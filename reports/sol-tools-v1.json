@@ -1,0 +1,3960 @@
+{
+  "campaign": "sol-tools-v1",
+  "at": "2026-10-14T18:25:06.322Z",
+  "completed": 48,
+  "scheduled": 48,
+  "groups": [
+    {
+      "arm": "control",
+      "attempts": 12,
+      "scheduled": 12,
+      "passed": 12,
+      "knownCostRuns": 12,
+      "knownCost": 0.5120472,
+      "meanCost": 0.0426706,
+      "costPerSuccess": 0.0426706,
+      "meanSeconds": 39.072916666666664,
+      "meanTurns": 4.666666666666667,
+      "meanUncachedInput": 16618.5,
+      "meanCachedInput": 10869.333333333334,
+      "meanOutput": 834.6666666666666,
+      "formattedResponses": 0,
+      "rawCharacters": 288414,
+      "deliveredCharacters": 288414,
+      "localOutputReduction": 0,
+      "navigationCalls": 0,
+      "recoveryCalls": 0,
+      "comparison": {
+        "baseline": "control",
+        "pairs": 12,
+        "knownCostPairs": 12,
+        "costChange": 0,
+        "baselinePasses": 12,
+        "candidatePasses": 12,
+        "wins": [],
+        "losses": []
+      }
+    },
+    {
+      "arm": "compact",
+      "attempts": 12,
+      "scheduled": 12,
+      "passed": 12,
+      "knownCostRuns": 11,
+      "knownCost": 0.4174176,
+      "meanCost": 0.03541356363636364,
+      "costPerSuccess": null,
+      "meanSeconds": 35.41441666666666,
+      "meanTurns": 4.75,
+      "meanUncachedInput": 12678.25,
+      "meanCachedInput": 9941.333333333334,
+      "meanOutput": 843.4166666666666,
+      "formattedResponses": 41,
+      "rawCharacters": 246085,
+      "deliveredCharacters": 208149,
+      "localOutputReduction": 0.15415811609809615,
+      "navigationCalls": 0,
+      "recoveryCalls": 0,
+      "comparison": {
+        "baseline": "control",
+        "pairs": 12,
+        "knownCostPairs": 11,
+        "costChange": -0.19843468613061788,
+        "baselinePasses": 12,
+        "candidatePasses": 12,
+        "wins": [],
+        "losses": []
+      }
+    },
+    {
+      "arm": "navigation",
+      "attempts": 12,
+      "scheduled": 12,
+      "passed": 12,
+      "knownCostRuns": 11,
+      "knownCost": 0.3896024,
+      "meanCost": 0.03321749090909091,
+      "costPerSuccess": null,
+      "meanSeconds": 38.42858333333333,
+      "meanTurns": 5.083333333333333,
+      "meanUncachedInput": 11196.5,
+      "meanCachedInput": 15605.333333333334,
+      "meanOutput": 851.3333333333334,
+      "formattedResponses": 0,
+      "rawCharacters": 252267,
+      "deliveredCharacters": 252267,
+      "localOutputReduction": 0,
+      "navigationCalls": 42,
+      "recoveryCalls": 0,
+      "comparison": {
+        "baseline": "control",
+        "pairs": 12,
+        "knownCostPairs": 11,
+        "costChange": -0.24814150871959995,
+        "baselinePasses": 12,
+        "candidatePasses": 12,
+        "wins": [],
+        "losses": []
+      }
+    },
+    {
+      "arm": "combined",
+      "attempts": 12,
+      "scheduled": 12,
+      "passed": 12,
+      "knownCostRuns": 12,
+      "knownCost": 0.4134111999999999,
+      "meanCost": 0.03445093333333333,
+      "costPerSuccess": 0.03445093333333333,
+      "meanSeconds": 37.52675,
+      "meanTurns": 5.166666666666667,
+      "meanUncachedInput": 12028.333333333334,
+      "meanCachedInput": 13909.333333333334,
+      "meanOutput": 900.3333333333334,
+      "formattedResponses": 44,
+      "rawCharacters": 274321,
+      "deliveredCharacters": 225477,
+      "localOutputReduction": 0.1780541774053025,
+      "navigationCalls": 43,
+      "recoveryCalls": 0,
+      "comparison": {
+        "baseline": "control",
+        "pairs": 12,
+        "knownCostPairs": 12,
+        "costChange": -0.19263067935924683,
+        "baselinePasses": 12,
+        "candidatePasses": 12,
+        "wins": [],
+        "losses": []
+      }
+    }
+  ],
+  "combinedVsCompact": {
+    "baseline": "compact",
+    "pairs": 12,
+    "knownCostPairs": 11,
+    "costChange": 0.005454509982307565,
+    "baselinePasses": 12,
+    "candidatePasses": 12,
+    "wins": [],
+    "losses": []
+  },
+  "combinedVsNavigation": {
+    "baseline": "navigation",
+    "pairs": 12,
+    "knownCostPairs": 11,
+    "costChange": 0.07192705704880531,
+    "baselinePasses": 12,
+    "candidatePasses": 12,
+    "wins": [],
+    "losses": []
+  },
+  "runs": [
+    {
+      "runId": "001-numeric-xrange-control-r0",
+      "task": "numeric-xrange",
+      "arm": "control",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 6,
+      "calls": 14,
+      "usage": {
+        "input": 27154,
+        "output": 1020,
+        "cacheRead": 23680,
+        "cacheWrite": 0,
+        "totalTokens": 51854,
+        "estimatedApiUsd": 0.066876
+      },
+      "knownEstimatedUsd": 0.066876,
+      "totalEstimatedUsd": 0.066876,
+      "latencyMs": 53883,
+      "costComponents": {
+        "input": 0.054308,
+        "output": 0.0102,
+        "cacheRead": 0.0023680000000000003,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 34432,
+        "deliveredCharacters": 34432,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 113
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 134
+      },
+      "endedAt": "2026-10-14T17:51:20.134Z"
+    },
+    {
+      "runId": "002-numeric-xrange-compact-r0",
+      "task": "numeric-xrange",
+      "arm": "compact",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 4,
+      "calls": 10,
+      "usage": {
+        "input": 8792,
+        "output": 914,
+        "cacheRead": 11008,
+        "cacheWrite": 0,
+        "totalTokens": 20714,
+        "estimatedApiUsd": 0.027824799999999997
+      },
+      "knownEstimatedUsd": 0.027824799999999997,
+      "totalEstimatedUsd": 0.027824799999999997,
+      "latencyMs": 45575,
+      "costComponents": {
+        "input": 0.017584,
+        "output": 0.00914,
+        "cacheRead": 0.0011008,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 23978,
+        "deliveredCharacters": 20774,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 119
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 140
+      },
+      "endedAt": "2026-10-14T17:52:06.440Z"
+    },
+    {
+      "runId": "003-numeric-xrange-navigation-r0",
+      "task": "numeric-xrange",
+      "arm": "navigation",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 6,
+      "calls": 17,
+      "usage": {
+        "input": 11754,
+        "output": 967,
+        "cacheRead": 23424,
+        "cacheWrite": 0,
+        "totalTokens": 36145,
+        "estimatedApiUsd": 0.0355204
+      },
+      "knownEstimatedUsd": 0.0355204,
+      "totalEstimatedUsd": 0.0355204,
+      "latencyMs": 50403,
+      "costComponents": {
+        "input": 0.023507999999999998,
+        "output": 0.00967,
+        "cacheRead": 0.0023424000000000006,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 29618,
+        "deliveredCharacters": 29618,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 2
+        },
+        "latencyMs": 410.1395000000193
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 114
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 130
+      },
+      "endedAt": "2026-10-14T17:52:57.467Z"
+    },
+    {
+      "runId": "004-numeric-xrange-combined-r0",
+      "task": "numeric-xrange",
+      "arm": "combined",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 7,
+      "calls": 17,
+      "usage": {
+        "input": 23939,
+        "output": 961,
+        "cacheRead": 20992,
+        "cacheWrite": 0,
+        "totalTokens": 45892,
+        "estimatedApiUsd": 0.0595872
+      },
+      "knownEstimatedUsd": 0.0595872,
+      "totalEstimatedUsd": 0.0595872,
+      "latencyMs": 46984,
+      "costComponents": {
+        "input": 0.047878,
+        "output": 0.00961,
+        "cacheRead": 0.0020992,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 45764,
+        "deliveredCharacters": 40071,
+        "formattedResponses": 5,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 3,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2
+        },
+        "latencyMs": 27.47490000000107
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 120
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 137
+      },
+      "endedAt": "2026-10-14T17:53:45.150Z"
+    },
+    {
+      "runId": "005-caret-prerelease-compact-r0",
+      "task": "caret-prerelease",
+      "arm": "compact",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 9248,
+        "output": 743,
+        "cacheRead": 11008,
+        "cacheWrite": 0,
+        "totalTokens": 20999,
+        "estimatedApiUsd": 0.027026799999999997
+      },
+      "knownEstimatedUsd": 0.027026799999999997,
+      "totalEstimatedUsd": 0.027026799999999997,
+      "latencyMs": 32057,
+      "costComponents": {
+        "input": 0.018496,
+        "output": 0.007430000000000001,
+        "cacheRead": 0.0011008,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 15283,
+        "deliveredCharacters": 12206,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 121
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 138
+      },
+      "endedAt": "2026-10-14T17:54:17.910Z"
+    },
+    {
+      "runId": "006-caret-prerelease-navigation-r0",
+      "task": "caret-prerelease",
+      "arm": "navigation",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 9817,
+        "output": 809,
+        "cacheRead": 2048,
+        "cacheWrite": 0,
+        "totalTokens": 12674,
+        "estimatedApiUsd": 0.027928799999999997
+      },
+      "knownEstimatedUsd": 0.027928799999999997,
+      "totalEstimatedUsd": 0.027928799999999997,
+      "latencyMs": 30281,
+      "costComponents": {
+        "input": 0.019634,
+        "output": 0.008090000000000002,
+        "cacheRead": 0.00020480000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 6967,
+        "deliveredCharacters": 6967,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 3,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1,
+          "symbol_references": 1
+        },
+        "latencyMs": 474.74179999995977
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 119
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 136
+      },
+      "endedAt": "2026-10-14T17:54:48.798Z"
+    },
+    {
+      "runId": "007-caret-prerelease-combined-r0",
+      "task": "caret-prerelease",
+      "arm": "combined",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 4,
+      "calls": 13,
+      "usage": {
+        "input": 4493,
+        "output": 805,
+        "cacheRead": 6656,
+        "cacheWrite": 0,
+        "totalTokens": 11954,
+        "estimatedApiUsd": 0.017701599999999998
+      },
+      "knownEstimatedUsd": 0.017701599999999998,
+      "totalEstimatedUsd": 0.017701599999999998,
+      "latencyMs": 27081,
+      "costComponents": {
+        "input": 0.008986,
+        "output": 0.00805,
+        "cacheRead": 0.0006656000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8247,
+        "deliveredCharacters": 4949,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2,
+          "symbol_references": 1
+        },
+        "latencyMs": 478.2998999999836
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 111
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 127
+      },
+      "endedAt": "2026-10-14T17:55:16.456Z"
+    },
+    {
+      "runId": "008-caret-prerelease-control-r0",
+      "task": "caret-prerelease",
+      "arm": "control",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 6,
+      "calls": 16,
+      "usage": {
+        "input": 16144,
+        "output": 618,
+        "cacheRead": 10240,
+        "cacheWrite": 0,
+        "totalTokens": 27002,
+        "estimatedApiUsd": 0.039492
+      },
+      "knownEstimatedUsd": 0.039492,
+      "totalEstimatedUsd": 0.039492,
+      "latencyMs": 28147,
+      "costComponents": {
+        "input": 0.032288,
+        "output": 0.006180000000000001,
+        "cacheRead": 0.0010240000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 26792,
+        "deliveredCharacters": 26792,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 121
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 139
+      },
+      "endedAt": "2026-10-14T17:55:45.226Z"
+    },
+    {
+      "runId": "009-prerelease-diff-navigation-r0",
+      "task": "prerelease-diff",
+      "arm": "navigation",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 10,
+      "usage": {
+        "input": 9713,
+        "output": 649,
+        "cacheRead": 4096,
+        "cacheWrite": 0,
+        "totalTokens": 14458,
+        "estimatedApiUsd": 0.026325600000000005
+      },
+      "knownEstimatedUsd": 0.026325600000000005,
+      "totalEstimatedUsd": 0.026325600000000005,
+      "latencyMs": 24120,
+      "costComponents": {
+        "input": 0.019426,
+        "output": 0.006490000000000001,
+        "cacheRead": 0.00040960000000000004,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8571,
+        "deliveredCharacters": 8571,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 2,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1
+        },
+        "latencyMs": 359.55590000003576
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 119
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 139
+      },
+      "endedAt": "2026-10-14T17:56:09.967Z"
+    },
+    {
+      "runId": "010-prerelease-diff-combined-r0",
+      "task": "prerelease-diff",
+      "arm": "combined",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 5,
+      "calls": 12,
+      "usage": {
+        "input": 9166,
+        "output": 669,
+        "cacheRead": 6016,
+        "cacheWrite": 0,
+        "totalTokens": 15851,
+        "estimatedApiUsd": 0.0256236
+      },
+      "knownEstimatedUsd": 0.0256236,
+      "totalEstimatedUsd": 0.0256236,
+      "latencyMs": 35635,
+      "costComponents": {
+        "input": 0.018332,
+        "output": 0.006690000000000001,
+        "cacheRead": 0.0006016000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8797,
+        "deliveredCharacters": 6335,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 2,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1
+        },
+        "latencyMs": 310.63980000000447
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 112
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 138
+      },
+      "endedAt": "2026-10-14T17:56:46.207Z"
+    },
+    {
+      "runId": "011-prerelease-diff-control-r0",
+      "task": "prerelease-diff",
+      "arm": "control",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 7996,
+        "output": 674,
+        "cacheRead": 7424,
+        "cacheWrite": 0,
+        "totalTokens": 16094,
+        "estimatedApiUsd": 0.0234744
+      },
+      "knownEstimatedUsd": 0.0234744,
+      "totalEstimatedUsd": 0.0234744,
+      "latencyMs": 27115,
+      "costComponents": {
+        "input": 0.015992,
+        "output": 0.00674,
+        "cacheRead": 0.0007424,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12746,
+        "deliveredCharacters": 12746,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 114
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 142
+      },
+      "endedAt": "2026-10-14T17:57:14.024Z"
+    },
+    {
+      "runId": "012-prerelease-diff-compact-r0",
+      "task": "prerelease-diff",
+      "arm": "compact",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 12671,
+        "output": 676,
+        "cacheRead": 1408,
+        "cacheWrite": 0,
+        "totalTokens": 14755,
+        "estimatedApiUsd": 0.032242799999999995
+      },
+      "knownEstimatedUsd": 0.032242799999999995,
+      "totalEstimatedUsd": 0.032242799999999995,
+      "latencyMs": 28915,
+      "costComponents": {
+        "input": 0.025342,
+        "output": 0.00676,
+        "cacheRead": 0.0001408,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12353,
+        "deliveredCharacters": 9603,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 110
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 131
+      },
+      "endedAt": "2026-10-14T17:57:43.629Z"
+    },
+    {
+      "runId": "013-numeric-prerelease-combined-r0",
+      "task": "numeric-prerelease",
+      "arm": "combined",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 18,
+      "usage": {
+        "input": 17163,
+        "output": 1105,
+        "cacheRead": 20992,
+        "cacheWrite": 0,
+        "totalTokens": 39260,
+        "estimatedApiUsd": 0.0474752
+      },
+      "knownEstimatedUsd": 0.0474752,
+      "totalEstimatedUsd": 0.0474752,
+      "latencyMs": 39732,
+      "costComponents": {
+        "input": 0.034325999999999995,
+        "output": 0.01105,
+        "cacheRead": 0.0020992,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 38162,
+        "deliveredCharacters": 33151,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 5,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 3
+        },
+        "latencyMs": 293.8485000000801
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 115
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 137
+      },
+      "endedAt": "2026-10-14T17:58:23.982Z"
+    },
+    {
+      "runId": "014-numeric-prerelease-control-r0",
+      "task": "numeric-prerelease",
+      "arm": "control",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 18033,
+        "output": 945,
+        "cacheRead": 12032,
+        "cacheWrite": 0,
+        "totalTokens": 31010,
+        "estimatedApiUsd": 0.046719199999999995
+      },
+      "knownEstimatedUsd": 0.046719199999999995,
+      "totalEstimatedUsd": 0.046719199999999995,
+      "latencyMs": 38355,
+      "costComponents": {
+        "input": 0.036065999999999994,
+        "output": 0.00945,
+        "cacheRead": 0.0012032000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 33459,
+        "deliveredCharacters": 33459,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 109
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 127
+      },
+      "endedAt": "2026-10-14T17:59:02.995Z"
+    },
+    {
+      "runId": "015-numeric-prerelease-compact-r0",
+      "task": "numeric-prerelease",
+      "arm": "compact",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 10781,
+        "output": 994,
+        "cacheRead": 18048,
+        "cacheWrite": 0,
+        "totalTokens": 29823,
+        "estimatedApiUsd": 0.0333068
+      },
+      "knownEstimatedUsd": 0.0333068,
+      "totalEstimatedUsd": 0.0333068,
+      "latencyMs": 36357,
+      "costComponents": {
+        "input": 0.021562,
+        "output": 0.009940000000000001,
+        "cacheRead": 0.0018048,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 27140,
+        "deliveredCharacters": 22743,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 128
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 138
+      },
+      "endedAt": "2026-10-14T17:59:39.967Z"
+    },
+    {
+      "runId": "016-numeric-prerelease-navigation-r0",
+      "task": "numeric-prerelease",
+      "arm": "navigation",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 16,
+      "usage": {
+        "input": 14490,
+        "output": 1051,
+        "cacheRead": 24192,
+        "cacheWrite": 0,
+        "totalTokens": 39733,
+        "estimatedApiUsd": 0.0419092
+      },
+      "knownEstimatedUsd": 0.0419092,
+      "totalEstimatedUsd": 0.0419092,
+      "latencyMs": 40223,
+      "costComponents": {
+        "input": 0.02898,
+        "output": 0.010510000000000002,
+        "cacheRead": 0.0024192,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 33820,
+        "deliveredCharacters": 33820,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 2
+        },
+        "latencyMs": 353.9993000002578
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 109
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 127
+      },
+      "endedAt": "2026-10-14T18:00:20.777Z"
+    },
+    {
+      "runId": "017-numeric-xrange-control-r1",
+      "task": "numeric-xrange",
+      "arm": "control",
+      "repetition": 1,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 12,
+      "usage": {
+        "input": 29408,
+        "output": 956,
+        "cacheRead": 14464,
+        "cacheWrite": 0,
+        "totalTokens": 44828,
+        "estimatedApiUsd": 0.0698224
+      },
+      "knownEstimatedUsd": 0.0698224,
+      "totalEstimatedUsd": 0.0698224,
+      "latencyMs": 45650,
+      "costComponents": {
+        "input": 0.05881599999999999,
+        "output": 0.009559999999999999,
+        "cacheRead": 0.0014464000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 36090,
+        "deliveredCharacters": 36090,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 110
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 128
+      },
+      "endedAt": "2026-10-14T18:01:07.144Z"
+    },
+    {
+      "runId": "018-numeric-xrange-combined-r1",
+      "task": "numeric-xrange",
+      "arm": "combined",
+      "repetition": 1,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 7,
+      "calls": 20,
+      "usage": {
+        "input": 15551,
+        "output": 1064,
+        "cacheRead": 27392,
+        "cacheWrite": 0,
+        "totalTokens": 44007,
+        "estimatedApiUsd": 0.0444812
+      },
+      "knownEstimatedUsd": 0.0444812,
+      "totalEstimatedUsd": 0.0444812,
+      "latencyMs": 60392,
+      "costComponents": {
+        "input": 0.031102,
+        "output": 0.01064,
+        "cacheRead": 0.0027392000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 31320,
+        "deliveredCharacters": 24825,
+        "formattedResponses": 5,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 5,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 3
+        },
+        "latencyMs": 340.5014000000665
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 117
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 133
+      },
+      "endedAt": "2026-10-14T18:02:08.155Z"
+    },
+    {
+      "runId": "019-numeric-xrange-navigation-r1",
+      "task": "numeric-xrange",
+      "arm": "navigation",
+      "repetition": 1,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 7,
+      "calls": 17,
+      "usage": {
+        "input": 11949,
+        "output": 975,
+        "cacheRead": 34176,
+        "cacheWrite": 0,
+        "totalTokens": 47100,
+        "estimatedApiUsd": 0.037065600000000004
+      },
+      "knownEstimatedUsd": 0.037065600000000004,
+      "totalEstimatedUsd": 0.037065600000000004,
+      "latencyMs": 62940,
+      "costComponents": {
+        "input": 0.023898,
+        "output": 0.009750000000000002,
+        "cacheRead": 0.0034176000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 29914,
+        "deliveredCharacters": 29914,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 3
+        },
+        "latencyMs": 26.186499999952503
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 116
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 127
+      },
+      "endedAt": "2026-10-14T18:03:11.787Z"
+    },
+    {
+      "runId": "020-numeric-xrange-compact-r1",
+      "task": "numeric-xrange",
+      "arm": "compact",
+      "repetition": 1,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 6,
+      "calls": 13,
+      "usage": {
+        "input": 19686,
+        "output": 1113,
+        "cacheRead": 16384,
+        "cacheWrite": 0,
+        "totalTokens": 37183,
+        "estimatedApiUsd": 0.052140399999999996
+      },
+      "knownEstimatedUsd": 0.052140399999999996,
+      "totalEstimatedUsd": 0.052140399999999996,
+      "latencyMs": 43360,
+      "costComponents": {
+        "input": 0.039372,
+        "output": 0.011130000000000003,
+        "cacheRead": 0.0016384000000000004,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 24429,
+        "deliveredCharacters": 21224,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 457
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 629
+      },
+      "endedAt": "2026-10-14T18:03:58.107Z"
+    },
+    {
+      "runId": "021-caret-prerelease-compact-r1",
+      "task": "caret-prerelease",
+      "arm": "compact",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 9432,
+        "output": 682,
+        "cacheRead": 11392,
+        "cacheWrite": 0,
+        "totalTokens": 21506,
+        "estimatedApiUsd": 0.0268232
+      },
+      "knownEstimatedUsd": 0.0268232,
+      "totalEstimatedUsd": 0.0268232,
+      "latencyMs": 29111,
+      "costComponents": {
+        "input": 0.018864,
+        "output": 0.0068200000000000005,
+        "cacheRead": 0.0011392000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 15962,
+        "deliveredCharacters": 12861,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 113
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 133
+      },
+      "endedAt": "2026-10-14T18:07:54.576Z"
+    },
+    {
+      "runId": "022-caret-prerelease-control-r1",
+      "task": "caret-prerelease",
+      "arm": "control",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 10244,
+        "output": 758,
+        "cacheRead": 9216,
+        "cacheWrite": 0,
+        "totalTokens": 20218,
+        "estimatedApiUsd": 0.0289896
+      },
+      "knownEstimatedUsd": 0.0289896,
+      "totalEstimatedUsd": 0.0289896,
+      "latencyMs": 79866,
+      "costComponents": {
+        "input": 0.020487999999999996,
+        "output": 0.007580000000000001,
+        "cacheRead": 0.0009216000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 14583,
+        "deliveredCharacters": 14583,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 117
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 138
+      },
+      "endedAt": "2026-10-14T18:09:15.558Z"
+    },
+    {
+      "runId": "023-caret-prerelease-combined-r1",
+      "task": "caret-prerelease",
+      "arm": "combined",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 14,
+      "usage": {
+        "input": 9039,
+        "output": 841,
+        "cacheRead": 9984,
+        "cacheWrite": 0,
+        "totalTokens": 19864,
+        "estimatedApiUsd": 0.0274864
+      },
+      "knownEstimatedUsd": 0.0274864,
+      "totalEstimatedUsd": 0.0274864,
+      "latencyMs": 36740,
+      "costComponents": {
+        "input": 0.018077999999999997,
+        "output": 0.00841,
+        "cacheRead": 0.0009984000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 22652,
+        "deliveredCharacters": 19354,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2,
+          "symbol_references": 1
+        },
+        "latencyMs": 535.22570000001
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 121
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 143
+      },
+      "endedAt": "2026-10-14T18:09:53.344Z"
+    },
+    {
+      "runId": "024-caret-prerelease-navigation-r1",
+      "task": "caret-prerelease",
+      "arm": "navigation",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 11289,
+        "output": 717,
+        "cacheRead": 8192,
+        "cacheWrite": 0,
+        "totalTokens": 20198,
+        "estimatedApiUsd": 0.030567199999999996
+      },
+      "knownEstimatedUsd": 0.030567199999999996,
+      "totalEstimatedUsd": 0.030567199999999996,
+      "latencyMs": 32983,
+      "costComponents": {
+        "input": 0.022577999999999997,
+        "output": 0.007170000000000001,
+        "cacheRead": 0.0008192000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12505,
+        "deliveredCharacters": 12505,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2,
+          "symbol_references": 1
+        },
+        "latencyMs": 500.94509999998263
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 116
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 137
+      },
+      "endedAt": "2026-10-14T18:10:27.375Z"
+    },
+    {
+      "runId": "025-prerelease-diff-navigation-r1",
+      "task": "prerelease-diff",
+      "arm": "navigation",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 7006,
+        "output": 731,
+        "cacheRead": 12416,
+        "cacheWrite": 0,
+        "totalTokens": 20153,
+        "estimatedApiUsd": 0.022563600000000003
+      },
+      "knownEstimatedUsd": 0.022563600000000003,
+      "totalEstimatedUsd": 0.022563600000000003,
+      "latencyMs": 32098,
+      "costComponents": {
+        "input": 0.014011999999999998,
+        "output": 0.007310000000000001,
+        "cacheRead": 0.0012416000000000003,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 13048,
+        "deliveredCharacters": 13048,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 2,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1
+        },
+        "latencyMs": 327.76820000002044
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 114
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 136
+      },
+      "endedAt": "2026-10-14T18:11:00.536Z"
+    },
+    {
+      "runId": "026-prerelease-diff-compact-r1",
+      "task": "prerelease-diff",
+      "arm": "compact",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 11,
+      "usage": {
+        "input": 9907,
+        "output": 634,
+        "cacheRead": 4096,
+        "cacheWrite": 0,
+        "totalTokens": 14637,
+        "estimatedApiUsd": 0.0265636
+      },
+      "knownEstimatedUsd": 0.0265636,
+      "totalEstimatedUsd": 0.0265636,
+      "latencyMs": 22923,
+      "costComponents": {
+        "input": 0.019814,
+        "output": 0.00634,
+        "cacheRead": 0.00040960000000000004,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12290,
+        "deliveredCharacters": 9542,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 105
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 135
+      },
+      "endedAt": "2026-10-14T18:11:24.564Z"
+    },
+    {
+      "runId": "027-prerelease-diff-control-r1",
+      "task": "prerelease-diff",
+      "arm": "control",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 7952,
+        "output": 617,
+        "cacheRead": 7424,
+        "cacheWrite": 0,
+        "totalTokens": 15993,
+        "estimatedApiUsd": 0.0228164
+      },
+      "knownEstimatedUsd": 0.0228164,
+      "totalEstimatedUsd": 0.0228164,
+      "latencyMs": 24698,
+      "costComponents": {
+        "input": 0.015903999999999998,
+        "output": 0.00617,
+        "cacheRead": 0.0007424,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12746,
+        "deliveredCharacters": 12746,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 115
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 142
+      },
+      "endedAt": "2026-10-14T18:11:50.453Z"
+    },
+    {
+      "runId": "028-prerelease-diff-combined-r1",
+      "task": "prerelease-diff",
+      "arm": "combined",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 5,
+      "calls": 12,
+      "usage": {
+        "input": 5313,
+        "output": 685,
+        "cacheRead": 9856,
+        "cacheWrite": 0,
+        "totalTokens": 15854,
+        "estimatedApiUsd": 0.0184616
+      },
+      "knownEstimatedUsd": 0.0184616,
+      "totalEstimatedUsd": 0.0184616,
+      "latencyMs": 30838,
+      "costComponents": {
+        "input": 0.010626,
+        "output": 0.00685,
+        "cacheRead": 0.0009856,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8796,
+        "deliveredCharacters": 6335,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 2,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1
+        },
+        "latencyMs": 304.8156000000308
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 108
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 131
+      },
+      "endedAt": "2026-10-14T18:12:22.393Z"
+    },
+    {
+      "runId": "029-numeric-prerelease-combined-r1",
+      "task": "numeric-prerelease",
+      "arm": "combined",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 17,
+      "usage": {
+        "input": 13884,
+        "output": 1073,
+        "cacheRead": 23424,
+        "cacheWrite": 0,
+        "totalTokens": 38381,
+        "estimatedApiUsd": 0.0408404
+      },
+      "knownEstimatedUsd": 0.0408404,
+      "totalEstimatedUsd": 0.0408404,
+      "latencyMs": 44849,
+      "costComponents": {
+        "input": 0.027768,
+        "output": 0.01073,
+        "cacheRead": 0.0023424,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 37968,
+        "deliveredCharacters": 32685,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 5,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 3
+        },
+        "latencyMs": 340.42109999997774
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 113
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 133
+      },
+      "endedAt": "2026-10-14T18:13:08.364Z"
+    },
+    {
+      "runId": "030-numeric-prerelease-navigation-r1",
+      "task": "numeric-prerelease",
+      "arm": "navigation",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 16,
+      "usage": {
+        "input": 20286,
+        "output": 967,
+        "cacheRead": 20864,
+        "cacheWrite": 0,
+        "totalTokens": 42117,
+        "estimatedApiUsd": 0.0523284
+      },
+      "knownEstimatedUsd": 0.0523284,
+      "totalEstimatedUsd": 0.0523284,
+      "latencyMs": 35082,
+      "costComponents": {
+        "input": 0.040572,
+        "output": 0.009670000000000002,
+        "cacheRead": 0.0020864,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 37909,
+        "deliveredCharacters": 37909,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 5,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 3
+        },
+        "latencyMs": 352.66130000009434
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 123
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 138
+      },
+      "endedAt": "2026-10-14T18:13:44.595Z"
+    },
+    {
+      "runId": "031-numeric-prerelease-compact-r1",
+      "task": "numeric-prerelease",
+      "arm": "compact",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 17343,
+        "output": 972,
+        "cacheRead": 3840,
+        "cacheWrite": 0,
+        "totalTokens": 22155,
+        "estimatedApiUsd": 0.044789999999999996
+      },
+      "knownEstimatedUsd": 0.044789999999999996,
+      "totalEstimatedUsd": 0.044789999999999996,
+      "latencyMs": 34630,
+      "costComponents": {
+        "input": 0.034685999999999995,
+        "output": 0.00972,
+        "cacheRead": 0.00038400000000000006,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 26270,
+        "deliveredCharacters": 22906,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 122
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 144
+      },
+      "endedAt": "2026-10-14T18:14:20.492Z"
+    },
+    {
+      "runId": "032-numeric-prerelease-control-r1",
+      "task": "numeric-prerelease",
+      "arm": "control",
+      "repetition": 1,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 14557,
+        "output": 1015,
+        "cacheRead": 8576,
+        "cacheWrite": 0,
+        "totalTokens": 24148,
+        "estimatedApiUsd": 0.04012159999999999
+      },
+      "knownEstimatedUsd": 0.04012159999999999,
+      "totalEstimatedUsd": 0.04012159999999999,
+      "latencyMs": 37185,
+      "costComponents": {
+        "input": 0.029114,
+        "output": 0.010150000000000001,
+        "cacheRead": 0.0008576,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 26271,
+        "deliveredCharacters": 26271,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 116
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 130
+      },
+      "endedAt": "2026-10-14T18:14:59.051Z"
+    },
+    {
+      "runId": "033-numeric-xrange-navigation-r2",
+      "task": "numeric-xrange",
+      "arm": "navigation",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 6,
+      "calls": 15,
+      "usage": {
+        "input": 11135,
+        "output": 901,
+        "cacheRead": 22656,
+        "cacheWrite": 0,
+        "totalTokens": 34692,
+        "estimatedApiUsd": 0.0335456
+      },
+      "knownEstimatedUsd": 0.0335456,
+      "totalEstimatedUsd": 0.0335456,
+      "latencyMs": 46741,
+      "costComponents": {
+        "input": 0.022269999999999998,
+        "output": 0.00901,
+        "cacheRead": 0.0022656,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 27841,
+        "deliveredCharacters": 27841,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 3,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2
+        },
+        "latencyMs": 25.10570000001462
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 120
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 139
+      },
+      "endedAt": "2026-10-14T18:15:47.107Z"
+    },
+    {
+      "runId": "034-numeric-xrange-combined-r2",
+      "task": "numeric-xrange",
+      "arm": "combined",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 6,
+      "calls": 20,
+      "usage": {
+        "input": 19556,
+        "output": 1215,
+        "cacheRead": 14720,
+        "cacheWrite": 0,
+        "totalTokens": 35491,
+        "estimatedApiUsd": 0.052733999999999996
+      },
+      "knownEstimatedUsd": 0.052733999999999996,
+      "totalEstimatedUsd": 0.052733999999999996,
+      "latencyMs": 48117,
+      "costComponents": {
+        "input": 0.039112,
+        "output": 0.012150000000000001,
+        "cacheRead": 0.0014720000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 29259,
+        "deliveredCharacters": 23794,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 3,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 1
+        },
+        "latencyMs": 523.2824999999721
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 126
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 138
+      },
+      "endedAt": "2026-10-14T18:16:36.459Z"
+    },
+    {
+      "runId": "035-numeric-xrange-control-r2",
+      "task": "numeric-xrange",
+      "arm": "control",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 12,
+      "usage": {
+        "input": 29361,
+        "output": 895,
+        "cacheRead": 14464,
+        "cacheWrite": 0,
+        "totalTokens": 44720,
+        "estimatedApiUsd": 0.06911840000000001
+      },
+      "knownEstimatedUsd": 0.06911840000000001,
+      "totalEstimatedUsd": 0.06911840000000001,
+      "latencyMs": 41084,
+      "costComponents": {
+        "input": 0.058721999999999996,
+        "output": 0.00895,
+        "cacheRead": 0.0014464000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 36091,
+        "deliveredCharacters": 36091,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 111
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 132
+      },
+      "endedAt": "2026-10-14T18:17:18.840Z"
+    },
+    {
+      "runId": "036-numeric-xrange-compact-r2",
+      "task": "numeric-xrange",
+      "arm": "compact",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 12,
+      "usage": {
+        "input": 8969,
+        "output": 899,
+        "cacheRead": 18688,
+        "cacheWrite": 0,
+        "totalTokens": 28556,
+        "estimatedApiUsd": 0.0287968
+      },
+      "knownEstimatedUsd": 0.0287968,
+      "totalEstimatedUsd": 0.0287968,
+      "latencyMs": 39038,
+      "costComponents": {
+        "input": 0.017937999999999996,
+        "output": 0.008990000000000001,
+        "cacheRead": 0.0018688,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 24136,
+        "deliveredCharacters": 20933,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 118
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 135
+      },
+      "endedAt": "2026-10-14T18:17:59.242Z"
+    },
+    {
+      "runId": "037-caret-prerelease-combined-r2",
+      "task": "caret-prerelease",
+      "arm": "combined",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 4,
+      "calls": 13,
+      "usage": {
+        "input": 6229,
+        "output": 878,
+        "cacheRead": 4992,
+        "cacheWrite": 0,
+        "totalTokens": 12099,
+        "estimatedApiUsd": 0.021737199999999998
+      },
+      "knownEstimatedUsd": 0.021737199999999998,
+      "totalEstimatedUsd": 0.021737199999999998,
+      "latencyMs": 30639,
+      "costComponents": {
+        "input": 0.012458,
+        "output": 0.00878,
+        "cacheRead": 0.0004992,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8249,
+        "deliveredCharacters": 4949,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2,
+          "symbol_references": 1
+        },
+        "latencyMs": 526.5327999999281
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 118
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 134
+      },
+      "endedAt": "2026-10-14T18:18:31.187Z"
+    },
+    {
+      "runId": "038-caret-prerelease-control-r2",
+      "task": "caret-prerelease",
+      "arm": "control",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 14,
+      "usage": {
+        "input": 7967,
+        "output": 863,
+        "cacheRead": 14976,
+        "cacheWrite": 0,
+        "totalTokens": 23806,
+        "estimatedApiUsd": 0.026061600000000004
+      },
+      "knownEstimatedUsd": 0.026061600000000004,
+      "totalEstimatedUsd": 0.026061600000000004,
+      "latencyMs": 37106,
+      "costComponents": {
+        "input": 0.015933999999999997,
+        "output": 0.00863,
+        "cacheRead": 0.0014976000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 16246,
+        "deliveredCharacters": 16246,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 124
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 141
+      },
+      "endedAt": "2026-10-14T18:19:09.689Z"
+    },
+    {
+      "runId": "039-caret-prerelease-compact-r2",
+      "task": "caret-prerelease",
+      "arm": "compact",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 6,
+      "calls": 15,
+      "usage": {
+        "input": 9952,
+        "output": 735,
+        "cacheRead": 6144,
+        "cacheWrite": 0,
+        "totalTokens": 16831,
+        "estimatedApiUsd": 0.027868399999999998
+      },
+      "knownEstimatedUsd": 0.027868399999999998,
+      "totalEstimatedUsd": null,
+      "latencyMs": 51535,
+      "costComponents": {
+        "input": 0.019903999999999998,
+        "output": 0.007350000000000001,
+        "cacheRead": 0.0006144000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12907,
+        "deliveredCharacters": 10124,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [
+        "OpenAI API error (503): 503 upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused"
+      ],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 111
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 131
+      },
+      "endedAt": "2026-10-14T18:20:02.568Z"
+    },
+    {
+      "runId": "040-caret-prerelease-navigation-r2",
+      "task": "caret-prerelease",
+      "arm": "navigation",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "turns": 5,
+      "calls": 13,
+      "usage": {
+        "input": 7489,
+        "output": 872,
+        "cacheRead": 5120,
+        "cacheWrite": 0,
+        "totalTokens": 13481,
+        "estimatedApiUsd": 0.02421
+      },
+      "knownEstimatedUsd": 0.02421,
+      "totalEstimatedUsd": null,
+      "latencyMs": 42891,
+      "costComponents": {
+        "input": 0.014977999999999998,
+        "output": 0.00872,
+        "cacheRead": 0.0005120000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8248,
+        "deliveredCharacters": 8248,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 2,
+          "symbol_references": 1
+        },
+        "latencyMs": 509.13589999999385
+      },
+      "providerErrors": [
+        "Our servers are currently overloaded. Please try again later."
+      ],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 117
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 135
+      },
+      "endedAt": "2026-10-14T18:20:46.780Z"
+    },
+    {
+      "runId": "041-prerelease-diff-control-r2",
+      "task": "prerelease-diff",
+      "arm": "control",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 12,
+      "usage": {
+        "input": 11330,
+        "output": 673,
+        "cacheRead": 4096,
+        "cacheWrite": 0,
+        "totalTokens": 16099,
+        "estimatedApiUsd": 0.029799599999999996
+      },
+      "knownEstimatedUsd": 0.029799599999999996,
+      "totalEstimatedUsd": 0.029799599999999996,
+      "latencyMs": 28161,
+      "costComponents": {
+        "input": 0.02266,
+        "output": 0.00673,
+        "cacheRead": 0.00040960000000000004,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12747,
+        "deliveredCharacters": 12747,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 107
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 128
+      },
+      "endedAt": "2026-10-14T18:21:16.354Z"
+    },
+    {
+      "runId": "042-prerelease-diff-compact-r2",
+      "task": "prerelease-diff",
+      "arm": "compact",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 13,
+      "usage": {
+        "input": 7051,
+        "output": 702,
+        "cacheRead": 7168,
+        "cacheWrite": 0,
+        "totalTokens": 14921,
+        "estimatedApiUsd": 0.0218388
+      },
+      "knownEstimatedUsd": 0.0218388,
+      "totalEstimatedUsd": 0.0218388,
+      "latencyMs": 30390,
+      "costComponents": {
+        "input": 0.014102,
+        "output": 0.00702,
+        "cacheRead": 0.0007168000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12525,
+        "deliveredCharacters": 10148,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 118
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 140
+      },
+      "endedAt": "2026-10-14T18:21:48.167Z"
+    },
+    {
+      "runId": "043-prerelease-diff-navigation-r2",
+      "task": "prerelease-diff",
+      "arm": "navigation",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 11,
+      "usage": {
+        "input": 7365,
+        "output": 671,
+        "cacheRead": 7936,
+        "cacheWrite": 0,
+        "totalTokens": 15972,
+        "estimatedApiUsd": 0.022233600000000003
+      },
+      "knownEstimatedUsd": 0.022233600000000003,
+      "totalEstimatedUsd": 0.022233600000000003,
+      "latencyMs": 26965,
+      "costComponents": {
+        "input": 0.01473,
+        "output": 0.006710000000000001,
+        "cacheRead": 0.0007936,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 12987,
+        "deliveredCharacters": 12987,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 2,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1
+        },
+        "latencyMs": 298.20160000002943
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 117
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 133
+      },
+      "endedAt": "2026-10-14T18:22:16.487Z"
+    },
+    {
+      "runId": "044-prerelease-diff-combined-r2",
+      "task": "prerelease-diff",
+      "arm": "combined",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "turns": 4,
+      "calls": 10,
+      "usage": {
+        "input": 7172,
+        "output": 620,
+        "cacheRead": 5376,
+        "cacheWrite": 0,
+        "totalTokens": 13168,
+        "estimatedApiUsd": 0.021081600000000002
+      },
+      "knownEstimatedUsd": 0.021081600000000002,
+      "totalEstimatedUsd": 0.021081600000000002,
+      "latencyMs": 23527,
+      "costComponents": {
+        "input": 0.014343999999999999,
+        "output": 0.006200000000000001,
+        "cacheRead": 0.0005376000000000001,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 8570,
+        "deliveredCharacters": 5965,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 2,
+        "tools": {
+          "symbols": 1,
+          "symbol_read": 1
+        },
+        "latencyMs": 327.1374000001233
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 110
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 136
+      },
+      "endedAt": "2026-10-14T18:22:41.417Z"
+    },
+    {
+      "runId": "045-numeric-prerelease-compact-r2",
+      "task": "numeric-prerelease",
+      "arm": "compact",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 17,
+      "usage": {
+        "input": 28307,
+        "output": 1057,
+        "cacheRead": 10112,
+        "cacheWrite": 0,
+        "totalTokens": 39476,
+        "estimatedApiUsd": 0.0681952
+      },
+      "knownEstimatedUsd": 0.0681952,
+      "totalEstimatedUsd": 0.0681952,
+      "latencyMs": 31082,
+      "costComponents": {
+        "input": 0.056614,
+        "output": 0.01057,
+        "cacheRead": 0.0010112,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 38812,
+        "deliveredCharacters": 35085,
+        "formattedResponses": 4,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 115
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 137
+      },
+      "endedAt": "2026-10-14T18:23:13.990Z"
+    },
+    {
+      "runId": "046-numeric-prerelease-navigation-r2",
+      "task": "numeric-prerelease",
+      "arm": "navigation",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 16,
+      "usage": {
+        "input": 12065,
+        "output": 906,
+        "cacheRead": 22144,
+        "cacheWrite": 0,
+        "totalTokens": 35115,
+        "estimatedApiUsd": 0.0354044
+      },
+      "knownEstimatedUsd": 0.0354044,
+      "totalEstimatedUsd": 0.0354044,
+      "latencyMs": 36416,
+      "costComponents": {
+        "input": 0.02413,
+        "output": 0.00906,
+        "cacheRead": 0.0022144,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 30839,
+        "deliveredCharacters": 30839,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 5,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 3
+        },
+        "latencyMs": 308.9764000000432
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 115
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 136
+      },
+      "endedAt": "2026-10-14T18:23:51.855Z"
+    },
+    {
+      "runId": "047-numeric-prerelease-combined-r2",
+      "task": "numeric-prerelease",
+      "arm": "combined",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 5,
+      "calls": 15,
+      "usage": {
+        "input": 12835,
+        "output": 888,
+        "cacheRead": 16512,
+        "cacheWrite": 0,
+        "totalTokens": 30235,
+        "estimatedApiUsd": 0.036201199999999996
+      },
+      "knownEstimatedUsd": 0.036201199999999996,
+      "totalEstimatedUsd": 0.036201199999999996,
+      "latencyMs": 25787,
+      "costComponents": {
+        "input": 0.02567,
+        "output": 0.00888,
+        "cacheRead": 0.0016512000000000002,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 26537,
+        "deliveredCharacters": 23064,
+        "formattedResponses": 3,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 4,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 2
+        },
+        "latencyMs": 334.776699999813
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 114
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 136
+      },
+      "endedAt": "2026-10-14T18:24:19.083Z"
+    },
+    {
+      "runId": "048-numeric-prerelease-control-r2",
+      "task": "numeric-prerelease",
+      "arm": "control",
+      "repetition": 2,
+      "resourceAmendmentAt": "2026-10-14T18:07:24.345Z",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "turns": 4,
+      "calls": 11,
+      "usage": {
+        "input": 19276,
+        "output": 982,
+        "cacheRead": 3840,
+        "cacheWrite": 0,
+        "totalTokens": 24098,
+        "estimatedApiUsd": 0.048755999999999994
+      },
+      "knownEstimatedUsd": 0.048755999999999994,
+      "totalEstimatedUsd": 0.048755999999999994,
+      "latencyMs": 27625,
+      "costComponents": {
+        "input": 0.038552,
+        "output": 0.00982,
+        "cacheRead": 0.00038400000000000006,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 26211,
+        "deliveredCharacters": 26211,
+        "formattedResponses": 0,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 0,
+        "tools": {},
+        "latencyMs": 0
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 125
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 137
+      },
+      "endedAt": "2026-10-14T18:24:48.271Z"
+    }
+  ]
+}

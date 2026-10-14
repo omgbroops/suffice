@@ -1,0 +1,12 @@
+[
+  {
+    "file": "src/intervals.mjs",
+    "old": "a.start <= b.end && b.start <= a.end",
+    "new": "a.start < b.end && b.start < a.end"
+  },
+  {
+    "file": "src/intervals.mjs",
+    "old": "start + duration < window.end",
+    "new": "start + duration <= window.end"
+  }
+]

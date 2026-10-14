@@ -1,0 +1,12 @@
+[
+  {
+    "file": "src/ledger.mjs",
+    "old": "const balances = this.balances;",
+    "new": "const balances = { ...this.balances };"
+  },
+  {
+    "file": "src/ledger.mjs",
+    "old": "const previous = this.committed.get(transfer.id);",
+    "new": "const previous = committed.get(transfer.id);"
+  }
+]

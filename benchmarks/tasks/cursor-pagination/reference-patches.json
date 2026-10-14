@@ -1,0 +1,12 @@
+[
+  {
+    "file": "src/repository.mjs",
+    "old": "row.id >= cursor",
+    "new": "row.id > cursor"
+  },
+  {
+    "file": "src/collect.mjs",
+    "old": "page.items.length < limit || page.nextCursor === null",
+    "new": "page.nextCursor === null"
+  }
+]

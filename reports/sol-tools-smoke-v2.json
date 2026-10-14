@@ -1,0 +1,141 @@
+{
+  "campaign": "sol-tools-smoke-v2",
+  "at": "2026-10-14T17:50:20.658Z",
+  "completed": 1,
+  "scheduled": 1,
+  "groups": [
+    {
+      "arm": "combined",
+      "attempts": 1,
+      "scheduled": 1,
+      "passed": 1,
+      "knownCostRuns": 1,
+      "knownCost": 0.037328,
+      "meanCost": 0.037328,
+      "costPerSuccess": 0.037328,
+      "meanSeconds": 54.091,
+      "meanTurns": 6,
+      "meanUncachedInput": 11781,
+      "meanCachedInput": 24960,
+      "meanOutput": 1127,
+      "formattedResponses": 5,
+      "rawCharacters": 23521,
+      "deliveredCharacters": 18344,
+      "localOutputReduction": 0.22010118617405727,
+      "navigationCalls": 3,
+      "recoveryCalls": 0,
+      "comparison": {
+        "baseline": "control",
+        "pairs": 0,
+        "knownCostPairs": 0,
+        "costChange": null,
+        "baselinePasses": 0,
+        "candidatePasses": 0,
+        "wins": [],
+        "losses": []
+      }
+    }
+  ],
+  "combinedVsCompact": {
+    "baseline": "compact",
+    "pairs": 0,
+    "knownCostPairs": 0,
+    "costChange": null,
+    "baselinePasses": 0,
+    "candidatePasses": 0,
+    "wins": [],
+    "losses": []
+  },
+  "combinedVsNavigation": {
+    "baseline": "navigation",
+    "pairs": 0,
+    "knownCostPairs": 0,
+    "costChange": null,
+    "baselinePasses": 0,
+    "candidatePasses": 0,
+    "wins": [],
+    "losses": []
+  },
+  "runs": [
+    {
+      "runId": "001-prerelease-subset-combined-r0",
+      "task": "prerelease-subset",
+      "arm": "combined",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "turns": 6,
+      "calls": 21,
+      "usage": {
+        "input": 11781,
+        "output": 1127,
+        "cacheRead": 24960,
+        "cacheWrite": 0,
+        "totalTokens": 37868,
+        "estimatedApiUsd": 0.037328
+      },
+      "knownEstimatedUsd": 0.037328,
+      "totalEstimatedUsd": 0.037328,
+      "latencyMs": 54091,
+      "costComponents": {
+        "input": 0.023562,
+        "output": 0.011270000000000002,
+        "cacheRead": 0.0024960000000000004,
+        "cacheWrite": 0
+      },
+      "observations": {
+        "rawCharacters": 23521,
+        "deliveredCharacters": 18344,
+        "formattedResponses": 5,
+        "recoveryCalls": 0
+      },
+      "navigation": {
+        "calls": 3,
+        "tools": {
+          "symbols": 2,
+          "symbol_read": 1
+        },
+        "latencyMs": 411.14270000000215
+      },
+      "providerErrors": [],
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 112
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 130
+      },
+      "endedAt": "2026-10-14T17:49:42.761Z"
+    }
+  ]
+}

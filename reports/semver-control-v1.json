@@ -1,0 +1,2827 @@
+{
+  "campaign": "semver-control-v1",
+  "at": "2026-10-14T16:27:46.270Z",
+  "completed": 42,
+  "scheduled": 42,
+  "repository": "https://github.com/npm/node-semver",
+  "baseRevision": "efa4be6096c1f9b77d9d27d6132f6220c43b4e31",
+  "groups": [
+    {
+      "arm": "sol",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 6,
+      "patchesAccepted": 6,
+      "completeCostRuns": 6,
+      "knownCost": 0.3296956,
+      "costPerSuccess": 0.05494926666666666,
+      "meanCost": 0.05494926666666666,
+      "meanSeconds": 62.27016666666666,
+      "prunedRequests": 0,
+      "stateUpdates": 0,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 2,
+      "patchesAccepted": 2,
+      "completeCostRuns": 5,
+      "knownCost": 0.028765139999999995,
+      "costPerSuccess": null,
+      "meanCost": 0.004670031999999999,
+      "meanSeconds": 54.19383333333334,
+      "prunedRequests": 0,
+      "stateUpdates": 0,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna-review",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 6,
+      "patchesAccepted": 6,
+      "completeCostRuns": 6,
+      "knownCost": 0.56257226,
+      "costPerSuccess": 0.09376204333333334,
+      "meanCost": 0.09376204333333334,
+      "meanSeconds": 138.8385,
+      "prunedRequests": 0,
+      "stateUpdates": 0,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 6,
+      "repairs": 6,
+      "falseApprovals": 0,
+      "rescued": 3
+    },
+    {
+      "arm": "luna-state",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 2,
+      "patchesAccepted": 2,
+      "completeCostRuns": 6,
+      "knownCost": 0.02941474,
+      "costPerSuccess": 0.01470737,
+      "meanCost": 0.004902456666666667,
+      "meanSeconds": 61.222833333333334,
+      "prunedRequests": 0,
+      "stateUpdates": 11,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna-prune",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 2,
+      "patchesAccepted": 2,
+      "completeCostRuns": 3,
+      "knownCost": 0.04454524000000001,
+      "costPerSuccess": null,
+      "meanCost": 0.005500306666666666,
+      "meanSeconds": 68.389,
+      "prunedRequests": 98,
+      "stateUpdates": 0,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna-state-prune",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 3,
+      "patchesAccepted": 3,
+      "completeCostRuns": 6,
+      "knownCost": 0.04075672,
+      "costPerSuccess": 0.013585573333333335,
+      "meanCost": 0.0067927866666666675,
+      "meanSeconds": 54.06366666666666,
+      "prunedRequests": 68,
+      "stateUpdates": 11,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna-repro",
+      "attempted": 6,
+      "scheduled": 6,
+      "successes": 2,
+      "patchesAccepted": 2,
+      "completeCostRuns": 5,
+      "knownCost": 0.02432314,
+      "costPerSuccess": null,
+      "meanCost": 0.004300152,
+      "meanSeconds": 49.5345,
+      "prunedRequests": 0,
+      "stateUpdates": 0,
+      "reproEstablished": 6,
+      "reproPassed": 3,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    }
+  ],
+  "runs": [
+    {
+      "runId": "001-prerelease-subset-sol-r0",
+      "task": "prerelease-subset",
+      "arm": "sol",
+      "repetition": 0,
+      "usage": {
+        "input": 27138,
+        "output": 1254,
+        "cacheRead": 19584,
+        "cacheWrite": 0,
+        "totalTokens": 47976,
+        "estimatedApiUsd": 0.0687744
+      },
+      "knownEstimatedUsd": 0.0687744,
+      "totalEstimatedUsd": 0.0687744,
+      "usageCostUnknown": false,
+      "latencyMs": 63670,
+      "turns": 6,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:37:26.282Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 6,
+          "calls": 22,
+          "patchReads": 0,
+          "editCount": 5,
+          "usage": {
+            "input": 27138,
+            "output": 1254,
+            "cacheRead": 19584,
+            "cacheWrite": 0,
+            "totalTokens": 47976,
+            "estimatedApiUsd": 0.0687744
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 63670,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "002-prerelease-subset-luna-r0",
+      "task": "prerelease-subset",
+      "arm": "luna",
+      "repetition": 0,
+      "usage": {
+        "input": 70985,
+        "output": 2320,
+        "cacheRead": 283136,
+        "cacheWrite": 0,
+        "totalTokens": 356441,
+        "estimatedApiUsd": 0.01108986
+      },
+      "knownEstimatedUsd": 0.01108986,
+      "totalEstimatedUsd": 0.01108986,
+      "usageCostUnknown": false,
+      "latencyMs": 106541,
+      "turns": 23,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:39:13.405Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 23,
+          "calls": 47,
+          "patchReads": 2,
+          "editCount": 4,
+          "usage": {
+            "input": 70985,
+            "output": 2320,
+            "cacheRead": 283136,
+            "cacheWrite": 0,
+            "totalTokens": 356441,
+            "estimatedApiUsd": 0.01108986
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 106541,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "003-prerelease-subset-luna-review-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-review",
+      "repetition": 0,
+      "usage": {
+        "input": 85814,
+        "output": 4700,
+        "cacheRead": 150272,
+        "cacheWrite": 0,
+        "totalTokens": 240786,
+        "estimatedApiUsd": 0.14054967999999998
+      },
+      "knownEstimatedUsd": 0.14054967999999998,
+      "totalEstimatedUsd": 0.14054967999999998,
+      "usageCostUnknown": false,
+      "latencyMs": 212794,
+      "turns": 28,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": {
+        "valid": true,
+        "verdict": "repair",
+        "findings": [
+          "src/ranges/subset.js:179 and 199 still use satisfies() against individual opposite-bound comparators, which incorrectly applies prerelease exclusion separately rather than across the whole domain comparator set. The required example subset('^10.2.0-beta.2', '^10.2.0-beta.1') still returns false (confirmed with check_cases): the lower prerelease endpoint fails satisfies() against '<11.0.0-0' despite the domain's lower comparator admitting that prerelease tuple. Repair both lower- and upper-endpoint checks to distinguish comparator ordering from range-wide prerelease admission.",
+          "src/ranges/subset.js:169-170 and 189-190 now require the domain's prerelease-admitting comparator to have the same bound direction. Prerelease admission is tuple-based regardless of comparator direction. For example, '>=1.2.3-beta.2 <=1.2.3-beta.4' is contained in '>=1.2.3-beta.1 <1.2.3', but the upper prerelease requirement cannot be cleared by the domain's lower comparator. Conversely, it is contained in '>1.2.2 <=1.2.3-beta.5', where the upper comparator admits the lower endpoint's tuple. Restore direction-independent tuple admission while checking inclusive/exclusive bound containment separately."
+        ]
+      },
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:42:47.173Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 17,
+          "calls": 32,
+          "patchReads": 0,
+          "editCount": 4,
+          "usage": {
+            "input": 35349,
+            "output": 1523,
+            "cacheRead": 127488,
+            "cacheWrite": 0,
+            "totalTokens": 164360,
+            "estimatedApiUsd": 0.0055712800000000005
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 77399,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "review",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 9,
+          "patchReads": 1,
+          "editCount": 0,
+          "usage": {
+            "input": 21239,
+            "output": 509,
+            "cacheRead": 1536,
+            "cacheWrite": 0,
+            "totalTokens": 23284,
+            "estimatedApiUsd": 0.047721599999999996
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 29679,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "repair",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 7,
+          "calls": 23,
+          "patchReads": 0,
+          "editCount": 8,
+          "usage": {
+            "input": 29226,
+            "output": 2668,
+            "cacheRead": 21248,
+            "cacheWrite": 0,
+            "totalTokens": 53142,
+            "estimatedApiUsd": 0.0872568
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 105716,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "004-prerelease-subset-luna-state-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-state",
+      "repetition": 0,
+      "usage": {
+        "input": 19568,
+        "output": 1172,
+        "cacheRead": 116224,
+        "cacheWrite": 0,
+        "totalTokens": 136964,
+        "estimatedApiUsd": 0.00370504
+      },
+      "knownEstimatedUsd": 0.00370504,
+      "totalEstimatedUsd": 0.00370504,
+      "usageCostUnknown": false,
+      "latencyMs": 54959,
+      "turns": 13,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:43:45.177Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 13,
+          "calls": 24,
+          "patchReads": 0,
+          "editCount": 0,
+          "usage": {
+            "input": 19568,
+            "output": 1172,
+            "cacheRead": 116224,
+            "cacheWrite": 0,
+            "totalTokens": 136964,
+            "estimatedApiUsd": 0.00370504
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 54959,
+          "stateUpdates": 2,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "005-prerelease-subset-luna-prune-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 60577,
+        "output": 2279,
+        "cacheRead": 55296,
+        "cacheWrite": 0,
+        "totalTokens": 118152,
+        "estimatedApiUsd": 0.007750160000000002
+      },
+      "knownEstimatedUsd": 0.007750160000000002,
+      "totalEstimatedUsd": null,
+      "usageCostUnknown": true,
+      "latencyMs": 96562,
+      "turns": 25,
+      "status": "turn_limit",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:45:23.508Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "turn_limit",
+          "model": "gpt-6-luna",
+          "turns": 25,
+          "calls": 47,
+          "patchReads": 0,
+          "editCount": 8,
+          "usage": {
+            "input": 60577,
+            "output": 2279,
+            "cacheRead": 55296,
+            "cacheWrite": 0,
+            "totalTokens": 118152,
+            "estimatedApiUsd": 0.007750160000000002
+          },
+          "usageCostUnknown": true,
+          "latencyMs": 96562,
+          "stateUpdates": 0,
+          "prunedRequests": 22,
+          "removedCharacters": 646683,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "006-prerelease-subset-luna-state-prune-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-state-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 35386,
+        "output": 1231,
+        "cacheRead": 60416,
+        "cacheWrite": 0,
+        "totalTokens": 97033,
+        "estimatedApiUsd": 0.004758260000000001
+      },
+      "knownEstimatedUsd": 0.004758260000000001,
+      "totalEstimatedUsd": 0.004758260000000001,
+      "usageCostUnknown": false,
+      "latencyMs": 48810,
+      "turns": 12,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:46:12.872Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 12,
+          "calls": 26,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 35386,
+            "output": 1231,
+            "cacheRead": 60416,
+            "cacheWrite": 0,
+            "totalTokens": 97033,
+            "estimatedApiUsd": 0.004758260000000001
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 48810,
+          "stateUpdates": 2,
+          "prunedRequests": 9,
+          "removedCharacters": 59401,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "007-prerelease-subset-luna-repro-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-repro",
+      "repetition": 0,
+      "usage": {
+        "input": 25016,
+        "output": 633,
+        "cacheRead": 26112,
+        "cacheWrite": 0,
+        "totalTokens": 51761,
+        "estimatedApiUsd": 0.00307922
+      },
+      "knownEstimatedUsd": 0.00307922,
+      "totalEstimatedUsd": 0.00307922,
+      "usageCostUnknown": false,
+      "latencyMs": 30743,
+      "turns": 8,
+      "status": "verification_failed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:46:44.182Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 8,
+          "calls": 16,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 25016,
+            "output": 633,
+            "cacheRead": 26112,
+            "cacheWrite": 0,
+            "totalTokens": 51761,
+            "estimatedApiUsd": 0.00307922
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 30743,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "subset",
+                "args": [
+                  "^10.2.0-beta.2",
+                  "^10.2.0-beta.1"
+                ],
+                "expected": true
+              }
+            ],
+            "before": "failed",
+            "after": "failed",
+            "hash": "45c32ced6fc1bf167a551efb7e649222168d6cd4b94dfb1927b6db3185f937cd"
+          }
+        }
+      ]
+    },
+    {
+      "runId": "008-build-metadata-luna-r0",
+      "task": "build-metadata",
+      "arm": "luna",
+      "repetition": 0,
+      "usage": {
+        "input": 20033,
+        "output": 619,
+        "cacheRead": 95744,
+        "cacheWrite": 0,
+        "totalTokens": 116396,
+        "estimatedApiUsd": 0.0032702399999999993
+      },
+      "knownEstimatedUsd": 0.0032702399999999993,
+      "totalEstimatedUsd": 0.0032702399999999993,
+      "usageCostUnknown": false,
+      "latencyMs": 37342,
+      "turns": 11,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:47:22.115Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 11,
+          "calls": 21,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 20033,
+            "output": 619,
+            "cacheRead": 95744,
+            "cacheWrite": 0,
+            "totalTokens": 116396,
+            "estimatedApiUsd": 0.0032702399999999993
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 37342,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "009-build-metadata-luna-review-r0",
+      "task": "build-metadata",
+      "arm": "luna-review",
+      "repetition": 0,
+      "usage": {
+        "input": 65387,
+        "output": 2353,
+        "cacheRead": 122112,
+        "cacheWrite": 0,
+        "totalTokens": 189852,
+        "estimatedApiUsd": 0.08566838
+      },
+      "knownEstimatedUsd": 0.08566838,
+      "totalEstimatedUsd": 0.08566838,
+      "usageCostUnknown": false,
+      "latencyMs": 132186,
+      "turns": 22,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": {
+        "valid": true,
+        "verdict": "repair",
+        "findings": [
+          "src/classes/range.js:38 strips arbitrary non-whitespace text after '+' without validating build metadata or its version context, changing existing strict parsing behavior. For example, validRange('1.2.3+foo!') now returns '1.2.3' instead of null; malformed metadata such as '1.2.3+a..b' is likewise silently accepted, and '+foo' becomes an unrestricted range. Restrict metadata normalization to valid build identifiers attached to valid range version tokens, preserving rejection of malformed inputs while supporting long metadata."
+        ]
+      },
+      "beforeReviewAccepted": true,
+      "endedAt": "2026-10-14T15:49:35.308Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 13,
+          "calls": 25,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 34446,
+            "output": 777,
+            "cacheRead": 89088,
+            "cacheWrite": 0,
+            "totalTokens": 124311,
+            "estimatedApiUsd": 0.00472398
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 52355,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "review",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 10,
+          "patchReads": 1,
+          "editCount": 0,
+          "usage": {
+            "input": 14273,
+            "output": 325,
+            "cacheRead": 12288,
+            "cacheWrite": 0,
+            "totalTokens": 26886,
+            "estimatedApiUsd": 0.0330248
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 25537,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "repair",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 5,
+          "calls": 17,
+          "patchReads": 0,
+          "editCount": 4,
+          "usage": {
+            "input": 16668,
+            "output": 1251,
+            "cacheRead": 20736,
+            "cacheWrite": 0,
+            "totalTokens": 38655,
+            "estimatedApiUsd": 0.0479196
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 54294,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "010-build-metadata-luna-state-r0",
+      "task": "build-metadata",
+      "arm": "luna-state",
+      "repetition": 0,
+      "usage": {
+        "input": 24699,
+        "output": 1471,
+        "cacheRead": 121856,
+        "cacheWrite": 0,
+        "totalTokens": 148026,
+        "estimatedApiUsd": 0.00442396
+      },
+      "knownEstimatedUsd": 0.00442396,
+      "totalEstimatedUsd": 0.00442396,
+      "usageCostUnknown": false,
+      "latencyMs": 59539,
+      "turns": 12,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:50:35.437Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 12,
+          "calls": 28,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 24699,
+            "output": 1471,
+            "cacheRead": 121856,
+            "cacheWrite": 0,
+            "totalTokens": 148026,
+            "estimatedApiUsd": 0.00442396
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 59539,
+          "stateUpdates": 1,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "011-build-metadata-luna-prune-r0",
+      "task": "build-metadata",
+      "arm": "luna-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 101132,
+        "output": 932,
+        "cacheRead": 9728,
+        "cacheWrite": 0,
+        "totalTokens": 111792,
+        "estimatedApiUsd": 0.01067648
+      },
+      "knownEstimatedUsd": 0.01067648,
+      "totalEstimatedUsd": null,
+      "usageCostUnknown": true,
+      "latencyMs": 77190,
+      "turns": 25,
+      "status": "turn_limit",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:51:53.171Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "turn_limit",
+          "model": "gpt-6-luna",
+          "turns": 25,
+          "calls": 49,
+          "patchReads": 0,
+          "editCount": 0,
+          "usage": {
+            "input": 101132,
+            "output": 932,
+            "cacheRead": 9728,
+            "cacheWrite": 0,
+            "totalTokens": 111792,
+            "estimatedApiUsd": 0.01067648
+          },
+          "usageCostUnknown": true,
+          "latencyMs": 77190,
+          "stateUpdates": 0,
+          "prunedRequests": 22,
+          "removedCharacters": 1094247,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "012-build-metadata-luna-state-prune-r0",
+      "task": "build-metadata",
+      "arm": "luna-state-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 85584,
+        "output": 1295,
+        "cacheRead": 48128,
+        "cacheWrite": 0,
+        "totalTokens": 135007,
+        "estimatedApiUsd": 0.009687180000000002
+      },
+      "knownEstimatedUsd": 0.009687180000000002,
+      "totalEstimatedUsd": 0.009687180000000002,
+      "usageCostUnknown": false,
+      "latencyMs": 61355,
+      "turns": 19,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:52:55.081Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 19,
+          "calls": 41,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 85584,
+            "output": 1295,
+            "cacheRead": 48128,
+            "cacheWrite": 0,
+            "totalTokens": 135007,
+            "estimatedApiUsd": 0.009687180000000002
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 61355,
+          "stateUpdates": 2,
+          "prunedRequests": 16,
+          "removedCharacters": 407039,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "013-build-metadata-luna-repro-r0",
+      "task": "build-metadata",
+      "arm": "luna-repro",
+      "repetition": 0,
+      "usage": {
+        "input": 40130,
+        "output": 1401,
+        "cacheRead": 181248,
+        "cacheWrite": 0,
+        "totalTokens": 222779,
+        "estimatedApiUsd": 0.00652598
+      },
+      "knownEstimatedUsd": 0.00652598,
+      "totalEstimatedUsd": 0.00652598,
+      "usageCostUnknown": false,
+      "latencyMs": 84944,
+      "turns": 22,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:54:20.627Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 22,
+          "calls": 41,
+          "patchReads": 0,
+          "editCount": 8,
+          "usage": {
+            "input": 40130,
+            "output": 1401,
+            "cacheRead": 181248,
+            "cacheWrite": 0,
+            "totalTokens": 222779,
+            "estimatedApiUsd": 0.00652598
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 84944,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "satisfies",
+                "args": [
+                  "4.17.0",
+                  "4.17.0+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3",
+                  {
+                    "loose": true
+                  }
+                ],
+                "expected": true
+              }
+            ],
+            "before": "failed",
+            "after": "passed",
+            "hash": "e29fdea99eca92c42b5660f81617dbad514bb60a9bad7f570cc205d928ecd1bd"
+          }
+        }
+      ]
+    },
+    {
+      "runId": "014-build-metadata-sol-r0",
+      "task": "build-metadata",
+      "arm": "sol",
+      "repetition": 0,
+      "usage": {
+        "input": 25636,
+        "output": 1028,
+        "cacheRead": 12032,
+        "cacheWrite": 0,
+        "totalTokens": 38696,
+        "estimatedApiUsd": 0.0627552
+      },
+      "knownEstimatedUsd": 0.0627552,
+      "totalEstimatedUsd": 0.0627552,
+      "usageCostUnknown": false,
+      "latencyMs": 61228,
+      "turns": 5,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:55:22.428Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 5,
+          "calls": 16,
+          "patchReads": 0,
+          "editCount": 3,
+          "usage": {
+            "input": 25636,
+            "output": 1028,
+            "cacheRead": 12032,
+            "cacheWrite": 0,
+            "totalTokens": 38696,
+            "estimatedApiUsd": 0.0627552
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 61228,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "015-dotted-prerelease-luna-review-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-review",
+      "repetition": 0,
+      "usage": {
+        "input": 34623,
+        "output": 1938,
+        "cacheRead": 45312,
+        "cacheWrite": 0,
+        "totalTokens": 81873,
+        "estimatedApiUsd": 0.05589556
+      },
+      "knownEstimatedUsd": 0.05589556,
+      "totalEstimatedUsd": 0.05589556,
+      "usageCostUnknown": false,
+      "latencyMs": 98951,
+      "turns": 15,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": {
+        "valid": true,
+        "verdict": "repair",
+        "findings": [
+          "src/classes/semver.js:308–321: Prefix matching now expects separate dotted components, but initialization and resets still store the entire identifier in one prerelease element. Consequently, `new SemVer('3.0.0').inc('prerelease', 'alpha.beta').inc('prerelease', 'alpha.beta').version` remains `3.0.1-alpha.beta.0` instead of advancing to `3.0.1-alpha.beta.1`. Construct reset prerelease arrays from the identifier components so subsequent instance increments match the prefix correctly, preserving identifierBase behavior."
+        ]
+      },
+      "beforeReviewAccepted": true,
+      "endedAt": "2026-10-14T15:57:02.307Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 7,
+          "calls": 15,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 14381,
+            "output": 789,
+            "cacheRead": 27136,
+            "cacheWrite": 0,
+            "totalTokens": 42306,
+            "estimatedApiUsd": 0.00210396
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 34731,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "review",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 10,
+          "patchReads": 2,
+          "editCount": 0,
+          "usage": {
+            "input": 12484,
+            "output": 441,
+            "cacheRead": 7296,
+            "cacheWrite": 0,
+            "totalTokens": 20221,
+            "estimatedApiUsd": 0.030107599999999998
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 29898,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "repair",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 10,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 7758,
+            "output": 708,
+            "cacheRead": 10880,
+            "cacheWrite": 0,
+            "totalTokens": 19346,
+            "estimatedApiUsd": 0.023684
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 34322,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "016-dotted-prerelease-luna-state-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-state",
+      "repetition": 0,
+      "usage": {
+        "input": 21609,
+        "output": 1353,
+        "cacheRead": 64512,
+        "cacheWrite": 0,
+        "totalTokens": 87474,
+        "estimatedApiUsd": 0.0034825200000000007
+      },
+      "knownEstimatedUsd": 0.0034825200000000007,
+      "totalEstimatedUsd": 0.0034825200000000007,
+      "usageCostUnknown": false,
+      "latencyMs": 49229,
+      "turns": 11,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:57:52.141Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 11,
+          "calls": 21,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 21609,
+            "output": 1353,
+            "cacheRead": 64512,
+            "cacheWrite": 0,
+            "totalTokens": 87474,
+            "estimatedApiUsd": 0.0034825200000000007
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 49229,
+          "stateUpdates": 2,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "017-dotted-prerelease-luna-prune-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 54175,
+        "output": 1378,
+        "cacheRead": 47104,
+        "cacheWrite": 0,
+        "totalTokens": 102657,
+        "estimatedApiUsd": 0.00657754
+      },
+      "knownEstimatedUsd": 0.00657754,
+      "totalEstimatedUsd": 0.00657754,
+      "usageCostUnknown": false,
+      "latencyMs": 76820,
+      "turns": 17,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:59:09.545Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 17,
+          "calls": 36,
+          "patchReads": 1,
+          "editCount": 2,
+          "usage": {
+            "input": 54175,
+            "output": 1378,
+            "cacheRead": 47104,
+            "cacheWrite": 0,
+            "totalTokens": 102657,
+            "estimatedApiUsd": 0.00657754
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 76820,
+          "stateUpdates": 0,
+          "prunedRequests": 14,
+          "removedCharacters": 304469,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "018-dotted-prerelease-luna-state-prune-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-state-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 39845,
+        "output": 728,
+        "cacheRead": 6144,
+        "cacheWrite": 0,
+        "totalTokens": 46717,
+        "estimatedApiUsd": 0.00440994
+      },
+      "knownEstimatedUsd": 0.00440994,
+      "totalEstimatedUsd": 0.00440994,
+      "usageCostUnknown": false,
+      "latencyMs": 50367,
+      "turns": 13,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:00:00.473Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 13,
+          "calls": 28,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 39845,
+            "output": 728,
+            "cacheRead": 6144,
+            "cacheWrite": 0,
+            "totalTokens": 46717,
+            "estimatedApiUsd": 0.00440994
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 50367,
+          "stateUpdates": 2,
+          "prunedRequests": 9,
+          "removedCharacters": 100588,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "019-dotted-prerelease-luna-repro-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-repro",
+      "repetition": 0,
+      "usage": {
+        "input": 28736,
+        "output": 478,
+        "cacheRead": 13824,
+        "cacheWrite": 0,
+        "totalTokens": 43038,
+        "estimatedApiUsd": 0.00325084
+      },
+      "knownEstimatedUsd": 0.00325084,
+      "totalEstimatedUsd": 0.00325084,
+      "usageCostUnknown": false,
+      "latencyMs": 32124,
+      "turns": 8,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:00:33.144Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 8,
+          "calls": 16,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 28736,
+            "output": 478,
+            "cacheRead": 13824,
+            "cacheWrite": 0,
+            "totalTokens": 43038,
+            "estimatedApiUsd": 0.00325084
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 32124,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "inc",
+                "args": [
+                  "3.0.0-alpha.beta.5.4",
+                  "prerelease",
+                  false,
+                  "alpha.beta"
+                ],
+                "expected": "3.0.0-alpha.beta.5.5"
+              }
+            ],
+            "before": "failed",
+            "after": "passed",
+            "hash": "ed60880500085a54420d20d5f0c85680bdcf4c703962fcf73f2c1c667025438c"
+          }
+        }
+      ]
+    },
+    {
+      "runId": "020-dotted-prerelease-sol-r0",
+      "task": "dotted-prerelease",
+      "arm": "sol",
+      "repetition": 0,
+      "usage": {
+        "input": 13418,
+        "output": 935,
+        "cacheRead": 9728,
+        "cacheWrite": 0,
+        "totalTokens": 24081,
+        "estimatedApiUsd": 0.0371588
+      },
+      "knownEstimatedUsd": 0.0371588,
+      "totalEstimatedUsd": 0.0371588,
+      "usageCostUnknown": false,
+      "latencyMs": 50942,
+      "turns": 5,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:01:24.686Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 5,
+          "calls": 15,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 13418,
+            "output": 935,
+            "cacheRead": 9728,
+            "cacheWrite": 0,
+            "totalTokens": 24081,
+            "estimatedApiUsd": 0.0371588
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 50942,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "021-dotted-prerelease-luna-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna",
+      "repetition": 0,
+      "usage": {
+        "input": 21787,
+        "output": 602,
+        "cacheRead": 18944,
+        "cacheWrite": 0,
+        "totalTokens": 41333,
+        "estimatedApiUsd": 0.00266914
+      },
+      "knownEstimatedUsd": 0.00266914,
+      "totalEstimatedUsd": 0.00266914,
+      "usageCostUnknown": false,
+      "latencyMs": 28590,
+      "turns": 7,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:01:53.875Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 7,
+          "calls": 16,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 21787,
+            "output": 602,
+            "cacheRead": 18944,
+            "cacheWrite": 0,
+            "totalTokens": 41333,
+            "estimatedApiUsd": 0.00266914
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 28590,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "022-prerelease-subset-luna-r1",
+      "task": "prerelease-subset",
+      "arm": "luna",
+      "repetition": 1,
+      "usage": {
+        "input": 34583,
+        "output": 1466,
+        "cacheRead": 122368,
+        "cacheWrite": 0,
+        "totalTokens": 158417,
+        "estimatedApiUsd": 0.00541498
+      },
+      "knownEstimatedUsd": 0.00541498,
+      "totalEstimatedUsd": null,
+      "usageCostUnknown": true,
+      "latencyMs": 77684,
+      "turns": 17,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:03:12.137Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 17,
+          "calls": 31,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 34583,
+            "output": 1466,
+            "cacheRead": 122368,
+            "cacheWrite": 0,
+            "totalTokens": 158417,
+            "estimatedApiUsd": 0.00541498
+          },
+          "usageCostUnknown": true,
+          "latencyMs": 77684,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "023-prerelease-subset-sol-r1",
+      "task": "prerelease-subset",
+      "arm": "sol",
+      "repetition": 1,
+      "usage": {
+        "input": 24766,
+        "output": 953,
+        "cacheRead": 12032,
+        "cacheWrite": 0,
+        "totalTokens": 37751,
+        "estimatedApiUsd": 0.0602652
+      },
+      "knownEstimatedUsd": 0.0602652,
+      "totalEstimatedUsd": 0.0602652,
+      "usageCostUnknown": false,
+      "latencyMs": 48480,
+      "turns": 5,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:04:01.307Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 5,
+          "calls": 17,
+          "patchReads": 0,
+          "editCount": 3,
+          "usage": {
+            "input": 24766,
+            "output": 953,
+            "cacheRead": 12032,
+            "cacheWrite": 0,
+            "totalTokens": 37751,
+            "estimatedApiUsd": 0.0602652
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 48480,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "024-prerelease-subset-luna-repro-r1",
+      "task": "prerelease-subset",
+      "arm": "luna-repro",
+      "repetition": 1,
+      "usage": {
+        "input": 32683,
+        "output": 1044,
+        "cacheRead": 114176,
+        "cacheWrite": 0,
+        "totalTokens": 147903,
+        "estimatedApiUsd": 0.00493206
+      },
+      "knownEstimatedUsd": 0.00493206,
+      "totalEstimatedUsd": 0.00493206,
+      "usageCostUnknown": false,
+      "latencyMs": 62177,
+      "turns": 18,
+      "status": "verification_failed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:05:04.111Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 18,
+          "calls": 34,
+          "patchReads": 0,
+          "editCount": 5,
+          "usage": {
+            "input": 32683,
+            "output": 1044,
+            "cacheRead": 114176,
+            "cacheWrite": 0,
+            "totalTokens": 147903,
+            "estimatedApiUsd": 0.00493206
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 62177,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "subset",
+                "args": [
+                  "^10.2.0-beta.2",
+                  "^10.2.0-beta.1"
+                ],
+                "expected": true
+              }
+            ],
+            "before": "failed",
+            "after": "failed",
+            "hash": "45c32ced6fc1bf167a551efb7e649222168d6cd4b94dfb1927b6db3185f937cd"
+          }
+        }
+      ]
+    },
+    {
+      "runId": "025-prerelease-subset-luna-state-prune-r1",
+      "task": "prerelease-subset",
+      "arm": "luna-state-prune",
+      "repetition": 1,
+      "usage": {
+        "input": 63172,
+        "output": 1948,
+        "cacheRead": 50688,
+        "cacheWrite": 0,
+        "totalTokens": 115808,
+        "estimatedApiUsd": 0.007798079999999999
+      },
+      "knownEstimatedUsd": 0.007798079999999999,
+      "totalEstimatedUsd": 0.007798079999999999,
+      "usageCostUnknown": false,
+      "latencyMs": 86342,
+      "turns": 23,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:06:31.034Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 23,
+          "calls": 43,
+          "patchReads": 0,
+          "editCount": 4,
+          "usage": {
+            "input": 63172,
+            "output": 1948,
+            "cacheRead": 50688,
+            "cacheWrite": 0,
+            "totalTokens": 115808,
+            "estimatedApiUsd": 0.007798079999999999
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 86342,
+          "stateUpdates": 2,
+          "prunedRequests": 19,
+          "removedCharacters": 482703,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "026-prerelease-subset-luna-prune-r1",
+      "task": "prerelease-subset",
+      "arm": "luna-prune",
+      "repetition": 1,
+      "usage": {
+        "input": 86249,
+        "output": 1279,
+        "cacheRead": 35328,
+        "cacheWrite": 0,
+        "totalTokens": 122856,
+        "estimatedApiUsd": 0.00961768
+      },
+      "knownEstimatedUsd": 0.00961768,
+      "totalEstimatedUsd": null,
+      "usageCostUnknown": true,
+      "latencyMs": 72226,
+      "turns": 25,
+      "status": "turn_limit",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:07:43.848Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "turn_limit",
+          "model": "gpt-6-luna",
+          "turns": 25,
+          "calls": 49,
+          "patchReads": 0,
+          "editCount": 4,
+          "usage": {
+            "input": 86249,
+            "output": 1279,
+            "cacheRead": 35328,
+            "cacheWrite": 0,
+            "totalTokens": 122856,
+            "estimatedApiUsd": 0.00961768
+          },
+          "usageCostUnknown": true,
+          "latencyMs": 72226,
+          "stateUpdates": 0,
+          "prunedRequests": 22,
+          "removedCharacters": 986331,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "027-prerelease-subset-luna-state-r1",
+      "task": "prerelease-subset",
+      "arm": "luna-state",
+      "repetition": 1,
+      "usage": {
+        "input": 49292,
+        "output": 3428,
+        "cacheRead": 234496,
+        "cacheWrite": 0,
+        "totalTokens": 287216,
+        "estimatedApiUsd": 0.00898816
+      },
+      "knownEstimatedUsd": 0.00898816,
+      "totalEstimatedUsd": 0.00898816,
+      "usageCostUnknown": false,
+      "latencyMs": 106514,
+      "turns": 19,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:09:30.942Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 19,
+          "calls": 43,
+          "patchReads": 0,
+          "editCount": 5,
+          "usage": {
+            "input": 49292,
+            "output": 3428,
+            "cacheRead": 234496,
+            "cacheWrite": 0,
+            "totalTokens": 287216,
+            "estimatedApiUsd": 0.00898816
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 106514,
+          "stateUpdates": 3,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "028-prerelease-subset-luna-review-r1",
+      "task": "prerelease-subset",
+      "arm": "luna-review",
+      "repetition": 1,
+      "usage": {
+        "input": 71883,
+        "output": 4349,
+        "cacheRead": 103040,
+        "cacheWrite": 0,
+        "totalTokens": 179272,
+        "estimatedApiUsd": 0.11787223999999999
+      },
+      "knownEstimatedUsd": 0.11787223999999999,
+      "totalEstimatedUsd": 0.11787223999999999,
+      "usageCostUnknown": false,
+      "latencyMs": 179579,
+      "turns": 25,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": {
+        "valid": true,
+        "verdict": "repair",
+        "findings": [
+          "src/ranges/subset.js:1: The patch deletes the entire implementation and module export, leaving an empty file. Consequently semver.subset is an object rather than a function, and every subset() call—including the requested prerelease example—throws TypeError. The visible subset test group confirms 'semver.subset is not a function'. Restore the implementation and export, then repair prerelease handling for both lower and upper bounds while preserving existing range semantics."
+        ]
+      },
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:12:31.450Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 15,
+          "calls": 27,
+          "patchReads": 1,
+          "editCount": 2,
+          "usage": {
+            "input": 29862,
+            "output": 1630,
+            "cacheRead": 82944,
+            "cacheWrite": 0,
+            "totalTokens": 114436,
+            "estimatedApiUsd": 0.00463064
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 65394,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "review",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 8,
+          "patchReads": 1,
+          "editCount": 0,
+          "usage": {
+            "input": 7067,
+            "output": 211,
+            "cacheRead": 5248,
+            "cacheWrite": 0,
+            "totalTokens": 12526,
+            "estimatedApiUsd": 0.0167688
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 19145,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "repair",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 6,
+          "calls": 19,
+          "patchReads": 0,
+          "editCount": 3,
+          "usage": {
+            "input": 34954,
+            "output": 2508,
+            "cacheRead": 14848,
+            "cacheWrite": 0,
+            "totalTokens": 52310,
+            "estimatedApiUsd": 0.0964728
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 95040,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "029-build-metadata-luna-review-r1",
+      "task": "build-metadata",
+      "arm": "luna-review",
+      "repetition": 1,
+      "usage": {
+        "input": 58799,
+        "output": 2427,
+        "cacheRead": 113024,
+        "cacheWrite": 0,
+        "totalTokens": 174250,
+        "estimatedApiUsd": 0.08853327999999999
+      },
+      "knownEstimatedUsd": 0.08853327999999999,
+      "totalEstimatedUsd": 0.08853327999999999,
+      "usageCostUnknown": false,
+      "latencyMs": 119946,
+      "turns": 21,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": {
+        "valid": true,
+        "verdict": "repair",
+        "findings": [
+          "src/internal/re.js:30: Raising the build-character bound to MAX_LENGTH only moves the truncation bug to metadata longer than 256 characters. Verified that validRange('4.17.0+' + 'a'.repeat(300) + '3', true) returns '4.17.0-' + 'a'.repeat(44) + '3' instead of '4.17.0': leftover build metadata becomes a prerelease and changes range meaning. Ensure range preprocessing consumes complete build metadata without allowing a bounded regex match to leave a suffix that is reinterpreted as version content."
+        ]
+      },
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:14:32.379Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 10,
+          "calls": 22,
+          "patchReads": 0,
+          "editCount": 3,
+          "usage": {
+            "input": 26421,
+            "output": 991,
+            "cacheRead": 55808,
+            "cacheWrite": 0,
+            "totalTokens": 83220,
+            "estimatedApiUsd": 0.00369568
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 44180,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "review",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 5,
+          "calls": 12,
+          "patchReads": 1,
+          "editCount": 0,
+          "usage": {
+            "input": 17309,
+            "output": 476,
+            "cacheRead": 25984,
+            "cacheWrite": 0,
+            "totalTokens": 43769,
+            "estimatedApiUsd": 0.0419764
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 31343,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "repair",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 6,
+          "calls": 18,
+          "patchReads": 0,
+          "editCount": 3,
+          "usage": {
+            "input": 15069,
+            "output": 960,
+            "cacheRead": 31232,
+            "cacheWrite": 0,
+            "totalTokens": 47261,
+            "estimatedApiUsd": 0.0428612
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 44423,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "030-build-metadata-luna-r1",
+      "task": "build-metadata",
+      "arm": "luna",
+      "repetition": 1,
+      "usage": {
+        "input": 25171,
+        "output": 913,
+        "cacheRead": 112128,
+        "cacheWrite": 0,
+        "totalTokens": 138212,
+        "estimatedApiUsd": 0.0040948799999999995
+      },
+      "knownEstimatedUsd": 0.0040948799999999995,
+      "totalEstimatedUsd": 0.0040948799999999995,
+      "usageCostUnknown": false,
+      "latencyMs": 55096,
+      "turns": 14,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:15:28.009Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 14,
+          "calls": 28,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 25171,
+            "output": 913,
+            "cacheRead": 112128,
+            "cacheWrite": 0,
+            "totalTokens": 138212,
+            "estimatedApiUsd": 0.0040948799999999995
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 55096,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "031-build-metadata-sol-r1",
+      "task": "build-metadata",
+      "arm": "sol",
+      "repetition": 1,
+      "usage": {
+        "input": 23892,
+        "output": 1676,
+        "cacheRead": 50560,
+        "cacheWrite": 0,
+        "totalTokens": 76128,
+        "estimatedApiUsd": 0.0696
+      },
+      "knownEstimatedUsd": 0.0696,
+      "totalEstimatedUsd": 0.0696,
+      "usageCostUnknown": false,
+      "latencyMs": 78278,
+      "turns": 8,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:16:46.868Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 8,
+          "calls": 20,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 23892,
+            "output": 1676,
+            "cacheRead": 50560,
+            "cacheWrite": 0,
+            "totalTokens": 76128,
+            "estimatedApiUsd": 0.0696
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 78278,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "032-build-metadata-luna-repro-r1",
+      "task": "build-metadata",
+      "arm": "luna-repro",
+      "repetition": 1,
+      "usage": {
+        "input": 28128,
+        "output": 745,
+        "cacheRead": 52736,
+        "cacheWrite": 0,
+        "totalTokens": 81609,
+        "estimatedApiUsd": 0.0037126599999999996
+      },
+      "knownEstimatedUsd": 0.0037126599999999996,
+      "totalEstimatedUsd": 0.0037126599999999996,
+      "usageCostUnknown": false,
+      "latencyMs": 38040,
+      "turns": 10,
+      "status": "verification_failed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js",
+        "src/internal/re.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:17:25.463Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 10,
+          "calls": 21,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 28128,
+            "output": 745,
+            "cacheRead": 52736,
+            "cacheWrite": 0,
+            "totalTokens": 81609,
+            "estimatedApiUsd": 0.0037126599999999996
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 38040,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "validRange",
+                "args": [
+                  "4.17.0+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3",
+                  {
+                    "loose": true
+                  }
+                ],
+                "expected": "4.17.0"
+              },
+              {
+                "method": "validRange",
+                "args": [
+                  "> 4.17.0+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3",
+                  {
+                    "loose": true
+                  }
+                ],
+                "expected": ">=?"
+              }
+            ],
+            "before": "failed",
+            "after": "failed",
+            "hash": "52f80fedf96bacaf867d60ea01d35e6e411e98eb1304c10d0fd35609d8fc3d84"
+          }
+        }
+      ]
+    },
+    {
+      "runId": "033-build-metadata-luna-state-prune-r1",
+      "task": "build-metadata",
+      "arm": "luna-state-prune",
+      "repetition": 1,
+      "usage": {
+        "input": 111946,
+        "output": 652,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 112598,
+        "estimatedApiUsd": 0.0115206
+      },
+      "knownEstimatedUsd": 0.0115206,
+      "totalEstimatedUsd": 0.0115206,
+      "usageCostUnknown": false,
+      "latencyMs": 52720,
+      "turns": 14,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:18:18.744Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 14,
+          "calls": 31,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 111946,
+            "output": 652,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 112598,
+            "estimatedApiUsd": 0.0115206
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 52720,
+          "stateUpdates": 2,
+          "prunedRequests": 11,
+          "removedCharacters": 172773,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "034-build-metadata-luna-prune-r1",
+      "task": "build-metadata",
+      "arm": "luna-prune",
+      "repetition": 1,
+      "usage": {
+        "input": 71104,
+        "output": 965,
+        "cacheRead": 13312,
+        "cacheWrite": 0,
+        "totalTokens": 85381,
+        "estimatedApiUsd": 0.007726019999999999
+      },
+      "knownEstimatedUsd": 0.007726019999999999,
+      "totalEstimatedUsd": 0.007726019999999999,
+      "usageCostUnknown": false,
+      "latencyMs": 64086,
+      "turns": 18,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:19:23.412Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 18,
+          "calls": 38,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 71104,
+            "output": 965,
+            "cacheRead": 13312,
+            "cacheWrite": 0,
+            "totalTokens": 85381,
+            "estimatedApiUsd": 0.007726019999999999
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 64086,
+          "stateUpdates": 0,
+          "prunedRequests": 15,
+          "removedCharacters": 670599,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "035-build-metadata-luna-state-r1",
+      "task": "build-metadata",
+      "arm": "luna-state",
+      "repetition": 1,
+      "usage": {
+        "input": 22025,
+        "output": 808,
+        "cacheRead": 81920,
+        "cacheWrite": 0,
+        "totalTokens": 104753,
+        "estimatedApiUsd": 0.0034257
+      },
+      "knownEstimatedUsd": 0.0034257,
+      "totalEstimatedUsd": 0.0034257,
+      "usageCostUnknown": false,
+      "latencyMs": 38025,
+      "turns": 11,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/internal/re.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:20:02.019Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 11,
+          "calls": 24,
+          "patchReads": 0,
+          "editCount": 2,
+          "usage": {
+            "input": 22025,
+            "output": 808,
+            "cacheRead": 81920,
+            "cacheWrite": 0,
+            "totalTokens": 104753,
+            "estimatedApiUsd": 0.0034257
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 38025,
+          "stateUpdates": 2,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "036-dotted-prerelease-luna-state-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-state",
+      "repetition": 1,
+      "usage": {
+        "input": 39836,
+        "output": 1552,
+        "cacheRead": 62976,
+        "cacheWrite": 0,
+        "totalTokens": 104364,
+        "estimatedApiUsd": 0.005389360000000001
+      },
+      "knownEstimatedUsd": 0.005389360000000001,
+      "totalEstimatedUsd": 0.005389360000000001,
+      "usageCostUnknown": false,
+      "latencyMs": 59071,
+      "turns": 13,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:21:01.677Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 13,
+          "calls": 25,
+          "patchReads": 0,
+          "editCount": 3,
+          "usage": {
+            "input": 39836,
+            "output": 1552,
+            "cacheRead": 62976,
+            "cacheWrite": 0,
+            "totalTokens": 104364,
+            "estimatedApiUsd": 0.005389360000000001
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 59071,
+          "stateUpdates": 1,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "037-dotted-prerelease-luna-review-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-review",
+      "repetition": 1,
+      "usage": {
+        "input": 45173,
+        "output": 1662,
+        "cacheRead": 38272,
+        "cacheWrite": 0,
+        "totalTokens": 85107,
+        "estimatedApiUsd": 0.07405312
+      },
+      "knownEstimatedUsd": 0.07405312,
+      "totalEstimatedUsd": 0.07405312,
+      "usageCostUnknown": false,
+      "latencyMs": 89575,
+      "turns": 16,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": {
+        "valid": true,
+        "verdict": "repair",
+        "findings": [
+          "src/classes/semver.js:308–321: Reset/new prereleases still store a dotted identifier as one array element ([identifier, base]), while the new matching code expects separate components. Consequently, new SemVer('3.0.0').inc('prerelease', 'alpha.beta').inc('prerelease', 'alpha.beta').version remains '3.0.1-alpha.beta.0' instead of advancing to '3.0.1-alpha.beta.1'. Construct reset prerelease arrays from the identifier's individual components so subsequent SemVer.inc calls can recognize and continue the sequence."
+        ]
+      },
+      "beforeReviewAccepted": true,
+      "endedAt": "2026-10-14T16:22:32.226Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 8,
+          "calls": 15,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 15375,
+            "output": 545,
+            "cacheRead": 26112,
+            "cacheWrite": 0,
+            "totalTokens": 42032,
+            "estimatedApiUsd": 0.00207112
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 28103,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "review",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 11,
+          "patchReads": 2,
+          "editCount": 0,
+          "usage": {
+            "input": 19821,
+            "output": 426,
+            "cacheRead": 1280,
+            "cacheWrite": 0,
+            "totalTokens": 21527,
+            "estimatedApiUsd": 0.04403
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 27381,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        },
+        {
+          "phase": "repair",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 4,
+          "calls": 12,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 9977,
+            "output": 691,
+            "cacheRead": 10880,
+            "cacheWrite": 0,
+            "totalTokens": 21548,
+            "estimatedApiUsd": 0.027951999999999998
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 34091,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "038-dotted-prerelease-luna-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna",
+      "repetition": 1,
+      "usage": {
+        "input": 19124,
+        "output": 402,
+        "cacheRead": 11264,
+        "cacheWrite": 0,
+        "totalTokens": 30790,
+        "estimatedApiUsd": 0.00222604
+      },
+      "knownEstimatedUsd": 0.00222604,
+      "totalEstimatedUsd": 0.00222604,
+      "usageCostUnknown": false,
+      "latencyMs": 19910,
+      "turns": 6,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:22:52.694Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 6,
+          "calls": 12,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 19124,
+            "output": 402,
+            "cacheRead": 11264,
+            "cacheWrite": 0,
+            "totalTokens": 30790,
+            "estimatedApiUsd": 0.00222604
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 19910,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "039-dotted-prerelease-sol-r1",
+      "task": "dotted-prerelease",
+      "arm": "sol",
+      "repetition": 1,
+      "usage": {
+        "input": 9882,
+        "output": 965,
+        "cacheRead": 17280,
+        "cacheWrite": 0,
+        "totalTokens": 28127,
+        "estimatedApiUsd": 0.031142
+      },
+      "knownEstimatedUsd": 0.031142,
+      "totalEstimatedUsd": 0.031142,
+      "usageCostUnknown": false,
+      "latencyMs": 71023,
+      "turns": 5,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:24:04.302Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6.1-sol",
+          "turns": 5,
+          "calls": 15,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 9882,
+            "output": 965,
+            "cacheRead": 17280,
+            "cacheWrite": 0,
+            "totalTokens": 28127,
+            "estimatedApiUsd": 0.031142
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 71023,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "040-dotted-prerelease-luna-repro-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-repro",
+      "repetition": 1,
+      "usage": {
+        "input": 21332,
+        "output": 723,
+        "cacheRead": 32768,
+        "cacheWrite": 0,
+        "totalTokens": 54823,
+        "estimatedApiUsd": 0.0028223800000000006
+      },
+      "knownEstimatedUsd": 0.0028223800000000006,
+      "totalEstimatedUsd": null,
+      "usageCostUnknown": true,
+      "latencyMs": 49179,
+      "turns": 12,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:24:54.041Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 12,
+          "calls": 19,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 21332,
+            "output": 723,
+            "cacheRead": 32768,
+            "cacheWrite": 0,
+            "totalTokens": 54823,
+            "estimatedApiUsd": 0.0028223800000000006
+          },
+          "usageCostUnknown": true,
+          "latencyMs": 49179,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "inc",
+                "args": [
+                  "3.0.0-alpha.beta.5.4",
+                  "prerelease",
+                  false,
+                  "alpha.beta"
+                ],
+                "expected": "3.0.0-alpha.beta.5.5"
+              }
+            ],
+            "before": "failed",
+            "after": "passed",
+            "hash": "ed60880500085a54420d20d5f0c85680bdcf4c703962fcf73f2c1c667025438c"
+          }
+        }
+      ]
+    },
+    {
+      "runId": "041-dotted-prerelease-luna-state-prune-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-state-prune",
+      "repetition": 1,
+      "usage": {
+        "input": 21369,
+        "output": 656,
+        "cacheRead": 11776,
+        "cacheWrite": 0,
+        "totalTokens": 33801,
+        "estimatedApiUsd": 0.00258266
+      },
+      "knownEstimatedUsd": 0.00258266,
+      "totalEstimatedUsd": 0.00258266,
+      "usageCostUnknown": false,
+      "latencyMs": 24788,
+      "turns": 7,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:26:42.791Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 7,
+          "calls": 15,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 21369,
+            "output": 656,
+            "cacheRead": 11776,
+            "cacheWrite": 0,
+            "totalTokens": 33801,
+            "estimatedApiUsd": 0.00258266
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 24788,
+          "stateUpdates": 1,
+          "prunedRequests": 4,
+          "removedCharacters": 27966,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "042-dotted-prerelease-luna-prune-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-prune",
+      "repetition": 1,
+      "usage": {
+        "input": 19455,
+        "output": 473,
+        "cacheRead": 1536,
+        "cacheWrite": 0,
+        "totalTokens": 21464,
+        "estimatedApiUsd": 0.00219736
+      },
+      "knownEstimatedUsd": 0.00219736,
+      "totalEstimatedUsd": 0.00219736,
+      "usageCostUnknown": false,
+      "latencyMs": 23450,
+      "turns": 6,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "changed": [
+        "src/classes/semver.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T16:27:06.831Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 6,
+          "calls": 13,
+          "patchReads": 0,
+          "editCount": 1,
+          "usage": {
+            "input": 19455,
+            "output": 473,
+            "cacheRead": 1536,
+            "cacheWrite": 0,
+            "totalTokens": 21464,
+            "estimatedApiUsd": 0.00219736
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 23450,
+          "stateUpdates": 0,
+          "prunedRequests": 3,
+          "removedCharacters": 35075,
+          "reproduction": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "sourceCampaign": "holdout-low-v3",
+  "at": "2026-10-14T07:51:05.608Z",
+  "purpose": "Same-input decision and availability comparison; no downstream success or accuracy inference.",
+  "rows": [
+    {
+      "task": "streaming-utf8",
+      "watcher": "gemma",
+      "sourceRun": "003-streaming-utf8-jev-r0",
+      "inputHash": "afe506a3694ca50bb3cfe8833f25b4b2373f6e9570eaeb60304507902449c3bf",
+      "selectedId": null,
+      "provider": "openrouter",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "usage": null,
+      "costUsd": null,
+      "dispatched": true,
+      "latencyMs": 386,
+      "status": "error",
+      "errorCode": "HTTP_429"
+    },
+    {
+      "task": "dependency-aliases",
+      "watcher": "gemma",
+      "sourceRun": "006-dependency-aliases-jev-r0",
+      "inputHash": "2b11ec355e58484412a947730d1eb4193ae89da8320230655543ea7f7a3fd9fb",
+      "selectedId": null,
+      "provider": "openrouter",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "usage": null,
+      "costUsd": null,
+      "dispatched": true,
+      "latencyMs": 141,
+      "status": "error",
+      "errorCode": "HTTP_429"
+    },
+    {
+      "task": "layered-config",
+      "watcher": "gemma",
+      "sourceRun": "009-layered-config-jev-r0",
+      "inputHash": "60e5bd380c8e9bfdeaec1e0358599b15a2ef8b0cae08602aa0bb750d72e20f5e",
+      "selectedId": null,
+      "provider": "openrouter",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "usage": null,
+      "costUsd": null,
+      "dispatched": true,
+      "latencyMs": 163,
+      "status": "error",
+      "errorCode": "HTTP_429"
+    },
+    {
+      "task": "atomic-ledger",
+      "watcher": "gemma",
+      "sourceRun": "016-atomic-ledger-jev-r0",
+      "inputHash": "921e6ffd37f9bdd3d7800e19111d10c8a3872c045d76c9ea10c1b1917599cc47",
+      "selectedId": null,
+      "provider": "openrouter",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "usage": null,
+      "costUsd": null,
+      "dispatched": true,
+      "latencyMs": 194,
+      "status": "error",
+      "errorCode": "HTTP_429"
+    }
+  ]
+}

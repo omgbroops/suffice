@@ -1,0 +1,2117 @@
+{
+  "version": 1,
+  "campaign": "pilot-v2",
+  "split": "pilot",
+  "model": "gpt-6.1-sol",
+  "provenance": "AI-authored synthetic tasks",
+  "evidence": {
+    "manifestSha256": "7d7e6f8ecd11d613328a171e53182fd7775a9842c7c04c07937b6357e14609ef",
+    "inputHashes": {
+      "acceptance:cursor-pagination": "ccb05b083b7b794631be91db4b63fd93aae295a0127a5e1246adbcb60bb7ddcc",
+      "acceptance:retry-idempotency": "8dd9091fe843eb4fbfad1ceeea22feb3a241d60576ef776a4bb08ab055499f9d",
+      "acceptance:tenant-cache": "352df6dd2204fd4ec54b9eea3590748a7c22f1bb04a15b6704266f9e323cb9b3",
+      "acceptance:window-scheduler": "0cb6fdd8ae02efbf8b9429ef2808a1ee33a1f319233da4b505c872d973f9ebae",
+      "benchmarks/tasks.mjs": "b4e351a691d314fc6a4b311e9a482d05ef045079bc80aa6c098ef58b7a39af95",
+      "docs/EXPERIMENT.md": "591d2560cb52d8f59b88f29475640331cd63f083ce9923cd9e98ba2097c2680d",
+      "package-lock.json": "7f3b150a0155ee8eae8c58323ed7c01855527f86efbc0bef91e2e34b5ae4e1eb",
+      "package.json": "853cd1434fcab815e387e5972768fca011c372acf0dd4242324cb58eba03bf8d",
+      "scripts/experiment.mjs": "1ddd47ba9145c4b4d28593a95786a03169f1dcdb41e94787af06c2b562ad096e",
+      "src/budget.mjs": "a011398d901b6d9d9617d610d2803ab30f3860c8639fa13dd16a4af8f2697913",
+      "src/harness.mjs": "8d5aac09c202189a3dde92e54e2903617a3d8fe03f30cc8c59f3c0b80293694c",
+      "src/runtime.mjs": "878fded7e06488cc933a7ae3111ad94f279ef729ea64e70257da74d414cd8e60",
+      "src/watchers.mjs": "de054d0f3e8c9041d01b5cc23527d74162a4ce00d446a96817ed00f63187da4b",
+      "src/workspace.mjs": "1c69ad26dfd5877e431e20c488ef23614048cc22b25029e64848c8485bab4cb6",
+      "task:cursor-pagination/README.md": "67ef16c6d2a38df39e7a29c521e48c64e0ac710123c2c8688d571bd2a7a07426",
+      "task:cursor-pagination/src/collect.mjs": "3aa82472867823fdc5f1d64f69f322a3cf53ce657b5d36420eb366834b1b1d5c",
+      "task:cursor-pagination/src/repository.mjs": "35f83ffc8eaaf016eb875e3ee60d77ffa5f81438c0b6276572a5d59c9866f20a",
+      "task:cursor-pagination/tests/visible.test.mjs": "612b18a948feb9600bc6e71744e3cf4ee25bfa2fafec15116d4dce9cd76d2f1d",
+      "task:retry-idempotency/README.md": "6ff6147d9e4f76026a15269651a5c68b8b946344bd1bff5d4a76d501d58a99bf",
+      "task:retry-idempotency/src/client.mjs": "8bce032020d96f28b7071867200339c8aee489437fc72342268cc2ce45d2346f",
+      "task:retry-idempotency/src/policy.mjs": "fe12ffe1206ba5d178013cb1e55306df677ed3d998b500f48ef3ea7baa555a67",
+      "task:retry-idempotency/tests/visible.test.mjs": "819154dc261d9165eae026aadd373fa2bb7759f6445140626c454188c2c31051",
+      "task:tenant-cache/README.md": "6f0682ad613766b4ff77e6e7cf9ee82e30b8a5f92587a912e67bf30d98c2eec6",
+      "task:tenant-cache/src/cache.mjs": "9afd70361102e443d070761cb6bf32bb6eb39826fd3c1e4fb043f2418bf746d6",
+      "task:tenant-cache/src/store.mjs": "88fae726b8508643f3184fa9cc54bfdf588520ac8f31d2aa162eeb3df19c4aca",
+      "task:tenant-cache/tests/visible.test.mjs": "f46f7ba66c53a4e3e368a8903c686e7d8fb32849b795fb0f49b243ef0833fa87",
+      "task:window-scheduler/README.md": "7638fb7efa9a298cac3c2fe0f76ffc746cff0eac3c2fcdf4f61d9548a3d587ec",
+      "task:window-scheduler/src/intervals.mjs": "6654082d7813c051a4ecdb58fe55bf879c56f1442d2ddd173f1441859fc044fe",
+      "task:window-scheduler/src/scheduler.mjs": "dde55e1590896bd2622b42a5ded51879675eb0627cff79206eb0849c3004acd2",
+      "task:window-scheduler/tests/visible.test.mjs": "225681a80218628ddf86a578294944bc68ea4d485f84e39dbea7847af4ead0d9"
+    },
+    "resultHashes": {
+      "001-retry-idempotency-pi-r0": "c8840d442a00246f037d38a29d5b03f9d17242d23238cc36f3d1ae651de917cb",
+      "002-retry-idempotency-core-r0": "70fa14924648b5c733b14c28c2e439bf531c7ea435599f3cbccfe069677e02e0",
+      "003-retry-idempotency-rules-r0": "9bb6677cc9aac28b8654598eef7eeddf39b3ea363e33f55dcf9b2050b6a37578",
+      "004-retry-idempotency-luna-r0": "d833dc26c5fd8cd509331239a2ba21758d913b7918d76766463bd6e33000fde8",
+      "005-retry-idempotency-jev-r0": "6f324eefd1610962bd99eba5157c4fb8825bac2b99b4641fa8499aac73192afa",
+      "006-retry-idempotency-lightning-r0": "1d8655b6b78705309bc50e6e5f0273be52cb1875dca9bea06f8914bdc348505e",
+      "007-retry-idempotency-nemotron-r0": "e73bef41b45bf0969fd8ba4b7ea32927ca4cf372e65811610a413f0e3c33ef80",
+      "008-cursor-pagination-core-r0": "c30c9cd89df6535779a5d21d4eca2393a5f8165ad93a59bcc8f445d88d952f78",
+      "009-cursor-pagination-rules-r0": "2191c5e130a51d4668ed95c7c03521f2d7da1919b7630499213f654e6ca89911"
+    }
+  },
+  "variants": [
+    {
+      "variant": "core",
+      "scheduled": 4,
+      "recorded": 2,
+      "statuses": {
+        "completed": 1,
+        "provider_error": 1,
+        "missing_result": 2
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "main_cost_unknown": 3,
+          "acceptance_unavailable": 2,
+          "watcher_cost_unknown": 2,
+          "watcher_record_missing": 2
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.018408400000000002,
+          "mean": 0.018408400000000002,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.018408400000000002,
+          "mean": 0.018408400000000002,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.018408400000000002,
+          "mean": 0.009204200000000001,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 73778,
+          "mean": 36889,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "turns": {
+          "sum": 7,
+          "mean": 3.5,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 12,
+          "mean": 6,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 9049,
+          "mean": 4524.5,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 9049,
+          "mean": 4524.5,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 3584,
+          "mean": 1792,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 2,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.018408400000000002,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "jev",
+      "scheduled": 4,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1,
+        "missing_result": 3
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "acceptance_unavailable": 3,
+          "main_cost_unknown": 3,
+          "watcher_cost_unknown": 3,
+          "watcher_record_missing": 3
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0171652,
+          "mean": 0.0171652,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0.000051366,
+          "mean": 0.000051366,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.017216566,
+          "mean": 0.017216566,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.017216566,
+          "mean": 0.017216566,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 54339,
+          "mean": 54339,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 11,
+          "mean": 11,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 9061,
+          "mean": 9061,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 1260,
+          "mean": 1260,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 10321,
+          "mean": 10321,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 3712,
+          "mean": 3712,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 1,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.017216566,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0.000051366,
+      "jev": {
+        "knownEstimatedSpendUsd": 0.000051366,
+        "knownCalls": 1,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": 0.01,
+          "mean": 0.01,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        }
+      }
+    },
+    {
+      "variant": "lightning",
+      "scheduled": 4,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1,
+        "missing_result": 3
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "acceptance_unavailable": 3,
+          "main_cost_unknown": 3,
+          "watcher_cost_unknown": 3,
+          "watcher_record_missing": 3
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0206764,
+          "mean": 0.0206764,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0206764,
+          "mean": 0.0206764,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0206764,
+          "mean": 0.0206764,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 46738,
+          "mean": 46738,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 12,
+          "mean": 12,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 9251,
+          "mean": 9251,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 886,
+          "mean": 886,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 10137,
+          "mean": 10137,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 2304,
+          "mean": 2304,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 1,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0206764,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "luna",
+      "scheduled": 4,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1,
+        "missing_result": 3
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "acceptance_unavailable": 3,
+          "main_cost_unknown": 3,
+          "watcher_cost_unknown": 3,
+          "watcher_record_missing": 3
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0185792,
+          "mean": 0.0185792,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0.0001122,
+          "mean": 0.0001122,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0186914,
+          "mean": 0.0186914,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0186914,
+          "mean": 0.0186914,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 61644,
+          "mean": 61644,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 12,
+          "mean": 12,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 9340,
+          "mean": 9340,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 854,
+          "mean": 854,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 10194,
+          "mean": 10194,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 3712,
+          "mean": 3712,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 1,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0186914,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0.0001122,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "nemotron",
+      "scheduled": 4,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1,
+        "missing_result": 3
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "acceptance_unavailable": 3,
+          "main_cost_unknown": 3,
+          "watcher_cost_unknown": 3,
+          "watcher_record_missing": 3
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0219504,
+          "mean": 0.0219504,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0219504,
+          "mean": 0.0219504,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0219504,
+          "mean": 0.0219504,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 46390,
+          "mean": 46390,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 12,
+          "mean": 12,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 9452,
+          "mean": 9452,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 886,
+          "mean": 886,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 10338,
+          "mean": 10338,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 2304,
+          "mean": 2304,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 1,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0219504,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "pi",
+      "scheduled": 4,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1,
+        "missing_result": 3
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "acceptance_unavailable": 3,
+          "main_cost_unknown": 3,
+          "watcher_cost_unknown": 3,
+          "watcher_record_missing": 3
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.023568,
+          "mean": 0.023568,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.023568,
+          "mean": 0.023568,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.023568,
+          "mean": 0.023568,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 60762,
+          "mean": 60762,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "turns": {
+          "sum": 6,
+          "mean": 6,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 8,
+          "mean": 8,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 12988,
+          "mean": 12988,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 12988,
+          "mean": 12988,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 5120,
+          "mean": 5120,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 1,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.023568,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "rules",
+      "scheduled": 4,
+      "recorded": 2,
+      "statuses": {
+        "completed": 1,
+        "provider_error": 1,
+        "missing_result": 2
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 4,
+        "rate": 0.25
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 3,
+          "main_cost_unknown": 3,
+          "acceptance_unavailable": 2,
+          "watcher_cost_unknown": 2,
+          "watcher_record_missing": 2
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.025655999999999998,
+          "mean": 0.025655999999999998,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.025655999999999998,
+          "mean": 0.025655999999999998,
+          "known": 1,
+          "missing": 3,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.025655999999999998,
+          "mean": 0.012827999999999999,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 66920,
+          "mean": 33460,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "turns": {
+          "sum": 7,
+          "mean": 3.5,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 12,
+          "mean": 6,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 9344,
+          "mean": 4672,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 9344,
+          "mean": 4672,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 0.5,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 0.5,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 2,
+        "runRate": 0.5,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.025655999999999998,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "baseline": "core",
+      "variant": "jev",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0011918340000000027,
+      "latencyMsDelta": 275,
+      "totalTokensDelta": 1272,
+      "cacheReadTokensDelta": 128
+    },
+    {
+      "baseline": "core",
+      "variant": "lightning",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.002267999999999999,
+      "latencyMsDelta": -7326,
+      "totalTokensDelta": 1088,
+      "cacheReadTokensDelta": -1280
+    },
+    {
+      "baseline": "core",
+      "variant": "luna",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.00028299999999999853,
+      "latencyMsDelta": 7580,
+      "totalTokensDelta": 1145,
+      "cacheReadTokensDelta": 128
+    },
+    {
+      "baseline": "core",
+      "variant": "nemotron",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0035419999999999965,
+      "latencyMsDelta": -7674,
+      "totalTokensDelta": 1289,
+      "cacheReadTokensDelta": -1280
+    },
+    {
+      "baseline": "core",
+      "variant": "pi",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.005159599999999997,
+      "latencyMsDelta": 6698,
+      "totalTokensDelta": 3939,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "core",
+      "variant": "rules",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": 211,
+      "totalTokensDelta": 0,
+      "cacheReadTokensDelta": 0
+    },
+    {
+      "baseline": "core",
+      "variant": "rules",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.007247599999999996,
+      "latencyMsDelta": -7069,
+      "totalTokensDelta": 295,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "pi",
+      "variant": "core",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.005159599999999997,
+      "latencyMsDelta": -6698,
+      "totalTokensDelta": -3939,
+      "cacheReadTokensDelta": -1536
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0063514339999999996,
+      "latencyMsDelta": -6423,
+      "totalTokensDelta": -2667,
+      "cacheReadTokensDelta": -1408
+    },
+    {
+      "baseline": "pi",
+      "variant": "lightning",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0028915999999999976,
+      "latencyMsDelta": -14024,
+      "totalTokensDelta": -2851,
+      "cacheReadTokensDelta": -2816
+    },
+    {
+      "baseline": "pi",
+      "variant": "luna",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.004876599999999998,
+      "latencyMsDelta": 882,
+      "totalTokensDelta": -2794,
+      "cacheReadTokensDelta": -1408
+    },
+    {
+      "baseline": "pi",
+      "variant": "nemotron",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0016176000000000003,
+      "latencyMsDelta": -14372,
+      "totalTokensDelta": -2650,
+      "cacheReadTokensDelta": -2816
+    },
+    {
+      "baseline": "pi",
+      "variant": "rules",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0020879999999999996,
+      "latencyMsDelta": -13767,
+      "totalTokensDelta": -3644,
+      "cacheReadTokensDelta": -5120
+    }
+  ],
+  "runs": [
+    {
+      "task": "retry-idempotency",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": "001-retry-idempotency-pi-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.023568,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.023568,
+      "knownEstimatedUsd": 0.023568,
+      "latencyMs": 60762,
+      "turns": 6,
+      "toolCalls": 8,
+      "mainTokens": 12988,
+      "watcherTokens": 0,
+      "totalTokens": 12988,
+      "cacheReadTokens": 5120,
+      "sourceHashesDigest": "a10177b1d7d144692edc944a5dbb0d69c6092f5fd3f19b92a586a661fca0a4d9",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "002-retry-idempotency-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.018408400000000002,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.018408400000000002,
+      "knownEstimatedUsd": 0.018408400000000002,
+      "latencyMs": 54064,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 9049,
+      "watcherTokens": 0,
+      "totalTokens": 9049,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "7019567dad10c02c41229473bec4bad61fcf4f027f6aa49f04efe2ee4a254a2b",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": "003-retry-idempotency-rules-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.025655999999999998,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.025655999999999998,
+      "knownEstimatedUsd": 0.025655999999999998,
+      "latencyMs": 46995,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 9344,
+      "watcherTokens": 0,
+      "totalTokens": 9344,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "a6afe1fe86658c9c0b4b7c28dadfe48a8522b51057eedb8d996193de17114883",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": "004-retry-idempotency-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0185792,
+      "watcherEstimatedUsd": 0.0001122,
+      "totalEstimatedUsd": 0.0186914,
+      "knownEstimatedUsd": 0.0186914,
+      "latencyMs": 61644,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 9340,
+      "watcherTokens": 854,
+      "totalTokens": 10194,
+      "cacheReadTokens": 3712,
+      "sourceHashesDigest": "57b4c923a3c553394c06b83ddd7f6fb0d3bb80f02e018941fd6865d01ad43401",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": "005-retry-idempotency-jev-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0171652,
+      "watcherEstimatedUsd": 0.000051366,
+      "totalEstimatedUsd": 0.017216566,
+      "knownEstimatedUsd": 0.017216566,
+      "latencyMs": 54339,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 9061,
+      "watcherTokens": 1260,
+      "totalTokens": 10321,
+      "cacheReadTokens": 3712,
+      "sourceHashesDigest": "6e7b6ca4b16144c561c7d7c1fed610c60c06928bd5e8c1f3bc6d1532d500c91f",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": "006-retry-idempotency-lightning-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0206764,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0206764,
+      "knownEstimatedUsd": 0.0206764,
+      "latencyMs": 46738,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 9251,
+      "watcherTokens": 886,
+      "totalTokens": 10137,
+      "cacheReadTokens": 2304,
+      "sourceHashesDigest": "a1d6373e9ccbe04da8c4a02c651e2b4c861a33b8dfc43d390a479c0955fbe9f1",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": "007-retry-idempotency-nemotron-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0219504,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0219504,
+      "knownEstimatedUsd": 0.0219504,
+      "latencyMs": 46390,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 9452,
+      "watcherTokens": 886,
+      "totalTokens": 10338,
+      "cacheReadTokens": 2304,
+      "sourceHashesDigest": "c0fe2185dca1ad939c995640f55544feea0fc734c0c792f1fe3b94e9a63447c3",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "008-cursor-pagination-core-r0",
+      "status": "provider_error",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0,
+      "latencyMs": 19714,
+      "turns": 3,
+      "toolCalls": 0,
+      "mainTokens": 0,
+      "watcherTokens": 0,
+      "totalTokens": 0,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "88dfdf9ec1e4bbc9d556450d8438407e5e6d01cc9577c4727a9ce2580fcbdc46",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": "009-cursor-pagination-rules-r0",
+      "status": "provider_error",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0,
+      "latencyMs": 19925,
+      "turns": 3,
+      "toolCalls": 0,
+      "mainTokens": 0,
+      "watcherTokens": 0,
+      "totalTokens": 0,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "88dfdf9ec1e4bbc9d556450d8438407e5e6d01cc9577c4727a9ce2580fcbdc46",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "core",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "core",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": null,
+      "status": "missing_result",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "acceptance_unavailable",
+        "main_cost_unknown",
+        "watcher_cost_unknown",
+        "watcher_record_missing"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": null,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": null,
+      "latencyMs": null,
+      "turns": null,
+      "toolCalls": null,
+      "mainTokens": null,
+      "watcherTokens": null,
+      "totalTokens": null,
+      "cacheReadTokens": null,
+      "sourceHashesDigest": null,
+      "watcherCalls": null,
+      "watcherErrors": 0,
+      "injections": 0
+    }
+  ],
+  "jevGlobalLedger": {
+    "scope": "global across campaigns; not attributable to this campaign",
+    "reservedUsd": 0.02,
+    "remainingUsd": 1.98,
+    "limitUsd": 2,
+    "calls": 2
+  },
+  "limitations": [
+    "Descriptive pilot only; small samples do not establish significance or real-world performance.",
+    "Core versus Pi compares a prompt/tool bundle; watcher versus core compares an added observer.",
+    "Intention-to-treat operational success includes scheduled missing results and provider/watcher failures. Missing results are incomplete executions, not evidence of model inability.",
+    "Treated-valid efficacy excludes unavailable acceptance, main failure, missing cost telemetry, watcher errors, and missing decision records. This selected subset is descriptive and can be biased.",
+    "Costs are API-equivalent estimates for subscription models plus estimated external watcher spend, not an actual subscription bill or verified provider invoice.",
+    "Known cost includes failed attempts and known components of partially costed runs. Incomplete cost/success is a nonnegative lower bound; null never means zero.",
+    "Jev ledger reservations are conservative budget consumption, separate from usage-based estimated spend; global reservations cannot be attributed to a campaign.",
+    "Provider cache warmth was observed rather than controlled. Fixed task/repetition pairs do not remove order or availability effects."
+  ]
+}

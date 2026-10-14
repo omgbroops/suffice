@@ -1,0 +1,183 @@
+{
+  "at": "2026-10-14T18:25:52.780Z",
+  "sourceInputs": 26,
+  "baselineFiles": 532,
+  "mismatches": [],
+  "operationalAmendments": [
+    {
+      "at": "2026-10-14T18:07:24.345Z",
+      "kind": "resource-only",
+      "originalMinimumFreeBytes": 5368709120,
+      "minimumFreeBytes": 1073741824,
+      "maximumCampaignArtifactBytes": 104857600,
+      "sourceChanges": [
+        {
+          "path": "scripts/efficiency-experiment.mjs",
+          "original": "2717dbbd4112c874981adec0dd5d94b1a572b143f839716fe09eb9310b29dc4f",
+          "current": "3e54de47b2ad80e389d5dfd4fdf071608a85baccb9199a6f0e515484f2c20253"
+        }
+      ],
+      "unchanged": "model, prompts, runtime tools, dependencies, tasks, acceptance, repetitions, order, per-run limits, and cost limit"
+    }
+  ],
+  "resultCount": 48,
+  "accepted": 48,
+  "immutableFailures": [],
+  "models": [
+    "gpt-6.1-sol"
+  ],
+  "unknownCosts": [
+    "039-caret-prerelease-compact-r2",
+    "040-caret-prerelease-navigation-r2"
+  ],
+  "artifactBytes": 18744654,
+  "freeBytes": 2779791360,
+  "commonCompleteCostComparison": [
+    {
+      "arm": "control",
+      "n": 11,
+      "meanCost": 0.04418050909090909,
+      "meanUncachedInput": 17405,
+      "costChange": 0
+    },
+    {
+      "arm": "compact",
+      "n": 11,
+      "meanCost": 0.03541356363636364,
+      "meanUncachedInput": 12926.09090909091,
+      "costChange": -0.19843468613061788
+    },
+    {
+      "arm": "navigation",
+      "n": 11,
+      "meanCost": 0.03321749090909091,
+      "meanUncachedInput": 11533.545454545454,
+      "costChange": -0.24814150871959995
+    },
+    {
+      "arm": "combined",
+      "n": 11,
+      "meanCost": 0.03560672727272726,
+      "meanUncachedInput": 12555.545454545454,
+      "costChange": -0.19406254012464597
+    }
+  ],
+  "perTask": [
+    {
+      "task": "numeric-xrange",
+      "arms": [
+        {
+          "arm": "control",
+          "successes": 3,
+          "meanCost": 0.0686056,
+          "known": 3
+        },
+        {
+          "arm": "compact",
+          "successes": 3,
+          "meanCost": 0.036253999999999995,
+          "known": 3
+        },
+        {
+          "arm": "navigation",
+          "successes": 3,
+          "meanCost": 0.035377200000000004,
+          "known": 3
+        },
+        {
+          "arm": "combined",
+          "successes": 3,
+          "meanCost": 0.05226746666666667,
+          "known": 3
+        }
+      ]
+    },
+    {
+      "task": "caret-prerelease",
+      "arms": [
+        {
+          "arm": "control",
+          "successes": 3,
+          "meanCost": 0.031514400000000005,
+          "known": 3
+        },
+        {
+          "arm": "compact",
+          "successes": 3,
+          "meanCost": 0.026924999999999998,
+          "known": 2
+        },
+        {
+          "arm": "navigation",
+          "successes": 3,
+          "meanCost": 0.029247999999999996,
+          "known": 2
+        },
+        {
+          "arm": "combined",
+          "successes": 3,
+          "meanCost": 0.022308399999999996,
+          "known": 3
+        }
+      ]
+    },
+    {
+      "task": "prerelease-diff",
+      "arms": [
+        {
+          "arm": "control",
+          "successes": 3,
+          "meanCost": 0.025363466666666667,
+          "known": 3
+        },
+        {
+          "arm": "compact",
+          "successes": 3,
+          "meanCost": 0.026881733333333335,
+          "known": 3
+        },
+        {
+          "arm": "navigation",
+          "successes": 3,
+          "meanCost": 0.023707600000000006,
+          "known": 3
+        },
+        {
+          "arm": "combined",
+          "successes": 3,
+          "meanCost": 0.02172226666666667,
+          "known": 3
+        }
+      ]
+    },
+    {
+      "task": "numeric-prerelease",
+      "arms": [
+        {
+          "arm": "control",
+          "successes": 3,
+          "meanCost": 0.04519893333333333,
+          "known": 3
+        },
+        {
+          "arm": "compact",
+          "successes": 3,
+          "meanCost": 0.048763999999999995,
+          "known": 3
+        },
+        {
+          "arm": "navigation",
+          "successes": 3,
+          "meanCost": 0.043214,
+          "known": 3
+        },
+        {
+          "arm": "combined",
+          "successes": 3,
+          "meanCost": 0.0415056,
+          "known": 3
+        }
+      ]
+    }
+  ]
+}

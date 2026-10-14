@@ -1,0 +1,12 @@
+[
+  {
+    "file": "src/decoder.mjs",
+    "old": "this.decoder.decode(bytes)",
+    "new": "this.decoder.decode(bytes, { stream: true })"
+  },
+  {
+    "file": "src/lines.mjs",
+    "old": "const last = this.pending.replace(/\\r$/, '');",
+    "new": "const last = this.pending;"
+  }
+]

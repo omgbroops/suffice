@@ -1,0 +1,22 @@
+[
+  {
+    "file": "src/resolution-key.mjs",
+    "old": "return path;",
+    "new": "return JSON.stringify([tenant, path, revision]);"
+  },
+  {
+    "file": "src/route-matcher.mjs",
+    "old": "return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;",
+    "new": "let selected = null, best = -1;\n  for (const route of routes) {\n    const score = patternScore(route.pattern, path);\n    if (score > best) { selected = route; best = score; }\n  }\n  return selected;"
+  },
+  {
+    "file": "src/field-merge.mjs",
+    "old": "if (key !== 'headers' && value) result[key] = value;",
+    "new": "if (key !== 'headers') result[key] = value;"
+  },
+  {
+    "file": "src/header-merge.mjs",
+    "old": "return { ...base, ...overrides };",
+    "new": "const result = { ...base };\n  for (const [name, value] of Object.entries(overrides)) {\n    if (value === null) delete result[name];\n    else result[name] = value;\n  }\n  return result;"
+  }
+]

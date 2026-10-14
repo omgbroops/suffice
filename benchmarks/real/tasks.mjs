@@ -1,0 +1,30 @@
+import { resolve } from 'node:path';
+import { stateDir } from '../../src/runtime.mjs';
+
+export const repository = 'https://github.com/npm/node-semver';
+export const baseRevision = 'efa4be6096c1f9b77d9d27d6132f6220c43b4e31';
+export const upstreamDir = resolve(stateDir, 'upstream/semver', `node-semver-${baseRevision}`);
+export const realTasks = [
+  {
+    id: 'prerelease-subset',
+    fix: '5f3ca133e040210b6ea80c350a1d61d9da02e722',
+    referenceFile: 'ranges/subset.js',
+    issue: 'https://github.com/npm/node-semver/issues/757',
+    prompt: 'Fix subset() incorrectly rejecting contained prerelease ranges. For example, ^10.2.0-beta.2 should be a subset of ^10.2.0-beta.1. Preserve normal prerelease exclusion, inclusive/exclusive bound semantics, empty ranges, and existing options. Investigate both lower and upper bounds rather than special-casing this example.',
+  },
+  {
+    id: 'build-metadata',
+    fix: '17aa702d91166472b197a2ea768f085083bee2e4',
+    referenceFile: 'classes/range.js',
+    issue: 'https://github.com/npm/node-semver/pull/869',
+    prompt: 'Fix range parsing with long build metadata. Build metadata must not change range meaning or bleed into version numbers. A loose range consisting of 4.17.0+ followed by 250 letters a and then 3 must mean exactly 4.17.0. The problem also affects comparator whitespace, partial versions, hyphen ranges, tilde/caret ranges and OR sets. Preserve prereleases and existing strict/loose behavior.',
+  },
+  {
+    id: 'dotted-prerelease',
+    fix: 'bea6028694a75e840f48b288ac019e9644cfe6e8',
+    referenceFile: 'classes/semver.js',
+    issue: 'https://github.com/npm/node-semver/issues/226',
+    prompt: 'Fix incrementing prereleases when the requested identifier contains dots. inc(3.0.0-alpha.beta.5.4, prerelease, false, alpha.beta) should continue to 3.0.0-alpha.beta.5.5 rather than restart the sequence. A matching prefix followed by a nonnumeric segment must restart, and a mismatching prefix must be replaced. Preserve identifierBase options, invalid-identifier handling, single-component identifiers, and nonmutation of SemVer objects passed to the public inc function.',
+  },
+].map(t => ({ ...t, title: t.id, workspaceDir: resolve(stateDir, 'real-tasks', t.id, 'workspace'),
+  acceptancePath: resolve(import.meta.dirname, `${t.id}.test.mjs`) }));

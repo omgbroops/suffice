@@ -1,0 +1,256 @@
+{
+  "campaign": "semver-infrastructure-smoke-v1",
+  "at": "2026-10-14T15:32:49.727Z",
+  "completed": 3,
+  "scheduled": 3,
+  "repository": "https://github.com/npm/node-semver",
+  "baseRevision": "efa4be6096c1f9b77d9d27d6132f6220c43b4e31",
+  "groups": [
+    {
+      "arm": "luna-review",
+      "attempted": 1,
+      "scheduled": 1,
+      "successes": 0,
+      "patchesAccepted": 0,
+      "completeCostRuns": 0,
+      "knownCost": 0.00704732,
+      "costPerSuccess": null,
+      "meanCost": null,
+      "meanSeconds": 117.212,
+      "prunedRequests": 0,
+      "stateUpdates": 0,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna-state-prune",
+      "attempted": 1,
+      "scheduled": 1,
+      "successes": 0,
+      "patchesAccepted": 0,
+      "completeCostRuns": 1,
+      "knownCost": 0.008753920000000002,
+      "costPerSuccess": null,
+      "meanCost": 0.008753920000000002,
+      "meanSeconds": 86.044,
+      "prunedRequests": 16,
+      "stateUpdates": 2,
+      "reproEstablished": 0,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    },
+    {
+      "arm": "luna-repro",
+      "attempted": 1,
+      "scheduled": 1,
+      "successes": 0,
+      "patchesAccepted": 0,
+      "completeCostRuns": 1,
+      "knownCost": 0.0035772,
+      "costPerSuccess": null,
+      "meanCost": 0.0035772,
+      "meanSeconds": 79.935,
+      "prunedRequests": 0,
+      "stateUpdates": 0,
+      "reproEstablished": 1,
+      "reproPassed": 0,
+      "reviews": 0,
+      "repairs": 0,
+      "falseApprovals": 0,
+      "rescued": 0
+    }
+  ],
+  "runs": [
+    {
+      "runId": "001-prerelease-subset-luna-review-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-review",
+      "repetition": 0,
+      "usage": {
+        "input": 30448,
+        "output": 2414,
+        "cacheRead": 279552,
+        "cacheWrite": 0,
+        "totalTokens": 312414,
+        "estimatedApiUsd": 0.00704732
+      },
+      "knownEstimatedUsd": 0.00704732,
+      "totalEstimatedUsd": null,
+      "usageCostUnknown": true,
+      "latencyMs": 117212,
+      "turns": 25,
+      "status": "turn_limit",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:29:56.612Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "turn_limit",
+          "model": "gpt-6-luna",
+          "turns": 25,
+          "calls": 48,
+          "patchReads": 0,
+          "editCount": 7,
+          "usage": {
+            "input": 30448,
+            "output": 2414,
+            "cacheRead": 279552,
+            "cacheWrite": 0,
+            "totalTokens": 312414,
+            "estimatedApiUsd": 0.00704732
+          },
+          "usageCostUnknown": true,
+          "latencyMs": 117212,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "002-prerelease-subset-luna-state-prune-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-state-prune",
+      "repetition": 0,
+      "usage": {
+        "input": 72130,
+        "output": 1894,
+        "cacheRead": 59392,
+        "cacheWrite": 0,
+        "totalTokens": 133416,
+        "estimatedApiUsd": 0.008753920000000002
+      },
+      "knownEstimatedUsd": 0.008753920000000002,
+      "totalEstimatedUsd": 0.008753920000000002,
+      "usageCostUnknown": false,
+      "latencyMs": 86044,
+      "turns": 20,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:31:23.258Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 20,
+          "calls": 42,
+          "patchReads": 0,
+          "editCount": 4,
+          "usage": {
+            "input": 72130,
+            "output": 1894,
+            "cacheRead": 59392,
+            "cacheWrite": 0,
+            "totalTokens": 133416,
+            "estimatedApiUsd": 0.008753920000000002
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 86044,
+          "stateUpdates": 2,
+          "prunedRequests": 16,
+          "removedCharacters": 500399,
+          "reproduction": null
+        }
+      ]
+    },
+    {
+      "runId": "003-prerelease-subset-luna-repro-r0",
+      "task": "prerelease-subset",
+      "arm": "luna-repro",
+      "repetition": 0,
+      "usage": {
+        "input": 22221,
+        "output": 867,
+        "cacheRead": 92160,
+        "cacheWrite": 0,
+        "totalTokens": 115248,
+        "estimatedApiUsd": 0.0035772
+      },
+      "knownEstimatedUsd": 0.0035772,
+      "totalEstimatedUsd": 0.0035772,
+      "usageCostUnknown": false,
+      "latencyMs": 79935,
+      "turns": 12,
+      "status": "invalid_treatment",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "review": null,
+      "beforeReviewAccepted": false,
+      "endedAt": "2026-10-14T15:32:43.774Z",
+      "phases": [
+        {
+          "phase": "worker",
+          "status": "completed",
+          "model": "gpt-6-luna",
+          "turns": 12,
+          "calls": 26,
+          "patchReads": 0,
+          "editCount": 4,
+          "usage": {
+            "input": 22221,
+            "output": 867,
+            "cacheRead": 92160,
+            "cacheWrite": 0,
+            "totalTokens": 115248,
+            "estimatedApiUsd": 0.0035772
+          },
+          "usageCostUnknown": false,
+          "latencyMs": 79935,
+          "stateUpdates": 0,
+          "prunedRequests": 0,
+          "removedCharacters": 0,
+          "reproduction": {
+            "cases": [
+              {
+                "method": "subset",
+                "args": [
+                  "^10.2.0-beta.2",
+                  "^10.2.0-beta.1"
+                ],
+                "expected": true
+              },
+              {
+                "method": "subset",
+                "args": [
+                  "^10.2.0-beta.1",
+                  "^10.2.0-beta.2"
+                ],
+                "expected": false
+              }
+            ],
+            "before": "failed",
+            "after": "failed",
+            "hash": "d9079a45a29d4c0a2f64bf372c68eafed2a46b4b50ea8a2f4b63d828a11582f9"
+          }
+        }
+      ]
+    }
+  ]
+}

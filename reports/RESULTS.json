@@ -1,0 +1,217 @@
+{
+  "at": "2026-10-14T07:51:50.356Z",
+  "totalCodingAttemptsIncludingIntegration": 79,
+  "campaigns": [
+    {
+      "name": "pilot-low-v3",
+      "split": "pilot",
+      "reasoning": "low",
+      "scheduled": 32,
+      "attempted": 32,
+      "passed": 29,
+      "providerFailures": 3,
+      "otherFailures": 0,
+      "coreVsPi": {
+        "pairs": 4,
+        "costChange": -0.29561689292503024,
+        "callChange": -0.36,
+        "tokenChange": -0.2990615178355568
+      },
+      "arms": [
+        {
+          "variant": "pi",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 0,
+          "injections": 0,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0.41968197413565567,
+            "callChange": 0.5625,
+            "tokenChange": 0.4266587231907688
+          }
+        },
+        {
+          "variant": "core",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 0,
+          "injections": 0,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0,
+            "callChange": 0,
+            "tokenChange": 0
+          }
+        },
+        {
+          "variant": "rules",
+          "attempted": 4,
+          "passed": 3,
+          "calls": 3,
+          "injections": 0,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 3,
+            "costChange": -0.010099746165671775,
+            "callChange": 0,
+            "tokenChange": -0.0030073895858394595
+          }
+        },
+        {
+          "variant": "luna",
+          "attempted": 4,
+          "passed": 3,
+          "calls": 3,
+          "injections": 3,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 3,
+            "costChange": -0.13263513996639398,
+            "callChange": 0,
+            "tokenChange": 0.03952569169960474
+          }
+        },
+        {
+          "variant": "jev",
+          "attempted": 4,
+          "passed": 3,
+          "calls": 3,
+          "injections": 3,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 2,
+            "costChange": -0.10891216737645404,
+            "callChange": 0,
+            "tokenChange": 0.0765935349863689
+          }
+        },
+        {
+          "variant": "lightning",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 4,
+          "injections": 4,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0.025514647664291346,
+            "callChange": 0,
+            "tokenChange": 0.04474476357707258
+          }
+        },
+        {
+          "variant": "nemotron",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 4,
+          "injections": 3,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0.10331221958300363,
+            "callChange": 0,
+            "tokenChange": 0.03681173962122153
+          }
+        },
+        {
+          "variant": "jev-gated",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 0,
+          "injections": 0,
+          "plannedReadsSkipped": 4,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": -0.02851675903932427,
+            "callChange": 0,
+            "tokenChange": 0.0033237175467202285
+          }
+        }
+      ]
+    },
+    {
+      "name": "holdout-low-v3",
+      "split": "holdout",
+      "reasoning": "low",
+      "scheduled": 16,
+      "attempted": 16,
+      "passed": 16,
+      "providerFailures": 0,
+      "otherFailures": 0,
+      "coreVsPi": {
+        "pairs": 4,
+        "costChange": -0.3396129778401935,
+        "callChange": -0.3846153846153846,
+        "tokenChange": -0.36474629502404554
+      },
+      "arms": [
+        {
+          "variant": "pi",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 0,
+          "injections": 0,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0.5142635552247585,
+            "callChange": 0.625,
+            "tokenChange": 0.5741742112906714
+          }
+        },
+        {
+          "variant": "core",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 0,
+          "injections": 0,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0,
+            "callChange": 0,
+            "tokenChange": 0
+          }
+        },
+        {
+          "variant": "jev",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 4,
+          "injections": 4,
+          "plannedReadsSkipped": 0,
+          "vsCore": {
+            "pairs": 3,
+            "costChange": 0.14620446490702843,
+            "callChange": 0,
+            "tokenChange": 0.041202310257870245
+          }
+        },
+        {
+          "variant": "jev-gated",
+          "attempted": 4,
+          "passed": 4,
+          "calls": 0,
+          "injections": 0,
+          "plannedReadsSkipped": 4,
+          "vsCore": {
+            "pairs": 4,
+            "costChange": 0.1962435030616141,
+            "callChange": 0,
+            "tokenChange": 0.0006179896795723838
+          }
+        }
+      ]
+    }
+  ],
+  "jev": {
+    "knownUsageEstimateUsd": 0.00046095000000000006,
+    "missingCallCost": 0,
+    "reservedUsd": 0.1,
+    "limitUsd": 2
+  },
+  "diskFreeGiB": 16.919193267822266
+}

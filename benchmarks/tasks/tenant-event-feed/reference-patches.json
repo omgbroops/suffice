@@ -1,0 +1,17 @@
+[
+  {
+    "file": "src/batch-commit.mjs",
+    "old": "const staged = state;",
+    "new": "const staged = { sequence: state.sequence, records: [...state.records] };"
+  },
+  {
+    "file": "src/snapshot.mjs",
+    "old": "return { ...record, payload: { ...record.payload } };",
+    "new": "return structuredClone(record);"
+  },
+  {
+    "file": "src/live-bus.mjs",
+    "old": "for (const entry of subscriptions) entry.onEvent(snapshot(record));",
+    "new": "for (const entry of subscriptions) if (entry.tenant === record.tenant) entry.onEvent(snapshot(record));"
+  }
+]

@@ -1,0 +1,43 @@
+# Watcher pilot v1
+
+## Context and control exploration v4
+
+### Revision v5 after the frozen screen
+
+The first screen rejected aggressive retention: six arms repeatedly reread evidence and hit tool/time limits. Keep those failures. `stable-rules`, `stable-luna`, and `stable-jev` protect the first complete group (usually the README contract) plus two recent complete groups, and target 20,000 characters. Model candidates show bounded assistant actions and tool evidence without thinking blocks, rather than the first 1,000 characters of a whole group. Omission metadata is attached to the latest retained tool result rather than posed as a new user turn. These changes are a bundle; no claim isolates their contributions.
+
+Smoke-test the revised variants on inventory-reservations, the tuning task. Then freeze them and run two repetitions on tenant-event-feed and layered-routing, excluding inventory via --exclude-task. Compare core, graph, bounded Sol assistance, cache-select, Luna-only and Luna-to-Sol routing with all three revised selectors. The two transfer tasks have not been used for policy tuning, but remain authored synthetic fixtures. Preserve every attempt and do not replace failures.
+
+New campaigns retain earlier raw results and source snapshots. All new arms share a history_read tool that can recover original messages; the worker transcript remains untouched and is saved in ignored run artifacts. Context replacement uses Pi's context hook, retaining user/system instructions and complete assistant/tool groups. One recent complete group is always retained. Deterministic selection uses a 6,000-character target, not a hard token limit; protected content can exceed it. Model selection retains at most one of twelve bounded historical group excerpts per decision and fails open on errors; after four decisions it reuses its retained IDs alongside protected recent groups. Threshold compaction removes older groups above 12,000 characters without generating a summary. This is a threshold heuristic, not an optimized cache-aware policy; actual cache costs are measured.
+
+Arms: core, short-direct, default-code, pi (prompt/tool ablation); bounded (35-line default, worker may request more); select-rules/select-luna/select-jev/select-gemma/select-lightning/select-nemotron (replacement context); compact (threshold pruning); graph (file-level imports plus reverse-dependency traversal with lexical ranking); delegate (up to two bounded read-only GPT-6.1 Sol evidence-selection calls, not an autonomous tool-using subagent); luna-worker and route (Luna-first, Sol after work tools/codemode or errors). Original append-only luna watcher remains a comparator. Graph traversal is not a complete symbol-call graph; no embeddings or weights are downloaded. Graph is indexed at run start, with retrieved file contents read fresh.
+
+Every auxiliary model call is counted in the existing decisions/cost telemetry. Context removal, preserved prefixes, routing changes, full request models, and provider failures are separately recorded. Subscription cost remains API-equivalent, not actual cash spend. A routing decision affects the next generation, not tools already generated. No Astra or GPT-5.6 Sol requests are permitted. Jev retains the existing cumulative $2 ledger. OpenRouter remains restricted to the three explicit zero-priced model IDs.
+
+Three additional authored multi-module tasks use a separate context split; they remain synthetic, not real repository issues. Initial exploration screens mechanisms and does not establish product-level accuracy or statistically significant superiority. No learned control policy is claimed: the new traces provide evidence for a later independently evaluated training experiment. Do not pool v4 comparisons with the earlier smaller tool surface.
+
+Question: does proactive code-evidence retrieval improve independently verified task success or reduce total resources after including watcher overhead?
+
+Main model: GPT-6.1 Sol, medium effort, subscription-backed OpenAI Responses via Pi 1.2.0. Pin dependencies in package-lock.json. Every arm receives identical task prompts, workspace state, restricted tools and acceptance criteria. Do not use Codex's existing auth cache. Pi has a separate user-approved OAuth login.
+
+Arms: Pi SDK default prompt/direct tools; core (short stable prompt + Pi codemode-only); core + deterministic direct-import watcher; core + Luna; core + pinned Jev; core + each of the three user-selected OpenRouter free models. Core versus Pi measures a bundle, not the effect of any single ingredient. Watcher versus core isolates the added observer.
+
+Use the native codemode sandbox and deferred discovery. Keep source/results outside history until needed, preserve previous messages, disable automatic compaction during short trials. Do not claim this recreates Reason's private implementation or guarantees its published results.
+
+Watcher policy v1: after a source-file read, offer at most eight unread source modules, prioritize identified direct imports descriptively, select one or abstain, append at most 4,500 characters of original evidence to the current result. Four calls maximum per run. Suppress evidence that became stale or was read concurrently. Same candidate set and action space for learned watchers. Never let a watcher edit files or alter tests.
+
+Eight frozen AI-authored synthetic tasks: four pilot, four holdout. Acceptance tests and reference fixes remain outside worker-accessible workspaces. Only src/ can be modified. All original workspaces fail acceptance and all reference fixes pass. Visible tests are smoke tests. This is a diagnostic pilot, not a real-world benchmark or a defensible accuracy claim.
+
+Fixed budgets: 24 main-model turns, 80 tool calls, four minutes per run, four watcher calls. Jev conservatively reserves $0.01 durably before every request, including failed/unknown calls, with a global $2 cap. No automatic paid OpenRouter fallback. All API keys and OAuth credentials remain outside model-accessible workspaces and test subprocess environments.
+
+Operational revision after initial overload failures: use Pi's bounded main-agent retry (two retries, 5s base backoff, 30s maximum delay) identically for all arms. Disable provider-internal retries and cache warming. Retain every failed request in telemetry and mark missing cost unknown even if a later retry succeeds. Stop the campaign after two consecutive terminal provider errors. Preserve earlier partial campaigns; never overwrite or merge them as if conditions were unchanged.
+
+Post-pilot candidate `jev-gated`: same Jev watcher, but skip candidate paths explicitly identified in the main agent's currently executing codemode read program. This is a narrow syntactic cost heuristic, not a correctness guarantee. Track suppressed opportunities separately. Evaluate it against ungated Jev and core on fresh held-out tasks. Optional `--effort=low` explores a lower main reasoning budget; effort stays equal across every arm within that campaign and results must not be pooled across effort settings.
+
+Longer campaigns may resume only unattempted rows after a 60-second provider cooldown, up to four resumes. Completed results, including failures, are never replaced. Resume verifies the frozen source/task/configuration hashes and schedule. This recovery handles temporary service overload, never authentication, consent or subscription-limit errors.
+
+Evaluation: frozen acceptance, source hashes, task/run/variant identity, actual returned token usage including cache reads, API-equivalent estimated cost, watcher spend, turns, wall time, cache-prefix diagnostics, availability failures and missing cost telemetry. Report subscription usage separately from actual provider charges. Never turn missing usage into a claim of zero cost. Repeat trials and rotate execution order; do not assume provider cache warmth is controlled.
+
+Test execution uses Node permission restrictions with bounded output/memory/time and a clean environment. This is not an OS security boundary; only authored pure-JavaScript tasks are in scope. No shell tool or unrestricted native file tool is exposed to workers. No downloads/model weights/Docker images. Stop if free storage falls below 5 GiB. Keep local run evidence ignored and publish only sanitized aggregate reports.
+
+Pilot results may motivate a separately versioned change. Never overwrite the initial results or describe tuned-on tasks as holdout. Run unchanged finalists on the held-out split before claiming transfer. Stop/mark an arm unavailable on provider/auth failures rather than counting an absent watcher as a successful treatment.

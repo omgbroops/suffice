@@ -1,0 +1,10 @@
+import {resolve} from 'node:path';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {createRuntime,stateDir} from '../src/runtime.mjs';
+import {runRealAgent} from '../src/real-agent.mjs';
+import {parseReview} from '../src/real-policy.mjs';
+import {realTasks} from '../benchmarks/real/tasks.mjs';
+const task=realTasks[0],v=JSON.parse(await readFile(resolve(task.workspaceDir,'../validation.json'),'utf8'));
+const dir=resolve(stateDir,'real-runs/semver-review-interface-smoke-v2');await mkdir(dir);
+const r=await runRealAgent({runtime:await createRuntime(),workspace:resolve(stateDir,'real-runs/semver-infrastructure-smoke-v1/001-prerelease-subset-luna-review-r0/workspace'),baseline:task.workspaceDir,sourceFiles:v.sourceFiles,task,arm:{model:'gpt-6-luna'},phase:'review',runDir:dir,timeoutMs:180000,maxTurns:12,feedback:'Review the existing attempted repair. Worker exhausted its turn budget. Inspect the patch and return the structured verdict.'});
+await writeFile(resolve(dir,'result.json'),JSON.stringify(r,null,2));console.log(JSON.stringify({status:r.status,turns:r.turns,patchReads:r.patchReads,review:parseReview(r.final,{patchReads:r.patchReads}),errors:r.errors}));

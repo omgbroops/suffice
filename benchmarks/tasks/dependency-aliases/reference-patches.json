@@ -1,0 +1,17 @@
+[
+  {
+    "file": "src/registry.mjs",
+    "old": "  const target = aliases[name] ?? name;",
+    "new": "  const seen = new Set(); let target = name;\n  while (Object.hasOwn(aliases, target)) {\n    if (seen.has(target)) throw new Error('Alias cycle: ' + target);\n    seen.add(target); target = aliases[target];\n  }"
+  },
+  {
+    "file": "src/order.mjs",
+    "old": "    if (done.has(name)) return;\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\n    active.add(name);",
+    "new": "    if (done.has(target)) return;\n    if (active.has(target)) throw new Error('Dependency cycle: ' + target);\n    active.add(target);"
+  },
+  {
+    "file": "src/order.mjs",
+    "old": "active.delete(name); done.add(name);",
+    "new": "active.delete(target); done.add(target);"
+  }
+]

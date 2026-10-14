@@ -1,0 +1,12 @@
+[
+  {
+    "file": "src/cache.mjs",
+    "old": "return tenant + ':' + resourceId;",
+    "new": "return JSON.stringify([tenant, resourceId]);"
+  },
+  {
+    "file": "src/store.mjs",
+    "old": "deadline: Date.now() + ttlMs",
+    "new": "deadline: this.now() + ttlMs"
+  }
+]

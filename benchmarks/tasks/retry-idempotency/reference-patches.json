@@ -1,0 +1,17 @@
+[
+  {
+    "file": "src/client.mjs",
+    "old": "    let response;\n    for",
+    "new": "    const outgoing = { ...headers };\n    if (method === 'POST' && !Object.hasOwn(outgoing, 'idempotency-key')) outgoing['idempotency-key'] = keyFactory();\n    let response;\n    for"
+  },
+  {
+    "file": "src/client.mjs",
+    "old": "      const outgoing = { ...headers };\n      if (method === 'POST') outgoing['idempotency-key'] = keyFactory();\n",
+    "new": ""
+  },
+  {
+    "file": "src/policy.mjs",
+    "old": "return Number(retryAfter);",
+    "new": "return Number(retryAfter) * 1000;"
+  }
+]

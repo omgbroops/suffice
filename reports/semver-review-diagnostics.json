@@ -1,0 +1,529 @@
+{
+  "at": "2026-10-14T16:29:16.042Z",
+  "notice": "Post-hoc diagnostics derived from reviewer findings. Not frozen/held-out acceptance, not replacement benchmark scores. Some checks also fail upstream references.",
+  "references": [
+    {
+      "task": "build-metadata",
+      "kind": "baseline",
+      "status": "failed",
+      "passed": 2,
+      "failed": 1,
+      "tests": 3,
+      "failures": [
+        "metadata without a version stays invalid"
+      ]
+    },
+    {
+      "task": "build-metadata",
+      "kind": "upstream-reference",
+      "status": "failed",
+      "passed": 2,
+      "failed": 1,
+      "tests": 3,
+      "failures": [
+        "metadata without a version stays invalid"
+      ]
+    },
+    {
+      "task": "dotted-prerelease",
+      "kind": "baseline",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "task": "dotted-prerelease",
+      "kind": "upstream-reference",
+      "status": "failed",
+      "passed": 0,
+      "failed": 2,
+      "tests": 2,
+      "failures": [
+        "consecutive instance increments advance dotted identifier",
+        "reset then increment advances dotted identifier"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "runId": "008-build-metadata-luna-r0",
+      "task": "build-metadata",
+      "arm": "luna",
+      "repetition": 0,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "009-build-metadata-luna-review-r0",
+      "task": "build-metadata",
+      "arm": "luna-review",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 3,
+        "failed": 0,
+        "tests": 3,
+        "failures": []
+      },
+      "before": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 3,
+        "tests": 3,
+        "failures": [
+          "invalid metadata punctuation stays invalid",
+          "empty metadata segment stays invalid",
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "010-build-metadata-luna-state-r0",
+      "task": "build-metadata",
+      "arm": "luna-state",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "011-build-metadata-luna-prune-r0",
+      "task": "build-metadata",
+      "arm": "luna-prune",
+      "repetition": 0,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "012-build-metadata-luna-state-prune-r0",
+      "task": "build-metadata",
+      "arm": "luna-state-prune",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "013-build-metadata-luna-repro-r0",
+      "task": "build-metadata",
+      "arm": "luna-repro",
+      "repetition": 0,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "014-build-metadata-sol-r0",
+      "task": "build-metadata",
+      "arm": "sol",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "015-dotted-prerelease-luna-review-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-review",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 2,
+        "failed": 0,
+        "tests": 2,
+        "failures": []
+      },
+      "before": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "016-dotted-prerelease-luna-state-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-state",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 2,
+        "failed": 0,
+        "tests": 2,
+        "failures": []
+      }
+    },
+    {
+      "runId": "017-dotted-prerelease-luna-prune-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-prune",
+      "repetition": 0,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "018-dotted-prerelease-luna-state-prune-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-state-prune",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 2,
+        "failed": 0,
+        "tests": 2,
+        "failures": []
+      }
+    },
+    {
+      "runId": "019-dotted-prerelease-luna-repro-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna-repro",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "020-dotted-prerelease-sol-r0",
+      "task": "dotted-prerelease",
+      "arm": "sol",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 2,
+        "failed": 0,
+        "tests": 2,
+        "failures": []
+      }
+    },
+    {
+      "runId": "021-dotted-prerelease-luna-r0",
+      "task": "dotted-prerelease",
+      "arm": "luna",
+      "repetition": 0,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "029-build-metadata-luna-review-r1",
+      "task": "build-metadata",
+      "arm": "luna-review",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      },
+      "before": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "030-build-metadata-luna-r1",
+      "task": "build-metadata",
+      "arm": "luna",
+      "repetition": 1,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": null,
+        "failed": null,
+        "tests": null,
+        "failures": []
+      }
+    },
+    {
+      "runId": "031-build-metadata-sol-r1",
+      "task": "build-metadata",
+      "arm": "sol",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "032-build-metadata-luna-repro-r1",
+      "task": "build-metadata",
+      "arm": "luna-repro",
+      "repetition": 1,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "033-build-metadata-luna-state-prune-r1",
+      "task": "build-metadata",
+      "arm": "luna-state-prune",
+      "repetition": 1,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "034-build-metadata-luna-prune-r1",
+      "task": "build-metadata",
+      "arm": "luna-prune",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 2,
+        "failed": 1,
+        "tests": 3,
+        "failures": [
+          "metadata without a version stays invalid"
+        ]
+      }
+    },
+    {
+      "runId": "035-build-metadata-luna-state-r1",
+      "task": "build-metadata",
+      "arm": "luna-state",
+      "repetition": 1,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": null,
+        "failed": null,
+        "tests": null,
+        "failures": []
+      }
+    },
+    {
+      "runId": "036-dotted-prerelease-luna-state-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-state",
+      "repetition": 1,
+      "originalAccepted": false,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "037-dotted-prerelease-luna-review-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-review",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 2,
+        "failed": 0,
+        "tests": 2,
+        "failures": []
+      },
+      "before": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "038-dotted-prerelease-luna-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "039-dotted-prerelease-sol-r1",
+      "task": "dotted-prerelease",
+      "arm": "sol",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "passed",
+        "passed": 2,
+        "failed": 0,
+        "tests": 2,
+        "failures": []
+      }
+    },
+    {
+      "runId": "040-dotted-prerelease-luna-repro-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-repro",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "041-dotted-prerelease-luna-state-prune-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-state-prune",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    },
+    {
+      "runId": "042-dotted-prerelease-luna-prune-r1",
+      "task": "dotted-prerelease",
+      "arm": "luna-prune",
+      "repetition": 1,
+      "originalAccepted": true,
+      "after": {
+        "status": "failed",
+        "passed": 0,
+        "failed": 2,
+        "tests": 2,
+        "failures": [
+          "consecutive instance increments advance dotted identifier",
+          "reset then increment advances dotted identifier"
+        ]
+      }
+    }
+  ]
+}

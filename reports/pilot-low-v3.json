@@ -1,0 +1,2796 @@
+{
+  "version": 1,
+  "campaign": "pilot-low-v3",
+  "split": "pilot",
+  "model": "gpt-6.1-sol",
+  "reasoning": "low",
+  "provenance": "AI-authored synthetic tasks",
+  "evidence": {
+    "manifestSha256": "2db6af9d4ebc4a0289e376e738087e432b92c91fa378237b441465bb5c344964",
+    "inputHashes": {
+      "acceptance:cursor-pagination": "ccb05b083b7b794631be91db4b63fd93aae295a0127a5e1246adbcb60bb7ddcc",
+      "acceptance:retry-idempotency": "8dd9091fe843eb4fbfad1ceeea22feb3a241d60576ef776a4bb08ab055499f9d",
+      "acceptance:tenant-cache": "352df6dd2204fd4ec54b9eea3590748a7c22f1bb04a15b6704266f9e323cb9b3",
+      "acceptance:window-scheduler": "0cb6fdd8ae02efbf8b9429ef2808a1ee33a1f319233da4b505c872d973f9ebae",
+      "benchmarks/tasks.mjs": "b4e351a691d314fc6a4b311e9a482d05ef045079bc80aa6c098ef58b7a39af95",
+      "docs/EXPERIMENT.md": "b7f5ab46ebb6024aefd793c907cadce88febc2a405864067e745c9d9d77b4b40",
+      "package-lock.json": "7a48d62c2208df2220c4e5b1c0cad0d8339f552da86a8aed18c78d154a3d3b2a",
+      "package.json": "3673efccdb97598006b88a0d4bdebb028667b265d503ab6eb9dcdfedc656a440",
+      "scripts/experiment.mjs": "a3a3b376be02d8c17a6cd81b94c54ae55bacfd16792c4c32dfa593728f46f9dc",
+      "src/budget.mjs": "a011398d901b6d9d9617d610d2803ab30f3860c8639fa13dd16a4af8f2697913",
+      "src/harness.mjs": "a5d68c81b0a5d604309e3d08e7a2eab843ff25923105aa980f4cc2e0b7c16fd7",
+      "src/planned-reads.mjs": "eceb24c4b57f8b6963aae2a273bab8ec6f761054c2d5a2620fd6148927f1e64d",
+      "src/runtime.mjs": "878fded7e06488cc933a7ae3111ad94f279ef729ea64e70257da74d414cd8e60",
+      "src/watchers.mjs": "de054d0f3e8c9041d01b5cc23527d74162a4ce00d446a96817ed00f63187da4b",
+      "src/workspace.mjs": "1c69ad26dfd5877e431e20c488ef23614048cc22b25029e64848c8485bab4cb6",
+      "task:cursor-pagination/README.md": "67ef16c6d2a38df39e7a29c521e48c64e0ac710123c2c8688d571bd2a7a07426",
+      "task:cursor-pagination/src/collect.mjs": "3aa82472867823fdc5f1d64f69f322a3cf53ce657b5d36420eb366834b1b1d5c",
+      "task:cursor-pagination/src/repository.mjs": "35f83ffc8eaaf016eb875e3ee60d77ffa5f81438c0b6276572a5d59c9866f20a",
+      "task:cursor-pagination/tests/visible.test.mjs": "612b18a948feb9600bc6e71744e3cf4ee25bfa2fafec15116d4dce9cd76d2f1d",
+      "task:retry-idempotency/README.md": "6ff6147d9e4f76026a15269651a5c68b8b946344bd1bff5d4a76d501d58a99bf",
+      "task:retry-idempotency/src/client.mjs": "8bce032020d96f28b7071867200339c8aee489437fc72342268cc2ce45d2346f",
+      "task:retry-idempotency/src/policy.mjs": "fe12ffe1206ba5d178013cb1e55306df677ed3d998b500f48ef3ea7baa555a67",
+      "task:retry-idempotency/tests/visible.test.mjs": "819154dc261d9165eae026aadd373fa2bb7759f6445140626c454188c2c31051",
+      "task:tenant-cache/README.md": "6f0682ad613766b4ff77e6e7cf9ee82e30b8a5f92587a912e67bf30d98c2eec6",
+      "task:tenant-cache/src/cache.mjs": "9afd70361102e443d070761cb6bf32bb6eb39826fd3c1e4fb043f2418bf746d6",
+      "task:tenant-cache/src/store.mjs": "88fae726b8508643f3184fa9cc54bfdf588520ac8f31d2aa162eeb3df19c4aca",
+      "task:tenant-cache/tests/visible.test.mjs": "f46f7ba66c53a4e3e368a8903c686e7d8fb32849b795fb0f49b243ef0833fa87",
+      "task:window-scheduler/README.md": "7638fb7efa9a298cac3c2fe0f76ffc746cff0eac3c2fcdf4f61d9548a3d587ec",
+      "task:window-scheduler/src/intervals.mjs": "6654082d7813c051a4ecdb58fe55bf879c56f1442d2ddd173f1441859fc044fe",
+      "task:window-scheduler/src/scheduler.mjs": "dde55e1590896bd2622b42a5ded51879675eb0627cff79206eb0849c3004acd2",
+      "task:window-scheduler/tests/visible.test.mjs": "225681a80218628ddf86a578294944bc68ea4d485f84e39dbea7847af4ead0d9"
+    },
+    "resultHashes": {
+      "001-retry-idempotency-pi-r0": "afdb953f1501d254344c2260516a0b5c602844714b971445602048b4e40b7042",
+      "002-retry-idempotency-core-r0": "dcc6489bb5379e7f48bf91b23231a213c9078df965b6188284f62cf2c37a77b3",
+      "003-retry-idempotency-rules-r0": "47c65bcaa0305c6e9f3b23c787fab375cfcf3c297dd7c227b738a0067e336c04",
+      "004-retry-idempotency-luna-r0": "78afa4545fce86e895070894195fa63e5d1683ffbe69663ee1f12000d1700372",
+      "005-retry-idempotency-jev-r0": "b7087da2bf4cb85db17d51b9977ef5fb043980913184bee9d27c42685ff5495a",
+      "006-retry-idempotency-lightning-r0": "4922be55cdb81b541382ff859b9a4cc37e47c445353e554bda4c7698b41c506f",
+      "007-retry-idempotency-nemotron-r0": "ec0af44a7d72e2e7d6762e086c320d7684f26de6536806f90ea8c677d6a88f5a",
+      "008-retry-idempotency-jev-gated-r0": "67bdf55ec6663c298cf0b34e483fd3d28e10e4e037b780e231a83899a8cd8546",
+      "009-cursor-pagination-core-r0": "92a92bc7d02766e6b25639043e5d601985058d3ef15a1fca79832651c9de5353",
+      "010-cursor-pagination-rules-r0": "7e2082653d9334f1c7ac945e095a2b2c820a297e5957fa439aaeee54ab7fd013",
+      "011-cursor-pagination-luna-r0": "903a0368974ca67916b973817e5345b067911c968b0fb124a7b6e4753814472e",
+      "012-cursor-pagination-jev-r0": "1056c8d49d70d2ef759c152cb5368c7ecfcf9cb2b63e0f0f959be2c301a55709",
+      "013-cursor-pagination-lightning-r0": "a99e257c3446b4750fc32ea0d8255ccff8c01d22521e3a680a8c8a92b705f2f8",
+      "014-cursor-pagination-nemotron-r0": "c857a4172d94c9b6dc4d4ffa0756a654f29068d491684e86f8b8f3872034c1d8",
+      "015-cursor-pagination-jev-gated-r0": "436b160141074e152025f968ae6bcb87053fa669859144aafeac56f667bec68a",
+      "016-cursor-pagination-pi-r0": "897e5e8cbb09f30641288816fceccec22a21570b40b0898b4a14f441397fb9c8",
+      "017-tenant-cache-rules-r0": "1c7bbc6a66f6c7b944ef03d818ffbe61ac75b5e545bdf6a3fae8f1e9fe7dc79e",
+      "018-tenant-cache-luna-r0": "033046978af72d2f51cf6fa418bdab43d283d7422e90a154e175f7aadebe1859",
+      "019-tenant-cache-jev-r0": "3927e1ff46371311c3b21613ad5c18016e208a037eb30ca9bbe62448c29dcb89",
+      "020-tenant-cache-lightning-r0": "a73752689d93f7fa65d0d46e1951238e29cc7c52e41b7bf5fa0e3fa145cd54c0",
+      "021-tenant-cache-nemotron-r0": "4ccba0d70ae9cb1ec7680b660135cf063ca1db66c8e191388b28ffea7024358c",
+      "022-tenant-cache-jev-gated-r0": "e95a75be51e66e53b6cb537c9b14e50e9e444daf2ebf832dc5c15a8716905bad",
+      "023-tenant-cache-pi-r0": "40279b664374d8acbdfdba911b905860f32a81df1be7e8bf93fbea873aa0941b",
+      "024-tenant-cache-core-r0": "24c40ea26d2ac14aa35737a4c58e4b84f7d69454f71e97e8352e6fbfeeea8bf0",
+      "025-window-scheduler-luna-r0": "8dd7057b6443258e9fe8ba0facf2843040afa9b3361a4733a15f55d95ffa4431",
+      "026-window-scheduler-jev-r0": "1bcf07e65a09e8e052f09f8c920cae276066f75902e236fb19c4a6b463899609",
+      "027-window-scheduler-lightning-r0": "2b6738c348b868e582bfae250a6090ac18640b66987fc31715009477136dce19",
+      "028-window-scheduler-nemotron-r0": "664310ec9aefc2049593a3615aeecd21e58927f6d058623236cb86f6e1872b2f",
+      "029-window-scheduler-jev-gated-r0": "2ddeb7445c7e2eb7e6085e627675a185485df8f2c270f71c4706c67a5dff77f6",
+      "030-window-scheduler-pi-r0": "4d31e7e7a3fc4bdcf69514df7865b389163e782f8ccd4911c97266f9f5363e89",
+      "031-window-scheduler-core-r0": "6f38abbf98abd7df909b52f7a16b6894b856fc2288ed12ca3be6e51b91ecb9c4",
+      "032-window-scheduler-rules-r0": "98793a5a5e87a339d5932b4b008acae8899031a0a081d9e1db5df1d525b66e35"
+    }
+  },
+  "variants": [
+    {
+      "variant": "core",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.060624,
+          "mean": 0.015156,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.060624,
+          "mean": 0.015156,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.060624,
+          "mean": 0.015156,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 126483,
+          "mean": 31620.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 44,
+          "mean": 11,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 31892,
+          "mean": 7973,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 31892,
+          "mean": 7973,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 8960,
+          "mean": 2240,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.015156,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.015156,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "jev",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "provider_error": 1,
+        "completed": 3
+      },
+      "intentionToTreat": {
+        "successes": 3,
+        "denominator": 4,
+        "rate": 0.75
+      },
+      "treatedValid": {
+        "successes": 2,
+        "denominator": 2,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 1,
+          "main_cost_unknown": 2
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.024845600000000002,
+          "mean": 0.012422800000000001,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0.000142128,
+          "mean": 0.000035532,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.024941192,
+          "mean": 0.012470596,
+          "known": 2,
+          "missing": 2,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.024987728,
+          "mean": 0.006246932,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 122126,
+          "mean": 30531.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 34,
+          "mean": 8.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 24738,
+          "mean": 6184.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 3495,
+          "mean": 873.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 28233,
+          "mean": 7058.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 10752,
+          "mean": 2688,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 3,
+          "mean": 0.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 3,
+          "mean": 0.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 3,
+        "runsWithInjection": 3,
+        "recordedRuns": 4,
+        "runRate": 0.75,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.008329242666666667,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0.000142128,
+      "jev": {
+        "knownEstimatedSpendUsd": 0.000142128,
+        "knownCalls": 3,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": 0.03,
+          "mean": 0.01,
+          "known": 3,
+          "missing": 0,
+          "total": 3
+        }
+      }
+    },
+    {
+      "variant": "jev-gated",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0588952,
+          "mean": 0.0147238,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0588952,
+          "mean": 0.0147238,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0588952,
+          "mean": 0.0147238,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 129301,
+          "mean": 32325.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 44,
+          "mean": 11,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 31998,
+          "mean": 7999.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 31998,
+          "mean": 7999.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 10112,
+          "mean": 2528,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.0147238,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0147238,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "lightning",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0621708,
+          "mean": 0.0155427,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0621708,
+          "mean": 0.0155427,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0621708,
+          "mean": 0.0155427,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 137142,
+          "mean": 34285.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 44,
+          "mean": 11,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 33319,
+          "mean": 8329.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 3246,
+          "mean": 811.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 36565,
+          "mean": 9141.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 9728,
+          "mean": 2432,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 4,
+          "mean": 1,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 4,
+          "mean": 1,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 4,
+        "runsWithInjection": 4,
+        "recordedRuns": 4,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": 0.0155427,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0155427,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "luna",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "provider_error": 1,
+        "completed": 3
+      },
+      "intentionToTreat": {
+        "successes": 3,
+        "denominator": 4,
+        "rate": 0.75
+      },
+      "treatedValid": {
+        "successes": 3,
+        "denominator": 3,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 1,
+          "main_cost_unknown": 1
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.038513599999999995,
+          "mean": 0.012837866666666664,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0.0003041,
+          "mean": 0.000076025,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0388177,
+          "mean": 0.012939233333333333,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0388177,
+          "mean": 0.009704425,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 115559,
+          "mean": 28889.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 15,
+          "mean": 3.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 33,
+          "mean": 8.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 24196,
+          "mean": 6049,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 2317,
+          "mean": 579.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 26513,
+          "mean": 6628.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 9216,
+          "mean": 2304,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 3,
+          "mean": 0.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 3,
+          "mean": 0.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 3,
+        "runsWithInjection": 3,
+        "recordedRuns": 4,
+        "runRate": 0.75,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.012939233333333333,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0.0003041,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "nemotron",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.06688720000000001,
+          "mean": 0.016721800000000002,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.06688720000000001,
+          "mean": 0.016721800000000002,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.06688720000000001,
+          "mean": 0.016721800000000002,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 128370,
+          "mean": 32092.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 45,
+          "mean": 11.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 33066,
+          "mean": 8266.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 3244,
+          "mean": 811,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 36310,
+          "mean": 9077.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 6912,
+          "mean": 1728,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 4,
+          "mean": 1,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 3,
+          "mean": 0.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 4,
+        "runsWithInjection": 3,
+        "recordedRuns": 4,
+        "runRate": 0.75,
+        "eligibleRunRate": 0.75
+      },
+      "costPerOperationalSuccessUsd": 0.016721800000000002,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.016721800000000002,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "pi",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.08606679999999998,
+          "mean": 0.021516699999999996,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.08606679999999998,
+          "mean": 0.021516699999999996,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.08606679999999998,
+          "mean": 0.021516699999999996,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 160302,
+          "mean": 40075.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 25,
+          "mean": 6.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 32,
+          "mean": 8,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 45499,
+          "mean": 11374.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 45499,
+          "mean": 11374.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 11648,
+          "mean": 2912,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.021516699999999996,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.021516699999999996,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "rules",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "provider_error": 1,
+        "completed": 3
+      },
+      "intentionToTreat": {
+        "successes": 3,
+        "denominator": 4,
+        "rate": 0.75
+      },
+      "treatedValid": {
+        "successes": 3,
+        "denominator": 3,
+        "rate": 1,
+        "exclusions": {
+          "main_not_completed": 1,
+          "main_cost_unknown": 1
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0443016,
+          "mean": 0.0147672,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0443016,
+          "mean": 0.0147672,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0443016,
+          "mean": 0.0110754,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 103498,
+          "mean": 25874.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 15,
+          "mean": 3.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 33,
+          "mean": 8.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 23206,
+          "mean": 5801.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 23206,
+          "mean": 5801.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 5376,
+          "mean": 1344,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 3,
+          "mean": 0.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 3,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": 0
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0147672,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "baseline": "core",
+      "variant": "jev-gated",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.003072000000000002,
+      "latencyMsDelta": 4031,
+      "totalTokensDelta": -96,
+      "cacheReadTokensDelta": 1280
+    },
+    {
+      "baseline": "core",
+      "variant": "jev-gated",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.005180400000000002,
+      "latencyMsDelta": 3627,
+      "totalTokensDelta": 179,
+      "cacheReadTokensDelta": -2176
+    },
+    {
+      "baseline": "core",
+      "variant": "jev-gated",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.00006399999999999809,
+      "latencyMsDelta": -3134,
+      "totalTokensDelta": 16,
+      "cacheReadTokensDelta": 0
+    },
+    {
+      "baseline": "core",
+      "variant": "jev-gated",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0039012000000000022,
+      "latencyMsDelta": -1706,
+      "totalTokensDelta": 7,
+      "cacheReadTokensDelta": 2048
+    },
+    {
+      "baseline": "core",
+      "variant": "jev",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0015950059999999978,
+      "latencyMsDelta": -3359,
+      "totalTokensDelta": 1877,
+      "cacheReadTokensDelta": 1664
+    },
+    {
+      "baseline": "core",
+      "variant": "jev",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -20489,
+      "totalTokensDelta": -8616,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "core",
+      "variant": "jev",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0014534019999999995,
+      "latencyMsDelta": 5077,
+      "totalTokensDelta": 1653,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "core",
+      "variant": "jev",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": 14414,
+      "totalTokensDelta": 1427,
+      "cacheReadTokensDelta": 2176
+    },
+    {
+      "baseline": "core",
+      "variant": "lightning",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0020992000000000007,
+      "latencyMsDelta": -1698,
+      "totalTokensDelta": 1120,
+      "cacheReadTokensDelta": -768
+    },
+    {
+      "baseline": "core",
+      "variant": "lightning",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0008008000000000008,
+      "latencyMsDelta": 14828,
+      "totalTokensDelta": 1252,
+      "cacheReadTokensDelta": 128
+    },
+    {
+      "baseline": "core",
+      "variant": "lightning",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0022352000000000014,
+      "latencyMsDelta": -2383,
+      "totalTokensDelta": 1183,
+      "cacheReadTokensDelta": -768
+    },
+    {
+      "baseline": "core",
+      "variant": "lightning",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.003588400000000002,
+      "latencyMsDelta": -88,
+      "totalTokensDelta": 1118,
+      "cacheReadTokensDelta": 2176
+    },
+    {
+      "baseline": "core",
+      "variant": "luna",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.002016300000000002,
+      "latencyMsDelta": 3633,
+      "totalTokensDelta": 1096,
+      "cacheReadTokensDelta": 1408
+    },
+    {
+      "baseline": "core",
+      "variant": "luna",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -20446,
+      "totalTokensDelta": -8616,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "core",
+      "variant": "luna",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0020710999999999993,
+      "latencyMsDelta": 5048,
+      "totalTokensDelta": 1114,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "core",
+      "variant": "luna",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0018485000000000012,
+      "latencyMsDelta": 841,
+      "totalTokensDelta": 1027,
+      "cacheReadTokensDelta": 896
+    },
+    {
+      "baseline": "core",
+      "variant": "nemotron",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0023099999999999996,
+      "latencyMsDelta": 1075,
+      "totalTokensDelta": 819,
+      "cacheReadTokensDelta": 1280
+    },
+    {
+      "baseline": "core",
+      "variant": "nemotron",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.008407600000000001,
+      "latencyMsDelta": -2144,
+      "totalTokensDelta": 1397,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "core",
+      "variant": "nemotron",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0021503999999999985,
+      "latencyMsDelta": 9290,
+      "totalTokensDelta": 1183,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "core",
+      "variant": "nemotron",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0023159999999999986,
+      "latencyMsDelta": -6334,
+      "totalTokensDelta": 1019,
+      "cacheReadTokensDelta": -1280
+    },
+    {
+      "baseline": "core",
+      "variant": "pi",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.002722399999999998,
+      "latencyMsDelta": 1031,
+      "totalTokensDelta": 930,
+      "cacheReadTokensDelta": -256
+    },
+    {
+      "baseline": "core",
+      "variant": "pi",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.013212400000000003,
+      "latencyMsDelta": 19122,
+      "totalTokensDelta": 5975,
+      "cacheReadTokensDelta": 384
+    },
+    {
+      "baseline": "core",
+      "variant": "pi",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.008177599999999998,
+      "latencyMsDelta": 8097,
+      "totalTokensDelta": 2580,
+      "cacheReadTokensDelta": -1024
+    },
+    {
+      "baseline": "core",
+      "variant": "pi",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.001330399999999999,
+      "latencyMsDelta": 5569,
+      "totalTokensDelta": 4122,
+      "cacheReadTokensDelta": 3584
+    },
+    {
+      "baseline": "core",
+      "variant": "rules",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0023580000000000007,
+      "latencyMsDelta": 9077,
+      "totalTokensDelta": 9,
+      "cacheReadTokensDelta": 1280
+    },
+    {
+      "baseline": "core",
+      "variant": "rules",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -21227,
+      "totalTokensDelta": -8616,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "core",
+      "variant": "rules",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.00004799999999999943,
+      "latencyMsDelta": -6200,
+      "totalTokensDelta": -4,
+      "cacheReadTokensDelta": 0
+    },
+    {
+      "baseline": "core",
+      "variant": "rules",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0019539999999999974,
+      "latencyMsDelta": -4635,
+      "totalTokensDelta": -75,
+      "cacheReadTokensDelta": -1280
+    },
+    {
+      "baseline": "pi",
+      "variant": "core",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.002722399999999998,
+      "latencyMsDelta": -1031,
+      "totalTokensDelta": -930,
+      "cacheReadTokensDelta": 256
+    },
+    {
+      "baseline": "pi",
+      "variant": "core",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.013212400000000003,
+      "latencyMsDelta": -19122,
+      "totalTokensDelta": -5975,
+      "cacheReadTokensDelta": -384
+    },
+    {
+      "baseline": "pi",
+      "variant": "core",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.008177599999999998,
+      "latencyMsDelta": -8097,
+      "totalTokensDelta": -2580,
+      "cacheReadTokensDelta": 1024
+    },
+    {
+      "baseline": "pi",
+      "variant": "core",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.001330399999999999,
+      "latencyMsDelta": -5569,
+      "totalTokensDelta": -4122,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev-gated",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0057944,
+      "latencyMsDelta": 3000,
+      "totalTokensDelta": -1026,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev-gated",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.008032000000000001,
+      "latencyMsDelta": -15495,
+      "totalTokensDelta": -5796,
+      "cacheReadTokensDelta": -2560
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev-gated",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0081136,
+      "latencyMsDelta": -11231,
+      "totalTokensDelta": -2564,
+      "cacheReadTokensDelta": 1024
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev-gated",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.005231600000000001,
+      "latencyMsDelta": -7275,
+      "totalTokensDelta": -4115,
+      "cacheReadTokensDelta": -1536
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.004317405999999996,
+      "latencyMsDelta": -4390,
+      "totalTokensDelta": 947,
+      "cacheReadTokensDelta": 1920
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -39611,
+      "totalTokensDelta": -14591,
+      "cacheReadTokensDelta": -3968
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.009631001999999998,
+      "latencyMsDelta": -3020,
+      "totalTokensDelta": -927,
+      "cacheReadTokensDelta": 2560
+    },
+    {
+      "baseline": "pi",
+      "variant": "jev",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": 8845,
+      "totalTokensDelta": -2695,
+      "cacheReadTokensDelta": -1408
+    },
+    {
+      "baseline": "pi",
+      "variant": "lightning",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0006231999999999974,
+      "latencyMsDelta": -2729,
+      "totalTokensDelta": 190,
+      "cacheReadTokensDelta": -512
+    },
+    {
+      "baseline": "pi",
+      "variant": "lightning",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.012411600000000002,
+      "latencyMsDelta": -4294,
+      "totalTokensDelta": -4723,
+      "cacheReadTokensDelta": -256
+    },
+    {
+      "baseline": "pi",
+      "variant": "lightning",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.005942399999999997,
+      "latencyMsDelta": -10480,
+      "totalTokensDelta": -1397,
+      "cacheReadTokensDelta": 256
+    },
+    {
+      "baseline": "pi",
+      "variant": "lightning",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.004918800000000001,
+      "latencyMsDelta": -5657,
+      "totalTokensDelta": -3004,
+      "cacheReadTokensDelta": -1408
+    },
+    {
+      "baseline": "pi",
+      "variant": "luna",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0047387,
+      "latencyMsDelta": 2602,
+      "totalTokensDelta": 166,
+      "cacheReadTokensDelta": 1664
+    },
+    {
+      "baseline": "pi",
+      "variant": "luna",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -39568,
+      "totalTokensDelta": -14591,
+      "cacheReadTokensDelta": -3968
+    },
+    {
+      "baseline": "pi",
+      "variant": "luna",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.010248699999999998,
+      "latencyMsDelta": -3049,
+      "totalTokensDelta": -1466,
+      "cacheReadTokensDelta": 2560
+    },
+    {
+      "baseline": "pi",
+      "variant": "luna",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0031789,
+      "latencyMsDelta": -4728,
+      "totalTokensDelta": -3095,
+      "cacheReadTokensDelta": -2688
+    },
+    {
+      "baseline": "pi",
+      "variant": "nemotron",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.005032399999999998,
+      "latencyMsDelta": 44,
+      "totalTokensDelta": -111,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "pi",
+      "variant": "nemotron",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.004804800000000001,
+      "latencyMsDelta": -21266,
+      "totalTokensDelta": -4578,
+      "cacheReadTokensDelta": -3968
+    },
+    {
+      "baseline": "pi",
+      "variant": "nemotron",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.010327999999999997,
+      "latencyMsDelta": 1193,
+      "totalTokensDelta": -1397,
+      "cacheReadTokensDelta": 2560
+    },
+    {
+      "baseline": "pi",
+      "variant": "nemotron",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0009855999999999997,
+      "latencyMsDelta": -11903,
+      "totalTokensDelta": -3103,
+      "cacheReadTokensDelta": -4864
+    },
+    {
+      "baseline": "pi",
+      "variant": "rules",
+      "task": "cursor-pagination",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.005080399999999999,
+      "latencyMsDelta": 8046,
+      "totalTokensDelta": -921,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "pi",
+      "variant": "rules",
+      "task": "retry-idempotency",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -40349,
+      "totalTokensDelta": -14591,
+      "cacheReadTokensDelta": -3968
+    },
+    {
+      "baseline": "pi",
+      "variant": "rules",
+      "task": "tenant-cache",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.008225599999999998,
+      "latencyMsDelta": -14297,
+      "totalTokensDelta": -2584,
+      "cacheReadTokensDelta": 1024
+    },
+    {
+      "baseline": "pi",
+      "variant": "rules",
+      "task": "window-scheduler",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0006235999999999985,
+      "latencyMsDelta": -10204,
+      "totalTokensDelta": -4197,
+      "cacheReadTokensDelta": -4864
+    }
+  ],
+  "runs": [
+    {
+      "task": "retry-idempotency",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": "001-retry-idempotency-pi-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.029082800000000002,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.029082800000000002,
+      "knownEstimatedUsd": 0.029082800000000002,
+      "latencyMs": 59681,
+      "turns": 7,
+      "toolCalls": 8,
+      "mainTokens": 14591,
+      "watcherTokens": 0,
+      "totalTokens": 14591,
+      "cacheReadTokens": 3968,
+      "sourceHashesDigest": "26bb39f13058fe8a53877665bfb9fec3db3afacdb41ac406db5c17f156c637ba",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "002-retry-idempotency-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0158704,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0158704,
+      "knownEstimatedUsd": 0.0158704,
+      "latencyMs": 40559,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8616,
+      "watcherTokens": 0,
+      "totalTokens": 8616,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "707019813abccfa872534c7b1c064a877e019a6c72ec1e1d3acf6b2c705f7f68",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": "003-retry-idempotency-rules-r0",
+      "status": "provider_error",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0,
+      "latencyMs": 19332,
+      "turns": 3,
+      "toolCalls": 0,
+      "mainTokens": 0,
+      "watcherTokens": 0,
+      "totalTokens": 0,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "e44bac4f2b51258bbd80280255335a15a29c12ed4399260888cb0502242d6636",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": "004-retry-idempotency-luna-r0",
+      "status": "provider_error",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0,
+      "latencyMs": 20113,
+      "turns": 3,
+      "toolCalls": 0,
+      "mainTokens": 0,
+      "watcherTokens": 0,
+      "totalTokens": 0,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "e44bac4f2b51258bbd80280255335a15a29c12ed4399260888cb0502242d6636",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": "005-retry-idempotency-jev-r0",
+      "status": "provider_error",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0,
+      "latencyMs": 20070,
+      "turns": 3,
+      "toolCalls": 0,
+      "mainTokens": 0,
+      "watcherTokens": 0,
+      "totalTokens": 0,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "e44bac4f2b51258bbd80280255335a15a29c12ed4399260888cb0502242d6636",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": "006-retry-idempotency-lightning-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0166712,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0166712,
+      "knownEstimatedUsd": 0.0166712,
+      "latencyMs": 55387,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8982,
+      "watcherTokens": 886,
+      "totalTokens": 9868,
+      "cacheReadTokens": 3712,
+      "sourceHashesDigest": "707019813abccfa872534c7b1c064a877e019a6c72ec1e1d3acf6b2c705f7f68",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": "007-retry-idempotency-nemotron-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.024278,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.024278,
+      "knownEstimatedUsd": 0.024278,
+      "latencyMs": 38415,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 9127,
+      "watcherTokens": 886,
+      "totalTokens": 10013,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "78578afd98e82dc40a20ebf04fb5675e71ef7df77a60e1b29228a56b361c1f10",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "retry-idempotency",
+      "variant": "jev-gated",
+      "repetition": 0,
+      "runId": "008-retry-idempotency-jev-gated-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0210508,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0210508,
+      "knownEstimatedUsd": 0.0210508,
+      "latencyMs": 44186,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8795,
+      "watcherTokens": 0,
+      "totalTokens": 8795,
+      "cacheReadTokens": 1408,
+      "sourceHashesDigest": "5f81ede942c9554d73ff134c2ce724eac8ca7b7a4acbe689d48fb6e8934a9567",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "009-cursor-pagination-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0144148,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0144148,
+      "knownEstimatedUsd": 0.0144148,
+      "latencyMs": 28476,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7757,
+      "watcherTokens": 0,
+      "totalTokens": 7757,
+      "cacheReadTokens": 2048,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": "010-cursor-pagination-rules-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0120568,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0120568,
+      "knownEstimatedUsd": 0.0120568,
+      "latencyMs": 37553,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7766,
+      "watcherTokens": 0,
+      "totalTokens": 7766,
+      "cacheReadTokens": 3328,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": "011-cursor-pagination-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.012297599999999999,
+      "watcherEstimatedUsd": 0.00010090000000000001,
+      "totalEstimatedUsd": 0.012398499999999998,
+      "knownEstimatedUsd": 0.012398499999999998,
+      "latencyMs": 32109,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8072,
+      "watcherTokens": 781,
+      "totalTokens": 8853,
+      "cacheReadTokens": 3456,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": "012-cursor-pagination-jev-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.012771200000000002,
+      "watcherEstimatedUsd": 0.000048594,
+      "totalEstimatedUsd": 0.012819794000000002,
+      "knownEstimatedUsd": 0.012819794000000002,
+      "latencyMs": 25117,
+      "turns": 4,
+      "toolCalls": 12,
+      "mainTokens": 8440,
+      "watcherTokens": 1194,
+      "totalTokens": 9634,
+      "cacheReadTokens": 3712,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": "013-cursor-pagination-lightning-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.016514,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.016514,
+      "knownEstimatedUsd": 0.016514,
+      "latencyMs": 26778,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8081,
+      "watcherTokens": 796,
+      "totalTokens": 8877,
+      "cacheReadTokens": 1280,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": "014-cursor-pagination-nemotron-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0121048,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0121048,
+      "knownEstimatedUsd": 0.0121048,
+      "latencyMs": 29551,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7782,
+      "watcherTokens": 794,
+      "totalTokens": 8576,
+      "cacheReadTokens": 3328,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "jev-gated",
+      "repetition": 0,
+      "runId": "015-cursor-pagination-jev-gated-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.011342799999999998,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.011342799999999998,
+      "knownEstimatedUsd": 0.011342799999999998,
+      "latencyMs": 32507,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7661,
+      "watcherTokens": 0,
+      "totalTokens": 7661,
+      "cacheReadTokens": 3328,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": "016-cursor-pagination-pi-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0171372,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0171372,
+      "knownEstimatedUsd": 0.0171372,
+      "latencyMs": 29507,
+      "turns": 5,
+      "toolCalls": 8,
+      "mainTokens": 8687,
+      "watcherTokens": 0,
+      "totalTokens": 8687,
+      "cacheReadTokens": 1792,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": "017-tenant-cache-rules-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0135268,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0135268,
+      "knownEstimatedUsd": 0.0135268,
+      "latencyMs": 20778,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7645,
+      "watcherTokens": 0,
+      "totalTokens": 7645,
+      "cacheReadTokens": 2048,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": "018-tenant-cache-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0114264,
+      "watcherEstimatedUsd": 0.00007730000000000001,
+      "totalEstimatedUsd": 0.0115037,
+      "knownEstimatedUsd": 0.0115037,
+      "latencyMs": 32026,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8034,
+      "watcherTokens": 729,
+      "totalTokens": 8763,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": "019-tenant-cache-jev-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0120744,
+      "watcherEstimatedUsd": 0.000046998000000000006,
+      "totalEstimatedUsd": 0.012121398,
+      "knownEstimatedUsd": 0.012121398,
+      "latencyMs": 32055,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8146,
+      "watcherTokens": 1156,
+      "totalTokens": 9302,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": "020-tenant-cache-lightning-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.01581,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.01581,
+      "knownEstimatedUsd": 0.01581,
+      "latencyMs": 24595,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8037,
+      "watcherTokens": 795,
+      "totalTokens": 8832,
+      "cacheReadTokens": 1280,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": "021-tenant-cache-nemotron-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.011424400000000001,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.011424400000000001,
+      "knownEstimatedUsd": 0.011424400000000001,
+      "latencyMs": 36268,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8037,
+      "watcherTokens": 795,
+      "totalTokens": 8832,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "jev-gated",
+      "repetition": 0,
+      "runId": "022-tenant-cache-jev-gated-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.013638799999999998,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.013638799999999998,
+      "knownEstimatedUsd": 0.013638799999999998,
+      "latencyMs": 23844,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7665,
+      "watcherTokens": 0,
+      "totalTokens": 7665,
+      "cacheReadTokens": 2048,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": "023-tenant-cache-pi-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.021752399999999998,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.021752399999999998,
+      "knownEstimatedUsd": 0.021752399999999998,
+      "latencyMs": 35075,
+      "turns": 6,
+      "toolCalls": 8,
+      "mainTokens": 10229,
+      "watcherTokens": 0,
+      "totalTokens": 10229,
+      "cacheReadTokens": 1024,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-cache",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "024-tenant-cache-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0135748,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0135748,
+      "knownEstimatedUsd": 0.0135748,
+      "latencyMs": 26978,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7649,
+      "watcherTokens": 0,
+      "totalTokens": 7649,
+      "cacheReadTokens": 2048,
+      "sourceHashesDigest": "8900aa74623b9c40a0438f94767e910d78b3a2fef1b46e384fda1d9de5e5f4b4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": "025-window-scheduler-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0147896,
+      "watcherEstimatedUsd": 0.0001259,
+      "totalEstimatedUsd": 0.0149155,
+      "knownEstimatedUsd": 0.0149155,
+      "latencyMs": 31311,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8090,
+      "watcherTokens": 807,
+      "totalTokens": 8897,
+      "cacheReadTokens": 2176,
+      "sourceHashesDigest": "fdb4948f0fff90d4a6caaa1ef5f146abf0994e06c2bb7d243987fbe79ca1064f",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": "026-window-scheduler-jev-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": false,
+      "excludedReasons": [
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0.000046536,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0.000046536,
+      "latencyMs": 44884,
+      "turns": 5,
+      "toolCalls": 11,
+      "mainTokens": 8152,
+      "watcherTokens": 1145,
+      "totalTokens": 9297,
+      "cacheReadTokens": 3456,
+      "sourceHashesDigest": "fdb4948f0fff90d4a6caaa1ef5f146abf0994e06c2bb7d243987fbe79ca1064f",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": "027-window-scheduler-lightning-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.013175599999999999,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.013175599999999999,
+      "knownEstimatedUsd": 0.013175599999999999,
+      "latencyMs": 30382,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8219,
+      "watcherTokens": 769,
+      "totalTokens": 8988,
+      "cacheReadTokens": 3456,
+      "sourceHashesDigest": "94cd832266f1b530a2e14e3df14b90170d1c005ed61d7659a78383e7635b8714",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": "028-window-scheduler-nemotron-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.01908,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.01908,
+      "knownEstimatedUsd": 0.01908,
+      "latencyMs": 24136,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8120,
+      "watcherTokens": 769,
+      "totalTokens": 8889,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "fdb4948f0fff90d4a6caaa1ef5f146abf0994e06c2bb7d243987fbe79ca1064f",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "jev-gated",
+      "repetition": 0,
+      "runId": "029-window-scheduler-jev-gated-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.012862799999999999,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.012862799999999999,
+      "knownEstimatedUsd": 0.012862799999999999,
+      "latencyMs": 28764,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7877,
+      "watcherTokens": 0,
+      "totalTokens": 7877,
+      "cacheReadTokens": 3328,
+      "sourceHashesDigest": "94cd832266f1b530a2e14e3df14b90170d1c005ed61d7659a78383e7635b8714",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "pi",
+      "repetition": 0,
+      "runId": "030-window-scheduler-pi-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0180944,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0180944,
+      "knownEstimatedUsd": 0.0180944,
+      "latencyMs": 36039,
+      "turns": 7,
+      "toolCalls": 8,
+      "mainTokens": 11992,
+      "watcherTokens": 0,
+      "totalTokens": 11992,
+      "cacheReadTokens": 4864,
+      "sourceHashesDigest": "8c5efeb8b03c3be188b71af43488e27f939fd1063e5c16888dfb37b639d3ab20",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "031-window-scheduler-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.016764,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.016764,
+      "knownEstimatedUsd": 0.016764,
+      "latencyMs": 30470,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7870,
+      "watcherTokens": 0,
+      "totalTokens": 7870,
+      "cacheReadTokens": 1280,
+      "sourceHashesDigest": "94cd832266f1b530a2e14e3df14b90170d1c005ed61d7659a78383e7635b8714",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "window-scheduler",
+      "variant": "rules",
+      "repetition": 0,
+      "runId": "032-window-scheduler-rules-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.018718,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.018718,
+      "knownEstimatedUsd": 0.018718,
+      "latencyMs": 25835,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7795,
+      "watcherTokens": 0,
+      "totalTokens": 7795,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "94cd832266f1b530a2e14e3df14b90170d1c005ed61d7659a78383e7635b8714",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 0
+    }
+  ],
+  "jevGlobalLedger": {
+    "scope": "global across campaigns; not attributable to this campaign",
+    "reservedUsd": 0.1,
+    "remainingUsd": 1.9,
+    "limitUsd": 2,
+    "calls": 10
+  },
+  "limitations": [
+    "Descriptive pilot only; small samples do not establish significance or real-world performance.",
+    "Core versus Pi compares a prompt/tool bundle; watcher versus core compares an added observer.",
+    "Intention-to-treat operational success includes scheduled missing results and provider/watcher failures. Missing results are incomplete executions, not evidence of model inability.",
+    "Treated-valid efficacy excludes unavailable acceptance, main failure, missing cost telemetry, watcher errors, and missing decision records. This selected subset is descriptive and can be biased.",
+    "Costs are API-equivalent estimates for subscription models plus estimated external watcher spend, not an actual subscription bill or verified provider invoice.",
+    "Known cost includes failed attempts and known components of partially costed runs. Incomplete cost/success is a nonnegative lower bound; null never means zero.",
+    "Jev ledger reservations are conservative budget consumption, separate from usage-based estimated spend; global reservations cannot be attributed to a campaign.",
+    "Provider cache warmth was observed rather than controlled. Fixed task/repetition pairs do not remove order or availability effects."
+  ]
+}

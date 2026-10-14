@@ -1,0 +1,57 @@
+[
+  {
+    "id": "retry-idempotency",
+    "split": "pilot",
+    "title": "Retries must preserve a logical request"
+  },
+  {
+    "id": "cursor-pagination",
+    "split": "pilot",
+    "title": "Filtered pages still advance"
+  },
+  {
+    "id": "tenant-cache",
+    "split": "pilot",
+    "title": "Cache identity and time must agree"
+  },
+  {
+    "id": "window-scheduler",
+    "split": "pilot",
+    "title": "Adjacent windows must not double book"
+  },
+  {
+    "id": "streaming-utf8",
+    "split": "holdout",
+    "title": "Streaming text survives arbitrary byte chunks"
+  },
+  {
+    "id": "dependency-aliases",
+    "split": "holdout",
+    "title": "Aliases share one dependency identity"
+  },
+  {
+    "id": "layered-config",
+    "split": "holdout",
+    "title": "Configuration overrides preserve intentional values"
+  },
+  {
+    "id": "atomic-ledger",
+    "split": "holdout",
+    "title": "Ledger batches publish atomically"
+  },
+  {
+    "id": "inventory-reservations",
+    "split": "context",
+    "title": "Tenant reservations combine identity and atomic inventory"
+  },
+  {
+    "id": "tenant-event-feed",
+    "split": "context",
+    "title": "Tenant event replay and live delivery share committed snapshots"
+  },
+  {
+    "id": "layered-routing",
+    "split": "context",
+    "title": "Route specificity and tenant configuration survive caching"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "file": "src/merge.mjs",
+    "old": "      if (!value) continue;",
+    "new": "      if (value === undefined) continue;"
+  },
+  {
+    "file": "src/merge.mjs",
+    "old": "      else result[key] = value;",
+    "new": "      else result[key] = isPlain(value) ? mergeLayers(value) : structuredClone(value);"
+  }
+]

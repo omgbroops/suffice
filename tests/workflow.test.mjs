@@ -1,0 +1,18 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,mkdir,writeFile,rm} from 'node:fs/promises';import {tmpdir} from 'node:os';import {resolve,dirname} from 'node:path';
+import {indexJavaScript,createNavigation} from '../src/symbol-navigation.mjs';import {validateChecks,checksSource,validateContract,buildPacket,verifyPacket} from '../src/workflow-policy.mjs';import {runNodeTests} from '../src/workspace.mjs';
+async function temporary(t){const dir=await mkdtemp(resolve(tmpdir(),'suffice-workflow-'));t.after(async()=>{assert.equal(dirname(dir),resolve(tmpdir()));assert.ok(dir.split(/[\\/]/).at(-1).startsWith('suffice-workflow-'));await rm(dir,{recursive:true,force:true});});return dir;}
+test('TypeScript navigation preserves exact original lines annotations and import text',()=>{
+  const source='import { type Input, helper } from "./dep.ts"\ninterface Hidden { value: number }\nexport function parse(input: Input): number {\n  return helper(input)\n}\n';const index=indexJavaScript(source,'src/a.ts');const symbol=index.symbols.find(s=>s.name==='parse');assert.equal(symbol.start,3);assert.equal(symbol.end,5);assert.match(index.source.slice(symbol.startOffset,symbol.endOffset),/input: Input/);assert.equal(index.imports[0].text,source.split('\n')[0]);
+});
+test('TypeScript opt-in navigation indexes source and refreshes edits',async t=>{
+  const dir=await temporary(t);await writeFile(resolve(dir,'a.ts'),'function value(x: number) { return x }');const nav=createNavigation({workspace:dir,includeTypeScript:true});assert.equal((await nav[0].execute('a',{query:'value'})).structuredContent.matches.length,1);await writeFile(resolve(dir,'a.ts'),'function next(x: number) { return x + 1 }');assert.equal((await nav[0].execute('b',{query:'value'})).structuredContent.matches.length,0);
+});
+test('contracts reject paths outside production and enforce bounded handoffs',()=>{
+  const contract={files:['src/a.ts'],requirements:['repair'],steps:['edit'],invariants:['preserve'],checks:[{operation:'load',source:'a',expected:1}]};assert.equal(validateContract(contract,['src/a.ts']).files[0],'src/a.ts');assert.throws(()=>validateContract({...contract,files:['tests/a.ts']},['src/a.ts']));assert.throws(()=>validateChecks([{operation:'eval',source:'anything'}]));assert.throws(()=>validateChecks([{operation:'roundtrip'}]));assert.throws(()=>validateChecks([{operation:'load',source:'x'}]));
+});
+test('packets expose truncation and detect stale source before dispatch',async t=>{
+  const dir=await temporary(t);await mkdir(resolve(dir,'src'));const path='src/a.ts';await writeFile(resolve(dir,path),'export function big(): number {\n'+'// source line\n'.repeat(1000)+'return 1\n}');const packet=await buildPacket(dir,{files:[path],symbols:[{path,name:'big'}]});assert.ok(packet.excerpts[0].omittedCharacters>0);assert.equal((await verifyPacket(dir,packet)).current,true);await writeFile(resolve(dir,path),'export function big(){return 2}');assert.deepEqual((await verifyPacket(dir,packet)).stale,[path]);
+});
+test('declared checks execute against actual code and cannot turn mismatch into pass',async t=>{
+  const dir=await temporary(t);await mkdir(resolve(dir,'src/src'),{recursive:true});await writeFile(resolve(dir,'src/src/index.ts'),'export function load(source: string){return Number(source)}\nexport const CORE_SCHEMA = {}\n');const path=resolve(dir,'checks.test.mjs');await writeFile(path,checksSource([{operation:'load',source:'2',expected:3}]));assert.equal((await runNodeTests(dir,path)).status,'failed');await writeFile(path,checksSource([{operation:'load',source:'2',expected:2}]));assert.equal((await runNodeTests(dir,path)).status,'passed');
+});

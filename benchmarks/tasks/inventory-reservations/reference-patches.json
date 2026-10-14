@@ -1,0 +1,17 @@
+[
+  {
+    "file": "src/request-key.mjs",
+    "old": "return id;",
+    "new": "return JSON.stringify([tenant, id]);"
+  },
+  {
+    "file": "src/item-plan.mjs",
+    "old": "quantities.set(item.sku, item.quantity)",
+    "new": "quantities.set(item.sku, (quantities.get(item.sku) ?? 0) + item.quantity)"
+  },
+  {
+    "file": "src/stock-transaction.mjs",
+    "old": "const staged = repository.current();",
+    "new": "const staged = structuredClone(repository.current());"
+  }
+]

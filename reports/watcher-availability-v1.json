@@ -1,0 +1,729 @@
+{
+  "version": 1,
+  "campaign": "watcher-availability-v1",
+  "split": "pilot",
+  "model": "gpt-6.1-sol",
+  "provenance": "AI-authored synthetic tasks",
+  "evidence": {
+    "manifestSha256": "e318a3f1dda38ba55a343a8e46a4a731c3b7c12b12fdef5d86f469b32233ea60",
+    "inputHashes": {
+      "acceptance:cursor-pagination": "ccb05b083b7b794631be91db4b63fd93aae295a0127a5e1246adbcb60bb7ddcc",
+      "package-lock.json": "7f3b150a0155ee8eae8c58323ed7c01855527f86efbc0bef91e2e34b5ae4e1eb",
+      "src/budget.mjs": "a011398d901b6d9d9617d610d2803ab30f3860c8639fa13dd16a4af8f2697913",
+      "src/harness.mjs": "b1354bc3a8ee073cda972df56d0349dee968d177326d1013a1da594b3590c06f",
+      "src/runtime.mjs": "878fded7e06488cc933a7ae3111ad94f279ef729ea64e70257da74d414cd8e60",
+      "src/watchers.mjs": "de054d0f3e8c9041d01b5cc23527d74162a4ce00d446a96817ed00f63187da4b",
+      "src/workspace.mjs": "1c69ad26dfd5877e431e20c488ef23614048cc22b25029e64848c8485bab4cb6",
+      "task:cursor-pagination/README.md": "67ef16c6d2a38df39e7a29c521e48c64e0ac710123c2c8688d571bd2a7a07426",
+      "task:cursor-pagination/src/collect.mjs": "3aa82472867823fdc5f1d64f69f322a3cf53ce657b5d36420eb366834b1b1d5c",
+      "task:cursor-pagination/src/repository.mjs": "35f83ffc8eaaf016eb875e3ee60d77ffa5f81438c0b6276572a5d59c9866f20a",
+      "task:cursor-pagination/tests/visible.test.mjs": "612b18a948feb9600bc6e71744e3cf4ee25bfa2fafec15116d4dce9cd76d2f1d"
+    },
+    "resultHashes": {
+      "001-cursor-pagination-luna-r0": "f5015112d0216e29d88529a2d871173279e324a7b7787e2d599a0024c3ff3602",
+      "002-cursor-pagination-jev-r0": "e5ec3ee79fa2c0ccfcfb304edf10d1ba89052f850f3cf964ad15bc3c83275b64",
+      "003-cursor-pagination-lightning-r0": "ac046af7466982693903d4d7bcff3a3064cd2eb71d09023eaf3a447aea34a142",
+      "004-cursor-pagination-nemotron-r0": "502e7ade5095520c3c365ee1dcb8540b1adcab3247dbdd92addc7e3d72331184"
+    }
+  },
+  "variants": [
+    {
+      "variant": "jev",
+      "scheduled": 1,
+      "recorded": 1,
+      "statuses": {
+        "provider_error": 1
+      },
+      "intentionToTreat": {
+        "successes": 0,
+        "denominator": 1,
+        "rate": 0
+      },
+      "treatedValid": {
+        "successes": 0,
+        "denominator": 0,
+        "rate": null,
+        "exclusions": {
+          "main_not_completed": 1,
+          "main_cost_unknown": 1
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 1,
+          "total": 1
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalEstimatedUsd": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 1,
+          "total": 1
+        },
+        "knownEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "latencyMs": {
+          "sum": 1280,
+          "mean": 1280,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "turns": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "toolCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "mainTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "cacheReadTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 1,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": null,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "lightning",
+      "scheduled": 1,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0126744,
+          "mean": 0.0126744,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0126744,
+          "mean": 0.0126744,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0126744,
+          "mean": 0.0126744,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "latencyMs": {
+          "sum": 42531,
+          "mean": 42531,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "toolCalls": {
+          "sum": 11,
+          "mean": 11,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "mainTokens": {
+          "sum": 8226,
+          "mean": 8226,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherTokens": {
+          "sum": 786,
+          "mean": 786,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalTokens": {
+          "sum": 9012,
+          "mean": 9012,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "cacheReadTokens": {
+          "sum": 3584,
+          "mean": 3584,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 1,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": 0.0126744,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0126744,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "luna",
+      "scheduled": 1,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.012282399999999999,
+          "mean": 0.012282399999999999,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0.00007730000000000001,
+          "mean": 0.00007730000000000001,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0123597,
+          "mean": 0.0123597,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0123597,
+          "mean": 0.0123597,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "latencyMs": {
+          "sum": 42722,
+          "mean": 42722,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "toolCalls": {
+          "sum": 11,
+          "mean": 11,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "mainTokens": {
+          "sum": 8178,
+          "mean": 8178,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherTokens": {
+          "sum": 729,
+          "mean": 729,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalTokens": {
+          "sum": 8907,
+          "mean": 8907,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "cacheReadTokens": {
+          "sum": 3584,
+          "mean": 3584,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "injections": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 1,
+        "recordedRuns": 1,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": 0.0123597,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0123597,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0.00007730000000000001,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "nemotron",
+      "scheduled": 1,
+      "recorded": 1,
+      "statuses": {
+        "completed": 1
+      },
+      "intentionToTreat": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1
+      },
+      "treatedValid": {
+        "successes": 1,
+        "denominator": 1,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.014232799999999999,
+          "mean": 0.014232799999999999,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.014232799999999999,
+          "mean": 0.014232799999999999,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.014232799999999999,
+          "mean": 0.014232799999999999,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "latencyMs": {
+          "sum": 28334,
+          "mean": 28334,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "turns": {
+          "sum": 4,
+          "mean": 4,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "toolCalls": {
+          "sum": 11,
+          "mean": 11,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "mainTokens": {
+          "sum": 7746,
+          "mean": 7746,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherTokens": {
+          "sum": 794,
+          "mean": 794,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "totalTokens": {
+          "sum": 8540,
+          "mean": 8540,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "cacheReadTokens": {
+          "sum": 2048,
+          "mean": 2048,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherCalls": {
+          "sum": 1,
+          "mean": 1,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 1,
+          "missing": 0,
+          "total": 1
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 1,
+        "runsWithInjection": 0,
+        "recordedRuns": 1,
+        "runRate": 0,
+        "eligibleRunRate": 0
+      },
+      "costPerOperationalSuccessUsd": 0.014232799999999999,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.014232799999999999,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    }
+  ],
+  "pairs": [],
+  "runs": [
+    {
+      "task": "cursor-pagination",
+      "variant": "luna",
+      "repetition": 0,
+      "runId": "001-cursor-pagination-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.012282399999999999,
+      "watcherEstimatedUsd": 0.00007730000000000001,
+      "totalEstimatedUsd": 0.0123597,
+      "knownEstimatedUsd": 0.0123597,
+      "latencyMs": 42722,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8178,
+      "watcherTokens": 729,
+      "totalTokens": 8907,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "jev",
+      "repetition": 0,
+      "runId": "002-cursor-pagination-jev-r0",
+      "status": "provider_error",
+      "operationalSuccess": false,
+      "valid": false,
+      "excludedReasons": [
+        "main_not_completed",
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0,
+      "latencyMs": 1280,
+      "turns": 1,
+      "toolCalls": 0,
+      "mainTokens": 0,
+      "watcherTokens": 0,
+      "totalTokens": 0,
+      "cacheReadTokens": 0,
+      "sourceHashesDigest": "88dfdf9ec1e4bbc9d556450d8438407e5e6d01cc9577c4727a9ce2580fcbdc46",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "lightning",
+      "repetition": 0,
+      "runId": "003-cursor-pagination-lightning-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0126744,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0126744,
+      "knownEstimatedUsd": 0.0126744,
+      "latencyMs": 42531,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 8226,
+      "watcherTokens": 786,
+      "totalTokens": 9012,
+      "cacheReadTokens": 3584,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "cursor-pagination",
+      "variant": "nemotron",
+      "repetition": 0,
+      "runId": "004-cursor-pagination-nemotron-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.014232799999999999,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.014232799999999999,
+      "knownEstimatedUsd": 0.014232799999999999,
+      "latencyMs": 28334,
+      "turns": 4,
+      "toolCalls": 11,
+      "mainTokens": 7746,
+      "watcherTokens": 794,
+      "totalTokens": 8540,
+      "cacheReadTokens": 2048,
+      "sourceHashesDigest": "eb567f0ad96062507b25d4c769bd7022d59abb535afd3881d6651b6d9055fa97",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 0
+    }
+  ],
+  "jevGlobalLedger": {
+    "scope": "global across campaigns; not attributable to this campaign",
+    "reservedUsd": 0.01,
+    "remainingUsd": 1.99,
+    "limitUsd": 2,
+    "calls": 1
+  },
+  "limitations": [
+    "Descriptive pilot only; small samples do not establish significance or real-world performance.",
+    "Core versus Pi compares a prompt/tool bundle; watcher versus core compares an added observer.",
+    "Intention-to-treat operational success includes scheduled missing results and provider/watcher failures. Missing results are incomplete executions, not evidence of model inability.",
+    "Treated-valid efficacy excludes unavailable acceptance, main failure, missing cost telemetry, watcher errors, and missing decision records. This selected subset is descriptive and can be biased.",
+    "Costs are API-equivalent estimates for subscription models plus estimated external watcher spend, not an actual subscription bill or verified provider invoice.",
+    "Known cost includes failed attempts and known components of partially costed runs. Incomplete cost/success is a nonnegative lower bound; null never means zero.",
+    "Jev ledger reservations are conservative budget consumption, separate from usage-based estimated spend; global reservations cannot be attributed to a campaign.",
+    "Provider cache warmth was observed rather than controlled. Fixed task/repetition pairs do not remove order or availability effects."
+  ]
+}

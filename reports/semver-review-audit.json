@@ -1,0 +1,57 @@
+[
+  {
+    "runId": "003-prerelease-subset-luna-review-r0",
+    "beforeHidden": false,
+    "beforeRegression": "passed",
+    "afterAccepted": true,
+    "findings": [
+      "src/ranges/subset.js:179 and 199 still use satisfies() against individual opposite-bound comparators, which incorrectly applies prerelease exclusion separately rather than across the whole domain comparator set. The required example subset('^10.2.0-beta.2', '^10.2.0-beta.1') still returns false (confirmed with check_cases): the lower prerelease endpoint fails satisfies() against '<11.0.0-0' despite the domain's lower comparator admitting that prerelease tuple. Repair both lower- and upper-endpoint checks to distinguish comparator ordering from range-wide prerelease admission.",
+      "src/ranges/subset.js:169-170 and 189-190 now require the domain's prerelease-admitting comparator to have the same bound direction. Prerelease admission is tuple-based regardless of comparator direction. For example, '>=1.2.3-beta.2 <=1.2.3-beta.4' is contained in '>=1.2.3-beta.1 <1.2.3', but the upper prerelease requirement cannot be cleared by the domain's lower comparator. Conversely, it is contained in '>1.2.2 <=1.2.3-beta.5', where the upper comparator admits the lower endpoint's tuple. Restore direction-independent tuple admission while checking inclusive/exclusive bound containment separately."
+    ]
+  },
+  {
+    "runId": "009-build-metadata-luna-review-r0",
+    "beforeHidden": true,
+    "beforeRegression": "passed",
+    "afterAccepted": true,
+    "findings": [
+      "src/classes/range.js:38 strips arbitrary non-whitespace text after '+' without validating build metadata or its version context, changing existing strict parsing behavior. For example, validRange('1.2.3+foo!') now returns '1.2.3' instead of null; malformed metadata such as '1.2.3+a..b' is likewise silently accepted, and '+foo' becomes an unrestricted range. Restrict metadata normalization to valid build identifiers attached to valid range version tokens, preserving rejection of malformed inputs while supporting long metadata."
+    ]
+  },
+  {
+    "runId": "015-dotted-prerelease-luna-review-r0",
+    "beforeHidden": true,
+    "beforeRegression": "passed",
+    "afterAccepted": true,
+    "findings": [
+      "src/classes/semver.js:308–321: Prefix matching now expects separate dotted components, but initialization and resets still store the entire identifier in one prerelease element. Consequently, `new SemVer('3.0.0').inc('prerelease', 'alpha.beta').inc('prerelease', 'alpha.beta').version` remains `3.0.1-alpha.beta.0` instead of advancing to `3.0.1-alpha.beta.1`. Construct reset prerelease arrays from the identifier components so subsequent instance increments match the prefix correctly, preserving identifierBase behavior."
+    ]
+  },
+  {
+    "runId": "028-prerelease-subset-luna-review-r1",
+    "beforeHidden": false,
+    "beforeRegression": "failed",
+    "afterAccepted": true,
+    "findings": [
+      "src/ranges/subset.js:1: The patch deletes the entire implementation and module export, leaving an empty file. Consequently semver.subset is an object rather than a function, and every subset() call—including the requested prerelease example—throws TypeError. The visible subset test group confirms 'semver.subset is not a function'. Restore the implementation and export, then repair prerelease handling for both lower and upper bounds while preserving existing range semantics."
+    ]
+  },
+  {
+    "runId": "029-build-metadata-luna-review-r1",
+    "beforeHidden": false,
+    "beforeRegression": "passed",
+    "afterAccepted": true,
+    "findings": [
+      "src/internal/re.js:30: Raising the build-character bound to MAX_LENGTH only moves the truncation bug to metadata longer than 256 characters. Verified that validRange('4.17.0+' + 'a'.repeat(300) + '3', true) returns '4.17.0-' + 'a'.repeat(44) + '3' instead of '4.17.0': leftover build metadata becomes a prerelease and changes range meaning. Ensure range preprocessing consumes complete build metadata without allowing a bounded regex match to leave a suffix that is reinterpreted as version content."
+    ]
+  },
+  {
+    "runId": "037-dotted-prerelease-luna-review-r1",
+    "beforeHidden": true,
+    "beforeRegression": "passed",
+    "afterAccepted": true,
+    "findings": [
+      "src/classes/semver.js:308–321: Reset/new prereleases still store a dotted identifier as one array element ([identifier, base]), while the new matching code expects separate components. Consequently, new SemVer('3.0.0').inc('prerelease', 'alpha.beta').inc('prerelease', 'alpha.beta').version remains '3.0.1-alpha.beta.0' instead of advancing to '3.0.1-alpha.beta.1'. Construct reset prerelease arrays from the identifier's individual components so subsequent SemVer.inc calls can recognize and continue the sequence."
+    ]
+  }
+]

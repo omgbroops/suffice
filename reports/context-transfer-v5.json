@@ -1,0 +1,3225 @@
+{
+  "version": 1,
+  "campaign": "context-transfer-v5",
+  "split": "context",
+  "model": "variant-specific: gpt-6.1-sol or gpt-6-luna",
+  "reasoning": "low",
+  "provenance": "AI-authored synthetic tasks",
+  "evidence": {
+    "manifestSha256": "279bb15c7e186bd959c2af6143eaa10435d8045e39558737050cf38c92d6ad7c",
+    "inputHashes": {
+      "acceptance:layered-routing": "e381c5f6ee0eec55ab45aa61a3be049098e1854efe726a1dd1c3ccf55b6c7681",
+      "acceptance:tenant-event-feed": "688e24b3f71517c42395d56dc3cabc2af71fd1ce2b4436d4a9737d213824f1e5",
+      "benchmarks/manifest.json": "70dbae8b38d939ed4d1dc6a770e8f3e72689834d34f475d03ff57726def5ec33",
+      "benchmarks/tasks.mjs": "b4e351a691d314fc6a4b311e9a482d05ef045079bc80aa6c098ef58b7a39af95",
+      "docs/EXPERIMENT.md": "a2882625a8a036d704f3ffb20bc3b0c145d94cf1ad5be5060cf9be4c92d94c49",
+      "package-lock.json": "7a48d62c2208df2220c4e5b1c0cad0d8339f552da86a8aed18c78d154a3d3b2a",
+      "package.json": "e82891df5a6399a7839b685869506fab5f8e5e8f77dfbfb93cb8a5ab56d546ec",
+      "scripts/experiment.mjs": "4151e314974c7f5d13840c7a49e578f4a4536341c431bdbc31fdc6dc95495ca3",
+      "scripts/freeze-sources.mjs": "4d7328e6b4e735908331adff4202725a87c0fcb399c9366e49f331428a40f561",
+      "scripts/run-pilot.mjs": "8a8bc9fe0c5b17b4948656b09e8a8ece864eeda6a22fbf86ee4a36526a3d4057",
+      "src/budget.mjs": "a011398d901b6d9d9617d610d2803ab30f3860c8639fa13dd16a4af8f2697913",
+      "src/code-graph.mjs": "da31b6ae16544b827c3bac8e3aebe815cd402acf7daa399244d08ef16c70781c",
+      "src/context-policy.mjs": "45ba94047d68fa4897bdb7f7c0164938f5d613c66768c69adcdf39cffa76e259",
+      "src/control-policy.mjs": "5c27627eb3382413ee2b42a88ab1055ef84c5458281b4a02811135258045ac7d",
+      "src/harness.mjs": "7bffbabc15dc4a98a705689c6ab2b0e15ed63776b51de9304a55469cadd0e17d",
+      "src/planned-reads.mjs": "eceb24c4b57f8b6963aae2a273bab8ec6f761054c2d5a2620fd6148927f1e64d",
+      "src/runtime.mjs": "878fded7e06488cc933a7ae3111ad94f279ef729ea64e70257da74d414cd8e60",
+      "src/watchers.mjs": "de054d0f3e8c9041d01b5cc23527d74162a4ce00d446a96817ed00f63187da4b",
+      "src/workspace.mjs": "190800091e7285daf33519de96a7e5a503e7b4a14fba0080a6052c8fbe5ea068",
+      "task:layered-routing/README.md": "3ca1b88e810d027fbbd43aadf15d9466f89767760c174c34ff973b537ca0c41d",
+      "task:layered-routing/src/configuration.mjs": "a756da6d9ff325088ba5bb06a7d5c3a4b15422ba34dc386e0ae28ed2696440d4",
+      "task:layered-routing/src/field-merge.mjs": "2b381802c131a8aaa11f332450e0f538203022b0147d1fc6657fe58f5b13a203",
+      "task:layered-routing/src/header-format.mjs": "1ae532f63bfc1d2b08c635011056a734dd4ff78891b0cb7070646e9e35569072",
+      "task:layered-routing/src/header-merge.mjs": "8749b7dadc4095e096e6279f80712d1717418cb01f35b947a9d50f368cce567a",
+      "task:layered-routing/src/index.mjs": "41859a55264df0efdb55dd36b552ffab75141696642842a1e0b922ec05015b62",
+      "task:layered-routing/src/legacy-redirects.mjs": "908ae0a13428d384ef7f5d661b46a9e9152a5222d349882db18663e1af17dffe",
+      "task:layered-routing/src/pattern-score.mjs": "9cc83f7a941aff492a78694584b84e144383661986f7c5d2d32ea6fa1f603b3f",
+      "task:layered-routing/src/resolution-key.mjs": "97a8645762113a05e61ebe9467e4ed089de7d3dc4e64d4a6a76a23d36503e1dd",
+      "task:layered-routing/src/resolver.mjs": "1a4fdb77952fed27390e597c4750bfa215f73b7c51767c217ec34f3bfbc58d72",
+      "task:layered-routing/src/route-cache.mjs": "140e2ba6e814af0125ed54402a2ed50cce78cf6bfa03f07c0602f60f5c742474",
+      "task:layered-routing/src/route-display.mjs": "2bf708023f87bd8fc6b71a98dd42535c515c0465eba2d5a606a0f382952c9ec3",
+      "task:layered-routing/src/route-matcher.mjs": "6f2d0215d3a08253d1ec78438471ad4d46733f930ba4b8e905ea0a6eb96eb2b1",
+      "task:layered-routing/src/router.mjs": "ad4d23523b463fcd9f3c84764d8c7b5e507f7ed6e0f68345876a2c77bab7880a",
+      "task:layered-routing/src/settings-merge.mjs": "72d6b66d990300cefd469e107d1b3512ffc487230b0b1ff9ad26769132972eea",
+      "task:layered-routing/src/snapshot.mjs": "24b9dc607fefef74949a4b655131c37b3485cd1b04e08cf85e6ff4b429dab0e8",
+      "task:layered-routing/src/tenant-table.mjs": "22c97f4d02177f7a125bfbb010a4f9985f38242ad22d694349e10d1a61025829",
+      "task:layered-routing/tests/visible.test.mjs": "5f27b3d7ef2500dd4b72796cfe7d1b33f133e0f60d19702521797778506f9397",
+      "task:tenant-event-feed/README.md": "8781e947d8e1ae173cf9b64b996ba0483352dd96238c5f500e85d9ed6cd97983",
+      "task:tenant-event-feed/src/batch-commit.mjs": "5f2603ac45ff8fe2e2740c802736e40e041e51cf3a7be65613838b822d50d9f6",
+      "task:tenant-event-feed/src/event-label.mjs": "1300a9dc97eab8627a3f25428296eef8265de80f0c2aa37b4e2812a6d31bf048",
+      "task:tenant-event-feed/src/event-store.mjs": "675a3df4479bcf4bdb506cfe683f0453270542190a5b987be57685550e24ba68",
+      "task:tenant-event-feed/src/feed-metrics.mjs": "7503d497aef9eec429913cd1bee9d5ed0df26cf091d973ada40e078729fc5334",
+      "task:tenant-event-feed/src/feed.mjs": "bdc94031a4ee854314d356674a06c9a31709bd5b3f0d8cb69822558566eca0b2",
+      "task:tenant-event-feed/src/index.mjs": "e8559ce1e8888df3b2cdac58a47e5fe04c403b785c302f2b74932e4fbb13d2b3",
+      "task:tenant-event-feed/src/legacy-poller.mjs": "a7711c9cfa52de46e2b352164f5138128c7d08b49fa9f31ec8491d0549812f60",
+      "task:tenant-event-feed/src/live-bus.mjs": "82049130f9f599fe4f0f07c82f3d5ad9fc35571ec8c47245da8e6352e8c185a1",
+      "task:tenant-event-feed/src/publisher.mjs": "a44ad2cbe3bc6f67c8e438f952a5e159ea7201d972e9cae69473f0f36f3959e4",
+      "task:tenant-event-feed/src/record-filter.mjs": "9aaa6fdfaf82bbb2b83cd3418a4936c4a2879e80df9fb243ae13f9fbf6634681",
+      "task:tenant-event-feed/src/record.mjs": "398072865ba96e1da5821417e2cbd0e1b28e62aa66d5119d04a8de04570f61d0",
+      "task:tenant-event-feed/src/replay.mjs": "8bc16a9661e08f498da2c384863f5ca655b209e811c049b23a9cec50e1700f70",
+      "task:tenant-event-feed/src/snapshot.mjs": "1e532cf2fd94f8d0031c22e0b1110e2088b6237237f8e93f512d6d46e15fb108",
+      "task:tenant-event-feed/src/subscription.mjs": "61fad716e190e3e8308ec48394ad32aac62e7497c222a6d08994b06b6745b7b0",
+      "task:tenant-event-feed/src/validation.mjs": "6ad374a80d2d3bd4311af61b7e24377272a58fbb036114be48d90a96ce5ce199",
+      "task:tenant-event-feed/tests/visible.test.mjs": "f64301bf90bfa50880bd09a8a772e16985ecddc7e4cc79f2843b66626cae81d5"
+    },
+    "resultHashes": {
+      "001-tenant-event-feed-core-r0": "fcb2226275e85da73d0df911ddfb8ef5c27c5210e0f8ab58fadead1ab464bb10",
+      "002-tenant-event-feed-cache-select-r0": "b58813d3a078a0826599e1d2b49b1b01f78f4b7953eab27642cb1f9e675b1caa",
+      "003-tenant-event-feed-graph-r0": "69c4b0a79d379414708e26009c8fa2554e9b2225de61c40ea03356d2055f0ff1",
+      "004-tenant-event-feed-delegate-r0": "509ee19e1f0752bfab0c2965dd3ecced6a7feede281439877a660a88739bd38e",
+      "005-tenant-event-feed-luna-worker-r0": "dcde3111af4ee89e1e264f3b17f456ca12e4fc5b339b5fa1c178cb880754af49",
+      "006-tenant-event-feed-route-r0": "80a7516161fa380d5cb5ca97a783b73b4eff946efbcff80c8ecc81cd3b131d5c",
+      "007-tenant-event-feed-stable-rules-r0": "5351f1f5f381468c5e59e997271472e5cfe074ebbccdc10b0071a2b51758802a",
+      "008-tenant-event-feed-stable-luna-r0": "be3a68c436811126bbe1e1554b06bf5fd305c9d77c5be70d0bf729e2b528e162",
+      "009-tenant-event-feed-stable-jev-r0": "478abde0a4bedb83be994d4ba7c87eebb2a787449b20b568e65b35eefb5e82b7",
+      "010-layered-routing-cache-select-r0": "a48a1317fe95aefff1008898bc5eab54ed3bc0b84aac340ad30fb5c7c91f7384",
+      "011-layered-routing-graph-r0": "cb03a6cfa02c84202b4a7ea620c953c776ea631b5a4121d8086143ddf8e0d909",
+      "012-layered-routing-delegate-r0": "4292cba4612993778ef32f0e3ec55d6fec27074e22f9bacb093b1843c77320b0",
+      "013-layered-routing-luna-worker-r0": "9e4ba025d985129447621e8ee853a420f95940f3c3848836a82001bcd2caad1e",
+      "014-layered-routing-route-r0": "32e564a65956a8c54067a967b8b588be8fa3837422d9a38050d103fbf186aa18",
+      "015-layered-routing-stable-rules-r0": "71d327236c09eb740142937770f38274332842a6752fdf2965be3d511fd3eb73",
+      "016-layered-routing-stable-luna-r0": "f45bd98b2bfd22831228244cca31cafbd899e4e6d649a7cbd6e74faf9f28d2e2",
+      "017-layered-routing-stable-jev-r0": "42edc5d647dcaaf085c6896ea6bd8b46d278b5986182417651cb53ba90895735",
+      "018-layered-routing-core-r0": "9d78443392cbc8c98362936c408cca34ee24cbfba43c3ceb9716008a887e8d80",
+      "019-tenant-event-feed-graph-r1": "23bf04cd6798620f40cc868c6712bbf9502c8dcdb75d5f377fd9d7df6e2506e1",
+      "020-tenant-event-feed-cache-select-r1": "fef2c954f444e278e33c991a496f69ad0f418a79b19fafcc52e3343d2c6d5a43",
+      "021-tenant-event-feed-core-r1": "f65ec1561f94bc43a4ed10cc57f755f757e4afe6ba897e46407c0f4c7b702c55",
+      "022-tenant-event-feed-stable-jev-r1": "e3dc125179dd11fdd15fb041aaa5de5631e0a9dd121daaaf3e18e311b79412f4",
+      "023-tenant-event-feed-stable-luna-r1": "8341fc2c57e9c79b1b62da06a4d17502fbf06934ceb1ec5d658a6ba6b3962373",
+      "024-tenant-event-feed-stable-rules-r1": "7373ca7ec0978d61f3fafa650eb3cb0820190f9ce5f3774392933545d42fc6a2",
+      "025-tenant-event-feed-route-r1": "7777b34fc8d6a95f1fbf1f51020dc3201e4ab91f9398d56adff027115035bcd5",
+      "026-tenant-event-feed-luna-worker-r1": "95e4f33323f3f40854f3305c0a5e401a3c848a8caadfe0a52d764628f31d1b3a",
+      "027-tenant-event-feed-delegate-r1": "4cb0a4d4480d868dfe2873233953c1357cd2689f813ad5595ccf32d160799d0e",
+      "028-layered-routing-delegate-r1": "194095fce4a5839366037e2649be2394471b7c0db3af584a5b234666b12ea5da",
+      "029-layered-routing-graph-r1": "c0f03ec2547cc2192f439dfefc914c3720c1a358f3248852a49daec7555be951",
+      "030-layered-routing-cache-select-r1": "174c01bea06a5e81f471214d1db152c546a186f92fe45007d824278f2daa7d2c",
+      "031-layered-routing-core-r1": "fe4ba5b1ec46a6625518b93dc7140800482d248f8ced6d62e6fc81c3ef94721d",
+      "032-layered-routing-stable-jev-r1": "904b8dbea87723ff38428a49c4d01448f1d5b330ef2c23b68d539f40bda45b7a",
+      "033-layered-routing-stable-luna-r1": "91bee1bac1f19a7ad46fac8ca9ca7f6d8f20850457b27c8a6fa587d1bb70a167",
+      "034-layered-routing-stable-rules-r1": "666ab4436ad84a7fc3756c8ed6e11e7e2ed3943e968af595d2911b7ce9e280bd",
+      "035-layered-routing-route-r1": "77fbebb7a4551f5d4df9f6d39bf82d19cbfbbd763bf7da6cadb2da22ef88ddfe",
+      "036-layered-routing-luna-worker-r1": "67047f8de18fbd35d031edb038e1fc2cdb9cf915a9c9b34349f69e9bb6ecfdda"
+    }
+  },
+  "variants": [
+    {
+      "variant": "cache-select",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.08741000000000002,
+          "mean": 0.021852500000000004,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.08741000000000002,
+          "mean": 0.021852500000000004,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.08741000000000002,
+          "mean": 0.021852500000000004,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 187487,
+          "mean": 46871.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 112,
+          "mean": 28,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 56257,
+          "mean": 14064.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 56257,
+          "mean": 14064.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 24320,
+          "mean": 6080,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.021852500000000004,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.021852500000000004,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "core",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 3,
+        "denominator": 3,
+        "rate": 1,
+        "exclusions": {
+          "main_cost_unknown": 1
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0794192,
+          "mean": 0.026473066666666666,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0794192,
+          "mean": 0.026473066666666666,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.1018984,
+          "mean": 0.0254746,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 177680,
+          "mean": 44420,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 18,
+          "mean": 4.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 112,
+          "mean": 28,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 55666,
+          "mean": 13916.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 55666,
+          "mean": 13916.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 15104,
+          "mean": 3776,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0254746,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "delegate",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 3,
+        "denominator": 3,
+        "rate": 1,
+        "exclusions": {
+          "main_cost_unknown": 1
+        }
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.07292520000000001,
+          "mean": 0.024308400000000004,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0.022842,
+          "mean": 0.0057105,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0957672,
+          "mean": 0.0319224,
+          "known": 3,
+          "missing": 1,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.114494,
+          "mean": 0.0286235,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 192076,
+          "mean": 48019,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 17,
+          "mean": 4.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 111,
+          "mean": 27.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 56658,
+          "mean": 14164.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 8889,
+          "mean": 2222.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 65547,
+          "mean": 16386.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 21120,
+          "mean": 5280,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 6,
+          "mean": 1.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 6,
+          "mean": 1.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 3,
+        "runsWithInjection": 3,
+        "recordedRuns": 4,
+        "runRate": 0.75,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": null,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0286235,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0.022842,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.10235999999999999,
+          "mean": 0.025589999999999998,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.10235999999999999,
+          "mean": 0.025589999999999998,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.10235999999999999,
+          "mean": 0.025589999999999998,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 148163,
+          "mean": 37040.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 108,
+          "mean": 27,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 58920,
+          "mean": 14730,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 58920,
+          "mean": 14730,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 17920,
+          "mean": 4480,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 13,
+          "mean": 3.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 13,
+          "mean": 3.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 4,
+        "runsWithInjection": 4,
+        "recordedRuns": 4,
+        "runRate": 1,
+        "eligibleRunRate": 1
+      },
+      "costPerOperationalSuccessUsd": 0.025589999999999998,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.025589999999999998,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "luna-worker",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 3,
+        "denominator": 4,
+        "rate": 0.75
+      },
+      "acceptedPatches": 3,
+      "treatedValid": {
+        "successes": 3,
+        "denominator": 4,
+        "rate": 0.75,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0063357199999999995,
+          "mean": 0.0015839299999999999,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0063357199999999995,
+          "mean": 0.0015839299999999999,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0063357199999999995,
+          "mean": 0.0015839299999999999,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 130530,
+          "mean": 32632.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 25,
+          "mean": 6.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 108,
+          "mean": 27,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 94402,
+          "mean": 23600.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 94402,
+          "mean": 23600.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 46592,
+          "mean": 11648,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.0021119066666666665,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0021119066666666665,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "route",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.0901621,
+          "mean": 0.022540525,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.0901621,
+          "mean": 0.022540525,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.0901621,
+          "mean": 0.022540525,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 181982,
+          "mean": 45495.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 20,
+          "mean": 5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 118,
+          "mean": 29.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 65922,
+          "mean": 16480.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 65922,
+          "mean": 16480.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 27776,
+          "mean": 6944,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 4,
+          "mean": 1,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.022540525,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.022540525,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "stable-jev",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.09234640000000001,
+          "mean": 0.023086600000000002,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.09234640000000001,
+          "mean": 0.023086600000000002,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.09234640000000001,
+          "mean": 0.023086600000000002,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 135671,
+          "mean": 33917.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 108,
+          "mean": 27,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 55570,
+          "mean": 13892.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 55570,
+          "mean": 13892.5,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 19584,
+          "mean": 4896,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.023086600000000002,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.023086600000000002,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "stable-luna",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.09592319999999999,
+          "mean": 0.023980799999999997,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.09592319999999999,
+          "mean": 0.023980799999999997,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.09592319999999999,
+          "mean": 0.023980799999999997,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 147239,
+          "mean": 36809.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 115,
+          "mean": 28.75,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 56080,
+          "mean": 14020,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 56080,
+          "mean": 14020,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 19072,
+          "mean": 4768,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.023980799999999997,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.023980799999999997,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "variant": "stable-rules",
+      "scheduled": 4,
+      "recorded": 4,
+      "statuses": {
+        "completed": 4
+      },
+      "intentionToTreat": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1
+      },
+      "acceptedPatches": 4,
+      "treatedValid": {
+        "successes": 4,
+        "denominator": 4,
+        "rate": 1,
+        "exclusions": {}
+      },
+      "metrics": {
+        "mainApiEquivalentUsd": {
+          "sum": 0.082898,
+          "mean": 0.0207245,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherEstimatedUsd": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalEstimatedUsd": {
+          "sum": 0.082898,
+          "mean": 0.0207245,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "knownEstimatedUsd": {
+          "sum": 0.082898,
+          "mean": 0.0207245,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "latencyMs": {
+          "sum": 153049,
+          "mean": 38262.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "turns": {
+          "sum": 16,
+          "mean": 4,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "toolCalls": {
+          "sum": 112,
+          "mean": 28,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "mainTokens": {
+          "sum": 55841,
+          "mean": 13960.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherTokens": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "totalTokens": {
+          "sum": 55841,
+          "mean": 13960.25,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "cacheReadTokens": {
+          "sum": 24960,
+          "mean": 6240,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "injections": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "watcherErrors": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextPrunedCalls": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "contextRemovedCharacters": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        },
+        "routingSwitches": {
+          "sum": 0,
+          "mean": 0,
+          "known": 4,
+          "missing": 0,
+          "total": 4
+        }
+      },
+      "watcherErrorsByCode": {},
+      "intervention": {
+        "runsWithWatcherCalls": 0,
+        "runsWithInjection": 0,
+        "recordedRuns": 4,
+        "runRate": 0,
+        "eligibleRunRate": null
+      },
+      "costPerOperationalSuccessUsd": 0.0207245,
+      "knownCostPerOperationalSuccessLowerBoundUsd": 0.0207245,
+      "watcherSubscriptionApiEquivalentKnownUsd": 0,
+      "watcherExternalEstimatedKnownUsd": 0,
+      "jev": {
+        "knownEstimatedSpendUsd": null,
+        "knownCalls": 0,
+        "unknownCalls": 0,
+        "recordedReservations": {
+          "sum": null,
+          "mean": null,
+          "known": 0,
+          "missing": 0,
+          "total": 0
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "baseline": "core",
+      "variant": "cache-select",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -5721,
+      "totalTokensDelta": 305,
+      "cacheReadTokensDelta": -3584
+    },
+    {
+      "baseline": "core",
+      "variant": "cache-select",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.008902799999999995,
+      "latencyMsDelta": 18032,
+      "totalTokensDelta": 339,
+      "cacheReadTokensDelta": 5632
+    },
+    {
+      "baseline": "core",
+      "variant": "cache-select",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.013445200000000001,
+      "latencyMsDelta": 3548,
+      "totalTokensDelta": 31,
+      "cacheReadTokensDelta": 7168
+    },
+    {
+      "baseline": "core",
+      "variant": "cache-select",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.000504000000000001,
+      "latencyMsDelta": -6052,
+      "totalTokensDelta": -84,
+      "cacheReadTokensDelta": 0
+    },
+    {
+      "baseline": "core",
+      "variant": "delegate",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -6734,
+      "totalTokensDelta": 3163,
+      "cacheReadTokensDelta": -4608
+    },
+    {
+      "baseline": "core",
+      "variant": "delegate",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0002944000000000037,
+      "latencyMsDelta": 19500,
+      "totalTokensDelta": 3548,
+      "cacheReadTokensDelta": 4864
+    },
+    {
+      "baseline": "core",
+      "variant": "delegate",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": 14279,
+      "totalTokensDelta": 245,
+      "cacheReadTokensDelta": 7168
+    },
+    {
+      "baseline": "core",
+      "variant": "delegate",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.008333200000000002,
+      "latencyMsDelta": -12649,
+      "totalTokensDelta": 2925,
+      "cacheReadTokensDelta": -1408
+    },
+    {
+      "baseline": "core",
+      "variant": "graph",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -7821,
+      "totalTokensDelta": 1240,
+      "cacheReadTokensDelta": 1664
+    },
+    {
+      "baseline": "core",
+      "variant": "graph",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.007489200000000001,
+      "latencyMsDelta": 2817,
+      "totalTokensDelta": 1297,
+      "cacheReadTokensDelta": 5248
+    },
+    {
+      "baseline": "core",
+      "variant": "graph",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.00016640000000000058,
+      "latencyMsDelta": -9093,
+      "totalTokensDelta": 1380,
+      "cacheReadTokensDelta": 1536
+    },
+    {
+      "baseline": "core",
+      "variant": "graph",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0090388,
+      "latencyMsDelta": -15420,
+      "totalTokensDelta": -663,
+      "cacheReadTokensDelta": -5632
+    },
+    {
+      "baseline": "core",
+      "variant": "luna-worker",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -33473,
+      "totalTokensDelta": 7268,
+      "cacheReadTokensDelta": 4480
+    },
+    {
+      "baseline": "core",
+      "variant": "luna-worker",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.02775528,
+      "latencyMsDelta": 435,
+      "totalTokensDelta": 9652,
+      "cacheReadTokensDelta": 6528
+    },
+    {
+      "baseline": "core",
+      "variant": "luna-worker",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.02977568,
+      "latencyMsDelta": -6227,
+      "totalTokensDelta": 4668,
+      "cacheReadTokensDelta": 8192
+    },
+    {
+      "baseline": "core",
+      "variant": "luna-worker",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": -1,
+      "treatedValidSuccessDelta": -1,
+      "estimatedUsdDelta": -0.01698224,
+      "latencyMsDelta": -7885,
+      "totalTokensDelta": 17148,
+      "cacheReadTokensDelta": 12288
+    },
+    {
+      "baseline": "core",
+      "variant": "route",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -11350,
+      "totalTokensDelta": 1796,
+      "cacheReadTokensDelta": 1408
+    },
+    {
+      "baseline": "core",
+      "variant": "route",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0015997999999999984,
+      "latencyMsDelta": 2158,
+      "totalTokensDelta": -10,
+      "cacheReadTokensDelta": 0
+    },
+    {
+      "baseline": "core",
+      "variant": "route",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0139134,
+      "latencyMsDelta": 12705,
+      "totalTokensDelta": 964,
+      "cacheReadTokensDelta": 7168
+    },
+    {
+      "baseline": "core",
+      "variant": "route",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0051964,
+      "latencyMsDelta": 789,
+      "totalTokensDelta": 7506,
+      "cacheReadTokensDelta": 4096
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-jev",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -20920,
+      "totalTokensDelta": -333,
+      "cacheReadTokensDelta": 1024
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-jev",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.007333199999999998,
+      "latencyMsDelta": 250,
+      "totalTokensDelta": 43,
+      "cacheReadTokensDelta": 3968
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-jev",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.010442799999999995,
+      "latencyMsDelta": -5757,
+      "totalTokensDelta": 109,
+      "cacheReadTokensDelta": 5632
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-jev",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0117956,
+      "latencyMsDelta": -15582,
+      "totalTokensDelta": 85,
+      "cacheReadTokensDelta": -6144
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-luna",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -6356,
+      "totalTokensDelta": -8,
+      "cacheReadTokensDelta": 1024
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-luna",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.003999599999999999,
+      "latencyMsDelta": 1632,
+      "totalTokensDelta": 357,
+      "cacheReadTokensDelta": 2944
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-luna",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.007479200000000002,
+      "latencyMsDelta": -4862,
+      "totalTokensDelta": 254,
+      "cacheReadTokensDelta": 4608
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-luna",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.007537200000000001,
+      "latencyMsDelta": -20855,
+      "totalTokensDelta": -189,
+      "cacheReadTokensDelta": -4608
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-rules",
+      "task": "layered-routing",
+      "repetition": 0,
+      "validPair": false,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": null,
+      "estimatedUsdDelta": null,
+      "latencyMsDelta": -12510,
+      "totalTokensDelta": -323,
+      "cacheReadTokensDelta": 0
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-rules",
+      "task": "layered-routing",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.008902800000000002,
+      "latencyMsDelta": 15022,
+      "totalTokensDelta": 387,
+      "cacheReadTokensDelta": 5632
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-rules",
+      "task": "tenant-event-feed",
+      "repetition": 0,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": -0.0111028,
+      "latencyMsDelta": -8008,
+      "totalTokensDelta": -101,
+      "cacheReadTokensDelta": 5632
+    },
+    {
+      "baseline": "core",
+      "variant": "stable-rules",
+      "task": "tenant-event-feed",
+      "repetition": 1,
+      "validPair": true,
+      "operationalSuccessDelta": 0,
+      "treatedValidSuccessDelta": 0,
+      "estimatedUsdDelta": 0.0025632000000000016,
+      "latencyMsDelta": -19135,
+      "totalTokensDelta": 212,
+      "cacheReadTokensDelta": -1408
+    }
+  ],
+  "runs": [
+    {
+      "task": "tenant-event-feed",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "001-tenant-event-feed-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.031184,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.031184,
+      "knownEstimatedUsd": 0.031184,
+      "latencyMs": 38608,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13588,
+      "watcherTokens": 0,
+      "totalTokens": 13588,
+      "cacheReadTokens": 0,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "cache-select",
+      "repetition": 0,
+      "runId": "002-tenant-event-feed-cache-select-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0177388,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0177388,
+      "knownEstimatedUsd": 0.0177388,
+      "latencyMs": 42156,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13619,
+      "watcherTokens": 0,
+      "totalTokens": 13619,
+      "cacheReadTokens": 7168,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "graph",
+      "repetition": 0,
+      "runId": "003-tenant-event-feed-graph-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0310176,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0310176,
+      "knownEstimatedUsd": 0.0310176,
+      "latencyMs": 29515,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 14968,
+      "watcherTokens": 0,
+      "totalTokens": 14968,
+      "cacheReadTokens": 1536,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 4,
+      "watcherErrors": 0,
+      "injections": 4
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "delegate",
+      "repetition": 0,
+      "runId": "004-tenant-event-feed-delegate-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": false,
+      "excludedReasons": [
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0.0187268,
+      "latencyMs": 52887,
+      "turns": 5,
+      "toolCalls": 26,
+      "mainTokens": 13833,
+      "watcherTokens": 0,
+      "totalTokens": 13833,
+      "cacheReadTokens": 7168,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "942e2f93104313568fe3014978d9f228e995562a1ecb416a936eec9ac4e54450",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "luna-worker",
+      "repetition": 0,
+      "runId": "005-tenant-event-feed-luna-worker-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.00140832,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.00140832,
+      "knownEstimatedUsd": 0.00140832,
+      "latencyMs": 32381,
+      "turns": 5,
+      "toolCalls": 26,
+      "mainTokens": 18256,
+      "watcherTokens": 0,
+      "totalTokens": 18256,
+      "cacheReadTokens": 8192,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "c972389a4b2fec269b15830352d6f85902180f5c681b2e3e4f3781fcc4ef3c53",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "route",
+      "repetition": 0,
+      "runId": "006-tenant-event-feed-route-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0172706,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0172706,
+      "knownEstimatedUsd": 0.0172706,
+      "latencyMs": 51313,
+      "turns": 5,
+      "toolCalls": 25,
+      "mainTokens": 14552,
+      "watcherTokens": 0,
+      "totalTokens": 14552,
+      "cacheReadTokens": 7168,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 1,
+      "sourceHashesDigest": "4d8f6dffd8f975925a002ee45e0f4e815e850e8a93a40b651173ccb44035f01b",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "stable-rules",
+      "repetition": 0,
+      "runId": "007-tenant-event-feed-stable-rules-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0200812,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0200812,
+      "knownEstimatedUsd": 0.0200812,
+      "latencyMs": 30600,
+      "turns": 4,
+      "toolCalls": 26,
+      "mainTokens": 13487,
+      "watcherTokens": 0,
+      "totalTokens": 13487,
+      "cacheReadTokens": 5632,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "4d8f6dffd8f975925a002ee45e0f4e815e850e8a93a40b651173ccb44035f01b",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "stable-luna",
+      "repetition": 0,
+      "runId": "008-tenant-event-feed-stable-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.023704799999999998,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.023704799999999998,
+      "knownEstimatedUsd": 0.023704799999999998,
+      "latencyMs": 33746,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 13842,
+      "watcherTokens": 0,
+      "totalTokens": 13842,
+      "cacheReadTokens": 4608,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "f2f3d5299ffbbe4fc34ba984f39ac169b934b8bc3465c7378d6ae38c5107ab7c",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "stable-jev",
+      "repetition": 0,
+      "runId": "009-tenant-event-feed-stable-jev-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.020741200000000005,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.020741200000000005,
+      "knownEstimatedUsd": 0.020741200000000005,
+      "latencyMs": 32851,
+      "turns": 4,
+      "toolCalls": 26,
+      "mainTokens": 13697,
+      "watcherTokens": 0,
+      "totalTokens": 13697,
+      "cacheReadTokens": 5632,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "cache-select",
+      "repetition": 0,
+      "runId": "010-layered-routing-cache-select-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.030842800000000004,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.030842800000000004,
+      "knownEstimatedUsd": 0.030842800000000004,
+      "latencyMs": 52493,
+      "turns": 4,
+      "toolCalls": 29,
+      "mainTokens": 14639,
+      "watcherTokens": 0,
+      "totalTokens": 14639,
+      "cacheReadTokens": 2688,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "964f5d511053ba019872b8605f4ce4cb628eaeea5ac7eb55552dd7057e331c3d",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "graph",
+      "repetition": 0,
+      "runId": "011-layered-routing-graph-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0215576,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0215576,
+      "knownEstimatedUsd": 0.0215576,
+      "latencyMs": 50393,
+      "turns": 4,
+      "toolCalls": 30,
+      "mainTokens": 15574,
+      "watcherTokens": 0,
+      "totalTokens": 15574,
+      "cacheReadTokens": 7936,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "b8cb4e0b57c3682ba26ed11bb0d502d7193d12ce3b45f3a46aa22fee71ddac21",
+      "watcherCalls": 4,
+      "watcherErrors": 0,
+      "injections": 4
+    },
+    {
+      "task": "layered-routing",
+      "variant": "delegate",
+      "repetition": 0,
+      "runId": "012-layered-routing-delegate-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0314404,
+      "watcherEstimatedUsd": 0.007464,
+      "totalEstimatedUsd": 0.0389044,
+      "knownEstimatedUsd": 0.0389044,
+      "latencyMs": 51480,
+      "turns": 4,
+      "toolCalls": 30,
+      "mainTokens": 14585,
+      "watcherTokens": 2912,
+      "totalTokens": 17497,
+      "cacheReadTokens": 1664,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "425e54acf24120e65a28891ca44df0507caa42e000e61a25b068963022cde295",
+      "watcherCalls": 2,
+      "watcherErrors": 0,
+      "injections": 2
+    },
+    {
+      "task": "layered-routing",
+      "variant": "luna-worker",
+      "repetition": 0,
+      "runId": "013-layered-routing-luna-worker-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.00142972,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.00142972,
+      "knownEstimatedUsd": 0.00142972,
+      "latencyMs": 24741,
+      "turns": 6,
+      "toolCalls": 26,
+      "mainTokens": 21602,
+      "watcherTokens": 0,
+      "totalTokens": 21602,
+      "cacheReadTokens": 10752,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "b54f7be4e0a44f026ba67cf0657a5e1afc154e489420297f3bd09b6dd6e0b359",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "route",
+      "repetition": 0,
+      "runId": "014-layered-routing-route-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0210597,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0210597,
+      "knownEstimatedUsd": 0.0210597,
+      "latencyMs": 46864,
+      "turns": 5,
+      "toolCalls": 33,
+      "mainTokens": 16130,
+      "watcherTokens": 0,
+      "totalTokens": 16130,
+      "cacheReadTokens": 7680,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 1,
+      "sourceHashesDigest": "5a48fcc94f6a2f684e977b62947a29bb889ab4eccfb190b8f1760aebe8db0a00",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "stable-rules",
+      "repetition": 0,
+      "runId": "015-layered-routing-stable-rules-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0209212,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0209212,
+      "knownEstimatedUsd": 0.0209212,
+      "latencyMs": 45704,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 14011,
+      "watcherTokens": 0,
+      "totalTokens": 14011,
+      "cacheReadTokens": 6272,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "00f8c6dc0b71abffca3cf55416124f60e888f56c160dc1d88340cd784e5e0d86",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "stable-luna",
+      "repetition": 0,
+      "runId": "016-layered-routing-stable-luna-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0204456,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0204456,
+      "knownEstimatedUsd": 0.0204456,
+      "latencyMs": 51858,
+      "turns": 4,
+      "toolCalls": 30,
+      "mainTokens": 14326,
+      "watcherTokens": 0,
+      "totalTokens": 14326,
+      "cacheReadTokens": 7296,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "425e54acf24120e65a28891ca44df0507caa42e000e61a25b068963022cde295",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "stable-jev",
+      "repetition": 0,
+      "runId": "017-layered-routing-stable-jev-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0189076,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0189076,
+      "knownEstimatedUsd": 0.0189076,
+      "latencyMs": 37294,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 14001,
+      "watcherTokens": 0,
+      "totalTokens": 14001,
+      "cacheReadTokens": 7296,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "58cdd4d07d6950073641d98e16a0ecdf5b3636bf6fe169b6398562da330480bc",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "core",
+      "repetition": 0,
+      "runId": "018-layered-routing-core-r0",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": false,
+      "excludedReasons": [
+        "main_cost_unknown"
+      ],
+      "mainApiEquivalentUsd": null,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0.0224792,
+      "latencyMs": 58214,
+      "turns": 6,
+      "toolCalls": 30,
+      "mainTokens": 14334,
+      "watcherTokens": 0,
+      "totalTokens": 14334,
+      "cacheReadTokens": 6272,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "d6936faeda820fdb7af3de63ca6059aa2d4018e7ed4ec6cb6ce29677bf012152",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "graph",
+      "repetition": 1,
+      "runId": "019-tenant-event-feed-graph-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0276596,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0276596,
+      "knownEstimatedUsd": 0.0276596,
+      "latencyMs": 32188,
+      "turns": 4,
+      "toolCalls": 23,
+      "mainTokens": 13097,
+      "watcherTokens": 0,
+      "totalTokens": 13097,
+      "cacheReadTokens": 1536,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 1,
+      "watcherErrors": 0,
+      "injections": 1
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "cache-select",
+      "repetition": 1,
+      "runId": "020-tenant-event-feed-cache-select-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0181168,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0181168,
+      "knownEstimatedUsd": 0.0181168,
+      "latencyMs": 41556,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13676,
+      "watcherTokens": 0,
+      "totalTokens": 13676,
+      "cacheReadTokens": 7168,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "99f902b71a5832f1d425ff37c1d31667bf86bd54659d8356ab7f833212d98a41",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "core",
+      "repetition": 1,
+      "runId": "021-tenant-event-feed-core-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0186208,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0186208,
+      "knownEstimatedUsd": 0.0186208,
+      "latencyMs": 47608,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13760,
+      "watcherTokens": 0,
+      "totalTokens": 13760,
+      "cacheReadTokens": 7168,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "c8a9c977dd7203b91676e31c3b94843f1dc76d4b138de9a0a2328bce89dd2a05",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "stable-jev",
+      "repetition": 1,
+      "runId": "022-tenant-event-feed-stable-jev-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0304164,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0304164,
+      "knownEstimatedUsd": 0.0304164,
+      "latencyMs": 32026,
+      "turns": 4,
+      "toolCalls": 26,
+      "mainTokens": 13845,
+      "watcherTokens": 0,
+      "totalTokens": 13845,
+      "cacheReadTokens": 1024,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "stable-luna",
+      "repetition": 1,
+      "runId": "023-tenant-event-feed-stable-luna-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.026158,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.026158,
+      "knownEstimatedUsd": 0.026158,
+      "latencyMs": 26753,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13571,
+      "watcherTokens": 0,
+      "totalTokens": 13571,
+      "cacheReadTokens": 2560,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "stable-rules",
+      "repetition": 1,
+      "runId": "024-tenant-event-feed-stable-rules-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.021184,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.021184,
+      "knownEstimatedUsd": 0.021184,
+      "latencyMs": 28473,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 13972,
+      "watcherTokens": 0,
+      "totalTokens": 13972,
+      "cacheReadTokens": 5760,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "route",
+      "repetition": 1,
+      "runId": "025-tenant-event-feed-route-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0238172,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0238172,
+      "knownEstimatedUsd": 0.0238172,
+      "latencyMs": 48397,
+      "turns": 6,
+      "toolCalls": 33,
+      "mainTokens": 21266,
+      "watcherTokens": 0,
+      "totalTokens": 21266,
+      "cacheReadTokens": 11264,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 1,
+      "sourceHashesDigest": "e2d5c23a476a024e7e983dff63bde72bc04514663ffdfc322a367057cdc34ffb",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "luna-worker",
+      "repetition": 1,
+      "runId": "026-tenant-event-feed-luna-worker-r1",
+      "status": "completed",
+      "operationalSuccess": false,
+      "acceptancePassed": false,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.00163856,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.00163856,
+      "knownEstimatedUsd": 0.00163856,
+      "latencyMs": 39723,
+      "turns": 8,
+      "toolCalls": 26,
+      "mainTokens": 30908,
+      "watcherTokens": 0,
+      "totalTokens": 30908,
+      "cacheReadTokens": 19456,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "f1e279491adc0ff447d52573f00d07b3348679458afbfb714575408a2e32022c",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "tenant-event-feed",
+      "variant": "delegate",
+      "repetition": 1,
+      "runId": "027-tenant-event-feed-delegate-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.019860000000000003,
+      "watcherEstimatedUsd": 0.007094,
+      "totalEstimatedUsd": 0.026954000000000002,
+      "knownEstimatedUsd": 0.026954000000000002,
+      "latencyMs": 34959,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13702,
+      "watcherTokens": 2983,
+      "totalTokens": 16685,
+      "cacheReadTokens": 5760,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34b6a32fa618b3a5d2ee60b041b2fab15a3afa03cf02a967365f3f4224fe74f4",
+      "watcherCalls": 2,
+      "watcherErrors": 0,
+      "injections": 2
+    },
+    {
+      "task": "layered-routing",
+      "variant": "delegate",
+      "repetition": 1,
+      "runId": "028-layered-routing-delegate-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.021624800000000003,
+      "watcherEstimatedUsd": 0.008284,
+      "totalEstimatedUsd": 0.029908800000000003,
+      "knownEstimatedUsd": 0.029908800000000003,
+      "latencyMs": 52750,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 14538,
+      "watcherTokens": 2994,
+      "totalTokens": 17532,
+      "cacheReadTokens": 6528,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "d113abaa2c8f9b74056b1b1ff10af44e0661aa3ba0ae7ec7cda11bb0338659c6",
+      "watcherCalls": 2,
+      "watcherErrors": 0,
+      "injections": 2
+    },
+    {
+      "task": "layered-routing",
+      "variant": "graph",
+      "repetition": 1,
+      "runId": "029-layered-routing-graph-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.022125199999999998,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.022125199999999998,
+      "knownEstimatedUsd": 0.022125199999999998,
+      "latencyMs": 36067,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 15281,
+      "watcherTokens": 0,
+      "totalTokens": 15281,
+      "cacheReadTokens": 6912,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "c82094b46238b188d709cfc814b9e1eff86ddfb767b2c1a39c9731f79249885a",
+      "watcherCalls": 4,
+      "watcherErrors": 0,
+      "injections": 4
+    },
+    {
+      "task": "layered-routing",
+      "variant": "cache-select",
+      "repetition": 1,
+      "runId": "030-layered-routing-cache-select-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.020711600000000004,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.020711600000000004,
+      "knownEstimatedUsd": 0.020711600000000004,
+      "latencyMs": 51282,
+      "turns": 4,
+      "toolCalls": 29,
+      "mainTokens": 14323,
+      "watcherTokens": 0,
+      "totalTokens": 14323,
+      "cacheReadTokens": 7296,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "46e58f1227ca0683fca1ad7a2130fab35143707428d6d0368b877047d1fd3e6a",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "core",
+      "repetition": 1,
+      "runId": "031-layered-routing-core-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0296144,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0296144,
+      "knownEstimatedUsd": 0.0296144,
+      "latencyMs": 33250,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 13984,
+      "watcherTokens": 0,
+      "totalTokens": 13984,
+      "cacheReadTokens": 1664,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "00f8c6dc0b71abffca3cf55416124f60e888f56c160dc1d88340cd784e5e0d86",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "stable-jev",
+      "repetition": 1,
+      "runId": "032-layered-routing-stable-jev-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0222812,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0222812,
+      "knownEstimatedUsd": 0.0222812,
+      "latencyMs": 33500,
+      "turns": 4,
+      "toolCalls": 28,
+      "mainTokens": 14027,
+      "watcherTokens": 0,
+      "totalTokens": 14027,
+      "cacheReadTokens": 5632,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "a8f7b5f1fac5b3cf7dcbf8cb61712f747621e647a4bc607c1b95c578e98fc8a1",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "stable-luna",
+      "repetition": 1,
+      "runId": "033-layered-routing-stable-luna-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0256148,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0256148,
+      "knownEstimatedUsd": 0.0256148,
+      "latencyMs": 34882,
+      "turns": 4,
+      "toolCalls": 30,
+      "mainTokens": 14341,
+      "watcherTokens": 0,
+      "totalTokens": 14341,
+      "cacheReadTokens": 4608,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "a94252a4d2647f23f61f716243a0935156f740c21258f66960387e6819c1a7b1",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "stable-rules",
+      "repetition": 1,
+      "runId": "034-layered-routing-stable-rules-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.020711599999999997,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.020711599999999997,
+      "knownEstimatedUsd": 0.020711599999999997,
+      "latencyMs": 48272,
+      "turns": 4,
+      "toolCalls": 30,
+      "mainTokens": 14371,
+      "watcherTokens": 0,
+      "totalTokens": 14371,
+      "cacheReadTokens": 7296,
+      "context": {
+        "decisions": 4,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "ce64c2befc99713ceefc7ec122b5b339f49a97409ec4885463c515dd2b38a209",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "route",
+      "repetition": 1,
+      "runId": "035-layered-routing-route-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0280146,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0280146,
+      "knownEstimatedUsd": 0.0280146,
+      "latencyMs": 35408,
+      "turns": 4,
+      "toolCalls": 27,
+      "mainTokens": 13974,
+      "watcherTokens": 0,
+      "totalTokens": 13974,
+      "cacheReadTokens": 1664,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 1,
+      "sourceHashesDigest": "58cdd4d07d6950073641d98e16a0ecdf5b3636bf6fe169b6398562da330480bc",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    },
+    {
+      "task": "layered-routing",
+      "variant": "luna-worker",
+      "repetition": 1,
+      "runId": "036-layered-routing-luna-worker-r1",
+      "status": "completed",
+      "operationalSuccess": true,
+      "acceptancePassed": true,
+      "valid": true,
+      "excludedReasons": [],
+      "mainApiEquivalentUsd": 0.0018591200000000001,
+      "watcherEstimatedUsd": 0,
+      "totalEstimatedUsd": 0.0018591200000000001,
+      "knownEstimatedUsd": 0.0018591200000000001,
+      "latencyMs": 33685,
+      "turns": 6,
+      "toolCalls": 30,
+      "mainTokens": 23636,
+      "watcherTokens": 0,
+      "totalTokens": 23636,
+      "cacheReadTokens": 8192,
+      "context": {
+        "decisions": 0,
+        "prunedCalls": 0,
+        "removedCharacters": 0,
+        "failures": 0
+      },
+      "routingSwitches": 0,
+      "sourceHashesDigest": "34ee92399709df1d0df46ac369cd987480962812d4623313c444923fcfca141d",
+      "watcherCalls": 0,
+      "watcherErrors": 0,
+      "injections": 0
+    }
+  ],
+  "jevGlobalLedger": {
+    "scope": "global across campaigns; not attributable to this campaign",
+    "reservedUsd": 0.14,
+    "remainingUsd": 1.86,
+    "limitUsd": 2,
+    "calls": 14
+  },
+  "limitations": [
+    "Descriptive pilot only; small samples do not establish significance or real-world performance.",
+    "Core versus Pi compares a prompt/tool bundle; watcher versus core compares an added observer.",
+    "Intention-to-treat operational success includes scheduled missing results and provider/watcher failures. Missing results are incomplete executions, not evidence of model inability.",
+    "Treated-valid efficacy excludes unavailable acceptance, main failure, missing cost telemetry, watcher errors, and missing decision records. This selected subset is descriptive and can be biased.",
+    "Costs are API-equivalent estimates for subscription models plus estimated external watcher spend, not an actual subscription bill or verified provider invoice.",
+    "Known cost includes failed attempts and known components of partially costed runs. Incomplete cost/success is a nonnegative lower bound; null never means zero.",
+    "Jev ledger reservations are conservative budget consumption, separate from usage-based estimated spend; global reservations cannot be attributed to a campaign.",
+    "Provider cache warmth was observed rather than controlled. Fixed task/repetition pairs do not remove order or availability effects."
+  ]
+}
