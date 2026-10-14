@@ -1,0 +1,297 @@
+{
+  "at": "2026-10-14T23:16:50.040Z",
+  "modelCalls": 0,
+  "primaryScoresChanged": false,
+  "scope": "Posthoc expanded-task/reference disagreements, not automatically upstream defects or invalid tests. Specific valid cases rerun against every scored saved patch for the relevant task. Ambiguous blocking-source assumptions excluded. No feedback to actors.",
+  "validation": [
+    {
+      "task": "lru-duration",
+      "kind": "baseline",
+      "result": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nnot ok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 1.5383\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\reports\\\\evidence-lru-sensitivity.test.mjs:2:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    undefined !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/evidence-record/reports/evidence-lru-sensitivity.test.mjs:2:275)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.697\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 89
+      }
+    },
+    {
+      "task": "lru-duration",
+      "kind": "reference",
+      "result": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nnot ok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 1.4749\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\reports\\\\evidence-lru-sensitivity.test.mjs:2:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    undefined !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/evidence-record/reports/evidence-lru-sensitivity.test.mjs:2:275)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.2139\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 86
+      }
+    },
+    {
+      "task": "emitter-once",
+      "kind": "baseline",
+      "result": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded nested snapshot once contract\nnot ok 1 - posthoc expanded nested snapshot once contract\n  ---\n  duration_ms: 2.1572\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\reports\\\\evidence-emitter-sensitivity.test.mjs:2:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        'a',\n        'a',\n        'once',\n        'b',\n    +   'once',\n        'b'\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 'a'\n    1: 'a'\n    2: 'once'\n    3: 'b'\n    4: 'b'\n  actual:\n    0: 'a'\n    1: 'a'\n    2: 'once'\n    3: 'b'\n    4: 'once'\n    5: 'b'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/evidence-record/reports/evidence-emitter-sensitivity.test.mjs:2:264)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.8596\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 85
+      }
+    },
+    {
+      "task": "emitter-once",
+      "kind": "reference",
+      "result": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded nested snapshot once contract\nnot ok 1 - posthoc expanded nested snapshot once contract\n  ---\n  duration_ms: 2.2029\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\reports\\\\evidence-emitter-sensitivity.test.mjs:2:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        'a',\n        'a',\n        'once',\n        'b',\n    +   'once',\n        'b'\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 'a'\n    1: 'a'\n    2: 'once'\n    3: 'b'\n    4: 'b'\n  actual:\n    0: 'a'\n    1: 'a'\n    2: 'once'\n    3: 'b'\n    4: 'once'\n    5: 'b'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/evidence-record/reports/evidence-emitter-sensitivity.test.mjs:2:264)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.9986\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 86
+      }
+    }
+  ],
+  "results": [
+    {
+      "runId": "001-lru-duration-A-r0",
+      "task": "lru-duration",
+      "arm": "A",
+      "repetition": 0,
+      "testHash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 0.9228\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.5322\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 82
+      }
+    },
+    {
+      "runId": "002-lru-duration-B-r0",
+      "task": "lru-duration",
+      "arm": "B",
+      "repetition": 0,
+      "testHash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 0.929\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.6104\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 80
+      }
+    },
+    {
+      "runId": "003-lru-duration-C-r0",
+      "task": "lru-duration",
+      "arm": "C",
+      "repetition": 0,
+      "testHash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 0.9098\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.6151\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 81
+      }
+    },
+    {
+      "runId": "010-lru-duration-A-r1",
+      "task": "lru-duration",
+      "arm": "A",
+      "repetition": 1,
+      "testHash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 0.8845\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.312\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 81
+      }
+    },
+    {
+      "runId": "011-lru-duration-C-r1",
+      "task": "lru-duration",
+      "arm": "C",
+      "repetition": 1,
+      "testHash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 0.863\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.2274\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 80
+      }
+    },
+    {
+      "runId": "012-lru-duration-B-r1",
+      "task": "lru-duration",
+      "arm": "B",
+      "repetition": 1,
+      "testHash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded infinite-age contract\nok 1 - posthoc expanded infinite-age contract\n  ---\n  duration_ms: 0.8806\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.2246\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 79
+      }
+    },
+    {
+      "runId": "007-emitter-once-C-r0",
+      "task": "emitter-once",
+      "arm": "C",
+      "repetition": 0,
+      "testHash": "a819ee5ea6cd3ea05e3492c2920ec7cc42ed532a17ffbc5e2f8b42d734c12fa9",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded nested snapshot once contract\nok 1 - posthoc expanded nested snapshot once contract\n  ---\n  duration_ms: 1.4827\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.5661\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 94
+      }
+    },
+    {
+      "runId": "008-emitter-once-A-r0",
+      "task": "emitter-once",
+      "arm": "A",
+      "repetition": 0,
+      "testHash": "a819ee5ea6cd3ea05e3492c2920ec7cc42ed532a17ffbc5e2f8b42d734c12fa9",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded nested snapshot once contract\nok 1 - posthoc expanded nested snapshot once contract\n  ---\n  duration_ms: 1.4297\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.3984\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 89
+      }
+    },
+    {
+      "runId": "009-emitter-once-B-r0",
+      "task": "emitter-once",
+      "arm": "B",
+      "repetition": 0,
+      "testHash": "a819ee5ea6cd3ea05e3492c2920ec7cc42ed532a17ffbc5e2f8b42d734c12fa9",
+      "result": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: posthoc expanded nested snapshot once contract\nok 1 - posthoc expanded nested snapshot once contract\n  ---\n  duration_ms: 1.4441\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.2372\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 94
+      }
+    }
+  ]
+}

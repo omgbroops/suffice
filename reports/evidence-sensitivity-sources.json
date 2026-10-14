@@ -1,0 +1,15 @@
+{
+  "kind": "Posthoc expanded-task sensitivity, never part of primary graders",
+  "files": [
+    {
+      "path": "reports/evidence-lru-sensitivity.test.mjs",
+      "hash": "ea83fc8d4716be67965155388201fdcc918572811c2f26fb917489057c98c1ec",
+      "source": "import test from 'node:test';import assert from 'node:assert/strict';import {pathToFileURL} from 'node:url';import {resolve} from 'node:path';const api=(await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/index.js')))).default;\ntest('posthoc expanded infinite-age contract',()=>{const real=Date.now;let now=100000;Date.now=()=>now;try{const q=new api({maxSize:20,maxAge:10});for(const age of [Infinity,-Infinity])q.set(String(age),1,{maxAge:age});now+=1000;for(const age of [Infinity,-Infinity])assert.equal(q.get(String(age)),1);}finally{Date.now=real;}});\r\n"
+    },
+    {
+      "path": "reports/evidence-emitter-sensitivity.test.mjs",
+      "hash": "a819ee5ea6cd3ea05e3492c2920ec7cc42ed532a17ffbc5e2f8b42d734c12fa9",
+      "source": "import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {resolve} from 'node:path';const api=createRequire(resolve(process.env.SUFFICE_WORKSPACE,'src/package.json'))('./index.js');\ntest('posthoc expanded nested snapshot once contract',()=>{const q=new api(),trace=[];let recursed=false;q.on('x',()=>{trace.push('a');if(!recursed){recursed=true;q.emit('x');}});q.once('x',()=>trace.push('once'));q.on('x',()=>trace.push('b'));q.emit('x');assert.deepEqual(trace,['a','a','once','b','b']);});\r\n"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "prelaunch telemetry-only amendment",
+  "unusedFreeze": "evidence-scored-v1",
+  "executedFreeze": "evidence-scored-v2",
+  "changedInputs": [
+    {
+      "path": "scripts/evidence-experiment.mjs",
+      "before": "2f718496109993455e5bb03fb3b9429235b48f526c502a4583945061f1e84388",
+      "after": "d37a1024a3aa310baec00f35fa85e0dd8e7cf0d0d961acc5b30db8b8dadd54f7"
+    },
+    {
+      "path": "src/evidence-agent.mjs",
+      "before": "de9f036f867b33785e0df8c895a91356f800bffea43b3eab3eb5fb02a41547a2",
+      "after": "a332d238f43343e08e61f8ac622bf826ef7b976218ada5ca8b30c430d5fa43ce"
+    }
+  ],
+  "unchanged": {
+    "model": true,
+    "effort": true,
+    "arms": true,
+    "schedule": true,
+    "ceilings": true,
+    "baselines": true,
+    "taskProvenance": true,
+    "acceptance": true,
+    "limits": true
+  },
+  "note": "No attempt ran in unused scored-v1. v2 adds model-invisible exact returned-source hashes and durable live event append; campaign label changed. Task/prompt/arm/schedule/budget/grader bytes unchanged."
+}

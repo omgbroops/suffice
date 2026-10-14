@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-14T23:21:09.513Z",
+  "modelCalls": 0,
+  "attempts": [
+    {
+      "layout": ".suffice/evidence-export-proof/2026-10-14T23-16-19-921Z",
+      "at": "2026-10-14T23:16:22.273Z",
+      "code": 1,
+      "stdout": "",
+      "stderr": "(node:152572) SecurityWarning: The flag --allow-child-process must be used with extreme caution. It could invalidate the permission model.\n(Use `node --trace-warnings ...` to show where the warning was created)\nnode:internal/modules/package_json_reader:125\r\n  const parsed = modulesBinding.readPackageJSON(\r\n                                ^\r\n\r\nError: Access to this API has been restricted. Use --allow-fs-read to manage permissions.\r\n    at Object.read (node:internal/modules/package_json_reader:125:33)\r\n    at packageResolve (node:internal/modules/esm/resolve:766:43)\r\n    at moduleResolve (node:internal/modules/esm/resolve:855:18)\r\n    at defaultResolve (node:internal/modules/esm/resolve:988:11)\r\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:697:20)\r\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:714:38)\r\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:746:52)\r\n    at #resolve (node:internal/modules/esm/loader:679:17)\r\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:599:35)\r\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:162:33) {\r\n  code: 'ERR_ACCESS_DENIED',\r\n  permission: 'FileSystemRead',\r\n  resource: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\node_modules\\\\typebox\\\\package.json'\r\n}\r\n\r\nNode.js v24.15.0\r\n"
+    },
+    {
+      "layout": ".suffice/evidence-export-proof/2026-10-14T23-17-09-129Z",
+      "at": "2026-10-14T23:17:11.674Z",
+      "code": 1,
+      "stdout": "",
+      "stderr": "(node:151232) SecurityWarning: The flag --allow-child-process must be used with extreme caution. It could invalidate the permission model.\n(Use `node --trace-warnings ...` to show where the warning was created)\nnode:internal/fs/promises:1038\r\n  const result = await PromisePrototypeThen(\r\n                 ^\r\n\r\nError: Access to this API has been restricted. Use --allow-fs-read to manage permissions.\r\n    at async stat (node:internal/fs/promises:1038:18)\r\n    at async checkParentPaths (node:internal/fs/cp/cp:167:16) {\r\n  code: 'ERR_ACCESS_DENIED',\r\n  permission: 'FileSystemRead',\r\n  resource: '\\\\\\\\?\\\\C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\.suffice\\\\evidence-export-proof'\r\n}\r\n\r\nNode.js v24.15.0\r\n"
+    },
+    {
+      "layout": ".suffice/evidence-export-proof/2026-10-14T23-17-40-090Z",
+      "at": "2026-10-14T23:20:39.067Z",
+      "code": 0,
+      "stdout": "{\"out\":\"C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\evidence-record\\\\.suffice\\\\evidence-export-proof\\\\2026-10-14T23-17-40-090Z\\\\reports\\\\portable-audit.json\",\"integrityChecks\":594,\"attempts\":22,\"generatedChecks\":33}\n",
+      "stderr": "(node:153544) SecurityWarning: The flag --allow-child-process must be used with extreme caution. It could invalidate the permission model.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    }
+  ],
+  "note": "Two engineering-only export proof failures were retained: missing logical dependency read allowance, then Windows fs.cp ancestor-stat access. Audit helper switched to manifest-file byte copy; third replay passes under isolated layout/dependency read allowance. No benchmark runtime/score changed."
+}

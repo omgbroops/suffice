@@ -1,0 +1,59 @@
+{
+  "tasks": [
+    {
+      "id": "queue-drain",
+      "repository": "sindresorhus/yocto-queue",
+      "base": "6f20a6fad9323285e9f7c04dd1232ccc5e931e7e",
+      "fix": "ee91589f82f7682902c848927a4d1f64558f2bcd",
+      "publicProvenance": "https://github.com/sindresorhus/yocto-queue/commit/ee91589f82f7682902c848927a4d1f64558f2bcd",
+      "authoredExpandedRequirements": "Queue.drain() must yield all queued values in FIFO order, including undefined, and leave the queue empty. Preserve dequeue, iteration, size, clear, and subsequent enqueue behavior."
+    },
+    {
+      "id": "pmap-close",
+      "repository": "sindresorhus/p-map",
+      "base": "e7c2ecb113e8988165a6798630e4e9c2cdeb9d1b",
+      "fix": "c82bd07b4e15e207086ccdbb87bbd7d57776e163",
+      "publicProvenance": "https://github.com/sindresorhus/p-map/commit/c82bd07b4e15e207086ccdbb87bbd7d57776e163",
+      "authoredExpandedRequirements": "pMap must close an unfinished source iterator when a mapper rejects or the supplied signal aborts. Preserve original rejection even when source return() throws/rejects or blocks, call return at most once, and do not close normally exhausted sources. Preserve concurrent mapping, stopOnError:false aggregation, and existing pMapIterable behavior."
+    },
+    {
+      "id": "lru-duration",
+      "repository": "sindresorhus/quick-lru",
+      "base": "6ee4b6e9a7391f4536324ea1df909839d5d2734d",
+      "fix": "6a9c875c93ae7e149f0e39c14690e41fd26a1129",
+      "publicProvenance": "https://github.com/sindresorhus/quick-lru/commit/6a9c875c93ae7e149f0e39c14690e41fd26a1129",
+      "authoredExpandedRequirements": "QuickLRU.set(key,value,{maxAge}) must interpret a finite numeric per-item maxAge as a duration in milliseconds from now, consistent with constructor maxAge. An override supersedes the global value on insertion and replacement. Infinite or nonnumeric ages do not expire. Preserve eviction callbacks and cache operations."
+    },
+    {
+      "id": "pmap-index",
+      "repository": "sindresorhus/p-map",
+      "base": "65aaa8f4d7e757a5254a146c4c39403efa9e2139",
+      "fix": "1af51b57534b284ead73cca65f26b56bb9390768",
+      "publicProvenance": "https://github.com/sindresorhus/p-map/commit/1af51b57534b284ead73cca65f26b56bb9390768",
+      "authoredExpandedRequirements": "pMapIterable mapper index must match each item position in the source iterable, even when promised input values settle in a different order. Preserve ordered output, concurrency/backpressure bounds, rejection behavior, async inputs and pMapSkip."
+    },
+    {
+      "id": "emitter-once",
+      "repository": "primus/eventemitter3",
+      "base": "5e22f4b92af7c1600544801786f9a88695fc582b",
+      "fix": "144834c15264128113814a5b5d2f8621c326e5af",
+      "publicProvenance": "https://github.com/primus/eventemitter3/commit/144834c15264128113814a5b5d2f8621c326e5af",
+      "authoredExpandedRequirements": "A once listener must run at most once even if it recursively emits the same event, for both single-listener and multiple-listener dispatch and for all argument-count paths. Remove it before invoking user code so throwing callbacks do not leave it registered. Preserve ordinary listeners, ordering, event isolation, context, and listener removal."
+    },
+    {
+      "id": "pmap-readahead",
+      "repository": "sindresorhus/p-map",
+      "base": "27606f0457e10a574362fbce77de41240d68bd6e",
+      "fix": "cada71d3fd121d84be7d1d387e476dd50d82ff39",
+      "publicProvenance": "https://github.com/sindresorhus/p-map/commit/cada71d3fd121d84be7d1d387e476dd50d82ff39",
+      "authoredExpandedRequirements": "Implement bounded read-ahead in pMapIterable when backpressure exceeds concurrency (public issue #78). While concurrency mappers run, read up to min(concurrency,backpressure-concurrency) additional input elements. Count all input elements not yet collected against backpressure, independently limit active mappers and in-flight source.next calls to concurrency, and hand freed mapper slots to waiting elements. Preserve ordered/unordered output, errors, skip and stop behavior. On consumer return or mapper stop/error, do not map read-ahead elements beyond the stopping position, close source exactly once and avoid deadlocks. With default backpressure=concurrency, do not add read-ahead."
+    }
+  ],
+  "publicIssue": {
+    "url": "https://github.com/sindresorhus/p-map/issues/78",
+    "title": "Possible inefficiency in `pMapIterable`",
+    "body": "`pMapIterable` can waste some concurrency slots when the source async iterable produces items slowly.\r\n\r\nHere's an example:\r\n\r\n```ts\r\nimport { setTimeout } from 'timers/promises';\r\nimport { pMapIterable } from 'p-map';\r\n\r\nasync function* source() {\r\n  for (let i = 1; i <= 2; ++i) {\r\n    console.log('Producing item', i);\r\n    await setTimeout(2000);\r\n    yield i;\r\n  }\r\n}\r\n\r\nconst target = pMapIterable(source(), async n => {\r\n  console.log('Running with', n);\r\n  await setTimeout(2000);\r\n  console.log('Finished running with', n);\r\n}, { concurrency: 1 });\r\n\r\nfor await (const _ of target) { }\r\n```\r\n\r\nThe above program outputs:\r\n```\r\nProducing item 1\r\nRunning with 1\r\nFinished running with 1\r\nProducing item 2\r\nRunning with 2\r\nFinished running with 2\r\n```\r\n\r\nThe source async iterable only starts producing the second item after the mapper function has handled the first one, meaning there's a 2 second pause between the two mapper invocations. The total running time of the above code is ~8 seconds.\r\n\r\nThere is no reason though, why the producing of the second item couldn't start sooner, so that by the time the first mapper invocation finishes, the second one wouldn't have to be delayed by so long. In other words, the producing of the next item and the mapping of the current item(s) could overlap. The running time of the above example could be reduced to ~6 seconds.\r\n\r\nThe effect of this issue becomes more pronounced when creating a pipeline of `pMapIterable` steps. Following is an example where 10 items are piped through 3 different mappings (with concurrency 1).\r\n\r\n```ts\r\nimport { setTimeout } from 'timers/promises';\r\nimport { pMapIterable } from 'p-map';\r\n\r\nasync function* source() {\r\n  for (let i = 1; i <= 10; ++i) {\r\n    console.log('Producing item', i);\r\n    await setTimeout(1000);\r\n    yield i;\r\n  }\r\n}\r\n\r\nconst stepA = pMapIterable(source(), async n => {\r\n  console.log('Begin A with', n);\r\n  await setTimeout(1000);\r\n  console.log('End A with with', n);\r\n  return n;\r\n}, { concurrency: 1 });\r\n\r\nconst stepB = pMapIterable(stepA, async n => {\r\n  console.log('Begin B with', n);\r\n  await setTimeout(1000);\r\n  console.log('End B with', n);\r\n  return n;\r\n}, { concurrency: 1 });\r\n\r\nconst stepC = pMapIterable(stepB, async n => {\r\n  console.log('Begin C with', n);\r\n  await setTimeout(1000);\r\n  console.log('End C with', n);\r\n  return n;\r\n}, { concurrency: 1 });\r\n\r\nfor await (const _ of stepC) { }\r\n```\r\n\r\nIt takes ~22 seconds with the current `pMapIterable` implementation. This could be reduced to ~13 seconds, which is the required minimum time (10s to produce 10 items + 3s to map the last item).\r\n\r\nFYI @Richienb ",
+    "updatedAt": "2026-10-09T03:03:15Z"
+  },
+  "note": "Expanded task contracts were authored from public historical fixes/docs, not untouched issue prompts. No explicit network tool was provided, but arbitrary generated Node tests retain network capability. Observed network and solution retrieval are audited."
+}
