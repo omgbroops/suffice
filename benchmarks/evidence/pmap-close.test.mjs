@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {pathToFileURL} from 'node:url';
+import {resolve} from 'node:path';
+const moduleApi=await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/index.js')));
+const api=moduleApi.default;
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+test('mapper rejection closes source exactly once without changing error',async()=>{for(const cleanup of ['ok','throw','reject','block']){let returned=0;const error=new Error('mapper');const src={[Symbol.asyncIterator](){return this;},async next(){return {value:1,done:false};},return(){returned++;if(cleanup==='throw')throw Error('cleanup');if(cleanup==='reject')return Promise.reject(Error('cleanup'));if(cleanup==='block')return new Promise(()=>{});return {done:true};}};await assert.rejects(api(src,()=>{throw error;},{concurrency:2}),e=>e===error);await delay(5);assert.equal(returned,1,cleanup);}});
+test('abort closes source but normal exhaustion does not',async()=>{let returned=0;const source=()=>({[Symbol.iterator](){return this;},i:0,next(){return {value:this.i++,done:this.i>4};},return(){returned++;return {done:true};}});assert.deepEqual(await api(source(),v=>v,{concurrency:2}),[0,1,2,3]);assert.equal(returned,0);const ctrl=new AbortController();const pending=api(source(),()=>new Promise(()=>{}),{concurrency:1,signal:ctrl.signal});await delay(0);ctrl.abort(new Error('stop'));await assert.rejects(pending,/stop/);await delay(0);assert.equal(returned,1);});
+test('aggregate errors after exhaustion preserve no-return',async()=>{let returned=0;const src={[Symbol.iterator](){return this;},i:0,next(){return {value:this.i++,done:this.i>3};},return(){returned++;return {done:true};}};await assert.rejects(api(src,()=>{throw Error('x');},{concurrency:2,stopOnError:false}),AggregateError);assert.equal(returned,0);});
