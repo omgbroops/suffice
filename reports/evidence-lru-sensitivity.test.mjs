@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {pathToFileURL} from 'node:url';import {resolve} from 'node:path';const api=(await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/index.js')))).default;
+test('posthoc expanded infinite-age contract',()=>{const real=Date.now;let now=100000;Date.now=()=>now;try{const q=new api({maxSize:20,maxAge:10});for(const age of [Infinity,-Infinity])q.set(String(age),1,{maxAge:age});now+=1000;for(const age of [Infinity,-Infinity])assert.equal(q.get(String(age)),1);}finally{Date.now=real;}});

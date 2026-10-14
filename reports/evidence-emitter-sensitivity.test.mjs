@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {resolve} from 'node:path';const api=createRequire(resolve(process.env.SUFFICE_WORKSPACE,'src/package.json'))('./index.js');
+test('posthoc expanded nested snapshot once contract',()=>{const q=new api(),trace=[];let recursed=false;q.on('x',()=>{trace.push('a');if(!recursed){recursed=true;q.emit('x');}});q.once('x',()=>trace.push('once'));q.on('x',()=>trace.push('b'));q.emit('x');assert.deepEqual(trace,['a','a','once','b','b']);});
