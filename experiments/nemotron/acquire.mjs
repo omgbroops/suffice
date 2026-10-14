@@ -1,0 +1,18 @@
+import fs from 'node:fs/promises';import {state,guard,hash} from './provider.mjs';
+// Frozen problem-only paraphrases. No repair-diff text, solution sections, or hidden labels enter queries.
+const specs=[
+ {repo:'isaacs/minimatch',pr:272,query:'The regular expression from makeRe does not agree with partial path matching when partial is true. Prefix paths that could still match the glob should be allowed, without changing complete matching.'},
+ {repo:'isaacs/minimatch',pr:235,query:'Optimization level 2 keeps duplicate patterns after expanding a brace glob such as {a,b,*}. The wildcard already covers the literal alternatives, but the pattern sets still retain an extra b.'},
+ {repo:'pillarjs/path-to-regexp',pr:456,query:'Serializing custom route tokens containing a parameter named foo, an empty text token, and literal bar merges the literal into the parameter name. The serialized route should round trip while retaining the foo parameter; wildcard names and Unicode suffixes need the same behavior.'},
+ {repo:'pillarjs/path-to-regexp',pr:448,query:'Compiling a wildcard route accepts an array containing only an empty string and produces a path which cannot match that route. Reject the empty result, while preserving trailing or interior empty segments when other content exists.'},
+ {repo:'markedjs/marked',pr:4101,issue:4098,query:null},
+ {repo:'markedjs/marked',pr:4123,query:'An image inside a Markdown link allows a subsequent bare URL or email address to become an autolink within the outer link. This produces nested anchors. Images and reference images must preserve surrounding link context, and normal autolinking after the enclosing link must continue.'},
+];
+const api=async p=>{const r=await fetch('https://api.github.com/repos/'+p,{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('github_'+r.status);return r.json();};
+const tasks=[];await fs.mkdir(state+'/corpus',{recursive:true});
+for(const s of specs){await guard();const p=await api(`${s.repo}/pulls/${s.pr}`);if(!p.merged_at)throw Error('not_merged');const files=await api(`${s.repo}/pulls/${s.pr}/files?per_page=100`),tree=await api(`${s.repo}/git/trees/${p.base.sha}?recursive=1`);const id=s.repo.split('/')[1]+'-'+s.pr;const source=tree.tree.filter(x=>x.type==='blob'&&/^src\/.*\.(?:ts|js)$/.test(x.path)&&!/(?:test|spec)/i.test(x.path));if(!source.length)throw Error('no_sources');const dir=state+'/corpus/'+id;for(const f of source){const r=await fetch(`https://raw.githubusercontent.com/${s.repo}/${p.base.sha}/${f.path}`);if(!r.ok)throw Error('source_fetch');const b=await r.text();const dest=dir+'/'+f.path;await fs.mkdir(dest.slice(0,dest.lastIndexOf('/')),{recursive:true});await fs.writeFile(dest,b);}
+ let query=s.query,queryProvenance='researcher problem-only paraphrase of public PR description; not an untouched issue holdout';if(s.issue){const i=await api(`${s.repo}/issues/${s.issue}`);query=i.title+'\n'+i.body;queryProvenance=i.html_url;await fs.writeFile(dir+'/issue-public.json',JSON.stringify({title:i.title,body:i.body,url:i.html_url},null,2));}
+ tasks.push({id,repo:s.repo,pr:s.pr,issue:s.issue??null,revision:p.base.sha,reference:p.head.sha,mergedAt:p.merged_at,url:p.html_url,query,queryProvenance,sourcePaths:source.map(x=>x.path)});
+ const labels=files.filter(x=>source.some(y=>y.path===x.filename)).map(x=>({path:x.filename,patch:x.patch??null}));await fs.mkdir(state+'/labels',{recursive:true});await fs.writeFile(state+'/labels/'+id+'.json',JSON.stringify({id,provenance:p.html_url,files:labels},null,2));console.log(JSON.stringify({event:'acquired',id,files:source.length,labels:labels.length}));
+}
+await fs.writeFile(state+'/tasks.json',JSON.stringify(tasks,null,2));console.log('Acquired '+tasks.length+' public tasks');

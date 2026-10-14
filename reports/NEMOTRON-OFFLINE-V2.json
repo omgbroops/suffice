@@ -1,0 +1,3212 @@
+{
+  "campaign": "nemotron-offline-v2",
+  "frozenHash": "1cab4d148f7ceaf35725a0fd47596168d47f198079e92589e18003ef14d92976",
+  "integrityAfter": true,
+  "policy": {
+    "name": "nemotron-offline-v2",
+    "inputModes": {
+      "index": "passage",
+      "query": "query"
+    },
+    "dimensions": 2048,
+    "maxInputUtf8Bytes": 4000,
+    "cacheKey": "SHA256(JSON({model,mode,dimensions,text}))",
+    "chunkLines": 60,
+    "budgets": [
+      2048,
+      4096
+    ],
+    "arms": [
+      "lexical",
+      "syntax",
+      "lexical-syntax",
+      "semantic",
+      "hybrid"
+    ],
+    "batch": 32,
+    "maxEmbeddingCalls": 120,
+    "retries": 0,
+    "model": "nvidia/nemotron-3-embed-1b:free",
+    "allowedReturnedModels": [
+      "nvidia/nemotron-3-embed-1b:free",
+      "private/openrouter/nvidia/nemotron-3-embed-1b"
+    ],
+    "providerFallback": false,
+    "maxPrice": {
+      "prompt": 0
+    },
+    "knownReturnedCostRequired": 0,
+    "estimator": "ceil(UTF-8 packet bytes / 3), not actual tokenizer",
+    "rankFusion": "reciprocal rank fusion k=60; lexical-syntax equally combines lexical and syntax; hybrid equally combines lexical-syntax and cosine",
+    "labels": "production old-side full diff hunk context-line coverage proxy; not minimal necessary evidence; never read by ranking",
+    "queries": "fresh public upstream problem-only paraphrases plus one independent issue; no repair diffs/solution text in queries",
+    "gate": "live pilot permitted if semantic exceeds lexical-syntax coverage on at least two tasks at 2048 and vectors succeed; otherwise stop without live comparison"
+  },
+  "corpora": [
+    {
+      "id": "minimatch-272",
+      "files": 6,
+      "bytes": 65206,
+      "chunks": 39,
+      "unparsed": []
+    },
+    {
+      "id": "minimatch-235",
+      "files": 6,
+      "bytes": 65173,
+      "chunks": 38,
+      "unparsed": []
+    },
+    {
+      "id": "path-to-regexp-456",
+      "files": 2,
+      "bytes": 18945,
+      "chunks": 14,
+      "unparsed": [
+        "src/index.ts"
+      ]
+    },
+    {
+      "id": "path-to-regexp-448",
+      "files": 2,
+      "bytes": 18033,
+      "chunks": 14,
+      "unparsed": [
+        "src/index.ts"
+      ]
+    },
+    {
+      "id": "marked-4101",
+      "files": 13,
+      "bytes": 125708,
+      "chunks": 71,
+      "unparsed": []
+    },
+    {
+      "id": "marked-4123",
+      "files": 13,
+      "bytes": 130070,
+      "chunks": 72,
+      "unparsed": []
+    }
+  ],
+  "tasks": [
+    {
+      "id": "minimatch-272",
+      "repo": "isaacs/minimatch",
+      "pr": 272,
+      "issue": null,
+      "revision": "babaf94f74c061ba33834fa762c7b5e50279b9e1",
+      "reference": "9f4a4ff090933e2f3254821936ad5613eb51b483",
+      "mergedAt": "2025-10-28T22:04:13Z",
+      "url": "https://github.com/isaacs/minimatch/pull/272",
+      "query": "The regular expression from makeRe does not agree with partial path matching when partial is true. Prefix paths that could still match the glob should be allowed, without changing complete matching.",
+      "queryProvenance": "researcher problem-only paraphrase of public PR description; not an untouched issue holdout",
+      "sourcePaths": [
+        "src/assert-valid-pattern.ts",
+        "src/ast.ts",
+        "src/brace-expressions.ts",
+        "src/escape.ts",
+        "src/index.ts",
+        "src/unescape.ts"
+      ]
+    },
+    {
+      "id": "minimatch-235",
+      "repo": "isaacs/minimatch",
+      "pr": 235,
+      "issue": null,
+      "revision": "d5ef89f0c9f479f1b82ea66b39a20273e4cda6fc",
+      "reference": "f09ab6731ef71f24565025f8c207437a2f459807",
+      "mergedAt": "2024-06-25T21:24:49Z",
+      "url": "https://github.com/isaacs/minimatch/pull/235",
+      "query": "Optimization level 2 keeps duplicate patterns after expanding a brace glob such as {a,b,*}. The wildcard already covers the literal alternatives, but the pattern sets still retain an extra b.",
+      "queryProvenance": "researcher problem-only paraphrase of public PR description; not an untouched issue holdout",
+      "sourcePaths": [
+        "src/assert-valid-pattern.ts",
+        "src/ast.ts",
+        "src/brace-expressions.ts",
+        "src/escape.ts",
+        "src/index.ts",
+        "src/unescape.ts"
+      ]
+    },
+    {
+      "id": "path-to-regexp-456",
+      "repo": "pillarjs/path-to-regexp",
+      "pr": 456,
+      "issue": null,
+      "revision": "8877f41873e37a30258d3935feaf1d2679321735",
+      "reference": "224aef551e272b5267109cceda1e3a228e394089",
+      "mergedAt": "2026-09-22T19:55:56Z",
+      "url": "https://github.com/pillarjs/path-to-regexp/pull/456",
+      "query": "Serializing custom route tokens containing a parameter named foo, an empty text token, and literal bar merges the literal into the parameter name. The serialized route should round trip while retaining the foo parameter; wildcard names and Unicode suffixes need the same behavior.",
+      "queryProvenance": "researcher problem-only paraphrase of public PR description; not an untouched issue holdout",
+      "sourcePaths": [
+        "src/index.bench.ts",
+        "src/index.ts"
+      ]
+    },
+    {
+      "id": "path-to-regexp-448",
+      "repo": "pillarjs/path-to-regexp",
+      "pr": 448,
+      "issue": null,
+      "revision": "c83a925ba75a4f75e035805b9ea9c46bd33d3a35",
+      "reference": "5a7a44d54d9a2ef13c004303cb394bf0064fc881",
+      "mergedAt": "2026-08-04T02:56:23Z",
+      "url": "https://github.com/pillarjs/path-to-regexp/pull/448",
+      "query": "Compiling a wildcard route accepts an array containing only an empty string and produces a path which cannot match that route. Reject the empty result, while preserving trailing or interior empty segments when other content exists.",
+      "queryProvenance": "researcher problem-only paraphrase of public PR description; not an untouched issue holdout",
+      "sourcePaths": [
+        "src/index.bench.ts",
+        "src/index.ts"
+      ]
+    },
+    {
+      "id": "marked-4101",
+      "repo": "markedjs/marked",
+      "pr": 4101,
+      "issue": 4098,
+      "revision": "4eb2d97ca61e2f558aa0fb5860509f5399d74338",
+      "reference": "af4122c41c70d2ce801acc6e51d029bf9f8a4128",
+      "mergedAt": "2026-09-22T05:44:51Z",
+      "url": "https://github.com/markedjs/marked/pull/4101",
+      "query": "Text after an empty nested blockquote is dropped (18.0.9+)\n**Marked version:** 18.0.9 through 18.0.13 (18.0.8 is fine)\n\n**Describe the bug**\nText on the line after an empty nested blockquote is dropped from the output, with default options.\n\n**To Reproduce**\n1. [Marked Demo](https://marked.js.org/demo/?outputType=html&text=%3E%3E%0Atext)\n2. [CommonMark Demo](https://spec.commonmark.org/dingus/?text=%3E%3E%0Atext)\n\n`marked.parse('>>\\ntext')` in 18.0.8, matching the dingus:\n\n```html\n<blockquote>\n<blockquote>\n</blockquote>\n</blockquote>\n<p>text</p>\n```\n\nIn 18.0.9 to 18.0.13:\n\n```html\n<blockquote>\n<blockquote>\n</blockquote>\n</blockquote>\n```\n\nSame for `>>>\\ntext` and `> quote\\n>>\\ntext`. With `>>\\ntext\\n> more`, the following `> more` blockquote disappears as well.\n\n**Expected behavior**\nThe empty nested blockquote closes and `text` becomes a paragraph after it, as in CommonMark and 18.0.8.\n\nThis looks like it comes from #4030: the continuation branch in `Tokenizer.blockquote()` now appends every continuation line to `raw`, also when the re-tokenized nested blockquote did not consume them, so the lexer skips past text no token holds. Reverting that commit brings the paragraph back. I have a small fix with a spec test in `test/specs/new/` and would be glad to open a PR if that is welcome.\n",
+      "queryProvenance": "https://github.com/markedjs/marked/issues/4098",
+      "sourcePaths": [
+        "src/Hooks.ts",
+        "src/Instance.ts",
+        "src/Lexer.ts",
+        "src/MarkedOptions.ts",
+        "src/Parser.ts",
+        "src/Renderer.ts",
+        "src/TextRenderer.ts",
+        "src/Tokenizer.ts",
+        "src/Tokens.ts",
+        "src/defaults.ts",
+        "src/helpers.ts",
+        "src/marked.ts",
+        "src/rules.ts"
+      ]
+    },
+    {
+      "id": "marked-4123",
+      "repo": "markedjs/marked",
+      "pr": 4123,
+      "issue": null,
+      "revision": "c18a64fa5e8c97cb92a8ea709a4542ea94b1c740",
+      "reference": "00073f9e91ebab73a67949cc9e9cf02de2dc8a84",
+      "mergedAt": "2026-10-06T15:00:27Z",
+      "url": "https://github.com/markedjs/marked/pull/4123",
+      "query": "An image inside a Markdown link allows a subsequent bare URL or email address to become an autolink within the outer link. This produces nested anchors. Images and reference images must preserve surrounding link context, and normal autolinking after the enclosing link must continue.",
+      "queryProvenance": "researcher problem-only paraphrase of public PR description; not an untouched issue holdout",
+      "sourcePaths": [
+        "src/Hooks.ts",
+        "src/Instance.ts",
+        "src/Lexer.ts",
+        "src/MarkedOptions.ts",
+        "src/Parser.ts",
+        "src/Renderer.ts",
+        "src/TextRenderer.ts",
+        "src/Tokenizer.ts",
+        "src/Tokens.ts",
+        "src/defaults.ts",
+        "src/helpers.ts",
+        "src/marked.ts",
+        "src/rules.ts"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "arm": "lexical",
+      "ceiling": 2048,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.4385964912280702,
+      "meanEstimatedTokens": 1965.8333333333333
+    },
+    {
+      "arm": "syntax",
+      "ceiling": 2048,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.10526315789473684,
+      "meanEstimatedTokens": 1313.1666666666667
+    },
+    {
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.2719298245614035,
+      "meanEstimatedTokens": 1949.1666666666667
+    },
+    {
+      "arm": "semantic",
+      "ceiling": 2048,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.7380952380952381,
+      "meanEstimatedTokens": 1996.1666666666667
+    },
+    {
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.6052631578947368,
+      "meanEstimatedTokens": 2013.6666666666667
+    },
+    {
+      "arm": "lexical",
+      "ceiling": 4096,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.7719298245614036,
+      "meanEstimatedTokens": 4034.1666666666665
+    },
+    {
+      "arm": "syntax",
+      "ceiling": 4096,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.10526315789473684,
+      "meanEstimatedTokens": 2729.5
+    },
+    {
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.6052631578947368,
+      "meanEstimatedTokens": 4020.5
+    },
+    {
+      "arm": "semantic",
+      "ceiling": 4096,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 1,
+      "meanEstimatedTokens": 4011
+    },
+    {
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "ranked": 6,
+      "unavailable": 0,
+      "meanHunkCoverage": 0.7719298245614036,
+      "meanEstimatedTokens": 3999.1666666666665
+    }
+  ],
+  "results": [
+    {
+      "task": "minimatch-272",
+      "arm": "lexical",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 14.185899999999947,
+      "selected": [
+        {
+          "path": "src/ast.ts",
+          "start": 361,
+          "end": 420,
+          "score": 19.471862940084165
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 12.506034290614668
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 8.463560418196437
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 2.8752337676692963
+        }
+      ],
+      "estimatedTokens": 1952,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 4.613199999999779,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 6
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 720,
+          "score": 6
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 6
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 1
+        }
+      ],
+      "estimatedTokens": 1805,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 5.365400000000136,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.03252247488101534
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 0.03125763125763126
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.029631255487269532
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.022988505747126436
+        }
+      ],
+      "estimatedTokens": 1777,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "semantic",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 5.677299999999832,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.5316844427830091
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1021,
+          "end": 1080,
+          "score": 0.5094478475389201
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 0.5017642793380592
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.3527658327809623
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1201,
+          "end": 1201,
+          "score": 0.14049631933983348
+        }
+      ],
+      "estimatedTokens": 1959,
+      "hunkLines": 19,
+      "coveredLines": 19,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 3.7009000000002743,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.03177805800756621
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.03177805800756621
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.02314071696094168
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1201,
+          "end": 1201,
+          "score": 0.01020408163265306
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 0.010101010101010102
+        }
+      ],
+      "estimatedTokens": 2002,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "lexical",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 3.674800000000232,
+      "selected": [
+        {
+          "path": "src/ast.ts",
+          "start": 361,
+          "end": 420,
+          "score": 19.471862940084165
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 12.506034290614668
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 421,
+          "end": 480,
+          "score": 9.935720600050159
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 481,
+          "end": 540,
+          "score": 8.581231484675978
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 8.463560418196437
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 8.00800128781652
+        }
+      ],
+      "estimatedTokens": 4077,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 3.508100000000013,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 6
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 720,
+          "score": 6
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 6
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 5
+        },
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 5
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 5
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 1
+        }
+      ],
+      "estimatedTokens": 3782,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 3.2134000000000924,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.03252247488101534
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 0.03125763125763126
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.029631255487269532
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.02844163539403516
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.02821939586645469
+        },
+        {
+          "path": "src/index.ts",
+          "start": 721,
+          "end": 780,
+          "score": 0.027984344422700584
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.022988505747126436
+        },
+        {
+          "path": "src/escape.ts",
+          "start": 1,
+          "end": 24,
+          "score": 0.014285714285714285
+        }
+      ],
+      "estimatedTokens": 4035,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "semantic",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 4.2608000000000175,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.5316844427830091
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1021,
+          "end": 1080,
+          "score": 0.5094478475389201
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 0.5017642793380592
+        },
+        {
+          "path": "src/index.ts",
+          "start": 901,
+          "end": 960,
+          "score": 0.49556395804684505
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.4891967374856304
+        },
+        {
+          "path": "src/index.ts",
+          "start": 721,
+          "end": 780,
+          "score": 0.46097259522201267
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.3527658327809623
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1201,
+          "end": 1201,
+          "score": 0.14049631933983348
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 0.11791258272086813
+        }
+      ],
+      "estimatedTokens": 3965,
+      "hunkLines": 19,
+      "coveredLines": 19,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-272",
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 3.5141999999996187,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 1081,
+          "end": 1140,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.03177805800756621
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.03177805800756621
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.03055037313432836
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.03036576949620428
+        },
+        {
+          "path": "src/index.ts",
+          "start": 721,
+          "end": 780,
+          "score": 0.030303030303030304
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.02314071696094168
+        },
+        {
+          "path": "src/escape.ts",
+          "start": 1,
+          "end": 24,
+          "score": 0.0227390180878553
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1201,
+          "end": 1201,
+          "score": 0.01020408163265306
+        }
+      ],
+      "estimatedTokens": 4045,
+      "hunkLines": 19,
+      "coveredLines": 12,
+      "hunkCoverage": 0.631578947368421,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "lexical",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 4.732600000000275,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 13.913548096662778
+        },
+        {
+          "path": "src/brace-expressions.ts",
+          "start": 121,
+          "end": 174,
+          "score": 11.495529570951026
+        },
+        {
+          "path": "src/index.ts",
+          "start": 781,
+          "end": 840,
+          "score": 9.706789825423549
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 1.0039466411289317
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 0.8055535474845483
+        }
+      ],
+      "estimatedTokens": 1974,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 5.7619000000004235,
+      "selected": [
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 3
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 3
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 2
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 1
+        }
+      ],
+      "estimatedTokens": 1627,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 4.05619999999999,
+      "selected": [
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.032018442622950824
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.030621785881252923
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.02946912242686891
+        }
+      ],
+      "estimatedTokens": 2032,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "semantic",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 4.479999999999563,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 0.45652213828492805
+        },
+        {
+          "path": "src/index.ts",
+          "start": 781,
+          "end": 840,
+          "score": 0.4543665720343577
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.45257555233383595
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.24193633922531604
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 0.12936690765345848
+        }
+      ],
+      "estimatedTokens": 2003,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 6.372000000000298,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.03149801587301587
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030679156908665108
+        }
+      ],
+      "estimatedTokens": 2032,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "lexical",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 4.649699999999939,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 13.913548096662778
+        },
+        {
+          "path": "src/brace-expressions.ts",
+          "start": 121,
+          "end": 174,
+          "score": 11.495529570951026
+        },
+        {
+          "path": "src/index.ts",
+          "start": 781,
+          "end": 840,
+          "score": 9.706789825423549
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 9.375740511358956
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 8.87069323078351
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 8.50700859787375
+        },
+        {
+          "path": "src/unescape.ts",
+          "start": 1,
+          "end": 26,
+          "score": 3.3915783770493917
+        }
+      ],
+      "estimatedTokens": 4071,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 4.131500000000415,
+      "selected": [
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 3
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 3
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 2
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 361,
+          "end": 420,
+          "score": 2
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 2
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 2
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 601,
+          "end": 660,
+          "score": 1
+        }
+      ],
+      "estimatedTokens": 4036,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 4.076399999999921,
+      "selected": [
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.032018442622950824
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.030621785881252923
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.02946912242686891
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.028782894736842105
+        },
+        {
+          "path": "src/brace-expressions.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.028381642512077296
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.027912386121341344
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.02557544757033248
+        }
+      ],
+      "estimatedTokens": 4055,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "semantic",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 3.871100000000297,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 0.45652213828492805
+        },
+        {
+          "path": "src/index.ts",
+          "start": 781,
+          "end": 840,
+          "score": 0.4543665720343577
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.45257555233383595
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.4356623204296649
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 720,
+          "score": 0.4046207167633704
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.3944668425004241
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.34006232978548045
+        }
+      ],
+      "estimatedTokens": 4091,
+      "hunkLines": 9,
+      "coveredLines": 9,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "minimatch-235",
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 4.304700000000594,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.03149801587301587
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030679156908665108
+        },
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 0.03009207275993712
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.029850746268656716
+        },
+        {
+          "path": "src/index.ts",
+          "start": 781,
+          "end": 840,
+          "score": 0.02946236559139785
+        },
+        {
+          "path": "src/ast.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.0250384024577573
+        },
+        {
+          "path": "src/assert-valid-pattern.ts",
+          "start": 1,
+          "end": 13,
+          "score": 0.02490996398559424
+        }
+      ],
+      "estimatedTokens": 4074,
+      "hunkLines": 9,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "lexical",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 2.2997000000004846,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 14.109479549302145
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 7.216520483282896
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 7.099114489855646
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 6.32161212228858
+        }
+      ],
+      "estimatedTokens": 1864,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 1.8308999999999287,
+      "selected": [],
+      "estimatedTokens": 0,
+      "hunkLines": 28,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 1.8942999999999302,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 0.01639344262295082
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.016129032258064516
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.015873015873015872
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.015625
+        }
+      ],
+      "estimatedTokens": 1864,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "semantic",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 2.9600000000000364,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.38654584381385126
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.3724784602845177
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.3723180142072093
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.36055253326766906
+        }
+      ],
+      "estimatedTokens": 1977,
+      "hunkLines": 28,
+      "coveredLines": 12,
+      "hunkCoverage": 0.42857142857142855,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 2.4704000000001543,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.032018442622950824
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 0.03177805800756621
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.0315136476426799
+        }
+      ],
+      "estimatedTokens": 1999,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "lexical",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 1.9952000000002954,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 14.109479549302145
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 7.216520483282896
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 7.099114489855646
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 6.32161212228858
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 6.291649436531383
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 5.998106664146983
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 5.184099275264209
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 4.905592673118077
+        }
+      ],
+      "estimatedTokens": 3849,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 1.882900000000518,
+      "selected": [],
+      "estimatedTokens": 0,
+      "hunkLines": 28,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 2.068000000000211,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 0.01639344262295082
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.016129032258064516
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.015873015873015872
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.015625
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.015384615384615385
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.015151515151515152
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.014925373134328358
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.014705882352941176
+        }
+      ],
+      "estimatedTokens": 3849,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "semantic",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 2.3195999999998094,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.38654584381385126
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.3724784602845177
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.3723180142072093
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.36055253326766906
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 0.34028890710588716
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.3378127146934719
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.2927211951461861
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.27366587691499866
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 0.15436268352636034
+        }
+      ],
+      "estimatedTokens": 3984,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-456",
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 2.0649999999996,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.032018442622950824
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 690,
+          "score": 0.03177805800756621
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.0315136476426799
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.03149801587301587
+        },
+        {
+          "path": "src/index.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.029857397504456328
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.029631255487269532
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.028985507246376812
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 0.013513513513513514
+        }
+      ],
+      "estimatedTokens": 3979,
+      "hunkLines": 28,
+      "coveredLines": 28,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "lexical",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 1.7256999999999607,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 7.0697007446029465
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 6.8811324380043555
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 6.616621384981415
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 6.525817290642238
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 3.3932985345114797
+        }
+      ],
+      "estimatedTokens": 2017,
+      "hunkLines": 6,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 2.262399999999616,
+      "selected": [
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        }
+      ],
+      "estimatedTokens": 510,
+      "hunkLines": 6,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 1.9454999999998108,
+      "selected": [
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030679156908665108
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.01639344262295082
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.016129032258064516
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.015873015873015872
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 0.014492753623188406
+        }
+      ],
+      "estimatedTokens": 2028,
+      "hunkLines": 6,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "semantic",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 1.8858000000000175,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.4190586255817149
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.398287014772019
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 0.3794198773480487
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.3794172578728533
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.3183421064253036
+        }
+      ],
+      "estimatedTokens": 1993,
+      "hunkLines": 6,
+      "coveredLines": 6,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 2.530499999999847,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.0315136476426799
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.03125763125763126
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.031099324975891997
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.030776515151515152
+        }
+      ],
+      "estimatedTokens": 1999,
+      "hunkLines": 6,
+      "coveredLines": 6,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "lexical",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 2.314300000000003,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 7.0697007446029465
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 6.8811324380043555
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 6.616621384981415
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 6.525817290642238
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 6.1948384926390645
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 5.802566244018035
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 4.720944715369103
+        },
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 4.62684696514148
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.4584524645200217
+        }
+      ],
+      "estimatedTokens": 4050,
+      "hunkLines": 6,
+      "coveredLines": 6,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 1.6255999999993946,
+      "selected": [
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        }
+      ],
+      "estimatedTokens": 510,
+      "hunkLines": 6,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 1.9290000000000873,
+      "selected": [
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030679156908665108
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.01639344262295082
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.016129032258064516
+        },
+        {
+          "path": "src/index.ts",
+          "start": 601,
+          "end": 660,
+          "score": 0.015873015873015872
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.015625
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.015384615384615385
+        },
+        {
+          "path": "src/index.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.015151515151515152
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.014925373134328358
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.013513513513513514
+        }
+      ],
+      "estimatedTokens": 4076,
+      "hunkLines": 6,
+      "coveredLines": 6,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "semantic",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 2.5744000000004235,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.4190586255817149
+        },
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.398287014772019
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 0.3794198773480487
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.3794172578728533
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.3604904413948337
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.3398343142515648
+        },
+        {
+          "path": "src/index.ts",
+          "start": 421,
+          "end": 480,
+          "score": 0.33750185373032965
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.3252037871821523
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.1204773658890653
+        }
+      ],
+      "estimatedTokens": 3863,
+      "hunkLines": 6,
+      "coveredLines": 6,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "path-to-regexp-448",
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 2.4409999999998035,
+      "selected": [
+        {
+          "path": "src/index.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.0315136476426799
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.03125763125763126
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.031099324975891997
+        },
+        {
+          "path": "src/index.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.030776515151515152
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.030621785881252923
+        },
+        {
+          "path": "src/index.bench.ts",
+          "start": 61,
+          "end": 83,
+          "score": 0.030158730158730156
+        },
+        {
+          "path": "src/index.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.03009207275993712
+        },
+        {
+          "path": "src/index.ts",
+          "start": 541,
+          "end": 600,
+          "score": 0.029857397504456328
+        },
+        {
+          "path": "src/index.ts",
+          "start": 661,
+          "end": 670,
+          "score": 0.02702702702702703
+        }
+      ],
+      "estimatedTokens": 3744,
+      "hunkLines": 6,
+      "coveredLines": 6,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "lexical",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 21.795099999999366,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 37.35925706706003
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 26.67856651671055
+        },
+        {
+          "path": "src/Hooks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 18.219952027125437
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 1.5608871557075228
+        }
+      ],
+      "estimatedTokens": 2016,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 20.036000000000058,
+      "selected": [
+        {
+          "path": "src/TextRenderer.ts",
+          "start": 1,
+          "end": 49,
+          "score": 23
+        },
+        {
+          "path": "src/Instance.ts",
+          "start": 241,
+          "end": 300,
+          "score": 16
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 12
+        },
+        {
+          "path": "src/Instance.ts",
+          "start": 361,
+          "end": 392,
+          "score": 8
+        },
+        {
+          "path": "src/Hooks.ts",
+          "start": 61,
+          "end": 70,
+          "score": 4
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 2
+        }
+      ],
+      "estimatedTokens": 1977,
+      "hunkLines": 7,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 27.02349999999933,
+      "selected": [
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.030834914611005692
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030090497737556562
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.02877846790890269
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 0.016095669036845506
+        }
+      ],
+      "estimatedTokens": 2008,
+      "hunkLines": 7,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "semantic",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 28.334899999999834,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.5642885824271293
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.5428907534307439
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.4721665779629062
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 601,
+          "end": 604,
+          "score": 0.2336836034303444
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 0.22810208027890858
+        }
+      ],
+      "estimatedTokens": 2038,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 30.711699999999837,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.032266458495966696
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.031754032258064516
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 0.016009221311475412
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 601,
+          "end": 604,
+          "score": 0.007874015748031496
+        }
+      ],
+      "estimatedTokens": 2038,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "lexical",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 14.11540000000059,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 37.35925706706003
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 26.67856651671055
+        },
+        {
+          "path": "src/MarkedOptions.ts",
+          "start": 61,
+          "end": 120,
+          "score": 26.3156881474078
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 25.936891427837367
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 23.577667572485687
+        },
+        {
+          "path": "src/helpers.ts",
+          "start": 121,
+          "end": 178,
+          "score": 15.918252096763275
+        }
+      ],
+      "estimatedTokens": 4088,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 9.305600000001505,
+      "selected": [
+        {
+          "path": "src/TextRenderer.ts",
+          "start": 1,
+          "end": 49,
+          "score": 23
+        },
+        {
+          "path": "src/Instance.ts",
+          "start": 241,
+          "end": 300,
+          "score": 16
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 12
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 661,
+          "end": 720,
+          "score": 12
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 11
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 11
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 541,
+          "end": 600,
+          "score": 11
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 2
+        }
+      ],
+      "estimatedTokens": 4087,
+      "hunkLines": 7,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 10.739600000000792,
+      "selected": [
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.030834914611005692
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030090497737556562
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.02938045560996381
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.02877846790890269
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.028531243721117136
+        },
+        {
+          "path": "src/Hooks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.0264301860545992
+        },
+        {
+          "path": "src/Instance.ts",
+          "start": 361,
+          "end": 392,
+          "score": 0.0216986301369863
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 0.016095669036845506
+        }
+      ],
+      "estimatedTokens": 4055,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "semantic",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 13.10070000000087,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.5642885824271293
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.5428907534307439
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.4721665779629062
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.459428699552634
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 661,
+          "end": 720,
+          "score": 0.4446789233868284
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.43860948341894834
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1051,
+          "score": 0.37439726089269887
+        },
+        {
+          "path": "src/Hooks.ts",
+          "start": 61,
+          "end": 70,
+          "score": 0.30175252130325647
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 0.22810208027890858
+        }
+      ],
+      "estimatedTokens": 4085,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4101",
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 13.711600000000544,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.032266458495966696
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.03200204813108039
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.031754032258064516
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 241,
+          "end": 300,
+          "score": 0.029631255487269532
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 181,
+          "end": 240,
+          "score": 0.029513888888888888
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.0288981288981289
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 541,
+          "end": 543,
+          "score": 0.016009221311475412
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 601,
+          "end": 604,
+          "score": 0.007874015748031496
+        }
+      ],
+      "estimatedTokens": 4069,
+      "hunkLines": 7,
+      "coveredLines": 7,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "lexical",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 13.766499999999724,
+      "selected": [
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 22.78427632754538
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 18.248061306649674
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1075,
+          "score": 10.541325912044446
+        }
+      ],
+      "estimatedTokens": 1972,
+      "hunkLines": 14,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 6.392299999999523,
+      "selected": [
+        {
+          "path": "src/rules.ts",
+          "start": 421,
+          "end": 480,
+          "score": 5
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 4
+        },
+        {
+          "path": "src/TextRenderer.ts",
+          "start": 1,
+          "end": 49,
+          "score": 2
+        }
+      ],
+      "estimatedTokens": 1960,
+      "hunkLines": 14,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "marked-4123",
+      "arm": "lexical-syntax",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 6.481499999999869,
+      "selected": [
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.03252247488101534
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.030330882352941176
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.02976190476190476
+        }
+      ],
+      "estimatedTokens": 1986,
+      "hunkLines": 14,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "marked-4123",
+      "arm": "semantic",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 7.404200000000856,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1075,
+          "score": 0.4363897083105641
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.4363548988353814
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.4287806676899873
+        }
+      ],
+      "estimatedTokens": 2007,
+      "hunkLines": 14,
+      "coveredLines": 14,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "hybrid",
+      "ceiling": 2048,
+      "status": "ranked",
+      "latencyMs": 6.51929999999993,
+      "selected": [
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.03149801587301587
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.03128054740957967
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1075,
+          "score": 0.03028233151183971
+        }
+      ],
+      "estimatedTokens": 2012,
+      "hunkLines": 14,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "lexical",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 6.890900000000329,
+      "selected": [
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 22.78427632754538
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 18.248061306649674
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 13.837518587752015
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 13.442532911138912
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 541,
+          "end": 600,
+          "score": 12.581127950636901
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1075,
+          "score": 10.541325912044446
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 601,
+          "end": 614,
+          "score": 4.023903737076273
+        }
+      ],
+      "estimatedTokens": 4070,
+      "hunkLines": 14,
+      "coveredLines": 14,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 5.763800000000629,
+      "selected": [
+        {
+          "path": "src/rules.ts",
+          "start": 421,
+          "end": 480,
+          "score": 5
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 4
+        },
+        {
+          "path": "src/helpers.ts",
+          "start": 1,
+          "end": 60,
+          "score": 2
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 2
+        },
+        {
+          "path": "src/TextRenderer.ts",
+          "start": 1,
+          "end": 49,
+          "score": 2
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 781,
+          "end": 840,
+          "score": 2
+        }
+      ],
+      "estimatedTokens": 3962,
+      "hunkLines": 14,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "lexical-syntax",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 8.492599999999584,
+      "selected": [
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.03252247488101534
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.030330882352941176
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 421,
+          "end": 480,
+          "score": 0.03028233151183971
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.029827662395050816
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.02976190476190476
+        },
+        {
+          "path": "src/Instance.ts",
+          "start": 361,
+          "end": 392,
+          "score": 0.014084507042253521
+        }
+      ],
+      "estimatedTokens": 4053,
+      "hunkLines": 14,
+      "coveredLines": 0,
+      "hunkCoverage": 0,
+      "fileRecall": 0
+    },
+    {
+      "task": "marked-4123",
+      "arm": "semantic",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 8.990199999998367,
+      "selected": [
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1075,
+          "score": 0.4363897083105641
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.4363548988353814
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.4287806676899873
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 721,
+          "end": 780,
+          "score": 0.4047422929422519
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.40212884766416473
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.39341116315141306
+        }
+      ],
+      "estimatedTokens": 4078,
+      "hunkLines": 14,
+      "coveredLines": 14,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    },
+    {
+      "task": "marked-4123",
+      "arm": "hybrid",
+      "ceiling": 4096,
+      "status": "ranked",
+      "latencyMs": 7.557999999999083,
+      "selected": [
+        {
+          "path": "src/Lexer.ts",
+          "start": 361,
+          "end": 420,
+          "score": 0.03149801587301587
+        },
+        {
+          "path": "src/Renderer.ts",
+          "start": 121,
+          "end": 180,
+          "score": 0.03128054740957967
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.030834914611005692
+        },
+        {
+          "path": "src/Lexer.ts",
+          "start": 301,
+          "end": 360,
+          "score": 0.03076923076923077
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 481,
+          "end": 540,
+          "score": 0.030679156908665108
+        },
+        {
+          "path": "src/Tokenizer.ts",
+          "start": 1021,
+          "end": 1075,
+          "score": 0.03028233151183971
+        },
+        {
+          "path": "src/rules.ts",
+          "start": 601,
+          "end": 614,
+          "score": 0.018642611683848797
+        }
+      ],
+      "estimatedTokens": 4084,
+      "hunkLines": 14,
+      "coveredLines": 14,
+      "hunkCoverage": 1,
+      "fileRecall": 1
+    }
+  ],
+  "embeddingAvailable": true,
+  "failure": null,
+  "semanticWins": [
+    "minimatch-272",
+    "path-to-regexp-448",
+    "marked-4101",
+    "marked-4123"
+  ],
+  "liveGatePassed": true,
+  "accounting": {
+    "availability": {
+      "calls": 0,
+      "latencyMs": 0,
+      "tokens": 0,
+      "knownCost": 0,
+      "unknownCosts": 0
+    },
+    "mode-passage": {
+      "calls": 0,
+      "latencyMs": 0,
+      "tokens": 0,
+      "knownCost": 0,
+      "unknownCosts": 0
+    },
+    "mode-query": {
+      "calls": 0,
+      "latencyMs": 0,
+      "tokens": 0,
+      "knownCost": 0,
+      "unknownCosts": 0
+    },
+    "index": {
+      "calls": 10,
+      "latencyMs": 9915.717200000003,
+      "tokens": 93238,
+      "knownCost": 0,
+      "unknownCosts": 0
+    },
+    "query": {
+      "calls": 6,
+      "latencyMs": 1325.7434000000007,
+      "tokens": 620,
+      "knownCost": 0,
+      "unknownCosts": 0
+    }
+  },
+  "liveAttempts": 0,
+  "knownRepairInferenceCost": 0,
+  "engineeringInferenceExcluded": true,
+  "developmentAccounting": {
+    "calls": 16,
+    "latencyMs": 9541.0092,
+    "tokens": 68147,
+    "knownCost": 0,
+    "unknownCosts": 0
+  },
+  "unknownDevelopmentRequests": [
+    15
+  ]
+}

@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import {parseEnv} from 'node:util';
+import {createHash} from 'node:crypto';
+export const MODEL='nvidia/nemotron-3-embed-1b:free';
+export const state='.suffice/nemotron';
+export const hash=x=>createHash('sha256').update(x).digest('hex');
+export async function guard(){const d=await fs.statfs('.');if(d.bavail*d.bsize<1024**3)throw Error('disk_floor');let n=0;async function walk(p){for(const e of await fs.readdir(p,{withFileTypes:true})){const x=p+'/'+e.name;if(e.isDirectory())await walk(x);else n+=(await fs.stat(x)).size;}}await walk(state);if(n>=100*1024**2)throw Error('artifact_ceiling');}
+export async function embed(input,kind){
+ await guard();const receipts=(await fs.readFile(state+'/http.jsonl','utf8').catch(()=>''));const count=receipts.trim()?receipts.trim().split('\n').length:0;if(count>=120)throw Error('embedding_http_ceiling');
+ const key=parseEnv(await fs.readFile('C:/Users/Mohammed/Documents/GitHub/suffice/.env','utf8')).OPENROUTER_API_KEY;if(!key)throw Error('missing_existing_key');
+ const start=performance.now(),id=count+1;await fs.appendFile(state+'/http.jsonl',JSON.stringify({id,kind,status:'started',at:new Date().toISOString(),inputs:input.length,inputHashes:input.map(hash)})+'\n');
+ let receipt;try{const r=await fetch('https://openrouter.ai/api/v1/embeddings',{method:'POST',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({model:MODEL,input,encoding_format:'float',provider:{allow_fallbacks:false,max_price:{prompt:0}}}),signal:AbortSignal.timeout(60000)});const b=await r.json();receipt={id,kind,status:r.status,model:b.model??null,usage:b.usage??null,provider:b.provider??null,error:b.error?{code:b.error.code,message:String(b.error.message).replaceAll(key,'[REDACTED]')}:null,latencyMs:performance.now()-start,dimensions:b.data?.[0]?.embedding?.length??null};await fs.writeFile(state+`/receipt-${id}.json`,JSON.stringify(receipt,null,2));if(!r.ok||b.error)throw Object.assign(Error('embedding_provider_failure'),{receipt});if(![MODEL,'private/openrouter/nvidia/nemotron-3-embed-1b'].includes(b.model))throw Error('returned_model_mismatch');if(b.usage?.cost!==0)throw Error('nonzero_or_unknown_returned_cost');if(!Array.isArray(b.data)||b.data.length!==input.length||b.data.some(x=>!Array.isArray(x.embedding)||!x.embedding.length||x.embedding.some(v=>!Number.isFinite(v))))throw Error('invalid_vectors');return {vectors:b.data.sort((a,b)=>a.index-b.index).map(x=>x.embedding),receipt};}catch(e){if(!receipt)await fs.writeFile(state+`/receipt-${id}.json`,JSON.stringify({id,kind,status:'network_error',error:{name:e.name},latencyMs:performance.now()-start},null,2));throw e;}
+}
