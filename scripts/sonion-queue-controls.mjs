@@ -1,0 +1,21 @@
+import {readFile,writeFile,mkdir,readdir,cp,symlink,rm} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {executeIsolated} from './sonion-execution.mjs';
+const ROOT=resolve(import.meta.dirname,'..'),id=process.argv[2],td=resolve(ROOT,'.suffice/field-campaign-v1/tasks',id),base=resolve(td,'base'),priv=resolve(td,'private');
+const task=JSON.parse(await readFile(resolve(td,'task.json'),'utf8')),dep=task.dependencyDir,modern=id!=='q03';
+const tests=(await readdir(resolve(base,'test'))).filter(f=>f.endsWith('.ts')).sort().map(f=>'test/'+f);
+const avaEval="const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spawnSync}=require('node:child_process');const config=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'suffice-ava-')),'ava.config.cjs');const original=JSON.parse(fs.readFileSync('package.json','utf8')).ava;fs.writeFileSync(config,'module.exports='+JSON.stringify({...original,cache:false})+';');const result=spawnSync(process.execPath,['node_modules/ava/entrypoints/cli.mjs','--tap','--config',config,...process.argv.slice(1)],{stdio:'inherit'});process.exit(result.status??1);";
+const avaCommand=['node','--eval',avaEval,'--'];
+const native=modern?[['node','--import=tsx/esm','--test','--test-reporter=tap','--test-concurrency=1',...tests],['node','node_modules/typescript/bin/tsc'],['node','node_modules/tsd/dist/cli.js']]:[['node','node_modules/typescript/bin/tsc'],avaCommand];
+const overlays=task.graderOverlay.filter(x=>id!=='q01'||x.target==='test/advanced.ts');
+const acceptance=modern?[['node','--import=tsx/esm','--test','--test-reporter=tap','--test-concurrency=1','--test-name-pattern='+(id==='q01'?'issue #251':'\\.onSizeLessThan\\(\\) resolves when|\\.onSizeLessThan\\(\\) resolves multiple'),...overlays.map(x=>x.target)]]:[[...avaCommand,'--match=aborting multiple jobs at the same time']];
+task.nativeCommands=native;task.acceptanceCommands=acceptance;task.graderOverlay=overlays;task.nativeParser='tap';
+async function run(dir,label,commands){let rows=[];for(let i=0;i<commands.length;i++){const receipts=resolve(priv,'sonion-controls',label+'-'+i),result=await executeIsolated({workspace:dir,receipts,command:commands[i],gitMetadata:[dep],network:false,timeoutMs:180000});const failures=[...result.stdout.matchAll(/^not ok \d+ -? ?(.+)$/gm)].map(m=>m[1]);rows.push({command:commands[i],exitCode:result.exitCode,latencyMs:result.latencyMs,failures,receipts});console.log(id,label,i,result.exitCode,result.stdout.slice(-650),result.stderr.slice(-1000));await writeFile(resolve(priv,'sonion-controls',label+'-progress.json'),JSON.stringify(rows,null,2)+'\n');}return rows;}
+async function control(name,reference){const dir=resolve(priv,'sonion-control-workspaces',name);await rm(dir,{recursive:true,force:true});await mkdir(dir,{recursive:true});await cp(base,dir,{recursive:true,filter:src=>!src.split('/').includes('node_modules')&&!src.split('/').includes('.git')});await symlink(dep,resolve(dir,'node_modules'),'dir');
+ if(reference){spawnSync('git',['-C',dir,'init','--initial-branch=control']);const patch=spawnSync('git',['-C',dir,'apply','--whitespace=nowarn',task.referencePatch],{encoding:'utf8'});if(patch.status!==0)throw new Error(patch.stderr);}
+ const original=await run(dir,name+'-native',native);for(const o of overlays)await cp(o.source,resolve(dir,o.target));const heldout=await run(dir,name+'acceptance',acceptance);return {native:original,acceptance:heldout};}
+const baseline=await control('baseline',false),reference=await control('reference',true);
+task.controls={nativeExitCodes:baseline.native.map(x=>x.exitCode),nativeFailureNames:baseline.native.flatMap(x=>x.failures),baselineAccepted:baseline.acceptance.every(x=>x.exitCode===0),referenceAccepted:reference.acceptance.every(x=>x.exitCode===0),knownNativeFailures:baseline.native.filter(x=>x.exitCode!==0).map(x=>({command:x.command,failures:x.failures,receipts:x.receipts})),baseline,reference};
+task.ready=!task.controls.baselineAccepted&&task.controls.referenceAccepted&&baseline.native.every(x=>x.exitCode===0)&&reference.native.every(x=>x.exitCode===0);
+await writeFile(resolve(td,'task.json'),JSON.stringify(task,null,2)+'\n');console.log(id,'READY',task.ready);

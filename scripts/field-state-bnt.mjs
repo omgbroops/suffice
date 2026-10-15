@@ -1,0 +1,7 @@
+import {readFile,writeFile,cp} from 'node:fs/promises';import {resolve} from 'node:path';import {executeIsolated} from './general-execution.mjs';
+const R=resolve(import.meta.dirname,'..');for(const id of ['s02','s03']){const f=resolve(R,'.suffice/field-campaign-v1/tasks',id,'task.json');const m=JSON.parse(await readFile(f,'utf8'));m.ready=false;await writeFile(f,JSON.stringify(m,null,2));}
+const id='s02',root=resolve(R,'.suffice/field-campaign-v1/tasks',id),m=JSON.parse(await readFile(resolve(root,'task.json'),'utf8')),priv=resolve(R,'research/field-campaign-v1/state',id);
+for(const f of ['package.json','package-lock.json'])await cp(resolve(m.dependencyDir,'..',f),resolve(m.baseDir,'.field-dependencies',f));
+const codes=[];for(const mode of ['baseline','reference']){const work=resolve(root,'controls',mode),r=await executeIsolated({workspace:work,privateRoots:[resolve(R,'research')],gitMetadata:[m.dependencyDir],network:false,command:['env','GIT_CEILING_DIRECTORIES=/workspace','node','node_modules/better-node-test/bin.js',...m.nativeCommands[0].slice(2)],receipts:resolve(priv,'receipts',mode,'native-bnt'),timeoutMs:180000});codes.push(r.exitCode);console.log(mode,r.exitCode,r.stdout.slice(-1000),r.stderr.slice(-500));}
+m.controls.nativeExitCodes=[codes[0]];m.controls.referenceNativeExitCodes=[codes[1]];m.ready=codes.every(x=>x===0)&&!m.controls.baselineAccepted&&m.controls.referenceAccepted;await writeFile(resolve(root,'task.json'),JSON.stringify(m,null,2));console.log('s02 READY',m.ready);
+
