@@ -12,19 +12,19 @@
         "fail": 0
       },
       "logPath": "validation/actor-visible.tap",
-      "logSha256": "0beabaa9e8dcc15c474e892d812000b135f4593591c7585c601334b10b8a751f"
+      "logSha256": "a15d3577ad27f0909eaa9d98124d6d3f5e96e47c7c70c29e923fafbd298ce45e"
     },
     {
       "variant": "actor",
       "suite": "acceptance",
       "exitCode": 1,
       "counts": {
-        "tests": 9,
-        "pass": 1,
+        "tests": 10,
+        "pass": 2,
         "fail": 8
       },
       "logPath": "validation/actor-acceptance.tap",
-      "logSha256": "d5fb03b61c7570c99a2e649ddcf7cfdd7f67bfba93f7e273865f04fb0980aeba"
+      "logSha256": "267b8664d983509f5e3e15a38426a1bda7c826868e6a9001caf06db59b494262"
     },
     {
       "variant": "reference",
@@ -36,19 +36,19 @@
         "fail": 0
       },
       "logPath": "validation/reference-visible.tap",
-      "logSha256": "0c70f346d6c3d53af87d791e26e835b3092552a6721978925020b9d63a1aa65b"
+      "logSha256": "879a8ebaf2067df5569680a5a7b2625cc33a7c411f6eafb50560e8bb315443ed"
     },
     {
       "variant": "reference",
       "suite": "acceptance",
       "exitCode": 0,
       "counts": {
-        "tests": 9,
-        "pass": 9,
+        "tests": 10,
+        "pass": 10,
         "fail": 0
       },
       "logPath": "validation/reference-acceptance.tap",
-      "logSha256": "e9ebdf7315d556a6642728b5df486d208c24bb8fb73dc5df00e4170b93e7bfa8"
+      "logSha256": "9dd75826005ef6584bf083ca88eea8b1772877a285eac85a2b72c0033dd78ddf"
     }
   ],
   "files": {
@@ -71,7 +71,7 @@
     "actor/src/test/index.js": "451902829edd5ecb3d9369621af041e67365836fe8faa3fa2cd3116564b67458",
     "actor/TASK.md": "be0a52464f8b674ab89c70a969c3465a9b66ea954408a32fdfa0f9ec27ee1095",
     "actor/tests/visible.test.mjs": "247358f886beeedb300f2da0792209769c0c2d7e16524796012ddc3f4fab83b9",
-    "private/acceptance.test.mjs": "39d29cd76f0de7559a8c872e24b270bbffd21ba68204395df47eff5b72ed325f",
+    "private/acceptance.test.mjs": "986bb8883dbd111abd3f844cc509b551df81e665c89e40531721234d62c710b1",
     "reference/README.md": "1b742fe1cf4240268096a9a973449f50d4d992b41619d3a3b2503495140730d8",
     "reference/src/.editorconfig": "f000102bd4c1a767896b393391d11934a6c1deba7d610c6d36c6686514d7222a",
     "reference/src/.github/workflows/ci.yml": "980e730fddf1358d8db1b028972be91c2884a854daa4089b9eccb5cacbd305b9",
@@ -93,7 +93,13 @@
     "reference/tests/visible.test.mjs": "247358f886beeedb300f2da0792209769c0c2d7e16524796012ddc3f4fab83b9",
     "SOURCE-LICENSE": "1ce941682a96c7b898ecd125d0f2e22319758ea6f3adbf498a65d649b0f3f7dd",
     "source.tar.gz": "b629c00d7173bda3438c5389d7f199e9758050b542f24c97766cdb6bf75e2251",
-    "task.json": "effa7a5da6a10558f4688445b4d4e6788189ae3de078b99ffd009e35004840d1"
+    "task.json": "90d000ab0a46be790aa0ec4e274bccc7aa6971e60fe146930f77643a8da9b791"
   },
-  "validationPolicy": "Native Node tests only. No package scripts, installation, network, subprocess or credentials in test code. Author validation launcher uses Node subprocesses offline. No model repair attempts."
+  "validationPolicy": "Native Node tests only. No package scripts, installation, network, subprocess or credentials in test code. Author validation launcher uses Node subprocesses offline. No model repair attempts.",
+  "supersedes": {
+    "commit": "60fa452",
+    "taskSha256": "effa7a5da6a10558f4688445b4d4e6788189ae3de078b99ffd009e35004840d1",
+    "graderSha256": "39d29cd76f0de7559a8c872e24b270bbffd21ba68204395df47eff5b72ed325f",
+    "reason": "Add missing mapped R1 hidden evidence only; no public requirement or actor source changes."
+  }
 }

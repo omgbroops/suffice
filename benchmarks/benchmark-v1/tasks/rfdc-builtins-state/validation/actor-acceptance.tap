@@ -1,10 +1,16 @@
 TAP version 13
-# Subtest: map keys and values are recursively independent in every mode
-not ok 1 - map keys and values are recursively independent in every mode
+# Subtest: ordinary data primitives functions and dates are preserved in every mode
+ok 1 - ordinary data primitives functions and dates are preserved in every mode
   ---
-  duration_ms: 2.5487
+  duration_ms: 3.9684
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:8:1'
+  ...
+# Subtest: map keys and values are recursively independent in every mode
+not ok 2 - map keys and values are recursively independent in every mode
+  ---
+  duration_ms: 0.8584
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:27:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected "actual" not to be reference-equal to "expected":
@@ -25,18 +31,20 @@ not ok 1 - map keys and values are recursively independent in every mode
       id: 1
   operator: 'notStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:13:10)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:32:10)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
-    Test.start (node:internal/test_runner/test:1096:17)
-    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
   ...
 # Subtest: maps inside arrays and sets recursively clone entries
-not ok 2 - maps inside arrays and sets recursively clone entries
+not ok 3 - maps inside arrays and sets recursively clone entries
   ---
-  duration_ms: 0.5584
+  duration_ms: 0.6057
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:17:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:36:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly equal:
@@ -49,20 +57,20 @@ not ok 2 - maps inside arrays and sets recursively clone entries
   actual: 5
   operator: 'strictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:22:34)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:41:34)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
     Test.postRun (node:internal/test_runner/test:1330:19)
     Test.run (node:internal/test_runner/test:1258:12)
-    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
 # Subtest: typed subviews preserve type offset length and independent storage
-not ok 3 - typed subviews preserve type offset length and independent storage
+not ok 4 - typed subviews preserve type offset length and independent storage
   ---
-  duration_ms: 0.6721
+  duration_ms: 0.9999
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:25:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:44:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected "actual" not to be reference-equal to "expected":
@@ -78,7 +86,7 @@ not ok 3 - typed subviews preserve type offset length and independent storage
   actual:
   operator: 'notStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:30:49)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:49:49)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
@@ -87,11 +95,11 @@ not ok 3 - typed subviews preserve type offset length and independent storage
     async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
 # Subtest: dataviews in arrays preserve the visible bytes and isolate writes
-not ok 4 - dataviews in arrays preserve the visible bytes and isolate writes
+not ok 5 - dataviews in arrays preserve the visible bytes and isolate writes
   ---
-  duration_ms: 0.2633
+  duration_ms: 0.3525
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:34:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:53:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected "actual" not to be reference-equal to "expected":
@@ -107,7 +115,7 @@ not ok 4 - dataviews in arrays preserve the visible bytes and isolate writes
   actual:
   operator: 'notStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:39:44)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:58:44)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
@@ -116,11 +124,11 @@ not ok 4 - dataviews in arrays preserve the visible bytes and isolate writes
     async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
 # Subtest: buffers and binary values nested through containers are copied
-not ok 5 - buffers and binary values nested through containers are copied
+not ok 6 - buffers and binary values nested through containers are copied
   ---
-  duration_ms: 0.2946
+  duration_ms: 0.3214
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:43:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:62:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly equal:
@@ -133,7 +141,7 @@ not ok 5 - buffers and binary values nested through containers are copied
   actual: 7
   operator: 'strictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:49:52)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:68:52)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
@@ -142,11 +150,11 @@ not ok 5 - buffers and binary values nested through containers are copied
     async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
 # Subtest: custom constructors work at object array and container positions
-not ok 6 - custom constructors work at object array and container positions
+not ok 7 - custom constructors work at object array and container positions
   ---
-  duration_ms: 0.3964
+  duration_ms: 0.3497
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:52:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:71:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected "actual" not to be reference-equal to "expected":
@@ -163,7 +171,7 @@ not ok 6 - custom constructors work at object array and container positions
     n: 4
   operator: 'notStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:59:77)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:78:77)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
@@ -172,11 +180,11 @@ not ok 6 - custom constructors work at object array and container positions
     async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
 # Subtest: custom handlers override builtins without matching subclasses
-not ok 7 - custom handlers override builtins without matching subclasses
+not ok 8 - custom handlers override builtins without matching subclasses
   ---
-  duration_ms: 1.7919
+  duration_ms: 1.7286
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:64:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:83:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly deep-equal:
@@ -194,7 +202,7 @@ not ok 7 - custom handlers override builtins without matching subclasses
   actual: 1970-01-01T00:00:00.000Z
   operator: 'deepStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:68:10)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:87:10)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
@@ -203,17 +211,17 @@ not ok 7 - custom handlers override builtins without matching subclasses
     async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
 # Subtest: ordinary ancestor cycles through arrays and repeated calls stay independent
-ok 8 - ordinary ancestor cycles through arrays and repeated calls stay independent
+ok 9 - ordinary ancestor cycles through arrays and repeated calls stay independent
   ---
-  duration_ms: 0.5086
+  duration_ms: 0.2887
   type: 'test'
   ...
 # Subtest: prototype property policy survives container and handler recursion
-not ok 9 - prototype property policy survives container and handler recursion
+not ok 10 - prototype property policy survives container and handler recursion
   ---
-  duration_ms: 0.5022
+  duration_ms: 0.4789
   type: 'test'
-  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:81:1'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs:100:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected "actual" not to be reference-equal to "expected":
@@ -230,7 +238,7 @@ not ok 9 - prototype property policy survives container and handler recursion
     n: 2
   operator: 'notStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:88:45)
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-state/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:107:45)
     Test.runInAsyncScope (node:async_hooks:227:14)
     Test.run (node:internal/test_runner/test:1201:25)
     Test.processPendingSubtests (node:internal/test_runner/test:831:18)
@@ -238,12 +246,12 @@ not ok 9 - prototype property policy survives container and handler recursion
     Test.run (node:internal/test_runner/test:1258:12)
     async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
   ...
-1..9
-# tests 9
+1..10
+# tests 10
 # suites 0
-# pass 1
+# pass 2
 # fail 8
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 109.9449
+# duration_ms 123.7011

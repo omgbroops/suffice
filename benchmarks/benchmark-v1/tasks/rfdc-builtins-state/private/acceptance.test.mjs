@@ -5,6 +5,25 @@ import {resolve} from 'node:path';
 const W = process.env.SUFFICE_WORKSPACE || process.cwd();
 const rfdc = createRequire(resolve(W, 'src/package.json'))('./index.js');
 const modes=[{}, {proto:true}, {circles:true}, {proto:true,circles:true}];
+test('ordinary data primitives functions and dates are preserved in every mode', () => {
+ const fn=()=>42;
+ const primitives=[null,undefined,true,false,0,-0,23,'','text',NaN,Infinity,7n,Symbol('value'),fn];
+ for(const opts of modes){
+  const clone=rfdc(opts);
+  for(const value of primitives) assert.equal(clone(value),value);
+  const input={nested:[{values:primitives.slice(),data:{count:3},date:new Date(123456789)}],date:new Date(-1000),fn};
+  const out=clone(input);
+  assert.deepEqual(out,input);assert.notEqual(out,input);assert.notEqual(out.nested,input.nested);
+  assert.notEqual(out.nested[0],input.nested[0]);assert.notEqual(out.nested[0].values,input.nested[0].values);
+  assert.equal(out.fn,fn);assert.equal(out.nested[0].values.at(-1),fn);
+  assert.ok(out.date instanceof Date);assert.notEqual(out.date,input.date);assert.equal(out.date.getTime(),-1000);
+  assert.ok(out.nested[0].date instanceof Date);assert.notEqual(out.nested[0].date,input.nested[0].date);
+  assert.equal(out.nested[0].date.getTime(),123456789);
+  out.nested[0].data.count=9;out.nested[0].values[4]=8;out.date.setTime(2000);out.nested[0].date.setTime(3000);
+  assert.equal(input.nested[0].data.count,3);assert.equal(input.nested[0].values[4],0);
+  assert.equal(input.date.getTime(),-1000);assert.equal(input.nested[0].date.getTime(),123456789);
+ }
+});
 test('map keys and values are recursively independent in every mode', () => {
  for(const opts of modes){
   const key={label:{id:1}}, value={list:[{score:2}]};

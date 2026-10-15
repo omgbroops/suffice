@@ -59,6 +59,13 @@
   ],
   "assertionMap": [
     {
+      "test": "ordinary data primitives functions and dates are preserved in every mode",
+      "requirementIDs": [
+        "R1"
+      ],
+      "rationale": "Checks root primitives, referenced functions, nested dense arrays/objects and copied Date values plus mutation isolation across all four supported option modes."
+    },
+    {
       "test": "map keys and values are recursively independent in every mode",
       "requirementIDs": [
         "R2"
