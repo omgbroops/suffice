@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: constructor heapifies unsorted odd and even arrays
+ok 1 - constructor heapifies unsorted odd and even arrays
+  ---
+  duration_ms: 1.7696
+  type: 'test'
+  ...
+# Subtest: insertion repairs every ancestor for both child positions
+ok 2 - insertion repairs every ancestor for both child positions
+  ---
+  duration_ms: 0.3432
+  type: 'test'
+  ...
+# Subtest: replacement selects either better child and handles left-only children
+ok 3 - replacement selects either better child and handles left-only children
+  ---
+  duration_ms: 0.2582
+  type: 'test'
+  ...
+# Subtest: emptying and reusing preserves peek pop and length
+ok 4 - emptying and reusing preserves peek pop and length
+  ---
+  duration_ms: 0.1395
+  type: 'test'
+  ...
+# Subtest: reverse comparator governs construction and later insertions
+ok 5 - reverse comparator governs construction and later insertions
+  ---
+  duration_ms: 0.2304
+  type: 'test'
+  ...
+# Subtest: object comparators retain all equal-priority entries
+ok 6 - object comparators retain all equal-priority entries
+  ---
+  duration_ms: 0.2766
+  type: 'test'
+  ...
+# Subtest: deterministic mixed operations agree with a sorted-array model
+ok 7 - deterministic mixed operations agree with a sorted-array model
+  ---
+  duration_ms: 0.716
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 106.6368

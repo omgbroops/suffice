@@ -1,0 +1,11 @@
+Repair injected deep-clone regressions in rfdc: maps alias their inputs, binary views share storage, and custom constructor handlers fail in circular mode.
+
+These are benchmark-authored defects in pinned real source, not claims of upstream bugs. Repair src/index.js while preserving the existing public API. The full repository is in src/. No installs, network access, subprocesses or package scripts are required. Run node --test tests/visible.test.mjs from the workspace.
+
+Public acceptance contract:
+R1: Keep existing deep copying of ordinary nested arrays/objects, primitive/function values and Date values.
+R2: Nested Map keys and values and nested Set values must be deeply copied, including when inside arrays or containers, in all four combinations of proto/circles options; modifying cloned ordinary data must not change the input.
+R3: Nested Buffer values must preserve their Buffer type, bytes and length with independent mutable bytes. Nested typed arrays must preserve their constructor, visible contents, length and byte offset with independent backing storage. Nested DataViews that extend from their byte offset to the end of their backing buffer have the same preservation and storage requirements. Cover object and array positions and Map/Set containers in all four option combinations. Buffer byte offsets, shorter DataViews, root binary views and preservation of shared-buffer identity between cloned views are out of scope.
+R4: User constructorHandlers must override built-in handlers and apply to exact matching constructors (not subclasses) at object, array and container positions in all four option combinations.
+R5: With circles:true, ordinary object ancestor back-references must point to the corresponding cloned ancestor, including object cycles reached via arrays; successive calls to the same clone function must produce independent outputs. Cyclic arrays themselves and self-referential Map/Set objects are out of scope.
+R6: proto:false copies own enumerable object properties only; proto:true also copies inherited enumerable object properties into own output properties, including ordinary objects reached via Map/Set and custom handlers that recurse with the supplied clone callback.

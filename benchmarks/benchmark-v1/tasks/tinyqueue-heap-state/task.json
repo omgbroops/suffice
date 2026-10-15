@@ -1,0 +1,137 @@
+{
+  "id": "tinyqueue-heap-state",
+  "split": "reserve",
+  "repository": "mourner/tinyqueue",
+  "url": "https://github.com/mourner/tinyqueue",
+  "sourceCommit": "6f4349d466d79c6ccd3d243f26356efd65ac5b05",
+  "provenance": {
+    "kind": "injected-defect",
+    "archivePath": "source.tar.gz",
+    "archiveUrl": "https://codeload.github.com/mourner/tinyqueue/tar.gz/6f4349d466d79c6ccd3d243f26356efd65ac5b05",
+    "archiveSha256": "9a8cfc1e6ec8c0922d077735ad7af6204c9a8b9ff68068a55ae3c53f3d06c52f",
+    "downloadBytes": 12430,
+    "licensePath": "SOURCE-LICENSE",
+    "upstreamEntrySha256": "4ab450ec366d74fd5721d2bf5cec0422451bbb80fe58169a21e0f9abf192ec18",
+    "referenceRepair": "Pristine pinned upstream index.js; no authored feature changes.",
+    "injectedChanges": [
+      "sift-up uses the wrong parent for even child positions",
+      "sift-down selects the worse right child",
+      "singleton pop writes an item back after length becomes zero"
+    ],
+    "primarySources": [
+      "https://github.com/mourner/tinyqueue",
+      "https://github.com/mourner/tinyqueue/tree/6f4349d466d79c6ccd3d243f26356efd65ac5b05"
+    ]
+  },
+  "publicPrompt": "Repair injected TinyQueue heap regressions affecting insertion paths, replacement ordering and empty-state reuse.\n\nThese are benchmark-authored defects in pinned real source, not claims of upstream bugs. Repair src/index.js while preserving the existing public API. The full repository is in src/. No installs, network access, subprocesses or package scripts are required. Run node --test tests/visible.test.mjs from the workspace.\n\nPublic acceptance contract:\nQ1: The constructor must heapify any supplied dense array using the supplied comparator; default ordering is ascending. The existing API may mutate the supplied array.\nQ2: push must preserve heap order for arbitrarily interleaved insertions, including inserts requiring movement through multiple ancestors.\nQ3: pop must return the highest-priority item according to the comparator and restore the heap after replacement, including when the better child is on either side or only the left child exists.\nQ4: length must equal the number of queued items after each operation; peek returns the next pop value without removal. Empty pop and peek return undefined. Draining and reusing a queue must not leave stale entries.\nQ5: Custom comparators, including reverse numeric ordering and object-priority comparators, must govern construction, push, peek and pop. Duplicate priorities must retain all inserted entries; tie stability is not required.",
+  "requirements": [
+    {
+      "id": "Q1",
+      "text": "The constructor must heapify any supplied dense array using the supplied comparator; default ordering is ascending. The existing API may mutate the supplied array."
+    },
+    {
+      "id": "Q2",
+      "text": "push must preserve heap order for arbitrarily interleaved insertions, including inserts requiring movement through multiple ancestors."
+    },
+    {
+      "id": "Q3",
+      "text": "pop must return the highest-priority item according to the comparator and restore the heap after replacement, including when the better child is on either side or only the left child exists."
+    },
+    {
+      "id": "Q4",
+      "text": "length must equal the number of queued items after each operation; peek returns the next pop value without removal. Empty pop and peek return undefined. Draining and reusing a queue must not leave stale entries."
+    },
+    {
+      "id": "Q5",
+      "text": "Custom comparators, including reverse numeric ordering and object-priority comparators, must govern construction, push, peek and pop. Duplicate priorities must retain all inserted entries; tie stability is not required."
+    }
+  ],
+  "workspaceDir": "actor",
+  "referenceDir": "reference",
+  "acceptancePath": "private/acceptance.test.mjs",
+  "visiblePath": "actor/tests/visible.test.mjs",
+  "allowedEditPaths": [
+    "src/index.js"
+  ],
+  "assertionMap": [
+    {
+      "test": "constructor heapifies unsorted odd and even arrays",
+      "requirementIDs": [
+        "Q1",
+        "Q3",
+        "Q4"
+      ],
+      "rationale": "Heapifies distinct lengths then drains with exact count tracking."
+    },
+    {
+      "test": "insertion repairs every ancestor for both child positions",
+      "requirementIDs": [
+        "Q2",
+        "Q3",
+        "Q4"
+      ],
+      "rationale": "Descending insertions require multiple levels and both index parities."
+    },
+    {
+      "test": "replacement selects either better child and handles left-only children",
+      "requirementIDs": [
+        "Q2",
+        "Q3"
+      ],
+      "rationale": "Several heap shapes cover both-child and left-only sift-down."
+    },
+    {
+      "test": "emptying and reusing preserves peek pop and length",
+      "requirementIDs": [
+        "Q4"
+      ],
+      "rationale": "Singleton drain and repeated reuse catch stale storage without checking private representation."
+    },
+    {
+      "test": "reverse comparator governs construction and later insertions",
+      "requirementIDs": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4",
+        "Q5"
+      ],
+      "rationale": "Reverse ordering governs heapify, push, peek and complete drain."
+    },
+    {
+      "test": "object comparators retain all equal-priority entries",
+      "requirementIDs": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q5"
+      ],
+      "rationale": "Checks priorities, complete membership and object identity without imposing tie order."
+    },
+    {
+      "test": "deterministic mixed operations agree with a sorted-array model",
+      "requirementIDs": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ],
+      "rationale": "240 fixed-seed operations compare all observable state with a simple independent model."
+    }
+  ],
+  "scopeTier": 1,
+  "engineeringScope": {
+    "modulesNeedingChange": [
+      "src/index.js"
+    ],
+    "integrationBoundaries": [
+      "Public queue operations to internal sift-up/sift-down and backing-array state"
+    ],
+    "stages": [
+      "Inspect source and public requirements",
+      "Repair the interacting regressions within the implementation module",
+      "Validate visible behavior and reason about additional states"
+    ],
+    "exAnteRationale": "Single-component repair with several interacting branches, not a multi-component or long-duration task. Scope assigned before any model repair attempts; failure counts do not establish difficulty or task length."
+  }
+}

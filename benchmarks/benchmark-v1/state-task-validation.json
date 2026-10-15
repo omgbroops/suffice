@@ -1,0 +1,117 @@
+{
+  "nodeVersion": "v24.15.0",
+  "splitFreezeSha256": "563ee47c28838b726ae95bf390fafb2d05a9c598221d525fb46e5bba81cdc98d",
+  "totalArchiveDownloadBytes": 21249,
+  "tasks": [
+    {
+      "id": "rfdc-builtins-state",
+      "split": "calibration",
+      "runs": [
+        {
+          "variant": "actor",
+          "suite": "visible",
+          "exitCode": 0,
+          "counts": {
+            "tests": 2,
+            "pass": 2,
+            "fail": 0
+          },
+          "logPath": "validation/actor-visible.tap",
+          "logSha256": "0beabaa9e8dcc15c474e892d812000b135f4593591c7585c601334b10b8a751f"
+        },
+        {
+          "variant": "actor",
+          "suite": "acceptance",
+          "exitCode": 1,
+          "counts": {
+            "tests": 9,
+            "pass": 1,
+            "fail": 8
+          },
+          "logPath": "validation/actor-acceptance.tap",
+          "logSha256": "d5fb03b61c7570c99a2e649ddcf7cfdd7f67bfba93f7e273865f04fb0980aeba"
+        },
+        {
+          "variant": "reference",
+          "suite": "visible",
+          "exitCode": 0,
+          "counts": {
+            "tests": 2,
+            "pass": 2,
+            "fail": 0
+          },
+          "logPath": "validation/reference-visible.tap",
+          "logSha256": "0c70f346d6c3d53af87d791e26e835b3092552a6721978925020b9d63a1aa65b"
+        },
+        {
+          "variant": "reference",
+          "suite": "acceptance",
+          "exitCode": 0,
+          "counts": {
+            "tests": 9,
+            "pass": 9,
+            "fail": 0
+          },
+          "logPath": "validation/reference-acceptance.tap",
+          "logSha256": "e9ebdf7315d556a6642728b5df486d208c24bb8fb73dc5df00e4170b93e7bfa8"
+        }
+      ],
+      "validationPolicy": "Native Node tests only. No package scripts, installation, network, subprocess or credentials in test code. Author validation launcher uses Node subprocesses offline. No model repair attempts."
+    },
+    {
+      "id": "tinyqueue-heap-state",
+      "split": "reserve",
+      "runs": [
+        {
+          "variant": "actor",
+          "suite": "visible",
+          "exitCode": 0,
+          "counts": {
+            "tests": 2,
+            "pass": 2,
+            "fail": 0
+          },
+          "logPath": "validation/actor-visible.tap",
+          "logSha256": "c7277027afa0667ce366f15600d603f6a807127a8fb65065d7cc5b9395109c66"
+        },
+        {
+          "variant": "actor",
+          "suite": "acceptance",
+          "exitCode": 1,
+          "counts": {
+            "tests": 7,
+            "pass": 0,
+            "fail": 7
+          },
+          "logPath": "validation/actor-acceptance.tap",
+          "logSha256": "2737002c2eeba5ebbac68408af4fd66e570153d4b58c1e87260f723060d87ff8"
+        },
+        {
+          "variant": "reference",
+          "suite": "visible",
+          "exitCode": 0,
+          "counts": {
+            "tests": 2,
+            "pass": 2,
+            "fail": 0
+          },
+          "logPath": "validation/reference-visible.tap",
+          "logSha256": "81edde058babd8188fe5dd3f12d0aa0f9a5d50e2e8b4f60d333a15f468cdcfb8"
+        },
+        {
+          "variant": "reference",
+          "suite": "acceptance",
+          "exitCode": 0,
+          "counts": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0
+          },
+          "logPath": "validation/reference-acceptance.tap",
+          "logSha256": "9c80be5d249e779b6e482f6d69cd58c4124b72a2746c4a1117eedf4bd4a96125"
+        }
+      ],
+      "validationPolicy": "Native Node tests only. No package scripts, installation, network, subprocess or credentials in test code. Author validation launcher uses Node subprocesses offline. No model repair attempts."
+    }
+  ]
+}

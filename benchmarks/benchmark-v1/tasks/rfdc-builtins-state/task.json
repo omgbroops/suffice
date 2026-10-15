@@ -1,0 +1,144 @@
+{
+  "id": "rfdc-builtins-state",
+  "split": "calibration",
+  "repository": "davidmarkclements/rfdc",
+  "url": "https://github.com/davidmarkclements/rfdc",
+  "sourceCommit": "4336f6a3ddeb8473c040a7bee516604a8fabf16f",
+  "provenance": {
+    "kind": "injected-defect",
+    "archivePath": "source.tar.gz",
+    "archiveUrl": "https://codeload.github.com/davidmarkclements/rfdc/tar.gz/4336f6a3ddeb8473c040a7bee516604a8fabf16f",
+    "archiveSha256": "b629c00d7173bda3438c5389d7f199e9758050b542f24c97766cdb6bf75e2251",
+    "downloadBytes": 8819,
+    "licensePath": "SOURCE-LICENSE",
+    "upstreamEntrySha256": "276defbca175e8293ccaa08fcf1de4d8071c096e606bd8e156976c7550bdb0b7",
+    "referenceRepair": "Pristine pinned upstream index.js; no authored feature changes.",
+    "injectedChanges": [
+      "copyBuffer reuses the original ArrayBuffer instead of a copy",
+      "Map handlers shallow-copy entries in both option implementations",
+      "circular-mode custom handlers are registered under prototype instead of constructor"
+    ],
+    "primarySources": [
+      "https://github.com/davidmarkclements/rfdc",
+      "https://github.com/davidmarkclements/rfdc/tree/4336f6a3ddeb8473c040a7bee516604a8fabf16f"
+    ]
+  },
+  "publicPrompt": "Repair injected deep-clone regressions in rfdc: maps alias their inputs, binary views share storage, and custom constructor handlers fail in circular mode.\n\nThese are benchmark-authored defects in pinned real source, not claims of upstream bugs. Repair src/index.js while preserving the existing public API. The full repository is in src/. No installs, network access, subprocesses or package scripts are required. Run node --test tests/visible.test.mjs from the workspace.\n\nPublic acceptance contract:\nR1: Keep existing deep copying of ordinary nested arrays/objects, primitive/function values and Date values.\nR2: Nested Map keys and values and nested Set values must be deeply copied, including when inside arrays or containers, in all four combinations of proto/circles options; modifying cloned ordinary data must not change the input.\nR3: Nested Buffer values must preserve their Buffer type, bytes and length with independent mutable bytes. Nested typed arrays must preserve their constructor, visible contents, length and byte offset with independent backing storage. Nested DataViews that extend from their byte offset to the end of their backing buffer have the same preservation and storage requirements. Cover object and array positions and Map/Set containers in all four option combinations. Buffer byte offsets, shorter DataViews, root binary views and preservation of shared-buffer identity between cloned views are out of scope.\nR4: User constructorHandlers must override built-in handlers and apply to exact matching constructors (not subclasses) at object, array and container positions in all four option combinations.\nR5: With circles:true, ordinary object ancestor back-references must point to the corresponding cloned ancestor, including object cycles reached via arrays; successive calls to the same clone function must produce independent outputs. Cyclic arrays themselves and self-referential Map/Set objects are out of scope.\nR6: proto:false copies own enumerable object properties only; proto:true also copies inherited enumerable object properties into own output properties, including ordinary objects reached via Map/Set and custom handlers that recurse with the supplied clone callback.",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Keep existing deep copying of ordinary nested arrays/objects, primitive/function values and Date values."
+    },
+    {
+      "id": "R2",
+      "text": "Nested Map keys and values and nested Set values must be deeply copied, including when inside arrays or containers, in all four combinations of proto/circles options; modifying cloned ordinary data must not change the input."
+    },
+    {
+      "id": "R3",
+      "text": "Nested Buffer values must preserve their Buffer type, bytes and length with independent mutable bytes. Nested typed arrays must preserve their constructor, visible contents, length and byte offset with independent backing storage. Nested DataViews that extend from their byte offset to the end of their backing buffer have the same preservation and storage requirements. Cover object and array positions and Map/Set containers in all four option combinations. Buffer byte offsets, shorter DataViews, root binary views and preservation of shared-buffer identity between cloned views are out of scope."
+    },
+    {
+      "id": "R4",
+      "text": "User constructorHandlers must override built-in handlers and apply to exact matching constructors (not subclasses) at object, array and container positions in all four option combinations."
+    },
+    {
+      "id": "R5",
+      "text": "With circles:true, ordinary object ancestor back-references must point to the corresponding cloned ancestor, including object cycles reached via arrays; successive calls to the same clone function must produce independent outputs. Cyclic arrays themselves and self-referential Map/Set objects are out of scope."
+    },
+    {
+      "id": "R6",
+      "text": "proto:false copies own enumerable object properties only; proto:true also copies inherited enumerable object properties into own output properties, including ordinary objects reached via Map/Set and custom handlers that recurse with the supplied clone callback."
+    }
+  ],
+  "workspaceDir": "actor",
+  "referenceDir": "reference",
+  "acceptancePath": "private/acceptance.test.mjs",
+  "visiblePath": "actor/tests/visible.test.mjs",
+  "allowedEditPaths": [
+    "src/index.js"
+  ],
+  "assertionMap": [
+    {
+      "test": "map keys and values are recursively independent in every mode",
+      "requirementIDs": [
+        "R2"
+      ],
+      "rationale": "Checks both entry positions, nested data and mutation isolation across all option modes."
+    },
+    {
+      "test": "maps inside arrays and sets recursively clone entries",
+      "requirementIDs": [
+        "R2"
+      ],
+      "rationale": "Exercises recursive containers without assuming alias identity or ordering beyond Map/Set semantics."
+    },
+    {
+      "test": "typed subviews preserve type offset length and independent storage",
+      "requirementIDs": [
+        "R3"
+      ],
+      "rationale": "Uses a nonzero-offset typed view and checks writes in both directions."
+    },
+    {
+      "test": "dataviews in arrays preserve the visible bytes and isolate writes",
+      "requirementIDs": [
+        "R3"
+      ],
+      "rationale": "Checks an array position and a supported DataView whose visible span reaches the end of its buffer."
+    },
+    {
+      "test": "buffers and binary values nested through containers are copied",
+      "requirementIDs": [
+        "R2",
+        "R3"
+      ],
+      "rationale": "Checks Buffer and signed typed data through Set and Map."
+    },
+    {
+      "test": "custom constructors work at object array and container positions",
+      "requirementIDs": [
+        "R2",
+        "R4"
+      ],
+      "rationale": "Checks supplied recursive handler and isolation in each supported position."
+    },
+    {
+      "test": "custom handlers override builtins without matching subclasses",
+      "requirementIDs": [
+        "R4"
+      ],
+      "rationale": "Explicit built-in override plus exact-constructor matching."
+    },
+    {
+      "test": "ordinary ancestor cycles through arrays and repeated calls stay independent",
+      "requirementIDs": [
+        "R5"
+      ],
+      "rationale": "Checks ancestor/self back-references and independence between calls."
+    },
+    {
+      "test": "prototype property policy survives container and handler recursion",
+      "requirementIDs": [
+        "R2",
+        "R4",
+        "R6"
+      ],
+      "rationale": "Checks own and inherited enumerable data through every relevant recursion path."
+    }
+  ],
+  "scopeTier": 1,
+  "engineeringScope": {
+    "modulesNeedingChange": [
+      "src/index.js"
+    ],
+    "integrationBoundaries": [
+      "Public clone factory to recursive built-in and custom constructor handlers; four option combinations"
+    ],
+    "stages": [
+      "Inspect source and public requirements",
+      "Repair the interacting regressions within the implementation module",
+      "Validate visible behavior and reason about additional states"
+    ],
+    "exAnteRationale": "Single-component repair with several interacting branches, not a multi-component or long-duration task. Scope assigned before any model repair attempts; failure counts do not establish difficulty or task length."
+  }
+}

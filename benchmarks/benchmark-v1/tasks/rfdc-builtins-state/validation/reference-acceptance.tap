@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: map keys and values are recursively independent in every mode
+ok 1 - map keys and values are recursively independent in every mode
+  ---
+  duration_ms: 4.06
+  type: 'test'
+  ...
+# Subtest: maps inside arrays and sets recursively clone entries
+ok 2 - maps inside arrays and sets recursively clone entries
+  ---
+  duration_ms: 0.5804
+  type: 'test'
+  ...
+# Subtest: typed subviews preserve type offset length and independent storage
+ok 3 - typed subviews preserve type offset length and independent storage
+  ---
+  duration_ms: 0.4674
+  type: 'test'
+  ...
+# Subtest: dataviews in arrays preserve the visible bytes and isolate writes
+ok 4 - dataviews in arrays preserve the visible bytes and isolate writes
+  ---
+  duration_ms: 0.2798
+  type: 'test'
+  ...
+# Subtest: buffers and binary values nested through containers are copied
+ok 5 - buffers and binary values nested through containers are copied
+  ---
+  duration_ms: 0.4984
+  type: 'test'
+  ...
+# Subtest: custom constructors work at object array and container positions
+ok 6 - custom constructors work at object array and container positions
+  ---
+  duration_ms: 0.4598
+  type: 'test'
+  ...
+# Subtest: custom handlers override builtins without matching subclasses
+ok 7 - custom handlers override builtins without matching subclasses
+  ---
+  duration_ms: 0.3077
+  type: 'test'
+  ...
+# Subtest: ordinary ancestor cycles through arrays and repeated calls stay independent
+ok 8 - ordinary ancestor cycles through arrays and repeated calls stay independent
+  ---
+  duration_ms: 0.2037
+  type: 'test'
+  ...
+# Subtest: prototype property policy survives container and handler recursion
+ok 9 - prototype property policy survives container and handler recursion
+  ---
+  duration_ms: 0.6336
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 117.1308
