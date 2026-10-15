@@ -1,10 +1,10 @@
 # Tier3 candidate and admission protocol
 
-This is a concrete task selection plan, not a prepared task or a long-horizon certification. No live inference was run. Engineering breadth and measured mechanism exposure are separate conditions.
+An initial bounded implementation of this selection plan now exists at `benchmarks/multicomponent/tapable-abortable-hooks/`, with an authored known reference and offline behavior receipts. It intentionally supports only AsyncSeriesHook and AsyncParallelHook; the broader bail/waterfall/loop scope below remains a future proposal. The prepared task is a separate calibration feature phase, with public feature checks that fail on upstream baseline. This is not a long-horizon certification and no live inference was run. Engineering breadth and measured mechanism exposure are separate conditions.
 
 ## Candidate repository and coherent feature
 
-Candidate: [webpack/tapable](https://github.com/webpack/tapable), tag `v2.2.1`, resolved using GitHub's commit API to `a0a7b26224557bd8bb09b97e0126b7dbda9f8e6a` on 2026-10-14 America/Chicago. This pin is a selection anchor; the archive has not been downloaded or validated here. It must pass the gates below before becoming a benchmark task. Its runtime uses native JavaScript with no external runtime packages. Confirm this against the pinned package metadata rather than assuming it from this plan.
+Candidate: [webpack/tapable](https://github.com/webpack/tapable), tag `v2.2.1`, resolved using GitHub's commit API to `a0a7b26224557bd8bb09b97e0126b7dbda9f8e6a` on 2026-10-14 America/Chicago. Offline preparation confirms a 98,543-byte source archive with 43 regular files totaling 457,348 bytes and no runtime dependencies. The complete source, archive hash, authored reference modifications and permission-restricted test outcomes are recorded in the prepared task's receipts.
 
 Requested feature: opt-in abortable invocation of asynchronous hooks. Add `callAsyncWithSignal(signal, ...args, callback)` and `promiseWithSignal(signal, ...args)` to asynchronous hook instances. Coordinate the public Hook dispatch and lazy compilation with generated series, parallel, bail and waterfall execution. Existing `callAsync` and `promise` remain compatible. The feature is larger in engineering scope than the Tier2 two-mutation repair: it crosses public dispatch, generated asynchronous execution, hook-specific completion semantics and late-completion handling. Do not use repository byte size or file count as its difficulty label.
 
