@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-15T01:59:25.215Z",
-  "status": "live A/B awaiting renewed Suffice/Pi authentication",
+  "at": "2026-10-15T02:28:40.241Z",
+  "status": "completed exploratory live A/B; no demonstrated savings; strict instruction parity gate failed",
   "worktree": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\source-presentation",
   "mechanism": "Lossless JSON metadata plus literal numbered source, new tool outputs only; no instruction/schema/history changes.",
   "offline": {
@@ -35,9 +35,9 @@
       "classification": "authentication startup failure, not model task failure"
     }
   ],
-  "modelInferenceRequests": 0,
+  "modelInferenceRequests": 54,
   "improvementDemonstrated": false,
-  "comparisonCompleted": false,
+  "comparisonCompleted": true,
   "oldUnknownCostPlaceholdersPreserved": true,
   "authenticationFix": {
     "previous": "In-memory credential snapshot may discard rotated refresh tokens across processes. Stored credential expired 2026-10-15T01:19:58.775Z; particular invalid_grant cause not proven.",
@@ -54,17 +54,79 @@
     "effort": "low",
     "freshStage": "v2 retains v1 startup failures; identical A/B mechanism and models; only common authentication lifecycle/preflight corrected."
   },
-  "requiredHumanAction": {
-    "directory": "C:/Users/Mohammed/Documents/GitHub/suffice",
-    "command": "node scripts/login.mjs",
-    "reason": "Refresh token terminally rejected. Complete browser sign-in; no alternative billing path or model substituted."
-  },
+  "requiredHumanAction": null,
   "sources": [
     "https://developers.openai.com/siwc/token-sharing-open-source/errors-and-recovery"
   ],
   "limitations": [
-    "Offline character savings do not establish token, cost or correctness improvements.",
-    "No live A/B activation or inferential comparison exists.",
-    "Old startup failures are not scored as semantic coding failures."
-  ]
+    "Twelve attempts on three exposed injected-defect efficiency controls. Costs are SDK API-equivalent, not subscription billing or engineering inference. No fresh holdout or causal/statistical regression claim.",
+    "Strict gate failed on unique SDK cwd fields. Post-hoc normalization explains hashes and does not override failed gate.",
+    "The retained v1 authentication startup failures are separate from the twelve v2 model attempts."
+  ],
+  "priorStatus": "live A/B awaiting renewed Suffice/Pi authentication",
+  "authenticationVerified": {
+    "subscription": true,
+    "modelAvailable": true
+  },
+  "results": {
+    "at": "2026-10-15T02:28:40.241Z",
+    "verdict": "No efficiency improvement demonstrated; no default promotion.",
+    "scheduleComplete": true,
+    "model": {
+      "provider": "openai",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "transport": "sse",
+      "billing": "API-equivalent metadata; not subscription charges; engineering inference excluded"
+    },
+    "attempts": 12,
+    "acceptance": {
+      "A": 6,
+      "B": 6
+    },
+    "knownBenchmarkInferenceUsd": 0.4277791999999999,
+    "unknownAttemptCosts": 0,
+    "aggregateRelativeCostChange": 0.052226375701379446,
+    "meanCostPerAccepted": {
+      "A": 0.03474106666666666,
+      "B": 0.03655546666666667
+    },
+    "activation": {
+      "outputs": 11,
+      "sourceObjects": 22,
+      "charactersAvoided": 2422,
+      "providerRequests": 54
+    },
+    "validation": {
+      "patchReplaysPassed": true,
+      "receiptRowsPassed": true,
+      "strictFrozenGatePassed": false,
+      "rawSystemInstructionParityPassed": false,
+      "postHocCwdExplanationPassed": true,
+      "archivedAndCurrentInputsMatch": true,
+      "note": "Strict gate failed on unique SDK cwd fields. Post-hoc normalization explains hashes and does not override failed gate."
+    },
+    "claims": {
+      "efficiencyGain": false,
+      "capabilityGain": false,
+      "externalSuperiority": false,
+      "promoted": false
+    },
+    "report": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\source-presentation\\docs\\source-presentation-v2\\RESULTS.md",
+    "limitsAndScope": "Twelve attempts on three exposed injected-defect efficiency controls. Costs are SDK API-equivalent, not subscription billing or engineering inference. No fresh holdout or causal/statistical regression claim."
+  },
+  "bundle": {
+    "at": "2026-10-15T02:30:49.378086+00:00",
+    "path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\source-presentation\\.suffice\\review-bundles\\source-presentation-v2-20261015-023049.zip",
+    "sha256": "4691268b7fbf877a8cfd937a61a2d485bed4c6a13cd99d448661775358f7ee9d",
+    "files": 1864,
+    "uncompressedBytes": 13591836,
+    "zipBytes": 3972236,
+    "entryHashesVerified": true,
+    "credentialStoreExcluded": true,
+    "credentialPatternMatches": 0,
+    "publicEnvFilesVerifiedAgainstPinnedTar": 10,
+    "strictInstructionParityPassed": false
+  },
+  "exportedPatchReplayPassed": true
 }

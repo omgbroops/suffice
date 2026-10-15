@@ -1,0 +1,674 @@
+{
+  "at": "2026-10-15T02:23:02.773Z",
+  "model": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "transport": "sse",
+    "billing": "API-equivalent metadata; not subscription charges; engineering inference excluded"
+  },
+  "phase": "exploratory efficiency A/B",
+  "scheduleComplete": true,
+  "arms": {
+    "A": {
+      "attempts": 6,
+      "accepted": 6,
+      "knownBudgetSuccesses": 6,
+      "unknownTotals": 0,
+      "knownEstimatedUsd": 0.20844639999999998,
+      "totalEstimatedUsd": 0.20844639999999998,
+      "meanEstimatedUsd": 0.03474106666666666,
+      "costPerAccepted": 0.03474106666666666,
+      "turns": 27,
+      "calls": 89,
+      "latencyMs": 163619,
+      "usage": {
+        "input": 77953,
+        "cacheRead": 98304,
+        "output": 4271,
+        "totalTokens": 180528
+      },
+      "appliedOutputs": 0,
+      "sourceObjects": 23,
+      "originalChars": 119401,
+      "framedChars": 116702
+    },
+    "B": {
+      "attempts": 6,
+      "accepted": 6,
+      "knownBudgetSuccesses": 6,
+      "unknownTotals": 0,
+      "knownEstimatedUsd": 0.2193328,
+      "totalEstimatedUsd": 0.2193328,
+      "meanEstimatedUsd": 0.03655546666666667,
+      "costPerAccepted": 0.03655546666666667,
+      "turns": 27,
+      "calls": 92,
+      "latencyMs": 172695,
+      "usage": {
+        "input": 81442,
+        "cacheRead": 82688,
+        "output": 4818,
+        "totalTokens": 168948
+      },
+      "appliedOutputs": 11,
+      "sourceObjects": 22,
+      "originalChars": 106696,
+      "framedChars": 104274
+    }
+  },
+  "pairs": [
+    {
+      "pair": "fastq-resume-window-r0",
+      "complete": true,
+      "costComplete": true,
+      "A": 0.045857999999999996,
+      "B": 0.0327328,
+      "ratio": 0.713786035151991,
+      "acceptanceA": true,
+      "acceptanceB": true
+    },
+    {
+      "pair": "rfdc-builtins-state-r0",
+      "complete": true,
+      "costComplete": true,
+      "A": 0.0231376,
+      "B": 0.030458400000000004,
+      "ratio": 1.316402738399834,
+      "acceptanceA": true,
+      "acceptanceB": true
+    },
+    {
+      "pair": "bottleneck-weighted-priority-r0",
+      "complete": true,
+      "costComplete": true,
+      "A": 0.037248399999999994,
+      "B": 0.0358596,
+      "ratio": 0.9627151770277382,
+      "acceptanceA": true,
+      "acceptanceB": true
+    },
+    {
+      "pair": "fastq-resume-window-r1",
+      "complete": true,
+      "costComplete": true,
+      "A": 0.0267464,
+      "B": 0.0330424,
+      "ratio": 1.2353961654652588,
+      "acceptanceA": true,
+      "acceptanceB": true
+    },
+    {
+      "pair": "rfdc-builtins-state-r1",
+      "complete": true,
+      "costComplete": true,
+      "A": 0.0205972,
+      "B": 0.032458,
+      "ratio": 1.5758452605208475,
+      "acceptanceA": true,
+      "acceptanceB": true
+    },
+    {
+      "pair": "bottleneck-weighted-priority-r1",
+      "complete": true,
+      "costComplete": true,
+      "A": 0.0548588,
+      "B": 0.05478159999999999,
+      "ratio": 0.9985927508439848,
+      "acceptanceA": true,
+      "acceptanceB": true
+    }
+  ],
+  "completePairSubset": {
+    "pairs": 6,
+    "A": 0.20844639999999998,
+    "B": 0.2193328,
+    "ratio": 1.0522263757013794,
+    "relativeChange": 0.052226375701379446,
+    "scope": "Descriptive subset; missing cost pairs remain unknown, never silently dropped from full totals."
+  },
+  "knownTotalUsd": 0.4277791999999999,
+  "unknownAttemptTotals": 0,
+  "rows": [
+    {
+      "id": "001-fastq-resume-window-A-r0",
+      "task": "fastq-resume-window",
+      "repetition": 0,
+      "arm": "A",
+      "pair": "fastq-resume-window-r0",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 16076,
+        "cacheRead": 12160,
+        "cacheWrite": 0,
+        "output": 1249,
+        "totalTokens": 29485,
+        "estimatedApiUsd": 0.045857999999999996
+      },
+      "knownEstimatedUsd": 0.045857999999999996,
+      "totalEstimatedUsd": 0.045857999999999996,
+      "turns": 5,
+      "calls": 19,
+      "latencyMs": 33440,
+      "presentation": {
+        "eligibleOutputs": 3,
+        "sourceObjects": 4,
+        "originalChars": 16059,
+        "framedChars": 15765,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "ec5c87a0f8e4ec3968fc52d7545c06efa0a8188fd3e50731b5b5e9ff5dd3e019"
+        ],
+        "initialUserHash": "a4ac6ff16914a2d47eebd651baa5da4eae1e131bce2f83bebd15933827024cd3"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "002-fastq-resume-window-B-r0",
+      "task": "fastq-resume-window",
+      "repetition": 0,
+      "arm": "B",
+      "pair": "fastq-resume-window-r0",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 11368,
+        "cacheRead": 7168,
+        "cacheWrite": 0,
+        "output": 928,
+        "totalTokens": 19464,
+        "estimatedApiUsd": 0.0327328
+      },
+      "knownEstimatedUsd": 0.0327328,
+      "totalEstimatedUsd": 0.0327328,
+      "turns": 4,
+      "calls": 14,
+      "latencyMs": 28253,
+      "presentation": {
+        "eligibleOutputs": 2,
+        "sourceObjects": 3,
+        "originalChars": 13251,
+        "framedChars": 12980,
+        "appliedOutputs": 2,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "8b98a5775069d7b26edc1b65bb5a57a18947888f2a0d68aafba103050f423e5f"
+        ],
+        "initialUserHash": "a4ac6ff16914a2d47eebd651baa5da4eae1e131bce2f83bebd15933827024cd3"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "003-rfdc-builtins-state-B-r0",
+      "task": "rfdc-builtins-state",
+      "repetition": 0,
+      "arm": "B",
+      "pair": "rfdc-builtins-state-r0",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 10310,
+        "cacheRead": 6784,
+        "cacheWrite": 0,
+        "output": 916,
+        "totalTokens": 18010,
+        "estimatedApiUsd": 0.030458400000000004
+      },
+      "knownEstimatedUsd": 0.030458400000000004,
+      "totalEstimatedUsd": 0.030458400000000004,
+      "turns": 4,
+      "calls": 14,
+      "latencyMs": 27299,
+      "presentation": {
+        "eligibleOutputs": 1,
+        "sourceObjects": 1,
+        "originalChars": 7758,
+        "framedChars": 7581,
+        "appliedOutputs": 1,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "a05373ba9ed363e80286443afbb4b0b3be70fb96efc94d92cc82f901a886b4c2"
+        ],
+        "initialUserHash": "7e8f57e3d66b4cda6fbb3738727d4730edfc0adbf41919bac73dfb47021834cd"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "004-rfdc-builtins-state-A-r0",
+      "task": "rfdc-builtins-state",
+      "repetition": 0,
+      "arm": "A",
+      "pair": "rfdc-builtins-state-r0",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 8036,
+        "cacheRead": 13056,
+        "cacheWrite": 0,
+        "output": 576,
+        "totalTokens": 21668,
+        "estimatedApiUsd": 0.0231376
+      },
+      "knownEstimatedUsd": 0.0231376,
+      "totalEstimatedUsd": 0.0231376,
+      "turns": 4,
+      "calls": 12,
+      "latencyMs": 26496,
+      "presentation": {
+        "eligibleOutputs": 2,
+        "sourceObjects": 2,
+        "originalChars": 15753,
+        "framedChars": 15415,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "41e1159d1cb75d3b8077e64e149eaa9f7aa762c999740d4c04caf530a6845b65"
+        ],
+        "initialUserHash": "7e8f57e3d66b4cda6fbb3738727d4730edfc0adbf41919bac73dfb47021834cd"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "005-bottleneck-weighted-priority-A-r0",
+      "task": "bottleneck-weighted-priority",
+      "repetition": 0,
+      "arm": "A",
+      "pair": "bottleneck-weighted-priority-r0",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 14765,
+        "cacheRead": 25984,
+        "cacheWrite": 0,
+        "output": 512,
+        "totalTokens": 41261,
+        "estimatedApiUsd": 0.037248399999999994
+      },
+      "knownEstimatedUsd": 0.037248399999999994,
+      "totalEstimatedUsd": 0.037248399999999994,
+      "turns": 5,
+      "calls": 16,
+      "latencyMs": 29735,
+      "presentation": {
+        "eligibleOutputs": 3,
+        "sourceObjects": 7,
+        "originalChars": 32236,
+        "framedChars": 31459,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "a56aaed94df6982939d167dbec1817141cce1ee669c9c7b351ee6d1060602f4b"
+        ],
+        "initialUserHash": "2f66bf3cff7b774d3309ebea4c23556f32329236646171e1dcc4f2635c57c3b2"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "006-bottleneck-weighted-priority-B-r0",
+      "task": "bottleneck-weighted-priority",
+      "repetition": 0,
+      "arm": "B",
+      "pair": "bottleneck-weighted-priority-r0",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 14413,
+        "cacheRead": 27136,
+        "cacheWrite": 0,
+        "output": 432,
+        "totalTokens": 41981,
+        "estimatedApiUsd": 0.0358596
+      },
+      "knownEstimatedUsd": 0.0358596,
+      "totalEstimatedUsd": 0.0358596,
+      "turns": 5,
+      "calls": 17,
+      "latencyMs": 26117,
+      "presentation": {
+        "eligibleOutputs": 3,
+        "sourceObjects": 8,
+        "originalChars": 33618,
+        "framedChars": 32795,
+        "appliedOutputs": 3,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "a17f393f292c04855b618b221260e34a7ebaec3267d75bfda914b8ca358a87ac"
+        ],
+        "initialUserHash": "2f66bf3cff7b774d3309ebea4c23556f32329236646171e1dcc4f2635c57c3b2"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "007-fastq-resume-window-B-r1",
+      "task": "fastq-resume-window",
+      "repetition": 1,
+      "arm": "B",
+      "pair": "fastq-resume-window-r1",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 9819,
+        "cacheRead": 15744,
+        "cacheWrite": 0,
+        "output": 1183,
+        "totalTokens": 26746,
+        "estimatedApiUsd": 0.0330424
+      },
+      "knownEstimatedUsd": 0.0330424,
+      "totalEstimatedUsd": 0.0330424,
+      "turns": 5,
+      "calls": 17,
+      "latencyMs": 39694,
+      "presentation": {
+        "eligibleOutputs": 1,
+        "sourceObjects": 2,
+        "originalChars": 9681,
+        "framedChars": 9501,
+        "appliedOutputs": 1,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "3cc3d6d7c92abedd33af67a71f807c3f25386bc1191b920b136c0e36ec60f8ac"
+        ],
+        "initialUserHash": "a4ac6ff16914a2d47eebd651baa5da4eae1e131bce2f83bebd15933827024cd3"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "008-fastq-resume-window-A-r1",
+      "task": "fastq-resume-window",
+      "repetition": 1,
+      "arm": "A",
+      "pair": "fastq-resume-window-r1",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 7743,
+        "cacheRead": 11904,
+        "cacheWrite": 0,
+        "output": 1007,
+        "totalTokens": 20654,
+        "estimatedApiUsd": 0.0267464
+      },
+      "knownEstimatedUsd": 0.0267464,
+      "totalEstimatedUsd": 0.0267464,
+      "turns": 4,
+      "calls": 15,
+      "latencyMs": 28658,
+      "presentation": {
+        "eligibleOutputs": 1,
+        "sourceObjects": 2,
+        "originalChars": 9681,
+        "framedChars": 9501,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "474f38f362e18c05aed7009d34dc48dbc7cd2bfff19f32cfe921a411a26c0007"
+        ],
+        "initialUserHash": "a4ac6ff16914a2d47eebd651baa5da4eae1e131bce2f83bebd15933827024cd3"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "009-rfdc-builtins-state-A-r1",
+      "task": "rfdc-builtins-state",
+      "repetition": 1,
+      "arm": "A",
+      "pair": "rfdc-builtins-state-r1",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 7402,
+        "cacheRead": 8832,
+        "cacheWrite": 0,
+        "output": 491,
+        "totalTokens": 16725,
+        "estimatedApiUsd": 0.0205972
+      },
+      "knownEstimatedUsd": 0.0205972,
+      "totalEstimatedUsd": 0.0205972,
+      "turns": 4,
+      "calls": 11,
+      "latencyMs": 23489,
+      "presentation": {
+        "eligibleOutputs": 1,
+        "sourceObjects": 1,
+        "originalChars": 7758,
+        "framedChars": 7581,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "25137cefcc0d23b055e3d62428deb67c39dbb5a7328eb9d1f44db0a06d52e801"
+        ],
+        "initialUserHash": "7e8f57e3d66b4cda6fbb3738727d4730edfc0adbf41919bac73dfb47021834cd"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "010-rfdc-builtins-state-B-r1",
+      "task": "rfdc-builtins-state",
+      "repetition": 1,
+      "arm": "B",
+      "pair": "rfdc-builtins-state-r1",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 11900,
+        "cacheRead": 7680,
+        "cacheWrite": 0,
+        "output": 789,
+        "totalTokens": 20369,
+        "estimatedApiUsd": 0.032458
+      },
+      "knownEstimatedUsd": 0.032458,
+      "totalEstimatedUsd": 0.032458,
+      "turns": 4,
+      "calls": 13,
+      "latencyMs": 26516,
+      "presentation": {
+        "eligibleOutputs": 2,
+        "sourceObjects": 2,
+        "originalChars": 14641,
+        "framedChars": 14323,
+        "appliedOutputs": 2,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "baa121ced3fa0388ea340e16bc42432b52869a10ae19e4f7aac5cb8fe7856a5c"
+        ],
+        "initialUserHash": "7e8f57e3d66b4cda6fbb3738727d4730edfc0adbf41919bac73dfb47021834cd"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "011-bottleneck-weighted-priority-B-r1",
+      "task": "bottleneck-weighted-priority",
+      "repetition": 1,
+      "arm": "B",
+      "pair": "bottleneck-weighted-priority-r1",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 23632,
+        "cacheRead": 18176,
+        "cacheWrite": 0,
+        "output": 570,
+        "totalTokens": 42378,
+        "estimatedApiUsd": 0.05478159999999999
+      },
+      "knownEstimatedUsd": 0.05478159999999999,
+      "totalEstimatedUsd": 0.05478159999999999,
+      "turns": 5,
+      "calls": 17,
+      "latencyMs": 24816,
+      "presentation": {
+        "eligibleOutputs": 2,
+        "sourceObjects": 6,
+        "originalChars": 27747,
+        "framedChars": 27094,
+        "appliedOutputs": 2,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "1655d7b1ed5a588c1f7b4b6384a1457e8b0bf7745f7dbacb1c48d0e944f73caf"
+        ],
+        "initialUserHash": "2f66bf3cff7b774d3309ebea4c23556f32329236646171e1dcc4f2635c57c3b2"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    },
+    {
+      "id": "012-bottleneck-weighted-priority-A-r1",
+      "task": "bottleneck-weighted-priority",
+      "repetition": 1,
+      "arm": "A",
+      "pair": "bottleneck-weighted-priority-r1",
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 23931,
+        "cacheRead": 26368,
+        "cacheWrite": 0,
+        "output": 436,
+        "totalTokens": 50735,
+        "estimatedApiUsd": 0.0548588
+      },
+      "knownEstimatedUsd": 0.0548588,
+      "totalEstimatedUsd": 0.0548588,
+      "turns": 5,
+      "calls": 16,
+      "latencyMs": 21801,
+      "presentation": {
+        "eligibleOutputs": 3,
+        "sourceObjects": 7,
+        "originalChars": 37914,
+        "framedChars": 36981,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [
+          "919c0f6db0b06468cc82da2e8ec88cc9e2f40b6b33a254df44ed5cbd8a7daa71"
+        ],
+        "instructionHashes": [
+          "2a5001dbfe0728fde8d22bf68a1495834f3c2650fb1b748f8dce719538a964dc"
+        ],
+        "initialUserHash": "2f66bf3cff7b774d3309ebea4c23556f32329236646171e1dcc4f2635c57c3b2"
+      },
+      "hidden": "passed",
+      "visible": "passed",
+      "errors": []
+    }
+  ],
+  "claims": {
+    "capabilityGain": false,
+    "externalSuperiority": false,
+    "promoted": false
+  },
+  "limitations": [
+    "Three exposed injected-defect efficiency controls, six correlated task/repetition pairs at most.",
+    "No untouched confirmation, statistical power claim, whole-upstream regression claim or competitor comparison.",
+    "Cache warmth and model trajectories vary; order counterbalanced. Character savings do not establish cost savings.",
+    "SDK API-equivalent cost metadata excludes engineering inference. Unknown failed-call totals remain unknown.",
+    "Common instrumentation runs formatter in shadow for A; model sees only original content. No new model instructions or source omission."
+  ]
+}
