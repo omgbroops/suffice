@@ -1,0 +1,109 @@
+{
+  "at": "2026-10-15T05:13:12.196Z",
+  "version": "suffice-general-v1",
+  "revision": "7c6bf9520fc816698f650737244b79f398a3e29e",
+  "inputs": {
+    "package.json": "f39773d5692cd48ded17500df848d67723626070ac0d5114ec4eaba2197256f2",
+    "package-lock.json": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda",
+    "configs/general-v1.json": "2c0c3799b67dc75e74d643b1f33c6bc69ac48088901d7f036ea9e7292faedd51",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "src/external-pi-observer.mjs": "fe50a639f09285030e0d3e6bd66f19dfdd35fb489525598b4d97963e73e69e87",
+    "src/general/tools.mjs": "7f75d7eb0d4db4b48d5faa1c207cafe4ad848a2adfa4b152caa93c9d0e0fcf0b",
+    "src/general/agent.mjs": "200283a684fc95a1f71916f057c7d3b037122252570a2c7f0e37f2e0a3f8aa1d",
+    "src/general/entry.mjs": "1b7efff9c4938b699750924512b2fb90a6dbdd0246d5f807e902100b49a850eb",
+    "scripts/general-execution.mjs": "979401c885c1e9cdede5a9f4d3eb192d6051c1c110caca10fe9d560d18609551",
+    "scripts/general-boundary.sh": "110ad4c6e4ae6f38af03e1d64c981e6c645c57eaa8980a52e260cefec49d371c",
+    "scripts/general-run.mjs": "e5bc768dfbdc587954f90a39217174b976f3b791a35693a1f9586f86cbab9da8",
+    "scripts/setup-general-runtime.sh": "58834669907d41c7d4d1c61901f39832bfeec2e7621429061f1c33c8c653bd69"
+  },
+  "runtimeFiles": [
+    "d1de76d8edf2fededf6f8b30d244e2c0529ac607923a018283b77e9c74bd932c  /home/mohammed/suffice-general-runtime/bin/node",
+    "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774  /home/mohammed/suffice-general-runtime/app/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js",
+    "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda  /home/mohammed/suffice-general-runtime/app/package-lock.json"
+  ],
+  "profile": {
+    "version": "suffice-general-v1",
+    "parent": "external-pi baseline 3cae104 / benchmark-agent a2745c6",
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "piVersion": "1.2.0",
+    "toolBinding": "Pi native read/bash/edit/write plus existing deterministic AST navigation",
+    "execution": "existing WSL Ubuntu and Bubblewrap; explicit public mounts only",
+    "history": "No controller history rewriting, compaction off; durable events retain retries",
+    "limits": {
+      "maxCostUsd": 0.75,
+      "maxTurns": 60,
+      "maxCalls": 240,
+      "timeoutMs": 600000,
+      "commandTimeout": 180
+    }
+  },
+  "compatibility": {
+    "run": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\general-v1\\.suffice\\compat\\runs\\2026-10-15T05-06-32-601Z",
+    "result": {
+      "at": "2026-10-15T05:06:41.008Z",
+      "inferenceCalls": 0,
+      "rows": [
+        {
+          "name": "edit JavaScript package and TypeScript package",
+          "passed": true
+        },
+        {
+          "name": "write root config hidden CI build script and new test",
+          "passed": true
+        },
+        {
+          "name": "project specific npm tests build and lint",
+          "passed": true
+        },
+        {
+          "name": "JavaScript and TypeScript AST navigation",
+          "passed": true
+        },
+        {
+          "name": "type syntax that is not strippable falls back explicitly",
+          "passed": true
+        },
+        {
+          "name": "file paths cannot escape repository or follow external links",
+          "passed": true
+        },
+        {
+          "name": "commands and descendants cannot read private host files",
+          "passed": true
+        },
+        {
+          "name": "outside writes denied by OS boundary",
+          "passed": true
+        },
+        {
+          "name": "command timeout terminates lingering child processes",
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  },
+  "preflightPassed": true,
+  "boundaryValidation": {
+    "at": "2026-10-15T05:10:19.728Z",
+    "inferenceCalls": 0,
+    "timeout": {
+      "exitCode": 124,
+      "latencyMs": 1579,
+      "childLeaked": false
+    },
+    "output": {
+      "exitCode": null,
+      "latencyMs": 320,
+      "outputLimited": true
+    },
+    "passed": true,
+    "raw": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\general-v1\\.suffice\\boundary-validation\\2026-10-15T05-10-14-471Z"
+  },
+  "oldBaselinePreserved": true,
+  "claim": "Tool compatibility only; no inference efficiency or capability advantage established by validation."
+}
