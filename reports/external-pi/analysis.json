@@ -1,0 +1,410 @@
+{
+  "at": "2026-10-15T04:20:24.886Z",
+  "comparison": "unchanged Suffice a2745c6 benchmark baseline versus native stock Pi 1.2.0 bundled CLI",
+  "freezeCommit": "d29f1e2",
+  "scheduleComplete": true,
+  "groups": {
+    "adapter-validation": {
+      "suffice": {
+        "attempts": 1,
+        "accepted": 1,
+        "budgetEligibleSuccesses": 1,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.034127199999999996,
+        "totalEstimatedUsd": 0.034127199999999996,
+        "costPerAccepted": 0.034127199999999996,
+        "costPerBudgetSuccess": 0.034127199999999996,
+        "turns": 4,
+        "calls": 14,
+        "latencyMs": 28267,
+        "usage": {
+          "input": 11861,
+          "cacheRead": 7552,
+          "output": 965,
+          "totalTokens": 20378
+        },
+        "costComponents": {
+          "input": 0.023721999999999997,
+          "cacheRead": 0.0007552,
+          "output": 0.009650000000000002,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 3,
+        "peakInputTokens": 7302,
+        "toolErrors": []
+      },
+      "stock-pi": {
+        "attempts": 1,
+        "accepted": 1,
+        "budgetEligibleSuccesses": 1,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.0408924,
+        "totalEstimatedUsd": 0.0408924,
+        "costPerAccepted": 0.0408924,
+        "costPerBudgetSuccess": 0.0408924,
+        "turns": 8,
+        "calls": 7,
+        "latencyMs": 52300,
+        "usage": {
+          "input": 7791,
+          "cacheRead": 31104,
+          "output": 2220,
+          "totalTokens": 41115
+        },
+        "costComponents": {
+          "input": 0.015581999999999997,
+          "cacheRead": 0.0031104000000000006,
+          "output": 0.022200000000000004,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 7,
+        "peakInputTokens": 6597,
+        "toolErrors": [
+          {
+            "name": "edit",
+            "callId": "call_ECQZyb0kh0NiaUbyzAZIylWB|fc_01c2d4d97013ffe1016ad0519c353487d1838b7593d9be910c"
+          }
+        ]
+      }
+    },
+    "exposed-pilot": {
+      "suffice": {
+        "attempts": 1,
+        "accepted": 1,
+        "budgetEligibleSuccesses": 1,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.042922,
+        "totalEstimatedUsd": 0.042922,
+        "costPerAccepted": 0.042922,
+        "costPerBudgetSuccess": 0.042922,
+        "turns": 5,
+        "calls": 16,
+        "latencyMs": 19514,
+        "usage": {
+          "input": 17913,
+          "cacheRead": 21760,
+          "output": 492,
+          "totalTokens": 40165
+        },
+        "costComponents": {
+          "input": 0.035826,
+          "cacheRead": 0.0021760000000000004,
+          "output": 0.004920000000000001,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 4,
+        "peakInputTokens": 11943,
+        "toolErrors": [
+          {
+            "name": "search",
+            "callId": "call_kkQVVvlaDxTIxuRWlahcDIjL|ctc_07c03c4afb760eff016ad052043b5487d1a09165d5a186cbf3/3"
+          },
+          {
+            "name": "codemode",
+            "callId": "call_kkQVVvlaDxTIxuRWlahcDIjL|ctc_07c03c4afb760eff016ad052043b5487d1a09165d5a186cbf3"
+          }
+        ]
+      },
+      "stock-pi": {
+        "attempts": 1,
+        "accepted": 1,
+        "budgetEligibleSuccesses": 1,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.0652668,
+        "totalEstimatedUsd": 0.0652668,
+        "costPerAccepted": 0.0652668,
+        "costPerBudgetSuccess": 0.0652668,
+        "turns": 9,
+        "calls": 10,
+        "latencyMs": 46320,
+        "usage": {
+          "input": 25044,
+          "cacheRead": 53888,
+          "output": 979,
+          "totalTokens": 79911
+        },
+        "costComponents": {
+          "input": 0.050087999999999994,
+          "cacheRead": 0.005388800000000001,
+          "output": 0.00979,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 10,
+        "peakInputTokens": 12344,
+        "toolErrors": []
+      }
+    },
+    "actor-unused-reserve": {
+      "suffice": {
+        "attempts": 2,
+        "accepted": 2,
+        "budgetEligibleSuccesses": 2,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.0517344,
+        "totalEstimatedUsd": 0.0517344,
+        "costPerAccepted": 0.0258672,
+        "costPerBudgetSuccess": 0.0258672,
+        "turns": 8,
+        "calls": 26,
+        "latencyMs": 38252,
+        "usage": {
+          "input": 18026,
+          "cacheRead": 26624,
+          "output": 1302,
+          "totalTokens": 45952
+        },
+        "costComponents": {
+          "input": 0.036052,
+          "cacheRead": 0.0026624,
+          "output": 0.01302,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 6,
+        "peakInputTokens": 10320,
+        "toolErrors": []
+      },
+      "stock-pi": {
+        "attempts": 2,
+        "accepted": 2,
+        "budgetEligibleSuccesses": 2,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.067908,
+        "totalEstimatedUsd": 0.067908,
+        "costPerAccepted": 0.033954,
+        "costPerBudgetSuccess": 0.033954,
+        "turns": 14,
+        "calls": 12,
+        "latencyMs": 77588,
+        "usage": {
+          "input": 17611,
+          "cacheRead": 37760,
+          "output": 2891,
+          "totalTokens": 58262
+        },
+        "costComponents": {
+          "input": 0.035221999999999996,
+          "cacheRead": 0.0037760000000000003,
+          "output": 0.028909999999999998,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 12,
+        "peakInputTokens": 7714,
+        "toolErrors": [
+          {
+            "name": "bash",
+            "callId": "call_6ahmgXZEdAvC5V9NN3nFZsaM|fc_0a67734f4d7b1d71016ad05262f67087d195a8c15bbf2f576d"
+          },
+          {
+            "name": "bash",
+            "callId": "call_IzDgBpONuY5xK28VT4HzZwim|fc_0a67734f4d7b1d71016ad0526bb63487d1b348960aca35b347"
+          }
+        ]
+      }
+    },
+    "evaluation-combined": {
+      "suffice": {
+        "attempts": 3,
+        "accepted": 3,
+        "budgetEligibleSuccesses": 3,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.0946564,
+        "totalEstimatedUsd": 0.0946564,
+        "costPerAccepted": 0.031552133333333336,
+        "costPerBudgetSuccess": 0.031552133333333336,
+        "turns": 13,
+        "calls": 42,
+        "latencyMs": 57766,
+        "usage": {
+          "input": 35939,
+          "cacheRead": 48384,
+          "output": 1794,
+          "totalTokens": 86117
+        },
+        "costComponents": {
+          "input": 0.071878,
+          "cacheRead": 0.004838400000000001,
+          "output": 0.01794,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 10,
+        "peakInputTokens": 11943,
+        "toolErrors": [
+          {
+            "name": "search",
+            "callId": "call_kkQVVvlaDxTIxuRWlahcDIjL|ctc_07c03c4afb760eff016ad052043b5487d1a09165d5a186cbf3/3"
+          },
+          {
+            "name": "codemode",
+            "callId": "call_kkQVVvlaDxTIxuRWlahcDIjL|ctc_07c03c4afb760eff016ad052043b5487d1a09165d5a186cbf3"
+          }
+        ]
+      },
+      "stock-pi": {
+        "attempts": 3,
+        "accepted": 3,
+        "budgetEligibleSuccesses": 3,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.1331748,
+        "totalEstimatedUsd": 0.1331748,
+        "costPerAccepted": 0.0443916,
+        "costPerBudgetSuccess": 0.0443916,
+        "turns": 23,
+        "calls": 22,
+        "latencyMs": 123908,
+        "usage": {
+          "input": 42655,
+          "cacheRead": 91648,
+          "output": 3870,
+          "totalTokens": 138173
+        },
+        "costComponents": {
+          "input": 0.08531,
+          "cacheRead": 0.009164800000000004,
+          "output": 0.038700000000000005,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 22,
+        "peakInputTokens": 12344,
+        "toolErrors": [
+          {
+            "name": "bash",
+            "callId": "call_6ahmgXZEdAvC5V9NN3nFZsaM|fc_0a67734f4d7b1d71016ad05262f67087d195a8c15bbf2f576d"
+          },
+          {
+            "name": "bash",
+            "callId": "call_IzDgBpONuY5xK28VT4HzZwim|fc_0a67734f4d7b1d71016ad0526bb63487d1b348960aca35b347"
+          }
+        ]
+      }
+    },
+    "all-attempts": {
+      "suffice": {
+        "attempts": 4,
+        "accepted": 4,
+        "budgetEligibleSuccesses": 4,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.1287836,
+        "totalEstimatedUsd": 0.1287836,
+        "costPerAccepted": 0.0321959,
+        "costPerBudgetSuccess": 0.0321959,
+        "turns": 17,
+        "calls": 56,
+        "latencyMs": 86033,
+        "usage": {
+          "input": 47800,
+          "cacheRead": 55936,
+          "output": 2759,
+          "totalTokens": 106495
+        },
+        "costComponents": {
+          "input": 0.0956,
+          "cacheRead": 0.005593600000000001,
+          "output": 0.027590000000000003,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 13,
+        "peakInputTokens": 11943,
+        "toolErrors": [
+          {
+            "name": "search",
+            "callId": "call_kkQVVvlaDxTIxuRWlahcDIjL|ctc_07c03c4afb760eff016ad052043b5487d1a09165d5a186cbf3/3"
+          },
+          {
+            "name": "codemode",
+            "callId": "call_kkQVVvlaDxTIxuRWlahcDIjL|ctc_07c03c4afb760eff016ad052043b5487d1a09165d5a186cbf3"
+          }
+        ]
+      },
+      "stock-pi": {
+        "attempts": 4,
+        "accepted": 4,
+        "budgetEligibleSuccesses": 4,
+        "operationalFailures": 0,
+        "codingFailures": 0,
+        "unknownCosts": 0,
+        "knownEstimatedUsd": 0.1740672,
+        "totalEstimatedUsd": 0.1740672,
+        "costPerAccepted": 0.0435168,
+        "costPerBudgetSuccess": 0.0435168,
+        "turns": 31,
+        "calls": 29,
+        "latencyMs": 176208,
+        "usage": {
+          "input": 50446,
+          "cacheRead": 122752,
+          "output": 6090,
+          "totalTokens": 179288
+        },
+        "costComponents": {
+          "input": 0.10089200000000001,
+          "cacheRead": 0.012275200000000002,
+          "output": 0.06090000000000001,
+          "cacheWrite": 0
+        },
+        "topLevelModelToolCalls": 29,
+        "peakInputTokens": 12344,
+        "toolErrors": [
+          {
+            "name": "edit",
+            "callId": "call_ECQZyb0kh0NiaUbyzAZIylWB|fc_01c2d4d97013ffe1016ad0519c353487d1838b7593d9be910c"
+          },
+          {
+            "name": "bash",
+            "callId": "call_6ahmgXZEdAvC5V9NN3nFZsaM|fc_0a67734f4d7b1d71016ad05262f67087d195a8c15bbf2f576d"
+          },
+          {
+            "name": "bash",
+            "callId": "call_IzDgBpONuY5xK28VT4HzZwim|fc_0a67734f4d7b1d71016ad0526bb63487d1b348960aca35b347"
+          }
+        ]
+      }
+    }
+  },
+  "evaluationRelativeCostChange": -0.2892318967252062,
+  "reserveRelativeCostChange": -0.23816928786004588,
+  "totalBenchmarkApiEquivalentUsd": 0.30285080000000003,
+  "unknownFullAttemptCosts": 0,
+  "validation": {
+    "adapterGatePassed": true,
+    "nativePatchReplaysPassed": true,
+    "receiptAuditPassed": true,
+    "modelRequests": 48,
+    "manualAccessReview": {
+      "reviewedAllShellPrograms": true,
+      "noOutsideWorkspaceOrEvaluatorAccessObserved": true,
+      "nativeHostPermissionsRetained": true
+    },
+    "stockNativeExtraVerificationObserved": true
+  },
+  "budget": {
+    "humanClarification": "$2 is for Jev; roughly $10 could be used if necessary, not a required spend.",
+    "frozenPilotAdmissionTargetUsd": 2,
+    "noJevUsed": true,
+    "engineeringInferenceIncluded": false
+  },
+  "decision": "Keep the lean baseline and this comparator. Observed pilot cost advantage; acceptance tied and tasks did not discriminate correctness. No broad superiority or capability claim. Stop this campaign; do not add mechanisms or automatically launch another.",
+  "reserveNowExposed": [
+    "emittery-iterator-lifecycle",
+    "tinyqueue-heap-state"
+  ],
+  "scope": "Three evaluation pairs: one previously exposed integration fixture and two previously actor-unused injected-defect reserve fixtures. One repetition; no new natural-issue held-out evaluation.",
+  "report": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\external-pi\\docs\\external-pi\\RESULTS.md"
+}

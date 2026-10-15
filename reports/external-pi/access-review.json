@@ -1,0 +1,663 @@
+[
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "001",
+    "arm": "suffice",
+    "name": "test",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "edit",
+    "path": "src/queue.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "python - <<'PY'\np='src/queue.js'\ns=open(p).read().replace('  var errorHandler = null\\n','  var errorHandler = null\\n  var dispatching = false\\n  var pendingDrain = false\\n',1)\na=s.index('      self.paused = false'); b=s.index('\\n    },',a); s=s[:a]+'      dispatch()'+s[b:]\na=s.index('    if (queueHead === null)',s.index('  function resume')); b=s.index('\\n  function idle',a); s=s[:a]+'    dispatch()\\n  }\\n'+s[b:]\ns=s.replace('    current.errorHandler = errorHandler\\n','    current.errorHandler = errorHandler\\n    pendingDrain = true\\n').replace('if (_running >= _concurrency || self.paused)', 'if (queueHead || _running >= _concurrency || self.paused)')\ns=s.replace('        self.saturated()\\n      }\\n    } else {','        self.saturated()\\n      }\\n      dispatch()\\n    } else {')\na=s.index('    var next = queueHead',s.index('  function release')); b=s.index('\\n  function kill',a)\ns=s[:a]+'''    _running--\n    dispatch()\n  }\n\n  function dispatch () {\n    if (dispatching) return\n    dispatching = true\n    try {\n      while (!self.paused && queueHead && _running < _concurrency) {\n        var next = queueHead\n        queueHead = next.next\n        next.next = null\n        if (queueHead === null) queueTail = null\n        _running++\n        if (queueHead === null) self.empty()\n        worker.call(context, next.value, next.worked)\n      }\n    } finally {\n      dispatching = false\n    }\n    if (!self.paused && pendingDrain && _running === 0 && queueHead === null) {\n      pendingDrain = false\n      self.drain()\n    }\n  }\n''' +s[b:]\nopen(p,'w').write(s)\nPY\nnode --test tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node <<'JS'\nconst assert = require('node:assert/strict'); const fastq = require('./src/queue');\nlet starts=[], callbacks=[], drains=0; const q=fastq((v,cb)=>{starts.push(v);callbacks.push(cb)},2); q.drain=()=>{assert.equal(q.running(),0);drains++}; q.push(1);q.push(2);q.push(3);q.pause();q.concurrency=3;callbacks.shift()(null,1);assert.equal(q.running(),1);assert.deepEqual(q.getQueue(),[3]);q.resume();assert.equal(q.running(),2);callbacks.shift()(null,2);callbacks.shift()(null,3);assert.equal(drains,1);\nlet results=[]; const sync=fastq((v,cb)=>cb(null,v*2),3);sync.pause();for(let i=0;i<10000;i++)sync.push(i,(err,v)=>results.push(v));sync.resume();assert.equal(results.length,10000);assert(sync.idle());\nconsole.log('Additional pause/resize and synchronous batch checks passed');\nJS\n git diff --stat",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "python - <<'PY'\nimport subprocess\np='src/queue.js'\noriginal=subprocess.check_output(['git','show','HEAD:'+p])\nprint('Original CRLF:',original.count(b'\\r\\n'))\nif original.count(b'\\r\\n'):\n data=open(p,'rb').read().replace(b'\\r\\n',b'\\n')\n open(p,'wb').write(data.replace(b'\\n',b'\\r\\n'))\nPY\n git diff --stat\nnode --test tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "002",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "python - <<'PY'\np='src/queue.js'\ns=open(p,'rb').read();open(p,'wb').write(s.replace(b'\\r\\n',b'\\n'))\nPY\ngit diff --stat",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/lib/LocalDatastore.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/lib/Queues.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/lib/Job.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/lib/Bottleneck.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/lib/DLList.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "edit",
+    "path": "src/lib/LocalDatastore.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "edit",
+    "path": "src/lib/Queues.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "003",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node <<'NODE'\nconst assert = require('assert').strict;\nconst Bottleneck = require('./src/lib');\n(async () => {\n const l = new Bottleneck({maxConcurrent: 5});\n let done = 0;\n for (let wave=0; wave<4; wave++) {\n  let release, started;\n  const ready = new Promise(r=>started=r);\n  const blocker = l.schedule({weight:5},()=> {started(); return new Promise(r=>release=r)});\n  await ready;\n  const order=[];\n  const error = new Error('original');\n  const low = l.schedule({weight:2,priority:9},()=>{order.push('low'); return 42});\n  const high = l.schedule({weight:5,priority:0},async()=>{order.push('high'); assert.equal(await l.running(),5)});\n  const fail = l.schedule({weight:3,priority:4},()=>{order.push('fail'); throw error}).catch(e=>assert.equal(e,error));\n  const zero = l.schedule({weight:0,priority:4},()=>{order.push('zero')});\n  while(l.queued()!==4) await new Promise(r=>setTimeout(r,2));\n  release();\n  await Promise.all([blocker,high,fail,zero,low.then(v=>assert.equal(v,42))]);\n  assert.deepEqual(order,['high','fail','zero','low']);\n  done+=15;\n  assert.equal(await l.running(),0);\n  assert.equal(await l.done(),done);\n  assert.equal(l.queued(),0);\n }\n let invoked=false;\n await assert.rejects(l.schedule({weight:6},()=>{invoked=true}));\n assert.equal(invoked,false);\n assert.equal(await l.running(),0);\n console.log('Weighted multi-wave, priority, zero-weight, rejection and overweight checks passed');\n})().catch(e=>{console.error(e);process.exitCode=1});\nNODE",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/lib/LocalDatastore.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/lib/Queues.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/lib/LocalDatastore.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/lib/Job.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "search",
+    "path": "src/lib/Bottleneck.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/lib/Bottleneck.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/lib/DLList.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "search",
+    "path": "src",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/lib/LocalDatastore.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/lib/Queues.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "004",
+    "arm": "suffice",
+    "name": "test",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "files",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "test",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "005",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/maps.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "006",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "006",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "006",
+    "arm": "stock-pi",
+    "name": "edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "006",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node --test tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "006",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport Emittery from './src/index.js';\nconst e = new Emittery();\nconst a = e.events(['x', 1]);\nconst b = e.events('x');\nconst c = e.anyEvent();\nassert.equal(e.listenerCount(), 4);\nawait e.emit('x', Promise.resolve(10));\nassert.deepEqual(await b.next(), {done:false, value:10});\nassert.deepEqual(await c.next(), {done:false, value:['x',10]});\ne.clearListeners(1);\nassert.equal(e.listenerCount(), 2);\nassert.deepEqual(await a.next(), {done:false, value:10});\nassert.deepEqual(await a.next(), {done:true});\nconst d = e.events('x');\nawait a.return();\nassert.equal(e.listenerCount(), 3);\nawait e.emit('x', 20);\nassert.deepEqual(await b.next(), {done:false,value:20});\nassert.deepEqual(await d.next(), {done:false,value:20});\nconst pending = d.next();\nassert.deepEqual(await d.return(Promise.resolve(9)), {done:true,value:9});\nassert.deepEqual(await pending, {done:true});\ne.clearListeners();\nassert.equal(e.listenerCount(), 0);\nassert.deepEqual(await c.next(), {done:false,value:['x',20]});\nassert.deepEqual(await c.next(), {done:true});\nconst f = e.anyEvent();\nawait c.return();\nawait e.emit(Symbol.for('s'), 30);\nassert.deepEqual(await f.next(), {done:false,value:[Symbol.for('s'),30]});\nconst p = f.next();\ne.clearListeners();\nassert.deepEqual(await p, {done:true});\nconsole.log('Additional fanout and lifecycle checks passed');\nEOF",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "read",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node --test tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node --input-type=module -e 'import assert from \"node:assert/strict\"; import TinyQueue from \"./src/index.js\"; let seed=42; const rand=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296); for (const compare of [(a,b)=>a-b,(a,b)=>b-a,(a,b)=>a.priority-b.priority]) { const object=compare.toString().includes(\"priority\"); const value=()=>object?{priority:Math.floor(rand()*30)}:Math.floor(rand()*30); for(let run=0;run<50;run++){const initial=Array.from({length:run},value);const expected=initial.slice();const q=new TinyQueue(initial,compare);for(let i=0;i<500;i++){expected.sort(compare);assert.equal(q.length,expected.length);assert.equal(q.peek(),expected[0]);if(rand()<0.55){const v=value();q.push(v);expected.push(v);}else{const popped=q.pop();if(expected.length){assert.equal(compare(popped,expected[0]),0);expected.splice(expected.indexOf(popped),1);}else assert.equal(popped,undefined);}}while(expected.length){expected.sort(compare);const popped=q.pop();assert.equal(compare(popped,expected[0]),0);expected.splice(expected.indexOf(popped),1);}assert.equal(q.peek(),undefined);assert.equal(q.pop(),undefined);assert.equal(q.data.length,0);const v=value();q.push(v);assert.equal(q.pop(),v);assert.equal(q.length,0);assert.equal(q.peek(),undefined);}} console.log(\"Randomized constructor, interleaving, comparator, and reuse checks passed\");'",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node --input-type=module -e 'import assert from \"node:assert/strict\"; import TinyQueue from \"./src/index.js\"; let seed=42; const rand=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296); for (const object of [false,true]) for(const direction of [1,-1]) { const compare=(a,b)=>direction*((object?a.priority:a)-(object?b.priority:b));const value=()=>object?{priority:Math.floor(rand()*30)}:Math.floor(rand()*30); for(let run=0;run<50;run++){const initial=Array.from({length:run},value);const expected=initial.slice();const q=new TinyQueue(initial,compare);for(let i=0;i<500;i++){expected.sort(compare);assert.equal(q.length,expected.length);if(expected.length)assert.equal(compare(q.peek(),expected[0]),0);else assert.equal(q.peek(),undefined);if(rand()<0.55){const v=value();q.push(v);expected.push(v);}else{const popped=q.pop();if(expected.length){assert.equal(compare(popped,expected[0]),0);assert.notEqual(expected.indexOf(popped),-1);expected.splice(expected.indexOf(popped),1);}else assert.equal(popped,undefined);}}while(expected.length){expected.sort(compare);const popped=q.pop();assert.equal(compare(popped,expected[0]),0);assert.notEqual(expected.indexOf(popped),-1);expected.splice(expected.indexOf(popped),1);}assert.equal(q.peek(),undefined);assert.equal(q.pop(),undefined);assert.equal(q.data.length,0);const v=value();q.push(v);assert.equal(q.pop(),v);assert.equal(q.length,0);assert.equal(q.peek(),undefined);}} console.log(\"Randomized constructor, interleaving, comparator, and reuse checks passed\");'",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "007",
+    "arm": "stock-pi",
+    "name": "bash",
+    "command": "node --input-type=module -e 'import assert from \"node:assert/strict\";import Q from \"./src/index.js\";let s=42;const r=()=>((s=(Math.imul(s,1664525)+1013904223)>>>0)%31);for(const obj of [false,true])for(const d of [1,-1]){const cmp=(a,b)=>d*((obj?a.p:a)-(obj?b.p:b));const make=()=>obj?{p:r()}:r();for(let k=0;k<50;k++){let a=Array.from({length:k},make);const q=new Q(a.slice(),cmp);for(let i=0;i<500;i++){a.sort(cmp);assert.equal(q.length,a.length);assert.ok(a.length?cmp(q.peek(),a[0])===0:q.peek()===undefined);if(r()<17){let v=make();a.push(v);q.push(v);}else{let v=q.pop();if(a.length){assert.ok(cmp(v,a[0])===0);assert.ok(a.includes(v));a.splice(a.indexOf(v),1);}else assert.equal(v,undefined);}}a.sort(cmp);while(a.length){let v=q.pop();assert.ok(cmp(v,a[0])===0);assert.ok(a.includes(v));a.splice(a.indexOf(v),1);}assert.equal(q.data.length,0);assert.equal(q.peek(),undefined);assert.equal(q.pop(),undefined);let v=make();q.push(v);assert.equal(q.pop(),v);assert.equal(q.peek(),undefined);}}console.log(\"Randomized heap and reuse checks passed\");'",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "files",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "codemode",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "src/README.md",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_read",
+    "path": "tests/visible.test.mjs",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "file_edit",
+    "path": "src/index.js",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  },
+  {
+    "id": "008",
+    "arm": "suffice",
+    "name": "test",
+    "outsideWorkspacePath": false,
+    "shellNeedsReview": false
+  }
+]

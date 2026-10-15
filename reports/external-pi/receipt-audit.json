@@ -1,0 +1,113 @@
+{
+  "at": "2026-10-15T04:15:02.618Z",
+  "passed": true,
+  "failures": [],
+  "rows": [
+    {
+      "id": "001",
+      "arm": "suffice",
+      "requests": 4,
+      "assistantReplies": 4,
+      "rawUsageMatches": null,
+      "initialCommittedFilesChecked": 3,
+      "passed": true
+    },
+    {
+      "id": "002",
+      "arm": "stock-pi",
+      "requests": 8,
+      "assistantReplies": 8,
+      "rawUsageMatches": true,
+      "initialCommittedFilesChecked": 3,
+      "passed": true
+    },
+    {
+      "id": "003",
+      "arm": "stock-pi",
+      "requests": 9,
+      "assistantReplies": 9,
+      "rawUsageMatches": true,
+      "initialCommittedFilesChecked": 4,
+      "passed": true
+    },
+    {
+      "id": "004",
+      "arm": "suffice",
+      "requests": 5,
+      "assistantReplies": 5,
+      "rawUsageMatches": null,
+      "initialCommittedFilesChecked": 4,
+      "passed": true
+    },
+    {
+      "id": "005",
+      "arm": "suffice",
+      "requests": 5,
+      "assistantReplies": 5,
+      "rawUsageMatches": null,
+      "initialCommittedFilesChecked": 3,
+      "passed": true
+    },
+    {
+      "id": "006",
+      "arm": "stock-pi",
+      "requests": 6,
+      "assistantReplies": 6,
+      "rawUsageMatches": true,
+      "initialCommittedFilesChecked": 3,
+      "passed": true
+    },
+    {
+      "id": "007",
+      "arm": "stock-pi",
+      "requests": 8,
+      "assistantReplies": 8,
+      "rawUsageMatches": true,
+      "initialCommittedFilesChecked": 3,
+      "passed": true
+    },
+    {
+      "id": "008",
+      "arm": "suffice",
+      "requests": 3,
+      "assistantReplies": 3,
+      "rawUsageMatches": null,
+      "initialCommittedFilesChecked": 3,
+      "passed": true
+    }
+  ],
+  "costComponentsAllAttempts": {
+    "suffice": {
+      "input": 0.0956,
+      "cacheRead": 0.005593600000000001,
+      "output": 0.027590000000000003,
+      "cacheWrite": 0
+    },
+    "stock-pi": {
+      "input": 0.10089200000000001,
+      "cacheRead": 0.012275200000000002,
+      "output": 0.06090000000000001,
+      "cacheWrite": 0
+    }
+  },
+  "topLevelModelToolCalls": {
+    "suffice": 13,
+    "stock-pi": 29
+  },
+  "parity": {
+    "suffice": {
+      "normalizedInstructionVariants": 1,
+      "toolSchemaVariants": 1
+    },
+    "stock-pi": {
+      "normalizedInstructionVariants": 1,
+      "toolSchemaVariants": 1
+    }
+  },
+  "crossAgentInstructions": "Intentionally different native system/tool contracts. Actual common user text matches per task; no cross-product byte-parity pass claimed.",
+  "accessReview": {
+    "directOutsidePaths": 0,
+    "shellFlags": [],
+    "note": "Raw shell commands preserved in access-review.json; parent must inspect them, not treat a lexical scan as OS isolation."
+  }
+}
