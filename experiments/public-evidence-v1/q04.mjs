@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import * as core from './source-a/index.js';
+import * as ui from './source-b/index.js';
+const count = core.atom(1);
+const doubled = ui.computed(count, value => value * 2);
+const observed = [];
+const unsubscribe = doubled.subscribe(value => observed.push(value));
+const before = doubled.get();
+count.set(2);
+const after = doubled.get();
+console.log(JSON.stringify({source: count.get(), before, after, observed}));
+unsubscribe();
+assert.equal(after, 4, 'computed value should follow the foreign atom update');
+assert.deepEqual(observed, [2, 4], 'subscriber should receive initial and changed values');

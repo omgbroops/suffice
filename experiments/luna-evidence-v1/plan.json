@@ -1,0 +1,85 @@
+{
+  "version": "luna-evidence-v1",
+  "declaredAt": "2026-10-15T07:57:00Z",
+  "launchGate": "All ten original luna-baseline-v2 result.json exist and original driver active=null; no overlapping calibration actors",
+  "developmentReuse": true,
+  "confirmatory": false,
+  "arms": {
+    "A": {
+      "effort": "low",
+      "evidence": false
+    },
+    "B": {
+      "effort": "low",
+      "evidence": true
+    },
+    "C": {
+      "effort": "medium",
+      "evidence": false
+    },
+    "D": {
+      "effort": "medium",
+      "evidence": true
+    }
+  },
+  "order": [
+    {
+      "task": "i01",
+      "arm": "A"
+    },
+    {
+      "task": "i01",
+      "arm": "B"
+    },
+    {
+      "task": "i01",
+      "arm": "C"
+    },
+    {
+      "task": "i01",
+      "arm": "D"
+    },
+    {
+      "task": "q04",
+      "arm": "D"
+    },
+    {
+      "task": "q04",
+      "arm": "C"
+    },
+    {
+      "task": "q04",
+      "arm": "B"
+    },
+    {
+      "task": "q04",
+      "arm": "A"
+    }
+  ],
+  "limits": {
+    "maxCostUsd": 0.05,
+    "maxTurns": 60,
+    "maxCalls": 240,
+    "timeoutMs": 600000,
+    "commandTimeout": 180
+  },
+  "plannedAggregateUsd": 0.4,
+  "costStop": "Post-response, may overshoot; preserve/report every usage event and partial/error attempt; no retry/replacement",
+  "runtimeParent": "experiments/luna-baseline-v1/runtime-source",
+  "manualPreparationCost": "Hand-authored public evidence and agent engineering overhead excluded from actor inference; not priced here",
+  "deadline": "2026-10-15T08:30:00Z",
+  "model": "openai/gpt-6-luna",
+  "maximumConcurrentActors": 1,
+  "originalCalibrationTasks": [
+    "s01",
+    "i01",
+    "q04",
+    "i03",
+    "s02",
+    "s03",
+    "i02",
+    "i04",
+    "q01",
+    "q02"
+  ]
+}

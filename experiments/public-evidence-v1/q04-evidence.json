@@ -1,0 +1,31 @@
+{
+  "id": "q04",
+  "repository": "nanostores/nanostores",
+  "revision": "42225493c37ba9579dc99d909cf63ae433784ea3",
+  "exitCode": 1,
+  "stdout": "{\"source\":2,\"before\":2,\"after\":2,\"observed\":[2]}\n",
+  "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: computed value should follow the foreign atom update\n\n2 !== 4\n\n    at file:///workspace/reproduce.mjs:13:8\n    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n    at async node:internal/modules/esm/loader:639:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 2,\n  expected: 4,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n",
+  "expected_behavior": "An atom imported from source-a and a computed imported from source-b retain the public reactive behavior: after count.set(2), doubled.get() is 4 and the subscription receives [2, 4].",
+  "public_sources": [
+    {
+      "url": "https://github.com/nanostores/nanostores/issues/371",
+      "basis": "Original issue describes separately bundled modules, foreign core stores, and computed values that never update."
+    },
+    {
+      "url": "https://github.com/nanostores/nanostores/blob/42225493c37ba9579dc99d909cf63ae433784ea3/README.md#L176-L193",
+      "basis": "subscribe receives changes and immediately receives the initial value."
+    },
+    {
+      "url": "https://github.com/nanostores/nanostores/blob/42225493c37ba9579dc99d909cf63ae433784ea3/README.md#L306-L338",
+      "basis": "computed derives from store values and updates each time dependencies update."
+    },
+    {
+      "url": "https://github.com/nanostores/nanostores/blob/42225493c37ba9579dc99d909cf63ae433784ea3/index.js#L1-L3",
+      "basis": "Public atom and computed exports."
+    }
+  ],
+  "reproduction": "experiments/public-evidence-v1/q04.mjs",
+  "context": "experiments/public-evidence-v1/q04-context.txt",
+  "source_manifest": ".suffice/public-evidence-v1/q04/source-manifest.json",
+  "basis": "Only original public issue body and Git-tracked public pre-fix files; no references, private graders, actor outputs, or fixing commits inspected."
+}

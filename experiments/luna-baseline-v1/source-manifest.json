@@ -1,0 +1,136 @@
+{
+  "version": "luna-baseline-v1",
+  "parent": "suffice-general-v1",
+  "model": "gpt-6-luna",
+  "provider": "openai",
+  "effort": "low",
+  "architectureChanges": false,
+  "sourceVersionLabelsRetained": true,
+  "inputs": {
+    "package.json": {
+      "originalSha256": "f39773d5692cd48ded17500df848d67723626070ac0d5114ec4eaba2197256f2",
+      "variantSha256": "f39773d5692cd48ded17500df848d67723626070ac0d5114ec4eaba2197256f2",
+      "substitutions": []
+    },
+    "package-lock.json": {
+      "originalSha256": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda",
+      "variantSha256": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda",
+      "substitutions": []
+    },
+    "configs/general-v1.json": {
+      "originalSha256": "2c0c3799b67dc75e74d643b1f33c6bc69ac48088901d7f036ea9e7292faedd51",
+      "variantSha256": "a6bc000b02b7b13f8e7f2bce0b82c63a1117ed2f26134a26472789fbb9b4b246",
+      "substitutions": [
+        {
+          "from": "gpt-6.1-sol",
+          "to": "gpt-6-luna",
+          "count": 1
+        }
+      ]
+    },
+    "src/runtime.mjs": {
+      "originalSha256": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+      "variantSha256": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+      "substitutions": []
+    },
+    "src/workspace.mjs": {
+      "originalSha256": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+      "variantSha256": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+      "substitutions": []
+    },
+    "src/symbol-navigation.mjs": {
+      "originalSha256": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+      "variantSha256": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+      "substitutions": []
+    },
+    "src/external-pi-observer.mjs": {
+      "originalSha256": "fe50a639f09285030e0d3e6bd66f19dfdd35fb489525598b4d97963e73e69e87",
+      "variantSha256": "fe50a639f09285030e0d3e6bd66f19dfdd35fb489525598b4d97963e73e69e87",
+      "substitutions": []
+    },
+    "src/general/tools.mjs": {
+      "originalSha256": "7f75d7eb0d4db4b48d5faa1c207cafe4ad848a2adfa4b152caa93c9d0e0fcf0b",
+      "variantSha256": "7f75d7eb0d4db4b48d5faa1c207cafe4ad848a2adfa4b152caa93c9d0e0fcf0b",
+      "substitutions": []
+    },
+    "src/general/agent.mjs": {
+      "originalSha256": "200283a684fc95a1f71916f057c7d3b037122252570a2c7f0e37f2e0a3f8aa1d",
+      "variantSha256": "c368cf28c27bfce25a844824027110ded19262a6079fc9ca4a50145028d247eb",
+      "substitutions": [
+        {
+          "from": "gpt-6.1-sol",
+          "to": "gpt-6-luna",
+          "count": 2
+        },
+        {
+          "from": "Sol subscription required",
+          "to": "Luna subscription required",
+          "count": 1
+        }
+      ]
+    },
+    "src/general/entry.mjs": {
+      "originalSha256": "1b7efff9c4938b699750924512b2fb90a6dbdd0246d5f807e902100b49a850eb",
+      "variantSha256": "9d877affdbfe2ab2650715aca452772d0b62ddc08a463c736ce6a3bfbf008d8c",
+      "substitutions": [
+        {
+          "from": "gpt-6.1-sol",
+          "to": "gpt-6-luna",
+          "count": 1
+        },
+        {
+          "from": "Sol subscription required",
+          "to": "Luna subscription required",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/general-execution.mjs": {
+      "originalSha256": "979401c885c1e9cdede5a9f4d3eb192d6051c1c110caca10fe9d560d18609551",
+      "variantSha256": "979401c885c1e9cdede5a9f4d3eb192d6051c1c110caca10fe9d560d18609551",
+      "substitutions": []
+    },
+    "scripts/general-boundary.sh": {
+      "originalSha256": "110ad4c6e4ae6f38af03e1d64c981e6c645c57eaa8980a52e260cefec49d371c",
+      "variantSha256": "110ad4c6e4ae6f38af03e1d64c981e6c645c57eaa8980a52e260cefec49d371c",
+      "substitutions": []
+    },
+    "scripts/general-run.mjs": {
+      "originalSha256": "e5bc768dfbdc587954f90a39217174b976f3b791a35693a1f9586f86cbab9da8",
+      "variantSha256": "e5bc768dfbdc587954f90a39217174b976f3b791a35693a1f9586f86cbab9da8",
+      "substitutions": []
+    },
+    "scripts/setup-general-runtime.sh": {
+      "originalSha256": "58834669907d41c7d4d1c61901f39832bfeec2e7621429061f1c33c8c653bd69",
+      "variantSha256": "58834669907d41c7d4d1c61901f39832bfeec2e7621429061f1c33c8c653bd69",
+      "substitutions": []
+    }
+  },
+  "evaluatorParents": {
+    "scripts/sonion-campaign-v2.mjs": "c54c144ce3ae373b58e169e379eec9e533455796c85f8d40f612bd84102c3e21",
+    "scripts/sonion-data-v2.py": "b9db344f447ab50fbcf2b1bb33bcd97369108f0e6a53fe1ab34e1e79e5533da1",
+    "scripts/sonion-execution.mjs": "49d073b5b5a42a4c248155f754050e5c9b80b5a6772e2a185e831e8a7a19eb3f"
+  },
+  "variantHostFiles": {
+    "campaign.mjs": "1b80f06d54502cb33ef7720aa37d3c3a2c583ebe9fe19a2370e65bde1e65ca3b",
+    "evaluator-data.py": "87dc3b21dd79a934370b68149c92e3b8c3fd6487fd2e35d8d4d8b4eb1709fd6c",
+    "execution.mjs": "ebcd019c6d39765fe970c22727386b4424b7779affee095a12cfd4e192376588"
+  },
+  "limits": {
+    "maxCostUsd": 10,
+    "maxTurns": 60,
+    "maxCalls": 240,
+    "timeoutMs": 600000,
+    "commandTimeout": 180
+  },
+  "tasks": [
+    "s01",
+    "i01",
+    "q04",
+    "i03"
+  ],
+  "scope": "Exposed historical calibration; not untouched heldout capability evidence",
+  "remoteRuntime": "/home/eric_qin/suffice-luna-runtime-v1/app",
+  "nodeAndDependencies": "Existing pinned general runtime bound read-only; not reinstalled",
+  "actorInferenceAllowed": false
+}

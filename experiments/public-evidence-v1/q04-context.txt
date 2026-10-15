@@ -1,0 +1,59 @@
+Public behavioral reproduction: q04
+
+Expected behavior: An atom imported from source-a and a computed imported from source-b retain the public reactive behavior: after count.set(2), doubled.get() is 4 and the subscription receives [2, 4].
+
+Source references:
+- https://github.com/nanostores/nanostores/issues/371 — Original issue describes separately bundled modules, foreign core stores, and computed values that never update.
+- https://github.com/nanostores/nanostores/blob/42225493c37ba9579dc99d909cf63ae433784ea3/README.md#L176-L193 — subscribe receives changes and immediately receives the initial value.
+- https://github.com/nanostores/nanostores/blob/42225493c37ba9579dc99d909cf63ae433784ea3/README.md#L306-L338 — computed derives from store values and updates each time dependencies update.
+- https://github.com/nanostores/nanostores/blob/42225493c37ba9579dc99d909cf63ae433784ea3/index.js#L1-L3 — Public atom and computed exports.
+
+Executable code (`node reproduce.mjs`, complete clean source copies beside it):
+```js
+import assert from 'node:assert/strict';
+import * as core from './source-a/index.js';
+import * as ui from './source-b/index.js';
+const count = core.atom(1);
+const doubled = ui.computed(count, value => value * 2);
+const observed = [];
+const unsubscribe = doubled.subscribe(value => observed.push(value));
+const before = doubled.get();
+count.set(2);
+const after = doubled.get();
+console.log(JSON.stringify({source: count.get(), before, after, observed}));
+unsubscribe();
+assert.equal(after, 4, 'computed value should follow the foreign atom update');
+assert.deepEqual(observed, [2, 4], 'subscriber should receive initial and changed values');
+```
+
+Observed pre-fix baseline (Node 24.15.0, isolated Sonion process, exit 1):
+stdout:
+```text
+{"source":2,"before":2,"after":2,"observed":[2]}
+```
+stderr:
+```text
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: computed value should follow the foreign atom update
+
+2 !== 4
+
+    at file:///workspace/reproduce.mjs:13:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 4,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.15.0
+```
+
+This observation constrains public behavior only. It adds no error-message requirement, internal-state assertion, or repair instructions.

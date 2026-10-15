@@ -1,0 +1,182 @@
+{
+  "version": "luna-baseline-v2",
+  "tasks": [
+    {
+      "id": "s01",
+      "repository": "sindresorhus/emittery",
+      "issue": 118,
+      "promptHash": "ff89cc1fd361ec7ef0df0fa419f1d27ba9cafc18104fa09ce6d4786f722f3722",
+      "taskFreezeSha256": "8c5a907dc1e25943e00bffb1966db644846930dd057dc8ed277639d2ce3474d4",
+      "sourceFiles": 24
+    },
+    {
+      "id": "i01",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1386,
+      "promptHash": "b81426b52722a5e34a3e8587744f551b2a89a6af4968b0e6b0045beb2f836302",
+      "taskFreezeSha256": "3c5baa72270e4ea1a1b5b49e9104f46fded9544cb60acfca4fbdcd0e2757bfb4",
+      "sourceFiles": 54
+    },
+    {
+      "id": "q04",
+      "status": "pending valid admission controls",
+      "ready": false,
+      "controls": {
+        "nativeExitCodes": [
+          0
+        ],
+        "nativeFailureNames": [],
+        "baselineAccepted": false,
+        "referenceAccepted": true,
+        "knownNativeFailures": [],
+        "baseline": {
+          "native": [
+            {
+              "command": [
+                "node",
+                "node_modules/better-node-test/bin.js",
+                "atom/index.test.ts",
+                "clean-stores/index.test.ts",
+                "computed/index.test.ts",
+                "deep-map/index.test.ts",
+                "deep-map/path.test.ts",
+                "deep-map/production.test.js",
+                "effect/index.test.ts",
+                "keep-mount/index.test.ts",
+                "lifecycle/index.test.ts",
+                "listen-keys/index.test.ts",
+                "map-creator/index.test.ts",
+                "map/index.test.ts",
+                "map/production.test.js",
+                "task/index.test.ts"
+              ],
+              "exitCode": 0,
+              "latencyMs": 7279,
+              "failures": [],
+              "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q04/private/sonion-controls/baseline-native-0"
+            }
+          ],
+          "acceptance": [
+            {
+              "command": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "--test-concurrency=1",
+                "field-q04-regression.test.mjs"
+              ],
+              "exitCode": 1,
+              "latencyMs": 1533,
+              "failures": [
+                "computed subscribed in a separate module instance follows a foreign atom",
+                "computed in a separate module follows multiple foreign source stores"
+              ],
+              "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q04/private/sonion-controls/baseline-acceptance-0"
+            }
+          ]
+        },
+        "reference": {
+          "native": [
+            {
+              "command": [
+                "node",
+                "node_modules/better-node-test/bin.js",
+                "atom/index.test.ts",
+                "clean-stores/index.test.ts",
+                "computed/index.test.ts",
+                "deep-map/index.test.ts",
+                "deep-map/path.test.ts",
+                "deep-map/production.test.js",
+                "effect/index.test.ts",
+                "keep-mount/index.test.ts",
+                "lifecycle/index.test.ts",
+                "listen-keys/index.test.ts",
+                "map-creator/index.test.ts",
+                "map/index.test.ts",
+                "map/production.test.js",
+                "task/index.test.ts"
+              ],
+              "exitCode": 0,
+              "latencyMs": 7425,
+              "failures": [],
+              "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q04/private/sonion-controls/reference-native-0"
+            }
+          ],
+          "acceptance": [
+            {
+              "command": [
+                "node",
+                "--test",
+                "--test-reporter=tap",
+                "--test-concurrency=1",
+                "field-q04-regression.test.mjs"
+              ],
+              "exitCode": 0,
+              "latencyMs": 1310,
+              "failures": [],
+              "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q04/private/sonion-controls/reference-acceptance-0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "i03",
+      "repository": "sindresorhus/p-limit",
+      "issue": 110,
+      "promptHash": "758ab52856cdc4e70c309f2bb3d77c9cbc56de7972d8a9deb2abec51821a551a",
+      "taskFreezeSha256": "4f3e16b88dd7f89d1ec6fc8d420651e56425d120d214f80350f43a7c7b1e8cea",
+      "sourceFiles": 17
+    },
+    {
+      "id": "s02",
+      "repository": "nanostores/nanostores",
+      "issue": 323,
+      "promptHash": "94c8b264db8ca948472d85a31ab266cbc7362aac29430aa9926e4d534ee692e1",
+      "taskFreezeSha256": "7a82d5bc9e2cd645b9b9bf554a74e1d0e3dd5d7e91d87692d3484b561911ae8a",
+      "sourceFiles": 70
+    },
+    {
+      "id": "s03",
+      "repository": "nanostores/nanostores",
+      "issue": 416,
+      "promptHash": "bef4284845e36d91a60743cd4c39131eefadfbf7f04ce6eb4d239de76fbd2a9c",
+      "taskFreezeSha256": "da5e6410deab267d4431cd1d2b28a225990cbee0e4c44267dd415ba20e65e1d9",
+      "sourceFiles": 72
+    },
+    {
+      "id": "i02",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1442,
+      "promptHash": "56f7c890a3b98da4a1cc0e8e334ed4c6292c043d8df696f790d2e7127e43e5b2",
+      "taskFreezeSha256": "9bf2ab5444c1d939d6896dc7502eca5902c488793891010ae622e2f4f6139e80",
+      "sourceFiles": 54
+    },
+    {
+      "id": "i04",
+      "repository": "mcollina/fastq",
+      "issue": 80,
+      "promptHash": "4aa72aa4c988eb45b29fdc8075700220e69551e13fb0964eb322ffdc4ef5bc51",
+      "taskFreezeSha256": "08a6c3b422e79a389699a301815303457be6da5655deda86febdb2ceb22f8494",
+      "sourceFiles": 16
+    },
+    {
+      "id": "q01",
+      "repository": "sindresorhus/p-queue",
+      "issue": 251,
+      "promptHash": "2c73d5b4ed757757164d8fa7bbfff02645be75975736221575cb2340f42a8adf",
+      "taskFreezeSha256": "54c1f8fd14815aff6857ebe1546725e17329c2fa3f812d96e078994fb6196115",
+      "sourceFiles": 25
+    },
+    {
+      "id": "q02",
+      "repository": "sindresorhus/p-queue",
+      "issue": 249,
+      "promptHash": "bf4f109d4be1dbfc97a1cc91c8b113d3fb636e531470306eb3f5dc449f6c2538",
+      "taskFreezeSha256": "71ef9a1e0912c5534eef5181e50a95795738cfe5a93328df1f5478776c5a54d1",
+      "sourceFiles": 25
+    }
+  ],
+  "actorAttempts": 0,
+  "status": "awaiting parent launch; no actor inference"
+}

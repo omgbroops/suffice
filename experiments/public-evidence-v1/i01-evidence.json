@@ -1,0 +1,23 @@
+{
+  "id": "i01",
+  "repository": "node-fetch/node-fetch",
+  "revision": "a6663eb141a5b2a1c37aafeeb9480bfdc9de815a",
+  "exitCode": 1,
+  "stdout": "requesting local redirect; awaiting fetch inside try/catch\n",
+  "stderr": "node:internal/url:819\n      href = bindingUrl.parse(input, base, true);\n                        ^\n\nTypeError: Invalid URL\n    at new URL (node:internal/url:819:25)\n    at ClientRequest.<anonymous> (file:///workspace/source/src/index.js:133:52)\n    at ClientRequest.emit (node:events:521:24)\n    at HTTPParser.parserOnIncomingClient [as onIncoming] (node:_http_client:798:27)\n    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)\n    at Socket.socketOnData (node:_http_client:633:22)\n    at Socket.emit (node:events:521:24)\n    at addChunk (node:internal/streams/readable:563:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)\n    at Readable.push (node:internal/streams/readable:394:5) {\n  code: 'ERR_INVALID_URL',\n  input: '//super:invalid:url%/',\n  base: 'http://127.0.0.1:34711/'\n}\n\nNode.js v24.15.0\n",
+  "expected_behavior": "With default redirect behavior, awaiting fetch inside try/catch rejects with a catchable error for the invalid Location. The public issue does not require a specific error class or message.",
+  "public_sources": [
+    {
+      "url": "https://github.com/node-fetch/node-fetch/issues/1386",
+      "basis": "Original reproduction uses //super:invalid:url%/ and expects an invalid URL to be caught and an appropriate error returned."
+    },
+    {
+      "url": "https://github.com/node-fetch/node-fetch/blob/a6663eb141a5b2a1c37aafeeb9480bfdc9de815a/src/index.js#L123-L145",
+      "basis": "Pre-fix public redirect response handling."
+    }
+  ],
+  "reproduction": "experiments/public-evidence-v1/i01.mjs",
+  "context": "experiments/public-evidence-v1/i01-context.txt",
+  "source_manifest": ".suffice/public-evidence-v1/i01/source-manifest.json",
+  "basis": "Only original public issue body and Git-tracked public pre-fix files; no references, private graders, actor outputs, or fixing commits inspected."
+}

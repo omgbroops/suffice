@@ -1,0 +1,43 @@
+{
+  "version": "luna-baseline-v2",
+  "reason": "Expand predeclared calibration cohort before any Luna inference; preserve four-task v1 setup",
+  "primary": [
+    "s01",
+    "i01",
+    "q04",
+    "i03"
+  ],
+  "secondary": [
+    "s02",
+    "s03",
+    "i02",
+    "i04",
+    "q01",
+    "q02"
+  ],
+  "serialOrder": [
+    "s01",
+    "i01",
+    "q04",
+    "i03",
+    "s02",
+    "s03",
+    "i02",
+    "i04",
+    "q01",
+    "q02"
+  ],
+  "inferenceCallsAtDeclaration": 0,
+  "runtimeVariant": "luna-baseline-v1; unchanged",
+  "limits": {
+    "maxCostUsd": 10,
+    "maxTurns": 60,
+    "maxCalls": 240,
+    "timeoutMs": 600000
+  },
+  "costGoal": "Aim below $1 total known benchmark inference; not a changed per-attempt ceiling",
+  "sourceSha256": "19c88c24e70df93125592cde5d3ab87950598792eca2a347fc5f4de75c4c1f1f",
+  "runtimeSourceManifestSha256": "4f108ee99fadefe7efce36892be4104381e9d67748b16b52af8bf742dadd1560",
+  "protocolSha256": "6a51fa99263b0c3699123b9d51e96cd3d9e80d4499f05ab7ab310364db787ec1",
+  "launchGate": "Parent confirmation that main comparative set is complete; no actor call authorized by preparation"
+}

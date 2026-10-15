@@ -1,0 +1,64 @@
+Public behavioral reproduction: i01
+
+Expected behavior: With default redirect behavior, awaiting fetch inside try/catch rejects with a catchable error for the invalid Location. The public issue does not require a specific error class or message.
+
+Source references:
+- https://github.com/node-fetch/node-fetch/issues/1386 — Original reproduction uses //super:invalid:url%/ and expects an invalid URL to be caught and an appropriate error returned.
+- https://github.com/node-fetch/node-fetch/blob/a6663eb141a5b2a1c37aafeeb9480bfdc9de815a/src/index.js#L123-L145 — Pre-fix public redirect response handling.
+
+Executable code (`node reproduce.mjs`, complete clean source copies beside it):
+```js
+import http from 'node:http';
+import {once} from 'node:events';
+import fetch from './source/src/index.js';
+const invalidLocation = '//super:invalid:url%/';
+const server = http.createServer((request, response) => {
+  response.writeHead(302, {Location: invalidLocation});
+  response.end();
+});
+server.listen(0, '127.0.0.1');
+await once(server, 'listening');
+console.log('requesting local redirect; awaiting fetch inside try/catch');
+try {
+  await fetch(`http://127.0.0.1:${server.address().port}/`);
+  console.log('UNEXPECTED: fetch resolved');
+  process.exitCode = 1;
+} catch (error) {
+  console.log('CAUGHT: fetch rejected with an error');
+  console.log(JSON.stringify({name: error.name, message: error.message}));
+} finally {
+  server.close();
+}
+```
+
+Observed pre-fix baseline (Node 24.15.0, isolated Sonion process, exit 1):
+stdout:
+```text
+requesting local redirect; awaiting fetch inside try/catch
+```
+stderr:
+```text
+node:internal/url:819
+      href = bindingUrl.parse(input, base, true);
+                        ^
+
+TypeError: Invalid URL
+    at new URL (node:internal/url:819:25)
+    at ClientRequest.<anonymous> (file:///workspace/source/src/index.js:133:52)
+    at ClientRequest.emit (node:events:521:24)
+    at HTTPParser.parserOnIncomingClient [as onIncoming] (node:_http_client:798:27)
+    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)
+    at Socket.socketOnData (node:_http_client:633:22)
+    at Socket.emit (node:events:521:24)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5) {
+  code: 'ERR_INVALID_URL',
+  input: '//super:invalid:url%/',
+  base: 'http://127.0.0.1:34711/'
+}
+
+Node.js v24.15.0
+```
+
+This observation constrains public behavior only. It adds no error-message requirement, internal-state assertion, or repair instructions.
