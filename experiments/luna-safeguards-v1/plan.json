@@ -1,0 +1,176 @@
+{
+  "version": "luna-safeguards-v1",
+  "declaredAt": "2026-10-15T14:28:34.157121+00:00",
+  "tasks": [
+    "s01",
+    "i01",
+    "q04",
+    "i03",
+    "s02",
+    "s03",
+    "i02",
+    "i04",
+    "q01",
+    "q02"
+  ],
+  "originalCalibrationTasks": [
+    "s01",
+    "i01",
+    "q04",
+    "i03",
+    "s02",
+    "s03",
+    "i02",
+    "i04",
+    "q01",
+    "q02"
+  ],
+  "arms": {
+    "A": {
+      "effort": "low",
+      "safeguards": false
+    },
+    "B": {
+      "effort": "low",
+      "safeguards": true
+    },
+    "C": {
+      "effort": "xhigh",
+      "safeguards": false
+    }
+  },
+  "order": [
+    {
+      "task": "s01",
+      "arm": "A"
+    },
+    {
+      "task": "s01",
+      "arm": "B"
+    },
+    {
+      "task": "s01",
+      "arm": "C"
+    },
+    {
+      "task": "i01",
+      "arm": "B"
+    },
+    {
+      "task": "i01",
+      "arm": "C"
+    },
+    {
+      "task": "i01",
+      "arm": "A"
+    },
+    {
+      "task": "q04",
+      "arm": "C"
+    },
+    {
+      "task": "q04",
+      "arm": "A"
+    },
+    {
+      "task": "q04",
+      "arm": "B"
+    },
+    {
+      "task": "i03",
+      "arm": "A"
+    },
+    {
+      "task": "i03",
+      "arm": "B"
+    },
+    {
+      "task": "i03",
+      "arm": "C"
+    },
+    {
+      "task": "s02",
+      "arm": "B"
+    },
+    {
+      "task": "s02",
+      "arm": "C"
+    },
+    {
+      "task": "s02",
+      "arm": "A"
+    },
+    {
+      "task": "s03",
+      "arm": "C"
+    },
+    {
+      "task": "s03",
+      "arm": "A"
+    },
+    {
+      "task": "s03",
+      "arm": "B"
+    },
+    {
+      "task": "i02",
+      "arm": "A"
+    },
+    {
+      "task": "i02",
+      "arm": "B"
+    },
+    {
+      "task": "i02",
+      "arm": "C"
+    },
+    {
+      "task": "i04",
+      "arm": "B"
+    },
+    {
+      "task": "i04",
+      "arm": "C"
+    },
+    {
+      "task": "i04",
+      "arm": "A"
+    },
+    {
+      "task": "q01",
+      "arm": "C"
+    },
+    {
+      "task": "q01",
+      "arm": "A"
+    },
+    {
+      "task": "q01",
+      "arm": "B"
+    },
+    {
+      "task": "q02",
+      "arm": "A"
+    },
+    {
+      "task": "q02",
+      "arm": "B"
+    },
+    {
+      "task": "q02",
+      "arm": "C"
+    }
+  ],
+  "limits": {
+    "maxCostUsd": 0.25,
+    "maxTurns": 60,
+    "maxCalls": 240,
+    "timeoutMs": 600000,
+    "commandTimeout": 180
+  },
+  "plannedAggregateUsd": 7.5,
+  "deadline": "2026-10-15T18:28:34.157137+00:00",
+  "maximumConcurrentActors": 1,
+  "subagents": false,
+  "scope": "Original ten issue packages reused for a predeclared development-rescue comparison; 30 fresh actor sessions, not fresh issues or confirmatory holdout. Repeated low is a contemporaneous control. One observation/task/arm; engineering overhead excluded. Fresh transfer, if prepared, must be separately frozen and reported."
+}

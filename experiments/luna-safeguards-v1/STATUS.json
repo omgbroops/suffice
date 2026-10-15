@@ -1,0 +1,46 @@
+{
+  "version": "luna-safeguards-v1",
+  "checkedAtUtc": "2026-10-15T14:29:11.897586+00:00",
+  "status": "pre_inference_validation_passed",
+  "blocker": null,
+  "localTailscaleBackend": "Running",
+  "localTailscaleOnline": true,
+  "sonionTailscaleOnline": true,
+  "sonionLastSeenUtc": "2026-10-15T08:29:31.1Z",
+  "sshTarget": "100.104.56.33",
+  "sshUser": "Eric Qin",
+  "parentOnly": true,
+  "subagentsDeployed": 0,
+  "modelRequests": 0,
+  "benchmarkAttempts": 0,
+  "frozenBaselineModified": false,
+  "treatmentImplemented": true,
+  "cohortFrozen": false,
+  "localHeavyWorkStarted": false,
+  "arms": {
+    "A": {
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "safeguards": false
+    },
+    "B": {
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "safeguards": true
+    },
+    "C": {
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "safeguards": false
+    }
+  },
+  "proposedFreshTasks": 0,
+  "proposedAttempts": 30,
+  "proposedTaskArmCostCapUsd": 0.25,
+  "proposedAggregateCostCapUsd": 7.5,
+  "pendingReverseSync": [],
+  "connectionRestored": true,
+  "initialTasks": 10,
+  "plannedAttempts": 30,
+  "plannedAggregateCostCapUsd": 7.5
+}

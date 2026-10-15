@@ -1,0 +1,24 @@
+// Model-free compatibility test of the public gate, not a scored task.
+import assert from 'node:assert/strict';
+import {mkdtemp,mkdir,writeFile,readFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {resolve} from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {createSafeguards} from './verification.mjs';
+const root=await mkdtemp(resolve(tmpdir(),'suffice-safeguard-test-')),workspace=resolve(root,'public'),runDir=resolve(root,'receipts');
+await mkdir(resolve(workspace,'test'),{recursive:true});await mkdir(resolve(workspace,'.suffice-checks'),{recursive:true});await mkdir(runDir,{recursive:true});
+const index=resolve(workspace,'index.mjs'),test=resolve(workspace,'test/check.mjs');
+await writeFile(index,'export default 1;');await writeFile(test,"import assert from 'node:assert/strict';import value from '../index.mjs';assert.equal(value,1);");
+const events=[],controller=new AbortController();
+const gate=await createSafeguards({workspace,runDir,signal:controller.signal,log:e=>events.push(e),verification:{trackedPaths:['index.mjs','test/check.mjs'],publicCommands:[[process.execPath,'test/check.mjs'],[process.execPath,'-e',"require('node:fs').writeFileSync('second-command-ran','yes')"]],nativeExitCodes:[0,0],commandTimeoutMs:10000}});
+await writeFile(resolve(workspace,'.suffice-checks/probe.mjs'),"import assert from 'node:assert/strict';import value from '../index.mjs';assert.equal(value,2);");
+await writeFile(resolve(workspace,'.suffice-checks/preserve.mjs'),"import assert from 'node:assert/strict';import value from '../index.mjs';assert.equal(typeof value,'number');");
+const tool=gate.wrap({name:'bash',execute:async(id,args)=>{const r=spawnSync('/bin/bash',['-c',args.command],{cwd:workspace,encoding:'utf8'});return {isError:r.status!==0,content:[{type:'text',text:r.stdout+r.stderr}]};}});
+await tool.execute('probe',{command:'node .suffice-checks/probe.mjs'});
+assert.equal(gate.summary().observedPreEditProbes,1);
+await writeFile(index,'export default 2;');await writeFile(test,"import assert from 'node:assert/strict';import value from '../index.mjs';assert.equal(value,2);");
+const first=await gate.runGate('compat-initial');assert.equal(first.passed,false);assert.equal(first.commands[0].exitCode,1);assert.equal(first.commands[1].exitCode,0);assert.equal(first.protectedOriginalFilesRestored,1);
+await writeFile(index,'export default 1;');await writeFile(resolve(workspace,'.suffice-checks/probe.mjs'),"import assert from 'node:assert/strict';import value from '../index.mjs';assert.equal(value,1);");
+const second=await gate.runGate('compat-repair');assert.equal(second.passed,true);
+assert.equal(await readFile('/tmp/suffice-public-gate-compat-initial/second-command-ran','utf8'),'yes');
+console.log(JSON.stringify({passed:true,inferenceCalls:0,preEditProbeRecorded:true,originalPublicTestsRestored:true,secondCommandRunsDespiteFirstFailure:true,repairGatePassed:true,events:events.length,root}));

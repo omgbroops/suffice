@@ -1,0 +1,18 @@
+{
+  "version": "suffice-general-v1",
+  "parent": "external-pi baseline 3cae104 / benchmark-agent a2745c6",
+  "provider": "openai",
+  "model": "gpt-6-luna",
+  "effort": "low",
+  "piVersion": "1.2.0",
+  "toolBinding": "Pi native read/bash/edit/write plus existing deterministic AST navigation",
+  "execution": "existing WSL Ubuntu and Bubblewrap; explicit public mounts only",
+  "history": "No controller history rewriting, compaction off; durable events retain retries",
+  "limits": {
+    "maxCostUsd": 0.25,
+    "maxTurns": 60,
+    "maxCalls": 240,
+    "timeoutMs": 600000,
+    "commandTimeout": 180
+  }
+}
