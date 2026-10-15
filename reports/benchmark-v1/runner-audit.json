@@ -1,0 +1,318 @@
+{
+  "at": "2026-10-15T00:59:59.136Z",
+  "mode": "Independent read-only static runner audit; no inference, tool programs, fixture validation or tests executed",
+  "auditedRoot": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-v1",
+  "verdict": "conditional: address resource accounting/admission issues and establish fresh validation on final exact inputs before live freeze",
+  "hashes": {
+    "src/benchmark-governance.mjs": "f9f3271dfea5bd200518ca765ae89a337e4a651060632e94de22c1b9be5f264a",
+    "src/benchmark-agent.mjs": "da6264394c865519eed298f0d73ccd77e02f21b5fbd5d7d5fd446b131e7e2383",
+    "src/benchmark-runtime.mjs": "4175751041ede76d9fbf3dfd589c703de8c601a84dc56709fde24445380a65f8",
+    "scripts/benchmark-v1.mjs": "ebc77edb88f023441cc3d7b0babdb83922196381d942bc257044f8321f7a254d",
+    "tests/benchmark-governance.test.mjs": "afe220d091b97eb458b6ce8f80e7314f852c3c73be9f4d22c9ba55f54754790c",
+    "benchmarks/benchmark-v1/protocol.json": "1813f38fba16750dd7ed93a7d08b4d9609bcdc435a33856448d4b29f46ef1058",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "package.json": "f39773d5692cd48ded17500df848d67723626070ac0d5114ec4eaba2197256f2",
+    "package-lock.json": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda",
+    "reports/benchmark-v1/contract-review.json": "f2d5390eaa304ef4eadc498324199ff94aab0d0914c5a928522328c59a746f13"
+  },
+  "taskSummaries": [
+    {
+      "id": "emittery-iterator-lifecycle",
+      "split": "reserve",
+      "scopeTier": 1,
+      "allowedEditPaths": [
+        "src/index.js"
+      ],
+      "taskHash": "caf0fab029a21d2e808672e039988c2ac2849cf2779f28a27adf7810114afd2a"
+    },
+    {
+      "id": "fastq-resume-window",
+      "split": "calibration",
+      "scopeTier": 1,
+      "allowedEditPaths": [
+        "src/queue.js"
+      ],
+      "taskHash": "cd0b7c27f2b169d9d853b6ca3733ed760d3d3b5bedce6aa0b6d733ee330e8737"
+    },
+    {
+      "id": "rfdc-builtins-state",
+      "split": "calibration",
+      "scopeTier": 1,
+      "allowedEditPaths": [
+        "src/index.js"
+      ],
+      "taskHash": "90d000ab0a46be790aa0ec4e274bccc7aa6971e60fe146930f77643a8da9b791"
+    },
+    {
+      "id": "tinyqueue-heap-state",
+      "split": "reserve",
+      "scopeTier": 1,
+      "allowedEditPaths": [
+        "src/index.js"
+      ],
+      "taskHash": "531bef677b3336a715bb78ccb6fa4bbae756c2f108369d090b85341bc043713e"
+    }
+  ],
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "medium",
+      "beforeLive": true,
+      "title": "Freeze is not bound to the fixture-validation inputs",
+      "source": "scripts/benchmark-v1.mjs: freeze branch",
+      "evidence": "freeze checks v.passed and v.rows.length, but not validation task IDs or fixture/source/visible hashes; independent review binds task.json and acceptance only. Inputs hashes are generated at freeze after validation.",
+      "impact": "A fixture change after validation can freeze stale baseline/reference pass/fail evidence. No such change was proven in this audit; fixture-validation.json was absent at inspection.",
+      "minimalResolution": "Validate final reviewed exact inputs immediately before freezing and preserve hash identity through freeze; preferably store and compare validation input hashes."
+    },
+    {
+      "id": "R2",
+      "severity": "medium",
+      "beforeLive": true,
+      "title": "Known-spend admission does not bound per-request overshoot or stop after unknown costs",
+      "source": "scripts/benchmark-v1.mjs: totals/admission; src/benchmark-agent.mjs: message_end",
+      "evidence": "Admission checks knownUsd + .20 <= 3; an in-flight provider response can exceed .20; only completed-response cost is measured. Unknown totals are counted but do not prevent another admission. Budget checks abort after a tool-bearing response; final over-budget responses are ineligible but already spent.",
+      "impact": "The .20 value and $3 aggregate are eligibility/admission ceilings, not guaranteed maximum inference charges. Results retain overshoot/unknown flags correctly but later attempts may still start.",
+      "minimalResolution": "Before live execution, use conservative headroom and stop subsequent admissions on unknown cost or overshoot; disclose that no hard dollar cap can be guaranteed by post-response accounting alone. Keep all failed response receipts."
+    },
+    {
+      "id": "R3",
+      "severity": "low",
+      "beforeLive": false,
+      "title": "Timeout and artifact ceilings are cooperative/admission checks",
+      "source": "src/benchmark-agent.mjs: timer; src/benchmark-governance.mjs: budgetEligible; scripts/benchmark-v1.mjs: artifact check",
+      "evidence": "240-second timer asks session to abort. budgetEligible does not check latencyMs. Artifact bytes are checked before a run, not enforced during it. Deadline includes setup but abort before session assignment does not independently gate the later provider request.",
+      "impact": "These are not hard OS wall-time/disk bounds. A late response/finalization or a single growing run may cross nominal boundaries.",
+      "minimalResolution": "Describe limits honestly; include latency in eligibility if the 240-second ceiling is a strict scored eligibility condition. No OS sandbox redesign is necessary for this disclosed small calibration."
+    },
+    {
+      "id": "R4",
+      "severity": "low",
+      "beforeLive": false,
+      "title": "Capability qualification helper is weaker than documented qualification rule",
+      "source": "src/benchmark-governance.mjs: qualify/TRACK_RULES",
+      "evidence": "Any semanticFailure yields capability-candidate-pending-failure-review, even without a success and without semanticFailureReviewed. TRACK_RULES asks for failure plus success or reviewed difficulty evidence.",
+      "impact": "Pending-review labels must not be promoted into qualified capability tasks without independent failure review and a successful baseline attempt or explicit additional reviewed evidence.",
+      "minimalResolution": "Keep label strictly provisional or align qualification predicate with the documented rule before promotion."
+    },
+    {
+      "id": "R5",
+      "severity": "informational",
+      "beforeLive": false,
+      "title": "Frozen coverage is broad but does not verify installed runtime/dependency bytes",
+      "source": "scripts/benchmark-v1.mjs: inputs/frozen; shared node_modules junction",
+      "evidence": "Freeze covers package/lock, runner, governance, agent, runtime, core workspace/navigation, governance tests, protocol, contract-review and entire fixture tree. Actual Node binary, installed dependency tree and credential content are not included.",
+      "impact": "Lockfile pinning is reproducibility evidence, not proof installed bytes match it. Credential contents should remain unfrozen/private.",
+      "minimalResolution": "Record Node/Pi versions and dependency resolution metadata; do not include secrets. Existing dependency read-only policy remains appropriate."
+    }
+  ],
+  "positiveFindings": [
+    "Actor task object excludes acceptance/reference paths, sourceCommit, provenance and injected-change/repair metadata. Resource loader disables context files, skills, external extensions and prompt templates; actor prompt contains only public repository/task and edit allowlist.",
+    "Core reads and navigation use scopedPath/readText; traversal, absolute/colon paths, hidden paths, links and node_modules enumeration are excluded. Writes additionally require exact permitted existing production path. Evaluator data is outside actor workspace and symlinks are rejected by tree hashing.",
+    "Visible test execution has a minimized environment and Node read permissions restricted to actor workspace plus visible test. Hidden acceptance is evaluator-only and not returned to repair actor; actor cannot specify arbitrary test path or run shell tools.",
+    "Reference repair and acceptance are evaluator-controlled; actor workspace is copied from baseline. Post-run integrity hashes constrain immutable files. Acceptance, visible regression, integrity, model identity and budget eligibility are recorded separately.",
+    "Provider effort is checked before request and reported assistant model identity is checked afterward. Usage counts input/cache/output once; missing/nonfinite cost and error/aborted responses mark total unknown. API-equivalent costs are explicitly distinguished from subscription charges.",
+    "Exclusive active.lock prevents concurrent runners; completed result directories resume without repeats, partial directories fail closed and remain preserved. Stale locks require explicit investigation rather than silent deletion. Frozen input hashes are checked on calibrate/replay/report.",
+    "Protocol explicitly separates ex-ante engineering scope, empirical acceptance, observed effort and mechanism activation. All four inspected tasks are scopeTier 1. No tier2/3, long-horizon, superiority, untouched reserve or causal mechanism claim is justified by current calibration."
+  ],
+  "limitations": [
+    "No OS sandbox/network deny layer. Node permissions constrain filesystem/process capabilities but are not a network isolation guarantee; malicious edited source executed by tests remains in the trusted local research threat model.",
+    "Static inspection is not end-to-end validation or proof against adversarial actor behavior. No attempt to execute attacks, graders or inference was made.",
+    "No manifest existed under .suffice/benchmark-v1 at inspection. fixture-validation.json was absent. Parent must complete final validation/freeze after reviews.",
+    "Core src/workspace.mjs, src/symbol-navigation.mjs and src/runtime.mjs had empty git diff versus this worktree HEAD. This audit wrote only research-printing scripts/reports. Original root frozen campaigns were not modified by this audit; their full before/after equality was not independently measured.",
+    "All hashes describe the read bytes for this receipt; concurrent parent edits after inspection require another hash comparison before applying this verdict.",
+    "Tool allowance counts parent codemode calls plus primitive calls according to extension events; this is acceptable if consistently applied to every arm and disclosed. Twelve-attempt maximum is the calibration schedule/result admission count; partial runs stop resumption rather than being silently excluded."
+  ],
+  "addenda": [
+    {
+      "at": "2026-10-15T01:00:46.433Z",
+      "mode": "read-only static patch review and saved validation receipt inspection; no fixture/test/inference execution",
+      "hashes": {
+        "src/benchmark-governance.mjs": "31539a6a436f5d098af5e512d9ca44c0a7a9e897a109799f0051d961621f1d21",
+        "src/benchmark-agent.mjs": "da6264394c865519eed298f0d73ccd77e02f21b5fbd5d7d5fd446b131e7e2383",
+        "scripts/benchmark-v1.mjs": "393257c6c57852b0f3c524dc39c99b592580579d7606cb1f6e4a1c5e1f48ab8a",
+        "tests/benchmark-governance.test.mjs": "8502e5a31327ef6aa209db0759828263bc2fec9672b2df4d68651370b2280e0e"
+      },
+      "validation": {
+        "passed": true,
+        "rows": [
+          {
+            "task": "emittery-iterator-lifecycle",
+            "passed": true,
+            "baseVisible": "passed",
+            "baseHidden": "failed",
+            "baseHiddenFailures": 13,
+            "referenceVisible": "passed",
+            "referenceHidden": "passed",
+            "unchanged": true
+          },
+          {
+            "task": "fastq-resume-window",
+            "passed": true,
+            "baseVisible": "passed",
+            "baseHidden": "failed",
+            "baseHiddenFailures": 14,
+            "referenceVisible": "passed",
+            "referenceHidden": "passed",
+            "unchanged": true
+          },
+          {
+            "task": "rfdc-builtins-state",
+            "passed": true,
+            "baseVisible": "passed",
+            "baseHidden": "failed",
+            "baseHiddenFailures": 8,
+            "referenceVisible": "passed",
+            "referenceHidden": "passed",
+            "unchanged": true
+          },
+          {
+            "task": "tinyqueue-heap-state",
+            "passed": true,
+            "baseVisible": "passed",
+            "baseHidden": "failed",
+            "baseHiddenFailures": 7,
+            "referenceVisible": "passed",
+            "referenceHidden": "passed",
+            "unchanged": true
+          }
+        ],
+        "fixtureHashCount": 219,
+        "receiptMatchesCurrentTree": true,
+        "receiptSha256": "45cc8bcb183953533362e86a3a193a9f7d42d5f258c2536356e771f295e9851f"
+      },
+      "dispositions": {
+        "R1": "resolved for sequential final validation/freeze: full fixture-tree hash receipt compared at freeze; rerun after fifth fixture arrives",
+        "R2": "unknown-cost admission resolved by persistent totals gate plus immediate loop break; cost targets honestly described as post-response admission targets rather than hard billing caps; overshoot ineligible. No exact pre-request estimate required.",
+        "R3": "latency eligibility resolved: finite latencyMs <= timeoutMs is required and governance test includes 240001ms rejection. Timer/artifact checks remain cooperative/admission bounds, disclosed.",
+        "R4": "accepted limitation: capability-candidate-pending-failure-review remains provisional; cannot promote without documented independent review and qualifying evidence.",
+        "R5": "unchanged reproducibility limitation: installed dependency/runtime bytes not fully hashed; no secret capture recommended."
+      },
+      "additionalNotes": [
+        "validateContract now allows assertion mappings to visible named tests as well as hidden tests. Every hidden test must still be mapped; requirement coverage is across mapped visible+hidden names. The error text Requirement lacks a hidden check is now more restrictive than implementation and should not be quoted as a hidden-only coverage guarantee. This is acceptable for disclosed combined regression/acceptance mapping.",
+        "Original audit hashes are retained as historical snapshot; this addendum hashes the currently reviewed source.",
+        "A later Tier2 fixture requires a fresh independent contract review, whole-tree validation and freeze. No inference approval or untouched-heldout claim follows from this runner audit."
+      ],
+      "verdict": "No remaining runner blocker identified for disclosed calibration on the reviewed exact code, once complete final fixture set passes validation and current contract-review hashes. Resource bounds retain disclosed cooperative/post-response semantics."
+    },
+    {
+      "at": "2026-10-15T01:11:20.196Z",
+      "mode": "Independent offline static reconciliation; no model calls, test/patch execution or benchmark mutations",
+      "hashes": {
+        "scripts/audit-benchmark-receipts.mjs": "ba121104295964d55ba3e2ca7201942ec3d3e677495e0e4b94bfdf84a07a54e3",
+        "tests/benchmark-receipts.test.mjs": "d02c450865d4825f541b7c1f61ada52b9f83ef14bd957085d5028ac525504489",
+        "reports/benchmark-v1/receipt-audit.json": "7b0a94a9c7895e7442f1451c076273218b345f5d5a5559000f7526fd6095f087",
+        "reports/benchmark-v1/replay.json": "553c914ac90a216da331846785bca35e94b1d6da67cd961e5125592ca3b7226a",
+        "reports/benchmark-v1/calibration-results.json": "6326afacec272a8c83661f7b642999809eb4b3dd402805462e2b04f65c62bede"
+      },
+      "manifestInputs": 436,
+      "inputAndFrozenCopyDrift": [],
+      "rows": [
+        {
+          "id": "001-bottleneck-weighted-priority-r0",
+          "assistantEvents": 5,
+          "finalTranscriptAssistants": 5,
+          "failedAssistantEvents": 0,
+          "knownEstimatedUsd": 0.0317536,
+          "totalEstimatedUsd": 0.0317536,
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "checks": {
+            "uniqueTurns": true,
+            "liveAndFinalEventsMatch": true,
+            "resultUsageMatches": true,
+            "workerUsageMatches": true,
+            "unknownMatches": true,
+            "knownCostMatches": true,
+            "patchReplayPassed": true,
+            "publishedRowPassed": true
+          },
+          "passed": true
+        },
+        {
+          "id": "002-fastq-resume-window-r0",
+          "assistantEvents": 4,
+          "finalTranscriptAssistants": 4,
+          "failedAssistantEvents": 0,
+          "knownEstimatedUsd": 0.026158000000000004,
+          "totalEstimatedUsd": 0.026158000000000004,
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "checks": {
+            "uniqueTurns": true,
+            "liveAndFinalEventsMatch": true,
+            "resultUsageMatches": true,
+            "workerUsageMatches": true,
+            "unknownMatches": true,
+            "knownCostMatches": true,
+            "patchReplayPassed": true,
+            "publishedRowPassed": true
+          },
+          "passed": true
+        },
+        {
+          "id": "003-rfdc-builtins-state-r0",
+          "assistantEvents": 5,
+          "finalTranscriptAssistants": 5,
+          "failedAssistantEvents": 0,
+          "knownEstimatedUsd": 0.034399599999999995,
+          "totalEstimatedUsd": 0.034399599999999995,
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "checks": {
+            "uniqueTurns": true,
+            "liveAndFinalEventsMatch": true,
+            "resultUsageMatches": true,
+            "workerUsageMatches": true,
+            "unknownMatches": true,
+            "knownCostMatches": true,
+            "patchReplayPassed": true,
+            "publishedRowPassed": true
+          },
+          "passed": true
+        },
+        {
+          "id": "004-bottleneck-weighted-priority-r1",
+          "assistantEvents": 6,
+          "finalTranscriptAssistants": 5,
+          "failedAssistantEvents": 1,
+          "knownEstimatedUsd": 0.026414,
+          "totalEstimatedUsd": null,
+          "patchAccepted": true,
+          "budgetEligible": false,
+          "success": false,
+          "checks": {
+            "uniqueTurns": true,
+            "liveAndFinalEventsMatch": true,
+            "resultUsageMatches": true,
+            "workerUsageMatches": true,
+            "unknownMatches": true,
+            "knownCostMatches": true,
+            "patchReplayPassed": true,
+            "publishedRowPassed": true
+          },
+          "passed": true
+        }
+      ],
+      "integrityPassed": true,
+      "campaignComplete": false,
+      "observed": 4,
+      "scheduled": 6,
+      "knownEstimatedUsd": 0.1187252,
+      "unknownTotals": 1,
+      "verdict": "Supplemental durable-event accounting is supported; integrity and campaign completion remain separate. Final transcript alone is not a complete failed-request cost ledger.",
+      "limitations": [
+        "Original replay is retained; its unknown-cost mismatch on attempt004 is explained by the pruned failed assistant, not evidence that result total should become known.",
+        "Patch replay pass is verified from immutable saved replay receipts, not independently re-executed in this audit.",
+        "The supplemental script consumes replay receipts; its method field must not be read as saying audit-benchmark-receipts itself reruns graders.",
+        "A failed stream may have incurred unreported cost. Zero/absent reported usage is not proof of zero actual inference cost; unknown total remains null.",
+        "Durable events match events.live in these four completed run directories. Completeness of events for a process crash or unobserved upstream retry is not established.",
+        "Duplicate-turn rejection is useful but does not prove all provider requests received terminal assistant receipts."
+      ]
+    }
+  ]
+}

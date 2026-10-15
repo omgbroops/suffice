@@ -1,0 +1,287 @@
+{
+  "id": "tapable-abortable-hooks",
+  "title": "Add abortable generated series and parallel Hook invocations",
+  "split": "calibration",
+  "scopeTier": 3,
+  "taskType": "feature",
+  "repository": "webpack/tapable",
+  "url": "https://github.com/webpack/tapable",
+  "sourceCommit": "a0a7b26224557bd8bb09b97e0126b7dbda9f8e6a",
+  "provenance": "AI-authored coherent new JavaScript feature on complete pinned Tapable v2.2.1, with an authored known reference. This is not an upstream historical issue or an injected repair. Tier3 describes staged engineering scope; long-horizon exposure is unmeasured. Separate future calibration phase only; not part of the frozen Tier1/Tier2 inference campaign.",
+  "workspaceDir": "actor",
+  "referenceDir": "reference",
+  "acceptancePath": "private/acceptance.test.mjs",
+  "visiblePath": "actor/tests/visible.test.mjs",
+  "visibleSmokePath": "actor/tests/smoke.test.mjs",
+  "visibleFeaturePath": "actor/tests/feature.test.mjs",
+  "expectedBaseline": {
+    "visibleSmoke": "passed",
+    "visibleFeature": "failed",
+    "visible": "failed",
+    "acceptance": "failed"
+  },
+  "expectedReference": {
+    "visibleSmoke": "passed",
+    "visibleFeature": "passed",
+    "visible": "passed",
+    "acceptance": "passed"
+  },
+  "entryPath": "actor/README.md",
+  "allowedEditPaths": [
+    "src/lib/Hook.js",
+    "src/lib/HookCodeFactory.js",
+    "src/lib/AsyncSeriesHook.js",
+    "src/lib/AsyncParallelHook.js"
+  ],
+  "engineeringScope": {
+    "modulesNeedingChange": [
+      "src/lib/Hook.js",
+      "src/lib/HookCodeFactory.js",
+      "src/lib/AsyncSeriesHook.js",
+      "src/lib/AsyncParallelHook.js"
+    ],
+    "integrationBoundaries": [
+      "Opt-in public Hook invocation methods and lazy compilation/cache invalidation",
+      "Shared generated sync/callback/promise tap adapters and invocation terminal/listener lifecycle",
+      "Ordered factory continuation semantics",
+      "Parallel factory eager dispatch and completion accounting",
+      "Concurrent snapshots and a reusable plugin pipeline composing both real generated Hook kinds"
+    ],
+    "stages": [
+      "S1: expose only supported APIs, preserve invocation conventions and invalidate both caches",
+      "S2: generate guarded tap adapters, first-terminal state and listener/interceptor cleanup",
+      "S3: integrate ordered continuations",
+      "S4: integrate parallel dispatch and join",
+      "S5: compose cancellation, registration invalidation and reuse across a plugin pipeline"
+    ],
+    "rationale": "Declared before model exposure from coherent public API, compilation and two distinct execution factories. The authored reference changes four functional modules; cache, adapter-lifecycle, ordered and parallel ablations are checked behaviorally. Tests do not mandate a particular code shape or number of changed files. This is structurally staged, not certified as difficult or naturally long-horizon; compaction, persistence and delegation activation remain unmeasured."
+  },
+  "publicPrompt": "Implement opt-in abortable invocation for the JavaScript AsyncSeriesHook and AsyncParallelHook classes in the complete pinned Tapable v2.2.1 repository under src/. This is an authored new-feature task with an authored known reference, not an upstream historical bug. The existing public module is src/lib/index.js.\n\nAdd callAsyncWithSignal(signal, ...declaredHookArguments, callback) and promiseWithSignal(signal, ...declaredHookArguments) to instances of these two classes only. Other Hook kinds, including synchronous, bail, waterfall and loop hooks, must not gain these methods. Preserve existing call/callAsync/promise and registration behavior. New methods must participate in normal lazy compilation and be invalidated independently when tap or interceptor registration changes; warming one entry point must not make another entry point stale.\n\nInputs and invocation: signal is a valid native AbortSignal and is mandatory; invalid/duck-typed signal validation is outside this task. Hook argument names for the new methods are distinct ordinary JavaScript identifiers that do not start with an underscore. Forward declared arguments unchanged. Invoke taps and the terminal callback as unbound functions, following ordinary JavaScript receiver rules; strict functions observe undefined this. Support tap, tapAsync and tapPromise. Ignore tap result values because these two Hook kinds have no result. Only tapPromise return values are observed as promises; synchronous and callback-tap return values remain ignored, as in their existing invocation conventions. A successful terminal callback receives zero arguments; a failure or cancellation receives exactly one argument. promiseWithSignal resolves undefined on success and rejects with the original error/reason on failure or cancellation, preserving identity and falsy values.\n\nTiming and completion: invocation starts synchronously and proceeds until asynchronous work is pending. An already-aborted signal starts no taps and runs no call/tap interceptors; callback cancellation is synchronous, and the promise is rejected normally. Cancellation during an active invocation is delivered synchronously within abort dispatch for callback mode. The first terminal event observed by the invocation wins; a later abort cannot override an already completed success/error, and a later completion/error cannot override cancellation. Preserve signal.reason exactly, including null, false and zero. Native promises retain normal microtask delivery.\n\nTap adapters: a synchronous throw fails the invocation with that exact thrown value. Callback taps use the existing error-first convention: a truthy first callback argument is failure, otherwise success. Honor only each tap's first callback completion; duplicate callbacks and a throw after that tap already called back cannot settle again, rerun successors or corrupt the parallel join. Promise taps must return a promise/thenable; observe fulfillment or rejection. If a promise tap synchronously aborts and returns a rejected promise, or an already-started promise tap rejects after cancellation, observe that rejection so the new APIs cause no unhandled rejection. Cancellation does not terminate underlying work; late callbacks and promise-tap rejections remain safely observed and cannot change the terminal outcome.\n\nSeries semantics: start taps in normal registration/stage order, waiting for each to complete before starting its successor. Failure or cancellation prevents remaining successors from starting. Parallel semantics: eagerly launch taps in registration/stage order without waiting for earlier asynchronous taps; successful completion waits for every started tap. If a tap aborts synchronously during dispatch, do not launch later taps. Already-started work can finish after cancellation and must be ignored safely.\n\nLifecycle, interception and reuse: attach one abort listener per active invocation and remove that invocation's listener immediately on success, failure or cancellation. An already-aborted invocation adds no listener. Remove the listener before terminal interceptor notification, and run terminal interceptors before the terminal callback/promise completion. Preserve non-context, nonthrowing register/call/tap/done/error interceptors: call before taps, tap before each started tap, done once on success, error once with the original failure/cancellation reason. Pre-aborted invocations still notify error interceptors once. Cancellation from a call/tap interceptor also prevents subsequent starts. Throwing terminal callbacks/interceptors and deprecated context-enabled taps/interceptors are explicitly outside the new API contract; their existing API behavior must remain unchanged. Concurrent invocations isolate listeners and terminal state even when sharing a signal. Each invocation snapshots its registered tap functions and interception metadata; registering taps/interceptors while one is active affects later invocations, including after recompilation, without changing that active invocation. After an aborted plugin pipeline composing series and parallel hooks, fresh signals and newly registered taps must work correctly on reuse.\n\nOnly existing production files src/lib/Hook.js, src/lib/HookCodeFactory.js, src/lib/AsyncSeriesHook.js and src/lib/AsyncParallelHook.js may be edited. Do not add files or change tests, fixtures, metadata, docs or TypeScript declarations. No package installation, runtime scripts, network, subprocesses or external service is needed. Run node tests/visible.test.mjs from the actor directory. Visible tests include four existing-behavior smoke checks and three public feature checks. The feature checks intentionally fail before implementation, so the upstream baseline does not pass the entire visible suite. You can also run node tests/smoke.test.mjs and node tests/feature.test.mjs separately. Independent private checks cover stage edges and real integration. No particular generated source text, architecture or edit count is required. This task is structurally staged; it does not claim measured long-horizon, compaction, persistence or delegation exposure.",
+  "requirements": [
+    {
+      "id": "A1",
+      "text": "Expose the two new invocation methods on AsyncSeriesHook and AsyncParallelHook only; empty success, declared arguments and unbound receiver conventions are preserved."
+    },
+    {
+      "id": "A2",
+      "text": "A pre-aborted invocation starts no work/call/tap interception, reports original arbitrary signal.reason synchronously in callback mode and notifies error interceptors once."
+    },
+    {
+      "id": "A3",
+      "text": "Both new lazy compilation caches invalidate after tap/interceptor registration, while in-flight snapshots remain stable."
+    },
+    {
+      "id": "A4",
+      "text": "Generated sync/callback/promise adapters preserve error identity, honor first per-tap completion and safely observe late promise rejection/duplicate callback or post-callback throw."
+    },
+    {
+      "id": "A5",
+      "text": "First observed invocation terminal event wins; active cancellation reports synchronously in callback mode and prevents later tap starts without terminating already-started work."
+    },
+    {
+      "id": "A6",
+      "text": "Each active invocation owns one abort listener and removes it immediately before terminal interception/completion; shared-signal invocations remain isolated."
+    },
+    {
+      "id": "A7",
+      "text": "Series dispatch waits for each mixed tap before its successor and stops on error/cancellation."
+    },
+    {
+      "id": "A8",
+      "text": "Parallel dispatch launches asynchronous work eagerly, joins successes exactly once and stops not-yet-launched taps on synchronous cancellation."
+    },
+    {
+      "id": "A9",
+      "text": "Supported interceptors preserve call/tap and cleanup/done-or-error/completion order, including original interceptor receivers and cancellation reasons."
+    },
+    {
+      "id": "A10",
+      "text": "The generated kinds compose in a cancellable plugin pipeline and remain reusable with fresh signals and newly registered taps."
+    },
+    {
+      "id": "A11",
+      "text": "Existing Hook entry points, registration, bail/waterfall/synchronous behavior remain compatible."
+    }
+  ],
+  "assertionMap": {
+    "public feature pre-aborted invocations skip work and preserve the reason": {
+      "requirements": [
+        "A1",
+        "A2",
+        "A5"
+      ],
+      "rationale": "Public feature check that intentionally fails on upstream baseline and gives the actor direct feedback."
+    },
+    "public feature cancellation stops ordered successors and completes once": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A7"
+      ],
+      "rationale": "Public gate-controlled series cancellation example with late and duplicate completion."
+    },
+    "public feature parallel cancellation stops further launches while observing started work": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A8"
+      ],
+      "rationale": "Public example distinguishes eager dispatch from ordered execution and checks late failure handling."
+    },
+    "existing series entry points run mixed taps in registration order": {
+      "requirements": [
+        "A11"
+      ],
+      "rationale": "Public regression for original mixed-tap series promise and callback paths."
+    },
+    "existing parallel entry points start work before waiting for completion": {
+      "requirements": [
+        "A11"
+      ],
+      "rationale": "Public gate-controlled original parallel dispatch regression."
+    },
+    "existing hook kinds preserve bail waterfall and synchronous behavior": {
+      "requirements": [
+        "A11"
+      ],
+      "rationale": "Public regression for intentionally unsupported feature kinds."
+    },
+    "existing compilation updates after tap and interceptor registration": {
+      "requirements": [
+        "A11"
+      ],
+      "rationale": "Public original cache invalidation and interceptor compatibility."
+    },
+    "stage one opt-in methods exist only on supported hook kinds and complete empty invocations": {
+      "requirements": [
+        "A1",
+        "A6",
+        "A11"
+      ],
+      "rationale": "Checks actual exported instances and empty callback/promise completion."
+    },
+    "stage one pre-abort skips call and tap interception while preserving every reason": {
+      "requirements": [
+        "A2",
+        "A5",
+        "A6",
+        "A9"
+      ],
+      "rationale": "Checks pre-abort behavior for both kinds and both modes including falsy reasons."
+    },
+    "stage one both abortable caches invalidate on new taps and interceptors": {
+      "requirements": [
+        "A3",
+        "A9"
+      ],
+      "rationale": "Warms both real new entry points, then independently changes registration and interception."
+    },
+    "stage two generated adapters preserve arguments and original tap errors": {
+      "requirements": [
+        "A1",
+        "A4",
+        "A6"
+      ],
+      "rationale": "Exercises actual generated invocation of sync, callback and promise errors in both Hook kinds/modes."
+    },
+    "stage two duplicate callbacks and throws after completion cannot settle twice": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "rationale": "Adversarial caller double completion and throw must not rerun successor or terminal callback."
+    },
+    "stage two tap and terminal callback receivers keep unbound invocation conventions": {
+      "requirements": [
+        "A1",
+        "A4"
+      ],
+      "rationale": "Strict user functions observe undefined receiver across all supported tap forms."
+    },
+    "stage two interceptor terminal notifications follow cleanup and precede completion": {
+      "requirements": [
+        "A6",
+        "A9"
+      ],
+      "rationale": "Public observer order is asserted through listener inspection and real callbacks, without generated-text checks."
+    },
+    "stage two cancellation from call or tap interception prevents subsequent starts": {
+      "requirements": [
+        "A5",
+        "A6",
+        "A9"
+      ],
+      "rationale": "Cancelling nonthrowing observers must not allow a tap body to start afterward."
+    },
+    "stage two abort cleanup is immediate and late callbacks or rejections stay observed": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "rationale": "Cancels real pending work, observes immediate cleanup/completion and flushes host rejection reporting."
+    },
+    "stage two synchronous abort inside a promise tap still observes its rejected return": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "rationale": "Catches the rejection-handler attachment gap when abort happens before a promise is returned."
+    },
+    "stage three series continuations wait for each mixed tap before starting the next": {
+      "requirements": [
+        "A7"
+      ],
+      "rationale": "Controlled callback and promise gates distinguish ordered continuation from parallel launch."
+    },
+    "stage three abort or error stops ordered successors and first terminal event wins": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A7"
+      ],
+      "rationale": "Exercises both error-before-abort and abort-before-error through an actual series continuation."
+    },
+    "stage four parallel dispatch starts all pending taps without serializing them": {
+      "requirements": [
+        "A4",
+        "A8"
+      ],
+      "rationale": "Pending gates prove eager launch and protect join count against duplicate callback."
+    },
+    "stage four abort during parallel dispatch prevents later launches and ignores late failure": {
+      "requirements": [
+        "A4",
+        "A5",
+        "A6",
+        "A8"
+      ],
+      "rationale": "A synchronous middle tap cancels dispatch after one promise already started."
+    },
+    "integration concurrent invocations isolate signals listeners and compilation snapshots": {
+      "requirements": [
+        "A3",
+        "A5",
+        "A6",
+        "A7",
+        "A8"
+      ],
+      "rationale": "Concurrent shared-signal calls, active registration, independent terminal cleanup and fresh reuse."
+    },
+    "integration plugin pipeline composes ordered parallel cancellation cleanup and cache reuse": {
+      "requirements": [
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "A9",
+        "A10"
+      ],
+      "rationale": "Real generated series stages invoke a parallel plugin group, abort, drain late results and reuse after adding taps."
+    }
+  }
+}

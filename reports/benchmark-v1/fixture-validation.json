@@ -1,0 +1,1424 @@
+{
+  "at": "2026-10-15T01:06:10.863Z",
+  "fixtureHashes": {
+    "bottleneck-weighted-priority/.gitattributes": "2967f3c393d404b180eaaf00a17641e3a4705f3c1de5f511ace4c6610a2b8437",
+    "bottleneck-weighted-priority/actor/README.md": "ba422480ee5285b5a55181198252918a8e22736bf29a342c1af71cb1090c4596",
+    "bottleneck-weighted-priority/actor/src/.babelrc.es5": "213d5cc77f73c93bee9ec4b2a1922290f95ceb2585002eeae5aa709a23d8e274",
+    "bottleneck-weighted-priority/actor/src/.babelrc.lib": "506ebc8d581c06174886ee19b639efaffa4098a78c470c91fb5b70daadf0de1b",
+    "bottleneck-weighted-priority/actor/src/.env": "9a71de52ef575866ca37dce0fe306c2571ed84f780ae2e8a263a6135fc42ac74",
+    "bottleneck-weighted-priority/actor/src/.gitignore": "2b5b91beba25eca07e094fc43f663d1982f79ba48bbd4f3510aa72a0ee8d4dce",
+    "bottleneck-weighted-priority/actor/src/.travis.yml": "cbda108bab2adc0b1c86f66ea4ae732282d67c01363b29c8189b6502b2a9a140",
+    "bottleneck-weighted-priority/actor/src/bottleneck.d.ts": "5f808ff2bf2dcbd57cc17074ee1da5d958704be942b0a7ac126aae49aa453c14",
+    "bottleneck-weighted-priority/actor/src/bottleneck.d.ts.ejs": "ae9ee74744fcc64e0f6affa8eb3c82aab42e1b65ac5ea55d19fe50d0fe821dd2",
+    "bottleneck-weighted-priority/actor/src/bower.json": "8d36c80f6020b63ee3ecb808372d8170e6d2022cfe6474dac30f7c05e33caa9b",
+    "bottleneck-weighted-priority/actor/src/es5.js": "b5c6a996db7855dfa54acaeca31be04195dc37335939c69f9797d6aff3dd306d",
+    "bottleneck-weighted-priority/actor/src/lib/Batcher.js": "d06937024cee7e2a87b23e39723154ea15ca3928651a7b9fd4214ff7c2a5b1c2",
+    "bottleneck-weighted-priority/actor/src/lib/Bottleneck.js": "de8237be93f5410e8519df631f10503d3be476625e1ddb66ee16d2424863b0fe",
+    "bottleneck-weighted-priority/actor/src/lib/BottleneckError.js": "48c8bc02ce05737b05ace2642cf2ab21371d7753e10ffbaa5bc624d605f9f338",
+    "bottleneck-weighted-priority/actor/src/lib/DLList.js": "d9299c21246c4e5fc2371943a83fb1c86d8b6c4ca144f87b3bad394a5fe327a2",
+    "bottleneck-weighted-priority/actor/src/lib/es5.js": "9291da273aa40fff9dad764e1cef6d794922b0578c5a914bb677c812ad693a9d",
+    "bottleneck-weighted-priority/actor/src/lib/Events.js": "0aa58ea73ad3cb06ba43c126f3f4d4f28298a1a4a3510a364bdff19183ab39f4",
+    "bottleneck-weighted-priority/actor/src/lib/Group.js": "909dacc587d7db4c2c5aae9f18a65761ba7f1453ac1e8d74892253aefbb54d37",
+    "bottleneck-weighted-priority/actor/src/lib/index.js": "97aeb3f85b49d31792b83305d7275fed46e13ac38a1e4afb0dd80d3ca7160686",
+    "bottleneck-weighted-priority/actor/src/lib/IORedisConnection.js": "17a63fc67e7e2d83c6a640358c6d75e4e1449002beb34ecd487445a06b9bcd58",
+    "bottleneck-weighted-priority/actor/src/lib/Job.js": "74551429dbb056fa8b4341ea16006cd8a2a475330c4bfdbde8549e46daf18681",
+    "bottleneck-weighted-priority/actor/src/lib/LocalDatastore.js": "24edfec1fa3cd1ac7f37dfa612c6056d0399ca340284cc290070762215d874e2",
+    "bottleneck-weighted-priority/actor/src/lib/lua.json": "8a2986b7f9b403dc33769b4e75d507ed8b6ec550786e2c85bdfd041c92267d67",
+    "bottleneck-weighted-priority/actor/src/lib/parser.js": "78352ad0b8101ef43e6ba569627c7b0748466bc29af87838d0530d83e96a14f0",
+    "bottleneck-weighted-priority/actor/src/lib/Queues.js": "4148c93cdfa6e669fffecc7e257ec7249b40dc67e15ff3f5ec45dcce18c478fc",
+    "bottleneck-weighted-priority/actor/src/lib/RedisConnection.js": "c817fb70b497ccb85a66a5b4cfffc4f7eb2fd7ea83cc6a26ad8fe085b58be270",
+    "bottleneck-weighted-priority/actor/src/lib/RedisDatastore.js": "7b7f80b53f526839b6c93ca45271a93bd1c8dbecce3554fbce25e49946780011",
+    "bottleneck-weighted-priority/actor/src/lib/Scripts.js": "84a1af0b00a02ce890dc22e23392f368a296008cd28a262ad5bc6fe450e301ca",
+    "bottleneck-weighted-priority/actor/src/lib/States.js": "e8f971cdf3154fa3f1e7c7a7dde149f39bae1fb6e3ed6b79325615cc77fb162c",
+    "bottleneck-weighted-priority/actor/src/lib/Sync.js": "b5566ba0e56b7d9ef8bad08239600ed2d1c14cbcc1a4ee4d7caea5bc1f74df9a",
+    "bottleneck-weighted-priority/actor/src/lib/version.json": "4337454d9d16be306f59503c287cb9647362ef694460f5b1322a77e6ca247ba0",
+    "bottleneck-weighted-priority/actor/src/LICENSE": "84a08edb16cc9ae161c31e76c9e593702f3d9192061abc6721398e0227bdb5e7",
+    "bottleneck-weighted-priority/actor/src/light.js": "799b24dab220c150eb1c9e173518ea9b55f27d6946b500ea854c222c8bb4a524",
+    "bottleneck-weighted-priority/actor/src/package-lock.json": "cc81f0751f115f8fd5a7e5b3b63a1843ff4f291a944d180025351c89f216e595",
+    "bottleneck-weighted-priority/actor/src/package.json": "9e73efe094fc7802ce2288f1e342e9f28c2fe75f017002a96a35a478eb1df4d9",
+    "bottleneck-weighted-priority/actor/src/README.md": "65c892bdc722cec56df01ff258cfb9b97d99d0b471dc0f0cc522293e8d9e2517",
+    "bottleneck-weighted-priority/actor/src/rollup.config.es5.js": "f39bf0a4312211f80fa73d659302dd400bf048d042f40565d097066822d5f2d3",
+    "bottleneck-weighted-priority/actor/src/rollup.config.light.js": "c0f71d8d3b6642dde7a39f9cf1406330aebb72e8bbcefb830c2ec5cb040004cc",
+    "bottleneck-weighted-priority/actor/src/scripts/assemble_lua.js": "9b605b334a92b1f7880d88698cf6bca74e94274a7c957be8192687fd517cd2d7",
+    "bottleneck-weighted-priority/actor/src/scripts/build.sh": "31bcd3e92cf2d93a9bf0452c5872c9042d22d699f95753615be562ae169e7493",
+    "bottleneck-weighted-priority/actor/src/scripts/test_all.sh": "934ee3e990e1770f813f0a37b14f39510424c42ec87ba26a3b59c46dee8cc397",
+    "bottleneck-weighted-priority/actor/src/scripts/version.js": "e8c578e7e13cc166804c1738745a5c5fb71429d226eded678d19f82d8a12671d",
+    "bottleneck-weighted-priority/actor/src/src/Batcher.coffee": "90e81c80d60a619962e53e5b81967e829d47de6dd989cb253dd96fb7ad9ff87c",
+    "bottleneck-weighted-priority/actor/src/src/Bottleneck.coffee": "1c943ef11db72d5b1e214701ddfba77141afcf6d4b950eb3782677d070e7834e",
+    "bottleneck-weighted-priority/actor/src/src/BottleneckError.coffee": "cfa4ac306bd5330ed19298914ed6e10a9298cd745b5556251617e4f204632766",
+    "bottleneck-weighted-priority/actor/src/src/DLList.coffee": "01d34691648b20d855b86b43391449298d05a24a840e4d9b29650a8e453a805b",
+    "bottleneck-weighted-priority/actor/src/src/es5.coffee": "1706d47266a247cb96ba970366a4932966bf49d5751a9ad1e604fabdd428e00e",
+    "bottleneck-weighted-priority/actor/src/src/Events.coffee": "63ca975160f375fea8ea0ff277eba75cab90639c0a029e1e1fc7174592697315",
+    "bottleneck-weighted-priority/actor/src/src/Group.coffee": "3e9ced1e7ee9b8734196360f8f1b3b2dbbff4737bf4100977e19a7db268c8f25",
+    "bottleneck-weighted-priority/actor/src/src/index.coffee": "0b0ee124e226e607b3b351b58f0cf297b88742c47fecdaed8108727ac9f952af",
+    "bottleneck-weighted-priority/actor/src/src/IORedisConnection.coffee": "317082008eaef290c1572aaec80cafa9298be6f7742238262f650c2d1c8e74c6",
+    "bottleneck-weighted-priority/actor/src/src/Job.coffee": "1b3186d46f93c6fda9c1bb9299dd054b3ec853f645c26afa54971b3d9ff7da26",
+    "bottleneck-weighted-priority/actor/src/src/LocalDatastore.coffee": "e4046734edd57d341ae52f709588a0d4881d3f6609e19002274109d8feba5e36",
+    "bottleneck-weighted-priority/actor/src/src/parser.coffee": "48d819e18102cd633c5a55041410c20c784be20fad428dd92a2941e99a6a0d1b",
+    "bottleneck-weighted-priority/actor/src/src/Queues.coffee": "7c39b20599ee7b0dbc7096031bda02f4a8664e793717daa28265754c27013876",
+    "bottleneck-weighted-priority/actor/src/src/redis/blacklist_client.lua": "be6209a3453f727bc9d5212facd1a9f8fa403248e54a64c947c0f01381d3929f",
+    "bottleneck-weighted-priority/actor/src/src/redis/check.lua": "eaf0ad4b31aff437a96c6144a6f8be39b86b526cd2e6fb5b5a970959967e74c3",
+    "bottleneck-weighted-priority/actor/src/src/redis/conditions_check.lua": "a8d122898ee28f08845567f376ab2402bed32444bfd6c91ed4adc9d54175a15d",
+    "bottleneck-weighted-priority/actor/src/src/redis/current_reservoir.lua": "90a91600cebacfe0f4468a6fb55cb538e6ee632932d5463f80f59f2138024699",
+    "bottleneck-weighted-priority/actor/src/src/redis/done.lua": "f25fb4d8fa02ead17b0ca7e4344db6c07ca7c62ed0f775ecc5bcaf43d49d1d42",
+    "bottleneck-weighted-priority/actor/src/src/redis/free.lua": "276cea2def8f1566db84368fa58edb214f2fa410bbd00acbd6e8c69f3a3631e2",
+    "bottleneck-weighted-priority/actor/src/src/redis/get_time.lua": "5959c1a3a22bedd44f632cebb3033e187f7f2a5c4d6aac7fd322e20b8bcda001",
+    "bottleneck-weighted-priority/actor/src/src/redis/group_check.lua": "bd9797c8e0805accfe98913b2047a447206cd2b43e9c7b47aa9bce2bcaa9e010",
+    "bottleneck-weighted-priority/actor/src/src/redis/heartbeat.lua": "62a13d39626d22d2d004588713a614bb74eee6946b246ea2256a356483832c3e",
+    "bottleneck-weighted-priority/actor/src/src/redis/increment_reservoir.lua": "05315d727d80fab51d0c107bef5e23e64877962640d71aa009e597c6e884f5d1",
+    "bottleneck-weighted-priority/actor/src/src/redis/init.lua": "dd3e9a35d755e18f3c15ac7fc04087bb3d631953f3305b85d5879d97db797563",
+    "bottleneck-weighted-priority/actor/src/src/redis/process_tick.lua": "d265934e7c26ea14aa7e128e330d2937432eab90630d5fc558ec766887467436",
+    "bottleneck-weighted-priority/actor/src/src/redis/queued.lua": "fc961a351f5e5517db8cd6796cdbf444ba23c1be1b08e37e46663f64c2077a69",
+    "bottleneck-weighted-priority/actor/src/src/redis/refresh_expiration.lua": "ee0ea1af9b540e622247dd433ef64fbea9dd9e0fb0cf8f4e8c732cf583099812",
+    "bottleneck-weighted-priority/actor/src/src/redis/refs.lua": "c925c57f4c84e05dccc1cce128ddd85cb5ef11f19ec12bcd8424fce4dedb5bfd",
+    "bottleneck-weighted-priority/actor/src/src/redis/register_client.lua": "04926a53c2a0c053874769828dd79adee6b95bad87736516d466046f4d47e65b",
+    "bottleneck-weighted-priority/actor/src/src/redis/register.lua": "073aaf35f8473d1eabf6dd1a6c3e9867debd10339d3d46bb1710371c50757edd",
+    "bottleneck-weighted-priority/actor/src/src/redis/running.lua": "6b6171dea5497c699336614dca36b87e2c35b4aa014dc5d87a14743095aba5db",
+    "bottleneck-weighted-priority/actor/src/src/redis/submit.lua": "451322a6d87125e092cb94d644d70362e3f67c12cafcc2d47f92d7d13aad8cb0",
+    "bottleneck-weighted-priority/actor/src/src/redis/update_settings.lua": "d5fa05c090352d66687ead86a95353d01f962633c03b6df17afe07846062211b",
+    "bottleneck-weighted-priority/actor/src/src/redis/validate_client.lua": "e9d6299238867d62db3b5f3592403f64078a7ddb4e57bd8a0a1ca2628aa06e0c",
+    "bottleneck-weighted-priority/actor/src/src/redis/validate_keys.lua": "c9ed978619b1160598e1a8cd72bac0f71c829746d8749776022f60274f32ee2b",
+    "bottleneck-weighted-priority/actor/src/src/RedisConnection.coffee": "95d5a0fd6bf8112e956e36258a6bf168febbd6b9e32aa17d3e56fbca37f0e83a",
+    "bottleneck-weighted-priority/actor/src/src/RedisDatastore.coffee": "35836cbf0610119dc6c3000e28916b07e733168fe4ed3ef3d1381dbd7ff116be",
+    "bottleneck-weighted-priority/actor/src/src/Scripts.coffee": "b340d3b64de6f0f41c60a98ef441655c56eef00a9cd084a89a854fefa0235491",
+    "bottleneck-weighted-priority/actor/src/src/States.coffee": "aa69e18b7862d52080f6ba22839235d092cea05a26d85f77b8af00af7ba0c20a",
+    "bottleneck-weighted-priority/actor/src/src/Sync.coffee": "98cfb09005d3408e4cfdd6ea3b8e4685d72bc9d7bb64c256a5ea75b3b0da25d9",
+    "bottleneck-weighted-priority/actor/src/test/batcher.js": "cc87e185aa5e63984de890320fe1e3d05fa554a266f909e20164aa211b706cd0",
+    "bottleneck-weighted-priority/actor/src/test/bottleneck.js": "f40a002e4376519645ef0fb55b22dc94c52dc73d92c81ca058382bbb41fbf72c",
+    "bottleneck-weighted-priority/actor/src/test/cluster.js": "d3ea3e66cfbdc59be7e9f30093c2e3bdb62c9695435037028485fa6243640e29",
+    "bottleneck-weighted-priority/actor/src/test/context.js": "29a9483ba130dbfa05da944a92678a24bd54023ac19315aa7be6bb3803134320",
+    "bottleneck-weighted-priority/actor/src/test/DLList.js": "5f2003d877db93eb5532d0da8230ac0d09573262b1e73e50be8dff64c372a3d0",
+    "bottleneck-weighted-priority/actor/src/test/general.js": "429cf203f49c42d3eccc402454503411f7e8c9dac14d66e507c77dc3536da4dc",
+    "bottleneck-weighted-priority/actor/src/test/group.js": "440137976baa093cda25ca645c5ccd1e9b6d43f31d0386e961beff3fa357284f",
+    "bottleneck-weighted-priority/actor/src/test/ioredis.js": "744359a19f22f2364d3cca264120a8834785fc375704491eb14a70caea35b631",
+    "bottleneck-weighted-priority/actor/src/test/node_redis.js": "de1cd3084716006eb14bff833d445c7f09496e7f78f15152aa3f3149f347455c",
+    "bottleneck-weighted-priority/actor/src/test/priority.js": "03cbdd137427f210331d40f776b8e48386f14e9a13c2a6f57d0f1197cf38a1e7",
+    "bottleneck-weighted-priority/actor/src/test/promises.js": "3c29e84472752212cea6bba568829d2edc7f5a51f2f9cccdace839547384c25f",
+    "bottleneck-weighted-priority/actor/src/test/retries.js": "f65474f2a6cd686fae8e7218cc572361af80ba658266c21c9cab6f2e52978f7b",
+    "bottleneck-weighted-priority/actor/src/test/spawn/increaseKeepAlive.js": "b30ae47b39a42588d4cd138ce59fa30cb0acbda51565f177d47220590edcfb5d",
+    "bottleneck-weighted-priority/actor/src/test/spawn/refreshKeepAlive.js": "c089da4a203c96b6007e4d0627a5f693f3989f601d5e241a03cd54ebb8467b7b",
+    "bottleneck-weighted-priority/actor/src/test/states.js": "b92f0e692b57466d64c09db20bce1b983cd2ab6bceb56d165365d5c2a06af9d3",
+    "bottleneck-weighted-priority/actor/src/test/stop.js": "377f0f2b9729fa9b5e31a473eea176a20b0ecce2576c9c862514855c3becb7d2",
+    "bottleneck-weighted-priority/actor/src/test.ts": "d35e612f1016c40a7c1db65d9d8b0b43ac196fa305e815266a839c3ed28b99c6",
+    "bottleneck-weighted-priority/actor/tests/visible.test.mjs": "bffd03dc2d2770f71806e41f66046a2f415ef06c78f964434e91fca3597cf7ab",
+    "bottleneck-weighted-priority/download/upstream.tar.gz": "be098c12058d7c0280f9a5a6220f4bff8d5f2241058d12afb32e140062b2d48b",
+    "bottleneck-weighted-priority/private/acceptance.test.mjs": "4063c94741905f979c6a30f543730e476fd007a0a99af3cd33bb06d1b7123881",
+    "bottleneck-weighted-priority/reference/README.md": "ba422480ee5285b5a55181198252918a8e22736bf29a342c1af71cb1090c4596",
+    "bottleneck-weighted-priority/reference/src/.babelrc.es5": "213d5cc77f73c93bee9ec4b2a1922290f95ceb2585002eeae5aa709a23d8e274",
+    "bottleneck-weighted-priority/reference/src/.babelrc.lib": "506ebc8d581c06174886ee19b639efaffa4098a78c470c91fb5b70daadf0de1b",
+    "bottleneck-weighted-priority/reference/src/.env": "9a71de52ef575866ca37dce0fe306c2571ed84f780ae2e8a263a6135fc42ac74",
+    "bottleneck-weighted-priority/reference/src/.gitignore": "2b5b91beba25eca07e094fc43f663d1982f79ba48bbd4f3510aa72a0ee8d4dce",
+    "bottleneck-weighted-priority/reference/src/.travis.yml": "cbda108bab2adc0b1c86f66ea4ae732282d67c01363b29c8189b6502b2a9a140",
+    "bottleneck-weighted-priority/reference/src/bottleneck.d.ts": "5f808ff2bf2dcbd57cc17074ee1da5d958704be942b0a7ac126aae49aa453c14",
+    "bottleneck-weighted-priority/reference/src/bottleneck.d.ts.ejs": "ae9ee74744fcc64e0f6affa8eb3c82aab42e1b65ac5ea55d19fe50d0fe821dd2",
+    "bottleneck-weighted-priority/reference/src/bower.json": "8d36c80f6020b63ee3ecb808372d8170e6d2022cfe6474dac30f7c05e33caa9b",
+    "bottleneck-weighted-priority/reference/src/es5.js": "b5c6a996db7855dfa54acaeca31be04195dc37335939c69f9797d6aff3dd306d",
+    "bottleneck-weighted-priority/reference/src/lib/Batcher.js": "d06937024cee7e2a87b23e39723154ea15ca3928651a7b9fd4214ff7c2a5b1c2",
+    "bottleneck-weighted-priority/reference/src/lib/Bottleneck.js": "de8237be93f5410e8519df631f10503d3be476625e1ddb66ee16d2424863b0fe",
+    "bottleneck-weighted-priority/reference/src/lib/BottleneckError.js": "48c8bc02ce05737b05ace2642cf2ab21371d7753e10ffbaa5bc624d605f9f338",
+    "bottleneck-weighted-priority/reference/src/lib/DLList.js": "d9299c21246c4e5fc2371943a83fb1c86d8b6c4ca144f87b3bad394a5fe327a2",
+    "bottleneck-weighted-priority/reference/src/lib/es5.js": "9291da273aa40fff9dad764e1cef6d794922b0578c5a914bb677c812ad693a9d",
+    "bottleneck-weighted-priority/reference/src/lib/Events.js": "0aa58ea73ad3cb06ba43c126f3f4d4f28298a1a4a3510a364bdff19183ab39f4",
+    "bottleneck-weighted-priority/reference/src/lib/Group.js": "909dacc587d7db4c2c5aae9f18a65761ba7f1453ac1e8d74892253aefbb54d37",
+    "bottleneck-weighted-priority/reference/src/lib/index.js": "97aeb3f85b49d31792b83305d7275fed46e13ac38a1e4afb0dd80d3ca7160686",
+    "bottleneck-weighted-priority/reference/src/lib/IORedisConnection.js": "17a63fc67e7e2d83c6a640358c6d75e4e1449002beb34ecd487445a06b9bcd58",
+    "bottleneck-weighted-priority/reference/src/lib/Job.js": "74551429dbb056fa8b4341ea16006cd8a2a475330c4bfdbde8549e46daf18681",
+    "bottleneck-weighted-priority/reference/src/lib/LocalDatastore.js": "20ede7b6b9e0fda828a7974364bbc99f3ec409463ee4567218c75dec1924c20d",
+    "bottleneck-weighted-priority/reference/src/lib/lua.json": "8a2986b7f9b403dc33769b4e75d507ed8b6ec550786e2c85bdfd041c92267d67",
+    "bottleneck-weighted-priority/reference/src/lib/parser.js": "78352ad0b8101ef43e6ba569627c7b0748466bc29af87838d0530d83e96a14f0",
+    "bottleneck-weighted-priority/reference/src/lib/Queues.js": "3658a22a7118d91a65b0c2060406bc465880259c0b1dc8a4adafe30763d7614f",
+    "bottleneck-weighted-priority/reference/src/lib/RedisConnection.js": "c817fb70b497ccb85a66a5b4cfffc4f7eb2fd7ea83cc6a26ad8fe085b58be270",
+    "bottleneck-weighted-priority/reference/src/lib/RedisDatastore.js": "7b7f80b53f526839b6c93ca45271a93bd1c8dbecce3554fbce25e49946780011",
+    "bottleneck-weighted-priority/reference/src/lib/Scripts.js": "84a1af0b00a02ce890dc22e23392f368a296008cd28a262ad5bc6fe450e301ca",
+    "bottleneck-weighted-priority/reference/src/lib/States.js": "e8f971cdf3154fa3f1e7c7a7dde149f39bae1fb6e3ed6b79325615cc77fb162c",
+    "bottleneck-weighted-priority/reference/src/lib/Sync.js": "b5566ba0e56b7d9ef8bad08239600ed2d1c14cbcc1a4ee4d7caea5bc1f74df9a",
+    "bottleneck-weighted-priority/reference/src/lib/version.json": "4337454d9d16be306f59503c287cb9647362ef694460f5b1322a77e6ca247ba0",
+    "bottleneck-weighted-priority/reference/src/LICENSE": "84a08edb16cc9ae161c31e76c9e593702f3d9192061abc6721398e0227bdb5e7",
+    "bottleneck-weighted-priority/reference/src/light.js": "799b24dab220c150eb1c9e173518ea9b55f27d6946b500ea854c222c8bb4a524",
+    "bottleneck-weighted-priority/reference/src/package-lock.json": "cc81f0751f115f8fd5a7e5b3b63a1843ff4f291a944d180025351c89f216e595",
+    "bottleneck-weighted-priority/reference/src/package.json": "9e73efe094fc7802ce2288f1e342e9f28c2fe75f017002a96a35a478eb1df4d9",
+    "bottleneck-weighted-priority/reference/src/README.md": "65c892bdc722cec56df01ff258cfb9b97d99d0b471dc0f0cc522293e8d9e2517",
+    "bottleneck-weighted-priority/reference/src/rollup.config.es5.js": "f39bf0a4312211f80fa73d659302dd400bf048d042f40565d097066822d5f2d3",
+    "bottleneck-weighted-priority/reference/src/rollup.config.light.js": "c0f71d8d3b6642dde7a39f9cf1406330aebb72e8bbcefb830c2ec5cb040004cc",
+    "bottleneck-weighted-priority/reference/src/scripts/assemble_lua.js": "9b605b334a92b1f7880d88698cf6bca74e94274a7c957be8192687fd517cd2d7",
+    "bottleneck-weighted-priority/reference/src/scripts/build.sh": "31bcd3e92cf2d93a9bf0452c5872c9042d22d699f95753615be562ae169e7493",
+    "bottleneck-weighted-priority/reference/src/scripts/test_all.sh": "934ee3e990e1770f813f0a37b14f39510424c42ec87ba26a3b59c46dee8cc397",
+    "bottleneck-weighted-priority/reference/src/scripts/version.js": "e8c578e7e13cc166804c1738745a5c5fb71429d226eded678d19f82d8a12671d",
+    "bottleneck-weighted-priority/reference/src/src/Batcher.coffee": "90e81c80d60a619962e53e5b81967e829d47de6dd989cb253dd96fb7ad9ff87c",
+    "bottleneck-weighted-priority/reference/src/src/Bottleneck.coffee": "1c943ef11db72d5b1e214701ddfba77141afcf6d4b950eb3782677d070e7834e",
+    "bottleneck-weighted-priority/reference/src/src/BottleneckError.coffee": "cfa4ac306bd5330ed19298914ed6e10a9298cd745b5556251617e4f204632766",
+    "bottleneck-weighted-priority/reference/src/src/DLList.coffee": "01d34691648b20d855b86b43391449298d05a24a840e4d9b29650a8e453a805b",
+    "bottleneck-weighted-priority/reference/src/src/es5.coffee": "1706d47266a247cb96ba970366a4932966bf49d5751a9ad1e604fabdd428e00e",
+    "bottleneck-weighted-priority/reference/src/src/Events.coffee": "63ca975160f375fea8ea0ff277eba75cab90639c0a029e1e1fc7174592697315",
+    "bottleneck-weighted-priority/reference/src/src/Group.coffee": "3e9ced1e7ee9b8734196360f8f1b3b2dbbff4737bf4100977e19a7db268c8f25",
+    "bottleneck-weighted-priority/reference/src/src/index.coffee": "0b0ee124e226e607b3b351b58f0cf297b88742c47fecdaed8108727ac9f952af",
+    "bottleneck-weighted-priority/reference/src/src/IORedisConnection.coffee": "317082008eaef290c1572aaec80cafa9298be6f7742238262f650c2d1c8e74c6",
+    "bottleneck-weighted-priority/reference/src/src/Job.coffee": "1b3186d46f93c6fda9c1bb9299dd054b3ec853f645c26afa54971b3d9ff7da26",
+    "bottleneck-weighted-priority/reference/src/src/LocalDatastore.coffee": "e4046734edd57d341ae52f709588a0d4881d3f6609e19002274109d8feba5e36",
+    "bottleneck-weighted-priority/reference/src/src/parser.coffee": "48d819e18102cd633c5a55041410c20c784be20fad428dd92a2941e99a6a0d1b",
+    "bottleneck-weighted-priority/reference/src/src/Queues.coffee": "7c39b20599ee7b0dbc7096031bda02f4a8664e793717daa28265754c27013876",
+    "bottleneck-weighted-priority/reference/src/src/redis/blacklist_client.lua": "be6209a3453f727bc9d5212facd1a9f8fa403248e54a64c947c0f01381d3929f",
+    "bottleneck-weighted-priority/reference/src/src/redis/check.lua": "eaf0ad4b31aff437a96c6144a6f8be39b86b526cd2e6fb5b5a970959967e74c3",
+    "bottleneck-weighted-priority/reference/src/src/redis/conditions_check.lua": "a8d122898ee28f08845567f376ab2402bed32444bfd6c91ed4adc9d54175a15d",
+    "bottleneck-weighted-priority/reference/src/src/redis/current_reservoir.lua": "90a91600cebacfe0f4468a6fb55cb538e6ee632932d5463f80f59f2138024699",
+    "bottleneck-weighted-priority/reference/src/src/redis/done.lua": "f25fb4d8fa02ead17b0ca7e4344db6c07ca7c62ed0f775ecc5bcaf43d49d1d42",
+    "bottleneck-weighted-priority/reference/src/src/redis/free.lua": "276cea2def8f1566db84368fa58edb214f2fa410bbd00acbd6e8c69f3a3631e2",
+    "bottleneck-weighted-priority/reference/src/src/redis/get_time.lua": "5959c1a3a22bedd44f632cebb3033e187f7f2a5c4d6aac7fd322e20b8bcda001",
+    "bottleneck-weighted-priority/reference/src/src/redis/group_check.lua": "bd9797c8e0805accfe98913b2047a447206cd2b43e9c7b47aa9bce2bcaa9e010",
+    "bottleneck-weighted-priority/reference/src/src/redis/heartbeat.lua": "62a13d39626d22d2d004588713a614bb74eee6946b246ea2256a356483832c3e",
+    "bottleneck-weighted-priority/reference/src/src/redis/increment_reservoir.lua": "05315d727d80fab51d0c107bef5e23e64877962640d71aa009e597c6e884f5d1",
+    "bottleneck-weighted-priority/reference/src/src/redis/init.lua": "dd3e9a35d755e18f3c15ac7fc04087bb3d631953f3305b85d5879d97db797563",
+    "bottleneck-weighted-priority/reference/src/src/redis/process_tick.lua": "d265934e7c26ea14aa7e128e330d2937432eab90630d5fc558ec766887467436",
+    "bottleneck-weighted-priority/reference/src/src/redis/queued.lua": "fc961a351f5e5517db8cd6796cdbf444ba23c1be1b08e37e46663f64c2077a69",
+    "bottleneck-weighted-priority/reference/src/src/redis/refresh_expiration.lua": "ee0ea1af9b540e622247dd433ef64fbea9dd9e0fb0cf8f4e8c732cf583099812",
+    "bottleneck-weighted-priority/reference/src/src/redis/refs.lua": "c925c57f4c84e05dccc1cce128ddd85cb5ef11f19ec12bcd8424fce4dedb5bfd",
+    "bottleneck-weighted-priority/reference/src/src/redis/register_client.lua": "04926a53c2a0c053874769828dd79adee6b95bad87736516d466046f4d47e65b",
+    "bottleneck-weighted-priority/reference/src/src/redis/register.lua": "073aaf35f8473d1eabf6dd1a6c3e9867debd10339d3d46bb1710371c50757edd",
+    "bottleneck-weighted-priority/reference/src/src/redis/running.lua": "6b6171dea5497c699336614dca36b87e2c35b4aa014dc5d87a14743095aba5db",
+    "bottleneck-weighted-priority/reference/src/src/redis/submit.lua": "451322a6d87125e092cb94d644d70362e3f67c12cafcc2d47f92d7d13aad8cb0",
+    "bottleneck-weighted-priority/reference/src/src/redis/update_settings.lua": "d5fa05c090352d66687ead86a95353d01f962633c03b6df17afe07846062211b",
+    "bottleneck-weighted-priority/reference/src/src/redis/validate_client.lua": "e9d6299238867d62db3b5f3592403f64078a7ddb4e57bd8a0a1ca2628aa06e0c",
+    "bottleneck-weighted-priority/reference/src/src/redis/validate_keys.lua": "c9ed978619b1160598e1a8cd72bac0f71c829746d8749776022f60274f32ee2b",
+    "bottleneck-weighted-priority/reference/src/src/RedisConnection.coffee": "95d5a0fd6bf8112e956e36258a6bf168febbd6b9e32aa17d3e56fbca37f0e83a",
+    "bottleneck-weighted-priority/reference/src/src/RedisDatastore.coffee": "35836cbf0610119dc6c3000e28916b07e733168fe4ed3ef3d1381dbd7ff116be",
+    "bottleneck-weighted-priority/reference/src/src/Scripts.coffee": "b340d3b64de6f0f41c60a98ef441655c56eef00a9cd084a89a854fefa0235491",
+    "bottleneck-weighted-priority/reference/src/src/States.coffee": "aa69e18b7862d52080f6ba22839235d092cea05a26d85f77b8af00af7ba0c20a",
+    "bottleneck-weighted-priority/reference/src/src/Sync.coffee": "98cfb09005d3408e4cfdd6ea3b8e4685d72bc9d7bb64c256a5ea75b3b0da25d9",
+    "bottleneck-weighted-priority/reference/src/test/batcher.js": "cc87e185aa5e63984de890320fe1e3d05fa554a266f909e20164aa211b706cd0",
+    "bottleneck-weighted-priority/reference/src/test/bottleneck.js": "f40a002e4376519645ef0fb55b22dc94c52dc73d92c81ca058382bbb41fbf72c",
+    "bottleneck-weighted-priority/reference/src/test/cluster.js": "d3ea3e66cfbdc59be7e9f30093c2e3bdb62c9695435037028485fa6243640e29",
+    "bottleneck-weighted-priority/reference/src/test/context.js": "29a9483ba130dbfa05da944a92678a24bd54023ac19315aa7be6bb3803134320",
+    "bottleneck-weighted-priority/reference/src/test/DLList.js": "5f2003d877db93eb5532d0da8230ac0d09573262b1e73e50be8dff64c372a3d0",
+    "bottleneck-weighted-priority/reference/src/test/general.js": "429cf203f49c42d3eccc402454503411f7e8c9dac14d66e507c77dc3536da4dc",
+    "bottleneck-weighted-priority/reference/src/test/group.js": "440137976baa093cda25ca645c5ccd1e9b6d43f31d0386e961beff3fa357284f",
+    "bottleneck-weighted-priority/reference/src/test/ioredis.js": "744359a19f22f2364d3cca264120a8834785fc375704491eb14a70caea35b631",
+    "bottleneck-weighted-priority/reference/src/test/node_redis.js": "de1cd3084716006eb14bff833d445c7f09496e7f78f15152aa3f3149f347455c",
+    "bottleneck-weighted-priority/reference/src/test/priority.js": "03cbdd137427f210331d40f776b8e48386f14e9a13c2a6f57d0f1197cf38a1e7",
+    "bottleneck-weighted-priority/reference/src/test/promises.js": "3c29e84472752212cea6bba568829d2edc7f5a51f2f9cccdace839547384c25f",
+    "bottleneck-weighted-priority/reference/src/test/retries.js": "f65474f2a6cd686fae8e7218cc572361af80ba658266c21c9cab6f2e52978f7b",
+    "bottleneck-weighted-priority/reference/src/test/spawn/increaseKeepAlive.js": "b30ae47b39a42588d4cd138ce59fa30cb0acbda51565f177d47220590edcfb5d",
+    "bottleneck-weighted-priority/reference/src/test/spawn/refreshKeepAlive.js": "c089da4a203c96b6007e4d0627a5f693f3989f601d5e241a03cd54ebb8467b7b",
+    "bottleneck-weighted-priority/reference/src/test/states.js": "b92f0e692b57466d64c09db20bce1b983cd2ab6bceb56d165365d5c2a06af9d3",
+    "bottleneck-weighted-priority/reference/src/test/stop.js": "377f0f2b9729fa9b5e31a473eea176a20b0ecce2576c9c862514855c3becb7d2",
+    "bottleneck-weighted-priority/reference/src/test.ts": "d35e612f1016c40a7c1db65d9d8b0b43ac196fa305e815266a839c3ed28b99c6",
+    "bottleneck-weighted-priority/reference/tests/visible.test.mjs": "bffd03dc2d2770f71806e41f66046a2f415ef06c78f964434e91fca3597cf7ab",
+    "bottleneck-weighted-priority/source.json": "0e058ecc475e804d22c973847e3b655cef06c409605f2138560fa7f57152c528",
+    "bottleneck-weighted-priority/task.json": "99bb6cf6ba571867f5ac037c0f739798617de75e09f276c6eaffb8256ebf2728",
+    "bottleneck-weighted-priority/validation.json": "24d0a608d536891033e8c0def1626341c4a5372e71d3c84995b8e0cf4b2d79ce",
+    "bottleneck-weighted-priority/visible.test.mjs": "bffd03dc2d2770f71806e41f66046a2f415ef06c78f964434e91fca3597cf7ab",
+    "emittery-iterator-lifecycle/actor/README.md": "b42240ad580581b6adcd9ca77f7feed2c2505c394543dca0b22569b2115e1d8e",
+    "emittery-iterator-lifecycle/actor/src/.editorconfig": "a6c981d9e5f90048850a8a59e79372701b58489ba29cccb5c5d273db3b77c4a3",
+    "emittery-iterator-lifecycle/actor/src/.gitattributes": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c",
+    "emittery-iterator-lifecycle/actor/src/.github/security.md": "cf00ea7fd49f2efefb2ac6db9da3850915d1b2c8c9cc54d74eace54e9fede183",
+    "emittery-iterator-lifecycle/actor/src/.github/workflows/main.yml": "5ac8d647b7966b691c806a63b1dce49b330a179740e847146174937e32c19f0b",
+    "emittery-iterator-lifecycle/actor/src/.gitignore": "3375cb6fbd901624eb0251901e0be4584b521b1a36b27ea9f96fbc752ff72120",
+    "emittery-iterator-lifecycle/actor/src/.npmrc": "f3fc23758ab91be5f94a8c5eaff433d1ccd6a206cf1d381d332eb63716009337",
+    "emittery-iterator-lifecycle/actor/src/examples/.gitignore": "7bcd5d7476c7c8b5ec8c296210f2e7c3dbe624ebac97dc2d513778a248d47d0e",
+    "emittery-iterator-lifecycle/actor/src/examples/clock.js": "ef26b6f4b79fbfe51e0451ad6f6d6b3c25db2fa745f9c57e2848c14cce63b37d",
+    "emittery-iterator-lifecycle/actor/src/examples/clocktyped.ts": "b3e6eeee2f6ff20127db07ebb24203c1a7a537a75514b3f35c29cddfd9e7084d",
+    "emittery-iterator-lifecycle/actor/src/examples/emit.js": "b7120e55dd454a6e5acc91e2924e13b96190ec0d8de15f0eb28c033c24721a40",
+    "emittery-iterator-lifecycle/actor/src/examples/emitonce.js": "17433a16e00829cef21b5c716e2d1a7921d5b99b8d8c49039623b4b1d5a0cf2d",
+    "emittery-iterator-lifecycle/actor/src/examples/eventdata.js": "3268e4586e68149ec0b026ea9435f43e3ca1b565b14452e4f1985db650e51129",
+    "emittery-iterator-lifecycle/actor/src/index.d.ts": "eb9794ed31c911aa8a4316c9dec4b0e36b7561e2efe62be40e0fb08c3f767a42",
+    "emittery-iterator-lifecycle/actor/src/index.js": "022a493ac830520f3e2a7c8da9fa8b693e36f34e8cbdf79ddab63c902dde69e5",
+    "emittery-iterator-lifecycle/actor/src/index.test-d.ts": "fd86b4819668896a5b026c5a6f18c4a3b142fd75f30163df166277045052c9ca",
+    "emittery-iterator-lifecycle/actor/src/license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "emittery-iterator-lifecycle/actor/src/maps.js": "eff8c8969b7afa0acb2c689120ae46c8ab6cb7a887dad0de9030d18c369deee8",
+    "emittery-iterator-lifecycle/actor/src/media/header.png": "34e17f2d03b3efe6fb426dea0f4bef39260c7214107af029e46b8517d6956f7a",
+    "emittery-iterator-lifecycle/actor/src/media/header.psd": "f7cddc6f3d91d8577643beb0cc57e0fea6ff3df7eda4ca43658e8524be32181a",
+    "emittery-iterator-lifecycle/actor/src/package.json": "e80e0c9c6e2b5f50f26b0822138838102ee0e6244e710b2f57e022131bce80d3",
+    "emittery-iterator-lifecycle/actor/src/readme.md": "2e349bfb6ad26b76249de8105b117d1d5b9477866eddb58cd6d74a900b8de932",
+    "emittery-iterator-lifecycle/actor/src/test/index.js": "a0ef1d8f4e56783070850b423a3ce941a3fadd0643840dc0987e24c876518d2b",
+    "emittery-iterator-lifecycle/actor/tests/visible.test.mjs": "66b39dfa267a38a48cd8da57fb055b4dae9c1f3876d6e89666113e2daf97ccc7",
+    "emittery-iterator-lifecycle/private/acceptance.test.mjs": "9edbb8ad3bfb47e54508d1aaf063efd7e3b3da1e3ce7866bca10f2e881487948",
+    "emittery-iterator-lifecycle/private/actor-hidden.tap": "79cd983252aa13220de3c8052847795ecee0c953764d6732ccc4bd15a8d3b00d",
+    "emittery-iterator-lifecycle/private/actor-visible.tap": "0c5e309ba16e7a8bf642c284d07c40659170b16633c408c65bb4966c3ebbf07a",
+    "emittery-iterator-lifecycle/private/integrity.json": "14f10146eaedad605531cb7ba5713179d0590fb95008334623f20b1de9014c58",
+    "emittery-iterator-lifecycle/private/reference-hidden.tap": "d0c86b47eb2d18a33ebd923073e0025171f963f5564ffcfac83374f7d1f03515",
+    "emittery-iterator-lifecycle/private/reference-visible.tap": "33b5471b8774191ef568b3b6167acb3365d6859817c58a7fd34af0851759a80e",
+    "emittery-iterator-lifecycle/public/task.md": "b42240ad580581b6adcd9ca77f7feed2c2505c394543dca0b22569b2115e1d8e",
+    "emittery-iterator-lifecycle/public/visible.test.mjs": "66b39dfa267a38a48cd8da57fb055b4dae9c1f3876d6e89666113e2daf97ccc7",
+    "emittery-iterator-lifecycle/reference/README.md": "b42240ad580581b6adcd9ca77f7feed2c2505c394543dca0b22569b2115e1d8e",
+    "emittery-iterator-lifecycle/reference/src/.editorconfig": "a6c981d9e5f90048850a8a59e79372701b58489ba29cccb5c5d273db3b77c4a3",
+    "emittery-iterator-lifecycle/reference/src/.gitattributes": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c",
+    "emittery-iterator-lifecycle/reference/src/.github/security.md": "cf00ea7fd49f2efefb2ac6db9da3850915d1b2c8c9cc54d74eace54e9fede183",
+    "emittery-iterator-lifecycle/reference/src/.github/workflows/main.yml": "5ac8d647b7966b691c806a63b1dce49b330a179740e847146174937e32c19f0b",
+    "emittery-iterator-lifecycle/reference/src/.gitignore": "3375cb6fbd901624eb0251901e0be4584b521b1a36b27ea9f96fbc752ff72120",
+    "emittery-iterator-lifecycle/reference/src/.npmrc": "f3fc23758ab91be5f94a8c5eaff433d1ccd6a206cf1d381d332eb63716009337",
+    "emittery-iterator-lifecycle/reference/src/examples/.gitignore": "7bcd5d7476c7c8b5ec8c296210f2e7c3dbe624ebac97dc2d513778a248d47d0e",
+    "emittery-iterator-lifecycle/reference/src/examples/clock.js": "ef26b6f4b79fbfe51e0451ad6f6d6b3c25db2fa745f9c57e2848c14cce63b37d",
+    "emittery-iterator-lifecycle/reference/src/examples/clocktyped.ts": "b3e6eeee2f6ff20127db07ebb24203c1a7a537a75514b3f35c29cddfd9e7084d",
+    "emittery-iterator-lifecycle/reference/src/examples/emit.js": "b7120e55dd454a6e5acc91e2924e13b96190ec0d8de15f0eb28c033c24721a40",
+    "emittery-iterator-lifecycle/reference/src/examples/emitonce.js": "17433a16e00829cef21b5c716e2d1a7921d5b99b8d8c49039623b4b1d5a0cf2d",
+    "emittery-iterator-lifecycle/reference/src/examples/eventdata.js": "3268e4586e68149ec0b026ea9435f43e3ca1b565b14452e4f1985db650e51129",
+    "emittery-iterator-lifecycle/reference/src/index.d.ts": "eb9794ed31c911aa8a4316c9dec4b0e36b7561e2efe62be40e0fb08c3f767a42",
+    "emittery-iterator-lifecycle/reference/src/index.js": "78e10eb74b9f6b4ea12aba9532534121cfce188e161f1b20067984b066ea62b7",
+    "emittery-iterator-lifecycle/reference/src/index.test-d.ts": "fd86b4819668896a5b026c5a6f18c4a3b142fd75f30163df166277045052c9ca",
+    "emittery-iterator-lifecycle/reference/src/license": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+    "emittery-iterator-lifecycle/reference/src/maps.js": "eff8c8969b7afa0acb2c689120ae46c8ab6cb7a887dad0de9030d18c369deee8",
+    "emittery-iterator-lifecycle/reference/src/media/header.png": "34e17f2d03b3efe6fb426dea0f4bef39260c7214107af029e46b8517d6956f7a",
+    "emittery-iterator-lifecycle/reference/src/media/header.psd": "f7cddc6f3d91d8577643beb0cc57e0fea6ff3df7eda4ca43658e8524be32181a",
+    "emittery-iterator-lifecycle/reference/src/package.json": "e80e0c9c6e2b5f50f26b0822138838102ee0e6244e710b2f57e022131bce80d3",
+    "emittery-iterator-lifecycle/reference/src/readme.md": "2e349bfb6ad26b76249de8105b117d1d5b9477866eddb58cd6d74a900b8de932",
+    "emittery-iterator-lifecycle/reference/src/test/index.js": "a0ef1d8f4e56783070850b423a3ce941a3fadd0643840dc0987e24c876518d2b",
+    "emittery-iterator-lifecycle/reference/tests/visible.test.mjs": "66b39dfa267a38a48cd8da57fb055b4dae9c1f3876d6e89666113e2daf97ccc7",
+    "emittery-iterator-lifecycle/sources/upstream.tar.gz": "8f8befefde47ddb8a6e7f712e14099fc88cd8d295ab68a9501de361f6dae3a3b",
+    "emittery-iterator-lifecycle/task.json": "caf0fab029a21d2e808672e039988c2ac2849cf2779f28a27adf7810114afd2a",
+    "fastq-resume-window/actor/README.md": "093fb38a88336671fd4efdd2d4c17a2028f21b85531558eb2a9c4785e0c1a1e6",
+    "fastq-resume-window/actor/src/.github/dependabot.yml": "e5a4daa9baee5c8f7212aeb8fb0ec79f22ce9a49ff8f9e58b3b1f9d2df66f626",
+    "fastq-resume-window/actor/src/.github/workflows/ci.yml": "c8c1b113b0e393b0f55e01edd953a2fdda6744de835752043e3051299878c705",
+    "fastq-resume-window/actor/src/.gitignore": "5a3b15e1ec45038bbde25eda41ed113a08b861f3ed4af96941412574378720db",
+    "fastq-resume-window/actor/src/bench.js": "0e5d43863154edd92c136e8054c503782b49779130baa3dd59840ec42959bb56",
+    "fastq-resume-window/actor/src/example.js": "417b88a3f41af145d6e77abb198eac1db57f71b652e141821c96c0bbf479981d",
+    "fastq-resume-window/actor/src/example.mjs": "e9def2f2bfbb7d744a861a2839774cd2df463fecce235f1bdd2c779e99a3ef99",
+    "fastq-resume-window/actor/src/index.d.ts": "69e4bf15f6f714f7659fb7c826da3e504acad1d9cc164693413803da18256114",
+    "fastq-resume-window/actor/src/LICENSE": "c3367f6d01a79d368fc4fbb41b3615fcd92f243d6597ab96742f6f976f9325af",
+    "fastq-resume-window/actor/src/package.json": "b09f958b57594e0f6580ea1ea0eae650faee6297d1b5334456ecab5cc1f8d514",
+    "fastq-resume-window/actor/src/queue.js": "dff5881cc3537466566d0506ce9fcd4e8f9a8e7e4516c081685cab1aac2f4099",
+    "fastq-resume-window/actor/src/README.md": "b6882601f84470f66f521ca56b654ae2c8f077f706cab3db2369845150386450",
+    "fastq-resume-window/actor/src/SECURITY.md": "d0614fe0e0f9034c8a695ffffe13a4cd606473173e4cf7a4d030dd980fe40748",
+    "fastq-resume-window/actor/src/test/example.ts": "26441ad872f5788bdf8bf92b8b209045b01640a1c2d978e0fe909c6a8343c1e4",
+    "fastq-resume-window/actor/src/test/promise.js": "060dc1fc4e2b403a98137ed8fac50b94023773958b86fe18aae8c998a3f8fb05",
+    "fastq-resume-window/actor/src/test/test.js": "488d296a7225c11a1c4de6322307016b06b6c0354bf23381128f43d2cd93f7e3",
+    "fastq-resume-window/actor/src/test/tsconfig.json": "6eae7b2d775f4b7d1989382f2e1aaab5024db8d64d1feddabef9acfa8581082f",
+    "fastq-resume-window/actor/src/vendor/reusify/.github/dependabot.yml": "9e1294283e17484923d2fb39ede6c43d9139e28bce79c986f79bc231b1ded6bc",
+    "fastq-resume-window/actor/src/vendor/reusify/.github/workflows/ci.yml": "2518554c9d38a88c89d09c005367745909dc55db127560856cb044abbe698117",
+    "fastq-resume-window/actor/src/vendor/reusify/.gitignore": "b3a03ca1f57dc23f14910361e25608ed23c968e3eb77b5656e17ea7690c4adfb",
+    "fastq-resume-window/actor/src/vendor/reusify/benchmarks/createNoCodeFunction.js": "970ce8755038592027209ac3b94c71f70c7640ca43372de4748b9332d278ac07",
+    "fastq-resume-window/actor/src/vendor/reusify/benchmarks/fib.js": "efe22b4adfc705e416cf42df734009d8a8792723ef2b1462edad0f21bdf0c285",
+    "fastq-resume-window/actor/src/vendor/reusify/benchmarks/reuseNoCodeFunction.js": "1a04480ba58a36764cbf746b63dea403a3a978efeea1cfd6ad301f3508884e0c",
+    "fastq-resume-window/actor/src/vendor/reusify/eslint.config.js": "6b1bca4a90543a6141a5f7e9155fd71b604c5d001499d7989dcab1a843f95390",
+    "fastq-resume-window/actor/src/vendor/reusify/LICENSE": "93a1506953b08ad4874e1cc0971a1d2ac387ca510da91e4d05e460a6c4966fa3",
+    "fastq-resume-window/actor/src/vendor/reusify/package.json": "db69497e33cebb1296cd68a9202cc4df7b8d1dc895a423f2153e8c157068aa76",
+    "fastq-resume-window/actor/src/vendor/reusify/README.md": "9df9fd0cfd741abe908f78cd5244053c86f058292c758bce8f45b70d7be51c74",
+    "fastq-resume-window/actor/src/vendor/reusify/reusify.d.ts": "9a40a92351b3725ab12d9117b87b1462f20871bffb8329e83a8ea3f54114dcab",
+    "fastq-resume-window/actor/src/vendor/reusify/reusify.js": "00894a3dd7016e3751560569cc791c15c2e0607c35a91bd3398dab675026fcf3",
+    "fastq-resume-window/actor/src/vendor/reusify/SECURITY.md": "d0614fe0e0f9034c8a695ffffe13a4cd606473173e4cf7a4d030dd980fe40748",
+    "fastq-resume-window/actor/src/vendor/reusify/test.js": "3ea47b07caf2b1cdfbbaf5244b343755bd0eb1d6ed2e0efd7a1506fc5eb99ff7",
+    "fastq-resume-window/actor/src/vendor/reusify/tsconfig.json": "7d6301f32f20b37b84c0bfbd3216af64f90193b0e2bac5e8eac140e9db5a40ef",
+    "fastq-resume-window/actor/tests/visible.test.mjs": "d2ca98eb8536cd3a2e1b72f0546ce01ecea136a2eb147372103a3406e09dc320",
+    "fastq-resume-window/private/acceptance.test.mjs": "fd5aa72e07550c0858999da7578a3fd38c41e0274fe8aff7dea6c9a05d933c09",
+    "fastq-resume-window/private/actor-hidden.tap": "fe7ebdb5e0b13e0437b82007d828c3d0612744e57a5574556b8ca533bdca276a",
+    "fastq-resume-window/private/actor-visible.tap": "743d3c7823a3fbb73659b6ece8a4d591cfd4aeda9b8a2d7b5ea31e5204501ec3",
+    "fastq-resume-window/private/integrity.json": "7a1c27c8a2f441da83ac8938aeec481ac17b19296640f65c1401053bad6a02af",
+    "fastq-resume-window/private/reference-hidden.tap": "cbf75b3774ba09a2ce8bc1a8182aabb304aabf175e3f8f2cfa84e3b019af7103",
+    "fastq-resume-window/private/reference-visible.tap": "30f73aeaaf9ad7eb22564ef46702b560e4301140de34471333844621ad8b7135",
+    "fastq-resume-window/public/task.md": "093fb38a88336671fd4efdd2d4c17a2028f21b85531558eb2a9c4785e0c1a1e6",
+    "fastq-resume-window/public/visible.test.mjs": "d2ca98eb8536cd3a2e1b72f0546ce01ecea136a2eb147372103a3406e09dc320",
+    "fastq-resume-window/reference/README.md": "093fb38a88336671fd4efdd2d4c17a2028f21b85531558eb2a9c4785e0c1a1e6",
+    "fastq-resume-window/reference/src/.github/dependabot.yml": "e5a4daa9baee5c8f7212aeb8fb0ec79f22ce9a49ff8f9e58b3b1f9d2df66f626",
+    "fastq-resume-window/reference/src/.github/workflows/ci.yml": "c8c1b113b0e393b0f55e01edd953a2fdda6744de835752043e3051299878c705",
+    "fastq-resume-window/reference/src/.gitignore": "5a3b15e1ec45038bbde25eda41ed113a08b861f3ed4af96941412574378720db",
+    "fastq-resume-window/reference/src/bench.js": "0e5d43863154edd92c136e8054c503782b49779130baa3dd59840ec42959bb56",
+    "fastq-resume-window/reference/src/example.js": "417b88a3f41af145d6e77abb198eac1db57f71b652e141821c96c0bbf479981d",
+    "fastq-resume-window/reference/src/example.mjs": "e9def2f2bfbb7d744a861a2839774cd2df463fecce235f1bdd2c779e99a3ef99",
+    "fastq-resume-window/reference/src/index.d.ts": "69e4bf15f6f714f7659fb7c826da3e504acad1d9cc164693413803da18256114",
+    "fastq-resume-window/reference/src/LICENSE": "c3367f6d01a79d368fc4fbb41b3615fcd92f243d6597ab96742f6f976f9325af",
+    "fastq-resume-window/reference/src/package.json": "b09f958b57594e0f6580ea1ea0eae650faee6297d1b5334456ecab5cc1f8d514",
+    "fastq-resume-window/reference/src/queue.js": "37312c50cc4a2986faad878886c8059f87f8c107c395b687e8fcdba7cfbe96c0",
+    "fastq-resume-window/reference/src/README.md": "b6882601f84470f66f521ca56b654ae2c8f077f706cab3db2369845150386450",
+    "fastq-resume-window/reference/src/SECURITY.md": "d0614fe0e0f9034c8a695ffffe13a4cd606473173e4cf7a4d030dd980fe40748",
+    "fastq-resume-window/reference/src/test/example.ts": "26441ad872f5788bdf8bf92b8b209045b01640a1c2d978e0fe909c6a8343c1e4",
+    "fastq-resume-window/reference/src/test/promise.js": "060dc1fc4e2b403a98137ed8fac50b94023773958b86fe18aae8c998a3f8fb05",
+    "fastq-resume-window/reference/src/test/test.js": "488d296a7225c11a1c4de6322307016b06b6c0354bf23381128f43d2cd93f7e3",
+    "fastq-resume-window/reference/src/test/tsconfig.json": "6eae7b2d775f4b7d1989382f2e1aaab5024db8d64d1feddabef9acfa8581082f",
+    "fastq-resume-window/reference/src/vendor/reusify/.github/dependabot.yml": "9e1294283e17484923d2fb39ede6c43d9139e28bce79c986f79bc231b1ded6bc",
+    "fastq-resume-window/reference/src/vendor/reusify/.github/workflows/ci.yml": "2518554c9d38a88c89d09c005367745909dc55db127560856cb044abbe698117",
+    "fastq-resume-window/reference/src/vendor/reusify/.gitignore": "b3a03ca1f57dc23f14910361e25608ed23c968e3eb77b5656e17ea7690c4adfb",
+    "fastq-resume-window/reference/src/vendor/reusify/benchmarks/createNoCodeFunction.js": "970ce8755038592027209ac3b94c71f70c7640ca43372de4748b9332d278ac07",
+    "fastq-resume-window/reference/src/vendor/reusify/benchmarks/fib.js": "efe22b4adfc705e416cf42df734009d8a8792723ef2b1462edad0f21bdf0c285",
+    "fastq-resume-window/reference/src/vendor/reusify/benchmarks/reuseNoCodeFunction.js": "1a04480ba58a36764cbf746b63dea403a3a978efeea1cfd6ad301f3508884e0c",
+    "fastq-resume-window/reference/src/vendor/reusify/eslint.config.js": "6b1bca4a90543a6141a5f7e9155fd71b604c5d001499d7989dcab1a843f95390",
+    "fastq-resume-window/reference/src/vendor/reusify/LICENSE": "93a1506953b08ad4874e1cc0971a1d2ac387ca510da91e4d05e460a6c4966fa3",
+    "fastq-resume-window/reference/src/vendor/reusify/package.json": "db69497e33cebb1296cd68a9202cc4df7b8d1dc895a423f2153e8c157068aa76",
+    "fastq-resume-window/reference/src/vendor/reusify/README.md": "9df9fd0cfd741abe908f78cd5244053c86f058292c758bce8f45b70d7be51c74",
+    "fastq-resume-window/reference/src/vendor/reusify/reusify.d.ts": "9a40a92351b3725ab12d9117b87b1462f20871bffb8329e83a8ea3f54114dcab",
+    "fastq-resume-window/reference/src/vendor/reusify/reusify.js": "00894a3dd7016e3751560569cc791c15c2e0607c35a91bd3398dab675026fcf3",
+    "fastq-resume-window/reference/src/vendor/reusify/SECURITY.md": "d0614fe0e0f9034c8a695ffffe13a4cd606473173e4cf7a4d030dd980fe40748",
+    "fastq-resume-window/reference/src/vendor/reusify/test.js": "3ea47b07caf2b1cdfbbaf5244b343755bd0eb1d6ed2e0efd7a1506fc5eb99ff7",
+    "fastq-resume-window/reference/src/vendor/reusify/tsconfig.json": "7d6301f32f20b37b84c0bfbd3216af64f90193b0e2bac5e8eac140e9db5a40ef",
+    "fastq-resume-window/reference/tests/visible.test.mjs": "d2ca98eb8536cd3a2e1b72f0546ce01ecea136a2eb147372103a3406e09dc320",
+    "fastq-resume-window/sources/reusify.tar.gz": "9ed9a9ec2f52e6300739515eb4bb7ea9095ac0549d406187ade395b60473074c",
+    "fastq-resume-window/sources/upstream.tar.gz": "cc7ff1229871e3fe4ad123fb88a7fdb627a75122ea6cb76041139d276becc6b5",
+    "fastq-resume-window/task.json": "cd0b7c27f2b169d9d853b6ca3733ed760d3d3b5bedce6aa0b6d733ee330e8737",
+    "rfdc-builtins-state/actor/README.md": "1b742fe1cf4240268096a9a973449f50d4d992b41619d3a3b2503495140730d8",
+    "rfdc-builtins-state/actor/src/.editorconfig": "f000102bd4c1a767896b393391d11934a6c1deba7d610c6d36c6686514d7222a",
+    "rfdc-builtins-state/actor/src/.github/workflows/ci.yml": "980e730fddf1358d8db1b028972be91c2884a854daa4089b9eccb5cacbd305b9",
+    "rfdc-builtins-state/actor/src/.gitignore": "04f933883520bf3ea6b12559187745765eb5b73fe278b9f0a9c9d01125e0840a",
+    "rfdc-builtins-state/actor/src/.npmignore": "19209e59d2e3174b6731dd149802b94d6b481bbbeaa8f4d761e0606dc3cb02c8",
+    "rfdc-builtins-state/actor/src/.npmrc": "f3fc23758ab91be5f94a8c5eaff433d1ccd6a206cf1d381d332eb63716009337",
+    "rfdc-builtins-state/actor/src/benchmark/fixture.json": "2ee501d0990939a9110f6def479552cce318ff1d2963053fdbdd842feda2e3f3",
+    "rfdc-builtins-state/actor/src/benchmark/index.js": "0370244796f640d6ac7162dc0408aab2ef7b8b97a8d39823c121528f79eae692",
+    "rfdc-builtins-state/actor/src/benchmark/shallow.js": "d7ab4c02c29593563998a541a84b76e8f3e412dbd169501641499d76218a087a",
+    "rfdc-builtins-state/actor/src/default.js": "d7f46114c176de337df05aef386228b8ee1cd60e93a7400ee4ac98b91651f35e",
+    "rfdc-builtins-state/actor/src/index.d.ts": "1e9c163d34dfec47f0cc38322bb35ae6e031fec7947bc739ed8e3f61c3b6ad54",
+    "rfdc-builtins-state/actor/src/index.js": "df922f0678450442133790e68a60d03134c1cd0167781068e845460e605eeaa4",
+    "rfdc-builtins-state/actor/src/index.test-d.ts": "486cd27a91b82aa30c23988fa421bc2ee1f4a8f835e558e068d273410ff6566a",
+    "rfdc-builtins-state/actor/src/LICENSE": "1ce941682a96c7b898ecd125d0f2e22319758ea6f3adbf498a65d649b0f3f7dd",
+    "rfdc-builtins-state/actor/src/package.json": "81def9ecb2be8cdf1c4aaeff121d3c6bcebf66bab7d3f219b1a984a5efe413fb",
+    "rfdc-builtins-state/actor/src/readme.md": "4a67904203da148cfe4689491e397952e0ac45e763857520af3892d522044753",
+    "rfdc-builtins-state/actor/src/test/index.js": "451902829edd5ecb3d9369621af041e67365836fe8faa3fa2cd3116564b67458",
+    "rfdc-builtins-state/actor/TASK.md": "be0a52464f8b674ab89c70a969c3465a9b66ea954408a32fdfa0f9ec27ee1095",
+    "rfdc-builtins-state/actor/tests/visible.test.mjs": "247358f886beeedb300f2da0792209769c0c2d7e16524796012ddc3f4fab83b9",
+    "rfdc-builtins-state/private/acceptance.test.mjs": "986bb8883dbd111abd3f844cc509b551df81e665c89e40531721234d62c710b1",
+    "rfdc-builtins-state/reference/README.md": "1b742fe1cf4240268096a9a973449f50d4d992b41619d3a3b2503495140730d8",
+    "rfdc-builtins-state/reference/src/.editorconfig": "f000102bd4c1a767896b393391d11934a6c1deba7d610c6d36c6686514d7222a",
+    "rfdc-builtins-state/reference/src/.github/workflows/ci.yml": "980e730fddf1358d8db1b028972be91c2884a854daa4089b9eccb5cacbd305b9",
+    "rfdc-builtins-state/reference/src/.gitignore": "04f933883520bf3ea6b12559187745765eb5b73fe278b9f0a9c9d01125e0840a",
+    "rfdc-builtins-state/reference/src/.npmignore": "19209e59d2e3174b6731dd149802b94d6b481bbbeaa8f4d761e0606dc3cb02c8",
+    "rfdc-builtins-state/reference/src/.npmrc": "f3fc23758ab91be5f94a8c5eaff433d1ccd6a206cf1d381d332eb63716009337",
+    "rfdc-builtins-state/reference/src/benchmark/fixture.json": "2ee501d0990939a9110f6def479552cce318ff1d2963053fdbdd842feda2e3f3",
+    "rfdc-builtins-state/reference/src/benchmark/index.js": "0370244796f640d6ac7162dc0408aab2ef7b8b97a8d39823c121528f79eae692",
+    "rfdc-builtins-state/reference/src/benchmark/shallow.js": "d7ab4c02c29593563998a541a84b76e8f3e412dbd169501641499d76218a087a",
+    "rfdc-builtins-state/reference/src/default.js": "d7f46114c176de337df05aef386228b8ee1cd60e93a7400ee4ac98b91651f35e",
+    "rfdc-builtins-state/reference/src/index.d.ts": "1e9c163d34dfec47f0cc38322bb35ae6e031fec7947bc739ed8e3f61c3b6ad54",
+    "rfdc-builtins-state/reference/src/index.js": "276defbca175e8293ccaa08fcf1de4d8071c096e606bd8e156976c7550bdb0b7",
+    "rfdc-builtins-state/reference/src/index.test-d.ts": "486cd27a91b82aa30c23988fa421bc2ee1f4a8f835e558e068d273410ff6566a",
+    "rfdc-builtins-state/reference/src/LICENSE": "1ce941682a96c7b898ecd125d0f2e22319758ea6f3adbf498a65d649b0f3f7dd",
+    "rfdc-builtins-state/reference/src/package.json": "81def9ecb2be8cdf1c4aaeff121d3c6bcebf66bab7d3f219b1a984a5efe413fb",
+    "rfdc-builtins-state/reference/src/readme.md": "4a67904203da148cfe4689491e397952e0ac45e763857520af3892d522044753",
+    "rfdc-builtins-state/reference/src/test/index.js": "451902829edd5ecb3d9369621af041e67365836fe8faa3fa2cd3116564b67458",
+    "rfdc-builtins-state/reference/TASK.md": "be0a52464f8b674ab89c70a969c3465a9b66ea954408a32fdfa0f9ec27ee1095",
+    "rfdc-builtins-state/reference/tests/visible.test.mjs": "247358f886beeedb300f2da0792209769c0c2d7e16524796012ddc3f4fab83b9",
+    "rfdc-builtins-state/SOURCE-LICENSE": "1ce941682a96c7b898ecd125d0f2e22319758ea6f3adbf498a65d649b0f3f7dd",
+    "rfdc-builtins-state/source.tar.gz": "b629c00d7173bda3438c5389d7f199e9758050b542f24c97766cdb6bf75e2251",
+    "rfdc-builtins-state/task.json": "90d000ab0a46be790aa0ec4e274bccc7aa6971e60fe146930f77643a8da9b791",
+    "rfdc-builtins-state/validation/actor-acceptance.tap": "267b8664d983509f5e3e15a38426a1bda7c826868e6a9001caf06db59b494262",
+    "rfdc-builtins-state/validation/actor-visible.tap": "a15d3577ad27f0909eaa9d98124d6d3f5e96e47c7c70c29e923fafbd298ce45e",
+    "rfdc-builtins-state/validation/frozen.json": "3664bcea35034ea2ba5e392f5eba5f47536333e19fbdf5d816b4808c3ee4d1d5",
+    "rfdc-builtins-state/validation/reference-acceptance.tap": "9dd75826005ef6584bf083ca88eea8b1772877a285eac85a2b72c0033dd78ddf",
+    "rfdc-builtins-state/validation/reference-visible.tap": "879a8ebaf2067df5569680a5a7b2625cc33a7c411f6eafb50560e8bb315443ed",
+    "tinyqueue-heap-state/actor/README.md": "898644ef74ddfb4351e346956f6707f699063bd7d83f25e2c1033df7e8231480",
+    "tinyqueue-heap-state/actor/src/.github/workflows/node.yml": "fef06de816dda7fc7f2cd7b8dfed1c3b79cc77cd0fbc4230e210f74174b8b1e4",
+    "tinyqueue-heap-state/actor/src/.gitignore": "eaeff0b53839d259914dc3a4d043824bde9e0ddc936fe4c3b823ead1f30ba661",
+    "tinyqueue-heap-state/actor/src/bench.js": "2605e33aa3f55c76dd11d92485e1ab9434eca8aa93e5498b481c75430713f8f0",
+    "tinyqueue-heap-state/actor/src/eslint.config.js": "86ebd2fd665dbaf7ba33d3f46ac409f6b00106cd268f834c87b5d5de8c135b6f",
+    "tinyqueue-heap-state/actor/src/index.d.ts": "5c74fb05b74f75ccc417a49e2b47c4a4d9746f758cc227f4b613566600607d6a",
+    "tinyqueue-heap-state/actor/src/index.js": "bb9a73b90305ae041e7f65349adb56caab6493790acc25a4ffe8172a51dcef98",
+    "tinyqueue-heap-state/actor/src/LICENSE": "780453e05abdc22307ee01c706a2e73f508d3e484fc4c804485ebf6fe0964694",
+    "tinyqueue-heap-state/actor/src/package-lock.json": "4d081ae5ac15f0c30f2accf000ec3d859458f601afcc91f6f3676dd56a9a2c5e",
+    "tinyqueue-heap-state/actor/src/package.json": "5ced55111995ea5fda0c25cd58c19ed770cf16588fc1303c0073229f80c94751",
+    "tinyqueue-heap-state/actor/src/README.md": "095905b5cda2ff107969a99b78167c3637deb2a331e5b68f3c9558e3fb564a67",
+    "tinyqueue-heap-state/actor/src/test.js": "b04052403f6499a9998e16896c063fd48e3c693e6f6bfbf496536bdf7758dbd0",
+    "tinyqueue-heap-state/actor/TASK.md": "4d353c687ef77608c83cb1c4e115212cb2d546796a739230703692b1d5ee209c",
+    "tinyqueue-heap-state/actor/tests/visible.test.mjs": "cda66cf374a424d91ded1916fc994d3cf2830dcf2b9b171e94a5bd752c390d63",
+    "tinyqueue-heap-state/private/acceptance.test.mjs": "90684d5d4f82ef08e8528e874967424011f5628e38871397d7c5514d2ace177e",
+    "tinyqueue-heap-state/reference/README.md": "898644ef74ddfb4351e346956f6707f699063bd7d83f25e2c1033df7e8231480",
+    "tinyqueue-heap-state/reference/src/.github/workflows/node.yml": "fef06de816dda7fc7f2cd7b8dfed1c3b79cc77cd0fbc4230e210f74174b8b1e4",
+    "tinyqueue-heap-state/reference/src/.gitignore": "eaeff0b53839d259914dc3a4d043824bde9e0ddc936fe4c3b823ead1f30ba661",
+    "tinyqueue-heap-state/reference/src/bench.js": "2605e33aa3f55c76dd11d92485e1ab9434eca8aa93e5498b481c75430713f8f0",
+    "tinyqueue-heap-state/reference/src/eslint.config.js": "86ebd2fd665dbaf7ba33d3f46ac409f6b00106cd268f834c87b5d5de8c135b6f",
+    "tinyqueue-heap-state/reference/src/index.d.ts": "5c74fb05b74f75ccc417a49e2b47c4a4d9746f758cc227f4b613566600607d6a",
+    "tinyqueue-heap-state/reference/src/index.js": "4ab450ec366d74fd5721d2bf5cec0422451bbb80fe58169a21e0f9abf192ec18",
+    "tinyqueue-heap-state/reference/src/LICENSE": "780453e05abdc22307ee01c706a2e73f508d3e484fc4c804485ebf6fe0964694",
+    "tinyqueue-heap-state/reference/src/package-lock.json": "4d081ae5ac15f0c30f2accf000ec3d859458f601afcc91f6f3676dd56a9a2c5e",
+    "tinyqueue-heap-state/reference/src/package.json": "5ced55111995ea5fda0c25cd58c19ed770cf16588fc1303c0073229f80c94751",
+    "tinyqueue-heap-state/reference/src/README.md": "095905b5cda2ff107969a99b78167c3637deb2a331e5b68f3c9558e3fb564a67",
+    "tinyqueue-heap-state/reference/src/test.js": "b04052403f6499a9998e16896c063fd48e3c693e6f6bfbf496536bdf7758dbd0",
+    "tinyqueue-heap-state/reference/TASK.md": "4d353c687ef77608c83cb1c4e115212cb2d546796a739230703692b1d5ee209c",
+    "tinyqueue-heap-state/reference/tests/visible.test.mjs": "cda66cf374a424d91ded1916fc994d3cf2830dcf2b9b171e94a5bd752c390d63",
+    "tinyqueue-heap-state/SOURCE-LICENSE": "780453e05abdc22307ee01c706a2e73f508d3e484fc4c804485ebf6fe0964694",
+    "tinyqueue-heap-state/source.tar.gz": "9a8cfc1e6ec8c0922d077735ad7af6204c9a8b9ff68068a55ae3c53f3d06c52f",
+    "tinyqueue-heap-state/task.json": "531bef677b3336a715bb78ccb6fa4bbae756c2f108369d090b85341bc043713e",
+    "tinyqueue-heap-state/validation/actor-acceptance.tap": "2737002c2eeba5ebbac68408af4fd66e570153d4b58c1e87260f723060d87ff8",
+    "tinyqueue-heap-state/validation/actor-visible.tap": "c7277027afa0667ce366f15600d603f6a807127a8fb65065d7cc5b9395109c66",
+    "tinyqueue-heap-state/validation/frozen.json": "697b4f5401a29f59ff52081a38429de3ff56c36c5be593179c281add26d6f1da",
+    "tinyqueue-heap-state/validation/reference-acceptance.tap": "9c80be5d249e779b6e482f6d69cd58c4124b72a2746c4a1117eedf4bd4a96125",
+    "tinyqueue-heap-state/validation/reference-visible.tap": "81edde058babd8188fe5dd3f12d0aa0f9a5d50e2e8b4f60d333a15f468cdcfb8"
+  },
+  "rows": [
+    {
+      "task": "bottleneck-weighted-priority",
+      "split": "calibration",
+      "scopeTier": 2,
+      "contract": {
+        "passed": true,
+        "errors": [],
+        "testNames": [
+          "queued priorities run from smaller number to larger number with FIFO ties",
+          "successful weighted jobs release their entire reservation exactly once",
+          "failed weighted jobs release capacity and retain rejection identity",
+          "priority selection and weighted release compose across backlog waves",
+          "oversized jobs reject without consuming running capacity",
+          "zero weight completion leaves running capacity unchanged"
+        ],
+        "visibleTestNames": [
+          "unit weight scheduling preserves results and releases capacity",
+          "same priority queued jobs keep FIFO order",
+          "rejections preserve the original error and permit later work"
+        ],
+        "map": [
+          {
+            "name": "unit weight scheduling preserves results and releases capacity",
+            "requirements": [
+              "R2",
+              "R4"
+            ],
+            "rationale": "Visible baseline compatibility for ordinary results, running and done."
+          },
+          {
+            "name": "same priority queued jobs keep FIFO order",
+            "requirements": [
+              "R1"
+            ],
+            "rationale": "Visible gate-controlled nonpreemption and equal-priority FIFO."
+          },
+          {
+            "name": "rejections preserve the original error and permit later work",
+            "requirements": [
+              "R2",
+              "R4"
+            ],
+            "rationale": "Visible unit-weight failure compatibility."
+          },
+          {
+            "name": "queued priorities run from smaller number to larger number with FIFO ties",
+            "requirements": [
+              "R1"
+            ],
+            "rationale": "Distinct priority bands mixed with equal-priority ties behind a running blocker."
+          },
+          {
+            "name": "successful weighted jobs release their entire reservation exactly once",
+            "requirements": [
+              "R2",
+              "R4"
+            ],
+            "rationale": "Observes actual weighted reservation, full release, done conservation and full-capacity reuse."
+          },
+          {
+            "name": "failed weighted jobs release capacity and retain rejection identity",
+            "requirements": [
+              "R2",
+              "R4"
+            ],
+            "rationale": "Exercises Job failure completion into datastore and a subsequent maximum-weight job."
+          },
+          {
+            "name": "priority selection and weighted release compose across backlog waves",
+            "requirements": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ],
+            "rationale": "Both modules must work through actual queue, registration, execution, free and re-drain across two waves."
+          },
+          {
+            "name": "oversized jobs reject without consuming running capacity",
+            "requirements": [
+              "R2",
+              "R4"
+            ],
+            "rationale": "Guards rejected admission and later valid full-capacity use without asserting undocumented error text."
+          },
+          {
+            "name": "zero weight completion leaves running capacity unchanged",
+            "requirements": [
+              "R2",
+              "R5"
+            ],
+            "rationale": "A zero reservation must not cause a negative running count or increase effective capacity."
+          }
+        ]
+      },
+      "baseVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: unit weight scheduling preserves results and releases capacity\nok 1 - unit weight scheduling preserves results and releases capacity\n  ---\n  duration_ms: 125.2815\n  type: 'test'\n  ...\n# Subtest: same priority queued jobs keep FIFO order\nok 2 - same priority queued jobs keep FIFO order\n  ---\n  duration_ms: 200.735\n  type: 'test'\n  ...\n# Subtest: rejections preserve the original error and permit later work\nok 3 - rejections preserve the original error and permit later work\n  ---\n  duration_ms: 138.5184\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 471.0786\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 576
+      },
+      "baseHidden": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 6,
+        "passed": 1,
+        "failed": 4,
+        "skipped": 0,
+        "cancelled": 1,
+        "todo": 0,
+        "expectedTests": 6,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: queued priorities run from smaller number to larger number with FIFO ties\nnot ok 1 - queued priorities run from smaller number to larger number with FIFO ties\n  ---\n  duration_ms: 325.8291\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:25:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   'low',\n    +   'medium',\n        'high-a',\n        'high-b',\n    -   'medium',\n    -   'low'\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 'high-a'\n    1: 'high-b'\n    2: 'medium'\n    3: 'low'\n  actual:\n    0: 'low'\n    1: 'medium'\n    2: 'high-a'\n    3: 'high-b'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/bottleneck-weighted-priority/private/acceptance.test.mjs:35:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: successful weighted jobs release their entire reservation exactly once\nnot ok 2 - successful weighted jobs release their entire reservation exactly once\n  ---\n  duration_ms: 75.0271\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:40:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    3 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 3\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/bottleneck-weighted-priority/private/acceptance.test.mjs:46:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: failed weighted jobs release capacity and retain rejection identity\nnot ok 3 - failed weighted jobs release capacity and retain rejection identity\n  ---\n  duration_ms: 63.4716\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:54:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/bottleneck-weighted-priority/private/acceptance.test.mjs:58:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: priority selection and weighted release compose across backlog waves\nnot ok 4 - priority selection and weighted release compose across backlog waves\n  ---\n  duration_ms: 2010.9527\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:65:1'\n  failureType: 'testTimeoutFailure'\n  error: 'test timed out after 2000ms'\n  code: 'ERR_TEST_FAILURE'\n  ...\n# Subtest: oversized jobs reject without consuming running capacity\nok 5 - oversized jobs reject without consuming running capacity\n  ---\n  duration_ms: 92.0799\n  type: 'test'\n  ...\n# Subtest: zero weight completion leaves running capacity unchanged\nnot ok 6 - zero weight completion leaves running capacity unchanged\n  ---\n  duration_ms: 76.9026\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:110:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/bottleneck-weighted-priority/private/acceptance.test.mjs:113:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 1\n# fail 4\n# cancelled 1\n# skipped 0\n# todo 0\n# duration_ms 2648.9888\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 2746
+      },
+      "refVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: unit weight scheduling preserves results and releases capacity\nok 1 - unit weight scheduling preserves results and releases capacity\n  ---\n  duration_ms: 109.9216\n  type: 'test'\n  ...\n# Subtest: same priority queued jobs keep FIFO order\nok 2 - same priority queued jobs keep FIFO order\n  ---\n  duration_ms: 171.0838\n  type: 'test'\n  ...\n# Subtest: rejections preserve the original error and permit later work\nok 3 - rejections preserve the original error and permit later work\n  ---\n  duration_ms: 139.1262\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 441.239\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 549
+      },
+      "refHidden": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 6,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: queued priorities run from smaller number to larger number with FIFO ties\nok 1 - queued priorities run from smaller number to larger number with FIFO ties\n  ---\n  duration_ms: 281.8654\n  type: 'test'\n  ...\n# Subtest: successful weighted jobs release their entire reservation exactly once\nok 2 - successful weighted jobs release their entire reservation exactly once\n  ---\n  duration_ms: 200.352\n  type: 'test'\n  ...\n# Subtest: failed weighted jobs release capacity and retain rejection identity\nok 3 - failed weighted jobs release capacity and retain rejection identity\n  ---\n  duration_ms: 169.5555\n  type: 'test'\n  ...\n# Subtest: priority selection and weighted release compose across backlog waves\nok 4 - priority selection and weighted release compose across backlog waves\n  ---\n  duration_ms: 610.2517\n  type: 'test'\n  ...\n# Subtest: oversized jobs reject without consuming running capacity\nok 5 - oversized jobs reject without consuming running capacity\n  ---\n  duration_ms: 108.1532\n  type: 'test'\n  ...\n# Subtest: zero weight completion leaves running capacity unchanged\nok 6 - zero weight completion leaves running capacity unchanged\n  ---\n  duration_ms: 188.6378\n  type: 'test'\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 6\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1566.1395\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 1681
+      },
+      "unchanged": true,
+      "passed": true
+    },
+    {
+      "task": "emittery-iterator-lifecycle",
+      "split": "reserve",
+      "scopeTier": 1,
+      "contract": {
+        "passed": true,
+        "errors": [],
+        "testNames": [
+          "I01 named events multicast to all independent iterators",
+          "I02 anyEvent multicasts to all independent iterators",
+          "I03 slow and fast consumers preserve their own FIFO buffers",
+          "I04 returning one named iterator preserves sibling registration",
+          "I05 sibling named iterator keeps receiving after return",
+          "I06 returning one any iterator preserves sibling delivery",
+          "I07 multi-event return preserves all unrelated subscriptions",
+          "I08 clear named event drains buffered data before done",
+          "I09 clear all retains buffers of named and any iterators",
+          "I10 clear named event leaves other named and any streams active",
+          "I11 return discards own buffer and forwards awaited value",
+          "I12 return wakes a pending next with done",
+          "I13 clear wakes an empty waiting iterator and permits a fresh one",
+          "I14 symbol and numeric channels keep identity in anyEvent",
+          "I15 instances isolate subscriptions cleanup and buffers",
+          "I16 clear buffers independent same-event consumers",
+          "I17 returning repeatedly does not unregister a new sibling",
+          "I18 clearing several names drains each selected buffer"
+        ],
+        "visibleTestNames": [
+          "IV01 named listener registration and disposal",
+          "IV02 once and serial event listeners retain payloads",
+          "IV03 one named iterator receives ordinary emissions"
+        ],
+        "map": [
+          {
+            "name": "IV01 named listener registration and disposal",
+            "requirements": [
+              "I-R6"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "IV02 once and serial event listeners retain payloads",
+            "requirements": [
+              "I-R6"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "IV03 one named iterator receives ordinary emissions",
+            "requirements": [
+              "I-R1",
+              "I-R2"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I01 named events multicast to all independent iterators",
+            "requirements": [
+              "I-R1"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I02 anyEvent multicasts to all independent iterators",
+            "requirements": [
+              "I-R1"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I03 slow and fast consumers preserve their own FIFO buffers",
+            "requirements": [
+              "I-R1"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I04 returning one named iterator preserves sibling registration",
+            "requirements": [
+              "I-R2",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I05 sibling named iterator keeps receiving after return",
+            "requirements": [
+              "I-R2",
+              "I-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I06 returning one any iterator preserves sibling delivery",
+            "requirements": [
+              "I-R2",
+              "I-R4",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I07 multi-event return preserves all unrelated subscriptions",
+            "requirements": [
+              "I-R2",
+              "I-R4",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I08 clear named event drains buffered data before done",
+            "requirements": [
+              "I-R3",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I09 clear all retains buffers of named and any iterators",
+            "requirements": [
+              "I-R3",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I10 clear named event leaves other named and any streams active",
+            "requirements": [
+              "I-R3",
+              "I-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I11 return discards own buffer and forwards awaited value",
+            "requirements": [
+              "I-R2",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I12 return wakes a pending next with done",
+            "requirements": [
+              "I-R2"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I13 clear wakes an empty waiting iterator and permits a fresh one",
+            "requirements": [
+              "I-R3",
+              "I-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I14 symbol and numeric channels keep identity in anyEvent",
+            "requirements": [
+              "I-R1"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I15 instances isolate subscriptions cleanup and buffers",
+            "requirements": [
+              "I-R3",
+              "I-R4",
+              "I-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I16 clear buffers independent same-event consumers",
+            "requirements": [
+              "I-R1",
+              "I-R3"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I17 returning repeatedly does not unregister a new sibling",
+            "requirements": [
+              "I-R2",
+              "I-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "I18 clearing several names drains each selected buffer",
+            "requirements": [
+              "I-R3"
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      "baseVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: IV01 named listener registration and disposal\nok 1 - IV01 named listener registration and disposal\n  ---\n  duration_ms: 4.1201\n  type: 'test'\n  ...\n# Subtest: IV02 once and serial event listeners retain payloads\nok 2 - IV02 once and serial event listeners retain payloads\n  ---\n  duration_ms: 0.6854\n  type: 'test'\n  ...\n# Subtest: IV03 one named iterator receives ordinary emissions\nok 3 - IV03 one named iterator receives ordinary emissions\n  ---\n  duration_ms: 0.6635\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 17.2551\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 128
+      },
+      "baseHidden": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 18,
+        "passed": 5,
+        "failed": 13,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 18,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: I01 named events multicast to all independent iterators\nnot ok 1 - I01 named events multicast to all independent iterators\n  ---\n  duration_ms: 117.735\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:13:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n          done: false,\n          value: 7\n        },\n    +   'unsettled'\n    -   {\n    -     done: false,\n    -     value: 7\n    -   }\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 7\n    1:\n      done: false\n      value: 7\n  actual:\n    0:\n      done: false\n      value: 7\n    1: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:16:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: I02 anyEvent multicasts to all independent iterators\nnot ok 2 - I02 anyEvent multicasts to all independent iterators\n  ---\n  duration_ms: 104.1832\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:18:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    ... Skipped lines\n    \n      [\n        {\n          done: false,\n          value: [\n            'x',\n    ...\n        },\n    +   'unsettled'\n    -   {\n    -     done: false,\n    -     value: [\n    -       'x',\n    -       9\n    -     ]\n    -   }\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value:\n        0: 'x'\n        1: 9\n    1:\n      done: false\n      value:\n        0: 'x'\n        1: 9\n  actual:\n    0:\n      done: false\n      value:\n        0: 'x'\n        1: 9\n    1: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:21:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I03 slow and fast consumers preserve their own FIFO buffers\nnot ok 3 - I03 slow and fast consumers preserve their own FIFO buffers\n  ---\n  duration_ms: 217.0079\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:23:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    ... Skipped lines\n    \n      [\n        {\n          done: false,\n          value: 1\n        },\n    ...\n        },\n    +   'unsettled',\n    +   'unsettled'\n    -   {\n    -     done: false,\n    -     value: 1\n    -   },\n    -   {\n    -     done: false,\n    -     value: 2\n    -   }\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 1\n    1:\n      done: false\n      value: 2\n    2:\n      done: false\n      value: 1\n    3:\n      done: false\n      value: 2\n  actual:\n    0:\n      done: false\n      value: 1\n    1:\n      done: false\n      value: 2\n    2: 'unsettled'\n    3: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:27:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I04 returning one named iterator preserves sibling registration\nnot ok 4 - I04 returning one named iterator preserves sibling registration\n  ---\n  duration_ms: 0.8301\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:29:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    0 !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:31:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I05 sibling named iterator keeps receiving after return\nnot ok 5 - I05 sibling named iterator keeps receiving after return\n  ---\n  duration_ms: 108.9557\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:33:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n    + 'unsettled'\n    - {\n    -   done: false,\n    -   value: 'live'\n    - }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    done: false\n    value: 'live'\n  actual: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:36:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I06 returning one any iterator preserves sibling delivery\nnot ok 6 - I06 returning one any iterator preserves sibling delivery\n  ---\n  duration_ms: 109.7659\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:38:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   0,\n    +   'unsettled'\n    -   1,\n    -   {\n    -     done: false,\n    -     value: [\n    -       'x',\n    -       3\n    -     ]\n    -   }\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 1\n    1:\n      done: false\n      value:\n        0: 'x'\n        1: 3\n  actual:\n    0: 0\n    1: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:41:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I07 multi-event return preserves all unrelated subscriptions\nnot ok 7 - I07 multi-event return preserves all unrelated subscriptions\n  ---\n  duration_ms: 216.6858\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:43:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   0,\n    +   'unsettled',\n    +   'unsettled'\n    -   2,\n    -   {\n    -     done: false,\n    -     value: 1\n    -   },\n    -   {\n    -     done: false,\n    -     value: 2\n    -   }\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 2\n    1:\n      done: false\n      value: 1\n    2:\n      done: false\n      value: 2\n  actual:\n    0: 0\n    1: 'unsettled'\n    2: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:47:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I08 clear named event drains buffered data before done\nnot ok 8 - I08 clear named event drains buffered data before done\n  ---\n  duration_ms: 0.7951\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:49:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n    +     done: true\n    -     done: false,\n    -     value: 1\n        },\n        {\n    +     done: true\n    -     done: false,\n    -     value: 2\n        },\n        {\n          done: true\n        },\n        0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 1\n    1:\n      done: false\n      value: 2\n    2:\n      done: true\n    3: 0\n  actual:\n    0:\n      done: true\n    1:\n      done: true\n    2:\n      done: true\n    3: 0\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:51:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I09 clear all retains buffers of named and any iterators\nnot ok 9 - I09 clear all retains buffers of named and any iterators\n  ---\n  duration_ms: 0.5993\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:53:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n    +     done: true\n    -     done: false,\n    -     value: 4\n        },\n        {\n          done: true\n        },\n        {\n    +     done: true\n    -     done: false,\n    -     value: [\n    -       'x',\n    -       4\n    -     ]\n        },\n        {\n          done: true\n        },\n        0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 4\n    1:\n      done: true\n    2:\n      done: false\n      value:\n        0: 'x'\n        1: 4\n    3:\n      done: true\n    4: 0\n  actual:\n    0:\n      done: true\n    1:\n      done: true\n    2:\n      done: true\n    3:\n      done: true\n    4: 0\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:55:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I10 clear named event leaves other named and any streams active\nok 10 - I10 clear named event leaves other named and any streams active\n  ---\n  duration_ms: 0.4318\n  type: 'test'\n  ...\n# Subtest: I11 return discards own buffer and forwards awaited value\nok 11 - I11 return discards own buffer and forwards awaited value\n  ---\n  duration_ms: 0.23\n  type: 'test'\n  ...\n# Subtest: I12 return wakes a pending next with done\nok 12 - I12 return wakes a pending next with done\n  ---\n  duration_ms: 0.1965\n  type: 'test'\n  ...\n# Subtest: I13 clear wakes an empty waiting iterator and permits a fresh one\nok 13 - I13 clear wakes an empty waiting iterator and permits a fresh one\n  ---\n  duration_ms: 0.2219\n  type: 'test'\n  ...\n# Subtest: I14 symbol and numeric channels keep identity in anyEvent\nok 14 - I14 symbol and numeric channels keep identity in anyEvent\n  ---\n  duration_ms: 0.2372\n  type: 'test'\n  ...\n# Subtest: I15 instances isolate subscriptions cleanup and buffers\nnot ok 15 - I15 instances isolate subscriptions cleanup and buffers\n  ---\n  duration_ms: 0.4598\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:81:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n    +     done: true\n    -     done: false,\n    -     value: 1\n        },\n        {\n          done: false,\n          value: 2\n        },\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 1\n    1:\n      done: false\n      value: 2\n    2: 0\n    3: 1\n  actual:\n    0:\n      done: true\n    1:\n      done: false\n      value: 2\n    2: 0\n    3: 1\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:85:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I16 clear buffers independent same-event consumers\nnot ok 16 - I16 clear buffers independent same-event consumers\n  ---\n  duration_ms: 0.4924\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:87:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n    +     done: true\n    -     done: false,\n    -     value: 3\n        },\n        {\n    +     done: true\n    -     done: false,\n    -     value: 3\n        },\n        {\n          done: true\n        },\n        {\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 3\n    1:\n      done: false\n      value: 3\n    2:\n      done: true\n    3:\n      done: true\n  actual:\n    0:\n      done: true\n    1:\n      done: true\n    2:\n      done: true\n    3:\n      done: true\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:89:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I17 returning repeatedly does not unregister a new sibling\nnot ok 17 - I17 returning repeatedly does not unregister a new sibling\n  ---\n  duration_ms: 104.8054\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:91:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n    + 'unsettled'\n    - {\n    -   done: false,\n    -   value: 8\n    - }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    done: false\n    value: 8\n  actual: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:94:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: I18 clearing several names drains each selected buffer\nnot ok 18 - I18 clearing several names drains each selected buffer\n  ---\n  duration_ms: 0.5945\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\emittery-iterator-lifecycle\\\\private\\\\acceptance.test.mjs:96:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n    +     done: true\n    -     done: false,\n    -     value: 1\n        },\n        {\n    +     done: true\n    -     done: false,\n    -     value: 2\n        },\n        {\n          done: true\n        },\n        {\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      done: false\n      value: 1\n    1:\n      done: false\n      value: 2\n    2:\n      done: true\n    3:\n      done: true\n  actual:\n    0:\n      done: true\n    1:\n      done: true\n    2:\n      done: true\n    3:\n      done: true\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:98:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..18\n# tests 18\n# suites 0\n# pass 5\n# fail 13\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1000.2553\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 1118
+      },
+      "refVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: IV01 named listener registration and disposal\nok 1 - IV01 named listener registration and disposal\n  ---\n  duration_ms: 2.7572\n  type: 'test'\n  ...\n# Subtest: IV02 once and serial event listeners retain payloads\nok 2 - IV02 once and serial event listeners retain payloads\n  ---\n  duration_ms: 0.598\n  type: 'test'\n  ...\n# Subtest: IV03 one named iterator receives ordinary emissions\nok 3 - IV03 one named iterator receives ordinary emissions\n  ---\n  duration_ms: 0.5243\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 12.1535\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 96
+      },
+      "refHidden": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 18,
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 18,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: I01 named events multicast to all independent iterators\nok 1 - I01 named events multicast to all independent iterators\n  ---\n  duration_ms: 2.3871\n  type: 'test'\n  ...\n# Subtest: I02 anyEvent multicasts to all independent iterators\nok 2 - I02 anyEvent multicasts to all independent iterators\n  ---\n  duration_ms: 0.3311\n  type: 'test'\n  ...\n# Subtest: I03 slow and fast consumers preserve their own FIFO buffers\nok 3 - I03 slow and fast consumers preserve their own FIFO buffers\n  ---\n  duration_ms: 0.5132\n  type: 'test'\n  ...\n# Subtest: I04 returning one named iterator preserves sibling registration\nok 4 - I04 returning one named iterator preserves sibling registration\n  ---\n  duration_ms: 0.332\n  type: 'test'\n  ...\n# Subtest: I05 sibling named iterator keeps receiving after return\nok 5 - I05 sibling named iterator keeps receiving after return\n  ---\n  duration_ms: 0.307\n  type: 'test'\n  ...\n# Subtest: I06 returning one any iterator preserves sibling delivery\nok 6 - I06 returning one any iterator preserves sibling delivery\n  ---\n  duration_ms: 0.3082\n  type: 'test'\n  ...\n# Subtest: I07 multi-event return preserves all unrelated subscriptions\nok 7 - I07 multi-event return preserves all unrelated subscriptions\n  ---\n  duration_ms: 0.3719\n  type: 'test'\n  ...\n# Subtest: I08 clear named event drains buffered data before done\nok 8 - I08 clear named event drains buffered data before done\n  ---\n  duration_ms: 1.0704\n  type: 'test'\n  ...\n# Subtest: I09 clear all retains buffers of named and any iterators\nok 9 - I09 clear all retains buffers of named and any iterators\n  ---\n  duration_ms: 0.3249\n  type: 'test'\n  ...\n# Subtest: I10 clear named event leaves other named and any streams active\nok 10 - I10 clear named event leaves other named and any streams active\n  ---\n  duration_ms: 0.3139\n  type: 'test'\n  ...\n# Subtest: I11 return discards own buffer and forwards awaited value\nok 11 - I11 return discards own buffer and forwards awaited value\n  ---\n  duration_ms: 0.2059\n  type: 'test'\n  ...\n# Subtest: I12 return wakes a pending next with done\nok 12 - I12 return wakes a pending next with done\n  ---\n  duration_ms: 0.158\n  type: 'test'\n  ...\n# Subtest: I13 clear wakes an empty waiting iterator and permits a fresh one\nok 13 - I13 clear wakes an empty waiting iterator and permits a fresh one\n  ---\n  duration_ms: 0.1912\n  type: 'test'\n  ...\n# Subtest: I14 symbol and numeric channels keep identity in anyEvent\nok 14 - I14 symbol and numeric channels keep identity in anyEvent\n  ---\n  duration_ms: 0.2472\n  type: 'test'\n  ...\n# Subtest: I15 instances isolate subscriptions cleanup and buffers\nok 15 - I15 instances isolate subscriptions cleanup and buffers\n  ---\n  duration_ms: 0.2908\n  type: 'test'\n  ...\n# Subtest: I16 clear buffers independent same-event consumers\nok 16 - I16 clear buffers independent same-event consumers\n  ---\n  duration_ms: 0.2005\n  type: 'test'\n  ...\n# Subtest: I17 returning repeatedly does not unregister a new sibling\nok 17 - I17 returning repeatedly does not unregister a new sibling\n  ---\n  duration_ms: 0.1616\n  type: 'test'\n  ...\n# Subtest: I18 clearing several names drains each selected buffer\nok 18 - I18 clearing several names drains each selected buffer\n  ---\n  duration_ms: 0.2347\n  type: 'test'\n  ...\n1..18\n# tests 18\n# suites 0\n# pass 18\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 19.2541\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 99
+      },
+      "unchanged": true,
+      "passed": true
+    },
+    {
+      "task": "fastq-resume-window",
+      "split": "calibration",
+      "scopeTier": 1,
+      "contract": {
+        "passed": true,
+        "errors": [],
+        "testNames": [
+          "F01 paused capacity increase must not dispatch",
+          "F02 paused active completions do not start backlog",
+          "F03 resume fills all available worker slots",
+          "F04 resume preserves existing running worker accounting",
+          "F05 resume at full capacity waits for a completion",
+          "F06 resume retains unshift priority and FIFO tails",
+          "F07 completion replaces worker at exact capacity",
+          "F08 serial queue fully drains without another push",
+          "F09 lowered concurrency waits for excess active workers",
+          "F10 lowered concurrency refills at its new limit",
+          "F11 raised concurrency fills free slots immediately",
+          "F12 repeated resume is idempotent",
+          "F13 synchronous completion reentrancy preserves task order",
+          "F14 queued callback and error handler retain context and payload",
+          "F15 empty and drain callbacks reflect queue transitions",
+          "F16 promise queue resumes and resolves all ordered results"
+        ],
+        "visibleTestNames": [
+          "FV01 immediate callback and context",
+          "FV02 promise immediate result",
+          "FV03 paused queue stores FIFO and unshift"
+        ],
+        "map": [
+          {
+            "name": "FV01 immediate callback and context",
+            "requirements": [
+              "F-R5",
+              "F-R3"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "FV02 promise immediate result",
+            "requirements": [
+              "F-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "FV03 paused queue stores FIFO and unshift",
+            "requirements": [
+              "F-R1",
+              "F-R3"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F01 paused capacity increase must not dispatch",
+            "requirements": [
+              "F-R1"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F02 paused active completions do not start backlog",
+            "requirements": [
+              "F-R1"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F03 resume fills all available worker slots",
+            "requirements": [
+              "F-R2",
+              "F-R3"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F04 resume preserves existing running worker accounting",
+            "requirements": [
+              "F-R2",
+              "F-R3"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F05 resume at full capacity waits for a completion",
+            "requirements": [
+              "F-R2"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F06 resume retains unshift priority and FIFO tails",
+            "requirements": [
+              "F-R2",
+              "F-R3"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F07 completion replaces worker at exact capacity",
+            "requirements": [
+              "F-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F08 serial queue fully drains without another push",
+            "requirements": [
+              "F-R3",
+              "F-R4",
+              "F-R6"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F09 lowered concurrency waits for excess active workers",
+            "requirements": [
+              "F-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F10 lowered concurrency refills at its new limit",
+            "requirements": [
+              "F-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F11 raised concurrency fills free slots immediately",
+            "requirements": [
+              "F-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F12 repeated resume is idempotent",
+            "requirements": [
+              "F-R2"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F13 synchronous completion reentrancy preserves task order",
+            "requirements": [
+              "F-R3",
+              "F-R5"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F14 queued callback and error handler retain context and payload",
+            "requirements": [
+              "F-R5",
+              "F-R4"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F15 empty and drain callbacks reflect queue transitions",
+            "requirements": [
+              "F-R6"
+            ],
+            "rationale": null
+          },
+          {
+            "name": "F16 promise queue resumes and resolves all ordered results",
+            "requirements": [
+              "F-R5",
+              "F-R3"
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      "baseVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: FV01 immediate callback and context\nok 1 - FV01 immediate callback and context\n  ---\n  duration_ms: 1.7522\n  type: 'test'\n  ...\n# Subtest: FV02 promise immediate result\nok 2 - FV02 promise immediate result\n  ---\n  duration_ms: 0.3507\n  type: 'test'\n  ...\n# Subtest: FV03 paused queue stores FIFO and unshift\nok 3 - FV03 paused queue stores FIFO and unshift\n  ---\n  duration_ms: 0.294\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.6477\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 99
+      },
+      "baseHidden": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 16,
+        "passed": 2,
+        "failed": 14,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 16,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: F01 paused capacity increase must not dispatch\nnot ok 1 - F01 paused capacity increase must not dispatch\n  ---\n  duration_ms: 2.7878\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:15:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    -   [],\n    -   0,\n        [\n          'a',\n          'b'\n        ],\n    +   2,\n    +   [],\n    +   false\n    -   true\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n    1: 0\n    2:\n      0: 'a'\n      1: 'b'\n    3: true\n  actual:\n    0:\n      0: 'a'\n      1: 'b'\n    1: 2\n    2:\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:17:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n# Subtest: F02 paused active completions do not start backlog\nnot ok 2 - F02 paused active completions do not start backlog\n  ---\n  duration_ms: 0.4026\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:19:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'a',\n    -   ],\n    -   0,\n    -   [\n          'b'\n        ],\n    +   1,\n    +   [],\n    +   false\n    -   true\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'a'\n    1: 0\n    2:\n      0: 'b'\n    3: true\n  actual:\n    0:\n      0: 'a'\n      1: 'b'\n    1: 1\n    2:\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:21:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: F03 resume fills all available worker slots\nnot ok 3 - F03 resume fills all available worker slots\n  ---\n  duration_ms: 0.3333\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:23:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'a',\n    +   ],\n    +   1,\n    +   [\n          'b',\n          'c',\n    -   ],\n    -   3,\n    -   [\n          'd'\n        ],\n        false\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'a'\n      1: 'b'\n      2: 'c'\n    1: 3\n    2:\n      0: 'd'\n    3: false\n  actual:\n    0:\n      0: 'a'\n    1: 1\n    2:\n      0: 'b'\n      1: 'c'\n      2: 'd'\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:25:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F04 resume preserves existing running worker accounting\nnot ok 4 - F04 resume preserves existing running worker accounting\n  ---\n  duration_ms: 0.2643\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:27:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'active',\n          'a',\n    -     'b'\n        ],\n    +   1,\n    -   3,\n        [\n    +     'b',\n          'c'\n        ],\n        false\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'active'\n      1: 'a'\n      2: 'b'\n    1: 3\n    2:\n      0: 'c'\n    3: false\n  actual:\n    0:\n      0: 'active'\n      1: 'a'\n    1: 1\n    2:\n      0: 'b'\n      1: 'c'\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:29:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F05 resume at full capacity waits for a completion\nnot ok 5 - F05 resume at full capacity waits for a completion\n  ---\n  duration_ms: 0.2937\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:31:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'active',\n    +     'waiting'\n        ],\n        1,\n    +   [],\n    -   [\n    -     'waiting'\n    -   ],\n        false\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'active'\n    1: 1\n    2:\n      0: 'waiting'\n    3: false\n  actual:\n    0:\n      0: 'active'\n      1: 'waiting'\n    1: 1\n    2:\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:33:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F06 resume retains unshift priority and FIFO tails\nnot ok 6 - F06 resume retains unshift priority and FIFO tails\n  ---\n  duration_ms: 0.3059\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:35:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'head',\n    -     'tail1'\n        ],\n    +   1,\n    -   2,\n        [\n    +     'tail1',\n          'tail2'\n        ],\n        false\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'head'\n      1: 'tail1'\n    1: 2\n    2:\n      0: 'tail2'\n    3: false\n  actual:\n    0:\n      0: 'head'\n    1: 1\n    2:\n      0: 'tail1'\n      1: 'tail2'\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:37:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F07 completion replaces worker at exact capacity\nnot ok 7 - F07 completion replaces worker at exact capacity\n  ---\n  duration_ms: 0.2355\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:39:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'a',\n          'b',\n    -     'c'\n        ],\n    +   1,\n    -   2,\n        [\n    +     'c',\n          'd'\n        ],\n        false\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'a'\n      1: 'b'\n      2: 'c'\n    1: 2\n    2:\n      0: 'd'\n    3: false\n  actual:\n    0:\n      0: 'a'\n      1: 'b'\n    1: 1\n    2:\n      0: 'c'\n      1: 'd'\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:41:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F08 serial queue fully drains without another push\nnot ok 8 - F08 serial queue fully drains without another push\n  ---\n  duration_ms: 0.371\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:43:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'a',\n    +   ],\n    +   0,\n    +   [\n          'b',\n          'c'\n        ],\n    +   false,\n    -   0,\n    -   [],\n    -   true,\n        1\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'a'\n      1: 'b'\n      2: 'c'\n    1: 0\n    2:\n    3: true\n    4: 1\n  actual:\n    0:\n      0: 'a'\n    1: 0\n    2:\n      0: 'b'\n      1: 'c'\n    3: false\n    4: 1\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:47:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F09 lowered concurrency waits for excess active workers\nok 9 - F09 lowered concurrency waits for excess active workers\n  ---\n  duration_ms: 0.4546\n  type: 'test'\n  ...\n# Subtest: F10 lowered concurrency refills at its new limit\nnot ok 10 - F10 lowered concurrency refills at its new limit\n  ---\n  duration_ms: 0.5035\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:54:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          'a',\n          'b',\n          'c',\n    +   ],\n    +   0,\n    +   [\n          'd'\n        ],\n    -   1,\n    -   [],\n        false\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'a'\n      1: 'b'\n      2: 'c'\n      3: 'd'\n    1: 1\n    2:\n    3: false\n  actual:\n    0:\n      0: 'a'\n      1: 'b'\n      2: 'c'\n    1: 0\n    2:\n      0: 'd'\n    3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:57:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F11 raised concurrency fills free slots immediately\nok 11 - F11 raised concurrency fills free slots immediately\n  ---\n  duration_ms: 0.1976\n  type: 'test'\n  ...\n# Subtest: F12 repeated resume is idempotent\nnot ok 12 - F12 repeated resume is idempotent\n  ---\n  duration_ms: 0.9648\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:63:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          [\n            'a',\n    +     ],\n    +     1,\n    +     [\n            'b'\n          ],\n    -     2,\n    -     [],\n          false\n        ],\n        [\n          [\n            'a',\n    +     ],\n    +     1,\n    +     [\n            'b'\n          ],\n    -     2,\n    -     [],\n          false\n        ]\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0:\n        0: 'a'\n        1: 'b'\n      1: 2\n      2:\n      3: false\n    1:\n      0:\n        0: 'a'\n        1: 'b'\n      1: 2\n      2:\n      3: false\n  actual:\n    0:\n      0:\n        0: 'a'\n      1: 1\n      2:\n        0: 'b'\n      3: false\n    1:\n      0:\n        0: 'a'\n      1: 1\n      2:\n        0: 'b'\n      3: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:65:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F13 synchronous completion reentrancy preserves task order\nnot ok 13 - F13 synchronous completion reentrancy preserves task order\n  ---\n  duration_ms: 0.3567\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:67:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          1,\n    -     2,\n    -     3,\n    -     4\n        ],\n        [\n          [\n            null,\n            2\n          ],\n    -     [\n    -       null,\n    -       4\n    -     ],\n    -     [\n    -       null,\n    -       6\n    -     ],\n    -     [\n    -       null,\n    -       8\n    -     ]\n        ],\n        0,\n    +   [\n    +     2,\n    +     3,\n    +     4\n    +   ],\n    +   false\n    -   [],\n    -   true\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 1\n      1: 2\n      2: 3\n      3: 4\n    1:\n      0:\n        0: ~\n        1: 2\n      1:\n        0: ~\n        1: 4\n      2:\n        0: ~\n        1: 6\n      3:\n        0: ~\n        1: 8\n    2: 0\n    3:\n    4: true\n  actual:\n    0:\n      0: 1\n    1:\n      0:\n        0: ~\n        1: 2\n    2: 0\n    3:\n      0: 2\n      1: 3\n      2: 4\n    4: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:71:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F14 queued callback and error handler retain context and payload\nnot ok 14 - F14 queued callback and error handler retain context and payload\n  ---\n  duration_ms: 0.3431\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:73:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n          [\n            'error',\n            false,\n            'a'\n          ],\n    -     [\n    -       'error',\n    -       true,\n    -       'b'\n    -     ],\n    -     [\n    -       'callback',\n    -       true,\n    -       'b-result',\n    -       true\n    -     ]\n        ],\n    +   false\n    -   true\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0:\n        0: 'error'\n        1: false\n        2: 'a'\n      1:\n        0: 'error'\n        1: true\n        2: 'b'\n      2:\n        0: 'callback'\n        1: true\n        2: 'b-result'\n        3: true\n    1: true\n  actual:\n    0:\n      0:\n        0: 'error'\n        1: false\n        2: 'a'\n    1: false\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:79:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F15 empty and drain callbacks reflect queue transitions\nnot ok 15 - F15 empty and drain callbacks reflect queue transitions\n  ---\n  duration_ms: 0.2336\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:81:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        [\n    -     'empty',\n    -     0\n    -   ],\n    -   [\n          'drain',\n          0\n        ]\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      0: 'empty'\n      1: 0\n    1:\n      0: 'drain'\n      1: 0\n  actual:\n    0:\n      0: 'drain'\n      1: 0\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:85:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: F16 promise queue resumes and resolves all ordered results\nnot ok 16 - F16 promise queue resumes and resolves all ordered results\n  ---\n  duration_ms: 115.0429\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\fastq-resume-window\\\\private\\\\acceptance.test.mjs:87:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n    + 'unsettled'\n    - [\n    -   2,\n    -   4,\n    -   6\n    - ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 2\n    1: 4\n    2: 6\n  actual: 'unsettled'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:92:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..16\n# tests 16\n# suites 0\n# pass 2\n# fail 14\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 129.6675\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 215
+      },
+      "refVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: FV01 immediate callback and context\nok 1 - FV01 immediate callback and context\n  ---\n  duration_ms: 1.8001\n  type: 'test'\n  ...\n# Subtest: FV02 promise immediate result\nok 2 - FV02 promise immediate result\n  ---\n  duration_ms: 0.3772\n  type: 'test'\n  ...\n# Subtest: FV03 paused queue stores FIFO and unshift\nok 3 - FV03 paused queue stores FIFO and unshift\n  ---\n  duration_ms: 0.2642\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.7231\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 96
+      },
+      "refHidden": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 16,
+        "passed": 16,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 16,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: F01 paused capacity increase must not dispatch\nok 1 - F01 paused capacity increase must not dispatch\n  ---\n  duration_ms: 1.9586\n  type: 'test'\n  ...\n# Subtest: F02 paused active completions do not start backlog\nok 2 - F02 paused active completions do not start backlog\n  ---\n  duration_ms: 0.3226\n  type: 'test'\n  ...\n# Subtest: F03 resume fills all available worker slots\nok 3 - F03 resume fills all available worker slots\n  ---\n  duration_ms: 0.2746\n  type: 'test'\n  ...\n# Subtest: F04 resume preserves existing running worker accounting\nok 4 - F04 resume preserves existing running worker accounting\n  ---\n  duration_ms: 0.1801\n  type: 'test'\n  ...\n# Subtest: F05 resume at full capacity waits for a completion\nok 5 - F05 resume at full capacity waits for a completion\n  ---\n  duration_ms: 0.1741\n  type: 'test'\n  ...\n# Subtest: F06 resume retains unshift priority and FIFO tails\nok 6 - F06 resume retains unshift priority and FIFO tails\n  ---\n  duration_ms: 0.1926\n  type: 'test'\n  ...\n# Subtest: F07 completion replaces worker at exact capacity\nok 7 - F07 completion replaces worker at exact capacity\n  ---\n  duration_ms: 0.2354\n  type: 'test'\n  ...\n# Subtest: F08 serial queue fully drains without another push\nok 8 - F08 serial queue fully drains without another push\n  ---\n  duration_ms: 0.2404\n  type: 'test'\n  ...\n# Subtest: F09 lowered concurrency waits for excess active workers\nok 9 - F09 lowered concurrency waits for excess active workers\n  ---\n  duration_ms: 0.1887\n  type: 'test'\n  ...\n# Subtest: F10 lowered concurrency refills at its new limit\nok 10 - F10 lowered concurrency refills at its new limit\n  ---\n  duration_ms: 0.2478\n  type: 'test'\n  ...\n# Subtest: F11 raised concurrency fills free slots immediately\nok 11 - F11 raised concurrency fills free slots immediately\n  ---\n  duration_ms: 0.166\n  type: 'test'\n  ...\n# Subtest: F12 repeated resume is idempotent\nok 12 - F12 repeated resume is idempotent\n  ---\n  duration_ms: 0.124\n  type: 'test'\n  ...\n# Subtest: F13 synchronous completion reentrancy preserves task order\nok 13 - F13 synchronous completion reentrancy preserves task order\n  ---\n  duration_ms: 0.1813\n  type: 'test'\n  ...\n# Subtest: F14 queued callback and error handler retain context and payload\nok 14 - F14 queued callback and error handler retain context and payload\n  ---\n  duration_ms: 0.2005\n  type: 'test'\n  ...\n# Subtest: F15 empty and drain callbacks reflect queue transitions\nok 15 - F15 empty and drain callbacks reflect queue transitions\n  ---\n  duration_ms: 0.1831\n  type: 'test'\n  ...\n# Subtest: F16 promise queue resumes and resolves all ordered results\nok 16 - F16 promise queue resumes and resolves all ordered results\n  ---\n  duration_ms: 1.1824\n  type: 'test'\n  ...\n1..16\n# tests 16\n# suites 0\n# pass 16\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 114.7247\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 196
+      },
+      "unchanged": true,
+      "passed": true
+    },
+    {
+      "task": "rfdc-builtins-state",
+      "split": "calibration",
+      "scopeTier": 1,
+      "contract": {
+        "passed": true,
+        "errors": [],
+        "testNames": [
+          "ordinary data primitives functions and dates are preserved in every mode",
+          "map keys and values are recursively independent in every mode",
+          "maps inside arrays and sets recursively clone entries",
+          "typed subviews preserve type offset length and independent storage",
+          "dataviews in arrays preserve the visible bytes and isolate writes",
+          "buffers and binary values nested through containers are copied",
+          "custom constructors work at object array and container positions",
+          "custom handlers override builtins without matching subclasses",
+          "ordinary ancestor cycles through arrays and repeated calls stay independent",
+          "prototype property policy survives container and handler recursion"
+        ],
+        "visibleTestNames": [
+          "ordinary nested values remain independent",
+          "dates keep their value and ordinary self cycles are preserved"
+        ],
+        "map": [
+          {
+            "name": "ordinary data primitives functions and dates are preserved in every mode",
+            "requirements": [
+              "R1"
+            ],
+            "rationale": "Checks root primitives, referenced functions, nested dense arrays/objects and copied Date values plus mutation isolation across all four supported option modes."
+          },
+          {
+            "name": "map keys and values are recursively independent in every mode",
+            "requirements": [
+              "R2"
+            ],
+            "rationale": "Checks both entry positions, nested data and mutation isolation across all option modes."
+          },
+          {
+            "name": "maps inside arrays and sets recursively clone entries",
+            "requirements": [
+              "R2"
+            ],
+            "rationale": "Exercises recursive containers without assuming alias identity or ordering beyond Map/Set semantics."
+          },
+          {
+            "name": "typed subviews preserve type offset length and independent storage",
+            "requirements": [
+              "R3"
+            ],
+            "rationale": "Uses a nonzero-offset typed view and checks writes in both directions."
+          },
+          {
+            "name": "dataviews in arrays preserve the visible bytes and isolate writes",
+            "requirements": [
+              "R3"
+            ],
+            "rationale": "Checks an array position and a supported DataView whose visible span reaches the end of its buffer."
+          },
+          {
+            "name": "buffers and binary values nested through containers are copied",
+            "requirements": [
+              "R2",
+              "R3"
+            ],
+            "rationale": "Checks Buffer and signed typed data through Set and Map."
+          },
+          {
+            "name": "custom constructors work at object array and container positions",
+            "requirements": [
+              "R2",
+              "R4"
+            ],
+            "rationale": "Checks supplied recursive handler and isolation in each supported position."
+          },
+          {
+            "name": "custom handlers override builtins without matching subclasses",
+            "requirements": [
+              "R4"
+            ],
+            "rationale": "Explicit built-in override plus exact-constructor matching."
+          },
+          {
+            "name": "ordinary ancestor cycles through arrays and repeated calls stay independent",
+            "requirements": [
+              "R5"
+            ],
+            "rationale": "Checks ancestor/self back-references and independence between calls."
+          },
+          {
+            "name": "prototype property policy survives container and handler recursion",
+            "requirements": [
+              "R2",
+              "R4",
+              "R6"
+            ],
+            "rationale": "Checks own and inherited enumerable data through every relevant recursion path."
+          }
+        ]
+      },
+      "baseVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 2,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: ordinary nested values remain independent\nok 1 - ordinary nested values remain independent\n  ---\n  duration_ms: 1.5174\n  type: 'test'\n  ...\n# Subtest: dates keep their value and ordinary self cycles are preserved\nok 2 - dates keep their value and ordinary self cycles are preserved\n  ---\n  duration_ms: 0.3306\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.7036\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 87
+      },
+      "baseHidden": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 10,
+        "passed": 2,
+        "failed": 8,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 10,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: ordinary data primitives functions and dates are preserved in every mode\nok 1 - ordinary data primitives functions and dates are preserved in every mode\n  ---\n  duration_ms: 3.6932\n  type: 'test'\n  ...\n# Subtest: map keys and values are recursively independent in every mode\nnot ok 2 - map keys and values are recursively independent in every mode\n  ---\n  duration_ms: 1.107\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:27:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected \"actual\" not to be reference-equal to \"expected\":\n    \n    {\n      label: {\n        id: 1\n      }\n    }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    label:\n      id: 1\n  actual:\n    label:\n      id: 1\n  operator: 'notStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:32:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: maps inside arrays and sets recursively clone entries\nnot ok 3 - maps inside arrays and sets recursively clone entries\n  ---\n  duration_ms: 0.5132\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:36:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    5 !== 3\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 3\n  actual: 5\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:41:34)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: typed subviews preserve type offset length and independent storage\nnot ok 4 - typed subviews preserve type offset length and independent storage\n  ---\n  duration_ms: 0.4549\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:44:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected \"actual\" not to be reference-equal to \"expected\":\n    \n    ArrayBuffer {\n      [Uint8Contents]: <00 00 00 00 0c 00 22 00 38 00 00 00 00 00 00 00>,\n      [byteLength]: 16\n    }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n  actual:\n  operator: 'notStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:49:49)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: dataviews in arrays preserve the visible bytes and isolate writes\nnot ok 5 - dataviews in arrays preserve the visible bytes and isolate writes\n  ---\n  duration_ms: 0.3464\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:53:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected \"actual\" not to be reference-equal to \"expected\":\n    \n    ArrayBuffer {\n      [Uint8Contents]: <00 00 11 00 00 00 00 00>,\n      [byteLength]: 8\n    }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n  actual:\n  operator: 'notStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:58:44)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: buffers and binary values nested through containers are copied\nnot ok 6 - buffers and binary values nested through containers are copied\n  ---\n  duration_ms: 0.4281\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:62:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    7 !== -2\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: -2\n  actual: 7\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:68:52)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: custom constructors work at object array and container positions\nnot ok 7 - custom constructors work at object array and container positions\n  ---\n  duration_ms: 0.5588\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:71:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected \"actual\" not to be reference-equal to \"expected\":\n    \n    {\n      n: 4\n    }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    n: 4\n  actual:\n    n: 4\n  operator: 'notStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:78:77)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: custom handlers override builtins without matching subclasses\nnot ok 8 - custom handlers override builtins without matching subclasses\n  ---\n  duration_ms: 1.6288\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:83:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n    + 1970-01-01T00:00:00.000Z\n    - {\n    -   handled: true\n    - }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    handled: true\n  actual: 1970-01-01T00:00:00.000Z\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:87:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: ordinary ancestor cycles through arrays and repeated calls stay independent\nok 9 - ordinary ancestor cycles through arrays and repeated calls stay independent\n  ---\n  duration_ms: 0.3255\n  type: 'test'\n  ...\n# Subtest: prototype property policy survives container and handler recursion\nnot ok 10 - prototype property policy survives container and handler recursion\n  ---\n  duration_ms: 0.6855\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\rfdc-builtins-state\\\\private\\\\acceptance.test.mjs:100:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected \"actual\" not to be reference-equal to \"expected\":\n    \n    {\n      n: 2\n    }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    n: 2\n  actual:\n    n: 2\n  operator: 'notStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/rfdc-builtins-state/private/acceptance.test.mjs:107:45)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 2\n# fail 8\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 23.0609\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 106
+      },
+      "refVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 2,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: ordinary nested values remain independent\nok 1 - ordinary nested values remain independent\n  ---\n  duration_ms: 1.9672\n  type: 'test'\n  ...\n# Subtest: dates keep their value and ordinary self cycles are preserved\nok 2 - dates keep their value and ordinary self cycles are preserved\n  ---\n  duration_ms: 0.4136\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.4469\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 105
+      },
+      "refHidden": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 10,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: ordinary data primitives functions and dates are preserved in every mode\nok 1 - ordinary data primitives functions and dates are preserved in every mode\n  ---\n  duration_ms: 3.313\n  type: 'test'\n  ...\n# Subtest: map keys and values are recursively independent in every mode\nok 2 - map keys and values are recursively independent in every mode\n  ---\n  duration_ms: 0.4657\n  type: 'test'\n  ...\n# Subtest: maps inside arrays and sets recursively clone entries\nok 3 - maps inside arrays and sets recursively clone entries\n  ---\n  duration_ms: 0.311\n  type: 'test'\n  ...\n# Subtest: typed subviews preserve type offset length and independent storage\nok 4 - typed subviews preserve type offset length and independent storage\n  ---\n  duration_ms: 0.2975\n  type: 'test'\n  ...\n# Subtest: dataviews in arrays preserve the visible bytes and isolate writes\nok 5 - dataviews in arrays preserve the visible bytes and isolate writes\n  ---\n  duration_ms: 0.2576\n  type: 'test'\n  ...\n# Subtest: buffers and binary values nested through containers are copied\nok 6 - buffers and binary values nested through containers are copied\n  ---\n  duration_ms: 0.442\n  type: 'test'\n  ...\n# Subtest: custom constructors work at object array and container positions\nok 7 - custom constructors work at object array and container positions\n  ---\n  duration_ms: 0.3868\n  type: 'test'\n  ...\n# Subtest: custom handlers override builtins without matching subclasses\nok 8 - custom handlers override builtins without matching subclasses\n  ---\n  duration_ms: 0.2482\n  type: 'test'\n  ...\n# Subtest: ordinary ancestor cycles through arrays and repeated calls stay independent\nok 9 - ordinary ancestor cycles through arrays and repeated calls stay independent\n  ---\n  duration_ms: 0.2873\n  type: 'test'\n  ...\n# Subtest: prototype property policy survives container and handler recursion\nok 10 - prototype property policy survives container and handler recursion\n  ---\n  duration_ms: 0.5152\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 10\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 19.4967\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 103
+      },
+      "unchanged": true,
+      "passed": true
+    },
+    {
+      "task": "tinyqueue-heap-state",
+      "split": "reserve",
+      "scopeTier": 1,
+      "contract": {
+        "passed": true,
+        "errors": [],
+        "testNames": [
+          "constructor heapifies unsorted odd and even arrays",
+          "insertion repairs every ancestor for both child positions",
+          "replacement selects either better child and handles left-only children",
+          "emptying and reusing preserves peek pop and length",
+          "reverse comparator governs construction and later insertions",
+          "object comparators retain all equal-priority entries",
+          "deterministic mixed operations agree with a sorted-array model"
+        ],
+        "visibleTestNames": [
+          "new empty queue has no item",
+          "ascending pushes expose the smallest item"
+        ],
+        "map": [
+          {
+            "name": "constructor heapifies unsorted odd and even arrays",
+            "requirements": [
+              "Q1",
+              "Q3",
+              "Q4"
+            ],
+            "rationale": "Heapifies distinct lengths then drains with exact count tracking."
+          },
+          {
+            "name": "insertion repairs every ancestor for both child positions",
+            "requirements": [
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "rationale": "Descending insertions require multiple levels and both index parities."
+          },
+          {
+            "name": "replacement selects either better child and handles left-only children",
+            "requirements": [
+              "Q2",
+              "Q3"
+            ],
+            "rationale": "Several heap shapes cover both-child and left-only sift-down."
+          },
+          {
+            "name": "emptying and reusing preserves peek pop and length",
+            "requirements": [
+              "Q4"
+            ],
+            "rationale": "Singleton drain and repeated reuse catch stale storage without checking private representation."
+          },
+          {
+            "name": "reverse comparator governs construction and later insertions",
+            "requirements": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4",
+              "Q5"
+            ],
+            "rationale": "Reverse ordering governs heapify, push, peek and complete drain."
+          },
+          {
+            "name": "object comparators retain all equal-priority entries",
+            "requirements": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q5"
+            ],
+            "rationale": "Checks priorities, complete membership and object identity without imposing tie order."
+          },
+          {
+            "name": "deterministic mixed operations agree with a sorted-array model",
+            "requirements": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "rationale": "240 fixed-seed operations compare all observable state with a simple independent model."
+          }
+        ]
+      },
+      "baseVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 2,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: new empty queue has no item\nok 1 - new empty queue has no item\n  ---\n  duration_ms: 0.8348\n  type: 'test'\n  ...\n# Subtest: ascending pushes expose the smallest item\nok 2 - ascending pushes expose the smallest item\n  ---\n  duration_ms: 0.2501\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.8036\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 113
+      },
+      "baseHidden": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 7,
+        "passed": 0,
+        "failed": 7,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: constructor heapifies unsorted odd and even arrays\nnot ok 1 - constructor heapifies unsorted odd and even arrays\n  ---\n  duration_ms: 1.6036\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:7:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    4 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 4\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:10:48)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n# Subtest: insertion repairs every ancestor for both child positions\nnot ok 2 - insertion repairs every ancestor for both child positions\n  ---\n  duration_ms: 2.2578\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:15:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        -8,\n    -   -6,\n        -4,\n    +   6,\n    +   8,\n    +   4,\n    +   10,\n        -2,\n        0,\n        2,\n    +   -6,\n    -   4,\n    -   6,\n    -   8,\n    -   10,\n        12\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: -8\n    1: -6\n    2: -4\n    3: -2\n    4: 0\n    5: 2\n    6: 4\n    7: 6\n    8: 8\n    9: 10\n    10: 12\n  actual:\n    0: -8\n    1: -4\n    2: 6\n    3: 8\n    4: 4\n    5: 10\n    6: -2\n    7: 0\n    8: 2\n    9: -6\n    10: 12\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:21:9)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: replacement selects either better child and handles left-only children\nnot ok 3 - replacement selects either better child and handles left-only children\n  ---\n  duration_ms: 0.4566\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:23:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        0,\n    -   1,\n        2,\n        3,\n    +   6,\n        5,\n    +   1,\n    -   6,\n        7\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 0\n    1: 1\n    2: 2\n    3: 3\n    4: 5\n    5: 6\n    6: 7\n  actual:\n    0: 0\n    1: 2\n    2: 3\n    3: 6\n    4: 5\n    5: 1\n    6: 7\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:26:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: emptying and reusing preserves peek pop and length\nnot ok 4 - emptying and reusing preserves peek pop and length\n  ---\n  duration_ms: 0.2229\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:29:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    0 !== undefined\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:33:63)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: reverse comparator governs construction and later insertions\nnot ok 5 - reverse comparator governs construction and later insertions\n  ---\n  duration_ms: 0.3546\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:37:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        12,\n    -   10,\n        8,\n    +   3,\n    +   1,\n    +   2,\n        6,\n        4,\n    +   10,\n    -   3,\n    -   2,\n    -   1,\n        0\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 12\n    1: 10\n    2: 8\n    3: 6\n    4: 4\n    5: 3\n    6: 2\n    7: 1\n    8: 0\n  actual:\n    0: 12\n    1: 8\n    2: 3\n    3: 1\n    4: 2\n    5: 6\n    6: 4\n    7: 10\n    8: 0\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:40:29)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: object comparators retain all equal-priority entries\nnot ok 6 - object comparators retain all equal-priority entries\n  ---\n  duration_ms: 0.3947\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:42:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   2,\n    +   3,\n        1,\n        1,\n    -   2,\n    -   3,\n        4\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 1\n    1: 1\n    2: 2\n    3: 3\n    4: 4\n  actual:\n    0: 2\n    1: 3\n    2: 1\n    3: 1\n    4: 4\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:46:9)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: deterministic mixed operations agree with a sorted-array model\nnot ok 7 - deterministic mixed operations agree with a sorted-array model\n  ---\n  duration_ms: 0.348\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-v1\\\\benchmarks\\\\benchmark-v1\\\\tasks\\\\tinyqueue-heap-state\\\\private\\\\acceptance.test.mjs:50:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    23 !== 20\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 20\n  actual: 23\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-v1/benchmarks/benchmark-v1/tasks/tinyqueue-heap-state/private/acceptance.test.mjs:56:46)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 0\n# fail 7\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 18.5869\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 107
+      },
+      "refVisible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 2,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: new empty queue has no item\nok 1 - new empty queue has no item\n  ---\n  duration_ms: 1.0507\n  type: 'test'\n  ...\n# Subtest: ascending pushes expose the smallest item\nok 2 - ascending pushes expose the smallest item\n  ---\n  duration_ms: 0.2468\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.0082\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 95
+      },
+      "refHidden": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: constructor heapifies unsorted odd and even arrays\nok 1 - constructor heapifies unsorted odd and even arrays\n  ---\n  duration_ms: 1.5205\n  type: 'test'\n  ...\n# Subtest: insertion repairs every ancestor for both child positions\nok 2 - insertion repairs every ancestor for both child positions\n  ---\n  duration_ms: 1.2829\n  type: 'test'\n  ...\n# Subtest: replacement selects either better child and handles left-only children\nok 3 - replacement selects either better child and handles left-only children\n  ---\n  duration_ms: 0.2549\n  type: 'test'\n  ...\n# Subtest: emptying and reusing preserves peek pop and length\nok 4 - emptying and reusing preserves peek pop and length\n  ---\n  duration_ms: 0.1463\n  type: 'test'\n  ...\n# Subtest: reverse comparator governs construction and later insertions\nok 5 - reverse comparator governs construction and later insertions\n  ---\n  duration_ms: 0.2299\n  type: 'test'\n  ...\n# Subtest: object comparators retain all equal-priority entries\nok 6 - object comparators retain all equal-priority entries\n  ---\n  duration_ms: 0.2813\n  type: 'test'\n  ...\n# Subtest: deterministic mixed operations agree with a sorted-array model\nok 7 - deterministic mixed operations agree with a sorted-array model\n  ---\n  duration_ms: 0.7657\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 13.6826\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 96
+      },
+      "unchanged": true,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "method": "Frozen authored public and hidden samples, not full upstream test suites. No model calls."
+}

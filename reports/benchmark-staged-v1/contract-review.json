@@ -1,0 +1,341 @@
+{
+  "reviewedAt": "2026-10-15T01:21:03.715Z",
+  "hashAlgorithm": "SHA256 native node:crypto exact bytes",
+  "tasks": [
+    {
+      "id": "tapable-abortable-hooks",
+      "verdict": "approved",
+      "taskHash": "922da9932b91668ec7b16ec7d396b640b22574fbda5680af4c5d8c7e48ebb5f7",
+      "acceptanceHash": "b94aed6a07d36d428dca2735d4e9066265bd77f4dd1e9470a74aa785f6e9b6bf",
+      "visibleHash": "f1a1298f659bc2dce8b62c407793f5719742e4bf182c3e9fb0309f5ea0aae436",
+      "taskPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\tapable-abortable-hooks\\task.json",
+      "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\tapable-abortable-hooks\\private\\acceptance.test.mjs",
+      "sourceReceiptPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\tapable-abortable-hooks\\source.json",
+      "sourceReceiptHash": "cbc7cf21dbe4340a46f55db37b797a455bea881205033507be7de7eba94197b5",
+      "referenceModuleHashes": [
+        {
+          "path": "src/lib/Hook.js",
+          "sha256": "44209416bad6d0e4693abbf41bc406208475e34960f38f738a632199527199e8",
+          "actorSha256": "8ad0d4e7ed356c96934b0ae02031aadd5c1801cd533c3cad85b98bc428c5b434",
+          "sourceDeclaredHash": "8ad0d4e7ed356c96934b0ae02031aadd5c1801cd533c3cad85b98bc428c5b434"
+        },
+        {
+          "path": "src/lib/HookCodeFactory.js",
+          "sha256": "d1201ef456ba9e861ced367db8a8bb5efb4338b607ee0a6ec9e07ee6935653dc",
+          "actorSha256": "430c6895caf1199313e72fe445323864bd9c675dc951ff827cbe6909e4ec4c51",
+          "sourceDeclaredHash": "430c6895caf1199313e72fe445323864bd9c675dc951ff827cbe6909e4ec4c51"
+        },
+        {
+          "path": "src/lib/AsyncSeriesHook.js",
+          "sha256": "a73977cf0dc26f1a01e987eecf14022767fc1e2b3fb5bd5b55c0f2c56767668d",
+          "actorSha256": "fbe690033e147a1bed32d8433c9502e0c63dbce88511ffb11a8a8e7ef1922915",
+          "sourceDeclaredHash": "fbe690033e147a1bed32d8433c9502e0c63dbce88511ffb11a8a8e7ef1922915"
+        },
+        {
+          "path": "src/lib/AsyncParallelHook.js",
+          "sha256": "dc737946a90b2e524bfef5f552c37453fa75074db1b7e0381d88dcc5ddd64211",
+          "actorSha256": "a6df932895d21d2a8afba4a7183e7168159ec66f7551f66a3e9e97227c6eee0f",
+          "sourceDeclaredHash": "a6df932895d21d2a8afba4a7183e7168159ec66f7551f66a3e9e97227c6eee0f"
+        }
+      ],
+      "sourceCommit": "a0a7b26224557bd8bb09b97e0126b7dbda9f8e6a",
+      "issues": [],
+      "limitations": [
+        "Authored feature with authored known reference on pinned public source; not a naturally occurring upstream repair or contamination-free task.",
+        "Structurally staged multi-module feature; no observed repair duration, long-horizon persistence, compaction or delegation benefit is established.",
+        "Public API deliberately excludes invalid/duck signals, throwing terminal callbacks/interceptors, deprecated context-enabled new calls, TypeScript declarations and other Hook types.",
+        "Only tapPromise returned promises are observed; sync/callback return values ignored explicitly by contract.",
+        "Finite authored 7 public +16 hidden group sample; no complete upstream regression suite independently executed.",
+        "Creator-reported stage ablations/pass counts are not independent runtime evidence; this review performed no tests/inference.",
+        "Existing over128KiB yarn.lock tool-read limitation may be encountered; it does not establish deficient code reasoning or feature complexity."
+      ],
+      "assertionNameMapping": [
+        {
+          "assertionName": "existing series entry points run mixed taps in registration order",
+          "suite": "public",
+          "requirements": [
+            "A11"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "existing parallel entry points start work before waiting for completion",
+          "suite": "public",
+          "requirements": [
+            "A11"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "existing hook kinds preserve bail waterfall and synchronous behavior",
+          "suite": "public",
+          "requirements": [
+            "A11"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "existing compilation updates after tap and interceptor registration",
+          "suite": "public",
+          "requirements": [
+            "A11"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "public feature pre-aborted invocations skip work and preserve the reason",
+          "suite": "public",
+          "requirements": [
+            "A1",
+            "A2",
+            "A5"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "public feature cancellation stops ordered successors and completes once",
+          "suite": "public",
+          "requirements": [
+            "A4",
+            "A5",
+            "A7"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "public feature parallel cancellation stops further launches while observing started work",
+          "suite": "public",
+          "requirements": [
+            "A4",
+            "A5",
+            "A8"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage one opt-in methods exist only on supported hook kinds and complete empty invocations",
+          "suite": "hidden",
+          "requirements": [
+            "A1",
+            "A6",
+            "A11"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage one pre-abort skips call and tap interception while preserving every reason",
+          "suite": "hidden",
+          "requirements": [
+            "A2",
+            "A5",
+            "A6",
+            "A9"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage one both abortable caches invalidate on new taps and interceptors",
+          "suite": "hidden",
+          "requirements": [
+            "A3",
+            "A9"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two generated adapters preserve arguments and original tap errors",
+          "suite": "hidden",
+          "requirements": [
+            "A1",
+            "A4",
+            "A6"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two duplicate callbacks and throws after completion cannot settle twice",
+          "suite": "hidden",
+          "requirements": [
+            "A4",
+            "A5",
+            "A6"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two tap and terminal callback receivers keep unbound invocation conventions",
+          "suite": "hidden",
+          "requirements": [
+            "A1",
+            "A4"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two interceptor terminal notifications follow cleanup and precede completion",
+          "suite": "hidden",
+          "requirements": [
+            "A6",
+            "A9"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two cancellation from call or tap interception prevents subsequent starts",
+          "suite": "hidden",
+          "requirements": [
+            "A5",
+            "A6",
+            "A9"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two abort cleanup is immediate and late callbacks or rejections stay observed",
+          "suite": "hidden",
+          "requirements": [
+            "A4",
+            "A5",
+            "A6"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage two synchronous abort inside a promise tap still observes its rejected return",
+          "suite": "hidden",
+          "requirements": [
+            "A4",
+            "A5",
+            "A6"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage three series continuations wait for each mixed tap before starting the next",
+          "suite": "hidden",
+          "requirements": [
+            "A7"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage three abort or error stops ordered successors and first terminal event wins",
+          "suite": "hidden",
+          "requirements": [
+            "A4",
+            "A5",
+            "A7"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage four parallel dispatch starts all pending taps without serializing them",
+          "suite": "hidden",
+          "requirements": [
+            "A4",
+            "A8"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "stage four abort during parallel dispatch prevents later launches and ignores late failure",
+          "suite": "hidden",
+          "requirements": [
+            "A4",
+            "A5",
+            "A6",
+            "A8"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "integration concurrent invocations isolate signals listeners and compilation snapshots",
+          "suite": "hidden",
+          "requirements": [
+            "A3",
+            "A5",
+            "A6",
+            "A7",
+            "A8"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        },
+        {
+          "assertionName": "integration plugin pipeline composes ordered parallel cancellation cleanup and cache reuse",
+          "suite": "hidden",
+          "requirements": [
+            "A3",
+            "A4",
+            "A5",
+            "A6",
+            "A7",
+            "A8",
+            "A9",
+            "A10"
+          ],
+          "verdict": "supported",
+          "review": "Read assertion operands against final public requirements; no exact generated-source architecture requirement."
+        }
+      ],
+      "requirementsReviewed": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "A9",
+        "A10",
+        "A11"
+      ],
+      "referenceReview": {
+        "modulesRead": [
+          "src/lib/Hook.js",
+          "src/lib/HookCodeFactory.js",
+          "src/lib/AsyncSeriesHook.js",
+          "src/lib/AsyncParallelHook.js"
+        ],
+        "diffReview": "Full four-module actor/reference production diffs reread. Feature public delegates+cache invalidation in Hook; signal settlement and adapters in factory; series continuation and parallel aggregation selected in their concrete factories.",
+        "coherence": [
+          "settled and per-tap called flags implement first-terminal/per-tap-first completion",
+          "listener cleanup before error/done before final callback explicitly public and implemented",
+          "pre-abort no work, original/falsy reason via separate failed flag and callback argument count",
+          "tap local function variable preserves unbound receiver; interceptor property calls retain receiver",
+          "promise rejection handler attaches even if tap synchronously aborts before returning promise",
+          "series successor guard and parallel dispatch guard prevent later starts after terminal event",
+          "captured x/taps/interceptors arrays plus both cache resets isolate in-flight calls from later registration"
+        ],
+        "earlyConcernsResolved": "Public contract excludes throwing observers/final callback and deprecated context. It explicitly states receiver conventions, cleanup ordering and tapPromise-only return observation."
+      },
+      "actorBoundary": "PublicPrompt and actor workspace only. Private acceptance, reference source, source receipt repair details and this review must remain evaluator-only.",
+      "reviewMode": "Static contract/reference/assertion inspection, exact native byte hashing, no inference/tests",
+      "scopeTier": "staged-multimodule-feature",
+      "scopeProvisional": true,
+      "durationEvidence": false
+    }
+  ]
+}

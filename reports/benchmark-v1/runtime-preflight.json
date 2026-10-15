@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-15T00:58:31.302Z",
+  "modelAvailable": true,
+  "subscription": true,
+  "model": "gpt-6.1-sol",
+  "provider": "openai",
+  "cost": {
+    "input": 2,
+    "output": 10,
+    "cacheRead": 0.1,
+    "cacheWrite": 2.5,
+    "tiers": [
+      {
+        "inputTokensAbove": 272000,
+        "input": 4,
+        "output": 15,
+        "cacheRead": 0.2,
+        "cacheWrite": 5
+      }
+    ]
+  },
+  "authBridge": "read authorized openai credential; refresh in memory only; no catalog/auth writes",
+  "inferenceCalls": 0
+}

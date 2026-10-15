@@ -1,0 +1,198 @@
+{
+  "at": "2026-10-15T01:09:19.468Z",
+  "phase": "calibration",
+  "complete": false,
+  "rows": [
+    {
+      "id": "001-bottleneck-weighted-priority-r0",
+      "task": "bottleneck-weighted-priority",
+      "scopeTier": 2,
+      "arm": "suffice-baseline",
+      "repetition": 0,
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "semanticFailure": false,
+      "semanticFailureReviewed": false,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 12450,
+        "cacheRead": 27136,
+        "cacheWrite": 0,
+        "output": 414,
+        "totalTokens": 40000,
+        "estimatedApiUsd": 0.0317536
+      },
+      "knownEstimatedUsd": 0.0317536,
+      "totalEstimatedUsd": 0.0317536,
+      "turns": 5,
+      "calls": 16,
+      "latencyMs": 21122,
+      "acceptanceStatus": "passed",
+      "regressionStatus": "passed",
+      "errors": []
+    },
+    {
+      "id": "002-fastq-resume-window-r0",
+      "task": "fastq-resume-window",
+      "scopeTier": 1,
+      "arm": "suffice-baseline",
+      "repetition": 0,
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "semanticFailure": false,
+      "semanticFailureReviewed": false,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 7766,
+        "cacheRead": 12160,
+        "cacheWrite": 0,
+        "output": 941,
+        "totalTokens": 20867,
+        "estimatedApiUsd": 0.026158000000000004
+      },
+      "knownEstimatedUsd": 0.026158000000000004,
+      "totalEstimatedUsd": 0.026158000000000004,
+      "turns": 4,
+      "calls": 15,
+      "latencyMs": 24857,
+      "acceptanceStatus": "passed",
+      "regressionStatus": "passed",
+      "errors": []
+    },
+    {
+      "id": "003-rfdc-builtins-state-r0",
+      "task": "rfdc-builtins-state",
+      "scopeTier": 1,
+      "arm": "suffice-baseline",
+      "repetition": 0,
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "semanticFailure": false,
+      "semanticFailureReviewed": false,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 13154,
+        "cacheRead": 9216,
+        "cacheWrite": 0,
+        "output": 717,
+        "totalTokens": 23087,
+        "estimatedApiUsd": 0.034399599999999995
+      },
+      "knownEstimatedUsd": 0.034399599999999995,
+      "totalEstimatedUsd": 0.034399599999999995,
+      "turns": 5,
+      "calls": 15,
+      "latencyMs": 23726,
+      "acceptanceStatus": "passed",
+      "regressionStatus": "passed",
+      "errors": []
+    },
+    {
+      "id": "004-bottleneck-weighted-priority-r1",
+      "task": "bottleneck-weighted-priority",
+      "scopeTier": 2,
+      "arm": "suffice-baseline",
+      "repetition": 1,
+      "status": "completed",
+      "patchAccepted": true,
+      "budgetEligible": false,
+      "success": false,
+      "semanticFailure": false,
+      "semanticFailureReviewed": false,
+      "intact": true,
+      "identityValid": true,
+      "usage": {
+        "input": 9576,
+        "cacheRead": 30720,
+        "cacheWrite": 0,
+        "output": 419,
+        "totalTokens": 40715,
+        "estimatedApiUsd": 0.026414
+      },
+      "knownEstimatedUsd": 0.026414,
+      "totalEstimatedUsd": null,
+      "turns": 6,
+      "calls": 16,
+      "latencyMs": 32168,
+      "acceptanceStatus": "passed",
+      "regressionStatus": "passed",
+      "errors": [
+        "OpenAI Responses stream ended before a terminal response event"
+      ]
+    }
+  ],
+  "totals": {
+    "attempts": 4,
+    "knownUsd": 0.1187252,
+    "unknownTotals": 1
+  },
+  "qualification": [
+    {
+      "task": "bottleneck-weighted-priority",
+      "attempts": 2,
+      "accepted": 1,
+      "semanticFailures": 0,
+      "operationalFailures": 0,
+      "candidateTrack": "unqualified"
+    },
+    {
+      "task": "fastq-resume-window",
+      "attempts": 1,
+      "accepted": 1,
+      "semanticFailures": 0,
+      "operationalFailures": 0,
+      "candidateTrack": "unqualified"
+    },
+    {
+      "task": "rfdc-builtins-state",
+      "attempts": 1,
+      "accepted": 1,
+      "semanticFailures": 0,
+      "operationalFailures": 0,
+      "candidateTrack": "unqualified"
+    }
+  ],
+  "reserve": {
+    "tasks": [
+      "emittery-iterator-lifecycle",
+      "tinyqueue-heap-state"
+    ],
+    "attempts": 0
+  },
+  "model": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "transport": "sse",
+    "billing": "API-equivalent metadata; not subscription charges; engineering inference excluded"
+  },
+  "tracks": {
+    "efficiency": "Candidate only after 2/2 calibration attempts accepted within the common budget. Qualification is pilot evidence, not proof of reliability. Confirm reliability on fresh replicates before an efficiency claim.",
+    "capability": "Candidate only after at least one contract-supported semantic failure and one success OR additional reviewed difficulty evidence. Operational errors, budget-only stops and disputed grader failures are not semantic failures. No mechanism superiority without fresh held-out matched-budget comparison.",
+    "reserve": "No repair attempts during calibration. Never retrospectively rename calibration attempts held-out. Reserve results cannot be used to tune the next scored policy."
+  },
+  "claims": {
+    "efficiencyImprovement": false,
+    "capabilityImprovement": false,
+    "externalComparison": false
+  },
+  "costPerAccepted": null,
+  "limitations": [
+    "Small injected-defect cohort; public upstream source may occur in model training.",
+    "Not full upstream test suites; actor cannot run arbitrary generated checks with this frozen baseline.",
+    "No scored intervention or stock-agent comparison.",
+    "Tier denotes predeclared engineering scope, not measured duration or empirical difficulty.",
+    "Cache warmth uncontrolled; failed attempts retained, engineering inference excluded.",
+    "No OS sandbox; actor tools scope reads/writes, but Node FS permissions alone do not block network.",
+    "Reserve is unused by repair actors, not inaccessible to evaluator authors or this machine."
+  ]
+}

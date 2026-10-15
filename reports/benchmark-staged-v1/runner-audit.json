@@ -1,0 +1,134 @@
+{
+  "at": "2026-10-15T01:16:11.128Z",
+  "mode": "Independent read-only static staged-runner preflight; no model calls, graders, tests or benchmark mutations",
+  "hashes": {
+    "scripts/benchmark-staged-pilot.mjs": "e7c3f60d190b98512d2b3885fedd94cd3a92fc8a7904b132feac9e46cf50efd7",
+    "scripts/audit-benchmark-receipts.mjs": "c5e5048f551e0ac395ddc0f8f866751cb2d49979046ef8ed8db73134c4b197a9",
+    "src/benchmark-agent.mjs": "da6264394c865519eed298f0d73ccd77e02f21b5fbd5d7d5fd446b131e7e2383",
+    "src/benchmark-runtime.mjs": "4175751041ede76d9fbf3dfd589c703de8c601a84dc56709fde24445380a65f8",
+    "src/benchmark-governance.mjs": "31539a6a436f5d098af5e512d9ca44c0a7a9e897a109799f0051d961621f1d21",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "package.json": "f39773d5692cd48ded17500df848d67723626070ac0d5114ec4eaba2197256f2",
+    "package-lock.json": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda"
+  },
+  "originalFrozenInputsChecked": 436,
+  "originalFrozenInputDrift": [],
+  "verdict": "No critical normal-path runner defect found. Conditional on final fixture transfer, independent contract approval and current full-tree validation before freeze. Not a validation of fixture semantics or permission to claim long-duration exposure.",
+  "boundaries": {
+    "attempts": 1,
+    "maxCostUsd": 0.75,
+    "maxTurns": 60,
+    "maxCalls": 300,
+    "timeoutMs": 480000,
+    "artifactAdmissionBytes": 83886080,
+    "postResponseCost": true,
+    "compaction": false,
+    "delegation": false,
+    "persistence": false
+  },
+  "checks": [
+    {
+      "area": "separation",
+      "verdict": "pass",
+      "evidence": "Staged BASE, REPORT and DIR are separate from benchmark-v1 calibration. Original six-attempt schedule/manifest are not written. All 436 original frozen input hashes still match at inspection."
+    },
+    {
+      "area": "hidden/reference isolation",
+      "verdict": "pass for inherited normal tool path",
+      "evidence": "loadTask validates evaluator paths outside actor workspace. Only baseline workspace is copied. Actor task contains public repository/prompt/edit paths. Hidden/reference graders are run by evaluator outside actor session; shared core/navigation scoped reads and allowlisted writes unchanged."
+    },
+    {
+      "area": "partial/orphan handling",
+      "verdict": "pass fail-closed",
+      "evidence": "run refuses any existing complete or partial attempt-001 before creation; active.lock uses wx. Runtime failure after workspace creation leaves preserved partial run. Process crash leaves lock and partial artifacts; neither is silently deleted or retried. There is no repair/replacement attempt."
+    },
+    {
+      "area": "freeze provenance",
+      "verdict": "conditional on fixture arrival",
+      "evidence": "Validation captures before/after whole BASE tree; freeze compares current tree to validation and checks approved task/acceptance hashes. Inputs include entire staged dataset, independent review, model/runtime/core implementation and supplementary event accountant. Frozen() compares exact current inputs and limits before run/replay. Fixture/review/validation were not yet present in this worktree at initial inspection."
+    },
+    {
+      "area": "budgets",
+      "verdict": "pass as disclosed eligibility/admission policy",
+      "evidence": "Shared post-response timer, tool/turn checks and cost accounting receive staged limits. budgetEligible checks completed status, finite known cost, turns/calls and finite latency <=480s. One run prevents aggregate replacement spending. Artifact/free disk checks occur before attempt; no hard OS storage/wall-time/dollar boundary is claimed."
+    },
+    {
+      "area": "replay",
+      "verdict": "pass saved-ledger design",
+      "evidence": "Independent workspace is created with mkdir and not overwritten; every patch path is allowlisted and baseline before bytes checked. Visible+hidden grades rerun. Usage compares durable assistant events to result; unknown check combines durable events and actual worker usageCostUnknown, retaining failed/pruned response uncertainty."
+    },
+    {
+      "area": "interpretation",
+      "verdict": "pass",
+      "evidence": ">=20 responses and >=32768 peak input tokens is predeclared as an exploratory descriptive flag. Structural scopeTier3 does not prove actual duration/necessary architecture. Compaction/delegation/persistence remain false; one attempt cannot show optimization or superiority."
+    }
+  ],
+  "findings": [
+    {
+      "id": "S1",
+      "severity": "low",
+      "blocking": false,
+      "title": "Eligibility predicate uses worker unknown flag while result uses combined unknown flag",
+      "source": "scripts/benchmark-staged-pilot.mjs: run result accounting",
+      "evidence": "eligible=budgetEligible(w,LIMITS), while totalEstimatedUsd/unknownTotal combine accountEvents(events).unknown OR w.usageCostUnknown.",
+      "impact": "If durable event accounting ever finds unknown usage not reflected by the worker flag, a result could have success=true with unknown total. Current shared agent sets worker unknown on errors/missing costs; no observed mismatch is asserted.",
+      "suggestion": "Before freeze, use the combined unknown predicate for eligibility as well, or assert equality and fail closed on mismatch."
+    }
+  ],
+  "limitations": [
+    "No OS sandbox/network denial is added; shared Node filesystem permissions and minimal environment do not prove network isolation.",
+    "No fixture semantics or stated smoke/public/hidden counts were independently checked because the staged dataset had not arrived at initial review.",
+    "Frozen manifest.model is informational in this runner; actual current MODEL comes from hash-frozen governance and identity is checked against it. Manual manifest tampering is outside the normal research integrity threat model.",
+    "Durable events protect known failed-retry accounting but cannot prove provider-side cost completeness for terminal-event loss or process crash. Unknown remains unknown."
+  ],
+  "addenda": [
+    {
+      "at": "2026-10-15T01:21:23.872Z",
+      "mode": "Read-only source/receipt review and exact-byte hashing; no tests, graders or inference",
+      "hashes": {
+        "scripts/benchmark-staged-pilot.mjs": "08f6f5cf41d18197340ec358a4e18bad92955b05efaeaf40ab65bb26b4c849b6",
+        "benchmarks/benchmark-staged-v1/tapable-abortable-hooks/task.json": "922da9932b91668ec7b16ec7d396b640b22574fbda5680af4c5d8c7e48ebb5f7",
+        "reports/benchmark-staged-v1/validation.json": "f7942b952dbd83dfb96bbe07d0c5947b37538f332a6540c8bbf44b491e5f2ef3"
+      },
+      "combinedUnknownEligibilityFixed": true,
+      "validationPassed": true,
+      "validationTreeMatches": true,
+      "fixtureFiles": 105,
+      "counts": {
+        "baselineVisible": {
+          "passed": 4,
+          "tests": 7,
+          "status": "failed"
+        },
+        "baselineHidden": {
+          "passed": 0,
+          "tests": 16,
+          "status": "failed"
+        },
+        "baseSmoke": {
+          "passed": 4,
+          "tests": 4,
+          "status": "passed"
+        },
+        "baseFeature": {
+          "passed": 0,
+          "tests": 3,
+          "status": "failed"
+        },
+        "referenceVisible": {
+          "passed": 7,
+          "tests": 7,
+          "status": "passed"
+        },
+        "referenceHidden": {
+          "passed": 16,
+          "tests": 16,
+          "status": "passed"
+        }
+      },
+      "contractReview": null,
+      "verdict": "Runner correction and current validation conditions satisfied; independent approved contract-review receipt still required and enforced by freeze."
+    }
+  ]
+}

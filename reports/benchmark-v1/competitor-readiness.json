@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "benchmark": "Suffice Benchmark v1",
+  "date": "2026-10-14",
+  "inferenceExecuted": false,
+  "installsExecuted": false,
+  "authChanged": false,
+  "localCliExecuted": false,
+  "status": "not_ready_for_scored_external_comparison",
+  "scope": "Installed source/metadata and official OpenAI docs only",
+  "readiness": [
+    {
+      "ready": false,
+      "version": "1.2.0",
+      "id": "pi-stock-tools",
+      "blockers": [
+        "Adapter and supervisor not implemented",
+        "External OS/process/network isolation not verified",
+        "Exact model catalog and subscription entitlement not resolved",
+        "Failed-call cost and cancellation receipt reconciliation unverified"
+      ],
+      "defaultTools": [
+        "read",
+        "bash",
+        "edit",
+        "write"
+      ],
+      "fixtureToolParity": false,
+      "interface": "verified_from_installed_docs_and_declarations"
+    },
+    {
+      "ready": false,
+      "classification": "Pi with benchmark tools, not unmodified stock CLI",
+      "version": "1.2.0",
+      "id": "pi-shared-fixture-tools",
+      "blockers": [
+        "Implement exact fixture schemas/executors",
+        "Validate tool/prompt/environment hashes and budgets",
+        "Validate in-memory or read-only credential bridge"
+      ],
+      "interface": "SDK customTools and allowlist supported"
+    },
+    {
+      "ready": false,
+      "id": "prime",
+      "pinnedSourceFiles": 12,
+      "sourceHashesVerified": true,
+      "revision": "5f218f780dabc51e26b039580da5d0686cc5616a",
+      "blockers": [
+        "No installed/tested headless adapter",
+        "Exact subscription/model/effort/transport controls unverified",
+        "Disable refinement/implicit children and isolate task storage",
+        "Raw failed/aborted request costs and descendant deduplication"
+      ]
+    },
+    {
+      "blockers": [
+        "Validate flags/schema against local binary",
+        "Exact gpt-6.1-sol subscription access and SSE equivalence unverified",
+        "Prove resource and subagent suppression",
+        "Fixture-tool bridge versus native-tool track decision",
+        "Aggregate budgets/error receipts and Windows isolation"
+      ],
+      "nativeBinary": "C:/Users/Mohammed/AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe",
+      "id": "codex",
+      "ready": false,
+      "localNpmVersion": "0.162.1"
+    }
+  ],
+  "pi": {
+    "transport": "sse",
+    "budgetContract": "External supervisor; wall time/turn/tool/token/cost admission and cancellation; drain agent_settled",
+    "staticModelIdSearchFound": false,
+    "extraPromptControl": "systemPromptOverride returns undefined; appendSystemPromptOverride returns empty array; clean/untrusted project resources",
+    "settings": {
+      "compaction": {
+        "enabled": false
+      },
+      "retry": {
+        "provider": {
+          "maxRetries": 0
+        },
+        "enabled": false
+      },
+      "cacheWarming": "off"
+    },
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "errorContract": "Preserve message_end error/aborted, partial usage and unknown costs; JSON CLI exit zero is not success",
+    "cliEntry": "node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js",
+    "rpcEntry": "node_modules/@earendil-works/pi-coding-agent/dist/bundle/rpc-entry.js",
+    "authContract": "No shared file-backed AuthStorage; private approved read-only or memory-only bridge; refresh behavior unverified",
+    "modelEntitlementVerified": false,
+    "thinkingLevel": "low",
+    "sdkEntry": "node_modules/@earendil-works/pi-coding-agent/dist/index.js",
+    "resourceFlags": [
+      "noExtensions",
+      "noSkills",
+      "noPromptTemplates",
+      "noThemes",
+      "noContextFiles"
+    ]
+  },
+  "sources": [
+    "node_modules/@earendil-works/pi-coding-agent/package.json",
+    "node_modules/@earendil-works/pi-coding-agent/docs/sdk.md",
+    "node_modules/@earendil-works/pi-coding-agent/docs/cli.md",
+    "node_modules/@earendil-works/pi-coding-agent/docs/cli-integration.md",
+    "node_modules/@earendil-works/pi-coding-agent/dist/core/resource-loader.js",
+    "node_modules/@earendil-works/pi-coding-agent/dist/core/model-runtime.js",
+    "node_modules/@earendil-works/pi-coding-agent/dist/core/auth-storage.d.ts",
+    "node_modules/@earendil-works/pi-ai/dist/providers/openai.js",
+    "https://learn.chatgpt.com/docs/developer-commands?surface=cli",
+    "https://learn.chatgpt.com/docs/config-file/config-reference"
+  ],
+  "report": "reports/BENCHMARK-V1-COMPETITOR-READINESS.md",
+  "headToHeadResults": []
+}

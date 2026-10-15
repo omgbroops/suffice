@@ -1,0 +1,54 @@
+# Tier3 candidate and admission protocol
+
+This is a concrete task selection plan, not a prepared task or a long-horizon certification. No live inference was run. Engineering breadth and measured mechanism exposure are separate conditions.
+
+## Candidate repository and coherent feature
+
+Candidate: [webpack/tapable](https://github.com/webpack/tapable), tag `v2.2.1`, resolved using GitHub's commit API to `a0a7b26224557bd8bb09b97e0126b7dbda9f8e6a` on 2026-10-14 America/Chicago. This pin is a selection anchor; the archive has not been downloaded or validated here. It must pass the gates below before becoming a benchmark task. Its runtime uses native JavaScript with no external runtime packages. Confirm this against the pinned package metadata rather than assuming it from this plan.
+
+Requested feature: opt-in abortable invocation of asynchronous hooks. Add `callAsyncWithSignal(signal, ...args, callback)` and `promiseWithSignal(signal, ...args)` to asynchronous hook instances. Coordinate the public Hook dispatch and lazy compilation with generated series, parallel, bail and waterfall execution. Existing `callAsync` and `promise` remain compatible. The feature is larger in engineering scope than the Tier2 two-mutation repair: it crosses public dispatch, generated asynchronous execution, hook-specific completion semantics and late-completion handling. Do not use repository byte size or file count as its difficulty label.
+
+Freeze this contract before implementation or model exposure:
+
+- An already-aborted invocation starts no taps and rejects/calls back exactly once with the original `signal.reason`. Callers supply an object reason, including Error and plain object cases, so identity can be tested without relying on engine-generated messages.
+- Cancellation during a series or waterfall invocation prevents subsequent taps from starting, returns the original reason once, and makes late success/failure from a tap unable to produce another result. Waterfall values before cancellation never turn cancellation into successful completion.
+- Parallel hooks stop launching further synchronous-dispatch taps once an earlier tap aborts. Already-started work may complete and is observed safely; it cannot change the final cancelled outcome. Abort after successful or failed completion has no effect.
+- Bail semantics continue to return the first applicable non-undefined result when no cancellation wins; error handling and values of existing entry points are preserved. The first terminal event wins; cancellation does not override an already completed result/error.
+- Synchronous, callback and promise taps are supported where the existing hook supports them. Throwing taps, callback-twice taps and late promise rejection cannot cause duplicate externally observable completion or unhandled rejection through the new invocation paths. Preserve upstream handling on old paths.
+- Concurrent invocations, separate hook instances and reuse of the same hook with different signals are isolated. Abort listeners are removed after completion or cancellation. Lazy compilation, tap registration invalidation and interceptors continue to work.
+- Synchronous hook types do not gain asynchronous cancellation entry points. Signal cancellation must not silently alter existing synchronous invocation semantics.
+
+The new method names and exact support matrix must be confirmed against the pinned API before task freezing. If a chosen hook lacks an existing async entry point, do not invent support silently. If semantics conflict with an existing contract, revise the public specification and reference together before any evaluated runs.
+
+## Independent stages and final integration
+
+| Stage | Likely production boundary | Independent acceptance | Integration obligation |
+| --- | --- | --- | --- |
+| 1. Invocation surface | `lib/Hook.js`, lazy call delegates and hook construction | Pre-abort, callback/promise surface, original reason identity, old API regressions | New dispatch methods survive recompilation after tap registration |
+| 2. Ordered execution | `lib/HookCodeFactory.js`, async series/bail/waterfall factories | Gate-controlled cancellation between ordered taps, waterfall and bail results, first-terminal-event wins | Real emitted series implementations use the cancellation protocol |
+| 3. Parallel execution | Async parallel and parallel-bail factories plus shared generator | Abort during dispatch, already-started callbacks/promises, duplicate/late completion, no listener leak | Real emitted parallel hooks share cancellation semantics without changing ordinary bail behavior |
+| 4. Cross-cutting integration | Hook/cache/interceptor boundaries and all affected asynchronous hook classes | Reuse/concurrent invocations, changing taps after compilation, interception, error/result compatibility | One end-to-end fixture runs plugin-style series/waterfall/parallel phases with gates and isolated signals |
+
+Each stage gets distinct literal `test('name', ...)` cases and requirement IDs. The final integration suite must fail for independently incomplete dispatch, ordered execution and parallel implementations, demonstrated by minimal reference ablations. Do not accept a list of separate repairs as a coherent feature solely because many files change. No sleeps, enormous fixtures or artificial context padding may be added to increase duration.
+
+## Repository, reference and grader admission gates
+
+1. Download the complete pinned archive with a streaming limit of 8 MiB. Enumerate all entries and reject symlinks, path traversal and oversized members. Record archive SHA-256, commit, original file bytes and complete inventory. A task with actor/reference/source receipt and acceptance artifacts must stay below 30 MiB. Measure active production modules and the actual dependency closure.
+2. Preserve complete upstream under `actor/src/` and `reference/src/`. Scope actor edits to existing production `.js` paths; if implementing the API requires new production files, either redesign without them or change the task admission rule explicitly before freezing. Never let a solver modify acceptance, scripts, fixture metadata or tests.
+3. Prepare a complete reference implementing the public feature before evaluating agents. This would be an authored new-feature task with an authored known reference, not a historical upstream issue. Obtain independent review of the behavioral specification, reference and at least one alternative implementation or strong mutation checks. Record all such evidence; absence of independent review blocks admission as validated Tier3.
+4. No package installation, lifecycle scripts, network, subprocesses or external services in evaluated tests. Run real Hook implementations with Node built-ins and controlled promises/callback gates. Adapt a bounded, representative set of upstream regression tests to Node's runner and document the omitted upstream test tooling. Vendoring is unnecessary only after dependency inspection confirms it.
+5. Separate public smoke tests from private stage and end-to-end tests. The baseline must pass existing behavior smoke tests and fail the new feature stages; reference passes all. Literal top-level test names, complete `requirements`/`assertionMap`, task-relative paths and permission-restricted `runNodeTests` receipts are required. Tests may assert behavior and public signal/listener outcomes; they may not require private generated source text or one implementation shape.
+6. Freeze public contract, source/reference hashes, stage checks, resource limits, split and structural scope classification before any pilot. Do not train a routing model or tune optimization policies on this candidate during preparation.
+
+## Mechanism eligibility and honest long-horizon reporting
+
+Structural Tier3 means the staged cross-component feature passes the gates above. It does not establish that any agent needs a long context, many turns, delegation, compaction or persistence. Keep it in calibration until exposure is measured, then reserve a distinct task family for held-out conclusions.
+
+For an initial neutral pilot, preregister one model, fixed total token/cost/turn limits, the same tool access and the same task content for all runs. Record all attempts, failures, elapsed time, context usage at each turn, stage transitions and accepted patches. A fast direct solve is valid evidence that this candidate did not expose the intended mechanism; do not move the threshold afterward to call it long-horizon.
+
+- **Compaction eligibility:** preregister the configured context limit, threshold and compaction policy. Record actual context usage and a real compaction event with pending work remaining. Only runs that naturally reach the trigger are compaction-exposed. If the task completes first, record `not_exposed`; do not insert irrelevant reads or reduce the context window after seeing results to force exposure. Compaction may be tested on a separately preregistered smaller-window regime, clearly labeled as that regime.
+- **Persistence eligibility:** use a separately labeled forced-restart experiment. Preregister the restart at the first passing Stage 1 checkpoint while at least two implementation stages still fail. Apply the same restart policy to control and treatment. Retain the same on-disk patch snapshot; only the declared restoration artifact differs. Record pre-restart transcript, stage outcomes, snapshot hash, restart cause and resumed worker state. A cached note read without a real process/session restart is not persistence activation. This intervention tests recovery from a staged restart, not naturally occurring long-task resilience.
+- **Delegation eligibility:** require a preregistered decision point with at least two semantically independent remaining implementation/review boundaries, shared integration tests and sufficient budget to delegate. Count actual launches and completed useful artifacts, coordination tokens, conflicts and integration failures. An available delegation tool alone is not treatment activation. Stage dependencies may make this candidate ineligible at some checkpoints.
+- **Long-horizon label:** preregister a measurable definition, such as active work spanning at least three distinct implementation stages with at least one qualifying compaction or session restart and unfinished integration afterward. Report measured exposure counts beside total runs. Forced-restart and naturally compacted runs must be reported separately. A staged specification, two files changed, elapsed timeout or repeated reread does not meet the label.
+
+No superiority or optimization conclusion is licensed by preparation receipts. If pilots rarely reach the mechanism trigger, select another coherent larger feature before running the optimization comparison; retain this task as a short multi-component calibration control.

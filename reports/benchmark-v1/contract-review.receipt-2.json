@@ -1,0 +1,316 @@
+{
+  "receiptVersion": 2,
+  "reviewedAt": "2026-10-15T01:02:18.832Z",
+  "hashAlgorithm": "SHA256 native node:crypto exact bytes",
+  "reviewMode": "static only; no inference or evaluator execution",
+  "tasks": [
+    {
+      "id": "rfdc-builtins-state",
+      "receiptKind": "revised-rfdc-R1",
+      "taskPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\task.json",
+      "taskHash": "90d000ab0a46be790aa0ec4e274bccc7aa6971e60fe146930f77643a8da9b791",
+      "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs",
+      "acceptanceHash": "986bb8883dbd111abd3f844cc509b551df81e665c89e40531721234d62c710b1",
+      "scopeTier": "single-component",
+      "scopeTierNumber": 1,
+      "scopeProvisional": false,
+      "verdict": "approved",
+      "issues": [],
+      "assertionNameMapping": [
+        {
+          "assertionName": "ordinary data primitives functions and dates are preserved in every mode",
+          "requirementIDs": [
+            "R1"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "map keys and values are recursively independent in every mode",
+          "requirementIDs": [
+            "R2"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "maps inside arrays and sets recursively clone entries",
+          "requirementIDs": [
+            "R2"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "typed subviews preserve type offset length and independent storage",
+          "requirementIDs": [
+            "R3"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "dataviews in arrays preserve the visible bytes and isolate writes",
+          "requirementIDs": [
+            "R3"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "buffers and binary values nested through containers are copied",
+          "requirementIDs": [
+            "R2",
+            "R3"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "custom constructors work at object array and container positions",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "custom handlers override builtins without matching subclasses",
+          "requirementIDs": [
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "ordinary ancestor cycles through arrays and repeated calls stay independent",
+          "requirementIDs": [
+            "R5"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "prototype property policy survives container and handler recursion",
+          "requirementIDs": [
+            "R2",
+            "R4",
+            "R6"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        }
+      ],
+      "durationEvidence": "None: engineering scope does not establish observed task duration, difficulty, long-horizon persistence, compaction or delegation benefit.",
+      "actorBoundary": "Evaluator-only hidden/reference and receipt; actor gets publicPrompt and actor workspace only.",
+      "supersedes": {
+        "id": "rfdc-builtins-state",
+        "taskPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\task.json",
+        "taskHash": "effa7a5da6a10558f4688445b4d4e6788189ae3de078b99ffd009e35004840d1",
+        "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-state\\benchmarks\\benchmark-v1\\tasks\\rfdc-builtins-state\\private\\acceptance.test.mjs",
+        "acceptanceHash": "39d29cd76f0de7559a8c872e24b270bbffd21ba68204395df47eff5b72ed325f",
+        "scopeTier": "single-component",
+        "scopeTierNumber": 1,
+        "scopeRationale": "One deep-clone engine with option branches, builtin handlers and recursion; no independently implemented component integration.",
+        "verdict": "approved",
+        "issues": [],
+        "limitations": [
+          "Disclosed injected defects in pinned public source; no natural-upstream-bug or contamination-free claim.",
+          "All repairs are localized to one production component; no ex ante long-duration or genuine multicomponent claim.",
+          "No inference or evaluator execution performed in independent review; runtime validation receipts belong to creator/parent.",
+          "Subclass exact {} output supported by existing generic fallback in source and preserve-API clause, rather than exact-match constructor requirement alone.",
+          "R1 mostly visible-regression coverage; hidden cases sample but do not exhaust all binary types/positions/options."
+        ],
+        "assertionNameMapping": [
+          {
+            "assertionName": "map keys and values are recursively independent in every mode",
+            "requirementIDs": [
+              "R2"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "maps inside arrays and sets recursively clone entries",
+            "requirementIDs": [
+              "R2"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "typed subviews preserve type offset length and independent storage",
+            "requirementIDs": [
+              "R3"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "dataviews in arrays preserve the visible bytes and isolate writes",
+            "requirementIDs": [
+              "R3"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "buffers and binary values nested through containers are copied",
+            "requirementIDs": [
+              "R2",
+              "R3"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "custom constructors work at object array and container positions",
+            "requirementIDs": [
+              "R2",
+              "R4"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "custom handlers override builtins without matching subclasses",
+            "requirementIDs": [
+              "R4"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "ordinary ancestor cycles through arrays and repeated calls stay independent",
+            "requirementIDs": [
+              "R5"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          },
+          {
+            "assertionName": "prototype property policy survives container and handler recursion",
+            "requirementIDs": [
+              "R2",
+              "R4",
+              "R6"
+            ],
+            "verdict": "supported",
+            "review": "Native assertion values manually read and compared with public requirement and preserved pinned API; finite scenario coverage only."
+          }
+        ],
+        "sourceCommit": "4336f6a3ddeb8473c040a7bee516604a8fabf16f",
+        "archives": [
+          {
+            "path": "source.tar.gz",
+            "declaredHash": "b629c00d7173bda3438c5389d7f199e9758050b542f24c97766cdb6bf75e2251",
+            "actualHash": "b629c00d7173bda3438c5389d7f199e9758050b542f24c97766cdb6bf75e2251",
+            "matches": true
+          }
+        ],
+        "productionModules": [
+          {
+            "path": "src/index.js",
+            "actorHash": "df922f0678450442133790e68a60d03134c1cd0167781068e845460e605eeaa4",
+            "referenceHash": "276defbca175e8293ccaa08fcf1de4d8071c096e606bd8e156976c7550bdb0b7"
+          }
+        ],
+        "referenceReview": "Allowed production module is byte-identical to matching pinned source archive entry.",
+        "reviewedSplit": "calibration"
+      },
+      "changeReview": "One added hidden R1 sample + mapping, unchanged public contract. Primitive pass-through including function identity and NaN, nested copies and Date mutation isolation are within R1.",
+      "reportedCreatorValidation": "Not rerun independently: actor visible2/2 hidden2/10; reference visible2/2 hidden10/10.",
+      "hashMatchesCreator": true
+    },
+    {
+      "id": "bottleneck-weighted-priority",
+      "receiptKind": "new-structural-tier2",
+      "taskPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\bottleneck-weighted-priority\\task.json",
+      "taskHash": "af5744160cd87d3695368d122063f994cf7f9f4596bb205e8dc0f84398affcd1",
+      "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\bottleneck-weighted-priority\\private\\acceptance.test.mjs",
+      "acceptanceHash": "4063c94741905f979c6a30f543730e476fd007a0a99af3cd33bb06d1b7123881",
+      "scopeTier": "multicomponent-small-patch",
+      "scopeTierNumber": 2,
+      "scopeProvisional": true,
+      "verdict": "approved",
+      "issues": [],
+      "assertionNameMapping": [
+        {
+          "assertionName": "queued priorities run from smaller number to larger number with FIFO ties",
+          "requirementIDs": [
+            "R1"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "successful weighted jobs release their entire reservation exactly once",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "failed weighted jobs release capacity and retain rejection identity",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "priority selection and weighted release compose across backlog waves",
+          "requirementIDs": [
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "oversized jobs reject without consuming running capacity",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "zero weight completion leaves running capacity unchanged",
+          "requirementIDs": [
+            "R2",
+            "R5"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        }
+      ],
+      "durationEvidence": "None: engineering scope does not establish observed task duration, difficulty, long-horizon persistence, compaction or delegation benefit.",
+      "actorBoundary": "Evaluator-only hidden/reference and receipt; actor gets publicPrompt and actor workspace only.",
+      "sourceReceiptHash": "0e058ecc475e804d22c973847e3b655cef06c409605f2138560fa7f57152c528",
+      "sourceCommit": "8a8bde9cde151c278397703c48f2bba4ded2bae7",
+      "referenceManifest": {
+        "entries": 97,
+        "mismatches": []
+      },
+      "productionDiffReview": "Compared actor/reference entire src: only Queues.getFirst priority traversal reversed and LocalDatastore.__free__ decrements 1 rather than weight. These are disclosed defects.",
+      "scopeRationale": "Two distinct functional modules: priority queue selection and datastore reservation conservation integrated through scheduler registration, Job completion and re-drain. Both need repair for combined backlog scenario. Only two one-line edits are needed; tier2 is structural and provisional.",
+      "limitations": [
+        "Existing lib JavaScript only is evaluated; CoffeeScript and bundled counterparts intentionally immutable.",
+        "Local scheduler only; Redis/clustering/timing/retries/expiration explicitly excluded.",
+        "Reference manifest checked against source receipt; source archive bytes not located independently in package.",
+        "Six authored hidden scenarios are a finite contract sample, not the full original upstream suite.",
+        "Two-second failure bounds can invalidate severely stalled host runs; combined test uses dependency gates rather than target latency."
+      ],
+      "validationReceiptHash": "450f6cf2db72a6717b51fa4c3cfe54c48d1fa424711cc2b79eb841e37c47f336",
+      "reportedCreatorValidation": "Creator/parent report reference passes, actor visible3/3 hidden1/6 and each partial repair fails combined scenario; not independently rerun."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-15T01:23:48.123Z",
+  "visible": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: existing series entry points run mixed taps in registration order\nok 1 - existing series entry points run mixed taps in registration order\n  ---\n  duration_ms: 2.9466\n  type: 'test'\n  ...\n# Subtest: existing parallel entry points start work before waiting for completion\nok 2 - existing parallel entry points start work before waiting for completion\n  ---\n  duration_ms: 0.621\n  type: 'test'\n  ...\n# Subtest: existing hook kinds preserve bail waterfall and synchronous behavior\nok 3 - existing hook kinds preserve bail waterfall and synchronous behavior\n  ---\n  duration_ms: 1.1731\n  type: 'test'\n  ...\n# Subtest: existing compilation updates after tap and interceptor registration\nok 4 - existing compilation updates after tap and interceptor registration\n  ---\n  duration_ms: 0.5558\n  type: 'test'\n  ...\n# Subtest: public feature pre-aborted invocations skip work and preserve the reason\nok 5 - public feature pre-aborted invocations skip work and preserve the reason\n  ---\n  duration_ms: 1.0171\n  type: 'test'\n  ...\n# Subtest: public feature cancellation stops ordered successors and completes once\nok 6 - public feature cancellation stops ordered successors and completes once\n  ---\n  duration_ms: 1.485\n  type: 'test'\n  ...\n# Subtest: public feature parallel cancellation stops further launches while observing started work\nok 7 - public feature parallel cancellation stops further launches while observing started work\n  ---\n  duration_ms: 0.4199\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 19.0511\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 157
+  },
+  "hidden": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 16,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: stage one opt-in methods exist only on supported hook kinds and complete empty invocations\nok 1 - stage one opt-in methods exist only on supported hook kinds and complete empty invocations\n  ---\n  duration_ms: 2.8734\n  type: 'test'\n  ...\n# Subtest: stage one pre-abort skips call and tap interception while preserving every reason\nok 2 - stage one pre-abort skips call and tap interception while preserving every reason\n  ---\n  duration_ms: 2.45\n  type: 'test'\n  ...\n# Subtest: stage one both abortable caches invalidate on new taps and interceptors\nok 3 - stage one both abortable caches invalidate on new taps and interceptors\n  ---\n  duration_ms: 0.7272\n  type: 'test'\n  ...\n# Subtest: stage two generated adapters preserve arguments and original tap errors\nok 4 - stage two generated adapters preserve arguments and original tap errors\n  ---\n  duration_ms: 0.741\n  type: 'test'\n  ...\n# Subtest: stage two duplicate callbacks and throws after completion cannot settle twice\nok 5 - stage two duplicate callbacks and throws after completion cannot settle twice\n  ---\n  duration_ms: 0.3292\n  type: 'test'\n  ...\n# Subtest: stage two tap and terminal callback receivers keep unbound invocation conventions\nok 6 - stage two tap and terminal callback receivers keep unbound invocation conventions\n  ---\n  duration_ms: 0.3353\n  type: 'test'\n  ...\n# Subtest: stage two interceptor terminal notifications follow cleanup and precede completion\nok 7 - stage two interceptor terminal notifications follow cleanup and precede completion\n  ---\n  duration_ms: 0.4284\n  type: 'test'\n  ...\n# Subtest: stage two cancellation from call or tap interception prevents subsequent starts\nok 8 - stage two cancellation from call or tap interception prevents subsequent starts\n  ---\n  duration_ms: 0.4332\n  type: 'test'\n  ...\n# Subtest: stage two abort cleanup is immediate and late callbacks or rejections stay observed\nok 9 - stage two abort cleanup is immediate and late callbacks or rejections stay observed\n  ---\n  duration_ms: 5.0463\n  type: 'test'\n  ...\n# Subtest: stage two synchronous abort inside a promise tap still observes its rejected return\nok 10 - stage two synchronous abort inside a promise tap still observes its rejected return\n  ---\n  duration_ms: 0.7767\n  type: 'test'\n  ...\n# Subtest: stage three series continuations wait for each mixed tap before starting the next\nok 11 - stage three series continuations wait for each mixed tap before starting the next\n  ---\n  duration_ms: 0.2965\n  type: 'test'\n  ...\n# Subtest: stage three abort or error stops ordered successors and first terminal event wins\nok 12 - stage three abort or error stops ordered successors and first terminal event wins\n  ---\n  duration_ms: 0.2443\n  type: 'test'\n  ...\n# Subtest: stage four parallel dispatch starts all pending taps without serializing them\nok 13 - stage four parallel dispatch starts all pending taps without serializing them\n  ---\n  duration_ms: 0.1865\n  type: 'test'\n  ...\n# Subtest: stage four abort during parallel dispatch prevents later launches and ignores late failure\nok 14 - stage four abort during parallel dispatch prevents later launches and ignores late failure\n  ---\n  duration_ms: 1.0437\n  type: 'test'\n  ...\n# Subtest: integration concurrent invocations isolate signals listeners and compilation snapshots\nok 15 - integration concurrent invocations isolate signals listeners and compilation snapshots\n  ---\n  duration_ms: 0.4748\n  type: 'test'\n  ...\n# Subtest: integration plugin pipeline composes ordered parallel cancellation cleanup and cache reuse\nok 16 - integration plugin pipeline composes ordered parallel cancellation cleanup and cache reuse\n  ---\n  duration_ms: 1.0702\n  type: 'test'\n  ...\n1..16\n# tests 16\n# suites 0\n# pass 16\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 24.2897\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 118
+  },
+  "usageMatches": true,
+  "gradeMatches": true,
+  "knownMatches": true,
+  "passed": true,
+  "method": "Saved patch reconstructed in a new workspace; complete durable assistant events account for retries, including failed replies absent from final Pi history. No model calls."
+}

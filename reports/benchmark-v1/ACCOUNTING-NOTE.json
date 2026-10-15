@@ -1,0 +1,13 @@
+{
+  "finding": "Final Pi session history can omit a failed assistant reply after a successful retry. It is not by itself a complete usage ledger.",
+  "evidence": {
+    "attempt": "004-bottleneck-weighted-priority-r1",
+    "durableAssistantEvents": 6,
+    "finalHistoryAssistants": 5,
+    "failedEvents": 1,
+    "knownEstimatedUsd": 0.026414,
+    "totalEstimatedUsd": null
+  },
+  "policy": "Use complete durable request/assistant/retry events plus final history. Zero usage on an interrupted response remains unknown; never infer free retries. Preserve original receipts and independent patch acceptance separately from budget success.",
+  "scope": "Confirmed in this pilot; no claim that all prior campaigns lost cost, and no retroactive score change."
+}
