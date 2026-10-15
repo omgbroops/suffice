@@ -1,0 +1,36 @@
+{
+  "version": "luna-safeguards-v1",
+  "completed": true,
+  "attempts": 30,
+  "newSubagents": 0,
+  "worktree": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\field-campaign-v1",
+  "report": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\field-campaign-v1\\reports\\luna-safeguards-v1\\RESULTS.md",
+  "reviewBundle": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\field-campaign-v1\\.suffice\\review-bundles\\luna-safeguards-v1-20261015-204139.zip",
+  "reviewBundleSha256": "8fe2086238f5257ab34bf816d059d4dcca6471b9ef211fc26850c56063dd9a66",
+  "frozenCheckAcceptance": {
+    "A": 2,
+    "B": 3,
+    "C": 7
+  },
+  "knownApiEquivalentInferenceUsd": 0.21621146000000002,
+  "allBenchmarkCostsKnown": true,
+  "engineeringInferenceIncluded": false,
+  "posthocFindings": [
+    {
+      "task": "s01",
+      "arm": "C",
+      "primaryAccepted": true,
+      "problem": "pending per-emitter metadata counter grants forbidden public meta-event permission"
+    },
+    {
+      "task": "q02",
+      "arm": "B",
+      "primaryAccepted": true,
+      "problem": "last waiting task starting does not resolve onSizeLessThan(1), and start emits a completion event when more tasks remain"
+    }
+  ],
+  "originalFrozenBaselineUnchanged": true,
+  "allRemoteExperimentCodeAndEvidenceReconciledLocally": true,
+  "freshHeldoutIssues": 0,
+  "furtherCampaignStarted": false
+}

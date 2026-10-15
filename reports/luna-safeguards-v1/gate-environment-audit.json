@@ -1,0 +1,86 @@
+{
+  "at": "2026-10-15T20:33:47.323Z",
+  "modelCalls": 0,
+  "primaryResultsModified": false,
+  "samePhysicalPublicWorkspacePerTask": true,
+  "onlyChangedSetting": "network",
+  "rows": [
+    {
+      "task": "i01",
+      "network": true,
+      "exitCode": 3,
+      "latencyMs": 5014,
+      "tests": 378,
+      "failureNames": [
+        "Request constructor referrer should throw a TypeError for an invalid URL",
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "frozenExpectedFailures": [
+        "Request constructor referrer should throw a TypeError for an invalid URL",
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch should support https request",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "sourcePatch": "/home/eric_qin/suffice-field-v1/.suffice/luna-safeguards-v1/attempts/i01-B/patch.json"
+    },
+    {
+      "task": "i01",
+      "network": false,
+      "exitCode": 4,
+      "latencyMs": 4010,
+      "tests": 378,
+      "failureNames": [
+        "Request constructor referrer should throw a TypeError for an invalid URL",
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch should support https request",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "frozenExpectedFailures": [
+        "Request constructor referrer should throw a TypeError for an invalid URL",
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch should support https request",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "sourcePatch": "/home/eric_qin/suffice-field-v1/.suffice/luna-safeguards-v1/attempts/i01-B/patch.json"
+    },
+    {
+      "task": "i02",
+      "network": true,
+      "exitCode": 2,
+      "latencyMs": 6517,
+      "tests": 384,
+      "failureNames": [
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "frozenExpectedFailures": [
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch should not forward secure headers to 3th party",
+        "node-fetch should support https request",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "sourcePatch": "/home/eric_qin/suffice-field-v1/.suffice/luna-safeguards-v1/attempts/i02-B/patch.json"
+    },
+    {
+      "task": "i02",
+      "network": false,
+      "exitCode": 4,
+      "latencyMs": 4510,
+      "tests": 384,
+      "failureNames": [
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch should not forward secure headers to 3th party",
+        "node-fetch should support https request",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "frozenExpectedFailures": [
+        "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "node-fetch should not forward secure headers to 3th party",
+        "node-fetch should support https request",
+        "node-fetch supports supplying a famliy option to the agent"
+      ],
+      "sourcePatch": "/home/eric_qin/suffice-field-v1/.suffice/luna-safeguards-v1/attempts/i02-B/patch.json"
+    }
+  ]
+}

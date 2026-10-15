@@ -1,0 +1,1636 @@
+{
+  "at": "2026-10-15T20:24:08.067415+00:00",
+  "plan": {
+    "version": "luna-safeguards-v1",
+    "declaredAt": "2026-10-15T14:28:34.157121+00:00",
+    "tasks": [
+      "s01",
+      "i01",
+      "q04",
+      "i03",
+      "s02",
+      "s03",
+      "i02",
+      "i04",
+      "q01",
+      "q02"
+    ],
+    "originalCalibrationTasks": [
+      "s01",
+      "i01",
+      "q04",
+      "i03",
+      "s02",
+      "s03",
+      "i02",
+      "i04",
+      "q01",
+      "q02"
+    ],
+    "arms": {
+      "A": {
+        "effort": "low",
+        "safeguards": false
+      },
+      "B": {
+        "effort": "low",
+        "safeguards": true
+      },
+      "C": {
+        "effort": "xhigh",
+        "safeguards": false
+      }
+    },
+    "order": [
+      {
+        "task": "s01",
+        "arm": "A"
+      },
+      {
+        "task": "s01",
+        "arm": "B"
+      },
+      {
+        "task": "s01",
+        "arm": "C"
+      },
+      {
+        "task": "i01",
+        "arm": "B"
+      },
+      {
+        "task": "i01",
+        "arm": "C"
+      },
+      {
+        "task": "i01",
+        "arm": "A"
+      },
+      {
+        "task": "q04",
+        "arm": "C"
+      },
+      {
+        "task": "q04",
+        "arm": "A"
+      },
+      {
+        "task": "q04",
+        "arm": "B"
+      },
+      {
+        "task": "i03",
+        "arm": "A"
+      },
+      {
+        "task": "i03",
+        "arm": "B"
+      },
+      {
+        "task": "i03",
+        "arm": "C"
+      },
+      {
+        "task": "s02",
+        "arm": "B"
+      },
+      {
+        "task": "s02",
+        "arm": "C"
+      },
+      {
+        "task": "s02",
+        "arm": "A"
+      },
+      {
+        "task": "s03",
+        "arm": "C"
+      },
+      {
+        "task": "s03",
+        "arm": "A"
+      },
+      {
+        "task": "s03",
+        "arm": "B"
+      },
+      {
+        "task": "i02",
+        "arm": "A"
+      },
+      {
+        "task": "i02",
+        "arm": "B"
+      },
+      {
+        "task": "i02",
+        "arm": "C"
+      },
+      {
+        "task": "i04",
+        "arm": "B"
+      },
+      {
+        "task": "i04",
+        "arm": "C"
+      },
+      {
+        "task": "i04",
+        "arm": "A"
+      },
+      {
+        "task": "q01",
+        "arm": "C"
+      },
+      {
+        "task": "q01",
+        "arm": "A"
+      },
+      {
+        "task": "q01",
+        "arm": "B"
+      },
+      {
+        "task": "q02",
+        "arm": "A"
+      },
+      {
+        "task": "q02",
+        "arm": "B"
+      },
+      {
+        "task": "q02",
+        "arm": "C"
+      }
+    ],
+    "limits": {
+      "maxCostUsd": 0.25,
+      "maxTurns": 60,
+      "maxCalls": 240,
+      "timeoutMs": 600000,
+      "commandTimeout": 180
+    },
+    "plannedAggregateUsd": 7.5,
+    "deadline": "2026-10-15T18:28:34.157137+00:00",
+    "maximumConcurrentActors": 1,
+    "subagents": false,
+    "scope": "Original ten issue packages reused for a predeclared development-rescue comparison; 30 fresh actor sessions, not fresh issues or confirmatory holdout. Repeated low is a contemporaneous control. One observation/task/arm; engineering overhead excluded. Fresh transfer, if prepared, must be separately frozen and reported."
+  },
+  "rows": [
+    {
+      "task": "s01",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0025765000000000002,
+      "totalEstimatedUsd": 0.0025765000000000002,
+      "requests": 8,
+      "replies": 8,
+      "rawResponses": 8,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 8,
+      "calls": 15,
+      "primitiveCalls": 8,
+      "latencyMs": 78239,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": false,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "s01",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00411186,
+      "totalEstimatedUsd": 0.004111860000000001,
+      "requests": 16,
+      "replies": 16,
+      "rawResponses": 16,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 16,
+      "calls": 28,
+      "primitiveCalls": 14,
+      "latencyMs": 78024,
+      "repairs": 1,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 6,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 2
+        },
+        {
+          "phase": "after-repair",
+          "passed": false,
+          "nativeValid": true,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 2
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "s01",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.02119918,
+      "totalEstimatedUsd": 0.021199179999999998,
+      "requests": 28,
+      "replies": 28,
+      "rawResponses": 28,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 28,
+      "calls": 55,
+      "primitiveCalls": 28,
+      "latencyMs": 324636,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "index.js",
+        "test/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "i01",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.004599580000000001,
+      "totalEstimatedUsd": 0.004599580000000001,
+      "requests": 10,
+      "replies": 10,
+      "rawResponses": 10,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 10,
+      "calls": 16,
+      "primitiveCalls": 8,
+      "latencyMs": 72448,
+      "repairs": 1,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 6,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 12
+        },
+        {
+          "phase": "after-repair",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 12
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "src/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "i01",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.007569,
+      "totalEstimatedUsd": 0.007569,
+      "requests": 12,
+      "replies": 12,
+      "rawResponses": 12,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 12,
+      "calls": 38,
+      "primitiveCalls": 27,
+      "latencyMs": 128589,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "i01",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00325666,
+      "totalEstimatedUsd": 0.0032566600000000006,
+      "requests": 10,
+      "replies": 10,
+      "rawResponses": 10,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 10,
+      "calls": 18,
+      "primitiveCalls": 9,
+      "latencyMs": 52595,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q04",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.01547152,
+      "totalEstimatedUsd": 0.01547152,
+      "requests": 26,
+      "replies": 26,
+      "rawResponses": 26,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 26,
+      "calls": 60,
+      "primitiveCalls": 35,
+      "latencyMs": 326702,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "atom/index.js",
+        "computed/index.js",
+        "computed/index.test.ts",
+        "package.json"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q04",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00314152,
+      "totalEstimatedUsd": 0.0031415199999999996,
+      "requests": 10,
+      "replies": 10,
+      "rawResponses": 10,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 10,
+      "calls": 17,
+      "primitiveCalls": 8,
+      "latencyMs": 46770,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "atom/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q04",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00310358,
+      "totalEstimatedUsd": 0.0031035800000000003,
+      "requests": 12,
+      "replies": 12,
+      "rawResponses": 12,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 12,
+      "calls": 24,
+      "primitiveCalls": 13,
+      "latencyMs": 58793,
+      "repairs": 0,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 3,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 17
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "atom/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "i03",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0038644800000000004,
+      "totalEstimatedUsd": 0.0038644800000000004,
+      "requests": 10,
+      "replies": 10,
+      "rawResponses": 10,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 10,
+      "calls": 18,
+      "primitiveCalls": 9,
+      "latencyMs": 54001,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "i03",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00244874,
+      "totalEstimatedUsd": 0.00244874,
+      "requests": 9,
+      "replies": 9,
+      "rawResponses": 9,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 9,
+      "calls": 16,
+      "primitiveCalls": 8,
+      "latencyMs": 49414,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 3,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "preEditProbeObserved": false,
+          "protectedOriginalFilesRestored": 2
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "i03",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.01223434,
+      "totalEstimatedUsd": 0.01223434,
+      "requests": 18,
+      "replies": 18,
+      "rawResponses": 18,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 18,
+      "calls": 41,
+      "primitiveCalls": 24,
+      "latencyMs": 289345,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "s02",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0031493800000000002,
+      "totalEstimatedUsd": 0.0031493800000000007,
+      "requests": 11,
+      "replies": 11,
+      "rawResponses": 11,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 11,
+      "calls": 22,
+      "primitiveCalls": 12,
+      "latencyMs": 60796,
+      "repairs": 0,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 3,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 17
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "computed/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": true
+    },
+    {
+      "task": "s02",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0174279,
+      "totalEstimatedUsd": 0.0174279,
+      "requests": 18,
+      "replies": 18,
+      "rawResponses": 18,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 18,
+      "calls": 43,
+      "primitiveCalls": 26,
+      "latencyMs": 323202,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "computed/index.js",
+        "computed/index.test.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "s02",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0038772800000000003,
+      "totalEstimatedUsd": 0.00387728,
+      "requests": 13,
+      "replies": 13,
+      "rawResponses": 13,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 13,
+      "calls": 31,
+      "primitiveCalls": 19,
+      "latencyMs": 63202,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "computed/index.js",
+        "computed/index.test.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "s03",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00941876,
+      "totalEstimatedUsd": 0.00941876,
+      "requests": 13,
+      "replies": 13,
+      "rawResponses": 13,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 13,
+      "calls": 42,
+      "primitiveCalls": 30,
+      "latencyMs": 200698,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "listen-keys/index.js",
+        "listen-keys/index.test.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "s03",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00425102,
+      "totalEstimatedUsd": 0.004251020000000001,
+      "requests": 14,
+      "replies": 14,
+      "rawResponses": 14,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 14,
+      "calls": 25,
+      "primitiveCalls": 12,
+      "latencyMs": 61695,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        "listen-keys/index.js",
+        "listen-keys/index.test.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "s03",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0025823,
+      "totalEstimatedUsd": 0.0025822999999999996,
+      "requests": 10,
+      "replies": 10,
+      "rawResponses": 10,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 10,
+      "calls": 19,
+      "primitiveCalls": 10,
+      "latencyMs": 51381,
+      "repairs": 0,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 3,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 18
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "listen-keys/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "i02",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.00449464,
+      "totalEstimatedUsd": 0.004494640000000001,
+      "requests": 9,
+      "replies": 9,
+      "rawResponses": 9,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 9,
+      "calls": 16,
+      "primitiveCalls": 8,
+      "latencyMs": 55118,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "i02",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.00456154,
+      "totalEstimatedUsd": 0.004561539999999999,
+      "requests": 13,
+      "replies": 13,
+      "rawResponses": 13,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 13,
+      "calls": 22,
+      "primitiveCalls": 11,
+      "latencyMs": 79940,
+      "repairs": 1,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 6,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 11
+        },
+        {
+          "phase": "after-repair",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 11
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "src/index.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": true
+    },
+    {
+      "task": "i02",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.006660160000000001,
+      "totalEstimatedUsd": 0.006660160000000001,
+      "requests": 11,
+      "replies": 11,
+      "rawResponses": 11,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 11,
+      "calls": 36,
+      "primitiveCalls": 26,
+      "latencyMs": 104417,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "i04",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0042207600000000005,
+      "totalEstimatedUsd": 0.0042207600000000005,
+      "requests": 10,
+      "replies": 10,
+      "rawResponses": 10,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 10,
+      "calls": 18,
+      "primitiveCalls": 9,
+      "latencyMs": 70018,
+      "repairs": 0,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 3,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 4
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".nyc_output/5ecae5e7-0660-4463-aa13-fd38c166d10f.json",
+        ".nyc_output/processinfo/5ecae5e7-0660-4463-aa13-fd38c166d10f.json",
+        ".nyc_output/processinfo/index.json",
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "queue.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "i04",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.01214626,
+      "totalEstimatedUsd": 0.012146259999999999,
+      "requests": 12,
+      "replies": 12,
+      "rawResponses": 12,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 12,
+      "calls": 32,
+      "primitiveCalls": 21,
+      "latencyMs": 235641,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        ".nyc_output/cba19d85-0d35-4fcb-a3d8-5aeb000ee785.json",
+        ".nyc_output/processinfo/cba19d85-0d35-4fcb-a3d8-5aeb000ee785.json",
+        ".nyc_output/processinfo/index.json",
+        "queue.js",
+        "test/test.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "i04",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0036498000000000004,
+      "totalEstimatedUsd": 0.0036498000000000004,
+      "requests": 12,
+      "replies": 12,
+      "rawResponses": 12,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 12,
+      "calls": 22,
+      "primitiveCalls": 11,
+      "latencyMs": 52183,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "patchPaths": [
+        ".nyc_output/e411105e-4e4c-4416-b98b-65485d7f908f.json",
+        ".nyc_output/processinfo/e411105e-4e4c-4416-b98b-65485d7f908f.json",
+        ".nyc_output/processinfo/index.json",
+        "queue.js"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q01",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.01139032,
+      "totalEstimatedUsd": 0.011390319999999999,
+      "requests": 16,
+      "replies": 16,
+      "rawResponses": 16,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 16,
+      "calls": 40,
+      "primitiveCalls": 25,
+      "latencyMs": 367569,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "source/index.ts",
+        "test/rate-limit.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q01",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00284576,
+      "totalEstimatedUsd": 0.00284576,
+      "requests": 11,
+      "replies": 11,
+      "rawResponses": 11,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 11,
+      "calls": 20,
+      "primitiveCalls": 10,
+      "latencyMs": 134310,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": false,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "source/index.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q01",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.007858460000000001,
+      "totalEstimatedUsd": 0.007858460000000001,
+      "requests": 20,
+      "replies": 20,
+      "rawResponses": 20,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 20,
+      "calls": 36,
+      "primitiveCalls": 18,
+      "latencyMs": 395810,
+      "repairs": 1,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 10,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 8
+        },
+        {
+          "phase": "after-repair",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 8
+        }
+      ],
+      "nativeValid": false,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "source/index.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "q02",
+      "arm": "A",
+      "effort": "low",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00432092,
+      "totalEstimatedUsd": 0.004320920000000001,
+      "requests": 12,
+      "replies": 12,
+      "rawResponses": 12,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 12,
+      "calls": 32,
+      "primitiveCalls": 21,
+      "latencyMs": 245878,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": false,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "source/index.ts",
+        "test/basic.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    },
+    {
+      "task": "q02",
+      "arm": "B",
+      "effort": "low",
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.008209260000000001,
+      "totalEstimatedUsd": 0.008209260000000001,
+      "requests": 20,
+      "replies": 20,
+      "rawResponses": 20,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 20,
+      "calls": 36,
+      "primitiveCalls": 18,
+      "latencyMs": 426387,
+      "repairs": 1,
+      "observedPreEditProbes": 1,
+      "publicGateCommands": 10,
+      "gates": [
+        {
+          "phase": "initial",
+          "passed": false,
+          "nativeValid": false,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 8
+        },
+        {
+          "phase": "after-repair",
+          "passed": false,
+          "nativeValid": true,
+          "preEditProbeObserved": true,
+          "protectedOriginalFilesRestored": 8
+        }
+      ],
+      "nativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        ".suffice-checks/preserve.mjs",
+        ".suffice-checks/probe.mjs",
+        "source/index.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": false
+    },
+    {
+      "task": "q02",
+      "arm": "C",
+      "effort": "xhigh",
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.021569980000000002,
+      "totalEstimatedUsd": 0.021569980000000002,
+      "requests": 23,
+      "replies": 23,
+      "rawResponses": 23,
+      "matched": true,
+      "identity": true,
+      "tools": true,
+      "turns": 23,
+      "calls": 62,
+      "primitiveCalls": 40,
+      "latencyMs": 565990,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "gates": [],
+      "nativeValid": false,
+      "acceptanceExits": [
+        0
+      ],
+      "patchPaths": [
+        "readme.md",
+        "source/index.ts",
+        "test/advanced.ts",
+        "test/basic.ts"
+      ],
+      "knownCostMatchesResult": true,
+      "firstSubmissionAccepted": null
+    }
+  ],
+  "byArm": {
+    "A": {
+      "attempted": 10,
+      "completed": 10,
+      "accepted": 2,
+      "budgetEligibleAccepted": 2,
+      "knownEstimatedUsd": 0.036278580000000005,
+      "totalEstimatedUsd": 0.036278580000000005,
+      "unknownCostTasks": [],
+      "knownCostPerAccepted": 0.018139290000000002,
+      "turns": 109,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "independentRepairRescues": 0,
+      "independentRepairRegressions": 0
+    },
+    "B": {
+      "attempted": 10,
+      "completed": 10,
+      "accepted": 3,
+      "budgetEligibleAccepted": 3,
+      "knownEstimatedUsd": 0.044845460000000004,
+      "totalEstimatedUsd": 0.044845460000000004,
+      "unknownCostTasks": [],
+      "knownCostPerAccepted": 0.014948486666666668,
+      "turns": 131,
+      "repairs": 5,
+      "observedPreEditProbes": 9,
+      "publicGateCommands": 53,
+      "independentRepairRescues": 1,
+      "independentRepairRegressions": 0
+    },
+    "C": {
+      "attempted": 10,
+      "completed": 10,
+      "accepted": 7,
+      "budgetEligibleAccepted": 7,
+      "knownEstimatedUsd": 0.13508742,
+      "totalEstimatedUsd": 0.13508742,
+      "unknownCostTasks": [],
+      "knownCostPerAccepted": 0.01929820285714286,
+      "turns": 177,
+      "repairs": 0,
+      "observedPreEditProbes": 0,
+      "publicGateCommands": 0,
+      "independentRepairRescues": 0,
+      "independentRepairRegressions": 0
+    }
+  },
+  "completed": 30,
+  "knownEstimatedUsd": 0.21621146000000002,
+  "unknownCostCells": [],
+  "frozenInputDrift": [],
+  "variantChecks": {
+    "A": {
+      "files": 14,
+      "mismatches": []
+    },
+    "B": {
+      "files": 15,
+      "mismatches": []
+    },
+    "C": {
+      "files": 14,
+      "mismatches": []
+    }
+  },
+  "driver": {
+    "at": "2026-10-15T16:09:38.503Z",
+    "pid": 772,
+    "active": null,
+    "completed": [
+      "s01-A",
+      "s01-B",
+      "s01-C",
+      "i01-B",
+      "i01-C",
+      "i01-A",
+      "q04-C",
+      "q04-A",
+      "q04-B",
+      "i03-A",
+      "i03-B",
+      "i03-C",
+      "s02-B",
+      "s02-C",
+      "s02-A",
+      "s03-C",
+      "s03-A",
+      "s03-B",
+      "i02-A",
+      "i02-B",
+      "i02-C",
+      "i04-B",
+      "i04-C",
+      "i04-A",
+      "q01-C",
+      "q01-A",
+      "q01-B",
+      "q02-A",
+      "q02-B",
+      "q02-C"
+    ],
+    "blocked": {},
+    "majorBlocker": null,
+    "plan": [
+      {
+        "task": "s01",
+        "arm": "A"
+      },
+      {
+        "task": "s01",
+        "arm": "B"
+      },
+      {
+        "task": "s01",
+        "arm": "C"
+      },
+      {
+        "task": "i01",
+        "arm": "B"
+      },
+      {
+        "task": "i01",
+        "arm": "C"
+      },
+      {
+        "task": "i01",
+        "arm": "A"
+      },
+      {
+        "task": "q04",
+        "arm": "C"
+      },
+      {
+        "task": "q04",
+        "arm": "A"
+      },
+      {
+        "task": "q04",
+        "arm": "B"
+      },
+      {
+        "task": "i03",
+        "arm": "A"
+      },
+      {
+        "task": "i03",
+        "arm": "B"
+      },
+      {
+        "task": "i03",
+        "arm": "C"
+      },
+      {
+        "task": "s02",
+        "arm": "B"
+      },
+      {
+        "task": "s02",
+        "arm": "C"
+      },
+      {
+        "task": "s02",
+        "arm": "A"
+      },
+      {
+        "task": "s03",
+        "arm": "C"
+      },
+      {
+        "task": "s03",
+        "arm": "A"
+      },
+      {
+        "task": "s03",
+        "arm": "B"
+      },
+      {
+        "task": "i02",
+        "arm": "A"
+      },
+      {
+        "task": "i02",
+        "arm": "B"
+      },
+      {
+        "task": "i02",
+        "arm": "C"
+      },
+      {
+        "task": "i04",
+        "arm": "B"
+      },
+      {
+        "task": "i04",
+        "arm": "C"
+      },
+      {
+        "task": "i04",
+        "arm": "A"
+      },
+      {
+        "task": "q01",
+        "arm": "C"
+      },
+      {
+        "task": "q01",
+        "arm": "A"
+      },
+      {
+        "task": "q01",
+        "arm": "B"
+      },
+      {
+        "task": "q02",
+        "arm": "A"
+      },
+      {
+        "task": "q02",
+        "arm": "B"
+      },
+      {
+        "task": "q02",
+        "arm": "C"
+      }
+    ],
+    "maximumConcurrentActors": 1
+  },
+  "limitations": [
+    "Development reuse of original ten issues; not heldout.",
+    "One new observation per task/arm, repository correlation and possible training exposure.",
+    "B bundles three changes; activation does not identify causal component effects.",
+    "Public check/probe correctness requires review; passing it is not hidden acceptance.",
+    "Frozen grader limitations and native timing sensitivity from original experiment still apply.",
+    "Controls are reused exact-source receipts, not newly executed controls.",
+    "Engineering inference and preparation overhead excluded; API-equivalent estimates are not actual subscription charges."
+  ]
+}

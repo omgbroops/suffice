@@ -1,0 +1,537 @@
+{
+  "at": "2026-10-15T20:28:59.654Z",
+  "rows": [
+    {
+      "task": "s01",
+      "at": "2026-10-15T20:28:44.409Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "4ed467e74a97f28132d98b37a41674f6e6a0f2d57bb26db3935e481b3ca29f87"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "9720b943c2ab5c110787040184108743901f039f45c0feb7faca2eb4fdaa8de5"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 106,
+            "stdout": "",
+            "stderr": "file:///workspace/index.js:380\n\t\t\tthrow new TypeError('`eventName` cannot be meta event `listenerAdded` or `listenerRemoved`');\n\t\t\t      ^\n\nTypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`\n    at YieldingEmittery.emit (file:///workspace/index.js:380:10)\n    at YieldingEmittery.emit (file:///workspace/.suffice-checks/probe.mjs:6:18)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:472:9)\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: listenerAdded meta event should work with async emit override\n\n1 !== 2\n\n    at file:///workspace/.suffice-checks/probe.mjs:14:8 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 1,\n  expected: 2,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 107,
+            "stdout": "",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": true,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "i01",
+      "at": "2026-10-15T20:28:44.932Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "b717b1e180bc10279a693672a3c5f1faf74006c3771d8f5df1ec102d891965f6"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "bb5aa7d202e59c58ee7a1638c18de92a1bb89666a8201f9714e0f4b2c733f864"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "node:internal/url:819\n      href = bindingUrl.parse(input, base, true);\n                        ^\n\nTypeError: Invalid URL\n    at new URL (node:internal/url:819:25)\n    at ClientRequest.<anonymous> (file:///workspace/src/index.js:133:52)\n    at ClientRequest.emit (node:events:521:24)\n    at HTTPParser.parserOnIncomingClient [as onIncoming] (node:_http_client:798:27)\n    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)\n    at Socket.socketOnData (node:_http_client:633:22)\n    at Socket.emit (node:events:521:24)\n    at addChunk (node:internal/streams/readable:563:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)\n    at Readable.push (node:internal/streams/readable:394:5) {\n  code: 'ERR_INVALID_URL',\n  input: '//super:invalid:url%/',\n  base: 'http://127.0.0.1:42527/'\n}\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "manual redirect preserved\n",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "invalid redirect rejected\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "manual redirect preserved\n",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "q04",
+      "at": "2026-10-15T20:28:45.463Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "5a62205b3442a0b7da28981ea760b1e114851dd101db99f420d736fd844be613"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "0d79a3423877931fa3f80b2ade76dfe8467c525cf85f8caead1ea77755dcf31e"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1106,
+            "stdout": "shared epoch probe passed\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1106,
+            "stdout": "computed array behavior preserved\n",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1105,
+            "stdout": "shared epoch probe passed\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1105,
+            "stdout": "computed array behavior preserved\n",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "i03",
+      "at": "2026-10-15T20:28:49.990Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "630ab32f904340c6e4e0c5a51de2d49f410b6190689f5d76fa467294a53c8b87"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "ece718ece0a8d686b0adbd6d2ab95d27be897af4cef20c49efd6d88c00ddc80b"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 105,
+            "stdout": "",
+            "stderr": "file:///workspace/.suffice-checks/probe.mjs:11\n    throw new Error('Mapper failed');\n          ^\n\nError: Mapper failed\n    at file:///workspace/.suffice-checks/probe.mjs:11:11\n    at file:///workspace/index.js:34:31\n    at run (file:///workspace/index.js:34:56)\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "map preserves result ordering and mapper indices\n",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 105,
+            "stdout": "Caught iterator error; no unhandled mapper rejection\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "map preserves result ordering and mapper indices\n",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "s02",
+      "at": "2026-10-15T20:28:50.504Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "77646417d11ee066353ee1e1a4c3c641ad3577cbc157b42b26014308ab790132"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "65ae771301cddacf425c2b84f3c13821e815c982052cdb0ef4bc539305199646"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1105,
+            "stdout": "before 2\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1105,
+            "stdout": "",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1106,
+            "stdout": "before 2\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 1105,
+            "stdout": "",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "s03",
+      "at": "2026-10-15T20:28:55.053Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "98f321cc2123d9339ecfab6b88bf9133668a6503dcc669588777b64c78116837"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "3ad1cc368c385be6d31f9dd7ff3fbcfa5ddc122d725dd3316218daf77c53631b"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n",
+            "stderr": "  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at file:///workspace/.suffice-checks/probe.mjs:3:15\n      at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n      at async node:internal/modules/esm/loader:639:26\n      at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\nfile:///workspace/.suffice-checks/probe.mjs:7\nif (events !== 1) throw new Error(`expected whole-store set notification; got ${events}`)\n                        ^\n\nError: expected whole-store set notification; got 0\n    at file:///workspace/.suffice-checks/probe.mjs:7:25\n    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n    at async node:internal/modules/esm/loader:639:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n",
+            "stderr": "  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at file:///workspace/.suffice-checks/preserve.mjs:3:15\n      at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n      at async node:internal/modules/esm/loader:639:26\n      at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n"
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n",
+            "stderr": "  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at file:///workspace/.suffice-checks/probe.mjs:3:15\n      at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n      at async node:internal/modules/esm/loader:639:26\n      at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 105,
+            "stdout": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n",
+            "stderr": "  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at file:///workspace/.suffice-checks/preserve.mjs:3:15\n      at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n      at async node:internal/modules/esm/loader:639:26\n      at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n"
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "i02",
+      "at": "2026-10-15T20:28:55.594Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "f897ab8b4944a5edd39bb18d7a94fdf12744640f97abca5dd1c8703696fcb4f8"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "6bf096cf56f03acdd03b06200dcc93a414d55515a6404bbd2c3dd61ff615c87d"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\nundefined\n(Use `node --trace-uncaught ...` to show where the exception was thrown)\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\nundefined\n(Use `node --trace-uncaught ...` to show where the exception was thrown)\n\nNode.js v24.15.0\n"
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 605,
+            "stdout": "Empty deflate response resolved\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "Empty identity body preserved\n",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "i04",
+      "at": "2026-10-15T20:28:56.628Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "bc080beb9b57601a72c2d518a1441e20384949a70eb518dbe28613b60c1b551f"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "7f6f37a58a1f810d70658b9067efe3152a20c97ed95fe32e2aee43c9e1fa4ca2"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "file:///workspace/.suffice-checks/probe.mjs:10\nif (starts.length !== 1) throw new Error(`expected concurrency 1 after resume, got ${starts.length}`)\n                               ^\n\nError: expected concurrency 1 after resume, got 2\n    at file:///workspace/.suffice-checks/probe.mjs:10:32\n    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n    at async node:internal/modules/esm/loader:639:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "file:///workspace/.suffice-checks/probe.mjs:19\n  if (!threw) throw new Error(`accepted invalid concurrency ${invalid}`)\n                    ^\n\nError: accepted invalid concurrency 1.2\n    at file:///workspace/.suffice-checks/probe.mjs:19:21\n    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)\n    at async node:internal/modules/esm/loader:639:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": true,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "q01",
+      "at": "2026-10-15T20:28:57.131Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "62385e5a9b263aeae5984d44501666ffea3603b7c5a8982469cb567b065505b5"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "ca587bea163035a25c39b7b5da605018de20424accb63ab4958c741cd46e7231"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 605,
+            "stdout": "Fresh-window task waited 126ms\n",
+            "stderr": "file:///workspace/.suffice-checks/probe.mjs:13\nif (waited > 80) throw new Error(`Expected immediate fresh-window task; waited ${waited}ms`);\n                       ^\n\nError: Expected immediate fresh-window task; waited 126ms\n    at file:///workspace/.suffice-checks/probe.mjs:13:24\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 205,
+            "stdout": "Preserved: both tasks execute within the two-slot window\n",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 405,
+            "stdout": "Fresh-window task waited 0ms\n",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 204,
+            "stdout": "Preserved: both tasks execute within the two-slot window\n",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    },
+    {
+      "task": "q02",
+      "at": "2026-10-15T20:28:58.648Z",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "scripts": [
+        {
+          "path": ".suffice-checks/preserve.mjs",
+          "sha256": "ad0492504649009dc0e8f2b60029cbec793372f2ae8953a870277514369c7264"
+        },
+        {
+          "path": ".suffice-checks/probe.mjs",
+          "sha256": "606a22251f37fdd4f78c5c9f7928ab6199e1acf1c7109afa7f93c674ab10838c"
+        }
+      ],
+      "controls": {
+        "baseline": {
+          "probe": {
+            "exitCode": 1,
+            "outputLimited": false,
+            "latencyMs": 104,
+            "stdout": "",
+            "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: onSizeLessThan should resolve when dequeueing crosses its limit\n\nfalse !== true\n\n    at file:///workspace/.suffice-checks/probe.mjs:13:8 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n"
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 205,
+            "stdout": "",
+            "stderr": ""
+          }
+        },
+        "reference": {
+          "probe": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 405,
+            "stdout": "",
+            "stderr": ""
+          },
+          "preserve": {
+            "exitCode": 0,
+            "outputLimited": false,
+            "latencyMs": 204,
+            "stdout": "",
+            "stderr": ""
+          }
+        }
+      },
+      "referenceProbeFails": false,
+      "referencePreservationFails": false,
+      "interpretation": "A failure on a known reference requires contract review; it can be a faulty actor check, reference incompleteness or environment mismatch. It is not automatically a coding failure or proof of invalidity."
+    }
+  ],
+  "inferenceCalls": 0,
+  "notActorFeedback": true
+}
