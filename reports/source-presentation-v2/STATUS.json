@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-15T01:59:25.215Z",
+  "status": "live A/B awaiting renewed Suffice/Pi authentication",
+  "worktree": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\source-presentation",
+  "mechanism": "Lossless JSON metadata plus literal numbered source, new tool outputs only; no instruction/schema/history changes.",
+  "offline": {
+    "transcripts": 39,
+    "sourceObjects": 120,
+    "originalChars": 880463,
+    "framedChars": 854692,
+    "savedChars": 25771,
+    "fraction": 0.029269827352199924,
+    "tokenOrCostClaim": false,
+    "sourceAndMetadataRoundTrip": true
+  },
+  "tests": {
+    "passed": 5,
+    "includesInstalledResponsesSerializer": true
+  },
+  "startupFailures": [
+    {
+      "id": "001-fastq-resume-window-A-r0",
+      "modelRequests": 0,
+      "toolCalls": 0,
+      "presentationActivations": 0,
+      "error": "OAuth refresh rejected: invalid_grant",
+      "classification": "authentication startup failure, not model task failure"
+    },
+    {
+      "id": "002-fastq-resume-window-B-r0",
+      "modelRequests": 0,
+      "toolCalls": 0,
+      "presentationActivations": 0,
+      "error": "OAuth refresh rejected: invalid_grant",
+      "classification": "authentication startup failure, not model task failure"
+    }
+  ],
+  "modelInferenceRequests": 0,
+  "improvementDemonstrated": false,
+  "comparisonCompleted": false,
+  "oldUnknownCostPlaceholdersPreserved": true,
+  "authenticationFix": {
+    "previous": "In-memory credential snapshot may discard rotated refresh tokens across processes. Stored credential expired 2026-10-15T01:19:58.775Z; particular invalid_grant cause not proven.",
+    "replacement": "New common runtime uses canonical file-backed SDK credential storage and resolves auth BEFORE allocating scored attempts. Normal atomic SDK refresh writes must persist; no auth secrets copied to reports.",
+    "sharedStore": "existing private .suffice/pi/auth.json via worktree junction",
+    "oldFrozenInputsUnchanged": true
+  },
+  "resume": {
+    "directory": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\source-presentation",
+    "command": "node scripts/source-presentation-v2.mjs run --resume",
+    "manifest": ".suffice/source-presentation-v2/manifest.json",
+    "plannedAttempts": 12,
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "freshStage": "v2 retains v1 startup failures; identical A/B mechanism and models; only common authentication lifecycle/preflight corrected."
+  },
+  "requiredHumanAction": {
+    "directory": "C:/Users/Mohammed/Documents/GitHub/suffice",
+    "command": "node scripts/login.mjs",
+    "reason": "Refresh token terminally rejected. Complete browser sign-in; no alternative billing path or model substituted."
+  },
+  "sources": [
+    "https://developers.openai.com/siwc/token-sharing-open-source/errors-and-recovery"
+  ],
+  "limitations": [
+    "Offline character savings do not establish token, cost or correctness improvements.",
+    "No live A/B activation or inferential comparison exists.",
+    "Old startup failures are not scored as semantic coding failures."
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "at": "2026-10-15T01:56:33.797Z",
+  "model": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "transport": "sse",
+    "billing": "API-equivalent metadata; not subscription charges; engineering inference excluded"
+  },
+  "phase": "exploratory efficiency A/B",
+  "scheduleComplete": false,
+  "arms": {
+    "A": {
+      "attempts": 1,
+      "accepted": 0,
+      "knownBudgetSuccesses": 0,
+      "unknownTotals": 1,
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "meanEstimatedUsd": null,
+      "costPerAccepted": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 322,
+      "usage": {
+        "input": 0,
+        "cacheRead": 0,
+        "output": 0,
+        "totalTokens": 0
+      },
+      "appliedOutputs": 0,
+      "sourceObjects": 0,
+      "originalChars": 0,
+      "framedChars": 0
+    },
+    "B": {
+      "attempts": 1,
+      "accepted": 0,
+      "knownBudgetSuccesses": 0,
+      "unknownTotals": 1,
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "meanEstimatedUsd": null,
+      "costPerAccepted": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 219,
+      "usage": {
+        "input": 0,
+        "cacheRead": 0,
+        "output": 0,
+        "totalTokens": 0
+      },
+      "appliedOutputs": 0,
+      "sourceObjects": 0,
+      "originalChars": 0,
+      "framedChars": 0
+    }
+  },
+  "pairs": [
+    {
+      "pair": "fastq-resume-window-r0",
+      "complete": true,
+      "costComplete": false,
+      "A": null,
+      "B": null,
+      "ratio": null,
+      "acceptanceA": false,
+      "acceptanceB": false
+    }
+  ],
+  "completePairSubset": {
+    "pairs": 0,
+    "A": 0,
+    "B": 0,
+    "ratio": null,
+    "relativeChange": null,
+    "scope": "Descriptive subset; missing cost pairs remain unknown, never silently dropped from full totals."
+  },
+  "knownTotalUsd": 0,
+  "unknownAttemptTotals": 2,
+  "rows": [
+    {
+      "id": "001-fastq-resume-window-A-r0",
+      "task": "fastq-resume-window",
+      "repetition": 0,
+      "arm": "A",
+      "pair": "fastq-resume-window-r0",
+      "status": "provider_error",
+      "patchAccepted": false,
+      "budgetEligible": false,
+      "success": false,
+      "intact": true,
+      "identityValid": false,
+      "usage": {
+        "input": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "output": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 322,
+      "presentation": {
+        "eligibleOutputs": 0,
+        "sourceObjects": 0,
+        "originalChars": 0,
+        "framedChars": 0,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [],
+        "instructionHashes": []
+      },
+      "hidden": "failed",
+      "visible": "passed",
+      "errors": [
+        "OAuth refresh failed for openai: OpenAI OAuth token request failed (400): {\n  \"error\": \"invalid_grant\"\n}"
+      ]
+    },
+    {
+      "id": "002-fastq-resume-window-B-r0",
+      "task": "fastq-resume-window",
+      "repetition": 0,
+      "arm": "B",
+      "pair": "fastq-resume-window-r0",
+      "status": "provider_error",
+      "patchAccepted": false,
+      "budgetEligible": false,
+      "success": false,
+      "intact": true,
+      "identityValid": false,
+      "usage": {
+        "input": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "output": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 219,
+      "presentation": {
+        "eligibleOutputs": 0,
+        "sourceObjects": 0,
+        "originalChars": 0,
+        "framedChars": 0,
+        "appliedOutputs": 0,
+        "wireVerified": true,
+        "schemaHashes": [],
+        "instructionHashes": []
+      },
+      "hidden": "failed",
+      "visible": "passed",
+      "errors": [
+        "OAuth refresh failed for openai: OpenAI OAuth token request failed (400): {\n  \"error\": \"invalid_grant\"\n}"
+      ]
+    }
+  ],
+  "claims": {
+    "capabilityGain": false,
+    "externalSuperiority": false,
+    "promoted": false
+  },
+  "limitations": [
+    "Three exposed injected-defect efficiency controls, six correlated task/repetition pairs at most.",
+    "No untouched confirmation, statistical power claim, whole-upstream regression claim or competitor comparison.",
+    "Cache warmth and model trajectories vary; order counterbalanced. Character savings do not establish cost savings.",
+    "SDK API-equivalent cost metadata excludes engineering inference. Unknown failed-call totals remain unknown.",
+    "Common instrumentation runs formatter in shadow for A; model sees only original content. No new model instructions or source omission."
+  ]
+}
