@@ -1,0 +1,125 @@
+{
+  "at": "2026-10-15T05:35:06.929Z",
+  "checks": [
+    {
+      "task": "h02",
+      "label": "h02-before",
+      "reference": false,
+      "native": {
+        "exitCode": 2,
+        "stats": {
+          "suites": 47,
+          "tests": 390,
+          "passes": 385,
+          "pending": 3,
+          "failures": 2,
+          "start": "2026-10-15T05:29:07.952Z",
+          "end": "2026-10-15T05:29:13.311Z",
+          "duration": 5359
+        },
+        "failures": [
+          {
+            "title": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+            "error": "expected false to be true"
+          },
+          {
+            "title": "node-fetch supports supplying a famliy option to the agent",
+            "error": "request to http://localhost:35647/redirect/301 failed, reason: Invalid IP address: undefined"
+          }
+        ],
+        "valid": true,
+        "buildAndLint": null,
+        "latencyMs": 15270
+      },
+      "independent": {
+        "passed": false,
+        "status": "failed",
+        "tests": 3
+      },
+      "reusedVerifiedControl": true
+    },
+    {
+      "task": "h02",
+      "label": "h02-reference",
+      "reference": true,
+      "native": {
+        "exitCode": 2,
+        "stats": {
+          "suites": 47,
+          "tests": 390,
+          "passes": 385,
+          "pending": 3,
+          "failures": 2,
+          "start": "2026-10-15T05:29:49.736Z",
+          "end": "2026-10-15T05:29:55.082Z",
+          "duration": 5346
+        },
+        "failures": [
+          {
+            "title": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+            "error": "expected false to be true"
+          },
+          {
+            "title": "node-fetch supports supplying a famliy option to the agent",
+            "error": "request to http://localhost:38847/redirect/301 failed, reason: Invalid IP address: undefined"
+          }
+        ],
+        "valid": true,
+        "buildAndLint": null,
+        "latencyMs": 11432
+      },
+      "independent": {
+        "passed": true,
+        "status": "passed",
+        "tests": 3
+      },
+      "reusedVerifiedControl": true
+    },
+    {
+      "task": "l01",
+      "label": "l01-before",
+      "reference": false,
+      "native": {
+        "exitCode": 0,
+        "stats": {
+          "suites": 12,
+          "tests": 153,
+          "passes": 153,
+          "pending": 0,
+          "failures": 0,
+          "start": "2026-10-15T05:34:05.216Z",
+          "end": "2026-10-15T05:34:05.300Z",
+          "duration": 84
+        },
+        "failures": [],
+        "valid": true,
+        "buildAndLint": {
+          "exitCode": 0,
+          "latencyMs": 50977,
+          "passed": true
+        },
+        "latencyMs": 14848
+      },
+      "independent": {
+        "exitCode": null,
+        "error": "ETIMEDOUT",
+        "stdout": "",
+        "stderr": "",
+        "complete": false,
+        "latencyMs": 10027,
+        "passed": false
+      },
+      "smallCapacityControl": {
+        "exitCode": 0,
+        "stdout": "{\"accepted\":true,\"largeCapacity\":16,\"firstDispatchMs\":3.383800000000008,\"events\":[\"large\",\"small\"],\"observations\":[\"hi\",\"acquire\",\"lo\"]}\n",
+        "stderr": "",
+        "complete": true,
+        "latencyMs": 515,
+        "passed": true
+      }
+    }
+  ],
+  "passed": true,
+  "inferenceCalls": 0,
+  "scope": "Original historical parent fails intended leak check, exact upstream fix passes; original live source stalls at reported capacity. Full native suites recorded, with matched pre-existing historical failure identities."
+}
