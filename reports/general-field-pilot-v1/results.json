@@ -1,0 +1,232 @@
+{
+  "at": "2026-10-15T05:51:55.273Z",
+  "configuration": "suffice-general-v1",
+  "scheduleComplete": true,
+  "historical": {
+    "suffice": {
+      "attempts": 1,
+      "accepted": 1,
+      "budgetEligibleSuccesses": 1,
+      "knownEstimatedUsd": 0.0784368,
+      "totalEstimatedUsd": 0.0784368,
+      "costPerAccepted": 0.0784368
+    },
+    "stock-pi": {
+      "attempts": 1,
+      "accepted": 1,
+      "budgetEligibleSuccesses": 1,
+      "knownEstimatedUsd": 0.0863372,
+      "totalEstimatedUsd": 0.0863372,
+      "costPerAccepted": 0.0863372
+    }
+  },
+  "rows": [
+    {
+      "id": "001",
+      "task": "h02",
+      "arm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "identity": true,
+      "usage": {
+        "input": 29794,
+        "cacheRead": 41088,
+        "cacheWrite": 0,
+        "output": 1474,
+        "totalTokens": 72356,
+        "estimatedApiUsd": 0.0784368
+      },
+      "knownEstimatedUsd": 0.0784368,
+      "totalEstimatedUsd": 0.0784368,
+      "requests": 8,
+      "assistantEvents": 8,
+      "missingReceipt": false,
+      "turns": 8,
+      "calls": 21,
+      "latencyMs": 234906,
+      "native": {
+        "exitCode": 2,
+        "stats": {
+          "suites": 47,
+          "tests": 390,
+          "passes": 385,
+          "pending": 3,
+          "failures": 2,
+          "start": "2026-10-15T05:41:05.370Z",
+          "end": "2026-10-15T05:41:10.852Z",
+          "duration": 5482
+        },
+        "failures": [
+          {
+            "title": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+            "error": "expected false to be true"
+          },
+          {
+            "title": "node-fetch supports supplying a famliy option to the agent",
+            "error": "request to http://localhost:36557/redirect/301 failed, reason: Invalid IP address: undefined"
+          }
+        ],
+        "valid": true,
+        "buildAndLint": null,
+        "latencyMs": 11338
+      },
+      "acceptance": {
+        "passed": true,
+        "status": "passed",
+        "tests": 3
+      },
+      "regressions": true,
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "codingFailure": false,
+      "toolingOrOperationalFailure": false,
+      "notes": [
+        "Pre-existing native failure identities retained; no exact exception-string requirements."
+      ]
+    },
+    {
+      "id": "002",
+      "task": "h02",
+      "arm": "stock-pi",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "identity": true,
+      "usage": {
+        "input": 27625,
+        "cacheRead": 127872,
+        "cacheWrite": 0,
+        "output": 1830,
+        "totalTokens": 157327,
+        "estimatedApiUsd": 0.0863372
+      },
+      "knownEstimatedUsd": 0.0863372,
+      "totalEstimatedUsd": 0.0863372,
+      "requests": 19,
+      "assistantEvents": 19,
+      "missingReceipt": false,
+      "turns": 19,
+      "calls": 18,
+      "latencyMs": 268940,
+      "native": {
+        "exitCode": 2,
+        "stats": {
+          "suites": 47,
+          "tests": 390,
+          "passes": 385,
+          "pending": 3,
+          "failures": 2,
+          "start": "2026-10-15T05:46:21.632Z",
+          "end": "2026-10-15T05:46:26.976Z",
+          "duration": 5344
+        },
+        "failures": [
+          {
+            "title": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+            "error": "expected false to be true"
+          },
+          {
+            "title": "node-fetch supports supplying a famliy option to the agent",
+            "error": "request to http://localhost:44887/redirect/301 failed, reason: Invalid IP address: undefined"
+          }
+        ],
+        "valid": true,
+        "buildAndLint": null,
+        "latencyMs": 11549
+      },
+      "acceptance": {
+        "passed": true,
+        "status": "passed",
+        "tests": 3
+      },
+      "regressions": true,
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "codingFailure": false,
+      "toolingOrOperationalFailure": false,
+      "notes": [
+        "Pre-existing native failure identities retained; no exact exception-string requirements."
+      ]
+    },
+    {
+      "id": "003",
+      "task": "l01",
+      "arm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "identity": true,
+      "usage": {
+        "input": 24024,
+        "cacheRead": 33664,
+        "cacheWrite": 0,
+        "output": 2183,
+        "totalTokens": 59871,
+        "estimatedApiUsd": 0.07324440000000002
+      },
+      "knownEstimatedUsd": 0.07324440000000002,
+      "totalEstimatedUsd": 0.07324440000000002,
+      "requests": 7,
+      "assistantEvents": 7,
+      "missingReceipt": false,
+      "turns": 7,
+      "calls": 13,
+      "latencyMs": 137900,
+      "native": {
+        "exitCode": 0,
+        "stats": {
+          "suites": 12,
+          "tests": 153,
+          "passes": 153,
+          "pending": 0,
+          "failures": 0,
+          "start": "2026-10-15T05:49:24.222Z",
+          "end": "2026-10-15T05:49:24.302Z",
+          "duration": 80
+        },
+        "failures": [],
+        "valid": true,
+        "buildAndLint": {
+          "exitCode": 0,
+          "latencyMs": 39870,
+          "passed": true
+        },
+        "latencyMs": 11231
+      },
+      "acceptance": {
+        "exitCode": 0,
+        "stdout": "{\"accepted\":true,\"largeCapacity\":2147483628,\"firstDispatchMs\":1.613399999999956,\"events\":[\"large\",\"small\"],\"observations\":[\"hi\",\"acquire\",\"lo\"]}\n",
+        "stderr": "",
+        "complete": true,
+        "latencyMs": 477,
+        "passed": true
+      },
+      "regressions": true,
+      "patchPaths": [
+        "src/Semaphore.ts",
+        "test/semaphore.ts"
+      ],
+      "codingFailure": false,
+      "toolingOrOperationalFailure": false,
+      "notes": [
+        "Low recent upstream activity; independent performance and original priority/weight semantics required."
+      ]
+    }
+  ],
+  "knownEstimatedUsd": 0.23801840000000002,
+  "unknownCosts": 0,
+  "claims": {
+    "prior28_9Transfers": false,
+    "broadSuperiority": false,
+    "capabilityImprovement": false
+  },
+  "scope": "One historical pair and one live Suffice attempt; descriptive pilot only. Engineering/setup inference excluded; estimates are API-equivalent, not subscription spending."
+}

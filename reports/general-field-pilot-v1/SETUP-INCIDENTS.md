@@ -1,0 +1,13 @@
+# Setup incidents outside scored inference
+
+These incidents preceded the three scored attempts. They are not failed coding attempts and did not consume benchmark model calls. Engineering-agent work is outside the reported benchmark inference total. Raw receipts exist in the compatibility, boundary-validation, dependency-receipt and setup directories; not every initial shell/setup error has a dedicated standalone receipt.
+
+- The installed native Windows isolation executor rejected the minimal-root profile and returned `helper_unknown_error: setup refresh had errors` with the broader profile. Both agents subsequently used the same existing WSL/Bubblewrap boundary; no unrestricted fallback ran.
+- Initial Bubblewrap read-only mount placeholders, shell quoting and trusted PID wrapper probes required correction. The final boundary separately passes private-file, descendant, read-only-write, timeout and output-ceiling checks.
+- Node's Wasm trap-handler reservation conflicted with the chosen virtual-address ceiling. Both arms use the same `--disable-wasm-trap-handler` runtime option. This does not disable task TypeScript builds.
+- Copying dependency metadata with `cp -a` on the Windows-mounted filesystem was too slow. Only the task-owned copy process was interrupted. Native copies plus restoration of links described by the trusted dependency source completed before freeze. Robocopy could not itself create Linux symlinks and produced placeholders; expected link targets were restored and audited. Actor dependencies are independent copies, not shared mutable hardlinks.
+- Windows maximum-path handling initially interrupted evaluator dependency preparation. Python filesystem operations were changed to validated extended absolute paths. Evaluator copies may hardlink dependencies; actors do not share those evaluator trees.
+- A freeze utility had a top-level import side effect when invoked with `freeze` in argv. The campaign failed before inference; an explicit main-module guard was committed before the pilot freeze. The 14 frozen configuration inputs were not changed.
+- The original node-fetch suite has two existing Node 24 failures. Baseline and exact upstream-reference controls preserve the same failure identities. Old project lint also crashes on Node 24; both actors observed it. Historical lint should have been checked in the repository-specific preflight. This gap limits CI compatibility claims and is not an observed coding regression.
+
+The final campaign has three completed attempts, three independent acceptances, no failed scored operational attempts and no unknown benchmark costs. Previously failed setup outputs and partial control directories remain preserved on disk; they are not silently relabeled as successful runs.

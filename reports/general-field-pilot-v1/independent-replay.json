@@ -1,0 +1,161 @@
+{
+  "at": "2026-10-15T06:02:52.470Z",
+  "inferenceCalls": 0,
+  "newBenchmarkAttempts": 0,
+  "reconstructedFromInitialBases": true,
+  "method": "Fresh tracked-file copies plus git apply of each saved tracked.patch; original tests restored; pinned evaluator dependencies mounted read-only; original native commands and private acceptance rerun.",
+  "rows": [
+    {
+      "id": "001",
+      "task": "h02",
+      "passed": true,
+      "patchSha256": "b72b4e7c9f40d5a47a570ba978c36af754ac6013f854922eb574f559f37bd4b2",
+      "workspace": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\general-v1\\.suffice\\general-field-replay-v1\\attempt-001",
+      "native": {
+        "exitCode": 2,
+        "stats": {
+          "suites": 47,
+          "tests": 390,
+          "passes": 385,
+          "pending": 3,
+          "failures": 2,
+          "start": "2026-10-15T06:01:30.251Z",
+          "end": "2026-10-15T06:01:35.695Z",
+          "duration": 5444
+        },
+        "failures": [
+          {
+            "title": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+            "error": "expected false to be true"
+          },
+          {
+            "title": "node-fetch supports supplying a famliy option to the agent",
+            "error": "request to http://localhost:38739/redirect/301 failed, reason: Invalid IP address: undefined"
+          }
+        ],
+        "valid": true,
+        "latencyMs": 21926
+      },
+      "buildAndLint": null,
+      "lintDiagnostic": null,
+      "acceptance": {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 635,
+        "stdout": "TAP version 13\n{\"socketCount\":1,\"snapshots\":[{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1}]}\n# Subtest: consumed keepalive responses do not accumulate retained socket listeners\nok 1 - consumed keepalive responses do not accumulate retained socket listeners\n  ---\n  duration_ms: 69.793259\n  type: 'test'\n  ...\n# Subtest: premature chunked response still rejects instead of accepting incomplete content\nok 2 - premature chunked response still rejects instead of accepting incomplete content\n  ---\n  duration_ms: 7.383105\n  type: 'test'\n  ...\n# Subtest: aborted streamed response still rejects and releases resources\nok 3 - aborted streamed response still rejects and releases resources\n  ---\n  duration_ms: 4.738344\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 87.433645\n",
+        "stderr": "",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "namesMatch": true,
+        "status": "passed"
+      },
+      "nativeRegressionGate": true,
+      "originalTestsUnmodified": true
+    },
+    {
+      "id": "002",
+      "task": "h02",
+      "passed": true,
+      "patchSha256": "815364ce404ec900307bcf6ab13d15efce0bf53b073c77162df976c149425eea",
+      "workspace": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\general-v1\\.suffice\\general-field-replay-v1\\attempt-002",
+      "native": {
+        "exitCode": 2,
+        "stats": {
+          "suites": 47,
+          "tests": 390,
+          "passes": 385,
+          "pending": 3,
+          "failures": 2,
+          "start": "2026-10-15T06:01:40.943Z",
+          "end": "2026-10-15T06:01:46.232Z",
+          "duration": 5289
+        },
+        "failures": [
+          {
+            "title": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+            "error": "expected false to be true"
+          },
+          {
+            "title": "node-fetch supports supplying a famliy option to the agent",
+            "error": "request to http://localhost:38371/redirect/301 failed, reason: Invalid IP address: undefined"
+          }
+        ],
+        "valid": true,
+        "latencyMs": 9840
+      },
+      "buildAndLint": null,
+      "lintDiagnostic": null,
+      "acceptance": {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 615,
+        "stdout": "TAP version 13\n{\"socketCount\":1,\"snapshots\":[{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1},{\"data\":0,\"close\":1}]}\n# Subtest: consumed keepalive responses do not accumulate retained socket listeners\nok 1 - consumed keepalive responses do not accumulate retained socket listeners\n  ---\n  duration_ms: 64.637794\n  type: 'test'\n  ...\n# Subtest: premature chunked response still rejects instead of accepting incomplete content\nok 2 - premature chunked response still rejects instead of accepting incomplete content\n  ---\n  duration_ms: 6.8844\n  type: 'test'\n  ...\n# Subtest: aborted streamed response still rejects and releases resources\nok 3 - aborted streamed response still rejects and releases resources\n  ---\n  duration_ms: 3.961219\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 80.888556\n",
+        "stderr": "",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "namesMatch": true,
+        "status": "passed"
+      },
+      "nativeRegressionGate": true,
+      "originalTestsUnmodified": true
+    },
+    {
+      "id": "003",
+      "task": "l01",
+      "passed": true,
+      "patchSha256": "959729fabf7285d69883aeb675327090b6476931dd8796640ff0600158b3000e",
+      "workspace": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\general-v1\\.suffice\\general-field-replay-v1\\attempt-003",
+      "native": {
+        "exitCode": 0,
+        "stats": {
+          "suites": 12,
+          "tests": 153,
+          "passes": 153,
+          "pending": 0,
+          "failures": 0,
+          "start": "2026-10-15T06:02:00.228Z",
+          "end": "2026-10-15T06:02:00.314Z",
+          "duration": 86
+        },
+        "failures": [],
+        "valid": true,
+        "latencyMs": 13521
+      },
+      "buildAndLint": {
+        "exitCode": 0,
+        "passed": true,
+        "latencyMs": 50604
+      },
+      "lintDiagnostic": null,
+      "acceptance": {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 1340,
+        "stdout": "{\"accepted\":true,\"largeCapacity\":2147483628,\"firstDispatchMs\":0.6059930000001259,\"events\":[\"large\",\"small\"],\"observations\":[\"hi\",\"acquire\",\"lo\"]}\n",
+        "stderr": "",
+        "complete": true,
+        "passed": true
+      },
+      "nativeRegressionGate": true,
+      "originalTestsUnmodified": true
+    }
+  ],
+  "frozenInputsUnmodified": true,
+  "originalBasesUnmodified": true,
+  "inputHashes": {
+    "configs/general-v1.json": "2c0c3799b67dc75e74d643b1f33c6bc69ac48088901d7f036ea9e7292faedd51",
+    "docs/general-v1/PILOT-PROTOCOL.md": "ed6aa19025da52e098b56686ada0981ced8aab2bfb8f178f957fb4cb3779d029",
+    "scripts/general-field-pilot.mjs": "1fb510bd98e1dd76a293769473f30687c7ef8bc687b99c3c27fa935b650c0e1a",
+    ".suffice/general-field-pilot-v1/manifest.json": "56e56c6a4fd958767baa0db81d397c37f03eaa6013c052108548eeb18fb51934",
+    ".suffice/field-v1/private/tasks.json": "4777a625fd2153576cdc1cea9e00718b1c2fd2a2cdfc8a574f05627a0b78d872",
+    ".suffice/field-v1/private/h02.test.mjs": "b14a403cec2f96e47d20fb21cec199a63701044c7d8797bdd052de675453e336",
+    ".suffice/field-v1/private/l01-check.cjs": "4583e5bf4dda59cf771df41b6c2671678ec18f93a445ad4a340ef0122bc2660d",
+    ".suffice/field-v1/private/h02-reference-index.js": "7aa943d40c2ab54a343c4bb71ef9b2410957c835427c66cde3aa7ea9802d2503"
+  },
+  "passed": true,
+  "scope": "Independent deterministic correctness replay. Original reports, receipts, campaign config, source core and private graders preserved. h02 pre-existing test failures allowed only with exact matching identities; h02 lint was not rerun; its original Node24 tooling crash is outside the historical acceptance gate.",
+  "privateGraderRuntime": "Linux Node24.15.0 inside isolated evaluator; original private receipts used Windows Node24.15.0. Same unchanged grader source.",
+  "dependencies": "Existing pinned evaluator dependencies mounted read-only; no dependency installs. Abandoned physical-copy files remain preserved and hidden by the replay mount."
+}

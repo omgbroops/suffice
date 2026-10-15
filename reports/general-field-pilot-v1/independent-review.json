@@ -1,0 +1,136 @@
+{
+  "at": "2026-10-15T05:58:49.101682+00:00",
+  "reviewType": "independent static source and saved-evidence review",
+  "scope": "Three completed attempts: historical node-fetch #1446 pair and live async-mutex #90 Suffice attempt.",
+  "newModelRuns": 0,
+  "newTestRuns": 0,
+  "networkUsed": false,
+  "verdict": "The narrow independently accepted verdicts are supported by reviewed source and saved evidence. No concrete correctness blocker found. Acceptance does not establish universal correctness or general harness superiority.",
+  "attempts": [
+    {
+      "id": "001",
+      "arm": "suffice",
+      "task": "node-fetch #1446",
+      "conclusion": "supported narrow acceptance",
+      "reason": "Named socket data handler and request-close cleanup remove both retained data and close handlers. Production behavior closely matches the private exact upstream repair.",
+      "savedChecks": "3 private checks pass; one reused socket has data=0 and close=1 throughout 24 consumed responses; original native suite has 385 passes, 3 pending and the same 2 pre-existing failures."
+    },
+    {
+      "id": "002",
+      "arm": "stock-pi",
+      "task": "node-fetch #1446",
+      "conclusion": "supported narrow acceptance",
+      "reason": "Same lifecycle repair, with idempotent cleanup on both request close and abort. Handler initialization completes synchronously before asynchronous lifecycle events.",
+      "savedChecks": "3 private checks pass with the same stable listener counts; original native suite has 385 passes, 3 pending and the same 2 pre-existing failures."
+    },
+    {
+      "id": "003",
+      "arm": "suffice",
+      "task": "async-mutex #90",
+      "conclusion": "supported narrow acceptance",
+      "reason": "Map stores only active waiter weights. Sorting keys descending preserves the original weight traversal; existing priority-sorted buckets preserve FIFO ties and strict queue-head priority eligibility. Notifications do not consume semaphore capacity. Removing resolved buckets is safe because native Promise resolution schedules callbacks after this synchronous drain.",
+      "savedChecks": "Private receipt completes at capacity 2147483628 with firstDispatchMs=1.6134, events large/small and observations hi/acquire/lo; all 153 original tests, build and lint pass."
+    }
+  ],
+  "performanceAssessment": {
+    "removesNumericCapacityScan": true,
+    "tradeoff": "Each drain allocates and sorts all W active weight keys, including currently ineligible weights: O(W log W) plus visited waiter work. DispatchQueue repeats draining after queued acquisitions. This can cost more for many distinct waiting weights at small capacity; no such workload benchmark was supplied.",
+    "contractAssessment": "The issue requests removal of work proportional to very large semaphore values and does not prescribe a data structure or require universal performance improvement. The tradeoff is a residual workload risk, not a demonstrated contract violation."
+  },
+  "gradingStrengths": [
+    "Public original issue contracts are frozen; actor tests are retained for review but excluded from native acceptance.",
+    "Historical original control fails leak acceptance while the exact upstream repair passes; original native failure identities are retained.",
+    "Live original stalls at the reported capacity while the small-capacity version of the same check passes. Full completion and exit status are required, so partial output cannot pass.",
+    "Independent checks exercise socket reuse, malformed-response rejection, abort rejection, large weighted observers, priority gating and capacity bookkeeping.",
+    "Saved actor production bytes are checked against graded production bytes in receipt-audit.json."
+  ],
+  "residualRisks": [
+    {
+      "id": "R1",
+      "kind": "coverage",
+      "description": "Historical check is a 24-request listener-retention proxy, not a heap or long-duration memory measurement. It compares final counts to the third sample with +1 tolerance. Saved patches actually show constant 0 data / 1 close, but other leak paths are not excluded."
+    },
+    {
+      "id": "R2",
+      "kind": "coverage",
+      "description": "Abort test proves rejection and test completion; agent.destroy and server.closeAllConnections in finally force cleanup. It does not independently assert automatic post-abort socket/listener/handle release. Malformed test checks rejection but not exact error identity, consistent with the frozen contract."
+    },
+    {
+      "id": "R3",
+      "kind": "coverage",
+      "description": "Live private check sorts the first event array before comparing, so it does not dynamically assert cross-weight resolution order. Static source review confirms descending weight traversal. Original tests cover priority gating, and actor test covers sparse order but is intentionally outside acceptance."
+    },
+    {
+      "id": "R4",
+      "kind": "performance",
+      "description": "No measurement covers many distinct waiter weights or repeated queued dispatches. The patch removes capacity-proportional work but is not established optimal across workloads."
+    },
+    {
+      "id": "R5",
+      "kind": "environment",
+      "description": "Historical original native suite remains partially failing: 390 tests, 385 passing, 3 pending, 2 baseline failures. Both actors attempted old XO lint and encountered util.isDate missing under Node24. Historical lint is not a passing gate, and full historical correctness is not established."
+    },
+    {
+      "id": "R6",
+      "kind": "grader",
+      "description": "Native regression gate compares total/pending counts and allowed failure titles, not full test-name identity or failure semantics. Worsening an already failing test under the same title can be hidden; original test restoration prevents actor tests from redefining the gate."
+    },
+    {
+      "id": "R7",
+      "kind": "inference",
+      "description": "One historical pair supplies descriptive costs only, and one unpaired low-activity live issue supplies no comparative evidence. Historical issue familiarity, run order, product prompt/tool/cache differences and stochastic variation are not controlled by repetition. No broad efficiency or capability improvement follows."
+    }
+  ],
+  "independentReconciliation": {
+    "frozenPilotFilesChecked": 90,
+    "frozenPilotInputsMatch": true,
+    "frozenCoreFilesChecked": 14,
+    "frozenCoreMatch": true,
+    "attempts": [
+      {
+        "id": "001",
+        "requests": 8,
+        "assistantResponses": 8,
+        "distinctRawResponses": 8,
+        "calculatedUsd": 0.0784368
+      },
+      {
+        "id": "002",
+        "requests": 19,
+        "assistantResponses": 19,
+        "distinctRawResponses": 19,
+        "calculatedUsd": 0.0863372
+      },
+      {
+        "id": "003",
+        "requests": 7,
+        "assistantResponses": 7,
+        "distinctRawResponses": 7,
+        "calculatedUsd": 0.0732444
+      }
+    ],
+    "rawInputOutputReconcile": true,
+    "allPromptHashesMatch": true,
+    "allRequestModelEffortMatch": true,
+    "totalApiEquivalentUsd": 0.2380184,
+    "limitation": "Saved event arithmetic was independently recalculated. Reported patch replay and test verdicts were reviewed from saved artifacts; no new replay was run by this reviewer. Engineering/evaluator inference, deterministic execution and subscription billing are excluded."
+  },
+  "evidence": [
+    "docs/general-v1/PILOT-PROTOCOL.md",
+    "reports/general-field-pilot-v1/results.json",
+    "reports/general-field-pilot-v1/validation.json",
+    "reports/general-field-pilot-v1/receipt-audit.json",
+    ".suffice/field-v1/private/tasks.json",
+    ".suffice/field-v1/private/h02.test.mjs",
+    ".suffice/field-v1/private/h02-reference-index.js",
+    ".suffice/field-v1/private/l01-check.cjs",
+    "scripts/general-field-pilot.mjs",
+    "scripts/audit-general-field.mjs",
+    ".suffice/general-field-pilot-v1/{001,002,003}/tracked.patch",
+    ".suffice/general-field-pilot-v1/{001,002,003}/acceptance/private.json",
+    ".suffice/general-field-pilot-v1/{001,002,003}/worker/events.live.jsonl",
+    ".suffice/field-v1/bases/l01/src/Semaphore.ts",
+    ".suffice/field-v1/bases/l01/test/semaphoreSuite.ts",
+    ".suffice/field-v1/bases/l01/README.md"
+  ]
+}
