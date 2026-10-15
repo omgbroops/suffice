@@ -1,0 +1,825 @@
+TAP version 13
+# Subtest: F01 paused capacity increase must not dispatch
+not ok 1 - F01 paused capacity increase must not dispatch
+  ---
+  duration_ms: 4.8397
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:15:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    -   [],
+    -   0,
+        [
+          'a',
+          'b'
+        ],
+    +   2,
+    +   [],
+    +   false
+    -   true
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+    1: 0
+    2:
+      0: 'a'
+      1: 'b'
+    3: true
+  actual:
+    0:
+      0: 'a'
+      1: 'b'
+    1: 2
+    2:
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:17:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.start (node:internal/test_runner/test:1096:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
+  ...
+# Subtest: F02 paused active completions do not start backlog
+not ok 2 - F02 paused active completions do not start backlog
+  ---
+  duration_ms: 0.849
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:19:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'a',
+    -   ],
+    -   0,
+    -   [
+          'b'
+        ],
+    +   1,
+    +   [],
+    +   false
+    -   true
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'a'
+    1: 0
+    2:
+      0: 'b'
+    3: true
+  actual:
+    0:
+      0: 'a'
+      1: 'b'
+    1: 1
+    2:
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:21:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+  ...
+# Subtest: F03 resume fills all available worker slots
+not ok 3 - F03 resume fills all available worker slots
+  ---
+  duration_ms: 0.5713
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'a',
+    +   ],
+    +   1,
+    +   [
+          'b',
+          'c',
+    -   ],
+    -   3,
+    -   [
+          'd'
+        ],
+        false
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'a'
+      1: 'b'
+      2: 'c'
+    1: 3
+    2:
+      0: 'd'
+    3: false
+  actual:
+    0:
+      0: 'a'
+    1: 1
+    2:
+      0: 'b'
+      1: 'c'
+      2: 'd'
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:25:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F04 resume preserves existing running worker accounting
+not ok 4 - F04 resume preserves existing running worker accounting
+  ---
+  duration_ms: 0.5671
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'active',
+          'a',
+    -     'b'
+        ],
+    +   1,
+    -   3,
+        [
+    +     'b',
+          'c'
+        ],
+        false
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'active'
+      1: 'a'
+      2: 'b'
+    1: 3
+    2:
+      0: 'c'
+    3: false
+  actual:
+    0:
+      0: 'active'
+      1: 'a'
+    1: 1
+    2:
+      0: 'b'
+      1: 'c'
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:29:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F05 resume at full capacity waits for a completion
+not ok 5 - F05 resume at full capacity waits for a completion
+  ---
+  duration_ms: 0.5609
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:31:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'active',
+    +     'waiting'
+        ],
+        1,
+    +   [],
+    -   [
+    -     'waiting'
+    -   ],
+        false
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'active'
+    1: 1
+    2:
+      0: 'waiting'
+    3: false
+  actual:
+    0:
+      0: 'active'
+      1: 'waiting'
+    1: 1
+    2:
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:33:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F06 resume retains unshift priority and FIFO tails
+not ok 6 - F06 resume retains unshift priority and FIFO tails
+  ---
+  duration_ms: 0.6106
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:35:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'head',
+    -     'tail1'
+        ],
+    +   1,
+    -   2,
+        [
+    +     'tail1',
+          'tail2'
+        ],
+        false
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'head'
+      1: 'tail1'
+    1: 2
+    2:
+      0: 'tail2'
+    3: false
+  actual:
+    0:
+      0: 'head'
+    1: 1
+    2:
+      0: 'tail1'
+      1: 'tail2'
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:37:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F07 completion replaces worker at exact capacity
+not ok 7 - F07 completion replaces worker at exact capacity
+  ---
+  duration_ms: 0.4599
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:39:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'a',
+          'b',
+    -     'c'
+        ],
+    +   1,
+    -   2,
+        [
+    +     'c',
+          'd'
+        ],
+        false
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'a'
+      1: 'b'
+      2: 'c'
+    1: 2
+    2:
+      0: 'd'
+    3: false
+  actual:
+    0:
+      0: 'a'
+      1: 'b'
+    1: 1
+    2:
+      0: 'c'
+      1: 'd'
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:41:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F08 serial queue fully drains without another push
+not ok 8 - F08 serial queue fully drains without another push
+  ---
+  duration_ms: 0.5362
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:43:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'a',
+    +   ],
+    +   0,
+    +   [
+          'b',
+          'c'
+        ],
+    +   false,
+    -   0,
+    -   [],
+    -   true,
+        1
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'a'
+      1: 'b'
+      2: 'c'
+    1: 0
+    2:
+    3: true
+    4: 1
+  actual:
+    0:
+      0: 'a'
+    1: 0
+    2:
+      0: 'b'
+      1: 'c'
+    3: false
+    4: 1
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:47:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F09 lowered concurrency waits for excess active workers
+ok 9 - F09 lowered concurrency waits for excess active workers
+  ---
+  duration_ms: 0.4674
+  type: 'test'
+  ...
+# Subtest: F10 lowered concurrency refills at its new limit
+not ok 10 - F10 lowered concurrency refills at its new limit
+  ---
+  duration_ms: 0.7178
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:54:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          'a',
+          'b',
+          'c',
+    +   ],
+    +   0,
+    +   [
+          'd'
+        ],
+    -   1,
+    -   [],
+        false
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'a'
+      1: 'b'
+      2: 'c'
+      3: 'd'
+    1: 1
+    2:
+    3: false
+  actual:
+    0:
+      0: 'a'
+      1: 'b'
+      2: 'c'
+    1: 0
+    2:
+      0: 'd'
+    3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:57:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F11 raised concurrency fills free slots immediately
+ok 11 - F11 raised concurrency fills free slots immediately
+  ---
+  duration_ms: 1.5474
+  type: 'test'
+  ...
+# Subtest: F12 repeated resume is idempotent
+not ok 12 - F12 repeated resume is idempotent
+  ---
+  duration_ms: 4.4717
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:63:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          [
+            'a',
+    +     ],
+    +     1,
+    +     [
+            'b'
+          ],
+    -     2,
+    -     [],
+          false
+        ],
+        [
+          [
+            'a',
+    +     ],
+    +     1,
+    +     [
+            'b'
+          ],
+    -     2,
+    -     [],
+          false
+        ]
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0:
+        0: 'a'
+        1: 'b'
+      1: 2
+      2:
+      3: false
+    1:
+      0:
+        0: 'a'
+        1: 'b'
+      1: 2
+      2:
+      3: false
+  actual:
+    0:
+      0:
+        0: 'a'
+      1: 1
+      2:
+        0: 'b'
+      3: false
+    1:
+      0:
+        0: 'a'
+      1: 1
+      2:
+        0: 'b'
+      3: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:65:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F13 synchronous completion reentrancy preserves task order
+not ok 13 - F13 synchronous completion reentrancy preserves task order
+  ---
+  duration_ms: 1.0916
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:67:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          1,
+    -     2,
+    -     3,
+    -     4
+        ],
+        [
+          [
+            null,
+            2
+          ],
+    -     [
+    -       null,
+    -       4
+    -     ],
+    -     [
+    -       null,
+    -       6
+    -     ],
+    -     [
+    -       null,
+    -       8
+    -     ]
+        ],
+        0,
+    +   [
+    +     2,
+    +     3,
+    +     4
+    +   ],
+    +   false
+    -   [],
+    -   true
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 1
+      1: 2
+      2: 3
+      3: 4
+    1:
+      0:
+        0: ~
+        1: 2
+      1:
+        0: ~
+        1: 4
+      2:
+        0: ~
+        1: 6
+      3:
+        0: ~
+        1: 8
+    2: 0
+    3:
+    4: true
+  actual:
+    0:
+      0: 1
+    1:
+      0:
+        0: ~
+        1: 2
+    2: 0
+    3:
+      0: 2
+      1: 3
+      2: 4
+    4: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:71:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F14 queued callback and error handler retain context and payload
+not ok 14 - F14 queued callback and error handler retain context and payload
+  ---
+  duration_ms: 0.8227
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:73:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+          [
+            'error',
+            false,
+            'a'
+          ],
+    -     [
+    -       'error',
+    -       true,
+    -       'b'
+    -     ],
+    -     [
+    -       'callback',
+    -       true,
+    -       'b-result',
+    -       true
+    -     ]
+        ],
+    +   false
+    -   true
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0:
+        0: 'error'
+        1: false
+        2: 'a'
+      1:
+        0: 'error'
+        1: true
+        2: 'b'
+      2:
+        0: 'callback'
+        1: true
+        2: 'b-result'
+        3: true
+    1: true
+  actual:
+    0:
+      0:
+        0: 'error'
+        1: false
+        2: 'a'
+    1: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:79:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F15 empty and drain callbacks reflect queue transitions
+not ok 15 - F15 empty and drain callbacks reflect queue transitions
+  ---
+  duration_ms: 1.0447
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:81:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+    -     'empty',
+    -     0
+    -   ],
+    -   [
+          'drain',
+          0
+        ]
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'empty'
+      1: 0
+    1:
+      0: 'drain'
+      1: 0
+  actual:
+    0:
+      0: 'drain'
+      1: 0
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:85:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: F16 promise queue resumes and resolves all ordered results
+not ok 16 - F16 promise queue resumes and resolves all ordered results
+  ---
+  duration_ms: 105.3665
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\fastq-resume-window\\private\\acceptance.test.mjs:87:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + 'unsettled'
+    - [
+    -   2,
+    -   4,
+    -   6
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 2
+    1: 4
+    2: 6
+  actual: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/fastq-resume-window/private/acceptance.test.mjs:92:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 2
+# fail 14
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 297.2615

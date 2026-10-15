@@ -1,0 +1,193 @@
+{
+  "nodeVersion": "v24.15.0",
+  "status": "validated",
+  "noInferencePerformed": true,
+  "archiveBytes": 869130,
+  "artifactBytesBeforeLogs": 4715181,
+  "structuralChecks": [
+    {
+      "task": "fastq-resume-window",
+      "completeUpstreamSourceFiles": 16,
+      "actorHasNoPrivateArtifacts": true,
+      "assertionMappingComplete": true,
+      "allowedEditPaths": [
+        "src/queue.js"
+      ],
+      "scopeTier": 1
+    },
+    {
+      "task": "emittery-iterator-lifecycle",
+      "completeUpstreamSourceFiles": 22,
+      "actorHasNoPrivateArtifacts": true,
+      "assertionMappingComplete": true,
+      "allowedEditPaths": [
+        "src/index.js"
+      ],
+      "scopeTier": 1
+    }
+  ],
+  "results": [
+    {
+      "task": "fastq-resume-window",
+      "workspace": "actor",
+      "suite": "visible",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "tests/visible.test.mjs"
+      ],
+      "exitCode": 0,
+      "passed": 3,
+      "failed": 0,
+      "failedNames": []
+    },
+    {
+      "task": "fastq-resume-window",
+      "workspace": "actor",
+      "suite": "hidden",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "../private/acceptance.test.mjs"
+      ],
+      "exitCode": 1,
+      "passed": 2,
+      "failed": 14,
+      "failedNames": [
+        "F01 paused capacity increase must not dispatch",
+        "F02 paused active completions do not start backlog",
+        "F03 resume fills all available worker slots",
+        "F04 resume preserves existing running worker accounting",
+        "F05 resume at full capacity waits for a completion",
+        "F06 resume retains unshift priority and FIFO tails",
+        "F07 completion replaces worker at exact capacity",
+        "F08 serial queue fully drains without another push",
+        "F10 lowered concurrency refills at its new limit",
+        "F12 repeated resume is idempotent",
+        "F13 synchronous completion reentrancy preserves task order",
+        "F14 queued callback and error handler retain context and payload",
+        "F15 empty and drain callbacks reflect queue transitions",
+        "F16 promise queue resumes and resolves all ordered results"
+      ]
+    },
+    {
+      "task": "fastq-resume-window",
+      "workspace": "reference",
+      "suite": "visible",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "tests/visible.test.mjs"
+      ],
+      "exitCode": 0,
+      "passed": 3,
+      "failed": 0,
+      "failedNames": []
+    },
+    {
+      "task": "fastq-resume-window",
+      "workspace": "reference",
+      "suite": "hidden",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "../private/acceptance.test.mjs"
+      ],
+      "exitCode": 0,
+      "passed": 16,
+      "failed": 0,
+      "failedNames": []
+    },
+    {
+      "task": "emittery-iterator-lifecycle",
+      "workspace": "actor",
+      "suite": "visible",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "tests/visible.test.mjs"
+      ],
+      "exitCode": 0,
+      "passed": 3,
+      "failed": 0,
+      "failedNames": []
+    },
+    {
+      "task": "emittery-iterator-lifecycle",
+      "workspace": "actor",
+      "suite": "hidden",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "../private/acceptance.test.mjs"
+      ],
+      "exitCode": 1,
+      "passed": 5,
+      "failed": 13,
+      "failedNames": [
+        "I01 named events multicast to all independent iterators",
+        "I02 anyEvent multicasts to all independent iterators",
+        "I03 slow and fast consumers preserve their own FIFO buffers",
+        "I04 returning one named iterator preserves sibling registration",
+        "I05 sibling named iterator keeps receiving after return",
+        "I06 returning one any iterator preserves sibling delivery",
+        "I07 multi-event return preserves all unrelated subscriptions",
+        "I08 clear named event drains buffered data before done",
+        "I09 clear all retains buffers of named and any iterators",
+        "I15 instances isolate subscriptions cleanup and buffers",
+        "I16 clear buffers independent same-event consumers",
+        "I17 returning repeatedly does not unregister a new sibling",
+        "I18 clearing several names drains each selected buffer"
+      ]
+    },
+    {
+      "task": "emittery-iterator-lifecycle",
+      "workspace": "reference",
+      "suite": "visible",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "tests/visible.test.mjs"
+      ],
+      "exitCode": 0,
+      "passed": 3,
+      "failed": 0,
+      "failedNames": []
+    },
+    {
+      "task": "emittery-iterator-lifecycle",
+      "workspace": "reference",
+      "suite": "hidden",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-timeout=3000",
+        "../private/acceptance.test.mjs"
+      ],
+      "exitCode": 0,
+      "passed": 18,
+      "failed": 0,
+      "failedNames": []
+    }
+  ],
+  "limitations": [
+    "Both tasks are scope tier 1 single-component repairs; they do not establish long-task performance.",
+    "Defects are disclosed synthetic injections into pinned real upstream code.",
+    "Native authored regression/acceptance suites ran; upstream development-dependency suites did not."
+  ]
+}
