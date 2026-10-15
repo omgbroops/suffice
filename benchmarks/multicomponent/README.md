@@ -1,0 +1,15 @@
+# Multi-component calibration candidate
+
+`bottleneck-weighted-priority/task.json` describes one ready-to-review Tier2 task. This is an explicitly injected two-module repair on the complete Bottleneck v2.19.5 repository, pinned at `8a8bde9cde151c278397703c48f2bba4ded2bae7`. It exercises the actual CommonJS scheduler, priority lists, job lifecycle and local weighted datastore. The reference source is pristine upstream. No dependencies, package install, runtime network, external service or live inference are required.
+
+Paths inside task metadata are relative to the directory containing `task.json`. Before passing them to the existing harness, resolve `workspaceDir`, `referenceDir`, `acceptancePath` and `visiblePath` against that directory. The test tool receives `actor/tests/visible.test.mjs`; private acceptance is evaluator-only. Workspace edits are limited to existing `src/lib/**/*.js` production files. This candidate is not registered into existing task manifests or optimization experiments.
+
+To reproduce preparation, run `python scripts/prepare-multicomponent.py`. The cached pinned tarball is included, so no network is needed when it is present; its SHA-256 is checked before extraction. Preparation copies every regular upstream file, including dotfiles, identically into actor and reference before applying the two documented mutations only to actor. The source receipt lists all hashes, sizes and exact injection text.
+
+Run `node scripts/validate-multicomponent.mjs` with the normal Suffice dependencies available. In an isolated worktree without installed harness dependencies, point `SUFFICE_HARNESS_MODULE` at an existing checkout's `src/workspace.mjs`; validation imports that read-only harness module and does not install or modify shared dependencies. For this receipt it was `C:/Users/Mohammed/Documents/GitHub/suffice/src/workspace.mjs` at the rootHEAD from which the worktree was created. Tests execute under its normal permission-restricted Node runner.
+
+The validation receipt records baseline visible 3/3 pass, baseline acceptance 1/6 pass, reference visible 3/3 pass and reference acceptance 6/6 pass. Priority-only and capacity-only repairs both fail the combined backlog-wave acceptance case. Source downloads are 153,683 bytes; two complete upstream copies total 1,557,716 bytes, comfortably within the 8 MiB download and 30 MiB task artifact ceilings.
+
+Scope is structural and declared before agent runs. Two small edits can solve this task, and the complete upstream CoffeeScript/bundled counterparts expose the intended semantics. This is useful as a transparent integration calibration control; it is not a demonstrated long-horizon, compaction, persistence or delegation workload. Hidden tests are adapted behavior checks, not the full upstream Mocha/Redis suite.
+
+`docs/TIER3-TASK-SELECTION.md` defines a separate Tapable staged cancellation feature, admission gates, independent stage/end-to-end acceptance and measured compaction/restart/delegation eligibility. That candidate is a plan only: no reference feature implementation or Tier3 exposure has been certified.
