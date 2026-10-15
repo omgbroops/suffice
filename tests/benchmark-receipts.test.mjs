@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {accountEvents} from '../scripts/audit-benchmark-receipts.mjs';
+test('zero-usage failed response remains unknown after a successful retry',()=>{const a=accountEvents([{type:'assistant',turn:1,stopReason:'error',usage:{cost:{total:0}}},{type:'assistant',turn:2,stopReason:'stop',usage:{input:5,output:2,cost:{total:.1}}}]);assert.equal(a.unknown,true);assert.equal(a.usage.estimatedApiUsd,.1);assert.equal(a.failedEvents,1);});
+test('duplicate model receipts cannot silently inflate audit totals',()=>assert.throws(()=>accountEvents([{type:'assistant',turn:1},{type:'assistant',turn:1}]),/Duplicate/));
