@@ -1,0 +1,24 @@
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {stageRuntime,executeIsolated,ROOT} from './general-execution.mjs';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const old=resolve(ROOT,'../external-pi');
+const manifest=JSON.parse(await readFile(resolve(old,'.suffice/external-pi-v1/manifest.json')));
+const differences=[];for(const[p,h]of Object.entries(manifest.inputs))if(hash(await readFile(resolve(old,p)))!==h)differences.push(p);
+const bundle=resolve(old,'.suffice/review-bundles/external-pi-v1-20261015-042139.zip');
+const preserved={at:new Date().toISOString(),oldWorktree:old,frozenInputCount:Object.keys(manifest.inputs).length,differences,baselineSourceSha256:hash(await readFile(resolve(old,'src/benchmark-agent.mjs'))),bundleSha256:hash(await readFile(bundle)),passed:!differences.length};
+if(preserved.bundleSha256!=='bc91c95d988470b390b3d39f73992330eb96fb7197f9d408a7c6887ddbdeb3f9')preserved.passed=false;
+await mkdir(resolve(ROOT,'reports/general-v1'),{recursive:true});await writeFile(resolve(ROOT,'reports/general-v1/baseline-preservation.json'),JSON.stringify(preserved,null,2));
+if(!preserved.passed)throw new Error('Prior baseline integrity failed; do not change it');
+await stageRuntime();
+const workspace=resolve(ROOT,'.suffice/compat/repo'),privateRoots=[resolve(ROOT,'.suffice/compat/private'),resolve(ROOT,'../github-field-test/.suffice/field/private')];
+const limits={maxCostUsd:0.75,maxTurns:60,maxCalls:240,timeoutMs:600000,commandTimeout:180};
+const sf=await executeIsolated({workspace,privateRoots,receipts:resolve(ROOT,'.suffice/general-preflight/suffice'),command:['node','/runtime/src/general/entry.mjs'],input:JSON.stringify({prompt:'Preflight only',limits,preflight:true}),timeoutMs:45000});
+const stock=await executeIsolated({workspace,privateRoots,receipts:resolve(ROOT,'.suffice/general-preflight/stock'),command:['node','/runtime/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js','--mode','rpc','--provider','openai','--model','gpt-6.1-sol','--thinking','low','--offline','--no-session','-e','/runtime/src/external-pi-observer.mjs'],input:JSON.stringify({type:'get_state',id:'preflight'})+'\n',timeoutMs:45000});
+const loadEvents=async arm=>(await readFile(resolve(ROOT,'.suffice/general-preflight',arm,'events.live.jsonl'),'utf8')).trim().split('\n').filter(Boolean).map(JSON.parse);
+let sfEvents=[],stockEvents=[];try{sfEvents=await loadEvents('suffice');stockEvents=await loadEvents('stock');}catch{}
+const startup=stockEvents.find(e=>e.type==='startup'),sfStartup=sfEvents.find(e=>e.type==='startup');
+const result={at:new Date().toISOString(),baselinePreserved:preserved.passed,inferenceCalls:sfEvents.concat(stockEvents).filter(e=>e.type==='provider_request').length,suffice:{exitCode:sf.exitCode,stdout:sf.stdout,stderr:sf.stderr,startup:sfStartup},stock:{exitCode:stock.exitCode,stdout:stock.stdout,stderr:stock.stderr,startup},passed:sf.exitCode===0&&stock.exitCode===0&&sfStartup?.model.id==='gpt-6.1-sol'&&startup?.model.id==='gpt-6.1-sol'&&JSON.stringify(sfStartup.model.cost)===JSON.stringify(startup.model.cost)&&JSON.stringify(startup.activeTools)===JSON.stringify(['read','bash','edit','write'])&&sfStartup.activeTools.includes('codemode')};
+result.passed&&=result.inferenceCalls===0;
+await writeFile(resolve(ROOT,'reports/general-v1/preflight.json'),JSON.stringify(result,null,2));console.log(JSON.stringify({...result,stock:{...result.stock,startup:'[saved]'},suffice:{...result.suffice,startup:'[saved]'}}));if(!result.passed)process.exitCode=1;
