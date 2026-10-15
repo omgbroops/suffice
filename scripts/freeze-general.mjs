@@ -8,8 +8,9 @@ const file=resolve(ROOT,'reports/general-v1/frozen-configuration.json');
 const paths=['package.json','package-lock.json','configs/general-v1.json','src/runtime.mjs','src/workspace.mjs','src/symbol-navigation.mjs','src/external-pi-observer.mjs','src/general/tools.mjs','src/general/agent.mjs','src/general/entry.mjs','scripts/general-execution.mjs','scripts/general-boundary.sh','scripts/general-run.mjs','scripts/setup-general-runtime.sh'];
 const fingerprints=async()=>{const inputs={};for(const p of paths)inputs[p]=hash(await readFile(resolve(ROOT,p)));return inputs;};
 export async function verifyGeneral(){const m=JSON.parse(await readFile(file));const current=await fingerprints();if(JSON.stringify(m.inputs)!==JSON.stringify(current))throw new Error('Frozen general-v1 source drift');return m;}
-if(process.argv[2]==='verify')console.log(JSON.stringify({passed:!!await verifyGeneral()}));
-else if(process.argv[2]==='freeze'){
+const isMain=process.argv[1]&&resolve(process.argv[1])===resolve(import.meta.filename);
+if(isMain&&process.argv[2]==='verify')console.log(JSON.stringify({passed:!!await verifyGeneral()}));
+else if(isMain&&process.argv[2]==='freeze'){
  const preflight=JSON.parse(await readFile(resolve(ROOT,'reports/general-v1/preflight.json'))),compat=JSON.parse(await readFile(resolve(ROOT,'.suffice/compat/latest.json'))),boundary=JSON.parse(await readFile(resolve(ROOT,'reports/general-v1/boundary-validation.json')));
  if(!preflight.passed||!compat.result.passed||!boundary.passed)throw new Error('Compatibility gates required');
  const r=spawnSync('wsl.exe',['-d','Ubuntu','--','sha256sum',LINUX_RUNTIME+'/bin/node',LINUX_RUNTIME+'/app/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js',LINUX_RUNTIME+'/app/package-lock.json'],{encoding:'utf8',windowsHide:true});if(r.status!==0)throw new Error(r.stderr);
