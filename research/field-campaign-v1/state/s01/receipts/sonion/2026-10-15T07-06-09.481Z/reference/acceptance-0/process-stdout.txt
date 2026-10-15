@@ -1,0 +1,20 @@
+
+  ✔ meta event - works with async emit override in subclass
+  ✔ meta event - listenerRemoved works with async emit override in subclass
+  ✔ meta event - onAny() works with async emit override in subclass
+  ✔ meta event - offAny() works with async emit override in subclass
+  ✔ meta event - concurrent on() calls with async emit override both deliver
+  ✔ meta event - multiple emitters have independent counters
+  ✖ Internal error
+  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'
+  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'
+      at Object.mkdirSync (node:fs:1350:26)
+      at Api._createCacheDir (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s01/dependencies/node_modules/ava/lib/api.js:335:6)
+      at Api.run (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s01/dependencies/node_modules/ava/lib/api.js:306:96)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async loadCli (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s01/dependencies/node_modules/ava/lib/cli.js:489:21)
+
+
+  ─
+
+  6 tests passed

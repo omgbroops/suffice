@@ -1,0 +1,38 @@
+
+  ✔ throws on invalid concurrency argument
+  ✔ clearQueue
+  ✔ accepts additional arguments
+  ✔ continues after sync throw
+  ✔ runs all tasks asynchronously
+  ✔ non-promise returning function
+  ✔ map accepts an iterable (set)
+  ✔ map accepts an iterable (array iterator)
+  ✔ map
+  ✔ propagates async execution context properly
+  ✔ limitFunction exposes clearQueue
+  ✔ shared context with a limited provider helper
+  ✔ map passes index and preserves order with concurrency
+  ✔ map works when detached from the limit
+  ✔ clearQueue rejects pending promises when enabled (102ms)
+  ✔ accepts options object (102ms)
+  ✔ does not ignore errors (112ms)
+  ✔ change concurrency to bigger value (152ms)
+  ✔ change concurrency to smaller value (202ms)
+  ✔ concurrency: 1 (608ms)
+  ✔ concurrency: 4 (2.3s)
+  ✔ limitFunction() (2.3s)
+  ✔ activeCount and pendingCount properties (3s)
+  ✘ Internal error
+  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'
+
+  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'
+      at Object.mkdirSync (node:fs:1350:26)
+      at Api._createCacheDir (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/api.js:332:6)
+      at Api.run (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/api.js:306:110)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async loadCli (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/cli.js:546:21)
+
+
+  ─
+
+  23 tests passed

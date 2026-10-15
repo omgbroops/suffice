@@ -1,0 +1,59 @@
+✖ abort settles a pending condition and late true cannot reverse rejection (302.90214ms)
+✖ timeout settles a never resolving condition (301.149278ms)
+✖ late rejection after abort is handled (301.642579ms)
+✔ ordinary asynchronous success and condition rejection remain intact (2.44441ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 951.601136
+
+✖ failing tests:
+
+test at field-acceptance.test.mjs:7:1
+✖ abort settles a pending condition and late true cannot reverse rejection (302.90214ms)
+  AssertionError [ERR_ASSERTION]: wait did not settle while condition was pending
+      at soon (file:///workspace/field-acceptance.test.mjs:6:111)
+      at async TestContext.<anonymous> (file:///workspace/field-acceptance.test.mjs:10:40)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'pending',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at field-acceptance.test.mjs:13:1
+✖ timeout settles a never resolving condition (301.149278ms)
+  AssertionError [ERR_ASSERTION]: wait did not settle while condition was pending
+      at soon (file:///workspace/field-acceptance.test.mjs:6:111)
+      at async TestContext.<anonymous> (file:///workspace/field-acceptance.test.mjs:14:85)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'pending',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at field-acceptance.test.mjs:17:1
+✖ late rejection after abort is handled (301.642579ms)
+  AssertionError [ERR_ASSERTION]: wait did not settle while condition was pending
+      at soon (file:///workspace/field-acceptance.test.mjs:6:111)
+      at async TestContext.<anonymous> (file:///workspace/field-acceptance.test.mjs:20:40)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'pending',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }

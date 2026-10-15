@@ -1,0 +1,64 @@
+
+  ✔ resolveWith works with timeout
+  ✔ resolveWith works with signal
+  ✔ cleanup happens on successful resolution
+  ✔ sentinel short-circuit on first call
+  ✔ rejects if condition throws
+  ✔ handles pre-aborted signal
+  ✔ cleanup happens on error
+  ✔ throws on invalid timeout.milliseconds
+  ✔ throws on negative interval
+  ✔ throws on NaN interval
+  ✔ throws on Infinity interval
+  ✔ throws on negative timeout
+  ✔ throws on NaN timeout
+  ✔ throws on negative timeout.milliseconds
+  ✔ throws on NaN timeout.milliseconds
+  ✔ abort before first check
+  ✔ rejects if condition returns non-boolean
+  ✔ handles null condition return value
+  ✔ handles undefined condition return value
+  ✔ handles promise rejection in condition
+  ✔ resolveWith returns custom value
+  ✔ resolveWith with falsy values
+  ✔ condition can return truthy non-boolean values that get rejected
+  ✔ works with zero interval
+  ✔ resolves with signal when condition becomes true
+  ✔ timeout with Infinity milliseconds never times out
+  ✔ signal and timeout work together
+  ✔ timeout before abort signal
+  ✔ handles fallback errors gracefully
+  ✔ signal abort reason is preserved
+  ✔ fallback returns undefined works
+  ✔ abort during sleep between checks
+  ✔ fallback not used on abort
+  ✔ timeout message as Error instance
+  ✔ timeout message as string
+  ✔ multiple simultaneous waits with same condition
+  ✔ handles async condition that resolves false multiple times
+  ✔ timeout rejects with TimeoutError (101ms)
+  ✔ timeout with custom error message (102ms)
+  ✔ timeout with custom error object (102ms)
+  ✔ timeout with fallback function (102ms)
+  ✔ before option delays first check (103ms)
+  ✔ aborts when signal is aborted (102ms)
+  ✔ before false delays first check exactly (101ms)
+  ✔ abort while condition is pending (101ms)
+  ✔ interval is respected (102ms)
+  ✔ stops checking after timeout (153ms)
+  ✔ stops checking after abort (153ms)
+  ✔ waits for condition (200ms)
+  ✘ Internal error
+  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'
+
+  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'
+      at Object.mkdirSync (node:fs:1350:26)
+      at Api._createCacheDir (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/l02/dependencies/node_modules/ava/lib/api.js:332:6)
+      at Api.run (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/l02/dependencies/node_modules/ava/lib/api.js:306:110)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async loadCli (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/l02/dependencies/node_modules/ava/lib/cli.js:546:21)
+
+
+  ─
+
+  49 tests passed

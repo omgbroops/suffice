@@ -1,0 +1,42 @@
+{
+  "capturedAt": "2026-10-15T07:08:49.931Z",
+  "host": "sonion",
+  "node": "v24.15.0",
+  "upstreamCommit": "6b5f7d53400cdfacf71c0813a26350a80103a7b5",
+  "localGitCommit": "ecbdc4065037662e3f483484eaa1f9f6072d5e24",
+  "graderSha256": "8b5c08b5ca08c89683341bfe05607664efd0365c5465d45f539fdaa9e86c96b0",
+  "lockSha256": "914269f1ade9018c5d82c73a109737687e573896484a2a38f5c831ccfd11b6de",
+  "nativePassed": true,
+  "baselineRejected": true,
+  "rows": [
+    {
+      "kind": "native",
+      "command": [
+        "sh",
+        "-c",
+        "printf \"module.exports = {cache: false};\\n\" > .field-ava.config.cjs && node node_modules/ava/entrypoints/cli.mjs --config .field-ava.config.cjs test.js"
+      ],
+      "exitCode": 0,
+      "latencyMs": 506
+    },
+    {
+      "kind": "native",
+      "command": [
+        "node",
+        "node_modules/tsd/dist/cli.js"
+      ],
+      "exitCode": 0,
+      "latencyMs": 1517
+    },
+    {
+      "kind": "acceptance",
+      "command": [
+        "node",
+        "--test",
+        "field-acceptance.test.mjs"
+      ],
+      "exitCode": 1,
+      "latencyMs": 1008
+    }
+  ]
+}

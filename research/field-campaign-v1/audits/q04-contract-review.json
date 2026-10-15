@@ -1,0 +1,70 @@
+{
+  "task": "q04",
+  "repository": "nanostores/nanostores",
+  "issue": 371,
+  "disposition": "retain-admit-subject-to-normal-v2-exact-path-preflight",
+  "blindActorResultsInspected": false,
+  "readOnly": true,
+  "reviewerRanTestsOrModelCalls": false,
+  "taskSha256": "9bedcd05b9f06407bf1f4294e989664aa982b4b5cbe2ff89bf2401af45b42149",
+  "contract": {
+    "foreignModuleUpdatesExplicitInOriginalBody": true,
+    "multipleForeignSourceStoresExplicitInOriginalBody": true,
+    "testUsesCompleteUnchangedRealSourceCopies": true,
+    "testRequiresGlobalSymbolRepresentation": false,
+    "publicSolutionHintPresent": true,
+    "unsupportedActiveAssertionsFound": false
+  },
+  "controls": {
+    "nativeBaselineExit": 0,
+    "nativeReferenceExit": 0,
+    "nativeOriginalFilesSelected": 14,
+    "nativeReportedEntries": 46,
+    "nativeEntryCaveat": "Includes file-level passes; not assertion count or independently enumerated result for every inner test.",
+    "acceptanceBaseline": {
+      "exit": 1,
+      "pass": 1,
+      "fail": 2,
+      "failureKind": "foreign-instance-computed-values-stay-6-and-7-instead-of-12-and-9"
+    },
+    "acceptanceReference": {
+      "exit": 0,
+      "pass": 3,
+      "fail": 0
+    },
+    "loadOrSetupFailureInAcceptance": false
+  },
+  "independentIntegrity": {
+    "originalTitleAndBodyExact": true,
+    "fixFirstParentMatchesBase": true,
+    "originalArchiveRegularFilesByteIdentical": 67,
+    "extraSourceFilesBeyondRootLock": [],
+    "baseGitCommitCount": 1,
+    "futureFixObjectAbsent": true,
+    "baseGitClean": true,
+    "trackedFilesPhysicalVsGitHeadRawByteIdentical": 67,
+    "dependencyDirActualNodeModules": true,
+    "productionReferenceBlobsMatchUpstream": true,
+    "privateFilesInActorBase": false,
+    "originalPackageAndPnpmLockByteIdentical": true
+  },
+  "coverageLimits": [
+    "No specific bundler/tree-shaking build is simulated; genuine independent module graphs reproduce the stated duplicate-module contract.",
+    "No cross-process global-state contract is imposed.",
+    "BNT46 reported entries are not original assertion counts.",
+    "Full lint/type/size/coverage CI is not claimed."
+  ],
+  "initialSemverTrialTaskSha256": "aab09a10a52b4b806a7c7d0626afa15ca36c226e899a9ff71e392df294dd1844",
+  "reviewedReadyFlag": false,
+  "readyToggleAuthorizedByContractReview": true,
+  "dependencyCorrection": {
+    "finalLock": "original pnpm-lock.yaml",
+    "lockSha256": "d9f6a07ceeab59e3a67a6166fcda428dae36430f3a523afd6554f6651eb61bca",
+    "packageManager": "pnpm@10.34.7",
+    "frozenLockfile": true,
+    "ignoreScripts": true,
+    "priorSemverTrialPreservedPrivately": true
+  },
+  "admittedReadyTaskSha256": "68ea2ed48bc678e36e8a5ef5d860fb5fc3857e0c87930e51a19d0f35962d56fd",
+  "admissionToggleNote": "After blind PASS, owner changed only ready/admission metadata; reviewed final dependency/source/control version remains 9bedcd05b9f06407bf1f4294e989664aa982b4b5cbe2ff89bf2401af45b42149."
+}

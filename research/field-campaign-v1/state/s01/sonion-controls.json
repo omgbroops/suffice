@@ -1,0 +1,62 @@
+{
+  "host": "sonion",
+  "runtime": "v24.15.0",
+  "startedAt": "2026-10-15T07:07:41.128Z",
+  "originalNativeCommands": [
+    [
+      "bash",
+      "-c",
+      "printf '%s' 'export default {cache: false};' > /tmp/field-ava.config.mjs; exec node node_modules/ava/entrypoints/cli.mjs --config /tmp/field-ava.config.mjs test/index.js"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "bash",
+      "-c",
+      "printf '%s' 'export default {cache: false};' > /tmp/field-ava.config.mjs; exec node node_modules/ava/entrypoints/cli.mjs --config /tmp/field-ava.config.mjs test/field-regression.js"
+    ]
+  ],
+  "baseCommit": "c5e99b898b05a67fbbb8bcb6cf34d2d35f582aff",
+  "fixCommit": "dd6d78befbf664268471c61a8363884e96777cff",
+  "localBaseCommit": "e075b9221b175e0c13cce54602c92200566c5456",
+  "baseline": {
+    "native": [
+      {
+        "exitCode": 0,
+        "latencyMs": 817,
+        "reportedTests": 117,
+        "stdoutTail": "entName is included in event object\n  ✔ emit() - awaits async listeners\n  ✔ anyEvent() - dataless event produces event object without data key\n  ✔ anyEvent() - explicit undefined payload includes data key\n  ✔ isDebug default logger handles symbol event names and object for event data\n  ✔ on() - returns a unsubcribe method\n  ✔ on() - use abort signal\n  ✔ off()\n  ✔ onAny()\n  ✔ offAny()\n  ✔ on()\n  ✔ emit() - userland cannot emit the meta events\n  ✔ emitSerial() - userland cannot emit the meta events\n  ✔ onAny() - receives correct eventName per distinct event\n  ✔ events() - iterators get isolated event objects\n  ✔ once() - filter predicate receives full event object with eventName\n  ✔ once() - filter predicate with multiple event names\n  ✔ anyEvent() - iterators get isolated event objects\n  ✔ emit() - returns undefined\n  ✔ onAny() - use abort signal\n  ✔ on() - multiple event names\n  ✔ once() - supports filter predicate\n  ✔ off() - multiple event names\n  ✔ clearListeners()\n  ✔ emit() - throws an error if any listener throws\n  ✔ clearListeners() - with event name\n  ✔ clearListeners() - with multiple event names\n  ✔ clearListeners() - with event name - clears iterators for that event\n  ✔ emit() - calls listeners subscribed when emit() was invoked\n  ✔ clearListeners() - also clears iterators\n  ✔ emitSerial() - calls listeners subscribed when emitSerial() was invoked\n  ✔ on() - listenerAdded\n  ✔ on() - listenerRemoved\n  ✔ on() - listenerAdded onAny\n  ✔ on() - listenerAdded offAny\n  ✔ events() - discarded iterators should stop receiving events\n  ✔ anyEvents() - discarded iterators should stop receiving events\n  ✔ once() - returns a promise with an unsubscribe method (101ms)\n  ✔ once() - filter predicate can be unsubscribed (111ms)\n  ✔ emitSerial() (339ms)\n  ─\n\n  117 tests passed\n",
+        "stderrTail": "[7:7:41.521][emittery:subscribe][testEmitter] Event Name: Symbol(test)\n\tdata: undefined\n[7:7:41.525][emittery:emit][testEmitter] Event Name: Symbol(listenerAdded)\n\tdata: {}\n[7:7:41.525][emittery:emit][testEmitter] Event Name: Symbol(test)\n\tdata: {\"complex\":[\"data\",\"structure\",1]}\n[7:7:41.525][emittery:emit][testEmitter] Event Name: test\n\tdata: Object with the following keys failed to stringify: circular\n"
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 1,
+        "latencyMs": 404,
+        "reportedTests": 6,
+        "stdoutTail": "22:   await delay(50);                       \n   23:   t.is(events.length, 1);                \n   24:   t.is(events[0].data.eventName, 'test');\n\n  Difference:\n\n  - 0\n  + 1\n\n  › file://test/field-regression.js:23:4\n\n\n\n  meta event - listenerRemoved works with async emit override in subclass\n\n  test/field-regression.js:47\n\n   46:   await delay(50);                       \n   47:   t.is(events.length, 1);                \n   48:   t.is(events[0].data.eventName, 'test');\n\n  Difference:\n\n  - 0\n  + 1\n\n  › file://test/field-regression.js:47:4\n\n\n\n  meta event - onAny() works with async emit override in subclass\n\n  test/field-regression.js:99\n\n   98:   await delay(50);                          \n   99:   t.is(events.length, 1);                   \n   100:   t.is(events[0].data.eventName, undefined);\n\n  Difference:\n\n  - 0\n  + 1\n\n  › file://test/field-regression.js:99:4\n\n\n\n  meta event - offAny() works with async emit override in subclass\n\n  test/field-regression.js:123\n\n   122:   await delay(50);                          \n   123:   t.is(events.length, 1);                   \n   124:   t.is(events[0].data.eventName, undefined);\n\n  Difference:\n\n  - 0\n  + 1\n\n  › file://test/field-regression.js:123:4\n\n\n\n  meta event - multiple emitters have independent counters\n\n  test/field-regression.js:153\n\n   152:   await delay(50);        \n   153:   t.is(events1.length, 1);\n   154:   t.is(events2.length, 1);\n\n  Difference:\n\n  - 0\n  + 1\n\n  › file://test/field-regression.js:153:4\n\n\n\n  meta event - concurrent on() calls with async emit override both deliver\n\n  test/field-regression.js:72\n\n   71:   await delay(50);       \n   72:   t.is(events.length, 2);\n   73:                          \n\n  Difference:\n\n  - 0\n  + 2\n\n  › file://test/field-regression.js:72:4\n\n  ─\n\n  6 tests failed\n  10 unhandled rejections\n",
+        "stderrTail": ""
+      }
+    ]
+  },
+  "reference": {
+    "native": [
+      {
+        "exitCode": 0,
+        "latencyMs": 707,
+        "reportedTests": 117,
+        "stdoutTail": "entName is included in event object\n  ✔ emit() - awaits async listeners\n  ✔ anyEvent() - dataless event produces event object without data key\n  ✔ anyEvent() - explicit undefined payload includes data key\n  ✔ isDebug default logger handles symbol event names and object for event data\n  ✔ on() - returns a unsubcribe method\n  ✔ on() - use abort signal\n  ✔ off()\n  ✔ onAny()\n  ✔ offAny()\n  ✔ on()\n  ✔ emit() - userland cannot emit the meta events\n  ✔ emitSerial() - userland cannot emit the meta events\n  ✔ onAny() - receives correct eventName per distinct event\n  ✔ events() - iterators get isolated event objects\n  ✔ once() - filter predicate receives full event object with eventName\n  ✔ once() - filter predicate with multiple event names\n  ✔ anyEvent() - iterators get isolated event objects\n  ✔ emit() - returns undefined\n  ✔ onAny() - use abort signal\n  ✔ on() - multiple event names\n  ✔ once() - supports filter predicate\n  ✔ off() - multiple event names\n  ✔ clearListeners()\n  ✔ emit() - throws an error if any listener throws\n  ✔ clearListeners() - with event name\n  ✔ clearListeners() - with multiple event names\n  ✔ clearListeners() - with event name - clears iterators for that event\n  ✔ emit() - calls listeners subscribed when emit() was invoked\n  ✔ clearListeners() - also clears iterators\n  ✔ emitSerial() - calls listeners subscribed when emitSerial() was invoked\n  ✔ on() - listenerAdded\n  ✔ on() - listenerRemoved\n  ✔ on() - listenerAdded onAny\n  ✔ on() - listenerAdded offAny\n  ✔ events() - discarded iterators should stop receiving events\n  ✔ anyEvents() - discarded iterators should stop receiving events\n  ✔ once() - returns a promise with an unsubscribe method (101ms)\n  ✔ once() - filter predicate can be unsubscribed (111ms)\n  ✔ emitSerial() (268ms)\n  ─\n\n  117 tests passed\n",
+        "stderrTail": "[7:7:42.750][emittery:subscribe][testEmitter] Event Name: Symbol(test)\n\tdata: undefined\n[7:7:42.755][emittery:emit][testEmitter] Event Name: Symbol(listenerAdded)\n\tdata: {}\n[7:7:42.755][emittery:emit][testEmitter] Event Name: Symbol(test)\n\tdata: {\"complex\":[\"data\",\"structure\",1]}\n[7:7:42.756][emittery:emit][testEmitter] Event Name: test\n\tdata: Object with the following keys failed to stringify: circular\n"
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 0,
+        "latencyMs": 405,
+        "reportedTests": 6,
+        "stdoutTail": "  ⚠ Using configuration from /tmp/field-ava.config.mjs\n\n  ✔ meta event - works with async emit override in subclass\n  ✔ meta event - listenerRemoved works with async emit override in subclass\n  ✔ meta event - onAny() works with async emit override in subclass\n  ✔ meta event - offAny() works with async emit override in subclass\n  ✔ meta event - concurrent on() calls with async emit override both deliver\n  ✔ meta event - multiple emitters have independent counters\n  ─\n\n  6 tests passed\n",
+        "stderrTail": ""
+      }
+    ]
+  }
+}

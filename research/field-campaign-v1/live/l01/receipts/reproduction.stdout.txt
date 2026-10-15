@@ -1,0 +1,51 @@
+✔ settled fulfillment survives finally (2.061309ms)
+✔ settled rejection survives finally (1.187228ms)
+✖ pending fulfillment survives finally (1004.216619ms)
+✖ pending rejection survives finally (1002.40829ms)
+✔ finally waits for cleanup and retains task value (5.573436ms)
+✔ a cleanup exception rejects the resulting promise (0.385855ms)
+✖ pool exec with finally completes (2098.647005ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 4
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7801.014404
+
+✖ failing tests:
+
+test at .suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:10:3
+✖ pending fulfillment survives finally (1004.216619ms)
+  Error: Promise remained pending
+      at Timeout._onTimeout (file:///mnt/c/Users/Mohammed/Documents/GitHub/suffice-experiments/field-campaign-v1/.suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:8:89)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)
+
+test at .suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:17:3
+✖ pending rejection survives finally (1002.40829ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: Promise remained pending
+      at async TestContext.<anonymous> (file:///mnt/c/Users/Mohammed/Documents/GitHub/suffice-experiments/field-campaign-v1/.suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:22:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Promise remained pending
+        at Timeout._onTimeout (file:///mnt/c/Users/Mohammed/Documents/GitHub/suffice-experiments/field-campaign-v1/.suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:8:89)
+        at listOnTimeout (node:internal/timers:605:17)
+        at process.processTimers (node:internal/timers:541:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at .suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:38:1
+✖ pool exec with finally completes (2098.647005ms)
+  Error: Promise remained pending
+      at Timeout._onTimeout (file:///mnt/c/Users/Mohammed/Documents/GitHub/suffice-experiments/field-campaign-v1/.suffice/field-campaign-v1/tasks/l01/controls/reproduction/acceptance.test.mjs:8:89)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)

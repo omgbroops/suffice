@@ -1,0 +1,358 @@
+{
+  "phase": "blind_contract_audit",
+  "createdAt": "2026-10-15T07:19:36.177863+00:00",
+  "actorOutputsOrResultsRead": false,
+  "scope": [
+    "i01",
+    "i02",
+    "i03",
+    "i04",
+    "l01",
+    "l02",
+    "l03"
+  ],
+  "mutationPolicy": "Only these two new audit reports were written; no task, grader, harness, actor or result artifacts changed. No tests, installs or model calls were run for this audit. SSH used only for read-only provenance hashing.",
+  "summary": "Core checks are defensible; i04 is explicitly a partial core-scheduler grade. Native test-restoration guarantee is incomplete for root test.js/index.test-d.ts in i03,l02,l03. No actor outcomes considered.",
+  "tasks": [
+    {
+      "id": "i01",
+      "disposition": "valid_with_environment_limits",
+      "contract": "Malformed redirect Location must reject through fetch promise; manual mode remains readable and valid redirects work.",
+      "checks": "Local HTTP statuses301,302,307,308: invalid default redirects reject Error, invalid manual returns original status/header/body, valid follow returns destination.",
+      "native": "378 tests:371 pass,3 pending,4 identical baseline/reference failures.",
+      "control": "Baseline uncaught ERR_INVALID_URL at invalid301Location; exact upstream production file passes.",
+      "limits": [
+        "303 is not exercised by private check. No exact Error subclass or message imposed.",
+        "Original public report contains diagnosis; solution hints are retained.",
+        "Four named native failures retained; full clean native suite is not claimed."
+      ],
+      "nativeTestProtection": "test/ files restored; runner/config edits remain replayable."
+    },
+    {
+      "id": "i02",
+      "disposition": "valid_with_historical_symptom_limit",
+      "contract": "Zero-byte deflate response must yield a response and empty text; ordinary zlib/raw deflate and gzip remain valid.",
+      "checks": "Empty content-length0, chunked and default framing; nonempty wrapped/raw deflate and gzip controls,1800ms outer timeout.",
+      "native": "384 tests:377 pass,3 pending,4 identical baseline/reference failures.",
+      "control": "Baseline Node24 rejects undefined on successful pump completion, rather than reproducing the older indefinite wait. Reference fixes pump callback error guards and empty-stream end settlement; check passes.",
+      "limits": [
+        "Operational historical symptom differs on Node24; measured public postcondition remains faithful.",
+        "Not an isolated test of only the missing end handler: successful pump completion rejection is also necessarily fixed on this base/runtime.",
+        "Original issue includes a proposed diff, retained verbatim."
+      ],
+      "nativeTestProtection": "test/ files restored; runner/config edits remain replayable."
+    },
+    {
+      "id": "i03",
+      "disposition": "valid_contract_native_restoration_limited",
+      "contract": "Iterator failure keeps original error identity, promptly rejects, observes already scheduled mapper rejections, and preserves normal/shared queue behavior.",
+      "checks": "Strict-unhandled mode with1and4 yielded items, mapper-only failure, array-like input, queued work behind a gate and immediate iterator rejection.",
+      "native": "23 original AVA tests pass baseline/reference.",
+      "control": "Baseline fatal mapper failure; actual upstream index.js/index.d.ts reference passes.",
+      "limits": [
+        "No full XO/tsd run is claimed.",
+        "Original issue supplies detailed cause and candidate fix, retained.",
+        "Native root test.js and index.test-d.ts are not protected by frozen path matcher."
+      ],
+      "nativeTestProtection": "Root test.js edits are replayed into evaluation; private field-acceptance.mjs overlay remains independent."
+    },
+    {
+      "id": "i04",
+      "disposition": "limited_core_contract_only",
+      "contract": "Pause/resume and mutable concurrency respect existing workers, queued work, no cancellation, and positive concurrency transitions.",
+      "checks": "Repeated resume with one active worker; raise1to3; lower3to1; push/unshift ordering; paused increase; invalid0,-1,NaN throw and preserve previous setting.",
+      "native": "187 original Tape assertions pass baseline/reference.",
+      "control": "Baseline first resume starts2workers despite limit1; upstream production reference passes core check.",
+      "limits": [
+        "Issue explicitly names fractional1.2 as nonsensical, but neither private acceptance nor upstream setter rejects it. Reference accepts value>=1 without finite/integer/type guard.",
+        "A score can support core scheduler repair, not complete resolution of every original example.",
+        "Fractional constructor/setter behavior and fractional pause/resume/new submissions are untested. Infinity and coercible values are also outside coverage, but the report does not invent a required policy for them.",
+        "Promise wrapper scheduling paths and other positive limits beyond1/2/3 are not directly added to private check."
+      ],
+      "nativeTestProtection": "Original test/ files restored; configurable runner/package inputs remain replayable."
+    },
+    {
+      "id": "l01",
+      "disposition": "valid_live_contract_with_environment_limits",
+      "contract": "Finally attached before settlement must complete with original success/rejection, cleanup executes once, and real pool.exec continues.",
+      "checks": "Pending and settled fulfillment/rejection, awaited cleanup, cleanup throw and one real thread worker. Cleanup behaviors are already part of original Promise native tests.",
+      "native": "Build and build:types pass;73 Promise/Queues/environment tests pass; test:types passes. Full capacity-oriented Pool suite excluded after frozen-address-space failure.",
+      "control": "Original inline reproduction verified. Private baseline7checks:4pass,3fail at pending fulfillment/rejection and pool.exec. No reference repair exists or was inspected.",
+      "limits": [
+        "One-second worker completion bound can be affected by severe host contention; pure Promise pending cases distinguish core bug.",
+        "No browser, process-worker or full high-worker Pool capacity CI claim.",
+        "No reference-positive control for unresolved live task."
+      ],
+      "nativeTestProtection": "Original test/ files restored; package build/type scripts remain editable."
+    },
+    {
+      "id": "l02",
+      "disposition": "valid_live_contract_native_restoration_limited",
+      "contract": "Abort/timeout settle outer wait while condition remains pending, preserve abort reason or TimeoutError and observe late condition rejection; normal polling remains intact.",
+      "checks": "Explicit abort followed by late true; never-resolving timeout; late rejection after abort; ordinary async success/condition failure.",
+      "native": "49 original AVA tests and tsd pass. Ephemeral AVA cache config supports immutable dependencies; lint not graded.",
+      "control": "Original inline reproduction verified. Private baseline4checks:1pass,3fail because pending wait does not settle within300ms. No reference repair.",
+      "limits": [
+        "Numeric timeout20ms is allowed300ms, a practical finite guard rather than an exact timing equality.",
+        "Timeout object/fallback, late timeout fulfillment/rejection, repeated abort cleanup and signal listener counts are not private-check coverage.",
+        "Root test.js and index.test-d.ts are not protected by frozen path matcher."
+      ],
+      "nativeTestProtection": "Root native test edits replayed; private field-acceptance.test.mjs overwritten from frozen evaluator file."
+    },
+    {
+      "id": "l03",
+      "disposition": "valid_live_contract_native_restoration_limited",
+      "contract": "Same-window suppressed callers await slow leading result, and overlapping windows retain their own batch result without extra calls.",
+      "checks": "Three same-window callers; two overlapping pending batches resolved in reverse order; ordinary leading/trailing controls. Batch isolation is explicit in original public suggested direction.",
+      "native": "77 original Node tests and tsd pass; lint not graded.",
+      "control": "Original inline reproduction verified. Private baseline3checks:1pass,2fail at premature fulfillment and undefined overlapping results. No reference repair.",
+      "limits": [
+        "Leading rejection, abort interaction, this-binding and longer overlap sequences are not added to private check.",
+        "Root test.js and index.test-d.ts are not protected by frozen path matcher; empty Node test.js can exit0 without nativeParser count check."
+      ],
+      "nativeTestProtection": "Root native test edits replayed; independent private acceptance is restored."
+    }
+  ],
+  "provenance": [
+    {
+      "id": "i01",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "archiveHashMatches": true,
+      "baseIsFixParent": true,
+      "referenceBlobsMatchGitHubCommitMetadata": [
+        {
+          "target": "src/index.js",
+          "matches": true
+        }
+      ],
+      "archiveFilesCompared": 53,
+      "archiveFileDifferences": []
+    },
+    {
+      "id": "i02",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "archiveHashMatches": true,
+      "baseIsFixParent": true,
+      "referenceBlobsMatchGitHubCommitMetadata": [
+        {
+          "target": "src/index.js",
+          "matches": true
+        }
+      ],
+      "archiveFilesCompared": 53,
+      "archiveFileDifferences": []
+    },
+    {
+      "id": "i03",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "archiveHashMatches": true,
+      "baseIsFixParent": true,
+      "referenceBlobsMatchGitHubCommitMetadata": [
+        {
+          "target": "index.js",
+          "matches": true
+        },
+        {
+          "target": "index.d.ts",
+          "matches": true
+        }
+      ],
+      "archiveFilesCompared": 16,
+      "archiveFileDifferences": []
+    },
+    {
+      "id": "i04",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "archiveHashMatches": true,
+      "baseIsFixParent": true,
+      "referenceBlobsMatchGitHubCommitMetadata": [
+        {
+          "target": "queue.js",
+          "matches": true
+        }
+      ],
+      "archiveFilesCompared": 15,
+      "archiveFileDifferences": []
+    },
+    {
+      "id": "l01",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "issueAtRefresh": {
+        "state": "open",
+        "assignees": [],
+        "comments": 0,
+        "updated_at": "2026-10-14T08:21:25Z"
+      },
+      "publicBodyMatchesRefreshedIssue": true,
+      "availabilityCapturedAt": "2026-10-15T07:04:51.004701+00:00",
+      "originalInlineReproduced": true,
+      "archiveFilesCompared": 113,
+      "archiveFileDifferences": []
+    },
+    {
+      "id": "l02",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "issueAtRefresh": {
+        "state": "open",
+        "assignees": [],
+        "comments": 0,
+        "updated_at": "2026-10-15T04:06:15Z"
+      },
+      "publicBodyMatchesRefreshedIssue": true,
+      "availabilityCapturedAt": "2026-10-15T07:04:52.320402+00:00",
+      "originalInlineReproduced": true,
+      "archiveFilesCompared": 13,
+      "archiveFileDifferences": []
+    },
+    {
+      "id": "l03",
+      "publicBodyHashMatches": true,
+      "gitCommitCount": 1,
+      "gitStatusClean": true,
+      "privateOverlayAbsentFromBase": true,
+      "issueAtRefresh": {
+        "state": "open",
+        "assignees": [],
+        "comments": 0,
+        "updated_at": "2026-10-08T07:01:48Z"
+      },
+      "publicBodyMatchesRefreshedIssue": true,
+      "availabilityCapturedAt": "2026-10-15T07:04:53.602460+00:00",
+      "originalInlineReproduced": true,
+      "archiveFilesCompared": 12,
+      "archiveFileDifferences": []
+    }
+  ],
+  "nodefetchKnownFailures": {
+    "i01": [
+      {
+        "name": "Request constructor referrer should throw a TypeError for an invalid URL",
+        "reason": "Node24 URL message differs: expected Invalid URL: foobar, actual Invalid URL; distinct from response redirect callback."
+      },
+      {
+        "name": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "reason": "Existing stream termination assertion expected false to be true; identical baseline/reference."
+      },
+      {
+        "name": "node-fetch should support https request",
+        "reason": "github.com EAI_AGAIN under isolated network; identical baseline/reference."
+      },
+      {
+        "name": "node-fetch supports supplying a famliy option to the agent",
+        "reason": "Custom lookup produces Invalid IP address: undefined on Node24; identical baseline/reference."
+      }
+    ],
+    "i02": [
+      {
+        "name": "node-fetch should not forward secure headers to 3th party",
+        "reason": "httpbin.org EAI_AGAIN; external HTTPS not local empty-deflate contract."
+      },
+      {
+        "name": "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+        "reason": "Existing termination assertion; unchanged by actual reference repair."
+      },
+      {
+        "name": "node-fetch should support https request",
+        "reason": "github.com EAI_AGAIN."
+      },
+      {
+        "name": "node-fetch supports supplying a famliy option to the agent",
+        "reason": "Custom lookup Invalid IP address: undefined."
+      }
+    ]
+  },
+  "crossTaskFindings": [
+    {
+      "severity": "material_limitation",
+      "finding": "Frozen protected() misses root test.js and index.test-d.ts. Native suites can be weakened by actor changes that are replayed, although independent private acceptance is always overlaid.",
+      "evidence": [
+        "scripts/sonion-data.py:protected",
+        "scripts/sonion-data.py:grade",
+        "scripts/sonion-campaign.mjs:nativeVerdict"
+      ],
+      "affected": [
+        "i03",
+        "l02",
+        "l03"
+      ],
+      "recommendation": "Keep frozen grades unchanged; inspect actual changed paths after unblinding. Do not claim complete original-test preservation without that review."
+    },
+    {
+      "severity": "coverage_limit",
+      "finding": "Fastq fractional1.2 is explicitly in issue but absent from both positive reference semantics and private assertions.",
+      "affected": [
+        "i04"
+      ],
+      "recommendation": "Call results core scheduling contract outcomes; report incomplete fractional behavior, optionally present aggregate sensitivity excluding i04 without new inference."
+    },
+    {
+      "severity": "measurement_limit",
+      "finding": "Mocha grading requires exact4 failure names/exit4 and nonzero tests, not equal total test/pass counts or same failure messages. Protected test/ source helps, but changed configs could reduce discovery, and fixing a previously known failure could be rejected.",
+      "affected": [
+        "i01",
+        "i02"
+      ],
+      "recommendation": "Compare evaluated test counts/messages on completed attempts; do not treat expected nonzero native exit as full-suite success."
+    },
+    {
+      "severity": "scope_limit",
+      "finding": "Live tasks have failing original reproductions and healthy native controls but no reference-positive repair; static checks judged by public outputs, not implementation internals.",
+      "affected": [
+        "l01",
+        "l02",
+        "l03"
+      ]
+    }
+  ],
+  "reviewedInputSha256": {
+    ".suffice/field-campaign-v1/tasks/i01/task.json": "113f4a1288a11ca7cd1d69eac7d970302220870a35518b0713b1276bf60ba32e",
+    "research/field-campaign-v1/integration/i01/provenance.json": "ce667696dea62c62d19744c423499dfbc2faaf0654ffff4e6c943190090d0158",
+    "research/field-campaign-v1/integration/i01/controls.json": "311007127ea23f65331722d7a183bfce091bf46bb64171423dfb586e0f787648",
+    "research/field-campaign-v1/integration/i01/field-acceptance.mjs": "b767bc79e116351e907ecaa9e6b5765b66594acf1961f861fc092d7393c0df9b",
+    ".suffice/field-campaign-v1/tasks/i02/task.json": "bad8e02b7170302398ac94e568e322f16a527a177d0a3bdc528fea52e6657e60",
+    "research/field-campaign-v1/integration/i02/provenance.json": "405f9ad5a9dc422d107c6b8e6f14adf201bd8be9d45a52d7231f5154e22f09c2",
+    "research/field-campaign-v1/integration/i02/controls.json": "63de3f29e581929e1a680b1191290e61d5392447071b00e570760681c7690222",
+    "research/field-campaign-v1/integration/i02/field-acceptance.mjs": "8d7ff528b641dbfe31fd9e22259bea27b01202121b93813f298d0205b6478f7f",
+    ".suffice/field-campaign-v1/tasks/i03/task.json": "f2abb0b3725b7742776ee21bad1c7dda034e230686dad20235c047df95741783",
+    "research/field-campaign-v1/integration/i03/provenance.json": "d35c37905c774e718019487614a98aa40e2e6cf9f51c929e8447d32fc153935c",
+    "research/field-campaign-v1/integration/i03/controls.json": "f145485ca4aa8a6d56af4bc219fd34b3df0cf2170a716e7a418c7a81205e62cf",
+    "research/field-campaign-v1/integration/i03/field-acceptance.mjs": "75d47de7bddfa938c361f79a9899da4d6f276f95745cfbcdf31a441394585f1f",
+    ".suffice/field-campaign-v1/tasks/i04/task.json": "17317ad16c5e6dea0960b3dcce025332fc9aa623a2dc96345e7dc3aeb2d0f49e",
+    "research/field-campaign-v1/integration/i04/provenance.json": "e4dc6d2692544214cafd72dd5fd9e97a974b8181c1b9d8d533d8b19afdaaaa29",
+    "research/field-campaign-v1/integration/i04/controls.json": "81d391e33a99e045d2b5497816c6145093ad0586bd5adafca284584db1c7b9d4",
+    "research/field-campaign-v1/integration/i04/field-acceptance.mjs": "501b92784d5f3c94ceff3284a6e87a0ffd7144c2d86d89b69be76088c92d76f5",
+    ".suffice/field-campaign-v1/tasks/l01/task.json": "706f1704c81bcaab3307709b1fe160f6299da772326be9ac822a182890bf68c0",
+    "research/field-campaign-v1/live/l01/provenance.json": "ab5688ccc0640da45050ecf754413fc1a88cc03beaddf2e0afa816d33cca9a5d",
+    "research/field-campaign-v1/live/l01/sonion-controls.json": "50b9ad50b6f32d14cf001a4f7ccb87f882f15811a8cfbf8b1492df74b84906e5",
+    ".suffice/field-campaign-v1/tasks/l01/grader/acceptance.test.mjs": "addf7282fc1c4f9dcce5cc262cc59a93956c050e13ddd816ff9daa976509fbc6",
+    ".suffice/field-campaign-v1/tasks/l02/task.json": "717e7bbe497c031ae0212b1d9500cfe9ad24e9000a30634dcf8639833f26ff11",
+    "research/field-campaign-v1/live/l02/provenance.json": "84f8f48a7b03e8698eef1981d37c0ede331cf5e2fd4797e867143156485efa80",
+    "research/field-campaign-v1/live/l02/sonion-controls.json": "6ec2ec371122931839f8ba9f7b43314f8175dd878eaa47ae62a643b51d606b07",
+    ".suffice/field-campaign-v1/tasks/l02/grader/acceptance.test.mjs": "8b5c08b5ca08c89683341bfe05607664efd0365c5465d45f539fdaa9e86c96b0",
+    ".suffice/field-campaign-v1/tasks/l03/task.json": "77db93bb4900eeb9a4bb71fa476073023a6f44a8088f0d8f87bbc2c284161618",
+    "research/field-campaign-v1/live/l03/provenance.json": "e7e69b6595ec546fa504dc15a902a09a5289dcdefeb0d037f6d5739344cb7ae5",
+    "research/field-campaign-v1/live/l03/sonion-controls.json": "584ccf78d8dfe2d596138159770889ae3d694838d6e6d6f7e42e6ed6ad249d44",
+    ".suffice/field-campaign-v1/tasks/l03/grader/acceptance.test.mjs": "f1f8bbe657caa832e5abe55e3df90c5f12c216a033218f31b238cdb4cde2b7d1",
+    "scripts/sonion-data.py": "ac3257eace2cb7be25190f8e63b74acdd00500a9e231083d3dd016b0e048e6b0",
+    "scripts/sonion-campaign.mjs": "045d6af0930a809464e539bd68600a4d503e72bf4a90f673f735a6a9c85387b1",
+    "scripts/sonion-execution.mjs": "49d073b5b5a42a4c248155f754050e5c9b80b5a6772e2a185e831e8a7a19eb3f"
+  }
+}

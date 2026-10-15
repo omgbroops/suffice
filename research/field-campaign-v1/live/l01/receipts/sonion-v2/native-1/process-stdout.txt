@@ -1,0 +1,99 @@
+
+
+  Promise
+    ✔ should resolve a promise returned by a onSuccess callback
+    ✔ should resolve a promise returned by an onFail callback
+    ✔ should resolve a rejected error from a returned promise (2)
+    ✔ should catch an error thrown by an onSuccess callback
+    ✔ should catch an error thrown by an onFail callback
+    ✔ should pass arguments through the promise chain which is already resolved
+    ✔ should pass arguments through the promise chain which is not yet resolved
+    construction
+      ✔ should throw an error when constructed without handler
+      ✔ should construct a promise with handler and resolve it
+      ✔ should construct a promise with handler and reject it
+      ✔ should throw an error when constructed without new keyword
+    then
+      ✔ should call onSuccess when resolved
+      ✔ should call onSuccess when resolved before then is attached
+      ✔ should NOT throw an error when resolving a promise twice
+      ✔ should not call onFail when resolved
+      ✔ should not call onSuccess when rejected
+    catch
+      ✔ should call onFail when rejected
+      ✔ should NOT throw an error when rejecting a promise twice
+      ✔ should not propagate an error when caught
+      ✔ should rethrow an error
+      ✔ should pass onFail to chained promises
+    always
+      ✔ should call always when resolved
+      ✔ should call always when rejected
+    finally
+      ✔ should call finally when resolved
+      ✔ should call finally when rejected and error is not returned
+      ✔ should continue promise chain from finally if not rejected
+      ✔ should not pass arguments to finally (resolving)
+      ✔ should not pass arguments to finally (rejecting)
+      ✔ should not return arguments from finally
+      ✔ should pass previous value along when calling finally
+      ✔ should rethrow previous error along when calling finally
+      ✔ should await a Promise returned by finally (resolving) (101ms)
+      ✔ should await a Promise returned by finally (rejecting) (101ms)
+      ✔ should propagate cancelling a Promise via finally (201ms)
+      ✔ should allow null finally
+    status
+      ✔ should have correct status before and after being resolved
+      ✔ should have correct status before and after being rejected
+    cancel
+      ✔ should cancel a promise
+      ✔ should cancel a promise and catch afterwards
+      ✔ should propagate cancellation of a promise to the promise parent
+    timeout
+      ✔ should timeout a promise
+      ✔ should timeout a promise afterwards
+      ✔ timeout should be stopped when promise resolves
+      ✔ timeout should be stopped when promise rejects
+      ✔ timeout should be propagated to parent promise
+    defer
+      ✔ should create a resolver and resolve it
+      ✔ should create a resolver and reject it
+    all
+      ✔ should resolve "all" when all promises are resolved (39ms)
+      ✔ should reject "all" when any of the promises failed
+      ✔ should resolve "all" when all of the promises are already resolved
+      ✔ should resolve "all" when empty
+
+  Queues
+    FIFOQueue
+      ✔ should create an empty queue
+      ✔ should push tasks to the queue
+      ✔ should pop tasks in FIFO order
+      ✔ should return undefined when popping from empty queue
+      ✔ should correctly report size
+      ✔ should check if queue contains a task
+      ✔ should clear all tasks
+      ✔ should handle mixed operations correctly
+    LIFOQueue
+      ✔ should create an empty queue
+      ✔ should push tasks to the queue
+      ✔ should pop tasks in LIFO order
+      ✔ should return undefined when popping from empty queue
+      ✔ should correctly report size
+      ✔ should check if queue contains a task
+      ✔ should clear all tasks
+      ✔ should handle mixed operations correctly
+    Queue comparison
+      ✔ should demonstrate FIFO vs LIFO behavior
+
+  Environment Detection
+    ✔ is platform assigned to be browser
+    ✔ is platform assigned to be node
+
+  Main Thread Detection
+    ✔ should detect isMainThread in main process
+    ✔ should detect isMainThread in child_process
+    ✔ should detect isMainThread in worker_thread
+
+
+  73 passing (653ms)
+

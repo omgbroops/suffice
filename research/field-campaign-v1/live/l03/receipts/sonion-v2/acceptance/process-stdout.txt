@@ -1,0 +1,55 @@
+✖ slow leading invocation retains the same result for suppressed callers (61.120235ms)
+✖ overlapping leading windows keep their own pending results (123.232839ms)
+✔ normal leading and trailing result sharing stays intact (21.179282ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 243.504347
+
+✖ failing tests:
+
+test at field-acceptance.test.mjs:5:1
+✖ slow leading invocation retains the same result for suppressed callers (61.120235ms)
+  AssertionError [ERR_ASSERTION]: suppressed caller settled before the leading result
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/field-acceptance.test.mjs:9:9)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at field-acceptance.test.mjs:11:1
+✖ overlapping leading windows keep their own pending results (123.232839ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'first',
+  +   undefined,
+  -   'first',
+      'second',
+  +   undefined
+  -   'second'
+    ]
+  
+      at TestContext.<anonymous> (file:///workspace/field-acceptance.test.mjs:15:37)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'first', undefined, 'second', undefined ],
+    expected: [ 'first', 'first', 'second', 'second' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

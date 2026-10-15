@@ -1,0 +1,70 @@
+Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.
+  Trace: Source of deprecated call
+      at warn (file:///workspace/warn/index.js:8:15)
+      at deepMap (file:///workspace/deep-map/index.js:10:5)
+      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:7:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
+✖ listens for deep keys on whole-store set (4.105689ms)
+✖ listens for array paths on whole-store set (0.623015ms)
+✔ keeps plain map keys containing a dot working (1.26806ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.514462
+
+✖ failing tests:
+
+test at listen-keys/field-regression.test.ts:5:1
+✖ listens for deep keys on whole-store set (4.105689ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   'b'
+  - ]
+  
+      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:15:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'b' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at listen-keys/field-regression.test.ts:30:1
+✖ listens for array paths on whole-store set (0.623015ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   3
+  - ]
+  
+      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:39:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 3 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

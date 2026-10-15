@@ -1,0 +1,36 @@
+✔ l01 callbacks can reenter without resettling source or losing new subscribers (1.138167ms)
+✔ l01 finally propagates rejected asynchronous cleanup (1.113688ms)
+✔ l02 helper removes abort listener on success and synchronous condition error (0.341937ms)
+✔ l03 baseline: completing old leading work must preserve abort for the new window (3.73468ms)
+ℹ {"listenersBefore":1,"listenersAfter":1,"observed":"rejected"}
+✖ l03 patched: completing old leading work must preserve abort for the new window (1.693406ms)
+ℹ {"listenersBefore":1,"listenersAfter":0,"observed":"pending"}
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.636412
+
+✖ failing tests:
+
+test at review.test.mjs:30:2
+✖ l03 patched: completing old leading work must preserve abort for the new window (1.693406ms)
+  AssertionError [ERR_ASSERTION]: new suppressed caller must reject at abort before its timer fires
+  + actual - expected
+  
+  + 'pending'
+  - 'rejected'
+  
+      at TestContext.<anonymous> (file:///workspace/review.test.mjs:44:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'rejected',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

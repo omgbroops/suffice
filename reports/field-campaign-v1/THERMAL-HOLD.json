@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-15T06:21:54.009129+00:00",
+  "status": "resource hold after user-reported CPU temperature of 90 C",
+  "reason": "Several concurrent npm dependency installs and native controls overloaded local execution; stop all campaign setup before reassessing",
+  "scoredAttempts": 0,
+  "newBenchmarkInferenceUsd": 0,
+  "frozenGeneralModified": false,
+  "allFourPreparationWorkersStopped": true,
+  "partialArtifactsPreserved": true,
+  "doNotAutoResume": [
+    "field-integration-install.py currently has four concurrent workers; change to single worker before running",
+    "q01/q03 dependency locks incomplete",
+    "s02 ready:false; original native suite must include .test.ts and .test.js via BNT, hidden test excluded",
+    "live native validations incomplete"
+  ],
+  "nextExecutionDecision": "Keep local installs/tests serial with task-specific CPU limits, or validate a separately versioned native Windows isolation binding. Do not change frozen harness."
+}

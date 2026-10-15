@@ -1,0 +1,131 @@
+{
+  "checkedAt": "2026-10-15T08:14:08.717189+00:00",
+  "id": "l05",
+  "issue": "https://github.com/uwdata/arquero/issues/329",
+  "state": "open",
+  "issueUpdatedAt": "2023-06-01T12:38:00Z",
+  "head": "e8003b487ac362f5679ed130cb3a6597b684f903",
+  "ready": false,
+  "disposition": "unrun",
+  "unrunReason": "Current HEAD does not reproduce the reported symptom for a typed empty Arrow IPC table: two appended rows survive and repeated concat preserves four rows. A fieldless first Arrow table yields zero rows, but the documented first-table named-column policy and absent reporter data/schema do not establish a fair schema-adoption requirement. An Arrow slice(0,0) IPC case throws in Flechette before concat, a different failure. Screened out rather than broaden the issue or force an oracle.",
+  "timelineEventCount": 0,
+  "openPulls": [
+    {
+      "number": 403,
+      "title": "Add className option toHTML method.",
+      "url": "https://github.com/uwdata/arquero/pull/403",
+      "files": 3,
+      "relatedImplementationPatch": false,
+      "assessment": "Only HTML documentation/formatter/test edits."
+    },
+    {
+      "number": 264,
+      "title": "added class and classAlt options",
+      "url": "https://github.com/uwdata/arquero/pull/264",
+      "files": 88,
+      "relatedImplementationPatch": false,
+      "assessment": "HTML formatting feature. PR264 broad obsolete diff removes old test files including concat/import tests; it does not add an empty-table concat repair."
+    }
+  ],
+  "contractScreen": {
+    "reportedRequirements": "Concatenating tables imported from Arrow buffers should retain later table rows when the first imported table is empty. Original public body preserved verbatim.",
+    "healthyApiConstraints": [
+      "Existing concat documentation retains only named columns of the first table.",
+      "Typed-empty tables with a known schema must retain that schema and append later rows.",
+      "Ordinary nonempty concat and array/variadic concat must preserve row values and order."
+    ],
+    "independentScreeningCases": [
+      "Real Apache Arrow20 typed empty vectors serialized to IPC, imported through actual Arquero current source, then concatenated singly and in bulk.",
+      "Schema-less new Arrow.Table serialized/imported through the same APIs.",
+      "Typed empty ordinary Arquero table as healthy API comparison.",
+      "Arrow.Table.slice(0,0) IPC import distinguishes a pre-concat Flechette parsing exception."
+    ],
+    "gradingStatus": "No acceptance oracle frozen because the task failed admissibility screening; no private failing assertion was promoted to a grader."
+  },
+  "probes": [
+    {
+      "name": "typed-empty-arrow-slice",
+      "error": {
+        "name": "TypeError",
+        "message": "Cannot read properties of undefined (reading 'subarray')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'subarray')\n    at buffer (/home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/dependencies/node_modules/@uwdata/flechette/dist/flechette.cjs:3734:18)\n    at visit$1 (/home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/dependencies/node_modules/@uwdata/flechette/dist/flechette.cjs:3772:19)\n    at /home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/dependencies/node_modules/@uwdata/flechette/dist/flechette.cjs:3686:42\n    at Array.forEach (<anonymous>)\n    at createTable (/home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/dependencies/node_modules/@uwdata/flechette/dist/flechette.cjs:3686:12)\n    at tableFromIPC (/home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/dependencies/node_modules/@uwdata/flechette/dist/flechette.cjs:3636:10)\n    at Module.fromArrow (file:///home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/base/src/format/from-arrow.js:20:7)\n    at toAQ (file:///home/eric_qin/suffice-field-v1/scripts/sonion-live-l05-probe.mjs:13:60)\n    at file:///home/eric_qin/suffice-field-v1/scripts/sonion-live-l05-probe.mjs:16:15\n    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)"
+      }
+    },
+    {
+      "name": "typed-empty-arrow-arrays",
+      "inputRows": 0,
+      "inputColumns": [
+        "a",
+        "b"
+      ],
+      "fullRows": 2,
+      "resultRows": 2,
+      "resultColumns": [
+        "a",
+        "b"
+      ],
+      "objects": [
+        {
+          "a": 1,
+          "b": "x"
+        },
+        {
+          "a": 2,
+          "b": "y"
+        }
+      ],
+      "bulkRows": 4
+    },
+    {
+      "name": "no-fields-empty-arrow",
+      "inputRows": 0,
+      "inputColumns": [],
+      "fullRows": 2,
+      "resultRows": 0,
+      "resultColumns": [],
+      "objects": [],
+      "bulkRows": 0
+    },
+    {
+      "name": "typed-empty-arquero",
+      "inputRows": 0,
+      "inputColumns": [
+        "a",
+        "b"
+      ],
+      "fullRows": 2,
+      "resultRows": 2,
+      "resultColumns": [
+        "a",
+        "b"
+      ],
+      "objects": [
+        {
+          "a": 1,
+          "b": "x"
+        },
+        {
+          "a": 2,
+          "b": "y"
+        }
+      ],
+      "bulkRows": 4
+    }
+  ],
+  "originalFilesArchiveAndRawGitHeadIdentical": 266,
+  "physicalBaseClean": true,
+  "baseGitCommitCount": 1,
+  "providedLock": "package-lock.json",
+  "lockSha256": "a765230819a27dca41c36ad439d4fdc06d24c62c0ac50ccedf62966a693cb5e2",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-live-extension-v1/tasks/l05/dependencies/node_modules",
+  "installedPackageBytesMiB": "96",
+  "nodeVersion": "v24.15.0",
+  "cpuAffinity": [
+    0,
+    1
+  ],
+  "nativeBuildRun": false,
+  "actorRun": false,
+  "modelCalls": 0,
+  "taskSha256": "40e08fab052a94c8f726c463a57d2ab99507edd4df19cf7787cc603cba49cb40"
+}

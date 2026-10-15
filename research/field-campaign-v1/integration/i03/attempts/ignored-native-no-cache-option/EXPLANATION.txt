@@ -1,0 +1,1 @@
+AVA 6 ignores undeclared --no-cache option when merging CLI flags; both original suites still passed 23 tests but cache mkdir failed. Precreate the empty cache directory during dependency staging so recursive mkdir succeeds against the readonly mount. AVA already catches cache-write failures, so this requires no source/config/test changes. Restore original AVA command.

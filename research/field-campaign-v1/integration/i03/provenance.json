@@ -1,0 +1,66 @@
+{
+  "issue": "https://github.com/sindresorhus/p-limit/issues/110",
+  "fix": "https://github.com/sindresorhus/p-limit/commit/9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+  "base": "783068bb9e967fd7bea8642e1bf5a3627fe38bdf",
+  "baseArchiveSha256": "17ccafb75deb64613b20b6cc3b086453d006dd6d7592993dbf4b99ee6a78dd88",
+  "originalBodySha256": "a6c73417c950693193d4a0d999b9480ac7afddc62cc6c018e06f29a470f681ce",
+  "selection": "Chosen by public API/state/async scope before actor execution. Source archive is pre-fix only; reference production files evaluator-private.",
+  "package": {
+    "name": "p-limit",
+    "version": "7.3.2",
+    "description": "Run multiple promise-returning & async functions with limited concurrency",
+    "license": "MIT",
+    "repository": "sindresorhus/p-limit",
+    "funding": "https://github.com/sponsors/sindresorhus",
+    "author": {
+      "name": "Sindre Sorhus",
+      "email": "sindresorhus@gmail.com",
+      "url": "https://sindresorhus.com"
+    },
+    "type": "module",
+    "exports": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "sideEffects": false,
+    "engines": {
+      "node": ">=20"
+    },
+    "scripts": {
+      "test": "xo && ava && tsd",
+      "benchmark": "node benchmark.js"
+    },
+    "files": [
+      "index.js",
+      "index.d.ts"
+    ],
+    "keywords": [
+      "promise",
+      "limit",
+      "limited",
+      "concurrency",
+      "throttle",
+      "throat",
+      "rate",
+      "batch",
+      "ratelimit",
+      "task",
+      "queue",
+      "async",
+      "await",
+      "promises",
+      "bluebird"
+    ],
+    "dependencies": {
+      "yocto-queue": "^1.2.1"
+    },
+    "devDependencies": {
+      "ava": "^6.4.1",
+      "in-range": "^3.0.0",
+      "random-int": "^3.0.0",
+      "time-span": "^5.1.0",
+      "tsd": "^0.33.0",
+      "xo": "^1.2.1"
+    }
+  }
+}

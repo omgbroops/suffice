@@ -1,0 +1,42 @@
+{
+  "capturedAt": "2026-10-15T07:07:37.494Z",
+  "host": "sonion",
+  "node": "v24.15.0",
+  "upstreamCommit": "792115ea04019c720ddc8753010c758c55796f77",
+  "localGitCommit": "90eedbad0b4804749b2229fc77303264ce4f83cd",
+  "graderSha256": "f1f8bbe657caa832e5abe55e3df90c5f12c216a033218f31b238cdb4cde2b7d1",
+  "lockSha256": "4dbde993c526b73052018b80f6817126972d2f45e928d31f05cc4182763a4f23",
+  "nativePassed": true,
+  "baselineRejected": true,
+  "rows": [
+    {
+      "kind": "native",
+      "command": [
+        "node",
+        "--test",
+        "test.js"
+      ],
+      "exitCode": 0,
+      "latencyMs": 6959
+    },
+    {
+      "kind": "native",
+      "command": [
+        "node",
+        "node_modules/tsd/dist/cli.js"
+      ],
+      "exitCode": 0,
+      "latencyMs": 1519
+    },
+    {
+      "kind": "acceptance",
+      "command": [
+        "node",
+        "--test",
+        "field-acceptance.test.mjs"
+      ],
+      "exitCode": 1,
+      "latencyMs": 304
+    }
+  ]
+}

@@ -1,0 +1,381 @@
+{
+  "at": "2026-10-15T07:33:05.477794+00:00",
+  "modelCalls": 0,
+  "rows": [
+    {
+      "attempt": "s02-suffice",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s02/dependencies/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s02/dependencies/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 38,
+          "callId": "call_TfOUgKxkAmKrz8ereEL42qOu|ctc_0244053c28b50759016ad07ca0b54887d199ad1c35c63825bc/3",
+          "input": {
+            "command": "cat >> computed/index.test.ts <<'EOF'\n\nfor (let create of [computed, batched]) {\n  test(`recomputes ${create.name} after cleaning`, () => {\n    let $source = atom(1)\n    let multiplier = 2\n    let calls = 0\n    let $derived = create($source, value => {\n      calls++\n      return value * multiplier\n    })\n\n    equal($derived.get(), 2)\n    equal(calls, 1)\n    cleanStores($derived)\n    multiplier = 3\n    equal($derived.get(), 3)\n    equal(calls, 2)\n    equal($derived.get(), 3)\n    equal(calls, 2)\n\n    cleanStores($derived, $source)\n    clock.runAll()\n  })\n}\nEOF\nnode --import tsx --test computed/index.test.ts",
+            "timeout": 60
+          },
+          "errorLines": [
+            "Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'tsx' imported from /workspace/"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 7330,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 1106,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "s02-stock-pi",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s02/dependencies/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s02/dependencies/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 17,
+          "callId": "call_aFS6Vr9EOEEt9by78bR6ZCUu|fc_0b01883af2b2b4e8016ad07ce5e95887d1a49c11ba052b9523",
+          "input": {
+            "command": "ls computed clean-stores test; rg 'cleanStores' test computed"
+          },
+          "errorLines": [
+            "/bin/bash: line 1: rg: command not found"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 7126,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 1107,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "s03-suffice",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s03/dependencies/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s03/dependencies/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 49,
+          "callId": "call_g1LQQ0UmL0ue9oRsAEMQeJh7|ctc_0614949035ff0cb0016ad07dd45d6c87d1bad4a590fa84bce5/2",
+          "input": {
+            "command": "npm run test:lint; npm run test:types; git diff --stat; git diff --check",
+            "timeout": 60
+          },
+          "errorLines": [
+            "sh: 1: oxlint: not found",
+            "sh: 1: check-dts: not found"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 7121,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 205,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "s03-stock-pi",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s03/dependencies/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s03/dependencies/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 60,
+          "callId": "call_nfPLF4oFXhdQFd2vdzShEhNG|fc_0c5b82a6ece594e5016ad07d7dff6887d191dfa108032733af",
+          "input": {
+            "command": "node --test */*.test.ts */*.test.js > /tmp/nanostores-tests.log 2>&1; tail -25 /tmp/nanostores-tests.log; npm run test:lint; npm run test:types",
+            "timeout": 200
+          },
+          "errorLines": [
+            "sh: 1: oxlint: not found",
+            "sh: 1: check-dts: not found"
+          ]
+        },
+        {
+          "eventLine": 78,
+          "callId": "call_SiCBilgGi0XMawo1vi6E1vkt|fc_0c5b82a6ece594e5016ad07d96e87887d184cad3d45e8526c8",
+          "input": {
+            "command": "node --test */*.test.ts */*.test.js > /tmp/nanostores-tests.log 2>&1; tail -9 /tmp/nanostores-tests.log; git diff --stat; npm run test:size",
+            "timeout": 200
+          },
+          "errorLines": [
+            "sh: 1: size-limit: not found"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 7136,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 205,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "q01-suffice",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 11,
+          "callId": "call_MWriygkp0pUVaUI6fBnh6LE4|ctc_067cf2efc210300a016ad07df8d4b887d1860035a44726a566/2",
+          "input": {
+            "command": "rg -n 'lastExecutionTime|isIntervalPausedAt|intervalEnd' source; ls test*"
+          },
+          "errorLines": [
+            "/bin/bash: line 1: rg: command not found"
+          ]
+        },
+        {
+          "eventLine": 59,
+          "callId": "call_facIKYZRAWAmUHfkZKCZbQha|ctc_067cf2efc210300a016ad07e1c40a887d1aacd111e3c1dcd19/2",
+          "input": {
+            "command": "npm test",
+            "timeout": 120
+          },
+          "errorLines": [
+            "Error: ENOENT: no such file or directory, open '/workspace/node_modules/.cache/xo-linter/tsconfig.xo.json'",
+            "  code: 'ENOENT',"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 84529,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 814,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 2828,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 1307,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "q01-stock-pi",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 8,
+          "callId": "call_EGKRVU2gqv4op0LOIy5MgxtS|fc_04c2ad9005715e27016ad07f45410887d19af945fee002342e",
+          "input": {
+            "command": "pwd; ls -a; rg -n 'lastExecutionTime|isIntervalPausedAt' source test*; ",
+            "timeout": 10
+          },
+          "errorLines": [
+            "/bin/bash: line 1: rg: command not found"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 84192,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 809,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 2533,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 1306,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "q02-suffice",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": true,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 19,
+          "callId": "call_5gxqoY9PvL7J5Lio3zgy8szs|ctc_0907465004a5b6dc016ad080426b5887d196ab70d1fe270548/1",
+          "input": {
+            "command": "rg -n \"onSizeLessThan|next'|next\\*\" test/test.ts readme.md; head -45 test/test.ts; ls test"
+          },
+          "errorLines": [
+            "/bin/bash: line 1: rg: command not found"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 0,
+          "latencyMs": 84444,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 811,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 2632,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 2309,
+          "outputLimited": false
+        }
+      ]
+    },
+    {
+      "attempt": "q02-stock-pi",
+      "initialBytesMatchAdmittedSource": true,
+      "dependencyLink": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "declaredDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "dependencyDirIsInstalledNodeModules": true,
+      "recordedStatus": "completed",
+      "recordedAccepted": false,
+      "identityVerified": true,
+      "toolsVerified": true,
+      "budgetEligible": true,
+      "toolEnvironmentErrors": [
+        {
+          "eventLine": 8,
+          "callId": "call_jWkhiXTV4Rgfu1dKq1d3OK7Y|fc_0899013a90c2e298016ad07eca958c87d1961c90a2e25fa038",
+          "input": {
+            "command": "pwd; ls -a; rg -n 'onSizeLessThan|#next|#tryToStartAnother' source test*; ",
+            "timeout": 10
+          },
+          "errorLines": [
+            "/bin/bash: line 1: rg: command not found"
+          ]
+        }
+      ],
+      "recordedNative": [
+        {
+          "exitCode": 1,
+          "latencyMs": 83919,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 809,
+          "outputLimited": false
+        },
+        {
+          "exitCode": 0,
+          "latencyMs": 2425,
+          "outputLimited": false
+        }
+      ],
+      "recordedPrivate": [
+        {
+          "exitCode": 0,
+          "latencyMs": 2309,
+          "outputLimited": false
+        }
+      ]
+    }
+  ],
+  "interpretation": "Initial hashes and dependency target are direct evidence. Missing rg and omitted lint/type/size orchestration commands are recorded separately from production/native dependency resolution. Replay outcome and public contract still determine patch success."
+}

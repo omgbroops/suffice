@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-15T07:37:22.135153+00:00",
+  "modelCalls": 0,
+  "attempt": "q02-stock-pi",
+  "classification": "genuine_native_public_event_regression",
+  "originalV1NativeFailures": [
+    "should emit next event when completing task",
+    "strict mode rapid sequential adds"
+  ],
+  "independentReplayNative": {
+    "tests": 193,
+    "suites": 0,
+    "pass": 192,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "failureNames": [
+      "should emit next event when completing task"
+    ]
+  },
+  "privateChecksPass": true,
+  "buildAndTypesPass": true,
+  "coreEvidence": "Submitted source emits next synchronously on each task start. Original native advanced.ts:176 requires next count0 immediately after first add while task is still pending; submitted source produces1. No wall-clock assumption is needed for that assertion.",
+  "traceClassification": {
+    "notRetrieved": false,
+    "retrievedNotApplied": "Original native contract was retrieved but was then replaced in actor tests instead of preserved.",
+    "statedWrongInvariant": "Visible final explanation describes next as a dequeue notification and says event-count assertions were updated. This is an observable incompatible contract reinterpretation; internal understanding is not inferred.",
+    "contraryToStatedApproach": false,
+    "originalNativeRead": {
+      "line": 85,
+      "callId": "call_Gt337CRqSc9ia4d7Ns4ofLtm|fc_0899013a90c2e298016ad07f65c24487d1b9154d6343f17990",
+      "path": "test/advanced.ts",
+      "offset": 150,
+      "limit": 55
+    }
+  },
+  "testEdit": "Renamed should emit next event when completing task to should emit next on dequeue and completion without double-emitting for replacements; changed expected counts0,0,1,2,2,3 to1,1,2,3,4,5. Frozen original tests are restored by both v1 and independent replay.",
+  "timingEvidence": "Original v1 also had strict sliding-window33ms<40ms failure. Independent full replay passed that test and failed only deterministic next-event assertion; do not use the nonrecurring timing failure as reliable evidence of a coding error.",
+  "artifactEvidence": {
+    "originalPatch": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/q02-stock-pi/patch.json",
+    "originalPatchSha256": "2dfc64e783a687c677dea2ebde6dd14b228f23c9bda1e6fb6e0187835e191278",
+    "originalTrace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/q02-stock-pi/worker/events.live.jsonl",
+    "originalTraceSha256": "b043e6c01fd89b08a6e81794350ad152df40a4ca3a034e5f152bb39dd0a77f46",
+    "replayRecord": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/adjudication.json"
+  },
+  "interpretation": "Private issue wake-up requirements pass, but retaining original public/native event behavior is also required. This v1 failure is a real source regression, unlike integration dependency startup failures. No actor was rerun.",
+  "q02SufficeTiming": {
+    "fullReplayFailure": "strict mode multiple complete intervals: Interval starting at0ms has4tasks",
+    "matchedFocusedRuns": {
+      "baseline: strict mode multiple complete intervals": {
+        "runs": 5,
+        "passes": 4,
+        "failures": 1
+      },
+      "baseline: strict mode rapid sequential adds": {
+        "runs": 5,
+        "passes": 5,
+        "failures": 0
+      },
+      "submitted: strict mode multiple complete intervals": {
+        "runs": 5,
+        "passes": 5,
+        "failures": 0
+      },
+      "submitted: strict mode rapid sequential adds": {
+        "runs": 5,
+        "passes": 5,
+        "failures": 0
+      }
+    },
+    "assessment": "Timing instability reproduced on unchanged baseline. Preserve original accepted v1 score and negative full replay receipt; do not attribute this isolated timing failure to submitted source without further evidence."
+  }
+}

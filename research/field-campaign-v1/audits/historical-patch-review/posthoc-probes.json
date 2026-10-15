@@ -1,0 +1,388 @@
+{
+  "at": "2026-10-15T07:50:07.700Z",
+  "modelCalls": 0,
+  "primaryGradesUnchanged": true,
+  "policy": "Bounded probes only for concrete reserved-event permission window, reentrant-pause loop, validation-policy changes, and dormant cross-module cache coverage gap. No original source or grader changed.",
+  "rows": [
+    {
+      "task": "s01",
+      "variant": "base",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-s01.mjs",
+        "api"
+      ],
+      "exitCode": 0,
+      "latencyMs": 105,
+      "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-base/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "s01",
+      "variant": "reference",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-s01.mjs",
+        "api"
+      ],
+      "exitCode": 0,
+      "latencyMs": 105,
+      "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-reference/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "s01",
+      "variant": "suffice",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-s01.mjs",
+        "api"
+      ],
+      "exitCode": 0,
+      "latencyMs": 105,
+      "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-suffice/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "s01",
+      "variant": "stock-pi",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-s01.mjs",
+        "api"
+      ],
+      "exitCode": 1,
+      "latencyMs": 109,
+      "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-stock-pi/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "base",
+      "mode": "guards",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "guards"
+      ],
+      "exitCode": 0,
+      "latencyMs": 108,
+      "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":true,\"assigned\":true,\"retained\":1.2},{\"value\":\"Infinity\",\"created\":true,\"assigned\":true,\"retained\":null}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-base/receipts/guards",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "base",
+      "mode": "setter",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "setter"
+      ],
+      "exitCode": 0,
+      "latencyMs": 108,
+      "stdout": "before setter\nafter setter {\"started\":[1],\"paused\":false}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-base/receipts/setter",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "base",
+      "mode": "resume",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "resume"
+      ],
+      "exitCode": 0,
+      "latencyMs": 107,
+      "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-base/receipts/resume",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "reference",
+      "mode": "guards",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "guards"
+      ],
+      "exitCode": 0,
+      "latencyMs": 105,
+      "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":true,\"assigned\":true,\"retained\":1.2},{\"value\":\"Infinity\",\"created\":true,\"assigned\":true,\"retained\":null}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-reference/receipts/guards",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "reference",
+      "mode": "setter",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "setter"
+      ],
+      "exitCode": 124,
+      "latencyMs": 2109,
+      "stdout": "before setter\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-reference/receipts/setter",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "reference",
+      "mode": "resume",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "resume"
+      ],
+      "exitCode": 124,
+      "latencyMs": 2107,
+      "stdout": "before resume\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-reference/receipts/resume",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "suffice",
+      "mode": "guards",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "guards"
+      ],
+      "exitCode": 0,
+      "latencyMs": 104,
+      "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":false,\"assigned\":false,\"retained\":1},{\"value\":\"Infinity\",\"created\":false,\"assigned\":false,\"retained\":1}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-suffice/receipts/guards",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "suffice",
+      "mode": "setter",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "setter"
+      ],
+      "exitCode": 0,
+      "latencyMs": 104,
+      "stdout": "before setter\nafter setter {\"started\":[1,2],\"paused\":true}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-suffice/receipts/setter",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "suffice",
+      "mode": "resume",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "resume"
+      ],
+      "exitCode": 0,
+      "latencyMs": 105,
+      "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-suffice/receipts/resume",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "stock-pi",
+      "mode": "guards",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "guards"
+      ],
+      "exitCode": 0,
+      "latencyMs": 105,
+      "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":false,\"assigned\":false,\"retained\":1},{\"value\":\"Infinity\",\"created\":false,\"assigned\":false,\"retained\":1}]\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-stock-pi/receipts/guards",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "stock-pi",
+      "mode": "setter",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "setter"
+      ],
+      "exitCode": 124,
+      "latencyMs": 2108,
+      "stdout": "before setter\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-stock-pi/receipts/setter",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "i04",
+      "variant": "stock-pi",
+      "mode": "resume",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-i04.mjs",
+        "resume"
+      ],
+      "exitCode": 124,
+      "latencyMs": 2114,
+      "stdout": "before resume\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-stock-pi/receipts/resume",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "q04",
+      "variant": "base",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-q04.mjs",
+        "api"
+      ],
+      "exitCode": 1,
+      "latencyMs": 204,
+      "stdout": "{\"first\":6,\"after\":6,\"expected\":12}\n",
+      "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n6 !== 12\n\n    at file:///workspace/posthoc-q04.mjs:1:899 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 6,\n  expected: 12,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-base/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "q04",
+      "variant": "reference",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-q04.mjs",
+        "api"
+      ],
+      "exitCode": 0,
+      "latencyMs": 1205,
+      "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-reference/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "q04",
+      "variant": "suffice",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-q04.mjs",
+        "api"
+      ],
+      "exitCode": 0,
+      "latencyMs": 1206,
+      "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-suffice/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    },
+    {
+      "task": "q04",
+      "variant": "stock-pi",
+      "mode": "api",
+      "command": [
+        "env",
+        "NODE_ENV=test",
+        "node",
+        "posthoc-q04.mjs",
+        "api"
+      ],
+      "exitCode": 0,
+      "latencyMs": 1210,
+      "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+      "stderr": "",
+      "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-stock-pi/receipts/api",
+      "posthoc": true,
+      "primaryGraderModified": false
+    }
+  ]
+}

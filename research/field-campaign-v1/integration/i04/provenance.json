@@ -1,0 +1,61 @@
+{
+  "issue": "https://github.com/mcollina/fastq/issues/80",
+  "fix": "https://github.com/mcollina/fastq/commit/62eb43ef51e08378f2051ddc023285a524c7390e",
+  "base": "b8d99205b36f9a0e8063ab9c84f6a92757d59ced",
+  "baseArchiveSha256": "d11c93071dec3f7fe3722d072a686ddf15147d921e5f28ab8101872f4678abfd",
+  "originalBodySha256": "6416e00f977aaabd50cbf372261c4dfc5e5f125456c74df743a96364f74610ec",
+  "selection": "Chosen by public API/state/async scope before actor execution. Source archive is pre-fix only; reference production files evaluator-private.",
+  "package": {
+    "name": "fastq",
+    "version": "1.16.0",
+    "description": "Fast, in memory work queue",
+    "main": "queue.js",
+    "scripts": {
+      "lint": "standard --verbose | snazzy",
+      "unit": "nyc --lines 100 --branches 100 --functions 100 --check-coverage --reporter=text tape test/test.js test/promise.js",
+      "coverage": "nyc --reporter=html --reporter=cobertura --reporter=text tape test/test.js test/promise.js",
+      "test:report": "npm run lint && npm run unit:report",
+      "test": "npm run lint && npm run unit",
+      "typescript": "tsc --project ./test/tsconfig.json",
+      "legacy": "tape test/test.js"
+    },
+    "pre-commit": [
+      "test",
+      "typescript"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/mcollina/fastq.git"
+    },
+    "keywords": [
+      "fast",
+      "queue",
+      "async",
+      "worker"
+    ],
+    "author": "Matteo Collina <hello@matteocollina.com>",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/mcollina/fastq/issues"
+    },
+    "homepage": "https://github.com/mcollina/fastq#readme",
+    "devDependencies": {
+      "async": "^3.1.0",
+      "neo-async": "^2.6.1",
+      "nyc": "^15.0.0",
+      "pre-commit": "^1.2.2",
+      "snazzy": "^9.0.0",
+      "standard": "^16.0.0",
+      "tape": "^5.0.0",
+      "typescript": "^5.0.4"
+    },
+    "dependencies": {
+      "reusify": "^1.0.4"
+    },
+    "standard": {
+      "ignore": [
+        "example.mjs"
+      ]
+    }
+  }
+}

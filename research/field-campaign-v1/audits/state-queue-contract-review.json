@@ -1,0 +1,177 @@
+{
+  "phase": "blind-contract-verdict-saved-before-actor-results",
+  "readOnlyAudit": true,
+  "newTestsOrModelCalls": false,
+  "taskOrHarnessMutations": false,
+  "dispositions": {
+    "s01": "retain-with-timing-and-public-solution-input-caveats",
+    "s02": "retain-with-narrow-regression-and-BNT-file-level-count-caveats",
+    "s03": "retain-with-BNT-file-level-count-and-presentation-caveats",
+    "q01": "retain-with-real-time-threshold-and-limited-configuration-coverage-caveats",
+    "q02": "retain-with-skipped-added-listener-cleanup-test-coverage-gap",
+    "q03": "hold-setup-control-failure-and-original-contract-overreach-concern"
+  },
+  "controls": {
+    "s01": {
+      "nativeBaseline": [
+        0
+      ],
+      "nativeReference": [
+        0
+      ],
+      "nativeReportedEntries": 117,
+      "acceptanceBaseline": 1,
+      "acceptanceReference": 0,
+      "privateTests": 6,
+      "baselineFailureKind": "behavioral-missing-meta-events-and-unhandled-reserved-event-rejections"
+    },
+    "s02": {
+      "nativeBaseline": [
+        0
+      ],
+      "nativeReference": [
+        0
+      ],
+      "nativeReportedEntries": 50,
+      "acceptanceBaseline": 1,
+      "acceptanceReference": 0,
+      "privateTests": 1,
+      "baselineFailureKind": "assertion-actual-2-expected-10",
+      "nativeCountCaveat": "six-file-level-entries-include-files-with-83-static-test-declarations-not-independently-enumerated"
+    },
+    "s03": {
+      "nativeBaseline": [
+        0
+      ],
+      "nativeReference": [
+        0
+      ],
+      "nativeReportedEntries": 53,
+      "acceptanceBaseline": 1,
+      "acceptanceReference": 0,
+      "privateTests": 3,
+      "baselineFailureKind": "two-deep-path-event-array-assertions",
+      "nativeCountCaveat": "six-file-level-entries-include-files-with-111-static-test-declarations-not-independently-enumerated"
+    },
+    "q01": {
+      "nativeBaseline": [
+        0,
+        0,
+        0
+      ],
+      "nativeReference": [
+        0,
+        0,
+        0
+      ],
+      "privateTestsSelected": 4,
+      "privateTestsAddedToActiveOverlay": 4,
+      "acceptanceBaseline": 1,
+      "acceptanceReference": 0,
+      "baselineBehavioralFailures": 3
+    },
+    "q02": {
+      "nativeBaseline": [
+        0,
+        0,
+        0
+      ],
+      "nativeReference": [
+        0,
+        0,
+        0
+      ],
+      "privateTestsSelected": 4,
+      "privateTestsAddedToActiveOverlay": 5,
+      "acceptanceBaseline": 1,
+      "acceptanceReference": 0,
+      "baselineBehavioralFailures": 4,
+      "skippedAddedTest": ".onSizeLessThan() removes its listeners once resolved"
+    },
+    "q03": {
+      "taskReady": false,
+      "nativeBaseline": [
+        0,
+        1
+      ],
+      "nativeReference": [
+        0,
+        1
+      ],
+      "acceptanceBaseline": 1,
+      "acceptanceReference": 1,
+      "baselineAccepted": false,
+      "referenceAccepted": false,
+      "setupError": "ENOENT mkdir /workspace/node_modules/.cache/ava",
+      "contractConcern": "Private test requires AbortError cancellation and pending release for already-running never-settling functions that do not handle the signal, while original README delegates running-operation signal handling to the operation and issue uses cooperative fetch."
+    }
+  },
+  "provenance": {
+    "allFixFirstParentsMatchBaseCommit": true,
+    "allArchiveHashesMatchRecorded": true,
+    "allReferenceProductionBlobsMatchUpstreamCommitMetadata": true,
+    "allBaseGitCommitCounts": 1,
+    "futureFixCommitObjectPresentInAnyBase": false,
+    "privateGraderOrSolutionFilesFoundInAnyBase": false,
+    "regularArchiveFileCounts": {
+      "s01": 22,
+      "s02": 68,
+      "s03": 70,
+      "q01": 24,
+      "q02": 24,
+      "q03": 18
+    },
+    "archiveDifferences": {
+      "s01": [
+        ".gitignore redundant node_modules entry"
+      ],
+      "s02": [
+        ".gitignore redundant node_modules entry"
+      ],
+      "s03": [],
+      "q01": [],
+      "q02": [],
+      "q03": []
+    },
+    "extraStateStagingFiles": [
+      ".field-dependencies/package.json",
+      ".field-dependencies/package-lock.json"
+    ],
+    "publicBodyDifferences": {
+      "s01": "CRLF-to-LF only",
+      "s02": "CRLF-to-LF only",
+      "s03": "one em dash became mojibake in a reproduction comment; no requirement/code semantic change",
+      "q01": "exact API body",
+      "q02": "exact API body",
+      "q03": "exact API body"
+    }
+  },
+  "coverageCaveats": [
+    "BNT 50/53 are reporter entries, including six file-level passes; not original assertion counts or independent proof every inner assertion ran.",
+    "State tasks do not claim full lint, type, size or coverage CI.",
+    "q01/q02 run all original runtime files plus build and tsd, but omit lint.",
+    "q02 listener cleanup regression is stored but not selected by the active acceptance pattern.",
+    "q03 reference acceptance is failing and uncooperative-running-abort expectation needs contract adjudication."
+  ],
+  "failureAnalysis": {
+    "status": "post-verdict-completed-result-snapshot-only",
+    "snapshotReportAt": "2026-10-15T07:17:00.938Z",
+    "completedReviewedRows": [
+      "s02-suffice",
+      "s02-stock-pi",
+      "s03-suffice",
+      "s03-stock-pi"
+    ],
+    "allReviewedRowsAccepted": true,
+    "completedFailingStateQueueRowsInSnapshot": [],
+    "actorTracesInspected": false,
+    "mechanismClassification": "not-applicable-no-completed-failure-observed",
+    "reasoningObservability": "No reasoning inference made. Pending or absent rows were not classified."
+  },
+  "actorResultsInspectedAtBlindVerdict": false,
+  "blindVerdictSavedBeforeActorResults": true,
+  "blindVersionSha256": {
+    "json": "ad07d9c89ed24a14c22f975bcfe6e1a2de177a501989ac3dd53e4ec39b888001",
+    "markdown": "467ff35c2b19fc322abaea143fd603b93fb67fce00b067d58a96aef52cd10d33"
+  }
+}

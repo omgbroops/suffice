@@ -1,0 +1,90 @@
+const YAML = require('yaml')
+const {isScalar, isMap} = require("yaml");
+//const customTags = require("./src/yaml/CustomTags");
+const stringify = require('./node_modules/yaml/dist/stringify/stringify.js').stringify;
+const tags = [];
+const customTags = [
+    "CritSuccumbEvent",
+    "CritFakeDeathEvent",
+    "CritLastWordsEvent"
+]
+for (let i of customTags) {
+    tags.push(CreateScalarType(i));
+    tags.push(CreateMapType(i));
+}
+
+function CreateMapType(type) {
+    return {
+        tag: "!type:" + type,
+        collection: "map",
+        resolve(str, onError, ctx) {
+
+            var obj = {
+                __type__: type
+            }
+            for (let item of str.items) {
+                obj[item.key] = item.value;
+            }
+            return obj;
+        },
+        identify: function (value) {
+            if(typeof value == "object" && value && isMap(value) && value.__type__ === type)
+                console.log("map", value)
+            return typeof value == "object" && value && isMap(value) && value.__type__ === type;
+        },
+
+        stringify(item, ctx, onComment, onChompKeep) {
+            delete item.value.__type__
+            if(Object.keys(item.value).length === 0)
+                return "";
+            const yaml = stringify(item.value, ctx, onComment, onChompKeep);
+            return '\n' + ctx.indent + yaml;
+        }
+    }
+}
+
+function CreateScalarType(type) {
+    return {
+        tag: "!type:" + type,
+        resolve(str) {
+
+            var obj = {
+                __type__: type
+            }
+            return obj;
+        },
+        identify: function (value) {
+            if(typeof value == "object" && value && isMap(value) && value.__type__ === type){
+                console.log("scalar", value)
+            }
+            return typeof value == "object" && value && isScalar(value) && value.__type__ === type;
+        },
+        stringify(item) {
+            return "";
+        }
+    }
+}
+
+
+const source = `
+- type: entity
+  components:
+  - type: InstantAction
+    event: !type:CritSuccumbEvent
+
+- type: entity
+  components:
+  - type: InstantAction
+    event: !type:CritSuccumbEvent
+
+- type: accessLevel
+  id: Quartermaster
+  name: id-card-access-level-quartermaster
+`
+
+console.log(source)
+console.log("-------------------------")
+let data = YAML.parseDocument(source, {customTags: tags})
+//console.dir(data.contents.items, {depth: null})
+let text = YAML.stringify(data, {customTags: tags, indentSeq: false, strict:false});
+console.log(text);

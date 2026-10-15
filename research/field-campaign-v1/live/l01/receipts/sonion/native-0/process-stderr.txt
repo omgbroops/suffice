@@ -1,0 +1,51 @@
+[36m
+[1m./src/worker.js[22m → [1m./dist/worker.js[22m...[39m
+[32mcreated [1m./dist/worker.js[22m in [1m564ms[22m[39m
+[36m
+[1m./src/worker.js[22m → [1m./dist/worker.min.js[22m...[39m
+[32mcreated [1m./dist/worker.min.js[22m in [1m361ms[22m[39m
+[36m
+[1m./src/index.js[22m → [1m./dist/workerpool.js[22m...[39m
+[32mcreated [1m./dist/workerpool.js[22m in [1m321ms[22m[39m
+[36m
+[1m./src/index.js[22m → [1m./dist/workerpool.min.js[22m...[39m
+[32mcreated [1m./dist/workerpool.min.js[22m in [1m536ms[22m[39m
+stderr message
+stderr message
+
+
+#
+# Fatal process out of memory: Failed to reserve virtual memory for CodeRange
+#
+----- Native stack trace -----
+
+ 1: 0x9b0281  [node]
+ 2: 0x27120f5 v8::base::FatalOOM(v8::base::OOMType, char const*) [node]
+ 3: 0xc06fdf  [node]
+ 4: 0xc0707f  [node]
+ 5: 0xeb7f3e  [node]
+ 6: 0xde777e  [node]
+ 7: 0x13c3ac3  [node]
+
+
+#
+# Fatal process out of memory: Failed to reserve virtual memory for CodeRange
+#
+----- Native stack trace -----
+
+ 8: 0xc30cc6 v8::Isolate::Initialize(v8::Isolate*, v8::Isolate::CreateParams const&) [node]
+ 1: 0x9b0281  [node]
+ 2: 0x27120f5 v8::base::FatalOOM(v8::base::OOMType, char const*) [node]
+ 3: 0xc06fdf  [node]
+ 4: 0xc0707f  [node]
+ 5: 0xeb7f3e  [node]
+ 6: 0xde777e  [node]
+ 7: 0x13c3ac3  [node]
+ 8: 0xc30cc6 v8::Isolate::Initialize(v8::Isolate*, v8::Isolate::CreateParams const&) [node]
+ 9: 0x7ebb50 node::NewIsolate(v8::Isolate::CreateParams*, uv_loop_s*, node::MultiIsolatePlatform*, node::SnapshotData const*, node::IsolateSettings const&) [node]
+10: 0xa82e5a node::worker::WorkerThreadData::WorkerThreadData(node::worker::Worker*) [node]
+11: 0xa816eb node::worker::Worker::Run() [node]
+12: 0xa82206  [node]
+13: 0x7c0dc86a407a  [/lib/x86_64-linux-gnu/libc.so.6]
+14: 0x7c0dc873772c  [/lib/x86_64-linux-gnu/libc.so.6]
+Trace/breakpoint trap

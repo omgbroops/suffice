@@ -1,0 +1,157 @@
+{
+  "phase": "narrow_contract_clarification_after_outcome_question",
+  "createdAt": "2026-10-15T07:57:52.950909+00:00",
+  "task": "i03",
+  "disposition": "defensible_issue_specific_compatibility_check_with_documentation_tension",
+  "confidence": "moderate",
+  "conclusion": "The non-Iterable array-like assertion is not an unsupported invention: the original public issue expressly identifies preservation of array-like runtime support and lists array-like input among its controls. It is defensible as a narrowly bounded compatibility requirement for this fix. The narrower documented Iterable parameter remains a real ambiguity about the general supported API domain. That general type-domain ambiguity does not invalidate the current task because its original issue explicitly calls out preservation of this runtime behavior.",
+  "scopeDistinction": {
+    "coreRepair": "Observe mapper rejections after iterator failure while promptly rejecting with the original iterator error.",
+    "compatibilityCheck": "Preserve existing successful mapping of a finite numeric-indexed object with length; line 27 checks only values and indices for {0:3,1:5,length:2}.",
+    "notClaimed": "This does not establish a requirement to broaden TypeScript declarations, support every malformed array-like object, or preserve every Array.from coercion edge case."
+  },
+  "reasoning": [
+    "The issue Expected paragraph focuses on iterator failure and already scheduled mapper rejections; array-like behavior is not necessary to repair that core failure.",
+    "However the same original public issue says its proposed fix preserves scheduling order, shared-queue behavior, and array-like runtime support, and explicitly lists array-like input among verification controls. This is task-public evidence independent of the hidden check or any actor outcome.",
+    "The pre-fix runtime uses Array.from directly, which handles the particular finite numeric-indexed object in line 27. The README and type return documentation explicitly give the Promise.all(Array.from(...)) equivalence, further supporting compatibility, but this alone would be weaker evidence because such an equivalence is normally interpreted over the documented input domain.",
+    "The README says iterable and the TypeScript signature is Iterable<Input>; the object in line 27 lacks Symbol.iterator and is outside that declared domain. Candidate-fix preservation language is descriptive rather than an explicit new API declaration. Therefore a general claim that ArrayLike is a formally documented accepted type would overstate the sources.",
+    "Considering all public issue text together with existing runtime behavior, the exact two-element compatibility check is defensible for this task. It should be reported separately from the core bug repair. The earlier blind audit is preserved unchanged; this clarification makes its previously unstated input-domain caveat explicit."
+  ],
+  "reportingRecommendation": [
+    "Keep frozen primary acceptance and its raw failure unchanged.",
+    "If a patch passes the core iterator/mapper checks but fails only line 27, describe it as core repair with an issue-mentioned array-like compatibility regression, not as failure to fix the unhandled-rejection defect.",
+    "Publish a sensitivity diagnostic excluding only the disputed assertion as a separate result if available; never substitute it silently for primary acceptance or use it to rewrite the grader.",
+    "If using a stricter benchmark policy that accepts only the declared Iterable domain despite issue-mentioned runtime preservation, mark the array-like assertion disputed for contract-sensitivity analysis consistently across all actors. That policy choice cannot establish an additional core capability failure."
+  ],
+  "outcomeIndependence": {
+    "blind": false,
+    "contextReceived": "Parent reported that Luna uses for..of, fails line 27 after earlier checks, and is running a separate omit-line diagnostic.",
+    "actorOutputsOrPatchesReadForThisClarification": false,
+    "judgmentEvidence": "Frozen original issue body, original README, original type declarations, original production source and private assertion only."
+  },
+  "verification": {
+    "issueBodyEqualsTaskPublicBody": true,
+    "issueJsonBodyEqualsArchivedBody": true,
+    "bodyHashEqualsOriginalProvenance": true,
+    "bodySha256": "a6c73417c950693193d4a0d999b9480ac7afddc62cc6c018e06f29a470f681ce",
+    "testsOrModelCallsRun": 0,
+    "modifiedArtifacts": "Only two new clarification reports; primary graders, results, earlier blind review, task files and sources unchanged."
+  },
+  "sources": {
+    "task": {
+      "path": ".suffice/field-campaign-v1/tasks/i03/task.json",
+      "sha256": "f2abb0b3725b7742776ee21bad1c7dda034e230686dad20235c047df95741783"
+    },
+    "issue": {
+      "path": "research/field-campaign-v1/integration/i03/issue.json",
+      "sha256": "538714a865cf12c07d670f55530481a155cc961a7fc42d9442ec4efe117cdbbc"
+    },
+    "body": {
+      "path": "research/field-campaign-v1/integration/i03/original-issue-body.md",
+      "sha256": "9837374fdbce0a3b36c7f273832a0ace71f570c31a3ed66c056751a8a3581ba9"
+    },
+    "readme": {
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/readme.md",
+      "sha256": "d319b5cd690ff94a7957a225aa449b297e8bfc545767d8fa23dbb11c6a2afc85"
+    },
+    "types": {
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/index.d.ts",
+      "sha256": "7b1abaeec6af1540ed700b39fd5b6c0aa0b7dd1a17b5f82d0d1e6f2bf87ae1e4"
+    },
+    "source": {
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/index.js",
+      "sha256": "63239cd9ae80b1433e05014fe6ec501475c6fa59fad06418cb5972dbc7cc14e2"
+    },
+    "privateCheck": {
+      "path": "research/field-campaign-v1/integration/i03/field-acceptance.mjs",
+      "sha256": "75d47de7bddfa938c361f79a9899da4d6f276f95745cfbcdf31a441394585f1f"
+    },
+    "provenance": {
+      "path": "research/field-campaign-v1/integration/i03/provenance.json",
+      "sha256": "d35c37905c774e718019487614a98aa40e2e6cf9f51c929e8447d32fc153935c"
+    },
+    "earlierBlindReview": {
+      "path": "research/field-campaign-v1/audits/integration-live-contract-review.json",
+      "sha256": "537545bd0db6811f6f462e2c60dabeb4c8a118c4027794757ca3b18f737cf88d"
+    }
+  },
+  "evidence": [
+    {
+      "source": "body",
+      "path": "research/field-campaign-v1/integration/i03/original-issue-body.md",
+      "line": 28,
+      "text": "Expected: the iterator error rejects the returned promise, while rejections from tasks already scheduled by `map()` are observed. This need not cancel those tasks or delay the iterator error until they finish."
+    },
+    {
+      "source": "body",
+      "path": "research/field-campaign-v1/integration/i03/original-issue-body.md",
+      "line": 34,
+      "text": "A [tested candidate fix](https://github.com/brennanbutler01/p-limit/commit/e442a9887054e32d02386b806b0a59630ebda6d0) records scheduled promises during iteration and observes them with `Promise.allSettled()` in the iteration-error path before immediately rethrowing the original error. It preserves scheduling order, shared-queue behavior, and array-like runtime support. It adds a temporary array of promise references during collection."
+    },
+    {
+      "source": "body",
+      "path": "research/field-campaign-v1/integration/i03/original-issue-body.md",
+      "line": 36,
+      "text": "Verification: two strict subprocess regressions fail against unchanged main; all 30 tests pass with the fix on Node 22.20.0 and 24.13.0. Full `pnpm test`, including XO and tsd, passes on Node 24 (one existing TODO warning). Controls cover throwing before any item, mapper errors, interleaved scheduling, array-like input, and immediate rejection with pending work. Node 20 and browsers were not tested locally."
+    },
+    {
+      "source": "readme",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/readme.md",
+      "line": 78,
+      "text": "### limit.map(iterable, mapperFunction)"
+    },
+    {
+      "source": "readme",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/readme.md",
+      "line": 80,
+      "text": "Process an iterable of inputs with limited concurrency."
+    },
+    {
+      "source": "readme",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/readme.md",
+      "line": 84,
+      "text": "Returns a promise equivalent to `Promise.all(Array.from(iterable, (item, index) => limit(mapperFunction, item, index)))`."
+    },
+    {
+      "source": "types",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/index.d.ts",
+      "line": 36,
+      "text": "\t@param iterable - An iterable containing an argument for the given function."
+    },
+    {
+      "source": "types",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/index.d.ts",
+      "line": 38,
+      "text": "\t@returns A promise equivalent to `Promise.all(Array.from(iterable, (item, index) => limit(mapperFunction, item, index)))`."
+    },
+    {
+      "source": "types",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/index.d.ts",
+      "line": 41,
+      "text": "\t\titerable: Iterable<Input>,"
+    },
+    {
+      "source": "source",
+      "path": ".suffice/field-campaign-v1/tasks/i03/base/index.js",
+      "line": 108,
+      "text": "\t\t\t\tconst promises = Array.from(iterable, (value, index) => generator(function_, value, index));"
+    },
+    {
+      "source": "privateCheck",
+      "path": "research/field-campaign-v1/integration/i03/field-acceptance.mjs",
+      "line": 27,
+      "text": "assert.deepEqual(await limit.map({0: 3, 1: 5, length: 2}, (value, index) => value + index), [3, 6]);"
+    }
+  ],
+  "publicLinks": {
+    "issue": "https://github.com/sindresorhus/p-limit/issues/110",
+    "readme": "https://github.com/sindresorhus/p-limit/blob/783068bb9e967fd7bea8642e1bf5a3627fe38bdf/readme.md",
+    "types": "https://github.com/sindresorhus/p-limit/blob/783068bb9e967fd7bea8642e1bf5a3627fe38bdf/index.d.ts",
+    "source": "https://github.com/sindresorhus/p-limit/blob/783068bb9e967fd7bea8642e1bf5a3627fe38bdf/index.js"
+  },
+  "subsequentParentEvidence": {
+    "liveSourceVerification": "Parent independently fetched current GitHub web/API issue and confirmed the original body matches archived SHA-256 a6c73417c950693193d4a0d999b9480ac7afddc62cc6c018e06f29a470f681ce.",
+    "separateDiagnostic": "Parent reports a diagnostic omitting only the array-like assertion also failed the later prompt-iterator-error observation check; baseline failed first mapper rejection and reference passed all. This clarification did not execute or independently inspect that diagnostic.",
+    "implication": "The reported later core-contract failure is separate from the array-like compatibility adjudication; do not imply that line 27 alone explains the diagnostic outcome."
+  }
+}

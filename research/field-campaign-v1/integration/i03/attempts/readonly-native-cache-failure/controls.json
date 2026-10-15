@@ -1,0 +1,43 @@
+{
+  "nativeMatch": false,
+  "baseline": {
+    "native": [
+      {
+        "exitCode": 1,
+        "outputLimited": false,
+        "latencyMs": 3312,
+        "stdout": "\n  ✔ throws on invalid concurrency argument\n  ✔ clearQueue\n  ✔ accepts additional arguments\n  ✔ continues after sync throw\n  ✔ runs all tasks asynchronously\n  ✔ non-promise returning function\n  ✔ map accepts an iterable (set)\n  ✔ map accepts an iterable (array iterator)\n  ✔ map\n  ✔ propagates async execution context properly\n  ✔ shared context with a limited provider helper\n  ✔ limitFunction exposes clearQueue\n  ✔ map passes index and preserves order with concurrency\n  ✔ map works when detached from the limit\n  ✔ clearQueue rejects pending promises when enabled (102ms)\n  ✔ accepts options object (101ms)\n  ✔ does not ignore errors (112ms)\n  ✔ change concurrency to bigger value (152ms)\n  ✔ change concurrency to smaller value (202ms)\n  ✔ concurrency: 1 (604ms)\n  ✔ limitFunction() (2.3s)\n  ✔ concurrency: 4 (2.4s)\n  ✔ activeCount and pendingCount properties (3s)\n  ✘ Internal error\n  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'\n\n  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'\n      at Object.mkdirSync (node:fs:1350:26)\n      at Api._createCacheDir (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/api.js:332:6)\n      at Api.run (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/api.js:306:110)\n      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n      at async loadCli (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/cli.js:546:21)\n\n\n  ─\n\n  23 tests passed\n",
+        "stderr": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 1,
+        "outputLimited": false,
+        "latencyMs": 104,
+        "stdout": "",
+        "stderr": "file:///workspace/field-acceptance.mjs:17\n    throw new Error('mapper failure');\n          ^\n\nError: mapper failure\n    at file:///workspace/field-acceptance.mjs:17:11\n\nNode.js v24.15.0\n"
+      }
+    ]
+  },
+  "reference": {
+    "native": [
+      {
+        "exitCode": 1,
+        "outputLimited": false,
+        "latencyMs": 3325,
+        "stdout": "\n  ✔ throws on invalid concurrency argument\n  ✔ clearQueue\n  ✔ accepts additional arguments\n  ✔ continues after sync throw\n  ✔ runs all tasks asynchronously\n  ✔ non-promise returning function\n  ✔ map accepts an iterable (set)\n  ✔ map accepts an iterable (array iterator)\n  ✔ map\n  ✔ propagates async execution context properly\n  ✔ limitFunction exposes clearQueue\n  ✔ shared context with a limited provider helper\n  ✔ map passes index and preserves order with concurrency\n  ✔ map works when detached from the limit\n  ✔ clearQueue rejects pending promises when enabled (102ms)\n  ✔ accepts options object (102ms)\n  ✔ does not ignore errors (112ms)\n  ✔ change concurrency to bigger value (152ms)\n  ✔ change concurrency to smaller value (202ms)\n  ✔ concurrency: 1 (608ms)\n  ✔ concurrency: 4 (2.3s)\n  ✔ limitFunction() (2.3s)\n  ✔ activeCount and pendingCount properties (3s)\n  ✘ Internal error\n  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'\n\n  Error: ENOENT: no such file or directory, mkdir '/workspace/node_modules/.cache/ava'\n      at Object.mkdirSync (node:fs:1350:26)\n      at Api._createCacheDir (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/api.js:332:6)\n      at Api.run (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/api.js:306:110)\n      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n      at async loadCli (file:///home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03/dependencies/node_modules/ava/lib/cli.js:546:21)\n\n\n  ─\n\n  23 tests passed\n",
+        "stderr": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 205,
+        "stdout": "iterator identity, scheduled rejection observation, queue recovery and immediate failure passed\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

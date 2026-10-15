@@ -1,0 +1,75 @@
+{
+  "host": "sonion",
+  "runtime": "v24.15.0",
+  "startedAt": "2026-10-15T07:05:02.879Z",
+  "originalNativeCommands": [
+    [
+      "node",
+      "node_modules/better-node-test/bin.js",
+      "atom/index.test.ts",
+      "clean-stores/index.test.ts",
+      "computed/index.test.ts",
+      "deep-map/index.test.ts",
+      "deep-map/path.test.ts",
+      "deep-map/production.test.js",
+      "effect/index.test.ts",
+      "keep-mount/index.test.ts",
+      "lifecycle/index.test.ts",
+      "listen-keys/index.test.ts",
+      "map-creator/index.test.ts",
+      "map/index.test.ts",
+      "map/production.test.js",
+      "task/index.test.ts"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--test",
+      "clean-stores/field-regression.test.ts"
+    ]
+  ],
+  "baseCommit": "dce1af0bd83802f03bad51dfb77c8ebc7019c836",
+  "fixCommit": "4a75960e739cc588fb446b6b6a7ab76e1ddbe7f3",
+  "localBaseCommit": "54fc782c118f2938348d05f9c1241709e6b1d461",
+  "baseline": {
+    "native": [
+      {
+        "exitCode": 0,
+        "latencyMs": 7349,
+        "reportedTests": 50,
+        "stdoutTail": "ng path with numbers inside does not produce any unnecessary stuff inside (0.279032ms)\n\u2714 deep-map/production.test.js (52.59383ms)\n\u2714 Runs effect on the initial call with the proper atom values (0.787166ms)\n\u2714 Updates value on any atom change (0.258412ms)\n\u2714 Calls cleanup function before each run (0.230512ms)\n\u2714 Stops running effect when returned unsubscribe method called. Runs effect cleanup as well (0.176681ms)\n\u2714 adds empty listener (0.897868ms)\n\u2714 has onStart and onStop listeners (1.533553ms)\n\u2714 tracks onStart from listening (0.164231ms)\n\u2714 shares data between onStart listeners (0.472574ms)\n\u2714 shares data between onStop listeners (0.117681ms)\n\u2714 shares data between onMount listeners (0.317793ms)\n\u2714 shares data between onSet listeners (0.438964ms)\n\u2714 shares data between onNotify listeners (0.358963ms)\n\u2714 does not share data between different listeners (0.363413ms)\n\u2714 has onSet and onNotify listeners (0.413853ms)\n\u2714 supports map in onSet and onNotify (0.451593ms)\n\u2714 triggered by listen method (2008.24072ms)\n\u2714 triggered by get method (1005.117157ms)\n\u2714 sets data from constructor (1002.696577ms)\n\u2714 listen for specific keys (1.19981ms)\n\u2714 does not fire when whole-store set leaves watched keys unchanged (0.291412ms)\n\u2714 fires for whole-store set when a watched key is newly added (0.189171ms)\n\u2714 fires for whole-store set when a watched key is removed (0.116731ms)\n\u2714 can subscribe to changes and call listener immediately (0.138701ms)\n\u2714 creates map store with argument (1.238381ms)\n\u2714 creates map store with ID only (0.141751ms)\n\u2714 map/index.test.ts (84.526727ms)\n\u2714 map/production.test.js (40.393923ms)\n\u2714 waits no tasks (0.567355ms)\n\u2714 waits for nested tasks (0.192932ms)\n\u2714 ends task on error (0.138161ms)\n\u2139 tests 50\n\u2139 suites 0\n\u2139 pass 50\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 7218.825106\n",
+        "stderrTail": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 1,
+        "latencyMs": 1206,
+        "reportedTests": 1,
+        "stdoutTail": "\u2716 resets computed cache (1.032049ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 0\n\u2139 fail 1\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 1074.507123\n\n\u2716 failing tests:\n\ntest at clean-stores/field-regression.test.ts:6:1\n\u2716 resets computed cache (1.032049ms)\n  AssertionError [ERR_ASSERTION]: 2 == 10\n      at TestContext.<anonymous> (file:///workspace/clean-stores/field-regression.test.ts:24:3)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 2,\n    expected: 10,\n    operator: '==',\n    diff: 'simple'\n  }\n",
+        "stderrTail": ""
+      }
+    ]
+  },
+  "reference": {
+    "native": [
+      {
+        "exitCode": 0,
+        "latencyMs": 7337,
+        "reportedTests": 50,
+        "stdoutTail": " path with numbers inside does not produce any unnecessary stuff inside (0.214052ms)\n\u2714 deep-map/production.test.js (42.686933ms)\n\u2714 Runs effect on the initial call with the proper atom values (0.804027ms)\n\u2714 Updates value on any atom change (0.208001ms)\n\u2714 Calls cleanup function before each run (0.227322ms)\n\u2714 Stops running effect when returned unsubscribe method called. Runs effect cleanup as well (0.164251ms)\n\u2714 adds empty listener (3.414751ms)\n\u2714 has onStart and onStop listeners (1.463302ms)\n\u2714 tracks onStart from listening (0.192052ms)\n\u2714 shares data between onStart listeners (0.331013ms)\n\u2714 shares data between onStop listeners (0.161541ms)\n\u2714 shares data between onMount listeners (0.235353ms)\n\u2714 shares data between onSet listeners (0.386908ms)\n\u2714 shares data between onNotify listeners (0.367454ms)\n\u2714 does not share data between different listeners (0.428364ms)\n\u2714 has onSet and onNotify listeners (0.496714ms)\n\u2714 supports map in onSet and onNotify (0.482294ms)\n\u2714 triggered by listen method (2006.169609ms)\n\u2714 triggered by get method (1007.817622ms)\n\u2714 sets data from constructor (1004.136111ms)\n\u2714 listen for specific keys (1.465733ms)\n\u2714 does not fire when whole-store set leaves watched keys unchanged (0.984329ms)\n\u2714 fires for whole-store set when a watched key is newly added (0.161351ms)\n\u2714 fires for whole-store set when a watched key is removed (0.09516ms)\n\u2714 can subscribe to changes and call listener immediately (0.290532ms)\n\u2714 creates map store with argument (1.411993ms)\n\u2714 creates map store with ID only (0.180892ms)\n\u2714 map/index.test.ts (99.911756ms)\n\u2714 map/production.test.js (42.817458ms)\n\u2714 waits no tasks (0.422554ms)\n\u2714 waits for nested tasks (0.231901ms)\n\u2714 ends task on error (1.011048ms)\n\u2139 tests 50\n\u2139 suites 0\n\u2139 pass 50\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 7218.354411\n",
+        "stderrTail": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 0,
+        "latencyMs": 1209,
+        "reportedTests": 1,
+        "stdoutTail": "\u2714 resets computed cache (0.860057ms)\n\u2139 tests 1\n\u2139 suites 0\n\u2139 pass 1\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 1080.622303\n",
+        "stderrTail": ""
+      }
+    ]
+  }
+}

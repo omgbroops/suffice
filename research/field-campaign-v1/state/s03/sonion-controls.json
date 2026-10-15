@@ -1,0 +1,75 @@
+{
+  "host": "sonion",
+  "runtime": "v24.15.0",
+  "startedAt": "2026-10-15T07:06:13.310Z",
+  "originalNativeCommands": [
+    [
+      "node",
+      "node_modules/better-node-test/bin.js",
+      "atom/index.test.ts",
+      "clean-stores/index.test.ts",
+      "computed/index.test.ts",
+      "deep-map/index.test.ts",
+      "deep-map/path.test.ts",
+      "deep-map/production.test.js",
+      "effect/index.test.ts",
+      "keep-mount/index.test.ts",
+      "lifecycle/index.test.ts",
+      "listen-keys/index.test.ts",
+      "map-creator/index.test.ts",
+      "map/index.test.ts",
+      "map/production.test.js",
+      "task/index.test.ts"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--test",
+      "listen-keys/field-regression.test.ts"
+    ]
+  ],
+  "baseCommit": "fd78b3d86a8667bd0126e12cb1724f863348f097",
+  "fixCommit": "579eae9cd72fe7abe26951df3b83e0fa6310174c",
+  "localBaseCommit": "3ada55e2c15d3c6229734432d44514b817e853d3",
+  "baseline": {
+    "native": [
+      {
+        "exitCode": 0,
+        "latencyMs": 7372,
+        "reportedTests": 53,
+        "stdoutTail": "p-map/production.test.js (40.537578ms)\n✔ Runs effect on the initial call with the proper atom values (0.760536ms)\n✔ Updates value on any atom change (0.251352ms)\n✔ Calls cleanup function before each run (0.210371ms)\n✔ Stops running effect when returned unsubscribe method called. Runs effect cleanup as well (0.190851ms)\n✔ adds empty listener (0.945798ms)\n✔ has onStart and onStop listeners (1.108599ms)\n✔ tracks onStart from listening (0.092951ms)\n✔ shares data between onStart listeners (0.154912ms)\n✔ shares data between onStop listeners (0.109961ms)\n✔ shares data between onMount listeners (0.131191ms)\n✔ shares data between onSet listeners (0.196252ms)\n✔ shares data between onNotify listeners (0.146661ms)\n✔ does not share data between different listeners (0.127511ms)\n✔ has onSet and onNotify listeners (0.225462ms)\n✔ supports map in onSet and onNotify (0.331493ms)\n✔ triggered by listen method (2010.309686ms)\n✔ triggered by get method (1002.309228ms)\n✔ sets data from constructor (1003.89322ms)\n✔ listen for specific keys (1.1881ms)\n✔ does not fire when whole-store set leaves watched keys unchanged (1.299501ms)\n✔ fires for whole-store set when a watched key is newly added (0.122121ms)\n✔ fires for whole-store set when a watched key is removed (4.296485ms)\n✔ can subscribe to changes and call listener immediately (0.324203ms)\n✔ creates map store with argument (1.25691ms)\n✔ creates map store with ID only (0.191572ms)\n✔ map/index.test.ts (139.477145ms)\n✔ map/production.test.js (61.097106ms)\n✔ waits no tasks (0.574405ms)\n✔ waits for nested tasks (0.220062ms)\n✔ ends task on error (0.166591ms)\n✔ returns synchronous task value (0.115771ms)\n✔ ends task on synchronous error (0.550804ms)\nℹ tests 53\nℹ suites 0\nℹ pass 53\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 7222.903179\n",
+        "stderrTail": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 1,
+        "latencyMs": 211,
+        "reportedTests": 3,
+        "stdoutTail": "eeps plain map keys containing a dot working (1.26806ms)\nℹ tests 3\nℹ suites 0\nℹ pass 1\nℹ fail 2\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 115.514462\n\n✖ failing tests:\n\ntest at listen-keys/field-regression.test.ts:5:1\n✖ listens for deep keys on whole-store set (4.105689ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n  + actual - expected\n  \n  + []\n  - [\n  -   'b'\n  - ]\n  \n      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:15:3)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: [],\n    expected: [ 'b' ],\n    operator: 'deepStrictEqual',\n    diff: 'simple'\n  }\n\ntest at listen-keys/field-regression.test.ts:30:1\n✖ listens for array paths on whole-store set (0.623015ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n  + actual - expected\n  \n  + []\n  - [\n  -   3\n  - ]\n  \n      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:39:3)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: [],\n    expected: [ 3 ],\n    operator: 'deepStrictEqual',\n    diff: 'simple'\n  }\n",
+        "stderrTail": ""
+      }
+    ]
+  },
+  "reference": {
+    "native": [
+      {
+        "exitCode": 0,
+        "latencyMs": 7434,
+        "reportedTests": 53,
+        "stdoutTail": "-map/production.test.js (48.526873ms)\n✔ Runs effect on the initial call with the proper atom values (0.842567ms)\n✔ Updates value on any atom change (0.212842ms)\n✔ Calls cleanup function before each run (0.153902ms)\n✔ Stops running effect when returned unsubscribe method called. Runs effect cleanup as well (0.166391ms)\n✔ adds empty listener (0.871937ms)\n✔ has onStart and onStop listeners (1.054799ms)\n✔ tracks onStart from listening (0.111001ms)\n✔ shares data between onStart listeners (0.148581ms)\n✔ shares data between onStop listeners (0.104431ms)\n✔ shares data between onMount listeners (0.102351ms)\n✔ shares data between onSet listeners (0.203442ms)\n✔ shares data between onNotify listeners (0.143671ms)\n✔ does not share data between different listeners (0.481944ms)\n✔ has onSet and onNotify listeners (0.478064ms)\n✔ supports map in onSet and onNotify (0.349873ms)\n✔ triggered by listen method (2010.482346ms)\n✔ triggered by get method (1001.69531ms)\n✔ sets data from constructor (1005.258411ms)\n✔ listen for specific keys (1.14045ms)\n✔ does not fire when whole-store set leaves watched keys unchanged (0.306463ms)\n✔ fires for whole-store set when a watched key is newly added (0.119451ms)\n✔ fires for whole-store set when a watched key is removed (0.085621ms)\n✔ can subscribe to changes and call listener immediately (0.185372ms)\n✔ creates map store with argument (1.410561ms)\n✔ creates map store with ID only (0.816787ms)\n✔ map/index.test.ts (79.585211ms)\n✔ map/production.test.js (39.304742ms)\n✔ waits no tasks (0.491714ms)\n✔ waits for nested tasks (0.223662ms)\n✔ ends task on error (0.143141ms)\n✔ returns synchronous task value (0.081741ms)\n✔ ends task on synchronous error (0.463474ms)\nℹ tests 53\nℹ suites 0\nℹ pass 53\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 7321.758357\n",
+        "stderrTail": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 0,
+        "latencyMs": 205,
+        "reportedTests": 3,
+        "stdoutTail": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:7:16)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n✔ listens for deep keys on whole-store set (1.715054ms)\n✔ listens for array paths on whole-store set (0.185342ms)\n✔ keeps plain map keys containing a dot working (0.158311ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 71.573395\n",
+        "stderrTail": ""
+      }
+    ]
+  }
+}

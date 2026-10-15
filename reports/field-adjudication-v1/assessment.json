@@ -1,0 +1,360 @@
+{
+  "at": "2026-10-15T07:42:28.821374+00:00",
+  "modelCalls": 0,
+  "modelReplayCostUsd": 0,
+  "originalV1ResultsModified": false,
+  "frozenGeneralInputMismatches": [],
+  "rawFullReplayCounts": {
+    "replayed": 14,
+    "passed": 12,
+    "failed": 2,
+    "pending": 0
+  },
+  "interpretation": "All six integration patches pass independent diagnostics but v1 remains invalid for harness/cost comparison. State four and q01 two independently pass. q02-stock-pi is a genuine native event-contract regression despite private success. q02-suffice retains its original accepted score; a full replay timing failure is disclosed, with unchanged baseline reproducing that timing failure in matched focused runs. No original result is overwritten and no rerun-until-pass replaces full replay evidence.",
+  "timingDiagnostic": {
+    "baseline: strict mode multiple complete intervals": {
+      "runs": 5,
+      "passes": 4,
+      "failures": 1
+    },
+    "baseline: strict mode rapid sequential adds": {
+      "runs": 5,
+      "passes": 5,
+      "failures": 0
+    },
+    "submitted: strict mode multiple complete intervals": {
+      "runs": 5,
+      "passes": 5,
+      "failures": 0
+    },
+    "submitted: strict mode rapid sequential adds": {
+      "runs": 5,
+      "passes": 5,
+      "failures": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": "q02-suffice",
+      "classification": "timing_limited_no_source_regression_established",
+      "strictReplayAccepted": false,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        193,
+        null,
+        null
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "/bin/bash: line 1: rg: command not found"
+        ]
+      ]
+    },
+    {
+      "attempt": "q02-stock-pi",
+      "classification": "genuine_public_event_regression",
+      "strictReplayAccepted": false,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        193,
+        null,
+        null
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "/bin/bash: line 1: rg: command not found"
+        ]
+      ]
+    },
+    {
+      "attempt": "i01-suffice",
+      "classification": "diagnostic_patch_pass_v1_environment_invalid",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "invalid_integration_v1_environment",
+      "nativeReportedTestCounts": [
+        378
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": null,
+      "actorNativeDependencyLayoutCorrect": null,
+      "environmentNotes": []
+    },
+    {
+      "attempt": "i01-stock-pi",
+      "classification": "diagnostic_patch_pass_v1_environment_invalid",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "invalid_integration_v1_environment",
+      "nativeReportedTestCounts": [
+        378
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": null,
+      "actorNativeDependencyLayoutCorrect": null,
+      "environmentNotes": []
+    },
+    {
+      "attempt": "i02-suffice",
+      "classification": "diagnostic_patch_pass_v1_environment_invalid",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "invalid_integration_v1_environment",
+      "nativeReportedTestCounts": [
+        384
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": null,
+      "actorNativeDependencyLayoutCorrect": null,
+      "environmentNotes": []
+    },
+    {
+      "attempt": "i02-stock-pi",
+      "classification": "diagnostic_patch_pass_v1_environment_invalid",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "invalid_integration_v1_environment",
+      "nativeReportedTestCounts": [
+        384
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": null,
+      "actorNativeDependencyLayoutCorrect": null,
+      "environmentNotes": []
+    },
+    {
+      "attempt": "i04-suffice",
+      "classification": "diagnostic_patch_pass_v1_environment_invalid",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "invalid_integration_v1_environment",
+      "nativeReportedTestCounts": [
+        187
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": null,
+      "actorNativeDependencyLayoutCorrect": null,
+      "environmentNotes": []
+    },
+    {
+      "attempt": "i04-stock-pi",
+      "classification": "diagnostic_patch_pass_v1_environment_invalid",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": false,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "invalid_integration_v1_environment",
+      "nativeReportedTestCounts": [
+        187
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": null,
+      "actorNativeDependencyLayoutCorrect": null,
+      "environmentNotes": []
+    },
+    {
+      "attempt": "s02-suffice",
+      "classification": "independent_patch_validation_pass",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        50
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'tsx' imported from /workspace/"
+        ]
+      ]
+    },
+    {
+      "attempt": "s02-stock-pi",
+      "classification": "independent_patch_validation_pass",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        50
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "/bin/bash: line 1: rg: command not found"
+        ]
+      ]
+    },
+    {
+      "attempt": "s03-suffice",
+      "classification": "independent_patch_validation_pass",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        53
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "sh: 1: oxlint: not found",
+          "sh: 1: check-dts: not found"
+        ]
+      ]
+    },
+    {
+      "attempt": "s03-stock-pi",
+      "classification": "independent_patch_validation_pass",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        53
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "sh: 1: oxlint: not found",
+          "sh: 1: check-dts: not found"
+        ],
+        [
+          "sh: 1: size-limit: not found"
+        ]
+      ]
+    },
+    {
+      "attempt": "q01-suffice",
+      "classification": "independent_patch_validation_pass",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        199,
+        null,
+        null
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "/bin/bash: line 1: rg: command not found"
+        ],
+        [
+          "Error: ENOENT: no such file or directory, open '/workspace/node_modules/.cache/xo-linter/tsconfig.xo.json'",
+          "  code: 'ENOENT',"
+        ]
+      ]
+    },
+    {
+      "attempt": "q01-stock-pi",
+      "classification": "independent_patch_validation_pass",
+      "strictReplayAccepted": true,
+      "originalV1Accepted": true,
+      "originalStatus": "completed",
+      "originalBudgetEligible": true,
+      "comparisonCohort": "v1_state_queue_with_documented_environment_limits",
+      "nativeReportedTestCounts": [
+        199,
+        null,
+        null
+      ],
+      "nativeCountsMatchOriginal": true,
+      "privatePassed": true,
+      "originalResultStillUnchanged": true,
+      "originalPatchStillUnchanged": true,
+      "initialActorBytesMatch": true,
+      "actorNativeDependencyLayoutCorrect": true,
+      "environmentNotes": [
+        [
+          "/bin/bash: line 1: rg: command not found"
+        ]
+      ]
+    }
+  ],
+  "limits": [
+    "Nano Stores totals50/53 include file-level aggregate passes under fake timers, not a claim of50/53 individual contract assertions.",
+    "Build/type commands have no native test count. All behavioral totals match original control totals.",
+    "Native tests contain real-time intervals. A deterministic script does not make wall-clock assertions deterministic.",
+    "Documented optional tooling failures (missing rg, attempted optional tsx loader, omitted oxlint/check-dts/size-limit, XO cache under immutable dependencies) are retained in environment-evidence.json; native and production dependency layouts were correct for state/queue actors.",
+    "Diagnostic integration replay does not remove actor-side environment repair effort, restore an uncontaminated cost comparison, or authorize changing frozen v1 scores."
+  ]
+}

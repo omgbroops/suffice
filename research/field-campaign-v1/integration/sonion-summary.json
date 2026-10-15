@@ -1,0 +1,237 @@
+{
+  "host": "sonion",
+  "runtime": "Node 24.15.0",
+  "execution": "Remote Ubuntu EXT4 via taskset CPUs0,1 and nice10. Installs and validation executed sequentially. No scored model calls. Frozen14 harness untouched.",
+  "tasks": [
+    {
+      "id": "i01",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1386,
+      "ready": true,
+      "controls": {
+        "baselineAccepted": false,
+        "referenceAccepted": true,
+        "knownNativeFailures": [
+          "Request constructor referrer should throw a TypeError for an invalid URL",
+          "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+          "node-fetch should support https request",
+          "node-fetch supports supplying a famliy option to the agent"
+        ],
+        "nativeExitCodes": [
+          4
+        ],
+        "nativeFailureNames": [
+          "Request constructor referrer should throw a TypeError for an invalid URL",
+          "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+          "node-fetch should support https request",
+          "node-fetch supports supplying a famliy option to the agent"
+        ]
+      },
+      "sourceAudit": {
+        "archiveFilesVerified": 53,
+        "archiveDifferences": [],
+        "localGitCommitCount": 1,
+        "localGitCommits": [
+          "a6663eb141a5b2a1c37aafeeb9480bfdc9de815a"
+        ],
+        "lockTracked": true,
+        "lockSha256": "6486524159b7067d4754c4c3a03327e47ff83dc325dc535d135973bc37640068",
+        "privateOverlayInBase": false,
+        "sourceOnlyPreFix": true
+      },
+      "publicBodyMatchesApi": true,
+      "privateAcceptanceSha256": "b767bc79e116351e907ecaa9e6b5765b66594acf1961f861fc092d7393c0df9b",
+      "native": {
+        "baseline": {
+          "suites": 47,
+          "tests": 378,
+          "passes": 371,
+          "pending": 3,
+          "failures": 4,
+          "start": "2026-10-15T07:06:55.477Z",
+          "end": "2026-10-15T07:06:58.304Z",
+          "duration": 2827
+        },
+        "reference": {
+          "suites": 47,
+          "tests": 378,
+          "passes": 371,
+          "pending": 3,
+          "failures": 4,
+          "start": "2026-10-15T07:06:59.732Z",
+          "end": "2026-10-15T07:07:04.138Z",
+          "duration": 4406
+        }
+      },
+      "referenceFiles": [
+        {
+          "source": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i01/reference/src/index.js",
+          "target": "src/index.js",
+          "sha256": "c6e5c2b009daf43e0383393b3377e824512699096dbf32fdfb6999a52deaaef6"
+        }
+      ]
+    },
+    {
+      "id": "i02",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1442,
+      "ready": true,
+      "controls": {
+        "baselineAccepted": false,
+        "referenceAccepted": true,
+        "knownNativeFailures": [
+          "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+          "node-fetch should not forward secure headers to 3th party",
+          "node-fetch should support https request",
+          "node-fetch supports supplying a famliy option to the agent"
+        ],
+        "nativeExitCodes": [
+          4
+        ],
+        "nativeFailureNames": [
+          "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+          "node-fetch should not forward secure headers to 3th party",
+          "node-fetch should support https request",
+          "node-fetch supports supplying a famliy option to the agent"
+        ]
+      },
+      "sourceAudit": {
+        "archiveFilesVerified": 53,
+        "archiveDifferences": [],
+        "localGitCommitCount": 1,
+        "localGitCommits": [
+          "ab969ce92b6fd5482e53cc6b768f3d50849935ab"
+        ],
+        "lockTracked": true,
+        "lockSha256": "c0dcc97eccb09510487a294039134a94c5a51a401230a984dd04f843766dbf97",
+        "privateOverlayInBase": false,
+        "sourceOnlyPreFix": true
+      },
+      "publicBodyMatchesApi": true,
+      "privateAcceptanceSha256": "8d7ff528b641dbfe31fd9e22259bea27b01202121b93813f298d0205b6478f7f",
+      "native": {
+        "baseline": {
+          "suites": 47,
+          "tests": 384,
+          "passes": 377,
+          "pending": 3,
+          "failures": 4,
+          "start": "2026-10-15T07:07:14.804Z",
+          "end": "2026-10-15T07:07:19.227Z",
+          "duration": 4423
+        },
+        "reference": {
+          "suites": 47,
+          "tests": 384,
+          "passes": 377,
+          "pending": 3,
+          "failures": 4,
+          "start": "2026-10-15T07:07:19.728Z",
+          "end": "2026-10-15T07:07:24.064Z",
+          "duration": 4336
+        }
+      },
+      "referenceFiles": [
+        {
+          "source": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i02/reference/src/index.js",
+          "target": "src/index.js",
+          "sha256": "5f2dae5b6d2c4430f3aff21cb88d34fe3204ca626c9adad4a33f5957e97c5d0c"
+        }
+      ]
+    },
+    {
+      "id": "i03",
+      "repository": "sindresorhus/p-limit",
+      "issue": 110,
+      "ready": true,
+      "controls": {
+        "baselineAccepted": false,
+        "referenceAccepted": true,
+        "knownNativeFailures": [],
+        "nativeExitCodes": [
+          0
+        ],
+        "nativeFailureNames": []
+      },
+      "sourceAudit": {
+        "archiveFilesVerified": 16,
+        "archiveDifferences": [],
+        "localGitCommitCount": 1,
+        "localGitCommits": [
+          "ef54236ab445309a299876604a0f706c92735fcd"
+        ],
+        "lockTracked": true,
+        "lockSha256": "419950977f9318b294f1c301e3e3ebc79f296a3aa8026492b0e637ac7d914649",
+        "privateOverlayInBase": false,
+        "sourceOnlyPreFix": true
+      },
+      "publicBodyMatchesApi": true,
+      "privateAcceptanceSha256": "75d47de7bddfa938c361f79a9899da4d6f276f95745cfbcdf31a441394585f1f",
+      "native": {
+        "baseline": {
+          "summary": "s)\n  \u2714 change concurrency to bigger value (153ms)\n  \u2714 change concurrency to smaller value (203ms)\n  \u2714 concurrency: 1 (607ms)\n  \u2714 limitFunction() (2.3s)\n  \u2714 concurrency: 4 (2.5s)\n  \u2714 activeCount and pendingCount properties (3s)\n  \u2500\n\n  23 tests passed\n"
+        },
+        "reference": {
+          "summary": "s)\n  \u2714 change concurrency to bigger value (151ms)\n  \u2714 change concurrency to smaller value (201ms)\n  \u2714 concurrency: 1 (605ms)\n  \u2714 concurrency: 4 (2.3s)\n  \u2714 limitFunction() (2.4s)\n  \u2714 activeCount and pendingCount properties (3s)\n  \u2500\n\n  23 tests passed\n"
+        }
+      },
+      "referenceFiles": [
+        {
+          "source": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i03/reference/index.js",
+          "target": "index.js",
+          "sha256": "edde12a4a4dbdbe8d27161cdd0853db0bab435d5dc6c15f9f4dedc27ee9bca60"
+        },
+        {
+          "source": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i03/reference/index.d.ts",
+          "target": "index.d.ts",
+          "sha256": "d367543c32631ba661e044b1d1f44deed2bbf54654dd0eb251061337162514ee"
+        }
+      ]
+    },
+    {
+      "id": "i04",
+      "repository": "mcollina/fastq",
+      "issue": 80,
+      "ready": true,
+      "controls": {
+        "baselineAccepted": false,
+        "referenceAccepted": true,
+        "knownNativeFailures": [],
+        "nativeExitCodes": [
+          0
+        ],
+        "nativeFailureNames": []
+      },
+      "sourceAudit": {
+        "archiveFilesVerified": 15,
+        "archiveDifferences": [],
+        "localGitCommitCount": 1,
+        "localGitCommits": [
+          "605c45afc28f4490eaf9484bb1e66996e5c30d8b"
+        ],
+        "lockTracked": true,
+        "lockSha256": "9f22539c3dc78f8015da0a7245a8ac299567fca9775fa7c46621eb61f3627fb9",
+        "privateOverlayInBase": false,
+        "sourceOnlyPreFix": true
+      },
+      "publicBodyMatchesApi": true,
+      "privateAcceptanceSha256": "501b92784d5f3c94ceff3284a6e87a0ffd7144c2d86d89b69be76088c92d76f5",
+      "native": {
+        "baseline": {
+          "summary": "ould be \"test error\"\n# unshift with worker throwing error\nok 186 push callback should catch the error\nok 187 error message should be \"test error\"\n# no unhandledRejection (push)\n# no unhandledRejection (unshift)\n\n1..187\n# tests 187\n# pass  187\n\n# ok\n\n"
+        },
+        "reference": {
+          "summary": "ould be \"test error\"\n# unshift with worker throwing error\nok 186 push callback should catch the error\nok 187 error message should be \"test error\"\n# no unhandledRejection (push)\n# no unhandledRejection (unshift)\n\n1..187\n# tests 187\n# pass  187\n\n# ok\n\n"
+        }
+      },
+      "referenceFiles": [
+        {
+          "source": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i04/reference/queue.js",
+          "target": "queue.js",
+          "sha256": "41ec9df7123c13ec8d96fc37912b45ffe584fbb024e0b7c1d9b24ac69bd47bd3"
+        }
+      ]
+    }
+  ],
+  "disk": "287\t/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i01\n287\t/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i02\n178\t/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i03\n103\t/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i04\n4\t/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration\n"
+}

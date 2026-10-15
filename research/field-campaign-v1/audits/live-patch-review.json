@@ -1,0 +1,214 @@
+{
+  "reviewedAt": "2026-10-15T07:39:44.292915+00:00",
+  "host": "sonion",
+  "reviewer": "independent parent-delegated review; no additional model calls",
+  "scope": "All completed Suffice-only l01/l02/l03 saved v2 patches against original public issues and repository API/native behavior",
+  "reviewOrder": [
+    "Read tracked patches, original issue bodies, source, README contracts and relevant native tests.",
+    "Formed static concerns and executed bounded review probes without reading agent final messages.",
+    "Read grade summaries only after independent source review/probes to distinguish primary acceptance from review outcome."
+  ],
+  "agentFinalClaimsRead": false,
+  "actorFilesModified": false,
+  "primaryGradersModified": false,
+  "primaryReceiptsModified": false,
+  "additionalModelCalls": 0,
+  "upstreamActions": 0,
+  "rows": [
+    {
+      "task": "l01",
+      "attempt": ".suffice/field-campaign-v2/attempts/l01-suffice",
+      "trackedPatchSha256": "b57122a88f6a181813969c6c89a00d49ac8a4cbd245e6cc1da2eb7a269a00599",
+      "primaryAccepted": true,
+      "primaryOriginalNativeValid": true,
+      "actorTestEditsExcluded": [
+        "test/Promise.test.js"
+      ],
+      "changedPaths": [
+        "dist/worker.js",
+        "dist/worker.js.map",
+        "dist/worker.min.js",
+        "dist/worker.min.js.map",
+        "dist/workerpool.js",
+        "dist/workerpool.js.map",
+        "dist/workerpool.min.js",
+        "dist/workerpool.min.js.LICENSE.txt",
+        "dist/workerpool.min.js.map",
+        "src/Promise.js",
+        "src/generated/embeddedWorker.js",
+        "test/Promise.test.js",
+        "types/Pool.d.ts",
+        "types/Promise.d.ts",
+        "types/WorkerHandler.d.ts",
+        "types/debug-port-allocator.d.ts",
+        "types/environment.d.ts",
+        "types/generated/embeddedWorker.d.ts",
+        "types/index.d.ts",
+        "types/queues.d.ts",
+        "types/transfer.d.ts",
+        "types/types.d.ts",
+        "types/validateOptions.d.ts",
+        "types/worker.d.ts"
+      ],
+      "verdict": "scoped_fix_supported",
+      "findings": [],
+      "evidence": [
+        {
+          "path": ".suffice/field-campaign-v2/actors/l01-suffice/src/Promise.js",
+          "lines": [
+            84,
+            97,
+            109,
+            122
+          ],
+          "detail": "Settlement dispatch and no-op resolver replacement move before synchronous subscriber iteration for both fulfillment and rejection, allowing finally to reenter the settled source without losing its subscriber."
+        },
+        {
+          "path": ".suffice/field-campaign-v1/tasks/l01/base/README.md",
+          "lines": [
+            257,
+            269
+          ],
+          "detail": "Public finally/cancel/timeout API reviewed; original Promise tests also require synchronous state and value/error pass-through."
+        }
+      ],
+      "postHocProbes": [
+        "Reentrant callbacks attach a new subscriber and attempt resolve/reject again; original state and both subscribers remain correct.",
+        "Pending finally adopts asynchronously rejected native cleanup and preserves the cleanup error."
+      ],
+      "limitations": [
+        "No full workerpool CI claim. Whole upstream npm test previously failed at high-worker-count Pool tests under unchanged 8 GiB virtual address-space limit.",
+        "22 generated dist/types artifacts match the independent evaluation workspace native build byte-for-byte.",
+        "No browser-worker or Promises/A+ conformance claim."
+      ]
+    },
+    {
+      "task": "l02",
+      "attempt": ".suffice/field-campaign-v2/attempts/l02-suffice",
+      "trackedPatchSha256": "7a2b169ac18689bdb4d407e2653310f215a033c7223b44fb5858388ae4f4e4a8",
+      "primaryAccepted": true,
+      "primaryOriginalNativeValid": true,
+      "actorTestEditsExcluded": [
+        "test.js"
+      ],
+      "changedPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "verdict": "scoped_fix_supported",
+      "findings": [],
+      "evidence": [
+        {
+          "path": ".suffice/field-campaign-v2/actors/l02-suffice/index.js",
+          "lines": [
+            20,
+            39,
+            117,
+            137
+          ],
+          "detail": "New helper races pending conditions against combined abort/timeout signal, retains fulfillment/rejection handlers after cancellation, removes its own listener in finally, and reuses existing fallback/error classification."
+        },
+        {
+          "path": ".suffice/field-campaign-v1/tasks/l02/base/readme.md",
+          "lines": [
+            46,
+            89,
+            121,
+            125
+          ],
+          "detail": "Documented timeout, fallback and AbortSignal cancellation contracts reviewed."
+        }
+      ],
+      "postHocProbes": [
+        "Successful condition and synchronously throwing condition leave no helper abort listener attached."
+      ],
+      "limitations": [
+        "Native behavioral tests and types pass; full lint/CI was not independently rerun.",
+        "The pre-existing sleep helper listener cleanup and before:false initial-delay timeout behavior are unchanged neighboring concerns, not regressions introduced by this patch or proof those separate issues are fixed."
+      ]
+    },
+    {
+      "task": "l03",
+      "attempt": ".suffice/field-campaign-v2/attempts/l03-suffice",
+      "trackedPatchSha256": "f4201fb24fcf4913aeb8812e00ed656e476fdc7bab20f09a13df576ef39e263d",
+      "primaryAccepted": true,
+      "primaryOriginalNativeValid": true,
+      "actorTestEditsExcluded": [
+        "test.js"
+      ],
+      "changedPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "verdict": "regression_found",
+      "findings": [
+        {
+          "id": "L03-R1",
+          "priority": "P2",
+          "kind": "introduced_regression",
+          "title": "Delayed cleanup from an older leading window removes the newer window abort listener",
+          "path": ".suffice/field-campaign-v2/actors/l03-suffice/index.js",
+          "lines": [
+            51,
+            62
+          ],
+          "trigger": "Use before:true with a pending leading call and a suppressed caller. Expire its wait timer; start a newer leading window and suppressed caller. Resolve the first leading call while the newer wait timer is pending, then abort the signal.",
+          "expected": "Newer suppressed caller rejects with the abort reason while its timer is pending, as the untouched baseline does.",
+          "actual": "Old timer resumes after awaiting currentLeadingPromise and unconditionally removes shared onAbort. Newer suppressed caller remains pending on abort and can later fulfill with the new leading value.",
+          "baselineEvidence": {
+            "listenersBeforeOldCompletion": 1,
+            "listenersAfterOldCompletion": 1,
+            "outcomeAtAbort": "rejected"
+          },
+          "patchedEvidence": {
+            "listenersBeforeOldCompletion": 1,
+            "listenersAfterOldCompletion": 0,
+            "outcomeAtAbort": "pending"
+          },
+          "contractEvidence": ".suffice/field-campaign-v1/tasks/l03/base/readme.md:59-63 documents AbortSignal cancellation. The untouched baseline passes the same deterministic probe.",
+          "recommendation": "Make abort registration and cleanup belong to the debounce batch, or avoid removing a shared listener that still serves an active later batch. Add this cross-window abort case before upstream submission.",
+          "classification": "Post-hoc exploratory regression finding, not a primary-grader change."
+        }
+      ],
+      "evidence": [
+        {
+          "path": ".suffice/field-campaign-v2/actors/l03-suffice/index.js",
+          "lines": [
+            43,
+            51,
+            62,
+            67,
+            82
+          ],
+          "detail": "Capturing leadingPromise per expired timer fixes slow successful result sharing and overlapping success batches. Awaiting old work extends the lifetime of unconditional shared-listener removal across later batches."
+        }
+      ],
+      "limitations": [
+        "The original successful same-window issue and private acceptance are satisfied, but this patch is not a complete regression-free fix suitable for submission as-is.",
+        "The deterministic review probes are exploratory, written after scores. Primary acceptance remains true and campaign receipts are unchanged."
+      ]
+    }
+  ],
+  "postHocProbeRun": {
+    "command": [
+      "node",
+      "--test",
+      "review.test.mjs"
+    ],
+    "workspace": "research/field-campaign-v1/audits/live-patch-probes/fixture",
+    "execution": "executeIsolated from scripts/sonion-execution.mjs, network:false, timeoutMs:15000, original sandbox limits",
+    "receipt": "research/field-campaign-v1/audits/live-patch-probes/receipts",
+    "tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "exitCode": 1,
+    "failure": "Only the patched l03 cross-window abort case; matching untouched baseline case passes.",
+    "sourceIntegrity": "All three patched probe source copies match the corresponding saved patch.json after bytes exactly.",
+    "primaryScoreImpact": "None; exploratory evidence is outside frozen acceptance."
+  },
+  "limitations": [
+    "Single static review plus five targeted probes, not exhaustive validation.",
+    "No fresh CI matrix, browser/OS matrix or broad fuzzing.",
+    "No repairs applied to patches or tests; l03 requires a follow-up fix and regression validation before submission."
+  ]
+}

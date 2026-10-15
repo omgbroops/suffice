@@ -1,0 +1,70 @@
+
+> workerpool@10.0.3 test
+> npm run build && mocha test && npm run test:types
+
+
+> workerpool@10.0.3 build
+> rollup -c rollup.config.mjs && npm run build:types
+
+
+> workerpool@10.0.3 build:types
+> tsc -p .
+
+
+
+  Pool
+    ✔ supports forkOpts parameter to pass options to fork
+    ✔ supports worker creation hook to pass dynamic options to fork (for example)
+    ✔ supports worker creation hook to pass dynamic options to threads (for example) (47ms)
+    ✔ supports stdout/stderr capture via fork
+stdout message
+    ✔ excludes stdout/stderr capture via fork
+    ✔ supports stdout/stderr capture via threads
+stdout message
+    ✔ excludes stdout/stderr capture via threads
+    ✔ should offload a function to a worker
+    ✔ should offload functions to multiple workers
+    ✔ should put tasks in queue when all workers are busy
+    ✔ should create a proxy
+    ✔ should create a proxy of a custom worker
+    ✔ should invoke a method via a proxy
+    ✔ should invoke an async method via a proxy (118ms)
+    ✔ should handle errors thrown by a worker
+    ✔ should handle a nested custom error class thrown by a worker
+    ✔ should execute a function returning a Promise
+    ✔ should propagate a rejected Promise
+    ✔ should cancel a task
+    ✔ should cancel a queued task
+    ✔ should run following tasks if a previous queued task is cancelled
+    ✔ should not assign new tasks to a worker whose previous task was cancelled (145ms)
+    ✔ should timeout a task (51ms)
+    ✔ should start timeout timer of a task once the task is taken from the queue (1) (123ms)
+    ✔ should start timeout timer of a task once the task is taken from the queue (2) (169ms)
+    ✔ should handle crashed workers
+    - should handle crashed workers (2)
+    ✔ should clear all workers upon explicit termination
+    ✔ should wait until subprocesses have ended
+    ✔ should clear all workers after tasks are finished
+    ✔ should wait for all workers if pool is terminated before multiple concurrent tasks are finished (583ms)
+    ✔ should wait for all workers if pool is terminated before tasks are finished, even if a task fails (492ms)
+    ✔ should cancel any pending tasks when terminating a pool
+    ✔ should return statistics (349ms)
+    ✔ should throw an error in case of wrong type of arguments in function exec
+    ✔ should throw an error when the tasks queue is full
+    ✔ should receive events from worker
+    ✔ should support sending transferable object to worker
+    ✔ should support sending transferable object from worker
+    ✔ should call worker termination handler (536ms)
+    ✔ should call worker termination async handler (222ms)
+    ✔ should not call worker termination async handler after timeout (120ms)
+    nodeWorker
+      ✔ supports process
+      ✔ supports auto
+      ✔ supports thread
+      ✔ supports passing options to threads
+      ✔ supports passing options to threads via mode auto
+    options
+      ✔ should throw an error on invalid type or number of maxWorkers
+      ✔ should limit to the configured number of max workers
+      ✔ should take number of cpus minus one as default maxWorkers
+      ✔ should throw an error on invalid type or number of minWorkers

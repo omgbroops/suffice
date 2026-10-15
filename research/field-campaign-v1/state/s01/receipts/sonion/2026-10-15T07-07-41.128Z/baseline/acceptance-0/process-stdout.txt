@@ -1,0 +1,245 @@
+  ⚠ Using configuration from /tmp/field-ava.config.mjs
+
+  ✖ meta event - works with async emit override in subclass 
+  ✖ meta event - listenerRemoved works with async emit override in subclass 
+  ✖ meta event - onAny() works with async emit override in subclass 
+  ✖ meta event - offAny() works with async emit override in subclass 
+  ✖ meta event - multiple emitters have independent counters 
+  ✖ meta event - concurrent on() calls with async emit override both deliver 
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:9
+
+   8:       await delay(10);                        
+   9:       return super.emit(eventName, eventData);
+   10:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:9:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:32
+
+   31:       await delay(10);                        
+   32:       return super.emit(eventName, eventData);
+   33:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:32:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:32
+
+   31:       await delay(10);                        
+   32:       return super.emit(eventName, eventData);
+   33:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:32:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:56
+
+   55:       await delay(10);                        
+   56:       return super.emit(eventName, eventData);
+   57:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:56:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:56
+
+   55:       await delay(10);                        
+   56:       return super.emit(eventName, eventData);
+   57:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:56:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:85
+
+   84:       await delay(10);                        
+   85:       return super.emit(eventName, eventData);
+   86:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:85:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:108
+
+   107:       await delay(10);                        
+   108:       return super.emit(eventName, eventData);
+   109:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:108:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:108
+
+   107:       await delay(10);                        
+   108:       return super.emit(eventName, eventData);
+   109:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:108:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:132
+
+   131:       await delay(10);                        
+   132:       return super.emit(eventName, eventData);
+   133:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:132:17)
+
+  Unhandled rejection in test/field-regression.js
+
+  test/field-regression.js:132
+
+   131:       await delay(10);                        
+   132:       return super.emit(eventName, eventData);
+   133:     }                                         
+
+  TypeError: `eventName` cannot be meta event `listenerAdded` or `listenerRemoved`
+
+  › CustomEmittery.emit (file://index.js:380:10)
+  › CustomEmittery.emit (file://test/field-regression.js:132:17)
+
+  ─
+
+  meta event - works with async emit override in subclass
+
+  test/field-regression.js:23
+
+   22:   await delay(50);                       
+   23:   t.is(events.length, 1);                
+   24:   t.is(events[0].data.eventName, 'test');
+
+  Difference:
+
+  - 0
+  + 1
+
+  › file://test/field-regression.js:23:4
+
+
+
+  meta event - listenerRemoved works with async emit override in subclass
+
+  test/field-regression.js:47
+
+   46:   await delay(50);                       
+   47:   t.is(events.length, 1);                
+   48:   t.is(events[0].data.eventName, 'test');
+
+  Difference:
+
+  - 0
+  + 1
+
+  › file://test/field-regression.js:47:4
+
+
+
+  meta event - onAny() works with async emit override in subclass
+
+  test/field-regression.js:99
+
+   98:   await delay(50);                          
+   99:   t.is(events.length, 1);                   
+   100:   t.is(events[0].data.eventName, undefined);
+
+  Difference:
+
+  - 0
+  + 1
+
+  › file://test/field-regression.js:99:4
+
+
+
+  meta event - offAny() works with async emit override in subclass
+
+  test/field-regression.js:123
+
+   122:   await delay(50);                          
+   123:   t.is(events.length, 1);                   
+   124:   t.is(events[0].data.eventName, undefined);
+
+  Difference:
+
+  - 0
+  + 1
+
+  › file://test/field-regression.js:123:4
+
+
+
+  meta event - multiple emitters have independent counters
+
+  test/field-regression.js:153
+
+   152:   await delay(50);        
+   153:   t.is(events1.length, 1);
+   154:   t.is(events2.length, 1);
+
+  Difference:
+
+  - 0
+  + 1
+
+  › file://test/field-regression.js:153:4
+
+
+
+  meta event - concurrent on() calls with async emit override both deliver
+
+  test/field-regression.js:72
+
+   71:   await delay(50);       
+   72:   t.is(events.length, 2);
+   73:                          
+
+  Difference:
+
+  - 0
+  + 2
+
+  › file://test/field-regression.js:72:4
+
+  ─
+
+  6 tests failed
+  10 unhandled rejections

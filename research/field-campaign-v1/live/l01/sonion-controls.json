@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-10-15T07:06:52.852Z",
+  "host": "sonion",
+  "node": "v24.15.0",
+  "upstreamCommit": "17dbcc88b87cb266d99953d91f7bc8898dce0b73",
+  "localGitCommit": "d849ac683b92436aca3d774d78efa7cfc0ac881f",
+  "graderSha256": "addf7282fc1c4f9dcce5cc262cc59a93956c050e13ddd816ff9daa976509fbc6",
+  "lockSha256": "c2ba3838f1bd28025fbf0c41339214d91a23e344c1b80acdc2779027332d65f2",
+  "nativePassed": true,
+  "baselineRejected": true,
+  "rows": [
+    {
+      "kind": "native",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "latencyMs": 2827
+    },
+    {
+      "kind": "native",
+      "command": [
+        "node",
+        "node_modules/mocha/bin/mocha.js",
+        "test/Promise.test.js",
+        "test/Queues.test.js",
+        "test/environment.test.js"
+      ],
+      "exitCode": 0,
+      "latencyMs": 805
+    },
+    {
+      "kind": "native",
+      "command": [
+        "npm",
+        "run",
+        "test:types"
+      ],
+      "exitCode": 0,
+      "latencyMs": 1109
+    },
+    {
+      "kind": "acceptance",
+      "command": [
+        "node",
+        "--test",
+        "field-acceptance.test.mjs"
+      ],
+      "exitCode": 1,
+      "latencyMs": 3110
+    }
+  ]
+}

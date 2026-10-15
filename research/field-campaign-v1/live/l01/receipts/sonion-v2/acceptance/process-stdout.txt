@@ -1,0 +1,51 @@
+✔ settled fulfillment survives finally (0.684745ms)
+✔ settled rejection survives finally (0.504535ms)
+✖ pending fulfillment survives finally (1004.87341ms)
+✖ pending rejection survives finally (1006.177321ms)
+✔ finally waits for cleanup and retains task value (0.887127ms)
+✔ a cleanup exception rejects the resulting promise (0.155481ms)
+✖ pool exec with finally completes (1005.984968ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 4
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3063.931699
+
+✖ failing tests:
+
+test at field-acceptance.test.mjs:10:3
+✖ pending fulfillment survives finally (1004.87341ms)
+  Error: Promise remained pending
+      at Timeout._onTimeout (file:///workspace/field-acceptance.test.mjs:8:89)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)
+
+test at field-acceptance.test.mjs:17:3
+✖ pending rejection survives finally (1006.177321ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: Promise remained pending
+      at async TestContext.<anonymous> (file:///workspace/field-acceptance.test.mjs:22:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Promise remained pending
+        at Timeout._onTimeout (file:///workspace/field-acceptance.test.mjs:8:89)
+        at listOnTimeout (node:internal/timers:605:17)
+        at process.processTimers (node:internal/timers:541:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at field-acceptance.test.mjs:38:1
+✖ pool exec with finally completes (1005.984968ms)
+  Error: Promise remained pending
+      at Timeout._onTimeout (file:///workspace/field-acceptance.test.mjs:8:89)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)

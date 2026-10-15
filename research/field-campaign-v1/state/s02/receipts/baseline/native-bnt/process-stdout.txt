@@ -1,0 +1,98 @@
+✔ atom/index.test.ts (4791.383045ms)
+✖ resets computed cache (3.955064ms)
+✔ cleans stores (15.669896ms)
+✔ allows to call multiple times (0.814029ms)
+✔ throws in production (0.696475ms)
+✔ cleans mocks (0.502576ms)
+✔ ignores undefined stores (0.554785ms)
+✔ cleans stores without events (0.369172ms)
+Nano Stores: Use @nanostores/async for async computed. We will remove Promise support in computed() in Nano Stores 2.0
+  Trace: Source of deprecated call
+      at warn (file:///workspace/warn/index.js:8:15)
+      at set (file:///workspace/computed/index.js:19:11)
+      at $computed.get (file:///workspace/computed/index.js:38:5)
+      at TestContext.<anonymous> (file:///workspace/computed/index.test.ts:431:14)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+✔ computed/index.test.ts (4759.968374ms)
+Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.
+  Trace: Source of deprecated call
+      at warn (file:///workspace/warn/index.js:8:15)
+      at deepMap (file:///workspace/deep-map/index.js:10:5)
+      at TestContext.<anonymous> (file:///workspace/deep-map/index.test.ts:12:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
+✔ deep-map/index.test.ts (4756.773467ms)
+✔ path evaluates correct value (12.609494ms)
+✔ path returns undefined for keys under null or undefined values (0.320339ms)
+✔ simple path setting (0.398338ms)
+✔ nested arrays path setting (0.447411ms)
+✔ creating objects (0.442091ms)
+✔ creating arrays (0.366788ms)
+✔ removes arrays (0.289901ms)
+✔ changes object reference at this level and earlier levels when key is changed (0.717014ms)
+✔ array items mutation changes identity on the same and earlier levels (0.461357ms)
+✔ setting path with numbers inside does not produce any unnecessary stuff inside (0.488629ms)
+✔ deep-map/production.test.js (5167.320084ms)
+✔ Runs effect on the initial call with the proper atom values (1.766169ms)
+✔ Updates value on any atom change (0.607065ms)
+✔ Calls cleanup function before each run (0.459714ms)
+✔ Stops running effect when returned unsubscribe method called. Runs effect cleanup as well (0.565526ms)
+✔ adds empty listener (2.70446ms)
+✔ has onStart and onStop listeners (3.337397ms)
+✔ tracks onStart from listening (1.621485ms)
+✔ shares data between onStart listeners (2.867775ms)
+✔ shares data between onStop listeners (0.308637ms)
+✔ shares data between onMount listeners (0.286044ms)
+✔ shares data between onSet listeners (0.408948ms)
+✔ shares data between onNotify listeners (0.38389ms)
+✔ does not share data between different listeners (0.32589ms)
+✔ has onSet and onNotify listeners (0.597927ms)
+✔ supports map in onSet and onNotify (0.723727ms)
+✔ triggered by listen method (2003.92633ms)
+✔ triggered by get method (1004.006795ms)
+✔ sets data from constructor (1002.174918ms)
+✔ listen for specific keys (6.926554ms)
+✔ does not fire when whole-store set leaves watched keys unchanged (8.927943ms)
+✔ fires for whole-store set when a watched key is newly added (0.304379ms)
+✔ fires for whole-store set when a watched key is removed (0.277097ms)
+✔ can subscribe to changes and call listener immediately (0.374833ms)
+✔ creates map store with argument (4.480769ms)
+✔ creates map store with ID only (0.726501ms)
+✔ map/index.test.ts (7154.226794ms)
+✔ map/production.test.js (6394.118745ms)
+✔ waits no tasks (1.320292ms)
+✔ waits for nested tasks (0.600071ms)
+✔ ends task on error (0.417785ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 50
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9254.09899
+
+✖ failing tests:
+
+test at clean-stores/field-regression.test.ts:6:1
+✖ resets computed cache (3.955064ms)
+  AssertionError [ERR_ASSERTION]: 2 == 10
+      at TestContext.<anonymous> (file:///workspace/clean-stores/field-regression.test.ts:24:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 10,
+    operator: '==',
+    diff: 'simple'
+  }

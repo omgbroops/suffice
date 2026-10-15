@@ -1,0 +1,43 @@
+{
+  "nativeMatch": true,
+  "baseline": {
+    "native": [
+      {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 3313,
+        "stdout": "\n  ✔ throws on invalid concurrency argument\n  ✔ clearQueue\n  ✔ accepts additional arguments\n  ✔ continues after sync throw\n  ✔ runs all tasks asynchronously\n  ✔ non-promise returning function\n  ✔ map accepts an iterable (set)\n  ✔ map accepts an iterable (array iterator)\n  ✔ map\n  ✔ propagates async execution context properly\n  ✔ limitFunction exposes clearQueue\n  ✔ shared context with a limited provider helper\n  ✔ map passes index and preserves order with concurrency\n  ✔ map works when detached from the limit\n  ✔ clearQueue rejects pending promises when enabled (103ms)\n  ✔ accepts options object (102ms)\n  ✔ does not ignore errors (112ms)\n  ✔ change concurrency to bigger value (153ms)\n  ✔ change concurrency to smaller value (203ms)\n  ✔ concurrency: 1 (607ms)\n  ✔ limitFunction() (2.3s)\n  ✔ concurrency: 4 (2.5s)\n  ✔ activeCount and pendingCount properties (3s)\n  ─\n\n  23 tests passed\n",
+        "stderr": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 1,
+        "outputLimited": false,
+        "latencyMs": 105,
+        "stdout": "",
+        "stderr": "file:///workspace/field-acceptance.mjs:17\n    throw new Error('mapper failure');\n          ^\n\nError: mapper failure\n    at file:///workspace/field-acceptance.mjs:17:11\n\nNode.js v24.15.0\n"
+      }
+    ]
+  },
+  "reference": {
+    "native": [
+      {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 3316,
+        "stdout": "\n  ✔ throws on invalid concurrency argument\n  ✔ clearQueue\n  ✔ accepts additional arguments\n  ✔ continues after sync throw\n  ✔ runs all tasks asynchronously\n  ✔ non-promise returning function\n  ✔ map accepts an iterable (set)\n  ✔ map accepts an iterable (array iterator)\n  ✔ map\n  ✔ propagates async execution context properly\n  ✔ limitFunction exposes clearQueue\n  ✔ shared context with a limited provider helper\n  ✔ map passes index and preserves order with concurrency\n  ✔ map works when detached from the limit\n  ✔ clearQueue rejects pending promises when enabled (102ms)\n  ✔ accepts options object (102ms)\n  ✔ does not ignore errors (112ms)\n  ✔ change concurrency to bigger value (151ms)\n  ✔ change concurrency to smaller value (201ms)\n  ✔ concurrency: 1 (605ms)\n  ✔ concurrency: 4 (2.3s)\n  ✔ limitFunction() (2.4s)\n  ✔ activeCount and pendingCount properties (3s)\n  ─\n\n  23 tests passed\n",
+        "stderr": ""
+      }
+    ],
+    "acceptance": [
+      {
+        "exitCode": 0,
+        "outputLimited": false,
+        "latencyMs": 204,
+        "stdout": "iterator identity, scheduled rejection observation, queue recovery and immediate failure passed\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

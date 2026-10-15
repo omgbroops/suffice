@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-15T07:09:57.943210+00:00",
+  "host": "sonion",
+  "node": "24.15.0",
+  "scoredInferenceCalls": 0,
+  "publicWrites": 0,
+  "rows": [
+    {
+      "id": "l01",
+      "repository": "josdejong/workerpool",
+      "issue": 596,
+      "ready": true,
+      "nativePassed": true,
+      "baselineRejected": true,
+      "originalReproduced": true,
+      "dependencyMiB": 100,
+      "baseCommit": "17dbcc88b87cb266d99953d91f7bc8898dce0b73",
+      "graderSha256": "addf7282fc1c4f9dcce5cc262cc59a93956c050e13ddd816ff9daa976509fbc6"
+    },
+    {
+      "id": "l02",
+      "repository": "sindresorhus/p-wait-for",
+      "issue": 37,
+      "ready": true,
+      "nativePassed": true,
+      "baselineRejected": true,
+      "originalReproduced": true,
+      "dependencyMiB": 175,
+      "baseCommit": "6b5f7d53400cdfacf71c0813a26350a80103a7b5",
+      "graderSha256": "8b5c08b5ca08c89683341bfe05607664efd0365c5465d45f539fdaa9e86c96b0"
+    },
+    {
+      "id": "l03",
+      "repository": "sindresorhus/p-debounce",
+      "issue": 35,
+      "ready": true,
+      "nativePassed": true,
+      "baselineRejected": true,
+      "originalReproduced": true,
+      "dependencyMiB": 159,
+      "baseCommit": "792115ea04019c720ddc8753010c758c55796f77",
+      "graderSha256": "f1f8bbe657caa832e5abe55e3df90c5f12c216a033218f31b238cdb4cde2b7d1"
+    }
+  ],
+  "notes": [
+    "No source implementation or reference fixes were made.",
+    "Workerpool whole npm test failed in high-worker-count capacity tests under the unchanged 8GB sandbox virtual-memory limit; selected complete native suites plus build/types passed.",
+    "p-wait-for AVA cache needs a generated cache:false config for read-only dependencies. Failed cache attempts retained.",
+    "Original public reproductions executed independently in addition to private graders; import-only adapters for l01/l02, no adapter for l03."
+  ]
+}

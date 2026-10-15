@@ -1,0 +1,234 @@
+TAP version 13
+# concurrency
+ok 1 should throw
+ok 2 should not throw
+# worker execution
+ok 3 should be strictly equal
+ok 4 no error
+ok 5 result matches
+# limit
+ok 6 no error
+ok 7 the result matches
+ok 8 no error
+ok 9 the result matches
+# multiple executions
+ok 10 arg matches
+ok 11 no error
+ok 12 the result matches
+ok 13 arg matches
+ok 14 no error
+ok 15 the result matches
+ok 16 arg matches
+ok 17 no error
+ok 18 the result matches
+ok 19 arg matches
+ok 20 no error
+ok 21 the result matches
+ok 22 arg matches
+ok 23 no error
+ok 24 the result matches
+# multiple executions, one after another
+ok 25 arg matches
+ok 26 no error
+ok 27 the result matches
+ok 28 arg matches
+ok 29 no error
+ok 30 the result matches
+ok 31 arg matches
+ok 32 no error
+ok 33 the result matches
+ok 34 arg matches
+ok 35 no error
+ok 36 the result matches
+ok 37 arg matches
+ok 38 no error
+ok 39 the result matches
+# set this
+ok 40 this matches
+ok 41 no error
+ok 42 this matches
+# drain
+ok 43 should be strictly equal
+ok 44 no error
+ok 45 result matches
+ok 46 drained
+# pause && resume
+ok 47 it should not be paused
+ok 48 it should be paused
+ok 49 it should be paused
+ok 50 should be strictly equal
+ok 51 no error
+ok 52 result matches
+ok 53 it should not be paused
+# pause in flight && resume
+ok 54 it should not be paused
+ok 55 should be strictly equal
+ok 56 no error
+ok 57 result matches
+ok 58 it should be paused
+ok 59 should be strictly equal
+ok 60 no error
+ok 61 result matches
+ok 62 it should not be paused
+# altering concurrency
+ok 63 works in parallel
+ok 64 works in parallel
+ok 65 2 jobs running
+ok 66 no error
+ok 67 result matches
+ok 68 no error
+ok 69 result matches
+# idle()
+ok 70 queue is idle
+ok 71 queue is not idle
+ok 72 should be strictly equal
+ok 73 queue is not idle
+ok 74 no error
+ok 75 result matches
+ok 76 queue is not idle
+ok 77 queue is not idle
+ok 78 should be strictly equal
+ok 79 no error
+ok 80 result matches
+ok 81 queue is now idle
+# saturated
+ok 82 should be strictly equal
+ok 83 saturated
+ok 84 started 1 task
+ok 85 worked zero task
+ok 86 no error
+ok 87 result matches
+ok 88 should be strictly equal
+ok 89 no error
+ok 90 result matches
+# length
+ok 91 nothing waiting
+ok 92 nothing waiting
+ok 93 one task waiting
+ok 94 two tasks waiting
+ok 95 no error
+ok 96 no error
+ok 97 no error
+# getQueue
+ok 98 nothing waiting
+ok 99 nothing waiting
+ok 100 one task waiting
+ok 101 should be equal
+ok 102 two tasks waiting
+ok 103 should be equal
+ok 104 should be equal
+ok 105 no error
+ok 106 no error
+ok 107 no error
+# unshift
+ok 108 tasks come in order
+ok 109 no error
+ok 110 tasks come in order
+ok 111 no error
+ok 112 tasks come in order
+ok 113 no error
+ok 114 tasks come in order
+ok 115 no error
+# unshift && empty
+ok 116 the task has not completed yet
+ok 117 no error
+# push && empty
+ok 118 the task has not completed yet
+ok 119 no error
+# kill
+ok 120 tasks come in order
+ok 121 no error
+ok 122 no queued tasks
+ok 123 no running tasks
+ok 124 drain is back to default
+# killAndDrain
+ok 125 tasks come in order
+ok 126 drain has been called
+ok 127 no error
+ok 128 no queued tasks
+ok 129 no running tasks
+ok 130 drain is back to default
+# pause && idle
+ok 131 it should not be paused
+ok 132 should be idle
+ok 133 it should be paused
+ok 134 it should be paused
+ok 135 should not be idle
+ok 136 should be strictly equal
+ok 137 it should not be paused
+ok 138 it should not be idle
+ok 139 no error
+ok 140 result matches
+ok 141 is should be idle
+# push without cb
+ok 142 should be strictly equal
+# unshift without cb
+ok 143 should be strictly equal
+# push with worker throwing error
+ok 144 global error handler should catch the error
+ok 145 error message should be "test error"
+ok 146 The task executed should be passed
+ok 147 push callback should catch the error
+ok 148 error message should be "test error"
+# unshift with worker throwing error
+ok 149 global error handler should catch the error
+ok 150 error message should be "test error"
+ok 151 The task executed should be passed
+ok 152 unshift callback should catch the error
+ok 153 error message should be "test error"
+# concurrency
+ok 154 should throw
+ok 155 should not throw
+# worker execution
+ok 156 should be strictly equal
+ok 157 result matches
+# limit
+ok 158 the result matches
+ok 159 the result matches
+# multiple executions
+ok 160 arg matches
+ok 161 arg matches
+ok 162 the result matches
+ok 163 arg matches
+ok 164 the result matches
+ok 165 arg matches
+ok 166 the result matches
+ok 167 arg matches
+ok 168 the result matches
+ok 169 the result matches
+# drained
+ok 170 should be strictly equal
+ok 171 should be strictly equal
+# drained with exception should not throw
+# drained with drain function
+ok 172 should be strictly equal
+ok 173 should be strictly equal
+# drained while idle should resolve
+# drained while idle should not call the drain function
+ok 174 should be strictly equal
+# set this
+ok 175 this matches
+# unshift
+ok 176 tasks come in order
+ok 177 tasks come in order
+ok 178 tasks come in order
+ok 179 tasks come in order
+ok 180 should be strictly equal
+# push with worker throwing error
+ok 181 global error handler should catch the error
+ok 182 error message should be "test error"
+ok 183 The task executed should be passed
+ok 184 push callback should catch the error
+ok 185 error message should be "test error"
+# unshift with worker throwing error
+ok 186 push callback should catch the error
+ok 187 error message should be "test error"
+# no unhandledRejection (push)
+# no unhandledRejection (unshift)
+
+1..187
+# tests 187
+# pass  187
+
+# ok
+

@@ -1,0 +1,1782 @@
+{
+  "version": "field-adjudication-v1",
+  "at": "2026-10-15T07:39:05.054Z",
+  "modelCalls": 0,
+  "replayModelCostUsd": 0,
+  "counts": {
+    "replayed": 14,
+    "passed": 12,
+    "failed": 2,
+    "pending": 0
+  },
+  "diagnosticIntegrationRuns": 6,
+  "replays": [
+    {
+      "attempt": "q02-suffice",
+      "task": "q02",
+      "arm": "suffice",
+      "at": "2026-10-15T07:37:35.600Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/q02-suffice/result.json",
+      "originalResultSha256": "cd7a6ac97e6243ba3577dbe29a984e27f1fffb1bad61812afcab7ba0c990c7da",
+      "originalRecordedAccepted": true,
+      "patchSha256": "9e65bfb157f61cde0f5b7ecd8caacd223e784b28ae5e2af37e70e5699d09369c",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q02/private/overlay/test/basic.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q02/private/reference-production.patch",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "test/advanced.ts",
+            "test/basic.ts",
+            "test/debug.ts",
+            "test/priority-queue.ts",
+            "test/rate-limit.ts",
+            "test/strict.ts",
+            "test/validation.ts"
+          ],
+          "exitCode": 1,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 83621,
+          "stats": {
+            "tests": 193,
+            "suites": 0,
+            "pass": 192,
+            "fail": 1,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": [
+              "strict mode multiple complete intervals"
+            ]
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": false,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/typescript/bin/tsc"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 819,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/native-1/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/native-1/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/tsd/dist/cli.js"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 2629,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/native-2/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/native-2/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "--test-name-pattern=\\.onSizeLessThan\\(\\) resolves when|\\.onSizeLessThan\\(\\) resolves multiple",
+            "test/basic.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 2309,
+          "stats": {
+            "tests": 4,
+            "suites": 0,
+            "pass": 4,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 4,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "TAP version 13\n# Subtest: .onSizeLessThan() resolves when start() drains the queue\nok 1 - .onSizeLessThan() resolves when start() drains the queue\n  ---\n  duration_ms: 1.826526\n  type: 'test'\n  ...\n# Subtest: .onSizeLessThan() resolves when concurrency is raised at runtime\nok 2 - .onSizeLessThan() resolves when concurrency is raised at runtime\n  ---\n  duration_ms: 0.292579\n  type: 'test'\n  ...\n# Subtest: .onSizeLessThan() resolves when a rate-limit interval tick drains the queue\nok 3 - .onSizeLessThan() resolves when a rate-limit interval tick drains the queue\n  ---\n  duration_ms: 100.37647\n  type: 'test'\n  ...\n# Subtest: .onSizeLessThan() resolves multiple waiters with different limits on a single drain\nok 4 - .onSizeLessThan() resolves multiple waiters with different limits on a single drain\n  ---\n  duration_ms: 0.738612\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2235.615978\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 193,
+          "stats": {
+            "tests": 193,
+            "suites": 0,
+            "pass": 193,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          }
+        },
+        {
+          "tests": null,
+          "stats": null
+        },
+        {
+          "tests": null,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/basic.ts"
+      ],
+      "replayAccepted": false,
+      "classification": "native_failure_requires_evidence_review",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "q02-stock-pi",
+      "task": "q02",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:31:01.041Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/q02-stock-pi/result.json",
+      "originalResultSha256": "5de2a501a94a333094e188e41a0cd3a97b6002793f5b8ce948c292472ada6fec",
+      "originalRecordedAccepted": false,
+      "patchSha256": "2dfc64e783a687c677dea2ebde6dd14b228f23c9bda1e6fb6e0187835e191278",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q02/private/overlay/test/basic.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q02/private/reference-production.patch",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "test/advanced.ts",
+            "test/basic.ts",
+            "test/debug.ts",
+            "test/priority-queue.ts",
+            "test/rate-limit.ts",
+            "test/strict.ts",
+            "test/validation.ts"
+          ],
+          "exitCode": 1,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 84473,
+          "stats": {
+            "tests": 193,
+            "suites": 0,
+            "pass": 192,
+            "fail": 1,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": [
+              "should emit next event when completing task"
+            ]
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": false,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/typescript/bin/tsc"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 906,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/native-1/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/native-1/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/tsd/dist/cli.js"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 2744,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/native-2/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/native-2/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "--test-name-pattern=\\.onSizeLessThan\\(\\) resolves when|\\.onSizeLessThan\\(\\) resolves multiple",
+            "test/basic.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 2312,
+          "stats": {
+            "tests": 4,
+            "suites": 0,
+            "pass": 4,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 4,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "TAP version 13\n# Subtest: .onSizeLessThan() resolves when start() drains the queue\nok 1 - .onSizeLessThan() resolves when start() drains the queue\n  ---\n  duration_ms: 1.789822\n  type: 'test'\n  ...\n# Subtest: .onSizeLessThan() resolves when concurrency is raised at runtime\nok 2 - .onSizeLessThan() resolves when concurrency is raised at runtime\n  ---\n  duration_ms: 0.344887\n  type: 'test'\n  ...\n# Subtest: .onSizeLessThan() resolves when a rate-limit interval tick drains the queue\nok 3 - .onSizeLessThan() resolves when a rate-limit interval tick drains the queue\n  ---\n  duration_ms: 100.202104\n  type: 'test'\n  ...\n# Subtest: .onSizeLessThan() resolves multiple waiters with different limits on a single drain\nok 4 - .onSizeLessThan() resolves multiple waiters with different limits on a single drain\n  ---\n  duration_ms: 0.619337\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2233.352951\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q02-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 193,
+          "stats": {
+            "tests": 193,
+            "suites": 0,
+            "pass": 193,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          }
+        },
+        {
+          "tests": null,
+          "stats": null
+        },
+        {
+          "tests": null,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/advanced.ts",
+        "test/basic.ts"
+      ],
+      "replayAccepted": false,
+      "classification": "native_failure_requires_evidence_review",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "i01-suffice",
+      "task": "i01",
+      "arm": "suffice",
+      "at": "2026-10-15T07:32:31.574Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/i01-suffice/result.json",
+      "originalResultSha256": "abedce4cd3ea177e5dd415b326411f4bb21377913fb6c9eb7435e3396afa2ab7",
+      "originalRecordedAccepted": false,
+      "patchSha256": "08ea12eed7f93822d8a02120fbfa4c32faf021937f8023f01e6b77919cccb391",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i01/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i01/field-acceptance.mjs",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i01/reference/src/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "invalid_v1_environment_perturbed",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/mocha/bin/mocha",
+            "--reporter",
+            "json"
+          ],
+          "exitCode": 4,
+          "expectedExitCode": 4,
+          "outputLimited": false,
+          "latencyMs": 4616,
+          "stats": {
+            "suites": 47,
+            "tests": 378,
+            "passes": 371,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:32:31.785Z",
+            "end": "2026-10-15T07:32:36.125Z",
+            "duration": 4340,
+            "failureNames": [
+              "Request constructor referrer should throw a TypeError for an invalid URL",
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--unhandled-rejections=strict",
+            "field-acceptance.mjs"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 104,
+          "stats": null,
+          "activeReportedTests": null,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "invalid redirect rejection, manual response and valid follow controls passed\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 378,
+          "stats": {
+            "suites": 47,
+            "tests": 378,
+            "passes": 371,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:06:55.477Z",
+            "end": "2026-10-15T07:06:58.304Z",
+            "duration": 2827,
+            "failureNames": [
+              "Request constructor referrer should throw a TypeError for an invalid URL",
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          }
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "i01-stock-pi",
+      "task": "i01",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:32:36.390Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/i01-stock-pi/result.json",
+      "originalResultSha256": "7de31f991c53370dd15615171d1b9809d76ac7dd5e35211b660cc5efd5703c91",
+      "originalRecordedAccepted": false,
+      "patchSha256": "b77127ff41d86b00107cdc817f676145d0bffd0c1a1a837d25e767f3a28e88ae",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i01/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i01/field-acceptance.mjs",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i01/reference/src/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "invalid_v1_environment_perturbed",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/mocha/bin/mocha",
+            "--reporter",
+            "json"
+          ],
+          "exitCode": 4,
+          "expectedExitCode": 4,
+          "outputLimited": false,
+          "latencyMs": 4011,
+          "stats": {
+            "suites": 47,
+            "tests": 378,
+            "passes": 371,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:32:36.611Z",
+            "end": "2026-10-15T07:32:39.436Z",
+            "duration": 2825,
+            "failureNames": [
+              "Request constructor referrer should throw a TypeError for an invalid URL",
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--unhandled-rejections=strict",
+            "field-acceptance.mjs"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 106,
+          "stats": null,
+          "activeReportedTests": null,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "invalid redirect rejection, manual response and valid follow controls passed\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i01-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 378,
+          "stats": {
+            "suites": 47,
+            "tests": 378,
+            "passes": 371,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:06:55.477Z",
+            "end": "2026-10-15T07:06:58.304Z",
+            "duration": 2827,
+            "failureNames": [
+              "Request constructor referrer should throw a TypeError for an invalid URL",
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          }
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "i02-suffice",
+      "task": "i02",
+      "arm": "suffice",
+      "at": "2026-10-15T07:32:40.604Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/i02-suffice/result.json",
+      "originalResultSha256": "c2a2c57ecff3f9cbe8ea227aafa5a47e37f006f816af32ddcd0844dc0cb13651",
+      "originalRecordedAccepted": false,
+      "patchSha256": "0819bf479d5776879f0bf1a7bc9c26babaee7597fd17a17e0848973f7160aa48",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i02/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i02/field-acceptance.mjs",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i02/reference/src/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "invalid_v1_environment_perturbed",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/mocha/bin/mocha",
+            "--reporter",
+            "json"
+          ],
+          "exitCode": 4,
+          "expectedExitCode": 4,
+          "outputLimited": false,
+          "latencyMs": 4612,
+          "stats": {
+            "suites": 47,
+            "tests": 384,
+            "passes": 377,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:32:40.817Z",
+            "end": "2026-10-15T07:32:45.152Z",
+            "duration": 4335,
+            "failureNames": [
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should not forward secure headers to 3th party",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--unhandled-rejections=strict",
+            "field-acceptance.mjs"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 104,
+          "stats": null,
+          "activeReportedTests": null,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "empty deflate framing and nonempty compression controls passed\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 384,
+          "stats": {
+            "suites": 47,
+            "tests": 384,
+            "passes": 377,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:07:14.804Z",
+            "end": "2026-10-15T07:07:19.227Z",
+            "duration": 4423,
+            "failureNames": [
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should not forward secure headers to 3th party",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          }
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "i02-stock-pi",
+      "task": "i02",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:32:45.419Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/i02-stock-pi/result.json",
+      "originalResultSha256": "14294ff75c4f2d4dd93156bc13acee219a129972690475092ebc2570fa4871e7",
+      "originalRecordedAccepted": false,
+      "patchSha256": "f233d67c7b5ad969ff09dd13e04dcd235433288d7d9e2ea7810176340ff5ee1e",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i02/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i02/field-acceptance.mjs",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i02/reference/src/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "invalid_v1_environment_perturbed",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/mocha/bin/mocha",
+            "--reporter",
+            "json"
+          ],
+          "exitCode": 4,
+          "expectedExitCode": 4,
+          "outputLimited": false,
+          "latencyMs": 4618,
+          "stats": {
+            "suites": 47,
+            "tests": 384,
+            "passes": 377,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:32:45.634Z",
+            "end": "2026-10-15T07:32:49.978Z",
+            "duration": 4344,
+            "failureNames": [
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should not forward secure headers to 3th party",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--unhandled-rejections=strict",
+            "field-acceptance.mjs"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 205,
+          "stats": null,
+          "activeReportedTests": null,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "empty deflate framing and nonempty compression controls passed\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i02-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 384,
+          "stats": {
+            "suites": 47,
+            "tests": 384,
+            "passes": 377,
+            "pending": 3,
+            "failures": 4,
+            "start": "2026-10-15T07:07:14.804Z",
+            "end": "2026-10-15T07:07:19.227Z",
+            "duration": 4423,
+            "failureNames": [
+              "node-fetch should handle chunked response with final chunk and EOM in separate packets",
+              "node-fetch should not forward secure headers to 3th party",
+              "node-fetch should support https request",
+              "node-fetch supports supplying a famliy option to the agent"
+            ]
+          }
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "i04-suffice",
+      "task": "i04",
+      "arm": "suffice",
+      "at": "2026-10-15T07:32:50.332Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/i04-suffice/result.json",
+      "originalResultSha256": "d9db54c83f6789bc604f07d74f863e26fa6c1214547397e49aeb66c4fd308be5",
+      "originalRecordedAccepted": false,
+      "patchSha256": "6db09fb4b803ef71831af43b31467b9826996ddde8a044945e5be0b8959a3b5b",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i04/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i04/field-acceptance.mjs",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i04/reference/queue.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "invalid_v1_environment_perturbed",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/tape/bin/tape",
+            "test/test.js",
+            "test/promise.js"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 306,
+          "stats": {
+            "tests": 187,
+            "pass": 187,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--unhandled-rejections=strict",
+            "field-acceptance.mjs"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 106,
+          "stats": null,
+          "activeReportedTests": null,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "pause/resume, concurrency increase/decrease, push/unshift and invalid values passed\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 187,
+          "stats": {
+            "tests": 187,
+            "pass": 187,
+            "failureNames": []
+          }
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/test.js"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "i04-stock-pi",
+      "task": "i04",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:32:50.831Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/i04-stock-pi/result.json",
+      "originalResultSha256": "0a071e6c1b2c0275446d1bd388865164610c00ac810bf55de410fbf398dfda9e",
+      "originalRecordedAccepted": false,
+      "patchSha256": "95dc6547a11eea8f3954c3eda9cd0c997fc74e171c5d87038527e3206da7680a",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/i04/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i04/field-acceptance.mjs",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/integration/i04/reference/queue.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "invalid_v1_environment_perturbed",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/tape/bin/tape",
+            "test/test.js",
+            "test/promise.js"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 311,
+          "stats": {
+            "tests": 187,
+            "pass": 187,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--unhandled-rejections=strict",
+            "field-acceptance.mjs"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 106,
+          "stats": null,
+          "activeReportedTests": null,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "pause/resume, concurrency increase/decrease, push/unshift and invalid values passed\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/i04-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 187,
+          "stats": {
+            "tests": 187,
+            "pass": 187,
+            "failureNames": []
+          }
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/test.js"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "s02-suffice",
+      "task": "s02",
+      "arm": "suffice",
+      "at": "2026-10-15T07:32:51.343Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/s02-suffice/result.json",
+      "originalResultSha256": "b82bf5fb7c3045842e1f63ad0d3217b7b9b0181c6e7739e966cd1626aff8d485",
+      "originalRecordedAccepted": true,
+      "patchSha256": "1f296f0794c616487df000aafad1e709d3131a16fffba9d68389103de3ef32ae",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s02/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s02/hidden/field-regression.test.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s02/overlay/computed/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/better-node-test/bin.js",
+            "atom/index.test.ts",
+            "clean-stores/index.test.ts",
+            "computed/index.test.ts",
+            "deep-map/index.test.ts",
+            "deep-map/path.test.ts",
+            "deep-map/production.test.js",
+            "effect/index.test.ts",
+            "keep-mount/index.test.ts",
+            "lifecycle/index.test.ts",
+            "listen-keys/index.test.ts",
+            "map-creator/index.test.ts",
+            "map/index.test.ts",
+            "map/production.test.js",
+            "task/index.test.ts"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 7649,
+          "stats": {
+            "tests": 50,
+            "suites": 0,
+            "pass": 50,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "clean-stores/field-regression.test.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1214,
+          "stats": {
+            "tests": 1,
+            "suites": 0,
+            "pass": 1,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 1,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "✔ resets computed cache (0.821399ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1137.026236\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 50,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "computed/index.test.ts"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true,
+      "reportParserCorrection": {
+        "at": "2026-10-15T07:37:35.548Z",
+        "reason": "ASCII token parsing replaces a Unicode marker corrupted by SSH transport stdin decoding; existing raw receipts reparsed, no commands repeated.",
+        "prior": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-suffice/adjudication.parser-v1.json"
+      }
+    },
+    {
+      "attempt": "s02-stock-pi",
+      "task": "s02",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:33:00.349Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/s02-stock-pi/result.json",
+      "originalResultSha256": "3b8b99a6dac793f69740e27e614205db09908ee86165bad4747e021442515b69",
+      "originalRecordedAccepted": true,
+      "patchSha256": "fef4c4e93b924b6c4241072572c7b284e5c5fb037d0554f888d70e0b296d46d3",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s02/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s02/hidden/field-regression.test.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s02/overlay/computed/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/better-node-test/bin.js",
+            "atom/index.test.ts",
+            "clean-stores/index.test.ts",
+            "computed/index.test.ts",
+            "deep-map/index.test.ts",
+            "deep-map/path.test.ts",
+            "deep-map/production.test.js",
+            "effect/index.test.ts",
+            "keep-mount/index.test.ts",
+            "lifecycle/index.test.ts",
+            "listen-keys/index.test.ts",
+            "map-creator/index.test.ts",
+            "map/index.test.ts",
+            "map/production.test.js",
+            "task/index.test.ts"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 7537,
+          "stats": {
+            "tests": 50,
+            "suites": 0,
+            "pass": 50,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "clean-stores/field-regression.test.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1105,
+          "stats": {
+            "tests": 1,
+            "suites": 0,
+            "pass": 1,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 1,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "✔ resets computed cache (0.835148ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1071.775275\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 50,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "computed/index.test.ts"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true,
+      "reportParserCorrection": {
+        "at": "2026-10-15T07:37:35.550Z",
+        "reason": "ASCII token parsing replaces a Unicode marker corrupted by SSH transport stdin decoding; existing raw receipts reparsed, no commands repeated.",
+        "prior": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s02-stock-pi/adjudication.parser-v1.json"
+      }
+    },
+    {
+      "attempt": "s03-suffice",
+      "task": "s03",
+      "arm": "suffice",
+      "at": "2026-10-15T07:33:09.102Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/s03-suffice/result.json",
+      "originalResultSha256": "0bffe24b41a8f1a74cf93f5cb549f36553dc40888d715bccbb32cc4d0e0f7782",
+      "originalRecordedAccepted": true,
+      "patchSha256": "dd256c03b40c97796e9a36d3744a9144007f74c45a31cb408e0a2d8d474b4d03",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s03/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s03/hidden/field-regression.test.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s03/overlay/listen-keys/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/better-node-test/bin.js",
+            "atom/index.test.ts",
+            "clean-stores/index.test.ts",
+            "computed/index.test.ts",
+            "deep-map/index.test.ts",
+            "deep-map/path.test.ts",
+            "deep-map/production.test.js",
+            "effect/index.test.ts",
+            "keep-mount/index.test.ts",
+            "lifecycle/index.test.ts",
+            "listen-keys/index.test.ts",
+            "map-creator/index.test.ts",
+            "map/index.test.ts",
+            "map/production.test.js",
+            "task/index.test.ts"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 7122,
+          "stats": {
+            "tests": 53,
+            "suites": 0,
+            "pass": 53,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "listen-keys/field-regression.test.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 205,
+          "stats": {
+            "tests": 3,
+            "suites": 0,
+            "pass": 3,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 3,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:7:16)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n✔ listens for deep keys on whole-store set (1.549092ms)\n✔ listens for array paths on whole-store set (0.913636ms)\n✔ keeps plain map keys containing a dot working (0.148794ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 76.876867\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 53,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "listen-keys/index.test.ts"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true,
+      "reportParserCorrection": {
+        "at": "2026-10-15T07:37:35.552Z",
+        "reason": "ASCII token parsing replaces a Unicode marker corrupted by SSH transport stdin decoding; existing raw receipts reparsed, no commands repeated.",
+        "prior": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-suffice/adjudication.parser-v1.json"
+      }
+    },
+    {
+      "attempt": "s03-stock-pi",
+      "task": "s03",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:33:16.526Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/s03-stock-pi/result.json",
+      "originalResultSha256": "95fff98739f2d22af29acd90069a29d13335bac3e4c075e8676516f91d551d05",
+      "originalRecordedAccepted": true,
+      "patchSha256": "28ca44e7e2bc9466067f732ad8984c9a94a9b9472eb455775a72c5fede6e135a",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/s03/dependencies/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s03/hidden/field-regression.test.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/research/field-campaign-v1/state/s03/overlay/listen-keys/index.js",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "node_modules/better-node-test/bin.js",
+            "atom/index.test.ts",
+            "clean-stores/index.test.ts",
+            "computed/index.test.ts",
+            "deep-map/index.test.ts",
+            "deep-map/path.test.ts",
+            "deep-map/production.test.js",
+            "effect/index.test.ts",
+            "keep-mount/index.test.ts",
+            "lifecycle/index.test.ts",
+            "listen-keys/index.test.ts",
+            "map-creator/index.test.ts",
+            "map/index.test.ts",
+            "map/production.test.js",
+            "task/index.test.ts"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 7133,
+          "stats": {
+            "tests": 53,
+            "suites": 0,
+            "pass": 53,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--test",
+            "listen-keys/field-regression.test.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 103,
+          "stats": {
+            "tests": 3,
+            "suites": 0,
+            "pass": 3,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 3,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "Nano Stores: Move to deepmap() from @nanostores/deepmap. deepmap() will be removed in 2.0.\n  Trace: Source of deprecated call\n      at warn (file:///workspace/warn/index.js:8:15)\n      at deepMap (file:///workspace/deep-map/index.js:10:5)\n      at TestContext.<anonymous> (file:///workspace/listen-keys/field-regression.test.ts:7:16)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n✔ listens for deep keys on whole-store set (1.552031ms)\n✔ listens for array paths on whole-store set (0.806649ms)\n✔ keeps plain map keys containing a dot working (0.143744ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 70.388797\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 53,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "listen-keys/index.test.ts"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true,
+      "reportParserCorrection": {
+        "at": "2026-10-15T07:37:35.554Z",
+        "reason": "ASCII token parsing replaces a Unicode marker corrupted by SSH transport stdin decoding; existing raw receipts reparsed, no commands repeated.",
+        "prior": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/s03-stock-pi/adjudication.parser-v1.json"
+      }
+    },
+    {
+      "attempt": "q01-suffice",
+      "task": "q01",
+      "arm": "suffice",
+      "at": "2026-10-15T07:33:23.863Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/q01-suffice/result.json",
+      "originalResultSha256": "2219586743f4438f5ec71f58605c1626232c4bf6e0abe7bf942b7664e9123308",
+      "originalRecordedAccepted": true,
+      "patchSha256": "a760460476db8fbf28d502e769f1f8075c69a4f9d8e68becf1bc6d8a567bc5d5",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/private/overlay/test/advanced.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/private/reference-production.patch",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "test/advanced.ts",
+            "test/basic.ts",
+            "test/debug.ts",
+            "test/priority-queue.ts",
+            "test/rate-limit.ts",
+            "test/strict.ts",
+            "test/validation.ts"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 84017,
+          "stats": {
+            "tests": 199,
+            "suites": 0,
+            "pass": 199,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/typescript/bin/tsc"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1215,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/native-1/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/native-1/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/tsd/dist/cli.js"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 3615,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/native-2/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/native-2/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "--test-name-pattern=issue #251",
+            "test/advanced.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1411,
+          "stats": {
+            "tests": 4,
+            "suites": 0,
+            "pass": 4,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 4,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "TAP version 13\n# Subtest: task added in a fresh window runs immediately after queue went idle mid-window (issue \\#251)\nok 1 - task added in a fresh window runs immediately after queue went idle mid-window (issue \\#251)\n  ---\n  duration_ms: 224.5694\n  type: 'test'\n  ...\n# Subtest: fresh window after idle still enforces the cap for the following task (issue \\#251)\nok 2 - fresh window after idle still enforces the cap for the following task (issue \\#251)\n  ---\n  duration_ms: 424.102559\n  type: 'test'\n  ...\n# Subtest: carryoverIntervalCount does not break the fresh window after idle mid-window (issue \\#251)\nok 3 - carryoverIntervalCount does not break the fresh window after idle mid-window (issue \\#251)\n  ---\n  duration_ms: 221.861002\n  type: 'test'\n  ...\n# Subtest: task added after going idle but before the boundary still waits for the current window (issue \\#251)\nok 4 - task added after going idle but before the boundary still waits for the current window (issue \\#251)\n  ---\n  duration_ms: 201.005566\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1287.164765\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-suffice/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 199,
+          "stats": {
+            "tests": 199,
+            "suites": 0,
+            "pass": 199,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          }
+        },
+        {
+          "tests": null,
+          "stats": null
+        },
+        {
+          "tests": null,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/rate-limit.ts"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    },
+    {
+      "attempt": "q01-stock-pi",
+      "task": "q01",
+      "arm": "stock-pi",
+      "at": "2026-10-15T07:34:54.254Z",
+      "modelCalls": 0,
+      "replayModelCostUsd": 0,
+      "originalResult": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/attempts/q01-stock-pi/result.json",
+      "originalResultSha256": "5a9b1c1482256f939ffacf78024d32afd76b65b8f19c1c1348fe0f483afb3e06",
+      "originalRecordedAccepted": true,
+      "patchSha256": "afea28f493da68c4e7757afcaf06cc048ab890b12cf5595282d47863663d0161",
+      "normalizedDependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/base/node_modules",
+      "baseDifferences": [],
+      "sourceHashChecks": [
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/private/overlay/test/advanced.ts",
+          "match": true
+        },
+        {
+          "path": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v1/tasks/q01/private/reference-production.patch",
+          "match": true
+        }
+      ],
+      "comparisonEligibility": "v1_environment_review_required_independent_replay_complete",
+      "native": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "test/advanced.ts",
+            "test/basic.ts",
+            "test/debug.ts",
+            "test/priority-queue.ts",
+            "test/rate-limit.ts",
+            "test/strict.ts",
+            "test/validation.ts"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 84092,
+          "stats": {
+            "tests": 199,
+            "suites": 0,
+            "pass": 199,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/native-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/native-0/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/typescript/bin/tsc"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 809,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/native-1/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/native-1/process-stderr.txt",
+          "stderrTail": ""
+        },
+        {
+          "command": [
+            "node",
+            "node_modules/tsd/dist/cli.js"
+          ],
+          "exitCode": 0,
+          "expectedExitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 2436,
+          "stats": null,
+          "countsMatchOriginal": true,
+          "knownFailureNamesMatch": true,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/native-2/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/native-2/process-stderr.txt",
+          "stderrTail": ""
+        }
+      ],
+      "acceptance": [
+        {
+          "command": [
+            "node",
+            "--import=tsx/esm",
+            "--test",
+            "--test-reporter=tap",
+            "--test-concurrency=1",
+            "--test-name-pattern=issue #251",
+            "test/advanced.ts"
+          ],
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1307,
+          "stats": {
+            "tests": 4,
+            "suites": 0,
+            "pass": 4,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          },
+          "activeReportedTests": 4,
+          "accepted": true,
+          "stdoutPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/acceptance-0/process-stdout.txt",
+          "stderrPath": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/receipts/acceptance-0/process-stderr.txt",
+          "stdoutTail": "TAP version 13\n# Subtest: task added in a fresh window runs immediately after queue went idle mid-window (issue \\#251)\nok 1 - task added in a fresh window runs immediately after queue went idle mid-window (issue \\#251)\n  ---\n  duration_ms: 222.656655\n  type: 'test'\n  ...\n# Subtest: fresh window after idle still enforces the cap for the following task (issue \\#251)\nok 2 - fresh window after idle still enforces the cap for the following task (issue \\#251)\n  ---\n  duration_ms: 423.762107\n  type: 'test'\n  ...\n# Subtest: carryoverIntervalCount does not break the fresh window after idle mid-window (issue \\#251)\nok 3 - carryoverIntervalCount does not break the fresh window after idle mid-window (issue \\#251)\n  ---\n  duration_ms: 222.508952\n  type: 'test'\n  ...\n# Subtest: task added after going idle but before the boundary still waits for the current window (issue \\#251)\nok 4 - task added after going idle but before the boundary still waits for the current window (issue \\#251)\n  ---\n  duration_ms: 201.597253\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1203.993416\n",
+          "stderrTail": ""
+        }
+      ],
+      "testRestoration": "sonion-data-v2.py; protected original test files restored from public base; task commands and private checks unchanged",
+      "network": false,
+      "reconstruction": {
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/field-adjudication-v1/attempts/q01-stock-pi/workspace",
+        "protectedTestsRestored": true
+      },
+      "originalNativeExpectations": [
+        {
+          "tests": 199,
+          "stats": {
+            "tests": 199,
+            "suites": 0,
+            "pass": 199,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "failureNames": []
+          }
+        },
+        {
+          "tests": null,
+          "stats": null
+        },
+        {
+          "tests": null,
+          "stats": null
+        }
+      ],
+      "originalTestsExcluded": [
+        "test/rate-limit.ts"
+      ],
+      "replayAccepted": true,
+      "classification": "patch_passes_restored_native_and_private_checks",
+      "v1ResultUnchanged": true,
+      "patchUnchanged": true
+    }
+  ],
+  "pending": [],
+  "caveat": "Integration v1 runs stay invalid for harness/cost comparison even if their patches pass this diagnostic replay. Native counts are exact runner totals; Nano Stores fake-timer files can be represented as file-level aggregate passes. Unchanged v1 result bytes remain authoritative historical receipts, not rewritten results."
+}

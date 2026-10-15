@@ -1,0 +1,29 @@
+{ settledBeforeResult: true, results: [ 42, undefined ], calls: 1 }
+✖ slow leading call keeps suppressed callers pending for the same result (42.113039ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79.272548
+
+✖ failing tests:
+
+test at public-reproduction.mjs:6:1
+✖ slow leading call keeps suppressed callers pending for the same result (42.113039ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/public-reproduction.mjs:24:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

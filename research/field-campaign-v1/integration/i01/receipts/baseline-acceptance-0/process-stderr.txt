@@ -1,0 +1,21 @@
+node:internal/url:819
+      href = bindingUrl.parse(input, base, true);
+                        ^
+
+TypeError: Invalid URL
+    at new URL (node:internal/url:819:25)
+    at ClientRequest.<anonymous> (file:///workspace/src/index.js:133:52)
+    at ClientRequest.emit (node:events:521:24)
+    at HTTPParser.parserOnIncomingClient [as onIncoming] (node:_http_client:798:27)
+    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)
+    at Socket.socketOnData (node:_http_client:633:22)
+    at Socket.emit (node:events:521:24)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Readable.push (node:internal/streams/readable:394:5) {
+  code: 'ERR_INVALID_URL',
+  input: '//super:invalid:url%/',
+  base: 'http://127.0.0.1:42683/301/bad'
+}
+
+Node.js v24.15.0

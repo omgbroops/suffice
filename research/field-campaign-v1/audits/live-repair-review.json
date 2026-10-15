@@ -1,0 +1,82 @@
+{
+  "at": "2026-10-15T07:47:22.021596+00:00",
+  "classification": "secondary field engineering repair, not a new primary benchmark score",
+  "priorReviewFinding": "L03-R1",
+  "attempts": 1,
+  "sourceDelta": {
+    "path": ".suffice/field-live-repair-v1/actor/index.js",
+    "lines": [
+      50,
+      54
+    ],
+    "description": "Remove the expired batch abort listener synchronously after capturing handlers and before awaiting the leading promise or invoking trailing work. Delayed completion no longer removes a listener attached by a newer batch.",
+    "newUnrelatedFindings": []
+  },
+  "verdict": "Scoped repair supported; the demonstrated newly introduced cancellation regression is fixed and the original successful-leading behavior remains accepted.",
+  "independentReview": {
+    "agentFinalClaimsRead": false,
+    "method": "Reviewed repair-only source/test diff and original documented cancellation behavior, then examined original-native/private/posthoc receipt outputs. No repair code was edited by reviewer.",
+    "nativeTestsRestored": true,
+    "actorTestEditsExcluded": true,
+    "primaryPrivateGradersUnchanged": true,
+    "fullCIMatrixClaimed": false
+  },
+  "validation": {
+    "originalNativeBehavioralTests": 77,
+    "originalNativeBehavioralPassed": 77,
+    "originalTypeCheckPassed": true,
+    "privateAcceptanceTests": 3,
+    "privateAcceptancePassed": 3,
+    "independentMockTimerCases": 2,
+    "independentMockTimerPassed": 2,
+    "repairedObserved": {
+      "listenersBeforeOldCompletion": 1,
+      "listenersAfterOldCompletion": 1,
+      "outcomeAtAbort": "rejected"
+    },
+    "receiptsRoot": "/home/eric_qin/suffice-field-v1/.suffice/field-live-repair-v1/grade"
+  },
+  "cost": {
+    "priorEstimatedUsd": 0.06081279999999999,
+    "repairEstimatedUsd": 0.042810799999999996,
+    "cumulativeEstimatedUsd": 0.10362359999999998,
+    "cumulativeHardCeilingUsd": 10,
+    "requests": 4,
+    "responses": 4,
+    "rawResponses": 4,
+    "failedResponses": 0,
+    "matched": true,
+    "identity": true,
+    "toolShape": true
+  },
+  "originalArtifacts": [
+    {
+      "task": "l01",
+      "trackedPatchUnchanged": true,
+      "primaryAccepted": true
+    },
+    {
+      "task": "l02",
+      "trackedPatchUnchanged": true,
+      "primaryAccepted": true
+    },
+    {
+      "task": "l03",
+      "trackedPatchUnchanged": true,
+      "primaryAccepted": true
+    }
+  ],
+  "artifactPaths": {
+    "repairOnlyPatch": "/home/eric_qin/suffice-field-v1/.suffice/field-live-repair-v1/repair-only.patch",
+    "cumulativePatch": "/home/eric_qin/suffice-field-v1/.suffice/field-live-repair-v1/cumulative.tracked.patch",
+    "machinePatch": "/home/eric_qin/suffice-field-v1/.suffice/field-live-repair-v1/cumulative.patch.json",
+    "publicFeedback": "/home/eric_qin/suffice-field-v1/.suffice/field-live-repair-v1/actor/repair-feedback.test.mjs",
+    "result": "/home/eric_qin/suffice-field-v1/.suffice/field-live-repair-v1/result.json"
+  },
+  "limitations": [
+    "One bounded secondary repair attempt and targeted independent review; no proof of every debounce edge case or full lint/CI matrix.",
+    "Leading rejection-sharing and other unrelated existing issues were not claimed fixed.",
+    "Original campaign raw acceptance remains 3/3; the original l03 patch review still records the regression. This secondary result must not be substituted for its original benchmark score."
+  ],
+  "transportNote": "An initial nohup SSH command returned a PID but created no directory/log/process and made no model calls. The sole actual invocation was confirmed through launch.json and provider_request events over a held-open SSH session."
+}

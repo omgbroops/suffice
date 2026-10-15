@@ -1,0 +1,842 @@
+{
+  "phase": "independent_post_primary_historical_patch_review",
+  "createdAt": "2026-10-15T07:53:59.221402+00:00",
+  "modelCalls": 0,
+  "newAgents": 0,
+  "primaryGradersOrSourcesModified": false,
+  "primaryTaskReadinessOrResultsModified": false,
+  "reviewedTaskIds": [
+    "s01",
+    "i01",
+    "i02",
+    "i03",
+    "i04",
+    "q04"
+  ],
+  "reviewedPrimaryAcceptedPatches": 12,
+  "reviewedPrimarySuccessCount": 10,
+  "reviewedBudgetIneligible": [
+    "s01-stock-pi",
+    "i04-stock-pi"
+  ],
+  "frozenGeneralInputMismatches": [],
+  "primaryResults": [
+    {
+      "attempt": "s01-suffice",
+      "task": "s01",
+      "arm": "suffice",
+      "repository": "sindresorhus/emittery",
+      "issue": 118,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "065485ee152ecbf125ec7c28b69e40a86cd2bf1216a3696aabd31d368217813b",
+      "primaryPatchSha256": "bdfffe330025b040b6e3640943755e8cdad77883a1993d16bed6a4b3d4d26e14",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "index.js",
+        "test/index.js"
+      ],
+      "excludedActorTests": [
+        "test/index.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-s01-suffice"
+    },
+    {
+      "attempt": "s01-stock-pi",
+      "task": "s01",
+      "arm": "stock-pi",
+      "repository": "sindresorhus/emittery",
+      "issue": 118,
+      "primaryAccepted": true,
+      "primarySuccess": false,
+      "budgetEligible": false,
+      "primaryStatus": "completed",
+      "failedResponses": 1,
+      "receiptsMatched": false,
+      "primaryResultSha256": "fb4fe528ba71ecd59293141861f2c72eeed9fdb5148bf106fc755823bf640417",
+      "primaryPatchSha256": "78cfe2bd51f62a801ec94206fb7ac3450f7caa17048d57066bd3491fde52e70b",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "index.js",
+        "test/index.js"
+      ],
+      "excludedActorTests": [
+        "test/index.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-s01-stock-pi"
+    },
+    {
+      "attempt": "i01-suffice",
+      "task": "i01",
+      "arm": "suffice",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1386,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "f83339dd41f62272f4a68ae22910e72784a0cb85b722e38c43e6a4f9f63255e7",
+      "primaryPatchSha256": "e8cb2410a93e1076f6e36d4c98d2dc757486c87759a674bc3816ae0ac7d336e1",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "excludedActorTests": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i01-suffice"
+    },
+    {
+      "attempt": "i01-stock-pi",
+      "task": "i01",
+      "arm": "stock-pi",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1386,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "309e29f62b8c90a3038d1c04bec06d6b1017a80539476b30db188681a58e0775",
+      "primaryPatchSha256": "95e6adba546f125c8286e88f124dafb7be09b8b2330f507d89b03b36983bdc89",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "excludedActorTests": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i01-stock-pi"
+    },
+    {
+      "attempt": "i02-suffice",
+      "task": "i02",
+      "arm": "suffice",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1442,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "1bb9ff28f788cc19585fcd495bb4954d253efafec5c75d9f1b45a1b39e3ecd7e",
+      "primaryPatchSha256": "5104d8ef5b9d7c4ce9ed82b31f58289774acdbe5e9667eb694ed603d6917ee92",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "excludedActorTests": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i02-suffice"
+    },
+    {
+      "attempt": "i02-stock-pi",
+      "task": "i02",
+      "arm": "stock-pi",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1442,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "db52a1488ab5825b1c0e726e7f29a487dbf0f310f348fc6c3dfd77f28c1f9e05",
+      "primaryPatchSha256": "c510907b1ca530496c4c8d0d08674e134606fbd6386274efe5aebfc45d16ef45",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "excludedActorTests": [
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i02-stock-pi"
+    },
+    {
+      "attempt": "i03-suffice",
+      "task": "i03",
+      "arm": "suffice",
+      "repository": "sindresorhus/p-limit",
+      "issue": 110,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "9f5e40952d32f1c4debc5ae6d2d4c08bdc460aeab92724a9f867eed54a7fbad1",
+      "primaryPatchSha256": "d15f40b3e93c2fe3236d4c93cf8e8c02cac8c2d01a51dc26380bfaa13692ad12",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "index.js",
+        "readme.md",
+        "test.js"
+      ],
+      "excludedActorTests": [
+        "test.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i03-suffice"
+    },
+    {
+      "attempt": "i03-stock-pi",
+      "task": "i03",
+      "arm": "stock-pi",
+      "repository": "sindresorhus/p-limit",
+      "issue": 110,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "9a8398883ceb3e4c6eb702ee4c046b5405410fb63ec6bfdf493ad6e2344c1c9d",
+      "primaryPatchSha256": "518ed9538c4edec5aad6639f3edb0b59f79d2e70540038d0e2dfee1ab904b292",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "excludedActorTests": [
+        "test.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i03-stock-pi"
+    },
+    {
+      "attempt": "i04-suffice",
+      "task": "i04",
+      "arm": "suffice",
+      "repository": "mcollina/fastq",
+      "issue": 80,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "283ea556a13f0afb6ae0cc7a3429dddd6711e45b028d788f4b570eed6c6b8a8f",
+      "primaryPatchSha256": "3650d3b3b56450ec84a93b91f3acee469a733e462fb6fe32e663047178a4180f",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        ".nyc_output/064ca9ea-3575-496d-bd21-3182d45c2c19.json",
+        ".nyc_output/processinfo/064ca9ea-3575-496d-bd21-3182d45c2c19.json",
+        ".nyc_output/processinfo/index.json",
+        "README.md",
+        "queue.js",
+        "test/test.js"
+      ],
+      "excludedActorTests": [
+        "test/test.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i04-suffice"
+    },
+    {
+      "attempt": "i04-stock-pi",
+      "task": "i04",
+      "arm": "stock-pi",
+      "repository": "mcollina/fastq",
+      "issue": 80,
+      "primaryAccepted": true,
+      "primarySuccess": false,
+      "budgetEligible": false,
+      "primaryStatus": "completed",
+      "failedResponses": 1,
+      "receiptsMatched": false,
+      "primaryResultSha256": "11f7840ff6922b2ea836beb01c48df78c27761af24326a48ec1568f9037c5b19",
+      "primaryPatchSha256": "0c032fde5d0a65405623d62a0492f0bc33285f441e01ea42903bdfa629f388fd",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        ".nyc_output/ca1950e0-ee79-43fc-8909-ecb7a732b0ce.json",
+        ".nyc_output/processinfo/ca1950e0-ee79-43fc-8909-ecb7a732b0ce.json",
+        ".nyc_output/processinfo/index.json",
+        "README.md",
+        "queue.js",
+        "test/test.js"
+      ],
+      "excludedActorTests": [
+        "test/test.js"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-i04-stock-pi"
+    },
+    {
+      "attempt": "q04-suffice",
+      "task": "q04",
+      "arm": "suffice",
+      "repository": "nanostores/nanostores",
+      "issue": 371,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "bd228176a3ae1a8de6c6c70121342c2cf28b7aa91a33c76f029b337a243345b9",
+      "primaryPatchSha256": "11a9880ca3598512d90853345afd3139a7013e8e04cd8c006442ba33219b9449",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "atom/index.js",
+        "computed/index.js",
+        "computed/index.test.ts"
+      ],
+      "excludedActorTests": [
+        "computed/index.test.ts"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-q04-suffice"
+    },
+    {
+      "attempt": "q04-stock-pi",
+      "task": "q04",
+      "arm": "stock-pi",
+      "repository": "nanostores/nanostores",
+      "issue": 371,
+      "primaryAccepted": true,
+      "primarySuccess": true,
+      "budgetEligible": true,
+      "primaryStatus": "completed",
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "primaryResultSha256": "86f5292cf5f07542fbceb7caa08bda8a178b1b730b14a4e3bf07447eeffae0ad",
+      "primaryPatchSha256": "ddd7a8d97fb300ce50cb66a5c572a363d0fe19f22fbaeab572cb130cd4cd93c1",
+      "frozenInputsStillMatch": true,
+      "changedPaths": [
+        "atom/index.js",
+        "computed/index.js",
+        "computed/index.test.ts"
+      ],
+      "excludedActorTests": [
+        "computed/index.test.ts"
+      ],
+      "primaryWorkspace": "/home/eric_qin/suffice-field-v1/.suffice/field-campaign-v2/evaluation/attempts-q04-stock-pi"
+    }
+  ],
+  "findings": [
+    {
+      "id": "H1",
+      "severity": "confirmed_posthoc_public_api_regression",
+      "affected": [
+        "s01-stock-pi"
+      ],
+      "primaryAccepted": true,
+      "primaryBudgetEligible": false,
+      "contract": "Existing native public contract forbids userland emit/emitSerial of listenerAdded or listenerRemoved.",
+      "sourceCause": "emitMetaEvent is now async and keeps pendingMetaEvents.has(emitter) true across await emitter.emit(...). Both public emit methods treat the presence of any pending internal meta emission as blanket permission, not an unforgeable per-emission authorization.",
+      "minimalSequence": "const e = new Emittery(); e.on('ordinary', () => {}); await e.emit(Emittery.listenerAdded, {eventName: 'forged'});",
+      "posthocEvidence": "All four combinations of emit/emitSerial and listenerAdded/listenerRemoved fulfilled in Pi. Base, actual upstream reference and Suffice rejected TypeError in all four. No async subclass or internal state inspection is required.",
+      "scope": "This is introduced relative to base, not merely a missing robustness enhancement. Six primary private tests exercise legitimate asynchronous meta delivery after settling, not unauthorized emission in the pending window.",
+      "primaryScoresChanged": false
+    },
+    {
+      "id": "H2",
+      "severity": "confirmed_posthoc_public_api_regression",
+      "affected": [
+        "i04-stock-pi"
+      ],
+      "primaryAccepted": true,
+      "primaryBudgetEligible": false,
+      "contract": "A worker may synchronously pause its queue; pause/resume and concurrency mutation must return while leaving queued jobs paused.",
+      "sourceCause": "Setter and resume while loops test queueHead and running<concurrency but not self.paused on each iteration. A started worker pauses; release() then decrements running without advancing queueHead. The loop repeats forever.",
+      "minimalSequence": "Pause queue with several pending jobs; resume with a worker that immediately calls queue.pause(). Alternatively increase concurrency while an already queued worker pauses from its own invocation.",
+      "posthocEvidence": "Pi prints before marker but never after marker in both setter and resume probes; bounded2s processes terminate124. Base returns in both; Suffice returns with paused=true and expected started jobs. Actual upstream reference also hangs in both.",
+      "scope": "Resume case clearly regresses from finite base behavior. The actual reference shares the defect, so baseline-fail/reference-pass primary controls cannot establish completeness on this state transition.",
+      "primaryScoresChanged": false
+    },
+    {
+      "id": "H3",
+      "severity": "informational_api_tightening",
+      "affected": [
+        "i04-suffice",
+        "i04-stock-pi"
+      ],
+      "contract": "Original issue explicitly calls fractional1.2 nonsensical.",
+      "sourceCause": "Both constructors and setters now require Number.isInteger(value)&&value>=1.",
+      "posthocEvidence": "Both reject1.2 for construction and assignment and retain the prior valid value, covering the explicit original example omitted by primary grading. Both also reject Infinity, which base and reference accept.",
+      "scope": "Infinity policy is not explicitly specified by the original report or inspected docs; record compatibility tightening without inventing a required Infinity policy or calling it a confirmed task failure. The raw guard probe serializes accepted Infinity as JSON null in retained, a serialization artifact, not a runtime null assignment.",
+      "primaryScoresChanged": false
+    },
+    {
+      "id": "H4",
+      "severity": "coverage_gap_checked_no_regression_found",
+      "affected": [
+        "q04-suffice",
+        "q04-stock-pi"
+      ],
+      "contract": "Public get() must give current derived value even without active listeners; epoch must be shared across separately loaded module copies.",
+      "sourceCause": "Both store one mutable {value:0} object on globalThis under Symbol.for(nanostores.epoch), increment its value in atom.notify and read the shared value in all computed cache comparisons.",
+      "posthocEvidence": "After initial foreign computed.get()=6, cleanStores unmounts it, foreign atom changes2to4, then get() returns12 for both patches and reference. Base remains stale6.",
+      "representationAndTypes": "The object-versus-number representation is not a prescribed public ABI. root index.js does not export epoch, package exports expose only root/package.json, and atom/index.d.ts did not declare epoch even before the patch. No public declaration change or supported-export type regression was found.",
+      "scope": "Primary grader loads two complete source copies and validates subscribed one/multi-source updates. It does not actually run a bundler/tree-shaker. Global writes are structurally observable to an optimizer, but an actual production bundler configuration remains unverified.",
+      "primaryScoresChanged": false
+    }
+  ],
+  "staticTaskReview": {
+    "s01": {
+      "suffice": "Minimal base-prototype dispatch bypasses an asynchronous subclass override for internal metadata, keeping the synchronous permission window closed on return. No introduced regression found in reviewed change or reserved-event probe. The old global flag remains; this review does not claim to remove all pre-existing reentrant/debug logger edge cases.",
+      "stock-pi": "Legitimate asynchronous delivery passes primary tests, but H1 confirms a new pending-window authorization regression."
+    },
+    "i01": {
+      "both": "The narrow try/catch around redirect Location parsing rejects FetchError, finalizes and returns, except manual mode preserves the original response. This is structurally equivalent to actual upstream behavior. No introduced API regression found. Primary private statuses omit303, but generic isRedirect handling and branch do not special-case it."
+    },
+    "i02": {
+      "both": "Both add a hasData flag and resolve an empty response on raw.end, preserving the original wrapped/raw decompression branch. Primary nonempty and empty framing controls pass. Actual upstream additionally guards pipeline callbacks against success-as-rejection; those broader baseline issues are not changed here. No introduced regression found statically; no new broad HTTP test battery was run."
+    },
+    "i03": {
+      "both": "Both track generated promises while retaining Array.from semantics, call Promise.allSettled on iterator failure without awaiting it, and rethrow the original iterator error. This observes mapper rejections without blocking immediate rejection and preserves array-like inputs, order and shared limiter behavior. Aggregate promise references can persist until pending tasks settle, a reasonable failure-path tradeoff rather than a demonstrated contract violation."
+    },
+    "i04": {
+      "suffice": "startAvailable tests !paused each loop iteration, preserving reentrant pause. Construction and assignment reject fractional values explicitly named by the issue. Infinity acceptance is tightened (H3), with no required policy inferred.",
+      "stock-pi": "Guard covers fractions, but setter/resume loop lacks reentrant pause guard; H2 confirms hang also present in actual upstream reference."
+    },
+    "q04": {
+      "both": "Shared object is valid representation-neutral repair. All epoch comparisons use epoch.value. Root exports/declarations stay compatible; subscribed primary controls and additional dormant cross-copy get scenario pass. Actual tree-shaking and heterogeneous independently chosen global storage conventions remain outside demonstrated coverage; no requirement to interoperate with an unrelated implementation is imposed."
+    }
+  },
+  "posthocProbeResults": {
+    "at": "2026-10-15T07:50:07.700Z",
+    "modelCalls": 0,
+    "primaryGradesUnchanged": true,
+    "policy": "Bounded probes only for concrete reserved-event permission window, reentrant-pause loop, validation-policy changes, and dormant cross-module cache coverage gap. No original source or grader changed.",
+    "rows": [
+      {
+        "task": "s01",
+        "variant": "base",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-s01.mjs",
+          "api"
+        ],
+        "exitCode": 0,
+        "latencyMs": 105,
+        "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-base/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "s01",
+        "variant": "reference",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-s01.mjs",
+          "api"
+        ],
+        "exitCode": 0,
+        "latencyMs": 105,
+        "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-reference/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "s01",
+        "variant": "suffice",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-s01.mjs",
+          "api"
+        ],
+        "exitCode": 0,
+        "latencyMs": 105,
+        "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-suffice/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "s01",
+        "variant": "stock-pi",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-s01.mjs",
+          "api"
+        ],
+        "exitCode": 1,
+        "latencyMs": 109,
+        "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"fulfilled\",\"expected\":\"TypeError\"}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/s01-stock-pi/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "base",
+        "mode": "guards",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "guards"
+        ],
+        "exitCode": 0,
+        "latencyMs": 108,
+        "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":true,\"assigned\":true,\"retained\":1.2},{\"value\":\"Infinity\",\"created\":true,\"assigned\":true,\"retained\":null}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-base/receipts/guards",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "base",
+        "mode": "setter",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "setter"
+        ],
+        "exitCode": 0,
+        "latencyMs": 108,
+        "stdout": "before setter\nafter setter {\"started\":[1],\"paused\":false}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-base/receipts/setter",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "base",
+        "mode": "resume",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "resume"
+        ],
+        "exitCode": 0,
+        "latencyMs": 107,
+        "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-base/receipts/resume",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "reference",
+        "mode": "guards",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "guards"
+        ],
+        "exitCode": 0,
+        "latencyMs": 105,
+        "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":true,\"assigned\":true,\"retained\":1.2},{\"value\":\"Infinity\",\"created\":true,\"assigned\":true,\"retained\":null}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-reference/receipts/guards",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "reference",
+        "mode": "setter",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "setter"
+        ],
+        "exitCode": 124,
+        "latencyMs": 2109,
+        "stdout": "before setter\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-reference/receipts/setter",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "reference",
+        "mode": "resume",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "resume"
+        ],
+        "exitCode": 124,
+        "latencyMs": 2107,
+        "stdout": "before resume\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-reference/receipts/resume",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "suffice",
+        "mode": "guards",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "guards"
+        ],
+        "exitCode": 0,
+        "latencyMs": 104,
+        "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":false,\"assigned\":false,\"retained\":1},{\"value\":\"Infinity\",\"created\":false,\"assigned\":false,\"retained\":1}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-suffice/receipts/guards",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "suffice",
+        "mode": "setter",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "setter"
+        ],
+        "exitCode": 0,
+        "latencyMs": 104,
+        "stdout": "before setter\nafter setter {\"started\":[1,2],\"paused\":true}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-suffice/receipts/setter",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "suffice",
+        "mode": "resume",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "resume"
+        ],
+        "exitCode": 0,
+        "latencyMs": 105,
+        "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-suffice/receipts/resume",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "stock-pi",
+        "mode": "guards",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "guards"
+        ],
+        "exitCode": 0,
+        "latencyMs": 105,
+        "stdout": "[{\"value\":\"1\",\"created\":true,\"assigned\":true,\"retained\":1},{\"value\":\"1.2\",\"created\":false,\"assigned\":false,\"retained\":1},{\"value\":\"Infinity\",\"created\":false,\"assigned\":false,\"retained\":1}]\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-stock-pi/receipts/guards",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "stock-pi",
+        "mode": "setter",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "setter"
+        ],
+        "exitCode": 124,
+        "latencyMs": 2108,
+        "stdout": "before setter\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-stock-pi/receipts/setter",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "i04",
+        "variant": "stock-pi",
+        "mode": "resume",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-i04.mjs",
+          "resume"
+        ],
+        "exitCode": 124,
+        "latencyMs": 2114,
+        "stdout": "before resume\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/i04-stock-pi/receipts/resume",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "q04",
+        "variant": "base",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-q04.mjs",
+          "api"
+        ],
+        "exitCode": 1,
+        "latencyMs": 204,
+        "stdout": "{\"first\":6,\"after\":6,\"expected\":12}\n",
+        "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n6 !== 12\n\n    at file:///workspace/posthoc-q04.mjs:1:899 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 6,\n  expected: 12,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-base/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "q04",
+        "variant": "reference",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-q04.mjs",
+          "api"
+        ],
+        "exitCode": 0,
+        "latencyMs": 1205,
+        "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-reference/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "q04",
+        "variant": "suffice",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-q04.mjs",
+          "api"
+        ],
+        "exitCode": 0,
+        "latencyMs": 1206,
+        "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-suffice/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      },
+      {
+        "task": "q04",
+        "variant": "stock-pi",
+        "mode": "api",
+        "command": [
+          "env",
+          "NODE_ENV=test",
+          "node",
+          "posthoc-q04.mjs",
+          "api"
+        ],
+        "exitCode": 0,
+        "latencyMs": 1210,
+        "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+        "stderr": "",
+        "receipts": "/home/eric_qin/suffice-field-v1/.suffice/field-posthoc-historical-v1/q04-stock-pi/receipts/api",
+        "posthoc": true,
+        "primaryGraderModified": false
+      }
+    ]
+  },
+  "inputSha256": {
+    ".suffice/field-campaign-v2/frozen/s01.json": "71bcaa8d5f37cd5527bca84607517f107f6e43e56e98fe62536717b9a9650e23",
+    ".suffice/field-campaign-v2/attempts/s01-suffice/result.json": "065485ee152ecbf125ec7c28b69e40a86cd2bf1216a3696aabd31d368217813b",
+    ".suffice/field-campaign-v2/attempts/s01-suffice/patch.json": "bdfffe330025b040b6e3640943755e8cdad77883a1993d16bed6a4b3d4d26e14",
+    ".suffice/field-campaign-v2/attempts/s01-stock-pi/result.json": "fb4fe528ba71ecd59293141861f2c72eeed9fdb5148bf106fc755823bf640417",
+    ".suffice/field-campaign-v2/attempts/s01-stock-pi/patch.json": "78cfe2bd51f62a801ec94206fb7ac3450f7caa17048d57066bd3491fde52e70b",
+    ".suffice/field-campaign-v2/frozen/i01.json": "7ee90291eb673416ad6862c25e78f2e7b182a6a84de77aac31385dd9538e132d",
+    ".suffice/field-campaign-v2/attempts/i01-suffice/result.json": "f83339dd41f62272f4a68ae22910e72784a0cb85b722e38c43e6a4f9f63255e7",
+    ".suffice/field-campaign-v2/attempts/i01-suffice/patch.json": "e8cb2410a93e1076f6e36d4c98d2dc757486c87759a674bc3816ae0ac7d336e1",
+    ".suffice/field-campaign-v2/attempts/i01-stock-pi/result.json": "309e29f62b8c90a3038d1c04bec06d6b1017a80539476b30db188681a58e0775",
+    ".suffice/field-campaign-v2/attempts/i01-stock-pi/patch.json": "95e6adba546f125c8286e88f124dafb7be09b8b2330f507d89b03b36983bdc89",
+    ".suffice/field-campaign-v2/frozen/i02.json": "e5554dfb4c923ceb92a90eee77742263273dd5efb80406573b45019c9ea14d27",
+    ".suffice/field-campaign-v2/attempts/i02-suffice/result.json": "1bb9ff28f788cc19585fcd495bb4954d253efafec5c75d9f1b45a1b39e3ecd7e",
+    ".suffice/field-campaign-v2/attempts/i02-suffice/patch.json": "5104d8ef5b9d7c4ce9ed82b31f58289774acdbe5e9667eb694ed603d6917ee92",
+    ".suffice/field-campaign-v2/attempts/i02-stock-pi/result.json": "db52a1488ab5825b1c0e726e7f29a487dbf0f310f348fc6c3dfd77f28c1f9e05",
+    ".suffice/field-campaign-v2/attempts/i02-stock-pi/patch.json": "c510907b1ca530496c4c8d0d08674e134606fbd6386274efe5aebfc45d16ef45",
+    ".suffice/field-campaign-v2/frozen/i03.json": "7ec371dfbf37697b925dc7749fb9c21a2c9ae9bf312fd343ef644b8cb6c00d78",
+    ".suffice/field-campaign-v2/attempts/i03-suffice/result.json": "9f5e40952d32f1c4debc5ae6d2d4c08bdc460aeab92724a9f867eed54a7fbad1",
+    ".suffice/field-campaign-v2/attempts/i03-suffice/patch.json": "d15f40b3e93c2fe3236d4c93cf8e8c02cac8c2d01a51dc26380bfaa13692ad12",
+    ".suffice/field-campaign-v2/attempts/i03-stock-pi/result.json": "9a8398883ceb3e4c6eb702ee4c046b5405410fb63ec6bfdf493ad6e2344c1c9d",
+    ".suffice/field-campaign-v2/attempts/i03-stock-pi/patch.json": "518ed9538c4edec5aad6639f3edb0b59f79d2e70540038d0e2dfee1ab904b292",
+    ".suffice/field-campaign-v2/frozen/i04.json": "6da4b9d0338368e632674ecbdbb15cd461c3512c83c8f778ea0d111e14b96552",
+    ".suffice/field-campaign-v2/attempts/i04-suffice/result.json": "283ea556a13f0afb6ae0cc7a3429dddd6711e45b028d788f4b570eed6c6b8a8f",
+    ".suffice/field-campaign-v2/attempts/i04-suffice/patch.json": "3650d3b3b56450ec84a93b91f3acee469a733e462fb6fe32e663047178a4180f",
+    ".suffice/field-campaign-v2/attempts/i04-stock-pi/result.json": "11f7840ff6922b2ea836beb01c48df78c27761af24326a48ec1568f9037c5b19",
+    ".suffice/field-campaign-v2/attempts/i04-stock-pi/patch.json": "0c032fde5d0a65405623d62a0492f0bc33285f441e01ea42903bdfa629f388fd",
+    ".suffice/field-campaign-v2/frozen/q04.json": "d68fe91d1ae49f6182edd0ea1d9487c8e323b0e651e8d5fe455c3392cd4e4d78",
+    ".suffice/field-campaign-v2/attempts/q04-suffice/result.json": "bd228176a3ae1a8de6c6c70121342c2cf28b7aa91a33c76f029b337a243345b9",
+    ".suffice/field-campaign-v2/attempts/q04-suffice/patch.json": "11a9880ca3598512d90853345afd3139a7013e8e04cd8c006442ba33219b9449",
+    ".suffice/field-campaign-v2/attempts/q04-stock-pi/result.json": "86f5292cf5f07542fbceb7caa08bda8a178b1b730b14a4e3bf07447eeffae0ad",
+    ".suffice/field-campaign-v2/attempts/q04-stock-pi/patch.json": "ddd7a8d97fb300ce50cb66a5c572a363d0fe19f22fbaeab572cb130cd4cd93c1"
+  },
+  "comparisonCredibility": [
+    "Primary acceptance measures the frozen tested contract, not complete public API correctness. Two primary-accepted Pi patches have confirmed posthoc regressions; both already have budgetEligible:false from unmatched/failed provider receipts, so do not conflate code acceptance with budget-qualified benchmark success.",
+    "Do not retroactively change frozen graders or primary accepted/success values. Present posthoc findings separately with base/reference controls and exact reproduction.",
+    "The fastq actual reference shares a reentrant-pause defect and omits fractional validation in primary controls. Reference-pass is useful positive control, not proof of complete correctness.",
+    "q04 storage representation should remain opaque; requiring a particular symbol/object field or reference global key would create an unsupported oracle. Current public-output checks and dormant probe are representation-neutral.",
+    "Ten selected historical issues, one pair per issue and often detailed original solution hints support a small controlled comparison of these tool/harness settings, not a general coding-success rate or a causal claim from one divergence.",
+    "Valid v1 state/queue runs and corrected v2 runs must be distinguished from invalid v1 integration attempts and diagnostic replays. Wall-clock strict-rate tests have demonstrated baseline instability; disclose that alongside primary grades.",
+    "Node24 runtime, immutable dependencies, selected native checks and omitted full lint/type/size/bundler CI limit external generalization. Preserve unknown costs and provider failure/accounting cases rather than treating known estimated cost as complete."
+  ]
+}

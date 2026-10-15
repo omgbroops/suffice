@@ -1,0 +1,659 @@
+{
+  "at": "2026-10-15T08:21:30.335326+00:00",
+  "plan": {
+    "version": "luna-evidence-v1",
+    "declaredAt": "2026-10-15T07:57:00Z",
+    "launchGate": "All ten original luna-baseline-v2 result.json exist and original driver active=null; no overlapping calibration actors",
+    "developmentReuse": true,
+    "confirmatory": false,
+    "arms": {
+      "A": {
+        "effort": "low",
+        "evidence": false
+      },
+      "B": {
+        "effort": "low",
+        "evidence": true
+      },
+      "C": {
+        "effort": "medium",
+        "evidence": false
+      },
+      "D": {
+        "effort": "medium",
+        "evidence": true
+      }
+    },
+    "order": [
+      {
+        "task": "i01",
+        "arm": "A"
+      },
+      {
+        "task": "i01",
+        "arm": "B"
+      },
+      {
+        "task": "i01",
+        "arm": "C"
+      },
+      {
+        "task": "i01",
+        "arm": "D"
+      },
+      {
+        "task": "q04",
+        "arm": "D"
+      },
+      {
+        "task": "q04",
+        "arm": "C"
+      },
+      {
+        "task": "q04",
+        "arm": "B"
+      },
+      {
+        "task": "q04",
+        "arm": "A"
+      }
+    ],
+    "limits": {
+      "maxCostUsd": 0.05,
+      "maxTurns": 60,
+      "maxCalls": 240,
+      "timeoutMs": 600000,
+      "commandTimeout": 180
+    },
+    "plannedAggregateUsd": 0.4,
+    "costStop": "Post-response, may overshoot; preserve/report every usage event and partial/error attempt; no retry/replacement",
+    "runtimeParent": "experiments/luna-baseline-v1/runtime-source",
+    "manualPreparationCost": "Hand-authored public evidence and agent engineering overhead excluded from actor inference; not priced here",
+    "deadline": "2026-10-15T08:30:00Z",
+    "model": "openai/gpt-6-luna",
+    "maximumConcurrentActors": 1,
+    "originalCalibrationTasks": [
+      "s01",
+      "i01",
+      "q04",
+      "i03",
+      "s02",
+      "s03",
+      "i02",
+      "i04",
+      "q01",
+      "q02"
+    ]
+  },
+  "rows": [
+    {
+      "id": "i01-A",
+      "task": "i01",
+      "arm": "A",
+      "effort": "low",
+      "evidence": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.004927240000000001,
+      "totalEstimatedUsd": 0.004927240000000001,
+      "turns": 12,
+      "requests": 12,
+      "calls": 23,
+      "latencyMs": 52536,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "b81426b52722a5e34a3e8587744f551b2a89a6af4968b0e6b0045beb2f836302",
+      "resultSha256": "c28c6c4b2ae0d11ea4f8b6b01182fb21b617899525fc163084d72ce6054d7d60"
+    },
+    {
+      "id": "i01-B",
+      "task": "i01",
+      "arm": "B",
+      "effort": "low",
+      "evidence": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0040397,
+      "totalEstimatedUsd": 0.0040397,
+      "turns": 9,
+      "requests": 9,
+      "calls": 18,
+      "latencyMs": 63884,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "ad5000583df01ecd904b84f790fc3d9247a5004d583b578f3f8332dd7416bfff",
+      "resultSha256": "0ee688efa454d2490cdf441fc35d71922f2de32646e4f946772bf47fdeae8a0e"
+    },
+    {
+      "id": "i01-C",
+      "task": "i01",
+      "arm": "C",
+      "effort": "medium",
+      "evidence": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.0036811,
+      "totalEstimatedUsd": 0.0036811,
+      "turns": 10,
+      "requests": 10,
+      "calls": 18,
+      "latencyMs": 52938,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "b81426b52722a5e34a3e8587744f551b2a89a6af4968b0e6b0045beb2f836302",
+      "resultSha256": "6a173715e34eef13c65929071747361d74ad603dd4191a06ded3056960e8a266"
+    },
+    {
+      "id": "i01-D",
+      "task": "i01",
+      "arm": "D",
+      "effort": "medium",
+      "evidence": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.003266979999999999,
+      "totalEstimatedUsd": 0.003266979999999999,
+      "turns": 11,
+      "requests": 11,
+      "calls": 20,
+      "latencyMs": 44330,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js",
+        "test/utils/server.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "ad5000583df01ecd904b84f790fc3d9247a5004d583b578f3f8332dd7416bfff",
+      "resultSha256": "21a89fe9b83b3a6a8600ba927f781eeceeb24520eff27f2a0cbeee479cc410e5"
+    },
+    {
+      "id": "q04-D",
+      "task": "q04",
+      "arm": "D",
+      "effort": "medium",
+      "evidence": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0028758200000000003,
+      "totalEstimatedUsd": 0.0028758200000000003,
+      "turns": 10,
+      "requests": 10,
+      "calls": 16,
+      "latencyMs": 64559,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "atom/index.js",
+        "computed/index.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "2629aea1d4c996256f5bdcb93171b0f103bc0dcab3dc5804b622e1eabc0f5677",
+      "resultSha256": "06760aec8952f0fdb1e138b0659d18966bd63e692a0ada109d6f4f1e7af343c4"
+    },
+    {
+      "id": "q04-C",
+      "task": "q04",
+      "arm": "C",
+      "effort": "medium",
+      "evidence": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.00293972,
+      "totalEstimatedUsd": 0.00293972,
+      "turns": 10,
+      "requests": 10,
+      "calls": 20,
+      "latencyMs": 51633,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "atom/index.js",
+        "computed/index.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "3d2bfaf0a072e05fb28158544fa67d6d0a4b4c3306624936bf765e509a67edb8",
+      "resultSha256": "eaf75ef6690311c62ae44bac3b4f5ea007428b23a75f33b80ecea8545e4c1521"
+    },
+    {
+      "id": "q04-B",
+      "task": "q04",
+      "arm": "B",
+      "effort": "low",
+      "evidence": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0031753000000000003,
+      "totalEstimatedUsd": 0.0031753000000000003,
+      "turns": 11,
+      "requests": 11,
+      "calls": 20,
+      "latencyMs": 40607,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        0
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "atom/index.js",
+        "computed/index.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "2629aea1d4c996256f5bdcb93171b0f103bc0dcab3dc5804b622e1eabc0f5677",
+      "resultSha256": "1ef563b6c559fc3d3f5faec2be4dfb5ebc3979f0b851e05627d6a829467f1a68"
+    },
+    {
+      "id": "q04-A",
+      "task": "q04",
+      "arm": "A",
+      "effort": "low",
+      "evidence": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00376878,
+      "totalEstimatedUsd": 0.00376878,
+      "turns": 10,
+      "requests": 10,
+      "calls": 18,
+      "latencyMs": 28700,
+      "originalNativeValid": true,
+      "acceptanceExits": [
+        1
+      ],
+      "identity": true,
+      "tools": true,
+      "receiptsMatched": true,
+      "costOvershootUsd": 0,
+      "patchPaths": [
+        "atom/index.js"
+      ],
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "errors": [],
+      "promptSha256": "3d2bfaf0a072e05fb28158544fa67d6d0a4b4c3306624936bf765e509a67edb8",
+      "resultSha256": "0f4d16786b085fb413c8d7afb46560bf0f8a0b13e1ed33c612b6fa7ff1a3b0d7"
+    }
+  ],
+  "allEightCompleted": true,
+  "completedResults": 8,
+  "accepted": 3,
+  "budgetEligibleSuccesses": 3,
+  "knownEstimatedUsd": 0.02867464,
+  "totalEstimatedUsd": 0.02867464,
+  "unknownCostCells": [],
+  "capStops": [],
+  "postResponseOvershootUsd": 0,
+  "originalCalibrationCompletionRecords": [
+    {
+      "task": "s01",
+      "id": "s01-suffice",
+      "end": "2026-10-15T07:45:09.122Z",
+      "complete": true,
+      "sha256": "a51d1995c9570e1d89e6da7bd6f2a8ab337d90f5fe5e7ca8ff06d386956203a7"
+    },
+    {
+      "task": "i01",
+      "id": "i01-suffice",
+      "end": "2026-10-15T07:46:09.871Z",
+      "complete": true,
+      "sha256": "641d5cdceb4e3bdb8c0c09e68d51f6b0eb6f3b1b764c67a76fe5fcdc4de8e373"
+    },
+    {
+      "task": "q04",
+      "id": "q04-suffice",
+      "end": "2026-10-15T07:47:14.242Z",
+      "complete": true,
+      "sha256": "587883fc5208f9f755eded854eb212b62e1dce2b7bd438f5287d8f6b0af85832"
+    },
+    {
+      "task": "i03",
+      "id": "i03-suffice",
+      "end": "2026-10-15T07:48:30.498Z",
+      "complete": true,
+      "sha256": "4ea3ff5fabc5d6bac0510738bf7d2f35ebe3ac296eed056ecf48a8c4c75ca621"
+    },
+    {
+      "task": "s02",
+      "id": "s02-suffice",
+      "end": "2026-10-15T07:49:46.851Z",
+      "complete": true,
+      "sha256": "0a1d3cb755829f18b25e459297a839b80238c18b26eed977692de72483548534"
+    },
+    {
+      "task": "s03",
+      "id": "s03-suffice",
+      "end": "2026-10-15T07:50:55.095Z",
+      "complete": true,
+      "sha256": "b646ad0e9f3e1c49de4ec09388f66abde90a787ff257c8046dfd4159e6e79ae6"
+    },
+    {
+      "task": "i02",
+      "id": "i02-suffice",
+      "end": "2026-10-15T07:52:00.711Z",
+      "complete": true,
+      "sha256": "0ad363937ce2239f01af8dedf61468b6b5bdf01cab5a24dde9ad2e396072e204"
+    },
+    {
+      "task": "i04",
+      "id": "i04-suffice",
+      "end": "2026-10-15T07:52:50.773Z",
+      "complete": true,
+      "sha256": "8ae2866e6058c505cc91f240caa5f0f9d341c6a3cadc8315a2d378289bb00a93"
+    },
+    {
+      "task": "q01",
+      "id": "q01-suffice",
+      "end": "2026-10-15T08:08:22.480Z",
+      "complete": true,
+      "sha256": "2c82f064982486e65d4b34f8918701ad6e06b6e7f7a996d281394316d0c687dc"
+    },
+    {
+      "task": "q02",
+      "id": "q02-suffice",
+      "end": "2026-10-15T08:12:04.296Z",
+      "complete": true,
+      "sha256": "7c25f70f607f5767b3aeb5827dfc393c6218c4e0d84509fc17a218a37a2c6588"
+    }
+  ],
+  "runtimeVariantChecks": {
+    "low": {
+      "files": 14,
+      "hashMismatches": [],
+      "unrecordedChanges": [],
+      "substitutions": {
+        "configs/general-v1.json": [
+          {
+            "from": "\"maxCostUsd\": 0.75",
+            "to": "\"maxCostUsd\": 0.05",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "medium": {
+      "files": 14,
+      "hashMismatches": [],
+      "unrecordedChanges": [],
+      "substitutions": {
+        "configs/general-v1.json": [
+          {
+            "from": "\"maxCostUsd\": 0.75",
+            "to": "\"maxCostUsd\": 0.05",
+            "count": 1
+          },
+          {
+            "from": "\"effort\": \"low\"",
+            "to": "\"effort\": \"medium\"",
+            "count": 1
+          }
+        ],
+        "src/general/agent.mjs": [
+          {
+            "from": "p.reasoning?.effort!=='low'",
+            "to": "p.reasoning?.effort!=='medium'",
+            "count": 1
+          },
+          {
+            "from": "thinkingLevel:'low'",
+            "to": "thinkingLevel:'medium'",
+            "count": 1
+          }
+        ]
+      }
+    }
+  },
+  "promptChecks": {
+    "i01": {
+      "baselineSha256": "b81426b52722a5e34a3e8587744f551b2a89a6af4968b0e6b0045beb2f836302",
+      "ordinaryMatchesOriginal": true,
+      "evidenceArmsMatch": true
+    },
+    "q04": {
+      "baselineSha256": "3d2bfaf0a072e05fb28158544fa67d6d0a4b4c3306624936bf765e509a67edb8",
+      "ordinaryMatchesOriginal": true,
+      "evidenceArmsMatch": true
+    }
+  },
+  "frozenInputsMatch": true,
+  "startupProofsPassed": true,
+  "controlsPassed": true,
+  "systemPromptHashes": [
+    "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1"
+  ],
+  "requestToolHashes": [
+    "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+  ],
+  "launchGate": {
+    "at": "2026-10-15T08:19:44.475Z",
+    "completions": [
+      {
+        "id": "s01",
+        "resultSha256": "a51d1995c9570e1d89e6da7bd6f2a8ab337d90f5fe5e7ca8ff06d386956203a7"
+      },
+      {
+        "id": "i01",
+        "resultSha256": "641d5cdceb4e3bdb8c0c09e68d51f6b0eb6f3b1b764c67a76fe5fcdc4de8e373"
+      },
+      {
+        "id": "q04",
+        "resultSha256": "587883fc5208f9f755eded854eb212b62e1dce2b7bd438f5287d8f6b0af85832"
+      },
+      {
+        "id": "i03",
+        "resultSha256": "4ea3ff5fabc5d6bac0510738bf7d2f35ebe3ac296eed056ecf48a8c4c75ca621"
+      },
+      {
+        "id": "s02",
+        "resultSha256": "0a1d3cb755829f18b25e459297a839b80238c18b26eed977692de72483548534"
+      },
+      {
+        "id": "s03",
+        "resultSha256": "b646ad0e9f3e1c49de4ec09388f66abde90a787ff257c8046dfd4159e6e79ae6"
+      },
+      {
+        "id": "i02",
+        "resultSha256": "0ad363937ce2239f01af8dedf61468b6b5bdf01cab5a24dde9ad2e396072e204"
+      },
+      {
+        "id": "i04",
+        "resultSha256": "8ae2866e6058c505cc91f240caa5f0f9d341c6a3cadc8315a2d378289bb00a93"
+      },
+      {
+        "id": "q01",
+        "resultSha256": "2c82f064982486e65d4b34f8918701ad6e06b6e7f7a996d281394316d0c687dc"
+      },
+      {
+        "id": "q02",
+        "resultSha256": "7c25f70f607f5767b3aeb5827dfc393c6218c4e0d84509fc17a218a37a2c6588"
+      }
+    ],
+    "driverSha256": "42e8a1ca1ecb8231441f1538f583a1b8b74bd3a7ecaa1b78494cd8d6f33ee13e",
+    "allTenComplete": true
+  },
+  "driver": {
+    "at": "2026-10-15T08:20:21.995Z",
+    "pid": 454,
+    "active": null,
+    "completed": [
+      "i01-A",
+      "i01-B",
+      "i01-C",
+      "i01-D",
+      "q04-D",
+      "q04-C",
+      "q04-B",
+      "q04-A"
+    ],
+    "blocked": {},
+    "majorBlocker": null,
+    "plan": [
+      {
+        "task": "i01",
+        "arm": "A"
+      },
+      {
+        "task": "i01",
+        "arm": "B"
+      },
+      {
+        "task": "i01",
+        "arm": "C"
+      },
+      {
+        "task": "i01",
+        "arm": "D"
+      },
+      {
+        "task": "q04",
+        "arm": "D"
+      },
+      {
+        "task": "q04",
+        "arm": "C"
+      },
+      {
+        "task": "q04",
+        "arm": "B"
+      },
+      {
+        "task": "q04",
+        "arm": "A"
+      }
+    ],
+    "maximumConcurrentActors": 1
+  },
+  "limitations": [
+    "Exposed development tasks, one fresh observation per task/cell; no holdout or confirmatory inference.",
+    "Public context was hand-authored; engineering and preparation-model overhead excluded from actor costs and not priced.",
+    "Reasoning effort and user-prompt input are the only interventions; no new feature, tool, or planner.",
+    "Costs are catalog-priced API-equivalent estimates, not measured subscription charges; post-response caps can overshoot.",
+    "No retries or replacements; all errors, partial work, costs and patches preserved.",
+    "The blind i01 public packet exercises the original default invalid-URL reproduction; it does not cover manual-mode API compatibility. A context-arm failure can reflect this packet coverage gap and does not refute the value of better context."
+  ],
+  "byArm": {
+    "A": {
+      "completed": 2,
+      "accepted": 0,
+      "knownEstimatedUsd": 0.00869602
+    },
+    "B": {
+      "completed": 2,
+      "accepted": 1,
+      "knownEstimatedUsd": 0.007215000000000001
+    },
+    "C": {
+      "completed": 2,
+      "accepted": 1,
+      "knownEstimatedUsd": 0.0066208199999999995
+    },
+    "D": {
+      "completed": 2,
+      "accepted": 1,
+      "knownEstimatedUsd": 0.0061427999999999995
+    }
+  }
+}

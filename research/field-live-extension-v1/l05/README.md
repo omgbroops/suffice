@@ -1,0 +1,9 @@
+# l05 screened out: Arquero #329
+
+Disposition: unrun, ready:false. No actor/model call, private acceptance grader, or reference patch exists. No alternative issue was selected. Native tests/build were not run after the admissibility gate failed.
+
+Fresh GitHub API checks show the issue open, unchanged since2023-06-01, timeline empty, and current main e8003b487ac362f5679ed130cb3a6597b684f903. Both open PRs concern HTML formatting. PR264 has a broad obsolete diff that removes old concat/Arrow tests; it does not implement the reported repair. API payloads and relevant PR file patches are preserved privately.
+
+Using genuine ApacheArrow20 from the provided lock, a typed zero-row Arrow table with Int32/Utf8 fields survives IPC import and concatenates correctly: two later rows survive, and bulk concatenation retains four. A typed empty Arquero table behaves the same. The zero-row result is reproducible only with the separate fieldless empty Arrow.Table case. Existing concat docs explicitly retain only the first table's named columns, while the report supplies no Arrow data/schema, so adopting later schema would require a new policy decision. A sliced typed empty Arrow batch instead throws inside Flechette during IPC parsing before concat, a different failure and not evidence for grading this issue.
+
+The original public title/body remain verbatim. screening.json records provisional reported requirements, healthy API constraints and independent checks. No unsupported check was converted into a failing grader. The original source archive and provided lock are durable, npm ci left package/lock untouched, installed dependencies are bounded, and a clean one-commit base contains only exact original public files. All compute/install/probes ran on Sonion under two-core affinity; local work was SSH and artifact reconciliation.
