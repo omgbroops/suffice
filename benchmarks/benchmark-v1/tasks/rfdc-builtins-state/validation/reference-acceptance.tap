@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: ordinary data primitives functions and dates are preserved in every mode
+ok 1 - ordinary data primitives functions and dates are preserved in every mode
+  ---
+  duration_ms: 3.4062
+  type: 'test'
+  ...
+# Subtest: map keys and values are recursively independent in every mode
+ok 2 - map keys and values are recursively independent in every mode
+  ---
+  duration_ms: 0.5637
+  type: 'test'
+  ...
+# Subtest: maps inside arrays and sets recursively clone entries
+ok 3 - maps inside arrays and sets recursively clone entries
+  ---
+  duration_ms: 0.4111
+  type: 'test'
+  ...
+# Subtest: typed subviews preserve type offset length and independent storage
+ok 4 - typed subviews preserve type offset length and independent storage
+  ---
+  duration_ms: 0.4375
+  type: 'test'
+  ...
+# Subtest: dataviews in arrays preserve the visible bytes and isolate writes
+ok 5 - dataviews in arrays preserve the visible bytes and isolate writes
+  ---
+  duration_ms: 0.3888
+  type: 'test'
+  ...
+# Subtest: buffers and binary values nested through containers are copied
+ok 6 - buffers and binary values nested through containers are copied
+  ---
+  duration_ms: 0.4189
+  type: 'test'
+  ...
+# Subtest: custom constructors work at object array and container positions
+ok 7 - custom constructors work at object array and container positions
+  ---
+  duration_ms: 0.5003
+  type: 'test'
+  ...
+# Subtest: custom handlers override builtins without matching subclasses
+ok 8 - custom handlers override builtins without matching subclasses
+  ---
+  duration_ms: 0.3087
+  type: 'test'
+  ...
+# Subtest: ordinary ancestor cycles through arrays and repeated calls stay independent
+ok 9 - ordinary ancestor cycles through arrays and repeated calls stay independent
+  ---
+  duration_ms: 0.4535
+  type: 'test'
+  ...
+# Subtest: prototype property policy survives container and handler recursion
+ok 10 - prototype property policy survives container and handler recursion
+  ---
+  duration_ms: 0.6839
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 131.2044

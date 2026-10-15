@@ -1,0 +1,646 @@
+TAP version 13
+# Subtest: I01 named events multicast to all independent iterators
+not ok 1 - I01 named events multicast to all independent iterators
+  ---
+  duration_ms: 116.0129
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        {
+          done: false,
+          value: 7
+        },
+    +   'unsettled'
+    -   {
+    -     done: false,
+    -     value: 7
+    -   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 7
+    1:
+      done: false
+      value: 7
+  actual:
+    0:
+      done: false
+      value: 7
+    1: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:16:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+  ...
+# Subtest: I02 anyEvent multicasts to all independent iterators
+not ok 2 - I02 anyEvent multicasts to all independent iterators
+  ---
+  duration_ms: 105.1102
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        {
+          done: false,
+          value: [
+            'x',
+    ...
+        },
+    +   'unsettled'
+    -   {
+    -     done: false,
+    -     value: [
+    -       'x',
+    -       9
+    -     ]
+    -   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value:
+        0: 'x'
+        1: 9
+    1:
+      done: false
+      value:
+        0: 'x'
+        1: 9
+  actual:
+    0:
+      done: false
+      value:
+        0: 'x'
+        1: 9
+    1: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:21:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I03 slow and fast consumers preserve their own FIFO buffers
+not ok 3 - I03 slow and fast consumers preserve their own FIFO buffers
+  ---
+  duration_ms: 218.6622
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        {
+          done: false,
+          value: 1
+        },
+    ...
+        },
+    +   'unsettled',
+    +   'unsettled'
+    -   {
+    -     done: false,
+    -     value: 1
+    -   },
+    -   {
+    -     done: false,
+    -     value: 2
+    -   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 1
+    1:
+      done: false
+      value: 2
+    2:
+      done: false
+      value: 1
+    3:
+      done: false
+      value: 2
+  actual:
+    0:
+      done: false
+      value: 1
+    1:
+      done: false
+      value: 2
+    2: 'unsettled'
+    3: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:27:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I04 returning one named iterator preserves sibling registration
+not ok 4 - I04 returning one named iterator preserves sibling registration
+  ---
+  duration_ms: 0.512
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:29:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:31:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1201:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+    Test.postRun (node:internal/test_runner/test:1330:19)
+    Test.run (node:internal/test_runner/test:1258:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I05 sibling named iterator keeps receiving after return
+not ok 5 - I05 sibling named iterator keeps receiving after return
+  ---
+  duration_ms: 108.5072
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:33:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + 'unsettled'
+    - {
+    -   done: false,
+    -   value: 'live'
+    - }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    done: false
+    value: 'live'
+  actual: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:36:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I06 returning one any iterator preserves sibling delivery
+not ok 6 - I06 returning one any iterator preserves sibling delivery
+  ---
+  duration_ms: 105.767
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:38:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   0,
+    +   'unsettled'
+    -   1,
+    -   {
+    -     done: false,
+    -     value: [
+    -       'x',
+    -       3
+    -     ]
+    -   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 1
+    1:
+      done: false
+      value:
+        0: 'x'
+        1: 3
+  actual:
+    0: 0
+    1: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:41:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I07 multi-event return preserves all unrelated subscriptions
+not ok 7 - I07 multi-event return preserves all unrelated subscriptions
+  ---
+  duration_ms: 218.9557
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:43:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   0,
+    +   'unsettled',
+    +   'unsettled'
+    -   2,
+    -   {
+    -     done: false,
+    -     value: 1
+    -   },
+    -   {
+    -     done: false,
+    -     value: 2
+    -   }
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 2
+    1:
+      done: false
+      value: 1
+    2:
+      done: false
+      value: 2
+  actual:
+    0: 0
+    1: 'unsettled'
+    2: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:47:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I08 clear named event drains buffered data before done
+not ok 8 - I08 clear named event drains buffered data before done
+  ---
+  duration_ms: 0.9186
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:49:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        {
+    +     done: true
+    -     done: false,
+    -     value: 1
+        },
+        {
+    +     done: true
+    -     done: false,
+    -     value: 2
+        },
+        {
+          done: true
+        },
+        0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 1
+    1:
+      done: false
+      value: 2
+    2:
+      done: true
+    3: 0
+  actual:
+    0:
+      done: true
+    1:
+      done: true
+    2:
+      done: true
+    3: 0
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:51:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I09 clear all retains buffers of named and any iterators
+not ok 9 - I09 clear all retains buffers of named and any iterators
+  ---
+  duration_ms: 0.5283
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:53:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        {
+    +     done: true
+    -     done: false,
+    -     value: 4
+        },
+        {
+          done: true
+        },
+        {
+    +     done: true
+    -     done: false,
+    -     value: [
+    -       'x',
+    -       4
+    -     ]
+        },
+        {
+          done: true
+        },
+        0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 4
+    1:
+      done: true
+    2:
+      done: false
+      value:
+        0: 'x'
+        1: 4
+    3:
+      done: true
+    4: 0
+  actual:
+    0:
+      done: true
+    1:
+      done: true
+    2:
+      done: true
+    3:
+      done: true
+    4: 0
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:55:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I10 clear named event leaves other named and any streams active
+ok 10 - I10 clear named event leaves other named and any streams active
+  ---
+  duration_ms: 0.4422
+  type: 'test'
+  ...
+# Subtest: I11 return discards own buffer and forwards awaited value
+ok 11 - I11 return discards own buffer and forwards awaited value
+  ---
+  duration_ms: 0.2259
+  type: 'test'
+  ...
+# Subtest: I12 return wakes a pending next with done
+ok 12 - I12 return wakes a pending next with done
+  ---
+  duration_ms: 0.1563
+  type: 'test'
+  ...
+# Subtest: I13 clear wakes an empty waiting iterator and permits a fresh one
+ok 13 - I13 clear wakes an empty waiting iterator and permits a fresh one
+  ---
+  duration_ms: 0.2385
+  type: 'test'
+  ...
+# Subtest: I14 symbol and numeric channels keep identity in anyEvent
+ok 14 - I14 symbol and numeric channels keep identity in anyEvent
+  ---
+  duration_ms: 0.2154
+  type: 'test'
+  ...
+# Subtest: I15 instances isolate subscriptions cleanup and buffers
+not ok 15 - I15 instances isolate subscriptions cleanup and buffers
+  ---
+  duration_ms: 0.3411
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:81:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        {
+    +     done: true
+    -     done: false,
+    -     value: 1
+        },
+        {
+          done: false,
+          value: 2
+        },
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 1
+    1:
+      done: false
+      value: 2
+    2: 0
+    3: 1
+  actual:
+    0:
+      done: true
+    1:
+      done: false
+      value: 2
+    2: 0
+    3: 1
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:85:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I16 clear buffers independent same-event consumers
+not ok 16 - I16 clear buffers independent same-event consumers
+  ---
+  duration_ms: 0.3711
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:87:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        {
+    +     done: true
+    -     done: false,
+    -     value: 3
+        },
+        {
+    +     done: true
+    -     done: false,
+    -     value: 3
+        },
+        {
+          done: true
+        },
+        {
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 3
+    1:
+      done: false
+      value: 3
+    2:
+      done: true
+    3:
+      done: true
+  actual:
+    0:
+      done: true
+    1:
+      done: true
+    2:
+      done: true
+    3:
+      done: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:89:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I17 returning repeatedly does not unregister a new sibling
+not ok 17 - I17 returning repeatedly does not unregister a new sibling
+  ---
+  duration_ms: 103.6824
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:91:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + 'unsettled'
+    - {
+    -   done: false,
+    -   value: 8
+    - }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    done: false
+    value: 8
+  actual: 'unsettled'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:94:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+# Subtest: I18 clearing several names drains each selected buffer
+not ok 18 - I18 clearing several names drains each selected buffer
+  ---
+  duration_ms: 0.6597
+  type: 'test'
+  location: 'C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-tasks-async\\benchmarks\\benchmark-v1\\tasks\\emittery-iterator-lifecycle\\private\\acceptance.test.mjs:96:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        {
+    +     done: true
+    -     done: false,
+    -     value: 1
+        },
+        {
+    +     done: true
+    -     done: false,
+    -     value: 2
+        },
+        {
+          done: true
+        },
+        {
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      done: false
+      value: 1
+    1:
+      done: false
+      value: 2
+    2:
+      done: true
+    3:
+      done: true
+  actual:
+    0:
+      done: true
+    1:
+      done: true
+    2:
+      done: true
+    3:
+      done: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-tasks-async/benchmarks/benchmark-v1/tasks/emittery-iterator-lifecycle/private/acceptance.test.mjs:98:10)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 5
+# fail 13
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1145.6413

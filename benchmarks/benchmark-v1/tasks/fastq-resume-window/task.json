@@ -1,0 +1,170 @@
+{
+  "id": "fastq-resume-window",
+  "split": "calibration",
+  "repository": "mcollina/fastq",
+  "url": "https://github.com/mcollina/fastq",
+  "sourceCommit": "5a7e5668c9d20535945a5a406775609fd9f07352",
+  "provenance": {
+    "kind": "explicitly-injected-defect",
+    "disclosure": "Synthetic production mutations in a complete pinned real upstream repository; not an actual upstream issue or historical bug claim. No repair model has attempted this task.",
+    "splitAssignedBeforeAttempts": true,
+    "sourceArchives": [
+      {
+        "path": "sources/upstream.tar.gz",
+        "url": "https://codeload.github.com/mcollina/fastq/tar.gz/5a7e5668c9d20535945a5a406775609fd9f07352",
+        "sha256": "cc7ff1229871e3fe4ad123fb88a7fdb627a75122ea6cb76041139d276becc6b5",
+        "bytes": 10125
+      },
+      {
+        "path": "sources/reusify.tar.gz",
+        "url": "https://codeload.github.com/mcollina/reusify/tar.gz/b2b16eef390ac330068c1ccea4fdec233f4d0f6a",
+        "sourceCommit": "b2b16eef390ac330068c1ccea4fdec233f4d0f6a",
+        "sha256": "9ed9a9ec2f52e6300739515eb4bb7ea9095ac0549d406187ade395b60473074c",
+        "bytes": 5223
+      }
+    ],
+    "injectedChanges": [
+      "Made the concurrency setter clear paused state instead of honoring it.",
+      "Replaced the resume refill loop with one dispatch that resets the running count to one.",
+      "Restricted release handoff to slot-filling calls without a completed holder, so worker completions strand backlog."
+    ],
+    "referenceRepair": "Restore pinned upstream production implementation. fastq retains only its disclosed local pinned dependency import.",
+    "licensePath": "actor/src/LICENSE",
+    "dependencyPolicy": "No install or package scripts. Native Node tests only. fastq uses complete pinned reusify source vendored in src/vendor/reusify; Emittery has no runtime dependencies."
+  },
+  "publicPrompt": "Repair the paused/resumed and dynamically resized fastq callback/promise work queue. The full pinned repository lives in src/, including its existing upstream tests and docs. This fixture contains explicitly injected production defects; it is not a claim about an upstream release. A local reusify import is already wired to the full pinned dependency at src/vendor/reusify. Edit only src/queue.js. Use Node native tests; do not install dependencies or execute package scripts. Run node --test tests/visible.test.mjs from this workspace. Existing upstream tests need development dependencies and are provided as source context only. Passing visible tests is a regression floor; satisfy every behavioral requirement below.\n\nF-R1: pause() prevents new workers from starting, including when concurrency is assigned a larger value. Already running work may complete while paused; its completion must reduce running(), leave waiting tasks in place, and not start waiting work.\n\nF-R2: resume() changes a paused queue to unpaused and immediately fills every free worker slot up to concurrency, while preserving the count of already running workers. It starts no work when existing running workers already fill the limit. Calling resume() again on an unpaused queue has no effect.\n\nF-R3: Waiting push() tasks start in FIFO order and unshift() places a waiting task ahead of them. Each task starts and completes exactly once, including when workers invoke their completion callback synchronously during resume(). running(), length(), getQueue(), and idle() must reflect the actual active and waiting tasks without lost or stranded work.\n\nF-R4: When a worker finishes in an unpaused queue, the next waiting task immediately replaces it whenever the resulting active count is below concurrency; the queue must keep progressing without another push or resume. Raising concurrency on an unpaused queue immediately fills all newly free slots. Lowering it leaves active tasks running, prevents replacement while the active count would exceed the new limit, and resumes replacement once enough active workers finish.\n\nF-R5: Retain callback/promise results and error behavior during queued execution: callbacks receive the original worker error and result and are called with the configured context; an installed error handler receives that task's error and original input. Synchronous and asynchronous workers both preserve those results. fastq.promise push()/unshift() promises must all settle with the matching worker results once work completes.\n\nF-R6: empty() fires when dispatch removes the final waiting task; at that callback length() is zero. drain() fires once when a nonempty unpaused work batch becomes fully idle; at that callback running() is zero. No callback/result may be lost while scheduling and draining the batch.",
+  "requirements": [
+    {
+      "id": "F-R1",
+      "text": "pause() prevents new workers from starting, including when concurrency is assigned a larger value. Already running work may complete while paused; its completion must reduce running(), leave waiting tasks in place, and not start waiting work."
+    },
+    {
+      "id": "F-R2",
+      "text": "resume() changes a paused queue to unpaused and immediately fills every free worker slot up to concurrency, while preserving the count of already running workers. It starts no work when existing running workers already fill the limit. Calling resume() again on an unpaused queue has no effect."
+    },
+    {
+      "id": "F-R3",
+      "text": "Waiting push() tasks start in FIFO order and unshift() places a waiting task ahead of them. Each task starts and completes exactly once, including when workers invoke their completion callback synchronously during resume(). running(), length(), getQueue(), and idle() must reflect the actual active and waiting tasks without lost or stranded work."
+    },
+    {
+      "id": "F-R4",
+      "text": "When a worker finishes in an unpaused queue, the next waiting task immediately replaces it whenever the resulting active count is below concurrency; the queue must keep progressing without another push or resume. Raising concurrency on an unpaused queue immediately fills all newly free slots. Lowering it leaves active tasks running, prevents replacement while the active count would exceed the new limit, and resumes replacement once enough active workers finish."
+    },
+    {
+      "id": "F-R5",
+      "text": "Retain callback/promise results and error behavior during queued execution: callbacks receive the original worker error and result and are called with the configured context; an installed error handler receives that task's error and original input. Synchronous and asynchronous workers both preserve those results. fastq.promise push()/unshift() promises must all settle with the matching worker results once work completes."
+    },
+    {
+      "id": "F-R6",
+      "text": "empty() fires when dispatch removes the final waiting task; at that callback length() is zero. drain() fires once when a nonempty unpaused work batch becomes fully idle; at that callback running() is zero. No callback/result may be lost while scheduling and draining the batch."
+    }
+  ],
+  "workspaceDir": "actor",
+  "referenceDir": "reference",
+  "acceptancePath": "private/acceptance.test.mjs",
+  "visiblePath": "actor/tests/visible.test.mjs",
+  "allowedEditPaths": [
+    "src/queue.js"
+  ],
+  "assertionMap": {
+    "FV01 immediate callback and context": [
+      "F-R5",
+      "F-R3"
+    ],
+    "FV02 promise immediate result": [
+      "F-R5"
+    ],
+    "FV03 paused queue stores FIFO and unshift": [
+      "F-R1",
+      "F-R3"
+    ],
+    "F01 paused capacity increase must not dispatch": [
+      "F-R1"
+    ],
+    "F02 paused active completions do not start backlog": [
+      "F-R1"
+    ],
+    "F03 resume fills all available worker slots": [
+      "F-R2",
+      "F-R3"
+    ],
+    "F04 resume preserves existing running worker accounting": [
+      "F-R2",
+      "F-R3"
+    ],
+    "F05 resume at full capacity waits for a completion": [
+      "F-R2"
+    ],
+    "F06 resume retains unshift priority and FIFO tails": [
+      "F-R2",
+      "F-R3"
+    ],
+    "F07 completion replaces worker at exact capacity": [
+      "F-R4"
+    ],
+    "F08 serial queue fully drains without another push": [
+      "F-R3",
+      "F-R4",
+      "F-R6"
+    ],
+    "F09 lowered concurrency waits for excess active workers": [
+      "F-R4"
+    ],
+    "F10 lowered concurrency refills at its new limit": [
+      "F-R4"
+    ],
+    "F11 raised concurrency fills free slots immediately": [
+      "F-R4"
+    ],
+    "F12 repeated resume is idempotent": [
+      "F-R2"
+    ],
+    "F13 synchronous completion reentrancy preserves task order": [
+      "F-R3",
+      "F-R5"
+    ],
+    "F14 queued callback and error handler retain context and payload": [
+      "F-R5",
+      "F-R4"
+    ],
+    "F15 empty and drain callbacks reflect queue transitions": [
+      "F-R6"
+    ],
+    "F16 promise queue resumes and resolves all ordered results": [
+      "F-R5",
+      "F-R3"
+    ]
+  },
+  "testCommands": {
+    "visible": "node --test --test-timeout=3000 tests/visible.test.mjs",
+    "hidden": "node --test --test-timeout=3000 <task>/private/acceptance.test.mjs"
+  },
+  "testWorkspaceEnvironment": "SUFFICE_TASK_WORKSPACE (optional); defaults to process.cwd()",
+  "pathConvention": "All descriptor paths are task-relative POSIX; workspaceVisiblePath is workspace-relative. Every literal named test contains one native assertion mapped to explicit requirement IDs.",
+  "evaluationPolicy": {
+    "hashManifest": "private/integrity.json",
+    "allowedEditPathsExact": true,
+    "checkAllOtherActorFilesUnchanged": true,
+    "maximumTestTimeoutMs": 3000,
+    "noInferencePerformed": true
+  },
+  "scopeTier": 1,
+  "engineeringScope": {
+    "classification": "single-production-component stateful repair",
+    "modulesNeedingChange": [
+      "src/queue.js"
+    ],
+    "integrationBoundaries": [
+      "pause/resume and dynamic concurrency setter share release() worker accounting",
+      "callback Task.worked() releases into scheduler; promise API wraps callback completion"
+    ],
+    "stages": [
+      "Understand public behavioral contract and existing source state transitions.",
+      "Repair shared production state transitions without changing APIs.",
+      "Check visible regressions and reason through independent lifecycle/scheduling scenarios."
+    ],
+    "exAnteRationale": "Assigned before any model repair attempt. Full upstream source context is present, but the intended fix is in one production component. Native test breadth does not make this a long-horizon engineering task.",
+    "longTaskEvidence": false
+  },
+  "workspaceVisiblePath": "tests/visible.test.mjs"
+}

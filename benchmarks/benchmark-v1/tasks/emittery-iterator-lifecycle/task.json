@@ -1,0 +1,176 @@
+{
+  "id": "emittery-iterator-lifecycle",
+  "split": "reserve",
+  "repository": "sindresorhus/emittery",
+  "url": "https://github.com/sindresorhus/emittery",
+  "sourceCommit": "bdc2220c656c7f9f8c1cab796202876cad75424b",
+  "provenance": {
+    "kind": "explicitly-injected-defect",
+    "disclosure": "Synthetic production mutations in a complete pinned real upstream repository; not an actual upstream issue or historical bug claim. No repair model has attempted this task.",
+    "splitAssignedBeforeAttempts": true,
+    "sourceArchives": [
+      {
+        "path": "sources/upstream.tar.gz",
+        "url": "https://codeload.github.com/sindresorhus/emittery/tar.gz/bdc2220c656c7f9f8c1cab796202876cad75424b",
+        "sha256": "8f8befefde47ddb8a6e7f712e14099fc88cd8d295ab68a9501de361f6dae3a3b",
+        "bytes": 853782
+      }
+    ],
+    "injectedChanges": [
+      "Limited named producer fanout to the first registered iterator.",
+      "Limited any-event producer fanout to the first registered iterator.",
+      "Discarded iterator backlog in producer.finish().",
+      "Changed iterator return cleanup from deleting its own producer to clearing the full producer set."
+    ],
+    "referenceRepair": "Restore pinned upstream production implementation. fastq retains only its disclosed local pinned dependency import.",
+    "licensePath": "actor/src/LICENSE",
+    "dependencyPolicy": "No install or package scripts. Native Node tests only. fastq uses complete pinned reusify source vendored in src/vendor/reusify; Emittery has no runtime dependencies."
+  },
+  "publicPrompt": "Repair Emittery async iterator fanout and lifecycle. The full pinned repository lives in src/, including upstream docs and tests. This fixture contains explicitly injected production defects; it is not a claim about an upstream release. Edit only src/index.js. The package has no runtime dependencies. Use Node native tests, without installing dependencies or executing package scripts. Run node --test tests/visible.test.mjs from this workspace. Existing upstream tests need development dependencies and are source context only. Passing visible tests is a regression floor; implement every requirement below. Iterator delivery in this task concerns emit(), not emitSerial(); emitSerial() retains its existing ordinary listener behavior. Concurrent next() calls on the same iterator are outside this contract.\n\nI-R1: Every emit(name, data) delivers one item to every currently registered events(name) iterator and every anyEvent() iterator independently. events([names]) subscribes to each listed name. Each iterator owns its FIFO backlog, so a fast consumer cannot consume or prevent delivery to a slower one. events() yields the data; anyEvent() yields [name, data]. Promise-valued data is awaited before yielding, and string, symbol and numeric event names keep their identity.\n\nI-R2: Calling return() on an iterator unregisters only that iterator from all of its subscriptions, discards its own buffered items, makes its next() calls finish with {done:true}, and wakes a pending next() with that same done result. return() without an argument resolves to {done:true}; with an argument it resolves to {done:true,value:await argument}. Repeated return() calls must not affect any other old or newly created iterator.\n\nI-R3: clearListeners(name) or clearListeners([names]) finishes and unregisters the iterators subscribed to the selected names. clearListeners() finishes/unregisters every named and any-event iterator. A finished iterator must yield all previously buffered items in order before returning {done:true}; if its backlog is empty, a pending next() must promptly resolve done. After its backlog drains, further next() calls remain done.\n\nI-R4: Clearing a named channel leaves iterators on unrelated named channels and anyEvent() iterators active. Finishing or returning one iterator must preserve the registration and delivery of siblings, even when it subscribed to multiple names. New iterators created after an earlier iterator was cleared or returned work normally. Separate Emittery instances never share registrations, buffers or lifecycle effects.\n\nI-R5: listenerCount(name) includes active named iterator subscriptions on that name and active anyEvent() iterators; listenerCount() includes every currently registered iterator subscription, so a multi-name iterator contributes one per subscribed name. Counts must update synchronously when an iterator is returned or cleared, without counting a finished iterator merely because it still has buffered data.\n\nI-R6: Preserve ordinary on()/off() and once() behavior, including unsubscribe disposal, payload forwarding, and ordinary listeners called through emitSerial(). Iterators remain consumable with the standard next()/return() async iterator protocol.",
+  "requirements": [
+    {
+      "id": "I-R1",
+      "text": "Every emit(name, data) delivers one item to every currently registered events(name) iterator and every anyEvent() iterator independently. events([names]) subscribes to each listed name. Each iterator owns its FIFO backlog, so a fast consumer cannot consume or prevent delivery to a slower one. events() yields the data; anyEvent() yields [name, data]. Promise-valued data is awaited before yielding, and string, symbol and numeric event names keep their identity."
+    },
+    {
+      "id": "I-R2",
+      "text": "Calling return() on an iterator unregisters only that iterator from all of its subscriptions, discards its own buffered items, makes its next() calls finish with {done:true}, and wakes a pending next() with that same done result. return() without an argument resolves to {done:true}; with an argument it resolves to {done:true,value:await argument}. Repeated return() calls must not affect any other old or newly created iterator."
+    },
+    {
+      "id": "I-R3",
+      "text": "clearListeners(name) or clearListeners([names]) finishes and unregisters the iterators subscribed to the selected names. clearListeners() finishes/unregisters every named and any-event iterator. A finished iterator must yield all previously buffered items in order before returning {done:true}; if its backlog is empty, a pending next() must promptly resolve done. After its backlog drains, further next() calls remain done."
+    },
+    {
+      "id": "I-R4",
+      "text": "Clearing a named channel leaves iterators on unrelated named channels and anyEvent() iterators active. Finishing or returning one iterator must preserve the registration and delivery of siblings, even when it subscribed to multiple names. New iterators created after an earlier iterator was cleared or returned work normally. Separate Emittery instances never share registrations, buffers or lifecycle effects."
+    },
+    {
+      "id": "I-R5",
+      "text": "listenerCount(name) includes active named iterator subscriptions on that name and active anyEvent() iterators; listenerCount() includes every currently registered iterator subscription, so a multi-name iterator contributes one per subscribed name. Counts must update synchronously when an iterator is returned or cleared, without counting a finished iterator merely because it still has buffered data."
+    },
+    {
+      "id": "I-R6",
+      "text": "Preserve ordinary on()/off() and once() behavior, including unsubscribe disposal, payload forwarding, and ordinary listeners called through emitSerial(). Iterators remain consumable with the standard next()/return() async iterator protocol."
+    }
+  ],
+  "workspaceDir": "actor",
+  "referenceDir": "reference",
+  "acceptancePath": "private/acceptance.test.mjs",
+  "visiblePath": "actor/tests/visible.test.mjs",
+  "allowedEditPaths": [
+    "src/index.js"
+  ],
+  "assertionMap": {
+    "IV01 named listener registration and disposal": [
+      "I-R6"
+    ],
+    "IV02 once and serial event listeners retain payloads": [
+      "I-R6"
+    ],
+    "IV03 one named iterator receives ordinary emissions": [
+      "I-R1",
+      "I-R2"
+    ],
+    "I01 named events multicast to all independent iterators": [
+      "I-R1"
+    ],
+    "I02 anyEvent multicasts to all independent iterators": [
+      "I-R1"
+    ],
+    "I03 slow and fast consumers preserve their own FIFO buffers": [
+      "I-R1"
+    ],
+    "I04 returning one named iterator preserves sibling registration": [
+      "I-R2",
+      "I-R5"
+    ],
+    "I05 sibling named iterator keeps receiving after return": [
+      "I-R2",
+      "I-R4"
+    ],
+    "I06 returning one any iterator preserves sibling delivery": [
+      "I-R2",
+      "I-R4",
+      "I-R5"
+    ],
+    "I07 multi-event return preserves all unrelated subscriptions": [
+      "I-R2",
+      "I-R4",
+      "I-R5"
+    ],
+    "I08 clear named event drains buffered data before done": [
+      "I-R3",
+      "I-R5"
+    ],
+    "I09 clear all retains buffers of named and any iterators": [
+      "I-R3",
+      "I-R5"
+    ],
+    "I10 clear named event leaves other named and any streams active": [
+      "I-R3",
+      "I-R4"
+    ],
+    "I11 return discards own buffer and forwards awaited value": [
+      "I-R2",
+      "I-R5"
+    ],
+    "I12 return wakes a pending next with done": [
+      "I-R2"
+    ],
+    "I13 clear wakes an empty waiting iterator and permits a fresh one": [
+      "I-R3",
+      "I-R4"
+    ],
+    "I14 symbol and numeric channels keep identity in anyEvent": [
+      "I-R1"
+    ],
+    "I15 instances isolate subscriptions cleanup and buffers": [
+      "I-R3",
+      "I-R4",
+      "I-R5"
+    ],
+    "I16 clear buffers independent same-event consumers": [
+      "I-R1",
+      "I-R3"
+    ],
+    "I17 returning repeatedly does not unregister a new sibling": [
+      "I-R2",
+      "I-R4"
+    ],
+    "I18 clearing several names drains each selected buffer": [
+      "I-R3"
+    ]
+  },
+  "testCommands": {
+    "visible": "node --test --test-timeout=3000 tests/visible.test.mjs",
+    "hidden": "node --test --test-timeout=3000 <task>/private/acceptance.test.mjs"
+  },
+  "testWorkspaceEnvironment": "SUFFICE_TASK_WORKSPACE (optional); defaults to process.cwd()",
+  "pathConvention": "All descriptor paths are task-relative POSIX; workspaceVisiblePath is workspace-relative. Every literal named test contains one native assertion mapped to explicit requirement IDs.",
+  "evaluationPolicy": {
+    "hashManifest": "private/integrity.json",
+    "allowedEditPathsExact": true,
+    "checkAllOtherActorFilesUnchanged": true,
+    "maximumTestTimeoutMs": 3000,
+    "noInferencePerformed": true
+  },
+  "scopeTier": 1,
+  "engineeringScope": {
+    "classification": "single-production-component stateful repair",
+    "modulesNeedingChange": [
+      "src/index.js"
+    ],
+    "integrationBoundaries": [
+      "producer registration, emit() fanout, per-iterator buffer and clearListeners()",
+      "return() cleanup shares producer sets with sibling and any-event subscriptions"
+    ],
+    "stages": [
+      "Understand public behavioral contract and existing source state transitions.",
+      "Repair shared production state transitions without changing APIs.",
+      "Check visible regressions and reason through independent lifecycle/scheduling scenarios."
+    ],
+    "exAnteRationale": "Assigned before any model repair attempt. Full upstream source context is present, but the intended fix is in one production component. Native test breadth does not make this a long-horizon engineering task.",
+    "longTaskEvidence": false
+  },
+  "workspaceVisiblePath": "tests/visible.test.mjs"
+}

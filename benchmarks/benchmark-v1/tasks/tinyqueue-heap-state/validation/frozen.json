@@ -1,0 +1,89 @@
+{
+  "id": "tinyqueue-heap-state",
+  "split": "reserve",
+  "runs": [
+    {
+      "variant": "actor",
+      "suite": "visible",
+      "exitCode": 0,
+      "counts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0
+      },
+      "logPath": "validation/actor-visible.tap",
+      "logSha256": "c7277027afa0667ce366f15600d603f6a807127a8fb65065d7cc5b9395109c66"
+    },
+    {
+      "variant": "actor",
+      "suite": "acceptance",
+      "exitCode": 1,
+      "counts": {
+        "tests": 7,
+        "pass": 0,
+        "fail": 7
+      },
+      "logPath": "validation/actor-acceptance.tap",
+      "logSha256": "2737002c2eeba5ebbac68408af4fd66e570153d4b58c1e87260f723060d87ff8"
+    },
+    {
+      "variant": "reference",
+      "suite": "visible",
+      "exitCode": 0,
+      "counts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0
+      },
+      "logPath": "validation/reference-visible.tap",
+      "logSha256": "81edde058babd8188fe5dd3f12d0aa0f9a5d50e2e8b4f60d333a15f468cdcfb8"
+    },
+    {
+      "variant": "reference",
+      "suite": "acceptance",
+      "exitCode": 0,
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0
+      },
+      "logPath": "validation/reference-acceptance.tap",
+      "logSha256": "9c80be5d249e779b6e482f6d69cd58c4124b72a2746c4a1117eedf4bd4a96125"
+    }
+  ],
+  "files": {
+    "actor/README.md": "898644ef74ddfb4351e346956f6707f699063bd7d83f25e2c1033df7e8231480",
+    "actor/src/.github/workflows/node.yml": "fef06de816dda7fc7f2cd7b8dfed1c3b79cc77cd0fbc4230e210f74174b8b1e4",
+    "actor/src/.gitignore": "eaeff0b53839d259914dc3a4d043824bde9e0ddc936fe4c3b823ead1f30ba661",
+    "actor/src/bench.js": "2605e33aa3f55c76dd11d92485e1ab9434eca8aa93e5498b481c75430713f8f0",
+    "actor/src/eslint.config.js": "86ebd2fd665dbaf7ba33d3f46ac409f6b00106cd268f834c87b5d5de8c135b6f",
+    "actor/src/index.d.ts": "5c74fb05b74f75ccc417a49e2b47c4a4d9746f758cc227f4b613566600607d6a",
+    "actor/src/index.js": "bb9a73b90305ae041e7f65349adb56caab6493790acc25a4ffe8172a51dcef98",
+    "actor/src/LICENSE": "780453e05abdc22307ee01c706a2e73f508d3e484fc4c804485ebf6fe0964694",
+    "actor/src/package-lock.json": "4d081ae5ac15f0c30f2accf000ec3d859458f601afcc91f6f3676dd56a9a2c5e",
+    "actor/src/package.json": "5ced55111995ea5fda0c25cd58c19ed770cf16588fc1303c0073229f80c94751",
+    "actor/src/README.md": "095905b5cda2ff107969a99b78167c3637deb2a331e5b68f3c9558e3fb564a67",
+    "actor/src/test.js": "b04052403f6499a9998e16896c063fd48e3c693e6f6bfbf496536bdf7758dbd0",
+    "actor/TASK.md": "4d353c687ef77608c83cb1c4e115212cb2d546796a739230703692b1d5ee209c",
+    "actor/tests/visible.test.mjs": "cda66cf374a424d91ded1916fc994d3cf2830dcf2b9b171e94a5bd752c390d63",
+    "private/acceptance.test.mjs": "90684d5d4f82ef08e8528e874967424011f5628e38871397d7c5514d2ace177e",
+    "reference/README.md": "898644ef74ddfb4351e346956f6707f699063bd7d83f25e2c1033df7e8231480",
+    "reference/src/.github/workflows/node.yml": "fef06de816dda7fc7f2cd7b8dfed1c3b79cc77cd0fbc4230e210f74174b8b1e4",
+    "reference/src/.gitignore": "eaeff0b53839d259914dc3a4d043824bde9e0ddc936fe4c3b823ead1f30ba661",
+    "reference/src/bench.js": "2605e33aa3f55c76dd11d92485e1ab9434eca8aa93e5498b481c75430713f8f0",
+    "reference/src/eslint.config.js": "86ebd2fd665dbaf7ba33d3f46ac409f6b00106cd268f834c87b5d5de8c135b6f",
+    "reference/src/index.d.ts": "5c74fb05b74f75ccc417a49e2b47c4a4d9746f758cc227f4b613566600607d6a",
+    "reference/src/index.js": "4ab450ec366d74fd5721d2bf5cec0422451bbb80fe58169a21e0f9abf192ec18",
+    "reference/src/LICENSE": "780453e05abdc22307ee01c706a2e73f508d3e484fc4c804485ebf6fe0964694",
+    "reference/src/package-lock.json": "4d081ae5ac15f0c30f2accf000ec3d859458f601afcc91f6f3676dd56a9a2c5e",
+    "reference/src/package.json": "5ced55111995ea5fda0c25cd58c19ed770cf16588fc1303c0073229f80c94751",
+    "reference/src/README.md": "095905b5cda2ff107969a99b78167c3637deb2a331e5b68f3c9558e3fb564a67",
+    "reference/src/test.js": "b04052403f6499a9998e16896c063fd48e3c693e6f6bfbf496536bdf7758dbd0",
+    "reference/TASK.md": "4d353c687ef77608c83cb1c4e115212cb2d546796a739230703692b1d5ee209c",
+    "reference/tests/visible.test.mjs": "cda66cf374a424d91ded1916fc994d3cf2830dcf2b9b171e94a5bd752c390d63",
+    "SOURCE-LICENSE": "780453e05abdc22307ee01c706a2e73f508d3e484fc4c804485ebf6fe0964694",
+    "source.tar.gz": "9a8cfc1e6ec8c0922d077735ad7af6204c9a8b9ff68068a55ae3c53f3d06c52f",
+    "task.json": "531bef677b3336a715bb78ccb6fa4bbae756c2f108369d090b85341bc043713e"
+  },
+  "validationPolicy": "Native Node tests only. No package scripts, installation, network, subprocess or credentials in test code. Author validation launcher uses Node subprocesses offline. No model repair attempts."
+}

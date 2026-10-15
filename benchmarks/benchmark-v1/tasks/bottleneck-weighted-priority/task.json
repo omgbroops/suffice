@@ -1,0 +1,52 @@
+{
+  "id": "bottleneck-weighted-priority",
+  "title": "Restore weighted priority scheduling across Bottleneck queue and local datastore",
+  "split": "calibration",
+  "scopeTier": 2,
+  "repository": "SGrondin/bottleneck",
+  "url": "https://github.com/SGrondin/bottleneck",
+  "sourceCommit": "8a8bde9cde151c278397703c48f2bba4ded2bae7",
+  "provenance": "Transparent AI-authored injected defect family on complete pinned Bottleneck v2.19.5; not an upstream historical issue. Reference is byte-identical upstream source. Two independent mutations affect the real queue selection and weighted resource-release modules.",
+  "workspaceDir": "actor",
+  "referenceDir": "reference",
+  "acceptancePath": "private/acceptance.test.mjs",
+  "visiblePath": "actor/tests/visible.test.mjs",
+  "entryPath": "actor/README.md",
+  "allowedEditPaths": [
+    "src/lib/Batcher.js", "src/lib/Bottleneck.js", "src/lib/BottleneckError.js",
+    "src/lib/DLList.js", "src/lib/Events.js", "src/lib/Group.js",
+    "src/lib/IORedisConnection.js", "src/lib/Job.js", "src/lib/LocalDatastore.js",
+    "src/lib/Queues.js", "src/lib/RedisConnection.js", "src/lib/RedisDatastore.js",
+    "src/lib/Scripts.js", "src/lib/States.js", "src/lib/Sync.js",
+    "src/lib/index.js", "src/lib/parser.js"
+  ],
+  "engineeringScope": {
+    "modulesNeedingChange": ["src/lib/Queues.js", "src/lib/LocalDatastore.js"],
+    "integrationBoundaries": [
+      "Queues priority lists feed Bottleneck._drainOne selection and its strict head-of-line admission",
+      "Bottleneck reservations and Job success/failure completion call LocalDatastore registration/free and trigger the next drain",
+      "The public schedule promise, queued/running/done observations and subsequent scheduling must agree after each backlog wave"
+    ],
+    "stages": ["Understand public priority ordering and FIFO ties", "Restore weighted reservation conservation through completion", "Validate their composition under a saturated backlog and capacity reuse"],
+    "rationale": "Classified before agent runs by distinct functional modules and real scheduler/datastore integration. The integrated scenario requires both mutations to be repaired; reversing priority and fixing capacity independently each leave it failing. This is a small structural Tier2 calibration task, not evidence of measured difficulty, delegation benefit, compaction exposure or long-horizon persistence. Two small edits can repair it. Upstream CoffeeScript and bundled counterparts remain available because the complete repository is preserved."
+  },
+  "publicPrompt": "Repair the shipped CommonJS local scheduler in this complete pinned Bottleneck v2.19.5 repository. This is an explicitly injected repair exercise, not a claim that upstream shipped these bugs. The active public entry point is src/lib/index.js; complete upstream documentation, CoffeeScript and bundled counterparts are available under src/.\n\nBehavior contract: with datastore left at its local default, minTime=0, no reservoir, no expiration, and no retry handler, schedule(options, task) must preserve task results and original rejection identity. A job weight is its concurrency reservation. Running capacity is the sum of currently reserved weights, never a job count, never negative, and never above maxConcurrent. Completing a successful or failed job releases its full weight exactly once; done() accumulates the weights of completed jobs. Weight zero consumes and releases no capacity. Fully completed work leaves running() zero and all capacity reusable. A job heavier than maxConcurrent rejects without invoking its task or consuming capacity.\n\nJobs already running are not preempted. Among queued jobs, lower numeric priority runs first (0 highest, 9 lowest), preserving FIFO at equal priority. The highest priority queued head must fit available capacity before it starts; lower priority work does not bypass that head. Queued counts must return to zero after backlog completion. These rules must compose: after a saturated blocker releases its full capacity, a full-capacity high-priority job must precede lower-priority queued work, then its completion must allow remaining weighted work to drain in order. Repeated backlog waves must not leak reservations or jobs.\n\nOnly existing production JavaScript files under src/lib/ may change. Preserve the API and other behavior. Do not edit tests, fixtures, documentation, metadata, CoffeeScript, or bundled builds; do not add files. No installation or network is needed. Run node tests/visible.test.mjs from this actor directory. Visible tests are smoke checks; acceptance independently exercises the complete contract above. Redis, clustering, timing guarantees, retries and expiration are outside this task's tested scope.",
+  "requirements": [
+    {"id": "R1", "text": "Queued lower numeric priorities run first, FIFO within equal priority, without preempting running jobs."},
+    {"id": "R2", "text": "Running concurrency is reserved weight; completion releases full weight exactly once, done totals weights, and capacity is reusable after success and failure."},
+    {"id": "R3", "text": "Priority admission and weighted release compose across saturated backlog waves, respecting capacity and leaving no queued or reserved work."},
+    {"id": "R4", "text": "Preserve return values and original task rejection identity; oversized jobs reject before invocation or reservation."},
+    {"id": "R5", "text": "Zero-weight work neither reserves nor releases concurrency capacity."}
+  ],
+  "assertionMap": {
+    "unit weight scheduling preserves results and releases capacity": {"requirements": ["R2", "R4"], "rationale": "Visible baseline compatibility for ordinary results, running and done."},
+    "same priority queued jobs keep FIFO order": {"requirements": ["R1"], "rationale": "Visible gate-controlled nonpreemption and equal-priority FIFO."},
+    "rejections preserve the original error and permit later work": {"requirements": ["R2", "R4"], "rationale": "Visible unit-weight failure compatibility."},
+    "queued priorities run from smaller number to larger number with FIFO ties": {"requirements": ["R1"], "rationale": "Distinct priority bands mixed with equal-priority ties behind a running blocker."},
+    "successful weighted jobs release their entire reservation exactly once": {"requirements": ["R2", "R4"], "rationale": "Observes actual weighted reservation, full release, done conservation and full-capacity reuse."},
+    "failed weighted jobs release capacity and retain rejection identity": {"requirements": ["R2", "R4"], "rationale": "Exercises Job failure completion into datastore and a subsequent maximum-weight job."},
+    "priority selection and weighted release compose across backlog waves": {"requirements": ["R1", "R2", "R3", "R4"], "rationale": "Both modules must work through actual queue, registration, execution, free and re-drain across two waves."},
+    "oversized jobs reject without consuming running capacity": {"requirements": ["R2", "R4"], "rationale": "Guards rejected admission and later valid full-capacity use without asserting undocumented error text."},
+    "zero weight completion leaves running capacity unchanged": {"requirements": ["R2", "R5"], "rationale": "A zero reservation must not cause a negative running count or increase effective capacity."}
+  }
+}

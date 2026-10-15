@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: I01 named events multicast to all independent iterators
+ok 1 - I01 named events multicast to all independent iterators
+  ---
+  duration_ms: 7.4005
+  type: 'test'
+  ...
+# Subtest: I02 anyEvent multicasts to all independent iterators
+ok 2 - I02 anyEvent multicasts to all independent iterators
+  ---
+  duration_ms: 1.0181
+  type: 'test'
+  ...
+# Subtest: I03 slow and fast consumers preserve their own FIFO buffers
+ok 3 - I03 slow and fast consumers preserve their own FIFO buffers
+  ---
+  duration_ms: 2.6456
+  type: 'test'
+  ...
+# Subtest: I04 returning one named iterator preserves sibling registration
+ok 4 - I04 returning one named iterator preserves sibling registration
+  ---
+  duration_ms: 1.4269
+  type: 'test'
+  ...
+# Subtest: I05 sibling named iterator keeps receiving after return
+ok 5 - I05 sibling named iterator keeps receiving after return
+  ---
+  duration_ms: 0.5537
+  type: 'test'
+  ...
+# Subtest: I06 returning one any iterator preserves sibling delivery
+ok 6 - I06 returning one any iterator preserves sibling delivery
+  ---
+  duration_ms: 0.4746
+  type: 'test'
+  ...
+# Subtest: I07 multi-event return preserves all unrelated subscriptions
+ok 7 - I07 multi-event return preserves all unrelated subscriptions
+  ---
+  duration_ms: 2.2917
+  type: 'test'
+  ...
+# Subtest: I08 clear named event drains buffered data before done
+ok 8 - I08 clear named event drains buffered data before done
+  ---
+  duration_ms: 3.6402
+  type: 'test'
+  ...
+# Subtest: I09 clear all retains buffers of named and any iterators
+ok 9 - I09 clear all retains buffers of named and any iterators
+  ---
+  duration_ms: 2.1214
+  type: 'test'
+  ...
+# Subtest: I10 clear named event leaves other named and any streams active
+ok 10 - I10 clear named event leaves other named and any streams active
+  ---
+  duration_ms: 3.1219
+  type: 'test'
+  ...
+# Subtest: I11 return discards own buffer and forwards awaited value
+ok 11 - I11 return discards own buffer and forwards awaited value
+  ---
+  duration_ms: 0.7206
+  type: 'test'
+  ...
+# Subtest: I12 return wakes a pending next with done
+ok 12 - I12 return wakes a pending next with done
+  ---
+  duration_ms: 2.9312
+  type: 'test'
+  ...
+# Subtest: I13 clear wakes an empty waiting iterator and permits a fresh one
+ok 13 - I13 clear wakes an empty waiting iterator and permits a fresh one
+  ---
+  duration_ms: 0.4904
+  type: 'test'
+  ...
+# Subtest: I14 symbol and numeric channels keep identity in anyEvent
+ok 14 - I14 symbol and numeric channels keep identity in anyEvent
+  ---
+  duration_ms: 0.4653
+  type: 'test'
+  ...
+# Subtest: I15 instances isolate subscriptions cleanup and buffers
+ok 15 - I15 instances isolate subscriptions cleanup and buffers
+  ---
+  duration_ms: 0.6038
+  type: 'test'
+  ...
+# Subtest: I16 clear buffers independent same-event consumers
+ok 16 - I16 clear buffers independent same-event consumers
+  ---
+  duration_ms: 0.3287
+  type: 'test'
+  ...
+# Subtest: I17 returning repeatedly does not unregister a new sibling
+ok 17 - I17 returning repeatedly does not unregister a new sibling
+  ---
+  duration_ms: 0.3089
+  type: 'test'
+  ...
+# Subtest: I18 clearing several names drains each selected buffer
+ok 18 - I18 clearing several names drains each selected buffer
+  ---
+  duration_ms: 1.1356
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 244.0853

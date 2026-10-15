@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "validationMode": "Offline native tests only; no live model inference",
+  "nodeVersion": "v24.15.0",
+  "validatedAt": "2026-10-15T01:02:39.229Z",
+  "taskId": "bottleneck-weighted-priority",
+  "sourceCommit": "8a8bde9cde151c278397703c48f2bba4ded2bae7",
+  "harnessModuleSha256": "190800091e7285daf33519de96a7e5a503e7b4a14fba0080a6052c8fbe5ea068",
+  "taskSha256": "99bb6cf6ba571867f5ac037c0f739798617de75e09f276c6eaffb8256ebf2728",
+  "acceptanceSha256": "4063c94741905f979c6a30f543730e476fd007a0a99af3cd33bb06d1b7123881",
+  "visibleSha256": "bffd03dc2d2770f71806e41f66046a2f415ef06c78f964434e91fca3597cf7ab",
+  "sourceReceiptSha256": "0e058ecc475e804d22c973847e3b655cef06c409605f2138560fa7f57152c528",
+  "sourceIntegrity": {
+    "completeRepository": true,
+    "referenceMatchesArchive": true,
+    "injectedFiles": [
+      "lib/Queues.js",
+      "lib/LocalDatastore.js"
+    ]
+  },
+  "artifactBytesBeforeReceipt": 1768702,
+  "results": {
+    "actor": {
+      "visible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: unit weight scheduling preserves results and releases capacity\nok 1 - unit weight scheduling preserves results and releases capacity\n  ---\n  duration_ms: 114.838\n  type: 'test'\n  ...\n# Subtest: same priority queued jobs keep FIFO order\nok 2 - same priority queued jobs keep FIFO order\n  ---\n  duration_ms: 171.3126\n  type: 'test'\n  ...\n# Subtest: rejections preserve the original error and permit later work\nok 3 - rejections preserve the original error and permit later work\n  ---\n  duration_ms: 138.5864\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 431.2681\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 542
+      },
+      "acceptance": {
+        "status": "failed",
+        "exitCode": 1,
+        "tests": 6,
+        "passed": 1,
+        "failed": 4,
+        "skipped": 0,
+        "cancelled": 1,
+        "todo": 0,
+        "expectedTests": 6,
+        "namesMatch": false,
+        "stdout": "TAP version 13\n# Subtest: queued priorities run from smaller number to larger number with FIFO ties\nnot ok 1 - queued priorities run from smaller number to larger number with FIFO ties\n  ---\n  duration_ms: 320.1868\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:25:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   'low',\n    +   'medium',\n        'high-a',\n        'high-b',\n    -   'medium',\n    -   'low'\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 'high-a'\n    1: 'high-b'\n    2: 'medium'\n    3: 'low'\n  actual:\n    0: 'low'\n    1: 'medium'\n    2: 'high-a'\n    3: 'high-b'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:35:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: successful weighted jobs release their entire reservation exactly once\nnot ok 2 - successful weighted jobs release their entire reservation exactly once\n  ---\n  duration_ms: 74.0922\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:40:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    3 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 3\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:46:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: failed weighted jobs release capacity and retain rejection identity\nnot ok 3 - failed weighted jobs release capacity and retain rejection identity\n  ---\n  duration_ms: 61.8667\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:54:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:58:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: priority selection and weighted release compose across backlog waves\nnot ok 4 - priority selection and weighted release compose across backlog waves\n  ---\n  duration_ms: 2005.1731\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:65:1'\n  failureType: 'testTimeoutFailure'\n  error: 'test timed out after 2000ms'\n  code: 'ERR_TEST_FAILURE'\n  ...\n# Subtest: oversized jobs reject without consuming running capacity\nok 5 - oversized jobs reject without consuming running capacity\n  ---\n  duration_ms: 106.8599\n  type: 'test'\n  ...\n# Subtest: zero weight completion leaves running capacity unchanged\nnot ok 6 - zero weight completion leaves running capacity unchanged\n  ---\n  duration_ms: 62.4561\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:110:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:113:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 1\n# fail 4\n# cancelled 1\n# skipped 0\n# todo 0\n# duration_ms 2635.3793\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 2730
+      }
+    },
+    "reference": {
+      "visible": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: unit weight scheduling preserves results and releases capacity\nok 1 - unit weight scheduling preserves results and releases capacity\n  ---\n  duration_ms: 97.4296\n  type: 'test'\n  ...\n# Subtest: same priority queued jobs keep FIFO order\nok 2 - same priority queued jobs keep FIFO order\n  ---\n  duration_ms: 201.4134\n  type: 'test'\n  ...\n# Subtest: rejections preserve the original error and permit later work\nok 3 - rejections preserve the original error and permit later work\n  ---\n  duration_ms: 140.0485\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 444.7647\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 556
+      },
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 6,
+        "namesMatch": true,
+        "stdout": "TAP version 13\n# Subtest: queued priorities run from smaller number to larger number with FIFO ties\nok 1 - queued priorities run from smaller number to larger number with FIFO ties\n  ---\n  duration_ms: 306.1564\n  type: 'test'\n  ...\n# Subtest: successful weighted jobs release their entire reservation exactly once\nok 2 - successful weighted jobs release their entire reservation exactly once\n  ---\n  duration_ms: 185.1997\n  type: 'test'\n  ...\n# Subtest: failed weighted jobs release capacity and retain rejection identity\nok 3 - failed weighted jobs release capacity and retain rejection identity\n  ---\n  duration_ms: 154.9534\n  type: 'test'\n  ...\n# Subtest: priority selection and weighted release compose across backlog waves\nok 4 - priority selection and weighted release compose across backlog waves\n  ---\n  duration_ms: 623.3726\n  type: 'test'\n  ...\n# Subtest: oversized jobs reject without consuming running capacity\nok 5 - oversized jobs reject without consuming running capacity\n  ---\n  duration_ms: 109.3568\n  type: 'test'\n  ...\n# Subtest: zero weight completion leaves running capacity unchanged\nok 6 - zero weight completion leaves running capacity unchanged\n  ---\n  duration_ms: 202.0263\n  type: 'test'\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 6\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1586.3963\n",
+        "stderr": "",
+        "truncated": false,
+        "latencyMs": 1682
+      }
+    }
+  },
+  "ablations": {
+    "priority-only": {
+      "status": "failed",
+      "exitCode": 1,
+      "tests": 6,
+      "passed": 2,
+      "failed": 3,
+      "skipped": 0,
+      "cancelled": 1,
+      "todo": 0,
+      "expectedTests": 6,
+      "namesMatch": false,
+      "stdout": "TAP version 13\n# Subtest: queued priorities run from smaller number to larger number with FIFO ties\nok 1 - queued priorities run from smaller number to larger number with FIFO ties\n  ---\n  duration_ms: 302.1441\n  type: 'test'\n  ...\n# Subtest: successful weighted jobs release their entire reservation exactly once\nnot ok 2 - successful weighted jobs release their entire reservation exactly once\n  ---\n  duration_ms: 61.0689\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:40:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    3 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 3\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:46:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: failed weighted jobs release capacity and retain rejection identity\nnot ok 3 - failed weighted jobs release capacity and retain rejection identity\n  ---\n  duration_ms: 62.8943\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:54:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:58:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: priority selection and weighted release compose across backlog waves\nnot ok 4 - priority selection and weighted release compose across backlog waves\n  ---\n  duration_ms: 2013.8831\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:65:1'\n  failureType: 'testTimeoutFailure'\n  error: 'test timed out after 2000ms'\n  code: 'ERR_TEST_FAILURE'\n  ...\n# Subtest: oversized jobs reject without consuming running capacity\nok 5 - oversized jobs reject without consuming running capacity\n  ---\n  duration_ms: 93.4754\n  type: 'test'\n  ...\n# Subtest: zero weight completion leaves running capacity unchanged\nnot ok 6 - zero weight completion leaves running capacity unchanged\n  ---\n  duration_ms: 63.3509\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:110:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    -1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: -1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:113:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 2\n# fail 3\n# cancelled 1\n# skipped 0\n# todo 0\n# duration_ms 2601.9688\n",
+      "stderr": "",
+      "truncated": false,
+      "latencyMs": 2770
+    },
+    "capacity-only": {
+      "status": "failed",
+      "exitCode": 1,
+      "tests": 6,
+      "passed": 4,
+      "failed": 2,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "expectedTests": 6,
+      "namesMatch": false,
+      "stdout": "TAP version 13\n# Subtest: queued priorities run from smaller number to larger number with FIFO ties\nnot ok 1 - queued priorities run from smaller number to larger number with FIFO ties\n  ---\n  duration_ms: 291.7055\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:25:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   'low',\n    +   'medium',\n        'high-a',\n        'high-b',\n    -   'medium',\n    -   'low'\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 'high-a'\n    1: 'high-b'\n    2: 'medium'\n    3: 'low'\n  actual:\n    0: 'low'\n    1: 'medium'\n    2: 'high-a'\n    3: 'high-b'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:35:10)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n  ...\n# Subtest: successful weighted jobs release their entire reservation exactly once\nok 2 - successful weighted jobs release their entire reservation exactly once\n  ---\n  duration_ms: 198.6042\n  type: 'test'\n  ...\n# Subtest: failed weighted jobs release capacity and retain rejection identity\nok 3 - failed weighted jobs release capacity and retain rejection identity\n  ---\n  duration_ms: 155.3259\n  type: 'test'\n  ...\n# Subtest: priority selection and weighted release compose across backlog waves\nnot ok 4 - priority selection and weighted release compose across backlog waves\n  ---\n  duration_ms: 234.8169\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\benchmark-multicomponent\\\\benchmarks\\\\multicomponent\\\\bottleneck-weighted-priority\\\\private\\\\acceptance.test.mjs:65:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n    +   'low',\n    +   'mid',\n        'high'\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 'high'\n  actual:\n    0: 'low'\n    1: 'mid'\n    2: 'high'\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice-experiments/benchmark-multicomponent/benchmarks/multicomponent/bottleneck-weighted-priority/private/acceptance.test.mjs:84:12)\n    async Test.run (node:internal/test_runner/test:1208:7)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n# Subtest: oversized jobs reject without consuming running capacity\nok 5 - oversized jobs reject without consuming running capacity\n  ---\n  duration_ms: 107.7491\n  type: 'test'\n  ...\n# Subtest: zero weight completion leaves running capacity unchanged\nok 6 - zero weight completion leaves running capacity unchanged\n  ---\n  duration_ms: 201.1305\n  type: 'test'\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 4\n# fail 2\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1194.8554\n",
+      "stderr": "",
+      "truncated": false,
+      "latencyMs": 1397
+    }
+  },
+  "limitations": [
+    "Not a historical upstream issue; two explicit injected mutations.",
+    "Two small repairs; no measured long-horizon exposure or model/delegation performance.",
+    "Complete upstream CoffeeScript and bundled counterparts may make intended fixes easier to locate.",
+    "Native adapted tests cover the documented local weighted-priority contract; upstream Mocha, Redis and clustering suites were not installed or run.",
+    "The grader launches a permission-restricted Node process; evaluated code has no subprocess or network permission. Test deadlines bound liveness failures and are not deliberate workload delay."
+  ]
+}
