@@ -1,0 +1,77 @@
+{
+  "at": "2026-10-15T04:01:46.564Z",
+  "node": "24.15.0",
+  "platform": "win32",
+  "tools": [
+    {
+      "name": "write",
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully wrote to native-probe.txt"
+          }
+        ]
+      }
+    },
+    {
+      "name": "read",
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "old value\n"
+          }
+        ],
+        "structuredContent": "old value\n"
+      }
+    },
+    {
+      "name": "edit",
+      "passed": false,
+      "error": "Error: Edit tool input is invalid. edits must contain at least one replacement."
+    },
+    {
+      "name": "bash",
+      "passed": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "v24.15.0\r\n"
+          }
+        ],
+        "structuredContent": {
+          "output": "v24.15.0\r\n",
+          "truncated": false,
+          "exit_code": 0,
+          "wall_time_seconds": 0.1
+        }
+      }
+    }
+  ],
+  "model": {
+    "id": "gpt-6.1-sol",
+    "provider": "openai",
+    "api": "openai-responses",
+    "cost": {
+      "input": 2,
+      "output": 10,
+      "cacheRead": 0.1,
+      "cacheWrite": 2.5,
+      "tiers": [
+        {
+          "inputTokensAbove": 272000,
+          "input": 4,
+          "output": 15,
+          "cacheRead": 0.2,
+          "cacheWrite": 5
+        }
+      ]
+    }
+  },
+  "passed": false,
+  "modelRequests": 0
+}
