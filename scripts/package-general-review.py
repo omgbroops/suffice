@@ -53,6 +53,19 @@ def main():
             dirs[:] = sorted(d for d in dirs if d not in SKIP and not (Path(directory)/d).is_symlink())
             for name in sorted(names):
                 p = Path(directory)/name
+                if p == ROOT/'.suffice/compat/repo/outside-link':
+                    # This deliberately escaping Linux test symlink is not a
+                    # readable Windows file. Preserve its target as metadata.
+                    target = subprocess.run(['wsl.exe', '-d', 'Ubuntu', '--', 'readlink',
+                                             '/mnt/c/'+str(p)[3:].replace('\\', '/')],
+                                            capture_output=True, text=True, check=True).stdout.strip()
+                    if target != '/runtime/package.json':
+                        raise RuntimeError('Compatibility fixture link drift')
+                    files['compatibility/fixture-symlink.json'] = json.dumps({
+                        'path': 'repo/outside-link', 'target': target,
+                        'export': 'metadata only; intentionally escaping link, never followed'
+                    }, indent=2).encode('utf-8')
+                    continue
                 if name in SECRET_NAMES or p.is_symlink():
                     continue
                 add(p, PurePosixPath(prefix)/PurePosixPath(p.relative_to(path).as_posix()))
