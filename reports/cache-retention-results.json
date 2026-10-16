@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "status": "bounded_screen_stopped_provider_limit",
+  "screeningAttempts": 1,
+  "plannedScreeningAttempts": 2,
+  "scoredAttempts": 0,
+  "plannedScoredAttempts": 8,
+  "knownEstimatedUsd": 0.034918000000000005,
+  "totalEstimatedUsd": null,
+  "actualSubscriptionBilling": null,
+  "screening": [
+    {
+      "runId": "001-union-subset-append-r0",
+      "task": "union-subset",
+      "arm": "append",
+      "repetition": 0,
+      "mode": "screen",
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 9568,
+        "output": 1463,
+        "cacheRead": 11520,
+        "cacheWrite": 0,
+        "totalTokens": 22551,
+        "estimatedApiUsd": 0.034918000000000005
+      },
+      "knownEstimatedUsd": 0.034918000000000005,
+      "totalEstimatedUsd": null,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 5,
+      "calls": 17,
+      "latencyMs": 46130,
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:31:52.059Z",
+      "costComponents": {
+        "input": 0.019135999999999997,
+        "output": 0.01463,
+        "cacheRead": 0.001152,
+        "cacheWrite": 0
+      }
+    }
+  ],
+  "retentionLiveAttempts": 0,
+  "offlineReplay": {
+    "notLive": true,
+    "inputCharacters": 60167,
+    "replaced": [
+      {
+        "index": 5,
+        "reference": "retained:call_ueqH98tMFhaKcBBt7DSUF6G7|ctc_0d45be68eb293e3f016acff4a74d2c87d1acbede8dec69b7fa",
+        "sha256": "a15c0c35c7c79b65954e0c9d26973d275795f0c61458c4856cd60c864e7b0ca5",
+        "originalCharacters": 14087
+      }
+    ],
+    "removedCharacters": 12733,
+    "active": true,
+    "exactRecoveries": [
+      {
+        "reference": "retained:call_ueqH98tMFhaKcBBt7DSUF6G7|ctc_0d45be68eb293e3f016acff4a74d2c87d1acbede8dec69b7fa",
+        "exact": true,
+        "readRevisionUnknown": true
+      }
+    ],
+    "allMessagesPreserved": true,
+    "firstAndRecentAndStatePreserved": true
+  },
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "usage": {
+    "input": 9568,
+    "output": 1463,
+    "cacheRead": 11520,
+    "cacheWrite": 0,
+    "totalTokens": 22551,
+    "estimatedApiUsd": 0.034918000000000005
+  },
+  "costComponents": {
+    "input": 0.019135999999999997,
+    "output": 0.01463,
+    "cacheRead": 0.001152,
+    "cacheWrite": 0
+  },
+  "efficiencyConclusion": "Not measured: no live retention treatment.",
+  "capabilityConclusion": "Not measured: baseline patch passed; operational failure came from provider quota.",
+  "integrity": {
+    "frozenBytesIntact": true,
+    "baselineIntact": true,
+    "currentDiffFromScreen": [
+      "src/cache-retention.mjs",
+      "src/real-agent.mjs"
+    ]
+  },
+  "limitations": [
+    "Provider Subscription Sharing usage limit, unknown total cost.",
+    "No scored attempts or live retention/recovery calls.",
+    "Offline replay is activation/recoverability validation only, not cache/capability evidence.",
+    "Concurrent provider/machine/cache contention uncontrolled.",
+    "Public historical semver issues from one library; training familiarity possible.",
+    "Same low-effort model and $0.25 matched attempt ceiling defined but no paired comparison completed.",
+    "Seven adapted fixture groups are not the entire upstream suite.",
+    "One initial acceptance expectation corrected before freeze after checking actual includePrerelease expansion; reference and baseline then validated."
+  ],
+  "validation": {
+    "focusedTests": "26/26 before conservative stale-revision follow-up; rerun receipt included.",
+    "broadHarness": "84/85; unrelated pre-existing retry-idempotency reference exact-match test failed, likely worktree CRLF. No fix attempted."
+  }
+}

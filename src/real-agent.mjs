@@ -1,3 +1,4 @@
+import {retainContext} from './cache-retention.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {Type} from 'typebox';
@@ -13,11 +14,12 @@ const safeError=e=>String(e?.message??e).replace(/Bearer\s+\S+|sk-[A-Za-z0-9_-]+
 export async function sourceSnapshot(workspace,sourceFiles){
   const snapshot={};for(const file of sourceFiles)snapshot[file]=await readText(workspace,file);return snapshot;
 }
-export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDir,task,arm,phase='worker',feedback='',timeoutMs=360000,maxTurns=24}){
+export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDir,task,arm,phase='worker',feedback='',timeoutMs=360000,maxTurns=24,costBudgetUsd=0.3}){
   await mkdir(runDir,{recursive:true});
   const started=Date.now(),events=[],controller=new AbortController();
   let session,abortReason,turns=0,calls=0,patchReads=0,caseCalls=0,editCount=0,reproduction,definitionAttempts=0;
   let userState={requirements:[],unresolved:[]},lastTests=null,usageCostUnknown=false;
+  const retentionArchive=new Map();let recoveryCalls=0;
   const observations=[],evidence=new Map(),batches=new Map();let activeBatch;
   const usage={input:0,output:0,cacheRead:0,cacheWrite:0,totalTokens:0,estimatedApiUsd:0};
   const errors=[];const log=e=>events.push({at:new Date().toISOString(),...e});
@@ -60,7 +62,9 @@ export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDi
     return {path,offset,beforeLines:original[path].split('\n').length,afterLines:current[path].split('\n').length,before:page(original[path]),after:page(current[path])};
   }));
   tools.push(make('evidence_read','Recover an original conversation message by index, or a tool evidence reference. Returns 8000-character pages.',Type.Object({index:Type.Optional(Type.Integer({minimum:0})),reference:Type.Optional(Type.String()),offset:Type.Optional(Type.Integer({minimum:0}))}),async({index,reference,offset=0})=>{
-    const value=reference?evidence.get(reference):session?.messages[index];if(!value)throw new Error('No such evidence');
+    if(reference?.startsWith('retained:'))recoveryCalls++;
+    const recovered=retentionArchive.get(reference);
+    const value=recovered?{...recovered,staleSource:recovered.editCount===null?editCount>0:editCount!==recovered.editCount,currentEditCount:editCount,notice:'Historical evidence. Reread current source after edits.'}:reference?evidence.get(reference):session?.messages[index];if(!value)throw new Error('No such evidence');
     const full=JSON.stringify(value);return {totalCharacters:full.length,offset,text:full.slice(offset,offset+8000),remaining:Math.max(0,full.length-offset-8000)};
   }));
   if(arm.state)tools.push(make('work_state','Read progress or record concise requirements and unresolved issues. The harness automatically records edits and test freshness. Keep requirements and remaining work current.',Type.Object({requirements:Type.Optional(Type.Array(Type.String())),unresolved:Type.Optional(Type.Array(Type.String()))}),async args=>{
@@ -90,6 +94,7 @@ export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDi
     });
     pi.on('tool_result',event=>{if(event.toolName==='codemode'&&activeBatch===event.toolCallId)activeBatch=undefined;return renderObservation?.(event);});
     pi.on('context',event=>{
+      if(arm.retention){const reduced=retainContext(event.messages,{batches,state:state(),archive:retentionArchive,threshold:arm.retentionThreshold??18000});log({type:'retention',...reduced.telemetry});return {messages:reduced.messages};}
       if(!arm.prune)return;
       // Only observed read-only batches are eligible; never infer this from code text.
       const candidates=event.messages.map((m,i)=>{
@@ -118,6 +123,7 @@ export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDi
       if(['error','aborted'].includes(m.stopReason))usageCostUnknown=true;
       if(m.stopReason==='error')errors.push(safeError(m.errorMessage));
       log({type:'assistant',turn:turns,model:m.model,usage:m.usage,stopReason:m.stopReason,content:m.content.filter(p=>p.type!=='thinking'),error:m.stopReason==='error'?safeError(m.errorMessage):undefined});
+      if(usage.estimatedApiUsd>=costBudgetUsd)abort('cost_limit');
       if(turns>=maxTurns&&m.content.some(p=>p.type==='toolCall'))abort('turn_limit');
     }});
     await session.prompt(`Repository: node-semver, under src/. Read README.md for workspace details.\nTask: ${task.prompt}\n${feedback}`);
@@ -125,6 +131,7 @@ export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDi
     const status=abortReason??(['error','aborted'].includes(last?.stopReason)?'provider_error':'completed');
     let reproAfter=null;if(reproduction)reproAfter=await runNodeTests(workspace,reproduction.path);
     return {phase,status,model:model.id,turns,calls,patchReads,editCount,usage,usageCostUnknown,latencyMs:Date.now()-started,final:session.getLastAssistantText(),errors,
+      retention:{activeRequests:events.filter(e=>e.type==='retention'&&e.active).length,removedCharacters:events.filter(e=>e.type==='retention').reduce((n,e)=>n+e.removedCharacters,0),recoveryCalls,uniqueArchived:retentionArchive.size},
       stateUpdates:events.filter(e=>e.type==='state_update').length,prunedRequests:events.filter(e=>e.type==='context_prune'&&e.removedCharacters>0).length,
       removedCharacters:events.filter(e=>e.type==='context_prune').reduce((n,e)=>n+e.removedCharacters,0),
       observations:events.filter(e=>e.type==='tool_observation'),presentations:events.filter(e=>e.type==='response_presentation'),navigation:events.filter(e=>e.type==='navigation'),recoveries:events.filter(e=>e.type==='observation_recovery'),

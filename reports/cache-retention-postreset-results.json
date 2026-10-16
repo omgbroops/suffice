@@ -1,0 +1,736 @@
+{
+  "version": 2,
+  "cumulativeAttempts": 11,
+  "postResetAttempts": 10,
+  "screeningAttempts": 3,
+  "scoredAttempts": 8,
+  "plannedScored": 8,
+  "cumulativeKnownEstimatedUsd": 0.6482696,
+  "cumulativeTotalEstimatedUsd": null,
+  "postResetKnownEstimatedUsd": 0.6133516,
+  "postResetTotalEstimatedUsd": 0.6133516,
+  "arms": {
+    "append": {
+      "attempts": 4,
+      "successes": 4,
+      "acceptedPatches": 4,
+      "knownEstimatedUsd": 0.19180440000000004,
+      "totalEstimatedUsd": 0.19180440000000004,
+      "activeRequests": 0,
+      "recoveryCalls": 0,
+      "input": 55887,
+      "cacheRead": 104704,
+      "output": 6956,
+      "costComponents": {
+        "input": 0.11177399999999998,
+        "output": 0.06956,
+        "cacheRead": 0.010470400000000001,
+        "cacheWrite": 0
+      },
+      "meanEstimatedUsd": 0.04795110000000001,
+      "costPerSuccess": 0.04795110000000001
+    },
+    "retention": {
+      "attempts": 4,
+      "successes": 4,
+      "acceptedPatches": 4,
+      "knownEstimatedUsd": 0.275888,
+      "totalEstimatedUsd": 0.275888,
+      "activeRequests": 10,
+      "recoveryCalls": 0,
+      "input": 100539,
+      "cacheRead": 73600,
+      "output": 6745,
+      "costComponents": {
+        "input": 0.201078,
+        "output": 0.06745000000000001,
+        "cacheRead": 0.007360000000000001,
+        "cacheWrite": 0
+      },
+      "meanEstimatedUsd": 0.068972,
+      "costPerSuccess": 0.068972
+    }
+  },
+  "integrity": {
+    "allFrozenAndCurrentAndBaselineIntact": true,
+    "checks": 935,
+    "failures": [],
+    "exactLiveArchives": true,
+    "archiveChecks": 16,
+    "patchImmutable": true,
+    "artifactsBytes": 7862350,
+    "freeBytes": 20416057344
+  },
+  "runs": [
+    {
+      "runId": "001-union-subset-append-r0",
+      "task": "union-subset",
+      "arm": "append",
+      "repetition": 0,
+      "mode": "screen",
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 9568,
+        "output": 1463,
+        "cacheRead": 11520,
+        "cacheWrite": 0,
+        "totalTokens": 22551,
+        "estimatedApiUsd": 0.034918000000000005
+      },
+      "knownEstimatedUsd": 0.034918000000000005,
+      "totalEstimatedUsd": null,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 5,
+      "calls": 17,
+      "latencyMs": 46130,
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:31:52.059Z",
+      "costComponents": {
+        "input": 0.019135999999999997,
+        "output": 0.01463,
+        "cacheRead": 0.001152,
+        "cacheWrite": 0
+      },
+      "campaign": "screen-v1",
+      "liveArchiveChecks": []
+    },
+    {
+      "runId": "001-union-subset-append-r0",
+      "task": "union-subset",
+      "arm": "append",
+      "repetition": 0,
+      "mode": "screen",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 17546,
+        "output": 2502,
+        "cacheRead": 43648,
+        "cacheWrite": 0,
+        "totalTokens": 63696,
+        "estimatedApiUsd": 0.0644768
+      },
+      "knownEstimatedUsd": 0.0644768,
+      "totalEstimatedUsd": 0.0644768,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 7,
+      "calls": 24,
+      "latencyMs": 78540,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:37:38.558Z",
+      "costComponents": {
+        "input": 0.03509199999999999,
+        "output": 0.02502,
+        "cacheRead": 0.0043648,
+        "cacheWrite": 0
+      },
+      "campaign": "screen-postreset-v2",
+      "liveArchiveChecks": []
+    },
+    {
+      "runId": "002-union-subset-retention-r0",
+      "task": "union-subset",
+      "arm": "retention",
+      "repetition": 0,
+      "mode": "screen",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 29231,
+        "output": 2089,
+        "cacheRead": 18304,
+        "cacheWrite": 0,
+        "totalTokens": 49624,
+        "estimatedApiUsd": 0.0811824
+      },
+      "knownEstimatedUsd": 0.0811824,
+      "totalEstimatedUsd": 0.0811824,
+      "retention": {
+        "activeRequests": 2,
+        "removedCharacters": 40443,
+        "recoveryCalls": 0,
+        "uniqueArchived": 1
+      },
+      "turns": 6,
+      "calls": 23,
+      "latencyMs": 56384,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:38:36.366Z",
+      "costComponents": {
+        "input": 0.058462,
+        "output": 0.020890000000000002,
+        "cacheRead": 0.0018304000000000003,
+        "cacheWrite": 0
+      },
+      "campaign": "screen-postreset-v2",
+      "liveArchiveChecks": [
+        {
+          "reference": "retained:call_Q7JAQ6J7rzrKWuEOCr3CzgTn|ctc_0440dbc43a35ee28016acff6275bfc87d19a3a564bd396c2a3",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_Q7JAQ6J7rzrKWuEOCr3CzgTn|ctc_0440dbc43a35ee28016acff6275bfc87d19a3a564bd396c2a3",
+          "exact": true
+        }
+      ]
+    },
+    {
+      "runId": "001-union-subset-append-r0",
+      "task": "union-subset",
+      "arm": "append",
+      "repetition": 0,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 14579,
+        "output": 2432,
+        "cacheRead": 33536,
+        "cacheWrite": 0,
+        "totalTokens": 50547,
+        "estimatedApiUsd": 0.05683160000000001
+      },
+      "knownEstimatedUsd": 0.05683160000000001,
+      "totalEstimatedUsd": 0.05683160000000001,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 6,
+      "calls": 21,
+      "latencyMs": 80823,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:40:33.903Z",
+      "costComponents": {
+        "input": 0.029157999999999996,
+        "output": 0.024319999999999998,
+        "cacheRead": 0.0033536,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": []
+    },
+    {
+      "runId": "002-union-subset-retention-r0",
+      "task": "union-subset",
+      "arm": "retention",
+      "repetition": 0,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 24664,
+        "output": 2079,
+        "cacheRead": 24064,
+        "cacheWrite": 0,
+        "totalTokens": 50807,
+        "estimatedApiUsd": 0.0725244
+      },
+      "knownEstimatedUsd": 0.0725244,
+      "totalEstimatedUsd": 0.0725244,
+      "retention": {
+        "activeRequests": 3,
+        "removedCharacters": 36723,
+        "recoveryCalls": 0,
+        "uniqueArchived": 1
+      },
+      "turns": 7,
+      "calls": 24,
+      "latencyMs": 63825,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:41:39.799Z",
+      "costComponents": {
+        "input": 0.049328,
+        "output": 0.020790000000000003,
+        "cacheRead": 0.0024064000000000004,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": [
+        {
+          "reference": "retained:call_VsPLtOKD4Vojuz2gmfhlUQpX|ctc_0958996b549a9088016acff6d8aba887d1a6012673fb7288c1",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_VsPLtOKD4Vojuz2gmfhlUQpX|ctc_0958996b549a9088016acff6d8aba887d1a6012673fb7288c1",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_VsPLtOKD4Vojuz2gmfhlUQpX|ctc_0958996b549a9088016acff6d8aba887d1a6012673fb7288c1",
+          "exact": true
+        }
+      ]
+    },
+    {
+      "runId": "003-tilde-prerelease-retention-r0",
+      "task": "tilde-prerelease",
+      "arm": "retention",
+      "repetition": 0,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 17883,
+        "output": 1208,
+        "cacheRead": 12416,
+        "cacheWrite": 0,
+        "totalTokens": 31507,
+        "estimatedApiUsd": 0.049087599999999995
+      },
+      "knownEstimatedUsd": 0.049087599999999995,
+      "totalEstimatedUsd": 0.049087599999999995,
+      "retention": {
+        "activeRequests": 1,
+        "removedCharacters": 12577,
+        "recoveryCalls": 0,
+        "uniqueArchived": 1
+      },
+      "turns": 5,
+      "calls": 23,
+      "latencyMs": 40584,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "endedAt": "2026-10-14T21:42:21.840Z",
+      "costComponents": {
+        "input": 0.035766,
+        "output": 0.012080000000000002,
+        "cacheRead": 0.0012416000000000003,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": [
+        {
+          "reference": "retained:call_WvsqQUPWNqAnaZpyFb61ueK5|ctc_0e2af5e7dadcd223016acff71b98c487d1a7dd55f9282a16b3",
+          "exact": true
+        }
+      ]
+    },
+    {
+      "runId": "004-tilde-prerelease-append-r0",
+      "task": "tilde-prerelease",
+      "arm": "append",
+      "repetition": 0,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 14734,
+        "output": 1238,
+        "cacheRead": 23296,
+        "cacheWrite": 0,
+        "totalTokens": 39268,
+        "estimatedApiUsd": 0.0441776
+      },
+      "knownEstimatedUsd": 0.0441776,
+      "totalEstimatedUsd": 0.0441776,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 6,
+      "calls": 22,
+      "latencyMs": 35303,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "endedAt": "2026-10-14T21:42:58.804Z",
+      "costComponents": {
+        "input": 0.029468,
+        "output": 0.01238,
+        "cacheRead": 0.0023296000000000002,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": []
+    },
+    {
+      "runId": "005-union-subset-retention-r1",
+      "task": "union-subset",
+      "arm": "retention",
+      "repetition": 1,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 24329,
+        "output": 2223,
+        "cacheRead": 26752,
+        "cacheWrite": 0,
+        "totalTokens": 53304,
+        "estimatedApiUsd": 0.07356320000000001
+      },
+      "knownEstimatedUsd": 0.07356320000000001,
+      "totalEstimatedUsd": 0.07356320000000001,
+      "retention": {
+        "activeRequests": 3,
+        "removedCharacters": 59801,
+        "recoveryCalls": 0,
+        "uniqueArchived": 2
+      },
+      "turns": 7,
+      "calls": 24,
+      "latencyMs": 70701,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:44:10.810Z",
+      "costComponents": {
+        "input": 0.048658,
+        "output": 0.02223,
+        "cacheRead": 0.0026752,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": [
+        {
+          "reference": "retained:call_JKbetesuYxK4V69ULedwpOSO|ctc_03615cf23d3952e4016acff7694edc87d19112459656d5b290",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_JKbetesuYxK4V69ULedwpOSO|ctc_03615cf23d3952e4016acff7694edc87d19112459656d5b290",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_tugbNZb81x7X0ETuBZZXhyHy|ctc_03615cf23d3952e4016acff77643a087d18be6beeb25a7979e",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_JKbetesuYxK4V69ULedwpOSO|ctc_03615cf23d3952e4016acff7694edc87d19112459656d5b290",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_tugbNZb81x7X0ETuBZZXhyHy|ctc_03615cf23d3952e4016acff77643a087d18be6beeb25a7979e",
+          "exact": true
+        }
+      ]
+    },
+    {
+      "runId": "006-union-subset-append-r1",
+      "task": "union-subset",
+      "arm": "append",
+      "repetition": 1,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 12175,
+        "output": 2084,
+        "cacheRead": 24960,
+        "cacheWrite": 0,
+        "totalTokens": 39219,
+        "estimatedApiUsd": 0.047686000000000006
+      },
+      "knownEstimatedUsd": 0.047686000000000006,
+      "totalEstimatedUsd": 0.047686000000000006,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 6,
+      "calls": 21,
+      "latencyMs": 53776,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/ranges/subset.js"
+      ],
+      "endedAt": "2026-10-14T21:45:06.036Z",
+      "costComponents": {
+        "input": 0.02435,
+        "output": 0.02084,
+        "cacheRead": 0.0024960000000000004,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": []
+    },
+    {
+      "runId": "007-tilde-prerelease-append-r1",
+      "task": "tilde-prerelease",
+      "arm": "append",
+      "repetition": 1,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 14399,
+        "output": 1202,
+        "cacheRead": 22912,
+        "cacheWrite": 0,
+        "totalTokens": 38513,
+        "estimatedApiUsd": 0.0431092
+      },
+      "knownEstimatedUsd": 0.0431092,
+      "totalEstimatedUsd": 0.0431092,
+      "retention": {
+        "activeRequests": 0,
+        "removedCharacters": 0,
+        "recoveryCalls": 0,
+        "uniqueArchived": 0
+      },
+      "turns": 6,
+      "calls": 21,
+      "latencyMs": 35579,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "endedAt": "2026-10-14T21:45:42.942Z",
+      "costComponents": {
+        "input": 0.028797999999999997,
+        "output": 0.012020000000000001,
+        "cacheRead": 0.0022912,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": []
+    },
+    {
+      "runId": "008-tilde-prerelease-retention-r1",
+      "task": "tilde-prerelease",
+      "arm": "retention",
+      "repetition": 1,
+      "mode": "scored",
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "modelValid": true,
+      "usage": {
+        "input": 33663,
+        "output": 1235,
+        "cacheRead": 10368,
+        "cacheWrite": 0,
+        "totalTokens": 45266,
+        "estimatedApiUsd": 0.0807128
+      },
+      "knownEstimatedUsd": 0.0807128,
+      "totalEstimatedUsd": 0.0807128,
+      "retention": {
+        "activeRequests": 3,
+        "removedCharacters": 21682,
+        "recoveryCalls": 0,
+        "uniqueArchived": 2
+      },
+      "turns": 7,
+      "calls": 23,
+      "latencyMs": 37155,
+      "errors": [],
+      "acceptance": "passed",
+      "regression": "passed",
+      "changed": [
+        "src/classes/range.js"
+      ],
+      "endedAt": "2026-10-14T21:46:21.723Z",
+      "costComponents": {
+        "input": 0.067326,
+        "output": 0.01235,
+        "cacheRead": 0.0010368,
+        "cacheWrite": 0
+      },
+      "campaign": "scored-postreset-v2",
+      "liveArchiveChecks": [
+        {
+          "reference": "retained:call_skSO2IFsMW5q26c4mKqxJE12|ctc_06ceaccce207e4ba016acff80c2bf087d183da35839adc4945",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_skSO2IFsMW5q26c4mKqxJE12|ctc_06ceaccce207e4ba016acff80c2bf087d183da35839adc4945",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_EqwIVyszamlMu6LBoPJ5ujGd|ctc_06ceaccce207e4ba016acff80f59e887d1971b687e80aa079b",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_skSO2IFsMW5q26c4mKqxJE12|ctc_06ceaccce207e4ba016acff80c2bf087d183da35839adc4945",
+          "exact": true
+        },
+        {
+          "reference": "retained:call_EqwIVyszamlMu6LBoPJ5ujGd|ctc_06ceaccce207e4ba016acff80f59e887d1971b687e80aa079b",
+          "exact": true
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Original pre-reset provider failure total remains unknown.",
+    "Screened union task reused; tilde was untouched by screening.",
+    "Public historical one-library tasks may be familiar.",
+    "Concurrent provider/CPU/cache contention and order not causal cache isolation.",
+    "Recovery availability does not imply recovery use; no live recovery claim unless calls recorded.",
+    "API-equivalent estimates are not subscription billing; engineering inference excluded."
+  ],
+  "paired": [
+    {
+      "task": "union-subset",
+      "repetition": 0,
+      "appendSuccess": true,
+      "retentionSuccess": true,
+      "appendUsd": 0.05683160000000001,
+      "retentionUsd": 0.0725244,
+      "deltaUsd": 0.015692799999999993,
+      "retentionActive": true
+    },
+    {
+      "task": "tilde-prerelease",
+      "repetition": 0,
+      "appendSuccess": true,
+      "retentionSuccess": true,
+      "appendUsd": 0.0441776,
+      "retentionUsd": 0.049087599999999995,
+      "deltaUsd": 0.004909999999999998,
+      "retentionActive": true
+    },
+    {
+      "task": "union-subset",
+      "repetition": 1,
+      "appendSuccess": true,
+      "retentionSuccess": true,
+      "appendUsd": 0.047686000000000006,
+      "retentionUsd": 0.07356320000000001,
+      "deltaUsd": 0.025877200000000003,
+      "retentionActive": true
+    },
+    {
+      "task": "tilde-prerelease",
+      "repetition": 1,
+      "appendSuccess": true,
+      "retentionSuccess": true,
+      "appendUsd": 0.0431092,
+      "retentionUsd": 0.0807128,
+      "deltaUsd": 0.0376036,
+      "retentionActive": true
+    }
+  ],
+  "activePairs": {
+    "count": 4,
+    "appendUsd": 0.19180440000000004,
+    "retentionUsd": 0.275888
+  },
+  "inactivePairs": 0,
+  "scoredComplete": true,
+  "scoredOperationalFailures": 0,
+  "modelBaselineFailures": 0,
+  "retentionCostChangePercent": 43.83820183478584
+}

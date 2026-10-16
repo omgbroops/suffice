@@ -1,0 +1,34 @@
+✔ preserves objective, all call/result pairs, first result, recent two and recoverable exact bytes (3.8956ms)
+✔ mutation/test/recovery batches always survive (1.4072ms)
+✔ orphans fail open and below threshold remains inactive (0.411ms)
+✔ Pi codemode exposes only scoped tools and no model or host APIs (211.5198ms)
+✔ working context protects early contract and recent evidence even when selection abstains (5.3057ms)
+✔ none returns full context and never mutates the transcript (0.4331ms)
+✔ deterministic replacement keeps initial task, system state and complete recent groups (0.6354ms)
+✔ deterministic budget selects relevant historical group before irrelevant newer group (0.408ms)
+✔ LLM callback sees closed historical groups and replaces rather than appends context (0.5171ms)
+✔ callback receives isolated evidence and cannot mutate original transcript (0.317ms)
+✔ LLM malformed, unknown, duplicate, injected summaries, missing and failed selections fail open (1.1319ms)
+✔ threshold compaction prunes only above threshold and adds no invented content (0.377ms)
+✔ tool group selection retains every result including errors and parallel calls (0.4784ms)
+✔ pending live tool call is protected even with zero recent groups (0.4298ms)
+✔ pending live group does not displace a required recent complete group (0.3103ms)
+✔ orphan, duplicate, unmatched and incomplete historical tools fail open without invoking selector (0.4177ms)
+✔ later user instructions, system changes and Pi custom messages remain pinned (0.2688ms)
+✔ empty input and configuration validation (1.0189ms)
+✔ pruning preserves task instructions, edits, tests and recent evidence (2.3921ms)
+✔ unknown mixed codemode outputs are never discarded (0.4213ms)
+✔ review requires inspected patch and consistent structured verdict (0.4194ms)
+✔ declarative reproductions cannot request arbitrary functions or code (1.3896ms)
+✔ review and repair costs count and unknown telemetry stays unknown (0.465ms)
+✔ review can rescue exhausted workers but cannot hide provider or repair failures (0.3154ms)
+✔ workspace paths reject traversal, hidden paths and test edits (7.1829ms)
+✔ test subprocess has no keys and cannot read parent files or spawn subprocesses (112.5015ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2570.7494
