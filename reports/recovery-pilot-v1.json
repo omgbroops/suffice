@@ -1,0 +1,159 @@
+{
+  "manifestPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\failure-recovery\\.suffice\\recovery-runs\\pilot-v1\\manifest.json",
+  "completed": 4,
+  "planned": 4,
+  "totalKnownUsd": 0.0437584,
+  "results": [
+    {
+      "id": "001-bom-boundaries-normal",
+      "task": "bom-boundaries",
+      "arm": "normal",
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": true,
+      "acceptance": "passed",
+      "regression": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "usage": {
+        "input": 13842,
+        "output": 1290,
+        "cacheRead": 31744,
+        "cacheWrite": 0,
+        "totalTokens": 46876,
+        "estimatedApiUsd": 0.0437584
+      },
+      "totalEstimatedUsd": null,
+      "turns": 7,
+      "calls": 26,
+      "latencyMs": 41692,
+      "rollbacks": 0,
+      "checkpoints": 2,
+      "failedStates": 0,
+      "testsCurrentAtFinish": true,
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ]
+    },
+    {
+      "id": "002-bom-boundaries-rollback",
+      "task": "bom-boundaries",
+      "arm": "rollback",
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "totalEstimatedUsd": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 5854,
+      "rollbacks": 0,
+      "checkpoints": 1,
+      "failedStates": 0,
+      "testsCurrentAtFinish": true,
+      "changed": [],
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ]
+    },
+    {
+      "id": "003-aliased-merge-tags-rollback",
+      "task": "aliased-merge-tags",
+      "arm": "rollback",
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "totalEstimatedUsd": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 3401,
+      "rollbacks": 0,
+      "checkpoints": 1,
+      "failedStates": 0,
+      "testsCurrentAtFinish": true,
+      "changed": [],
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ]
+    },
+    {
+      "id": "004-aliased-merge-tags-normal",
+      "task": "aliased-merge-tags",
+      "arm": "normal",
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "totalEstimatedUsd": null,
+      "turns": 1,
+      "calls": 0,
+      "latencyMs": 3554,
+      "rollbacks": 0,
+      "checkpoints": 1,
+      "failedStates": 0,
+      "testsCurrentAtFinish": true,
+      "changed": [],
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ]
+    }
+  ],
+  "stopReason": null
+}

@@ -1,0 +1,246 @@
+{
+  "status": "provider_limited_inconclusive",
+  "scoredAttempts": 0,
+  "screeningAttempts": 4,
+  "knownEstimatedUsdLowerBound": 0.0437584,
+  "totalEstimatedUsd": null,
+  "unknownCostAttempts": 4,
+  "actualRollbacks": 0,
+  "operationalSuccesses": 0,
+  "patchAccepted": 1,
+  "mechanismTests": {
+    "passed": 6,
+    "total": 6,
+    "offlineOnly": true
+  },
+  "existingHarnessTests": {
+    "passed": 85,
+    "total": 86,
+    "failure": "pre-existing CRLF vs LF retry-idempotency reference replacement mismatch; temporary normalized copy verified"
+  },
+  "efficiencyClaim": false,
+  "capabilityClaim": false,
+  "pilot": {
+    "manifestPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\failure-recovery\\.suffice\\recovery-runs\\pilot-v1\\manifest.json",
+    "completed": 4,
+    "planned": 4,
+    "totalKnownUsd": 0.0437584,
+    "results": [
+      {
+        "id": "001-bom-boundaries-normal",
+        "task": "bom-boundaries",
+        "arm": "normal",
+        "status": "provider_error",
+        "success": false,
+        "patchAccepted": true,
+        "acceptance": "passed",
+        "regression": "passed",
+        "upstream": "passed",
+        "upstreamTests": 297,
+        "immutableIntact": true,
+        "modelValid": true,
+        "actualModels": [
+          "gpt-6.1-sol"
+        ],
+        "usage": {
+          "input": 13842,
+          "output": 1290,
+          "cacheRead": 31744,
+          "cacheWrite": 0,
+          "totalTokens": 46876,
+          "estimatedApiUsd": 0.0437584
+        },
+        "totalEstimatedUsd": null,
+        "turns": 7,
+        "calls": 26,
+        "latencyMs": 41692,
+        "rollbacks": 0,
+        "checkpoints": 2,
+        "failedStates": 0,
+        "testsCurrentAtFinish": true,
+        "changed": [
+          "src/src/parser/parser.ts"
+        ],
+        "errors": [
+          "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+        ]
+      },
+      {
+        "id": "002-bom-boundaries-rollback",
+        "task": "bom-boundaries",
+        "arm": "rollback",
+        "status": "provider_error",
+        "success": false,
+        "patchAccepted": false,
+        "acceptance": "failed",
+        "regression": "passed",
+        "upstream": "passed",
+        "upstreamTests": 297,
+        "immutableIntact": true,
+        "modelValid": true,
+        "actualModels": [
+          "gpt-6.1-sol"
+        ],
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "estimatedApiUsd": 0
+        },
+        "totalEstimatedUsd": null,
+        "turns": 1,
+        "calls": 0,
+        "latencyMs": 5854,
+        "rollbacks": 0,
+        "checkpoints": 1,
+        "failedStates": 0,
+        "testsCurrentAtFinish": true,
+        "changed": [],
+        "errors": [
+          "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+        ]
+      },
+      {
+        "id": "003-aliased-merge-tags-rollback",
+        "task": "aliased-merge-tags",
+        "arm": "rollback",
+        "status": "provider_error",
+        "success": false,
+        "patchAccepted": false,
+        "acceptance": "failed",
+        "regression": "passed",
+        "upstream": "passed",
+        "upstreamTests": 286,
+        "immutableIntact": true,
+        "modelValid": true,
+        "actualModels": [
+          "gpt-6.1-sol"
+        ],
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "estimatedApiUsd": 0
+        },
+        "totalEstimatedUsd": null,
+        "turns": 1,
+        "calls": 0,
+        "latencyMs": 3401,
+        "rollbacks": 0,
+        "checkpoints": 1,
+        "failedStates": 0,
+        "testsCurrentAtFinish": true,
+        "changed": [],
+        "errors": [
+          "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+        ]
+      },
+      {
+        "id": "004-aliased-merge-tags-normal",
+        "task": "aliased-merge-tags",
+        "arm": "normal",
+        "status": "provider_error",
+        "success": false,
+        "patchAccepted": false,
+        "acceptance": "failed",
+        "regression": "passed",
+        "upstream": "passed",
+        "upstreamTests": 286,
+        "immutableIntact": true,
+        "modelValid": true,
+        "actualModels": [
+          "gpt-6.1-sol"
+        ],
+        "usage": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "estimatedApiUsd": 0
+        },
+        "totalEstimatedUsd": null,
+        "turns": 1,
+        "calls": 0,
+        "latencyMs": 3554,
+        "rollbacks": 0,
+        "checkpoints": 1,
+        "failedStates": 0,
+        "testsCurrentAtFinish": true,
+        "changed": [],
+        "errors": [
+          "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+        ]
+      }
+    ],
+    "stopReason": null
+  },
+  "verification": {
+    "verifiedAt": "2026-10-14T21:34:57.403Z",
+    "inputCount": 30,
+    "inputDrift": [],
+    "frozenDrift": [],
+    "baselineDrift": [],
+    "patchDrift": [],
+    "immutableDrift": [],
+    "toolPathViolations": [],
+    "observedLiteralPaths": [
+      "src/src/parser/parser.ts",
+      "tests/visible.test.mjs",
+      "README.md"
+    ],
+    "fixtures": [
+      {
+        "id": "bom-boundaries",
+        "base": "04d6fe3298191ee94adf8b1bad87bd2d909092af",
+        "fix": "e5e6f621214e7d8b3f6e6f8ea29ea667f32a5861",
+        "sourceFiles": 41,
+        "baseline": "failed",
+        "reference": "passed",
+        "visibleBaseline": "passed",
+        "visibleReference": "passed",
+        "upstreamBaseline": "passed",
+        "upstreamReference": "passed",
+        "upstreamTests": 297
+      },
+      {
+        "id": "aliased-merge-tags",
+        "base": "cc665ec15016ccb6004bc46f53257366c5d0b18d",
+        "fix": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+        "sourceFiles": 41,
+        "baseline": "failed",
+        "reference": "passed",
+        "visibleBaseline": "passed",
+        "visibleReference": "passed",
+        "upstreamBaseline": "passed",
+        "upstreamReference": "passed",
+        "upstreamTests": 286
+      },
+      {
+        "id": "empty-block-outdent",
+        "base": "30108cc828b5393d55dfbfc8087ab713f7145946",
+        "fix": "0cbb471d67b083778e7b2600af2418142bf5bf04",
+        "sourceFiles": 43,
+        "baseline": "failed",
+        "reference": "passed",
+        "visibleBaseline": "passed",
+        "visibleReference": "passed",
+        "upstreamBaseline": "passed",
+        "upstreamReference": "passed",
+        "upstreamTests": 305
+      }
+    ],
+    "artifactBytes": 32079556,
+    "freeBytes": 10324258816,
+    "runCount": 4,
+    "knownUsd": 0.0437584,
+    "unknownCostAttempts": 4,
+    "actualRollbacks": 0,
+    "allIntact": true
+  },
+  "nextVersionLiveEvaluated": false
+}

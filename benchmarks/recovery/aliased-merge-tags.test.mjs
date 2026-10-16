@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolve} from 'node:path';import {pathToFileURL} from 'node:url';
+const y=await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/src/index.ts')).href);const o={schema:y.YAML11_SCHEMA};
+test('aliased merge sequences reject scalar and nested sequence elements',()=>{for(const value of ['[abc]','[[p, q]]','[1]','[null]','[true]','[{x: 1}, abc]'])assert.throws(()=>y.load('a: &x '+value+'\n<<: *x\n',o),/cannot merge mappings/);});
+test('mapping sources keep tag provenance and merge override precedence',()=>{assert.deepEqual(y.load('a: &x [{p: 1}, {p: 2, q: 3}]\n<<: *x\np: 9\n',o),{a:[{p:1},{p:2,q:3}],p:9,q:3});assert.deepEqual(y.load('--- !!set\n<<: [{a: null}, {b: null}]\n',o),new Set(['a','b']));assert.deepEqual(y.load('a: &x {p: 1}\n<<: *x\n',o),{a:{p:1},p:1});});
+test('ordinary sequences and multi-document provenance remain independent',()=>{assert.deepEqual(y.load('[abc, [p,q], 1]',o),['abc',['p','q'],1]);assert.deepEqual(y.loadAll('---\na: &x [{p: 1}]\n<<: *x\n---\na: &x [{q: 2}]\n<<: *x\n',o),[{a:[{p:1}],p:1},{a:[{q:2}],q:2}]);});

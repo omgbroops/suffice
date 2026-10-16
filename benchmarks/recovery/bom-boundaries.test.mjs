@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolve} from 'node:path';import {pathToFileURL} from 'node:url';
+const y=await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/src/index.ts')).href);
+test('BOM before repeated documents comments and directives',()=>{for(const boundary of ['\uFEFF---\n','\uFEFF# comment\n---\n','\uFEFF%YAML 1.2\n---\n']){assert.deepEqual(y.loadAll('---\na: 1\n'+boundary+'b: [2, 3]\n...\n\uFEFF---\nc: 4\n'),[{a:1},{b:[2,3]},{c:4}]);}});
+test('plain and block scalars terminate at BOM document start',()=>{for(const body of ['plain value\n','|\n  line\n','>\n  line\n']){const src='---\nk: '+body+'\uFEFF---\nx: 2\n';assert.deepEqual(y.loadAll(src),[{k:body==='plain value\n'?'plain value':'line\n'},{x:2}]);assert.deepEqual(y.constructFromEvents(y.parseEvents(src,{}),{source:src}),y.loadAll(src));}});
+test('BOM scalar content is preserved and normal documents remain valid',()=>{assert.equal(y.load('"x\uFEFFy"'),'x\uFEFFy');assert.deepEqual(y.load('\uFEFFfoo: bar\n'),{foo:'bar'});assert.deepEqual(y.loadAll('---\na: 1\n...\n---\nb: 2\n'),[{a:1},{b:2}]);});
