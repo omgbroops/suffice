@@ -1,0 +1,413 @@
+{
+  "kind": "offline mechanism verification; not coding-agent repair or live capability evidence",
+  "generatedAt": "2026-10-14T21:33:58.045Z",
+  "baselineSource": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+  "referenceSource": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+  "changedFiles": [
+    "src/src/parser/constructor.ts"
+  ],
+  "arms": [
+    {
+      "mode": "unrestricted",
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 6,
+        "executed": 6,
+        "deferred": 0,
+        "testWallMs": 2020,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 0,
+            "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+            "status": "passed",
+            "latencyMs": 357
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 0,
+            "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+            "status": "passed",
+            "latencyMs": 361
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "behavioral",
+            "executed": true,
+            "edits": 0,
+            "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+            "status": "failed",
+            "latencyMs": 344
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "behavioral",
+            "executed": true,
+            "edits": 0,
+            "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+            "status": "failed",
+            "latencyMs": 302
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "behavioral",
+            "executed": true,
+            "edits": 1,
+            "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+            "status": "passed",
+            "latencyMs": 342
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "behavioral",
+            "executed": true,
+            "edits": 1,
+            "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+            "status": "passed",
+            "latencyMs": 314
+          }
+        ]
+      },
+      "receipts": [
+        {
+          "kind": "visible",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 357
+        },
+        {
+          "kind": "visible",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 361
+        },
+        {
+          "kind": "behavioral",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "failed",
+          "executed": true,
+          "latencyMs": 344
+        },
+        {
+          "kind": "behavioral",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "failed",
+          "executed": true,
+          "latencyMs": 302
+        },
+        {
+          "kind": "behavioral",
+          "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+          "edits": 1,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 342
+        },
+        {
+          "kind": "behavioral",
+          "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+          "edits": 1,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 314
+        }
+      ],
+      "independentBaselineFinal": "failed",
+      "independentReferenceFinal": "passed",
+      "finalWallMs": 593,
+      "observedBehavioralFailures": 2
+    },
+    {
+      "mode": "fixed",
+      "policy": {
+        "mode": "fixed",
+        "requested": 6,
+        "executed": 1,
+        "deferred": 5,
+        "testWallMs": 299,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 0,
+            "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+            "status": "passed",
+            "latencyMs": 299
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": false,
+            "edits": 0,
+            "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "behavioral",
+            "executed": false,
+            "edits": 0,
+            "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "behavioral",
+            "executed": false,
+            "edits": 0,
+            "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "behavioral",
+            "executed": false,
+            "edits": 1,
+            "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "behavioral",
+            "executed": false,
+            "edits": 1,
+            "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "receipts": [
+        {
+          "kind": "visible",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 299
+        },
+        {
+          "kind": "visible",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        },
+        {
+          "kind": "behavioral",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        },
+        {
+          "kind": "behavioral",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        },
+        {
+          "kind": "behavioral",
+          "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+          "edits": 1,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        },
+        {
+          "kind": "behavioral",
+          "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+          "edits": 1,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        }
+      ],
+      "independentBaselineFinal": "failed",
+      "independentReferenceFinal": "passed",
+      "finalWallMs": 636,
+      "observedBehavioralFailures": 0
+    },
+    {
+      "mode": "selective",
+      "policy": {
+        "mode": "selective",
+        "requested": 6,
+        "executed": 3,
+        "deferred": 3,
+        "testWallMs": 956,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 0,
+            "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+            "status": "passed",
+            "latencyMs": 308
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": false,
+            "edits": 0,
+            "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+            "status": "deferred",
+            "reason": "identical source and test revision already executed",
+            "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "behavioral",
+            "executed": true,
+            "edits": 0,
+            "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+            "status": "failed",
+            "latencyMs": 325
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "behavioral",
+            "executed": false,
+            "edits": 0,
+            "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+            "status": "deferred",
+            "reason": "identical source and test revision already executed",
+            "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "behavioral",
+            "executed": true,
+            "edits": 1,
+            "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+            "status": "passed",
+            "latencyMs": 323
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "behavioral",
+            "executed": false,
+            "edits": 1,
+            "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+            "status": "deferred",
+            "reason": "identical source and test revision already executed",
+            "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "receipts": [
+        {
+          "kind": "visible",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 308
+        },
+        {
+          "kind": "visible",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        },
+        {
+          "kind": "behavioral",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "failed",
+          "executed": true,
+          "latencyMs": 325
+        },
+        {
+          "kind": "behavioral",
+          "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+          "edits": 0,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        },
+        {
+          "kind": "behavioral",
+          "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+          "edits": 1,
+          "status": "passed",
+          "executed": true,
+          "latencyMs": 323
+        },
+        {
+          "kind": "behavioral",
+          "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+          "edits": 1,
+          "status": "deferred",
+          "executed": false,
+          "latencyMs": null
+        }
+      ],
+      "independentBaselineFinal": "failed",
+      "independentReferenceFinal": "passed",
+      "finalWallMs": 548,
+      "observedBehavioralFailures": 1
+    }
+  ]
+}

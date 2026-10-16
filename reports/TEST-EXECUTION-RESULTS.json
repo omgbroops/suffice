@@ -1,0 +1,4170 @@
+{
+  "observedComparisons": {
+    "fixedCostReductionPct": 16.48733765885314,
+    "selectiveCostReductionPct": 15.00019675907983,
+    "fixedActivation": 12,
+    "selectiveActivation": 0,
+    "capabilityImprovementMeasured": false,
+    "difficultyCeiling": true,
+    "causalSelectiveEffectMeasured": false
+  },
+  "campaign": "test-execution-post-reset",
+  "status": "completed",
+  "scoredAttempts": 18,
+  "plannedScoredAttempts": 18,
+  "screeningAttempts": 4,
+  "allAttempts": 22,
+  "knownEstimatedUsd": 1.0580736,
+  "unknownCostAttempts": 1,
+  "livePolicyActivation": true,
+  "screening": [
+    {
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "task": "merge-alias-screen",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": true,
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "latencyMs": 3739,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 0,
+        "executed": 0,
+        "deferred": 0,
+        "testWallMs": 0,
+        "events": []
+      },
+      "changed": [],
+      "acceptance": "failed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1717,
+      "turns": 1,
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ],
+      "endedAt": "2026-10-14T21:32:51.162Z",
+      "campaign": "test-execution-screen-v1"
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "task": "merge-alias-screen",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": true,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 18159,
+        "output": 1801,
+        "cacheRead": 45312,
+        "cacheWrite": 0,
+        "totalTokens": 65272,
+        "estimatedApiUsd": 0.0588592
+      },
+      "knownEstimatedUsd": 0.0588592,
+      "totalEstimatedUsd": 0.0588592,
+      "latencyMs": 44960,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 1639,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 10,
+            "key": "e57e65da344b899d5dc4091cefd5cb4cb634030e5247b2828e78d7c86e2c181c",
+            "status": "passed",
+            "latencyMs": 319
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 10,
+            "key": "28bbc14c81d845fe385c85057b0a5f8f917f803522577c4ce5ab400d05a6e1ea",
+            "status": "passed",
+            "latencyMs": 756
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 10,
+            "key": "94d661151841d0715ea35f7863647f33be2cbb02faacfaced106c38115047d16",
+            "status": "failed",
+            "latencyMs": 294
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 10,
+            "key": "d93d7e26f8fc226ff3a407eb15712aba659292d7a844b348cdcb649123989112",
+            "status": "passed",
+            "latencyMs": 270
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1366,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:37:30.471Z"
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "002-merge-alias-screen-fixed-r0",
+      "task": "merge-alias-screen",
+      "mode": "fixed",
+      "repetition": 0,
+      "pilot": true,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 13588,
+        "output": 1610,
+        "cacheRead": 33152,
+        "cacheWrite": 0,
+        "totalTokens": 48350,
+        "estimatedApiUsd": 0.0465912
+      },
+      "knownEstimatedUsd": 0.0465912,
+      "totalEstimatedUsd": 0.0465912,
+      "latencyMs": 48416,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 314,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 9,
+            "key": "2061eed1ff2b9316e28eb348720aa9961b50e1c92889f9fc3a62cc692b4bf6e2",
+            "status": "passed",
+            "latencyMs": 314
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 9,
+            "key": "565d70afe5006a43b352fcec09a0e6617ea90f5f3bef36088ed70970121c9cce",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "0d89c245d327e6e4a7acbfef5c9b955f550d1b3a9de801a3e9b30d25fe7acdcb",
+            "testRevision": "002d2fe591b7e0c54d76e093abb2adac4ff130b69dc2f529510f36f6c1bbd627",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 9,
+            "key": "f29556449322871306c45a6a5560784dd465557323c88d988cca5099df1d5ce6",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "0d89c245d327e6e4a7acbfef5c9b955f550d1b3a9de801a3e9b30d25fe7acdcb",
+            "testRevision": "822cfaf074fcb9582f7cf142a543fc5228957c4882c0a8ccd9b251ca8f08d39c",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1462,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:38:21.438Z"
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "003-merge-alias-screen-selective-r0",
+      "task": "merge-alias-screen",
+      "mode": "selective",
+      "repetition": 0,
+      "pilot": true,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 16619,
+        "output": 1555,
+        "cacheRead": 31488,
+        "cacheWrite": 0,
+        "totalTokens": 49662,
+        "estimatedApiUsd": 0.0519368
+      },
+      "knownEstimatedUsd": 0.0519368,
+      "totalEstimatedUsd": 0.0519368,
+      "latencyMs": 43621,
+      "policy": {
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "deferred": 0,
+        "testWallMs": 1900,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 10,
+            "key": "3fda1f97603f35c0e26bb4249bec8ab149feee74099dab7271de950010a0a7cd",
+            "status": "passed",
+            "latencyMs": 414
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 10,
+            "key": "d975b3161fc0f24ca1fe90d845c2544646d94937374c124d6d23b1a5d90748f2",
+            "status": "passed",
+            "latencyMs": 981
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 10,
+            "key": "d47d61e7f787b53569694aa7030b3d395a1916cb5752178dd8d14fc665377e9e",
+            "status": "passed",
+            "latencyMs": 505
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 2328,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:39:08.984Z"
+    }
+  ],
+  "summary": [
+    {
+      "mode": "unrestricted",
+      "attempts": 6,
+      "accepted": 6,
+      "patchAccepted": 6,
+      "knownCost": 0.3354356,
+      "unknownCost": 0,
+      "meanCompleteCost": 0.05590593333333333,
+      "completeCostPerAccepted": 0.05590593333333333,
+      "requested": 26,
+      "executed": 26,
+      "deferred": 0,
+      "publicTestWallMs": 22296,
+      "finalTestWallMs": 22796,
+      "meanAgentWallMs": 51018.666666666664,
+      "turns": 43,
+      "input": 118865,
+      "output": 7528,
+      "cacheRead": 224256
+    },
+    {
+      "mode": "fixed",
+      "attempts": 6,
+      "accepted": 6,
+      "patchAccepted": 6,
+      "knownCost": 0.2801312,
+      "unknownCost": 0,
+      "meanCompleteCost": 0.04668853333333334,
+      "completeCostPerAccepted": 0.04668853333333334,
+      "requested": 18,
+      "executed": 6,
+      "deferred": 12,
+      "publicTestWallMs": 10536,
+      "finalTestWallMs": 16883,
+      "meanAgentWallMs": 43969.666666666664,
+      "turns": 41,
+      "input": 94808,
+      "output": 6960,
+      "cacheRead": 209152
+    },
+    {
+      "mode": "selective",
+      "attempts": 6,
+      "accepted": 6,
+      "patchAccepted": 6,
+      "knownCost": 0.28511960000000003,
+      "unknownCost": 0,
+      "meanCompleteCost": 0.04751993333333334,
+      "completeCostPerAccepted": 0.04751993333333334,
+      "requested": 23,
+      "executed": 23,
+      "deferred": 0,
+      "publicTestWallMs": 21403,
+      "finalTestWallMs": 20367,
+      "meanAgentWallMs": 53126.333333333336,
+      "turns": 42,
+      "input": 88787,
+      "output": 8320,
+      "cacheRead": 243456
+    }
+  ],
+  "matchedCosts": [
+    {
+      "mode": "unrestricted",
+      "groups": 6,
+      "meanCost": 0.05590593333333333,
+      "accepted": 6
+    },
+    {
+      "mode": "fixed",
+      "groups": 6,
+      "meanCost": 0.04668853333333334,
+      "accepted": 6
+    },
+    {
+      "mode": "selective",
+      "groups": 6,
+      "meanCost": 0.04751993333333334,
+      "accepted": 6
+    }
+  ],
+  "capabilityEqualBudget": [
+    {
+      "mode": "unrestricted",
+      "budgetUsd": 0.75,
+      "screeningKnownUsd": 0.0588592,
+      "spent": 0.3942948,
+      "remaining": 0.3557052,
+      "attempts": 6,
+      "accepted": 6,
+      "unknown": true,
+      "eligible": [
+        {
+          "task": "merge-values",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "flow-key-separation",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "blank-scalar-dedent",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "merge-values",
+          "repetition": 1,
+          "success": true
+        },
+        {
+          "task": "flow-key-separation",
+          "repetition": 1,
+          "success": true
+        },
+        {
+          "task": "blank-scalar-dedent",
+          "repetition": 1,
+          "success": true
+        }
+      ]
+    },
+    {
+      "mode": "fixed",
+      "budgetUsd": 0.75,
+      "screeningKnownUsd": 0.0465912,
+      "spent": 0.3267224,
+      "remaining": 0.4232776,
+      "attempts": 6,
+      "accepted": 6,
+      "unknown": false,
+      "eligible": [
+        {
+          "task": "merge-values",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "flow-key-separation",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "blank-scalar-dedent",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "merge-values",
+          "repetition": 1,
+          "success": true
+        },
+        {
+          "task": "flow-key-separation",
+          "repetition": 1,
+          "success": true
+        },
+        {
+          "task": "blank-scalar-dedent",
+          "repetition": 1,
+          "success": true
+        }
+      ]
+    },
+    {
+      "mode": "selective",
+      "budgetUsd": 0.75,
+      "screeningKnownUsd": 0.0519368,
+      "spent": 0.33705640000000003,
+      "remaining": 0.41294359999999997,
+      "attempts": 6,
+      "accepted": 6,
+      "unknown": false,
+      "eligible": [
+        {
+          "task": "merge-values",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "flow-key-separation",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "blank-scalar-dedent",
+          "repetition": 0,
+          "success": true
+        },
+        {
+          "task": "merge-values",
+          "repetition": 1,
+          "success": true
+        },
+        {
+          "task": "flow-key-separation",
+          "repetition": 1,
+          "success": true
+        },
+        {
+          "task": "blank-scalar-dedent",
+          "repetition": 1,
+          "success": true
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "task": "merge-alias-screen",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": true,
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "latencyMs": 3739,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 0,
+        "executed": 0,
+        "deferred": 0,
+        "testWallMs": 0,
+        "events": []
+      },
+      "changed": [],
+      "acceptance": "failed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1717,
+      "turns": 1,
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ],
+      "endedAt": "2026-10-14T21:32:51.162Z",
+      "campaign": "test-execution-screen-v1"
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "task": "merge-alias-screen",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": true,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 18159,
+        "output": 1801,
+        "cacheRead": 45312,
+        "cacheWrite": 0,
+        "totalTokens": 65272,
+        "estimatedApiUsd": 0.0588592
+      },
+      "knownEstimatedUsd": 0.0588592,
+      "totalEstimatedUsd": 0.0588592,
+      "latencyMs": 44960,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 1639,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 10,
+            "key": "e57e65da344b899d5dc4091cefd5cb4cb634030e5247b2828e78d7c86e2c181c",
+            "status": "passed",
+            "latencyMs": 319
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 10,
+            "key": "28bbc14c81d845fe385c85057b0a5f8f917f803522577c4ce5ab400d05a6e1ea",
+            "status": "passed",
+            "latencyMs": 756
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 10,
+            "key": "94d661151841d0715ea35f7863647f33be2cbb02faacfaced106c38115047d16",
+            "status": "failed",
+            "latencyMs": 294
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 10,
+            "key": "d93d7e26f8fc226ff3a407eb15712aba659292d7a844b348cdcb649123989112",
+            "status": "passed",
+            "latencyMs": 270
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1366,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:37:30.471Z"
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "002-merge-alias-screen-fixed-r0",
+      "task": "merge-alias-screen",
+      "mode": "fixed",
+      "repetition": 0,
+      "pilot": true,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 13588,
+        "output": 1610,
+        "cacheRead": 33152,
+        "cacheWrite": 0,
+        "totalTokens": 48350,
+        "estimatedApiUsd": 0.0465912
+      },
+      "knownEstimatedUsd": 0.0465912,
+      "totalEstimatedUsd": 0.0465912,
+      "latencyMs": 48416,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 314,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 9,
+            "key": "2061eed1ff2b9316e28eb348720aa9961b50e1c92889f9fc3a62cc692b4bf6e2",
+            "status": "passed",
+            "latencyMs": 314
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 9,
+            "key": "565d70afe5006a43b352fcec09a0e6617ea90f5f3bef36088ed70970121c9cce",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "0d89c245d327e6e4a7acbfef5c9b955f550d1b3a9de801a3e9b30d25fe7acdcb",
+            "testRevision": "002d2fe591b7e0c54d76e093abb2adac4ff130b69dc2f529510f36f6c1bbd627",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 9,
+            "key": "f29556449322871306c45a6a5560784dd465557323c88d988cca5099df1d5ce6",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "0d89c245d327e6e4a7acbfef5c9b955f550d1b3a9de801a3e9b30d25fe7acdcb",
+            "testRevision": "822cfaf074fcb9582f7cf142a543fc5228957c4882c0a8ccd9b251ca8f08d39c",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1462,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:38:21.438Z"
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "003-merge-alias-screen-selective-r0",
+      "task": "merge-alias-screen",
+      "mode": "selective",
+      "repetition": 0,
+      "pilot": true,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 16619,
+        "output": 1555,
+        "cacheRead": 31488,
+        "cacheWrite": 0,
+        "totalTokens": 49662,
+        "estimatedApiUsd": 0.0519368
+      },
+      "knownEstimatedUsd": 0.0519368,
+      "totalEstimatedUsd": 0.0519368,
+      "latencyMs": 43621,
+      "policy": {
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "deferred": 0,
+        "testWallMs": 1900,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 10,
+            "key": "3fda1f97603f35c0e26bb4249bec8ab149feee74099dab7271de950010a0a7cd",
+            "status": "passed",
+            "latencyMs": 414
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 10,
+            "key": "d975b3161fc0f24ca1fe90d845c2544646d94937374c124d6d23b1a5d90748f2",
+            "status": "passed",
+            "latencyMs": 981
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 10,
+            "key": "d47d61e7f787b53569694aa7030b3d395a1916cb5752178dd8d14fc665377e9e",
+            "status": "passed",
+            "latencyMs": 505
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 2328,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:39:08.984Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "001-merge-values-unrestricted-r0",
+      "task": "merge-values",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 15876,
+        "output": 1203,
+        "cacheRead": 47616,
+        "cacheWrite": 0,
+        "totalTokens": 64695,
+        "estimatedApiUsd": 0.0485436
+      },
+      "knownEstimatedUsd": 0.0485436,
+      "totalEstimatedUsd": 0.0485436,
+      "latencyMs": 42177,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 1687,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 3,
+            "key": "bc981ba650e1c65abc006e66378ed27d42a17b6a631a90250153d1bc83099bf0",
+            "status": "passed",
+            "latencyMs": 354
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 3,
+            "key": "0b408b641354b1a14f0e1cc0005b4bd7fc0db824262eba801ddf739d661f6835",
+            "status": "passed",
+            "latencyMs": 818
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "d5342605a502ba6a4b56a3850a1f38a2fa4496f163c1889242da0cb99e61f6b9",
+            "status": "failed",
+            "latencyMs": 279
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "7972cb461eb1719f36d5077f1e8a4d4d91d6c6c83aa9d8e0f82454e342ac24f0",
+            "status": "passed",
+            "latencyMs": 236
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "finalTestWallMs": 1868,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:40:28.343Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "002-merge-values-fixed-r0",
+      "task": "merge-values",
+      "mode": "fixed",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 16056,
+        "output": 1135,
+        "cacheRead": 48000,
+        "cacheWrite": 0,
+        "totalTokens": 65191,
+        "estimatedApiUsd": 0.048262000000000006
+      },
+      "knownEstimatedUsd": 0.048262000000000006,
+      "totalEstimatedUsd": 0.048262000000000006,
+      "latencyMs": 38455,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 348,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 7,
+            "key": "2ac34fc3f5dee2a98e4ff52bbead844045f9ccdf762592364821217988bf9c0d",
+            "status": "passed",
+            "latencyMs": 348
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 7,
+            "key": "0595e7fd462e5744114cc4bac8125318f3acd4386a37c6c8cc87877cb5001f8d",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "dadaa5a1b89a2805620e36b3dffc7ff7a113b748e10d522d832d097c2b2b3118",
+            "testRevision": "e5ac7f0c00c1079ce23faa25103bfd8538e6c6f156d491948a5187fae625b478",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 7,
+            "key": "759a8a0dc483636a9836cfc0546afde36b67c953569c5f9b2b4674d54981e433",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "dadaa5a1b89a2805620e36b3dffc7ff7a113b748e10d522d832d097c2b2b3118",
+            "testRevision": "58c0f752084018e0c414b3b4dd58ee56d42c7c500bfa264f621052f40c5855fb",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "finalTestWallMs": 1568,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:41:09.827Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "003-merge-values-selective-r0",
+      "task": "merge-values",
+      "mode": "selective",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 17847,
+        "output": 1259,
+        "cacheRead": 47360,
+        "cacheWrite": 0,
+        "totalTokens": 66466,
+        "estimatedApiUsd": 0.053020000000000005
+      },
+      "knownEstimatedUsd": 0.053020000000000005,
+      "totalEstimatedUsd": 0.053020000000000005,
+      "latencyMs": 47436,
+      "policy": {
+        "mode": "selective",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 1848,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 3,
+            "key": "2d70c12817e9f6d9f2db55b95d9e0126fd42dc0f224c0cd28e2c734b937eaf25",
+            "status": "passed",
+            "latencyMs": 293
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 3,
+            "key": "12722ec045dd11baf0d81fbd36da621a5d5d807117170c6f515c6dc8cfa311d7",
+            "status": "passed",
+            "latencyMs": 983
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "01fefeb8bd00eaa6a301e0fcd085f5fbf93f41b43445b94d83c3b21d018def6d",
+            "status": "failed",
+            "latencyMs": 333
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "20edafcbab900401b5ad0a4f0c6e492b888405159ab4fff21a14f3a57c263637",
+            "status": "passed",
+            "latencyMs": 239
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "finalTestWallMs": 1641,
+      "turns": 8,
+      "errors": [],
+      "endedAt": "2026-10-14T21:42:00.599Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "004-flow-key-separation-fixed-r0",
+      "task": "flow-key-separation",
+      "mode": "fixed",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 17155,
+        "output": 1826,
+        "cacheRead": 70144,
+        "cacheWrite": 0,
+        "totalTokens": 89125,
+        "estimatedApiUsd": 0.05958440000000001
+      },
+      "knownEstimatedUsd": 0.05958440000000001,
+      "totalEstimatedUsd": 0.05958440000000001,
+      "latencyMs": 52551,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 342,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 1,
+            "key": "03159bd9583607fe6770f585a3f1041d2bafd4d196f41302be0e703d311ae99b",
+            "status": "passed",
+            "latencyMs": 342
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 1,
+            "key": "78ddc21f537bc6f8355b4975bb0e5062289560136046478be8f992e8db38cbfc",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "9aaef178b13acb80e5944588e32a8c010af44464a083356aefd24dfed8ee1180",
+            "testRevision": "08c1d35700c9db21f513b5b035acfb1e08b37f103307e10aeee9db665512f3b8",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 1,
+            "key": "c228c59086ca664ae86ede6b26f052980058e83873c54148b752c73c6c55054e",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "9aaef178b13acb80e5944588e32a8c010af44464a083356aefd24dfed8ee1180",
+            "testRevision": "7fe7d8303bb56e45c37ef57aac529e9407129632abfe0ac42d24201c82dd986a",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/ast/presenter.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "finalTestWallMs": 1804,
+      "turns": 9,
+      "errors": [],
+      "endedAt": "2026-10-14T21:42:56.163Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "005-flow-key-separation-selective-r0",
+      "task": "flow-key-separation",
+      "mode": "selective",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 20050,
+        "output": 1803,
+        "cacheRead": 58368,
+        "cacheWrite": 0,
+        "totalTokens": 80221,
+        "estimatedApiUsd": 0.0639668
+      },
+      "knownEstimatedUsd": 0.0639668,
+      "totalEstimatedUsd": 0.0639668,
+      "latencyMs": 59568,
+      "policy": {
+        "mode": "selective",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 2203,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 8,
+            "key": "592f7d5885834838ef860055bac433d9ce9650a2de1becde15039870515f40ce",
+            "status": "passed",
+            "latencyMs": 521
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 8,
+            "key": "bfcfe42b44164c83b95887b24ef22f7ba29e1e66d5e02dd093add5126e811ef6",
+            "status": "passed",
+            "latencyMs": 1091
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 8,
+            "key": "5b324696466ebbd6f9c6fb4bd7bafb3a129813906743d785d854614f6dd9fa11",
+            "status": "failed",
+            "latencyMs": 305
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 8,
+            "key": "d1714ba0a81442b0acc9198ea23c7358398ecec922866cc9d014082344f02ea5",
+            "status": "passed",
+            "latencyMs": 286
+          }
+        ]
+      },
+      "changed": [
+        "src/src/ast/presenter.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "finalTestWallMs": 2072,
+      "turns": 8,
+      "errors": [],
+      "endedAt": "2026-10-14T21:43:59.215Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "006-flow-key-separation-unrestricted-r0",
+      "task": "flow-key-separation",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 36561,
+        "output": 1659,
+        "cacheRead": 62976,
+        "cacheWrite": 0,
+        "totalTokens": 101196,
+        "estimatedApiUsd": 0.0960096
+      },
+      "knownEstimatedUsd": 0.0960096,
+      "totalEstimatedUsd": 0.0960096,
+      "latencyMs": 66574,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 5,
+        "executed": 5,
+        "deferred": 0,
+        "testWallMs": 2296,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 8,
+            "key": "018ad6c4be4bf660a97b25bb256c3fd500c66f769878748b6f2d4675a07b2894",
+            "status": "passed",
+            "latencyMs": 422
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 8,
+            "key": "768233adf591ae4169f8480f5afcb79a3e64288abcae4915e636811a67d79d73",
+            "status": "passed",
+            "latencyMs": 1014
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 8,
+            "key": "880fb43412f1c935b12797cc66e09a337fae36f89f4658d740eb4bc4b5e03b63",
+            "status": "failed",
+            "latencyMs": 301
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 8,
+            "key": "7abb3b119f571d16766aca045fee9db80498ad7fdf283feb6b3e34e255a25a94",
+            "status": "failed",
+            "latencyMs": 299
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 8,
+            "key": "1d71719785c8552a5d2be75fe2ba72a5a04f5dee24fe603173162f0052d171a7",
+            "status": "passed",
+            "latencyMs": 260
+          }
+        ]
+      },
+      "changed": [
+        "src/src/ast/presenter.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "finalTestWallMs": 1664,
+      "turns": 10,
+      "errors": [],
+      "endedAt": "2026-10-14T21:45:09.064Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "007-blank-scalar-dedent-selective-r0",
+      "task": "blank-scalar-dedent",
+      "mode": "selective",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 9012,
+        "output": 1092,
+        "cacheRead": 21888,
+        "cacheWrite": 0,
+        "totalTokens": 31992,
+        "estimatedApiUsd": 0.0311328
+      },
+      "knownEstimatedUsd": 0.0311328,
+      "totalEstimatedUsd": 0.0311328,
+      "latencyMs": 40753,
+      "policy": {
+        "mode": "selective",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 1863,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "b68eb1c4853e0480dc80b2d8a2daea23203f65ab9e97562c9bb66b71785642a1",
+            "status": "passed",
+            "latencyMs": 320
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 1,
+            "key": "aeb3391c27c90e1760aeaae76fde284d1ac7c1a1b2dc6d94b8def95035f5f41d",
+            "status": "passed",
+            "latencyMs": 292
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 1,
+            "key": "b66ae0e4e34ed57bcf2e34f85180944013d908ab3248c66ddea1b83b9433f71f",
+            "status": "passed",
+            "latencyMs": 830
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "33bf57e2d25262de3dd512eba606b56e60d0fb95c283b48f01c2939c117bd338",
+            "status": "passed",
+            "latencyMs": 421
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "finalTestWallMs": 1377,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:45:52.341Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "008-blank-scalar-dedent-unrestricted-r0",
+      "task": "blank-scalar-dedent",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 17137,
+        "output": 839,
+        "cacheRead": 16000,
+        "cacheWrite": 0,
+        "totalTokens": 33976,
+        "estimatedApiUsd": 0.044264
+      },
+      "knownEstimatedUsd": 0.044264,
+      "totalEstimatedUsd": 0.044264,
+      "latencyMs": 30114,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 3,
+        "executed": 3,
+        "deferred": 0,
+        "testWallMs": 1555,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 1,
+            "key": "7991d5c2fa37769cbd0ecb753f45694c4580c8e93c7c87b4412c48df995a77ed",
+            "status": "passed",
+            "latencyMs": 354
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 1,
+            "key": "ede6344415d80d13998e3644c2a61e6674370d1c2553c92da61dea729fdbd2e6",
+            "status": "passed",
+            "latencyMs": 888
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "70944f7663fc4acbc3a83fc07828793f5c37ffd57ecd25007c6e4c3ac9fe4cff",
+            "status": "passed",
+            "latencyMs": 313
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "finalTestWallMs": 2177,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:46:25.896Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "009-blank-scalar-dedent-fixed-r0",
+      "task": "blank-scalar-dedent",
+      "mode": "fixed",
+      "repetition": 0,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 8591,
+        "output": 852,
+        "cacheRead": 17536,
+        "cacheWrite": 0,
+        "totalTokens": 26979,
+        "estimatedApiUsd": 0.027455599999999997
+      },
+      "knownEstimatedUsd": 0.027455599999999997,
+      "totalEstimatedUsd": 0.027455599999999997,
+      "latencyMs": 29638,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 394,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 2,
+            "key": "43e86de667fdd13cb0b8e73ae599f08dfd22b498fee03960940967e61901d058",
+            "status": "passed",
+            "latencyMs": 394
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 2,
+            "key": "d5e562173f8a65aca1ab6665a969bdb1b0ff60e929e7b277639604a8c8eaa870",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "18bbd1a1b70f6a0239b84335353743b9db7bc75373a9ef836ee189dd56a73c65",
+            "testRevision": "ced41a57fc370bfd6de1f57200121af4b24e3e09615e678b23c089c26eb2f264",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 2,
+            "key": "21b58b89979d39931e2295c70974abd01cc17daa17443a3ac453a0028632f55c",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "18bbd1a1b70f6a0239b84335353743b9db7bc75373a9ef836ee189dd56a73c65",
+            "testRevision": "786311d4ce57ee538376518b9121070c6d5215e564de3f99458c6f23c52699ab",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "finalTestWallMs": 1484,
+      "turns": 6,
+      "errors": [],
+      "endedAt": "2026-10-14T21:46:59.530Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "010-merge-values-fixed-r1",
+      "task": "merge-values",
+      "mode": "fixed",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 20721,
+        "output": 1026,
+        "cacheRead": 29056,
+        "cacheWrite": 0,
+        "totalTokens": 50803,
+        "estimatedApiUsd": 0.0546076
+      },
+      "knownEstimatedUsd": 0.0546076,
+      "totalEstimatedUsd": 0.0546076,
+      "latencyMs": 44167,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 391,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 3,
+            "key": "4b14c183f4df3dd649dc3e96ad9250d17163312a084516b447a7b2300273a7fd",
+            "status": "passed",
+            "latencyMs": 391
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 3,
+            "key": "675bf7cbc1790f081b976da7543cfbf6b7625e102c90ba4157e542a29b5fd2e7",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "9dc0dba7e6ff4d81eb36886d2c888c4a0a06fc686fd8beb9b822bf082cbdd92b",
+            "testRevision": "e5ac7f0c00c1079ce23faa25103bfd8538e6c6f156d491948a5187fae625b478",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 3,
+            "key": "c0b11491dbfa34bfd8fe3bc068606f978a396091fcfe34713e2f145b79ff8931",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "9dc0dba7e6ff4d81eb36886d2c888c4a0a06fc686fd8beb9b822bf082cbdd92b",
+            "testRevision": "6fd8fdf4f91f1a4e23ee54b744e07671224d3330df83fbc58bdca017b5e39a67",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "finalTestWallMs": 4067,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:47:49.112Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "011-merge-values-selective-r1",
+      "task": "merge-values",
+      "mode": "selective",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 18806,
+        "output": 2006,
+        "cacheRead": 64256,
+        "cacheWrite": 0,
+        "totalTokens": 85068,
+        "estimatedApiUsd": 0.0640976
+      },
+      "knownEstimatedUsd": 0.0640976,
+      "totalEstimatedUsd": 0.0640976,
+      "latencyMs": 68228,
+      "policy": {
+        "mode": "selective",
+        "requested": 5,
+        "executed": 5,
+        "deferred": 0,
+        "testWallMs": 2588,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 3,
+            "key": "a6a6e43e54b2df1edbf44670b2f03f14123d4cf34f9f76b2b2ab9a6d30f36db5",
+            "status": "passed",
+            "latencyMs": 450
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 3,
+            "key": "fe9ed771bdecd99b006471709d9b02426780e16562c1014f090ab47f3ad991f8",
+            "status": "passed",
+            "latencyMs": 855
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "60fe413c7a1930ae7fd2f6d596e7a629ceda779112e20ef1d814f16c5b486327",
+            "status": "failed",
+            "latencyMs": 413
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "1e9395aa06ddbae1afbe9dfaa83ca74e73d5293e09219e11f6896c81c837acb9",
+            "status": "failed",
+            "latencyMs": 519
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "3d0016f7d2b6ae6c4b73f3707b7ffa3618720855081b3be9211762fdf78a95e5",
+            "status": "passed",
+            "latencyMs": 351
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "finalTestWallMs": 1900,
+      "turns": 8,
+      "errors": [],
+      "endedAt": "2026-10-14T21:49:02.438Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "012-merge-values-unrestricted-r1",
+      "task": "merge-values",
+      "mode": "unrestricted",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 20373,
+        "output": 1416,
+        "cacheRead": 42240,
+        "cacheWrite": 0,
+        "totalTokens": 64029,
+        "estimatedApiUsd": 0.05913
+      },
+      "knownEstimatedUsd": 0.05913,
+      "totalEstimatedUsd": 0.05913,
+      "latencyMs": 55745,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 4485,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 3,
+            "key": "7043a09933223a89ba997640cc14c89be617e2a9173083fff0d80fa5e49fda26",
+            "status": "passed",
+            "latencyMs": 397
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 3,
+            "key": "b8ff8c54460eea23ea752fb5f38b6d5d9a4bb721b918c33d3bf30dd645053a3e",
+            "status": "passed",
+            "latencyMs": 893
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "3044e5aa7c00d40cafd3aed0b323b69acc5bb433f2e258e7e71b0b435771bb43",
+            "status": "failed",
+            "latencyMs": 2782
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 3,
+            "key": "dab623e1e5607b1b93ba67544707cd37ae682ae709591b6596b54cc5f70419b6",
+            "status": "passed",
+            "latencyMs": 413
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "finalTestWallMs": 9121,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:50:10.180Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "013-flow-key-separation-selective-r1",
+      "task": "flow-key-separation",
+      "mode": "selective",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 15413,
+        "output": 1485,
+        "cacheRead": 40448,
+        "cacheWrite": 0,
+        "totalTokens": 57346,
+        "estimatedApiUsd": 0.049720799999999996
+      },
+      "knownEstimatedUsd": 0.049720799999999996,
+      "totalEstimatedUsd": 0.049720799999999996,
+      "latencyMs": 63875,
+      "policy": {
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "deferred": 0,
+        "testWallMs": 8414,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 9,
+            "key": "a288bcc371ef462f4f0d96421863ed0ea1680e32d0eab92029afe9480ae094ed",
+            "status": "passed",
+            "latencyMs": 1796
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 9,
+            "key": "6d0753085a3c968b4b2ad69af7b1b4ebc0ed9de3825ffcb9158d49f7c9cbd087",
+            "status": "passed",
+            "latencyMs": 6019
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 9,
+            "key": "9ffb6b564d88ca641d5ec451e78b9b6ae9e169f4e74cf08e97599d3ded9f9b6d",
+            "status": "passed",
+            "latencyMs": 599
+          }
+        ]
+      },
+      "changed": [
+        "src/src/ast/presenter.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "finalTestWallMs": 9040,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:51:33.223Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "014-flow-key-separation-unrestricted-r1",
+      "task": "flow-key-separation",
+      "mode": "unrestricted",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 20464,
+        "output": 1637,
+        "cacheRead": 39552,
+        "cacheWrite": 0,
+        "totalTokens": 61653,
+        "estimatedApiUsd": 0.061253199999999994
+      },
+      "knownEstimatedUsd": 0.061253199999999994,
+      "totalEstimatedUsd": 0.061253199999999994,
+      "latencyMs": 72048,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 6,
+        "executed": 6,
+        "deferred": 0,
+        "testWallMs": 7222,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 7,
+            "key": "acd1573d76f6a4464bed3955d415e48f04d285dfd3ad89302bbc2e2b7fc42279",
+            "status": "passed",
+            "latencyMs": 944
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 7,
+            "key": "5f80634828cb734fbc5f89104c5706d272c6c2304ee21b1fe0bdcddbe34c27ac",
+            "status": "passed",
+            "latencyMs": 1891
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 7,
+            "key": "4fc236fac1831e6bf884952d0bb2b565a5a7841d8685ec2dbca3b5f18e1e57dd",
+            "status": "failed",
+            "latencyMs": 455
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 8,
+            "key": "c60825dafead315606bf37bde6333405155eb0beecda4367f78512689f06b1e5",
+            "status": "passed",
+            "latencyMs": 866
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 8,
+            "key": "c52bcb4eba33e8efa2dc5abb194c029f73aad1ff119537cfef143a623291f344",
+            "status": "passed",
+            "latencyMs": 1016
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 8,
+            "key": "d6d68b52cae48c0f38a47083c56651c91aed9c28a18881a0a9d11e940635529b",
+            "status": "passed",
+            "latencyMs": 2050
+          }
+        ]
+      },
+      "changed": [
+        "src/src/ast/presenter.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "finalTestWallMs": 4458,
+      "turns": 8,
+      "errors": [],
+      "endedAt": "2026-10-14T21:53:07.042Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "015-flow-key-separation-fixed-r1",
+      "task": "flow-key-separation",
+      "mode": "fixed",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 24419,
+        "output": 1451,
+        "cacheRead": 28800,
+        "cacheWrite": 0,
+        "totalTokens": 54670,
+        "estimatedApiUsd": 0.06622800000000001
+      },
+      "knownEstimatedUsd": 0.06622800000000001,
+      "totalEstimatedUsd": 0.06622800000000001,
+      "latencyMs": 55046,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 1283,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": true,
+            "edits": 9,
+            "key": "234bf75d79115deee3870a529b5417f9a2fef56faf7cedf02ea8a621043aaeb8",
+            "status": "passed",
+            "latencyMs": 1283
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 9,
+            "key": "d70ed16b4c2b5ba3a37d5c691427473f17635d7aab2a2c18995f80873b102968",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "0f2ea1fa737e14a9d157e7ca140bd770d4afe44484e3b58425af6e2415d72e91",
+            "testRevision": "08c1d35700c9db21f513b5b035acfb1e08b37f103307e10aeee9db665512f3b8",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": false,
+            "edits": 9,
+            "key": "5742800b7135b05480fec292f741d7f91fa13f12e6cbff4d1f2b234b8db62b84",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "0f2ea1fa737e14a9d157e7ca140bd770d4afe44484e3b58425af6e2415d72e91",
+            "testRevision": "f787917c0ef35d1e3942ee2409853ca40599d485e40a924e716fdaf0e8de5263",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/ast/presenter.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "finalTestWallMs": 3915,
+      "turns": 7,
+      "errors": [],
+      "endedAt": "2026-10-14T21:54:11.219Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "016-blank-scalar-dedent-unrestricted-r1",
+      "task": "blank-scalar-dedent",
+      "mode": "unrestricted",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 8454,
+        "output": 774,
+        "cacheRead": 15872,
+        "cacheWrite": 0,
+        "totalTokens": 25100,
+        "estimatedApiUsd": 0.0262352
+      },
+      "knownEstimatedUsd": 0.0262352,
+      "totalEstimatedUsd": 0.0262352,
+      "latencyMs": 39454,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "deferred": 0,
+        "testWallMs": 5051,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "7adb34c692fe74f80a23cf7c74c8e65e5a792c016fc9e6744fe3e97b2cdf3f02",
+            "status": "passed",
+            "latencyMs": 796
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "visible",
+            "executed": true,
+            "edits": 1,
+            "key": "8d0ba877ebd10d997f8bc5fd9afdc6073fbe4469e1a852d04a99ffaba66267f5",
+            "status": "passed",
+            "latencyMs": 1026
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 1,
+            "key": "387649b85abf496d3f4e35856dc0387e5d1e3e95abc75bfdf5d3e5b9b4e58dfa",
+            "status": "passed",
+            "latencyMs": 2378
+          },
+          {
+            "type": "test_policy",
+            "mode": "unrestricted",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "440233f61855effbe641228629a44ad6990a7a3285673ddce93454e5f64be018",
+            "status": "passed",
+            "latencyMs": 851
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "finalTestWallMs": 3508,
+      "turns": 5,
+      "errors": [],
+      "endedAt": "2026-10-14T21:54:59.871Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "017-blank-scalar-dedent-fixed-r1",
+      "task": "blank-scalar-dedent",
+      "mode": "fixed",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 7866,
+        "output": 670,
+        "cacheRead": 15616,
+        "cacheWrite": 0,
+        "totalTokens": 24152,
+        "estimatedApiUsd": 0.023993600000000004
+      },
+      "knownEstimatedUsd": 0.023993600000000004,
+      "totalEstimatedUsd": 0.023993600000000004,
+      "latencyMs": 43961,
+      "policy": {
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "deferred": 2,
+        "testWallMs": 7778,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "23094f8df8f49533acd7310844a41de57d03bc366e664e90986fb0198cf846dd",
+            "status": "passed",
+            "latencyMs": 7778
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "visible",
+            "executed": false,
+            "edits": 1,
+            "key": "e850923adbcb69ccd52513fac852da493fdbde0abcf7084a9b0c5d092d3a39f7",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "382811662fbb5604b079bf2770688aa16da4553b8d834712d6ec6237694126e8",
+            "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+            "priorResultIsNotCurrentPass": true
+          },
+          {
+            "type": "test_policy",
+            "mode": "fixed",
+            "kind": "upstream",
+            "executed": false,
+            "edits": 1,
+            "key": "4dbb8fc00282eebcd618f508769e6f1204d4aea04a3846cbe56876285989372c",
+            "status": "deferred",
+            "reason": "fewer than two meaningful edits since last checkpoint",
+            "sourceRevision": "382811662fbb5604b079bf2770688aa16da4553b8d834712d6ec6237694126e8",
+            "testRevision": "ced41a57fc370bfd6de1f57200121af4b24e3e09615e678b23c089c26eb2f264",
+            "priorResultIsNotCurrentPass": true
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "finalTestWallMs": 4045,
+      "turns": 5,
+      "errors": [],
+      "endedAt": "2026-10-14T21:55:51.291Z"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "018-blank-scalar-dedent-selective-r1",
+      "task": "blank-scalar-dedent",
+      "mode": "selective",
+      "repetition": 1,
+      "pilot": false,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 7659,
+        "output": 675,
+        "cacheRead": 11136,
+        "cacheWrite": 0,
+        "totalTokens": 19470,
+        "estimatedApiUsd": 0.0231816
+      },
+      "knownEstimatedUsd": 0.0231816,
+      "totalEstimatedUsd": 0.0231816,
+      "latencyMs": 38898,
+      "policy": {
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "deferred": 0,
+        "testWallMs": 4487,
+        "events": [
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "cases",
+            "executed": true,
+            "edits": 1,
+            "key": "27bba916e3525dc82d2722edd2026d7ba76a5e7851b1ce5d22a75ce49b5eed86",
+            "status": "passed",
+            "latencyMs": 685
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "visible",
+            "executed": true,
+            "edits": 1,
+            "key": "1174fbde68db91d72a7ed9c0bee014711e84bc038f9a3afafd535d14bfa73472",
+            "status": "passed",
+            "latencyMs": 1001
+          },
+          {
+            "type": "test_policy",
+            "mode": "selective",
+            "kind": "upstream",
+            "executed": true,
+            "edits": 1,
+            "key": "366d542423a8feb060e6cedba2eca2801bfa8a4cffe3ac9aba1b3d486eafa29b",
+            "status": "passed",
+            "latencyMs": 2801
+          }
+        ]
+      },
+      "changed": [
+        "src/src/parser/parser.ts"
+      ],
+      "acceptance": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "finalTestWallMs": 4337,
+      "turns": 5,
+      "errors": [],
+      "endedAt": "2026-10-14T21:56:39.177Z"
+    }
+  ],
+  "offlineMechanism": {
+    "kind": "offline mechanism verification; not coding-agent repair or live capability evidence",
+    "generatedAt": "2026-10-14T21:33:58.045Z",
+    "baselineSource": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+    "referenceSource": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+    "changedFiles": [
+      "src/src/parser/constructor.ts"
+    ],
+    "arms": [
+      {
+        "mode": "unrestricted",
+        "policy": {
+          "mode": "unrestricted",
+          "requested": 6,
+          "executed": 6,
+          "deferred": 0,
+          "testWallMs": 2020,
+          "events": [
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 357
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 361
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "failed",
+              "latencyMs": 344
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "failed",
+              "latencyMs": 302
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "passed",
+              "latencyMs": 342
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "passed",
+              "latencyMs": 314
+            }
+          ]
+        },
+        "receipts": [
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 357
+          },
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 361
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "failed",
+            "executed": true,
+            "latencyMs": 344
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "failed",
+            "executed": true,
+            "latencyMs": 302
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 342
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 314
+          }
+        ],
+        "independentBaselineFinal": "failed",
+        "independentReferenceFinal": "passed",
+        "finalWallMs": 593,
+        "observedBehavioralFailures": 2
+      },
+      {
+        "mode": "fixed",
+        "policy": {
+          "mode": "fixed",
+          "requested": 6,
+          "executed": 1,
+          "deferred": 5,
+          "testWallMs": 299,
+          "events": [
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 299
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "visible",
+              "executed": false,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            }
+          ]
+        },
+        "receipts": [
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 299
+          },
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          }
+        ],
+        "independentBaselineFinal": "failed",
+        "independentReferenceFinal": "passed",
+        "finalWallMs": 636,
+        "observedBehavioralFailures": 0
+      },
+      {
+        "mode": "selective",
+        "policy": {
+          "mode": "selective",
+          "requested": 6,
+          "executed": 3,
+          "deferred": 3,
+          "testWallMs": 956,
+          "events": [
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 308
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "visible",
+              "executed": false,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "deferred",
+              "reason": "identical source and test revision already executed",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "failed",
+              "latencyMs": 325
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "deferred",
+              "reason": "identical source and test revision already executed",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "passed",
+              "latencyMs": 323
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "deferred",
+              "reason": "identical source and test revision already executed",
+              "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            }
+          ]
+        },
+        "receipts": [
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 308
+          },
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "failed",
+            "executed": true,
+            "latencyMs": 325
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 323
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          }
+        ],
+        "independentBaselineFinal": "failed",
+        "independentReferenceFinal": "passed",
+        "finalWallMs": 548,
+        "observedBehavioralFailures": 1
+      }
+    ]
+  },
+  "validation": {
+    "at": "2026-10-14T22:00:50.709Z",
+    "manifests": [
+      {
+        "campaign": "post-reset-screen-v1",
+        "plannedAttempts": 3,
+        "frozenMismatches": [],
+        "currentMismatches": [],
+        "manifestHash": "6817e9ebabd2dbdf95779a18dc1c5addf16591bb10b15459ad286437f28ed303"
+      },
+      {
+        "campaign": "post-reset-v1",
+        "plannedAttempts": 18,
+        "frozenMismatches": [],
+        "currentMismatches": [],
+        "manifestHash": "29d150d51383103e61a2b2222a0168619d640f3b88534c73c9c75485b8275ba3"
+      },
+      {
+        "campaign": "test-execution-screen-v1",
+        "plannedAttempts": 3,
+        "frozenMismatches": [],
+        "currentMismatches": [
+          "scripts/test-execution-experiment.mjs",
+          "docs/TEST-EXECUTION.md"
+        ],
+        "manifestHash": "7070ad79a8bc679f00750ad8acb57481319c6f19986d1df4cfeab29ef1229c25"
+      },
+      {
+        "campaign": "test-execution-v1",
+        "plannedAttempts": 18,
+        "frozenMismatches": [],
+        "currentMismatches": [
+          "scripts/test-execution-experiment.mjs",
+          "docs/TEST-EXECUTION.md"
+        ],
+        "manifestHash": "ea461e73159613f521f5eccf4fecb6545a90483e139b4c76ab1d552eeeeb535a"
+      }
+    ],
+    "fixtures": [
+      {
+        "id": "merge-alias-screen",
+        "screening": true,
+        "base": "cc665ec15016ccb6004bc46f53257366c5d0b18d",
+        "fix": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+        "acceptanceHash": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 286,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1023365,
+        "excludedFiles": 45
+      },
+      {
+        "id": "merge-values",
+        "screening": false,
+        "base": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+        "fix": "fae37b8ab70a1ba3813e87a7ac0037f41d604aa1",
+        "acceptanceHash": "62d9654105b336f9f40ac10d18080733611781a51615dd387e10b1e8c9515c92",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 290,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1019685,
+        "excludedFiles": 45
+      },
+      {
+        "id": "flow-key-separation",
+        "screening": false,
+        "base": "4aa80cd610528b329403b8390514b292b1adbc46",
+        "fix": "83af54ade8b1e65c0a59d7e538e5e111f03996d9",
+        "acceptanceHash": "1af1d2f69dd8aab2fed7be76e7b20a668b2c567ccdcc9c30042f6f2c99090351",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 297,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1022028,
+        "excludedFiles": 45
+      },
+      {
+        "id": "blank-scalar-dedent",
+        "screening": false,
+        "base": "30108cc828b5393d55dfbfc8087ab713f7145946",
+        "fix": "0cbb471d67b083778e7b2600af2418142bf5bf04",
+        "acceptanceHash": "76abc02a6052ce755ea521a9cf0d6939af8a42e6bdd35e990b6bca12f8ba71f9",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 305,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1025337,
+        "excludedFiles": 46
+      }
+    ],
+    "patches": [
+      {
+        "campaign": "post-reset-screen-v1",
+        "runId": "001-merge-alias-screen-unrestricted-r0",
+        "changedFiles": [
+          "src/src/parser/constructor.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-screen-v1",
+        "runId": "002-merge-alias-screen-fixed-r0",
+        "changedFiles": [
+          "src/src/parser/constructor.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-screen-v1",
+        "runId": "003-merge-alias-screen-selective-r0",
+        "changedFiles": [
+          "src/src/parser/constructor.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "001-merge-values-unrestricted-r0",
+        "changedFiles": [
+          "src/src/parser/constructor.ts",
+          "src/src/tag/scalar/merge.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "002-merge-values-fixed-r0",
+        "changedFiles": [
+          "src/src/parser/constructor.ts",
+          "src/src/tag/scalar/merge.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "003-merge-values-selective-r0",
+        "changedFiles": [
+          "src/src/parser/constructor.ts",
+          "src/src/tag/scalar/merge.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "004-flow-key-separation-fixed-r0",
+        "changedFiles": [
+          "src/src/ast/presenter.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "005-flow-key-separation-selective-r0",
+        "changedFiles": [
+          "src/src/ast/presenter.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "006-flow-key-separation-unrestricted-r0",
+        "changedFiles": [
+          "src/src/ast/presenter.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "007-blank-scalar-dedent-selective-r0",
+        "changedFiles": [
+          "src/src/parser/parser.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "008-blank-scalar-dedent-unrestricted-r0",
+        "changedFiles": [
+          "src/src/parser/parser.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "009-blank-scalar-dedent-fixed-r0",
+        "changedFiles": [
+          "src/src/parser/parser.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "010-merge-values-fixed-r1",
+        "changedFiles": [
+          "src/src/parser/constructor.ts",
+          "src/src/tag/scalar/merge.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "011-merge-values-selective-r1",
+        "changedFiles": [
+          "src/src/parser/constructor.ts",
+          "src/src/tag/scalar/merge.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "012-merge-values-unrestricted-r1",
+        "changedFiles": [
+          "src/src/parser/constructor.ts",
+          "src/src/tag/scalar/merge.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "013-flow-key-separation-selective-r1",
+        "changedFiles": [
+          "src/src/ast/presenter.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "014-flow-key-separation-unrestricted-r1",
+        "changedFiles": [
+          "src/src/ast/presenter.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "015-flow-key-separation-fixed-r1",
+        "changedFiles": [
+          "src/src/ast/presenter.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "016-blank-scalar-dedent-unrestricted-r1",
+        "changedFiles": [
+          "src/src/parser/parser.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "017-blank-scalar-dedent-fixed-r1",
+        "changedFiles": [
+          "src/src/parser/parser.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "018-blank-scalar-dedent-selective-r1",
+        "changedFiles": [
+          "src/src/parser/parser.ts"
+        ],
+        "patchMatches": true,
+        "immutableIntact": true
+      },
+      {
+        "campaign": "test-execution-screen-v1",
+        "runId": "001-merge-alias-screen-unrestricted-r0",
+        "changedFiles": [],
+        "patchMatches": true,
+        "immutableIntact": true
+      }
+    ],
+    "incomplete": [],
+    "privateStateBytes": 100386207,
+    "newReviewableBytes": 260141,
+    "artifactBytes": 100646348,
+    "freeBytes": 7133110272,
+    "harnessTests": {
+      "focused": {
+        "passed": 13,
+        "total": 13,
+        "receipt": "reports/test-execution-harness-tests.txt"
+      },
+      "broad": {
+        "passed": 86,
+        "total": 87,
+        "failed": "inherited retry-idempotency exact reference replacement mismatch; Windows checkout line-ending sensitivity"
+      }
+    },
+    "concurrencyAudit": {
+      "kind": "post-hoc public test concurrency audit",
+      "method": "Infer process intervals from test_policy completion timestamp minus actual subprocess latency; inspect codemode for Promise.all test batches. No invocation-start timestamp was logged, so very small overlaps may be missed.",
+      "runs": [
+        {
+          "campaign": "post-reset-screen-v1",
+          "runId": "001-merge-alias-screen-unrestricted-r0",
+          "mode": "unrestricted",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-screen-v1",
+          "runId": "002-merge-alias-screen-fixed-r0",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-screen-v1",
+          "runId": "003-merge-alias-screen-selective-r0",
+          "mode": "selective",
+          "requested": 3,
+          "executed": 3,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "001-merge-values-unrestricted-r0",
+          "mode": "unrestricted",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "002-merge-values-fixed-r0",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "003-merge-values-selective-r0",
+          "mode": "selective",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "004-flow-key-separation-fixed-r0",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "005-flow-key-separation-selective-r0",
+          "mode": "selective",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "006-flow-key-separation-unrestricted-r0",
+          "mode": "unrestricted",
+          "requested": 5,
+          "executed": 5,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "007-blank-scalar-dedent-selective-r0",
+          "mode": "selective",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "008-blank-scalar-dedent-unrestricted-r0",
+          "mode": "unrestricted",
+          "requested": 3,
+          "executed": 3,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "009-blank-scalar-dedent-fixed-r0",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "010-merge-values-fixed-r1",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "011-merge-values-selective-r1",
+          "mode": "selective",
+          "requested": 5,
+          "executed": 5,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "012-merge-values-unrestricted-r1",
+          "mode": "unrestricted",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "013-flow-key-separation-selective-r1",
+          "mode": "selective",
+          "requested": 3,
+          "executed": 3,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "014-flow-key-separation-unrestricted-r1",
+          "mode": "unrestricted",
+          "requested": 6,
+          "executed": 6,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "015-flow-key-separation-fixed-r1",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "016-blank-scalar-dedent-unrestricted-r1",
+          "mode": "unrestricted",
+          "requested": 4,
+          "executed": 4,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "017-blank-scalar-dedent-fixed-r1",
+          "mode": "fixed",
+          "requested": 3,
+          "executed": 1,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        },
+        {
+          "campaign": "post-reset-v1",
+          "runId": "018-blank-scalar-dedent-selective-r1",
+          "mode": "selective",
+          "requested": 3,
+          "executed": 3,
+          "overlaps": [],
+          "repeatedExecutedKeys": [],
+          "fixedSerialViolations": [],
+          "parallelTestBatches": 0
+        }
+      ],
+      "summary": {
+        "runs": 21,
+        "overlappingPairs": 0,
+        "parallelTestBatches": 0,
+        "selectiveDuplicateExecutions": 0,
+        "fixedSerialViolations": 0
+      }
+    },
+    "v2": {
+      "benchmarked": false,
+      "testsPassed": 8,
+      "testsTotal": 8,
+      "receipt": "reports/test-execution-concurrency-v2-tests.txt",
+      "evaluatedAgentStillUsesV1": true
+    },
+    "finalAudit": {
+      "kind": "post-campaign independent re-execution; no model inference and no repair feedback",
+      "generatedAt": "2026-10-14T22:00:13.148Z",
+      "elapsedMs": 91603,
+      "checks": [
+        {
+          "runId": "001-merge-values-unrestricted-r0",
+          "mode": "unrestricted",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 764,
+            "outputHash": "ce90b7247bbcae0ac8aee5d494b4586f1ca1f021d2e9bc02737907794284c0aa",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 970,
+            "outputHash": "fea663a6d5e8ecf0ab94441b139ed102974c0dc353dacd106b1a571b89131303",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 290,
+            "passed": 290,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 5331,
+            "outputHash": "36a3a295b954cae009725dccf1ffa133f9f21feeaf49551ac801db45642fc612",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 290,
+          "passed": true
+        },
+        {
+          "runId": "002-merge-values-fixed-r0",
+          "mode": "fixed",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1571,
+            "outputHash": "8222482c6c8670a4adc4ad69431a56308ce7651a3537a42b60bf633b85ae6b65",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1176,
+            "outputHash": "b2293ef7f8e9e430a29208e080c99f7bcd10b91bef6eccc238365ccf935bd5a2",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 290,
+            "passed": 290,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 3200,
+            "outputHash": "9b60cfca26ed073834138e03a535b390cf83a72f20e38f656b2b6be92dd246b7",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 290,
+          "passed": true
+        },
+        {
+          "runId": "003-merge-values-selective-r0",
+          "mode": "selective",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2073,
+            "outputHash": "3078d742f6180d97ee86ee49abe55e372ae785a619901d037ddb9fd720ea7c55",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2135,
+            "outputHash": "b3379f7e02f644ea355a87c3818cbe13871bcd3bfe7c14dc7c79016201d8a548",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 290,
+            "passed": 290,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 4263,
+            "outputHash": "a212251e89f47b177bff176508f0339ee5f2e5a870678b67f84a643ad712af84",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 290,
+          "passed": true
+        },
+        {
+          "runId": "004-flow-key-separation-fixed-r0",
+          "mode": "fixed",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1186,
+            "outputHash": "713eb461687d975b360f9a659eb5c1ef93dff7f715356e541b2c1f10da5207cf",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 6763,
+            "outputHash": "02874b349fc716790ebf9bc57be904ab7c70d70916c88eff3a7515a3fb653549",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 297,
+            "passed": 297,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2247,
+            "outputHash": "0dfb9e64ce5c758eea32d4a4a5d23cf7c04e9cb623abbfc807e0286b11a52c4e",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 297,
+          "passed": true
+        },
+        {
+          "runId": "005-flow-key-separation-selective-r0",
+          "mode": "selective",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 656,
+            "outputHash": "445741b5e2e27bd45aa0aa3d1fda66487fff7d28a3d873d188e0162e5e1b526d",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1094,
+            "outputHash": "011195ed364eb3a995d0e8d972ba3ace9160947f5049a83c5af38fb0e8558bed",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 297,
+            "passed": 297,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2672,
+            "outputHash": "d818a4d70bc348c5b323b9410ee3570d314b6d2774c277ca08d0cd9be777457f",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 297,
+          "passed": true
+        },
+        {
+          "runId": "006-flow-key-separation-unrestricted-r0",
+          "mode": "unrestricted",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 996,
+            "outputHash": "e0658c51f6ee6a48862decba07838f1ffe58406229710f29a05cb19bbed1e335",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 698,
+            "outputHash": "bd7d4bbc6bda235383fdecb222e8955b5d519912d146094716db8d5e79ebb44a",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 297,
+            "passed": 297,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2172,
+            "outputHash": "5019b44585b5b716aa1db60d5a485e256d97176ff5082457c73ab618afd7e1c9",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 297,
+          "passed": true
+        },
+        {
+          "runId": "007-blank-scalar-dedent-selective-r0",
+          "mode": "selective",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 716,
+            "outputHash": "b3b9c89b79912346f5cf1eef21873a7658357d82bad39602a860133f28fc53e9",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 730,
+            "outputHash": "04059f97e733defd66c8e38b4ed5e3b0349af4692ec99b4a1d456a2c39e8a116",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 305,
+            "passed": 305,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2534,
+            "outputHash": "a6e688e098dab4af7c8d1d55daf00127f456548928bce3d99cc000b649a91f03",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 305,
+          "passed": true
+        },
+        {
+          "runId": "008-blank-scalar-dedent-unrestricted-r0",
+          "mode": "unrestricted",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 881,
+            "outputHash": "f3de8c4e5ff7402cae80faf8f00a1ee9b33eb907a07346c7f5a955b04f3a85bf",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 845,
+            "outputHash": "de71ef7607a4c0d8d593657fbcacf40d4beeee0c79331c7f1ebbfff3542863d9",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 305,
+            "passed": 305,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2042,
+            "outputHash": "a4e97dc1cc5ce4c1bc40055d86cdfd5ea19a80564c921641bc816823e932caa4",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 305,
+          "passed": true
+        },
+        {
+          "runId": "009-blank-scalar-dedent-fixed-r0",
+          "mode": "fixed",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 560,
+            "outputHash": "5396e49d0252ba078d602b9bce9d6c9099de65aad2be570292805777a4bc23b4",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 811,
+            "outputHash": "5c8fde113ea4b6ba09c5a0bc9dc2168c4e24997599b049aacaf9149e8453bdf0",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 305,
+            "passed": 305,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 3579,
+            "outputHash": "8899a8c60e3fd88d64b336ec4eff7d587710ef83a17a544fbe0f1ef387721f12",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 305,
+          "passed": true
+        },
+        {
+          "runId": "010-merge-values-fixed-r1",
+          "mode": "fixed",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 764,
+            "outputHash": "886ba04ca5e57a54424ff68c87ee8231e4e0ee56bbbec05b4373327721d73a7e",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 625,
+            "outputHash": "8924abd207c53b3c704a2f16acb196730820bbae28c81a11fcfa40ec92b4e077",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 290,
+            "passed": 290,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2084,
+            "outputHash": "60f80e5bcd3c26dc7634ad991837f279a20c3b11c149669b70d159ce9deafa9e",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 290,
+          "passed": true
+        },
+        {
+          "runId": "011-merge-values-selective-r1",
+          "mode": "selective",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 658,
+            "outputHash": "5c1bc4ae8a58a66989d972fc4c59ef24e7dcc3cac60ddea9c394be9dc7ca623f",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 942,
+            "outputHash": "5d1c8e24ac3d2c457cfeed6791a49cd8b0e218058bfa394690beeb641a342fc4",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 290,
+            "passed": 290,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2132,
+            "outputHash": "049eaa2f51a4eeeb36d81dd6e876103dfecf6e69dcae7b25304facaca8feffd5",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 290,
+          "passed": true
+        },
+        {
+          "runId": "012-merge-values-unrestricted-r1",
+          "mode": "unrestricted",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 718,
+            "outputHash": "9e281bc209d4e7fdb28a2ba980ab470aad73fe6095dcf66699f4b9b5ffcdb733",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 647,
+            "outputHash": "37e49daaa1324d144f248948690736ffa500599ec5d5809599703014d509f11b",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 290,
+            "passed": 290,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1706,
+            "outputHash": "59b3fec1d85b46c53f6a3f4bc5177e1536a1297ba6b1d07459efaaa37c59ac2f",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 290,
+          "passed": true
+        },
+        {
+          "runId": "013-flow-key-separation-selective-r1",
+          "mode": "selective",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 620,
+            "outputHash": "5334f60f207184bd78f700694b1329b641662e482493ec8beb68e8ba2f39e76a",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 594,
+            "outputHash": "e610c47c6c8f1cd6bb175255556dbd915283d1feee8a66743282555de731ee13",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 297,
+            "passed": 297,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1736,
+            "outputHash": "da228010b400717775f1eccc76815e422c79eedd0142ef8f6b7eac573f7f8e84",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 297,
+          "passed": true
+        },
+        {
+          "runId": "014-flow-key-separation-unrestricted-r1",
+          "mode": "unrestricted",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 883,
+            "outputHash": "dc9a13d168d795e2aff53a648123a9315b206584d74dfff09f036b20bb9d8a37",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1012,
+            "outputHash": "e446f7404931ba9f47bd1fce1b20f7a42f623d976efd8bd3756a8ec18a2b4b29",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 297,
+            "passed": 297,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2432,
+            "outputHash": "bc426023598595e99f1e2d46ac15eb98dc12b5d65bfd4dbeb887bec3bdd42526",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 297,
+          "passed": true
+        },
+        {
+          "runId": "015-flow-key-separation-fixed-r1",
+          "mode": "fixed",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 895,
+            "outputHash": "64b4d539482e666d71644a03e73e1ae6b1f80fce029338974b9b3d1db65363a4",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 934,
+            "outputHash": "9e8f0be4d385f3b329cc27bc4171d85a63422cbb69fa9142c9df0e372016ee38",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 297,
+            "passed": 297,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2433,
+            "outputHash": "2cf6332c67cdea555cff112d243bd5e8265ec3677199dcc93bc2c8f8c331fbd9",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 297,
+          "passed": true
+        },
+        {
+          "runId": "016-blank-scalar-dedent-unrestricted-r1",
+          "mode": "unrestricted",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1053,
+            "outputHash": "23a4e90957698b1e1e0fe2307176adc79e20c9702e58664312d1b87452e19849",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 742,
+            "outputHash": "de4e8954d11b44a58b322f614bd818d8a9809e8857a86de129806596e00be823",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 305,
+            "passed": 305,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 4811,
+            "outputHash": "c74627c865c7c4557c80dec827aa0240f639610a546fadc42256ea7165a2d73b",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 305,
+          "passed": true
+        },
+        {
+          "runId": "017-blank-scalar-dedent-fixed-r1",
+          "mode": "fixed",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1226,
+            "outputHash": "85c9f1ea75fce0974948656863a3900cb527c38cc53c5a6b5c4407f5f4e53cb0",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 1664,
+            "outputHash": "f45dfa1a3b506868652c4f83e2a8ae96d4d27bd6a4615178d3fb3af877429e82",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 305,
+            "passed": 305,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2436,
+            "outputHash": "71e0e3c4820d17a48b609afb1f681adf5abb2979681fd0f5e39acdc7257f1476",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 305,
+          "passed": true
+        },
+        {
+          "runId": "018-blank-scalar-dedent-selective-r1",
+          "mode": "selective",
+          "acceptance": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 724,
+            "outputHash": "bbc231673eeefdc92e4c3bb225c68414569cd45a086530f637721078bbca2838",
+            "diagnostics": null
+          },
+          "visible": {
+            "status": "passed",
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 877,
+            "outputHash": "24c7bf6f15e03d3509ed1b93ad890d519ac171e4b58b3fa59703afb305a575df",
+            "diagnostics": null
+          },
+          "upstream": {
+            "status": "passed",
+            "tests": 305,
+            "passed": 305,
+            "failed": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0,
+            "latencyMs": 2876,
+            "outputHash": "306d7e87987f3728af600b4e9692731e666298bbe6c4c83cff7a12907f23acf4",
+            "diagnostics": null
+          },
+          "expectedUpstreamTests": 305,
+          "passed": true
+        }
+      ],
+      "totalTestWallMs": 90889,
+      "passed": true
+    },
+    "valid": true
+  },
+  "engineeringWorkExcludedFromBenchmarkInference": true,
+  "concurrency": "other root and independent campaigns shared provider/machine; wall-time/cache cannot be causally attributed"
+}

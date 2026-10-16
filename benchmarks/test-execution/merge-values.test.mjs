@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolve} from 'node:path';import {pathToFileURL} from 'node:url';const y=await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/src/index.ts')).href);const opts={schema:y.YAML11_SCHEMA};
+test('merge scalar outside key is a user string',()=>{for(const [source,value] of [['<<\n','<<'],['- <<\n- !!merge\n',['<<','<<']],['a: {b: <<}\n',{a:{b:'<<'}}],['a: !!merge\n',{a:'<<'}],['a: &word <<\nb: *word\n',{a:'<<',b:'<<'}]])assert.deepEqual(y.load(source,opts),value);});
+test('only merge-tagged key position performs merge',()=>{assert.deepEqual(y.load('<<: {x: 1}\n<<: {other: 2}\nz: 3\n',opts),{x:1,other:2,z:3});assert.deepEqual(y.load('"<<": string\n',opts),{'<<':'string'});assert.deepEqual(y.load('!!str <<: value\n',opts),{'<<':'value'});assert.deepEqual(y.load('a: &a {x: 1}\nb: {<<: *a, x: 7}\n',opts),{a:{x:1},b:{x:7}});});
+test('ordinary schema and repeated documents preserve context',()=>{assert.deepEqual(y.load('foo: <<\n',{schema:y.CORE_SCHEMA}),{foo:'<<'});assert.deepEqual(y.loadAll('<<\n---\n- <<\n',opts),['<<',['<<']]);});
+

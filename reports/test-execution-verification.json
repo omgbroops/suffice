@@ -1,0 +1,1351 @@
+{
+  "at": "2026-10-14T22:00:50.709Z",
+  "manifests": [
+    {
+      "campaign": "post-reset-screen-v1",
+      "plannedAttempts": 3,
+      "frozenMismatches": [],
+      "currentMismatches": [],
+      "manifestHash": "6817e9ebabd2dbdf95779a18dc1c5addf16591bb10b15459ad286437f28ed303"
+    },
+    {
+      "campaign": "post-reset-v1",
+      "plannedAttempts": 18,
+      "frozenMismatches": [],
+      "currentMismatches": [],
+      "manifestHash": "29d150d51383103e61a2b2222a0168619d640f3b88534c73c9c75485b8275ba3"
+    },
+    {
+      "campaign": "test-execution-screen-v1",
+      "plannedAttempts": 3,
+      "frozenMismatches": [],
+      "currentMismatches": [
+        "scripts/test-execution-experiment.mjs",
+        "docs/TEST-EXECUTION.md"
+      ],
+      "manifestHash": "7070ad79a8bc679f00750ad8acb57481319c6f19986d1df4cfeab29ef1229c25"
+    },
+    {
+      "campaign": "test-execution-v1",
+      "plannedAttempts": 18,
+      "frozenMismatches": [],
+      "currentMismatches": [
+        "scripts/test-execution-experiment.mjs",
+        "docs/TEST-EXECUTION.md"
+      ],
+      "manifestHash": "ea461e73159613f521f5eccf4fecb6545a90483e139b4c76ab1d552eeeeb535a"
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "merge-alias-screen",
+      "screening": true,
+      "base": "cc665ec15016ccb6004bc46f53257366c5d0b18d",
+      "fix": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+      "acceptanceHash": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1023365,
+      "excludedFiles": 45
+    },
+    {
+      "id": "merge-values",
+      "screening": false,
+      "base": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+      "fix": "fae37b8ab70a1ba3813e87a7ac0037f41d604aa1",
+      "acceptanceHash": "62d9654105b336f9f40ac10d18080733611781a51615dd387e10b1e8c9515c92",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1019685,
+      "excludedFiles": 45
+    },
+    {
+      "id": "flow-key-separation",
+      "screening": false,
+      "base": "4aa80cd610528b329403b8390514b292b1adbc46",
+      "fix": "83af54ade8b1e65c0a59d7e538e5e111f03996d9",
+      "acceptanceHash": "1af1d2f69dd8aab2fed7be76e7b20a668b2c567ccdcc9c30042f6f2c99090351",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1022028,
+      "excludedFiles": 45
+    },
+    {
+      "id": "blank-scalar-dedent",
+      "screening": false,
+      "base": "30108cc828b5393d55dfbfc8087ab713f7145946",
+      "fix": "0cbb471d67b083778e7b2600af2418142bf5bf04",
+      "acceptanceHash": "76abc02a6052ce755ea521a9cf0d6939af8a42e6bdd35e990b6bca12f8ba71f9",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1025337,
+      "excludedFiles": 46
+    }
+  ],
+  "patches": [
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "changedFiles": [
+        "src/src/parser/constructor.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "002-merge-alias-screen-fixed-r0",
+      "changedFiles": [
+        "src/src/parser/constructor.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-screen-v1",
+      "runId": "003-merge-alias-screen-selective-r0",
+      "changedFiles": [
+        "src/src/parser/constructor.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "001-merge-values-unrestricted-r0",
+      "changedFiles": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "002-merge-values-fixed-r0",
+      "changedFiles": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "003-merge-values-selective-r0",
+      "changedFiles": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "004-flow-key-separation-fixed-r0",
+      "changedFiles": [
+        "src/src/ast/presenter.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "005-flow-key-separation-selective-r0",
+      "changedFiles": [
+        "src/src/ast/presenter.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "006-flow-key-separation-unrestricted-r0",
+      "changedFiles": [
+        "src/src/ast/presenter.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "007-blank-scalar-dedent-selective-r0",
+      "changedFiles": [
+        "src/src/parser/parser.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "008-blank-scalar-dedent-unrestricted-r0",
+      "changedFiles": [
+        "src/src/parser/parser.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "009-blank-scalar-dedent-fixed-r0",
+      "changedFiles": [
+        "src/src/parser/parser.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "010-merge-values-fixed-r1",
+      "changedFiles": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "011-merge-values-selective-r1",
+      "changedFiles": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "012-merge-values-unrestricted-r1",
+      "changedFiles": [
+        "src/src/parser/constructor.ts",
+        "src/src/tag/scalar/merge.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "013-flow-key-separation-selective-r1",
+      "changedFiles": [
+        "src/src/ast/presenter.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "014-flow-key-separation-unrestricted-r1",
+      "changedFiles": [
+        "src/src/ast/presenter.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "015-flow-key-separation-fixed-r1",
+      "changedFiles": [
+        "src/src/ast/presenter.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "016-blank-scalar-dedent-unrestricted-r1",
+      "changedFiles": [
+        "src/src/parser/parser.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "017-blank-scalar-dedent-fixed-r1",
+      "changedFiles": [
+        "src/src/parser/parser.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "post-reset-v1",
+      "runId": "018-blank-scalar-dedent-selective-r1",
+      "changedFiles": [
+        "src/src/parser/parser.ts"
+      ],
+      "patchMatches": true,
+      "immutableIntact": true
+    },
+    {
+      "campaign": "test-execution-screen-v1",
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "changedFiles": [],
+      "patchMatches": true,
+      "immutableIntact": true
+    }
+  ],
+  "incomplete": [],
+  "privateStateBytes": 100386207,
+  "newReviewableBytes": 260141,
+  "artifactBytes": 100646348,
+  "freeBytes": 7133110272,
+  "harnessTests": {
+    "focused": {
+      "passed": 13,
+      "total": 13,
+      "receipt": "reports/test-execution-harness-tests.txt"
+    },
+    "broad": {
+      "passed": 86,
+      "total": 87,
+      "failed": "inherited retry-idempotency exact reference replacement mismatch; Windows checkout line-ending sensitivity"
+    }
+  },
+  "concurrencyAudit": {
+    "kind": "post-hoc public test concurrency audit",
+    "method": "Infer process intervals from test_policy completion timestamp minus actual subprocess latency; inspect codemode for Promise.all test batches. No invocation-start timestamp was logged, so very small overlaps may be missed.",
+    "runs": [
+      {
+        "campaign": "post-reset-screen-v1",
+        "runId": "001-merge-alias-screen-unrestricted-r0",
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-screen-v1",
+        "runId": "002-merge-alias-screen-fixed-r0",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-screen-v1",
+        "runId": "003-merge-alias-screen-selective-r0",
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "001-merge-values-unrestricted-r0",
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "002-merge-values-fixed-r0",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "003-merge-values-selective-r0",
+        "mode": "selective",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "004-flow-key-separation-fixed-r0",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "005-flow-key-separation-selective-r0",
+        "mode": "selective",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "006-flow-key-separation-unrestricted-r0",
+        "mode": "unrestricted",
+        "requested": 5,
+        "executed": 5,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "007-blank-scalar-dedent-selective-r0",
+        "mode": "selective",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "008-blank-scalar-dedent-unrestricted-r0",
+        "mode": "unrestricted",
+        "requested": 3,
+        "executed": 3,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "009-blank-scalar-dedent-fixed-r0",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "010-merge-values-fixed-r1",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "011-merge-values-selective-r1",
+        "mode": "selective",
+        "requested": 5,
+        "executed": 5,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "012-merge-values-unrestricted-r1",
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "013-flow-key-separation-selective-r1",
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "014-flow-key-separation-unrestricted-r1",
+        "mode": "unrestricted",
+        "requested": 6,
+        "executed": 6,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "015-flow-key-separation-fixed-r1",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "016-blank-scalar-dedent-unrestricted-r1",
+        "mode": "unrestricted",
+        "requested": 4,
+        "executed": 4,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "017-blank-scalar-dedent-fixed-r1",
+        "mode": "fixed",
+        "requested": 3,
+        "executed": 1,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      },
+      {
+        "campaign": "post-reset-v1",
+        "runId": "018-blank-scalar-dedent-selective-r1",
+        "mode": "selective",
+        "requested": 3,
+        "executed": 3,
+        "overlaps": [],
+        "repeatedExecutedKeys": [],
+        "fixedSerialViolations": [],
+        "parallelTestBatches": 0
+      }
+    ],
+    "summary": {
+      "runs": 21,
+      "overlappingPairs": 0,
+      "parallelTestBatches": 0,
+      "selectiveDuplicateExecutions": 0,
+      "fixedSerialViolations": 0
+    }
+  },
+  "v2": {
+    "benchmarked": false,
+    "testsPassed": 8,
+    "testsTotal": 8,
+    "receipt": "reports/test-execution-concurrency-v2-tests.txt",
+    "evaluatedAgentStillUsesV1": true
+  },
+  "finalAudit": {
+    "kind": "post-campaign independent re-execution; no model inference and no repair feedback",
+    "generatedAt": "2026-10-14T22:00:13.148Z",
+    "elapsedMs": 91603,
+    "checks": [
+      {
+        "runId": "001-merge-values-unrestricted-r0",
+        "mode": "unrestricted",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 764,
+          "outputHash": "ce90b7247bbcae0ac8aee5d494b4586f1ca1f021d2e9bc02737907794284c0aa",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 970,
+          "outputHash": "fea663a6d5e8ecf0ab94441b139ed102974c0dc353dacd106b1a571b89131303",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 290,
+          "passed": 290,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 5331,
+          "outputHash": "36a3a295b954cae009725dccf1ffa133f9f21feeaf49551ac801db45642fc612",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 290,
+        "passed": true
+      },
+      {
+        "runId": "002-merge-values-fixed-r0",
+        "mode": "fixed",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1571,
+          "outputHash": "8222482c6c8670a4adc4ad69431a56308ce7651a3537a42b60bf633b85ae6b65",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1176,
+          "outputHash": "b2293ef7f8e9e430a29208e080c99f7bcd10b91bef6eccc238365ccf935bd5a2",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 290,
+          "passed": 290,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 3200,
+          "outputHash": "9b60cfca26ed073834138e03a535b390cf83a72f20e38f656b2b6be92dd246b7",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 290,
+        "passed": true
+      },
+      {
+        "runId": "003-merge-values-selective-r0",
+        "mode": "selective",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2073,
+          "outputHash": "3078d742f6180d97ee86ee49abe55e372ae785a619901d037ddb9fd720ea7c55",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2135,
+          "outputHash": "b3379f7e02f644ea355a87c3818cbe13871bcd3bfe7c14dc7c79016201d8a548",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 290,
+          "passed": 290,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 4263,
+          "outputHash": "a212251e89f47b177bff176508f0339ee5f2e5a870678b67f84a643ad712af84",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 290,
+        "passed": true
+      },
+      {
+        "runId": "004-flow-key-separation-fixed-r0",
+        "mode": "fixed",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1186,
+          "outputHash": "713eb461687d975b360f9a659eb5c1ef93dff7f715356e541b2c1f10da5207cf",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 6763,
+          "outputHash": "02874b349fc716790ebf9bc57be904ab7c70d70916c88eff3a7515a3fb653549",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 297,
+          "passed": 297,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2247,
+          "outputHash": "0dfb9e64ce5c758eea32d4a4a5d23cf7c04e9cb623abbfc807e0286b11a52c4e",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 297,
+        "passed": true
+      },
+      {
+        "runId": "005-flow-key-separation-selective-r0",
+        "mode": "selective",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 656,
+          "outputHash": "445741b5e2e27bd45aa0aa3d1fda66487fff7d28a3d873d188e0162e5e1b526d",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1094,
+          "outputHash": "011195ed364eb3a995d0e8d972ba3ace9160947f5049a83c5af38fb0e8558bed",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 297,
+          "passed": 297,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2672,
+          "outputHash": "d818a4d70bc348c5b323b9410ee3570d314b6d2774c277ca08d0cd9be777457f",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 297,
+        "passed": true
+      },
+      {
+        "runId": "006-flow-key-separation-unrestricted-r0",
+        "mode": "unrestricted",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 996,
+          "outputHash": "e0658c51f6ee6a48862decba07838f1ffe58406229710f29a05cb19bbed1e335",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 698,
+          "outputHash": "bd7d4bbc6bda235383fdecb222e8955b5d519912d146094716db8d5e79ebb44a",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 297,
+          "passed": 297,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2172,
+          "outputHash": "5019b44585b5b716aa1db60d5a485e256d97176ff5082457c73ab618afd7e1c9",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 297,
+        "passed": true
+      },
+      {
+        "runId": "007-blank-scalar-dedent-selective-r0",
+        "mode": "selective",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 716,
+          "outputHash": "b3b9c89b79912346f5cf1eef21873a7658357d82bad39602a860133f28fc53e9",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 730,
+          "outputHash": "04059f97e733defd66c8e38b4ed5e3b0349af4692ec99b4a1d456a2c39e8a116",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 305,
+          "passed": 305,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2534,
+          "outputHash": "a6e688e098dab4af7c8d1d55daf00127f456548928bce3d99cc000b649a91f03",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 305,
+        "passed": true
+      },
+      {
+        "runId": "008-blank-scalar-dedent-unrestricted-r0",
+        "mode": "unrestricted",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 881,
+          "outputHash": "f3de8c4e5ff7402cae80faf8f00a1ee9b33eb907a07346c7f5a955b04f3a85bf",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 845,
+          "outputHash": "de71ef7607a4c0d8d593657fbcacf40d4beeee0c79331c7f1ebbfff3542863d9",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 305,
+          "passed": 305,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2042,
+          "outputHash": "a4e97dc1cc5ce4c1bc40055d86cdfd5ea19a80564c921641bc816823e932caa4",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 305,
+        "passed": true
+      },
+      {
+        "runId": "009-blank-scalar-dedent-fixed-r0",
+        "mode": "fixed",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 560,
+          "outputHash": "5396e49d0252ba078d602b9bce9d6c9099de65aad2be570292805777a4bc23b4",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 811,
+          "outputHash": "5c8fde113ea4b6ba09c5a0bc9dc2168c4e24997599b049aacaf9149e8453bdf0",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 305,
+          "passed": 305,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 3579,
+          "outputHash": "8899a8c60e3fd88d64b336ec4eff7d587710ef83a17a544fbe0f1ef387721f12",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 305,
+        "passed": true
+      },
+      {
+        "runId": "010-merge-values-fixed-r1",
+        "mode": "fixed",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 764,
+          "outputHash": "886ba04ca5e57a54424ff68c87ee8231e4e0ee56bbbec05b4373327721d73a7e",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 625,
+          "outputHash": "8924abd207c53b3c704a2f16acb196730820bbae28c81a11fcfa40ec92b4e077",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 290,
+          "passed": 290,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2084,
+          "outputHash": "60f80e5bcd3c26dc7634ad991837f279a20c3b11c149669b70d159ce9deafa9e",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 290,
+        "passed": true
+      },
+      {
+        "runId": "011-merge-values-selective-r1",
+        "mode": "selective",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 658,
+          "outputHash": "5c1bc4ae8a58a66989d972fc4c59ef24e7dcc3cac60ddea9c394be9dc7ca623f",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 942,
+          "outputHash": "5d1c8e24ac3d2c457cfeed6791a49cd8b0e218058bfa394690beeb641a342fc4",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 290,
+          "passed": 290,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2132,
+          "outputHash": "049eaa2f51a4eeeb36d81dd6e876103dfecf6e69dcae7b25304facaca8feffd5",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 290,
+        "passed": true
+      },
+      {
+        "runId": "012-merge-values-unrestricted-r1",
+        "mode": "unrestricted",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 718,
+          "outputHash": "9e281bc209d4e7fdb28a2ba980ab470aad73fe6095dcf66699f4b9b5ffcdb733",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 647,
+          "outputHash": "37e49daaa1324d144f248948690736ffa500599ec5d5809599703014d509f11b",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 290,
+          "passed": 290,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1706,
+          "outputHash": "59b3fec1d85b46c53f6a3f4bc5177e1536a1297ba6b1d07459efaaa37c59ac2f",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 290,
+        "passed": true
+      },
+      {
+        "runId": "013-flow-key-separation-selective-r1",
+        "mode": "selective",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 620,
+          "outputHash": "5334f60f207184bd78f700694b1329b641662e482493ec8beb68e8ba2f39e76a",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 594,
+          "outputHash": "e610c47c6c8f1cd6bb175255556dbd915283d1feee8a66743282555de731ee13",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 297,
+          "passed": 297,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1736,
+          "outputHash": "da228010b400717775f1eccc76815e422c79eedd0142ef8f6b7eac573f7f8e84",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 297,
+        "passed": true
+      },
+      {
+        "runId": "014-flow-key-separation-unrestricted-r1",
+        "mode": "unrestricted",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 883,
+          "outputHash": "dc9a13d168d795e2aff53a648123a9315b206584d74dfff09f036b20bb9d8a37",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1012,
+          "outputHash": "e446f7404931ba9f47bd1fce1b20f7a42f623d976efd8bd3756a8ec18a2b4b29",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 297,
+          "passed": 297,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2432,
+          "outputHash": "bc426023598595e99f1e2d46ac15eb98dc12b5d65bfd4dbeb887bec3bdd42526",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 297,
+        "passed": true
+      },
+      {
+        "runId": "015-flow-key-separation-fixed-r1",
+        "mode": "fixed",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 895,
+          "outputHash": "64b4d539482e666d71644a03e73e1ae6b1f80fce029338974b9b3d1db65363a4",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 934,
+          "outputHash": "9e8f0be4d385f3b329cc27bc4171d85a63422cbb69fa9142c9df0e372016ee38",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 297,
+          "passed": 297,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2433,
+          "outputHash": "2cf6332c67cdea555cff112d243bd5e8265ec3677199dcc93bc2c8f8c331fbd9",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 297,
+        "passed": true
+      },
+      {
+        "runId": "016-blank-scalar-dedent-unrestricted-r1",
+        "mode": "unrestricted",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1053,
+          "outputHash": "23a4e90957698b1e1e0fe2307176adc79e20c9702e58664312d1b87452e19849",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 742,
+          "outputHash": "de4e8954d11b44a58b322f614bd818d8a9809e8857a86de129806596e00be823",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 305,
+          "passed": 305,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 4811,
+          "outputHash": "c74627c865c7c4557c80dec827aa0240f639610a546fadc42256ea7165a2d73b",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 305,
+        "passed": true
+      },
+      {
+        "runId": "017-blank-scalar-dedent-fixed-r1",
+        "mode": "fixed",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1226,
+          "outputHash": "85c9f1ea75fce0974948656863a3900cb527c38cc53c5a6b5c4407f5f4e53cb0",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 1664,
+          "outputHash": "f45dfa1a3b506868652c4f83e2a8ae96d4d27bd6a4615178d3fb3af877429e82",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 305,
+          "passed": 305,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2436,
+          "outputHash": "71e0e3c4820d17a48b609afb1f681adf5abb2979681fd0f5e39acdc7257f1476",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 305,
+        "passed": true
+      },
+      {
+        "runId": "018-blank-scalar-dedent-selective-r1",
+        "mode": "selective",
+        "acceptance": {
+          "status": "passed",
+          "tests": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 724,
+          "outputHash": "bbc231673eeefdc92e4c3bb225c68414569cd45a086530f637721078bbca2838",
+          "diagnostics": null
+        },
+        "visible": {
+          "status": "passed",
+          "tests": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 877,
+          "outputHash": "24c7bf6f15e03d3509ed1b93ad890d519ac171e4b58b3fa59703afb305a575df",
+          "diagnostics": null
+        },
+        "upstream": {
+          "status": "passed",
+          "tests": 305,
+          "passed": 305,
+          "failed": 0,
+          "skipped": 0,
+          "cancelled": 0,
+          "todo": 0,
+          "latencyMs": 2876,
+          "outputHash": "306d7e87987f3728af600b4e9692731e666298bbe6c4c83cff7a12907f23acf4",
+          "diagnostics": null
+        },
+        "expectedUpstreamTests": 305,
+        "passed": true
+      }
+    ],
+    "totalTestWallMs": 90889,
+    "passed": true
+  },
+  "valid": true
+}

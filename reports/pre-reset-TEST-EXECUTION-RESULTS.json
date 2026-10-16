@@ -1,0 +1,597 @@
+{
+  "campaign": "test-execution-v1",
+  "status": "blocked_by_subscription_sharing_limit",
+  "scoredAttempts": 0,
+  "plannedScoredAttempts": 18,
+  "screeningAttempts": 1,
+  "plannedScreeningAttempts": 3,
+  "knownEstimatedUsd": 0,
+  "unknownCostAttempts": 1,
+  "livePolicyActivation": false,
+  "liveDifficultyMeasured": false,
+  "runs": [
+    {
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "task": "merge-alias-screen",
+      "mode": "unrestricted",
+      "repetition": 0,
+      "pilot": true,
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "immutableIntact": true,
+      "modelValid": true,
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "low",
+      "usage": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "knownEstimatedUsd": 0,
+      "totalEstimatedUsd": null,
+      "latencyMs": 3739,
+      "policy": {
+        "mode": "unrestricted",
+        "requested": 0,
+        "executed": 0,
+        "deferred": 0,
+        "testWallMs": 0,
+        "events": []
+      },
+      "changed": [],
+      "acceptance": "failed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "finalTestWallMs": 1717,
+      "turns": 1,
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ],
+      "endedAt": "2026-10-14T21:32:51.162Z"
+    }
+  ],
+  "offlineMechanism": {
+    "kind": "offline mechanism verification; not coding-agent repair or live capability evidence",
+    "generatedAt": "2026-10-14T21:33:58.045Z",
+    "baselineSource": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+    "referenceSource": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+    "changedFiles": [
+      "src/src/parser/constructor.ts"
+    ],
+    "arms": [
+      {
+        "mode": "unrestricted",
+        "policy": {
+          "mode": "unrestricted",
+          "requested": 6,
+          "executed": 6,
+          "deferred": 0,
+          "testWallMs": 2020,
+          "events": [
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 357
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 361
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "failed",
+              "latencyMs": 344
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "failed",
+              "latencyMs": 302
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "passed",
+              "latencyMs": 342
+            },
+            {
+              "type": "test_policy",
+              "mode": "unrestricted",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "passed",
+              "latencyMs": 314
+            }
+          ]
+        },
+        "receipts": [
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 357
+          },
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 361
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "failed",
+            "executed": true,
+            "latencyMs": 344
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "failed",
+            "executed": true,
+            "latencyMs": 302
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 342
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 314
+          }
+        ],
+        "independentBaselineFinal": "failed",
+        "independentReferenceFinal": "passed",
+        "finalWallMs": 593,
+        "observedBehavioralFailures": 2
+      },
+      {
+        "mode": "fixed",
+        "policy": {
+          "mode": "fixed",
+          "requested": 6,
+          "executed": 1,
+          "deferred": 5,
+          "testWallMs": 299,
+          "events": [
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 299
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "visible",
+              "executed": false,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "fixed",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "deferred",
+              "reason": "fewer than two meaningful edits since last checkpoint",
+              "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            }
+          ]
+        },
+        "receipts": [
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 299
+          },
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          }
+        ],
+        "independentBaselineFinal": "failed",
+        "independentReferenceFinal": "passed",
+        "finalWallMs": 636,
+        "observedBehavioralFailures": 0
+      },
+      {
+        "mode": "selective",
+        "policy": {
+          "mode": "selective",
+          "requested": 6,
+          "executed": 3,
+          "deferred": 3,
+          "testWallMs": 956,
+          "events": [
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "visible",
+              "executed": true,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "passed",
+              "latencyMs": 308
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "visible",
+              "executed": false,
+              "edits": 0,
+              "key": "bdfd8564db74974a398cda67b3b2cd64d987c35e9f1da523e4ef481efc3cf86e",
+              "status": "deferred",
+              "reason": "identical source and test revision already executed",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "failed",
+              "latencyMs": 325
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 0,
+              "key": "1ed0200f78b4bbf7060d03bd7048a1c78997a77881b3f9938cf70ef27b301d76",
+              "status": "deferred",
+              "reason": "identical source and test revision already executed",
+              "sourceRevision": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": true,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "passed",
+              "latencyMs": 323
+            },
+            {
+              "type": "test_policy",
+              "mode": "selective",
+              "kind": "behavioral",
+              "executed": false,
+              "edits": 1,
+              "key": "ade652fefc3347aa359e8f5dc95e4b0218156dfba7abaeef513932f0496f07f0",
+              "status": "deferred",
+              "reason": "identical source and test revision already executed",
+              "sourceRevision": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+              "testRevision": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+              "priorResultIsNotCurrentPass": true
+            }
+          ]
+        },
+        "receipts": [
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 308
+          },
+          {
+            "kind": "visible",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "failed",
+            "executed": true,
+            "latencyMs": 325
+          },
+          {
+            "kind": "behavioral",
+            "source": "02b47cec8fe6c0698a34fa131d8920bfa84aaffb81378d4cebbf5c8da03268df",
+            "edits": 0,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "passed",
+            "executed": true,
+            "latencyMs": 323
+          },
+          {
+            "kind": "behavioral",
+            "source": "b5bb6fa060694bd8b6f13b450e136d00fe2331693450834cc7a6ddee85968b0d",
+            "edits": 1,
+            "status": "deferred",
+            "executed": false,
+            "latencyMs": null
+          }
+        ],
+        "independentBaselineFinal": "failed",
+        "independentReferenceFinal": "passed",
+        "finalWallMs": 548,
+        "observedBehavioralFailures": 1
+      }
+    ]
+  },
+  "validation": {
+    "at": "2026-10-14T21:34:58.688Z",
+    "manifests": [
+      {
+        "campaign": "test-execution-screen-v1",
+        "plannedAttempts": 3,
+        "frozenMismatches": [],
+        "currentMismatches": [
+          "scripts/test-execution-experiment.mjs",
+          "docs/TEST-EXECUTION.md"
+        ],
+        "manifestHash": "7070ad79a8bc679f00750ad8acb57481319c6f19986d1df4cfeab29ef1229c25"
+      },
+      {
+        "campaign": "test-execution-v1",
+        "plannedAttempts": 18,
+        "frozenMismatches": [],
+        "currentMismatches": [],
+        "manifestHash": "ea461e73159613f521f5eccf4fecb6545a90483e139b4c76ab1d552eeeeb535a"
+      }
+    ],
+    "fixtures": [
+      {
+        "id": "merge-alias-screen",
+        "screening": true,
+        "base": "cc665ec15016ccb6004bc46f53257366c5d0b18d",
+        "fix": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+        "acceptanceHash": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 286,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1023365,
+        "excludedFiles": 45
+      },
+      {
+        "id": "merge-values",
+        "screening": false,
+        "base": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+        "fix": "fae37b8ab70a1ba3813e87a7ac0037f41d604aa1",
+        "acceptanceHash": "62d9654105b336f9f40ac10d18080733611781a51615dd387e10b1e8c9515c92",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 290,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1019685,
+        "excludedFiles": 45
+      },
+      {
+        "id": "flow-key-separation",
+        "screening": false,
+        "base": "4aa80cd610528b329403b8390514b292b1adbc46",
+        "fix": "83af54ade8b1e65c0a59d7e538e5e111f03996d9",
+        "acceptanceHash": "1af1d2f69dd8aab2fed7be76e7b20a668b2c567ccdcc9c30042f6f2c99090351",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 297,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1022028,
+        "excludedFiles": 45
+      },
+      {
+        "id": "blank-scalar-dedent",
+        "screening": false,
+        "base": "30108cc828b5393d55dfbfc8087ab713f7145946",
+        "fix": "0cbb471d67b083778e7b2600af2418142bf5bf04",
+        "acceptanceHash": "76abc02a6052ce755ea521a9cf0d6939af8a42e6bdd35e990b6bca12f8ba71f9",
+        "acceptanceMatches": true,
+        "baselineMatches": true,
+        "validationMatches": true,
+        "baseline": "failed",
+        "reference": "passed",
+        "visible": "passed",
+        "upstream": "passed",
+        "upstreamTests": 305,
+        "referenceUpstream": "passed",
+        "archiveBytes": 1025337,
+        "excludedFiles": 46
+      }
+    ],
+    "patches": [
+      {
+        "runId": "001-merge-alias-screen-unrestricted-r0",
+        "changedFiles": [],
+        "emptyPatch": true,
+        "immutableIntact": true
+      }
+    ],
+    "sourceOnlyScope": true,
+    "artifactBytes": 87345964,
+    "freeBytes": 10322575360,
+    "harnessTests": {
+      "focused": {
+        "passed": 13,
+        "total": 13,
+        "receipt": "reports/test-execution-harness-tests.txt"
+      },
+      "broad": {
+        "passed": 86,
+        "total": 87,
+        "failed": "inherited retry-idempotency exact reference replacement mismatch; Windows checkout line-ending sensitivity"
+      }
+    },
+    "valid": true
+  },
+  "efficiencyFrontier": "not measured; no live matched pairs",
+  "capabilityFrontier": "not measured; no scored repairs and unknown charge",
+  "engineeringWorkExcludedFromBenchmarkInference": true,
+  "concurrency": "other root and independent campaigns shared provider/machine; wall-time/cache cannot be causally attributed"
+}

@@ -1,0 +1,120 @@
+{
+  "at": "2026-10-14T21:34:58.688Z",
+  "manifests": [
+    {
+      "campaign": "test-execution-screen-v1",
+      "plannedAttempts": 3,
+      "frozenMismatches": [],
+      "currentMismatches": [
+        "scripts/test-execution-experiment.mjs",
+        "docs/TEST-EXECUTION.md"
+      ],
+      "manifestHash": "7070ad79a8bc679f00750ad8acb57481319c6f19986d1df4cfeab29ef1229c25"
+    },
+    {
+      "campaign": "test-execution-v1",
+      "plannedAttempts": 18,
+      "frozenMismatches": [],
+      "currentMismatches": [],
+      "manifestHash": "ea461e73159613f521f5eccf4fecb6545a90483e139b4c76ab1d552eeeeb535a"
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "merge-alias-screen",
+      "screening": true,
+      "base": "cc665ec15016ccb6004bc46f53257366c5d0b18d",
+      "fix": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+      "acceptanceHash": "a5e88b9eddc2aa0ca9db2159b5503937c20f2ed33428b4fbc709514a01734afb",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 286,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1023365,
+      "excludedFiles": 45
+    },
+    {
+      "id": "merge-values",
+      "screening": false,
+      "base": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+      "fix": "fae37b8ab70a1ba3813e87a7ac0037f41d604aa1",
+      "acceptanceHash": "62d9654105b336f9f40ac10d18080733611781a51615dd387e10b1e8c9515c92",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 290,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1019685,
+      "excludedFiles": 45
+    },
+    {
+      "id": "flow-key-separation",
+      "screening": false,
+      "base": "4aa80cd610528b329403b8390514b292b1adbc46",
+      "fix": "83af54ade8b1e65c0a59d7e538e5e111f03996d9",
+      "acceptanceHash": "1af1d2f69dd8aab2fed7be76e7b20a668b2c567ccdcc9c30042f6f2c99090351",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 297,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1022028,
+      "excludedFiles": 45
+    },
+    {
+      "id": "blank-scalar-dedent",
+      "screening": false,
+      "base": "30108cc828b5393d55dfbfc8087ab713f7145946",
+      "fix": "0cbb471d67b083778e7b2600af2418142bf5bf04",
+      "acceptanceHash": "76abc02a6052ce755ea521a9cf0d6939af8a42e6bdd35e990b6bca12f8ba71f9",
+      "acceptanceMatches": true,
+      "baselineMatches": true,
+      "validationMatches": true,
+      "baseline": "failed",
+      "reference": "passed",
+      "visible": "passed",
+      "upstream": "passed",
+      "upstreamTests": 305,
+      "referenceUpstream": "passed",
+      "archiveBytes": 1025337,
+      "excludedFiles": 46
+    }
+  ],
+  "patches": [
+    {
+      "runId": "001-merge-alias-screen-unrestricted-r0",
+      "changedFiles": [],
+      "emptyPatch": true,
+      "immutableIntact": true
+    }
+  ],
+  "sourceOnlyScope": true,
+  "artifactBytes": 87345964,
+  "freeBytes": 10322575360,
+  "harnessTests": {
+    "focused": {
+      "passed": 13,
+      "total": 13,
+      "receipt": "reports/test-execution-harness-tests.txt"
+    },
+    "broad": {
+      "passed": 86,
+      "total": 87,
+      "failed": "inherited retry-idempotency exact reference replacement mismatch; Windows checkout line-ending sensitivity"
+    }
+  },
+  "valid": true
+}

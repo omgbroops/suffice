@@ -1,0 +1,16 @@
+✔ evaluated v1 fixed race is reproducible (24.3458ms)
+✔ evaluated v1 selective race is reproducible (14.9161ms)
+✔ unbenchmarked v2 fixed admits one concurrent identical-revision execution (14.8789ms)
+✔ unbenchmarked v2 selective admits one concurrent identical-revision execution (18.1633ms)
+✔ v2 fixed checkpoint is consumed once across distinct checks (27.4574ms)
+✔ v2 selective executes distinct test revisions while keeping gate serialized (29.6875ms)
+✔ v2 rejected executor releases queue without marking revision executed (16.9363ms)
+✔ v2 unrestricted preserves concurrent execution (14.7185ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1519.8401
