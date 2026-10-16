@@ -1,0 +1,14 @@
+[
+  {
+    "sha": "513b05225e2f4aa83d5b8ee43e6c09a2eefc8a77",
+    "filename": "src/index.js",
+    "status": "modified",
+    "additions": 9,
+    "deletions": 7,
+    "changes": 16,
+    "blob_url": "https://github.com/node-fetch/node-fetch/blob/ff68404105e237bc3ede1629b52138c53698da83/src%2Findex.js",
+    "raw_url": "https://github.com/node-fetch/node-fetch/raw/ff68404105e237bc3ede1629b52138c53698da83/src%2Findex.js",
+    "contents_url": "https://api.github.com/repos/node-fetch/node-fetch/contents/src%2Findex.js?ref=ff68404105e237bc3ede1629b52138c53698da83",
+    "patch": "@@ -387,13 +387,7 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {\n \t\t\t}\n \t\t};\n \n-\t\tsocket.prependListener('close', onSocketClose);\n-\n-\t\trequest.on('abort', () => {\n-\t\t\tsocket.removeListener('close', onSocketClose);\n-\t\t});\n-\n-\t\tsocket.on('data', buf => {\n+\t\tconst onData = buf => {\n \t\t\tproperLastChunkReceived = Buffer.compare(buf.slice(-5), LAST_CHUNK) === 0;\n \n \t\t\t// Sometimes final 0-length chunk and end of message code are in separate packets\n@@ -405,6 +399,14 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {\n \t\t\t}\n \n \t\t\tpreviousChunk = buf;\n+\t\t};\n+\n+\t\tsocket.prependListener('close', onSocketClose);\n+\t\tsocket.on('data', onData);\n+\n+\t\trequest.on('close', () => {\n+\t\t\tsocket.removeListener('close', onSocketClose);\n+\t\t\tsocket.removeListener('data', onData);\n \t\t});\n \t});\n }"
+  }
+]

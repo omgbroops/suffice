@@ -1,0 +1,113 @@
+{
+  "sha": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+  "node_id": "C_kwDOBrDIp9oAKGZhZDUyYjkwMmRlOWE5MWZkNmMwY2E5MzRjM2E2MTBlMTdhNTc5MDg",
+  "commit": {
+    "author": {
+      "name": "Sindre Sorhus",
+      "email": "sindresorhus@gmail.com",
+      "date": "2024-01-29T07:06:34Z"
+    },
+    "committer": {
+      "name": "Sindre Sorhus",
+      "email": "sindresorhus@gmail.com",
+      "date": "2024-01-29T07:06:34Z"
+    },
+    "message": "Fix `emitter.listenerCount()` for symbol keys\n\nFixes #113",
+    "tree": {
+      "sha": "ee261c70d47e639036860a1d30eac149727c2119",
+      "url": "https://api.github.com/repos/sindresorhus/emittery/git/trees/ee261c70d47e639036860a1d30eac149727c2119"
+    },
+    "url": "https://api.github.com/repos/sindresorhus/emittery/git/commits/fad52b902de9a91fd6c0ca934c3a610e17a57908",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/sindresorhus/emittery/commits/fad52b902de9a91fd6c0ca934c3a610e17a57908",
+  "html_url": "https://github.com/sindresorhus/emittery/commit/fad52b902de9a91fd6c0ca934c3a610e17a57908",
+  "comments_url": "https://api.github.com/repos/sindresorhus/emittery/commits/fad52b902de9a91fd6c0ca934c3a610e17a57908/comments",
+  "author": {
+    "login": "sindresorhus",
+    "id": 170270,
+    "node_id": "MDQ6VXNlcjE3MDI3MA==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/170270?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sindresorhus",
+    "html_url": "https://github.com/sindresorhus",
+    "followers_url": "https://api.github.com/users/sindresorhus/followers",
+    "following_url": "https://api.github.com/users/sindresorhus/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sindresorhus/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sindresorhus/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sindresorhus/subscriptions",
+    "organizations_url": "https://api.github.com/users/sindresorhus/orgs",
+    "repos_url": "https://api.github.com/users/sindresorhus/repos",
+    "events_url": "https://api.github.com/users/sindresorhus/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sindresorhus/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "sindresorhus",
+    "id": 170270,
+    "node_id": "MDQ6VXNlcjE3MDI3MA==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/170270?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sindresorhus",
+    "html_url": "https://github.com/sindresorhus",
+    "followers_url": "https://api.github.com/users/sindresorhus/followers",
+    "following_url": "https://api.github.com/users/sindresorhus/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sindresorhus/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sindresorhus/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sindresorhus/subscriptions",
+    "organizations_url": "https://api.github.com/users/sindresorhus/orgs",
+    "repos_url": "https://api.github.com/users/sindresorhus/repos",
+    "events_url": "https://api.github.com/users/sindresorhus/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sindresorhus/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "fc902058a1fc66a2601c6ba71a9d957e6a88622f",
+      "url": "https://api.github.com/repos/sindresorhus/emittery/commits/fc902058a1fc66a2601c6ba71a9d957e6a88622f",
+      "html_url": "https://github.com/sindresorhus/emittery/commit/fc902058a1fc66a2601c6ba71a9d957e6a88622f"
+    }
+  ],
+  "stats": {
+    "total": 22,
+    "additions": 18,
+    "deletions": 4
+  },
+  "files": [
+    {
+      "sha": "6f47a0881ad50248430bfdfca6c6801da26b29ba",
+      "filename": "index.js",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 4,
+      "changes": 10,
+      "blob_url": "https://github.com/sindresorhus/emittery/blob/fad52b902de9a91fd6c0ca934c3a610e17a57908/index.js",
+      "raw_url": "https://github.com/sindresorhus/emittery/raw/fad52b902de9a91fd6c0ca934c3a610e17a57908/index.js",
+      "contents_url": "https://api.github.com/repos/sindresorhus/emittery/contents/index.js?ref=fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "patch": "@@ -10,8 +10,10 @@ const listenerRemoved = Symbol('listenerRemoved');\n let canEmitMetaEvents = false;\n let isGlobalDebugEnabled = false;\n \n+const isEventKeyType = key => typeof key === 'string' || typeof key === 'symbol' || typeof key === 'number';\n+\n function assertEventName(eventName) {\n-\tif (typeof eventName !== 'string' && typeof eventName !== 'symbol' && typeof eventName !== 'number') {\n+\tif (!isEventKeyType(eventName)) {\n \t\tthrow new TypeError('`eventName` must be a string, symbol, or number');\n \t}\n }\n@@ -32,7 +34,7 @@ function getListeners(instance, eventName) {\n }\n \n function getEventProducers(instance, eventName) {\n-\tconst key = typeof eventName === 'string' || typeof eventName === 'symbol' || typeof eventName === 'number' ? eventName : anyProducer;\n+\tconst key = isEventKeyType(eventName) ? eventName : anyProducer;\n \tconst producers = producersMap.get(instance);\n \tif (!producers.has(key)) {\n \t\treturn;\n@@ -432,7 +434,7 @@ export default class Emittery {\n \t\tfor (const eventName of eventNames) {\n \t\t\tthis.logIfDebugEnabled('clear', eventName, undefined);\n \n-\t\t\tif (typeof eventName === 'string' || typeof eventName === 'symbol' || typeof eventName === 'number') {\n+\t\t\tif (isEventKeyType(eventName)) {\n \t\t\t\tconst set = getListeners(this, eventName);\n \t\t\t\tif (set) {\n \t\t\t\t\tset.clear();\n@@ -471,7 +473,7 @@ export default class Emittery {\n \t\tlet count = 0;\n \n \t\tfor (const eventName of eventNames) {\n-\t\t\tif (typeof eventName === 'string') {\n+\t\t\tif (isEventKeyType(eventName)) {\n \t\t\t\tcount += anyMap.get(this).size\n \t\t\t\t\t+ (getListeners(this, eventName)?.size ?? 0)\n \t\t\t\t\t+ (getEventProducers(this, eventName)?.size ?? 0)"
+    },
+    {
+      "sha": "9c78b19a36530781a0d6b6a9bf1564f86a097267",
+      "filename": "test/index.js",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 0,
+      "changes": 12,
+      "blob_url": "https://github.com/sindresorhus/emittery/blob/fad52b902de9a91fd6c0ca934c3a610e17a57908/test%2Findex.js",
+      "raw_url": "https://github.com/sindresorhus/emittery/raw/fad52b902de9a91fd6c0ca934c3a610e17a57908/test%2Findex.js",
+      "contents_url": "https://api.github.com/repos/sindresorhus/emittery/contents/test%2Findex.js?ref=fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "patch": "@@ -1064,6 +1064,18 @@ test('listenerCount() - eventName must be undefined if not a string, symbol, or\n \t}, {instanceOf: TypeError});\n });\n \n+test('listenerCount() - symbol', t => {\n+\tconst symbol = Symbol('🦄');\n+\tconst emitter = new Emittery();\n+\tt.is(emitter.listenerCount(symbol), 0);\n+\temitter.on(symbol, () => {});\n+\temitter.on(symbol, () => {});\n+\tt.is(emitter.listenerCount(symbol), 2);\n+\temitter.onAny(() => {});\n+\temitter.onAny(() => {});\n+\tt.is(emitter.listenerCount(symbol), 4);\n+});\n+\n test('bindMethods()', t => {\n \tconst methodsToBind = ['on', 'off', 'emit', 'listenerCount'];\n "
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "assignees": [],
+    "body": "### Issue\nfixes #600\n\n### LLM Use\nan LLM reviewed my code, i didn't apply any of its suggestions\n\n### Description\n`parsePrelude()` now also returns where the last empty line between comments was. when the prelude doesn't end with an empty line, the part before that point goes to `doc.commentBefore` and the rest to the value, so `#foo\\n\\n#bar\\n42` gives `'foo'` on the document and `'bar'` on the value. stringified output doesn't change.\n\n`seq comments without #` expected the combined `' c1\\n\\n c2'` on the first item, updated it to `' c1'` on the document and `' c2'` on the item.\n",
+    "isDraft": false,
+    "number": 732,
+    "title": "fix: Keep newline-separated comments separate at document start",
+    "updatedAt": "2026-10-10T22:30:50Z",
+    "url": "https://github.com/eemeli/yaml/pull/732"
+  },
+  {
+    "assignees": [],
+    "body": "### Issue\nfixes #703\n\n### LLM Use\nan LLM reviewed my code, i didn't apply any of its suggestions\n\n### Description\nraw non-printable characters in scalars now give a `NON_PRINTABLE_CHAR` error in `doc.errors`, checked in `resolveFlowScalar()` and `resolveBlockScalar()` as you suggested.\n\n- plain and block scalars: everything outside c-printable.\n- quoted scalars: only C0, since the spec allows the rest there for JSON compatibility (`nb-json`). escapes like `\"\\x01\"` still work.\n- the stringifier now also double-quotes U+FFFE and U+FFFF, otherwise a round trip produced a plain scalar that no longer parses.\n- new error code added to `docs/08_errors.md`.\n\ntests are in `tests/doc/errors.ts`, full suite passes.\n",
+    "isDraft": false,
+    "number": 731,
+    "title": "fix: Error on non-printable characters in scalar values",
+    "updatedAt": "2026-10-10T21:43:01Z",
+    "url": "https://github.com/eemeli/yaml/pull/731"
+  },
+  {
+    "assignees": [],
+    "body": "<!--\nUsing this template is REQUIRED for non-maintainer contributions.\nIf your PR does not, it will be closed.\n\nPlease be sure to read our contributing guide before proceeding,\ntaking note in particular of the last section on LLM use:\n\nhttps://github.com/eemeli/yaml/blob/main/docs/CONTRIBUTING.md\n-->\n\n### Issue\nfixes #717 \n\n### LLM Use\ndidn't use LLM\n\n### Description\nthis PR aims to fix issue #717",
+    "isDraft": false,
+    "number": 730,
+    "title": "Fix extra line for tags and anchors",
+    "updatedAt": "2026-10-10T08:44:16Z",
+    "url": "https://github.com/eemeli/yaml/pull/730"
+  },
+  {
+    "assignees": [],
+    "body": "This adds `freeze` and `preferNullPrototype` options corresponding to the ones introduced by [JSON.parse Options Proposal](https://github.com/tc39/proposal-json-parseimmutable).\r\n\r\nWith `freeze` enabled, the Object and Array values corresponding to mappings and sequences are deeply frozen.\r\n\r\nWith `preferNullPrototype`, Object values corresponding to mappings are created with `Object.create(null)`.",
+    "isDraft": false,
+    "number": 727,
+    "title": "Add `freeze` and `preferNullPrototype` options for `parse()` and `.toJS()`",
+    "updatedAt": "2026-09-23T11:59:18Z",
+    "url": "https://github.com/eemeli/yaml/pull/727"
+  },
+  {
+    "assignees": [],
+    "body": "### Issue\n\nFixes #687\n\n### LLM Use\n\nAn assistant helped apply the one-line header change and add the regression test. The wording here is mine. No generated comments in the code.\n\n### Description\n\n`toString()` wrote an empty root `|` / `>` without an indent indicator, so a following document comment parsed as the scalar.\n\nWhen `forceBlockIndent` is set, emit `|2` / `>2` so the comment stays a comment. Nested empty scalars already round-trip; this only covers the root case.\n\n#697 tried a wider version of this and was closed by the author after review.",
+    "isDraft": false,
+    "number": 721,
+    "title": "Keep indent indicator on empty root block scalar + comment",
+    "updatedAt": "2026-09-21T13:39:15Z",
+    "url": "https://github.com/eemeli/yaml/pull/721"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #692\r\n\r\nAt the root `ctx.indent` is empty, so the body of a block scalar goes out unindented while the header still claims `|1`:\r\n\r\n```js\r\nparse(stringify('  a\\n  b'))            // ' a\\n b', lost a space\r\nparse(stringify('  indented\\nlines'))   // throws\r\n```\r\n\r\nPyYAML reads `|1-\\n  a\\n  b\\n` as `' a\\n b'` too, so the parser is doing the right thing here and the header is the part that's wrong. `blockString` now indents the block whenever the content starts with a space, so the indicator matches what actually gets written.\r\n\r\nThat alone isn't enough, which is why `foldFlowLines` is in this diff as well. `consumeMoreIndentedLines` allows `indent.length` of leading whitespace before it decides a line is more-indented, but the first line is the one line that doesn't carry the indent yet, so its leading space gets eaten and the line is folded anyway. Reproduces on main today:\r\n\r\n```js\r\nstringify({ k: ' first more-indented line\\nnext line\\n' }, { lineWidth: 20 })\r\n// 'k: >2\\n   first\\n  more-indented line\\n  next line\\n'\r\n// reads back as ' first\\nmore-indented line next line\\n'\r\n```\r\n\r\nFix one without the other and stringify stops emitting unparseable YAML but starts emitting parseable YAML with the wrong value in it.\r\n\r\nFuzzed 20k random strings built from spaces, tabs, newlines and a few indicator characters through `parse(stringify(x)) === x`. 1971 failures before, 102 after. All 102 leftovers are values made entirely of whitespace, and those look like a parser problem rather than a stringify one: `parse('|2+\\n   \\n')` gives `'\\n'` here but `' \\n'` in PyYAML.\r\n\r\nThe other thing I noticed and left alone is that the indicator is still hardcoded to `'2'`. That's wrong for map values whenever `indent` isn't 2, since a map value gets `indent + indentStep` while `YAMLSeq` uses `indent + '  '` no matter what `indentStep` is. Getting it right needs the parent indent available in `StringifyContext`, which is more surgery than this fix wants. Happy to open issues for that or the parser one, or to have a go at either.\r\n\r\nOne test expectation changed. \"More-indented first line (#55)\" asserted `>1\\n first more-indented line\\nnext line\\n`, which neither we nor PyYAML will parse, so it was pinning invalid output in place. Updated it and added the round-trip check.\r\n\r\nFull suite green, submodules included.",
+    "isDraft": false,
+    "number": 708,
+    "title": "Fix round-trip of block scalars whose content starts with a space",
+    "updatedAt": "2026-08-03T17:45:09Z",
+    "url": "https://github.com/eemeli/yaml/pull/708"
+  },
+  {
+    "assignees": [],
+    "body": "Adds a keepIndentStep parse option that preserves the original indentation between keys and values in block maps. When enabled, each Pair stores its original indentStep string, which stringifyPair uses instead of the context's default.\r\n\r\n<details>\r\n<summary>previous keepIndent option <a href=\"https://github.com/eemeli/yaml/commit/83326fa44b67d8af8604818072ff08afb43741fb\">83326fa</a></summary>\r\n\r\nI believe this fixes https://github.com/eemeli/yaml/issues/283 by adding a `keepIndent` option to toString.\r\n\r\nI temporarily enabled this `keepIndent` + `keepSourceToken` on by default  and ran all the tests and it seems to work.\r\n\r\nAlternatively, indent could be an optional property on the AST, which is maybe better in theory but also leads to some odd situations. Another alternative to this implementation might be something more general like `keepSourceFormatting` where in addition to formatting changes, we would attempt to keep more formatting e.g. in multiline flow text we wouldn't re-fold text if sourceToken exists.\r\n\r\nThis would be really helpful for us at [Stainless](https://www.stainless.com), as we apply \"transforms\" to a yaml file, but also need to textually diff the original yaml file against the transformed file to show changes to our users. Spurius diffs make this process really difficult to inspect.\r\n\r\nAnd while I'm at it just want to say thank you for your work on this library, much of my work at Stainles would just not be possible without it. Diffing, transforming, adding comments, etc. to yaml files are a core part of what we do, and we use this library for things like just parsing YAML, analyzing source in our language server, showing great diffs in our transforms product, and so, so many more things.\r\n\r\n</details>",
+    "isDraft": false,
+    "number": 654,
+    "title": "Add keepIndentStep option to parse",
+    "updatedAt": "2026-04-28T17:50:15Z",
+    "url": "https://github.com/eemeli/yaml/pull/654"
+  },
+  {
+    "assignees": [],
+    "body": "Trying to use `isMergeKey` for something… Is there a reason it isn’t exposed alongside `isScalar` etc? Also, seems like `MERGE_KEY` should be a [shared symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol#shared_symbols_in_the_global_symbol_registry), no?",
+    "isDraft": false,
+    "number": 651,
+    "title": "feat: Expose `isMergeKey` and `MERGE_KEY` `const`ant",
+    "updatedAt": "2026-01-21T01:13:37Z",
+    "url": "https://github.com/eemeli/yaml/pull/651"
+  },
+  {
+    "assignees": [],
+    "body": "Fix for inline comments getting removed https://github.com/eemeli/yaml/issues/602\r\n\r\nIt's possible there is an easier way to do this, but this appears to work!\r\n\r\nThere are a couple of skipped cases that do not pass in tests/trailing-key-comments.test.ts",
+    "isDraft": false,
+    "number": 629,
+    "title": "Preserve Inline comments",
+    "updatedAt": "2026-02-13T09:57:15Z",
+    "url": "https://github.com/eemeli/yaml/pull/629"
+  },
+  {
+    "assignees": [],
+    "body": "This enables the resolution of YAML looking like this:\r\n\r\n```yaml\r\n- &foo \r\n  bar:\r\n    - 1\r\n    - 2\r\n    - 42\r\n- *foo/bar/2\r\n```\r\nto resolve as:\r\n```js\r\n[\r\n  { bar: [1, 2, 42] },\r\n  42\r\n]\r\n```\r\n\r\nIn other words, if an alias contains a `/` character, it is resolved as follows:\r\n1. If a preceding anchor matches the alias exactly, use that and resolve the value as previously.\r\n2. Else, find the last longest preceding anchor which matches the start of the alias if it were followed by a `/` character.\r\n3. Considering the node of that anchor as a root node, use the rest of the alias as a `/` separated path to the target node.\r\n4. Provided that the target node is a scalar or a collection, resolve it as the alias's value.\r\n\r\nPut together, this means that all existing valid YAML continues to have the exact same meaning as before, but it's possible for an alias to point at nodes within a structure with an anchor. As with anchors, JS equality is maintained across aliased values, so e.g. this works:\r\n\r\n```js\r\nimport { parse } from 'yaml'\r\n\r\nconst src = `\r\n  - &foo { bar: [1, 2, 42] }\r\n  - { alias: *foo/bar }\r\n`\r\nconst res = parse(src, { version: 'next' })\r\n\r\nArray.isArray(res[0].bar) // true\r\nres[0].bar === res[1].alias // true\r\n```\r\n\r\nIn the implementation, this currently requires tracking some additional nodes during the native value composition, but a later optimisation should be able to reduce the impact of that.\r\n\r\nThis feature is not yet in the YAML spec, and so requires using `version: 'next'` as an option. Its implementation is also not guaranteed to follow semver.",
+    "isDraft": true,
+    "number": 380,
+    "title": "Allow for pathlike aliases",
+    "updatedAt": "2026-02-13T10:47:28Z",
+    "url": "https://github.com/eemeli/yaml/pull/380"
+  }
+]

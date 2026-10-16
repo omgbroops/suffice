@@ -1,0 +1,40 @@
+{
+  "repo": "sindresorhus/emittery",
+  "issue": 113,
+  "fix_kind": "sha",
+  "fix_ref": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+  "fix_commit": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+  "pre_fix_commit": "fc902058a1fc66a2601c6ba71a9d957e6a88622f",
+  "pr_merged": null,
+  "fix_subject": "Fix `emitter.listenerCount()` for symbol keys",
+  "changes": [
+    {
+      "filename": "index.js",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 4
+    },
+    {
+      "filename": "test/index.js",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "test": "xo && nyc ava && tsd"
+  },
+  "engines": {
+    "node": ">=14.16"
+  },
+  "dependencies": null,
+  "devDependencies": {
+    "@types/node": "^18.7.15",
+    "ava": "^4.3.3",
+    "delay": "^5.0.0",
+    "nyc": "^15.1.0",
+    "p-event": "^5.0.1",
+    "tsd": "^0.23.0",
+    "xo": "^0.55.0"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "repo": "sindresorhus/p-limit",
+  "issue": 110,
+  "fix_kind": "sha",
+  "fix_ref": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+  "fix_commit": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+  "pre_fix_commit": "783068bb9e967fd7bea8642e1bf5a3627fe38bdf",
+  "pr_merged": null,
+  "fix_subject": "Fix unhandled rejections in `limit.map()` when the iterable throws",
+  "changes": [
+    {
+      "filename": "index.d.ts",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0
+    },
+    {
+      "filename": "index.js",
+      "status": "modified",
+      "additions": 17,
+      "deletions": 1
+    },
+    {
+      "filename": "readme.md",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0
+    },
+    {
+      "filename": "test.js",
+      "status": "modified",
+      "additions": 106,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "test": "xo && ava && tsd",
+    "benchmark": "node benchmark.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "yocto-queue": "^1.2.1"
+  },
+  "devDependencies": {
+    "ava": "^6.4.1",
+    "in-range": "^3.0.0",
+    "random-int": "^3.0.0",
+    "time-span": "^5.1.0",
+    "tsd": "^0.33.0",
+    "xo": "^1.2.1"
+  }
+}

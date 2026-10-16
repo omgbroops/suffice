@@ -1,0 +1,38 @@
+[
+  {
+    "sha": "bc1cb873e968bc8f2f1a97d6e796e5a02fac0813",
+    "filename": "atom/index.js",
+    "status": "modified",
+    "additions": 9,
+    "deletions": 2,
+    "changes": 11,
+    "blob_url": "https://github.com/nanostores/nanostores/blob/44e805e80288e4cf23f4085dd5ec3be879880489/atom%2Findex.js",
+    "raw_url": "https://github.com/nanostores/nanostores/raw/44e805e80288e4cf23f4085dd5ec3be879880489/atom%2Findex.js",
+    "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/atom%2Findex.js?ref=44e805e80288e4cf23f4085dd5ec3be879880489",
+    "patch": "@@ -3,7 +3,14 @@ import { clean } from '../clean-stores/index.js'\n let listenerQueue = []\n let lqIndex = 0\n const QUEUE_ITEMS_PER_LISTENER = 4\n-export let epoch = 0\n+// Use globalThis.nanostoresEpoch to store epoch so all module instances share\n+// the same counter. This fixes issues when nanostores is bundled separately\n+// in different parts of an application (e.g., tree-shaking separates core\n+// from React), causing each bundle to have its own epoch instance.\n+// We export NANOSTORES_EPOCH so users can access the shared epoch object.\n+// See: https://github.com/nanostores/nanostores/issues/371\n+let NANOSTORES = globalThis.nanostoresEpoch ||= { epoch: 0 }\n+export const NANOSTORES_EPOCH = globalThis.nanostoresEpoch\n \n /* @__NO_SIDE_EFFECTS__ */\n export const atom = initialValue => {\n@@ -40,7 +47,7 @@ export const atom = initialValue => {\n       }\n     },\n     notify(oldValue, changedKey) {\n-      epoch++\n+      NANOSTORES.epoch++\n       let runListenerQueue = !listenerQueue.length\n       for (let listener of listeners) {\n         listenerQueue.push(listener, $atom.value, oldValue, changedKey)"
+  },
+  {
+    "sha": "d0ff902711df57ccf46355dd0c86705c8e2faf25",
+    "filename": "computed/index.js",
+    "status": "modified",
+    "additions": 4,
+    "deletions": 4,
+    "changes": 8,
+    "blob_url": "https://github.com/nanostores/nanostores/blob/44e805e80288e4cf23f4085dd5ec3be879880489/computed%2Findex.js",
+    "raw_url": "https://github.com/nanostores/nanostores/raw/44e805e80288e4cf23f4085dd5ec3be879880489/computed%2Findex.js",
+    "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/computed%2Findex.js?ref=44e805e80288e4cf23f4085dd5ec3be879880489",
+    "patch": "@@ -1,4 +1,4 @@\n-import { atom, epoch } from '../atom/index.js'\n+import { atom, NANOSTORES_EPOCH } from '../atom/index.js'\n import { onMount } from '../lifecycle/index.js'\n import { warn } from '../warn/index.js'\n \n@@ -8,8 +8,8 @@ let computedStore = (stores, cb, batched) => {\n   let previousArgs\n   let currentEpoch\n   let set = () => {\n-    if (currentEpoch === epoch) return\n-    currentEpoch = epoch\n+    if (currentEpoch === NANOSTORES_EPOCH.epoch) return\n+    currentEpoch = NANOSTORES_EPOCH.epoch\n     let args = stores.map($store => $store.get())\n     if (!previousArgs || args.some((arg, i) => arg !== previousArgs[i])) {\n       previousArgs = args\n@@ -28,7 +28,7 @@ let computedStore = (stores, cb, batched) => {\n         })\n       } else {\n         $computed.set(value)\n-        currentEpoch = epoch\n+        currentEpoch = NANOSTORES_EPOCH.epoch\n       }\n     }\n   }"
+  },
+  {
+    "sha": "fa8e6d739d5f8ecc3d44f16877a71887351b88f0",
+    "filename": "package.json",
+    "status": "modified",
+    "additions": 2,
+    "deletions": 2,
+    "changes": 4,
+    "blob_url": "https://github.com/nanostores/nanostores/blob/44e805e80288e4cf23f4085dd5ec3be879880489/package.json",
+    "raw_url": "https://github.com/nanostores/nanostores/raw/44e805e80288e4cf23f4085dd5ec3be879880489/package.json",
+    "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/package.json?ref=44e805e80288e4cf23f4085dd5ec3be879880489",
+    "patch": "@@ -60,14 +60,14 @@\n       \"import\": {\n         \"./index.js\": \"{ atom }\"\n       },\n-      \"limit\": \"271 B\"\n+      \"limit\": \"311 B\"\n     },\n     {\n       \"name\": \"Popular Set\",\n       \"import\": {\n         \"./index.js\": \"{ map, computed }\"\n       },\n-      \"limit\": \"802 B\"\n+      \"limit\": \"845 B\"\n     }\n   ],\n   \"engines\": {"
+  }
+]

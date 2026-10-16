@@ -1,0 +1,65 @@
+{
+  "repo": "sindresorhus/p-queue",
+  "issue": 251,
+  "fix_kind": "sha",
+  "fix_ref": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+  "fix_commit": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+  "pre_fix_commit": "98ccb488771059368b21cc2356234a70dc961c8b",
+  "pr_merged": null,
+  "fix_subject": "Fix rate limiter delaying tasks in a fresh window when `intervalCap > 1`",
+  "changes": [
+    {
+      "filename": "source/index.ts",
+      "status": "modified",
+      "additions": 20,
+      "deletions": 25
+    },
+    {
+      "filename": "test/advanced.ts",
+      "status": "modified",
+      "additions": 86,
+      "deletions": 0
+    },
+    {
+      "filename": "test/rate-limit.ts",
+      "status": "modified",
+      "additions": 50,
+      "deletions": 0
+    },
+    {
+      "filename": "test/strict.ts",
+      "status": "modified",
+      "additions": 21,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "build": "del-cli dist && tsc",
+    "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+    "bench": "node --import=tsx/esm bench.ts",
+    "prepublishOnly": "del-cli dist && tsc"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.4",
+    "p-timeout": "^7.0.0"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^8.0.1",
+    "@types/benchmark": "^2.1.5",
+    "@types/node": "^25.6.0",
+    "benchmark": "^2.1.4",
+    "del-cli": "^6.0.0",
+    "delay": "^6.0.0",
+    "in-range": "^3.0.0",
+    "p-defer": "^4.0.1",
+    "random-int": "^3.1.0",
+    "time-span": "^5.1.0",
+    "tsd": "^0.33.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "xo": "^1.2.2"
+  }
+}

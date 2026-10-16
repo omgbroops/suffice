@@ -1,0 +1,1509 @@
+{
+  "evaluator_only": true,
+  "do_not_expose_to_repair_actors": true,
+  "purpose": "Historical candidate screening, not a frozen benchmark manifest. Original bodies remain unedited and separate from grading/fix notes.",
+  "checked_at": "2026-10-15T04:41:49.384685+00:00",
+  "candidates_screened": 16,
+  "task_quality_shortlist": [
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1386,
+      "status": "pilot-1"
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1574,
+      "status": "reserve-3"
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1446,
+      "status": "pilot-2"
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 251,
+      "status": "reserve-blocked-4"
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 168,
+      "status": "reserve-blocked-5"
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 118,
+      "status": "reserve-blocked-6"
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 323,
+      "status": "reserve-blocked-7"
+    }
+  ],
+  "candidates": [
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1386,
+      "fix_kind": "pr",
+      "fix_ref": 1387,
+      "fix_commit": "6e4c1e4f67b7b6b8de13bbbf88991894dc003245",
+      "pre_fix_commit": "2d5399ed5605fb1b2e887f6e7953bc02e6194d52",
+      "pr_merged": true,
+      "fix_subject": "fix(Redirect): Better handle wrong redirect header in a response (#1387)",
+      "changes": [
+        {
+          "filename": "docs/CHANGELOG.md",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 13,
+          "deletions": 1
+        },
+        {
+          "filename": "test/main.js",
+          "status": "modified",
+          "additions": 22,
+          "deletions": 0
+        },
+        {
+          "filename": "test/utils/server.js",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "formdata-polyfill": "^4.0.10",
+        "fetch-blob": "^3.1.3"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^0.3.1",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "delay": "^5.0.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/node-fetch/node-fetch/issues/1386",
+      "issue_title": "Uncatchable error when server redirects to invalid URL",
+      "issue_created_at": "2021-11-18T05:49:00Z",
+      "issue_closed_at": "2021-11-26T10:19:25Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1386\\original-issue-body.md",
+      "original_body_sha256": "9f33527b1c6372a1c5e8c999761c5dcca5d667a22c5fd49d88a8165eae292537",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1386\\original-issue.json",
+      "fix_url": "https://github.com/node-fetch/node-fetch/pull/1387",
+      "pre_fix_url": "https://github.com/node-fetch/node-fetch/commit/2d5399ed5605fb1b2e887f6e7953bc02e6194d52",
+      "complexity": "medium",
+      "research_disposition": "pilot-1",
+      "original_requirements_summary": "Malformed Location URLs must reject the fetch promise with an appropriate error so caller try/catch works; avoid an uncaught process-level URL parse error.",
+      "evidence_and_test_strength": "Native test/main.js plus test/utils/server.js gained regression coverage. Source is direct ESM src JS; original issue has reproduction and expected behavior without solution patch.",
+      "feasibility_and_exclusions": "Native Node24 execution remains unverified; 2021 dependency ranges lack a repository lockfile; freeze resolved dependency closure. Full suite may have Node24 stream behavior drift.",
+      "contamination": "clean",
+      "native_tests": "Mocha9, npm test=mocha; pre-fix test/main.js imports ../src/index.js directly; local HTTP server and filesystem test fixture.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": true,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-05-12T09:33:16Z",
+        "updated_at": "2026-10-15T04:20:51Z",
+        "default_branch": "main",
+        "size": 1297
+      },
+      "checked_at": "2026-10-15T04:41:49.183888+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1574,
+      "fix_kind": "pr",
+      "fix_ref": 1578,
+      "fix_commit": "1c5ed6b981e6c5dd28bd50f5ab5418e5bd262b99",
+      "pre_fix_commit": "a92b5d5cf4457c2da95d8404b08cfd06a426a2fa",
+      "pr_merged": true,
+      "fix_subject": "fix: undefined reference to response.body when aborted (#1578)",
+      "changes": [
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 1
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "fetch-blob": "^3.1.4",
+        "formdata-polyfill": "^4.0.10"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^1.4.0",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "stream-consumers": "^1.0.1",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/node-fetch/node-fetch/issues/1574",
+      "issue_title": "TypeError: Cannot read properties of null (reading 'body') after update from 3.2.4 to 3.2.5 on 302 status code",
+      "issue_created_at": "2022-06-03T16:56:20Z",
+      "issue_closed_at": "2022-06-11T09:47:16Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1574\\original-issue-body.md",
+      "original_body_sha256": "053ee4773f64fca2525aa0e9828338fc23adfdfd7b8cae1784eadb4242c7b24a",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1574\\original-issue.json",
+      "fix_url": "https://github.com/node-fetch/node-fetch/pull/1578",
+      "pre_fix_url": "https://github.com/node-fetch/node-fetch/commit/a92b5d5cf4457c2da95d8404b08cfd06a426a2fa",
+      "complexity": "medium-small",
+      "research_disposition": "reserve-3",
+      "original_requirements_summary": "Follow 302 redirects and return response.text without an uncaught null-body error, including Windows/Linux behavior.",
+      "evidence_and_test_strength": "Original report is explicit Windows/Linux regression after3.2.5; comments confirm1578 restored stability. Direct src JS.",
+      "feasibility_and_exclusions": "Fix adds3 lines and no native regression. Original public reproduction does not specify a deterministic server timing sequence, so validate a genuine reproduction before spending model budget.",
+      "contamination": "clean-original-body",
+      "native_tests": "Mocha9, npm test=mocha; pre-fix test/main.js imports ../src/index.js directly; local HTTP server and filesystem test fixture.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": true,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-05-12T09:33:16Z",
+        "updated_at": "2026-10-15T04:20:51Z",
+        "default_branch": "main",
+        "size": 1297
+      },
+      "checked_at": "2026-10-15T04:41:49.186062+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1446,
+      "fix_kind": "pr",
+      "fix_ref": 1474,
+      "fix_commit": "043a5fcfc82884155bcb2afba2a82333b2f29c02",
+      "pre_fix_commit": "004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf",
+      "pr_merged": true,
+      "fix_subject": "Fix leaking listeners (#1295) (#1474)",
+      "changes": [
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 9,
+          "deletions": 7
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "fetch-blob": "^3.1.4",
+        "formdata-polyfill": "^4.0.10"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^1.4.0",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "stream-consumers": "^1.0.1",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/node-fetch/node-fetch/issues/1446",
+      "issue_title": "Mem leak when keepalive is used",
+      "issue_created_at": "2022-01-09T21:25:35Z",
+      "issue_closed_at": "2022-11-13T18:40:42Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1446\\original-issue-body.md",
+      "original_body_sha256": "7028868d0ab09b8e2cc00503a92d4935602af9f031cfaca61c035f7e82c222af",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1446\\original-issue.json",
+      "fix_url": "https://github.com/node-fetch/node-fetch/pull/1474",
+      "pre_fix_url": "https://github.com/node-fetch/node-fetch/commit/004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf",
+      "complexity": "medium",
+      "research_disposition": "pilot-2",
+      "original_requirements_summary": "Repeated fetches through a keepAlive HTTP agent, consuming each body, should not retain memory/listeners indefinitely relative to plain node:http.",
+      "evidence_and_test_strength": "Merged fix PR1474 explicitly addresses leaked listeners (primary issue1295); comments on1446 identify duplicate/fix. Stateful socket lifecycle and listener cleanup. No native regression added by this fix.",
+      "feasibility_and_exclusions": "Weaker issue-to-fix linkage than1386; memory working-set slope alone is noisy. Need deterministic evaluator-only retained-listener/resource oracle and native suite compatibility before scoring.",
+      "contamination": "clean-original-body",
+      "native_tests": "Mocha9, npm test=mocha; pre-fix test/main.js imports ../src/index.js directly; local HTTP server and filesystem test fixture.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": true,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-05-12T09:33:16Z",
+        "updated_at": "2026-10-15T04:20:51Z",
+        "default_branch": "main",
+        "size": 1297
+      },
+      "checked_at": "2026-10-15T04:41:49.187286+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1442,
+      "fix_kind": "pr",
+      "fix_ref": 965,
+      "fix_commit": "dd2cea4672c5519b1ab91009541e00f0ab74520b",
+      "pre_fix_commit": "92dee097c6a99d47f06c03c8a9c10b83c68d5b81",
+      "pr_merged": true,
+      "fix_subject": "Handle zero-length OK deflate responses (master) (#965)",
+      "changes": [
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 41,
+          "deletions": 5
+        },
+        {
+          "filename": "test/main.js",
+          "status": "modified",
+          "additions": 11,
+          "deletions": 0
+        },
+        {
+          "filename": "test/utils/server.js",
+          "status": "modified",
+          "additions": 7,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "fetch-blob": "^3.1.3",
+        "formdata-polyfill": "^4.0.10"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^0.3.1",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "delay": "^5.0.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "stream-consumers": "^1.0.1",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/node-fetch/node-fetch/issues/1442",
+      "issue_title": "Fetch never resolves on empty response with `deflate`",
+      "issue_created_at": "2022-01-06T12:51:47Z",
+      "issue_closed_at": "2022-01-16T21:05:47Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1442\\original-issue-body.md",
+      "original_body_sha256": "55f64ec6a2cfe0e21c2e6c8dcc79526bd95f78fe8c631ed8cce5695e4d41bcb9",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\node-fetch__node-fetch\\1442\\original-issue.json",
+      "fix_url": "https://github.com/node-fetch/node-fetch/pull/965",
+      "pre_fix_url": "https://github.com/node-fetch/node-fetch/commit/92dee097c6a99d47f06c03c8a9c10b83c68d5b81",
+      "complexity": "medium",
+      "research_disposition": "reject-score-contaminated",
+      "original_requirements_summary": "An empty HTTP200 body marked content-encoding:deflate must settle fetch and response.text like gzip.",
+      "evidence_and_test_strength": "PR965 adds native server fixture and regression test, direct src JS; issue release bot ties resolution to3.2.0.",
+      "feasibility_and_exclusions": "Original issue includes an explicit implementation diff. Preserve the issue unedited, but do not use as a blind repair scored task.",
+      "contamination": "solution-patch-in-original",
+      "native_tests": "Mocha9, npm test=mocha; pre-fix test/main.js imports ../src/index.js directly; local HTTP server and filesystem test fixture.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": true,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-05-12T09:33:16Z",
+        "updated_at": "2026-10-15T04:20:51Z",
+        "default_branch": "main",
+        "size": 1297
+      },
+      "checked_at": "2026-10-15T04:41:49.188760+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 255,
+      "fix_kind": "sha",
+      "fix_ref": "22edad49b42214b9b5add8312391401c063d8b27",
+      "fix_commit": "22edad49b42214b9b5add8312391401c063d8b27",
+      "pre_fix_commit": "180ab9e25cd10b6f548767d7176076b50d25e188",
+      "pr_merged": null,
+      "fix_subject": "Count the running task before emitting active",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filename": "test/basic.ts",
+          "status": "modified",
+          "additions": 29,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/p-queue/issues/255",
+      "issue_title": "Adding tasks from an active listener exceeds the concurrency limit",
+      "issue_created_at": "2026-10-11T05:19:09Z",
+      "issue_closed_at": "2026-10-11T08:03:46Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\255\\original-issue-body.md",
+      "original_body_sha256": "1c23bbb5a676b0b382cf47cb6f205c0ca10ec5f83e530f4a3b0f6befe8d14eb7",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\255\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/p-queue/commit/22edad49b42214b9b5add8312391401c063d8b27",
+      "pre_fix_url": "https://github.com/sindresorhus/p-queue/commit/180ab9e25cd10b6f548767d7176076b50d25e188",
+      "complexity": "medium",
+      "research_disposition": "reject-adapter-and-contamination",
+      "original_requirements_summary": "Adding work reentrantly from an active listener must respect configured concurrency and pending counts.",
+      "evidence_and_test_strength": "Modern Node24 reproduction and native node:test TypeScript regression.",
+      "feasibility_and_exclusions": "Canonical source lives source/, outside frozen src-only write allowlist. Original body contains tested fix and implementation directions.",
+      "contamination": "tested-fix-linked-in-original",
+      "native_tests": "node:test+tsx; full npm test additionally xo/build/tsd.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": true,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-12T17:57:06Z",
+        "updated_at": "2026-10-12T18:20:05Z",
+        "default_branch": "main",
+        "size": 390
+      },
+      "checked_at": "2026-10-15T04:41:49.225612+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 256,
+      "fix_kind": "sha",
+      "fix_ref": "507e7eeab74970b991f1335b3f08cb5e08207ca3",
+      "fix_commit": "507e7eeab74970b991f1335b3f08cb5e08207ca3",
+      "pre_fix_commit": "de565c42a271bd3c2f8c69d3b6bce33f49f9d344",
+      "pr_merged": null,
+      "fix_subject": "Fix missed abort when the task aborts the signal while it starts",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 5,
+          "deletions": 0
+        },
+        {
+          "filename": "test/advanced.ts",
+          "status": "modified",
+          "additions": 17,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/p-queue/issues/256",
+      "issue_title": "Abort during task setup is missed before the running listener is registered",
+      "issue_created_at": "2026-10-11T10:57:17Z",
+      "issue_closed_at": "2026-10-11T16:22:47Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\256\\original-issue-body.md",
+      "original_body_sha256": "b6e6a2c76dd8bfc6ccff1688362b29ae84d5451e27dd66aa0dcdd400f3a91a23",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\256\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/p-queue/commit/507e7eeab74970b991f1335b3f08cb5e08207ca3",
+      "pre_fix_url": "https://github.com/sindresorhus/p-queue/commit/de565c42a271bd3c2f8c69d3b6bce33f49f9d344",
+      "complexity": "medium",
+      "research_disposition": "reject-adapter-and-contamination",
+      "original_requirements_summary": "Synchronously aborting during task setup must reject add and release capacity even before the running listener exists.",
+      "evidence_and_test_strength": "Modern Node24 reproduction and native tests exercise cancellation/microtask ordering.",
+      "feasibility_and_exclusions": "Canonical source source/ is unwritable. Original issue describes exact fix.",
+      "contamination": "implementation-directions-in-original",
+      "native_tests": "node:test+tsx; full npm test additionally xo/build/tsd.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": true,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-12T17:57:06Z",
+        "updated_at": "2026-10-12T18:20:05Z",
+        "default_branch": "main",
+        "size": 390
+      },
+      "checked_at": "2026-10-15T04:41:49.227145+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 251,
+      "fix_kind": "sha",
+      "fix_ref": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "fix_commit": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "pre_fix_commit": "98ccb488771059368b21cc2356234a70dc961c8b",
+      "pr_merged": null,
+      "fix_subject": "Fix rate limiter delaying tasks in a fresh window when `intervalCap > 1`",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 20,
+          "deletions": 25
+        },
+        {
+          "filename": "test/advanced.ts",
+          "status": "modified",
+          "additions": 86,
+          "deletions": 0
+        },
+        {
+          "filename": "test/rate-limit.ts",
+          "status": "modified",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "filename": "test/strict.ts",
+          "status": "modified",
+          "additions": 21,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/p-queue/issues/251",
+      "issue_title": "Fixed-window rate limiter incorrectly delays tasks in a new interval when `intervalCap > 1` and queue went idle mid-window",
+      "issue_created_at": "2026-07-21T21:07:34Z",
+      "issue_closed_at": "2026-07-22T12:09:29Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\251\\original-issue-body.md",
+      "original_body_sha256": "230bb04f4e9da65aedc546260bb10136285184f5fcf5d2a4edc374a3ea20f508",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\251\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/p-queue/commit/08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "pre_fix_url": "https://github.com/sindresorhus/p-queue/commit/98ccb488771059368b21cc2356234a70dc961c8b",
+      "complexity": "medium",
+      "research_disposition": "reserve-blocked-4",
+      "original_requirements_summary": "After an interval window expires, tasks must start with fresh capacity even if earlier work consumed slots at different times and the queue went idle.",
+      "evidence_and_test_strength": "Meaningful rate-limiter state transition, regression coverage across advanced/rate-limit/strict suites.",
+      "feasibility_and_exclusions": "Frozen adapter cannot edit source/. Original includes root cause diagnosis; any use must explicitly disclose supplied solution hints rather than remove them.",
+      "contamination": "root-cause-in-original",
+      "native_tests": "node:test+tsx; full npm test additionally xo/build/tsd.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": true,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-12T17:57:06Z",
+        "updated_at": "2026-10-12T18:20:05Z",
+        "default_branch": "main",
+        "size": 390
+      },
+      "checked_at": "2026-10-15T04:41:49.228350+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 249,
+      "fix_kind": "sha",
+      "fix_ref": "d9cf2be011f3b7f127cac476de2d9927ed723491",
+      "fix_commit": "d9cf2be011f3b7f127cac476de2d9927ed723491",
+      "pre_fix_commit": "cfa917af261fb6db9eb1281221ba21093eb49e3d",
+      "pr_merged": null,
+      "fix_subject": "Fix `onSizeLessThan()` resolving late when the queue drains without a completion",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 15,
+          "deletions": 5
+        },
+        {
+          "filename": "test/basic.ts",
+          "status": "modified",
+          "additions": 123,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/p-queue/issues/249",
+      "issue_title": "onSizeLessThan() resolves late when the queue drains without a completion",
+      "issue_created_at": "2026-07-03T17:38:34Z",
+      "issue_closed_at": "2026-07-03T19:44:17Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\249\\original-issue-body.md",
+      "original_body_sha256": "3a9d674f234cef51e09912007de732a13901099fd43c65dc42d9aed9c89720eb",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\249\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/p-queue/commit/d9cf2be011f3b7f127cac476de2d9927ed723491",
+      "pre_fix_url": "https://github.com/sindresorhus/p-queue/commit/cfa917af261fb6db9eb1281221ba21093eb49e3d",
+      "complexity": "medium",
+      "research_disposition": "reject-adapter",
+      "original_requirements_summary": "onSizeLessThan must settle when start, concurrency changes, aborts or clearing drain the queue below the threshold, without waiting for unrelated completion.",
+      "evidence_and_test_strength": "Meaningful queue observer lifecycle,123 regression lines added.",
+      "feasibility_and_exclusions": "Canonical source source/ is unwritable. Full package test invokes build/lint/tsd and cannot run through frozen test tool without an evaluator-side allowed native in-process entry.",
+      "contamination": "diagnosis-in-original",
+      "native_tests": "node:test+tsx; full npm test additionally xo/build/tsd.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": true,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-12T17:57:06Z",
+        "updated_at": "2026-10-12T18:20:05Z",
+        "default_branch": "main",
+        "size": 390
+      },
+      "checked_at": "2026-10-15T04:41:49.229324+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 168,
+      "fix_kind": "sha",
+      "fix_ref": "81846550274256011a2d55b06aeb36b23877eb43",
+      "fix_commit": "81846550274256011a2d55b06aeb36b23877eb43",
+      "pre_fix_commit": "c905aaf2a826c4581a604ee6bbb1ae41b062a598",
+      "pr_merged": null,
+      "fix_subject": "Fix `.add()` and `.addAll()`",
+      "changes": [
+        {
+          "filename": "package.json",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 9
+        },
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 65,
+          "deletions": 42
+        },
+        {
+          "filename": "test/test.ts",
+          "status": "modified",
+          "additions": 21,
+          "deletions": 2
+        },
+        {
+          "filename": "tsconfig.json",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 2
+        }
+      ],
+      "scripts": {
+        "build": "del dist && tsc",
+        "test": "xo && npm run build && nyc ava",
+        "bench": "node --loader=ts-node/esm bench.ts",
+        "prepare": "npm run build"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "dependencies": {
+        "eventemitter3": "^4.0.7",
+        "p-timeout": "^5.0.2"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^2.0.0",
+        "@types/benchmark": "^2.1.1",
+        "@types/node": "^17.0.13",
+        "ava": "^4.0.1",
+        "benchmark": "^2.1.4",
+        "codecov": "^3.8.3",
+        "del-cli": "^4.0.1",
+        "delay": "^5.0.0",
+        "in-range": "^3.0.0",
+        "nyc": "^15.1.0",
+        "p-defer": "^4.0.0",
+        "random-int": "^3.0.0",
+        "time-span": "^5.0.0",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.5.5",
+        "xo": "^0.44.0"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/p-queue/issues/168",
+      "issue_title": "Aborting pending and waiting tasks at the same time hangs the queue",
+      "issue_created_at": "2022-09-19T08:58:45Z",
+      "issue_closed_at": "2023-02-03T11:22:22Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\168\\original-issue-body.md",
+      "original_body_sha256": "2eaf61ae91662ea140ee024504c8917dfdf66bde0a052f3e8f7d409621bda6b1",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-queue\\168\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/p-queue/commit/81846550274256011a2d55b06aeb36b23877eb43",
+      "pre_fix_url": "https://github.com/sindresorhus/p-queue/commit/c905aaf2a826c4581a604ee6bbb1ae41b062a598",
+      "complexity": "medium-high",
+      "research_disposition": "reserve-blocked-5",
+      "original_requirements_summary": "Aborting both running and queued tasks must not leave pending counts stuck or permanently block the queue.",
+      "evidence_and_test_strength": "Clear historical concurrency repro; substantial source refactor in closing commit.",
+      "feasibility_and_exclusions": "source/ blocked; native tests were AVA4 with build, nyc, TS4.5. Closing commit also changes package.json and tsconfig, outside actor scope. Whole commit is not an admissible source-only oracle.",
+      "contamination": "clean-original-body",
+      "native_tests": "AVA4+TypeScript build+nyc.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": true,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-12T17:57:06Z",
+        "updated_at": "2026-10-12T18:20:05Z",
+        "default_branch": "main",
+        "size": 390
+      },
+      "checked_at": "2026-10-15T04:41:49.230340+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 126,
+      "fix_kind": "sha",
+      "fix_ref": "a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+      "fix_commit": "a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+      "pre_fix_commit": "cfde903357ccfa6fb4d7e1888da17aa84dc2c009",
+      "pr_merged": null,
+      "fix_subject": "Fix `emitSerial()` not delivering events to async iterators",
+      "changes": [
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filename": "test/index.js",
+          "status": "modified",
+          "additions": 42,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && nyc ava && tsd"
+      },
+      "engines": {
+        "node": ">=14.16"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@types/node": "^18.7.15",
+        "ava": "^4.3.3",
+        "delay": "^5.0.0",
+        "nyc": "^15.1.0",
+        "p-event": "^6.0.0",
+        "tsd": "^0.23.0",
+        "xo": "^0.55.0"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/emittery/issues/126",
+      "issue_title": "`emitSerial()` doesn’t deliver events to async iterators",
+      "issue_created_at": "2026-02-26T23:40:39Z",
+      "issue_closed_at": "2026-02-27T05:05:27Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__emittery\\126\\original-issue-body.md",
+      "original_body_sha256": "094f02d34023ac615ec55be95e68b42100f42101a69c22182446bd7a87ef3d1d",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__emittery\\126\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/emittery/commit/a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+      "pre_fix_url": "https://github.com/sindresorhus/emittery/commit/cfde903357ccfa6fb4d7e1888da17aa84dc2c009",
+      "complexity": "medium-small",
+      "research_disposition": "reject-adapter-and-contamination",
+      "original_requirements_summary": "emitSerial must deliver to events and anyEvent async iterators as ordinary emit does.",
+      "evidence_and_test_strength": "Genuine async iterator integration bug;42 native AVA regression lines.",
+      "feasibility_and_exclusions": "index.js lives repository root, outside src/. Original body supplies missing enqueue call and local fix description.",
+      "contamination": "solution-in-original",
+      "native_tests": "AVA4+nyc+tsd; root JS runtime, zero production deps.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-09-26T11:04:11Z",
+        "updated_at": "2026-10-06T13:16:05Z",
+        "default_branch": "main",
+        "size": 1114
+      },
+      "checked_at": "2026-10-15T04:41:49.270778+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 118,
+      "fix_kind": "sha",
+      "fix_ref": "dd6d78befbf664268471c61a8363884e96777cff",
+      "fix_commit": "dd6d78befbf664268471c61a8363884e96777cff",
+      "pre_fix_commit": "c5e99b898b05a67fbbb8bcb6cf34d2d35f582aff",
+      "pr_merged": null,
+      "fix_subject": "Fix `emitMetaEvent` breaking async `emit()` overrides in subclasses",
+      "changes": [
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 20,
+          "deletions": 12
+        },
+        {
+          "filename": "test/index.js",
+          "status": "modified",
+          "additions": 356,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && nyc ava && tsd"
+      },
+      "engines": {
+        "node": ">=14.16"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@types/node": "^18.7.15",
+        "ava": "^4.3.3",
+        "delay": "^5.0.0",
+        "nyc": "^15.1.0",
+        "p-event": "^6.0.0",
+        "tsd": "^0.23.0",
+        "xo": "^0.55.0"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/emittery/issues/118",
+      "issue_title": "`emitMetaEvent` assumes synchronous operation",
+      "issue_created_at": "2024-07-26T12:37:19Z",
+      "issue_closed_at": "2026-03-01T13:27:14Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__emittery\\118\\original-issue-body.md",
+      "original_body_sha256": "aa51c6a278cba0335c6c9576e0086fabff2a7f9348449b3d13874bd9b6a33b78",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__emittery\\118\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/emittery/commit/dd6d78befbf664268471c61a8363884e96777cff",
+      "pre_fix_url": "https://github.com/sindresorhus/emittery/commit/c5e99b898b05a67fbbb8bcb6cf34d2d35f582aff",
+      "complexity": "medium",
+      "research_disposition": "reserve-blocked-6",
+      "original_requirements_summary": "Meta-event operations must work when a subclass emit override yields asynchronously, without resetting permission state before the override runs.",
+      "evidence_and_test_strength": "Async subclass/internals interaction;356 native AVA regression lines.",
+      "feasibility_and_exclusions": "Root index.js is blocked. Original links a proposed solution in another issue; classify as hinted if used under a future adapter.",
+      "contamination": "solution-reference-in-original",
+      "native_tests": "AVA4+nyc+tsd; root JS runtime, zero production deps.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-09-26T11:04:11Z",
+        "updated_at": "2026-10-06T13:16:05Z",
+        "default_branch": "main",
+        "size": 1114
+      },
+      "checked_at": "2026-10-15T04:41:49.272322+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 113,
+      "fix_kind": "sha",
+      "fix_ref": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "fix_commit": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "pre_fix_commit": "fc902058a1fc66a2601c6ba71a9d957e6a88622f",
+      "pr_merged": null,
+      "fix_subject": "Fix `emitter.listenerCount()` for symbol keys",
+      "changes": [
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 4
+        },
+        {
+          "filename": "test/index.js",
+          "status": "modified",
+          "additions": 12,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && nyc ava && tsd"
+      },
+      "engines": {
+        "node": ">=14.16"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@types/node": "^18.7.15",
+        "ava": "^4.3.3",
+        "delay": "^5.0.0",
+        "nyc": "^15.1.0",
+        "p-event": "^5.0.1",
+        "tsd": "^0.23.0",
+        "xo": "^0.55.0"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/emittery/issues/113",
+      "issue_title": "Wrong listener count for Symbol event names",
+      "issue_created_at": "2024-01-29T02:36:15Z",
+      "issue_closed_at": "2024-01-29T07:10:39Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__emittery\\113\\original-issue-body.md",
+      "original_body_sha256": "7baec5b3535ed590bb36bf77b2ac9ebef9ffaf476f671475856aff13612fe148",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__emittery\\113\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/emittery/commit/fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "pre_fix_url": "https://github.com/sindresorhus/emittery/commit/fc902058a1fc66a2601c6ba71a9d957e6a88622f",
+      "complexity": "small",
+      "research_disposition": "reject-adapter-and-complexity",
+      "original_requirements_summary": "listenerCount(Symbol()) must report that symbol event count rather than the sum of all events.",
+      "evidence_and_test_strength": "Concrete public Symbol-vs-string functional regression with native tests.",
+      "feasibility_and_exclusions": "Root index.js blocked; narrow type-dispatch correction below preferred engineering complexity.",
+      "contamination": "clean-original-body",
+      "native_tests": "AVA4+nyc+tsd; root JS runtime, zero production deps.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-09-26T11:04:11Z",
+        "updated_at": "2026-10-06T13:16:05Z",
+        "default_branch": "main",
+        "size": 1114
+      },
+      "checked_at": "2026-10-15T04:41:49.275467+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 416,
+      "fix_kind": "pr",
+      "fix_ref": 419,
+      "fix_commit": "579eae9cd72fe7abe26951df3b83e0fa6310174c",
+      "pre_fix_commit": "fd78b3d86a8667bd0126e12cb1724f863348f097",
+      "pr_merged": true,
+      "fix_subject": "fix(listen-keys): compare deep paths on whole-store set (#419)",
+      "changes": [
+        {
+          "filename": "listen-keys/index.js",
+          "status": "modified",
+          "additions": 10,
+          "deletions": 1
+        },
+        {
+          "filename": "listen-keys/index.test.ts",
+          "status": "modified",
+          "additions": 61,
+          "deletions": 1
+        },
+        {
+          "filename": "oxlint.config.ts",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test:lint": "oxlint",
+        "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+        "test:types": "check-dts",
+        "test:size": "size-limit",
+        "test:synced": "node test/size-synced.ts",
+        "test": "pnpm run /^test:/"
+      },
+      "engines": {
+        "node": "^20.0.0 || >=22.0.0"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@logux/oxc-configs": "^1.1.0",
+        "@sinonjs/fake-timers": "^15.4.0",
+        "@size-limit/preset-small-lib": "^13.0.3",
+        "@types/node": "^26.2.0",
+        "@types/sinonjs__fake-timers": "^15.0.1",
+        "@types/ws": "^8.18.1",
+        "benchmark": "^2.1.4",
+        "better-node-test": "^0.8.4",
+        "check-dts": "^2.0.1",
+        "eslint-plugin-prefer-let": "^4.2.2",
+        "multiocular": "^0.8.4",
+        "oxlint": "^1.78.0",
+        "oxlint-tsgolint": "^7.0.2001",
+        "size-limit": "^13.0.3",
+        "tsx": "^4.23.12",
+        "typescript": "^7.0.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/nanostores/nanostores/issues/416",
+      "issue_title": "listenKeys stopped firing on whole-store set() for deepMap dot-path keys (regression from #406)",
+      "issue_created_at": "2026-08-11T02:17:02Z",
+      "issue_closed_at": "2026-08-15T15:30:05Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\nanostores__nanostores\\416\\original-issue-body.md",
+      "original_body_sha256": "c94316ce3c5d5ff6b6be1534961f8bb2ce52bb5ff0c5dfd2585db431eb920dc0",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\nanostores__nanostores\\416\\original-issue.json",
+      "fix_url": "https://github.com/nanostores/nanostores/pull/419",
+      "pre_fix_url": "https://github.com/nanostores/nanostores/commit/fd78b3d86a8667bd0126e12cb1724f863348f097",
+      "complexity": "medium",
+      "research_disposition": "reject-adapter-and-contamination",
+      "original_requirements_summary": "listenKeys must fire for deepMap dot paths after a whole-store set changes those paths.",
+      "evidence_and_test_strength": "Cross-module key path/change detection, native TS tests added.",
+      "feasibility_and_exclusions": "Source listen-keys/index.js outside src/. Original body gives detailed implementation diagnosis; native toolchain has oxlint native packages but pure JS runtime has zero production dependencies.",
+      "contamination": "detailed-diagnosis-in-original",
+      "native_tests": "better-node-test+TS; full test includes lint/types/size.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-14T12:27:44Z",
+        "updated_at": "2026-10-14T16:56:23Z",
+        "default_branch": "main",
+        "size": 3052
+      },
+      "checked_at": "2026-10-15T04:41:49.324250+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 371,
+      "fix_kind": "pr",
+      "fix_ref": 396,
+      "fix_commit": "3206678515f9dd1985a7770d9c2a340a8f65a443",
+      "pre_fix_commit": "8ad031dcde958413cf722b0fe46ceb65b547c747",
+      "pr_merged": true,
+      "fix_subject": "Fix: store epoch on globalThis to prevent separate module instances from diverging (#396)",
+      "changes": [
+        {
+          "filename": "atom/index.js",
+          "status": "modified",
+          "additions": 9,
+          "deletions": 2
+        },
+        {
+          "filename": "computed/index.js",
+          "status": "modified",
+          "additions": 4,
+          "deletions": 4
+        },
+        {
+          "filename": "package.json",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 2
+        }
+      ],
+      "scripts": {
+        "test:lint": "oxlint",
+        "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+        "test:types": "check-dts",
+        "test:size": "size-limit",
+        "test": "pnpm run /^test:/"
+      },
+      "engines": {
+        "node": "^20.0.0 || >=22.0.0"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@logux/oxc-configs": "^0.2.1",
+        "@sinonjs/fake-timers": "^15.1.1",
+        "@size-limit/preset-small-lib": "^12.0.1",
+        "@types/node": "^25.5.0",
+        "@types/sinonjs__fake-timers": "^15.0.1",
+        "@types/ws": "^8.18.1",
+        "actions-up": "^1.12.0",
+        "benchmark": "^2.1.4",
+        "better-node-test": "^0.8.4",
+        "check-dts": "^1.0.0",
+        "clean-publish": "^6.0.5",
+        "multiocular": "^0.8.2",
+        "oxlint": "^1.58.0",
+        "oxlint-tsgolint": "^0.18.1",
+        "size-limit": "^12.0.1",
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/nanostores/nanostores/issues/371",
+      "issue_title": "Issue with \"epoch\" Global Variable Across Multiple Module Instances",
+      "issue_created_at": "2025-09-24T12:28:30Z",
+      "issue_closed_at": "2026-04-17T22:28:20Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\nanostores__nanostores\\371\\original-issue-body.md",
+      "original_body_sha256": "e381cbe5aec3a21330d0dda84b242f56c5892336d45b62f23a1ddc8340c0e300",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\nanostores__nanostores\\371\\original-issue.json",
+      "fix_url": "https://github.com/nanostores/nanostores/pull/396",
+      "pre_fix_url": "https://github.com/nanostores/nanostores/commit/8ad031dcde958413cf722b0fe46ceb65b547c747",
+      "complexity": "medium",
+      "research_disposition": "reject-adapter-and-contamination",
+      "original_requirements_summary": "Independent module instances must share a consistent epoch so computed state does not silently stop updating in split/tree-shaken bundles.",
+      "evidence_and_test_strength": "Real multi-module bundler integration; atom and computed both touched.",
+      "feasibility_and_exclusions": "atom/ and computed/ outside src/. Original body proposes Symbol.for globalThis implementation. Fix also changes package.json and adds no regression test, so incomplete source-only oracle evidence.",
+      "contamination": "solution-code-in-original",
+      "native_tests": "better-node-test+TS; full test includes lint/types/size.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-14T12:27:44Z",
+        "updated_at": "2026-10-14T16:56:23Z",
+        "default_branch": "main",
+        "size": 3052
+      },
+      "checked_at": "2026-10-15T04:41:49.327467+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 323,
+      "fix_kind": "pr",
+      "fix_ref": 400,
+      "fix_commit": "4a75960e739cc588fb446b6b6a7ab76e1ddbe7f3",
+      "pre_fix_commit": "dce1af0bd83802f03bad51dfb77c8ebc7019c836",
+      "pr_merged": true,
+      "fix_subject": "Reset computed cache on cleanStores (#400)",
+      "changes": [
+        {
+          "filename": "clean-stores/index.test.ts",
+          "status": "modified",
+          "additions": 24,
+          "deletions": 0
+        },
+        {
+          "filename": "computed/index.js",
+          "status": "modified",
+          "additions": 11,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test:lint": "oxlint",
+        "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+        "test:types": "check-dts",
+        "test:size": "size-limit",
+        "test": "pnpm run /^test:/"
+      },
+      "engines": {
+        "node": "^20.0.0 || >=22.0.0"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@logux/oxc-configs": "^0.4.0",
+        "@sinonjs/fake-timers": "^15.3.2",
+        "@size-limit/preset-small-lib": "^12.1.0",
+        "@types/node": "^25.6.0",
+        "@types/sinonjs__fake-timers": "^15.0.1",
+        "@types/ws": "^8.18.1",
+        "actions-up": "^1.14.0",
+        "benchmark": "^2.1.4",
+        "better-node-test": "^0.8.4",
+        "check-dts": "^1.0.0",
+        "clean-publish": "^6.0.5",
+        "eslint-plugin-prefer-let": "^4.2.2",
+        "multiocular": "^0.8.2",
+        "oxlint": "^1.60.0",
+        "oxlint-tsgolint": "^0.21.1",
+        "size-limit": "^12.1.0",
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.2"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/nanostores/nanostores/issues/323",
+      "issue_title": "`cleanStores` doesn't reset values of `computed`",
+      "issue_created_at": "2024-07-16T17:38:48Z",
+      "issue_closed_at": "2026-06-24T18:40:04Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\nanostores__nanostores\\323\\original-issue-body.md",
+      "original_body_sha256": "666f9dd47652251bbb44ca2047e2c29cce0abd838ec63403d56c3afbb574a035",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\nanostores__nanostores\\323\\original-issue.json",
+      "fix_url": "https://github.com/nanostores/nanostores/pull/400",
+      "pre_fix_url": "https://github.com/nanostores/nanostores/commit/dce1af0bd83802f03bad51dfb77c8ebc7019c836",
+      "complexity": "medium",
+      "research_disposition": "reserve-blocked-7",
+      "original_requirements_summary": "cleanStores must clear cached computed values between tests so later subscriptions cannot reuse stale derived state.",
+      "evidence_and_test_strength": "Interaction across clean-stores and computed; native24-line regression.",
+      "feasibility_and_exclusions": "computed/index.js outside src/. Native runtime tests are TS/node-test via better-node-test; full npm test additionally runs lint/types/size process tooling.",
+      "contamination": "clean-original-body",
+      "native_tests": "better-node-test+TS; full test includes lint/types/size.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-10-14T12:27:44Z",
+        "updated_at": "2026-10-14T16:56:23Z",
+        "default_branch": "main",
+        "size": 3052
+      },
+      "checked_at": "2026-10-15T04:41:49.329267+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    },
+    {
+      "repo": "sindresorhus/p-limit",
+      "issue": 110,
+      "fix_kind": "sha",
+      "fix_ref": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "fix_commit": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "pre_fix_commit": "783068bb9e967fd7bea8642e1bf5a3627fe38bdf",
+      "pr_merged": null,
+      "fix_subject": "Fix unhandled rejections in `limit.map()` when the iterable throws",
+      "changes": [
+        {
+          "filename": "index.d.ts",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 0
+        },
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 17,
+          "deletions": 1
+        },
+        {
+          "filename": "readme.md",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 0
+        },
+        {
+          "filename": "test.js",
+          "status": "modified",
+          "additions": 106,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && ava && tsd",
+        "benchmark": "node benchmark.js"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "yocto-queue": "^1.2.1"
+      },
+      "devDependencies": {
+        "ava": "^6.4.1",
+        "in-range": "^3.0.0",
+        "random-int": "^3.0.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "xo": "^1.2.1"
+      },
+      "evaluator_only": true,
+      "issue_url": "https://github.com/sindresorhus/p-limit/issues/110",
+      "issue_title": "limit.map can leave unhandled rejections when iteration throws",
+      "issue_created_at": "2026-09-18T14:29:14Z",
+      "issue_closed_at": "2026-09-18T18:17:19Z",
+      "original_body_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-limit\\110\\original-issue-body.md",
+      "original_body_sha256": "a6c73417c950693193d4a0d999b9480ac7afddc62cc6c018e06f29a470f681ce",
+      "original_issue_json_path": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\github-field-test\\research\\historical\\sindresorhus__p-limit\\110\\original-issue.json",
+      "fix_url": "https://github.com/sindresorhus/p-limit/commit/9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "pre_fix_url": "https://github.com/sindresorhus/p-limit/commit/783068bb9e967fd7bea8642e1bf5a3627fe38bdf",
+      "complexity": "medium",
+      "research_disposition": "reject-adapter-and-contamination",
+      "original_requirements_summary": "When an input iterator throws, map must reject that error while observing already-scheduled mapper rejections so Node does not terminate from an unhandled rejection.",
+      "evidence_and_test_strength": "Meaningful iterator/scheduler/error-lifetime interaction;106 native AVA regression lines, modern Node24 report.",
+      "feasibility_and_exclusions": "Root index.js outside src/. Original includes cause and proposed fix; package whole fix also touches types/docs.",
+      "contamination": "proposed-fix-in-original",
+      "native_tests": "AVA6+xo+tsd; one production dependency yocto-queue.",
+      "node24_windows_status": "Declared Node engine range admits24; source and scripts inspected only. No installation, compilation, native test execution, or patch validation performed.",
+      "frozen_adapter_src_write_compatible": false,
+      "runtime_build_required": false,
+      "repo_activity": {
+        "archived": false,
+        "pushed_at": "2026-09-18T19:12:42Z",
+        "updated_at": "2026-10-13T19:00:54Z",
+        "default_branch": "main",
+        "size": 59
+      },
+      "checked_at": "2026-10-15T04:41:49.384232+00:00",
+      "source_provenance": [
+        "original-issue.json",
+        "timeline.json",
+        "comments.json",
+        "fix-commit.json",
+        "pre-fix-package.json",
+        "pre-fix-tree.json",
+        "pre-fix-native-evidence/"
+      ]
+    }
+  ]
+}

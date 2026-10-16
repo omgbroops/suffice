@@ -1,0 +1,137 @@
+{
+  "sha": "81846550274256011a2d55b06aeb36b23877eb43",
+  "node_id": "C_kwDOBE2vuNoAKDgxODQ2NTUwMjc0MjU2MDExYTJkNTViMDZhZWIzNmIyMzg3N2ViNDM",
+  "commit": {
+    "author": {
+      "name": "Richie Bendall",
+      "email": "richiebendall@gmail.com",
+      "date": "2023-02-03T11:20:59Z"
+    },
+    "committer": {
+      "name": "Richie Bendall",
+      "email": "richiebendall@gmail.com",
+      "date": "2023-02-03T11:21:47Z"
+    },
+    "message": "Fix `.add()` and `.addAll()`\n\nFixes #158, fixes #168\n\nSigned-off-by: Richie Bendall <richiebendall@gmail.com>",
+    "tree": {
+      "sha": "f90f9f10af2aa3339dede59c85652b93296f41ec",
+      "url": "https://api.github.com/repos/sindresorhus/p-queue/git/trees/f90f9f10af2aa3339dede59c85652b93296f41ec"
+    },
+    "url": "https://api.github.com/repos/sindresorhus/p-queue/git/commits/81846550274256011a2d55b06aeb36b23877eb43",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/sindresorhus/p-queue/commits/81846550274256011a2d55b06aeb36b23877eb43",
+  "html_url": "https://github.com/sindresorhus/p-queue/commit/81846550274256011a2d55b06aeb36b23877eb43",
+  "comments_url": "https://api.github.com/repos/sindresorhus/p-queue/commits/81846550274256011a2d55b06aeb36b23877eb43/comments",
+  "author": {
+    "login": "Richienb",
+    "id": 29491356,
+    "node_id": "MDQ6VXNlcjI5NDkxMzU2",
+    "avatar_url": "https://avatars.githubusercontent.com/u/29491356?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/Richienb",
+    "html_url": "https://github.com/Richienb",
+    "followers_url": "https://api.github.com/users/Richienb/followers",
+    "following_url": "https://api.github.com/users/Richienb/following{/other_user}",
+    "gists_url": "https://api.github.com/users/Richienb/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/Richienb/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/Richienb/subscriptions",
+    "organizations_url": "https://api.github.com/users/Richienb/orgs",
+    "repos_url": "https://api.github.com/users/Richienb/repos",
+    "events_url": "https://api.github.com/users/Richienb/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/Richienb/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "Richienb",
+    "id": 29491356,
+    "node_id": "MDQ6VXNlcjI5NDkxMzU2",
+    "avatar_url": "https://avatars.githubusercontent.com/u/29491356?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/Richienb",
+    "html_url": "https://github.com/Richienb",
+    "followers_url": "https://api.github.com/users/Richienb/followers",
+    "following_url": "https://api.github.com/users/Richienb/following{/other_user}",
+    "gists_url": "https://api.github.com/users/Richienb/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/Richienb/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/Richienb/subscriptions",
+    "organizations_url": "https://api.github.com/users/Richienb/orgs",
+    "repos_url": "https://api.github.com/users/Richienb/repos",
+    "events_url": "https://api.github.com/users/Richienb/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/Richienb/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "c905aaf2a826c4581a604ee6bbb1ae41b062a598",
+      "url": "https://api.github.com/repos/sindresorhus/p-queue/commits/c905aaf2a826c4581a604ee6bbb1ae41b062a598",
+      "html_url": "https://github.com/sindresorhus/p-queue/commit/c905aaf2a826c4581a604ee6bbb1ae41b062a598"
+    }
+  ],
+  "stats": {
+    "total": 148,
+    "additions": 93,
+    "deletions": 55
+  },
+  "files": [
+    {
+      "sha": "08a8ae43968dd1398ecca17928cd18cc199ac3ff",
+      "filename": "package.json",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 9,
+      "changes": 15,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/81846550274256011a2d55b06aeb36b23877eb43/package.json",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/81846550274256011a2d55b06aeb36b23877eb43/package.json",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/package.json?ref=81846550274256011a2d55b06aeb36b23877eb43",
+      "patch": "@@ -11,10 +11,10 @@\n \t\t\"node\": \">=12\"\n \t},\n \t\"scripts\": {\n-\t\t\"build\": \"del dist && tsc\",\n-\t\t\"test\": \"xo && npm run build && nyc ava\",\n+\t\t\"build\": \"tsc --build --clean\",\n+\t\t\"test\": \"xo && ava\",\n \t\t\"bench\": \"node --loader=ts-node/esm bench.ts\",\n-\t\t\"prepare\": \"npm run build\"\n+\t\t\"prepare\": \"tsc --build --clean\"\n \t},\n \t\"files\": [\n \t\t\"dist\"\n@@ -50,18 +50,15 @@\n \t\t\"@sindresorhus/tsconfig\": \"^2.0.0\",\n \t\t\"@types/benchmark\": \"^2.1.1\",\n \t\t\"@types/node\": \"^17.0.13\",\n-\t\t\"ava\": \"^4.0.1\",\n+\t\t\"ava\": \"^5.1.1\",\n \t\t\"benchmark\": \"^2.1.4\",\n-\t\t\"codecov\": \"^3.8.3\",\n-\t\t\"del-cli\": \"^4.0.1\",\n \t\t\"delay\": \"^5.0.0\",\n \t\t\"in-range\": \"^3.0.0\",\n-\t\t\"nyc\": \"^15.1.0\",\n \t\t\"p-defer\": \"^4.0.0\",\n \t\t\"random-int\": \"^3.0.0\",\n \t\t\"time-span\": \"^5.0.0\",\n-\t\t\"ts-node\": \"^10.4.0\",\n-\t\t\"typescript\": \"^4.5.5\",\n+\t\t\"ts-node\": \"^10.9.1\",\n+\t\t\"typescript\": \"^4.8.4\",\n \t\t\"xo\": \"^0.44.0\"\n \t},\n \t\"ava\": {"
+    },
+    {
+      "sha": "0e9bda588e785bebd34bfa2741ed4fad338b6db6",
+      "filename": "source/index.ts",
+      "status": "modified",
+      "additions": 65,
+      "deletions": 42,
+      "changes": 107,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/81846550274256011a2d55b06aeb36b23877eb43/source%2Findex.ts",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/81846550274256011a2d55b06aeb36b23877eb43/source%2Findex.ts",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/source%2Findex.ts?ref=81846550274256011a2d55b06aeb36b23877eb43",
+      "patch": "@@ -8,8 +8,6 @@ type Task<TaskResultType> =\n \t| ((options: TaskOptions) => PromiseLike<TaskResultType>)\n \t| ((options: TaskOptions) => TaskResultType);\n \n-const timeoutError = new TimeoutError();\n-\n /**\n The error thrown by `queue.add()` when a job is aborted before it is run. See `signal`.\n */\n@@ -41,7 +39,7 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \n \treadonly #queueClass: new () => QueueType;\n \n-\t#pendingCount = 0;\n+\t#pending = 0;\n \n \t// The `!` is needed because of https://github.com/microsoft/TypeScript/issues/32194\n \t#concurrency!: number;\n@@ -96,23 +94,15 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t}\n \n \tget #doesConcurrentAllowAnother(): boolean {\n-\t\treturn this.#pendingCount < this.#concurrency;\n+\t\treturn this.#pending < this.#concurrency;\n \t}\n \n \t#next(): void {\n-\t\tthis.#pendingCount--;\n+\t\tthis.#pending--;\n \t\tthis.#tryToStartAnother();\n \t\tthis.emit('next');\n \t}\n \n-\t#emitEvents(): void {\n-\t\tthis.emit('empty');\n-\n-\t\tif (this.#pendingCount === 0) {\n-\t\t\tthis.emit('idle');\n-\t\t}\n-\t}\n-\n \t#onResumeInterval(): void {\n \t\tthis.#onInterval();\n \t\tthis.#initializeIntervalIfNeeded();\n@@ -127,7 +117,7 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t\t\tif (delay < 0) {\n \t\t\t\t// Act as the interval was done\n \t\t\t\t// We don't need to resume it here because it will be resumed on line 160\n-\t\t\t\tthis.#intervalCount = (this.#carryoverConcurrencyCount) ? this.#pendingCount : 0;\n+\t\t\t\tthis.#intervalCount = (this.#carryoverConcurrencyCount) ? this.#pending : 0;\n \t\t\t} else {\n \t\t\t\t// Act as the interval is pending\n \t\t\t\tif (this.#timeoutId === undefined) {\n@@ -156,7 +146,11 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \n \t\t\tthis.#intervalId = undefined;\n \n-\t\t\tthis.#emitEvents();\n+\t\t\tthis.emit('empty');\n+\n+\t\t\tif (this.#pending === 0) {\n+\t\t\t\tthis.emit('idle');\n+\t\t\t}\n \n \t\t\treturn false;\n \t\t}\n@@ -199,12 +193,12 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t}\n \n \t#onInterval(): void {\n-\t\tif (this.#intervalCount === 0 && this.#pendingCount === 0 && this.#intervalId) {\n+\t\tif (this.#intervalCount === 0 && this.#pending === 0 && this.#intervalId) {\n \t\t\tclearInterval(this.#intervalId);\n \t\t\tthis.#intervalId = undefined;\n \t\t}\n \n-\t\tthis.#intervalCount = this.#carryoverConcurrencyCount ? this.#pendingCount : 0;\n+\t\tthis.#intervalCount = this.#carryoverConcurrencyCount ? this.#pending : 0;\n \t\tthis.#processQueue();\n \t}\n \n@@ -230,48 +224,69 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t\tthis.#processQueue();\n \t}\n \n+\tasync #throwOnAbort(signal: AbortSignal): Promise<never> {\n+\t\treturn new Promise((_resolve, reject) => {\n+\t\t\tsignal.addEventListener('abort', () => {\n+\t\t\t\t// TODO: Reject with signal.throwIfAborted() when targeting Node.js 18\n+\t\t\t\t// TODO: Use ABORT_ERR code when targeting Node.js 16 (https://nodejs.org/docs/latest-v16.x/api/errors.html#abort_err)\n+\t\t\t\treject(new AbortError('The task was aborted.'));\n+\t\t\t}, {once: true});\n+\t\t});\n+\t}\n+\n \t/**\n \tAdds a sync or async task to the queue. Always returns a promise.\n \t*/\n-\tasync add<TaskResultType>(fn: Task<TaskResultType>, options: Partial<EnqueueOptionsType> = {}): Promise<TaskResultType> {\n-\t\treturn new Promise<TaskResultType>((resolve, reject) => {\n-\t\t\tconst run = async (): Promise<void> => {\n-\t\t\t\tthis.#pendingCount++;\n+\tasync add<TaskResultType>(function_: Task<TaskResultType>, options?: Partial<EnqueueOptionsType>): Promise<TaskResultType | void>;\n+\tasync add<TaskResultType>(function_: Task<TaskResultType>, options: {throwOnTimeout: true} & Exclude<EnqueueOptionsType, 'throwOnTimeout'>): Promise<TaskResultType>;\n+\tasync add<TaskResultType>(function_: Task<TaskResultType>, options: Partial<EnqueueOptionsType> = {}): Promise<TaskResultType | void> {\n+\t\toptions = {\n+\t\t\ttimeout: this.timeout,\n+\t\t\tthrowOnTimeout: this.#throwOnTimeout,\n+\t\t\t...options,\n+\t\t};\n+\n+\t\treturn new Promise((resolve, reject) => {\n+\t\t\tthis.#queue.enqueue(async () => {\n+\t\t\t\tthis.#pending++;\n \t\t\t\tthis.#intervalCount++;\n \n \t\t\t\ttry {\n+\t\t\t\t\t// TODO: Use options.signal?.throwIfAborted() when targeting Node.js 18\n \t\t\t\t\tif (options.signal?.aborted) {\n \t\t\t\t\t\t// TODO: Use ABORT_ERR code when targeting Node.js 16 (https://nodejs.org/docs/latest-v16.x/api/errors.html#abort_err)\n-\t\t\t\t\t\treject(new AbortError('The task was aborted.'));\n-\t\t\t\t\t\treturn;\n+\t\t\t\t\t\tthrow new AbortError('The task was aborted.');\n \t\t\t\t\t}\n \n-\t\t\t\t\tconst operation = (this.timeout === undefined && options.timeout === undefined) ? fn({signal: options.signal}) : pTimeout(\n-\t\t\t\t\t\tPromise.resolve(fn({signal: options.signal})),\n-\t\t\t\t\t\t(options.timeout === undefined ? this.timeout : options.timeout)!,\n-\t\t\t\t\t\t() => {\n-\t\t\t\t\t\t\tif (options.throwOnTimeout === undefined ? this.#throwOnTimeout : options.throwOnTimeout) {\n-\t\t\t\t\t\t\t\treject(timeoutError);\n-\t\t\t\t\t\t\t}\n+\t\t\t\t\tlet operation = function_({signal: options.signal});\n \n-\t\t\t\t\t\t\treturn undefined;\n-\t\t\t\t\t\t},\n-\t\t\t\t\t);\n+\t\t\t\t\tif (options.timeout) {\n+\t\t\t\t\t\toperation = pTimeout(Promise.resolve(operation), options.timeout);\n+\t\t\t\t\t}\n+\n+\t\t\t\t\tif (options.signal) {\n+\t\t\t\t\t\toperation = Promise.race([operation, this.#throwOnAbort(options.signal)]);\n+\t\t\t\t\t}\n \n \t\t\t\t\tconst result = await operation;\n-\t\t\t\t\tresolve(result!);\n+\t\t\t\t\tresolve(result);\n \t\t\t\t\tthis.emit('completed', result);\n \t\t\t\t} catch (error: unknown) {\n+\t\t\t\t\tif (error instanceof TimeoutError && !options.throwOnTimeout) {\n+\t\t\t\t\t\tresolve();\n+\t\t\t\t\t\treturn;\n+\t\t\t\t\t}\n+\n \t\t\t\t\treject(error);\n \t\t\t\t\tthis.emit('error', error);\n+\t\t\t\t} finally {\n+\t\t\t\t\tthis.#next();\n \t\t\t\t}\n+\t\t\t}, options);\n \n-\t\t\t\tthis.#next();\n-\t\t\t};\n+\t\t\tthis.emit('add');\n \n-\t\t\tthis.#queue.enqueue(run, options);\n \t\t\tthis.#tryToStartAnother();\n-\t\t\tthis.emit('add');\n \t\t});\n \t}\n \n@@ -282,8 +297,16 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t*/\n \tasync addAll<TaskResultsType>(\n \t\tfunctions: ReadonlyArray<Task<TaskResultsType>>,\n-\t\toptions?: EnqueueOptionsType,\n-\t): Promise<TaskResultsType[]> {\n+\t\toptions?: Partial<EnqueueOptionsType>,\n+\t): Promise<Array<TaskResultsType | void>>;\n+\tasync addAll<TaskResultsType>(\n+\t\tfunctions: ReadonlyArray<Task<TaskResultsType>>,\n+\t\toptions?: {throwOnTimeout: true} & Partial<Exclude<EnqueueOptionsType, 'throwOnTimeout'>>,\n+\t): Promise<TaskResultsType[]>\n+\tasync addAll<TaskResultsType>(\n+\t\tfunctions: ReadonlyArray<Task<TaskResultsType>>,\n+\t\toptions?: Partial<EnqueueOptionsType>,\n+\t): Promise<Array<TaskResultsType | void>> {\n \t\treturn Promise.all(functions.map(async function_ => this.add(function_, options)));\n \t}\n \n@@ -352,7 +375,7 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t*/\n \tasync onIdle(): Promise<void> {\n \t\t// Instantly resolve if none pending and if nothing else is queued\n-\t\tif (this.#pendingCount === 0 && this.#queue.size === 0) {\n+\t\tif (this.#pending === 0 && this.#queue.size === 0) {\n \t\t\treturn;\n \t\t}\n \n@@ -395,7 +418,7 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \tNumber of running items (no longer in the queue).\n \t*/\n \tget pending(): number {\n-\t\treturn this.#pendingCount;\n+\t\treturn this.#pending;\n \t}\n \n \t/**"
+    },
+    {
+      "sha": "cb448328246331251c33f2da14a8a6f9dbbb38ea",
+      "filename": "test/test.ts",
+      "status": "modified",
+      "additions": 21,
+      "deletions": 2,
+      "changes": 23,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/81846550274256011a2d55b06aeb36b23877eb43/test%2Ftest.ts",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/81846550274256011a2d55b06aeb36b23877eb43/test%2Ftest.ts",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/test%2Ftest.ts?ref=81846550274256011a2d55b06aeb36b23877eb43",
+      "patch": "@@ -773,8 +773,8 @@ test('pause should work when throttled', async t => {\n \t\tautoStart: false,\n \t});\n \n-\tconst values = \t[0, 1, 2, 3];\n-\tconst firstValue = \t[0, 1];\n+\tconst values = [0, 1, 2, 3];\n+\tconst firstValue = [0, 1];\n \tconst secondValue = [0, 1, 2, 3];\n \n \tfor (const value of values) {\n@@ -1115,3 +1115,22 @@ test('should pass AbortSignal instance to job', async t => {\n \t\tt.is(controller.signal, signal!);\n \t}, {signal: controller.signal});\n });\n+\n+test('aborting multiple jobs at the same time', async t => {\n+\tconst queue = new PQueue({concurrency: 1});\n+\n+\tconst controller1 = new AbortController();\n+\tconst controller2 = new AbortController();\n+\n+\tconst task1 = queue.add(async () => new Promise(() => {}), {signal: controller1.signal}); // eslint-disable-line @typescript-eslint/no-empty-function\n+\tconst task2 = queue.add(async () => new Promise(() => {}), {signal: controller2.signal}); // eslint-disable-line @typescript-eslint/no-empty-function\n+\n+\tsetTimeout(() => {\n+\t\tcontroller1.abort();\n+\t\tcontroller2.abort();\n+\t}, 0);\n+\n+\tawait t.throwsAsync(task1, {instanceOf: AbortError});\n+\tawait t.throwsAsync(task2, {instanceOf: AbortError});\n+\tt.like(queue, {size: 0, pending: 0});\n+});"
+    },
+    {
+      "sha": "032ec28f6647109e73550c8d49aa013977c529b3",
+      "filename": "tsconfig.json",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 2,
+      "changes": 3,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/81846550274256011a2d55b06aeb36b23877eb43/tsconfig.json",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/81846550274256011a2d55b06aeb36b23877eb43/tsconfig.json",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/tsconfig.json?ref=81846550274256011a2d55b06aeb36b23877eb43",
+      "patch": "@@ -1,8 +1,7 @@\n {\n \t\"extends\": \"@sindresorhus/tsconfig\",\n \t\"compilerOptions\": {\n-\t\t\"outDir\": \"dist\",\n-\t\t\"noPropertyAccessFromIndexSignature\": false\n+\t\t\"outDir\": \"dist\"\n \t},\n \t\"include\": [\n \t\t\"source\""
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "sha": "f427515a38f6a671f8de663e6bcc040ed81f114e",
+  "node_id": "C_kwDOAs73MdoAKGY0Mjc1MTVhMzhmNmE2NzFmOGRlNjYzZTZiY2MwNDBlZDgxZjExNGU",
+  "commit": {
+    "author": {
+      "name": "Take Weiland",
+      "email": "diesieben07@gmail.com",
+      "date": "2026-08-09T12:44:34Z"
+    },
+    "committer": {
+      "name": "Take Weiland",
+      "email": "diesieben07@gmail.com",
+      "date": "2026-08-09T12:44:44Z"
+    },
+    "message": "Rewrite Duration#shiftTo and normalize to do less \"unintuitive\" conversions.\n\nFixes #1634\nFixes #1620",
+    "tree": {
+      "sha": "56481e7b5540e011f616196154fd1d892c67bfb5",
+      "url": "https://api.github.com/repos/moment/luxon/git/trees/56481e7b5540e011f616196154fd1d892c67bfb5"
+    },
+    "url": "https://api.github.com/repos/moment/luxon/git/commits/f427515a38f6a671f8de663e6bcc040ed81f114e",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/moment/luxon/commits/f427515a38f6a671f8de663e6bcc040ed81f114e",
+  "html_url": "https://github.com/moment/luxon/commit/f427515a38f6a671f8de663e6bcc040ed81f114e",
+  "comments_url": "https://api.github.com/repos/moment/luxon/commits/f427515a38f6a671f8de663e6bcc040ed81f114e/comments",
+  "author": {
+    "login": "diesieben07",
+    "id": 1915984,
+    "node_id": "MDQ6VXNlcjE5MTU5ODQ=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1915984?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/diesieben07",
+    "html_url": "https://github.com/diesieben07",
+    "followers_url": "https://api.github.com/users/diesieben07/followers",
+    "following_url": "https://api.github.com/users/diesieben07/following{/other_user}",
+    "gists_url": "https://api.github.com/users/diesieben07/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/diesieben07/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/diesieben07/subscriptions",
+    "organizations_url": "https://api.github.com/users/diesieben07/orgs",
+    "repos_url": "https://api.github.com/users/diesieben07/repos",
+    "events_url": "https://api.github.com/users/diesieben07/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/diesieben07/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "diesieben07",
+    "id": 1915984,
+    "node_id": "MDQ6VXNlcjE5MTU5ODQ=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1915984?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/diesieben07",
+    "html_url": "https://github.com/diesieben07",
+    "followers_url": "https://api.github.com/users/diesieben07/followers",
+    "following_url": "https://api.github.com/users/diesieben07/following{/other_user}",
+    "gists_url": "https://api.github.com/users/diesieben07/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/diesieben07/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/diesieben07/subscriptions",
+    "organizations_url": "https://api.github.com/users/diesieben07/orgs",
+    "repos_url": "https://api.github.com/users/diesieben07/repos",
+    "events_url": "https://api.github.com/users/diesieben07/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/diesieben07/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "aeb7427a8d27f9737bf6d93f836296fe964471de",
+      "url": "https://api.github.com/repos/moment/luxon/commits/aeb7427a8d27f9737bf6d93f836296fe964471de",
+      "html_url": "https://github.com/moment/luxon/commit/aeb7427a8d27f9737bf6d93f836296fe964471de"
+    }
+  ],
+  "stats": {
+    "total": 268,
+    "additions": 177,
+    "deletions": 91
+  },
+  "files": [
+    {
+      "sha": "db74c7bd9abae0d2366b3dfc8f7c70ff5b92c353",
+      "filename": "src/duration.js",
+      "status": "modified",
+      "additions": 128,
+      "deletions": 91,
+      "changes": 219,
+      "blob_url": "https://github.com/moment/luxon/blob/f427515a38f6a671f8de663e6bcc040ed81f114e/src%2Fduration.js",
+      "raw_url": "https://github.com/moment/luxon/raw/f427515a38f6a671f8de663e6bcc040ed81f114e/src%2Fduration.js",
+      "contents_url": "https://api.github.com/repos/moment/luxon/contents/src%2Fduration.js?ref=f427515a38f6a671f8de663e6bcc040ed81f114e",
+      "patch": "@@ -10,6 +10,7 @@ import {\n   isUndefined,\n   normalizeObject,\n   roundTo,\n+  snapFloatingPoint,\n } from \"./impl/util.js\";\n import Settings from \"./settings.js\";\n import DateTime from \"./datetime.js\";\n@@ -145,59 +146,6 @@ function durationToMillis(matrix, vals) {\n   return sum;\n }\n \n-// NB: mutates parameters\n-function normalizeValues(matrix, vals) {\n-  // the logic below assumes the overall value of the duration is positive\n-  // if this is not the case, factor is used to make it so\n-  const factor = durationToMillis(matrix, vals) < 0 ? -1 : 1;\n-\n-  orderedUnits.reduceRight((previous, current) => {\n-    if (!isUndefined(vals[current])) {\n-      if (previous) {\n-        const previousVal = vals[previous] * factor;\n-        const conv = matrix[current][previous];\n-\n-        // if (previousVal < 0):\n-        // lower order unit is negative (e.g. { years: 2, days: -2 })\n-        // normalize this by reducing the higher order unit by the appropriate amount\n-        // and increasing the lower order unit\n-        // this can never make the higher order unit negative, because this function only operates\n-        // on positive durations, so the amount of time represented by the lower order unit cannot\n-        // be larger than the higher order unit\n-        // else:\n-        // lower order unit is positive (e.g. { years: 2, days: 450 } or { years: -2, days: 450 })\n-        // in this case we attempt to convert as much as possible from the lower order unit into\n-        // the higher order one\n-        //\n-        // Math.floor takes care of both of these cases, rounding away from 0\n-        // if previousVal < 0 it makes the absolute value larger\n-        // if previousVal >= it makes the absolute value smaller\n-        const rollUp = Math.floor(previousVal / conv);\n-        vals[current] += rollUp * factor;\n-        vals[previous] -= rollUp * conv * factor;\n-      }\n-      return current;\n-    } else {\n-      return previous;\n-    }\n-  }, null);\n-\n-  // try to convert any decimals into smaller units if possible\n-  // for example for { years: 2.5, days: 0, seconds: 0 } we want to get { years: 2, days: 182, hours: 12 }\n-  orderedUnits.reduce((previous, current) => {\n-    if (!isUndefined(vals[current])) {\n-      if (previous) {\n-        const fraction = vals[previous] % 1;\n-        vals[previous] -= fraction;\n-        vals[current] += fraction * matrix[previous][current];\n-      }\n-      return current;\n-    } else {\n-      return previous;\n-    }\n-  }, null);\n-}\n-\n // Remove all properties with a value of 0 from an object\n function removeZeroes(vals) {\n   const newVals = {};\n@@ -772,13 +720,7 @@ export default class Duration {\n \n   /**\n    * Reduce this Duration to its canonical representation in its current units.\n-   * Assuming the overall value of the Duration is positive, this means:\n-   * - excessive values for lower-order units are converted to higher-order units (if possible, see first and second example)\n-   * - negative lower-order units are converted to higher order units (there must be such a higher order unit, otherwise\n-   *   the overall value would be negative, see third example)\n-   * - fractional values for higher-order units are converted to lower-order units (if possible, see fourth example)\n-   *\n-   * If the overall value is negative, the result of this method is equivalent to `this.negate().normalize().negate()`.\n+   * This is equivalent to `this.shiftTo()`.\n    * @example Duration.fromObject({ years: 2, days: 5000 }).normalize().toObject() //=> { years: 15, days: 255 }\n    * @example Duration.fromObject({ days: 5000 }).normalize().toObject() //=> { days: 5000 }\n    * @example Duration.fromObject({ hours: 12, minutes: -45 }).normalize().toObject() //=> { hours: 11, minutes: 15 }\n@@ -787,9 +729,7 @@ export default class Duration {\n    */\n   normalize() {\n     if (!this.isValid) return this;\n-    const vals = this.toObject();\n-    normalizeValues(this.matrix, vals);\n-    return clone(this, { values: vals }, true);\n+    return this.shiftTo();\n   }\n \n   /**\n@@ -799,68 +739,165 @@ export default class Duration {\n    */\n   rescale() {\n     if (!this.isValid) return this;\n-    const vals = removeZeroes(this.normalize().shiftToAll().toObject());\n+    const vals = removeZeroes(this.shiftToAll().toObject());\n     return clone(this, { values: vals }, true);\n   }\n \n   /**\n    * Convert this Duration into its representation in a different set of units.\n+   * This is done by converting as much as possible into the largest possible units. At the end, the Duration will\n+   * have a consistent sign (either all positive or all negative) and only have fractions in the smallest unit.\n+   * Passing no units is equivalent to passing the Duration's current units, effectively normalizing the Duration.\n    * @example Duration.fromObject({ hours: 1, seconds: 30 }).shiftTo('minutes', 'milliseconds').toObject() //=> { minutes: 60, milliseconds: 30000 }\n+   * @example Duration.fromObject({ days: 396 }).shiftTo('years', 'months', 'hours').toObject() //=> { years: 1, months: 1, hours: 24 }\n+   * @example Duration.fromObject({ years: 1, days: -1 }).shiftTo('months', 'days').toObject() //=> { months: 11, days: 29 }\n    * @return {Duration}\n    */\n   shiftTo(...units) {\n     if (!this.isValid) return this;\n \n     if (units.length === 0) {\n-      return this;\n+      units = Object.keys(this.values);\n+    } else {\n+      units = units.map((u) => Duration.normalizeUnit(u));\n     }\n \n-    units = units.map((u) => Duration.normalizeUnit(u));\n-\n+    // built is the final result, accumulated is our \"working copy\" of things still to do\n     const built = {},\n-      accumulated = {},\n-      vals = this.toObject();\n-    let lastUnit;\n+      accumulated = this.toObject();\n \n-    for (const k of orderedUnits) {\n-      if (units.indexOf(k) >= 0) {\n+    // Pass 1: Build up the target units largest to smallest.\n+    //         Units grab as many whole units (e.g., grab \"1 year\" from \"370 days\") as they can from anything\n+    //         still left in \"accumulated\".\n+    //         Additionally, we accumulate the entire Duration in the smallest unit to determine\n+    //         the overall sign of the target Duration.\n+    let lastUnit;\n+    let lastUnitTotal = 0;\n+    for (let i = 0; i < orderedUnits.length; i++) {\n+      const k = orderedUnits[i];\n+      if (units.includes(k)) {\n+        if (lastUnit) {\n+          // make sure lastUnitTotal stays in the correct unit\n+          lastUnitTotal *= this.matrix[lastUnit][k];\n+        }\n         lastUnit = k;\n \n         let own = 0;\n-\n-        // anything we haven't boiled down yet should get boiled to this unit\n+        // Grab as much as we can from \"accumulated\" into this unit.\n         for (const ak in accumulated) {\n-          own += this.matrix[ak][k] * accumulated[ak];\n-          accumulated[ak] = 0;\n-        }\n-\n-        // plus anything that's already in this unit\n-        if (isNumber(vals[k])) {\n-          own += vals[k];\n+          const av = accumulated[ak];\n+          if (ak === k) {\n+            own += av;\n+          } else if (i > orderedUnits.indexOf(ak)) {\n+            // ak is a larger unit than us, meaning whatever we have accumulated for it must not\n+            // have fit into any higher unit. We down-convert it to this.\n+            const converted = this.matrix[ak][k] * av;\n+            own += converted;\n+            accumulated[ak] = 0;\n+          } else {\n+            // ak is a smaller unit than us, grab any overflow from it.\n+            // e.g., 125 minutes => 2 hours, 5 minutes\n+            const conv = this.matrix[k][ak];\n+            const toConvert = Math.trunc(av / conv);\n+            accumulated[ak] -= toConvert * conv;\n+            own += toConvert;\n+          }\n         }\n \n+        own = snapFloatingPoint(own);\n         // only keep the integer part for now in the hopes of putting any decimal part\n         // into a smaller unit later\n-        const i = Math.trunc(own);\n-        built[k] = i;\n-        accumulated[k] = (own * 1000 - i * 1000) / 1000;\n-\n-        // otherwise, keep it in the wings to boil it later\n-      } else if (isNumber(vals[k])) {\n-        accumulated[k] = vals[k];\n+        accumulated[k] = own % 1;\n+        lastUnitTotal += built[k] = Math.trunc(own);\n       }\n     }\n \n-    // anything leftover becomes the decimal for the last unit\n+    // anything leftover gets converted to the last unit\n     // lastUnit must be defined since units is not empty\n     for (const key in accumulated) {\n       if (accumulated[key] !== 0) {\n-        built[lastUnit] +=\n+        const toAdd =\n           key === lastUnit ? accumulated[key] : accumulated[key] / this.matrix[lastUnit][key];\n+        built[lastUnit] += toAdd;\n+        lastUnitTotal += toAdd;\n+      }\n+    }\n+\n+    // Pass 2: ensure the unit signs are consistent with the overall sign according to lastUnitTotal\n+    // Do this by \"borrowing\" from a higher unit.\n+    // Note that we only work within the target units here to avoid unexpected intermediary conversions.\n+    const overallSign = Math.sign(lastUnitTotal);\n+    if (overallSign !== 0) {\n+      for (let i = 0; i < reverseUnits.length; i++) {\n+        const unit = reverseUnits[i];\n+        if (unit in built) {\n+          const unitValue = built[unit];\n+          const unitSign = Math.sign(unitValue);\n+          if (unitSign !== 0 && unitSign !== overallSign) {\n+            // find the next largest unit that we have and \"borrow\" from it\n+            for (let j = i + 1; j < reverseUnits.length; j++) {\n+              const higherUnit = reverseUnits[j];\n+              if (higherUnit in built) {\n+                const conv = this.matrix[higherUnit][unit];\n+                // we want to an integer divide by \"conv\" and round away from zero.\n+                // For example: 3 hours, -122 minutes\n+                // => -122 / 60 => -3 hours to borrow so that we get 0 hours, 58 minutes\n+                // Another example: -3 hours, 122 minutes\n+                // => 122 / 60 => 3 hours to borrow so that we get 0 hours, -58 minutes\n+                const toBorrow = Math.trunc((unitValue + (conv - 1) * unitSign) / conv);\n+                built[higherUnit] += toBorrow;\n+                // this may leave a fractional part behind - it will be fixed below\n+                built[unit] -= toBorrow * conv;\n+                break;\n+              }\n+            }\n+          }\n+        }\n+      }\n+    }\n+\n+    // Pass 3: ensure any fractional parts created by the sign redistribution above are\n+    // distributed to lower order units again\n+    for (let i = 0; i < orderedUnits.length; i++) {\n+      const unit = orderedUnits[i];\n+      // last unit keeps fractions\n+      if (unit !== lastUnit && unit in built) {\n+        const unitValue = built[unit];\n+        if (!Number.isInteger(unitValue)) {\n+          // find the next unit down to convert it into\n+          for (let j = i + 1; j < orderedUnits.length; j++) {\n+            const smallerUnit = orderedUnits[j];\n+            if (smallerUnit in built) {\n+              const conv = this.matrix[unit][smallerUnit];\n+              const unitFrac = unitValue % 1;\n+              built[unit] = Math.trunc(unitValue);\n+              built[smallerUnit] += unitFrac * conv;\n+              break;\n+            }\n+          }\n+        }\n+      }\n+    }\n+\n+    // Pass 4: make sure any overflowing units get converted into a higher unit\n+    for (let i = 0; i < reverseUnits.length; i++) {\n+      const unit = reverseUnits[i];\n+      if (units.includes(unit)) {\n+        for (const ak in built) {\n+          if (i > reverseUnits.indexOf(ak)) {\n+            // unit is a larger unit than ak\n+            // try to up-convert any overflow in \"ak\"\n+            // for example, 61 minutes => 1 hour, 1 minute\n+            const conv = this.matrix[unit][ak];\n+            const av = built[ak];\n+            const toConvert = Math.trunc(av / conv);\n+            built[unit] += toConvert;\n+            built[ak] -= toConvert * conv;\n+          }\n+        }\n       }\n     }\n \n-    normalizeValues(this.matrix, built);\n     return clone(this, { values: built }, true);\n   }\n "
+    },
+    {
+      "sha": "c93f4075772aacb9ac19e422688a4fd4c5d33926",
+      "filename": "src/impl/util.js",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 0,
+      "changes": 5,
+      "blob_url": "https://github.com/moment/luxon/blob/f427515a38f6a671f8de663e6bcc040ed81f114e/src%2Fimpl%2Futil.js",
+      "raw_url": "https://github.com/moment/luxon/raw/f427515a38f6a671f8de663e6bcc040ed81f114e/src%2Fimpl%2Futil.js",
+      "contents_url": "https://api.github.com/repos/moment/luxon/contents/src%2Fimpl%2Futil.js?ref=f427515a38f6a671f8de663e6bcc040ed81f114e",
+      "patch": "@@ -179,6 +179,11 @@ export function roundTo(number, digits, rounding = \"round\") {\n   }\n }\n \n+export function snapFloatingPoint(val) {\n+  const r = Math.round(val);\n+  return Math.abs(val - r) < 4 * Number.EPSILON * Math.max(1, Math.abs(r)) ? r : val;\n+}\n+\n // DATE BASICS\n \n export function isLeapYear(year) {"
+    },
+    {
+      "sha": "6837218bc0457aa0b9d9b44be19483ae120fdf4b",
+      "filename": "test/duration/units.test.js",
+      "status": "modified",
+      "additions": 44,
+      "deletions": 0,
+      "changes": 44,
+      "blob_url": "https://github.com/moment/luxon/blob/f427515a38f6a671f8de663e6bcc040ed81f114e/test%2Fduration%2Funits.test.js",
+      "raw_url": "https://github.com/moment/luxon/raw/f427515a38f6a671f8de663e6bcc040ed81f114e/test%2Fduration%2Funits.test.js",
+      "contents_url": "https://api.github.com/repos/moment/luxon/contents/test%2Fduration%2Funits.test.js?ref=f427515a38f6a671f8de663e6bcc040ed81f114e",
+      "patch": "@@ -116,6 +116,50 @@ test(\"Duration#shiftTo does not produce unnecessary fractions in higher order un\n   expect(shifted.minutes).toBeCloseTo(894.6, 5);\n });\n \n+// #1620\n+test(\"Duration#siftTo does not create intermediate units when lower order units can go directly into a higher one\", () => {\n+  const duration = Duration.fromObject({\n+    months: 12,\n+    days: 730,\n+  });\n+  // We expect 12 months => 1 year\n+  // 730 days => 2 years\n+  // We don't want to convert the days first to months, then years: that would leave stray \"days\" behind.\n+  expect(duration.shiftTo(\"years\", \"months\", \"days\").toObject()).toEqual({\n+    years: 3,\n+    months: 0,\n+    days: 0,\n+  });\n+});\n+\n+// 1634\n+test.each([1, 5, -12])(\n+  \"Duration#shiftTo can convert milliseconds directly into whole years correctly: %i\",\n+  (years) => {\n+    const duration = Duration.fromMillis(365 * 24 * 60 * 60 * 1000 * years);\n+    expect(\n+      duration\n+        .shiftTo(\"years\", \"months\", \"days\", \"hours\", \"minutes\", \"seconds\", \"milliseconds\")\n+        .toObject()\n+    ).toEqual({\n+      years,\n+      months: 0,\n+      days: 0,\n+      hours: 0,\n+      minutes: 0,\n+      seconds: 0,\n+      milliseconds: 0,\n+    });\n+  }\n+);\n+\n+test(\"Duration#shiftTo with no units normalizes\", () => {\n+  expect(Duration.fromObject({ years: 0, days: 367 }).shiftTo().toObject()).toEqual({\n+    years: 1,\n+    days: 2,\n+  });\n+});\n+\n //------\n // #shiftToAll()\n //-------"
+    }
+  ]
+}

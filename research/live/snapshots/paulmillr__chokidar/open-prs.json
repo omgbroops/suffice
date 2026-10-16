@@ -1,0 +1,20 @@
+[
+  {
+    "assignees": [],
+    "body": "This has always been an object but we may as well lean on primitives these days, and it means we don't need to care about key safety and what not.",
+    "isDraft": false,
+    "number": 1495,
+    "title": "feat: use a `Map` in `getWatched`",
+    "updatedAt": "2026-10-12T08:08:36Z",
+    "url": "https://github.com/paulmillr/chokidar/pull/1495"
+  },
+  {
+    "assignees": [],
+    "body": "When `cwd` makes a watched directory's key exactly `__proto__`, `getWatched()` invokes the inherited setter instead of creating an own property. The directory disappears from `Object.keys()` and JSON output, and the returned object's prototype becomes its child array.\n\nDefine each directory as an enumerable, writable, configurable own data property, preserving the existing `Object.prototype` return type and sorted child lists. Add real filesystem regressions for empty/nonempty `__proto__` directories with cwd and absolute paths, ordinary siblings, serialization, sorting and behavior after close. These tests run in the existing native, recursive-preferred and polling suites.\n\nFixes #1493.\n\nValidation on macOS / Node 22.22.3:\n- `npm ci`\n- `npm run build`\n- `npm test` — 461 tests passed\n- `JSBT_FILTER=getWatched npm test` — 18 tests passed; new regression failed before the fix\n- `npm pack --dry-run`\n- Prettier check for both changed files\n- CI's backend parity benchmark smoke configuration\n\nThe two-file diff also passed an independent review.\n",
+    "isDraft": false,
+    "number": 1494,
+    "title": "fix: include __proto__ directories in getWatched",
+    "updatedAt": "2026-10-13T13:23:37Z",
+    "url": "https://github.com/paulmillr/chokidar/pull/1494"
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "repo": "sindresorhus/emittery",
+  "issue": 118,
+  "fix_kind": "sha",
+  "fix_ref": "dd6d78befbf664268471c61a8363884e96777cff",
+  "fix_commit": "dd6d78befbf664268471c61a8363884e96777cff",
+  "pre_fix_commit": "c5e99b898b05a67fbbb8bcb6cf34d2d35f582aff",
+  "pr_merged": null,
+  "fix_subject": "Fix `emitMetaEvent` breaking async `emit()` overrides in subclasses",
+  "changes": [
+    {
+      "filename": "index.js",
+      "status": "modified",
+      "additions": 20,
+      "deletions": 12
+    },
+    {
+      "filename": "test/index.js",
+      "status": "modified",
+      "additions": 356,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "test": "xo && nyc ava && tsd"
+  },
+  "engines": {
+    "node": ">=14.16"
+  },
+  "dependencies": null,
+  "devDependencies": {
+    "@types/node": "^18.7.15",
+    "ava": "^4.3.3",
+    "delay": "^5.0.0",
+    "nyc": "^15.1.0",
+    "p-event": "^6.0.0",
+    "tsd": "^0.23.0",
+    "xo": "^0.55.0"
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "sha": "36dd1997d841618a715ad389fdefe4dcdb875815",
+    "filename": "src/index.js",
+    "status": "modified",
+    "additions": 41,
+    "deletions": 5,
+    "changes": 46,
+    "blob_url": "https://github.com/node-fetch/node-fetch/blob/9aa222f5e107f5fb27033f3d13da007e9c50a6b6/src%2Findex.js",
+    "raw_url": "https://github.com/node-fetch/node-fetch/raw/9aa222f5e107f5fb27033f3d13da007e9c50a6b6/src%2Findex.js",
+    "contents_url": "https://api.github.com/repos/node-fetch/node-fetch/contents/src%2Findex.js?ref=9aa222f5e107f5fb27033f3d13da007e9c50a6b6",
+    "patch": "@@ -235,7 +235,11 @@ export default async function fetch(url, options_) {\n \t\t\t\t});\n \t\t\t}\n \n-\t\t\tlet body = pump(response_, new PassThrough(), reject);\n+\t\t\tlet body = pump(response_, new PassThrough(), error => {\n+\t\t\t\tif (error) {\n+\t\t\t\t\treject(error);\n+\t\t\t\t}\n+\t\t\t});\n \t\t\t// see https://github.com/nodejs/node/pull/29376\n \t\t\t/* c8 ignore next 3 */\n \t\t\tif (process.version < 'v12.10') {\n@@ -281,7 +285,11 @@ export default async function fetch(url, options_) {\n \n \t\t\t// For gzip\n \t\t\tif (codings === 'gzip' || codings === 'x-gzip') {\n-\t\t\t\tbody = pump(body, zlib.createGunzip(zlibOptions), reject);\n+\t\t\t\tbody = pump(body, zlib.createGunzip(zlibOptions), error => {\n+\t\t\t\t\tif (error) {\n+\t\t\t\t\t\treject(error);\n+\t\t\t\t\t}\n+\t\t\t\t});\n \t\t\t\tresponse = new Response(body, responseOptions);\n \t\t\t\tresolve(response);\n \t\t\t\treturn;\n@@ -291,20 +299,48 @@ export default async function fetch(url, options_) {\n \t\t\tif (codings === 'deflate' || codings === 'x-deflate') {\n \t\t\t\t// Handle the infamous raw deflate response from old servers\n \t\t\t\t// a hack for old IIS and Apache servers\n-\t\t\t\tconst raw = pump(response_, new PassThrough(), reject);\n+\t\t\t\tconst raw = pump(response_, new PassThrough(), error => {\n+\t\t\t\t\tif (error) {\n+\t\t\t\t\t\treject(error);\n+\t\t\t\t\t}\n+\t\t\t\t});\n \t\t\t\traw.once('data', chunk => {\n \t\t\t\t\t// See http://stackoverflow.com/questions/37519828\n-\t\t\t\t\tbody = (chunk[0] & 0x0F) === 0x08 ? pump(body, zlib.createInflate(), reject) : pump(body, zlib.createInflateRaw(), reject);\n+\t\t\t\t\tif ((chunk[0] & 0x0F) === 0x08) {\n+\t\t\t\t\t\tbody = pump(body, zlib.createInflate(), error => {\n+\t\t\t\t\t\t\tif (error) {\n+\t\t\t\t\t\t\t\treject(error);\n+\t\t\t\t\t\t\t}\n+\t\t\t\t\t\t});\n+\t\t\t\t\t} else {\n+\t\t\t\t\t\tbody = pump(body, zlib.createInflateRaw(), error => {\n+\t\t\t\t\t\t\tif (error) {\n+\t\t\t\t\t\t\t\treject(error);\n+\t\t\t\t\t\t\t}\n+\t\t\t\t\t\t});\n+\t\t\t\t\t}\n \n \t\t\t\t\tresponse = new Response(body, responseOptions);\n \t\t\t\t\tresolve(response);\n \t\t\t\t});\n+\t\t\t\traw.once('end', () => {\n+\t\t\t\t\t// Some old IIS servers return zero-length OK deflate responses, so\n+\t\t\t\t\t// 'data' is never emitted. See https://github.com/node-fetch/node-fetch/pull/903\n+\t\t\t\t\tif (!response) {\n+\t\t\t\t\t\tresponse = new Response(body, responseOptions);\n+\t\t\t\t\t\tresolve(response);\n+\t\t\t\t\t}\n+\t\t\t\t});\n \t\t\t\treturn;\n \t\t\t}\n \n \t\t\t// For br\n \t\t\tif (codings === 'br') {\n-\t\t\t\tbody = pump(body, zlib.createBrotliDecompress(), reject);\n+\t\t\t\tbody = pump(body, zlib.createBrotliDecompress(), error => {\n+\t\t\t\t\tif (error) {\n+\t\t\t\t\t\treject(error);\n+\t\t\t\t\t}\n+\t\t\t\t});\n \t\t\t\tresponse = new Response(body, responseOptions);\n \t\t\t\tresolve(response);\n \t\t\t\treturn;"
+  },
+  {
+    "sha": "a8e2d0eaba1416e558410e8e96a4d7300385fcec",
+    "filename": "test/main.js",
+    "status": "modified",
+    "additions": 11,
+    "deletions": 0,
+    "changes": 11,
+    "blob_url": "https://github.com/node-fetch/node-fetch/blob/9aa222f5e107f5fb27033f3d13da007e9c50a6b6/test%2Fmain.js",
+    "raw_url": "https://github.com/node-fetch/node-fetch/raw/9aa222f5e107f5fb27033f3d13da007e9c50a6b6/test%2Fmain.js",
+    "contents_url": "https://api.github.com/repos/node-fetch/node-fetch/contents/test%2Fmain.js?ref=9aa222f5e107f5fb27033f3d13da007e9c50a6b6",
+    "patch": "@@ -946,6 +946,17 @@ describe('node-fetch', () => {\n \t\t});\n \t});\n \n+\tit('should handle empty deflate response', () => {\n+\t\tconst url = `${base}empty/deflate`;\n+\t\treturn fetch(url).then(res => {\n+\t\t\texpect(res.headers.get('content-type')).to.equal('text/plain');\n+\t\t\treturn res.text().then(result => {\n+\t\t\t\texpect(result).to.be.a('string');\n+\t\t\t\texpect(result).to.be.empty;\n+\t\t\t});\n+\t\t});\n+\t});\n+\n \tit('should decompress brotli response', function () {\n \t\tif (typeof zlib.createBrotliDecompress !== 'function') {\n \t\t\tthis.skip();"
+  },
+  {
+    "sha": "a84efb8b0f5efcb99f580536dbdb7438a0e6d4b9",
+    "filename": "test/utils/server.js",
+    "status": "modified",
+    "additions": 7,
+    "deletions": 0,
+    "changes": 7,
+    "blob_url": "https://github.com/node-fetch/node-fetch/blob/9aa222f5e107f5fb27033f3d13da007e9c50a6b6/test%2Futils%2Fserver.js",
+    "raw_url": "https://github.com/node-fetch/node-fetch/raw/9aa222f5e107f5fb27033f3d13da007e9c50a6b6/test%2Futils%2Fserver.js",
+    "contents_url": "https://api.github.com/repos/node-fetch/node-fetch/contents/test%2Futils%2Fserver.js?ref=9aa222f5e107f5fb27033f3d13da007e9c50a6b6",
+    "patch": "@@ -179,6 +179,13 @@ export default class TestServer {\n \t\t\t});\n \t\t}\n \n+\t\tif (p === '/empty/deflate') {\n+\t\t\tres.statusCode = 200;\n+\t\t\tres.setHeader('Content-Type', 'text/plain');\n+\t\t\tres.setHeader('Content-Encoding', 'deflate');\n+\t\t\tres.end();\n+\t\t}\n+\n \t\tif (p === '/sdch') {\n \t\t\tres.statusCode = 200;\n \t\t\tres.setHeader('Content-Type', 'text/plain');"
+  }
+]

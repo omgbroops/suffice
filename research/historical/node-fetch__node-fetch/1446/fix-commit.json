@@ -1,0 +1,101 @@
+{
+  "sha": "043a5fcfc82884155bcb2afba2a82333b2f29c02",
+  "node_id": "C_kwDOAcd5ZNoAKDA0M2E1ZmNmYzgyODg0MTU1YmNiMmFmYmEyYTgyMzMzYjJmMjljMDI",
+  "commit": {
+    "author": {
+      "name": "Felipe Contreras",
+      "email": "felipe.contreras@gmail.com",
+      "date": "2022-05-07T21:56:37Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2022-05-07T21:56:37Z"
+    },
+    "message": "Fix leaking listeners (#1295) (#1474)\n\nSince 8eeeec1 it seems listeners have been leaking on keep-alive\r\nsockets.\r\n\r\nApparently abort() has been deprecated since v17, using close() the\r\nonSocketClose listener is properly removed, and by creating a new onData\r\nfunction I'm able to remove the 'data' listener too.",
+    "tree": {
+      "sha": "0d06362cdfa66598a95f3a7dba16ac99263efdbf",
+      "url": "https://api.github.com/repos/node-fetch/node-fetch/git/trees/0d06362cdfa66598a95f3a7dba16ac99263efdbf"
+    },
+    "url": "https://api.github.com/repos/node-fetch/node-fetch/git/commits/043a5fcfc82884155bcb2afba2a82333b2f29c02",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJidusVCRBK7hj4Ov3rIwAAPjwIABniqyFTcY3fopeeu8WxTQ8f\np5qgwfKhay09QqaTyBDmHQKt9Q8f7nq1mWO5iikRv/KdBOY4phaqTVdiGeSd6gPv\nxMF/Yu/5ryXA9aElgK9LUZBPZ32e9zJOq10dexCJmtucYyIFWAWWWLiI6ZXJJ18C\nhIoRVdB9/1jviVurx+FIpKPYDeb/AOCw1rkOamUCyLKx0rFtXEQQuIGO5HCaZHfI\ne4wKBcH0ikFxcpihj8Whk2bPGAT4Hb0JGWS0f7pyjfqN5/DknKb4v2SQOpC0TgWm\ntaTO7EmvWeaIpvCLtyaSL/+iwm/3AJsxHL7wV8DbRG7zCsfoSBMTETIBssER+bE=\n=g9R0\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 0d06362cdfa66598a95f3a7dba16ac99263efdbf\nparent 004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf\nauthor Felipe Contreras <felipe.contreras@gmail.com> 1651960597 -0500\ncommitter GitHub <noreply@github.com> 1651960597 +0200\n\nFix leaking listeners (#1295) (#1474)\n\nSince 8eeeec1 it seems listeners have been leaking on keep-alive\r\nsockets.\r\n\r\nApparently abort() has been deprecated since v17, using close() the\r\nonSocketClose listener is properly removed, and by creating a new onData\r\nfunction I'm able to remove the 'data' listener too.",
+      "verified_at": "2024-01-16T19:59:59Z"
+    }
+  },
+  "url": "https://api.github.com/repos/node-fetch/node-fetch/commits/043a5fcfc82884155bcb2afba2a82333b2f29c02",
+  "html_url": "https://github.com/node-fetch/node-fetch/commit/043a5fcfc82884155bcb2afba2a82333b2f29c02",
+  "comments_url": "https://api.github.com/repos/node-fetch/node-fetch/commits/043a5fcfc82884155bcb2afba2a82333b2f29c02/comments",
+  "author": {
+    "login": "felipec",
+    "id": 8358,
+    "node_id": "MDQ6VXNlcjgzNTg=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/8358?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/felipec",
+    "html_url": "https://github.com/felipec",
+    "followers_url": "https://api.github.com/users/felipec/followers",
+    "following_url": "https://api.github.com/users/felipec/following{/other_user}",
+    "gists_url": "https://api.github.com/users/felipec/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/felipec/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/felipec/subscriptions",
+    "organizations_url": "https://api.github.com/users/felipec/orgs",
+    "repos_url": "https://api.github.com/users/felipec/repos",
+    "events_url": "https://api.github.com/users/felipec/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/felipec/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf",
+      "url": "https://api.github.com/repos/node-fetch/node-fetch/commits/004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf",
+      "html_url": "https://github.com/node-fetch/node-fetch/commit/004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf"
+    }
+  ],
+  "stats": {
+    "total": 16,
+    "additions": 9,
+    "deletions": 7
+  },
+  "files": [
+    {
+      "sha": "513b05225e2f4aa83d5b8ee43e6c09a2eefc8a77",
+      "filename": "src/index.js",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 7,
+      "changes": 16,
+      "blob_url": "https://github.com/node-fetch/node-fetch/blob/043a5fcfc82884155bcb2afba2a82333b2f29c02/src%2Findex.js",
+      "raw_url": "https://github.com/node-fetch/node-fetch/raw/043a5fcfc82884155bcb2afba2a82333b2f29c02/src%2Findex.js",
+      "contents_url": "https://api.github.com/repos/node-fetch/node-fetch/contents/src%2Findex.js?ref=043a5fcfc82884155bcb2afba2a82333b2f29c02",
+      "patch": "@@ -387,13 +387,7 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {\n \t\t\t}\n \t\t};\n \n-\t\tsocket.prependListener('close', onSocketClose);\n-\n-\t\trequest.on('abort', () => {\n-\t\t\tsocket.removeListener('close', onSocketClose);\n-\t\t});\n-\n-\t\tsocket.on('data', buf => {\n+\t\tconst onData = buf => {\n \t\t\tproperLastChunkReceived = Buffer.compare(buf.slice(-5), LAST_CHUNK) === 0;\n \n \t\t\t// Sometimes final 0-length chunk and end of message code are in separate packets\n@@ -405,6 +399,14 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {\n \t\t\t}\n \n \t\t\tpreviousChunk = buf;\n+\t\t};\n+\n+\t\tsocket.prependListener('close', onSocketClose);\n+\t\tsocket.on('data', onData);\n+\n+\t\trequest.on('close', () => {\n+\t\t\tsocket.removeListener('close', onSocketClose);\n+\t\t\tsocket.removeListener('data', onData);\n \t\t});\n \t});\n }"
+    }
+  ]
+}

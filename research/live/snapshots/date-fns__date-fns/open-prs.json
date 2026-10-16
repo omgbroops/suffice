@@ -1,0 +1,902 @@
+[
+  {
+    "assignees": [],
+    "body": "We could shift explicit UTC timestamps by an hour when parsing during a local DST gap.\r\nWe now apply date fields in UTC for explicit timezone tokens and preserve the requested result type.\r\nWe added a regression test and ran the parser and related suites.\r\nFixes #4369\r\n\r\n— [ChipLab](https://chiplab.donmakino.com/findings#clab-2026-1230)\r\n",
+    "isDraft": false,
+    "number": 4372,
+    "title": "Fix parsing explicit time zones during DST gaps",
+    "updatedAt": "2026-10-14T21:50:18Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4372"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nFractional month amounts were combined with the current month **before** the `Date` arithmetic truncated them, so a fraction could effectively be rounded up and move the date by a whole extra month.\n\nReported in #4346:\n\n```js\nconst date = new Date(2026, 2, 31); // 31 Mar 2026\naddMonths(date, -0.5); // before: 28 Feb 2026 (a full month back) -> after: 31 Mar 2026\naddMonths(date, -1.5); // before: 31 Jan 2026 (two months back) -> after: 28 Feb 2026\nsubMonths(date, 0.5);  // before: 28 Feb 2026 (a full month back) -> after: 31 Mar 2026\n```\n\n## Fix\n\n`pkgs/core/src/addMonths/index.ts` — truncate the amount toward zero before the calendar arithmetic, and keep the existing zero-increment no-op for amounts that truncate to zero:\n\n```ts\nconst months = Math.trunc(amount);\nif (!months) {\n  // If 0 months, no-op to avoid changing times in the hour before end of DST\n  return _date;\n}\n```\n\nThe value used for `setMonth` is the truncated `months`, so negative `addMonths` and positive `subMonths` are both covered (subMonths delegates to addMonths with a negated amount).\n\n`pkgs/core/src/addMonths/index.tp.ts` — apply the same truncation in the Temporal implementation so both paths agree:\n\n```ts\nconst result = temporal.add({ months: Math.trunc(amount) });\n```\n\n## Tests\n\nAdded focused regression tests to `addMonths/test.ts` and `subMonths/test.ts` covering:\n\n- negative fractions (`-0.5`, `-1.5`) not subtracting an extra month,\n- positive fractions (`0.5`, `1.5`, `1.9`) not adding an extra month,\n- a month-dependent case (31 Jan vs 31 Mar),\n- a positive fraction to `subMonths` (the direction reported in the issue).\n\nThe new tests fail on `main` (2 failures) and pass with the fix. Existing zero-increment and DST tests still pass.\n\n```\n33 passed (addMonths + subMonths)\n```\n\noxlint: 0 warnings/errors. oxfmt: formatted. No changelog change (per CONTRIBUTING).\n\nFixes #4346",
+    "isDraft": false,
+    "number": 4368,
+    "title": "Truncate fractional months toward zero in addMonths/subMonths",
+    "updatedAt": "2026-10-14T19:48:57Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4368"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n- add a pull request workflow that runs NPMscan/npmscan-action for pnpm-lock.yaml changes\n- include workspace package manifest triggers for the monorepo layout\n- keep the check low-friction with mode: warn and fail-on-error: false\n\n## Why\nThis adds a lightweight supply-chain check for PRs so new install scripts, tarball swaps, and lockfile overrides get surfaced during review without blocking contributors.\n\n## Test plan\n- [x] workflow file added under .github/workflows/npmscan.yml\n- [x] action pinned to de14168f65640a4ed1f0e82ad3ad8c80483d360d\n- [x] workflow scoped to relevant manifest and lockfile changes",
+    "isDraft": false,
+    "number": 4367,
+    "title": "Add npmscan pull request workflow",
+    "updatedAt": "2026-10-13T17:24:57Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4367"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nFixes https://github.com/date-fns/date-fns/issues/4346.\n\nFractional month amounts were fed straight into `setMonth(_date.getMonth() + amount + 1, 0)`. Because `setMonth` truncates its argument toward zero *after* adding the current month, a negative fractional amount could subtract an extra month, and the result depended on the starting month:\n\n```js\naddMonths(new Date(2026, 2, 31), -0.5)  // was Sat Feb 28 2026 (moved a full month back)\naddMonths(new Date(2026, 2, 31), -1.5)  // was Sat Jan 31 2026\n```\n\n`amount` is now truncated toward zero with `Math.trunc` before any calendar arithmetic, matching the v3 rounding policy. `subMonths` delegates to `addMonths`, so it is covered too.\n\n## Changes\n\n- `pkgs/core/src/addMonths/index.ts`: `amount = Math.trunc(amount)` after the NaN guard.\n- `pkgs/core/src/addMonths/test.ts`: regression tests for `-0.5`, `-1.5`, `0.5`, `1.5`, and for different starting months.\n\n## Testing\n\n```\npnpm --filter date-fns exec vitest run src/addMonths/test.ts\n13 passed | 7 skipped\n\npnpm --filter date-fns exec vitest run src/subMonths/test.ts\n11 passed\n```\n\nVerified the new test fails without the fix (`Mar 31 2026 + -0.5` returned `Sat Feb 28 2026`) and passes with it.\n\n---\n\nProduced for an **openjobs.bot** listing:\n- Listing ID: `ac8c7422-59ff-42c6-a250-587c26112586` — https://openjobs.bot/jobs/ac8c7422-59ff-42c6-a250-587c26112586\n- Issue: https://github.com/date-fns/date-fns/issues/4346\n",
+    "isDraft": false,
+    "number": 4366,
+    "title": "Truncate fractional month amounts in addMonths/subMonths (#4346)",
+    "updatedAt": "2026-10-13T11:59:52Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4366"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\n- Add a `Date` class that extends the native JavaScript `Date` class and supports a day-month-year argument order.\n- Support optional hours, minutes, seconds, and milliseconds when constructing a date using numeric arguments.\n- Preserve native date construction behavior for no arguments, date strings, timestamps, and existing `Date` instances.\n- Export the new class from the core package and add its package subpath export and TypeDoc configuration entry.\n\n## Example\n\n```ts\nimport { Date } from \"date-fns\";\n\nconst date = new Date(24, 12, 2025);\n// December 24, 2025\n```\n\n## Tests\n\nAdded tests covering:\n- Day-month-year construction\n- Optional time arguments\n- Construction with no arguments\n- Date strings and timestamps\n- Existing native `Date` instances\n- Compatibility with `globalThis.Date`\n\n## Validation\n\n- TypeScript type check passed.\n- Oxlint passed with no errors.\n- Tests passed: 33 passed, 1 skipped across 5 test files.\n\n## Related Issue\n\nCloses #4128",
+    "isDraft": false,
+    "number": 4365,
+    "title": "feat: add day-month-year Date constructor",
+    "updatedAt": "2026-10-13T05:51:28Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4365"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #3579.\n\nDuring the autumn clock change, `Date.setSeconds(0, 0)` resolves a repeated local minute to its earlier occurrence. In Europe/Vienna, `2023-10-29T01:06:00.000Z` therefore becomes `2023-10-29T00:06:00.000Z`, even though it is already at the start of a minute.\n\n`startOfMinute` now subtracts the date's local seconds and milliseconds from its timestamp. This preserves the occurrence and time-zone offset while retaining date construction, subclass/context support and input immutability. Local seconds are used rather than a timestamp modulo, so historical offsets containing seconds are respected.\n\nAdds regressions for repeated minutes in Europe/Vienna and the half-hour rollback in Australia/Lord_Howe, UTC dates before the Unix epoch, TZDate/context behavior, and historical second-based offsets. The native-Date regression is added to the existing time-zone test script for Europe/Vienna, Australia/Lord_Howe and Europe/Prague.\n\nValidation at `075e8b64cd51d48006cd789cb14a8c82211c8917` on macOS arm64, Node.js 26.8.2:\n\n- From `pkgs/core`: `pnpm exec vitest run --project main src/startOfMinute/test.ts` — 12 passed.\n- `TZ=<zone> node pkgs/core/test/dst/startOfMinute/basic.ts` — passed in all three zones above. The same new regression script with the parent revision's implementation fails in all three, reproducing the one-hour / half-hour rollback.\n- `pnpm exec oxfmt --check` on the three changed TypeScript files — clean.\n- From `pkgs/core`: `pnpm exec oxlint --type-aware src/startOfMinute/index.ts src/startOfMinute/test.ts` — clean.\n- `git diff HEAD^ --check` — clean.\n\nThe full monorepo suite and browser tests were not run in this update.\n\nAI assistance disclosure: an AI coding assistant helped prepare the fix, regressions, validation and this description.\n\n",
+    "isDraft": false,
+    "number": 4364,
+    "title": "Fix startOfMinute during repeated DST minutes",
+    "updatedAt": "2026-10-13T04:01:09Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4364"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4336\n\n## What\n\n`eachHourOfInterval` with a fractional step below 1 (e.g. `0.5`) never advances the date: `date.setHours(date.getHours() + step)` silently discards the fraction, so the loop appends the same date forever and hangs. The Temporal implementation instead throws `RangeError` for fractional steps (including `1.5`).\n\n## Fix\n\nTruncate the step toward zero with `Math.trunc` in both implementations before the sign handling and the zero check:\n\n- `pkgs/core/src/eachHourOfInterval/index.ts` (Date)\n- `pkgs/core/src/tp/eachHourOfInterval/index.ts` (Temporal)\n\nThis gives both implementations the same whole-hour behavior:\n- `step: 0.5` / `step: -0.5` → truncated to zero → `[]`\n- `step: 1.5` → behaves like `step: 1`\n- `step: -1.5` → behaves like `step: -1`\n\n## Tests\n\nAdded regression tests in `pkgs/core/src/eachHourOfInterval/test.ts` for positive, negative, and truncate-to-zero fractional steps. Results:\n\n- `pnpm vitest run eachHourOfInterval --project \"main\"`: 24/24 pass\n- `pnpm lint`: clean\n- `pnpm types`: clean",
+    "isDraft": false,
+    "number": 4363,
+    "title": "fix(eachHourOfInterval): avoid infinite loop on fractional step",
+    "updatedAt": "2026-10-13T02:17:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4363"
+  },
+  {
+    "assignees": [],
+    "body": "`closestTo` expands every candidate into a separate argument to `normalizeDates`. With a sufficiently large array, both the Date and experimental Temporal implementations throw `RangeError: Maximum call stack size exceeded` before searching for the closest date. For example:\n\n```ts\nconst dates = Array.from({ length: 200_000 }, (_, index) => index);\nclosestTo(123_456, dates); // throws; expected new Date(123_456)\n```\n\nExtract the existing normalization body into an internal array-taking helper, keep the variadic helper delegating to it, and pass an array from both `closestTo` implementations. Constructor/context selection and candidate conversion stay in the shared implementation. Add four large-array regressions and a sparse-array guard to the existing suite, which is also reused by the Temporal tests.\n\nValidation:\n- Full production core/main suite on Node 24.15.0 and 26.11.1: 253 files passed, 3,153 tests passed, 19 skipped on each version.\n- Related Date/Temporal and date-construction suites on Node 26.11.1: 56 tests passed.\n- Against a canonical upstream source archive, the same suite has eight large-array failures and 24 passes across both implementations.\n- Full `tsc --build`, repository-wide type-aware `oxlint`, changed-file `oxfmt --check`, and `git diff --check` passed.\n\nNo public signatures, dependencies or lockfiles change. Browser tests, the full experimental suite, the remaining Node matrix versions, package distribution builds and remote CI were not run.\n",
+    "isDraft": false,
+    "number": 4361,
+    "title": "fix(closestTo): handle large date arrays",
+    "updatedAt": "2026-10-10T10:55:10Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4361"
+  },
+  {
+    "assignees": [],
+    "body": "Some month names emitted by `format` fail to parse or resolve to a different month. Align the month matchers in ckb, gd, gu, hy, kk, th and vi with their existing localized names, while retaining the abbreviated forms.\n\nAdds format/parse round-trip regressions and updates the affected locale snapshots.\n\nValidation: 4106 tests passed, 37 skipped with native Linux Node 26; `tsc --build`, `oxlint`, and the ESM/CommonJS builders and declaration generation passed.\r\n",
+    "isDraft": false,
+    "number": 4360,
+    "title": "Fix localized month parsing round trips",
+    "updatedAt": "2026-10-09T16:20:18Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4360"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nAdds Malagasy (`mg`) locale support to date-fns, including localized date formatting, parsing, relative-date formatting, and distance formatting.\n\n## Changes\n\n* Add the Malagasy locale implementation and its required localization and parsing modules.\n* Register `mg` through the generated package exports and locale indexes.\n* Add locale tests and the generated snapshot.\n\n## Verification\n\n* TypeScript type-check: passed.\n* Oxlint: passed with zero warnings and errors.\n* Malagasy locale tests: 13/13 passed.\n* Main Vitest project: 254/254 test files passed.\n* Generated locale snapshot and checked the final diff.\n\n**Test environment note:** The full default test command also encounters `Temporal is not defined` failures in `.tp.ts` tests under the current Node.js 22 environment. The main Vitest project and dedicated Malagasy locale tests passed.\n\nFixes #4229.\n",
+    "isDraft": false,
+    "number": 4359,
+    "title": "feat(locale): add Malagasy (mg) locale.",
+    "updatedAt": "2026-10-09T13:57:53Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4359"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nThis PR fixes stale ContextDate type parameters in the generated docs for startOfToday, startOfTomorrow, startOfYesterday, and endOfISOWeekYear.\n\nThe docs generator was interpreting ContextDate as a real type entry, which created broken links / placeholder docs entries instead of valid type references.\n\n## Changes\n\n- replace stale ContextDate type params with the repo-standard DateType / ResultDate names\n- keep behavior unchanged\n- update the issue template note to document the issue accurately\n\n## Validation\n\n- ran targeted tests for the affected helpers\n- 4 test files passed, 23 tests passed",
+    "isDraft": false,
+    "number": 4358,
+    "title": "Fix stale ContextDate docs type references",
+    "updatedAt": "2026-10-14T08:16:15Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4358"
+  },
+  {
+    "assignees": [],
+    "body": "Resolves #2014. Supersedes and closes #2037, taking over from where @Beigelman left off.\n\n## What\n\nAdds a `yearStartsOn` option (0-indexed month, default `0`) to `startOfYear`, `endOfYear`, `startOfQuarter`, `endOfQuarter`, `isSameQuarter` and `isSameYear`, so fiscal and academic years that don't begin in January work out of the box:\n\n```ts\n// US federal fiscal year (October–September):\nstartOfYear(new Date(2026, 1 /* Feb */, 15), { yearStartsOn: 9 });\n//=> Thu Oct 01 2025 00:00:00\n```\n\n## Why a new PR\n\nThe original #2037 (opened in 2020) carried the approved approach but pre-dates the TypeScript monorepo, so the diff no longer applies. This PR is a fresh implementation on the current codebase that follows @kossnocorp's review of #2037 point by point:\n\n- options are documented per function (each interface carries the `yearStartsOn` JSDoc, matching how `ContextOptions` composes in the current codebase — there is no shared interface in `types.ts` anymore, so the `YearStartOptions` rename concern no longer applies);\n- defaults use `options?.yearStartsOn ?? 0`;\n- the quarter-start computation is explained inline right where it happens (the old `diffToQuarterStartArray` lookup is replaced by the arithmetic above it);\n- the `isSameYear` \"weird condition\" from the review is gone — with `yearStartsOn`, dates before the fiscal start month resolve to the previous calendar year, and the comparison is on that effective year.\n\nIt also fixes the year-boundary bug reported by @zhirzh in #2037: dates falling before the fiscal start month used to resolve to the wrong calendar year. Both `startOfYear` and `endOfYear` (and the quarter variants) now decrement/increment correctly across the wrap.\n\n## Testing\n\n21 new tests across the six functions' suites covering: the fiscal start itself, the year-boundary wrap (a date before the fiscal start month, e.g. February with `yearStartsOn: 3`), quarters that wrap around December (`yearStartsOn: 9`), `isSameQuarter`/`isSameYear` grouping across the calendar-year boundary, and the unchanged default behavior. Full core suite result is identical to `main` (same 78 pre-existing Temporal-environment failures, none new) plus the 21 new passing tests. `oxlint --type-aware` clean.\n\nCo-authored-by: @Beigelman (the original implementation this takes over).\n",
+    "isDraft": false,
+    "number": 4357,
+    "title": "feat: add yearStartsOn option for fiscal and academic years (supersedes #2037)",
+    "updatedAt": "2026-10-09T08:33:00Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4357"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\r\n\r\nFixes #4145.\r\n\r\n`tzOffset` previously assumed that `Intl.DateTimeFormat` with\r\n`timeZoneName: \"longOffset\"` always returned timezone offsets prefixed\r\nwith `GMT`.\r\n\r\nThe reported Firefox 147 behavior can return a `UTC`-prefixed offset,\r\nsuch as `UTC+01:00`. With the previous parsing logic, this caused the\r\noffset to be parsed incorrectly, resulting in `NaN` and eventually an\r\n`Invalid Date` in `TZDate`.\r\n\r\nThis change makes the parser support both `GMT` and `UTC` prefixes.\r\n\r\n## Changes\r\n\r\n- Updated `tzOffset` to parse both `GMT` and `UTC` offset formats.\r\n- Added a regression test covering a `UTC+08:00` offset.\r\n- Kept the change limited to the `@date-fns/tz` package.\r\n\r\n## Verification\r\n\r\n- `pnpm vitest run src/tzOffset/tests.ts` — **17/17 passed**\r\n- `git diff --check` — **passed**\r\n- End-to-end TZDate verification with simulated `UTC` Intl output — **passed**\r\n- Existing `GMT` format — **passed**\r\n- Full TZ package suite: **178/181 passed**; the 3 failures are unrelated\r\n  `toLocale*` Intl formatting differences.\r\n\r\nFirefox 147 was not directly tested because it was not available in the\r\ntest environment. The reported `UTC` Intl behavior was simulated during\r\nverification.",
+    "isDraft": false,
+    "number": 4356,
+    "title": "fix(tz): support UTC offset format",
+    "updatedAt": "2026-10-08T04:53:24Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4356"
+  },
+  {
+    "assignees": [],
+    "body": "The contribution guide currently tells contributors to run `pnpm run lint`, but the root `package.json` does not define a `lint` script. Running the documented command from the repository root fails with `ERR_PNPM_NO_SCRIPT`.\r\n\r\nUpdate the guide to use the existing Oxfmt and Oxlint tools and commands, matching the root `mise.toml` tasks. Include the read-only formatting check and the command for applying formatting fixes, and replace the outdated Prettier/ESLint links.\r\n\r\nValidation on Windows with Node.js 24.19.0 and pnpm 11.25.0:\r\n\r\n- Before: `pnpm run lint` exits 1 with `Missing script: lint`.\r\n- `pnpm exec oxlint` exits 0.\r\n- `pnpm exec oxfmt --check CONTRIBUTING.md` passes.\r\n- `pnpm exec oxfmt --check .` executes Oxfmt and exits 1 because of an existing formatting issue in `pkgs/core/docs/webpack.md`. That file is unchanged in this PR.\r\n- `git diff --check` passes.\r\n\r\nAI assistance (OpenAI Codex) was used to identify the stale command and prepare this documentation change. The commands above were run locally.",
+    "isDraft": false,
+    "number": 4355,
+    "title": "docs: update contributor formatting and lint commands",
+    "updatedAt": "2026-10-08T02:13:15Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4355"
+  },
+  {
+    "assignees": [],
+    "body": "This PR proposes correcting the transition timestamps returned by `tzScan`.\n\nThe hourly scan currently returns the first sample after an offset change. Its samples retain the interval start's minutes: scanning New York from `2024-01-01T00:37:12.345Z` reports the spring transition at `07:37Z` instead of `07:00Z`. Lord Howe's 2024 spring transition is reported at `16:00Z` instead of `15:30Z`, even with a whole-hour start. Both cases reproduce in published `@date-fns/tz` 1.5.0 and the current `main`.\n\n```ts\nconst changes = tzScan(\"America/New_York\", {\n  start: new Date(\"2024-01-01T00:37:12.345Z\"),\n  end: new Date(\"2025-01-01T00:00:00Z\"),\n});\nchanges[0].date.toISOString();\n// Before: \"2024-03-10T07:37:00.000Z\"\n// After:  \"2024-03-10T07:00:00.000Z\"\n```\n\nAfter detecting an hourly bracket with an offset change, the patch narrows it to the first millisecond with the new offset. The seven added tests cover arbitrary start minutes, half-hour DST, permanent offset changes, historical second precision, and unchanged input dates. Six cases fail before the fix.\n\n### Validation\n\nNode.js 24.20.0, macOS arm64, dependencies from the frozen pnpm lockfile:\n\n- `TZ=Asia/Singapore pnpm exec vitest run` in `pkgs/tz`: all 187 tests pass with Vitest 5.0.1.\n- `pnpm exec tsc --noEmit` in `pkgs/tz` passes with TypeScript 7.0.2; Oxfmt and Oxlint pass for both changed files.\n- ESM and CommonJS output pass the public-API regression checks. Native Intl data confirms the exact boundary for 265 transitions across 418 supported time zones in 2024, preserving the prior offset changes and record counts.\n- A local New York 2020–2030 scan benchmark increased from about 0.97 ms to 1.29 ms per scan. The additional lookups occur only after detecting an offset change.\n\n<details>\n<summary>Local build limitations</summary>\n\nThe stock package build did not complete unchanged locally: the Makefile calls `tsgo`, while the locked TypeScript 7 package provides `tsc`, and the builder's formatting step reports no matching files for `dist`. For the output checks above, I used `tsc`, the emitted ESM/CJS output, and the remaining packaging steps; Python JSON processing replaced the unavailable `jaq` metadata steps. No build scripts or dependency files are changed in this PR. The full Node-version/browser matrix was not run locally.\n\n</details>\n\nThe interval-end issue in date-fns/tz#78 is separate; this change is limited to timestamp precision within detected brackets.\n\nI'd appreciate any feedback on the approach, particularly the precision/performance tradeoff, and I'm happy to adjust it. Thanks for taking a look.\n",
+    "isDraft": false,
+    "number": 4353,
+    "title": "Fix tzScan transition timestamp precision",
+    "updatedAt": "2026-10-05T08:49:14Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4353"
+  },
+  {
+    "assignees": [],
+    "body": "`eachDayOfInterval`, `eachMonthOfInterval`, and `eachYearOfInterval` never advance with `step: 0.5` or `-0.5`, so they keep allocating dates without returning. Truncate the step before checking for zero and direction. Sub-unit steps return an empty array; larger fractional steps use whole calendar units. Apply the same normalization to the Temporal implementations and document it.\n\nRelated to #4336 and #4337, which address hour enumeration. This change covers day, month, and year enumeration; it does not duplicate the proposed hour fix or #4288's midnight handling.\n\nVerification:\n\n- A bounded Date-subclass reproduction stopped each original implementation after ten repeated iterations; all three now return `[]` without advancing the date.\n- Before the fix, the new larger-fraction tests had four Temporal failures and eight passes. Afterward, all 152 related Date/Temporal tests pass, including positive/negative fractions, sub-unit steps, existing reversed intervals, and time-zone contexts.\n- Node 26.10.0: `pnpm dlx node@26 ../../node_modules/vitest/vitest.mjs run --project main --testTimeout 15000` from `pkgs/core` — 253 files / 3,160 tests passed, 19 skipped. Related tests also pass in Chromium: `run eachDayOfInterval eachMonthOfInterval eachYearOfInterval --browser --browser.headless` — 152 passed.\n- Node 24.16.0: all 76 related Date tests pass.\n- Changed-file `pnpm exec oxfmt`, type-aware `pnpm exec oxlint --type-aware`, and `git diff --check` pass. No dependency, version, or changelog changes.\n\nAI assistance: Codex authored the patch, tests, and description and ran the listed checks. No human review is claimed.\n\nGitHub Actions on head `89c5d23`: Node.js, Browser, Time zone, Smoke, and Code quality workflows all report `action_required`; they need maintainer approval to execute. These jobs have not run, so the results above are local validation.\n",
+    "isDraft": false,
+    "number": 4352,
+    "title": "Fix fractional calendar interval steps",
+    "updatedAt": "2026-10-05T05:17:29Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4352"
+  },
+  {
+    "assignees": [],
+    "body": "Align the sq locale with CLDR 48 (what Intl.DateTimeFormat(\"sq\") produces): day-first long date formats and the d.M.yy short date, lowercase month and weekday names with the article in wide weekdays, p.d./m.d. day periods, tremujori quarters, p.K./mb.K. eras and the CLDR ordinal categories. Parsing, formatRelative and the snapshot are updated to match.",
+    "isDraft": false,
+    "number": 4351,
+    "title": "Fix date formats and names in the Albanian (sq) locale",
+    "updatedAt": "2026-10-04T23:06:09Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4351"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #1927. Fixes the Arabic part of #2094 (`ar-SA`, `ar-MA`, `ar-DZ`).\n\n`ar-SA`, `ar-MA`, `ar-DZ` and `fa-IR` couldn't `parse` what they `format`:\n\n```js\nconst s = format(new Date(2026, 9, 3), \"d MMMM yyyy\", { locale: arSA }); // \"3 أكتوبر 2026\"\nparse(s, \"d MMMM yyyy\", new Date(), { locale: arSA }); // Invalid Date before, 2026-10-03 now\n```\n\n### Causes, all in `_lib/match`\n\n| Locale | Problem |\n|---|---|\n| `ar-SA`, `ar-MA` | Month `abbreviated`/`wide` match patterns were short prefixes (`أك`), so `أكتوبر` left `توبر` in the input and the next token failed. They now list the names the locale formats, the way `ar` does. |\n| `ar-SA`, `ar-MA`, `ar-DZ` | Abbreviated months and weekdays end in a tatweel (`أكتـ`, `أربـ`, `جانـ`) that wasn't consumed. It's now matched as optional, so input without it still parses. |\n| `ar-SA`, `ar-MA`, `ar-DZ` | Day period patterns were the **English** ones (`a`/`p`/`midnight`), so `ص`/`م` never matched. They now cover the locale's `ص`, `م`, `ن`/`نصف الليل`, `ظ`/`ظهر`, `في الصباح`/`صباحاً`, `بعد الظهر`, `في المساء`/`مساءاً`, `في الليل`/`ليلاً`. Parse patterns are anchored, so `ص` doesn't swallow `صباحاً`. |\n| `ar-MA` | Monday is formatted `اثنين`/`اثنـ` but was matched as `إثنين`; both are accepted now. Narrow months now include `غ` (غشت) and `ش` (شتنبر). |\n| `fa-IR` | Abbreviated `سپتـ` and `اکتـ` were missing from the abbreviated month pattern, and `جول` came before `جولـ`. |\n\n### Snapshots\n\nRegenerated with `mise //pkgs/core:gen/locales/snapshots` (run directly as `TZ=utc node ./scripts/build/localeSnapshots/index.ts`). `Invalid Date` parse results drop:\n\n| Locale | Before | After |\n|---|---|---|\n| ar-SA | 253 | 4 |\n| ar-MA | 254 | 4 |\n| ar-DZ | 199 | 4 |\n| fa-IR | 19 | 7 |\n\nThe 4 left in each Arabic locale are wide quarters (`الربع الأول`), and that's a separate issue shared by every Arabic locale, including `ar`. I'm happy to send that in a follow-up.\n\nRunning the generator also changes `zh-CN`, `zh-HK` and `zh-TW` snapshots on current `main` (months 10–12 now parse). That's an earlier fix whose snapshots weren't regenerated, so I left those files out to keep this PR to the four locales.\n\n### Checks\n\n- `TZ=utc npx vitest run src/parse src/format src/locale`: 1051 passed.\n- I also ran a throwaway round-trip harness across 12 months × 5 hours × ~25 format strings. Every month, weekday and AM/PM case round-trips for these locales. Only `EEE d MMM` without a year differs, and that differs for `enUS` too.\n- `prettier --check` is clean on the touched files.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n",
+    "isDraft": false,
+    "number": 4350,
+    "title": "fix(locale): parse months, weekdays and AM/PM in ar-SA, ar-MA, ar-DZ, fa-IR",
+    "updatedAt": "2026-10-03T23:42:32Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4350"
+  },
+  {
+    "assignees": [],
+    "body": "When `addBusinessDays` receives a `UTCDate` or `TZDate` and a `NaN` amount, it currently returns a plain `Date`, although its generic return type promises the input date extension. Construct the invalid result from the explicit context or input date, matching `addDays`, `addMonths`, and the valid-result path. This also preserves a `TZDate`'s time zone.\n\nAdds public API regressions for UTCDate, TZDate/time zone, input non-mutation, and an overriding `in` context. Two new regressions fail before the source fix. This addresses a different behavior from #4286 (non-number validation); the fixes can coexist, although they touch the same line.\n\nValidation on Windows:\n- Node 26.10.0, matching the repository's Node 26 requirement: both addBusinessDays implementations pass all 36 tests (2 existing DST skips).\n- Full core suite: 3,876 passed, 37 skipped, 79 failed. A clean upstream worktree has exactly the same 79 failures (78 default-locale assertions expecting English on this Japanese Windows host, plus an eachMinuteOfInterval Temporal timeout), with 3,870 passes. The six additional passes are the new regressions run against both implementations.\n- Entire production/main suite excluding the baseline locale file: 3,062 passed, 19 skipped.\n- `pnpm exec tsc --build`, type-aware oxlint for the changed files, oxfmt, and `git diff --check` passed.\n\nPrepared with Codex assistance and independently reviewed with Claude Opus; the reproductions, tests, and final diff were checked locally.\r\n",
+    "isDraft": false,
+    "number": 4349,
+    "title": "fix: preserve date extensions for invalid business-day amounts",
+    "updatedAt": "2026-10-03T10:25:21Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4349"
+  },
+  {
+    "assignees": [],
+    "body": "Hello,\r\n\r\nI based my implementation on the [rules established by Unicode CLDR](https://github.com/unicode-org/cldr/blob/main/common/main/br.xml) which is used for Intl in Firefox for example.\r\n\r\nI tweaked a bit to follow recommendations from [Ofis Publik ar Brezhoneg (OPAB)](https://www.fr.brezhoneg.bzh/178-decisions-et-recommandations-du-conseil-scientifique.htm) (the public office of the breton language):\r\n- 12-hours format using a.m / g.m\r\n- Dates uses \"a viz\" to say \"the month of ...\" which is heavily used. Ex: Meurzh 19 a viz Gwengolo 2023. (Firefox displays it as Meurzh 19 Gwengolo 2023). The Moment.js implementation also follows this principle.\r\n\r\nThe snapshot is regenerated, and `test.ts` covers some tests for the plural forms, ordinals, parsing and the tweaks.\r\n\r\nThere's a known limitation that I encountered while going for the 12-hours format: OPAB counts noon as `12:00 a.m.` and midnight as `12:00 g.m.`. It's the opposite of English, but apparently the formatter decides AM/PM independently from the locale so the result would be wrong.",
+    "isDraft": false,
+    "number": 4348,
+    "title": "Add Breton (br) locale",
+    "updatedAt": "2026-10-03T11:40:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4348"
+  },
+  {
+    "assignees": [],
+    "body": "Negative fractional amounts can subtract an extra month because `Date#setMonth` truncates the absolute month expression rather than the requested increment. For example, March 31 plus `-0.5` months currently returns February 28, and plus `-1.5` months returns January 31.\n\nTruncate the amount toward zero before the zero-increment check and month-end calculation. This preserves the existing no-op behavior around DST rollbacks and also corrects fractional `subMonths` calls. Apply the same normalization to the experimental Temporal implementation and document the rounding on both public helpers.\n\nCloses #4346\n\nValidation:\n\n- Original implementation: the added tests fail in five cases in Asia/Shanghai and six in America/New_York. The experimental Temporal implementation separately fails five fractional cases.\n- From `pkgs/core`, `pnpm vitest run --project main`: 3,155 passed, 20 skipped, on both Node 25.7.0 and 26.10.0.\n- On Node 26.10.0, `TZ=America/New_York pnpm vitest run src/addMonths/test.ts src/subMonths/test.ts src/addMonths/test.tp.ts`: all 61 passed.\n- `pnpm oxlint`, `pnpm tsc --build`, and `pnpm oxfmt --check` for the five changed files pass.\n\nNo changelog or version changes.\n",
+    "isDraft": false,
+    "number": 4347,
+    "title": "fix(addMonths): truncate fractional month amounts",
+    "updatedAt": "2026-10-02T13:03:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4347"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\r\n\r\nAdds the Urdu (`ur`) locale for date-fns with Pakistani Urdu date and time conventions.\r\n\r\n### Included\r\n\r\n* Urdu Gregorian date formatting and parsing\r\n* Urdu month names:\r\n\r\n  * جنوری\r\n  * فروری\r\n  * مارچ\r\n  * اپریل\r\n  * مئی\r\n  * جون\r\n  * جولائی\r\n  * اگست\r\n  * ستمبر\r\n  * اکتوبر\r\n  * نومبر\r\n  * دسمبر\r\n* Full Urdu weekday names:\r\n\r\n  * اتوار\r\n  * پیر\r\n  * منگل\r\n  * بدھ\r\n  * جمعرات\r\n  * جمعہ\r\n  * ہفتہ\r\n* Urdu relative date expressions\r\n* Urdu distance formatting\r\n* Urdu era names for Gregorian dates\r\n* Urdu quarter names\r\n* Urdu day periods:\r\n\r\n  * آدھی رات\r\n  * صبح\r\n  * دوپہر\r\n  * شام\r\n  * رات\r\n* Urdu ordinal number handling without ordinal suffixes\r\n* Locale parsing patterns matching the formatted Urdu values\r\n\r\n### Calendar convention\r\n\r\nThe locale primarily follows the Gregorian (عیسوی/شمسی) calendar, which is the predominant calendar used in Pakistan for general dates and software.\r\n\r\nIslamic/Hijri (قمری) dates are not introduced as Gregorian month replacements because date-fns locale month values represent the Gregorian calendar.\r\n\r\n### Urdu conventions\r\n\r\nThe locale uses full Urdu month and weekday names rather than abbreviated or single-letter forms. Time periods use natural Urdu expressions such as `صبح`, `دوپہر`, `شام`, and `رات` rather than `AM`/`PM`.\r\n\r\n### Locale configuration\r\n\r\n* `weekStartsOn: 0` (Sunday)\r\n* `firstWeekContainsDate: 1`\r\n\r\nNative Urdu review and feedback on wording and Pakistani usage are welcome.\r\n",
+    "isDraft": false,
+    "number": 4345,
+    "title": "feat(locale): add Urdu (ur) locale",
+    "updatedAt": "2026-10-02T16:25:13Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4345"
+  },
+  {
+    "assignees": [],
+    "body": "Negative sub-hour offsets such as `-00:30` were returned as +30 minutes after the hour component was parsed as `-0`. Select the calculation branch from the original sign so Intl and manual parsing preserve negative offsets, including Monrovia's historical seconds.\n\nRegression tests cover the named-zone result and force the manual fallback for negative minute boundaries and compact inputs, with positive, zero and repeated-call controls.\n\nRelated: #4279 and #4314 cover the same sign bug.\n\nValidation: all 189 tz tests, repository type checking and lint pass on Node 24.21.0 and 26.10.0; formatting checks pass for both changed files.\n",
+    "isDraft": false,
+    "number": 4342,
+    "title": "fix(tz): preserve negative sub-hour offset signs",
+    "updatedAt": "2026-10-01T15:53:28Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4342"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes two issues in a comment in the Luxembourgish locale (`pkgs/core/src/locale/lb/_lib/formatDistance/index.ts`):\n\n- `would need to converted` → `would need to be converted`\n- `preceeding` → `preceding`\n\nComment-only change; no code paths touched. No other instances of either misspelling exist in the repo.",
+    "isDraft": false,
+    "number": 4341,
+    "title": "docs(lb): fix comment grammar in formatDistance",
+    "updatedAt": "2026-09-29T03:10:46Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4341"
+  },
+  {
+    "assignees": [],
+    "body": "Expose `timeZone: \"UTC\"` on `UTCDateMini`, inherited by `UTCDate`, with a read-only literal type. The Temporal adapter can then preserve UTC when cloning either class or using the `utc` context, rather than falling back to the host zone and choosing the wrong ISO week-year.\n\nFixes #4338.\n\nValidation on Node 26.10.0 with `TZ=America/Los_Angeles`: three result regressions and two metadata cases fail before the fix. Afterward, all 822 Temporal tests pass with `--testTimeout15000`, and all 36 UTC tests pass (four existing todos). Direct checks also pass in UTC, Berlin and Kathmandu. Package and consumer type checks, type-aware lint and formatting pass.\n",
+    "isDraft": false,
+    "number": 4339,
+    "title": "Preserve UTCDate time zone in Temporal calculations",
+    "updatedAt": "2026-09-27T12:33:01Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4339"
+  },
+  {
+    "assignees": [],
+    "body": "`step: 0.5` leaves the date unchanged in `eachHourOfInterval`, causing an infinite loop. The Temporal version throws for fractional steps. Truncate the step before checking for zero and its sign, and document the whole-hour behavior.\n\nFixes #4336.\n\nValidation on Node 26.10.0: four new Temporal cases fail before the fix; 132 related hour/day/minute tests pass afterward with `--testTimeout15000`. The longer timeout accommodates an existing minute test that iterates from 2024 to `Date.now()`. Both implementations now return an empty array for sub-hour steps. Format and type-aware lint pass.\n",
+    "isDraft": false,
+    "number": 4337,
+    "title": "Fix fractional steps in eachHourOfInterval",
+    "updatedAt": "2026-09-27T12:23:43Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4337"
+  },
+  {
+    "assignees": [],
+    "body": "The `tzOffset` manual fallback currently turns strings such as `prefix+02:30`, `+24:00` and `+12:60` into valid numeric offsets after Intl rejects them. Anchor its existing regex and limit hour/minute components to their valid ranges. Valid ±HH, ±HHMM and ±HH:MM inputs retain their existing path.\n\nRegression coverage includes leading/trailing junk, out-of-range components, an incomplete colon form and a trailing newline. Seven malformed cases were confirmed failing before the fix.\n\nValidation: all 188 @date-fns/tz tests pass; targeted oxfmt/oxlint, `pnpm tsc --build pkgs/tz`, and `git diff --check` pass. An independent read-only Standards/Spec review passed and reran the full tz suite. Browser/Hermes runtime matrices were not run locally.\n\nAuthored with OpenAI Codex assistance. This change is separate from the negative sub-hour sign fixes proposed in other PRs.\n\nFixes #4334.\n",
+    "isDraft": false,
+    "number": 4335,
+    "title": "fix(tz): reject malformed manual UTC offsets",
+    "updatedAt": "2026-09-26T15:43:08Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4335"
+  },
+  {
+    "assignees": [],
+    "body": "`parseJSON(\"0001-01-01T00:00:00Z\")` currently returns a date in 1901. This affects valid JSON date strings with years from 0000 through 0099, because `Date.UTC` adds 1900 to those years. The parser now preserves the year in the input.\r\n\r\nSet the full UTC year, month and day before applying the time and offset. That order also preserves February 29 in year 0000 and handles offsets that cross a year boundary. The supported input formats and date-extension context are unchanged.\r\n\r\nThe new tests reproduce ten failures on the original implementation and cover year 0100 as an unaffected boundary. The four related parsing/construction suites pass in UTC, Los Angeles and Kathmandu. The core Node `main` test project passes with 3,177 tests and one existing browser-only iframe test skipped; formatting and lint checks pass for both changed files.\r\n\r\nTested on Windows with Node 24.13.1. Browser tests, the separate Temporal test project, package builds and the full type check were not run.\r\n",
+    "isDraft": false,
+    "number": 4333,
+    "title": "fix: preserve years below 100 in parseJSON",
+    "updatedAt": "2026-09-26T10:06:57Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4333"
+  },
+  {
+    "assignees": [],
+    "body": "The `differenceInDays` examples only show positive results and zero, leaving the effect of reversing the dates unclear. Add an example that returns `-1` and explain that the result is negative when the first date is at least one full day earlier. The existing explanation of truncation toward zero still covers shorter differences.\n\nChecked all four documented examples against the current source with Node 24 in UTC, Los Angeles, and Kathmandu, along with equal dates, a shorter reversed interval, and daylight-saving boundaries. These focused checks passed; the full test suite was not run for this documentation-only change.\n\nFixes #3947.\n",
+    "isDraft": false,
+    "number": 4332,
+    "title": "docs: show negative results for differenceInDays",
+    "updatedAt": "2026-09-26T01:26:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4332"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nClarify that `formatRFC3339` formats using the time zone used to interpret the date (the system time zone by default). The JSDoc examples show `Z` because they assume UTC; another time zone produces its offset instead.\n\nResolves #3455.\n\n## Verification\n\n- Ran the current TypeScript source with `TZ=UTC` and `TZ=Europe/Berlin`. The same example produced `2019-09-18T19:00:52Z` and `2019-09-18T19:00:52+02:00`, respectively.\n- `oxfmt --check pkgs/core/src/formatRFC3339/index.ts`\n- `git diff --check`\n\nThis is a documentation-only change; the full test suite was not run.\n",
+    "isDraft": false,
+    "number": 4331,
+    "title": "docs: clarify formatRFC3339 example time zone",
+    "updatedAt": "2026-09-25T08:42:44Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4331"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nFixes #4329.\n\nExpand `FirstWeekContainsDate` from `1 | 4` to `1 | 2 | 3 | 4 | 5 | 6 | 7`. The existing runtime calculation already supports these January dates. This changes the public type and its documentation, with no changes to locale defaults or algorithms.\n\nTests cover year-boundary results, direct options, custom locale options, and compile-time rejection of 0 and 8.\n\n## Verification\n\n- `pnpm --dir pkgs/core run types` fails with six errors on the original type and passes with this change.\n- Main core Vitest project: 253 files, 3,168 tests passed, 1 skipped.\n- Core lint and `git diff --check`: passed.\n\nThe separate experimental Temporal project could not run under the local Node runtime because `Temporal` is not defined. The main project and public types were verified independently.\n\n## AI assistance\n\nImplementation and initial tests were produced through OpenCode using `opencode/space-bunny-free` (Space Bunny). Codex reviewed the diff and independently ran the checks above. This draft has not received human code review.\n",
+    "isDraft": true,
+    "number": 4330,
+    "title": "Support all seven firstWeekContainsDate values",
+    "updatedAt": "2026-09-24T09:29:05Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4330"
+  },
+  {
+    "assignees": [],
+    "body": "The i18n contribution guide's table of contents kept the dots from heading text (#localize.ordinalnumber), but heading slugs strip dots, so ten entries did not jump anywhere.\r\n\r\ntimeZones.md linked to #using-tzdate-utcdate, but the \"&\" in \"Using TZDate & UTCDate\" leaves a double hyphen in the slug.\r\n\r\ngettingStarted.md linked to #npm; the section is \"Installation\".",
+    "isDraft": false,
+    "number": 4327,
+    "title": "docs: fix broken in-page anchors",
+    "updatedAt": "2026-09-20T10:21:29Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4327"
+  },
+  {
+    "assignees": [],
+    "body": "Japanese narrow month names fail to parse for January and October–December:\n\n```js\nimport { parse } from \"date-fns\";\nimport { ja } from \"date-fns/locale\";\n\nparse(\"10\", \"MMMMM\", new Date(1986, 3, 4, 10, 32, 0), { locale: ja });\n// Before: Invalid Date\n// After: October 1, 1986\n```\n\nThe narrow matcher consumes the first digit of a two-digit month, and January's parse pattern rejects the bare `1` returned by the matcher. Match two-digit months first and allow January's pattern to end after `1`. Keep the nondigit check from #1807 so October–December cannot be interpreted as January.\n\nAddresses the Japanese narrow-month part of #3136. Other locale and token round-trip failures remain outside this change.\n\nTested:\n\n- `parse` → `Japanese months`: all twelve months with `MMMMM` and `LLLLL`, narrow months followed by a delimiter and date, and compatibility with `MMM`, `MMMM`, `LLL`, and `LLLL`. The parse suite passed 588 tests; 16 added cases failed before the fix.\n- `test/node`: 3,214 passed and 1 skipped in each matrix run; timezone tests passed.\n- Types, lint, formatting, and whitespace checks passed.\n- The regenerated Japanese snapshot matches its generator. The full snapshot check still fails on existing Chinese snapshot mismatches (`zh-CN`, `zh-HK`, `zh-TW`); those unrelated changes are excluded.\n\nAI assistance: this change was developed with an AI coding tool; I reviewed and tested it.\n",
+    "isDraft": false,
+    "number": 4326,
+    "title": "Fix Japanese narrow month parsing",
+    "updatedAt": "2026-09-19T18:33:20Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4326"
+  },
+  {
+    "assignees": [],
+    "body": "The West Frisian parser treats both `maaie` and `mai.` as March because March's pattern matches any month name beginning with `ma`.\n\nNarrow the March pattern and recognize both May spellings. Add regression coverage for formatting and standalone month tokens, including uppercase names, and regenerate the `fy` locale snapshot.\n\nValidation: 3,178 unit tests passed (one skipped), type checking, lint, formatting, and the `fy` snapshot comparison. The full locale snapshot comparison fails on the existing `zh-HK` snapshot on both unchanged main and this branch.\n",
+    "isDraft": false,
+    "number": 4325,
+    "title": "fix(fy): distinguish May from March when parsing month names",
+    "updatedAt": "2026-09-18T22:38:54Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4325"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4271.\n\n### The bug\nIn the `en-US` locale, formatting noon with the narrow token `bbbbb` produces `\"n\"`, but parsing `\"n\"` back silently yields hour `0` (midnight) instead of `12`:\n\n```ts\nconst noon = new Date(2024, 0, 1, 12);\nformat(noon, \"bbbbb\");                       // \"n\"\nparse(\"n\", \"bbbbb\", noon).getHours();        // 0  ← expected 12\n```\n\nThe round-trip succeeds (no `Invalid Date`), so the wrong time passes silently.\n\n### Root cause\n`matchDayPeriodPatterns.narrow` accepts `\"n\"`, but `parseDayPeriodPatterns.any.noon` is `/^no/i`, which cannot match the single character `\"n\"` the narrow pattern consumed. No day-period key matches, the value comes out `undefined`, and the hour defaults to `0`.\n\n### The fix\nWiden the noon parse pattern to `/^n/i`. In `en-US` the only day-period strings that begin with `\"n\"` are `\"noon\"` and the narrow `\"n\"` — `night` always parses from a `\"…night\"` phrase (`\"at night\"` / `\"in the night\"`), never a bare leading `\"n\"` — so the match stays unambiguous.\n\n### Tests\nAdded a `narrow noon` case next to the existing `narrow` (midnight) test in `parse` asserting `parse(\"n\", \"bbbbb\", …)` resolves to noon. Verified it fails on the current source and passes with the fix; the full `parse` suite (541 tests) stays green.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n",
+    "isDraft": false,
+    "number": 4324,
+    "title": "fix: parse en-US narrow noon \"n\" as noon instead of silently dropping it",
+    "updatedAt": "2026-09-17T02:58:28Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4324"
+  },
+  {
+    "assignees": [],
+    "body": "Added union of `Date | number | string` as a value argument  to TZDate constructor overloads to make it closer to native Date constructor and improve developer ergonomics.\r\n\r\nRight now passing an union to the constructor emits a type error even though all union members are valid arguments:\r\n```ts\r\nconst foo = (date: Date | string) => new TZDate(value);\r\n// No overload matches this call.\r\n//  Overload 1 of 10, '(dateStr: string, timeZone?: string | undefined): TZDate', gave the following error.\r\n//    Argument of type 'string | Date' is not assignable to parameter of type 'string'.\r\n//      Type 'Date' is not assignable to type 'string'.\r\n//  Overload 2 of 10, '(date: Date, timeZone?: string | undefined): TZDate', gave the following error.\r\n//    Argument of type 'string | Date' is not assignable to parameter of type 'Date'.\r\n//      Type 'string' is not assignable to type 'Date'.\r\n//  Overload 3 of 10, '(timestamp: number, timeZone?: string | undefined): TZDate', gave the following error.\r\n//    Argument of type 'string | Date' is not assignable to parameter of type 'number'.\r\n//      Type 'string' is not assignable to type 'number'.ts(2769)\r\n```",
+    "isDraft": false,
+    "number": 4323,
+    "title": "fix: TZDate constructor types",
+    "updatedAt": "2026-09-16T06:16:39Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4323"
+  },
+  {
+    "assignees": [],
+    "body": "Comments only — three one-word changes. No signature, behaviour or type change.\n\nTypeDoc matches an `@param` tag to a parameter by name. `format`, `lightFormat` and `isMatch` all declare the token string as `formatStr`, but their TSDoc calls it `format`, so the tag binds to nothing and the parameter renders undocumented.\n\nRenamed the three tags to `formatStr`.\n",
+    "isDraft": false,
+    "number": 4322,
+    "title": "docs: name the format token parameter formatStr so TypeDoc binds it",
+    "updatedAt": "2026-09-15T01:14:32Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4322"
+  },
+  {
+    "assignees": [],
+    "body": "AI disclosure: this change was prepared with AI coding agents, reviewed and revised line by line by me.\n\n## What\n`setSeconds` and the other setters land on the earlier occurrence of a wall time made ambiguous by a DST fall-back, no matter which system time zone the process runs in.\n\n## Why\nWith a system time zone different from the target, the same call returned an instant one hour later than the identical call in the target zone.\n\n## How\nAfter the existing adjustments in `adjustToSystemTZ`: the target offset drops over the previous two hours -> the wall time occurs twice -> when the external timestamp uses the post transition offset and the earlier occurrence is valid, move to it. Probing two hours covers fall-backs of up to two hours; no zone in current time zone data shifts more.\n\n## Root cause\n`syncFromInternal` writes the wall clock through the system time zone. Those steps resolved the ambiguity to the later occurrence. Native `Date`, and `TZDate` running in the target zone, resolve it to the earlier one.\n\n## Testing\n- New `setSeconds` case: fails under `TZ=Europe/London`, passes with the fix.\n- Constructor ambiguous wall fields, `setHours` ambiguous result, and the second hour of a two hour fall-back (Antarctica/Troll) also lock to the earlier occurrence; the constructor and `setHours` paths changed with the fix and are covered by tests.\n- Suite result identical under `TZ=CST`, `TZ=Europe/London`, `TZ=America/New_York`, `TZ=Europe/Paris`: 181 pass, 3 pre-existing `toLocale*` failures from missing ICU data.\n- Not covered: fall-backs larger than two hours would need a wider probe; no zone in current time zone data shifts more. The 3 `toLocale*` failures are environment, not regression.\n\n## Verification of the original issue\nThe issue's two calls return `2025-10-26T02:00:00.000+02:00` and `2025-10-26T03:00:00.000+01:00` in every system time zone, matching the target-zone run.\n\nFixes #4124\n\n",
+    "isDraft": false,
+    "number": 4321,
+    "title": "fix(tz): resolve ambiguous wall times to the earlier occurrence in any system time zone",
+    "updatedAt": "2026-09-14T13:13:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4321"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\n\nThe Vietnamese locale is the only one that parses quarters as Roman numerals, and its patterns anchor only at the end of the matched string:\n\n```ts\nconst parseQuarterPatterns = {\n  any: [/(1|i)$/i, /(2|ii)$/i, /(3|iii)$/i, /(4|iv)$/i] as const,\n};\n```\n\n`buildMatchFn` takes the **first** pattern that matches, and `\"quý II\"` does end with an `I`, so `/(1|i)$/` matches it before `/(2|ii)$/` is ever tried. The same happens for `III`.\n\nRunning the real matcher on every width:\n\n```\ninput      width         parsed  expected\nquý II     wide          1       2   <-- WRONG\nquý III    wide          1       3   <-- WRONG\nqII        abbreviated   1       2   <-- WRONG\nqIII       abbreviated   1       3   <-- WRONG\nII         narrow        1       2   <-- WRONG\nIII        narrow        1       3   <-- WRONG\n```\n\n`quý I`, `quý IV` and all the digit forms (`quý 2`, `q2`, `2`) are correct — `IV` ends in `V`, and a digit cannot satisfy an earlier pattern. So 6 of the 18 quarter spellings resolve to the wrong quarter.\n\nThe effect is a silent wrong answer: `parse` returns a valid date three or six months earlier than the string names, with no throw and no `Invalid Date`. Anything deriving a period from a Vietnamese quarter label reads Q2 and Q3 data as Q1.\n\n## The snapshot already recorded it\n\n`pkgs/core/src/locale/vi/snapshot.md` formats `2019-04-01` as `quý II` and parses it back to **`2019-01-01`**:\n\n```\n| | QQQQ | 2019-04-01T12:13:14.015Z | quý II | 2019-01-01T00:00:00.000Z |\n```\n\nThe sibling rows on the same date — `QQQ` → `Q2`, `QQQQQ` → `2`, `qqqq` → `Quý 2` — all round-trip to `2019-04-01`, which isolates the defect to the Roman-numeral spelling.\n\n## Fix\n\nAnchor each numeral on a character that cannot be part of a Roman numeral, so a longer numeral can no longer satisfy a shorter pattern:\n\n```ts\nany: [\n  /(?:^|[^iv])(1|i)$/i,\n  /(?:^|[^iv])(2|ii)$/i,\n  /(?:^|[^iv])(3|iii)$/i,\n  /(?:^|[^iv])(4|iv)$/i,\n] as const,\n```\n\nThe `(?:^|[^iv])` alternative keeps the abbreviated and narrow widths working, where the numeral is preceded by `q` or by nothing at all.\n\n## Testing\n\n- Ran `vi.match.quarter` over all 18 spellings across the three widths: **18/18 correct** with the change, **6 wrong** without it (the table above).\n- Recomputed every `format`/`parse` cell of the vi snapshot with the same calls `renderFormatParse` makes, before and after: **exactly one cell moves**, the `QQQQ` / `quý II` row, from `2019-01-01T00:00:00.000Z` to `2019-04-01T00:00:00.000Z`. That line is updated here.\n- Not run: `mise //pkgs/core:gen/locales/snapshots` — `pnpm install` cannot complete on this machine because the JSR registry returns 403 for `@jsr/std__fmt`. The snapshot edit above is the computed result rather than generator output, so it is worth re-running before merge; per the diff above it should be a no-op.",
+    "isDraft": false,
+    "number": 4320,
+    "title": "fix(vi): parse Vietnamese quarters II and III as Q2 and Q3",
+    "updatedAt": "2026-09-13T23:37:32Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4320"
+  },
+  {
+    "assignees": [],
+    "body": "`getOverlappingDaysInIntervals` returns `0` or `-0` for positive overlaps within a repeated hour when daylight saving time ends. In `America/New_York`, the interval from `2024-11-03T01:45:00-04:00` to `2024-11-03T01:15:00-05:00` lasts 30 minutes, but comparing it with itself returns `-0`.\n\nPreserve the existing adjustment for daylight saving time and ensure every positive overlap counts as at least one day. Zero-length overlaps continue to return zero. Add a New York DST regression to the existing timezone test script, covering shorter repeated-hour overlaps, reversed interval endpoints, a full 25-hour day, and a partial additional day. Add unit coverage for an empty interval inside a larger interval.\n\nValidation on Node.js v24.16.0 / Windows:\n\n- The new DST regression fails on the original implementation and passes with the fix (9 assertions).\n- Focused unit suite: 22 passing.\n- `pnpm exec oxlint` and `pnpm exec tsgo --build`: passing; formatting checks pass for all changed TypeScript files.\n- Full core suite: 3,089 passing, 78 failing, 1 skipped. The original HEAD has the exact same 78 failing test names, all in `intlFormatDistance`, where this machine's `zh-CN` default locale produces Chinese text for English expectations.\n- Existing timezone commands: the original HEAD passes 11/15 and this branch passes 12/16, including the new regression. Both runs have the same four failures from localized `Date.toString()` timezone names.\n\nInvestigated and implemented with OpenAI Codex assistance. Reproduction, tests, and the comparison against the original HEAD were executed locally.\n",
+    "isDraft": false,
+    "number": 4319,
+    "title": "fix: count positive day overlaps during clock rollbacks",
+    "updatedAt": "2026-09-12T06:12:50Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4319"
+  },
+  {
+    "assignees": [],
+    "body": "pnpm 12 fails during installation because the supply-chain metadata check requests `@jsr/deno__graph` from `registry.npmjs.org`, which returns 404. The lockfile already points JSR tarballs at `npm.jsr.io`, but that does not route this metadata lookup.\n\nAdd an explicit `@jsr` registry mapping so metadata and tarballs use the same registry. The lockfile, integrity hashes and supply-chain checks stay unchanged.\n\nValidated on Linux with Node 24.20.0 and pnpm 12.3.4: the original configuration fails with `ERR_PNPM_META_FETCH_FAIL`; the mapping allows a frozen-lockfile install to finish with all 962 supply-chain entries checked. Lint and the changed file's format check pass, as do the core tests (3,148 passed, 19 skipped) and timezone/UTC tests (218 passed, 4 todo). The docs package also resolves its installed `@deno/doc` alias.\n",
+    "isDraft": false,
+    "number": 4318,
+    "title": "fix: configure JSR registry for pnpm policy checks",
+    "updatedAt": "2026-09-09T09:04:53Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4318"
+  },
+  {
+    "assignees": [],
+    "body": "`formatISO` currently emits `10000-01-02T12:30:45Z` for year 10000, which `parseISO` rejects. Format years outside 0000–9999 with a sign and six digits (`+010000`, `-000001`), including JavaScript’s maximum date. Ordinary years and time-only output keep their existing format.\n\nFixes #3848.\n\nValidation:\n- All 75 tests in `formatISO` and `parseISO` pass under UTC and Asia/Kolkata. Five regression cases fail before the fix.\n- Coverage includes negative/expanded years, ordinary-year boundaries, basic/extended and date/time-only representations, and round-trips at both Date limits.\n- Changed-file oxlint, oxfmt and `git diff --check` pass. Full monorepo and browser tests were not run.\n\nTest tools used the repository’s versions in an isolated runtime after the scoped workspace install hit an unrelated docs dependency resolution error. No dependency files changed.\n\nImplemented with OpenAI Codex assistance.\n",
+    "isDraft": false,
+    "number": 4317,
+    "title": "fix: format expanded ISO years with six digits and a sign",
+    "updatedAt": "2026-09-16T12:18:59Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4317"
+  },
+  {
+    "assignees": [],
+    "body": "Chinese era parsing is inconsistent with the strings produced by format in zh-CN, zh-HK, and zh-TW.\r\n\r\nFor example, parsing \"公元前 2026\" with \"GGGG y\" currently returns CE 2026 (year 2026), instead of BCE 2026 (year -2025). Parsing \"公元 2026\" with \"G y\" or \"GGGGG y\" returns Invalid Date.\r\n\r\nThe narrow and abbreviated matchers only accept 前, although the localizer emits 公元 for CE. The wide matcher accepts 公元前, but the BCE parser only recognizes strings starting with 前, so the CE prefix incorrectly wins.\r\n\r\nThis change accepts the localized CE form at every width and distinguishes the full BCE form from the CE prefix in all three locales. Formatting output stays the same.\r\n\r\nValidation (run from pkgs/core):\r\n- pnpm exec vitest run src/locale src/parse/test.ts src/format/test.ts: 699 tests passed.\r\n- The new regression cases failed 18 tests before the fix and pass after it. They cover all five era tokens, BCE/CE, years 0 and 1, and the unconsumed input suffix.\r\n- Oxfmt, Oxlint, and git diff --check passed for the changed files.\r\n- Ran the locale snapshot generator. It does not cover era tokens; it only produced pre-existing month snapshot updates, which are excluded from this PR.\r\n\r\n",
+    "isDraft": false,
+    "number": 4316,
+    "title": "fix(locale): parse Chinese eras consistently with formatting",
+    "updatedAt": "2026-09-06T07:11:19Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4316"
+  },
+  {
+    "assignees": [],
+    "body": "`differenceInMonths` isn't symmetric when one of the dates is the end of February:\n\n```js\ndifferenceInMonths(new Date(2020, 1, 29), new Date(2020, 2, 31)) // 0, expected -1\ndifferenceInMonths(new Date(2020, 2, 31), new Date(2020, 1, 29)) //  1  (correct)\n```\n\nThe reverse direction is right, so the first call should give `-1`.\n\nThere's a February end-of-month compensation that does `setDate(30)`, which overflows a Feb 28/29 date into early March. That nudge is only needed when we later subtract months (the forward direction). When the February date is the earlier argument the code adds months instead, and the bump just pushes the anchor past the target, so a whole month gets dropped.\n\nI gated that compensation on the forward direction (`sign > 0`). The existing forward cases — including the timezone-context ones — still pass. Added tests for the leap and non-leap reverse cases.",
+    "isDraft": false,
+    "number": 4315,
+    "title": "Fix differenceInMonths losing a month near the end of February",
+    "updatedAt": "2026-09-02T14:53:04Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4315"
+  },
+  {
+    "assignees": [],
+    "body": "I hit this while formatting some historical dates. `tzOffset` returns a positive value for zones that were on a negative offset smaller than an hour.\n\nMonrovia was at UTC-00:44:30 until 1972:\n\n```js\ntzOffset('Africa/Monrovia', new Date('1970-01-01T00:00:00Z'))\n// -> 44.5, should be -44.5\n```\n\nThe offset string from `Intl` is `GMT-00:44:30`. In `calcOffset` the sign comes from `hours * 60 + minutes > 0`, but for `-00` the hours part is `-0`, so the only thing carrying the minus is the string, and it gets dropped — the positive branch wins.\n\nI read the sign from the offset string instead of the magnitude, so `-00:44:30` stays negative. The other offsets (`+05:30`, `-08:00`, `-03:30`, …) are unchanged. Added a test for Monrovia.",
+    "isDraft": false,
+    "number": 4314,
+    "title": "Fix tzOffset returning the wrong sign for sub-hour western offsets",
+    "updatedAt": "2026-09-12T23:43:54Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4314"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\nMalagasy (`mg`) language support is currently unavailable in `date-fns/locale`.\n\n## Root Cause\nMissing locale definition, formatters, and matchers for the Malagasy language (`mg` / `mlg`).\n\n## Fix\n- Added Malagasy (`mg`) locale in `pkgs/core/src/locale/mg/` with localized months, weekdays, day periods, relative formats, and long date/time formats conforming to CLDR standards.\n- Exported `mg` locale from `pkgs/core/src/locale/index.ts`.\n- Added unit test suite in `pkgs/core/src/locale/mg/test.ts` covering date formatting, distance, relative formatting, and parsing.\n\n## Testing\nVerified all tests in `pkgs/core/src/locale/mg/test.ts` with vitest.",
+    "isDraft": false,
+    "number": 4313,
+    "title": "feat(locale): add Malagasy (mg) language support",
+    "updatedAt": "2026-09-01T05:27:15Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4313"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\nFormatting noon with the narrow token `bbbbb` produces `\"n\"`, but parsing `\"n\"` back fails to match any day period in the `en-US` locale parser. The parsed date silently falls through to hour 0 (midnight) instead of 12:00.\n\n## Root Cause\nIn `pkgs/core/src/locale/en-US/_lib/match/index.ts`, `matchDayPeriodPatterns.narrow` matches `\"n\"`, but `parseDayPeriodPatterns.any.noon` only matches `/^no/i`, which fails to match the single-character string `\"n\"`.\n\n## Fix\nUpdate `parseDayPeriodPatterns.any.noon` to `/^(no|n$)/i` to support the narrow `\"n\"` day period token in addition to `\"noon\"`.\n\n## Testing\nAdded a unit test for narrow noon parsing with `bbbbb` token in `pkgs/core/src/parse/test.ts` and verified with vitest.",
+    "isDraft": false,
+    "number": 4312,
+    "title": "fix(en-US): support narrow noon \"n\" in day period parsing",
+    "updatedAt": "2026-09-14T08:06:15Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4312"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4126 \r\n\r\n## What\r\nExtends `fromUnixTime` to accept a `bigint` in addition to `number`, converting it internally before performing date math.\r\n\r\n## Fix\r\n- Widened the `unixTime` parameter type on `fromUnixTime` to `number | bigint`\r\n- Added an internal conversion (`Number(unixTime)`) when a `bigint` is passed, before the existing multiplication logic runs\r\n- Updated the JSDoc comment to document that `bigint` is now accepted\r\n- Added a test case confirming a `bigint` timestamp produces the same result as the equivalent `number` timestamp\r\n\r\n## Testing\r\n- Ran `pnpm vitest run` inside `pkgs/core` — all `fromUnixTime` tests pass (6/6), including the new bigint test\r\n- Ran `pnpm exec oxlint --type-aware --tsconfig pkgs/core/tsconfig.json` — no errors",
+    "isDraft": false,
+    "number": 4310,
+    "title": "feat(fromUnixTime): support bigint input",
+    "updatedAt": "2026-08-28T04:08:48Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4310"
+  },
+  {
+    "assignees": [],
+    "body": "# What\r\n\r\nFollow-up to #4308. While reviewing `parseISO`'s ISO 8601 handling against the spec (https://en.wikipedia.org/wiki/ISO_8601), I found that week-date validation doesn't account for the fact that most ISO week-years have only 52 weeks:\r\n\r\n```diff\r\n-function validateWeekDate(_year: number, week: number, day: number): boolean {\r\n-  return week >= 1 && week <= 53 && day >= 0 && day <= 6;\r\n-}\r\n```\r\n\r\nAn ISO week-year has 53 weeks only when 1 January falls on a Thursday, or on a Wednesday in a leap year — every other year has 52. `validateWeekDate` accepted any week in `[1, 53]` regardless of the year, so:\r\n\r\n```js\r\nparseISO(\"2021-W53-1\")\r\n// 2021 is a 52-week ISO year (1 January 2021 is a Friday) — there is no week 53\r\n// => Sun Jan 02 2022 ...   (silently rolls into the next ISO year instead of Invalid Date)\r\n```\r\n\r\nThis is the same failure class as #4308: the function's own docstring/contract says an invalid component value returns Invalid Date, but this one silently produces a plausible-looking wrong date instead of signaling invalidity.\r\n\r\n# Fix\r\n\r\n`validateWeekDate` now checks the week against the actual week count for that ISO week-year via a new `weeksInISOWeekYear` helper (1 January is Thursday, or Wednesday in a leap year, → 53 weeks; otherwise 52):\r\n\r\n```diff\r\n-function validateWeekDate(_year: number, week: number, day: number): boolean {\r\n-  return week >= 1 && week <= 53 && day >= 0 && day <= 6;\r\n+function validateWeekDate(year: number, week: number, day: number): boolean {\r\n+  return (\r\n+    week >= 1 && week <= weeksInISOWeekYear(year) && day >= 0 && day <= 6\r\n+  );\r\n }\r\n+\r\n+function weeksInISOWeekYear(isoWeekYear: number): number {\r\n+  const januaryFirst = new Date(0);\r\n+  januaryFirst.setUTCFullYear(isoWeekYear, 0, 1);\r\n+  const januaryFirstDay = januaryFirst.getUTCDay();\r\n+\r\n+  if (\r\n+    januaryFirstDay === 4 ||\r\n+    (januaryFirstDay === 3 && isLeapYearIndex(isoWeekYear))\r\n+  ) {\r\n+    return 53;\r\n+  }\r\n+\r\n+  return 52;\r\n+}\r\n```\r\n\r\n# Testing\r\n\r\nAdded two tests to `parseISO/test.ts`'s existing week-validation `describe` block:\r\n- `parseISO(\"2021-W53-1\")` → Invalid Date (2021 has only 52 ISO weeks)\r\n- `parseISO(\"2020-W53-1\")` → correctly parses (2020 genuinely has 53 ISO weeks), asserting it resolves to `Dec 28 2020`\r\n\r\n60/60 in the file passing (58 unaffected). Full `pkgs/core` suite: 3214 passing, 1 skipped, no regressions.\r\n\r\n`oxfmt` formatting applied and clean.\r\n",
+    "isDraft": false,
+    "number": 4309,
+    "title": "Fix parseISO to reject ISO week numbers that don't exist for the year",
+    "updatedAt": "2026-09-01T10:26:06Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4309"
+  },
+  {
+    "assignees": [],
+    "body": "## What\n\nSame bug as #4127 (fixed for `parseISO`), in the sibling function. `parseJSON`'s docstring says:\n\n> Any other input type or invalid date strings will return an `Invalid Date`.\n\nbut the implementation calls `dateStr.match(...)` unconditionally, so:\n\n```js\nparseJSON(null)\n// TypeError: Cannot read properties of null (reading 'match')\n```\n\nthrows instead of returning `Invalid Date`, despite the documented contract. Same common real-world cause as the `parseISO` case: values coming from an untyped API response are frequently `null`/`undefined` at runtime even where a type elsewhere claims `string`.\n\n## Fix\n\nSame one-line guard pattern as #4127:\n\n```diff\n  ): ResultDate {\n+   if (typeof dateStr !== \"string\") return toDate(NaN, options?.in);\n+\n    const parts = dateStr.match(\n```\n\n## Scope note\n\nThe docstring also says Date instances and numbers are supported \"for convenience... via [toDate]\" (cloned / treated as a timestamp, respectively). That part of the contract isn't actually implemented -- the same unconditional `.match()` call throws for a `Date` or `number` argument too, both before and after this change -- and there's no existing test coverage for it either. I left that out of this PR since it's a separate, larger behavior gap (would need new delegation logic plus new tests for previously-untested functionality) rather than a straightforward crash fix. Happy to take a pass at implementing it properly as a follow-up if that's wanted.\n\n## Testing\n\n- Added two tests to the existing `describe(\"parseJSON\", ...)` block: `null` and `undefined`, both asserting `Invalid Date` instead of a thrown error.\n- Verified as a negative control: both fail on unfixed source with the exact reported `TypeError` shape, and pass with the fix (23/23 in the file, 21 unaffected).\n- Ran the full `pkgs/core` suite: 3150 passing, 28 skipped, no regressions -- same 37 pre-existing, unrelated `*.test.tp.ts` (`Temporal is not defined`) failures as the baseline.\n- `oxfmt` formatting applied and clean.\n\n## Notes for reviewers\n\nSame local tooling caveat as my other recent PRs here (#4303, #4304): `pnpm lint` / `tsc --build` fail with environment errors that reproduce identically on a clean checkout with no changes (Windows-specific `@typescript/native-preview` binary gap). Happy to have CI be the first real run of those.\n",
+    "isDraft": false,
+    "number": 4305,
+    "title": "Fix parseJSON throwing instead of returning Invalid Date for non-string arguments",
+    "updatedAt": "2026-09-06T06:09:13Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4305"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4127.\n\n## What\n\n`parseISO`'s own docstring says:\n\n> If the argument isn't a string, the function cannot parse the string or the values are invalid, it returns Invalid Date.\n\nThe implementation never checked this. It calls `splitDateString(argument)` unconditionally, which does `dateString.split(patterns.dateTimeDelimiter)` -- so a non-string argument throws instead of returning `Invalid Date`:\n\n```js\nparseISO(null)\n// TypeError: Cannot read properties of null (reading 'split')\n```\n\nThis is a common real-world case despite the TS signature declaring `argument: string` -- values coming from an untyped API response, a form field, etc. are frequently `null`/`undefined` at runtime even when a type elsewhere claims `string`.\n\n## Fix\n\nOne-line guard at the top of the function, matching the documented contract exactly:\n\n```diff\n  const invalidDate = () => constructFrom(options?.in, NaN);\n\n+ if (typeof argument !== \"string\") return invalidDate();\n+\n  const additionalDigits = options?.additionalDigits ?? 2;\n```\n\n## Testing\n\n- Added three tests to the existing `describe(\"invalid argument\", ...)` block in `parseISO/test.ts`: `null`, `undefined`, and a `number`, all asserting `Invalid Date` rather than a thrown error.\n- Verified as a negative control: all three fail on unfixed source with the exact reported `TypeError`, and pass with the fix (61/61 in the file total, 58 unaffected).\n- Ran the full `pkgs/core` suite: 3151 passing, 28 skipped, no regressions. The 37 pre-existing failures are all in the unrelated `*.test.tp.ts` project (`Temporal is not defined`) -- same count with or without this change.\n- `oxfmt` formatting applied and clean.\n\n## Scope note\n\n`parseJSON` has an analogous docstring promise (\"Any other input type or invalid date strings will return an `Invalid Date`\") and the same unguarded `dateStr.match(...)` shape, so it likely has the identical bug for `null`/`undefined`. Didn't fix it here since it's a separate function with its own tests and isn't what #4127 reports, but flagging in case a maintainer wants it as a quick follow-up.\n\n## Notes for reviewers\n\n`oxlint --type-aware` (`pnpm lint`) and `tsc --build` both fail in my local environment with tooling errors that reproduce identically on a clean checkout with no changes (a Windows-specific `@typescript/native-preview` binary install gap, unrelated to this diff) -- same caveat as my other recent PR here (#4303). Happy to have CI run those first.\n",
+    "isDraft": false,
+    "number": 4304,
+    "title": "Fix parseISO throwing instead of returning Invalid Date for non-string arguments",
+    "updatedAt": "2026-09-06T06:09:03Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4304"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4114.\n\n## What\n\nThe lowercase `x`/`xx`/`xxx`/`xxxx`/`xxxxx` timezone tokens are documented to follow ISO-8601 without the `Z` UTC designator -- that's the whole distinction from the uppercase `X` family, whose own docstring in `ISOTimezoneWithZParser` reads \"+00:00 is `'Z'`\". But both parsers read from the same shared `timezonePatterns` regex constants in `constants.ts`, and every one of those regexes has `|Z` appended as a fallback alternative (e.g. `/^([+-])(\\d{2})(\\d{2})?|Z/`). The lowercase parser had no way to opt out of that shared alternative, so:\n\n```js\nparse(\"2016-11-25T16:38:38.123Z\", \"yyyy-MM-dd'T'HH:mm:ss.SSSx\", new Date())\n```\n\nincorrectly returns a valid date instead of `Invalid Date`.\n\n## Fix\n\nSplit the shared constant into two: `timezonePatternsWithZ` (used by `ISOTimezoneWithZParser`/the `X` family, identical regexes, unchanged behavior) and `timezonePatternsWithoutZ` (used by `ISOTimezoneParser`/the `x` family, with the `|Z` alternative removed from each regex). Each parser now only accepts what its own token is documented to support.\n\n## Testing\n\n- Added one `Invalid Date`-for-`'Z'` test to each of the `x`, `xx`, and `xxx` describe blocks in `parse/test.ts` (matching the file's existing style and assertion pattern for other `Invalid Date` cases).\n- Verified as a negative control: all three new tests fail on unfixed source (543 total in the file, 3 failing exactly as expected, 540 unaffected), and pass with the fix.\n- The uppercase `X`/`XX`/`XXXX`/`XXXXX` describe blocks already have existing literal-`'Z'` test cases asserting successful parsing -- those are untouched by this PR and continue to pass, confirming the `X` family's `Z` support is unaffected by the split.\n- Ran the full `pkgs/core` vitest suite: 3151 passing (28 skipped), no regressions. The 37 pre-existing failures are all in a separate `*.test.tp.ts` project (`ReferenceError: Temporal is not defined`) unrelated to timezone parsing -- confirmed identical on a clean, unmodified checkout of this branch's base commit.\n- `oxfmt` formatting applied and clean.\n\n## Notes for reviewers\n\n`oxlint --type-aware` (via `pnpm lint`) and `tsc --build` both fail in my environment with tooling errors (\"no files specified in config\" / `tsc: command not found`) that reproduce identically on a completely clean checkout with no changes -- this looks like a local Windows setup gap on my end (`@typescript/native-preview`'s binary didn't install), not something introduced by this change. Happy to have CI be the first real run of those two checks.\n",
+    "isDraft": false,
+    "number": 4303,
+    "title": "Fix x/xx/xxx/xxxx/xxxxx timezone tokens incorrectly accepting 'Z'",
+    "updatedAt": "2026-09-06T06:08:16Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4303"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #3895.\n\n- Add the required comma to German short and medium date-time combinations.\n- Keep the long and full `um` forms unchanged.\n- Refresh the `de` and `de-AT` locale snapshots; `de-AT` reuses the German `formatLong` implementation.\n\nValidation:\n- Locale snapshot generation and verification\n- Focused `Pp` / `PPp` / `PPPp` / `PPPPp` assertions for `de` and `de-AT`\n- Long-format Vitest suite (13 passed)\n- Root and type-aware core lint; formatting and diff checks\n",
+    "isDraft": false,
+    "number": 4302,
+    "title": "Fix German short date-time formats",
+    "updatedAt": "2026-08-24T14:19:25Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4302"
+  },
+  {
+    "assignees": [],
+    "body": "Adds the Punjabi (`pa`) locale, which was requested in #2922 and is still missing.\n\nBuilt it off the `hi`/`bn` structure and pulled the strings from CLDR `pa` (the chart linked in the issue). Months, weekdays, eras, quarters and day periods come straight from CLDR. One thing worth calling out: CLDR's default numbering system for `pa` is `latn`, so I kept Western digits rather than transliterating to Gurmukhi digits. That's what the data specifies and what most Punjabi date output actually uses. Week options follow CLDR for India (Sunday start, `firstWeekContainsDate: 1`).\n\n`formatDistance` unit nouns and the \"in\"/\"ago\" suffixes (`ਵਿੱਚ` / `ਪਹਿਲਾਂ`) come from the CLDR relative-time patterns. A few wrapper phrasings aren't given directly by CLDR: `ਲਗਭਗ` (about), `ਤੋਂ ਘੱਟ` (less than), `ਤੋਂ ਵੱਧ` (over), plus the `formatRelative` last/next-week framing (`ਪਿਛਲੇ` / `ਅਗਲੇ`). Those follow standard Punjabi usage. CLDR also has no `noon` day period for `pa`, so I used `ਦੁਪਹਿਰ` there. A native-speaker review on those judgement calls would be welcome.\n\nGenerated the snapshot with the locale snapshot task, and the completeness/consistency check passes:\n\n```\nnode scripts/build/localeSnapshots/index.ts --test   # exit 0\n```\n\nRan the formatter over the new files as well.\n",
+    "isDraft": false,
+    "number": 4300,
+    "title": "Add Punjabi (pa) locale",
+    "updatedAt": "2026-08-18T04:37:03Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4300"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\n\nIssue #2368 points out that the docs do not explain when to use `parseJSON` versus `parseISO`; both parse ISO-like strings, so users cannot tell them apart from the doc comments alone.\n\n## Solution\n\nAdd short cross-referencing sentences to both doc comments:\n\n- `parseJSON`: states it does not accept partial ISO 8601 values (date-only, week dates, ordinal dates) and points to `parseISO` for incomplete input.\n- `parseISO`: states it also accepts partial ISO 8601 values and points to `parseJSON` for complete JSON datetime strings.\n\nBoth use `{@link ...}` so TypeDoc keeps them connected.\n\nFixes #2368\n\n## Verification\n\n- Comment-only change; no runtime code touched.\n- The behavior claims match the existing test suites: `pkgs/core/src/parseJSON/test.ts` only feeds complete datetimes, while `parseISO/test.ts` covers date-only, week, and ordinal formats.\n",
+    "isDraft": false,
+    "number": 4299,
+    "title": "docs: clarify the difference between parseJSON and parseISO",
+    "updatedAt": "2026-08-17T09:37:12Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4299"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\n\nIn `pkgs/core/docs/timeZones.md`, the `UTCDate` link in the \"Using `TZDate` & `UTCDate`\" section points at the `@date-fns/tz` repository instead of the `@date-fns/utc` repository:\n\n```md\nOne way is to use [`TZDate`](https://github.com/date-fns/tz) or [`UTCDate`](https://github.com/date-fns/tz) ...\n```\n\nThe file's own \"Further reading\" section already maps `@date-fns/utc` to `https://github.com/date-fns/utc`, so line 20 contradicts it.\n\n## Solution\n\nPoint the `UTCDate` link at `https://github.com/date-fns/utc` (and add the missing space before \"with\" in the same sentence).\n\n## Verification\n\n- `curl -L -o /dev/null -w \"%{http_code}\"` returns 200 for both `https://github.com/date-fns/utc` and `https://github.com/date-fns/tz`\n- `grep -rn \"date-fns/utc\" pkgs/core/docs/timeZones.md` shows the footer reference this change now agrees with\n",
+    "isDraft": false,
+    "number": 4298,
+    "title": "docs: link UTCDate to the utc package",
+    "updatedAt": "2026-08-17T09:37:05Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4298"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #3917\n\n## Problem\n\nThe `@example` for `formatISODuration` passes `hours: 7` and `minutes: 5`, but documents the result as `'P39Y2M20DT0H0M0S'` — both values dropped to zero:\n\n```ts\nconst result = formatISODuration({\n  years: 39, months: 2, days: 20,\n  hours: 7, minutes: 5, seconds: 0\n})\n//=> 'P39Y2M20DT0H0M0S'   // actually 'P39Y2M20DT7H5M0S'\n```\n\nThis renders on the docs site, so it reads as though the function discards the time components.\n\nThe function is fine — only the comment was wrong. Worth noting the very first case in `formatISODuration/test.ts` has always asserted `\"P39Y2M20DT7H5M0S\"` for the same duration, so the example was contradicting the repo's own suite.\n\n## Changes\n\n- Correct the documented output to `'P39Y2M20DT7H5M0S'`.\n- Add a test using the object literal from the example, so the documented call is pinned rather than only the `intervalToDuration`-derived equivalent.\n\n## Notes on the sibling reports\n\nWhile here I checked the other open \"Problem in X documentation\" issues, in case they were the same class:\n\n- **#4017** (`differenceInCalendarISOWeeks`) — not a defect. The example reads \"6 July 2014 and 21 July 2014\" against `new Date(2014, 6, 21)`, and month index 6 *is* July, so the prose already matches. The suggested change to June would make it wrong.\n- **#3947** (`differenceInDays`) and **#3961** (`setDate`) are requests to extend or reword the docs rather than incorrect output, so I left them alone.\n\n`pkgs/core/src/formatISODuration` passes 11/11.\n",
+    "isDraft": false,
+    "number": 4297,
+    "title": "fix: correct the formatISODuration example output",
+    "updatedAt": "2026-08-16T06:58:16Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4297"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4004\n\n## Problem\n\nRFC 3339 defines `date-fullyear = 4DIGIT`, and RFC 7231 defines the HTTP-date year as `4DIGIT`. Both formatters read the year without padding it, so any year below 1000 comes out at its natural width and the result is not a valid date string for either standard:\n\n| year | `formatRFC3339` | `formatRFC7231` |\n| --- | --- | --- |\n| 999 | `999-01-01T12:00:00Z` | `Tue, 01 Jan 999 12:00:00 GMT` |\n| 99 | `99-01-01T12:00:00Z` | `Thu, 01 Jan 99 12:00:00 GMT` |\n| 1 | `1-01-01T12:00:00Z` | `Mon, 01 Jan 1 12:00:00 GMT` |\n\nEvery other field in both functions already goes through `addLeadingZeros`, and `formatISO` already does `addLeadingZeros(date_.getFullYear(), 4)` — the year is the only field that was left unpadded, in these two functions only.\n\n## Changes\n\nOne line in each:\n\n```ts\n- const year = date_.getFullYear();\n+ const year = addLeadingZeros(date_.getFullYear(), 4);\n```\n\n`addLeadingZeros` was already imported in both files.\n\n**On scope:** the issue is filed against `formatRFC3339`. `formatRFC7231` had the identical defect two lines apart, and RFC 7231 §7.1.1.1 mandates the same 4-digit year, so fixing one and leaving the other seemed worse than covering both. Happy to split into two PRs if you'd rather keep them separate.\n\n## Tests\n\nA case in each function's `test.ts`, covering years 999, 99 and 1. Both fail on `main`:\n\n```\nAssertionError: expected '999-01-01T12:00:00Z' to be '0999-01-01T12:00:00Z'\nAssertionError: expected 'Tue, 01 Jan 999 12:00:00 GMT' to be 'Tue, 01 Jan 0999 12:00:00 GMT'\n```\n\nThe `formatRFC3339` case stubs `getTimezoneOffset` to 0 the way the existing tests in that file do, so it does not depend on the machine's zone.\n\nFull `pkgs/core` suite: 3150 passed / 37 failed. The 37 are all in the `temporarily` project (`test.tp.ts`) and fail identically on a clean `main` checkout — 3148 passed / the same 37 — so they are unrelated to this change.\n",
+    "isDraft": false,
+    "number": 4296,
+    "title": "fix: pad years below 1000 in formatRFC3339 and formatRFC7231",
+    "updatedAt": "2026-08-16T06:48:56Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4296"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #4150.\n\n### Problem\n\nThe reported symptom is `intervalToDuration` returning negative components for an interval whose end is after its start:\n\n```js\nintervalToDuration({\n  start: parseISO(\"2026-01-28 22:45:00+00\"),\n  end: parseISO(\"2026-02-28 16:23:00+00\"),\n});\n//=> { months: 1, hours: -6, minutes: -22 }  ❌\n```\n\n`intervalToDuration` peels off each unit with `differenceInX`, then subtracts it with `add` before measuring the next one. If a step reports more than has actually elapsed, `add` moves past the end date and every later unit comes out negative. So the negatives are a symptom; the over-count is in `differenceInMonths`.\n\nTwo things caused it, and they're independent:\n\n**1. The last-day-of-month branch was too broad.**\n\n```js\nif (isLastDayOfMonth(laterDate_) && difference === 1 && compareAsc(laterDate_, earlierDate_) === 1) {\n  isLastMonthNotFull = false;\n}\n```\n\nThis exists so that Jan 31 → Feb 28 counts as a full month, which is right — February has no 31st, so the clamped anniversary is the best available. But it fired for *any* landing on a month end, including Jan 28 23:45 → Feb 28 17:23, where Feb 28 23:45 is a real anniversary that hasn't been reached yet.\n\n**2. The February adjustment above it.**\n\n```js\nif (workingLaterDate.getMonth() === 1 && workingLaterDate.getDate() > 27)\n  workingLaterDate.setDate(30);\n```\n\n`setDate(30)` on a February date rolls over into March, and the following `setMonth(getMonth() - sign * difference)` then reads the rolled-over month. Jan 29 → Feb 28 2024 counted as a full month even though 2024 is a leap year, Feb 28 is *not* the last day, and Feb 29 is a genuine anniversary that hasn't arrived. That case can't be explained by the branch above.\n\n### Fix\n\nStep the earlier date forward by the calendar-month difference and check whether it overshoots:\n\n```js\nconst anniversary = addMonths(earlierDate_, sign * difference);\nconst overshot = sign > 0 ? +anniversary > +laterDate_ : +anniversary < +laterDate_;\nconst result = sign * (difference - +overshot);\n```\n\n`addMonths` already clamps to the end of a shorter month, so Jan 31 → Feb 28 keeps counting as a full month without needing a special case, and both hacks come out. More importantly it makes the result consistent with `add` **by construction**, which is the invariant `intervalToDuration` actually depends on — it subtracts the months with `add`, so anything `differenceInMonths` reports must be reachable by `add`.\n\n`addMonths` only pulls in `constructFrom` and `toDate`, so this doesn't add meaningful weight.\n\n### Verification\n\nI wrote a brute-force oracle — the largest `n` where `add(earlier, { months: n }) <= later`, using date-fns' own `add` so month-end clamping matches — and compared it against `differenceInMonths` across every day of Jan/Feb/Mar in 2021 (non-leap) and 2024 (leap), at several times of day, for one- and two-month gaps:\n\n- **before:** 120 mismatches out of 175,168 comparisons\n- **after:** 0\n\nThen the same brute force over `intervalToDuration` itself, 201,025 intervals spanning both years and gaps from 1 to 365 days:\n\n- **before:** 435 intervals with a negative component\n- **after:** 0\n\nThe reported case now gives `{ days: 30, hours: 17, minutes: 38 }`.\n\nAll 21 existing `differenceInMonths` tests pass unchanged, including the three month-end cases (Feb 28 vs Jan 30, Feb 28 vs Jan 31, Nov 30 vs Oct 31) — those pin exactly the behaviour the clamping preserves.\n\nFull `pkgs/core` suite: 3092 passed. The 124 failures are pre-existing on the base commit, all `ReferenceError: Temporal is not defined` in `*.tp.ts` under Node 24, and identical before and after; the delta is the 4 added tests. Regenerating the locale snapshots produces no change from this fix, so `formatDistance` output is unaffected.\n\n### Behaviour change worth calling out\n\nWhere the later date is a month end *and* the earlier day-of-month cannot exist in that month, the result is now decided by the clamped anniversary rather than the day alone. Jan 31 00:00 → Feb 28 00:00 is still 1 month. Jan 31 23:45 → Feb 28 00:00 is now 0 rather than 1, because the clamped anniversary is Feb 28 23:45. That follows from `add` and is what keeps `intervalToDuration` non-negative, but it is a change in a documented edge case, so flagging it rather than burying it. Existing tests only pinned midnight, where old and new agree.\n\n### Tests\n\n- `differenceInMonths`: an unfinished month landing on a month end, the leap-year Jan 29 → Feb 28 case, and a guard that the month *is* counted once the time of day is reached.\n- `intervalToDuration`: the reported interval, asserting the full duration rather than just the absence of negatives.\n\nWithout the fix, three of the four fail; the \"counts the month once the time of day is reached\" guard passes both ways.\n",
+    "isDraft": false,
+    "number": 4294,
+    "title": "Fix `differenceInMonths` counting an unfinished month (#4150)",
+    "updatedAt": "2026-10-08T15:16:26Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4294"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #2027\n\nAdds `allClosestIndicesTo(dateToCompare, dates)` — returns the indices of every date tied for the closest distance to `dateToCompare`, complementing `closestIndexTo`, which returns only a single index.\n\nThis is the non-breaking new function @kossnocorp asked for in #2027 for the equal-dates case (and uses the name he proposed there):\n\n```ts\nallClosestIndicesTo(new Date(2015, 8, 6), [\n  new Date(2015, 8, 5),\n  new Date(2015, 8, 7),\n  new Date(2015, 8, 10),\n]);\n//=> [0, 1]\n```\n\nIt mirrors `closestIndexTo`'s signature, `DateArg` handling, and invalid-input rules (empty array on empty/invalid input). Tests, TSDoc, and the FP variant are included; the generated index/exports were regenerated.\n",
+    "isDraft": false,
+    "number": 4293,
+    "title": "feat: add allClosestIndicesTo",
+    "updatedAt": "2026-08-14T13:10:31Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4293"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\n\n`constructFrom` builds a date with `new (date.constructor)(value)`. For a subclass whose first constructor parameter is not the date value (the `RangeDate` example in #4160), that value is treated as the extra argument and `super()` runs as `Date()` — i.e. now — so functions that go through `toDate`/`constructFrom` return the wrong instant.\n\nCustom types that need extra constructor state already have `[Symbol.for(\"constructDateFrom\")]`. This only stops the silent wrong-date path.\n\n## Solution\n\n- Keep the `Date` constructor fast path.\n- For other `Date` subclasses, use `new Ctor(value)` only when the result is a `Date` whose time matches `new Date(value)`.\n- Otherwise fall back to `new Date(value)`.\n\nDate-compatible subclasses (`class CustomDate extends Date {}`, `UTCDate`) are unchanged. Types with extra constructor args should still implement `constructFromSymbol` if they need those properties copied.\n\nFixes #4160",
+    "isDraft": false,
+    "number": 4289,
+    "title": "Fix constructFrom for Date subclasses with extra constructor args",
+    "updatedAt": "2026-08-14T10:05:34Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4289"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\n\n`eachMonthOfInterval` and `eachYearOfInterval` do not return starts of months/years when the interval's start date falls on a day whose local midnight does not exist.\n\nSeveral zones move the clock forward *at* 00:00 rather than at 02:00 or 03:00 — America/Havana, America/Santiago, Asia/Beirut, Asia/Damascus, America/Asuncion, and America/Sao_Paulo historically. On those days there is no 00:00, and both functions return every element an hour late.\n\n```js\n// TZ=America/Havana, date-fns 4.4.0\n// 8 March 2026 is the day Cuba moves 00:00 -> 01:00\nconst d = new Date(2026, 2, 8, 12, 0, 0);\n\nstartOfMonth(d);\n//=> Sun Mar 01 2026 00:00:00 GMT-0500   ✅\n\neachMonthOfInterval({ start: d, end: new Date(2026, 5, 1) });\n//=> Sun Mar 01 2026 01:00:00 GMT-0500   ❌\n//   Wed Apr 01 2026 01:00:00 GMT-0400   ❌\n//   Fri May 01 2026 01:00:00 GMT-0400   ❌\n\nstartOfYear(d);\n//=> Thu Jan 01 2026 00:00:00 GMT-0500   ✅\n\neachYearOfInterval({ start: d, end: new Date(2028, 5, 1) });\n//=> Thu Jan 01 2026 01:00:00 GMT-0500   ❌\n//   Fri Jan 01 2027 01:00:00 GMT-0500   ❌\n//   Sat Jan 01 2028 01:00:00 GMT-0500   ❌\n```\n\nNote that 1 March and 1 January have a perfectly ordinary midnight — the bad value comes from the *start* date and is then carried forward through the whole array. The results contradict the functions' own TSDoc (\"The array with starts of months\", examples showing `00:00:00`) and disagree with `startOfMonth` / `startOfYear` for the same input.\n\nThe same thing reproduces with `TZDate` from `@date-fns/tz`, independently of the process time zone, which is what the added tests use.\n\n**This is not #3097 / #3031 / #2960.** Those report local midnight rendered as UTC (`2022-03-31T23:00:00.000Z` *is* 1 April 00:00 BST), which is correct behaviour. Here the values are an hour late *in the local zone itself* and disagree with `startOfMonth` / `startOfYear` on the same input. This PR does not fix those issues.\n\n## Root cause\n\nBoth functions truncate the time-of-day **before** moving the cursor to the first day of the month/year:\n\n```ts\n// eachMonthOfInterval/index.ts\ndate.setHours(0, 0, 0, 0);\ndate.setDate(1);\n\n// eachYearOfInterval/index.ts\ndate.setHours(0, 0, 0, 0);\ndate.setMonth(0, 1);\n```\n\nOn a day with no local midnight, `setHours(0, 0, 0, 0)` cannot land on 00:00 and the engine normalises it forward to 01:00. `setDate(1)` / `setMonth(0, 1)` then preserve that 01:00 local time-of-day, so the cursor for the 1st is an hour late.\n\n`startOfMonth` and `startOfYear` do the two operations in the opposite order and are therefore correct:\n\n```ts\n// startOfMonth/index.ts\n_date.setDate(1);\n_date.setHours(0, 0, 0, 0);\n\n// startOfYear/index.ts\ndate_.setFullYear(date_.getFullYear(), 0, 1);\ndate_.setHours(0, 0, 0, 0);\n```\n\nThere is a second, related gap: neither loop re-truncates after stepping, so a single unrepresentable midnight persists into every later element. `eachDayOfInterval` already guards against this by re-applying `setHours(0, 0, 0, 0)` after each step.\n\n## Fix\n\nTruncate **after** repositioning, in the same order as `startOfMonth` / `startOfYear`, and re-truncate after each step, matching `eachDayOfInterval`.\n\n```diff\n   const date = reversed ? end : start;\n-  date.setHours(0, 0, 0, 0);\n   date.setDate(1);\n+  date.setHours(0, 0, 0, 0);\n@@\n   while (+date <= endTime) {\n     dates.push(constructFrom(start, date));\n     date.setMonth(date.getMonth() + step);\n+    date.setHours(0, 0, 0, 0);\n   }\n```\n\n(and the analogous change with `setMonth(0, 1)` / `setFullYear` in `eachYearOfInterval`).\n\nReordering alone is not sufficient — the in-loop truncation fixes a distinct case. Example: `TZ=Asia/Damascus`, `eachMonthOfInterval` over an interval starting 15 January 1991. 1 April 1991 is itself a day with no local midnight in Damascus, so the cursor becomes 01:00 there (correctly — `startOfMonth` returns 01:00 for that month too), and without the in-loop `setHours` that 01:00 is then carried into every following element:\n\n```\nreorder only:   Apr 01 1991 01:00:00   May 01 1991 01:00:00 ❌   Jun 01 1991 01:00:00 ❌\nwith both:      Apr 01 1991 01:00:00   May 01 1991 00:00:00 ✅   Jun 01 1991 00:00:00 ✅\n```\n\nWhy this is safe:\n\n- `setDate(1)` and `setMonth(0, 1)` can never overflow — day 1 exists in every month — so repositioning first is unconditionally valid, whatever the current day-of-month.\n- The in-loop truncation is a no-op in the ordinary case, because the hours are already 0. It only matters when a month/year boundary *itself* has no midnight, and it cannot affect loop termination: a month or year step always advances further than the ≤ 1 h pullback.\n- For a month whose own local midnight does not exist, the fixed function returns 01:00 — exactly what `startOfMonth` returns for that month. The two agree in every case I tested (18 time zones, 1970–2040, every day of the month at several times of day); this PR does not try to invent a midnight that does not exist.\n- No public signature, option, or documented behaviour changes.\n\n## Verification\n\n**Fail then pass.** Reverting only the two `index.ts` files to `main` (keeping the new tests) and confirming the fix is genuinely absent from the restored files, then running the new tests:\n\n```\n FAIL  src/eachMonthOfInterval/test.ts > returns starts of months when the interval start is on a day that has no midnight\n- Expected\n+ Received\n  [\n-   \"2023-03-01T00:00:00.000-05:00\",\n-   \"2023-04-01T00:00:00.000-04:00\",\n-   \"2023-05-01T00:00:00.000-04:00\",\n+   \"2023-03-01T01:00:00.000-05:00\",\n+   \"2023-04-01T01:00:00.000-04:00\",\n+   \"2023-05-01T01:00:00.000-04:00\",\n  ]\n\n FAIL  src/eachYearOfInterval/test.ts > returns starts of years when the interval start is on a day that has no midnight\n- Expected\n+ Received\n  [\n-   \"2023-01-01T00:00:00.000-05:00\",\n-   \"2024-01-01T00:00:00.000-05:00\",\n-   \"2025-01-01T00:00:00.000-05:00\",\n+   \"2023-01-01T01:00:00.000-05:00\",\n+   \"2024-01-01T01:00:00.000-05:00\",\n+   \"2025-01-01T01:00:00.000-05:00\",\n  ]\n\n Test Files  2 failed (2)\n      Tests  2 failed | 43 passed (45)\n```\n\nWith the fix applied: `Test Files 2 passed (2)` / `Tests 45 passed (45)`.\n\n**Full suite**, same command on both:\n\n```\nwith fix:        Test Files 253 passed (253)   Tests 3168 passed | 1 skipped (3169)\nuntouched main:  Test Files 253 passed (253)   Tests 3166 passed | 1 skipped (3167)\n```\n\nThe delta is exactly the two new tests. Also green under `TZ=America/Havana`, `America/Santiago`, `Asia/Beirut`, `America/Sao_Paulo` and `Pacific/Chatham` (3168 passed each), and the root workspace suite (`pkgs/tz`, `pkgs/utc`) is 218 passed | 4 todo.\n\n`pnpm oxlint` exits 0, `pnpm tsgo --build` exits 0, and `pnpm oxfmt --check` reports the touched files correctly formatted.\n\n**Breadth.** A property check over every day from 2010-01-01 to 2035-01-01 (9131 start days), asserting `each*OfInterval(...)[0] === startOf*(start)` and that every element is a start of its unit, is clean in all 14 zones tested with the fix. On `main` the same check flags:\n\n| zone | broken start days |\n| --- | --- |\n| UTC | 0 / 9131 |\n| America/Havana | 24 / 9131 |\n| America/Santiago | 24 / 9131 |\n| Asia/Beirut | 25 / 9131 |\n| Asia/Damascus | 12 / 9131 |\n| America/Sao_Paulo | 9 / 9131 |\n\nI also checked the sibling functions: `eachDayOfInterval` and `eachQuarterOfInterval` already behave correctly in these zones and are left untouched.\n\n## Tests\n\nTwo regression tests, one per function, in the existing style of each file. They use `TZDate` from `@date-fns/tz` rather than the process time zone, so they behave identically under the `tz_tests` matrix. Both pin a historical transition (America/Havana, 12 March 2023) rather than a future one, so they cannot start failing on a tzdata rule change.\n\n## CI\n\nAll five workflows ran green on this exact commit (`4ee377f`) on my fork, including the browser and smoke tests I could not run locally:\n\n| workflow | result |\n| --- | --- |\n| Code quality | ✅ success |\n| Node.js tests | ✅ success |\n| Browser tests | ✅ success |\n| Smoke tests | ✅ success |\n| Time zone tests | ✅ success (14m, full zone matrix) |\n\n## What I could not verify\n\n- I did not enumerate every IANA zone with a midnight DST transition — the zones named above are illustrative of the class, not an exhaustive list. The `tz_tests` matrix covers the repo's own zone set and is green.\n",
+    "isDraft": false,
+    "number": 4288,
+    "title": "Fix `eachMonthOfInterval` and `eachYearOfInterval` on days without midnight",
+    "updatedAt": "2026-08-13T07:56:53Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4288"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nThe Bengali (`bn`) locale's abbreviated month names (`MMM`/`LLL` format tokens) use truncated forms like `জানু`, `ফেব্রু`, `সেপ্ট`, `অক্টো`, `নভে`, `ডিসে` that don't reflect how Bengali is actually written. This PR changes `abbreviated` to match `wide` (full month names), consistent with how Bengali dates are conventionally written.\n\n## Why\n\n- Bengali doesn't have an established convention for truncating Gregorian month names. A Bangladesh government reference on writing dates in Bengali (https://www.teachers.gov.bd/blog/details/632252) gives the modern rule as day-number + **full** month name (e.g. ২৬ মার্চ, ৮ ডিসেম্বর) — no abbreviated forms appear.\n- No Bangla Academy dictionary or publication defines abbreviated forms for these words.\n- The current values were introduced unsourced in #845 (2018) — no CLDR/reference citation in that PR.\n- This isn't unprecedented for CLDR-based i18n data: CLDR itself sets `abbreviated == wide` for other Indic locales that, like Bengali, transliterate the Gregorian month names rather than using native calendar words — e.g. Odia (`or`) and Nepali (`ne`) both have abbreviated identical to wide for all 12 months. Bengali should be treated consistently.\n- Spelling note: the full forms used here (জানুয়ারি, ফেব্রুয়ারি, …) follow Bangla Academy's প্রমিত বানান (standardized spelling) rule that non-tatsama words — তদ্ভব, দেশী, বিদেশী (foreign), and মিশ্র (mixed) — take হ্রস্ব ই-কার (ি) rather than দীর্ঘ ঈ-কার (ী). Since these are বিদেশী (foreign) loanwords from English, the same rule that governs ফারসি, ফরাসি, জাপানি, ইংরেজি, etc. applies here, giving জানুয়ারি rather than the older/informal জানুয়ারী seen in some bilingual dictionaries. This matches the locale's existing (unchanged) `wide` values, so no spelling change is introduced — just confirming the values this PR extends to `abbreviated` are already spelled correctly.\n\nScope: this only changes `abbreviated` width for **months**. `narrow` width is left as-is (single/double-letter forms serve a different, space-constrained UI purpose, not a claim about everyday usage).\n\ncc @touhidrahman, who authored the original `bn` locale in #845 — I reached out directly and he confirmed the short forms were his own shorthand chosen at the time date-fns's width system looked different, not values drawn from an established convention, and he's supportive of updating them now.\n\n## Changes\n\n- `src/locale/bn/_lib/localize/index.ts`: `monthValues.abbreviated` now matches `monthValues.wide`.\n- `src/locale/bn/_lib/match/index.ts`: `matchMonthPatterns.abbreviated` updated to match the full-length forms (needed so `parse()` consumes the whole matched word — previously it only stripped the short prefix, which is fine for the old short values, but round-trip correctness requires the match pattern and the localize array to be in sync).\n- `src/locale/bn/snapshot.md`: regenerated via `pnpm run locale-snapshots`.\n\n## Test plan\n\n- [x] Regenerated locale snapshot (`pnpm run locale-snapshots`) — diff limited to `bn` (MMM/LLL/PP/PPpp rows now show full names, and parse round-trips correctly for all 12 months, including January/February which previously used the special-cased short forms জানু/ফেব্রু)\n- [x] `pnpm vitest run` — 3166 passed, 0 new failures (46 pre-existing failures are unrelated `Temporal is not defined` errors from experimental `.tp.ts` tests, reproducible on an unmodified checkout)\n- [x] `oxfmt` clean\n",
+    "isDraft": false,
+    "number": 4287,
+    "title": "fix(bn): use full month names for abbreviated month width",
+    "updatedAt": "2026-10-10T13:27:07Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4287"
+  },
+  {
+    "assignees": [],
+    "body": "AI disclosure: this change was prepared with AI coding agents, reviewed and revised line by line by me.\n\n## 🧩 Context\n\n`addDays`, `addMonths` and `addBusinessDays` guard an invalid `amount` with\n\n```ts\nif (isNaN(amount)) return constructFrom(..., NaN)\n```\n\nbut `isNaN` coerces its argument, so a numeric string like `\"10\"` bypasses the guard (#4284). It then reaches e.g. `_date.setDate(_date.getDate() + amount)`, where `+` concatenates the string and the date jumps to a bogus value:\n\n```ts\naddDays(new Date(2026, 8, 10), 10)   // 2026-09-20  ✓\naddDays(new Date(2026, 8, 10), \"10\") // 2029-06-05  ✗ (string concatenation in setDate)\n```\n\nThe type signature is `amount: number`, so a string is a misuse — but the current behaviour fails silently with a plausible-looking result instead of failing predictably.\n\n## 📦 Changes\n\nReject non-number amounts up front, so the call returns an Invalid Date (`NaN`) — matching the existing `NaN`-amount behaviour:\n\n```diff\n-  if (isNaN(amount)) return constructFrom(options?.in || date, NaN);\n+  if (typeof amount !== \"number\" || isNaN(amount))\n+    return constructFrom(options?.in || date, NaN);\n```\n\nApplied to:\n\n- `addDays`, `addMonths`, `addBusinessDays`: the only `add*` helpers that can emit a plausible-but-wrong date from a non-number amount. Each keeps its own `constructFrom(...)` clause.\n- `tpyAddDays` and `tpyAddBusinessDays`, the Temporal implementations that share the same guard, so both implementations agree.\n\nThe other `add*` helpers don't share this hazard: `addWeeks`, `addYears`, `addQuarters`, `addHours`, `addMinutes`, and `addSeconds` multiply `amount` by a factor, so a numeric string coerces to a number and they return the correct result; `addMilliseconds` computes `+toDate(date) + amount`, which for a string becomes `new Date(\"<timestamp>10\")` and parses to an Invalid Date.\n\nNumber amounts — including `0` (no-op) and `NaN` — are unchanged.\n\n## 🧪 Testing\n\nAdded a regression test for the `\"10\"` input to each of `addDays`, `addMonths`, and `addBusinessDays`. The `addDays` and `addBusinessDays` suites are shared with their Temporal implementations via `test.tp.ts`, so those tests cover both the regular and Temporal code paths.\n\n```ts\naddDays(date, \"10\") // Invalid Date  (was: 2029-…)\naddDays(date, 10)   // +10 days      (unchanged)\naddDays(date, NaN)  // Invalid Date  (unchanged)\naddDays(date, 0)    // no-op         (unchanged)\n```\n\nVerified locally:\n\n- `vitest run --project main src/addDays/test.ts src/addMonths/test.ts src/addBusinessDays/test.ts` → 38 passed, 15 skipped.\n- `vitest run --project temporarily src/addDays/test.tp.ts src/addBusinessDays/test.tp.ts` → 26 passed, 8 skipped.\n- `tsgo --build` → passes.\n- `oxlint --type-aware` on the changed files → passes.\n\n## 🛠 Alternative considered\n\nInstead of rejecting, the string could be coerced (`amount = Number(amount)`) so `\"10\"` behaves like `10`. I went with rejecting because `amount` is typed `number`, the existing guard already returns Invalid Date for invalid numeric input, and a predictable failure is safer than an implicit coercion. Happy to switch if coercion is preferred.\n\nCloses #4284\n",
+    "isDraft": false,
+    "number": 4286,
+    "title": "Reject non-number amounts in addDays, addMonths, and addBusinessDays",
+    "updatedAt": "2026-08-22T18:24:09Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4286"
+  },
+  {
+    "assignees": [],
+    "body": "`differenceInMonths(a, b)` and `differenceInMonths(b, a)` can disagree in magnitude whenever the later of the two dates falls in February on the 28th or 29th:\n\n```js\ndifferenceInMonths(new Date(2027, 1, 28), new Date(2026, 1, 28)) //=> 12\ndifferenceInMonths(new Date(2026, 1, 28), new Date(2027, 1, 28)) //=> -11   <-- same pair\ndifferenceInMonths(new Date(2026, 2, 28), new Date(2027, 2, 28)) //=> -12   <-- March, fine\ndifferenceInCalendarMonths(new Date(2026, 1, 28), new Date(2027, 1, 28)) //=> -12\n```\n\n28 February 2026 to 28 February 2027 is a whole year either way round, and `differenceInCalendarMonths` already says 12 for the same pair.\n\n## Cause\n\nThe function decides whether the final partial month is full by stepping the later date backwards with `Date#setMonth` and comparing. `setMonth` rolls over when the day-of-month doesn't exist in the target month, so stepping back two months from 29 February 2024 lands on 29 December, not 31 December. A special case pushed February dates to the 30th first to compensate:\n\n```js\nif (workingLaterDate.getMonth() === 1 && workingLaterDate.getDate() > 27)\n  workingLaterDate.setDate(30);\n```\n\nThat compensation applies to one operand only, which is why the answer depends on which argument comes first.\n\n## Fix\n\nStep the *earlier* date forwards with `addMonths` instead. `addMonths` already clamps to the end of the target month, so nothing needs compensating and the two directions cannot disagree. Both the February special case and the now-redundant `isLastDayOfMonth` branch come out.\n\nThis also makes the round-trip hold:\n\n```js\ndifferenceInMonths(addMonths(d, n), d) === n\n```\n\nwhich is the property the February special case broke. It felt like the right invariant to aim at because it is internal to date-fns: `addMonths` clamps, so `differenceInMonths` has to use the same rule or the two functions contradict each other. `addDays` never faces this because every step is the same size; `addMonths` moves between fields of different lengths, so it must decide what 31 January + 1 month means, and date-fns decided it means 28 February.\n\n## Verification\n\nSwept every day from 1900 to 2100, which covers 1900 and 2100 (divisible by 100, not leap) and 2000 (divisible by 400, leap):\n\n| | before | after |\n|---|---|---|\n| asymmetric pairs, 954,382 swept | 1,804 | 0 |\n| `differenceInMonths(addMonths(d, n), d) === n`, 734,140 checked | 4,623 violations | 0 |\n| `differenceInMonths` suite | 21 pass | 25 pass |\n| full `pkgs/core` suite | 3,166 pass | 3,169 pass |\n| `mise //pkgs/core:test/tz` | | all 378 time zones pass |\n| `mise //:lint`, `mise //:types` | | clean |\n| bundled size of the function | 1,079 B min / 576 B gzip | 987 B min / 561 B gzip |\n\nSize goes down because `isLastDayOfMonth` pulled in `endOfDay` and `endOfMonth`, while `addMonths` only adds `constructFrom`.\n\nThe `pkgs/core` suite has 46 pre-existing failures in `*.tp.ts` on Node 22, from `Temporal` not being defined. Identical count before and after this change.\n\n## One note on the Temporal migration\n\nSince `index.tp.ts` implementations get run against the same test file, it's worth flagging that a naive `since()` won't satisfy the existing `context` test when the migration reaches this function: Temporal gives 1 for 31 December 2023 to 29 February 2024, and the test asserts 2. Temporal counts exact anniversaries where `addMonths` clamps. So the Temporal version will need the clamping rule built on top of it. The tests added here pin that rule explicitly, so it should be straightforward to satisfy.\n\nRefs #3436, #3685, #2178, #1929, #3041, #3316, #3534, #1887\n",
+    "isDraft": false,
+    "number": 4283,
+    "title": "fix(differenceInMonths): make the result independent of argument order",
+    "updatedAt": "2026-08-06T18:02:48Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4283"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #4270.\n\n## The reported bug\n\nzh-CN's `localize` produces the 季 quarter forms, but its `matchQuarterPatterns` still expects the 刻 forms that `localize` stopped producing in #2771. A format → parse round-trip through zh-CN returns `Invalid Date`:\n\n```js\nformat(new Date(2024, 6, 1), \"QQQ\", { locale: zhCN });        //=> \"第三季\"\nparse(\"第三季\", \"QQQ\", new Date(2024, 0, 1), { locale: zhCN }); //=> Invalid Date\n```\n\nzh-HK has identical `quarterValues`, so this aligns zh-CN's match patterns with zh-HK's:\n\n```diff\n-  abbreviated: /^第[一二三四]刻/i,\n-  wide: /^第[一二三四]刻钟/i,\n+  abbreviated: /^第[一二三四]季/i,\n+  wide: /^第[一二三四]季度/i,\n```\n\nzh-TW is deliberately left alone — it uses 刻 on *both* sides, so it round-trips correctly today. Its wording is the separate concern in #2889 / #2890.\n\nThis does drop the ability to parse the pre-#2771 刻 strings, which zh-CN itself has not emitted since 2021. If you would rather keep them for backward compatibility, `/^第[一二三四](季|刻)/i` and `/^第[一二三四](季度|刻钟)/i` would do it — happy to switch.\n\n## A second issue this surfaced\n\nRegenerating the snapshots also changed zh-HK and zh-TW, which I had not touched. The cause:\n\n`[tasks.\"test/locales\"]` runs the generator with `--test`, but the script compares the mode against `test`:\n\n```ts\nconst mode = process.argv[2] || \"generate\";  // \"--test\"\n...\nif (mode === \"test\") {                       // never true\n```\n\nThe guard never matched, so the task took the **write** branch — it rewrote the snapshots and exited 0 every time rather than verifying them.\n\nBecause that check never ran, drift went unnoticed: #4194 fixed Chinese month parsing on **2026-05-21**, but the zh-CN, zh-HK and zh-TW snapshots were last generated **2026-05-19** and still record October as `Invalid Date`. Those rows are corrected here.\n\nThe fix strips a leading `--` so both spellings work:\n\n```ts\nconst mode = (process.argv[2] || \"generate\").replace(/^--/, \"\");\n```\n\nHappy to split this into its own PR if you would rather review it separately. I kept it together because regenerating the snapshots for #4270 necessarily picks up the drift, so the two are entangled in the diff either way.\n\n## Verification\n\n- `test/locales` with the guard fixed and snapshots at `main` → **fails**, correctly naming `zh-HK` (it exited 0 before)\n- after regenerating → **passes**\n- `vitest run` → **37 failed / 3148 passed**, byte-identical to a clean `main` checkout on this machine. All 37 are `ReferenceError: Temporal is not defined`, from running Node 22.18.0 against the 22.19.0 in `.nvmrc`. No change attributable to this PR.\n- `oxfmt --check` on both edited source files → clean\n\nA note for anyone reproducing on Windows: with `core.autocrlf=true`, the snapshot comparison fails on every locale on line endings alone, which looks like total drift. Set `core.autocrlf=false` before running `test/locales`.\n\n---\n\nDisclosure: I used an AI assistant while investigating and preparing this change, including running the verification above.\n",
+    "isDraft": false,
+    "number": 4282,
+    "title": "Fix zh-CN quarter parsing and make the locale snapshot test actually run",
+    "updatedAt": "2026-08-01T10:55:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4282"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\r\nThe Hindi (`hi`) locale's `formatDistance` had two bugs in the future-suffix logic:\r\n1. Misspelled postposition: `मे` instead of the correct `में` (missing anusvara)\r\n2. Wrong spacing/position: suffix was appended directly with no leading space \r\n   (e.g. \"१ घंटामे \" instead of \"१ घंटे में\")\r\n\r\nAdditionally, singular nouns ending in `आ` (घंटा, महीना) were not being inflected \r\nto their correct oblique form (घंटे, महीने) before the postposition, which is \r\nrequired by Hindi grammar (e.g. \"घंटे में\" not \"घंटा में\").\r\n\r\n## Fix\r\n- Corrected spelling and spacing of the suffix\r\n- Added oblique-case inflection for घंटा→घंटे and महीना→महीने before में/पहले\r\n- Added 10 tests covering all affected tokens\r\n- Updated snapshot.md\r\n\r\n## Verification\r\nAs a native Hindi speaker, I manually verified the corrected output reads \r\nnaturally for all singular duration tokens (minute, hour, day, month, year) \r\nin both future and past suffix forms.",
+    "isDraft": false,
+    "number": 4281,
+    "title": "fix(locale/hi): correct formatDistance suffix spelling, spacing, and noun inflection",
+    "updatedAt": "2026-07-28T21:59:58Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4281"
+  },
+  {
+    "assignees": [],
+    "body": "## Bug\n\n`tzOffset` returns a positive offset for time zones whose UTC offset is between -00:01 and -00:59, flipping the sign. This corrupts `TZDate` for those zones:\n\n```js\nimport { tzOffset, TZDate } from \"@date-fns/tz\";\n\n// Liberia used UTC-00:44:30 until January 1972\ntzOffset(\"Africa/Monrovia\", new Date(\"1970-01-15T00:00:00Z\"));\n//=> 44.5 (expected -44.5)\n\ntzOffset(\"-00:30\", new Date(\"2020-01-15T00:00:00Z\"));\n//=> 30 (expected -30)\n\nnew TZDate(1970, 0, 1, 12, 0, \"Africa/Monrovia\").toISOString();\n// treats the zone as UTC+00:44:30, so the result is off by 89 minutes\n```\n\nAny LMT-era date in a zone slightly west of Greenwich hits the same path, e.g. `Europe/Dublin` before 1880 is -00:25:21 but comes back as +25.35. Zones at -01:00 or beyond (like the tested 1880 `America/New_York` LMT) are unaffected.\n\n## Root cause\n\nIn `calcOffset` (`pkgs/tz/src/tzOffset/index.ts`), the sign is derived from the parsed numbers:\n\n```ts\nhours * 60 + minutes > 0\n  ? hours * 60 + minutes + seconds\n  : hours * 60 - minutes - seconds;\n```\n\nFor `\"-00:44:30\"`, `+\"-00\"` evaluates to `-0`, so `hours * 60 + minutes` is `44` — positive — and the minutes/seconds get added instead of subtracted.\n\n## Fix\n\nRead the sign from the hours string (`\"-00\"`) instead of the number, then apply it to the absolute value. Both the `Intl` path and the manual `±HH:MM`/`±HHMM`/`±HH` fallback go through `calcOffset`, so both are covered.\n\n## Tests\n\nAdded to `pkgs/tz/src/tzOffset/tests.ts`:\n\n- `Africa/Monrovia` in 1970 → `-44.5` (Intl path, seconds-bearing offset)\n- `\"-00:30\"` → `-30` and `\"-0030\"` → `-30` (offset string formats)\n\nAll three fail before the fix (returning `+44.5` / `+30`) and pass after; the rest of the `pkgs/tz` suite is unaffected.\n",
+    "isDraft": false,
+    "number": 4279,
+    "title": "fix(tz): correct tzOffset sign for negative offsets of less than an hour",
+    "updatedAt": "2026-07-28T15:17:26Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4279"
+  },
+  {
+    "assignees": [],
+    "body": "## Problem\n\n`format` and `parse` do not round-trip for weekday names in the **hr**, **bs**, and **sr-Latn** locales. Parsing a locale's own `format(date, \"EEEE\", { locale })` output returns `Invalid Date`.\n\n```js\nimport { format, parse } from \"date-fns\";\nimport { hr, bs, srLatn } from \"date-fns/locale\";\n\nconst d = new Date(2024, 0, 8); // Monday\nconst ref = new Date(2024, 0, 1);\n\nformat(d, \"EEEE\", { locale: hr });                    //=> \"ponedjeljak\"\nparse(\"ponedjeljak\", \"EEEE\", ref, { locale: hr });    //=> Invalid Date  ❌\nparse(\"utorak\",      \"EEEE\", ref, { locale: bs });    //=> Invalid Date  ❌\nparse(\"sreda\",       \"EEEE\", ref, { locale: srLatn });//=> Invalid Date  ❌\n```\n\nThis affects every weekday token (`E`, `EEEE`, `c`, …) and every width for these three locales.\n\n## Root cause\n\nIn each locale's `_lib/match/index.ts`, `parseDayPatterns` still contains the **English** patterns copied from the en-US template:\n\n```js\nconst parseDayPatterns = {\n  narrow: [/^s/i, /^m/i, /^t/i, /^w/i, /^t/i, /^f/i, /^s/i] as const,\n  any: [/^su/i, /^m/i, /^tu/i, /^w/i, /^th/i, /^f/i, /^sa/i] as const,\n};\n```\n\nThe sibling `matchDayPatterns` correctly match the localized names (`ponedjeljak`, `utorak`, …), but the parser then can't map any of those matches to a weekday index, so parsing fails. The Cyrillic `sr` locale and `cs` locale have properly localized `parseDayPatterns`; these three were missed.\n\n## Fix\n\nReplace the English patterns with ones based on the actual localized day names, following the existing `cs` / `sr` style:\n\n```js\nconst parseDayPatterns = {\n  narrow: [/^n/i, /^p/i, /^u/i, /^s/i, /^(č|c)/i, /^p/i, /^s/i] as const,\n  any: [/^ne/i, /^po/i, /^u/i, /^sr/i, /^(č|c)/i, /^pe/i, /^su/i] as const,\n};\n```\n\n(Wednesday `sr…` / Saturday `su…` are disambiguated by the second letter. Narrow ambiguity for repeated initials — P, S — resolves to the first match, exactly as in the `cs` locale.)\n\n## Tests\n\nAdded a regression test in `pkgs/core/src/parse/test.ts` asserting `EEEE` round-trips for `hr`, `bs`, and `sr-Latn`.\n\n- `vitest run --project main` → **3149 passed**, 19 skipped, 0 failed.\n- The pre-existing `.tp.ts` (`|temporarily|`/Temporal) failures are unrelated (`Temporal is not defined` in the local Node environment) and untouched by this change.",
+    "isDraft": false,
+    "number": 4277,
+    "title": "fix(locale): use localized parseDayPatterns for hr, bs and sr-Latn",
+    "updatedAt": "2026-07-25T12:36:09Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4277"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nFixes #4271 by mapping the en-US narrow noon day-period form (`n`) back to `noon` during parsing.\n\nThis keeps `format(noon, \"bbbbb\")` / `parse(\"n\", \"bbbbb\", ...)` round-trips at 12:00 instead of silently falling through to midnight.\n\n## Checks run locally\n\n- `npx vitest run src/parse/test.ts -t 'AM, PM, noon, midnight'` from `pkgs/core` — 11 passed, 530 skipped\n- `npx oxlint pkgs/core/src/locale/en-US/_lib/match/index.ts pkgs/core/src/parse/test.ts` — clean\n- `git diff --check` — clean\n\n## Disclosure\n\nThis contribution was prepared with AI assistance and locally verified before submission.\n",
+    "isDraft": false,
+    "number": 4276,
+    "title": "fix: parse en-US narrow noon day period",
+    "updatedAt": "2026-07-24T03:19:49Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4276"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n- After #2771, zh-CN `format` with `QQQ`/`QQQQ` produces 季/季度 strings, but `matchQuarterPatterns` still only accepted the old 刻/刻钟 forms, so a format then parse round-trip returned `Invalid Date`.\n- Update the match patterns to accept 季/季度 (same as zh-HK), while still accepting legacy 刻/刻钟 input.\n- Add regression tests for the round-trip and the legacy forms.\n\nFixes #4270\n\n## Test plan\n- [x] `pnpm vitest run src/locale/zh-CN/test.ts` in `pkgs/core` (4 passed)",
+    "isDraft": false,
+    "number": 4275,
+    "title": "fix(locale): accept 季 forms when parsing zh-CN quarters",
+    "updatedAt": "2026-07-23T16:30:31Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4275"
+  },
+  {
+    "assignees": [],
+    "body": "Implemented the remaining 4 it.todo unit test cases in pkgs/utc/src/date/tests.ts:\r\n\r\n- getMilliseconds()\r\n- getSeconds()\r\n- setMilliseconds()\r\n- setSeconds()\r\n\r\nAll 37 tests in the file are now active and passing cleanly.\r\n\r\n",
+    "isDraft": false,
+    "number": 4274,
+    "title": "test(utc): implement missing unit tests for seconds and milliseconds",
+    "updatedAt": "2026-07-23T16:16:57Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4274"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\r\n\r\nThis PR adds unit tests only — no source changes — to fill coverage gaps in `pkgs/core`, measured with `pnpm vitest run --project main --coverage` (v8 provider) before and after:\r\n\r\n| Metric | Before | After | Delta |\r\n|---|---|---|---|\r\n| Statements | 95.25% (2909/3054) | 98.88% (3020/3054) | +3.63 |\r\n| Branches | 89.09% (1504/1688) | 97.15% (1640/1688) | +8.06 |\r\n| Functions | 95.06% (501/527) | 99.62% (525/527) | +4.56 |\r\n| Lines | 95.51% (2830/2963) | 99.15% (2938/2963) | +3.64 |\r\n\r\n11 test files, 956 insertions, 0 deletions; 3148 → 3252 passing tests.\r\n\r\n## What this covers\r\n\r\n- **`parse`**: the text-unit width fallback chains (`E`/`i`/`e`/`c`, `M`/`L`, `Q`/`q`, `G`, `a`/`b`/`B` tokens accepting narrower-width input), two-digit year normalization edge cases (including the documented `parse('75', 'yy', new Date(2018, 0, 1))` example, a reference date in the first fifty years CE, and a B.C. reference date), the `K` token combined with a PM day period, the morning flexible day period, and `Invalid Date` paths for non-matching numeric, ordinal, and timezone input.\r\n- **`intlFormatDistance`**: explicit `month` and `year` units.\r\n- **`roundToNearestHours` / `roundToNearestMinutes`**: out-of-range `nearestTo`.\r\n- **`transpose`**: date constructor argument (the documented `UTCDate` use case).\r\n- **`formatDuration`**: locale without `formatDistance`.\r\n- **Locales `fr`, `zh-CN`, `zh-HK`, `zh-TW`, plus a new `eo` test file**: `formatDistance` token forms and suffixes, `formatRelative` (including the zh-CN `checkWeek` branches), `ordinalNumber` units, quarter localize/match callbacks, and the zh narrow era.\r\n\r\nWhere TSDoc/docs define the behavior, assertions match the documented contract. Where behavior is defined but undocumented (e.g. the parse width fallbacks), tests are explicitly labeled `characterizes current behavior; not asserting correctness` in comments.\r\n\r\n## Related findings\r\n\r\nWhile writing these tests, three behaviors surfaced that appear to contradict documented behavior. They are noted here as observations only — this PR does not pin them with tests and does not propose fixes:\r\n\r\n1. **zh-CN cannot parse its own formatted quarter** — `format` produces `第X季`/`第X季度`, but the zh-CN `matchQuarterPatterns` only accept `第[一二三四]刻`/`第[一二三四]刻钟`, so a same-locale format → parse round-trip returns `Invalid Date`. Filed as ISSUE-1-URL.\r\n2. **en-US narrow noon is unparseable** — `format(noon, 'bbbbb')` produces `\"n\"`, but the parse patterns map noon via `/^no/i`, so `parse('n', 'bbbbb', ...)` silently yields hour 0 instead of 12. Filed as ISSUE-2-URL.\r\n3. **`parseISO` silently accepts a malformed timezone** — `parseISO('2016-11-25T16:38:38+abc')` returns a valid date treating the offset as 0, contradicting the documented \"non-ISO → Invalid Date\" contract. This matches existing open issue #2489.\r\n\r\nBranches whose behavior is one of the findings above, and provably-unreachable defensive branches (e.g. `cleanEscapedString`'s no-match path, `Hour1To24Parser`'s post-validation `value > 24` case, the `timestampIsSet` guards in the `x`/`X` parsers), were deliberately left uncovered rather than covered with contrived tests.\r\n\r\n## Checks run locally\r\n\r\n- `pnpm vitest run --project main` — 3252 passed, 19 skipped, 0 failed\r\n- `pnpm oxlint` — clean\r\n- `pnpm tsgo --build` — clean\r\n\r\nPer the contributing guidelines: no source changes, changelog untouched, library version unchanged.\r\n\r\n## Disclosure\r\n\r\nThese tests were generated with AI assistance. Every assertion was verified against actual runtime behavior via executed probe scripts before being written, and undocumented behaviors are characterization-labeled rather than asserted as correct.",
+    "isDraft": false,
+    "number": 4272,
+    "title": "Add tests to fill unit test coverage gaps",
+    "updatedAt": "2026-07-25T06:03:39Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4272"
+  },
+  {
+    "assignees": [],
+    "body": "Addresses #2034.\n\nAdd scaleDuration(duration, multiplier): multiplies every present unit of the duration by the multiplier, component wise and without carrying between units (lossless). Absent units are omitted; explicitly present zero units stay present. Supports integer, fractional, zero, and negative multipliers.",
+    "isDraft": false,
+    "number": 4267,
+    "title": "feat: scaleDuration: scalar multiplication for Durations",
+    "updatedAt": "2026-07-20T10:44:03Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4267"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #2666.\n\nAdd isISOMatch(value, { representation? }): returns true when value is a string matching an ISO 8601 shape (the same shapes formatISO produces) AND denoting a real date/time. The `representation` option restricts the shape: 'date' (YYYY MM DD), 'time' (HH:mm:ss with optional fractional seconds/timezone, range checked), or the default 'complete' (date with optional T separated, timezone qualified time).",
+    "isDraft": false,
+    "number": 4266,
+    "title": "feat: isISOMatch: validate an ISO 8601 date string",
+    "updatedAt": "2026-07-20T10:44:00Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4266"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #2823.\n\nAdd isBusinessDay(date, { holidays?: Date[], weekStartsOn? }): true when the date is a weekday (Mon Fri) AND not a configured holiday. Add isHoliday(date, { holidays?: Date[] }): true when the date matches (calendar day) any date in the holidays list.",
+    "isDraft": false,
+    "number": 4265,
+    "title": "feat: business day helpers (isBusinessDay, isHoliday) with holiday override",
+    "updatedAt": "2026-07-20T10:43:56Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4265"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #840.\n\nAdd getAge(dateOfBirth, { today }): built on intervalToDuration: returning { years, months, days }, the calendar accurate age as of an optional reference date (defaults to now). Accepts today as a Date, timestamp number, or ISO string. Returns zeros if today is on or before the birthdate.",
+    "isDraft": false,
+    "number": 4264,
+    "title": "feat: getAge: exact calendar age in years, months, days",
+    "updatedAt": "2026-07-20T10:43:53Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4264"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #3150.\n\nAdd parseISODuration(duration): parses `P3Y6M4DT12H30M5S` into { years:3, months:6, days:4, hours:12, minutes:30, seconds:5 }, supporting years/months/weeks/days/hours/minutes/seconds. Absent units are omitted; explicitly written zeros are kept (so formatISODuration to parseISODuration round trips exactly for full durations). Throws RangeError on invalid input (or P/PT with no units).",
+    "isDraft": false,
+    "number": 4263,
+    "title": "feat: parseISODuration function (reverse of formatISODuration)",
+    "updatedAt": "2026-07-20T10:43:49Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4263"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #3694.\n\nAdd compareDurationsAsc(left, right) returning 1/0/1 (shorter/equal/longer) and compareDurationsDesc(left, right) returning 1/0/ 1, mirroring compareAsc/compareDesc. Durations are compared by their total length in seconds (weeks/days/hours/minutes/seconds exact; years/months use astronomical averages so 1 day == 24 hours). Returns positive zero for equal magnitudes.",
+    "isDraft": false,
+    "number": 4262,
+    "title": "feat: compareDurationsAsc and compareDurationsDesc functions",
+    "updatedAt": "2026-07-20T10:43:42Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4262"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #3695.\n\nAdd addDuration(durationA, durationB) and subDuration(durationA, durationB) that, per unit (years/months/weeks/days/hours/minutes/seconds), add or subtract the counts WITHOUT carrying between units (lossless: e.g. {seconds:70} + {seconds:30} = {seconds:100}, not {minutes:1,seconds:10}). A unit is included in the result when it appears in either input. subDuration is the inverse of addDuration.",
+    "isDraft": false,
+    "number": 4261,
+    "title": "feat: add summing duration functions (addDuration, subDuration)",
+    "updatedAt": "2026-07-20T10:43:38Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4261"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #2991.\n\nAdd convertMomentFormat(momentFormat) that converts a moment.js format string to the equivalent date fns format() pattern. Maps the common moment tokens (YYYY/YY, MMMM/MMM/MM/Mo/M, DDDD/DDD/DD/Do/D, dddd/ddd, HH/H/hh/h/mm/m/ss/s/SSS, A/a, Z/ZZ) to their date fns equivalents. Bracketed literal text ([text]) converts to the date fns quoted form ('text', with internal ' escaped as '').",
+    "isDraft": false,
+    "number": 4260,
+    "title": "feat: convert moment.js format strings to date fns format strings",
+    "updatedAt": "2026-07-20T10:41:56Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4260"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #3893.\n\nAdd formatDurationClock(duration, {format, delimiter}) that renders a Duration as a colon separated, zero padded clock: default `H:MM:SS` (hours unbounded, minutes/seconds 2 digit). Pass format to include days (e.g. `['days','hours','minutes','seconds']` to `1:02:03:04`) and delimiter to change the separator. Only listed units are used (years/months/weeks ignored; convert weeks to days first); absent units count as 0.",
+    "isDraft": false,
+    "number": 4259,
+    "title": "feat: format duration as hh:mm:ss",
+    "updatedAt": "2026-07-20T10:41:52Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4259"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #780.\n\nAdd nthDayOfMonth(date, dayOfWeek, n) returning the Date of the nth occurrence of dayOfWeek (0=Sunday 6=Saturday, matching Date.getDay) in the reference date's month. n is 1 based from the start (positive) or end (negative: 1 = last occurrence). Returns null when the nth occurrence does not exist (e.g. a 5th Sunday in a month with only four).",
+    "isDraft": false,
+    "number": 4258,
+    "title": "feat: nth day of the month, eg 3rd Sunday of the Month",
+    "updatedAt": "2026-07-20T10:41:49Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4258"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #2938.\n\nAdd formatDatetimeLocal(date, options?) that formats a date as YYYY MM DDTHH:mm by default, with optional { includeSeconds: true } for ...:ss and { includeMs: true } for ...:ss.SSS (includeMs implies includeSeconds). The result contains no timezone offset.",
+    "isDraft": false,
+    "number": 4257,
+    "title": "feat: proposal for datetime local format function",
+    "updatedAt": "2026-07-20T10:40:39Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4257"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #3092.\n\nAdd normalizeDuration(duration) that carries overflow units upward within their natural ranges: seconds to minutes (60), minutes to hours (60), hours to days (24), days to weeks (7), and separately months to years (12). Weeks are NOT carried into months (the ratio is not constant). So {months:13} to {years:1,months:1}, {seconds:3661} to {hours:1,minutes:1,seconds:1}, {days:8} to {weeks:1,days:1}.",
+    "isDraft": false,
+    "number": 4256,
+    "title": "feat: normalize duration",
+    "updatedAt": "2026-07-20T10:40:36Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4256"
+  },
+  {
+    "assignees": [],
+    "body": "Addresses #2034.\n\nAdd two functions: addDurations(duration1, duration2) sums two Duration objects component wise (each unit is the sum of that unit in both inputs; units present in either input appear in the result, even at zero sum; no carry/normalization); scaleDuration(duration, scale) multiplies every unit of a Duration by a scalar number (e.g. 2 doubles, 1 negates, 0 zeroes but keeps present). Both return a new Duration without mutating inputs.",
+    "isDraft": false,
+    "number": 4255,
+    "title": "feat: addition and scalar multiplication for Durations",
+    "updatedAt": "2026-07-20T10:40:33Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4255"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #1706.\n\nAdd a new function formatDurationCustom(duration, labels, options?) that renders a Duration using a custom map of unit to label. Only the units present in the map are rendered, in the map's insertion order, with the label appended directly to each unit's value (so { hours: \"h\", minutes: \"m\" } renders \"4h 30m\"). The set of listed units controls the resolution: a map of only { hours: \" hrs\" } shows just hours.",
+    "isDraft": false,
+    "number": 4254,
+    "title": "feat: format distance in custom format instead of words",
+    "updatedAt": "2026-07-20T10:40:29Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4254"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #1541.\n\nAdd a style option to formatDistanceStrict: long (default, unchanged) uses the locale words; narrow renders \"5m\"/\"2h\"/\"1d\"/\"1mo\"/\"1y\"/\"30s\"; short renders \"5 mins\"/\"2 hrs\"/\"3 days\"; a per unit formatter map gives full control, with units that have no custom formatter falling back to the locale long form. The existing unit, roundingMethod, and addSuffix options keep working together with style; addSuffix applies to the long style (locale words).",
+    "isDraft": false,
+    "number": 4253,
+    "title": "feat: twitter style format (compact distance)",
+    "updatedAt": "2026-07-20T10:40:25Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4253"
+  },
+  {
+    "assignees": [],
+    "body": "feat(formatDuration): add style option\n\nCloses #2134.\n\nAdds a style option to formatDuration that selects the unit label style. The long style is the default and keeps the current locale driven output unchanged. The narrow style renders a compact locale agnostic form such as 5h 9m 30s. The short style renders 5 hrs 9 mins 30 secs.\n\nThe option also accepts a per unit formatter map, a function per duration unit that receives the unit value and returns its label, so callers can fully control the label for any subset of units, with units that have no custom formatter falling back to the locale long form. The existing format, zero, and delimiter options keep working with the new style. When the style option is omitted the output is exactly the same as before.\n",
+    "isDraft": false,
+    "number": 4252,
+    "title": "feat(formatDuration): add style option",
+    "updatedAt": "2026-07-20T10:29:01Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4252"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\nCloses #4248 — the `fromUnixTime` documentation said \"Decimal values will be discarded,\" but the implementation (`toDate(unixTime * 1000, ...)`) **preserves fractional seconds as milliseconds** and has done so since the function was introduced (see #1917).\n\n## The fix\n\nTwo parts:\n\n**`pkgs/core/src/fromUnixTime/index.ts`** — corrected the `@description` to state that fractional seconds are preserved as milliseconds (one-line doc fix; no behavior change).\n\n**`pkgs/core/src/fromUnixTime/test.ts`** — added three regression tests pinning the actual behavior:\n- `fromUnixTime(1640888727.872)` → `1640888727872` (fractional seconds → ms)\n- `fromUnixTime(0.001)` → `1` (small fractional → 1ms)\n- `fromUnixTime(-0.001)` → `-1` (negative fractional → -1ms)\n\nI chose to fix the docs (not change the implementation to truncate), because truncating would be a breaking change for anyone relying on the current fractional-second behavior, while the doc fix is safe and aligns the documented contract with the actual behavior. The reporter provided the exact test cases.\n\n## AI usage\n\nAn AI assistant was used to help locate the relevant code and draft this change. I have reviewed and understand every line of the diff, and I am the sole author of this contribution.\n\nCloses #4248",
+    "isDraft": false,
+    "number": 4251,
+    "title": "fix(fromUnixTime): document that fractional seconds are preserved as milliseconds",
+    "updatedAt": "2026-07-18T16:25:20Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4251"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #3918\r\n\r\nFrom v4.0.0 onwards, the documentation from these functions has been in the \"misc\" category. This pull request re-adds the documentation attributes to place the functions in the correct place on the docs site.",
+    "isDraft": false,
+    "number": 4250,
+    "title": "docs: Put documentation for subSeconds/subMilliseconds back in the correct categories",
+    "updatedAt": "2026-07-17T12:50:27Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4250"
+  },
+  {
+    "assignees": [],
+    "body": "**Disclosure:** I'm an AI coding agent (operating as `@MayzrBot`), not a human. This PR was written and tested by me, under human supervision but without a human writing the code. Happy to answer questions or make changes if a maintainer would like something done differently.\n\nFixes #1758.\n\n## The bug\n\n`differenceInMonths` checks whether the final month of a period is \"full\" by taking a copy of the later date, shifting it *backward* by the candidate month count, and comparing that against the earlier date.\n\nIf that backward shift lands on a local wall-clock time that doesn't exist — a DST \"spring forward\" gap, e.g. 2:00–2:59 AM on the day clocks jump from 2:00 to 3:00 — the JS engine silently normalizes the `Date` forward into the next valid time. That happens the moment the field is set, before any comparison code runs, so the information needed to tell the two dates apart is already gone by the time they're compared. The result: a period that's actually one DST-gap short of a full month gets reported as a full month.\n\nRepro from the issue, under `TZ=America/Los_Angeles`:\n```js\ndifferenceInMonths(new Date(2020, 3, 8, 2), new Date(2020, 2, 8, 3)) // => 1, should be 0\n```\n\n## The fix\n\nCapture the later date's wall-clock minutes-of-day before the backward shift. If they don't match after `setMonth()`, the shift landed in a gap and got silently renormalized — so fall back to shifting a copy of the *earlier* date *forward* by the same number of months instead, and compare that against the untouched later date. Moving forward from an already-valid date can't land back in the same gap.\n\nThis only changes behavior for the specific case that was already provably wrong (the shift landing in a DST gap). Verified the scope is narrow by fuzzing 500k random date pairs against the original (pre-fix) algorithm's output, in both a UTC-only environment and `TZ=America/Los_Angeles`: **zero mismatches**. (I also tried a simpler redesign — always shift the earlier date forward instead of conditionally — but that changed ~0.025% of unrelated date-pair results involving month-end-day comparisons, so I discarded it in favor of the narrower, detect-and-fallback version here.)\n\n## Testing\n\n- Added a `describe(\"DST\")` regression test, modeled on the existing pattern in `differenceInDays/test.ts` (uses `getDstTransitions`, gated to only run in DST-observing zones/years). It constructs a later date one calendar month after a real DST transition, at the wall-clock time that falls inside that transition's gap, and asserts the difference is `0`. Confirmed this construction actually fails on the unpatched code (returns `1`) across multiple real zones, including a 30-minute-offset zone (`Australia/Lord_Howe`), not just US-style 1-hour zones.\n- All 13 pre-existing edge-case tests still pass, unchanged.\n- Ran the full test file across 8 timezones (`UTC`, `America/Los_Angeles`, `Europe/London`, `Australia/Lord_Howe`, `Europe/Paris`, `Pacific/Chatham`, `Australia/Sydney`, `America/Sao_Paulo`, `Asia/Tokyo`) — all green; non-DST zones/years correctly skip the new DST-only cases.\n- Ran the full repo test suite (`vitest run`, no TZ override): 3148 passed, 33 skipped, 37 failed — but confirmed via `git stash` that those same 37 failures (`Temporal is not defined`) exist identically on unmodified `main` in this environment (Node 20 vs. a `Temporal` global gap), unrelated to this change. Zero new failures introduced.\n- Ran `oxfmt` on both changed files.\n- Could not run `oxlint --type-aware` locally — it fails on unmodified `main` too in my sandbox (`tsgolint` config error), so I couldn't verify lint cleanliness beyond `oxfmt`. Happy to fix anything CI flags.\n",
+    "isDraft": false,
+    "number": 4249,
+    "title": "fix(differenceInMonths): don't miscount a month across a DST spring-forward gap",
+    "updatedAt": "2026-07-17T09:09:51Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4249"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\n- Adds a JSDoc example showing how to include literal text in a `format` pattern using single quotes\n- Addresses confusion called out in #4209 where the escaping rules are easy to miss without a concrete example\n\nFixes #4209\n\n## Test plan\n\n- [x] Verified `format(new Date(2014, 6, 2), \"'Date:' MM/dd/yyyy\")` returns `Date: 07/02/2014`",
+    "isDraft": false,
+    "number": 4247,
+    "title": "docs: add format example for literal text in patterns",
+    "updatedAt": "2026-07-15T21:06:16Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4247"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\n- Updates broken `master/docs` and `master/src` links in `CONTRIBUTING.md`, `i18n.md`, and `i18nContributionGuide.md`\n- Points links to the new `main/pkgs/core/...` paths after the monorepo migration\n\nRelated to #4226. Complements #4243, which fixes the `unicodeTokens.md` source links.\n\n## Test plan\n\n- [x] Verified updated URLs match existing files in the repository\n- [x] Confirmed no remaining `blob/master` or `tree/master` links in the changed markdown files",
+    "isDraft": false,
+    "number": 4246,
+    "title": "docs: fix remaining monorepo doc links",
+    "updatedAt": "2026-07-15T21:00:19Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4246"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\n- Adds a note to the `closestIndexTo` JSDoc example explaining that months are 0-indexed in `Date`\n- Clarifies that month index `8` corresponds to September, matching the example description\n\nFixes #4149\n\n## Test plan\n\n- [x] Ran `pnpm vitest run src/closestIndexTo/test.ts` in `pkgs/core` (6 tests passed)",
+    "isDraft": false,
+    "number": 4245,
+    "title": "docs: clarify 0-indexed month in closestIndexTo example",
+    "updatedAt": "2026-07-15T20:54:52Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4245"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\n- Removes `seconds: 0` from the `intervalToDuration` JSDoc example\n- Matches actual behavior where zero duration fields are omitted from the result\n\nFixes #4131\n\n## Test plan\n\n- [x] Ran `pnpm vitest run src/intervalToDuration/test.ts` in `pkgs/core` (20 tests passed)\n- [x] Verified the existing test for the documented example already expects output without `seconds`",
+    "isDraft": false,
+    "number": 4244,
+    "title": "docs: fix intervalToDuration example output",
+    "updatedAt": "2026-07-15T20:49:16Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4244"
+  },
+  {
+    "assignees": [],
+    "body": "## Summary\n\n- Updates all references to `unicodeTokens.md` from the old `master/docs` path to `main/pkgs/core/docs`\n- Fixes broken links in JSDoc comments, runtime error messages, and format tests\n\nFixes #4226\n\n## Test plan\n\n- [x] Ran `pnpm vitest run src/format/test.ts` in `pkgs/core` (133 tests passed)\n- [x] Verified no remaining references to `blob/master/docs/unicodeTokens.md` in source files",
+    "isDraft": false,
+    "number": 4243,
+    "title": "docs: fix unicodeTokens.md links after monorepo migration",
+    "updatedAt": "2026-07-15T20:44:30Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4243"
+  },
+  {
+    "assignees": [],
+    "body": "`transpose(date, Date)` throws `TypeError: date_.setFullYear is not a function` when the code runs under fake timers (Jest or Vitest).\n\nThe cause is `isConstructor`. It detects a date constructor by checking `prototype.constructor === constructor`, but fake timers replace the global Date with a mock whose `prototype.constructor` still points to the native Date. The check fails, so transpose treats the constructor as a context function and calls it without `new`, which returns a string instead of a date.\n\nThe fix detects a date constructor by checking its prototype exposes Date methods (`setFullYear`). That stays correct under fake timers while still rejecting context functions. Added a regression test that runs transpose under fake timers.\n\nCloses #4156\n",
+    "isDraft": false,
+    "number": 4240,
+    "title": "Fix transpose failing under fake timers",
+    "updatedAt": "2026-07-06T13:49:10Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4240"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes #3999\n\n## Problem\n\nIn v3, `min([null])` and `max([null])` returned `Invalid Date`. Since v4 they return the **epoch** (`1970-01-01`), and a single `null` even poisons results when valid dates are present:\n\n```js\n// v4.4.0\nmin([null]) //=> 1970-01-01T00:00:00.000Z\nmin([null, new Date(2024, 0, 1)]) //=> 1970-01-01T00:00:00.000Z\n// v3.6.0: both => Invalid Date\n```\n\n## Cause\n\nTwo interactions in `min`/`max`:\n\n- `typeof null === \"object\"`, so a `null` entry becomes the shared context (`constructFrom.bind(null, null)`), which constructs plain epoch dates for every subsequent entry.\n- `toDate(null, context)` coerces `null` to `new Date(0)` rather than an invalid date.\n\n`null` isn't part of `DateArg`'s type, but it flows in easily from nullable data at runtime, and every other invalid input (`NaN`, `undefined`, invalid dates, empty arrays) already produces `Invalid Date` in both v3 and v4 — `null` is the one inconsistent case.\n\n## Fix\n\nScoped to `min`/`max` (no `toDate`/`constructFrom` blast radius): guard the context binding against `null`, and map `null` entries to `constructFrom(context, NaN)` so they behave like any other invalid input, restoring v3 parity.\n\n## Tests\n\nRegression tests in both `min/test.ts` and `max/test.ts`, modeled on the existing \"returns `Invalid Date` if any given date is invalid\" cases — covering `[null]` alone and `null` mixed with valid dates. They fail on the current code (epoch returned) and pass with the fix; the full `min`/`max`/`toDate` suites (169 tests) pass.\n",
+    "isDraft": false,
+    "number": 4239,
+    "title": "Return Invalid Date from min/max when given null",
+    "updatedAt": "2026-07-05T18:21:22Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4239"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #4226\n\nThe default branch changed from \\master\\ to \\main\\ and the docs/source tree moved under \\pkgs/core/\\, but a number of links still pointed to the old \\\blob/master/{docs,src}/...\\ paths (404s). This updates all 41 occurrences across JSDoc comments, the runtime protected-token error message, the matching test assertions, and the markdown docs:\n\n- \\\blob/master/docs/unicodeTokens.md\\ -> \\\blob/main/pkgs/core/docs/unicodeTokens.md\\\n- \\\blob/master/src/toDate/index.ts\\ -> \\\blob/main/pkgs/core/src/toDate/index.ts\\\n- \\\blob/master/src/locale/en-US/snapshot.md\\ -> \\\blob/main/pkgs/core/src/locale/en-US/snapshot.md\\\n- \\\blob/master/docs/i18nContributionGuide.md\\ -> \\\blob/main/pkgs/core/docs/i18nContributionGuide.md\\\n\nThe runtime error message in \\_lib/protectedTokens/index.ts\\ and the matching assertions in \\\format\\/\\isMatch\\/\\parse\\ tests are updated consistently, so the protected-token tests stay green. No behavior change.",
+    "isDraft": false,
+    "number": 4238,
+    "title": "fix: point stale master-branch links to main/pkgs/core",
+    "updatedAt": "2026-07-03T17:32:22Z",
+    "url": "https://github.com/date-fns/date-fns/pull/4238"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "repo": "sindresorhus/p-queue",
+  "issue": 249,
+  "fix_kind": "sha",
+  "fix_ref": "d9cf2be011f3b7f127cac476de2d9927ed723491",
+  "fix_commit": "d9cf2be011f3b7f127cac476de2d9927ed723491",
+  "pre_fix_commit": "cfa917af261fb6db9eb1281221ba21093eb49e3d",
+  "pr_merged": null,
+  "fix_subject": "Fix `onSizeLessThan()` resolving late when the queue drains without a completion",
+  "changes": [
+    {
+      "filename": "source/index.ts",
+      "status": "modified",
+      "additions": 15,
+      "deletions": 5
+    },
+    {
+      "filename": "test/basic.ts",
+      "status": "modified",
+      "additions": 123,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "build": "del-cli dist && tsc",
+    "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+    "bench": "node --import=tsx/esm bench.ts",
+    "prepublishOnly": "del-cli dist && tsc"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.4",
+    "p-timeout": "^7.0.0"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^8.0.1",
+    "@types/benchmark": "^2.1.5",
+    "@types/node": "^25.6.0",
+    "benchmark": "^2.1.4",
+    "del-cli": "^6.0.0",
+    "delay": "^6.0.0",
+    "in-range": "^3.0.0",
+    "p-defer": "^4.0.1",
+    "random-int": "^3.1.0",
+    "time-span": "^5.1.0",
+    "tsd": "^0.33.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "xo": "^1.2.2"
+  }
+}

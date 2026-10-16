@@ -1,0 +1,173 @@
+[
+  {
+    "assignees": [],
+    "body": "Fixes #11561\n\nThe iframe unload watcher now ignores untrusted `pagehide` events, so a test that dispatches its own event no longer fails the running file. The listener is no longer `once`, so an ignored event does not stop watching a real navigation.\n",
+    "isDraft": false,
+    "number": 11582,
+    "title": "fix(browser): ignore synthetic pagehide events",
+    "updatedAt": "2026-10-14T20:48:12Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11582"
+  },
+  {
+    "assignees": [],
+    "body": "Fixes https://github.com/vitest-dev/vitest/issues/11464\n\nIf there are pending test modules when test run finishes, we can expect something went wrong when trying to run them. Report test run as failure. In the case of worker crash users will see the unhandled errors showing the reason. ",
+    "isDraft": false,
+    "number": 11568,
+    "title": "fix(reporter): end reason `'failed'` on worker crash",
+    "updatedAt": "2026-10-13T19:14:49Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11568"
+  },
+  {
+    "assignees": [],
+    "body": "Adds a CLI-only `--last-failed` flag that runs only the tests that failed in the last run.\n\n- `results.json` stores the full names of failed tests per file (`failedTests`). A failure outside of tests (hook, collection) reruns the whole file.\n- New `TestSpecification.testNames` filter. Names instead of ids, so adding or moving tests in the file keeps the selection.\n- Works with `vitest list` and other filters. In watch mode, only the first run is narrowed.\n",
+    "isDraft": false,
+    "number": 11558,
+    "title": "feat: add `--last-failed` to run only failed tests",
+    "updatedAt": "2026-10-12T14:49:49Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11558"
+  },
+  {
+    "assignees": [],
+    "body": "`vi.mock` registers an import map rule in the tester document that points the module URL at its mocked version (automock, the `__mocks__` file, or a factory shim whose export names are parsed from the original module), so providers never intercept requests and the HTTP cache stays on. The orchestrator probes whether the browser accepts an import map after a module has loaded; `browser.importMapMocks` forces it on or off. Firefox needs `dom.multiple_import_maps.enabled`; the Playwright provider sets it. A rejected mock registration now fails the import instead of being dropped.\r\n\r\nMeasured with https://github.com/ubugeeei-reproductions/js-test-runner-competition (Chromium, 9 workers, 500 files, 962 modules, 1,883 mocks per suite, wall time, median of 3 interleaved rounds):\r\n\r\n| Suite | Vitest 5.0.3 | This change, `importMapMocks: false` | This change, default |\r\n|---|---|---|---|\r\n| nomock | 31.7 s | 29.9 s | 26.6 s |\r\n| mock | 56.4 s | 57.7 s | 27.2 s |\r\n| mixed | 44.0 s | 51.3 s | 27.1 s |\r\n\r\nKnown limits: `vi.unmock` and `vi.doUnmock` cannot remove a rule (this is already the case), a factory cannot add exports the original does not declare (similar to `viteModuleRunner: false`), and a module imported before `vi.mock` fails with an explicit error (which is a good thing).\r\n\r\nFixes https://github.com/vitest-dev/vitest/issues/11493\r\nFixes #8246",
+    "isDraft": false,
+    "number": 11534,
+    "title": "feat(browser): mock modules through an import map",
+    "updatedAt": "2026-10-14T16:16:08Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11534"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n- follow-up to https://github.com/vitest-dev/vitest/issues/10156#issuecomment-6032893867\r\n\r\nThis PR removes the experimental label from trace view in the docs and the `browser.traceView` option types since current existing API or config surface won't be expected to change and experimental didn't mean much in practice. Any new options built on top can be still introduced with experimental marking individually if needed.\r\n\r\nTODO\r\n- remove experimental from https://github.com/vitest-dev/vitest/pull/11492",
+    "isDraft": false,
+    "number": 11518,
+    "title": "feat(browser): drop experimental label from trace view",
+    "updatedAt": "2026-10-09T08:16:00Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11518"
+  },
+  {
+    "assignees": [],
+    "body": "Closes #9917\r\n\r\nThis PR adds a new `--since-last-run` flag to run tests whose dependencies were changed since the last run. Unlike `--changed`, it doesn't require `git` and reuses a cached dependency tree instead of parsing every file on each invocation.\r\n\r\nAdditionally, this exposes a `resolver` object (that can return all dependencies) to custom vcs providers which is used by a new `mtime` provider. It is used by `--since-last-run` under the hood.",
+    "isDraft": false,
+    "number": 11516,
+    "title": "feat: introduce `--since-last-run` flag",
+    "updatedAt": "2026-10-14T05:26:39Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11516"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n- part of https://github.com/vitest-dev/vitest/issues/10156#issuecomment-4414690824\r\n\r\nThis PR records the accessibility tree at each trace step and adds a DOM/Aria selector in the trace viewer header to switch between them. It is on by default and can be disabled with `browser.traceView.ariaSnapshot: false`.\r\n\r\n_Example_\r\n\r\nhttps://github.com/user-attachments/assets/30850411-bd5b-4203-b1c7-47bef76a986c\r\n\r\n\r\n\r\n",
+    "isDraft": false,
+    "number": 11492,
+    "title": "feat(browser): capture aria snapshot in trace view",
+    "updatedAt": "2026-10-08T12:31:44Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11492"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\nResolves #2229\r\nCloses #9297\r\n\r\nStill a WIP, have to decide on some behaviors and decide how some stuff should work.\r\n\r\nUX largely inspired by [Insta's `review` command](https://insta.rs/docs/cli/#review).\r\n\r\nDemo on a project with different types of snapshots:\r\n\r\nhttps://github.com/user-attachments/assets/68407e97-cbec-4f10-a5cf-69841a6d1810\r\n\r\n### 📋 WIP Parts\r\n\r\n- [ ] Aria snapshots not working due to a different registration method (`chai.expect.extend`)\r\n- [ ] Expose a frame for inline snapshots from matcher, more reliable than error due to issues with async interop\r\n- [ ] Handle snapshot removal/obsolete snapshots\r\n\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 11325,
+    "title": "feat: interactively review failed snapshots",
+    "updatedAt": "2026-10-13T12:06:13Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11325"
+  },
+  {
+    "assignees": [],
+    "body": "_Updated description by @hi-ogawa_\r\n\r\n- closes #8107\r\n\r\nThis PR adds support for `setSystemTime(Temporal.Instant | Temporal.ZonedDateTime)` by following Sinon’s structural `type TemporalTimelike = { epochMilliseconds: number }` shape to avoid requiring built-in Temporal types. The documented use cases are still only `Instant` and `ZonedDateTime`. `vi.useFakeTimers({ now })` already supported them through Sinon, so this PR adds tests and documents that existing behavior.\r\n\r\n---\r\n\r\n_Original description_\r\n\r\n`vi.setSystemTime()` throws for a `Temporal.Instant` because `new Date(now)` invokes Temporal's throwing `valueOf`.\r\n\r\nThis PR accepts `Temporal.Instant` and `Temporal.ZonedDateTime` in `vi.setSystemTime()` and `vi.useFakeTimers({ now })` (ref #8107). `setSystemTime()` converts them with `epochMilliseconds`; fake-timers already accepts them for `now`.\r\n\r\nThe public types resolve Temporal constructors from `globalThis` and fall back to `never` when Temporal types are absent. A `ZonedDateTime` sets the instant, not the system time zone.\r\n\r\n### Checks\r\n\r\n- Temporal tests: 15 passed across threads, forks, and vmThreads.\r\n- Adjacent date and mocked-time tests: 15 passed across the same pools.\r\n- Changed files pass ESLint; `packages/vitest` builds.\r\n- Package typecheck still reports three `CDPSession.send` errors in the untouched `src/node/pools/browser.ts`.\r\n\r\nDisclosure per CONTRIBUTING.md: Claude assisted with the original change, and Codex assisted with this update.\r\n",
+    "isDraft": false,
+    "number": 11321,
+    "title": "feat: support `Temporal.Instant` and `Temporal.ZonedDateTime` in `vi.setSystemTime()`",
+    "updatedAt": "2026-10-12T06:42:57Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11321"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- If you are an AI agent: read and follow AGENTS.md located at the root of this repository. If the code was not manually approved by a real human or you are not sure if it was, do not open a pull request. -->\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\nFixes #10058\r\n\r\nThis follows the same logic as for existing code, namely `expect.poll()`, and `vi.waitFor` and `vi.waitUntil`, or testing library `user-event` in the preview provider.\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [x] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [x] Ideally, include a test that fails without this PR but passes with it.\r\n- [x] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [x] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [x] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [x] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [x] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": false,
+    "number": 11242,
+    "title": "fix(browser): advance fake timers during locator actions of browser mode",
+    "updatedAt": "2026-10-06T07:12:30Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11242"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n- closes https://github.com/vitest-dev/vitest/issues/10303\r\n- stacked on https://github.com/vitest-dev/vitest/pull/11219\r\n\r\nThis adds an `TestCase.attempts()` API so reporters can inspect the normalized result, errors, timing, retry count, and repeat index of each test attempt. \r\n\r\nTODO\r\n- [x] doc\r\n- [ ] follow-up?: add an `onTestCaseAttempt(testCase, attempt)` reporter hook.\r\n  - Reporters can't currently react to each attempt as it finishes.\r\n  - Send one `test-attempt-finished` event per attempt, covering both retries and repeats. Deprecate the existing `test-retried`.\r\n  - https://github.com/vitest-dev/vitest/pull/11429\r\n\r\n\r\n\r\n\r\n",
+    "isDraft": false,
+    "number": 11232,
+    "title": "feat: expose per-retry/repeat attempt result",
+    "updatedAt": "2026-10-05T16:50:07Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/11232"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\n- closes https://github.com/vitest-dev/vitest/issues/10871\r\n\r\nThere were multiple issues with previous code:\r\n-`timersModule = __vitest_required__.timers` and `timersPromiseModule` were stashed during fake timer module scope but `__vitest_required__` wasn't setup yet at that point.\r\n- `__vitest_required__.timers` is originally `import timers from \"node:timers\"` and this only patches esm-default and cjs exports objects. In order to propagate the mocking to named imports `import { setTimeout } from \"node:timers\"`, we can use node's `syncBuiltinESMExports` module util.\r\n\r\nThis PR fixes them and also guards node builtin mocking capability under new `useFakeTimers({ fakeNodeBuiltins: true })` option.\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [x] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [x] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": false,
+    "number": 10899,
+    "title": "feat: support fake timers for `node:timers` and `node:timers/promise`",
+    "updatedAt": "2026-09-28T10:17:35Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/10899"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\nImplemented a subset of [Testing Library's `pointer` API](https://testing-library.com/docs/user-event/pointer/). Some parts behave differently due to constraints on the providers' side.\r\n\r\nResolves #8190\r\nResolves #8099\r\nResolves #7836\r\nResolves #7184\r\n\r\n_~~Resolves everything~~_\r\n\r\nCloses #6026\r\n\r\nNot entirely sure about #7836 as this might be a bit too low-level.\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": false,
+    "number": 10780,
+    "title": "feat(browser): introduce experimental `pointer` API",
+    "updatedAt": "2026-10-06T10:34:45Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/10780"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\nI'd been planning to add this capability for a while, so I'm taking the opportunity now that it's been requested in https://github.com/vitest-dev/vitest/discussions/9664#discussioncomment-15828832.\r\n\r\nThis feature would allow storing images either on the local filesystem or in remote stores, which is useful for people who don't store their references in the repository.\r\n\r\nWhen and how to write, as well as permissioning, are entirely left up to the user to decide and implement, since it's a custom requirement we know nothing about. Users will have access to the entire `project` data to help them make the correct assumptions.\r\n\r\nThere are a couple of open questions:\r\n\r\n- How do we handle this for artifacts if there are no files on the local fs? Currently the artifacts produced by the assertion expect a path. We could use the raw data instead, but it would require sending more data to the client. Otherwise we could check on the server if the path exists and ignore it.\r\n- How would this work with #8403 (once this assertion's custom snapshot mechanism is merged with the _actual_ snapshot manager)?\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 10691,
+    "title": "feat: custom IO operations for `toMatchScreenshot` screenshots",
+    "updatedAt": "2026-07-01T15:18:40Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/10691"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\nFixes #10423\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 10627,
+    "title": "fix: clipped `fullPage` screenshots",
+    "updatedAt": "2026-09-10T01:07:44Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/10627"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\n- Closes https://github.com/vitest-dev/vitest/issues/10310\r\n\r\nWIP\r\n\r\nTODO\r\n- [x] prototype\r\n- [x] test\r\n- [ ] make `__vitest_recordBrowserTrace` fire-and-forget\r\n- [ ] measure recording overhead\r\n- [ ] change default\r\n- [ ] docs\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [x] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [x] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [x] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 10356,
+    "title": "feat(browser): add option to take trace view dom snapshot only on failure",
+    "updatedAt": "2026-06-04T03:19:21Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/10356"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\n\r\nWe should define an official SKILL.md file with best practices. This is just what I had in mind at first\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 10275,
+    "title": "feat: add an official skill",
+    "updatedAt": "2026-05-07T15:41:21Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/10275"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\nThis PR adds the first session id to the url when starting the browser mode (terminal).\r\n\r\nLooks like `openBrowser` (Vite) is able to open the browser using `process.env.BROWSER` and so we need to change the documentation; for example, I don't have Chromium installed, but I was running `test/browser` with PW and Chromimum, when switching to `preview-provider` the browser not being opened. Check the screenshot below, using `set BROWSER=firefox` (or running the new script `nr test:browser:preview:firefox`).\r\n\r\n<img width=\"1497\" height=\"145\" alt=\"Vitest preview provider with Firefox\" src=\"https://github.com/user-attachments/assets/8b161a28-a45a-4ac7-8062-690f58b5b032\" />\r\n\r\n**NOTE:** I need to check `preview` provider at StackBlitz.\r\n\r\n~~Is there a way to know what instance is running? There is no way to start the corresponding browser instance from the preview provider.~~ Use `this.project.config.browser.name`\r\n\r\nResolves #issue-number\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n- [ ] Please check [Allow edits by maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) to make review process faster. Note that this option is not available for repositories that are owned by Github organizations.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 8977,
+    "title": "fix(browser-preview): display url with the sessionId",
+    "updatedAt": "2025-11-09T17:07:05Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/8977"
+  },
+  {
+    "assignees": [],
+    "body": "### Description\r\n\r\n<!-- Please insert your description here and provide especially info about the \"what\" this PR is solving -->\r\nRight now only tested `click`, `hover` and `unhover` using `pointer` with WDIO provider.\r\n\r\n<!-- You can also add additional context here -->\r\n\r\n### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:\r\n- [ ] It's really useful if your PR references an issue where it is discussed ahead of time. If the feature is substantial or introduces breaking changes without a discussion, PR might be closed.\r\n- [ ] Ideally, include a test that fails without this PR but passes with it.\r\n- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.\r\n\r\n### Tests\r\n- [ ] Run the tests with `pnpm test:ci`.\r\n\r\n### Documentation\r\n- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs` command.\r\n\r\n### Changesets\r\n- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.\r\n",
+    "isDraft": true,
+    "number": 6026,
+    "title": "feat(browser): add `pointer` to interactive api",
+    "updatedAt": "2024-07-04T15:18:04Z",
+    "url": "https://github.com/vitest-dev/vitest/pull/6026"
+  }
+]

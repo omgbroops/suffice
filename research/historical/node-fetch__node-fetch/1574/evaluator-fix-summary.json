@@ -1,0 +1,50 @@
+{
+  "repo": "node-fetch/node-fetch",
+  "issue": 1574,
+  "fix_kind": "pr",
+  "fix_ref": 1578,
+  "fix_commit": "1c5ed6b981e6c5dd28bd50f5ab5418e5bd262b99",
+  "pre_fix_commit": "a92b5d5cf4457c2da95d8404b08cfd06a426a2fa",
+  "pr_merged": true,
+  "fix_subject": "fix: undefined reference to response.body when aborted (#1578)",
+  "changes": [
+    {
+      "filename": "src/index.js",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 1
+    }
+  ],
+  "scripts": {
+    "test": "mocha",
+    "coverage": "c8 report --reporter=text-lcov | coveralls",
+    "test-types": "tsd",
+    "lint": "xo"
+  },
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "dependencies": {
+    "data-uri-to-buffer": "^4.0.0",
+    "fetch-blob": "^3.1.4",
+    "formdata-polyfill": "^4.0.10"
+  },
+  "devDependencies": {
+    "abort-controller": "^3.0.0",
+    "abortcontroller-polyfill": "^1.7.1",
+    "busboy": "^1.4.0",
+    "c8": "^7.7.2",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "chai-iterator": "^3.0.2",
+    "chai-string": "^1.5.0",
+    "coveralls": "^3.1.0",
+    "form-data": "^4.0.0",
+    "formdata-node": "^4.2.4",
+    "mocha": "^9.1.3",
+    "p-timeout": "^5.0.0",
+    "stream-consumers": "^1.0.1",
+    "tsd": "^0.14.0",
+    "xo": "^0.39.1"
+  }
+}

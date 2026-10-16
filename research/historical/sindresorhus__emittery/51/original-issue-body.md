@@ -1,0 +1,1 @@
+See the initial attempt and feedback in https://github.com/sindresorhus/emittery/pull/19.

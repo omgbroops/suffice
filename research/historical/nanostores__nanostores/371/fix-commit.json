@@ -1,0 +1,125 @@
+{
+  "sha": "3206678515f9dd1985a7770d9c2a340a8f65a443",
+  "node_id": "C_kwDOEiCCI9oAKDMyMDY2Nzg1MTVmOWRkMTk4NWE3NzcwZDljMmEzNDBhOGY2NWE0NDM",
+  "commit": {
+    "author": {
+      "name": "Andrii Furmanets",
+      "email": "furmanets.andriy@gmail.com",
+      "date": "2026-04-17T22:28:19Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-04-17T22:28:19Z"
+    },
+    "message": "Fix: store epoch on globalThis to prevent separate module instances from diverging (#396)\n\n* Fix: store epoch on globalThis to prevent separate module instances from diverging\n\nFixes #371\n\nWhen nanostores is bundled separately in different parts of an application\n(e.g., tree-shaking separates core from React), each bundle can end up with\nits own epoch instance. This causes computed stores to not receive updates\nfrom atom stores in different bundles, because the epoch counters are not\nshared.\n\nThe fix stores epoch on globalThis.nanostores to ensure all module instances\nshare the same counter, regardless of how they are bundled.\n\n* Use nanostoresEpoch as global key per review feedback\n\n* Address review comments: fix comment and update size limits\n\n- Update comment to reference globalThis.nanostoresEpoch instead of globalThis.nanostores\n- Update Atom size limit: 271 B → 311 B\n- Update Popular Set size limit: 802 B → 835 B\n\n* Fix: export shared NANOSTORES_EPOCH object instead of primitive epoch value\n\nThe original implementation had a bug: 'export let epoch = NANOSTORES.epoch' captured\nthe initial value (0) as a local variable, and 'epoch++' in notify() incremented the\nlocal copy, not the shared global. This meant separate module instances still had\ndiverging epoch counters.\n\nFix: Export the shared object 'NANOSTORES_EPOCH' and use NANOSTORES.epoch++ for\nincrements, ensuring all module instances share the same epoch counter.\n\nChanges per review feedback from ai:\n- atom/index.js: Export NANOSTORES_EPOCH (the shared global object) instead of epoch\n- atom/index.js: Use NANOSTORES.epoch++ instead of epoch++\n- computed/index.js: Import and use NANOSTORES_EPOCH.epoch instead of epoch\n- package.json: Update Popular Set size limit from 835 B to 845 B\n\n* Use ||= for cleaner initialization, per gismya's suggestion\n\nSaving 11 B on Atom (300 B vs 307 B) and 8 B on Popular Set (837 B vs 845 B).",
+    "tree": {
+      "sha": "6af71241f3b73da637d582c2d0d826038fc49e2e",
+      "url": "https://api.github.com/repos/nanostores/nanostores/git/trees/6af71241f3b73da637d582c2d0d826038fc49e2e"
+    },
+    "url": "https://api.github.com/repos/nanostores/nanostores/git/commits/3206678515f9dd1985a7770d9c2a340a8f65a443",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJp4rQDCRC1aQ7uu5UhlAAAeD8QADNwHE7i6yOrnmk9cuOilzYx\n0e8xbU2j/I+5weBDi8RwJ38nT2OsOcYAcTdW/Ww5ELLOjOLzaMttfBVXM/hyDn8z\npgRK7o62Jl/bampCp5mAZ/R5hCmL9ZkqX3M9O9SXxbFKqFma/VoSM4lz750I4ZAF\nNBPYcGWlxQScnSQpI66pOn84Aov9TzreYw0nEIKX9UEQW3GRsjXYVFfRE4r4f9Aa\nZbFF8U3AGQtnKolu5AfdzgMe2DWmkFrDOHrYFa9vk4XEEMyLB4WUgHIy8liEO+GV\nXGrd5ZJ3GJdRgGFNBbSRXIGSferWWuqA/VE9J+nQ73swqD+hbqV5DbXVs48N6MEh\nYJ7BZ7oIL2JddXvy4cMmVQeTnIAykvi/9BXvyeTYCohvqjzC0MDGa8AtHQ4gUgZU\nrEvz+mJCm9nHpd+tEPF5Ppf9vgBCGk3gZOtHTAUUd9tJ2wVCnzn8PK7pRakKK8dv\nxAzUpCKB+6gldJdykQ42h/AezEdgxzCv+AvUAL28syP0vMlXQCnA6KGMREc+GNPo\nWHaZX+OXC3yOrNvXGHCQ+tJC2KO17TZCjHLwk+mjSqBege1yg9Ikz2mNkuAwShrH\noRyzN6fMIY07mZEZzjV05atXjpyJ0/9B4r/eizRHQZVY1+6TtqLouo5Kv/HllIw6\n5pXYDZnAuXonKh3Qbqyg\n=lpyw\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 6af71241f3b73da637d582c2d0d826038fc49e2e\nparent 8ad031dcde958413cf722b0fe46ceb65b547c747\nauthor Andrii Furmanets <furmanets.andriy@gmail.com> 1776464899 +0300\ncommitter GitHub <noreply@github.com> 1776464899 +0200\n\nFix: store epoch on globalThis to prevent separate module instances from diverging (#396)\n\n* Fix: store epoch on globalThis to prevent separate module instances from diverging\n\nFixes #371\n\nWhen nanostores is bundled separately in different parts of an application\n(e.g., tree-shaking separates core from React), each bundle can end up with\nits own epoch instance. This causes computed stores to not receive updates\nfrom atom stores in different bundles, because the epoch counters are not\nshared.\n\nThe fix stores epoch on globalThis.nanostores to ensure all module instances\nshare the same counter, regardless of how they are bundled.\n\n* Use nanostoresEpoch as global key per review feedback\n\n* Address review comments: fix comment and update size limits\n\n- Update comment to reference globalThis.nanostoresEpoch instead of globalThis.nanostores\n- Update Atom size limit: 271 B → 311 B\n- Update Popular Set size limit: 802 B → 835 B\n\n* Fix: export shared NANOSTORES_EPOCH object instead of primitive epoch value\n\nThe original implementation had a bug: 'export let epoch = NANOSTORES.epoch' captured\nthe initial value (0) as a local variable, and 'epoch++' in notify() incremented the\nlocal copy, not the shared global. This meant separate module instances still had\ndiverging epoch counters.\n\nFix: Export the shared object 'NANOSTORES_EPOCH' and use NANOSTORES.epoch++ for\nincrements, ensuring all module instances share the same epoch counter.\n\nChanges per review feedback from ai:\n- atom/index.js: Export NANOSTORES_EPOCH (the shared global object) instead of epoch\n- atom/index.js: Use NANOSTORES.epoch++ instead of epoch++\n- computed/index.js: Import and use NANOSTORES_EPOCH.epoch instead of epoch\n- package.json: Update Popular Set size limit from 835 B to 845 B\n\n* Use ||= for cleaner initialization, per gismya's suggestion\n\nSaving 11 B on Atom (300 B vs 307 B) and 8 B on Popular Set (837 B vs 845 B).",
+      "verified_at": "2026-04-17T22:28:19Z"
+    }
+  },
+  "url": "https://api.github.com/repos/nanostores/nanostores/commits/3206678515f9dd1985a7770d9c2a340a8f65a443",
+  "html_url": "https://github.com/nanostores/nanostores/commit/3206678515f9dd1985a7770d9c2a340a8f65a443",
+  "comments_url": "https://api.github.com/repos/nanostores/nanostores/commits/3206678515f9dd1985a7770d9c2a340a8f65a443/comments",
+  "author": {
+    "login": "afurm",
+    "id": 6375192,
+    "node_id": "MDQ6VXNlcjYzNzUxOTI=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/6375192?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/afurm",
+    "html_url": "https://github.com/afurm",
+    "followers_url": "https://api.github.com/users/afurm/followers",
+    "following_url": "https://api.github.com/users/afurm/following{/other_user}",
+    "gists_url": "https://api.github.com/users/afurm/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/afurm/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/afurm/subscriptions",
+    "organizations_url": "https://api.github.com/users/afurm/orgs",
+    "repos_url": "https://api.github.com/users/afurm/repos",
+    "events_url": "https://api.github.com/users/afurm/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/afurm/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "8ad031dcde958413cf722b0fe46ceb65b547c747",
+      "url": "https://api.github.com/repos/nanostores/nanostores/commits/8ad031dcde958413cf722b0fe46ceb65b547c747",
+      "html_url": "https://github.com/nanostores/nanostores/commit/8ad031dcde958413cf722b0fe46ceb65b547c747"
+    }
+  ],
+  "stats": {
+    "total": 23,
+    "additions": 15,
+    "deletions": 8
+  },
+  "files": [
+    {
+      "sha": "bc1cb873e968bc8f2f1a97d6e796e5a02fac0813",
+      "filename": "atom/index.js",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 2,
+      "changes": 11,
+      "blob_url": "https://github.com/nanostores/nanostores/blob/3206678515f9dd1985a7770d9c2a340a8f65a443/atom%2Findex.js",
+      "raw_url": "https://github.com/nanostores/nanostores/raw/3206678515f9dd1985a7770d9c2a340a8f65a443/atom%2Findex.js",
+      "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/atom%2Findex.js?ref=3206678515f9dd1985a7770d9c2a340a8f65a443",
+      "patch": "@@ -3,7 +3,14 @@ import { clean } from '../clean-stores/index.js'\n let listenerQueue = []\n let lqIndex = 0\n const QUEUE_ITEMS_PER_LISTENER = 4\n-export let epoch = 0\n+// Use globalThis.nanostoresEpoch to store epoch so all module instances share\n+// the same counter. This fixes issues when nanostores is bundled separately\n+// in different parts of an application (e.g., tree-shaking separates core\n+// from React), causing each bundle to have its own epoch instance.\n+// We export NANOSTORES_EPOCH so users can access the shared epoch object.\n+// See: https://github.com/nanostores/nanostores/issues/371\n+let NANOSTORES = globalThis.nanostoresEpoch ||= { epoch: 0 }\n+export const NANOSTORES_EPOCH = globalThis.nanostoresEpoch\n \n /* @__NO_SIDE_EFFECTS__ */\n export const atom = initialValue => {\n@@ -40,7 +47,7 @@ export const atom = initialValue => {\n       }\n     },\n     notify(oldValue, changedKey) {\n-      epoch++\n+      NANOSTORES.epoch++\n       let runListenerQueue = !listenerQueue.length\n       for (let listener of listeners) {\n         listenerQueue.push(listener, $atom.value, oldValue, changedKey)"
+    },
+    {
+      "sha": "d0ff902711df57ccf46355dd0c86705c8e2faf25",
+      "filename": "computed/index.js",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "changes": 8,
+      "blob_url": "https://github.com/nanostores/nanostores/blob/3206678515f9dd1985a7770d9c2a340a8f65a443/computed%2Findex.js",
+      "raw_url": "https://github.com/nanostores/nanostores/raw/3206678515f9dd1985a7770d9c2a340a8f65a443/computed%2Findex.js",
+      "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/computed%2Findex.js?ref=3206678515f9dd1985a7770d9c2a340a8f65a443",
+      "patch": "@@ -1,4 +1,4 @@\n-import { atom, epoch } from '../atom/index.js'\n+import { atom, NANOSTORES_EPOCH } from '../atom/index.js'\n import { onMount } from '../lifecycle/index.js'\n import { warn } from '../warn/index.js'\n \n@@ -8,8 +8,8 @@ let computedStore = (stores, cb, batched) => {\n   let previousArgs\n   let currentEpoch\n   let set = () => {\n-    if (currentEpoch === epoch) return\n-    currentEpoch = epoch\n+    if (currentEpoch === NANOSTORES_EPOCH.epoch) return\n+    currentEpoch = NANOSTORES_EPOCH.epoch\n     let args = stores.map($store => $store.get())\n     if (!previousArgs || args.some((arg, i) => arg !== previousArgs[i])) {\n       previousArgs = args\n@@ -28,7 +28,7 @@ let computedStore = (stores, cb, batched) => {\n         })\n       } else {\n         $computed.set(value)\n-        currentEpoch = epoch\n+        currentEpoch = NANOSTORES_EPOCH.epoch\n       }\n     }\n   }"
+    },
+    {
+      "sha": "fa8e6d739d5f8ecc3d44f16877a71887351b88f0",
+      "filename": "package.json",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/nanostores/nanostores/blob/3206678515f9dd1985a7770d9c2a340a8f65a443/package.json",
+      "raw_url": "https://github.com/nanostores/nanostores/raw/3206678515f9dd1985a7770d9c2a340a8f65a443/package.json",
+      "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/package.json?ref=3206678515f9dd1985a7770d9c2a340a8f65a443",
+      "patch": "@@ -60,14 +60,14 @@\n       \"import\": {\n         \"./index.js\": \"{ atom }\"\n       },\n-      \"limit\": \"271 B\"\n+      \"limit\": \"311 B\"\n     },\n     {\n       \"name\": \"Popular Set\",\n       \"import\": {\n         \"./index.js\": \"{ map, computed }\"\n       },\n-      \"limit\": \"802 B\"\n+      \"limit\": \"845 B\"\n     }\n   ],\n   \"engines\": {"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "repo": "node-fetch/node-fetch",
+  "issue": 1386,
+  "fix_kind": "pr",
+  "fix_ref": 1387,
+  "fix_commit": "6e4c1e4f67b7b6b8de13bbbf88991894dc003245",
+  "pre_fix_commit": "2d5399ed5605fb1b2e887f6e7953bc02e6194d52",
+  "pr_merged": true,
+  "fix_subject": "fix(Redirect): Better handle wrong redirect header in a response (#1387)",
+  "changes": [
+    {
+      "filename": "docs/CHANGELOG.md",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0
+    },
+    {
+      "filename": "src/index.js",
+      "status": "modified",
+      "additions": 13,
+      "deletions": 1
+    },
+    {
+      "filename": "test/main.js",
+      "status": "modified",
+      "additions": 22,
+      "deletions": 0
+    },
+    {
+      "filename": "test/utils/server.js",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "test": "mocha",
+    "coverage": "c8 report --reporter=text-lcov | coveralls",
+    "test-types": "tsd",
+    "lint": "xo"
+  },
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "dependencies": {
+    "data-uri-to-buffer": "^4.0.0",
+    "formdata-polyfill": "^4.0.10",
+    "fetch-blob": "^3.1.3"
+  },
+  "devDependencies": {
+    "abort-controller": "^3.0.0",
+    "abortcontroller-polyfill": "^1.7.1",
+    "busboy": "^0.3.1",
+    "c8": "^7.7.2",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "chai-iterator": "^3.0.2",
+    "chai-string": "^1.5.0",
+    "coveralls": "^3.1.0",
+    "delay": "^5.0.0",
+    "form-data": "^4.0.0",
+    "formdata-node": "^4.2.4",
+    "mocha": "^9.1.3",
+    "p-timeout": "^5.0.0",
+    "tsd": "^0.14.0",
+    "xo": "^0.39.1"
+  }
+}

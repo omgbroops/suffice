@@ -1,0 +1,137 @@
+{
+  "sha": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+  "node_id": "C_kwDOBE2vuNoAKDA4YTAxMmFjM2FlMjAwOTNlYTkwNjc2YTViNzg4ZWM0YjczYzU4ZjY",
+  "commit": {
+    "author": {
+      "name": "Sindre Sorhus",
+      "email": "sindresorhus@gmail.com",
+      "date": "2026-07-21T22:53:36Z"
+    },
+    "committer": {
+      "name": "Sindre Sorhus",
+      "email": "sindresorhus@gmail.com",
+      "date": "2026-07-22T11:09:51Z"
+    },
+    "message": "Fix rate limiter delaying tasks in a fresh window when `intervalCap > 1`\n\nThe fix for #182 tracked `#lastExecutionTime` to enforce spacing after the\nqueue went idle, but that anchor overshoots the real window boundary when\nmore than one slot is consumed per interval, blocking tasks that belong to\na fresh window.\n\nKeep `#intervalEnd` accurate across window transitions instead and drop the\n`#lastExecutionTime` guard entirely.\n\nFixes #251\n\nRefine fresh-window rate limiter fix after review\n\nOnly advance `#intervalEnd` from the recurring interval timer, not from the\ntimeout-resume path. Advancing it there made the follow-up `#processQueue`\nschedule a redundant timeout that coexisted with the `setInterval` created by\n`#initializeIntervalIfNeeded`, causing extra window-boundary churn. The timeout\npath already gets an accurate `#intervalEnd` from `#initializeIntervalIfNeeded`.\n\nAlso strengthen the issue #251 test to assert the full `intervalCap` is\navailable in the fresh window, and tidy a comment and a redundant ternary.\n\nDocument interval state machine and add fresh-window edge-case tests\n\nAdd field-level comments explaining the `#intervalEnd`/`#intervalId`/`#timeoutId`\ninterval state machine and why the fixed-window pause check only applies while\nthe queue is idle, since that invariant is what the issue #251 fix depends on.\n\nAdd two tests: one asserting a fresh window after idle still enforces the cap\nfor the following task (guarding against over-correction into always-allow), and\none covering the `carryoverIntervalCount` path through the fresh-window reset.\n\nAdd fresh-window rate limiter edge-case tests\n\nCover two paths the existing suite missed: a task added after the queue goes\nidle but before the window boundary must still wait for the current window\n(guarding against the reset firing too eagerly), and the strict-mode analog\nwhere spread ticks age out individually so a slot frees mid-window.\n\nUnwrap hard-wrapped comments",
+    "tree": {
+      "sha": "9405d2433c3edcce80f91f5823a8ed68488648da",
+      "url": "https://api.github.com/repos/sindresorhus/p-queue/git/trees/9405d2433c3edcce80f91f5823a8ed68488648da"
+    },
+    "url": "https://api.github.com/repos/sindresorhus/p-queue/git/commits/08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/sindresorhus/p-queue/commits/08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+  "html_url": "https://github.com/sindresorhus/p-queue/commit/08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+  "comments_url": "https://api.github.com/repos/sindresorhus/p-queue/commits/08a012ac3ae20093ea90676a5b788ec4b73c58f6/comments",
+  "author": {
+    "login": "sindresorhus",
+    "id": 170270,
+    "node_id": "MDQ6VXNlcjE3MDI3MA==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/170270?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sindresorhus",
+    "html_url": "https://github.com/sindresorhus",
+    "followers_url": "https://api.github.com/users/sindresorhus/followers",
+    "following_url": "https://api.github.com/users/sindresorhus/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sindresorhus/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sindresorhus/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sindresorhus/subscriptions",
+    "organizations_url": "https://api.github.com/users/sindresorhus/orgs",
+    "repos_url": "https://api.github.com/users/sindresorhus/repos",
+    "events_url": "https://api.github.com/users/sindresorhus/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sindresorhus/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "sindresorhus",
+    "id": 170270,
+    "node_id": "MDQ6VXNlcjE3MDI3MA==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/170270?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sindresorhus",
+    "html_url": "https://github.com/sindresorhus",
+    "followers_url": "https://api.github.com/users/sindresorhus/followers",
+    "following_url": "https://api.github.com/users/sindresorhus/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sindresorhus/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sindresorhus/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sindresorhus/subscriptions",
+    "organizations_url": "https://api.github.com/users/sindresorhus/orgs",
+    "repos_url": "https://api.github.com/users/sindresorhus/repos",
+    "events_url": "https://api.github.com/users/sindresorhus/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sindresorhus/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "98ccb488771059368b21cc2356234a70dc961c8b",
+      "url": "https://api.github.com/repos/sindresorhus/p-queue/commits/98ccb488771059368b21cc2356234a70dc961c8b",
+      "html_url": "https://github.com/sindresorhus/p-queue/commit/98ccb488771059368b21cc2356234a70dc961c8b"
+    }
+  ],
+  "stats": {
+    "total": 202,
+    "additions": 177,
+    "deletions": 25
+  },
+  "files": [
+    {
+      "sha": "bf7978ceea2929a6bca64791eb082494b89b353e",
+      "filename": "source/index.ts",
+      "status": "modified",
+      "additions": 20,
+      "deletions": 25,
+      "changes": 45,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/08a012ac3ae20093ea90676a5b788ec4b73c58f6/source%2Findex.ts",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/08a012ac3ae20093ea90676a5b788ec4b73c58f6/source%2Findex.ts",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/source%2Findex.ts?ref=08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "patch": "@@ -27,12 +27,15 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \n \treadonly #interval: number;\n \n+\t/*\n+\tTimestamp when the current interval window ends. Kept accurate at every window transition: `#initializeIntervalIfNeeded` sets it when a window starts and `#onInterval` advances it as the recurring timer rolls into each new window. This is the source of truth for whether a task added after the queue goes idle belongs to a fresh window, so it must not go stale.\n+\t*/\n \t#intervalEnd = 0;\n \n-\t#lastExecutionTime = 0;\n-\n+\t// Recurring timer that drives windows while the queue is actively processing. Absent (`undefined`) once the queue goes idle.\n \t#intervalId?: NodeJS.Timeout;\n \n+\t// One-shot timer used while idle to resume at the next window boundary, since `#intervalId` is cleared when idle.\n \t#timeoutId?: NodeJS.Timeout;\n \n \treadonly #strict: boolean;\n@@ -234,26 +237,14 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t\t\treturn false;\n \t\t}\n \n-\t\t// Fixed window mode (original logic)\n+\t\t// Fixed window mode. While the recurring timer runs it already governs the windows, so pausing is only decided here when the queue is idle (the timer is absent) and we rely on `#intervalEnd`.\n \t\tif (this.#intervalId === undefined) {\n \t\t\tconst delay = this.#intervalEnd - now;\n \t\t\tif (delay < 0) {\n-\t\t\t\t// If the interval has expired while idle, check if we should enforce the interval\n-\t\t\t\t// from the last task execution. This ensures proper spacing between tasks even\n-\t\t\t\t// when the queue becomes empty and then new tasks are added.\n-\t\t\t\tif (this.#lastExecutionTime > 0) {\n-\t\t\t\t\tconst timeSinceLastExecution = now - this.#lastExecutionTime;\n-\t\t\t\t\tif (timeSinceLastExecution < this.#interval) {\n-\t\t\t\t\t\t// Not enough time has passed since the last task execution\n-\t\t\t\t\t\tthis.#createIntervalTimeout(this.#interval - timeSinceLastExecution);\n-\t\t\t\t\t\treturn true;\n-\t\t\t\t\t}\n-\t\t\t\t}\n-\n-\t\t\t\t// Enough time has passed or no previous execution, allow execution\n-\t\t\t\tthis.#intervalCount = (this.#carryoverIntervalCount) ? this.#pending : 0;\n+\t\t\t\t// The interval expired while idle, so reset the count for the new window.\n+\t\t\t\tthis.#intervalCount = this.#carryoverIntervalCount ? this.#pending : 0;\n \t\t\t} else {\n-\t\t\t\t// Act as the interval is pending\n+\t\t\t\t// Still inside the previous window; wait out the remaining time before starting the next task.\n \t\t\t\tthis.#createIntervalTimeout(delay);\n \t\t\t\treturn true;\n \t\t\t}\n@@ -323,13 +314,13 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t\t\t\t\tthis.#scheduleRateLimitUpdate();\n \t\t\t\t}\n \n-\t\t\t\tthis.emit('active');\n-\t\t\t\tjob();\n-\n \t\t\t\tif (canInitializeInterval) {\n \t\t\t\t\tthis.#initializeIntervalIfNeeded();\n \t\t\t\t}\n \n+\t\t\t\tthis.emit('active');\n+\t\t\t\tjob();\n+\n \t\t\t\ttaskStarted = true;\n \t\t\t}\n \t\t}\n@@ -360,8 +351,14 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t#onInterval(): void {\n \t\t// Non-strict mode uses interval timers and intervalCount\n \t\tif (!this.#strict) {\n-\t\t\tif (this.#intervalCount === 0 && this.#pending === 0 && this.#intervalId) {\n-\t\t\t\tthis.#clearIntervalTimer();\n+\t\t\t// Only touch the recurring interval timer here. When resumed via a timeout instead, `#intervalId` is undefined and `#initializeIntervalIfNeeded` sets `#intervalEnd` right after.\n+\t\t\tif (this.#intervalId !== undefined) {\n+\t\t\t\tif (this.#intervalCount === 0 && this.#pending === 0) {\n+\t\t\t\t\tthis.#clearIntervalTimer();\n+\t\t\t\t} else {\n+\t\t\t\t\t// The recurring timer fired, starting a new window. Keep the boundary accurate so tasks added after the queue later goes idle are scheduled against the correct window.\n+\t\t\t\t\tthis.#intervalEnd = Date.now() + this.#interval;\n+\t\t\t\t}\n \t\t\t}\n \n \t\t\tthis.#intervalCount = this.#carryoverIntervalCount ? this.#pending : 0;\n@@ -489,8 +486,6 @@ export default class PQueue<QueueType extends Queue<RunFunction, EnqueueOptionsT\n \t\t\t\t\t\tthrow error;\n \t\t\t\t\t}\n \n-\t\t\t\t\tthis.#lastExecutionTime = Date.now();\n-\n \t\t\t\t\tlet operation = function_({signal: options.signal});\n \n \t\t\t\t\tif (options.timeout !== undefined) {"
+    },
+    {
+      "sha": "d3b8dacdb17a477e5cb5c062e0ecdeaac79ae4ae",
+      "filename": "test/advanced.ts",
+      "status": "modified",
+      "additions": 86,
+      "deletions": 0,
+      "changes": 86,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/08a012ac3ae20093ea90676a5b788ec4b73c58f6/test%2Fadvanced.ts",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/08a012ac3ae20093ea90676a5b788ec4b73c58f6/test%2Fadvanced.ts",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/test%2Fadvanced.ts?ref=08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "patch": "@@ -999,6 +999,92 @@ test('interval should be maintained when using await between adds (issue #182)',\n \t}\n });\n \n+test('task added in a fresh window runs immediately after queue went idle mid-window (issue #251)', async () => {\n+\tconst queue = new PQueue({intervalCap: 2, interval: 200});\n+\n+\t// Window [0, 200): consume slot 1 at t≈0.\n+\tqueue.add(() => undefined);\n+\n+\t// Consume slot 2 later in the window at t≈120.\n+\tawait delay(120);\n+\tqueue.add(() => undefined);\n+\tawait queue.onIdle();\n+\n+\t// Now past the window boundary at t≈220. Both slots of the fresh window should be available immediately.\n+\tawait delay(100);\n+\tconst start = Date.now();\n+\tqueue.add(() => undefined);\n+\tawait queue.add(() => undefined);\n+\tconst elapsed = Date.now() - start;\n+\n+\tassert.ok(elapsed < 50, `Both tasks should start immediately in the new window, but waited ${elapsed}ms`);\n+});\n+\n+test('fresh window after idle still enforces the cap for the following task (issue #251)', async () => {\n+\tconst queue = new PQueue({intervalCap: 2, interval: 200});\n+\n+\t// Consume both slots of the first window, then let the queue drain.\n+\tqueue.add(() => undefined);\n+\tawait delay(120);\n+\tqueue.add(() => undefined);\n+\tawait queue.onIdle();\n+\n+\t// Past the boundary: the fresh window grants exactly two slots, so a third task must wait for the next window.\n+\tawait delay(100);\n+\tconst timestamps: number[] = [];\n+\tconst start = Date.now();\n+\tqueue.add(() => {\n+\t\ttimestamps.push(Date.now() - start);\n+\t});\n+\tqueue.add(() => {\n+\t\ttimestamps.push(Date.now() - start);\n+\t});\n+\tawait queue.add(() => {\n+\t\ttimestamps.push(Date.now() - start);\n+\t});\n+\n+\tassert.ok(timestamps[0] < 50, `First task should be immediate, waited ${timestamps[0]}ms`);\n+\tassert.ok(timestamps[1] < 50, `Second task should be immediate, waited ${timestamps[1]}ms`);\n+\tassert.ok(timestamps[2] >= 170, `Third task should wait for the next window, but ran after ${timestamps[2]}ms`);\n+});\n+\n+test('carryoverIntervalCount does not break the fresh window after idle mid-window (issue #251)', async () => {\n+\tconst queue = new PQueue({intervalCap: 2, interval: 200, carryoverIntervalCount: true});\n+\n+\tqueue.add(() => undefined);\n+\tawait delay(120);\n+\tqueue.add(() => undefined);\n+\tawait queue.onIdle();\n+\n+\t// With no pending tasks, carrying the count over resets it to zero, so the fresh window is fully available.\n+\tawait delay(100);\n+\tconst start = Date.now();\n+\tqueue.add(() => undefined);\n+\tawait queue.add(() => undefined);\n+\tconst elapsed = Date.now() - start;\n+\n+\tassert.ok(elapsed < 50, `Both tasks should start immediately in the new window, but waited ${elapsed}ms`);\n+});\n+\n+test('task added after going idle but before the boundary still waits for the current window (issue #251)', async () => {\n+\tconst queue = new PQueue({intervalCap: 2, interval: 200});\n+\tconst windowStart = Date.now();\n+\n+\t// Fill both slots spread across the window, after which the queue goes idle.\n+\tqueue.add(() => undefined);\n+\tawait delay(120);\n+\tqueue.add(() => undefined);\n+\tawait queue.onIdle();\n+\n+\t// Added while still inside the window [0, 200): the cap is reached, so it must wait for the boundary, not run immediately. This guards against the reset firing before the window has actually expired.\n+\tconst start = Date.now();\n+\tawait queue.add(() => undefined);\n+\tconst waited = Date.now() - start;\n+\n+\tassert.ok(waited >= 40, `Task should wait for the current window to end, but only waited ${waited}ms`);\n+\tassert.ok(Date.now() - windowStart >= 190, 'Task should run at the window boundary');\n+});\n+\n test('interval maintained when queue becomes empty multiple times', async () => {\n \tconst queue = new PQueue({\n \t\tintervalCap: 1,"
+    },
+    {
+      "sha": "af4b6567782add52941ee8605eb305f9b5577ba7",
+      "filename": "test/rate-limit.ts",
+      "status": "modified",
+      "additions": 50,
+      "deletions": 0,
+      "changes": 50,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/08a012ac3ae20093ea90676a5b788ec4b73c58f6/test%2Frate-limit.ts",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/08a012ac3ae20093ea90676a5b788ec4b73c58f6/test%2Frate-limit.ts",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/test%2Frate-limit.ts?ref=08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "patch": "@@ -43,6 +43,56 @@ test('rate-limit rapid pause/start cycles', async () => {\n \tassert.equal(results.length, 4);\n });\n \n+test('rate-limit preserves the interval count for re-entrant task additions', async () => {\n+\tconst queue = new PQueue({\n+\t\tinterval: 100,\n+\t\tintervalCap: 2,\n+\t});\n+\n+\tconst starts: number[] = [];\n+\tconst addTask = (index: number): void => {\n+\t\tqueue.add(() => {\n+\t\t\tstarts.push(index);\n+\n+\t\t\tif (index < 4) {\n+\t\t\t\taddTask(index + 1);\n+\t\t\t}\n+\t\t});\n+\t};\n+\n+\taddTask(0);\n+\tassert.deepEqual(starts, [0, 1]);\n+\n+\tawait queue.onIdle();\n+\tassert.deepEqual(starts, [0, 1, 2, 3, 4]);\n+});\n+\n+test('rate-limit preserves the interval count for re-entrant active listeners', async () => {\n+\tconst queue = new PQueue({\n+\t\tinterval: 100,\n+\t\tintervalCap: 2,\n+\t});\n+\n+\tconst starts: number[] = [];\n+\tlet nextTask = 0;\n+\tqueue.on('active', () => {\n+\t\tif (nextTask < 5) {\n+\t\t\tconst taskIndex = nextTask++;\n+\t\t\tqueue.add(() => {\n+\t\t\t\tstarts.push(taskIndex);\n+\t\t\t});\n+\t\t}\n+\t});\n+\n+\tqueue.add(() => {\n+\t\tstarts.push(-1);\n+\t});\n+\tassert.equal(starts.length, 2);\n+\n+\tawait queue.onIdle();\n+\tassert.equal(starts.length, 6);\n+});\n+\n test('rate-limit edge case with zero-interval', async () => {\n \t// Zero interval should effectively disable rate limiting\n \tconst queue = new PQueue({"
+    },
+    {
+      "sha": "cee9ae5e632c37f588de575d6804a084b1ec4310",
+      "filename": "test/strict.ts",
+      "status": "modified",
+      "additions": 21,
+      "deletions": 0,
+      "changes": 21,
+      "blob_url": "https://github.com/sindresorhus/p-queue/blob/08a012ac3ae20093ea90676a5b788ec4b73c58f6/test%2Fstrict.ts",
+      "raw_url": "https://github.com/sindresorhus/p-queue/raw/08a012ac3ae20093ea90676a5b788ec4b73c58f6/test%2Fstrict.ts",
+      "contents_url": "https://api.github.com/repos/sindresorhus/p-queue/contents/test%2Fstrict.ts?ref=08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "patch": "@@ -507,6 +507,27 @@ test('strict mode after queue becomes idle', async () => {\n \tassert.ok(elapsed < 50, `Second batch should execute immediately after idle, took ${elapsed}ms`);\n });\n \n+test('strict mode frees a slot as soon as the oldest tick ages out, even with spread ticks', async () => {\n+\tconst queue = new PQueue({\n+\t\tinterval: 100,\n+\t\tintervalCap: 2,\n+\t\tstrict: true,\n+\t});\n+\n+\t// Consume both slots spread across the window: tick at ≈0 and tick at ≈60.\n+\tawait queue.add(async () => undefined);\n+\tawait delay(60);\n+\tawait queue.add(async () => undefined);\n+\n+\t// At ≈120ms the first tick (≈0) has aged out but the second (≈60) has not, so exactly one slot is free and the next task should run immediately.\n+\tawait delay(60);\n+\tconst start = Date.now();\n+\tawait queue.add(async () => undefined);\n+\tconst elapsed = Date.now() - start;\n+\n+\tassert.ok(elapsed < 40, `Task should run as soon as the oldest tick ages out, but waited ${elapsed}ms`);\n+});\n+\n test('strict mode prevents boundary bursts', async () => {\n \t// This test verifies that strict mode prevents the boundary burst problem\n \t// that occurs with fixed window mode"
+    }
+  ]
+}

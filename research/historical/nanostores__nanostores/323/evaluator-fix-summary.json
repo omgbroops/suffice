@@ -1,0 +1,55 @@
+{
+  "repo": "nanostores/nanostores",
+  "issue": 323,
+  "fix_kind": "pr",
+  "fix_ref": 400,
+  "fix_commit": "4a75960e739cc588fb446b6b6a7ab76e1ddbe7f3",
+  "pre_fix_commit": "dce1af0bd83802f03bad51dfb77c8ebc7019c836",
+  "pr_merged": true,
+  "fix_subject": "Reset computed cache on cleanStores (#400)",
+  "changes": [
+    {
+      "filename": "clean-stores/index.test.ts",
+      "status": "modified",
+      "additions": 24,
+      "deletions": 0
+    },
+    {
+      "filename": "computed/index.js",
+      "status": "modified",
+      "additions": 11,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "test:lint": "oxlint",
+    "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+    "test:types": "check-dts",
+    "test:size": "size-limit",
+    "test": "pnpm run /^test:/"
+  },
+  "engines": {
+    "node": "^20.0.0 || >=22.0.0"
+  },
+  "dependencies": null,
+  "devDependencies": {
+    "@logux/oxc-configs": "^0.4.0",
+    "@sinonjs/fake-timers": "^15.3.2",
+    "@size-limit/preset-small-lib": "^12.1.0",
+    "@types/node": "^25.6.0",
+    "@types/sinonjs__fake-timers": "^15.0.1",
+    "@types/ws": "^8.18.1",
+    "actions-up": "^1.14.0",
+    "benchmark": "^2.1.4",
+    "better-node-test": "^0.8.4",
+    "check-dts": "^1.0.0",
+    "clean-publish": "^6.0.5",
+    "eslint-plugin-prefer-let": "^4.2.2",
+    "multiocular": "^0.8.2",
+    "oxlint": "^1.60.0",
+    "oxlint-tsgolint": "^0.21.1",
+    "size-limit": "^12.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}

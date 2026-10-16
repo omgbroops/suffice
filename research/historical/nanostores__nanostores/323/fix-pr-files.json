@@ -1,0 +1,26 @@
+[
+  {
+    "sha": "959a321c8e6bed8365e7c24368cc879d572f1e6a",
+    "filename": "clean-stores/index.test.ts",
+    "status": "modified",
+    "additions": 24,
+    "deletions": 0,
+    "changes": 24,
+    "blob_url": "https://github.com/nanostores/nanostores/blob/911446a576386d3bfedb983f59649764e57ebf63/clean-stores%2Findex.test.ts",
+    "raw_url": "https://github.com/nanostores/nanostores/raw/911446a576386d3bfedb983f59649764e57ebf63/clean-stores%2Findex.test.ts",
+    "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/clean-stores%2Findex.test.ts?ref=911446a576386d3bfedb983f59649764e57ebf63",
+    "patch": "@@ -5,6 +5,7 @@ import {\n   atom,\n   clean,\n   cleanStores,\n+  computed,\n   map,\n   type MapCreator,\n   type MapStore,\n@@ -151,6 +152,29 @@ test('allows to call multiple times', () => {\n   deepStrictEqual(events, ['loaded', 'built 1', 'built 2'])\n })\n \n+test('resets computed cache', () => {\n+  let multiplier = 2\n+  let computations = 0\n+  let $source = atom(1)\n+  let $computed = computed($source, value => {\n+    computations += 1\n+    return value * multiplier\n+  })\n+\n+  let unbind = $computed.subscribe(() => {})\n+  equal($computed.get(), 2)\n+  equal(computations, 1)\n+  unbind()\n+\n+  cleanStores($source, $computed)\n+\n+  multiplier = 10\n+  let unbind2 = $computed.subscribe(() => {})\n+  equal($computed.get(), 10)\n+  equal(computations, 2)\n+  unbind2()\n+})\n+\n test('throws in production', () => {\n   process.env.NODE_ENV = 'production'\n   throws(() => {"
+  },
+  {
+    "sha": "9ba5f2c1adbf6feb10faef20bf71d2936c8aff4f",
+    "filename": "computed/index.js",
+    "status": "modified",
+    "additions": 11,
+    "deletions": 0,
+    "changes": 11,
+    "blob_url": "https://github.com/nanostores/nanostores/blob/911446a576386d3bfedb983f59649764e57ebf63/computed%2Findex.js",
+    "raw_url": "https://github.com/nanostores/nanostores/raw/911446a576386d3bfedb983f59649764e57ebf63/computed%2Findex.js",
+    "contents_url": "https://api.github.com/repos/nanostores/nanostores/contents/computed%2Findex.js?ref=911446a576386d3bfedb983f59649764e57ebf63",
+    "patch": "@@ -1,4 +1,5 @@\n import { atom, nanostoresGlobal } from '../atom/index.js'\n+import { clean } from '../clean-stores/index.js'\n import { onMount } from '../lifecycle/index.js'\n import { warn } from '../warn/index.js'\n \n@@ -39,6 +40,16 @@ let computedStore = (stores, cb, batched) => {\n     return get()\n   }\n \n+  if (process.env.NODE_ENV !== 'production') {\n+    let cleanComputed = $computed[clean]\n+    $computed[clean] = () => {\n+      previousArgs = undefined\n+      currentEpoch = undefined\n+      $computed.value = undefined\n+      cleanComputed()\n+    }\n+  }\n+\n   let timer\n   let run = batched\n     ? () => {"
+  }
+]

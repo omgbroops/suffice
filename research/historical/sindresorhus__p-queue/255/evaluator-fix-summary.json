@@ -1,0 +1,53 @@
+{
+  "repo": "sindresorhus/p-queue",
+  "issue": 255,
+  "fix_kind": "sha",
+  "fix_ref": "22edad49b42214b9b5add8312391401c063d8b27",
+  "fix_commit": "22edad49b42214b9b5add8312391401c063d8b27",
+  "pre_fix_commit": "180ab9e25cd10b6f548767d7176076b50d25e188",
+  "pr_merged": null,
+  "fix_subject": "Count the running task before emitting active",
+  "changes": [
+    {
+      "filename": "source/index.ts",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 1
+    },
+    {
+      "filename": "test/basic.ts",
+      "status": "modified",
+      "additions": 29,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "build": "del-cli dist && tsc",
+    "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+    "bench": "node --import=tsx/esm bench.ts",
+    "prepublishOnly": "del-cli dist && tsc"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.4",
+    "p-timeout": "^7.0.0"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^8.0.1",
+    "@types/benchmark": "^2.1.5",
+    "@types/node": "^25.6.0",
+    "benchmark": "^2.1.4",
+    "del-cli": "^6.0.0",
+    "delay": "^6.0.0",
+    "in-range": "^3.0.0",
+    "p-defer": "^4.0.1",
+    "random-int": "^3.1.0",
+    "time-span": "^5.1.0",
+    "tsd": "^0.33.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "xo": "^1.2.2"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "repo": "sindresorhus/emittery",
+  "issue": 126,
+  "fix_kind": "sha",
+  "fix_ref": "a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+  "fix_commit": "a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+  "pre_fix_commit": "cfde903357ccfa6fb4d7e1888da17aa84dc2c009",
+  "pr_merged": null,
+  "fix_subject": "Fix `emitSerial()` not delivering events to async iterators",
+  "changes": [
+    {
+      "filename": "index.js",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 1
+    },
+    {
+      "filename": "test/index.js",
+      "status": "modified",
+      "additions": 42,
+      "deletions": 0
+    }
+  ],
+  "scripts": {
+    "test": "xo && nyc ava && tsd"
+  },
+  "engines": {
+    "node": ">=14.16"
+  },
+  "dependencies": null,
+  "devDependencies": {
+    "@types/node": "^18.7.15",
+    "ava": "^4.3.3",
+    "delay": "^5.0.0",
+    "nyc": "^15.1.0",
+    "p-event": "^6.0.0",
+    "tsd": "^0.23.0",
+    "xo": "^0.55.0"
+  }
+}

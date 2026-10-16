@@ -1,0 +1,877 @@
+{
+  "evaluator_only": true,
+  "checked_at": "2026-10-15T04:39:22.367072+00:00",
+  "candidates": [
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1386,
+      "fix_kind": "pr",
+      "fix_ref": 1387,
+      "fix_commit": "6e4c1e4f67b7b6b8de13bbbf88991894dc003245",
+      "pre_fix_commit": "2d5399ed5605fb1b2e887f6e7953bc02e6194d52",
+      "pr_merged": true,
+      "fix_subject": "fix(Redirect): Better handle wrong redirect header in a response (#1387)",
+      "changes": [
+        {
+          "filename": "docs/CHANGELOG.md",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 13,
+          "deletions": 1
+        },
+        {
+          "filename": "test/main.js",
+          "status": "modified",
+          "additions": 22,
+          "deletions": 0
+        },
+        {
+          "filename": "test/utils/server.js",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "formdata-polyfill": "^4.0.10",
+        "fetch-blob": "^3.1.3"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^0.3.1",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "delay": "^5.0.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      }
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1574,
+      "fix_kind": "pr",
+      "fix_ref": 1578,
+      "fix_commit": "1c5ed6b981e6c5dd28bd50f5ab5418e5bd262b99",
+      "pre_fix_commit": "a92b5d5cf4457c2da95d8404b08cfd06a426a2fa",
+      "pr_merged": true,
+      "fix_subject": "fix: undefined reference to response.body when aborted (#1578)",
+      "changes": [
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 1
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "fetch-blob": "^3.1.4",
+        "formdata-polyfill": "^4.0.10"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^1.4.0",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "stream-consumers": "^1.0.1",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      }
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1446,
+      "fix_kind": "pr",
+      "fix_ref": 1474,
+      "fix_commit": "043a5fcfc82884155bcb2afba2a82333b2f29c02",
+      "pre_fix_commit": "004b3ac8324e6cdbfb5d04b8bbdc6664ea48fbcf",
+      "pr_merged": true,
+      "fix_subject": "Fix leaking listeners (#1295) (#1474)",
+      "changes": [
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 9,
+          "deletions": 7
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "fetch-blob": "^3.1.4",
+        "formdata-polyfill": "^4.0.10"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^1.4.0",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "stream-consumers": "^1.0.1",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      }
+    },
+    {
+      "repo": "node-fetch/node-fetch",
+      "issue": 1442,
+      "fix_kind": "pr",
+      "fix_ref": 965,
+      "fix_commit": "dd2cea4672c5519b1ab91009541e00f0ab74520b",
+      "pre_fix_commit": "92dee097c6a99d47f06c03c8a9c10b83c68d5b81",
+      "pr_merged": true,
+      "fix_subject": "Handle zero-length OK deflate responses (master) (#965)",
+      "changes": [
+        {
+          "filename": "src/index.js",
+          "status": "modified",
+          "additions": 41,
+          "deletions": 5
+        },
+        {
+          "filename": "test/main.js",
+          "status": "modified",
+          "additions": 11,
+          "deletions": 0
+        },
+        {
+          "filename": "test/utils/server.js",
+          "status": "modified",
+          "additions": 7,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "mocha",
+        "coverage": "c8 report --reporter=text-lcov | coveralls",
+        "test-types": "tsd",
+        "lint": "xo"
+      },
+      "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+      },
+      "dependencies": {
+        "data-uri-to-buffer": "^4.0.0",
+        "fetch-blob": "^3.1.3",
+        "formdata-polyfill": "^4.0.10"
+      },
+      "devDependencies": {
+        "abort-controller": "^3.0.0",
+        "abortcontroller-polyfill": "^1.7.1",
+        "busboy": "^0.3.1",
+        "c8": "^7.7.2",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-iterator": "^3.0.2",
+        "chai-string": "^1.5.0",
+        "coveralls": "^3.1.0",
+        "delay": "^5.0.0",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.2.4",
+        "mocha": "^9.1.3",
+        "p-timeout": "^5.0.0",
+        "stream-consumers": "^1.0.1",
+        "tsd": "^0.14.0",
+        "xo": "^0.39.1"
+      }
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 255,
+      "fix_kind": "sha",
+      "fix_ref": "22edad49b42214b9b5add8312391401c063d8b27",
+      "fix_commit": "22edad49b42214b9b5add8312391401c063d8b27",
+      "pre_fix_commit": "180ab9e25cd10b6f548767d7176076b50d25e188",
+      "pr_merged": null,
+      "fix_subject": "Count the running task before emitting active",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filename": "test/basic.ts",
+          "status": "modified",
+          "additions": 29,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      }
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 256,
+      "fix_kind": "sha",
+      "fix_ref": "507e7eeab74970b991f1335b3f08cb5e08207ca3",
+      "fix_commit": "507e7eeab74970b991f1335b3f08cb5e08207ca3",
+      "pre_fix_commit": "de565c42a271bd3c2f8c69d3b6bce33f49f9d344",
+      "pr_merged": null,
+      "fix_subject": "Fix missed abort when the task aborts the signal while it starts",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 5,
+          "deletions": 0
+        },
+        {
+          "filename": "test/advanced.ts",
+          "status": "modified",
+          "additions": 17,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      }
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 251,
+      "fix_kind": "sha",
+      "fix_ref": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "fix_commit": "08a012ac3ae20093ea90676a5b788ec4b73c58f6",
+      "pre_fix_commit": "98ccb488771059368b21cc2356234a70dc961c8b",
+      "pr_merged": null,
+      "fix_subject": "Fix rate limiter delaying tasks in a fresh window when `intervalCap > 1`",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 20,
+          "deletions": 25
+        },
+        {
+          "filename": "test/advanced.ts",
+          "status": "modified",
+          "additions": 86,
+          "deletions": 0
+        },
+        {
+          "filename": "test/rate-limit.ts",
+          "status": "modified",
+          "additions": 50,
+          "deletions": 0
+        },
+        {
+          "filename": "test/strict.ts",
+          "status": "modified",
+          "additions": 21,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      }
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 249,
+      "fix_kind": "sha",
+      "fix_ref": "d9cf2be011f3b7f127cac476de2d9927ed723491",
+      "fix_commit": "d9cf2be011f3b7f127cac476de2d9927ed723491",
+      "pre_fix_commit": "cfa917af261fb6db9eb1281221ba21093eb49e3d",
+      "pr_merged": null,
+      "fix_subject": "Fix `onSizeLessThan()` resolving late when the queue drains without a completion",
+      "changes": [
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 15,
+          "deletions": 5
+        },
+        {
+          "filename": "test/basic.ts",
+          "status": "modified",
+          "additions": 123,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "build": "del-cli dist && tsc",
+        "test": "xo && node --import=tsx/esm --test test/*.ts && del-cli dist && tsc && tsd",
+        "bench": "node --import=tsx/esm bench.ts",
+        "prepublishOnly": "del-cli dist && tsc"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "eventemitter3": "^5.0.4",
+        "p-timeout": "^7.0.0"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^8.0.1",
+        "@types/benchmark": "^2.1.5",
+        "@types/node": "^25.6.0",
+        "benchmark": "^2.1.4",
+        "del-cli": "^6.0.0",
+        "delay": "^6.0.0",
+        "in-range": "^3.0.0",
+        "p-defer": "^4.0.1",
+        "random-int": "^3.1.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "xo": "^1.2.2"
+      }
+    },
+    {
+      "repo": "sindresorhus/p-queue",
+      "issue": 168,
+      "fix_kind": "sha",
+      "fix_ref": "81846550274256011a2d55b06aeb36b23877eb43",
+      "fix_commit": "81846550274256011a2d55b06aeb36b23877eb43",
+      "pre_fix_commit": "c905aaf2a826c4581a604ee6bbb1ae41b062a598",
+      "pr_merged": null,
+      "fix_subject": "Fix `.add()` and `.addAll()`",
+      "changes": [
+        {
+          "filename": "package.json",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 9
+        },
+        {
+          "filename": "source/index.ts",
+          "status": "modified",
+          "additions": 65,
+          "deletions": 42
+        },
+        {
+          "filename": "test/test.ts",
+          "status": "modified",
+          "additions": 21,
+          "deletions": 2
+        },
+        {
+          "filename": "tsconfig.json",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 2
+        }
+      ],
+      "scripts": {
+        "build": "del dist && tsc",
+        "test": "xo && npm run build && nyc ava",
+        "bench": "node --loader=ts-node/esm bench.ts",
+        "prepare": "npm run build"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "dependencies": {
+        "eventemitter3": "^4.0.7",
+        "p-timeout": "^5.0.2"
+      },
+      "devDependencies": {
+        "@sindresorhus/tsconfig": "^2.0.0",
+        "@types/benchmark": "^2.1.1",
+        "@types/node": "^17.0.13",
+        "ava": "^4.0.1",
+        "benchmark": "^2.1.4",
+        "codecov": "^3.8.3",
+        "del-cli": "^4.0.1",
+        "delay": "^5.0.0",
+        "in-range": "^3.0.0",
+        "nyc": "^15.1.0",
+        "p-defer": "^4.0.0",
+        "random-int": "^3.0.0",
+        "time-span": "^5.0.0",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.5.5",
+        "xo": "^0.44.0"
+      }
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 126,
+      "fix_kind": "sha",
+      "fix_ref": "a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+      "fix_commit": "a3c04ca97d9ebb13d04c8ba06031aa24d6f3382e",
+      "pre_fix_commit": "cfde903357ccfa6fb4d7e1888da17aa84dc2c009",
+      "pr_merged": null,
+      "fix_subject": "Fix `emitSerial()` not delivering events to async iterators",
+      "changes": [
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filename": "test/index.js",
+          "status": "modified",
+          "additions": 42,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && nyc ava && tsd"
+      },
+      "engines": {
+        "node": ">=14.16"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@types/node": "^18.7.15",
+        "ava": "^4.3.3",
+        "delay": "^5.0.0",
+        "nyc": "^15.1.0",
+        "p-event": "^6.0.0",
+        "tsd": "^0.23.0",
+        "xo": "^0.55.0"
+      }
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 118,
+      "fix_kind": "sha",
+      "fix_ref": "dd6d78befbf664268471c61a8363884e96777cff",
+      "fix_commit": "dd6d78befbf664268471c61a8363884e96777cff",
+      "pre_fix_commit": "c5e99b898b05a67fbbb8bcb6cf34d2d35f582aff",
+      "pr_merged": null,
+      "fix_subject": "Fix `emitMetaEvent` breaking async `emit()` overrides in subclasses",
+      "changes": [
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 20,
+          "deletions": 12
+        },
+        {
+          "filename": "test/index.js",
+          "status": "modified",
+          "additions": 356,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && nyc ava && tsd"
+      },
+      "engines": {
+        "node": ">=14.16"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@types/node": "^18.7.15",
+        "ava": "^4.3.3",
+        "delay": "^5.0.0",
+        "nyc": "^15.1.0",
+        "p-event": "^6.0.0",
+        "tsd": "^0.23.0",
+        "xo": "^0.55.0"
+      }
+    },
+    {
+      "repo": "sindresorhus/emittery",
+      "issue": 113,
+      "fix_kind": "sha",
+      "fix_ref": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "fix_commit": "fad52b902de9a91fd6c0ca934c3a610e17a57908",
+      "pre_fix_commit": "fc902058a1fc66a2601c6ba71a9d957e6a88622f",
+      "pr_merged": null,
+      "fix_subject": "Fix `emitter.listenerCount()` for symbol keys",
+      "changes": [
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 4
+        },
+        {
+          "filename": "test/index.js",
+          "status": "modified",
+          "additions": 12,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && nyc ava && tsd"
+      },
+      "engines": {
+        "node": ">=14.16"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@types/node": "^18.7.15",
+        "ava": "^4.3.3",
+        "delay": "^5.0.0",
+        "nyc": "^15.1.0",
+        "p-event": "^5.0.1",
+        "tsd": "^0.23.0",
+        "xo": "^0.55.0"
+      }
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 416,
+      "fix_kind": "pr",
+      "fix_ref": 419,
+      "fix_commit": "579eae9cd72fe7abe26951df3b83e0fa6310174c",
+      "pre_fix_commit": "fd78b3d86a8667bd0126e12cb1724f863348f097",
+      "pr_merged": true,
+      "fix_subject": "fix(listen-keys): compare deep paths on whole-store set (#419)",
+      "changes": [
+        {
+          "filename": "listen-keys/index.js",
+          "status": "modified",
+          "additions": 10,
+          "deletions": 1
+        },
+        {
+          "filename": "listen-keys/index.test.ts",
+          "status": "modified",
+          "additions": 61,
+          "deletions": 1
+        },
+        {
+          "filename": "oxlint.config.ts",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test:lint": "oxlint",
+        "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+        "test:types": "check-dts",
+        "test:size": "size-limit",
+        "test:synced": "node test/size-synced.ts",
+        "test": "pnpm run /^test:/"
+      },
+      "engines": {
+        "node": "^20.0.0 || >=22.0.0"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@logux/oxc-configs": "^1.1.0",
+        "@sinonjs/fake-timers": "^15.4.0",
+        "@size-limit/preset-small-lib": "^13.0.3",
+        "@types/node": "^26.2.0",
+        "@types/sinonjs__fake-timers": "^15.0.1",
+        "@types/ws": "^8.18.1",
+        "benchmark": "^2.1.4",
+        "better-node-test": "^0.8.4",
+        "check-dts": "^2.0.1",
+        "eslint-plugin-prefer-let": "^4.2.2",
+        "multiocular": "^0.8.4",
+        "oxlint": "^1.78.0",
+        "oxlint-tsgolint": "^7.0.2001",
+        "size-limit": "^13.0.3",
+        "tsx": "^4.23.12",
+        "typescript": "^7.0.2"
+      }
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 371,
+      "fix_kind": "pr",
+      "fix_ref": 396,
+      "fix_commit": "3206678515f9dd1985a7770d9c2a340a8f65a443",
+      "pre_fix_commit": "8ad031dcde958413cf722b0fe46ceb65b547c747",
+      "pr_merged": true,
+      "fix_subject": "Fix: store epoch on globalThis to prevent separate module instances from diverging (#396)",
+      "changes": [
+        {
+          "filename": "atom/index.js",
+          "status": "modified",
+          "additions": 9,
+          "deletions": 2
+        },
+        {
+          "filename": "computed/index.js",
+          "status": "modified",
+          "additions": 4,
+          "deletions": 4
+        },
+        {
+          "filename": "package.json",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 2
+        }
+      ],
+      "scripts": {
+        "test:lint": "oxlint",
+        "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+        "test:types": "check-dts",
+        "test:size": "size-limit",
+        "test": "pnpm run /^test:/"
+      },
+      "engines": {
+        "node": "^20.0.0 || >=22.0.0"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@logux/oxc-configs": "^0.2.1",
+        "@sinonjs/fake-timers": "^15.1.1",
+        "@size-limit/preset-small-lib": "^12.0.1",
+        "@types/node": "^25.5.0",
+        "@types/sinonjs__fake-timers": "^15.0.1",
+        "@types/ws": "^8.18.1",
+        "actions-up": "^1.12.0",
+        "benchmark": "^2.1.4",
+        "better-node-test": "^0.8.4",
+        "check-dts": "^1.0.0",
+        "clean-publish": "^6.0.5",
+        "multiocular": "^0.8.2",
+        "oxlint": "^1.58.0",
+        "oxlint-tsgolint": "^0.18.1",
+        "size-limit": "^12.0.1",
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.2"
+      }
+    },
+    {
+      "repo": "nanostores/nanostores",
+      "issue": 323,
+      "fix_kind": "pr",
+      "fix_ref": 400,
+      "fix_commit": "4a75960e739cc588fb446b6b6a7ab76e1ddbe7f3",
+      "pre_fix_commit": "dce1af0bd83802f03bad51dfb77c8ebc7019c836",
+      "pr_merged": true,
+      "fix_subject": "Reset computed cache on cleanStores (#400)",
+      "changes": [
+        {
+          "filename": "clean-stores/index.test.ts",
+          "status": "modified",
+          "additions": 24,
+          "deletions": 0
+        },
+        {
+          "filename": "computed/index.js",
+          "status": "modified",
+          "additions": 11,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test:lint": "oxlint",
+        "test:coverage": "pnpm bnt --coverage 100 --coverage-exclude '**/*.test.ts'",
+        "test:types": "check-dts",
+        "test:size": "size-limit",
+        "test": "pnpm run /^test:/"
+      },
+      "engines": {
+        "node": "^20.0.0 || >=22.0.0"
+      },
+      "dependencies": null,
+      "devDependencies": {
+        "@logux/oxc-configs": "^0.4.0",
+        "@sinonjs/fake-timers": "^15.3.2",
+        "@size-limit/preset-small-lib": "^12.1.0",
+        "@types/node": "^25.6.0",
+        "@types/sinonjs__fake-timers": "^15.0.1",
+        "@types/ws": "^8.18.1",
+        "actions-up": "^1.14.0",
+        "benchmark": "^2.1.4",
+        "better-node-test": "^0.8.4",
+        "check-dts": "^1.0.0",
+        "clean-publish": "^6.0.5",
+        "eslint-plugin-prefer-let": "^4.2.2",
+        "multiocular": "^0.8.2",
+        "oxlint": "^1.60.0",
+        "oxlint-tsgolint": "^0.21.1",
+        "size-limit": "^12.1.0",
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.2"
+      }
+    },
+    {
+      "repo": "sindresorhus/p-limit",
+      "issue": 110,
+      "fix_kind": "sha",
+      "fix_ref": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "fix_commit": "9df0d27f82ab3cb6d7e1087f5bda94ce911d33ca",
+      "pre_fix_commit": "783068bb9e967fd7bea8642e1bf5a3627fe38bdf",
+      "pr_merged": null,
+      "fix_subject": "Fix unhandled rejections in `limit.map()` when the iterable throws",
+      "changes": [
+        {
+          "filename": "index.d.ts",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 0
+        },
+        {
+          "filename": "index.js",
+          "status": "modified",
+          "additions": 17,
+          "deletions": 1
+        },
+        {
+          "filename": "readme.md",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 0
+        },
+        {
+          "filename": "test.js",
+          "status": "modified",
+          "additions": 106,
+          "deletions": 0
+        }
+      ],
+      "scripts": {
+        "test": "xo && ava && tsd",
+        "benchmark": "node benchmark.js"
+      },
+      "engines": {
+        "node": ">=20"
+      },
+      "dependencies": {
+        "yocto-queue": "^1.2.1"
+      },
+      "devDependencies": {
+        "ava": "^6.4.1",
+        "in-range": "^3.0.0",
+        "random-int": "^3.0.0",
+        "time-span": "^5.1.0",
+        "tsd": "^0.33.0",
+        "xo": "^1.2.1"
+      }
+    }
+  ]
+}
