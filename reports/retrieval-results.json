@@ -1,0 +1,3491 @@
+{
+  "frozenManifestSha256": "046b6d9595c02e7250d3e0fba27ff3caeafc4e1db5769ef4dd9b44d909eb4565",
+  "policy": {
+    "version": "retrieval-v1",
+    "budgets": [
+      4096,
+      8192
+    ],
+    "arms": [
+      "lexical",
+      "ast",
+      "dependency",
+      "hybrid"
+    ],
+    "chunkLines": 60,
+    "budgetEstimator": "ceil(UTF-8 packet bytes / 3); not model tokens",
+    "dependency": "one-hop relative import and reverse import from top three lexical files, score 0.7 seed",
+    "ast": "query identifier words substring-match current indexJavaScript symbol names; same 60-line output units",
+    "lexical": "BM25 k1=1.2 b=0.75; path repeated twice; lowercase identifier-split words; no learned query rewrite",
+    "hybrid": "0.5 normalized lexical + 0.25 normalized AST + 0.25 normalized dependency",
+    "packing": "rank descending, path/start tie break, deduplicate source lines, skip oversized units; include packet headers in budget"
+  },
+  "coverage": [
+    {
+      "id": "picomatch-62",
+      "files": 5,
+      "bytes": 61125,
+      "unparsed": []
+    },
+    {
+      "id": "picomatch-142",
+      "files": 5,
+      "bytes": 61125,
+      "unparsed": []
+    },
+    {
+      "id": "picomatch-187",
+      "files": 5,
+      "bytes": 61895,
+      "unparsed": []
+    },
+    {
+      "id": "picomatch-58",
+      "files": 5,
+      "bytes": 61125,
+      "unparsed": []
+    },
+    {
+      "id": "fast-glob-499",
+      "files": 84,
+      "bytes": 219702,
+      "unparsed": [
+        "src/tests/utils/errno.ts",
+        "src/utils/pattern.ts",
+        "src/utils/stream.ts"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "arm": "lexical",
+      "budget": 4096,
+      "tasks": 5,
+      "meanFileRecall": 0.6666666666666667,
+      "allFiles": 3,
+      "meanHunkCoverage": 0.2999107142857143,
+      "meanEstimatedTokens": 4036.6
+    },
+    {
+      "arm": "ast",
+      "budget": 4096,
+      "tasks": 5,
+      "meanFileRecall": 0.8,
+      "allFiles": 4,
+      "meanHunkCoverage": 0.2875,
+      "meanEstimatedTokens": 3681.6
+    },
+    {
+      "arm": "dependency",
+      "budget": 4096,
+      "tasks": 5,
+      "meanFileRecall": 0.6666666666666667,
+      "allFiles": 3,
+      "meanHunkCoverage": 0.3217857142857143,
+      "meanEstimatedTokens": 4074.4
+    },
+    {
+      "arm": "hybrid",
+      "budget": 4096,
+      "tasks": 5,
+      "meanFileRecall": 0.6333333333333333,
+      "allFiles": 3,
+      "meanHunkCoverage": 0.2561607142857143,
+      "meanEstimatedTokens": 4040.2
+    },
+    {
+      "arm": "lexical",
+      "budget": 8192,
+      "tasks": 5,
+      "meanFileRecall": 0.9,
+      "allFiles": 4,
+      "meanHunkCoverage": 0.4685714285714286,
+      "meanEstimatedTokens": 8094.2
+    },
+    {
+      "arm": "ast",
+      "budget": 8192,
+      "tasks": 5,
+      "meanFileRecall": 0.8333333333333334,
+      "allFiles": 4,
+      "meanHunkCoverage": 0.4342857142857143,
+      "meanEstimatedTokens": 5579.4
+    },
+    {
+      "arm": "dependency",
+      "budget": 8192,
+      "tasks": 5,
+      "meanFileRecall": 0.9,
+      "allFiles": 4,
+      "meanHunkCoverage": 0.3560714285714286,
+      "meanEstimatedTokens": 8172
+    },
+    {
+      "arm": "hybrid",
+      "budget": 8192,
+      "tasks": 5,
+      "meanFileRecall": 0.9,
+      "allFiles": 4,
+      "meanHunkCoverage": 0.4685714285714286,
+      "meanEstimatedTokens": 8145.4
+    }
+  ],
+  "runs": [
+    {
+      "id": "picomatch-62",
+      "arm": "lexical",
+      "budget": 4096,
+      "latencyMs": 2.919599999999946,
+      "estimatedTokens": 4074,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 18.18191110483489
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 17.382119736198188
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 15.16666726998934
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 11.307465590878731
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 8.6854751558758
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 8.62807644147858
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 7.572096567528573
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 61,
+          "end": 120,
+          "score": 3.6092633678734924
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "ast",
+      "budget": 4096,
+      "latencyMs": 9.942999999999984,
+      "estimatedTokens": 4050,
+      "selected": [
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "dependency",
+      "budget": 4096,
+      "latencyMs": 2.472500000000082,
+      "estimatedTokens": 4052,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 18.18191110483489
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 17.382119736198188
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 15.16666726998934
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 121,
+          "end": 180,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 12.727337773384422
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "hybrid",
+      "budget": 4096,
+      "latencyMs": 2.6684000000000196,
+      "estimatedTokens": 4081,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.9670087746541662
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.6561513935027923
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 0.6545729369239908
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.6256218274803463
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.6255336388034207
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.5942564776941778
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.5923247135657633
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 0.175
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.175
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 0.175
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "lexical",
+      "budget": 8192,
+      "latencyMs": 2.5625,
+      "estimatedTokens": 7938,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 18.18191110483489
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 17.382119736198188
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 15.16666726998934
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 11.307465590878731
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 8.6854751558758
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 8.62807644147858
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 7.572096567528573
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 7.28026511544742
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 7.178023136318105
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 6.989847027359774
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 6.434739441728864
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 6.364493114412184
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 6.204727027258797
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 361,
+          "end": 420,
+          "score": 5.15266662187317
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 841,
+          "end": 900,
+          "score": 4.659715789265225
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "ast",
+      "budget": 8192,
+      "latencyMs": 2.023800000000051,
+      "estimatedTokens": 4281,
+      "selected": [
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "dependency",
+      "budget": 8192,
+      "latencyMs": 3.281199999999899,
+      "estimatedTokens": 8164,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 18.18191110483489
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 17.382119736198188
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 15.16666726998934
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 121,
+          "end": 180,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 1,
+          "end": 60,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 12.727337773384422
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 12.16748381533873
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 61,
+          "end": 120,
+          "score": 12.16748381533873
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 121,
+          "end": 180,
+          "score": 12.16748381533873
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 12.16748381533873
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 12.16748381533873
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-62",
+      "arm": "hybrid",
+      "budget": 8192,
+      "latencyMs": 2.171100000000024,
+      "estimatedTokens": 8186,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.9670087746541662
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.6561513935027923
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 0.6545729369239908
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.6256218274803463
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.6255336388034207
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.5942564776941778
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.5923247135657633
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.587931168623425
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.4859537145375185
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.425
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.3752062674674355
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.37239462741101353
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 0.35952185828124095
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 361,
+          "end": 420,
+          "score": 0.3089996553375123
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.23643512866333438
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "lexical",
+      "budget": 4096,
+      "latencyMs": 1.3197000000000116,
+      "estimatedTokens": 3844,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 11.120416103160382
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 10.668266807704642
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 9.83709577628863
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 9.537166502260394
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 8.831801150859318
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 7.6354178778893464
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 3.279922450338425
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 1.8998267922066765
+        }
+      ],
+      "fileRecall": 0,
+      "allFiles": false,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "ast",
+      "budget": 4096,
+      "latencyMs": 0.9680000000000746,
+      "estimatedTokens": 2239,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 2
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "dependency",
+      "budget": 4096,
+      "latencyMs": 1.5671000000000959,
+      "estimatedTokens": 4062,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 11.120416103160382
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 10.668266807704642
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 9.83709577628863
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 9.537166502260394
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 8.831801150859318
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 7.784291272212267
+        }
+      ],
+      "fileRecall": 0,
+      "allFiles": false,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "hybrid",
+      "budget": 4096,
+      "latencyMs": 1.5907999999999447,
+      "estimatedTokens": 3882,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.9695054601872828
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.875
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.7206477528985641
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.6634483605446853
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.6432200747112758
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.5183063028873258
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.32247300909928556
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 0.2604206701701905
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 0.175
+        }
+      ],
+      "fileRecall": 0,
+      "allFiles": false,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "lexical",
+      "budget": 8192,
+      "latencyMs": 1.445100000000025,
+      "estimatedTokens": 8021,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 11.120416103160382
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 10.668266807704642
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 9.83709577628863
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 9.537166502260394
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 8.831801150859318
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 7.6354178778893464
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 6.809002281404874
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 3.8659977910477776
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 781,
+          "end": 840,
+          "score": 3.303980491027616
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 3.279922450338425
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 601,
+          "end": 660,
+          "score": 2.5410859902707097
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 1,
+          "end": 60,
+          "score": 2.493345902026321
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 2.3476264156440467
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1021,
+          "end": 1080,
+          "score": 2.1382544030795665
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 1.8998267922066765
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 1.740035919618357
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "ast",
+      "budget": 8192,
+      "latencyMs": 0.9174000000000433,
+      "estimatedTokens": 2239,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 2
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "dependency",
+      "budget": 8192,
+      "latencyMs": 1.7676000000000158,
+      "estimatedTokens": 8164,
+      "selected": [
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 11.120416103160382
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 10.668266807704642
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 9.83709577628863
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 9.537166502260394
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 8.831801150859318
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 121,
+          "end": 180,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 1,
+          "end": 60,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 7.784291272212267
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 7.467786765393249
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 61,
+          "end": 120,
+          "score": 7.467786765393249
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 121,
+          "end": 180,
+          "score": 7.467786765393249
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 7.467786765393249
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 7.467786765393249
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-142",
+      "arm": "hybrid",
+      "budget": 8192,
+      "latencyMs": 1.866800000000012,
+      "estimatedTokens": 8060,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.9695054601872828
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.875
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.7206477528985641
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.6634483605446853
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.6432200747112758
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.5183063028873258
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.4811487186378655
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.3711207049958909
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.3488243315350886
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.32247300909928556
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 781,
+          "end": 840,
+          "score": 0.316439322433452
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.28710668193062133
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 601,
+          "end": 660,
+          "score": 0.28213779568841885
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 0.27343939929605354
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1021,
+          "end": 1080,
+          "score": 0.26402554235840814
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 0.2604206701701905
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 0.175
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "lexical",
+      "budget": 4096,
+      "latencyMs": 9.737899999999968,
+      "estimatedTokens": 4088,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 36.763188839723846
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 34.12929848036514
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 30.10830923687062
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 28.047108110333127
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 27.125519889502257
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 26.916197417207364
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1381,
+          "end": 1426,
+          "score": 14.322137067685825
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 3.2805236941556903
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "ast",
+      "budget": 4096,
+      "latencyMs": 9.388199999999983,
+      "estimatedTokens": 4049,
+      "selected": [
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 20
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 9
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 121,
+          "end": 180,
+          "score": 7
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 6
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 481,
+          "end": 540,
+          "score": 6
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 6
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 5
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 4
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "dependency",
+      "budget": 4096,
+      "latencyMs": 10.12009999999998,
+      "estimatedTokens": 4090,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 36.763188839723846
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 34.12929848036514
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 30.10830923687062
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 28.047108110333127
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 27.125519889502257
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 26.916197417207364
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 25.73423218780669
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "hybrid",
+      "budget": 4096,
+      "latencyMs": 9.444799999999987,
+      "estimatedTokens": 4058,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.8125
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.6962664194302828
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.6517348539486105
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.6241130856715194
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.5721846158247423
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.5533834403163682
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.39196295789436264
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 0.19682183476865353
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.18793842921658
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "lexical",
+      "budget": 8192,
+      "latencyMs": 4.991300000000024,
+      "estimatedTokens": 8168,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 36.763188839723846
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 34.12929848036514
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 30.10830923687062
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 28.047108110333127
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 27.125519889502257
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 26.916197417207364
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 26.71135838498549
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 661,
+          "end": 720,
+          "score": 23.780431129586887
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 22.241503006559572
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 22.06560982537426
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1141,
+          "end": 1200,
+          "score": 21.800860903467374
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 841,
+          "end": 900,
+          "score": 21.059772022022607
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 361,
+          "end": 420,
+          "score": 15.460199999363695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 14.74903394385371
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 3.2805236941556903
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 1.6044804648585236
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "ast",
+      "budget": 8192,
+      "latencyMs": 3.169899999999984,
+      "estimatedTokens": 7865,
+      "selected": [
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 20
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 9
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 121,
+          "end": 180,
+          "score": 7
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 6
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 481,
+          "end": 540,
+          "score": 6
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 6
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 5
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 4
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 3
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 421,
+          "end": 480,
+          "score": 3
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 2
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1321,
+          "end": 1380,
+          "score": 2
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 361,
+          "end": 420,
+          "score": 1
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1381,
+          "end": 1426,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "dependency",
+      "budget": 8192,
+      "latencyMs": 3.4402999999999793,
+      "estimatedTokens": 8160,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 36.763188839723846
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 34.12929848036514
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 30.10830923687062
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 28.047108110333127
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 27.125519889502257
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 26.916197417207364
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 26.71135838498549
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 121,
+          "end": 180,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 61,
+          "end": 120,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 121,
+          "end": 180,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 421,
+          "end": 480,
+          "score": 25.73423218780669
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 21.075816465809435
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-187",
+      "arm": "hybrid",
+      "budget": 8192,
+      "latencyMs": 4.040200000000027,
+      "estimatedTokens": 8118,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.8125
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.6962664194302828
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.6517348539486105
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.6241130856715194
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.5721846158247423
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.5533834403163682
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.5449341969783708
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 541,
+          "end": 600,
+          "score": 0.502496922988994
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 661,
+          "end": 720,
+          "score": 0.4984272091202728
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.48809513890586237
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.48692146029414063
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1141,
+          "end": 1200,
+          "score": 0.47150394309525756
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 841,
+          "end": 900,
+          "score": 0.4614247184029208
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.45015701551843423
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 0.19682183476865353
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.18793842921658
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "lexical",
+      "budget": 4096,
+      "latencyMs": 1.3973999999999478,
+      "estimatedTokens": 4082,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 28.565272384716707
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 22.351430843738783
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 21.209016858748747
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 12.973661085638561
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 12.575634822617037
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 11.316499481540317
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 6.364493114412184
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 3.279922450338425
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0.328125
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "ast",
+      "budget": 4096,
+      "latencyMs": 1.0977000000000317,
+      "estimatedTokens": 4008,
+      "selected": [
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 7
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 4
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 3
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0.4375
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "dependency",
+      "budget": 4096,
+      "latencyMs": 2.3523999999999887,
+      "estimatedTokens": 4078,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 28.565272384716707
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 22.351430843738783
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 21.209016858748747
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 121,
+          "end": 180,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 19.995690669301695
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0.4375
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "hybrid",
+      "budget": 4096,
+      "latencyMs": 1.1297000000000708,
+      "estimatedTokens": 4087,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.8928571428571428
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.5925709622349746
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.5868515065087603
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.4588273524266642
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.39288600344911734
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.35702122338440473
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.32801464536583
+        },
+        {
+          "path": "lib/utils.js",
+          "start": 61,
+          "end": 73,
+          "score": 0.2269985451250744
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.18734423755446072
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0.109375
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "lexical",
+      "budget": 8192,
+      "latencyMs": 1.2408000000000357,
+      "estimatedTokens": 8155,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 28.565272384716707
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 22.351430843738783
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 21.209016858748747
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 12.973661085638561
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 12.575634822617037
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 11.316499481540317
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 8.901505712046498
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 6.541153216102975
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 6.434739441728864
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 6.364493114412184
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 6.333801337577024
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 6.32876028745425
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 6.204727027258797
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 961,
+          "end": 1020,
+          "score": 5.4217397705646135
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1321,
+          "end": 1380,
+          "score": 5.390812668061158
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1381,
+          "end": 1417,
+          "score": 4.905994352806518
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 3.279922450338425
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "ast",
+      "budget": 8192,
+      "latencyMs": 0.8914000000000897,
+      "estimatedTokens": 5338,
+      "selected": [
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 7
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 4
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 3
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 1
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 1
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "dependency",
+      "budget": 8192,
+      "latencyMs": 1.167100000000005,
+      "estimatedTokens": 8184,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 28.565272384716707
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 22.351430843738783
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 21.209016858748747
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 61,
+          "end": 120,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 121,
+          "end": 180,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 181,
+          "end": 185,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 1,
+          "end": 60,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 61,
+          "end": 120,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 121,
+          "end": 180,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 181,
+          "end": 240,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 301,
+          "end": 360,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 361,
+          "end": 420,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 421,
+          "end": 480,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 481,
+          "end": 540,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 601,
+          "end": 660,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 19.995690669301695
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 14.846311801124122
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 0.4375
+    },
+    {
+      "id": "picomatch-58",
+      "arm": "hybrid",
+      "budget": 8192,
+      "latencyMs": 1.184699999999907,
+      "estimatedTokens": 8175,
+      "selected": [
+        {
+          "path": "lib/picomatch.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.8928571428571428
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.5925709622349746
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.5868515065087603
+        },
+        {
+          "path": "lib/constants.js",
+          "start": 1,
+          "end": 60,
+          "score": 0.4588273524266642
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.39288600344911734
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.35702122338440473
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.3500542626346364
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.32801464536583
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 301,
+          "end": 360,
+          "score": 0.3252091368049179
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 181,
+          "end": 240,
+          "score": 0.32334649441626967
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.3221169187558208
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 121,
+          "end": 180,
+          "score": 0.32157969690787547
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 361,
+          "end": 392,
+          "score": 0.32149145951852237
+        },
+        {
+          "path": "lib/scan.js",
+          "start": 61,
+          "end": 120,
+          "score": 0.31932040967651537
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 961,
+          "end": 1020,
+          "score": 0.26990089395166084
+        },
+        {
+          "path": "lib/parse.js",
+          "start": 241,
+          "end": 300,
+          "score": 0.26297605033728644
+        },
+        {
+          "path": "lib/picomatch.js",
+          "start": 361,
+          "end": 362,
+          "score": 0.18734423755446072
+        }
+      ],
+      "fileRecall": 1,
+      "allFiles": true,
+      "hunkCoverage": 1
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "lexical",
+      "budget": 4096,
+      "latencyMs": 16.53430000000003,
+      "estimatedTokens": 4095,
+      "selected": [
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 65.65536130096817
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 63.506492392553895
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 56.306518372962685
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 53.92643946337471
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 53.330849337274465
+        },
+        {
+          "path": "src/providers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 52.77517809470699
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 48.93874260640719
+        },
+        {
+          "path": "src/readers/stream.ts",
+          "start": 61,
+          "end": 76,
+          "score": 34.21674026219922
+        },
+        {
+          "path": "src/providers/filters/entry.ts",
+          "start": 121,
+          "end": 127,
+          "score": 13.5163977212822
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 121,
+          "end": 121,
+          "score": 7.273991486691727
+        }
+      ],
+      "fileRecall": 0.3333333333333333,
+      "allFiles": false,
+      "hunkCoverage": 0.17142857142857143
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "ast",
+      "budget": 4096,
+      "latencyMs": 13.113300000000095,
+      "estimatedTokens": 4062,
+      "selected": [
+        {
+          "path": "src/readers/reader.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 30
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 29
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 23
+        },
+        {
+          "path": "src/readers/async.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 22
+        },
+        {
+          "path": "src/readers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 21
+        },
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 21
+        },
+        {
+          "path": "src/providers/filters/entry.ts",
+          "start": 61,
+          "end": 120,
+          "score": 20
+        },
+        {
+          "path": "src/readers/stream.ts",
+          "start": 61,
+          "end": 76,
+          "score": 17
+        }
+      ],
+      "fileRecall": 0,
+      "allFiles": false,
+      "hunkCoverage": 0
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "dependency",
+      "budget": 4096,
+      "latencyMs": 21.32230000000004,
+      "estimatedTokens": 4090,
+      "selected": [
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 65.65536130096817
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 63.506492392553895
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 56.306518372962685
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 53.92643946337471
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 53.330849337274465
+        },
+        {
+          "path": "src/providers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 52.77517809470699
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 48.93874260640719
+        },
+        {
+          "path": "src/utils/index.ts",
+          "start": 1,
+          "end": 8,
+          "score": 44.454544674787726
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 121,
+          "end": 121,
+          "score": 39.414562861073875
+        },
+        {
+          "path": "src/tests/utils/fs.ts",
+          "start": 1,
+          "end": 8,
+          "score": 19.990313039166807
+        }
+      ],
+      "fileRecall": 0.3333333333333333,
+      "allFiles": false,
+      "hunkCoverage": 0.17142857142857143
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "hybrid",
+      "budget": 4096,
+      "latencyMs": 24.585500000000025,
+      "estimatedTokens": 4093,
+      "selected": [
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.925
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 0.8848721557985845
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 0.7508802359836027
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.750452854886857
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.7493504992754942
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.7119457871425746
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 0.6757079426190107
+        },
+        {
+          "path": "src/readers/stream.ts",
+          "start": 61,
+          "end": 76,
+          "score": 0.5325342925260492
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 121,
+          "end": 121,
+          "score": 0.20547653978739733
+        },
+        {
+          "path": "src/providers/provider.spec.ts",
+          "start": 121,
+          "end": 122,
+          "score": 0.07878260940181728
+        }
+      ],
+      "fileRecall": 0.16666666666666666,
+      "allFiles": false,
+      "hunkCoverage": 0.17142857142857143
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "lexical",
+      "budget": 8192,
+      "latencyMs": 26.08910000000003,
+      "estimatedTokens": 8189,
+      "selected": [
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 65.65536130096817
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 63.506492392553895
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 56.306518372962685
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 53.92643946337471
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 53.330849337274465
+        },
+        {
+          "path": "src/providers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 52.77517809470699
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 51.95952983667242
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 61,
+          "end": 120,
+          "score": 50.02986040141839
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 48.93874260640719
+        },
+        {
+          "path": "src/providers/stream.ts",
+          "start": 1,
+          "end": 45,
+          "score": 48.851246733054566
+        },
+        {
+          "path": "src/index.spec.ts",
+          "start": 241,
+          "end": 300,
+          "score": 47.839603322818355
+        },
+        {
+          "path": "src/utils/pattern.ts",
+          "start": 181,
+          "end": 239,
+          "score": 47.437805302969835
+        },
+        {
+          "path": "src/settings.ts",
+          "start": 1,
+          "end": 60,
+          "score": 46.98683200802666
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 45.54548484292758
+        },
+        {
+          "path": "src/tests/utils/fs.ts",
+          "start": 1,
+          "end": 8,
+          "score": 19.990313039166807
+        }
+      ],
+      "fileRecall": 0.5,
+      "allFiles": false,
+      "hunkCoverage": 0.34285714285714286
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "ast",
+      "budget": 8192,
+      "latencyMs": 24.113700000000108,
+      "estimatedTokens": 8174,
+      "selected": [
+        {
+          "path": "src/readers/reader.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 30
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 29
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 23
+        },
+        {
+          "path": "src/readers/async.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 22
+        },
+        {
+          "path": "src/readers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 21
+        },
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 21
+        },
+        {
+          "path": "src/providers/filters/entry.ts",
+          "start": 61,
+          "end": 120,
+          "score": 20
+        },
+        {
+          "path": "src/tests/utils/pattern.ts",
+          "start": 1,
+          "end": 60,
+          "score": 20
+        },
+        {
+          "path": "src/providers/provider.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 19
+        },
+        {
+          "path": "src/tests/e2e/runner.ts",
+          "start": 121,
+          "end": 180,
+          "score": 19
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 17
+        },
+        {
+          "path": "src/readers/stream.ts",
+          "start": 61,
+          "end": 76,
+          "score": 17
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 16
+        },
+        {
+          "path": "src/readers/async.ts",
+          "start": 1,
+          "end": 46,
+          "score": 16
+        },
+        {
+          "path": "src/utils/path.ts",
+          "start": 1,
+          "end": 60,
+          "score": 16
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 14
+        }
+      ],
+      "fileRecall": 0.16666666666666666,
+      "allFiles": false,
+      "hunkCoverage": 0.17142857142857143
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "dependency",
+      "budget": 8192,
+      "latencyMs": 26.40599999999995,
+      "estimatedTokens": 8188,
+      "selected": [
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 65.65536130096817
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 63.506492392553895
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 56.306518372962685
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 53.92643946337471
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 53.330849337274465
+        },
+        {
+          "path": "src/providers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 52.77517809470699
+        },
+        {
+          "path": "src/index.ts",
+          "start": 1,
+          "end": 60,
+          "score": 51.95952983667242
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 61,
+          "end": 120,
+          "score": 50.02986040141839
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 48.93874260640719
+        },
+        {
+          "path": "src/providers/stream.ts",
+          "start": 1,
+          "end": 45,
+          "score": 48.851246733054566
+        },
+        {
+          "path": "src/index.spec.ts",
+          "start": 241,
+          "end": 300,
+          "score": 47.839603322818355
+        },
+        {
+          "path": "src/utils/pattern.ts",
+          "start": 181,
+          "end": 239,
+          "score": 47.437805302969835
+        },
+        {
+          "path": "src/settings.ts",
+          "start": 1,
+          "end": 60,
+          "score": 46.98683200802666
+        },
+        {
+          "path": "src/readers/async.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 45.95875291067772
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 121,
+          "end": 121,
+          "score": 39.414562861073875
+        },
+        {
+          "path": "src/readers/index.ts",
+          "start": 1,
+          "end": 4,
+          "score": 10.435205427915104
+        }
+      ],
+      "fileRecall": 0.5,
+      "allFiles": false,
+      "hunkCoverage": 0.34285714285714286
+    },
+    {
+      "id": "fast-glob-499",
+      "arm": "hybrid",
+      "budget": 8192,
+      "latencyMs": 26.385099999999966,
+      "estimatedTokens": 8188,
+      "selected": [
+        {
+          "path": "src/readers/stream.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.925
+        },
+        {
+          "path": "src/readers/sync.ts",
+          "start": 1,
+          "end": 56,
+          "score": 0.8848721557985845
+        },
+        {
+          "path": "src/readers/reader.ts",
+          "start": 1,
+          "end": 50,
+          "score": 0.7508802359836027
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.750452854886857
+        },
+        {
+          "path": "src/index.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.7493504992754942
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.7119457871425746
+        },
+        {
+          "path": "src/readers/reader.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.7044240684285943
+        },
+        {
+          "path": "src/managers/tasks.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.6881720937567539
+        },
+        {
+          "path": "src/readers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.6872954209471445
+        },
+        {
+          "path": "src/providers/sync.ts",
+          "start": 1,
+          "end": 34,
+          "score": 0.6757079426190107
+        },
+        {
+          "path": "src/providers/stream.ts",
+          "start": 1,
+          "end": 45,
+          "score": 0.674708452193337
+        },
+        {
+          "path": "src/providers/stream.spec.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.6611993108669391
+        },
+        {
+          "path": "src/providers/filters/entry.ts",
+          "start": 61,
+          "end": 120,
+          "score": 0.654919003730674
+        },
+        {
+          "path": "src/utils/path.ts",
+          "start": 1,
+          "end": 60,
+          "score": 0.6176549719949995
+        },
+        {
+          "path": "src/readers/sync.spec.ts",
+          "start": 121,
+          "end": 121,
+          "score": 0.20547653978739733
+        },
+        {
+          "path": "src/providers/provider.spec.ts",
+          "start": 121,
+          "end": 122,
+          "score": 0.07878260940181728
+        }
+      ],
+      "fileRecall": 0.5,
+      "allFiles": false,
+      "hunkCoverage": 0.34285714285714286
+    }
+  ],
+  "integrityAfter": true,
+  "inferenceCost": 0
+}
