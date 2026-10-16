@@ -1,0 +1,1141 @@
+{
+  "mode": "offline static saved-transcript reconstruction",
+  "costCaveat": "Descriptive recorded cost, not avoidable cost. Subsequent costs overlap when an attempt has multiple errors; do not sum as unique spend.",
+  "summary": {
+    "sourceAttempts": 34,
+    "errorCalls": 25,
+    "affectedAttempts": 24,
+    "failedTools": {
+      "symbols": 22,
+      "search": 3
+    },
+    "nextBehavior": {
+      "same tool succeeds": 24,
+      "switch to other tools": 1
+    },
+    "nextEquivalent": {
+      "success file path": 23,
+      "success omitted path": 1,
+      "no later same tool": 1
+    },
+    "partialEmissions": 17,
+    "errorsWithCompletedPriorCalls": 25,
+    "nextAssistantKnownCost": 0.07061680000000001,
+    "subsequentCostAcrossErrorCases": 1.0271084,
+    "errorsWithPreservedPartialOutput": 25,
+    "uniqueSubsequentKnownRecordedCost": 1.0195035999999995,
+    "subsequentResponsesMissingCost": 0
+  },
+  "cases": [
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-screen-v1/001-pmap-readahead-A-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-screen-v1/001-pmap-readahead-A-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1728,
+      "partialEmittedSectionCharacters": 1512,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0018244,
+      "subsequentKnownRecordedCost": 0.0602476,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-screen-v1/002-pmap-readahead-B-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-screen-v1/002-pmap-readahead-B-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "tests/visible.test.mjs",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "search",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1752,
+      "partialEmittedSectionCharacters": 1536,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0022012,
+      "subsequentKnownRecordedCost": 0.1331448,
+      "subsequentAssistantResponses": 10,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-screen-v1/003-pmap-readahead-C-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-screen-v1/003-pmap-readahead-C-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "search",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1752,
+      "partialEmittedSectionCharacters": 1536,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0020488,
+      "subsequentKnownRecordedCost": 0.1255264,
+      "subsequentAssistantResponses": 9,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/001-lru-duration-A-r0/worker/transcript.json#message=3&nested=1",
+      "attempt": "evidence-record/evidence-scored-v2/001-lru-duration-A-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "files",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1035,
+      "partialEmittedSectionCharacters": 831,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.0014816000000000002,
+      "subsequentKnownRecordedCost": 0.0192704,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/002-lru-duration-B-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/002-lru-duration-B-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.d.ts",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1261,
+      "partialEmittedSectionCharacters": 1045,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0052,
+      "subsequentKnownRecordedCost": 0.035134,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/003-lru-duration-C-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/003-lru-duration-C-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.d.ts",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1261,
+      "partialEmittedSectionCharacters": 1045,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.001856,
+      "subsequentKnownRecordedCost": 0.061975199999999994,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/004-pmap-index-B-r0/worker/transcript.json#message=3&nested=1",
+      "attempt": "evidence-record/evidence-scored-v2/004-pmap-index-B-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "files",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 977,
+      "partialEmittedSectionCharacters": 773,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.0013472,
+      "subsequentKnownRecordedCost": 0.0326156,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/006-pmap-index-A-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/006-pmap-index-A-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "search",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1225,
+      "partialEmittedSectionCharacters": 1009,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0016876,
+      "subsequentKnownRecordedCost": 0.0289148,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/007-emitter-once-C-r0/worker/transcript.json#message=3&nested=1",
+      "attempt": "evidence-record/evidence-scored-v2/007-emitter-once-C-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "files",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1016,
+      "partialEmittedSectionCharacters": 812,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.005132,
+      "subsequentKnownRecordedCost": 0.044608400000000006,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/008-emitter-once-A-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/008-emitter-once-A-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/README.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1535,
+      "partialEmittedSectionCharacters": 1319,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0018415999999999999,
+      "subsequentKnownRecordedCost": 0.026572799999999997,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/009-emitter-once-B-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/009-emitter-once-B-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1559,
+      "partialEmittedSectionCharacters": 1343,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0017952,
+      "subsequentKnownRecordedCost": 0.0350336,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/011-lru-duration-C-r1/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/011-lru-duration-C-r1",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1261,
+      "partialEmittedSectionCharacters": 1045,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0017139999999999998,
+      "subsequentKnownRecordedCost": 0.042934,
+      "subsequentAssistantResponses": 7,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/012-lru-duration-B-r1/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/012-lru-duration-B-r1",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1261,
+      "partialEmittedSectionCharacters": 1045,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.00509,
+      "subsequentKnownRecordedCost": 0.07280719999999999,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/013-pmap-index-B-r1/worker/transcript.json#message=3&nested=1",
+      "attempt": "evidence-record/evidence-scored-v2/013-pmap-index-B-r1",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "files",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 977,
+      "partialEmittedSectionCharacters": 773,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.0013592,
+      "subsequentKnownRecordedCost": 0.0580636,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/014-pmap-index-A-r1/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/014-pmap-index-A-r1",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "search",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1225,
+      "partialEmittedSectionCharacters": 1009,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.004607999999999999,
+      "subsequentKnownRecordedCost": 0.0261532,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/015-pmap-index-C-r1/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-scored-v2/015-pmap-index-C-r1",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "search",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1249,
+      "partialEmittedSectionCharacters": 1033,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.00184,
+      "subsequentKnownRecordedCost": 0.04001759999999999,
+      "subsequentAssistantResponses": 6,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-pilot-v1/002-queue-drain-B-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-pilot-v1/002-queue-drain-B-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1126,
+      "partialEmittedSectionCharacters": 910,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0015564,
+      "subsequentKnownRecordedCost": 0.0386736,
+      "subsequentAssistantResponses": 5,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-pilot-v1/003-queue-drain-C-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-pilot-v1/003-queue-drain-C-r0",
+      "failedTool": "symbols",
+      "failedPath": "src/",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/readme.md",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/index.d.ts",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1126,
+      "partialEmittedSectionCharacters": 910,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0017692,
+      "subsequentKnownRecordedCost": 0.030952800000000003,
+      "subsequentAssistantResponses": 7,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-pilot-v1/004-pmap-close-A-r0/worker/transcript.json#message=3&nested=2",
+      "attempt": "evidence-record/evidence-pilot-v1/004-pmap-close-A-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.js",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "tests/visible.test.mjs",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.js",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files",
+        "file_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1325,
+      "partialEmittedSectionCharacters": 1109,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0017908,
+      "subsequentKnownRecordedCost": 0.0167688,
+      "subsequentAssistantResponses": 4,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/03-marked-4123-semantic-r0/execution/transcript.json#message=5&nested=1",
+      "attempt": "nemotron-retrieval/live-scored-v1/03-marked-4123-semantic-r0",
+      "failedTool": "search",
+      "failedPath": "src",
+      "nextAssistantMessage": 6,
+      "nextResultMessage": 7,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "search",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "symbols",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "src/Lexer.ts",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 7,
+        "path": null,
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "symbol_references"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 490,
+      "partialEmittedSectionCharacters": 279,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.0016172,
+      "subsequentKnownRecordedCost": 0.013513999999999998,
+      "subsequentAssistantResponses": 3,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/04-marked-4123-navigation-r0/execution/transcript.json#message=3&nested=1",
+      "attempt": "nemotron-retrieval/live-scored-v1/04-marked-4123-navigation-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "symbols",
+          "path": "src/Lexer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "README.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/Tokenizer.ts",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 2,
+      "completedPriorCalls": [
+        "files"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 514,
+      "partialEmittedSectionCharacters": 314,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.003934,
+      "subsequentKnownRecordedCost": 0.0159908,
+      "subsequentAssistantResponses": 4,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/04-marked-4123-navigation-r0/execution/transcript.json#message=7&nested=3",
+      "attempt": "nemotron-retrieval/live-scored-v1/04-marked-4123-navigation-r0",
+      "failedTool": "search",
+      "failedPath": "src",
+      "nextAssistantMessage": 8,
+      "nextResultMessage": 9,
+      "nextBehavior": "switch to other tools",
+      "nextCalls": [
+        {
+          "name": "file_edit",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_edit",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "test",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": null,
+      "laterEquivalentCount": 0,
+      "completedPriorCalls": [
+        "symbol_read",
+        "symbol_references",
+        "symbol_read"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 4095,
+      "partialEmittedSectionCharacters": 3848,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.0049864,
+      "subsequentKnownRecordedCost": 0.0076048,
+      "subsequentAssistantResponses": 2,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/07-marked-4123-navigation-r1/execution/transcript.json#message=3&nested=1",
+      "attempt": "nemotron-retrieval/live-scored-v1/07-marked-4123-navigation-r1",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "symbols",
+          "path": "src/Lexer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "README.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/Tokenizer.ts",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 2,
+      "completedPriorCalls": [
+        "files"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 514,
+      "partialEmittedSectionCharacters": 314,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.003912,
+      "subsequentKnownRecordedCost": 0.021411200000000002,
+      "subsequentAssistantResponses": 4,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/08-marked-4123-semantic-r1/execution/transcript.json#message=5&nested=2",
+      "attempt": "nemotron-retrieval/live-scored-v1/08-marked-4123-semantic-r1",
+      "failedTool": "search",
+      "failedPath": "src",
+      "nextAssistantMessage": 6,
+      "nextResultMessage": 7,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbol_references",
+          "path": null,
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "search",
+          "path": "src/Lexer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "symbol_read",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "symbol_read",
+          "path": "src/Tokenizer.ts",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 7,
+        "path": "src/Lexer.ts",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "file_read",
+        "symbols"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 1294,
+      "partialEmittedSectionCharacters": 1077,
+      "hasTextEmissionMarker": true,
+      "nextAssistantRecordedCost": 0.008964,
+      "subsequentKnownRecordedCost": 0.0178148,
+      "subsequentAssistantResponses": 3,
+      "subsequentResponsesMissingCost": 0
+    },
+    {
+      "reference": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-pilot-v1/01-path-to-regexp-448-navigation-r0/execution/transcript.json#message=3&nested=1",
+      "attempt": "nemotron-retrieval/live-pilot-v1/01-path-to-regexp-448-navigation-r0",
+      "failedTool": "symbols",
+      "failedPath": "src",
+      "nextAssistantMessage": 4,
+      "nextResultMessage": 5,
+      "nextBehavior": "same tool succeeds",
+      "nextCalls": [
+        {
+          "name": "symbols",
+          "path": "src/index.ts",
+          "status": "ok",
+          "errorClass": null
+        },
+        {
+          "name": "file_read",
+          "path": "README.md",
+          "status": "ok",
+          "errorClass": null
+        }
+      ],
+      "nextEquivalent": {
+        "message": 5,
+        "path": "src/index.ts",
+        "status": "ok",
+        "errorClass": null
+      },
+      "laterEquivalentCount": 1,
+      "completedPriorCalls": [
+        "files"
+      ],
+      "recordedCallsAfterError": [],
+      "partialOutputCharacters": 306,
+      "partialEmittedSectionCharacters": 106,
+      "hasTextEmissionMarker": false,
+      "nextAssistantRecordedCost": 0.00106,
+      "subsequentKnownRecordedCost": 0.0213584,
+      "subsequentAssistantResponses": 4,
+      "subsequentResponsesMissingCost": 0
+    }
+  ]
+}

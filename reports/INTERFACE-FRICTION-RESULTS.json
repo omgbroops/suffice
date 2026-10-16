@@ -1,0 +1,703 @@
+{
+  "at": "2026-10-15T00:31:57.033Z",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "primaryCohort": "scored-v1",
+  "verdict": "Observed directory errors: A=1, B=0. No turn reduction or demonstrated efficiency/capability gain. B costs 9.85% more in this small cohort. Error-message branch not activated live in B.",
+  "totalAttempts": 14,
+  "knownBenchmarkInference": 0.34023479999999995,
+  "unknownAttemptTotals": 0,
+  "accounting": "Saved API-equivalent inference estimates, not invoices or total project expense. Engineering/research-agent inference excluded. No descendant benchmark agents, embeddings, reviewer model calls or compression experiment.",
+  "treatment": "Only search/symbols/symbol_references descriptions, path argument descriptions, and EISDIR error messages differ. Same allowed values, tool operations, models, budgets, public prompt and hidden acceptance. No directory-aware behavior added.",
+  "mechanism": {
+    "descriptionsTransmitted": true,
+    "commonInstructions": true,
+    "stableSchemas": true,
+    "BDirectoryErrorMessageActivations": 0,
+    "errorMessageCoverage": "unit boundary checks only; no live B failure exercised the new message"
+  },
+  "cohorts": {
+    "pilot-v1": {
+      "arms": {
+        "A": {
+          "attempts": 1,
+          "accepted": 1,
+          "withinBudgetSuccesses": 1,
+          "knownCost": 0.010532799999999998,
+          "meanCost": 0.010532799999999998,
+          "unknownCostAttempts": 0,
+          "turns": 4,
+          "calls": 10,
+          "directoryErrors": 0,
+          "otherToolErrors": 0,
+          "postErrorContinuationTurns": 0,
+          "meanLatencyMs": 17733,
+          "usage": {
+            "input": 4015,
+            "cacheRead": 3328,
+            "cacheWrite": 0,
+            "output": 217,
+            "totalTokens": 7560
+          }
+        },
+        "B": {
+          "attempts": 1,
+          "accepted": 1,
+          "withinBudgetSuccesses": 1,
+          "knownCost": 0.009352,
+          "meanCost": 0.009352,
+          "unknownCostAttempts": 0,
+          "turns": 4,
+          "calls": 12,
+          "directoryErrors": 0,
+          "otherToolErrors": 0,
+          "postErrorContinuationTurns": 0,
+          "meanLatencyMs": 14260,
+          "usage": {
+            "input": 3190,
+            "cacheRead": 5120,
+            "cacheWrite": 0,
+            "output": 246,
+            "totalTokens": 8556
+          }
+        }
+      },
+      "pairs": [
+        {
+          "task": "pilot",
+          "repetition": 0,
+          "A": 0.010532799999999998,
+          "B": 0.009352,
+          "relativeChange": -0.1121069421236518,
+          "ATurns": 4,
+          "BTurns": 4,
+          "ADirectoryErrors": 0,
+          "BDirectoryErrors": 0
+        }
+      ],
+      "relativeMeanCostChange": -0.1121069421236518,
+      "rows": [
+        {
+          "id": "001-pilot-A-r0",
+          "task": "pilot",
+          "arm": "A",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 4015,
+            "cacheRead": 3328,
+            "cacheWrite": 0,
+            "output": 217,
+            "totalTokens": 7560,
+            "estimatedApiUsd": 0.010532799999999998
+          },
+          "knownEstimatedUsd": 0.010532799999999998,
+          "totalEstimatedUsd": 0.010532799999999998,
+          "latencyMs": 17733,
+          "turns": 4,
+          "calls": 10,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "002-pilot-B-r0",
+          "task": "pilot",
+          "arm": "B",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 3190,
+            "cacheRead": 5120,
+            "cacheWrite": 0,
+            "output": 246,
+            "totalTokens": 8556,
+            "estimatedApiUsd": 0.009352
+          },
+          "knownEstimatedUsd": 0.009352,
+          "totalEstimatedUsd": 0.009352,
+          "latencyMs": 14260,
+          "turns": 4,
+          "calls": 12,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        }
+      ]
+    },
+    "scored-v1": {
+      "arms": {
+        "A": {
+          "attempts": 6,
+          "accepted": 6,
+          "withinBudgetSuccesses": 6,
+          "knownCost": 0.15265600000000001,
+          "meanCost": 0.02544266666666667,
+          "unknownCostAttempts": 0,
+          "turns": 29,
+          "calls": 78,
+          "directoryErrors": 1,
+          "otherToolErrors": 0,
+          "postErrorContinuationTurns": 1,
+          "meanLatencyMs": 24515.5,
+          "usage": {
+            "input": 48243,
+            "cacheRead": 70400,
+            "cacheWrite": 0,
+            "output": 4913,
+            "totalTokens": 123556
+          }
+        },
+        "B": {
+          "attempts": 6,
+          "accepted": 6,
+          "withinBudgetSuccesses": 6,
+          "knownCost": 0.16769400000000004,
+          "meanCost": 0.027949000000000005,
+          "unknownCostAttempts": 0,
+          "turns": 29,
+          "calls": 77,
+          "directoryErrors": 0,
+          "otherToolErrors": 0,
+          "postErrorContinuationTurns": 0,
+          "meanLatencyMs": 27535.833333333332,
+          "usage": {
+            "input": 54838,
+            "cacheRead": 65280,
+            "cacheWrite": 0,
+            "output": 5149,
+            "totalTokens": 125267
+          }
+        }
+      },
+      "pairs": [
+        {
+          "task": "json5",
+          "repetition": 0,
+          "A": 0.0167972,
+          "B": 0.0210988,
+          "relativeChange": 0.2560903007644131,
+          "ATurns": 4,
+          "BTurns": 4,
+          "ADirectoryErrors": 1,
+          "BDirectoryErrors": 0
+        },
+        {
+          "task": "dotenv",
+          "repetition": 0,
+          "A": 0.025502,
+          "B": 0.030279200000000003,
+          "relativeChange": 0.1873264841973179,
+          "ATurns": 5,
+          "BTurns": 5,
+          "ADirectoryErrors": 0,
+          "BDirectoryErrors": 0
+        },
+        {
+          "task": "flatted",
+          "repetition": 0,
+          "A": 0.02834,
+          "B": 0.0434536,
+          "relativeChange": 0.5332956951305576,
+          "ATurns": 5,
+          "BTurns": 5,
+          "ADirectoryErrors": 0,
+          "BDirectoryErrors": 0
+        },
+        {
+          "task": "json5",
+          "repetition": 1,
+          "A": 0.024563599999999998,
+          "B": 0.0171756,
+          "relativeChange": -0.3007702454037682,
+          "ATurns": 5,
+          "BTurns": 5,
+          "ADirectoryErrors": 0,
+          "BDirectoryErrors": 0
+        },
+        {
+          "task": "dotenv",
+          "repetition": 1,
+          "A": 0.0257252,
+          "B": 0.0268156,
+          "relativeChange": 0.04238645374963057,
+          "ATurns": 5,
+          "BTurns": 5,
+          "ADirectoryErrors": 0,
+          "BDirectoryErrors": 0
+        },
+        {
+          "task": "flatted",
+          "repetition": 1,
+          "A": 0.031728000000000006,
+          "B": 0.028871200000000003,
+          "relativeChange": -0.0900403429147757,
+          "ATurns": 5,
+          "BTurns": 5,
+          "ADirectoryErrors": 0,
+          "BDirectoryErrors": 0
+        }
+      ],
+      "relativeMeanCostChange": 0.09850906613562538,
+      "rows": [
+        {
+          "id": "001-json5-A-r0",
+          "task": "json5",
+          "arm": "A",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 5560,
+            "cacheRead": 6272,
+            "cacheWrite": 0,
+            "output": 505,
+            "totalTokens": 12337,
+            "estimatedApiUsd": 0.0167972
+          },
+          "knownEstimatedUsd": 0.0167972,
+          "totalEstimatedUsd": 0.0167972,
+          "latencyMs": 18747,
+          "turns": 4,
+          "calls": 10,
+          "toolErrors": [
+            {
+              "parentCallId": "call_Q79HXEO793YpHrHX8gTlPYQ4|ctc_00365bc593bed538016ad01d1e17dc87d18f9143c35359373d",
+              "tool": "search",
+              "path": "src",
+              "error": "EISDIR: illegal operation on a directory, read",
+              "kind": "directory-path"
+            }
+          ],
+          "correctionTurns": 1,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "002-json5-B-r0",
+          "task": "json5",
+          "arm": "B",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 8096,
+            "cacheRead": 3968,
+            "cacheWrite": 0,
+            "output": 451,
+            "totalTokens": 12515,
+            "estimatedApiUsd": 0.0210988
+          },
+          "knownEstimatedUsd": 0.0210988,
+          "totalEstimatedUsd": 0.0210988,
+          "latencyMs": 18098,
+          "turns": 4,
+          "calls": 9,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "003-dotenv-B-r0",
+          "task": "dotenv",
+          "arm": "B",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 9938,
+            "cacheRead": 12032,
+            "cacheWrite": 0,
+            "output": 920,
+            "totalTokens": 22890,
+            "estimatedApiUsd": 0.030279200000000003
+          },
+          "knownEstimatedUsd": 0.030279200000000003,
+          "totalEstimatedUsd": 0.030279200000000003,
+          "latencyMs": 28173,
+          "turns": 5,
+          "calls": 13,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "004-dotenv-A-r0",
+          "task": "dotenv",
+          "arm": "A",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 7731,
+            "cacheRead": 12800,
+            "cacheWrite": 0,
+            "output": 876,
+            "totalTokens": 21407,
+            "estimatedApiUsd": 0.025502
+          },
+          "knownEstimatedUsd": 0.025502,
+          "totalEstimatedUsd": 0.025502,
+          "latencyMs": 24433,
+          "turns": 5,
+          "calls": 12,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "005-flatted-A-r0",
+          "task": "flatted",
+          "arm": "A",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 8125,
+            "cacheRead": 16000,
+            "cacheWrite": 0,
+            "output": 1049,
+            "totalTokens": 25174,
+            "estimatedApiUsd": 0.02834
+          },
+          "knownEstimatedUsd": 0.02834,
+          "totalEstimatedUsd": 0.02834,
+          "latencyMs": 30736,
+          "turns": 5,
+          "calls": 16,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "006-flatted-B-r0",
+          "task": "flatted",
+          "arm": "B",
+          "repetition": 0,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 15561,
+            "cacheRead": 9216,
+            "cacheWrite": 0,
+            "output": 1141,
+            "totalTokens": 25918,
+            "estimatedApiUsd": 0.0434536
+          },
+          "knownEstimatedUsd": 0.0434536,
+          "totalEstimatedUsd": 0.0434536,
+          "latencyMs": 36191,
+          "turns": 5,
+          "calls": 16,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "007-json5-B-r1",
+          "task": "json5",
+          "arm": "B",
+          "repetition": 1,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 5449,
+            "cacheRead": 11776,
+            "cacheWrite": 0,
+            "output": 510,
+            "totalTokens": 17735,
+            "estimatedApiUsd": 0.0171756
+          },
+          "knownEstimatedUsd": 0.0171756,
+          "totalEstimatedUsd": 0.0171756,
+          "latencyMs": 23583,
+          "turns": 5,
+          "calls": 11,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "008-json5-A-r1",
+          "task": "json5",
+          "arm": "A",
+          "repetition": 1,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 9337,
+            "cacheRead": 7296,
+            "cacheWrite": 0,
+            "output": 516,
+            "totalTokens": 17149,
+            "estimatedApiUsd": 0.024563599999999998
+          },
+          "knownEstimatedUsd": 0.024563599999999998,
+          "totalEstimatedUsd": 0.024563599999999998,
+          "latencyMs": 21707,
+          "turns": 5,
+          "calls": 11,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "009-dotenv-A-r1",
+          "task": "dotenv",
+          "arm": "A",
+          "repetition": 1,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 8002,
+            "cacheRead": 13312,
+            "cacheWrite": 0,
+            "output": 839,
+            "totalTokens": 22153,
+            "estimatedApiUsd": 0.0257252
+          },
+          "knownEstimatedUsd": 0.0257252,
+          "totalEstimatedUsd": 0.0257252,
+          "latencyMs": 22969,
+          "turns": 5,
+          "calls": 13,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "010-dotenv-B-r1",
+          "task": "dotenv",
+          "arm": "B",
+          "repetition": 1,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 8273,
+            "cacheRead": 13696,
+            "cacheWrite": 0,
+            "output": 890,
+            "totalTokens": 22859,
+            "estimatedApiUsd": 0.0268156
+          },
+          "knownEstimatedUsd": 0.0268156,
+          "totalEstimatedUsd": 0.0268156,
+          "latencyMs": 23628,
+          "turns": 5,
+          "calls": 13,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "011-flatted-B-r1",
+          "task": "flatted",
+          "arm": "B",
+          "repetition": 1,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 7521,
+            "cacheRead": 14592,
+            "cacheWrite": 0,
+            "output": 1237,
+            "totalTokens": 23350,
+            "estimatedApiUsd": 0.028871200000000003
+          },
+          "knownEstimatedUsd": 0.028871200000000003,
+          "totalEstimatedUsd": 0.028871200000000003,
+          "latencyMs": 35542,
+          "turns": 5,
+          "calls": 15,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        },
+        {
+          "id": "012-flatted-A-r1",
+          "task": "flatted",
+          "arm": "A",
+          "repetition": 1,
+          "status": "completed",
+          "patchAccepted": true,
+          "budgetEligible": true,
+          "success": true,
+          "intact": true,
+          "models": [
+            "gpt-6.1-sol"
+          ],
+          "modelValid": true,
+          "effortValid": true,
+          "usage": {
+            "input": 9488,
+            "cacheRead": 14720,
+            "cacheWrite": 0,
+            "output": 1128,
+            "totalTokens": 25336,
+            "estimatedApiUsd": 0.031728000000000006
+          },
+          "knownEstimatedUsd": 0.031728000000000006,
+          "totalEstimatedUsd": 0.031728000000000006,
+          "latencyMs": 28501,
+          "turns": 5,
+          "calls": 16,
+          "toolErrors": [],
+          "correctionTurns": 0,
+          "acceptanceStatus": "passed",
+          "regressionStatus": "passed",
+          "errors": []
+        }
+      ]
+    }
+  },
+  "validation": {
+    "passed": true,
+    "attempts": 14,
+    "inputFailures": [],
+    "identityFailures": []
+  },
+  "limitations": [
+    "Six matched groups from three small historical library snapshots; two repetitions are not independent tasks.",
+    "Only one control directory error; insufficient evidence of a broad invalid-call reduction.",
+    "All arms accepted; this is not a capability rescue experiment.",
+    "Cost signs reverse for JSON5 and flatted between repetitions. No statistical confidence or stable causal attribution established.",
+    "Counterbalanced order and recorded cache usage; provider cache warmth not controlled. B has 6595 more fresh-input tokens and 5120 fewer cached-input tokens in scored runs; these totals do not isolate instruction length from different trajectories/cache behavior.",
+    "B changed initial request payload from 5816 to 6401 bytes in pilot; longer documentation overhead is included, not priced separately.",
+    "Post-error continuation count does not equal counterfactual extra turns or avoidable cost.",
+    "Researcher saw public PR descriptions/reference code while authoring prompts and tests; actors saw only task prompt/repository and workspace, never hidden acceptance or fix metadata. Public fixes may be in training.",
+    "Complete frozen authored regression samples were run, not unchanged full upstream test suites.",
+    "Common generic Suffice actor uses existing workspace/navigation tools; comparison is of those tool contracts, not every previously specialized harness tool."
+  ],
+  "disposition": "Preserve in experiment/interface-friction; no default promotion, directory-aware search or live compression follow-up."
+}
