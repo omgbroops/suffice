@@ -1,0 +1,130 @@
+{
+  "receiptVersion": 3,
+  "reviewedAt": "2026-10-15T01:04:13.794Z",
+  "hashAlgorithm": "SHA256 native node:crypto over exact bytes",
+  "reviewMode": "static final allowlist rereview; no execution or inference",
+  "tasks": [
+    {
+      "id": "bottleneck-weighted-priority",
+      "receiptKind": "new-structural-tier2",
+      "taskPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\bottleneck-weighted-priority\\task.json",
+      "taskHash": "99bb6cf6ba571867f5ac037c0f739798617de75e09f276c6eaffb8256ebf2728",
+      "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\benchmark-multicomponent\\benchmarks\\multicomponent\\bottleneck-weighted-priority\\private\\acceptance.test.mjs",
+      "acceptanceHash": "4063c94741905f979c6a30f543730e476fd007a0a99af3cd33bb06d1b7123881",
+      "scopeTier": "multicomponent-small-patch",
+      "scopeTierNumber": 2,
+      "scopeProvisional": true,
+      "verdict": "approved",
+      "issues": [],
+      "assertionNameMapping": [
+        {
+          "assertionName": "queued priorities run from smaller number to larger number with FIFO ties",
+          "requirementIDs": [
+            "R1"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "successful weighted jobs release their entire reservation exactly once",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "failed weighted jobs release capacity and retain rejection identity",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "priority selection and weighted release compose across backlog waves",
+          "requirementIDs": [
+            "R1",
+            "R2",
+            "R3",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "oversized jobs reject without consuming running capacity",
+          "requirementIDs": [
+            "R2",
+            "R4"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        },
+        {
+          "assertionName": "zero weight completion leaves running capacity unchanged",
+          "requirementIDs": [
+            "R2",
+            "R5"
+          ],
+          "verdict": "supported",
+          "review": "Read actual assertion operands and public behavior contract; no unsupported exact output requirement found."
+        }
+      ],
+      "durationEvidence": "None: engineering scope does not establish observed task duration, difficulty, long-horizon persistence, compaction or delegation benefit.",
+      "actorBoundary": "Evaluator-only hidden/reference and receipt; actor gets publicPrompt and actor workspace only.",
+      "sourceReceiptHash": "0e058ecc475e804d22c973847e3b655cef06c409605f2138560fa7f57152c528",
+      "sourceCommit": "8a8bde9cde151c278397703c48f2bba4ded2bae7",
+      "referenceManifest": {
+        "entries": 97,
+        "mismatches": []
+      },
+      "productionDiffReview": "Compared actor/reference entire src: only Queues.getFirst priority traversal reversed and LocalDatastore.__free__ decrements 1 rather than weight. These are disclosed defects.",
+      "scopeRationale": "Two distinct functional modules: priority queue selection and datastore reservation conservation integrated through scheduler registration, Job completion and re-drain. Both need repair for combined backlog scenario. Only two one-line edits are needed; tier2 is structural and provisional.",
+      "limitations": [
+        "Existing lib JavaScript only is evaluated; CoffeeScript and bundled counterparts intentionally immutable.",
+        "Local scheduler only; Redis/clustering/timing/retries/expiration explicitly excluded.",
+        "Reference manifest checked against source receipt; source archive bytes not located independently in package.",
+        "Six authored hidden scenarios are a finite contract sample, not the full original upstream suite.",
+        "Two-second failure bounds can invalidate severely stalled host runs; combined test uses dependency gates rather than target latency."
+      ],
+      "validationReceiptHash": "450f6cf2db72a6717b51fa4c3cfe54c48d1fa424711cc2b79eb841e37c47f336",
+      "reportedCreatorValidation": "Creator/parent report reference passes, actor visible3/3 hidden1/6 and each partial repair fails combined scenario; not independently rerun.",
+      "allowedEditPaths": [
+        "src/lib/Batcher.js",
+        "src/lib/Bottleneck.js",
+        "src/lib/BottleneckError.js",
+        "src/lib/DLList.js",
+        "src/lib/Events.js",
+        "src/lib/Group.js",
+        "src/lib/IORedisConnection.js",
+        "src/lib/Job.js",
+        "src/lib/LocalDatastore.js",
+        "src/lib/Queues.js",
+        "src/lib/RedisConnection.js",
+        "src/lib/RedisDatastore.js",
+        "src/lib/Scripts.js",
+        "src/lib/States.js",
+        "src/lib/Sync.js",
+        "src/lib/index.js",
+        "src/lib/parser.js"
+      ],
+      "allowlistChecks": {
+        "count": 17,
+        "unique": true,
+        "allExistingProductionJS": true,
+        "excludesBundledES5": true,
+        "containsRequiredModules": true,
+        "unchangedAcceptance": true
+      },
+      "supersedes": {
+        "taskHash": "af5744160cd87d3695368d122063f994cf7f9f4596bb205e8dc0f84398affcd1",
+        "acceptanceHash": "4063c94741905f979c6a30f543730e476fd007a0a99af3cd33bb06d1b7123881",
+        "receipt": "BENCHMARK-V1-CONTRACT-REVIEW.receipt-2.json"
+      },
+      "changeReview": "Final explicit allowlist: 17 existing production lib JS modules, excludes lib/es5.js bundled wrapper. Both actual repair modules permitted. Public behavioral contract and acceptance unchanged; prior assertion/scope approval retained."
+    }
+  ]
+}
