@@ -1,12 +1,16 @@
 # Suffice
 
-Latest completed experiment: [Sol tool-efficiency findings](reports/TOOL-EFFICIENCY-RESULTS.md). All 48 attempts passed the frozen checks. On 11 common complete-cost task/repetition groups, navigation-only cost 24.8% less, compact responses 19.8% less, and both together 19.4% less than Sol/core. These are narrow historical-replay results, not general performance guarantees. [Protocol](docs/TOOL-EFFICIENCY.md) and [per-run data](reports/sol-tools-v1.md) document the comparison.
+Newest completed investigations: [Nemotron retrieval and revision-aware evidence](reports/EVIDENCE-EXPERIMENTS-RESULTS.md). Semantic retrieval improved offline region coverage but cost 6.3% more in scored repairs; the evidence record cost 85.2% more, and record plus directed checks 105.5% more. Every scored arm passed. No new policy was enabled by default. These are bounded observations, not general accuracy or cost guarantees. Independent saved-patch audits and isolated exported-layout replays passed; see [status](STATUS.md).
+
+Earlier completed investigations: [architect workflow and five parallel experiments](reports/PARALLEL-EXPERIMENTS-RESULTS.md). Delegation cost more than solo, dynamic history retention cost 43.8% more, and fixed test checkpoints showed a narrow 16.5% efficiency signal with a feedback-loss risk. Harder tasks now expose real baseline failures, but no capability-frontier gain is established. [Full project handoff](docs/CHATGPT-HANDOFF.md) and [status](STATUS.md) include model settings, preserved failures and limitations.
+
+Earlier positive evidence: [Sol tool-efficiency findings](reports/TOOL-EFFICIENCY-RESULTS.md). All 48 attempts passed the frozen checks. On 11 common complete-cost task/repetition groups, navigation-only cost 24.8% less, compact responses 19.8% less, and both together 19.4% less than Sol/core. These are narrow historical-replay results, not general performance guarantees. [Protocol](docs/TOOL-EFFICIENCY.md) and [per-run data](reports/sol-tools-v1.md) document the comparison.
 
 The completed real-repository experiment uses npm/node-semver: [conclusions](reports/SEMVER-RESULTS.md), [protocol](docs/REAL-EXPERIMENT.md), [per-run results](reports/semver-control-v1.md), and [current status](STATUS.md). All 42 runs finished. Sol/core and Luna + Sol review/repair passed 6/6 each; review/repair cost more. State, pruning, and reproduction-first did not establish an accuracy-preserving efficiency gain. Earlier synthetic findings remain documented below.
 
 An experimental Pi-based coding harness studying how proactive context retrieval changes task success, latency, and total computation.
 
-This repository currently contains a controlled diagnostic experiment, not a validated learned control policy. Pi 1.2.0 supplies the agent loop and native programmatic JavaScript tool execution. The main model is GPT-6.1 Sol at medium reasoning effort.
+This repository contains controlled diagnostic experiments, not a validated learned control policy. Pi 1.2.0 supplies the benchmark agent loop and native programmatic JavaScript tool execution. Each frozen protocol specifies its models and effort; recent baselines use GPT-6.1 Sol low, while early integration runs used medium. The coordinating development session is separate from these benchmark actors.
 
 Initial experiments are complete. Read [the results summary](reports/RESULTS.md). The final pilot and held-out campaigns use low reasoning; initial integration campaigns used medium. Comparisons remain separated by campaign.
 
