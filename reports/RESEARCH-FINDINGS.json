@@ -1,0 +1,809 @@
+{
+  "title": "Suffice context waste audit and Prime Agent research",
+  "at": "2026-10-15T00:02:30.322114+00:00",
+  "scope": "Offline analysis and public-source research. No harness configuration, frozen campaigns, dependency versions, authentication or runtime tools changed. No live model campaign or Prime Agent installation.",
+  "decision": "Retain AST navigation, codemode and append-only history. Measure interface friction and actual evidence sufficiency before adding persistent state or filtering mechanisms.",
+  "coverage": {
+    "resultRecords": 347,
+    "attemptRecords": 345,
+    "nonAttemptSummariesExcluded": 2,
+    "attemptsWithTranscripts": 266,
+    "actorTranscripts": 296,
+    "savedInputManifestFiles": 999,
+    "jsonParseFailures": 0,
+    "usageReconciliationMismatches": 0,
+    "completeReportedCostAttempts": 303,
+    "reportedKnownInferenceUsd": 12.482243945999997,
+    "recordedActorCostComponentsUsd": {
+      "input": 8.832067899999997,
+      "cacheRead": 0.6190591999999999,
+      "cacheWrite": 0,
+      "output": 2.9968995000000014,
+      "total": 12.448026599999995
+    },
+    "costGapExplanation": "Some historical auxiliary/classifier calls are included in result totals but absent from assistant transcript cost components. These are API-equivalent experiment receipts, not invoices or total project expenditure."
+  },
+  "findings": [
+    {
+      "observation": "Across the heterogeneous archive, fresh input is 70.95% of recorded actor cost, cached input 4.97%, output 24.08%.",
+      "interpretation": "The broader Codex-history 97.7% cache ratio should not be transferred to Suffice. These shares describe saved receipt prices, not current provider tariffs."
+    },
+    {
+      "observation": "In the newest 34 attempts, source file/function reads contribute 81.52% of primitive output characters; test results contribute 4.77%.",
+      "interpretation": "Large test logs are not the dominant measured primitive output here. Source length alone does not establish waste."
+    },
+    {
+      "observation": "25 EISDIR nested-tool failures occurred in 24 of the newest 34 attempts: 22 symbols calls and 3 search calls with directory paths src or src/.",
+      "interpretation": "Verified interface mismatch: optional path is implemented as a single file, while descriptions omit that restriction. This is a concrete friction target. Following-turn cost is not an estimate of avoidable spending. No fix made."
+    },
+    {
+      "observation": "All 177 newest codemode programs contain a direct whole-result emit expression; none contain a direct store/load call. Some emits are not reached because scripts fail.",
+      "interpretation": "Codemode availability does not establish effective filtering or retained-state use. Complete outputs can be useful and are already bounded/compacted in some arms; this is not 177 proven wasteful programs."
+    },
+    {
+      "observation": "The 48-attempt tools campaign and 27-attempt YAML campaign have zero exact repeated file_read receipts within actors. The 23 newest scored attempts also have zero.",
+      "interpretation": "Avoiding repeated file_read is not a demonstrated major bottleneck in those cohorts. Symbol reads, partial overlaps, cross-actor duplication and semantic rediscovery are distinct."
+    },
+    {
+      "observation": "Existing adaptive failures passed visible checks and missed the unchanged-stale-value update/disposal invariant; neither escalation nor rollback activated in their respective harder pilots.",
+      "interpretation": "Completion evidence and controller triggers remain separate reliability problems. This audit uses saved outcomes, does not regrade patches, and cannot show a remedy would improve acceptance."
+    }
+  ],
+  "newestRound": {
+    "attempts": 34,
+    "modelResponses": 211,
+    "knownActorCost": 1.4302372,
+    "costComponents": {
+      "input": 0.9645480000000002,
+      "cacheRead": 0.08273920000000003,
+      "cacheWrite": 0,
+      "output": 0.3829500000000002,
+      "total": 1.4302372
+    },
+    "primitiveRawCharacters": {
+      "files": 7851,
+      "file_read": 284384,
+      "symbols": 37890,
+      "symbol_read": 152065,
+      "file_write": 115,
+      "test": 25522,
+      "search": 14902,
+      "file_edit": 10984,
+      "symbol_references": 1673
+    },
+    "codemodePrograms": 177,
+    "directWholeResultEmitPrograms": 177,
+    "directStorePrograms": 0,
+    "directLoadPrograms": 0,
+    "directoryErrorCalls": 25,
+    "directoryErrorAttempts": 24,
+    "cases": [
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-screen-v1/001-pmap-readahead-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-screen-v1/002-pmap-readahead-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-screen-v1/003-pmap-readahead-C-r0/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/001-lru-duration-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/002-lru-duration-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/003-lru-duration-C-r0/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/004-pmap-index-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/006-pmap-index-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/007-emitter-once-C-r0/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/008-emitter-once-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/009-emitter-once-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/011-lru-duration-C-r1/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/012-lru-duration-B-r1/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/013-pmap-index-B-r1/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/014-pmap-index-A-r1/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/015-pmap-index-C-r1/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-pilot-v1/002-queue-drain-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-pilot-v1/003-queue-drain-C-r0/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-pilot-v1/004-pmap-close-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/03-marked-4123-semantic-r0/result.json",
+        "arm": "semantic",
+        "errors": [
+          {
+            "tool": "search",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/04-marked-4123-navigation-r0/result.json",
+        "arm": "navigation",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          },
+          {
+            "tool": "search",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/07-marked-4123-navigation-r1/result.json",
+        "arm": "navigation",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/08-marked-4123-semantic-r1/result.json",
+        "arm": "semantic",
+        "errors": [
+          {
+            "tool": "search",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-pilot-v1/01-path-to-regexp-448-navigation-r0/result.json",
+        "arm": "navigation",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      }
+    ]
+  },
+  "newestScored": {
+    "attempts": 23,
+    "modelResponses": 142,
+    "knownActorCost": 0.8813352,
+    "costComponents": {
+      "input": 0.5964999999999999,
+      "cacheRead": 0.047155199999999994,
+      "cacheWrite": 0,
+      "output": 0.23767999999999997,
+      "total": 0.8813352
+    },
+    "primitiveRawCharacters": {
+      "file_read": 145288,
+      "symbols": 28828,
+      "files": 5448,
+      "symbol_read": 89526,
+      "search": 10209,
+      "file_edit": 6758,
+      "test": 15832,
+      "symbol_references": 1250
+    },
+    "codemodePrograms": 119,
+    "directWholeResultEmitPrograms": 119,
+    "directStorePrograms": 0,
+    "directLoadPrograms": 0,
+    "directoryErrorCalls": 18,
+    "directoryErrorAttempts": 17,
+    "cases": [
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/001-lru-duration-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/002-lru-duration-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/003-lru-duration-C-r0/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/004-pmap-index-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/006-pmap-index-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/007-emitter-once-C-r0/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/008-emitter-once-A-r0/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/009-emitter-once-B-r0/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/011-lru-duration-C-r1/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/012-lru-duration-B-r1/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/013-pmap-index-B-r1/result.json",
+        "arm": "B",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/014-pmap-index-A-r1/result.json",
+        "arm": "A",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/evidence-record/.suffice/evidence-runs/evidence-scored-v2/015-pmap-index-C-r1/result.json",
+        "arm": "C",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src/",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/03-marked-4123-semantic-r0/result.json",
+        "arm": "semantic",
+        "errors": [
+          {
+            "tool": "search",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/04-marked-4123-navigation-r0/result.json",
+        "arm": "navigation",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          },
+          {
+            "tool": "search",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/07-marked-4123-navigation-r1/result.json",
+        "arm": "navigation",
+        "errors": [
+          {
+            "tool": "symbols",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      },
+      {
+        "source": "../suffice-experiments/nemotron-retrieval/.suffice/nemotron/live-scored-v1/08-marked-4123-semantic-r1/result.json",
+        "arm": "semantic",
+        "errors": [
+          {
+            "tool": "search",
+            "path": "src",
+            "errorClass": "directory passed where a file is expected"
+          }
+        ]
+      }
+    ]
+  },
+  "primeAgent": {
+    "commit": "5f218f780dabc51e26b039580da5d0686cc5616a",
+    "publicSourceDownloadedBytes": 264474,
+    "inspectedFiles": [
+      {
+        "path": "README.md",
+        "bytes": 10223,
+        "sha256": "4aea26f2ccbc3290fea5dc4f4546be7f04eddf97825365ad1d44fda2d65b10cc",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/README.md"
+      },
+      {
+        "path": "prime-agent-runtime/src/rlm/repl.md",
+        "bytes": 11190,
+        "sha256": "8588a9fe75d78ed961c787f6e6a67e1f6c7274bf9043ff71a49293926ffe9507",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/prime-agent-runtime/src/rlm/repl.md"
+      },
+      {
+        "path": "skills/refine/SKILL.md",
+        "bytes": 2076,
+        "sha256": "048b0e5a3df1d8d5b17ad2650d08956fd2fd92bf60f9d2d02430a87aca2e6173",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/skills/refine/SKILL.md"
+      },
+      {
+        "path": "crates/pa-core/src/prompts/layers/usage.md",
+        "bytes": 6321,
+        "sha256": "fad6e7bf50353fcad562e0692b8d117a7334bca6cea96a5f915d29b89b8d950a",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/prompts/layers/usage.md"
+      },
+      {
+        "path": "crates/pa-core/src/session_engine/compaction.rs",
+        "bytes": 35866,
+        "sha256": "fe4da8deb567484b7709485aa45199d24e322a831c5513ae0892fde83d595069",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/session_engine/compaction.rs"
+      },
+      {
+        "path": "crates/pa-core/src/session_engine/compaction_exec.rs",
+        "bytes": 27708,
+        "sha256": "a4b07edbc5bf75e9e7ffded8971b5ef5db7feb5c49232b27d26d51153ad27088",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/session_engine/compaction_exec.rs"
+      },
+      {
+        "path": "crates/pa-core/src/session_engine/compaction_utils.rs",
+        "bytes": 24245,
+        "sha256": "0378552b7260a9728c54b749edefb7d455489f2045d4b395f75769b606b55535",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/session_engine/compaction_utils.rs"
+      },
+      {
+        "path": "crates/pa-core/src/session_engine/compaction_arms.rs",
+        "bytes": 21334,
+        "sha256": "52e8e7fd5fadf9289915da8744295e7fa000f48b221e87acf7a1c06f6802ed82",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/session_engine/compaction_arms.rs"
+      },
+      {
+        "path": "crates/pa-core/src/autonomous/gates.rs",
+        "bytes": 26954,
+        "sha256": "9d46f91ba87f2b8c350676b369f62ab41deeb9a4aa2cb10630248b4479c89b94",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/autonomous/gates.rs"
+      },
+      {
+        "path": "crates/pa-types/src/usage.rs",
+        "bytes": 6158,
+        "sha256": "487ee66ac5c2b2f92322a59d71724da33589fe7abc27437db440b866b03927b4",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-types/src/usage.rs"
+      },
+      {
+        "path": "crates/pa-daemon/src/rlm_children/usage.rs",
+        "bytes": 17253,
+        "sha256": "ae84df3d3f2b43376ea98a71421a15bb82c390434a45d9a95dbc20cf193f12cc",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-daemon/src/rlm_children/usage.rs"
+      },
+      {
+        "path": "prime-agent-runtime/src/rlm/repl.py",
+        "bytes": 75146,
+        "sha256": "5b97d430d4e6e4bde9c7c68c621cce0d2ce52ce641a37e432540d194eda2d786",
+        "url": "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/5f218f780dabc51e26b039580da5d0686cc5616a/prime-agent-runtime/src/rlm/repl.py"
+      }
+    ],
+    "architectureComparison": [
+      {
+        "dimension": "Execution state",
+        "prime": "Persistent Python namespace containing live objects/functions. Namespace snapshots have size limits, skips and per-name restore failures.",
+        "suffice": "Pi supports small JSON store/load: 262144 characters per value, 1048576 total. Current repair runners use in-memory sessions; no demonstrated cross-restart preservation.",
+        "source": "https://github.com/PrimeIntellect-ai/prime-agent/blob/5f218f780dabc51e26b039580da5d0686cc5616a/prime-agent-runtime/src/rlm/repl.md"
+      },
+      {
+        "dimension": "Compaction",
+        "prime": "Summarizer prompts explicitly retain names of reusable Python variables while the kernel continues; disk history remains retrievable. Oversized state can be pruned.",
+        "suffice": "Current controlled repair runners disable compaction, so these campaigns do not test persistence across compaction.",
+        "source": "https://github.com/PrimeIntellect-ai/prime-agent/blob/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/session_engine/compaction.rs"
+      },
+      {
+        "dimension": "Usage guidance",
+        "prime": "Prompts explicitly direct models to assign read/search results to variables and use Python for filtering and control flow.",
+        "suffice": "Prompts emphasize batching and awaiting edits before checks. Saved programs generally emit whole tool results.",
+        "source": "https://github.com/PrimeIntellect-ai/prime-agent/blob/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/prompts/layers/usage.md"
+      },
+      {
+        "dimension": "Completion gates",
+        "prime": "Autonomous mode runs configured shell gates and tracks budgets. Gate correctness/coverage is still supplied by the task or evaluator.",
+        "suffice": "Independent acceptance already exists outside repair actors, but visible checks can miss requirements that final acceptance finds.",
+        "source": "https://github.com/PrimeIntellect-ai/prime-agent/blob/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-core/src/autonomous/gates.rs"
+      },
+      {
+        "dimension": "Refinement",
+        "prime": "Versioned supplemental harness state; local by default, explicit global promotion; refinement runs at a turn boundary.",
+        "suffice": "Not enabled. Existing data does not justify its maintenance cost or establish held-out benefit.",
+        "source": "https://github.com/PrimeIntellect-ai/prime-agent/blob/5f218f780dabc51e26b039580da5d0686cc5616a/skills/refine/SKILL.md"
+      },
+      {
+        "dimension": "Descendant cost",
+        "prime": "Per-origin child usage rows with persisted attribution cursors and repeat-delivery handling.",
+        "suffice": "Bounded workflow phase accounting exists, but this archive is not a complete product expenditure ledger.",
+        "source": "https://github.com/PrimeIntellect-ai/prime-agent/blob/5f218f780dabc51e26b039580da5d0686cc5616a/crates/pa-daemon/src/rlm_children/usage.rs"
+      }
+    ],
+    "paper": {
+      "url": "https://arxiv.org/html/2608.23552v1",
+      "date": "2026-08-24",
+      "status": "Author-reported nominal-model comparisons, not independently reproduced here.",
+      "model": "GPT-5.6 Sol high",
+      "pointEstimates": [
+        {
+          "task": "ManyIH Coding",
+          "prime": 0.499,
+          "codex": 0.454
+        },
+        {
+          "task": "EmulatorBench",
+          "prime": 0.275,
+          "codex": 0.228
+        },
+        {
+          "task": "OOLONG",
+          "prime": 0.94,
+          "codex": 0.9
+        },
+        {
+          "task": "OBLIQ",
+          "prime": 0.612,
+          "codex": 0.646
+        },
+        {
+          "task": "ManyIH IF",
+          "prime": 0.216,
+          "codex": 0.232
+        },
+        {
+          "task": "LongCoT-Mini",
+          "prime": 0.671,
+          "codex": 0.681
+        }
+      ],
+      "limits": "Metrics differ; uncertainty intervals unavailable. ARC uses external official reference scores after weaker native reruns, so it is not an isolated harness effect. Factorio refinement preserved a specification exploit. August results do not independently validate current October Rust code or GPT-6.1 Sol low."
+    },
+    "rustBlog": {
+      "url": "https://www.primeintellect.ai/blog/prime-agent-rust",
+      "date": "2026-10-09",
+      "status": "Author runtime benchmark; scripted model excludes inference.",
+      "coldTypeMs": {
+        "primeRust": 55.8,
+        "codex": 324.6,
+        "pi": 317.7
+      },
+      "startupMemoryMB": {
+        "primeRust": 106,
+        "codex": 344.4,
+        "pi": 138.1
+      },
+      "lesson": "Borrow differential parity checks and alternating measurements; runtime gains do not demonstrate cheaper model calls."
+    },
+    "unverified": [
+      "No installation/build/runtime behavior tested.",
+      "No same-model equal-budget Prime versus Suffice comparison.",
+      "Full model-evaluation receipts/configurations were not reconstructed from the current source tree.",
+      "Expressive persistence is not proof of correct retained evidence or economical subagents."
+    ]
+  },
+  "nextResearch": [
+    {
+      "priority": 1,
+      "question": "How often do file-only path semantics, edit matching and schema mistakes induce corrective turns?",
+      "method": "Use saved nested error receipts and subsequent programs. Separate genuine API ambiguity, expected policy rejection and implementation faults; measure partial batch output lost without assigning the entire next turn as waste."
+    },
+    {
+      "priority": 2,
+      "question": "Which source excerpts are necessary on the known failed lifecycle tasks?",
+      "method": "Trace task requirements to retrieved source and visible checks; inspect missing behavioral coverage. Later path mentions and changed-file matches are only proxies, not a semantic necessity oracle."
+    },
+    {
+      "priority": 3,
+      "question": "Would lightweight guidance to reuse existing codemode state help?",
+      "method": "First select long tasks with measured rediscovery or repeated retrieval. Do not build another store. Any later live pilot must count guidance/state/compaction overhead and use hidden acceptance."
+    },
+    {
+      "priority": 4,
+      "question": "Is a fair Prime-versus-Suffice test feasible?",
+      "method": "Before spending inference, specify pinned revisions, shared model/provider/effort, price receipts including descendants/retries/refinement, cache state, environment, matched budgets and externally held acceptance. Separate short repairs from calibrated long tasks."
+    }
+  ],
+  "validation": {
+    "command": "node --test tests/context-waste-audit.test.mjs",
+    "passed": 3,
+    "boundaries": [
+      "Pi cache accounting and response deduplication; unknown failed responses retained",
+      "AST syntax checks without executing recorded programs",
+      "Repeat reads separated by actor and content hash"
+    ],
+    "inputManifest": "reports/context-waste-input-manifest.json",
+    "detailedAudit": "reports/CONTEXT-WASTE-AUDIT.json"
+  },
+  "limitations": [
+    "Pi input is fresh input: add cacheRead/cacheWrite once. It differs from Codex input_tokens.",
+    "No causal attribution of cumulative input dollars to a specific historical tool output. Raw operation sizes and model-visible codemode results are separate.",
+    "Requested line overlap overestimates actual overlapping content on short files; symbol reads excluded from that estimate.",
+    "Repeated tests without production edits can still be justified by changed test programs or external state.",
+    "Missing transcripts imply unknown model-visible output and batching metrics, not zero.",
+    "Difficulty is uncalibrated except explicitly identified hard-screen protocols. Cost or length is not task difficulty.",
+    "Stored outcomes were authored by the experiments, not regraded here. Heterogeneous tasks/models/budgets cannot be pooled as a controlled comparison.",
+    "No counterfactual claim that removed output would preserve subsequent model decisions or correctness. Engineering inference excluded."
+  ],
+  "followupResearch": {
+    "date": "2026-10-14",
+    "note": "Three GPT-6.1 Sol research subagents completed offline investigations. Prior acceptance scores unchanged; finer diagnosis below supersedes broad failure wording.",
+    "reports": [
+      "reports/friction-research/PRINTING-RESEARCH.md",
+      "reports/friction-research/EISDIR-TRAJECTORIES.md",
+      "reports/friction-research/CAPABILITY-FAILURE-DIAGNOSIS.md",
+      "reports/friction-research/prime-comparison-protocol.md"
+    ],
+    "corrections": [
+      "LRU unchanged-stale rejection is status.oldValue metadata; preceding nondisposal and signal assertions pass.",
+      "YAML finalizer rejection is exact reason text. Its public task did not expressly demand verbatim reason preservation; later source-location/placeholder assertions in the failing test never ran.",
+      "Lossless source formatting arithmetic removes 27270 characters, 3.53% of visible text in analyzed cohort; no live token/cost or decision result."
+    ]
+  }
+}
