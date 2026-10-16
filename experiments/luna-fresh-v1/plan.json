@@ -1,0 +1,89 @@
+{
+  "version": "luna-fresh-v1",
+  "declaredAt": "2026-10-16T00:39:57.406551+00:00",
+  "tasks": [
+    "f01",
+    "f02",
+    "f03",
+    "f04",
+    "f05",
+    "f06"
+  ],
+  "arms": {
+    "A": {
+      "effort": "xhigh",
+      "safeguards": false
+    },
+    "B": {
+      "effort": "xhigh",
+      "safeguards": true
+    }
+  },
+  "order": [
+    {
+      "task": "f01",
+      "arm": "A"
+    },
+    {
+      "task": "f02",
+      "arm": "A"
+    },
+    {
+      "task": "f03",
+      "arm": "A"
+    },
+    {
+      "task": "f04",
+      "arm": "A"
+    },
+    {
+      "task": "f05",
+      "arm": "A"
+    },
+    {
+      "task": "f06",
+      "arm": "A"
+    },
+    {
+      "task": "f06",
+      "arm": "B"
+    },
+    {
+      "task": "f05",
+      "arm": "B"
+    },
+    {
+      "task": "f04",
+      "arm": "B"
+    },
+    {
+      "task": "f03",
+      "arm": "B"
+    },
+    {
+      "task": "f02",
+      "arm": "B"
+    },
+    {
+      "task": "f01",
+      "arm": "B"
+    }
+  ],
+  "limits": {
+    "maxCostUsd": 0.15,
+    "maxTurns": 60,
+    "maxCalls": 240,
+    "timeoutMs": 600000,
+    "commandTimeout": 180
+  },
+  "scope": "Six fresh-to-actor GitHub issues, four repositories; development task 7/10 is not validation. Baseline phase precedes treatment as requested; phase/cache order remains a limitation. Three p-map tasks share a repo: not six independent repository samples. Upstream issue bodies may contain hints. API-equivalent inference only, not subscription charges. Engineering inference excluded.",
+  "handoffSignal": {
+    "frozenBeforeLabels": true,
+    "rule": "Route only if original public regression commands fail, worker has not completed operationally, or no production patch was submitted. No hidden checks, model confidence judge, or hidden result in feedback.",
+    "cost": "Deterministic public checks; all Luna and any Sol continuation charges sum within the same .15 allowance.",
+    "initialStudy": "Offline precision/recall from A original-native result; live Sol only after staged results warrant it."
+  },
+  "plannedAggregateUsd": 1.8,
+  "solFollowupMaximumAdditionalUsd": 0.9,
+  "deadline": "2026-10-16T04:39:57.406579+00:00"
+}
