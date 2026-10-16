@@ -1,0 +1,2074 @@
+{
+  "at": "2026-10-16T04:09:42.093623+00:00",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "expectedAttempts": 20,
+  "recordedAttempts": 20,
+  "complete": true,
+  "cohort": "Original ten exposed historical issues; new actor sessions; not fresh holdout",
+  "summaries": {
+    "suffice": {
+      "attempts": 10,
+      "accepted": 10,
+      "budgetEligibleSuccesses": 10,
+      "knownTotalApiEquivalentUsd": 1.9667916,
+      "totalApiEquivalentUsd": 1.9667916,
+      "unknownFullCosts": 0,
+      "meanCostPerAttemptUsd": 0.19667916000000002,
+      "medianCostPerAttemptUsd": 0.1749948,
+      "costPerAcceptedUsd": 0.19667916000000002,
+      "tokens": {
+        "input": 453309,
+        "cacheRead": 2718336,
+        "cacheWrite": 0,
+        "output": 78834
+      },
+      "totalInputTokensIncludingCache": 3171645,
+      "reasoningOutputTokensIncludedInOutput": 45548,
+      "costComponents": {
+        "input": 0.9066179999999999,
+        "cacheRead": 0.2718336,
+        "cacheWrite": 0.0,
+        "output": 0.7883399999999999
+      },
+      "modelResponses": 126,
+      "modelVisibleCalls": 116,
+      "meanActorSeconds": 269.7983,
+      "medianActorSeconds": 242.073,
+      "operationalFailures": 0,
+      "codingFailures": 0,
+      "budgetLimitStops": 0,
+      "costPerBudgetEligibleSuccessUsd": 0.19667916000000002
+    },
+    "codex": {
+      "attempts": 10,
+      "accepted": 9,
+      "budgetEligibleSuccesses": 9,
+      "knownTotalApiEquivalentUsd": 2.2638532,
+      "totalApiEquivalentUsd": 2.2638532,
+      "unknownFullCosts": 0,
+      "meanCostPerAttemptUsd": 0.22638531999999997,
+      "medianCostPerAttemptUsd": 0.214888,
+      "costPerAcceptedUsd": 0.2515392444444444,
+      "tokens": {
+        "input": 450598,
+        "cacheRead": 5174272,
+        "cacheWrite": 0,
+        "output": 84523
+      },
+      "totalInputTokensIncludingCache": 5624870,
+      "reasoningOutputTokensIncludedInOutput": 44722,
+      "costComponents": {
+        "input": 0.9011959999999999,
+        "cacheRead": 0.5174272000000001,
+        "cacheWrite": 0.0,
+        "output": 0.84523
+      },
+      "modelResponses": 148,
+      "modelVisibleCalls": 138,
+      "meanActorSeconds": 206.322,
+      "medianActorSeconds": 227.3615,
+      "operationalFailures": 0,
+      "codingFailures": 1,
+      "budgetLimitStops": 0,
+      "costPerBudgetEligibleSuccessUsd": 0.2515392444444444
+    }
+  },
+  "pairs": [
+    {
+      "task": "s01",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.1813692,
+      "codexCostUsd": 0.2162996,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "i01",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.1574396,
+      "codexCostUsd": 0.18310919999999997,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "q04",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.3085344,
+      "codexCostUsd": 0.22495800000000005,
+      "sufficeCheaper": false
+    },
+    {
+      "task": "i03",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.1660568,
+      "codexCostUsd": 0.21347639999999998,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "s02",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.22451640000000006,
+      "codexCostUsd": 0.195194,
+      "sufficeCheaper": false
+    },
+    {
+      "task": "s03",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.2281312,
+      "codexCostUsd": 0.26784040000000003,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "i02",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.1312708,
+      "codexCostUsd": 0.18382479999999998,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "i04",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.1605604,
+      "codexCostUsd": 0.1939656,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "q01",
+      "sufficeAccepted": true,
+      "codexAccepted": true,
+      "sufficeCostUsd": 0.16862039999999998,
+      "codexCostUsd": 0.285696,
+      "sufficeCheaper": true
+    },
+    {
+      "task": "q02",
+      "sufficeAccepted": true,
+      "codexAccepted": false,
+      "sufficeCostUsd": 0.2402924,
+      "codexCostUsd": 0.29948919999999996,
+      "sufficeCheaper": true
+    }
+  ],
+  "allRawUsageMatches": true,
+  "audits": [
+    {
+      "id": "i01-codex",
+      "uniqueUsageRecords": 13,
+      "recomputedCostUsd": 0.1831092,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 2638
+    },
+    {
+      "id": "i01-suffice",
+      "uniqueUsageRecords": 11,
+      "recomputedCostUsd": 0.1574396,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 1525
+    },
+    {
+      "id": "i02-codex",
+      "uniqueUsageRecords": 14,
+      "recomputedCostUsd": 0.18382479999999998,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 2513
+    },
+    {
+      "id": "i02-suffice",
+      "uniqueUsageRecords": 10,
+      "recomputedCostUsd": 0.1312708,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 1639
+    },
+    {
+      "id": "i03-codex",
+      "uniqueUsageRecords": 18,
+      "recomputedCostUsd": 0.21347639999999998,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 4923
+    },
+    {
+      "id": "i03-suffice",
+      "uniqueUsageRecords": 8,
+      "recomputedCostUsd": 0.1660568,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 6265
+    },
+    {
+      "id": "i04-codex",
+      "uniqueUsageRecords": 11,
+      "recomputedCostUsd": 0.1939656,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 3909
+    },
+    {
+      "id": "i04-suffice",
+      "uniqueUsageRecords": 9,
+      "recomputedCostUsd": 0.16056040000000002,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 3943
+    },
+    {
+      "id": "q01-codex",
+      "uniqueUsageRecords": 18,
+      "recomputedCostUsd": 0.28569599999999995,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 4993
+    },
+    {
+      "id": "q01-suffice",
+      "uniqueUsageRecords": 10,
+      "recomputedCostUsd": 0.1686204,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 2739
+    },
+    {
+      "id": "q02-codex",
+      "uniqueUsageRecords": 20,
+      "recomputedCostUsd": 0.2994892,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 4457
+    },
+    {
+      "id": "q02-suffice",
+      "uniqueUsageRecords": 17,
+      "recomputedCostUsd": 0.2402924,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 5568
+    },
+    {
+      "id": "q04-codex",
+      "uniqueUsageRecords": 14,
+      "recomputedCostUsd": 0.224958,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 4943
+    },
+    {
+      "id": "q04-suffice",
+      "uniqueUsageRecords": 19,
+      "recomputedCostUsd": 0.3085344,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 7831
+    },
+    {
+      "id": "s01-codex",
+      "uniqueUsageRecords": 12,
+      "recomputedCostUsd": 0.2162996,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 6107
+    },
+    {
+      "id": "s01-suffice",
+      "uniqueUsageRecords": 11,
+      "recomputedCostUsd": 0.1813692,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 5405
+    },
+    {
+      "id": "s02-codex",
+      "uniqueUsageRecords": 13,
+      "recomputedCostUsd": 0.195194,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 3536
+    },
+    {
+      "id": "s02-suffice",
+      "uniqueUsageRecords": 15,
+      "recomputedCostUsd": 0.22451639999999998,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 5889
+    },
+    {
+      "id": "s03-codex",
+      "uniqueUsageRecords": 15,
+      "recomputedCostUsd": 0.26784040000000003,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 6703
+    },
+    {
+      "id": "s03-suffice",
+      "uniqueUsageRecords": 16,
+      "recomputedCostUsd": 0.22813119999999998,
+      "eventsMatchResult": true,
+      "reasoningOutputTokens": 4744
+    }
+  ],
+  "inputsSha256": {
+    ".suffice/codex-sol-xhigh-v2/attempts/i01-codex/result.json": "810e7304192834c7cf8f3542135eb694845eb2b6b26e072eaa9c9c835e15b844",
+    ".suffice/codex-sol-xhigh-v2/attempts/i01-codex/worker/events.live.jsonl": "42984284e7b74837d2536103e8e5287bf74fb29f8c544e92e254ee68afd95b99",
+    ".suffice/codex-sol-xhigh-v2/attempts/i01-suffice/result.json": "2ec59b81f1c438ba88f48d4807cb85afea974d863b9d51dc35ef065fd40ae02b",
+    ".suffice/codex-sol-xhigh-v2/attempts/i01-suffice/worker/events.live.jsonl": "c85c1f2554887e7501bd6944210e6271582a5529ed225df73440b6d9b2d0e151",
+    ".suffice/codex-sol-xhigh-v2/attempts/i02-codex/result.json": "4d543629e46b901b972c5332c4548403c19f7709a281185edca2c7ccf3ec317d",
+    ".suffice/codex-sol-xhigh-v2/attempts/i02-codex/worker/events.live.jsonl": "e2451b3d53fc218b360fd7298c9594d55a4e495527238dd4a8f16572f8ade783",
+    ".suffice/codex-sol-xhigh-v2/attempts/i02-suffice/result.json": "d6d1da2731d96ddfb791647565a376cf7631c377e1c8827ab16d3d341e851611",
+    ".suffice/codex-sol-xhigh-v2/attempts/i02-suffice/worker/events.live.jsonl": "9d79a7e013f6d9711cc9b61ad608fea6fb65e6334b7eb210a69b744aa60ce121",
+    ".suffice/codex-sol-xhigh-v2/attempts/i03-codex/result.json": "e1e4873577b5c6ff39d3a483f27a0f3d310087ff3ac3fc099cfa5c69ffa40ef8",
+    ".suffice/codex-sol-xhigh-v2/attempts/i03-codex/worker/events.live.jsonl": "d0b8619d6e3a9fe54c1cc8abe9edb33af5d2f2593358a56d774805a87c08a9fa",
+    ".suffice/codex-sol-xhigh-v2/attempts/i03-suffice/result.json": "c094c8e308cdf8343fc6814658336fbfa0e1a07c1c8513d70ae7a7c6d6a3a36a",
+    ".suffice/codex-sol-xhigh-v2/attempts/i03-suffice/worker/events.live.jsonl": "5c0cb9d9a2587c5a491921881f0a075ea3f34132121dc5ff94e893d32645ad23",
+    ".suffice/codex-sol-xhigh-v2/attempts/i04-codex/result.json": "2d71059cdef5b9cdcc1b381f4f634e321f76f743b9430042dec682d7de4ad61c",
+    ".suffice/codex-sol-xhigh-v2/attempts/i04-codex/worker/events.live.jsonl": "c957eb310c7596918c3b8919f3cc73569c0be27b47f9b88a069115cff33e9fd5",
+    ".suffice/codex-sol-xhigh-v2/attempts/i04-suffice/result.json": "c52e0c61db211908ed56d0e6fe6aab42b42cd2ea408d22731307cd5e0b904fd0",
+    ".suffice/codex-sol-xhigh-v2/attempts/i04-suffice/worker/events.live.jsonl": "2b9e0682eb367ca8115b5dbe38ef1715f500a335db62b584d9d75f556ba0258e",
+    ".suffice/codex-sol-xhigh-v2/attempts/q01-codex/result.json": "742573e15f62e1071b5e9496635d121d339c721a4a81f041c6133795b44af7d5",
+    ".suffice/codex-sol-xhigh-v2/attempts/q01-codex/worker/events.live.jsonl": "31fd5d7de48bcecfdcdac3742c844d1d69215bf1e874b181455aa422ee191846",
+    ".suffice/codex-sol-xhigh-v2/attempts/q01-suffice/result.json": "ba42befce03f6d3be62f52d51129de5aceafadd6f5ab388c473584ddf57da0e6",
+    ".suffice/codex-sol-xhigh-v2/attempts/q01-suffice/worker/events.live.jsonl": "f2aa94e07b42a81e920eaad718a0abe28ab1204337ae1920f0f2d9f0ca0acfb1",
+    ".suffice/codex-sol-xhigh-v2/attempts/q02-codex/result.json": "04b2861149eb8b078618d9d967fb1c12051250e630be29f3f0b8657d2edd081b",
+    ".suffice/codex-sol-xhigh-v2/attempts/q02-codex/worker/events.live.jsonl": "8c67c2b35b7e189acef06d2a5e6d69c56f71eaf20255e8c257935f8e47d60f53",
+    ".suffice/codex-sol-xhigh-v2/attempts/q02-suffice/result.json": "c40b1925b8fa0b0158eb29c9088b25b8dc2aa127d42aaff3c5c59148983fcfe4",
+    ".suffice/codex-sol-xhigh-v2/attempts/q02-suffice/worker/events.live.jsonl": "f6868c6bebf0a021d10744217a3749dc2ff56fee29ef9dce3f64c54f2feeae2b",
+    ".suffice/codex-sol-xhigh-v2/attempts/q04-codex/result.json": "1b4b97c3e849416baaea40427657a1e885008ab1e3d63d4b5996de6d6e4fac52",
+    ".suffice/codex-sol-xhigh-v2/attempts/q04-codex/worker/events.live.jsonl": "4debe942eeda7d16b404841d08e14ce552e7d4c11a2e316936e4ee2d67c34e34",
+    ".suffice/codex-sol-xhigh-v2/attempts/q04-suffice/result.json": "a4832804c9fa6d8172c02624d288e1941d1f3f98389899ef06c0edbe949b11d0",
+    ".suffice/codex-sol-xhigh-v2/attempts/q04-suffice/worker/events.live.jsonl": "71d8fe58d5dcda84e6a47faada50e57edbd1587539abd6440ccf7ce576059ac9",
+    ".suffice/codex-sol-xhigh-v2/attempts/s01-codex/result.json": "6020f148d8da33d028c3a99954c216173678be932d2daf7c9ec16bebc14435eb",
+    ".suffice/codex-sol-xhigh-v2/attempts/s01-codex/worker/events.live.jsonl": "a4d1dc80e8cb062f0613c842d55c92e5b1a047263ecc37c398d5dc5ca7b87b62",
+    ".suffice/codex-sol-xhigh-v2/attempts/s01-suffice/result.json": "530199671b250cc5fb5d8fd03963c77f43300bfbadabbc40fe41e1436ab87c2d",
+    ".suffice/codex-sol-xhigh-v2/attempts/s01-suffice/worker/events.live.jsonl": "4ace0286b03936ff6b355484341b471322d870a4fbd9a89c56a286dd2fbaad61",
+    ".suffice/codex-sol-xhigh-v2/attempts/s02-codex/result.json": "48a057d41a3aced919cf70548dd0cbb222fd4f34d43b759a8dee0da08dfde83a",
+    ".suffice/codex-sol-xhigh-v2/attempts/s02-codex/worker/events.live.jsonl": "a43bf93e245631c7e6430d0ee837dc630012649eea032f46aebbf11963a7b020",
+    ".suffice/codex-sol-xhigh-v2/attempts/s02-suffice/result.json": "e29221db3a8de3f9bb7e52b68a9fbc8f6ed9fa739606ed4e2430d528e6ddb8a4",
+    ".suffice/codex-sol-xhigh-v2/attempts/s02-suffice/worker/events.live.jsonl": "eee8d7c7eb4d43f9a14a301c86b3f7487cfe4409e488d20c49201eef04ddafa4",
+    ".suffice/codex-sol-xhigh-v2/attempts/s03-codex/result.json": "02c0c3fdcfe6dc6ed25a5055045c2bf397fa2fa28f0d0282f92f60f0f7e7150d",
+    ".suffice/codex-sol-xhigh-v2/attempts/s03-codex/worker/events.live.jsonl": "f63c9ee65a9d8bfe65c0fcefe342c7223adf97e6fed3f5e3b4e7ebd1deb3383a",
+    ".suffice/codex-sol-xhigh-v2/attempts/s03-suffice/result.json": "a2587ce29d89605e189b06a79cd5ef9710b2e1e610277d2ffd942dedb285b800",
+    ".suffice/codex-sol-xhigh-v2/attempts/s03-suffice/worker/events.live.jsonl": "f7c9acf9a4407be267adedbedcec068a9b87fce52030a5f41dfd566d91b5ebf9"
+  },
+  "scope": "API-equivalent benchmark inference, not subscription charges; setup and engineering excluded and reported separately",
+  "rows": [
+    {
+      "id": "i01-codex",
+      "task": "i01",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1386,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.18310919999999997,
+      "totalEstimatedUsd": 0.18310919999999997,
+      "usage": {
+        "input": 43100,
+        "cacheRead": 414592,
+        "cacheWrite": 0,
+        "output": 5545,
+        "totalTokens": 463237,
+        "estimatedApiUsd": 0.18310919999999997
+      },
+      "requests": null,
+      "turns": 13,
+      "rawResponses": 13,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 12,
+      "modelVisibleCalls": 12,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 19,
+      "latencyMs": 151520,
+      "peakRssBytes": 1278840832,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 4,
+            "latencyMs": 4014,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 105,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i01-codex",
+        "actorTestEditsExcluded": [
+          "test/main.js"
+        ]
+      },
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:29:54.954Z",
+      "costComponents": {
+        "input": 0.0862,
+        "cacheRead": 0.04145920000000001,
+        "cacheWrite": 0.0,
+        "output": 0.05544999999999999
+      },
+      "reasoningOutputTokens": 2638
+    },
+    {
+      "id": "i01-suffice",
+      "task": "i01",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1386,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.1574396,
+      "totalEstimatedUsd": 0.1574396,
+      "usage": {
+        "input": 50772,
+        "cacheRead": 205056,
+        "cacheWrite": 0,
+        "output": 3539,
+        "totalTokens": 259367,
+        "estimatedApiUsd": 0.1574396
+      },
+      "requests": 11,
+      "turns": 11,
+      "rawResponses": 11,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 35,
+      "modelVisibleCalls": 10,
+      "primitiveCalls": 25,
+      "nativeCommandExecutions": null,
+      "latencyMs": 140610,
+      "peakRssBytes": 830959616,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 4,
+            "latencyMs": 4625,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 105,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i01-suffice",
+        "actorTestEditsExcluded": [
+          "test/main.js"
+        ]
+      },
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:27:19.048Z",
+      "costComponents": {
+        "input": 0.10154400000000001,
+        "cacheRead": 0.020505600000000002,
+        "cacheWrite": 0.0,
+        "output": 0.03538999999999999
+      },
+      "reasoningOutputTokens": 1525
+    },
+    {
+      "id": "i02-codex",
+      "task": "i02",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1442,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.18382479999999998,
+      "totalEstimatedUsd": 0.18382479999999998,
+      "usage": {
+        "input": 41938,
+        "cacheRead": 485888,
+        "cacheWrite": 0,
+        "output": 5136,
+        "totalTokens": 532962,
+        "estimatedApiUsd": 0.18382479999999998
+      },
+      "requests": null,
+      "turns": 14,
+      "rawResponses": 14,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 13,
+      "modelVisibleCalls": 13,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 20,
+      "latencyMs": 124981,
+      "peakRssBytes": 1665810432,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 4,
+            "latencyMs": 4612,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 105,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i02-codex",
+        "actorTestEditsExcluded": [
+          "test/main.js"
+        ]
+      },
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:48:12.310Z",
+      "costComponents": {
+        "input": 0.08387599999999998,
+        "cacheRead": 0.0485888,
+        "cacheWrite": 0.0,
+        "output": 0.051359999999999996
+      },
+      "reasoningOutputTokens": 2513
+    },
+    {
+      "id": "i02-suffice",
+      "task": "i02",
+      "repository": "node-fetch/node-fetch",
+      "issue": 1442,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.1312708,
+      "totalEstimatedUsd": 0.1312708,
+      "usage": {
+        "input": 39340,
+        "cacheRead": 167808,
+        "cacheWrite": 0,
+        "output": 3581,
+        "totalTokens": 210729,
+        "estimatedApiUsd": 0.1312708
+      },
+      "requests": 10,
+      "turns": 10,
+      "rawResponses": 10,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 27,
+      "modelVisibleCalls": 9,
+      "primitiveCalls": 18,
+      "nativeCommandExecutions": null,
+      "latencyMs": 112572,
+      "peakRssBytes": 772964352,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 4,
+            "latencyMs": 4613,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 104,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i02-suffice",
+        "actorTestEditsExcluded": [
+          "test/main.js"
+        ]
+      },
+      "patchPaths": [
+        "src/index.js",
+        "test/main.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:50:09.830Z",
+      "costComponents": {
+        "input": 0.07868,
+        "cacheRead": 0.016780800000000002,
+        "cacheWrite": 0.0,
+        "output": 0.03581
+      },
+      "reasoningOutputTokens": 1639
+    },
+    {
+      "id": "i03-codex",
+      "task": "i03",
+      "repository": "sindresorhus/p-limit",
+      "issue": 110,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.21347639999999998,
+      "totalEstimatedUsd": 0.21347639999999998,
+      "usage": {
+        "input": 33719,
+        "cacheRead": 515584,
+        "cacheWrite": 0,
+        "output": 9448,
+        "totalTokens": 558751,
+        "estimatedApiUsd": 0.21347639999999998
+      },
+      "requests": null,
+      "turns": 18,
+      "rawResponses": 18,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 17,
+      "modelVisibleCalls": 17,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 20,
+      "latencyMs": 226977,
+      "peakRssBytes": 1588973568,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 3312,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 206,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i03-codex",
+        "actorTestEditsExcluded": [
+          "fixtures/map-iteration-error.js",
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "fixtures/map-iteration-error.js",
+        "index.d.ts",
+        "index.js",
+        "readme.md",
+        "test.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:38:32.417Z",
+      "costComponents": {
+        "input": 0.06743799999999997,
+        "cacheRead": 0.0515584,
+        "cacheWrite": 0.0,
+        "output": 0.09448000000000002
+      },
+      "reasoningOutputTokens": 4923
+    },
+    {
+      "id": "i03-suffice",
+      "task": "i03",
+      "repository": "sindresorhus/p-limit",
+      "issue": 110,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.1660568,
+      "totalEstimatedUsd": 0.1660568,
+      "usage": {
+        "input": 29770,
+        "cacheRead": 90368,
+        "cacheWrite": 0,
+        "output": 9748,
+        "totalTokens": 129886,
+        "estimatedApiUsd": 0.1660568
+      },
+      "requests": 8,
+      "turns": 8,
+      "rawResponses": 8,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 37,
+      "modelVisibleCalls": 7,
+      "primitiveCalls": 30,
+      "nativeCommandExecutions": null,
+      "latencyMs": 282781,
+      "peakRssBytes": 906215424,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 3412,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 210,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i03-suffice",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "index.d.ts",
+        "index.js",
+        "readme.md",
+        "test.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:34:41.656Z",
+      "costComponents": {
+        "input": 0.05954000000000001,
+        "cacheRead": 0.009036800000000001,
+        "cacheWrite": 0.0,
+        "output": 0.09748
+      },
+      "reasoningOutputTokens": 6265
+    },
+    {
+      "id": "i04-codex",
+      "task": "i04",
+      "repository": "mcollina/fastq",
+      "issue": 80,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.1939656,
+      "totalEstimatedUsd": 0.1939656,
+      "usage": {
+        "input": 37133,
+        "cacheRead": 317696,
+        "cacheWrite": 0,
+        "output": 8793,
+        "totalTokens": 363622,
+        "estimatedApiUsd": 0.1939656
+      },
+      "requests": null,
+      "turns": 11,
+      "rawResponses": 11,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 10,
+      "modelVisibleCalls": 10,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 13,
+      "latencyMs": 191399,
+      "peakRssBytes": 1245163520,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 305,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 105,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i04-codex",
+        "actorTestEditsExcluded": [
+          "test/promise.js",
+          "test/test.js"
+        ]
+      },
+      "patchPaths": [
+        ".nyc_output/b11a9d02-ca06-4fe1-90f0-034bf7f67800.json",
+        ".nyc_output/processinfo/b11a9d02-ca06-4fe1-90f0-034bf7f67800.json",
+        ".nyc_output/processinfo/index.json",
+        "README.md",
+        "queue.js",
+        "test/promise.js",
+        "test/test.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:50:16.876Z",
+      "costComponents": {
+        "input": 0.074266,
+        "cacheRead": 0.031769599999999995,
+        "cacheWrite": 0.0,
+        "output": 0.08793
+      },
+      "reasoningOutputTokens": 3909
+    },
+    {
+      "id": "i04-suffice",
+      "task": "i04",
+      "repository": "mcollina/fastq",
+      "issue": 80,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.1605604,
+      "totalEstimatedUsd": 0.1605604,
+      "usage": {
+        "input": 33661,
+        "cacheRead": 118784,
+        "cacheWrite": 0,
+        "output": 8136,
+        "totalTokens": 160581,
+        "estimatedApiUsd": 0.1605604
+      },
+      "requests": 9,
+      "turns": 9,
+      "rawResponses": 9,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 28,
+      "modelVisibleCalls": 8,
+      "primitiveCalls": 20,
+      "nativeCommandExecutions": null,
+      "latencyMs": 198133,
+      "peakRssBytes": 692645888,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 306,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 105,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-i04-suffice",
+        "actorTestEditsExcluded": [
+          "test/promise.js",
+          "test/test.js"
+        ]
+      },
+      "patchPaths": [
+        ".nyc_output/a8a6155b-0b8d-4e18-910f-a0ce72068e71.json",
+        ".nyc_output/processinfo/a8a6155b-0b8d-4e18-910f-a0ce72068e71.json",
+        ".nyc_output/processinfo/index.json",
+        "README.md",
+        "queue.js",
+        "test/promise.js",
+        "test/test.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:53:35.624Z",
+      "costComponents": {
+        "input": 0.067322,
+        "cacheRead": 0.0118784,
+        "cacheWrite": 0.0,
+        "output": 0.08136
+      },
+      "reasoningOutputTokens": 3943
+    },
+    {
+      "id": "q01-codex",
+      "task": "q01",
+      "repository": "sindresorhus/p-queue",
+      "issue": 251,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.285696,
+      "totalEstimatedUsd": 0.285696,
+      "usage": {
+        "input": 59680,
+        "cacheRead": 722560,
+        "cacheWrite": 0,
+        "output": 9408,
+        "totalTokens": 791648,
+        "estimatedApiUsd": 0.285696
+      },
+      "requests": null,
+      "turns": 18,
+      "rawResponses": 18,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 17,
+      "modelVisibleCalls": 17,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 23,
+      "latencyMs": 231258,
+      "peakRssBytes": 1725980672,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 84025,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 811,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2530,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1308,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-q01-codex",
+        "actorTestEditsExcluded": [
+          "test/rate-limit.ts"
+        ]
+      },
+      "patchPaths": [
+        "dist/index.d.ts",
+        "dist/index.js",
+        "dist/lower-bound.d.ts",
+        "dist/lower-bound.js",
+        "dist/options.d.ts",
+        "dist/options.js",
+        "dist/priority-queue.d.ts",
+        "dist/priority-queue.js",
+        "dist/queue.d.ts",
+        "dist/queue.js",
+        "source/index.ts",
+        "test/rate-limit.ts"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T04:00:40.804Z",
+      "costComponents": {
+        "input": 0.11936,
+        "cacheRead": 0.072256,
+        "cacheWrite": 0.0,
+        "output": 0.09407999999999998
+      },
+      "reasoningOutputTokens": 4993
+    },
+    {
+      "id": "q01-suffice",
+      "task": "q01",
+      "repository": "sindresorhus/p-queue",
+      "issue": 251,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.16862039999999998,
+      "totalEstimatedUsd": 0.16862039999999998,
+      "usage": {
+        "input": 51086,
+        "cacheRead": 182784,
+        "cacheWrite": 0,
+        "output": 4817,
+        "totalTokens": 238687,
+        "estimatedApiUsd": 0.16862039999999998
+      },
+      "requests": 10,
+      "turns": 10,
+      "rawResponses": 10,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 29,
+      "modelVisibleCalls": 9,
+      "primitiveCalls": 20,
+      "nativeCommandExecutions": null,
+      "latencyMs": 221561,
+      "peakRssBytes": 784338944,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 84272,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 912,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2437,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1306,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-q01-suffice",
+        "actorTestEditsExcluded": [
+          "test/advanced.ts"
+        ]
+      },
+      "patchPaths": [
+        "dist/index.d.ts",
+        "dist/index.js",
+        "dist/lower-bound.d.ts",
+        "dist/lower-bound.js",
+        "dist/options.d.ts",
+        "dist/options.js",
+        "dist/priority-queue.d.ts",
+        "dist/priority-queue.js",
+        "dist/queue.d.ts",
+        "dist/queue.js",
+        "source/index.ts",
+        "test/advanced.ts"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:55:20.651Z",
+      "costComponents": {
+        "input": 0.10217199999999999,
+        "cacheRead": 0.0182784,
+        "cacheWrite": 0.0,
+        "output": 0.048170000000000004
+      },
+      "reasoningOutputTokens": 2739
+    },
+    {
+      "id": "q02-codex",
+      "task": "q02",
+      "repository": "sindresorhus/p-queue",
+      "issue": 249,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.29948919999999996,
+      "totalEstimatedUsd": 0.29948919999999996,
+      "usage": {
+        "input": 57112,
+        "cacheRead": 903552,
+        "cacheWrite": 0,
+        "output": 9491,
+        "totalTokens": 970155,
+        "estimatedApiUsd": 0.29948919999999996
+      },
+      "requests": null,
+      "turns": 20,
+      "rawResponses": 20,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 19,
+      "modelVisibleCalls": 19,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 24,
+      "latencyMs": 229100,
+      "peakRssBytes": 1937596416,
+      "resourceStop": null,
+      "grade": {
+        "accepted": false,
+        "originalNativeValid": false,
+        "native": [
+          {
+            "exitCode": 1,
+            "latencyMs": 83727,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 814,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2522,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 2309,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-q02-codex",
+        "actorTestEditsExcluded": [
+          "test/advanced.ts",
+          "test/basic.ts"
+        ]
+      },
+      "patchPaths": [
+        "dist/index.d.ts",
+        "dist/index.js",
+        "dist/lower-bound.d.ts",
+        "dist/lower-bound.js",
+        "dist/options.d.ts",
+        "dist/options.js",
+        "dist/priority-queue.d.ts",
+        "dist/priority-queue.js",
+        "dist/queue.d.ts",
+        "dist/queue.js",
+        "readme.md",
+        "source/index.ts",
+        "test/advanced.ts",
+        "test/basic.ts"
+      ],
+      "codingFailure": true,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:58:54.473Z",
+      "costComponents": {
+        "input": 0.11422399999999996,
+        "cacheRead": 0.09035520000000002,
+        "cacheWrite": 0.0,
+        "output": 0.09491000000000001
+      },
+      "reasoningOutputTokens": 4457
+    },
+    {
+      "id": "q02-suffice",
+      "task": "q02",
+      "repository": "sindresorhus/p-queue",
+      "issue": 249,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.2402924,
+      "totalEstimatedUsd": 0.2402924,
+      "usage": {
+        "input": 49498,
+        "cacheRead": 488064,
+        "cacheWrite": 0,
+        "output": 9249,
+        "totalTokens": 546811,
+        "estimatedApiUsd": 0.2402924
+      },
+      "requests": 17,
+      "turns": 17,
+      "rawResponses": 17,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 63,
+      "modelVisibleCalls": 16,
+      "primitiveCalls": 47,
+      "nativeCommandExecutions": null,
+      "latencyMs": 427500,
+      "peakRssBytes": 817094656,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 84306,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 907,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2623,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 2311,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-q02-suffice",
+        "actorTestEditsExcluded": [
+          "test/basic.ts"
+        ]
+      },
+      "patchPaths": [
+        "dist/index.d.ts",
+        "dist/index.js",
+        "dist/lower-bound.d.ts",
+        "dist/lower-bound.js",
+        "dist/options.d.ts",
+        "dist/options.js",
+        "dist/priority-queue.d.ts",
+        "dist/priority-queue.js",
+        "dist/queue.d.ts",
+        "dist/queue.js",
+        "source/index.ts",
+        "test/basic.ts"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T04:07:32.345Z",
+      "costComponents": {
+        "input": 0.098996,
+        "cacheRead": 0.0488064,
+        "cacheWrite": 0.0,
+        "output": 0.09248999999999999
+      },
+      "reasoningOutputTokens": 5568
+    },
+    {
+      "id": "q04-codex",
+      "task": "q04",
+      "repository": "nanostores/nanostores",
+      "issue": 371,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.22495800000000005,
+      "totalEstimatedUsd": 0.22495800000000005,
+      "usage": {
+        "input": 43970,
+        "cacheRead": 490880,
+        "cacheWrite": 0,
+        "output": 8793,
+        "totalTokens": 543643,
+        "estimatedApiUsd": 0.22495800000000005
+      },
+      "requests": null,
+      "turns": 14,
+      "rawResponses": 14,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 13,
+      "modelVisibleCalls": 13,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 25,
+      "latencyMs": 227746,
+      "peakRssBytes": 1573789696,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 7246,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1407,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-q04-codex",
+        "actorTestEditsExcluded": [
+          "computed/instances.test.ts"
+        ]
+      },
+      "patchPaths": [
+        "README.md",
+        "atom/index.js",
+        "computed/index.js",
+        "computed/instances.test.ts",
+        "package.json"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:38:14.975Z",
+      "costComponents": {
+        "input": 0.08793999999999998,
+        "cacheRead": 0.04908800000000001,
+        "cacheWrite": 0.0,
+        "output": 0.08793000000000001
+      },
+      "reasoningOutputTokens": 4943
+    },
+    {
+      "id": "q04-suffice",
+      "task": "q04",
+      "repository": "nanostores/nanostores",
+      "issue": 371,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.3085344,
+      "totalEstimatedUsd": 0.3085344,
+      "usage": {
+        "input": 60164,
+        "cacheRead": 507264,
+        "cacheWrite": 0,
+        "output": 13748,
+        "totalTokens": 581176,
+        "estimatedApiUsd": 0.3085344
+      },
+      "requests": 19,
+      "turns": 19,
+      "rawResponses": 19,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 55,
+      "modelVisibleCalls": 18,
+      "primitiveCalls": 37,
+      "nativeCommandExecutions": null,
+      "latencyMs": 556087,
+      "peakRssBytes": 668819456,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 7126,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1406,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-q04-suffice",
+        "actorTestEditsExcluded": [
+          "computed/index.test.ts"
+        ]
+      },
+      "patchPaths": [
+        "README.md",
+        "atom/index.js",
+        "computed/index.js",
+        "computed/index.test.ts",
+        "package.json"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:34:18.320Z",
+      "costComponents": {
+        "input": 0.12032799999999999,
+        "cacheRead": 0.050726400000000005,
+        "cacheWrite": 0.0,
+        "output": 0.13748
+      },
+      "reasoningOutputTokens": 7831
+    },
+    {
+      "id": "s01-codex",
+      "task": "s01",
+      "repository": "sindresorhus/emittery",
+      "issue": 118,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.2162996,
+      "totalEstimatedUsd": 0.2162996,
+      "usage": {
+        "input": 40686,
+        "cacheRead": 360576,
+        "cacheWrite": 0,
+        "output": 9887,
+        "totalTokens": 411149,
+        "estimatedApiUsd": 0.2162996
+      },
+      "requests": null,
+      "turns": 12,
+      "rawResponses": 12,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 11,
+      "modelVisibleCalls": 11,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 19,
+      "latencyMs": 240610,
+      "peakRssBytes": 1056993280,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 506,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 408,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-s01-codex",
+        "actorTestEditsExcluded": [
+          "test/index.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "test/index.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:20:40.613Z",
+      "costComponents": {
+        "input": 0.081372,
+        "cacheRead": 0.0360576,
+        "cacheWrite": 0.0,
+        "output": 0.09887
+      },
+      "reasoningOutputTokens": 6107
+    },
+    {
+      "id": "s01-suffice",
+      "task": "s01",
+      "repository": "sindresorhus/emittery",
+      "issue": 118,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.1813692,
+      "totalEstimatedUsd": 0.1813692,
+      "usage": {
+        "input": 37510,
+        "cacheRead": 209792,
+        "cacheWrite": 0,
+        "output": 8537,
+        "totalTokens": 255839,
+        "estimatedApiUsd": 0.1813692
+      },
+      "requests": 11,
+      "turns": 11,
+      "rawResponses": 11,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 36,
+      "modelVisibleCalls": 10,
+      "primitiveCalls": 26,
+      "nativeCommandExecutions": null,
+      "latencyMs": 251436,
+      "peakRssBytes": 363663360,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 706,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 404,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-s01-suffice",
+        "actorTestEditsExcluded": [
+          "test/index.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "test/index.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:24:53.381Z",
+      "costComponents": {
+        "input": 0.07502,
+        "cacheRead": 0.020979200000000003,
+        "cacheWrite": 0.0,
+        "output": 0.08537
+      },
+      "reasoningOutputTokens": 5405
+    },
+    {
+      "id": "s02-codex",
+      "task": "s02",
+      "repository": "nanostores/nanostores",
+      "issue": 323,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.195194,
+      "totalEstimatedUsd": 0.195194,
+      "usage": {
+        "input": 44229,
+        "cacheRead": 424960,
+        "cacheWrite": 0,
+        "output": 6424,
+        "totalTokens": 475613,
+        "estimatedApiUsd": 0.195194
+      },
+      "requests": null,
+      "turns": 13,
+      "rawResponses": 13,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 12,
+      "modelVisibleCalls": 12,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 23,
+      "latencyMs": 175359,
+      "peakRssBytes": 1259081728,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 7214,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1206,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-s02-codex",
+        "actorTestEditsExcluded": [
+          "computed/index.test.ts"
+        ]
+      },
+      "patchPaths": [
+        "computed/index.js",
+        "computed/index.test.ts"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:46:02.257Z",
+      "costComponents": {
+        "input": 0.08845800000000001,
+        "cacheRead": 0.042496,
+        "cacheWrite": 0.0,
+        "output": 0.06424
+      },
+      "reasoningOutputTokens": 3536
+    },
+    {
+      "id": "s02-suffice",
+      "task": "s02",
+      "repository": "nanostores/nanostores",
+      "issue": 323,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "suffice",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.22451640000000006,
+      "totalEstimatedUsd": 0.22451640000000006,
+      "usage": {
+        "input": 50063,
+        "cacheRead": 357504,
+        "cacheWrite": 0,
+        "output": 8864,
+        "totalTokens": 416431,
+        "estimatedApiUsd": 0.22451640000000006
+      },
+      "requests": 15,
+      "turns": 15,
+      "rawResponses": 15,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 34,
+      "modelVisibleCalls": 14,
+      "primitiveCalls": 20,
+      "nativeCommandExecutions": null,
+      "latencyMs": 274593,
+      "peakRssBytes": 451735552,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 7121,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1211,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-s02-suffice",
+        "actorTestEditsExcluded": [
+          "clean-stores/index.test.ts"
+        ]
+      },
+      "patchPaths": [
+        "clean-stores/index.test.ts",
+        "computed/index.js"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:42:58.250Z",
+      "costComponents": {
+        "input": 0.10012599999999999,
+        "cacheRead": 0.0357504,
+        "cacheWrite": 0.0,
+        "output": 0.08863999999999998
+      },
+      "reasoningOutputTokens": 5889
+    },
+    {
+      "id": "s03-codex",
+      "task": "s03",
+      "repository": "nanostores/nanostores",
+      "issue": 416,
+      "cohort": "historical",
+      "arm": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.26784040000000003,
+      "totalEstimatedUsd": 0.26784040000000003,
+      "usage": {
+        "input": 49031,
+        "cacheRead": 537984,
+        "cacheWrite": 0,
+        "output": 11598,
+        "totalTokens": 598613,
+        "estimatedApiUsd": 0.26784040000000003
+      },
+      "requests": null,
+      "turns": 15,
+      "rawResponses": 15,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 14,
+      "modelVisibleCalls": 14,
+      "primitiveCalls": null,
+      "nativeCommandExecutions": 21,
+      "latencyMs": 264270,
+      "peakRssBytes": 1075261440,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 7221,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 205,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-s03-codex",
+        "actorTestEditsExcluded": [
+          "deep-map/index.test.ts",
+          "listen-keys/index.test.ts"
+        ]
+      },
+      "patchPaths": [
+        "deep-map/index.js",
+        "deep-map/index.test.ts",
+        "listen-keys/index.js",
+        "listen-keys/index.test.ts"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:43:04.514Z",
+      "costComponents": {
+        "input": 0.09806200000000001,
+        "cacheRead": 0.05379840000000001,
+        "cacheWrite": 0.0,
+        "output": 0.11598000000000001
+      },
+      "reasoningOutputTokens": 6703
+    },
+    {
+      "id": "s03-suffice",
+      "task": "s03",
+      "repository": "nanostores/nanostores",
+      "issue": 416,
+      "cohort": "historical",
+      "arm": "suffice",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "firstArm": "codex",
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.2281312,
+      "totalEstimatedUsd": 0.2281312,
+      "usage": {
+        "input": 51445,
+        "cacheRead": 390912,
+        "cacheWrite": 0,
+        "output": 8615,
+        "totalTokens": 450972,
+        "estimatedApiUsd": 0.2281312
+      },
+      "requests": 16,
+      "turns": 16,
+      "rawResponses": 16,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 38,
+      "modelVisibleCalls": 15,
+      "primitiveCalls": 23,
+      "nativeCommandExecutions": null,
+      "latencyMs": 232710,
+      "peakRssBytes": 601866240,
+      "resourceStop": null,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 7118,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 205,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/codex-sol-xhigh-v2/evaluation/attempts-s03-suffice",
+        "actorTestEditsExcluded": [
+          "listen-keys/deep-map.test.ts",
+          "listen-keys/index.test.ts"
+        ]
+      },
+      "patchPaths": [
+        "listen-keys/deep-map.test.ts",
+        "listen-keys/index.js",
+        "listen-keys/index.test.ts"
+      ],
+      "codingFailure": false,
+      "operationalFailure": false,
+      "errors": [],
+      "end": "2026-10-16T03:47:04.778Z",
+      "costComponents": {
+        "input": 0.10288999999999998,
+        "cacheRead": 0.0390912,
+        "cacheWrite": 0.0,
+        "output": 0.08615
+      },
+      "reasoningOutputTokens": 4744
+    }
+  ],
+  "contractReview": {
+    "sensitiveTasks": [
+      "q02"
+    ],
+    "primaryGradesChanged": false,
+    "capabilityAdvantageEstablished": false,
+    "reason": "Original next-event test conflicts with the proposed mechanism in the public issue. See Q02-CONTRACT-REVIEW.md. Nine-pair sensitivity is post-outcome, not a confirmatory cohort."
+  },
+  "ninePairContractSensitivity": {
+    "suffice": {
+      "attempts": 9,
+      "accepted": 9,
+      "knownTotalApiEquivalentUsd": 1.7264992000000001,
+      "totalApiEquivalentUsd": 1.7264992000000001,
+      "meanCostPerAttemptUsd": 0.19183324444444447,
+      "costPerAcceptedUsd": 0.19183324444444447,
+      "medianCostPerAttemptUsd": 0.16862039999999998
+    },
+    "codex": {
+      "attempts": 9,
+      "accepted": 9,
+      "knownTotalApiEquivalentUsd": 1.964364,
+      "totalApiEquivalentUsd": 1.964364,
+      "meanCostPerAttemptUsd": 0.21826266666666666,
+      "costPerAcceptedUsd": 0.21826266666666666,
+      "medianCostPerAttemptUsd": 0.21347639999999998
+    }
+  },
+  "pairedKnownCostComparison": {
+    "fullyPricedPairs": 10,
+    "sufficeCheaperPairs": 8,
+    "observedFractionSaving": 0.13121946246337868,
+    "descriptivePairedTaskBootstrap95Percentiles": [
+      -0.012358641461838404,
+      0.2503974880903419
+    ],
+    "bootstrapDraws": 5000,
+    "seed": 20261015,
+    "interpretation": "Task-resampling sensitivity only. One model draw per task, six correlated repositories and exposed issue selection do not support a population confidence claim."
+  },
+  "extraAttemptAccounting": {
+    "at": "2026-10-16T03:20:58.489564+00:00",
+    "rows": [
+      {
+        "directory": ".suffice/codex-sol-xhigh-v1/setup/codex-smoke",
+        "responsesWithUsage": 0,
+        "knownApiEquivalentUsd": 0,
+        "fullCostUnknown": true,
+        "scope": "compatibility check"
+      },
+      {
+        "directory": ".suffice/codex-sol-xhigh-v1/setup/codex-smoke-v2",
+        "responsesWithUsage": 0,
+        "knownApiEquivalentUsd": 0,
+        "fullCostUnknown": true,
+        "scope": "compatibility check"
+      },
+      {
+        "directory": ".suffice/codex-sol-xhigh-v1/setup/codex-smoke-v3",
+        "responsesWithUsage": 3,
+        "knownApiEquivalentUsd": 0.014932800000000001,
+        "fullCostUnknown": false,
+        "scope": "compatibility check"
+      },
+      {
+        "directory": ".suffice/codex-sol-xhigh-v1/setup/codex-smoke-v4",
+        "responsesWithUsage": 2,
+        "knownApiEquivalentUsd": 0.007794000000000001,
+        "fullCostUnknown": false,
+        "scope": "compatibility check"
+      },
+      {
+        "directory": ".suffice/codex-sol-xhigh-v1/attempts/s01-codex/worker",
+        "responsesWithUsage": 6,
+        "knownApiEquivalentUsd": 0.1207664,
+        "fullCostUnknown": true,
+        "scope": "interrupted first job"
+      }
+    ],
+    "knownExtraInferenceUsd": 0.1434932,
+    "inclusiveTotalUnknown": true,
+    "primaryMatchedCohortContainsNoneOfTheseAttempts": true,
+    "firstBackgroundJobExit": "0xC000013A",
+    "firstJobUsageLastResponseIncompleteUnknown": true
+  },
+  "inclusiveKnownInferenceUsd": 4.374138,
+  "inclusiveFullInferenceUsd": null,
+  "codexInclusiveIssueAttempts": {
+    "attempts": 11,
+    "knownCostLowerBoundUsd": 2.3846195999999997,
+    "fullCostUsd": null,
+    "meanCostLowerBoundUsd": 0.21678359999999997,
+    "costPerAcceptedLowerBoundUsd": 0.2649577333333333,
+    "operationalInterruptionCount": 1
+  }
+}

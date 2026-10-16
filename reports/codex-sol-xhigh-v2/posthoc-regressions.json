@@ -1,0 +1,343 @@
+{
+  "at": "2026-10-16T04:09:33.517Z",
+  "inferenceCalls": 0,
+  "primaryScoresModified": false,
+  "rows": [
+    {
+      "task": "s01",
+      "arm": "baseline",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reserved-window",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 109,
+          "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:20.190Z"
+    },
+    {
+      "task": "s01",
+      "arm": "reference",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reserved-window",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 105,
+          "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:20.362Z"
+    },
+    {
+      "task": "s01",
+      "arm": "suffice",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reserved-window",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 105,
+          "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:20.526Z"
+    },
+    {
+      "task": "s01",
+      "arm": "codex",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reserved-window",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 105,
+          "stdout": "[{\"method\":\"emit\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emit\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerAdded\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"},{\"method\":\"emitSerial\",\"event\":\"listenerRemoved\",\"outcome\":\"TypeError\",\"expected\":\"TypeError\"}]\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:20.681Z"
+    },
+    {
+      "task": "i04",
+      "arm": "baseline",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reentrant-resume",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 105,
+          "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+          "stderr": ""
+        },
+        {
+          "name": "reentrant-setter",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 105,
+          "stdout": "before setter\nafter setter {\"started\":[1],\"paused\":false}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:20.956Z"
+    },
+    {
+      "task": "i04",
+      "arm": "reference",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reentrant-resume",
+          "exitCode": 124,
+          "outputLimited": false,
+          "latencyMs": 3108,
+          "stdout": "before resume\n",
+          "stderr": ""
+        },
+        {
+          "name": "reentrant-setter",
+          "exitCode": 124,
+          "outputLimited": false,
+          "latencyMs": 3109,
+          "stdout": "before setter\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:27.218Z"
+    },
+    {
+      "task": "i04",
+      "arm": "suffice",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reentrant-resume",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 104,
+          "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+          "stderr": ""
+        },
+        {
+          "name": "reentrant-setter",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 104,
+          "stdout": "before setter\nafter setter {\"started\":[1,2],\"paused\":true}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:27.472Z"
+    },
+    {
+      "task": "i04",
+      "arm": "codex",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "reentrant-resume",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 104,
+          "stdout": "before resume\nafter resume {\"started\":[1],\"paused\":true}\n",
+          "stderr": ""
+        },
+        {
+          "name": "reentrant-setter",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 104,
+          "stdout": "before setter\nafter setter {\"started\":[1,2],\"paused\":true}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:27.726Z"
+    },
+    {
+      "task": "q04",
+      "arm": "baseline",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "dormant-foreign-computed",
+          "exitCode": 1,
+          "outputLimited": false,
+          "latencyMs": 204,
+          "stdout": "{\"first\":6,\"after\":6,\"expected\":12}\n",
+          "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n6 !== 12\n\n    at file:///workspace/posthoc-dormant-foreign-computed.mjs:1:899 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 6,\n  expected: 12,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n"
+        }
+      ],
+      "at": "2026-10-16T04:09:27.999Z"
+    },
+    {
+      "task": "q04",
+      "arm": "reference",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "dormant-foreign-computed",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1208,
+          "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:29.258Z"
+    },
+    {
+      "task": "q04",
+      "arm": "suffice",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "dormant-foreign-computed",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1106,
+          "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:30.414Z"
+    },
+    {
+      "task": "q04",
+      "arm": "codex",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "dormant-foreign-computed",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 1208,
+          "stdout": "{\"first\":6,\"after\":12,\"expected\":12}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:31.675Z"
+    },
+    {
+      "task": "q02",
+      "arm": "baseline",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "next-before-completion",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 206,
+          "stdout": "{\"beforeCompletion\":0,\"expected\":0}\n",
+          "stderr": ""
+        },
+        {
+          "name": "last-waiter-before-completion",
+          "exitCode": 1,
+          "outputLimited": false,
+          "latencyMs": 204,
+          "stdout": "{\"beforeCompletion\":false,\"expected\":true}\n",
+          "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: onSizeLessThan(1) must settle when the last waiting job starts, before it completes\n\nfalse !== true\n\n    at file:///workspace/posthoc-last-waiter-before-completion.mjs:1:450 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n"
+        }
+      ],
+      "at": "2026-10-16T04:09:32.139Z"
+    },
+    {
+      "task": "q02",
+      "arm": "reference",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "next-before-completion",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 205,
+          "stdout": "{\"beforeCompletion\":0,\"expected\":0}\n",
+          "stderr": ""
+        },
+        {
+          "name": "last-waiter-before-completion",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 207,
+          "stdout": "{\"beforeCompletion\":true,\"expected\":true}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:32.598Z"
+    },
+    {
+      "task": "q02",
+      "arm": "suffice",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "next-before-completion",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 206,
+          "stdout": "{\"beforeCompletion\":0,\"expected\":0}\n",
+          "stderr": ""
+        },
+        {
+          "name": "last-waiter-before-completion",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 205,
+          "stdout": "{\"beforeCompletion\":true,\"expected\":true}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:33.057Z"
+    },
+    {
+      "task": "q02",
+      "arm": "codex",
+      "inferenceCalls": 0,
+      "actorFeedback": false,
+      "probes": [
+        {
+          "name": "next-before-completion",
+          "exitCode": 1,
+          "outputLimited": false,
+          "latencyMs": 204,
+          "stdout": "{\"beforeCompletion\":1,\"expected\":0}\n",
+          "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: starting work must preserve the existing completion-event contract\n\n1 !== 0\n\n    at file:///workspace/posthoc-next-before-completion.mjs:1:381 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 1,\n  expected: 0,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.15.0\n"
+        },
+        {
+          "name": "last-waiter-before-completion",
+          "exitCode": 0,
+          "outputLimited": false,
+          "latencyMs": 204,
+          "stdout": "{\"beforeCompletion\":true,\"expected\":true}\n",
+          "stderr": ""
+        }
+      ],
+      "at": "2026-10-16T04:09:33.517Z"
+    }
+  ]
+}
