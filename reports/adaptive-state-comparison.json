@@ -1,0 +1,725 @@
+{
+  "manifest": {
+    "mode": "state-comparison",
+    "schedule": [
+      {
+        "task": "lru-background-lifecycle",
+        "arm": "medium",
+        "repetition": 0
+      },
+      {
+        "task": "lru-background-lifecycle",
+        "arm": "adaptive",
+        "repetition": 0
+      },
+      {
+        "task": "lru-background-lifecycle",
+        "arm": "low",
+        "repetition": 1
+      }
+    ],
+    "inputs": {
+      "src/adaptive-agent.mjs": "9e7339be68d26f133799644b9b5ddbf573c10c3aeefba512a3ef9d0b3030749a",
+      "src/adaptive-policy.mjs": "924062f7f794e076f95b22bb84987fdbb9d4880e9a2c540a68c963207b24dfe3",
+      "scripts/adaptive-experiment.mjs": "611bf44c01e9c4972ee7d178c32f3a9502d12259f7f836ed1c128f3c7e6022a3",
+      "scripts/prepare-adaptive.mjs": "09262dfcef4439ca1a4f41bfec96735ca0986ce6b9cf97225ffbeec92dd7cedf",
+      "tests/adaptive.test.mjs": "cdc8f646fb8af1096f3a70962d84600261be4b634e8e99683a749c2e4a191037",
+      "scripts/adaptive-state.mjs": "323e62e32cd9255e7a2d6a53ea6dcc44d24b8d3bbf0e4e9e0ae407443e4aca6b",
+      "scripts/prepare-adaptive-lru.mjs": "2bb7efe88c25d62f79b1d4100eb452fa62450274405babf35d0ee8b0660715dd",
+      "benchmarks/adaptive-lru/task.json": "cf4b29a469e098b37c20582dbb0402cf9c0f2d87a6e0f94eb7855d62c4e45f2a",
+      "benchmarks/adaptive-lru/acceptance.test.mjs": "6f9ae8e694ca6c4b5056984bd59b7caf17867a3ee7375fdc93a95d5eb2e2fe97",
+      "docs/ADAPTIVE-STATE-PROTOCOL.md": "c42e559f62eefd044abb6ac2c6944cf6b80092e6a4a714aec08583cb10bbd08b",
+      "benchmarks/adaptive/tasks.json": "c8bbdb66c8725e7686ce5969b33c6c8d716034959ede0aba35182ed55997ba6d",
+      "src/adaptive-state-agent.mjs": "42eacf4238891c7831ce899511f740a725577a7ee25bb1b5ffc822b1da037799",
+      "src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+      "src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+      "src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+      "src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+      "src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+      "src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+      "src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+      "src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+      "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+      "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+      "src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+      "src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+      "src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+      "src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+      "src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+      "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+      "benchmarks/adaptive/blank-scalar.test.mjs": "bf9be0fee04f1adfb3cdb235d86813c5fd4cc75b5171145ceeab65ed65369c63",
+      "benchmarks/adaptive/bom-stream.test.mjs": "38d9a966f61d2a6b5905b6bf3d52204c369dee350c0e15a5f7d7624571bdfb2e",
+      "benchmarks/adaptive/merge-alias.test.mjs": "864eaee317f078ea2b63dac95c8389525ce3381d2cbc73e7a5a52a8e1ad1ffb5"
+    },
+    "baselines": {
+      "lru-background-lifecycle": {
+        "package.json": "6dc1b06d6b093e9cccb20bee06a93836eee0420ae26803ca2ce4065d82f070d1",
+        "README.md": "657cf6cb5cfd7ac7032b257fe5250248279bd0997db2e058bbaf4b44276bc520",
+        "src/diagnostics-channel.ts": "8952a62f484e31c316e5b7275ff2e088cfcb517ad710b1c845aed69777d58fc5",
+        "src/index.ts": "f5e025b860df54cbc334df987ef3a4965489fdaf0314f08ccf69bc25e13ae1e0",
+        "src/perf.ts": "aea93f6a905f81f0aab99b2895dc776b80213095431505ba775be1dc2edddecb",
+        "tests/visible.test.mjs": "792dd7704816bcfb3dde50ac47810a1acb66c532b9a0c170a3b2d97190387732"
+      }
+    },
+    "model": "gpt-6.1-sol",
+    "perAttemptUsd": 0.18,
+    "maxTurns": 18,
+    "timeoutMs": 240000,
+    "campaignCapUsd": 3,
+    "storageCap": 104857600,
+    "minFree": 1073741824,
+    "policy": "two failures on distinct edit versions OR nine turns without any edit; monotonic low to medium",
+    "frozenAt": "2026-10-14T21:42:40.959Z"
+  },
+  "knownCost": 0.1905272,
+  "results": [
+    {
+      "id": "0-lru-background-lifecycle-medium",
+      "task": "lru-background-lifecycle",
+      "arm": "medium",
+      "repetition": 0,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        }
+      ],
+      "knownCost": 0.0742216,
+      "totalCost": 0.0742216,
+      "execution": {
+        "status": "completed",
+        "phases": [
+          {
+            "phase": "solo",
+            "actor": "solo",
+            "model": "gpt-6.1-sol",
+            "status": "completed",
+            "turns": 9,
+            "calls": 44,
+            "effortEvidence": [
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "medium",
+                  "summary": "auto"
+                },
+                "requested": "medium"
+              }
+            ],
+            "escalations": [],
+            "usage": {
+              "input": 18973,
+              "output": 2697,
+              "cacheRead": 93056,
+              "cacheWrite": 0,
+              "totalTokens": 114726,
+              "estimatedApiUsd": 0.0742216
+            },
+            "usageCostUnknown": false,
+            "latencyMs": 82985,
+            "errors": [],
+            "final": "Implemented the lifecycle repair in `src/index.ts`.\n\n- Synchronous fetch results now settle correctly.\n- Internal fetch Promise placeholders no longer reach `onInsert`.\n- Fetch completion is distinguished from replacement, avoiding self-abort.\n- Insert/update/replace status and callbacks use the actual stale value; unchanged values are not disposed.\n- Eviction aborts in-flight fetches and disposes their stale values through both disposal callbacks.\n- Late results cannot resurrect evicted entries or overwrite replacement entries.\n\nVerification: all 3 visible tests passed. Hidden tests were not available to run.",
+            "actualModels": [
+              "gpt-6.1-sol"
+            ]
+          }
+        ],
+        "contract": null,
+        "packetCharacters": 0,
+        "finalChecks": {
+          "label": "final-checks",
+          "visible": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "exitCode": 0,
+            "diagnostics": ""
+          },
+          "upstream": null,
+          "declared": null,
+          "patch": {
+            "changed": [
+              {
+                "path": "src/index.ts",
+                "beforeHash": "f5e025b860df54cbc334df987ef3a4965489fdaf0314f08ccf69bc25e13ae1e0",
+                "afterHash": "96d9aa95d7ac85470a7611ce3a860944042f15030fe59f46f1bd8c686ac32ab1"
+              }
+            ],
+            "text": "\nsrc/index.ts\ndiff --git \"a/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-lru-fixtures\\\\baseline\\\\src\\\\index.ts\" \"b/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-runs\\\\state-comparison\\\\0-lru-background-lifecycle-medium\\\\workspace\\\\src\\\\index.ts\"\nindex 09ca0de..e3dead4 100644\n--- \"a/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-lru-fixtures\\\\baseline\\\\src\\\\index.ts\"\n+++ \"b/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-runs\\\\state-comparison\\\\0-lru-background-lifecycle-medium\\\\workspace\\\\src\\\\index.ts\"\n@@ -2145,6 +2145,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n     k: K,\n     v: V | BackgroundFetch<V> | undefined,\n     setOptions: LRUCache.SetOptions<K, V, FC> = {},\n+    resolvingFetch?: BackgroundFetch<V>,\n   ) {\n     const {\n       ttl = this.ttl,\n@@ -2174,6 +2175,14 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n     // NB: maxEntrySize set to maxSize by default\n     if (this.maxEntrySize && size > this.maxEntrySize) {\n       // have to delete, in case something is there already.\n+      const index = this.#keyMap.get(k)\n+      if (\n+        resolvingFetch &&\n+        index !== undefined &&\n+        this.#valList[index] === resolvingFetch\n+      ) {\n+        this.#valList[index] = resolvingFetch.__staleWhileFetching\n+      }\n       this.#delete(k, 'set')\n       if (status) {\n         status.set = 'miss'\n@@ -2199,50 +2208,44 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       this.#addItemSize(index, size, status)\n       if (status) status.set = 'add'\n       noUpdateTTL = false\n-      if (this.#hasOnInsert) {\n+      if (this.#hasOnInsert && !this.#isBackgroundFetch(v)) {\n         this.#onInsert?.(v as V, k, 'add')\n       }\n     } else {\n       // update\n       this.#moveToTail(index)\n       const oldVal = this.#valList[index] as V | BackgroundFetch<V>\n+      const oldFetch = this.#isBackgroundFetch(oldVal) ? oldVal : undefined\n+      const oldValue = oldFetch ? oldFetch.__staleWhileFetching : oldVal\n+      const reason =\n+        oldValue === undefined ? 'add' : v === oldValue ? 'update' : 'replace'\n       if (v !== oldVal) {\n-        if (this.#hasFetchMethod && this.#isBackgroundFetch(oldVal)) {\n-          oldVal.__abortController.abort(new Error('replaced'))\n-          const { __staleWhileFetching: s } = oldVal\n-          if (s !== undefined && !noDisposeOnSet) {\n-            if (this.#hasDispose) {\n-              this.#dispose?.(s as V, k, 'set')\n-            }\n-            if (this.#hasDisposeAfter) {\n-              this.#disposed?.push([s as V, k, 'set'])\n-            }\n-          }\n-        } else if (!noDisposeOnSet) {\n+        // A completed fetch is not a cancellation. An ordinary set still\n+        // cancels the request, even when it preserves the stale value.\n+        if (oldFetch && oldFetch !== resolvingFetch) {\n+          oldFetch.__abortController.abort(new Error('replaced'))\n+        }\n+        if (oldValue !== undefined && v !== oldValue && !noDisposeOnSet) {\n           if (this.#hasDispose) {\n-            this.#dispose?.(oldVal as V, k, 'set')\n+            this.#dispose?.(oldValue as V, k, 'set')\n           }\n           if (this.#hasDisposeAfter) {\n-            this.#disposed?.push([oldVal as V, k, 'set'])\n+            this.#disposed?.push([oldValue as V, k, 'set'])\n           }\n         }\n         this.#removeItemSize(index)\n         this.#addItemSize(index, size, status)\n         this.#valList[index] = v\n-        if (status) {\n-          status.set = 'replace'\n-          const oldValue =\n-            oldVal && this.#isBackgroundFetch(oldVal) ?\n-              oldVal.__staleWhileFetching\n-            : oldVal\n-          if (oldValue !== undefined) status.oldValue = oldValue\n+      }\n+      if (reason === 'add') noUpdateTTL = false\n+      if (status) {\n+        status.set = reason\n+        if (reason === 'replace' && oldValue !== undefined) {\n+          status.oldValue = oldValue\n         }\n-      } else if (status) {\n-        status.set = 'update'\n       }\n-\n-      if (this.#hasOnInsert) {\n-        this.onInsert?.(v as V, k, v === oldVal ? 'update' : 'replace')\n+      if (this.#hasOnInsert && !this.#isBackgroundFetch(v)) {\n+        this.#onInsert?.(v as V, k, reason)\n       }\n     }\n     if (ttl !== 0 && !this.#ttls) {\n@@ -2295,10 +2298,13 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n   #evict(free: boolean) {\n     const head = this.#head\n     const k = this.#keyList[head] as K\n-    const v = this.#valList[head] as V\n-    if (this.#hasFetchMethod && this.#isBackgroundFetch(v)) {\n-      v.__abortController.abort(new Error('evicted'))\n-    } else if (this.#hasDispose || this.#hasDisposeAfter) {\n+    const entry = this.#valList[head]\n+    const fetching = this.#isBackgroundFetch(entry)\n+    const v = fetching ? entry.__staleWhileFetching : entry\n+    if (fetching) {\n+      entry.__abortController.abort(new Error('evicted'))\n+    }\n+    if (v !== undefined && (this.#hasDispose || this.#hasDisposeAfter)) {\n       if (this.#hasDispose) {\n         this.#dispose?.(v, k, 'evict')\n       }\n@@ -2469,20 +2475,22 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       }\n       // either we didn't abort, and are still here, or we did, and ignored\n       const bf = p as BackgroundFetch<V>\n-      // if nothing else has been written there but we're set to update the\n-      // cache and ignore the abort, or if it's still pending on this specific\n-      // background request, then write it to the cache.\n+      // Only the entry still owned by this request may be updated. In\n+      // particular, an ignored abort must not resurrect an evicted entry.\n       const vl = this.#valList[index as Index]\n-      if (vl === p || (vl === undefined && ignoreAbort && updateCache)) {\n+      if (this.#keyMap.get(k) === index && vl === p) {\n         if (v === undefined) {\n           if (bf.__staleWhileFetching !== undefined) {\n             this.#valList[index as Index] = bf.__staleWhileFetching\n           } else {\n+            // Detach a completed request before deleting its empty entry,\n+            // so deletion does not abort the request's own signal.\n+            this.#valList[index as Index] = undefined\n             this.#delete(k, 'fetch')\n           }\n         } else {\n           if (options.status) options.status.fetchUpdated = true\n-          this.#set(k, v, fetchOpts.options)\n+          this.#set(k, v, fetchOpts.options, bf)\n         }\n       }\n       return v\n@@ -2534,9 +2542,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       rej: (e: unknown) => void,\n     ) => {\n       const fmp = this.#fetchMethod?.(k, v, fetchOpts)\n-      if (fmp && fmp instanceof Promise) {\n-        fmp.then(v => res(v === undefined ? undefined : v), rej)\n-      }\n+      Promise.resolve(fmp).then(v => res(v), rej)\n       // ignored, we go until we finish, regardless.\n       // defer check until we are actually aborting,\n       // so fetchMethod can override.\n@@ -3060,7 +3066,9 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n           const v = this.#valList[index]\n           if (this.#isBackgroundFetch(v)) {\n             v.__abortController.abort(new Error('deleted'))\n-          } else if (this.#hasDispose || this.#hasDisposeAfter) {\n+          } else if (\n+            v !== undefined && (this.#hasDispose || this.#hasDisposeAfter)\n+          ) {\n             if (this.#hasDispose) {\n               this.#dispose?.(v as V, k, reason)\n             }\n@@ -3107,7 +3115,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       const v = this.#valList[index]\n       if (this.#isBackgroundFetch(v)) {\n         v.__abortController.abort(new Error('deleted'))\n-      } else {\n+      } else if (v !== undefined) {\n         const k = this.#keyList[index]\n         if (this.#hasDispose) {\n           this.#dispose?.(v as V, k as K, reason)\n",
+            "omittedCharacters": 0
+          }
+        },
+        "latencyMs": 83293,
+        "errors": [],
+        "navigationCalls": 8
+      },
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run"
+    },
+    {
+      "id": "1-lru-background-lifecycle-adaptive",
+      "task": "lru-background-lifecycle",
+      "arm": "adaptive",
+      "repetition": 0,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.056662000000000004,
+      "totalCost": 0.056662000000000004,
+      "execution": {
+        "status": "completed",
+        "phases": [
+          {
+            "phase": "solo",
+            "actor": "solo",
+            "model": "gpt-6.1-sol",
+            "status": "completed",
+            "turns": 7,
+            "calls": 28,
+            "effortEvidence": [
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              }
+            ],
+            "escalations": [],
+            "usage": {
+              "input": 15243,
+              "output": 2208,
+              "cacheRead": 40960,
+              "cacheWrite": 0,
+              "totalTokens": 58411,
+              "estimatedApiUsd": 0.056662000000000004
+            },
+            "usageCostUnknown": false,
+            "latencyMs": 47534,
+            "errors": [],
+            "final": "Implemented in `src/index.ts`.\n\n- Synchronous fetch results now fulfill.\n- Internal fetch placeholders no longer reach `onInsert`.\n- Fetch completion no longer aborts its own signal; external replacement still does.\n- Status and insertion callbacks use the actual stale value to distinguish add, update, and replace.\n- Unchanged stale values are not disposed.\n- Eviction aborts pending fetches and disposes their stale values through both disposal callbacks.\n- Late results cannot restore evicted entries or overwrite replacement entries.\n\nVerification: all 3 visible tests passed. Hidden tests were not available.",
+            "actualModels": [
+              "gpt-6.1-sol"
+            ]
+          }
+        ],
+        "contract": null,
+        "packetCharacters": 0,
+        "finalChecks": {
+          "label": "final-checks",
+          "visible": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "exitCode": 0,
+            "diagnostics": ""
+          },
+          "upstream": null,
+          "declared": null,
+          "patch": {
+            "changed": [
+              {
+                "path": "src/index.ts",
+                "beforeHash": "f5e025b860df54cbc334df987ef3a4965489fdaf0314f08ccf69bc25e13ae1e0",
+                "afterHash": "f77c0a134cb6a85b4f42d6c27e7eb54195b92c5a7f692dbabfb45bcb93c51d6b"
+              }
+            ],
+            "text": "\nsrc/index.ts\ndiff --git \"a/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-lru-fixtures\\\\baseline\\\\src\\\\index.ts\" \"b/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-runs\\\\state-comparison\\\\1-lru-background-lifecycle-adaptive\\\\workspace\\\\src\\\\index.ts\"\nindex 09ca0de..c872fc5 100644\n--- \"a/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-lru-fixtures\\\\baseline\\\\src\\\\index.ts\"\n+++ \"b/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-runs\\\\state-comparison\\\\1-lru-background-lifecycle-adaptive\\\\workspace\\\\src\\\\index.ts\"\n@@ -2145,6 +2145,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n     k: K,\n     v: V | BackgroundFetch<V> | undefined,\n     setOptions: LRUCache.SetOptions<K, V, FC> = {},\n+    resolving?: BackgroundFetch<V>,\n   ) {\n     const {\n       ttl = this.ttl,\n@@ -2199,18 +2200,24 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       this.#addItemSize(index, size, status)\n       if (status) status.set = 'add'\n       noUpdateTTL = false\n-      if (this.#hasOnInsert) {\n+      if (this.#hasOnInsert && !this.#isBackgroundFetch(v)) {\n         this.#onInsert?.(v as V, k, 'add')\n       }\n     } else {\n       // update\n       this.#moveToTail(index)\n       const oldVal = this.#valList[index] as V | BackgroundFetch<V>\n+      const oldValue = this.#isBackgroundFetch(oldVal) ?\n+        oldVal.__staleWhileFetching : oldVal\n+      const reason = oldValue === undefined ? 'add' :\n+        v === oldValue ? 'update' : 'replace'\n       if (v !== oldVal) {\n         if (this.#hasFetchMethod && this.#isBackgroundFetch(oldVal)) {\n-          oldVal.__abortController.abort(new Error('replaced'))\n+          if (oldVal !== resolving) {\n+            oldVal.__abortController.abort(new Error('replaced'))\n+          }\n           const { __staleWhileFetching: s } = oldVal\n-          if (s !== undefined && !noDisposeOnSet) {\n+          if (s !== undefined && s !== v && !noDisposeOnSet) {\n             if (this.#hasDispose) {\n               this.#dispose?.(s as V, k, 'set')\n             }\n@@ -2230,19 +2237,15 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n         this.#addItemSize(index, size, status)\n         this.#valList[index] = v\n         if (status) {\n-          status.set = 'replace'\n-          const oldValue =\n-            oldVal && this.#isBackgroundFetch(oldVal) ?\n-              oldVal.__staleWhileFetching\n-            : oldVal\n-          if (oldValue !== undefined) status.oldValue = oldValue\n+          status.set = reason\n+          if (reason === 'replace' && oldValue !== undefined) status.oldValue = oldValue\n         }\n       } else if (status) {\n         status.set = 'update'\n       }\n \n-      if (this.#hasOnInsert) {\n-        this.onInsert?.(v as V, k, v === oldVal ? 'update' : 'replace')\n+      if (this.#hasOnInsert && !this.#isBackgroundFetch(v)) {\n+        this.onInsert?.(v as V, k, reason)\n       }\n     }\n     if (ttl !== 0 && !this.#ttls) {\n@@ -2295,10 +2298,13 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n   #evict(free: boolean) {\n     const head = this.#head\n     const k = this.#keyList[head] as K\n-    const v = this.#valList[head] as V\n-    if (this.#hasFetchMethod && this.#isBackgroundFetch(v)) {\n-      v.__abortController.abort(new Error('evicted'))\n-    } else if (this.#hasDispose || this.#hasDisposeAfter) {\n+    const stored = this.#valList[head]\n+    const fetching = this.#isBackgroundFetch(stored)\n+    const v = (fetching ? stored.__staleWhileFetching : stored) as V\n+    if (fetching) {\n+      stored.__abortController.abort(new Error('evicted'))\n+    }\n+    if (v !== undefined && (this.#hasDispose || this.#hasDisposeAfter)) {\n       if (this.#hasDispose) {\n         this.#dispose?.(v, k, 'evict')\n       }\n@@ -2473,7 +2479,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       // cache and ignore the abort, or if it's still pending on this specific\n       // background request, then write it to the cache.\n       const vl = this.#valList[index as Index]\n-      if (vl === p || (vl === undefined && ignoreAbort && updateCache)) {\n+      if (vl === p && this.#keyMap.get(k) === index) {\n         if (v === undefined) {\n           if (bf.__staleWhileFetching !== undefined) {\n             this.#valList[index as Index] = bf.__staleWhileFetching\n@@ -2482,7 +2488,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n           }\n         } else {\n           if (options.status) options.status.fetchUpdated = true\n-          this.#set(k, v, fetchOpts.options)\n+          this.#set(k, v, fetchOpts.options, bf)\n         }\n       }\n       return v\n@@ -2534,9 +2540,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       rej: (e: unknown) => void,\n     ) => {\n       const fmp = this.#fetchMethod?.(k, v, fetchOpts)\n-      if (fmp && fmp instanceof Promise) {\n-        fmp.then(v => res(v === undefined ? undefined : v), rej)\n-      }\n+      Promise.resolve(fmp).then(res, rej)\n       // ignored, we go until we finish, regardless.\n       // defer check until we are actually aborting,\n       // so fetchMethod can override.\n",
+            "omittedCharacters": 0
+          }
+        },
+        "latencyMs": 47813,
+        "errors": [],
+        "navigationCalls": 3
+      },
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run"
+    },
+    {
+      "id": "2-lru-background-lifecycle-low",
+      "task": "lru-background-lifecycle",
+      "arm": "low",
+      "repetition": 1,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.059643600000000005,
+      "totalCost": 0.059643600000000005,
+      "execution": {
+        "status": "completed",
+        "phases": [
+          {
+            "phase": "solo",
+            "actor": "solo",
+            "model": "gpt-6.1-sol",
+            "status": "completed",
+            "turns": 7,
+            "calls": 33,
+            "effortEvidence": [
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              },
+              {
+                "type": "provider_effort",
+                "model": "gpt-6.1-sol",
+                "reasoning": {
+                  "effort": "low",
+                  "summary": "auto"
+                },
+                "requested": "low"
+              }
+            ],
+            "escalations": [],
+            "usage": {
+              "input": 17587,
+              "output": 2214,
+              "cacheRead": 23296,
+              "cacheWrite": 0,
+              "totalTokens": 43097,
+              "estimatedApiUsd": 0.059643600000000005
+            },
+            "usageCostUnknown": false,
+            "latencyMs": 50488,
+            "errors": [],
+            "final": "Implemented the lifecycle repair in `src/index.ts`.\n\n- Synchronous fetch results now fulfill through Promise normalization.\n- Internal fetch placeholders are excluded from `onInsert`.\n- Fetch completion no longer aborts its own signal.\n- Insert/update/replace classification uses the actual stale value, and unchanged stale values are not disposed.\n- Eviction aborts in-flight fetches and disposes their stale values through both disposal callbacks.\n- Late fetch results cannot restore evicted entries or overwrite replacement entries.\n\nVerification: all 3 visible tests passed. Hidden tests were not available to run.",
+            "actualModels": [
+              "gpt-6.1-sol"
+            ]
+          }
+        ],
+        "contract": null,
+        "packetCharacters": 0,
+        "finalChecks": {
+          "label": "final-checks",
+          "visible": {
+            "status": "passed",
+            "tests": 3,
+            "passed": 3,
+            "failed": 0,
+            "exitCode": 0,
+            "diagnostics": ""
+          },
+          "upstream": null,
+          "declared": null,
+          "patch": {
+            "changed": [
+              {
+                "path": "src/index.ts",
+                "beforeHash": "f5e025b860df54cbc334df987ef3a4965489fdaf0314f08ccf69bc25e13ae1e0",
+                "afterHash": "ff040001f1c852836784671715bf2054f442fbd6bd6071b88849db2b21ca02dc"
+              }
+            ],
+            "text": "\nsrc/index.ts\ndiff --git \"a/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-lru-fixtures\\\\baseline\\\\src\\\\index.ts\" \"b/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-runs\\\\state-comparison\\\\2-lru-background-lifecycle-low\\\\workspace\\\\src\\\\index.ts\"\nindex 09ca0de..dd86e26 100644\n--- \"a/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-lru-fixtures\\\\baseline\\\\src\\\\index.ts\"\n+++ \"b/C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice-experiments\\\\adaptive-effort\\\\.suffice\\\\adaptive-runs\\\\state-comparison\\\\2-lru-background-lifecycle-low\\\\workspace\\\\src\\\\index.ts\"\n@@ -2145,6 +2145,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n     k: K,\n     v: V | BackgroundFetch<V> | undefined,\n     setOptions: LRUCache.SetOptions<K, V, FC> = {},\n+    resolvingFetch?: BackgroundFetch<V>,\n   ) {\n     const {\n       ttl = this.ttl,\n@@ -2199,18 +2200,24 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       this.#addItemSize(index, size, status)\n       if (status) status.set = 'add'\n       noUpdateTTL = false\n-      if (this.#hasOnInsert) {\n+      if (this.#hasOnInsert && !this.#isBackgroundFetch(v)) {\n         this.#onInsert?.(v as V, k, 'add')\n       }\n     } else {\n       // update\n       this.#moveToTail(index)\n       const oldVal = this.#valList[index] as V | BackgroundFetch<V>\n+      const oldValue = this.#isBackgroundFetch(oldVal) ?\n+        oldVal.__staleWhileFetching : oldVal\n+      const reason = oldValue === undefined ? 'add' :\n+        v === oldValue ? 'update' : 'replace'\n       if (v !== oldVal) {\n         if (this.#hasFetchMethod && this.#isBackgroundFetch(oldVal)) {\n-          oldVal.__abortController.abort(new Error('replaced'))\n+          if (oldVal !== resolvingFetch) {\n+            oldVal.__abortController.abort(new Error('replaced'))\n+          }\n           const { __staleWhileFetching: s } = oldVal\n-          if (s !== undefined && !noDisposeOnSet) {\n+          if (s !== undefined && s !== v && !noDisposeOnSet) {\n             if (this.#hasDispose) {\n               this.#dispose?.(s as V, k, 'set')\n             }\n@@ -2230,19 +2237,17 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n         this.#addItemSize(index, size, status)\n         this.#valList[index] = v\n         if (status) {\n-          status.set = 'replace'\n-          const oldValue =\n-            oldVal && this.#isBackgroundFetch(oldVal) ?\n-              oldVal.__staleWhileFetching\n-            : oldVal\n-          if (oldValue !== undefined) status.oldValue = oldValue\n+          status.set = reason\n+          if (reason === 'replace' && oldValue !== undefined) {\n+            status.oldValue = oldValue\n+          }\n         }\n       } else if (status) {\n         status.set = 'update'\n       }\n \n-      if (this.#hasOnInsert) {\n-        this.onInsert?.(v as V, k, v === oldVal ? 'update' : 'replace')\n+      if (this.#hasOnInsert && !this.#isBackgroundFetch(v)) {\n+        this.onInsert?.(v as V, k, reason)\n       }\n     }\n     if (ttl !== 0 && !this.#ttls) {\n@@ -2295,10 +2300,13 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n   #evict(free: boolean) {\n     const head = this.#head\n     const k = this.#keyList[head] as K\n-    const v = this.#valList[head] as V\n-    if (this.#hasFetchMethod && this.#isBackgroundFetch(v)) {\n-      v.__abortController.abort(new Error('evicted'))\n-    } else if (this.#hasDispose || this.#hasDisposeAfter) {\n+    const value = this.#valList[head]\n+    const fetching = this.#isBackgroundFetch(value)\n+    const v = fetching ? value.__staleWhileFetching : value\n+    if (fetching) {\n+      value.__abortController.abort(new Error('evicted'))\n+    }\n+    if (v !== undefined && (this.#hasDispose || this.#hasDisposeAfter)) {\n       if (this.#hasDispose) {\n         this.#dispose?.(v, k, 'evict')\n       }\n@@ -2473,7 +2481,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       // cache and ignore the abort, or if it's still pending on this specific\n       // background request, then write it to the cache.\n       const vl = this.#valList[index as Index]\n-      if (vl === p || (vl === undefined && ignoreAbort && updateCache)) {\n+      if (vl === p && this.#keyMap.get(k) === index) {\n         if (v === undefined) {\n           if (bf.__staleWhileFetching !== undefined) {\n             this.#valList[index as Index] = bf.__staleWhileFetching\n@@ -2482,7 +2490,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n           }\n         } else {\n           if (options.status) options.status.fetchUpdated = true\n-          this.#set(k, v, fetchOpts.options)\n+          this.#set(k, v, fetchOpts.options, bf)\n         }\n       }\n       return v\n@@ -2534,9 +2542,7 @@ export class LRUCache<K extends {}, V extends {}, FC = unknown> {\n       rej: (e: unknown) => void,\n     ) => {\n       const fmp = this.#fetchMethod?.(k, v, fetchOpts)\n-      if (fmp && fmp instanceof Promise) {\n-        fmp.then(v => res(v === undefined ? undefined : v), rej)\n-      }\n+      Promise.resolve(fmp).then(v => res(v), rej)\n       // ignored, we go until we finish, regardless.\n       // defer check until we are actually aborting,\n       // so fetchMethod can override.\n",
+            "omittedCharacters": 0
+          }
+        },
+        "latencyMs": 50779,
+        "errors": [],
+        "navigationCalls": 8
+      },
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run"
+    }
+  ]
+}

@@ -1,0 +1,949 @@
+{
+  "attempts": 9,
+  "knownCost": 0.572212,
+  "unknownTotalCosts": 2,
+  "preResetProviderFailures": 2,
+  "completedLowHiddenRejections": 2,
+  "escalations": 0,
+  "receipt": {
+    "changedInputs": [],
+    "changedBaseline": [],
+    "immutable": true,
+    "providerSettings": true,
+    "artifacts": 34572169,
+    "diskFree": 7759523840
+  },
+  "rows": [
+    {
+      "id": "0-merge-alias-low",
+      "task": "merge-alias",
+      "arm": "low",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.0628284,
+      "totalCost": 0.0628284,
+      "acceptance": "passed",
+      "regression": "passed",
+      "upstream": "passed",
+      "campaign": "pilot",
+      "hiddenTests": 2,
+      "hiddenPassed": 2,
+      "hiddenFailed": 0,
+      "visibleTests": 7,
+      "visiblePassed": 7,
+      "reasoningTokensKnown": 86,
+      "reasoningTelemetryMissing": false,
+      "turns": 7,
+      "latencyMs": 46918,
+      "usage": [
+        {
+          "input": 23263,
+          "output": 1396,
+          "cacheRead": 23424,
+          "cacheWrite": 0,
+          "totalTokens": 48083,
+          "estimatedApiUsd": 0.0628284
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "1-merge-alias-medium",
+      "task": "merge-alias",
+      "arm": "medium",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        }
+      ],
+      "knownCost": 0.06758120000000001,
+      "totalCost": 0.06758120000000001,
+      "acceptance": "passed",
+      "regression": "passed",
+      "upstream": "passed",
+      "campaign": "pilot",
+      "hiddenTests": 2,
+      "hiddenPassed": 2,
+      "hiddenFailed": 0,
+      "visibleTests": 7,
+      "visiblePassed": 7,
+      "reasoningTokensKnown": 297,
+      "reasoningTelemetryMissing": false,
+      "turns": 7,
+      "latencyMs": 76886,
+      "usage": [
+        {
+          "input": 21854,
+          "output": 2075,
+          "cacheRead": 31232,
+          "cacheWrite": 0,
+          "totalTokens": 55161,
+          "estimatedApiUsd": 0.06758120000000001
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "2-merge-alias-adaptive",
+      "task": "merge-alias",
+      "arm": "adaptive",
+      "repetition": 0,
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": true,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.0515376,
+      "totalCost": null,
+      "acceptance": "passed",
+      "regression": "passed",
+      "upstream": "passed",
+      "campaign": "pilot",
+      "hiddenTests": 2,
+      "hiddenPassed": 2,
+      "hiddenFailed": 0,
+      "visibleTests": 7,
+      "visiblePassed": 7,
+      "reasoningTokensKnown": 90,
+      "reasoningTelemetryMissing": true,
+      "turns": 7,
+      "latencyMs": 48524,
+      "usage": [
+        {
+          "input": 17771,
+          "output": 1373,
+          "cacheRead": 22656,
+          "cacheWrite": 0,
+          "totalTokens": 41800,
+          "estimatedApiUsd": 0.0515376
+        }
+      ],
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ]
+    },
+    {
+      "id": "0-bom-stream-low",
+      "task": "bom-stream",
+      "arm": "low",
+      "repetition": 0,
+      "status": "provider_error",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0,
+      "totalCost": null,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "passed",
+      "campaign": "screen",
+      "hiddenTests": 1,
+      "hiddenPassed": 0,
+      "hiddenFailed": 1,
+      "visibleTests": 7,
+      "visiblePassed": 7,
+      "reasoningTokensKnown": 0,
+      "reasoningTelemetryMissing": true,
+      "turns": 1,
+      "latencyMs": 4793,
+      "usage": [
+        {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "estimatedApiUsd": 0
+        }
+      ],
+      "errors": [
+        "The ChatGPT user has reached their Subscription Sharing usage limit. Ask the user to try again after their usage limit resets or use an API key instead."
+      ]
+    },
+    {
+      "id": "0-bom-stream-low",
+      "task": "bom-stream",
+      "arm": "low",
+      "repetition": 0,
+      "status": "completed",
+      "success": true,
+      "patchAccepted": true,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.10633680000000001,
+      "totalCost": 0.10633680000000001,
+      "acceptance": "passed",
+      "regression": "passed",
+      "upstream": "passed",
+      "campaign": "postreset-hard",
+      "hiddenTests": 1,
+      "hiddenPassed": 1,
+      "hiddenFailed": 0,
+      "visibleTests": 7,
+      "visiblePassed": 7,
+      "reasoningTokensKnown": 269,
+      "reasoningTelemetryMissing": false,
+      "turns": 10,
+      "latencyMs": 58687,
+      "usage": [
+        {
+          "input": 39467,
+          "output": 1939,
+          "cacheRead": 80128,
+          "cacheWrite": 0,
+          "totalTokens": 121534,
+          "estimatedApiUsd": 0.10633680000000001
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "0-lru-background-lifecycle-low",
+      "task": "lru-background-lifecycle",
+      "arm": "low",
+      "repetition": 0,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.0934008,
+      "totalCost": 0.0934008,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run",
+      "campaign": "state-screen",
+      "hiddenTests": 6,
+      "hiddenPassed": 5,
+      "hiddenFailed": 1,
+      "visibleTests": 3,
+      "visiblePassed": 3,
+      "reasoningTokensKnown": 162,
+      "reasoningTelemetryMissing": false,
+      "turns": 9,
+      "latencyMs": 72241,
+      "usage": [
+        {
+          "input": 30924,
+          "output": 2674,
+          "cacheRead": 48128,
+          "cacheWrite": 0,
+          "totalTokens": 81726,
+          "estimatedApiUsd": 0.0934008
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "0-lru-background-lifecycle-medium",
+      "task": "lru-background-lifecycle",
+      "arm": "medium",
+      "repetition": 0,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        }
+      ],
+      "knownCost": 0.0742216,
+      "totalCost": 0.0742216,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run",
+      "campaign": "state-comparison",
+      "hiddenTests": 6,
+      "hiddenPassed": 5,
+      "hiddenFailed": 1,
+      "visibleTests": 3,
+      "visiblePassed": 3,
+      "reasoningTokensKnown": 401,
+      "reasoningTelemetryMissing": false,
+      "turns": 9,
+      "latencyMs": 83293,
+      "usage": [
+        {
+          "input": 18973,
+          "output": 2697,
+          "cacheRead": 93056,
+          "cacheWrite": 0,
+          "totalTokens": 114726,
+          "estimatedApiUsd": 0.0742216
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "1-lru-background-lifecycle-adaptive",
+      "task": "lru-background-lifecycle",
+      "arm": "adaptive",
+      "repetition": 0,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.056662000000000004,
+      "totalCost": 0.056662000000000004,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run",
+      "campaign": "state-comparison",
+      "hiddenTests": 6,
+      "hiddenPassed": 5,
+      "hiddenFailed": 1,
+      "visibleTests": 3,
+      "visiblePassed": 3,
+      "reasoningTokensKnown": 28,
+      "reasoningTelemetryMissing": false,
+      "turns": 7,
+      "latencyMs": 47813,
+      "usage": [
+        {
+          "input": 15243,
+          "output": 2208,
+          "cacheRead": 40960,
+          "cacheWrite": 0,
+          "totalTokens": 58411,
+          "estimatedApiUsd": 0.056662000000000004
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "2-lru-background-lifecycle-low",
+      "task": "lru-background-lifecycle",
+      "arm": "low",
+      "repetition": 1,
+      "status": "completed",
+      "success": false,
+      "patchAccepted": false,
+      "immutable": true,
+      "applied": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "knownCost": 0.059643600000000005,
+      "totalCost": 0.059643600000000005,
+      "acceptance": "failed",
+      "regression": "passed",
+      "upstream": "not_run",
+      "campaign": "state-comparison",
+      "hiddenTests": 6,
+      "hiddenPassed": 5,
+      "hiddenFailed": 1,
+      "visibleTests": 3,
+      "visiblePassed": 3,
+      "reasoningTokensKnown": 34,
+      "reasoningTelemetryMissing": false,
+      "turns": 7,
+      "latencyMs": 50779,
+      "usage": [
+        {
+          "input": 17587,
+          "output": 2214,
+          "cacheRead": 23296,
+          "cacheWrite": 0,
+          "totalTokens": 43097,
+          "estimatedApiUsd": 0.059643600000000005
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-14T21:34:20.381Z",
+  "checks": {
+    "focusedHarnessTests": 7,
+    "passed": 7,
+    "failed": 0,
+    "command": "node --test tests/workflow.test.mjs tests/adaptive.test.mjs",
+    "graderHashesUnchanged": true,
+    "baselinesUnchanged": true,
+    "immutableAttemptFiles": true,
+    "outgoingProviderSettings": true
+  },
+  "resource": {
+    "screeningAttempts": 4,
+    "scoredAttempts": 0,
+    "knownCostUsd": 0.18194720000000003,
+    "unknownTotalCosts": 2,
+    "fixtureRunAndBenchmarkBytes": 31505892,
+    "artifactLimitBytes": 104857600,
+    "diskFreeBytes": 10433220608,
+    "minDiskFreeBytes": 1073741824
+  },
+  "providerEffortCounts": {
+    "low": 15,
+    "medium": 7
+  },
+  "hashes": {
+    "docs/ADAPTIVE-EFFORT.md": "a0e150cb95c8dde753f10f931858e3a51350916288fd430bd8118b00ea4d9818",
+    "docs/ADAPTIVE-SCREENING-DECISION.md": "9df77df122670136a06c06eb2a0d9932634ad8b4f883d64d5cc0884970246b98",
+    "scripts/adaptive-report.mjs": "c6b75e1a0f7aff9a45373014d564c50187f785d6d08c055306c298b66a27e86c",
+    "reports/adaptive-pilot.json": "d8981e8079be72c235993e4dfb25d2829b1031822a09aa878329b374ee20961d",
+    "reports/adaptive-screen.json": "ccaeb014201ede5b5fcaeebcfd4d6c4a7ee2d7185c2eb854e142bbbc10384384",
+    "reports/adaptive-effort-results.json": "6a15a63528b9fce8a586ab41df913673960f8a02560efa8e8c5bdd153a68459c",
+    "reports/ADAPTIVE-EFFORT-RESULTS.md": "12d64c88decc1c1d1bbb14442a0c87ac79f92cf07cdc3c0b7932d1addbc37ff8"
+  },
+  "limitations": [
+    "Payload effort verified, internal computation unobservable",
+    "No actual effort switch; inactive policy efficacy untested",
+    "No completed low-effort hidden rejection",
+    "Subscription limits affected two runs; no API-key fallback",
+    "Prospective scored campaign never launched",
+    "Protocol document hashes recorded at close; execution, policy, tools, tests and fixtures were hashed before each screening attempt"
+  ]
+}

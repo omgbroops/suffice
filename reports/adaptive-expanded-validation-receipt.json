@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-14T21:48:10.673Z",
+  "attempts": 9,
+  "screening": 6,
+  "scoredContinuation": 3,
+  "knownApiEquivalentCostUsd": 0.572212,
+  "unknownTotalCosts": 2,
+  "completedLowHiddenRejections": 2,
+  "escalations": 0,
+  "liveEffortSwitchObserved": false,
+  "focusedHarnessTests": {
+    "command": "node --test tests/workflow.test.mjs tests/adaptive.test.mjs",
+    "passed": 7,
+    "failed": 0
+  },
+  "preResetFilesChanged": [],
+  "frozenIntegrity": {
+    "changedInputs": [],
+    "changedBaseline": [],
+    "immutable": true,
+    "providerSettings": true,
+    "artifacts": 34572169,
+    "diskFree": 7759523840
+  },
+  "resource": {
+    "newArtifactBytes": 34949526,
+    "maxArtifactBytes": 104857600,
+    "freeBytes": 7759458304,
+    "minFree": 1073741824,
+    "withinBudget": true
+  },
+  "hashes": {
+    "docs/ADAPTIVE-STATE-PROTOCOL.md": "c42e559f62eefd044abb6ac2c6944cf6b80092e6a4a714aec08583cb10bbd08b",
+    "docs/ADAPTIVE-STATE-GATE.md": "5269e8c407ec965b6fe25e8f987c78a0db652622e8f0ba0e3d7ab75fb193c17c",
+    "reports/adaptive-expanded-results.json": "6e7801791b25a36c648a8e4be85387972aa78f64fca148e14928f08d13bfffd9",
+    "reports/ADAPTIVE-EXPANDED-RESULTS.md": "696ee9778d86afac0319a0996ddcb9d1da4b9b3b466f48ef7e79f562dbce18f4",
+    "src/adaptive-state-agent.mjs": "42eacf4238891c7831ce899511f740a725577a7ee25bb1b5ffc822b1da037799",
+    "scripts/adaptive-state.mjs": "323e62e32cd9255e7a2d6a53ea6dcc44d24b8d3bbf0e4e9e0ae407443e4aca6b",
+    "scripts/adaptive-expanded-report.mjs": "c9c8e86825936098bbd36e33afa52ae3a187a3902c5dce761805694b6d922c3b"
+  },
+  "interpretation": "Four LRU low/medium/adaptive attempts all completed, passed visible3/3 and hidden5/6, and failed same unchanged-stale-value invariant. Adaptive never escalated. No capability or efficiency-frontier win; cost per independently accepted LRU task undefined. Initial all-pass low/medium pair is limited efficiency observation. Provider-limit attempts remain preserved with unknown totals."
+}

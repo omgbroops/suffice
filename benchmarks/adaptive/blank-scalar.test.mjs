@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolve} from 'node:path';import {pathToFileURL} from 'node:url';const y=await import(pathToFileURL(resolve(process.env.SUFFICE_WORKSPACE,'src/src/index.ts')).href);
+test('blank scalars terminate at parent boundary',()=>{for(const style of ['|+','>+']){assert.deepEqual(y.load('a: '+style+'\n   \nb: 1\n'),{a:'\n',b:1});assert.deepEqual(y.load('a:\n  b: '+style+'\n      \n  c: 1\n'),{a:{b:'\n',c:1}});}assert.throws(()=>y.load('a: |\n   \n b\n'),/bad indentation/);});

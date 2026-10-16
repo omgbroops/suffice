@@ -1,0 +1,13 @@
+{
+  "id": "lru-background-lifecycle",
+  "base": "425dd43e921d1da9761e297ece18631fac831e15",
+  "fix": "451737cf4f82dc268b88530a559f900837261733",
+  "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\.suffice\\adaptive-lru-fixtures\\baseline",
+  "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\benchmarks\\adaptive-lru\\acceptance.test.mjs",
+  "sourceFiles": [
+    "src/index.ts",
+    "src/diagnostics-channel.ts",
+    "src/perf.ts"
+  ],
+  "prompt": "Repair background-fetch lifecycle edge cases in LRUCache. Synchronous non-Promise fetchMethod results must fulfill. Internal fetch Promise placeholders must never be emitted through onInsert. Resolving a background fetch must not abort its own signal; distinguish replacing an in-flight fetch from resolving it. Classify resulting insert/update/replace status and callbacks relative to the actual stale value; unchanged stale values must not be disposed. Evicting an in-flight fetch must abort it and dispose its stale value exactly once through both disposal callbacks, preserving cache membership when its late result arrives. Preserve ordinary set/get/delete, async fetch sharing, TTL and size accounting. Coordinate the fetch completion, set replacement and eviction paths. Visible tests include limited reproductions, hidden tests are separate."
+}

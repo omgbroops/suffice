@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {shouldEscalate} from '../src/adaptive-policy.mjs';
+test('distinct failures trigger escalation threshold',()=>{assert.equal(shouldEscalate({failedValidations:1,turns:8,editVersion:1}),false);assert.equal(shouldEscalate({failedValidations:2,turns:3,editVersion:2}),true);});
+test('stall triggers only without an edit and at threshold',()=>{assert.equal(shouldEscalate({failedValidations:0,turns:8,editVersion:0}),false);assert.equal(shouldEscalate({failedValidations:0,turns:9,editVersion:0}),true);assert.equal(shouldEscalate({failedValidations:0,turns:9,editVersion:1}),false);});

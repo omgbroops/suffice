@@ -1,0 +1,352 @@
+{
+  "byArm": {
+    "low": {
+      "attempts": 0,
+      "accepted": 0,
+      "patchAccepted": 0,
+      "knownCost": 0,
+      "unknownCosts": 0,
+      "costPerAccepted": null,
+      "escalations": 0,
+      "turns": 0,
+      "latencyMs": 0,
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0
+    },
+    "medium": {
+      "attempts": 0,
+      "accepted": 0,
+      "patchAccepted": 0,
+      "knownCost": 0,
+      "unknownCosts": 0,
+      "costPerAccepted": null,
+      "escalations": 0,
+      "turns": 0,
+      "latencyMs": 0,
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0
+    },
+    "adaptive": {
+      "attempts": 0,
+      "accepted": 0,
+      "patchAccepted": 0,
+      "knownCost": 0,
+      "unknownCosts": 0,
+      "costPerAccepted": null,
+      "escalations": 0,
+      "turns": 0,
+      "latencyMs": 0,
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0
+    }
+  },
+  "screening": [
+    {
+      "id": "0-merge-alias-low",
+      "arm": "low",
+      "success": true,
+      "status": "completed",
+      "totalCost": 0.0628284,
+      "knownCost": 0.0628284,
+      "patchAccepted": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "usage": [
+        {
+          "input": 23263,
+          "output": 1396,
+          "cacheRead": 23424,
+          "cacheWrite": 0,
+          "totalTokens": 48083,
+          "estimatedApiUsd": 0.0628284
+        }
+      ],
+      "turns": 7,
+      "latencyMs": 46918
+    },
+    {
+      "id": "1-merge-alias-medium",
+      "arm": "medium",
+      "success": true,
+      "status": "completed",
+      "totalCost": 0.06758120000000001,
+      "knownCost": 0.06758120000000001,
+      "patchAccepted": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "medium",
+            "summary": "auto"
+          },
+          "requested": "medium"
+        }
+      ],
+      "usage": [
+        {
+          "input": 21854,
+          "output": 2075,
+          "cacheRead": 31232,
+          "cacheWrite": 0,
+          "totalTokens": 55161,
+          "estimatedApiUsd": 0.06758120000000001
+        }
+      ],
+      "turns": 7,
+      "latencyMs": 76886
+    },
+    {
+      "id": "2-merge-alias-adaptive",
+      "arm": "adaptive",
+      "success": false,
+      "status": "provider_error",
+      "totalCost": null,
+      "knownCost": 0.0515376,
+      "patchAccepted": true,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        },
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "usage": [
+        {
+          "input": 17771,
+          "output": 1373,
+          "cacheRead": 22656,
+          "cacheWrite": 0,
+          "totalTokens": 41800,
+          "estimatedApiUsd": 0.0515376
+        }
+      ],
+      "turns": 7,
+      "latencyMs": 48524
+    },
+    {
+      "id": "0-bom-stream-low",
+      "arm": "low",
+      "success": false,
+      "status": "provider_error",
+      "totalCost": null,
+      "knownCost": 0,
+      "patchAccepted": false,
+      "requests": [
+        {
+          "type": "provider_effort",
+          "model": "gpt-6.1-sol",
+          "reasoning": {
+            "effort": "low",
+            "summary": "auto"
+          },
+          "requested": "low"
+        }
+      ],
+      "usage": [
+        {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "estimatedApiUsd": 0
+        }
+      ],
+      "turns": 1,
+      "latencyMs": 4793
+    }
+  ],
+  "knownCost": 0.18194720000000003,
+  "attempts": 4,
+  "unknownCosts": 2,
+  "baselineFailures": 0,
+  "operationalFailures": 2,
+  "activeEscalations": 0,
+  "integrity": {
+    "changedInputs": [],
+    "changedBaselines": [],
+    "allAttemptImmutable": true,
+    "allProviderEffortsMatch": true,
+    "artifactBytes": 31501567
+  },
+  "generatedAt": "2026-10-14T21:33:59.148Z"
+}

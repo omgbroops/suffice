@@ -1,0 +1,32 @@
+[
+  {
+    "id": "merge-alias",
+    "base": "cc665ec15016ccb6004bc46f53257366c5d0b18d",
+    "fix": "b62ef8357ccb8e294a6bfe5a3c40ed5ba98d8fe4",
+    "file": "src/parser/constructor.ts",
+    "prompt": "YAML 1.1 merge source sequences must reject scalar or nested sequence elements even when the entire sequence arrives through an alias. Valid aliased mappings and mapping sequences must still merge. Merge elements must use their own mapping tag, including when the target is a !!set. Preserve document isolation and normal aliases.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\.suffice\\adaptive-fixtures\\merge-alias\\baseline",
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\benchmarks\\adaptive\\merge-alias.test.mjs",
+    "upstream": true
+  },
+  {
+    "id": "bom-stream",
+    "base": "04d6fe3298191ee94adf8b1bad87bd2d909092af",
+    "fix": "e5e6f621214e7d8b3f6e6f8ea29ea667f32a5861",
+    "file": "src/parser/parser.ts",
+    "prompt": "Accept byte order marks at the beginning of each document in a YAML stream, including BOM-prefixed document separators and directive/comment prefixes. Do not absorb the next document into a plain or block scalar. Preserve interior BOM characters, regular document endings, scalar indentation, and event consumer behavior.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\.suffice\\adaptive-fixtures\\bom-stream\\baseline",
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\benchmarks\\adaptive\\bom-stream.test.mjs",
+    "upstream": true
+  },
+  {
+    "id": "blank-scalar",
+    "base": "30108cc828b5393d55dfbfc8087ab713f7145946",
+    "fix": "0cbb471d67b083778e7b2600af2418142bf5bf04",
+    "file": "src/parser/parser.ts",
+    "prompt": "A whitespace-only block scalar must terminate at a less-indented subsequent mapping entry instead of reporting bad indentation. Handle nested mappings and literal/folded styles and chomping modes. Preserve rejection of excessively indented leading empty lines before a first content line.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\.suffice\\adaptive-fixtures\\blank-scalar\\baseline",
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\adaptive-effort\\benchmarks\\adaptive\\blank-scalar.test.mjs",
+    "upstream": true
+  }
+]

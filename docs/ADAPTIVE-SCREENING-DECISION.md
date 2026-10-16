@@ -1,0 +1,3 @@
+# Screening decision amendment
+
+October 14, 2026: The pilot low and medium runs solved the hardest initial aliased-merge candidate. The waiting 12-attempt scored launcher was stopped before any scored request. Use the fourth and final screening allowance for the cross-boundary BOM issue at low with identical budget/tools. If low passes and no adaptive activation is observed, finish this as an inconclusive bounded pilot. Do not launch the scored cohort. No task, policy or grader changes are made to the running pilot. The original prospective schedule remains documented as intent, not completed evaluation.
