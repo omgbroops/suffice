@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const W=process.env.SUFFICE_WORKSPACE;
+const require=createRequire(resolve(W,'package.json'));
+const api=require(resolve(W,'src')); const missing=resolve(W,'fixtures/absent.env'),first=resolve(W,'fixtures/first.env'),second=resolve(W,'fixtures/second.env');
+test('missing explicit path never falls back',()=>{const env={};const r=api.configDotenv({path:missing,processEnv:env});assert.deepEqual(env,{});assert.deepEqual(r.parsed,{});assert.equal(r.error?.code,'ENOENT');});
+test('all-missing explicit array reports error',()=>{const env={};const r=api.configDotenv({path:[missing,missing+'2'],processEnv:env});assert.deepEqual(env,{});assert.deepEqual(r.parsed,{});assert.equal(r.error?.code,'ENOENT');});
+test('mixed valid and missing paths retain values and error',()=>{const env={};const r=api.configDotenv({path:[first,missing],processEnv:env});assert.equal(env.ORDER,'first');assert.equal(r.parsed.ORDER,'first');assert.equal(r.error?.code,'ENOENT');assert.equal(env.FALLBACK_MARKER,undefined);});
+test('array precedence and override remain intact',()=>{for(const override of [false,true]){const env={};api.configDotenv({path:[first,second],override,processEnv:env});assert.equal(env.ORDER,override?'second':'first');}});
+test('default config still uses cwd file',()=>{const env={};const r=api.configDotenv({processEnv:env});assert.equal(r.parsed.FALLBACK_MARKER,'yes');assert.equal(r.error,undefined);});

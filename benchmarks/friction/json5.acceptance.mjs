@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const W=process.env.SUFFICE_WORKSPACE;
+const require=createRequire(resolve(W,'package.json'));
+const api=require(resolve(W,'src'));
+test('NUL followed by every decimal digit',()=>{for(let d=0;d<10;d++){const v='before'+String.fromCharCode(0)+d+'after';const s=api.stringify(v);assert.doesNotThrow(()=>api.parse(s));assert.equal(api.parse(s),v);}});
+test('other NUL contexts remain valid',()=>{for(const v of ['a'+String.fromCharCode(0),'a'+String.fromCharCode(0)+'z',String.fromCharCode(0,0)+'8'])assert.equal(api.parse(api.stringify(v)),v);});
+test('nested arrays and property keys',()=>{const v={['a'+String.fromCharCode(0)+'3']:[String.fromCharCode(0)+'0',{x:String.fromCharCode(0)+'9'}]};assert.deepEqual(api.parse(api.stringify(v)),v);});
+test('supported quote choices',()=>{for(const quote of ["'",'"']){const v=String.fromCharCode(0)+'4';assert.equal(api.parse(api.stringify(v,{quote})),v);}});

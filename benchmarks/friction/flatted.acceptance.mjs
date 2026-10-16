@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const W=process.env.SUFFICE_WORKSPACE;
+const require=createRequire(resolve(W,'package.json'));
+const cjs=require(resolve(W,'src/cjs/index.js'));const esm=await import(pathToFileURL(resolve(W,'src/esm/index.js')));
+const wide=n=>JSON.stringify([Array.from({length:n},(_,i)=>String(i+1)),...Array.from({length:n},(_,i)=>({index:i,next:String((i+1)%n+1)}))]);
+test('CommonJS wide linked collection',()=>{let r;assert.doesNotThrow(()=>{r=cjs.parse(wide(6000));});assert.equal(r.length,6000);for(let i=0;i<r.length;i++)assert.equal(r[i].next,r[(i+1)%r.length]);});
+test('ESM wide linked collection',()=>{let r;assert.doesNotThrow(()=>{r=esm.parse(wide(6000));});assert.equal(r.length,6000);assert.equal(r[5999].next,r[0]);});
+test('shared references and literal strings',()=>{for(const api of [cjs,esm]){const shared={value:'123'};const r=api.parse(api.stringify({a:shared,b:shared}));assert.equal(r.a,r.b);assert.equal(r.a.value,'123');}});
+test('reviver receiver and root call',()=>{for(const api of [cjs,esm]){let root=false,receiver=false;const r=api.parse(api.stringify({a:2}),function(k,v){if(k==='')root=true;if(k==='a')receiver=this.a===2;return typeof v==='number'?v+1:v;});assert.equal(r.a,3);assert.ok(root);assert.ok(receiver);}});

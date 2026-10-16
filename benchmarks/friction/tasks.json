@@ -1,0 +1,140 @@
+[
+  {
+    "id": "json5",
+    "repository": "json5/json5",
+    "issue": "https://github.com/json5/json5/pull/210",
+    "base": "cdefab84909342af949477b319c841d760254914",
+    "fix": "3d9c22e3bb731c75413ad7686c5949856d0b52e0",
+    "title": "fix: stringify `\\0` as `\\\\x00` in some cases",
+    "body": "The following is invalid JSON5 and ES5 because a digit cannot follow a\r\nnull character escape.\r\n\r\n    '\\01'\r\n\r\nHowever, JSON5 stringifies `'\\x001'` as `'\\01'` making it impossible to\r\nround trip. This commit ensures that JSON5 stringifies null characters\r\nas `\\x00` when followed by a digit.",
+    "files": [
+      [
+        "lib/stringify.js",
+        "modified"
+      ],
+      [
+        "test/stringify.js",
+        "modified"
+      ]
+    ],
+    "prompt": "Repair JSON5 string serialization so that strings containing a NUL character immediately followed by any decimal digit produce valid JSON5 and round-trip without changing the string. Preserve handling of isolated NULs, NULs followed by non-digits, object keys, nested values and supported quote options. Locate the relevant implementation in the repository and keep unrelated serialization behavior intact.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\json5\\baseline",
+    "referenceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\json5\\reference",
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\benchmarks\\friction\\json5.acceptance.mjs",
+    "sourceFiles": [
+      "src/lib/cli.js",
+      "src/lib/index.js",
+      "src/lib/parse.js",
+      "src/lib/register.js",
+      "src/lib/require.js",
+      "src/lib/stringify.js",
+      "src/lib/unicode.js",
+      "src/lib/util.js"
+    ],
+    "taskStatus": "fresh relative to existing Suffice campaigns; researcher public-PR-authored, not contamination-free",
+    "regressionScope": "complete frozen authored Node sample, not the full original upstream suite"
+  },
+  {
+    "id": "dotenv",
+    "repository": "motdotla/dotenv",
+    "issue": "https://github.com/motdotla/dotenv/pull/814",
+    "base": "1146910932ed1dd19c2c6506f7fc6373047c1321",
+    "fix": "69241772b6f37af8e388f61916334d84ec0deeb7",
+    "title": "do not check if exists",
+    "body": null,
+    "files": [
+      [
+        "CHANGELOG.md",
+        "modified"
+      ],
+      [
+        "lib/main.js",
+        "modified"
+      ],
+      [
+        "tests/test-config.js",
+        "modified"
+      ]
+    ],
+    "prompt": "Repair dotenv's handling of explicit configuration paths. When an explicit file path or array of paths is provided, attempt those paths rather than falling back to the working directory's .env when files are missing. Return the filesystem error for missing files, preserve successfully parsed values from other supplied files, and keep normal default-path behavior plus first-file precedence and override behavior. Locate the implementation in the repository; keep parse/populate APIs compatible.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\dotenv\\baseline",
+    "referenceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\dotenv\\reference",
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\benchmarks\\friction\\dotenv.acceptance.mjs",
+    "sourceFiles": [
+      "src/lib/cli-options.js",
+      "src/lib/env-options.js",
+      "src/lib/main.js"
+    ],
+    "taskStatus": "fresh relative to existing Suffice campaigns; researcher public-PR-authored, not contamination-free",
+    "regressionScope": "complete frozen authored Node sample, not the full original upstream suite"
+  },
+  {
+    "id": "flatted",
+    "repository": "WebReflection/flatted",
+    "issue": "https://github.com/WebReflection/flatted/pull/40",
+    "base": "91e28b150597051c6ff2ad33b4d79a2e50de8fea",
+    "fix": "0a1b0053b31f74211af11792de124d1049eea7cd",
+    "title": "Fix #39 - No tail-call",
+    "body": "This MR fixes #39 by avoiding tail-call completely for any browser.",
+    "files": [
+      [
+        "cjs/index.js",
+        "modified"
+      ],
+      [
+        "es.js",
+        "modified"
+      ],
+      [
+        "esm/index.js",
+        "modified"
+      ],
+      [
+        "index.js",
+        "modified"
+      ],
+      [
+        "min.js",
+        "modified"
+      ],
+      [
+        "package.json",
+        "modified"
+      ],
+      [
+        "test/65515.json",
+        "added"
+      ],
+      [
+        "test/65518.json",
+        "added"
+      ],
+      [
+        "test/index.js",
+        "modified"
+      ]
+    ],
+    "prompt": "Repair flatted parsing for large top-level collections whose objects reference one another. Parsing a collection of thousands of mutually linked entries should avoid exhausting the JavaScript call stack, retain object identity and cycles, and preserve ordinary parse/stringify and reviver behavior. Keep the CommonJS and ES module entry points consistent. This request concerns wide linked collections; it does not require arbitrary-depth nested JSON support. Discover the relevant entry points in the repository.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\flatted\\baseline",
+    "referenceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\flatted\\reference",
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\benchmarks\\friction\\flatted.acceptance.mjs",
+    "sourceFiles": [
+      "src/cjs/index.js",
+      "src/esm/index.js"
+    ],
+    "taskStatus": "fresh relative to existing Suffice campaigns; researcher public-PR-authored, not contamination-free",
+    "regressionScope": "complete frozen authored Node sample, not the full original upstream suite"
+  },
+  {
+    "id": "pilot",
+    "repository": "synthetic activation pilot",
+    "prompt": "Fix queue draining so it returns all queued values in order and leaves the original queue empty. Discover the implementation under src/.",
+    "workspaceDir": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\.suffice\\friction-fixtures\\pilot\\baseline",
+    "sourceFiles": [
+      "src/collections/queue.js",
+      "src/collections/stack.js"
+    ],
+    "acceptancePath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice-experiments\\interface-friction\\benchmarks\\friction\\pilot.acceptance.mjs",
+    "taskStatus": "development activation pilot only"
+  }
+]
