@@ -1,0 +1,17 @@
+{
+  "study": "Accounting replay only, not an executed handoff or a causal estimate",
+  "trigger": "Frozen public-only terminal check rule",
+  "projection": [
+    {
+      "task": "q02",
+      "priorSolAccepted": true,
+      "priorSolApiEqUsd": 0.0651528,
+      "lunaApiEqUsd": 0.021569980000000002,
+      "hypotheticalSumUsd": 0.08672278
+    }
+  ],
+  "priorLunaAllTenCost": 0.13508742,
+  "hypotheticalLunaPlusStandaloneSolCost": 0.20024022000000002,
+  "deltaPercent": 48.230101663056416,
+  "limitation": "Uses old Sol from-scratch runs, different sessions/cache/allowance, and frozen primary acceptance with known posthoc miss. Actual continuation cost unknown. No performance or price-parity claim."
+}

@@ -1,0 +1,137 @@
+{
+  "frozenRule": "Original PUBLIC regression failure OR worker not completed OR no production patch. No hidden diagnostics or inference classifier.",
+  "fresh": {
+    "rows": [
+      {
+        "task": "f01",
+        "signal": false,
+        "accepted": true,
+        "budgetEligible": true,
+        "cost": 0.0070538,
+        "publicCheckSeconds": 22.759
+      },
+      {
+        "task": "f02",
+        "signal": false,
+        "accepted": true,
+        "budgetEligible": true,
+        "cost": 0.007267260000000001,
+        "publicCheckSeconds": 21.647
+      },
+      {
+        "task": "f03",
+        "signal": false,
+        "accepted": true,
+        "budgetEligible": true,
+        "cost": 0.01970096,
+        "publicCheckSeconds": 25.753
+      },
+      {
+        "task": "f04",
+        "signal": false,
+        "accepted": true,
+        "budgetEligible": true,
+        "cost": 0.006080479999999999,
+        "publicCheckSeconds": 3.536
+      },
+      {
+        "task": "f05",
+        "signal": false,
+        "accepted": true,
+        "budgetEligible": true,
+        "cost": 0.008904220000000001,
+        "publicCheckSeconds": 30.583
+      },
+      {
+        "task": "f06",
+        "signal": false,
+        "accepted": false,
+        "budgetEligible": true,
+        "cost": 0.00641446,
+        "publicCheckSeconds": 1.122
+      }
+    ],
+    "confusionAgainstFrozenGrader": {
+      "truePositive": 0,
+      "falsePositive": 0,
+      "falseNegative": 1,
+      "trueNegative": 5
+    },
+    "validatedContractOnlyConfusion": {
+      "truePositive": 0,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "trueNegative": 5
+    },
+    "limitation": "The sole frozen-grader negative is disputed f06. Zero confirmed failures on the five contract-valid cases; sensitivity to real failures is unmeasured, not 100%."
+  },
+  "developmentOnlyPriorXhigh": {
+    "rows": [
+      {
+        "task": "i01",
+        "signal": false,
+        "accepted": false
+      },
+      {
+        "task": "i02",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "i03",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "i04",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "q01",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "q02",
+        "signal": true,
+        "accepted": false
+      },
+      {
+        "task": "q04",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "s01",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "s02",
+        "signal": false,
+        "accepted": true
+      },
+      {
+        "task": "s03",
+        "signal": false,
+        "accepted": false
+      }
+    ],
+    "confusionAgainstFrozenGrader": {
+      "truePositive": 1,
+      "falsePositive": 0,
+      "falseNegative": 2,
+      "trueNegative": 7
+    },
+    "limitation": "Old s01 frozen pass has known posthoc regression, so primary labels overstate signal coverage. Not held out."
+  },
+  "deployment": "Not enabled; evaluate misses/false positives before any routing claim.",
+  "treatmentOnlyDiagnostic": {
+    "notHeldOutSignalValidation": true,
+    "case": "f01-B",
+    "publicFailureTriggeredContinuation": true,
+    "libraryBytesUnchanged": true,
+    "classification": "Sub-millisecond timing assertion instability, not demonstrated coding regression. A one-shot public failure is not reliably a coding failure."
+  }
+}

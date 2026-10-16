@@ -1,0 +1,1177 @@
+{
+  "at": "2026-10-16T01:46:12.224Z",
+  "plan": {
+    "version": "luna-fresh-v1",
+    "declaredAt": "2026-10-16T00:39:57.406551+00:00",
+    "tasks": [
+      "f01",
+      "f02",
+      "f03",
+      "f04",
+      "f05",
+      "f06"
+    ],
+    "arms": {
+      "A": {
+        "effort": "xhigh",
+        "safeguards": false
+      },
+      "B": {
+        "effort": "xhigh",
+        "safeguards": true
+      }
+    },
+    "order": [
+      {
+        "task": "f01",
+        "arm": "A"
+      },
+      {
+        "task": "f02",
+        "arm": "A"
+      },
+      {
+        "task": "f03",
+        "arm": "A"
+      },
+      {
+        "task": "f04",
+        "arm": "A"
+      },
+      {
+        "task": "f05",
+        "arm": "A"
+      },
+      {
+        "task": "f06",
+        "arm": "A"
+      },
+      {
+        "task": "f06",
+        "arm": "B"
+      },
+      {
+        "task": "f05",
+        "arm": "B"
+      },
+      {
+        "task": "f04",
+        "arm": "B"
+      },
+      {
+        "task": "f03",
+        "arm": "B"
+      },
+      {
+        "task": "f02",
+        "arm": "B"
+      },
+      {
+        "task": "f01",
+        "arm": "B"
+      }
+    ],
+    "limits": {
+      "maxCostUsd": 0.15,
+      "maxTurns": 60,
+      "maxCalls": 240,
+      "timeoutMs": 600000,
+      "commandTimeout": 180
+    },
+    "scope": "Six fresh-to-actor GitHub issues, four repositories; development task 7/10 is not validation. Baseline phase precedes treatment as requested; phase/cache order remains a limitation. Three p-map tasks share a repo: not six independent repository samples. Upstream issue bodies may contain hints. API-equivalent inference only, not subscription charges. Engineering inference excluded.",
+    "handoffSignal": {
+      "frozenBeforeLabels": true,
+      "rule": "Route only if original public regression commands fail, worker has not completed operationally, or no production patch was submitted. No hidden checks, model confidence judge, or hidden result in feedback.",
+      "cost": "Deterministic public checks; all Luna and any Sol continuation charges sum within the same .15 allowance.",
+      "initialStudy": "Offline precision/recall from A original-native result; live Sol only after staged results warrant it."
+    },
+    "plannedAggregateUsd": 1.8,
+    "solFollowupMaximumAdditionalUsd": 0.9,
+    "deadline": "2026-10-16T04:39:57.406579+00:00"
+  },
+  "rows": [
+    {
+      "id": "f01-A",
+      "task": "f01",
+      "arm": "A",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [],
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0070538,
+      "totalEstimatedUsd": 0.0070538,
+      "usage": {
+        "input": 26812,
+        "cacheRead": 117760,
+        "cacheWrite": 0,
+        "output": 6390,
+        "totalTokens": 150962,
+        "estimatedApiUsd": 0.0070538
+      },
+      "requests": 12,
+      "turns": 12,
+      "rawResponses": 12,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 34,
+      "latencyMs": 158131,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 21431,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1328,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 21130,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f01-A",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": null,
+      "patchPaths": [
+        "index.js",
+        "repro.mjs",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T00:57:00.430Z"
+    },
+    {
+      "id": "f02-A",
+      "task": "f02",
+      "arm": "A",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [],
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.007267260000000001,
+      "totalEstimatedUsd": 0.007267260000000001,
+      "usage": {
+        "input": 38229,
+        "cacheRead": 103936,
+        "cacheWrite": 0,
+        "output": 4810,
+        "totalTokens": 146975,
+        "estimatedApiUsd": 0.007267260000000001
+      },
+      "requests": 15,
+      "turns": 15,
+      "rawResponses": 15,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 32,
+      "latencyMs": 154634,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20330,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1317,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20630,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f02-A",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": null,
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:00:17.667Z"
+    },
+    {
+      "id": "f03-A",
+      "task": "f03",
+      "arm": "A",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [],
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.01970096,
+      "totalEstimatedUsd": 0.01970096,
+      "usage": {
+        "input": 94199,
+        "cacheRead": 352256,
+        "cacheWrite": 0,
+        "output": 13517,
+        "totalTokens": 459972,
+        "estimatedApiUsd": 0.01970096
+      },
+      "requests": 21,
+      "turns": 21,
+      "rawResponses": 21,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 49,
+      "latencyMs": 317852,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 24237,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1516,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 24540,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f03-A",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": null,
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:06:26.134Z"
+    },
+    {
+      "id": "f04-A",
+      "task": "f04",
+      "arm": "A",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [],
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.006080479999999999,
+      "totalEstimatedUsd": 0.006080479999999999,
+      "usage": {
+        "input": 18330,
+        "cacheRead": 104448,
+        "cacheWrite": 0,
+        "output": 6406,
+        "totalTokens": 129184,
+        "estimatedApiUsd": 0.006080479999999999
+      },
+      "requests": 12,
+      "turns": 12,
+      "rawResponses": 12,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 41,
+      "latencyMs": 150559,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1306,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2230,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1324,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f04-A",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": null,
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:09:01.871Z"
+    },
+    {
+      "id": "f05-A",
+      "task": "f05",
+      "arm": "A",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [],
+      "safeguards": false,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.008904220000000001,
+      "totalEstimatedUsd": 0.008904220000000001,
+      "usage": {
+        "input": 36358,
+        "cacheRead": 132992,
+        "cacheWrite": 0,
+        "output": 7877,
+        "totalTokens": 177227,
+        "estimatedApiUsd": 0.008904220000000001
+      },
+      "requests": 14,
+      "turns": 14,
+      "rawResponses": 14,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 29,
+      "latencyMs": 211338,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 28148,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2435,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 28247,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f05-A",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": null,
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:13:32.341Z"
+    },
+    {
+      "id": "f06-A",
+      "task": "f06",
+      "arm": "A",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [],
+      "safeguards": false,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.00641446,
+      "totalEstimatedUsd": 0.00641446,
+      "usage": {
+        "input": 23838,
+        "cacheRead": 124416,
+        "cacheWrite": 0,
+        "output": 5573,
+        "totalTokens": 153827,
+        "estimatedApiUsd": 0.00641446
+      },
+      "requests": 12,
+      "turns": 12,
+      "rawResponses": 12,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 27,
+      "latencyMs": 136428,
+      "grade": {
+        "accepted": false,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 304,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 818,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 1,
+            "latencyMs": 309,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f06-A",
+        "actorTestEditsExcluded": [
+          "test/promise.js"
+        ]
+      },
+      "firstSubmissionGrade": null,
+      "patchPaths": [
+        "queue.js",
+        "test/promise.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:15:50.512Z"
+    },
+    {
+      "id": "f06-B",
+      "task": "f06",
+      "arm": "B",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "protectedOriginalFilesRestored": 4
+        }
+      ],
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0053232800000000005,
+      "totalEstimatedUsd": 0.0053232800000000005,
+      "usage": {
+        "input": 20979,
+        "cacheRead": 76288,
+        "cacheWrite": 0,
+        "output": 4925,
+        "totalTokens": 102192,
+        "estimatedApiUsd": 0.0053232800000000005
+      },
+      "requests": 10,
+      "turns": 10,
+      "rawResponses": 10,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 25,
+      "latencyMs": 135724,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 305,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 715,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 306,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f06-B",
+        "actorTestEditsExcluded": [
+          "test/promise.js"
+        ]
+      },
+      "firstSubmissionGrade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 305,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 716,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 304,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/f06-B-first-submission",
+        "actorTestEditsExcluded": [
+          "test/promise.js"
+        ]
+      },
+      "patchPaths": [
+        "queue.js",
+        "test/promise.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:18:09.214Z"
+    },
+    {
+      "id": "f05-B",
+      "task": "f05",
+      "arm": "B",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "protectedOriginalFilesRestored": 2
+        }
+      ],
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.012991999999999998,
+      "totalEstimatedUsd": 0.012991999999999998,
+      "usage": {
+        "input": 49095,
+        "cacheRead": 243200,
+        "cacheWrite": 0,
+        "output": 11301,
+        "totalTokens": 303596,
+        "estimatedApiUsd": 0.012991999999999998
+      },
+      "requests": 20,
+      "turns": 20,
+      "rawResponses": 20,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 42,
+      "latencyMs": 310600,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 28245,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1513,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 28157,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f05-B",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 28152,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1517,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 28164,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/f05-B-first-submission",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:25:15.922Z"
+    },
+    {
+      "id": "f04-B",
+      "task": "f04",
+      "arm": "B",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "protectedOriginalFilesRestored": 2
+        }
+      ],
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.00536144,
+      "totalEstimatedUsd": 0.00536144,
+      "usage": {
+        "input": 32705,
+        "cacheRead": 34944,
+        "cacheWrite": 0,
+        "output": 3483,
+        "totalTokens": 71132,
+        "estimatedApiUsd": 0.00536144
+      },
+      "requests": 10,
+      "turns": 10,
+      "rawResponses": 10,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 21,
+      "latencyMs": 94447,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1309,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2022,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1305,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f04-B",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1306,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 2036,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 1306,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/f04-B-first-submission",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:27:00.020Z"
+    },
+    {
+      "id": "f03-B",
+      "task": "f03",
+      "arm": "B",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "protectedOriginalFilesRestored": 4
+        }
+      ],
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.0206745,
+      "totalEstimatedUsd": 0.0206745,
+      "usage": {
+        "input": 73226,
+        "cacheRead": 445440,
+        "cacheWrite": 0,
+        "output": 17795,
+        "totalTokens": 536461,
+        "estimatedApiUsd": 0.0206745
+      },
+      "requests": 20,
+      "turns": 20,
+      "rawResponses": 20,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 49,
+      "latencyMs": 437429,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 24270,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1416,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 24846,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f03-B",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 24639,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1515,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 24636,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/f03-B-first-submission",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:35:59.164Z"
+    },
+    {
+      "id": "f02-B",
+      "task": "f02",
+      "arm": "B",
+      "effort": "xhigh",
+      "safeguardEvents": [],
+      "publicGates": [
+        {
+          "phase": "initial",
+          "passed": true,
+          "nativeValid": true,
+          "protectedOriginalFilesRestored": 3
+        }
+      ],
+      "safeguards": true,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "knownEstimatedUsd": 0.00498192,
+      "totalEstimatedUsd": 0.00498192,
+      "usage": {
+        "input": 19265,
+        "cacheRead": 72192,
+        "cacheWrite": 0,
+        "output": 4667,
+        "totalTokens": 96124,
+        "estimatedApiUsd": 0.00498192
+      },
+      "requests": 10,
+      "turns": 10,
+      "rawResponses": 10,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 19,
+      "latencyMs": 140210,
+      "grade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20330,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1417,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20830,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f02-B",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20230,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1417,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20630,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/f02-B-first-submission",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:39:44.585Z"
+    },
+    {
+      "id": "f01-B",
+      "task": "f01",
+      "arm": "B",
+      "effort": "xhigh",
+      "safeguardEvents": [
+        {
+          "at": "2026-10-16T01:43:05.463Z",
+          "type": "preservation_repair",
+          "reason": "original_public_regression_failure",
+          "costBefore": 0.008288319999999998
+        }
+      ],
+      "publicGates": [
+        {
+          "phase": "initial",
+          "passed": false,
+          "nativeValid": false,
+          "protectedOriginalFilesRestored": 3
+        },
+        {
+          "phase": "after-repair",
+          "passed": true,
+          "nativeValid": true,
+          "protectedOriginalFilesRestored": 3
+        }
+      ],
+      "safeguards": true,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "knownEstimatedUsd": 0.011036099999999998,
+      "totalEstimatedUsd": 0.011036099999999998,
+      "usage": {
+        "input": 39970,
+        "cacheRead": 220160,
+        "cacheWrite": 0,
+        "output": 9675,
+        "totalTokens": 269805,
+        "estimatedApiUsd": 0.011036099999999998
+      },
+      "requests": 18,
+      "turns": 18,
+      "rawResponses": 18,
+      "failedResponses": 0,
+      "receiptsMatched": true,
+      "identity": true,
+      "tools": true,
+      "calls": 47,
+      "latencyMs": 299953,
+      "grade": {
+        "accepted": false,
+        "originalNativeValid": false,
+        "native": [
+          {
+            "exitCode": 1,
+            "latencyMs": 21132,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1421,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 1,
+            "latencyMs": 21233,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/attempts-f01-B",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "firstSubmissionGrade": {
+        "accepted": true,
+        "originalNativeValid": true,
+        "native": [
+          {
+            "exitCode": 0,
+            "latencyMs": 20932,
+            "outputLimited": false
+          },
+          {
+            "exitCode": 0,
+            "latencyMs": 1424,
+            "outputLimited": false
+          }
+        ],
+        "acceptance": [
+          {
+            "exitCode": 0,
+            "latencyMs": 21132,
+            "outputLimited": false
+          }
+        ],
+        "workspace": "/home/eric_qin/suffice-field-v1/.suffice/luna-fresh-v1/evaluation/f01-B-first-submission",
+        "actorTestEditsExcluded": [
+          "test.js"
+        ]
+      },
+      "patchPaths": [
+        "index.js",
+        "repro.mjs",
+        "test.js"
+      ],
+      "errors": [],
+      "costCapUsd": 0.15,
+      "costOvershootUsd": 0,
+      "systemPromptSha256": "26c1afcef489325ba7c57d703deead8f0d4f2dbeb83e58f3a51caacf5aaef5f1",
+      "requestToolHashes": [
+        "47814f8bde9faf7b133e78e493a144e7cea05e2167da11ceb5131ef0f5ee1a83"
+      ],
+      "end": "2026-10-16T01:46:12.179Z"
+    }
+  ],
+  "attempts": 12,
+  "accepted": 10,
+  "successes": 10,
+  "knownEstimatedUsd": 0.11579041999999999,
+  "unknownCosts": 0,
+  "scope": "Six fresh-to-actor GitHub issues, four repositories; development task 7/10 is not validation. Baseline phase precedes treatment as requested; phase/cache order remains a limitation. Three p-map tasks share a repo: not six independent repository samples. Upstream issue bodies may contain hints. API-equivalent inference only, not subscription charges. Engineering inference excluded."
+}

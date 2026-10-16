@@ -1,0 +1,699 @@
+{
+  "at": "2026-10-16T01:18:47.051Z",
+  "primaryGraderChanged": false,
+  "modelFeedback": false,
+  "originalIssue": "https://github.com/mcollina/fastq/issues/88",
+  "observation": "Upstream grader checks event array immediately after await Promise.all. Original issue requires printed event order, not drained callback completion before the Promise.all continuation. Compare eventual trace separately from that additional scheduling boundary.",
+  "rows": [
+    {
+      "label": "base",
+      "runs": [
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        },
+        {
+          "atPromiseAll": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "drained promise resolved",
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "publicExpectedTraceSatisfied": false
+        }
+      ]
+    },
+    {
+      "label": "reference",
+      "runs": [
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        }
+      ]
+    },
+    {
+      "label": "A",
+      "runs": [
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        }
+      ]
+    },
+    {
+      "label": "B",
+      "runs": [
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        },
+        {
+          "atPromiseAll": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "settledTrace": [
+            "processed",
+            "processed",
+            "processed",
+            "called drain",
+            "drained promise resolved"
+          ],
+          "publicExpectedTraceSatisfied": true
+        }
+      ]
+    }
+  ]
+}

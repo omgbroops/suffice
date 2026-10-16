@@ -1,0 +1,229 @@
+{
+  "at": "2026-10-16T01:36:22.714Z",
+  "primaryGraderChanged": false,
+  "modelFeedback": false,
+  "originalIssue": "https://github.com/sindresorhus/p-map/issues/95",
+  "contractBasis": "Original issue95 states that there is no preliminary then read so a getter is also read once. Upstream added tests count then calls but not getter reads. This separate review checks that explicit claim, across the four listed API modes.",
+  "rows": [
+    {
+      "label": "base",
+      "checks": [
+        {
+          "mode": "map",
+          "nextCalls": 2,
+          "thenGets": 6,
+          "thenCalls": 4,
+          "values": [
+            2
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": false
+        },
+        {
+          "mode": "settled",
+          "nextCalls": 2,
+          "thenGets": 6,
+          "thenCalls": 4,
+          "values": [
+            2
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": false
+        },
+        {
+          "mode": "ordered",
+          "nextCalls": 2,
+          "thenGets": 6,
+          "thenCalls": 4,
+          "values": [
+            2
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": false
+        },
+        {
+          "mode": "unordered",
+          "nextCalls": 2,
+          "thenGets": 6,
+          "thenCalls": 4,
+          "values": [
+            2
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": false
+        }
+      ]
+    },
+    {
+      "label": "reference",
+      "checks": [
+        {
+          "mode": "map",
+          "nextCalls": 4,
+          "thenGets": 8,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "settled",
+          "nextCalls": 4,
+          "thenGets": 8,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "ordered",
+          "nextCalls": 4,
+          "thenGets": 8,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "unordered",
+          "nextCalls": 4,
+          "thenGets": 8,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": false,
+          "singleSubscriptionPerPull": true
+        }
+      ]
+    },
+    {
+      "label": "A",
+      "checks": [
+        {
+          "mode": "map",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "settled",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "ordered",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "unordered",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        }
+      ]
+    },
+    {
+      "label": "B",
+      "checks": [
+        {
+          "mode": "map",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "settled",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "ordered",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        },
+        {
+          "mode": "unordered",
+          "nextCalls": 4,
+          "thenGets": 4,
+          "thenCalls": 4,
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "oneGetterReadPerPull": true,
+          "singleSubscriptionPerPull": true
+        }
+      ]
+    }
+  ]
+}
