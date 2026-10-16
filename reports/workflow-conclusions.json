@@ -1,0 +1,210 @@
+{
+  "at": "2026-10-14T22:05:40.307Z",
+  "campaign": "yaml-workflow-v1",
+  "attempts": 27,
+  "operationalSuccesses": 26,
+  "acceptedPatches": 27,
+  "knownCostLowerBound": 2.4795862399999997,
+  "unknownCosts": 1,
+  "commonGroups": [
+    "mapping-boundaries:0",
+    "folded-tabs:0",
+    "exponent-integers:0",
+    "folded-tabs:1",
+    "exponent-integers:1",
+    "mapping-boundaries:2",
+    "folded-tabs:2",
+    "exponent-integers:2"
+  ],
+  "arms": [
+    {
+      "id": "solo",
+      "attempts": 9,
+      "operationalSuccesses": 9,
+      "acceptedPatches": 9,
+      "unknownCosts": 0,
+      "commonGroups": 8,
+      "meanCost": 0.05352079999999999,
+      "meanSeconds": 47.477000000000004,
+      "meanTurns": 6.75,
+      "phaseMeanCosts": {
+        "solo": 0.05352079999999999,
+        "plan": 0,
+        "implement": 0,
+        "review": 0
+      },
+      "parentCostFraction": 0,
+      "parentChanged": 0,
+      "afterWorkerChecks": [],
+      "costChangeVsSolo": 0
+    },
+    {
+      "id": "workflow-sol",
+      "attempts": 9,
+      "operationalSuccesses": 8,
+      "acceptedPatches": 9,
+      "unknownCosts": 1,
+      "commonGroups": 8,
+      "meanCost": 0.12868875000000002,
+      "meanSeconds": 107.992125,
+      "meanTurns": 13.25,
+      "phaseMeanCosts": {
+        "solo": 0,
+        "plan": 0.05429579999999999,
+        "implement": 0.04867725,
+        "review": 0.025715700000000005
+      },
+      "parentCostFraction": 0.6217443249701313,
+      "parentChanged": 0,
+      "afterWorkerChecks": [
+        {
+          "runId": "002-mapping-boundaries-workflow-sol-r0",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "004-folded-tabs-workflow-sol-r0",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "009-exponent-integers-workflow-sol-r0",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "010-mapping-boundaries-workflow-sol-r1",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "015-folded-tabs-workflow-sol-r1",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "017-exponent-integers-workflow-sol-r1",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "021-mapping-boundaries-workflow-sol-r2",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "023-folded-tabs-workflow-sol-r2",
+          "visible": "passed",
+          "declared": "failed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "025-exponent-integers-workflow-sol-r2",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        }
+      ],
+      "costChangeVsSolo": 1.4044623772439881
+    },
+    {
+      "id": "workflow-luna",
+      "attempts": 9,
+      "operationalSuccesses": 9,
+      "acceptedPatches": 9,
+      "unknownCosts": 0,
+      "commonGroups": 8,
+      "meanCost": 0.08146819250000001,
+      "meanSeconds": 108.61300000000001,
+      "meanTurns": 15.875,
+      "phaseMeanCosts": {
+        "solo": 0,
+        "plan": 0.058508399999999995,
+        "implement": 0.0027539425000000003,
+        "review": 0.02020585
+      },
+      "parentCostFraction": 0.9661961016257969,
+      "parentChanged": 1,
+      "afterWorkerChecks": [
+        {
+          "runId": "003-mapping-boundaries-workflow-luna-r0",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "005-folded-tabs-workflow-luna-r0",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "007-exponent-integers-workflow-luna-r0",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "011-mapping-boundaries-workflow-luna-r1",
+          "visible": "passed",
+          "declared": "failed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "013-folded-tabs-workflow-luna-r1",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "018-exponent-integers-workflow-luna-r1",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "019-mapping-boundaries-workflow-luna-r2",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "024-folded-tabs-workflow-luna-r2",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        },
+        {
+          "runId": "026-exponent-integers-workflow-luna-r2",
+          "visible": "passed",
+          "declared": "passed",
+          "upstream": "passed"
+        }
+      ],
+      "costChangeVsSolo": 0.5221781531666196
+    }
+  ],
+  "lunaSavingVsWorkflowSol": 0.3669361735194413,
+  "verification": {
+    "valid": true,
+    "inputCount": 30,
+    "baselineFiles": 368,
+    "artifactBytes": 228372180,
+    "freeBytes": 7747190784
+  },
+  "unknownRuns": [
+    {
+      "runId": "010-mapping-boundaries-workflow-sol-r1",
+      "status": "provider_error",
+      "patchAccepted": true,
+      "knownEstimatedUsd": 0.19265079999999998
+    }
+  ]
+}

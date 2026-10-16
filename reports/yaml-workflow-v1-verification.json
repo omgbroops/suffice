@@ -1,0 +1,1283 @@
+{
+  "campaign": "yaml-workflow-v1",
+  "at": "2026-10-14T22:05:29.227Z",
+  "valid": true,
+  "errors": [],
+  "inputCount": 30,
+  "baselineFiles": 368,
+  "results": 27,
+  "expected": 27,
+  "artifactBytes": 228372180,
+  "freeBytes": 7747190784,
+  "rows": [
+    {
+      "runId": "001-mapping-boundaries-solo-r0",
+      "task": "mapping-boundaries",
+      "arm": "solo",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.0585688,
+      "knownEstimatedUsd": 0.0585688,
+      "seconds": 42.923,
+      "turns": 7,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 279,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 20289,
+        "output": 1209,
+        "cacheRead": 59008,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0585688,
+          "unknown": false,
+          "seconds": 41.713,
+          "turns": 7
+        }
+      ]
+    },
+    {
+      "runId": "002-mapping-boundaries-workflow-sol-r0",
+      "task": "mapping-boundaries",
+      "arm": "workflow-sol",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.1454,
+      "knownEstimatedUsd": 0.1454,
+      "seconds": 130.699,
+      "turns": 14,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 279,
+      "packetCharacters": 25112,
+      "usage": {
+        "input": 48120,
+        "output": 3316,
+        "cacheRead": 160000,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0649656,
+          "unknown": false,
+          "seconds": 54.838,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0542088,
+          "unknown": false,
+          "seconds": 45.57,
+          "turns": 4
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.026225599999999998,
+          "unknown": false,
+          "seconds": 27.687,
+          "turns": 3
+        }
+      ]
+    },
+    {
+      "runId": "003-mapping-boundaries-workflow-luna-r0",
+      "task": "mapping-boundaries",
+      "arm": "workflow-luna",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.11570246,
+      "knownEstimatedUsd": 0.11570246,
+      "seconds": 121.2,
+      "turns": 19,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 279,
+      "packetCharacters": 25088,
+      "usage": {
+        "input": 65403,
+        "output": 2796,
+        "cacheRead": 210176,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0958532,
+          "unknown": false,
+          "seconds": 50.331,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.00405446,
+          "unknown": false,
+          "seconds": 51.458,
+          "turns": 10
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0157948,
+          "unknown": false,
+          "seconds": 16.564,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "004-folded-tabs-workflow-sol-r0",
+      "task": "folded-tabs",
+      "arm": "workflow-sol",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.1032952,
+      "knownEstimatedUsd": 0.1032952,
+      "seconds": 105.832,
+      "turns": 14,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 282,
+      "packetCharacters": 6603,
+      "usage": {
+        "input": 36000,
+        "output": 2382,
+        "cacheRead": 74752,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.052850799999999996,
+          "unknown": false,
+          "seconds": 48.92,
+          "turns": 6
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0360056,
+          "unknown": false,
+          "seconds": 35.284,
+          "turns": 5
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.014438800000000002,
+          "unknown": false,
+          "seconds": 19.114,
+          "turns": 3
+        }
+      ]
+    },
+    {
+      "runId": "005-folded-tabs-workflow-luna-r0",
+      "task": "folded-tabs",
+      "arm": "workflow-luna",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.08205122,
+      "knownEstimatedUsd": 0.08205122,
+      "seconds": 94.547,
+      "turns": 17,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 282,
+      "packetCharacters": 6474,
+      "usage": {
+        "input": 44949,
+        "output": 2253,
+        "cacheRead": 86912,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.060361599999999994,
+          "unknown": false,
+          "seconds": 40.196,
+          "turns": 8
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.00215322,
+          "unknown": false,
+          "seconds": 36.674,
+          "turns": 6
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0195364,
+          "unknown": false,
+          "seconds": 15.209,
+          "turns": 3
+        }
+      ]
+    },
+    {
+      "runId": "006-folded-tabs-solo-r0",
+      "task": "folded-tabs",
+      "arm": "solo",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.034793599999999994,
+      "knownEstimatedUsd": 0.034793599999999994,
+      "seconds": 52.177,
+      "turns": 6,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 282,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 11297,
+        "output": 987,
+        "cacheRead": 23296,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.034793599999999994,
+          "unknown": false,
+          "seconds": 47.771,
+          "turns": 6
+        }
+      ]
+    },
+    {
+      "runId": "007-exponent-integers-workflow-luna-r0",
+      "task": "exponent-integers",
+      "arm": "workflow-luna",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.10215875999999999,
+      "knownEstimatedUsd": 0.10215875999999999,
+      "seconds": 88.28,
+      "turns": 12,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 267,
+      "packetCharacters": 9205,
+      "usage": {
+        "input": 53746,
+        "output": 2440,
+        "cacheRead": 84480,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0534512,
+          "unknown": false,
+          "seconds": 48.758,
+          "turns": 6
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.00215236,
+          "unknown": false,
+          "seconds": 23.855,
+          "turns": 4
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0465552,
+          "unknown": false,
+          "seconds": 12.415,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "008-exponent-integers-solo-r0",
+      "task": "exponent-integers",
+      "arm": "solo",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.0359352,
+      "knownEstimatedUsd": 0.0359352,
+      "seconds": 32.594,
+      "turns": 6,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 267,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 13523,
+        "output": 647,
+        "cacheRead": 24192,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0359352,
+          "unknown": false,
+          "seconds": 31.202,
+          "turns": 6
+        }
+      ]
+    },
+    {
+      "runId": "009-exponent-integers-workflow-sol-r0",
+      "task": "exponent-integers",
+      "arm": "workflow-sol",
+      "repetition": 0,
+      "success": true,
+      "totalEstimatedUsd": 0.1356364,
+      "knownEstimatedUsd": 0.1356364,
+      "seconds": 89.537,
+      "turns": 12,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 267,
+      "packetCharacters": 18169,
+      "usage": {
+        "input": 51715,
+        "output": 2276,
+        "cacheRead": 94464,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.052658,
+          "unknown": false,
+          "seconds": 46.817,
+          "turns": 6
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.06355999999999999,
+          "unknown": false,
+          "seconds": 24.888,
+          "turns": 4
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.019418400000000002,
+          "unknown": false,
+          "seconds": 13.882,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "010-mapping-boundaries-workflow-sol-r1",
+      "task": "mapping-boundaries",
+      "arm": "workflow-sol",
+      "repetition": 1,
+      "success": false,
+      "totalEstimatedUsd": null,
+      "knownEstimatedUsd": 0.19265079999999998,
+      "seconds": 103.067,
+      "turns": 15,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 279,
+      "packetCharacters": 18773,
+      "usage": {
+        "input": 77513,
+        "output": 2686,
+        "cacheRead": 107648,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.08980840000000001,
+          "unknown": false,
+          "seconds": 49.798,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.07405679999999999,
+          "unknown": false,
+          "seconds": 26.781,
+          "turns": 5
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "provider_error",
+          "cost": 0.0287856,
+          "unknown": true,
+          "seconds": 21.232,
+          "turns": 3
+        }
+      ]
+    },
+    {
+      "runId": "011-mapping-boundaries-workflow-luna-r1",
+      "task": "mapping-boundaries",
+      "arm": "workflow-luna",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.10920189999999999,
+      "knownEstimatedUsd": 0.10920189999999999,
+      "seconds": 156.866,
+      "turns": 24,
+      "parentChanged": true,
+      "workerVisible": "passed",
+      "workerDeclared": "failed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 279,
+      "packetCharacters": 25270,
+      "usage": {
+        "input": 56403,
+        "output": 3869,
+        "cacheRead": 308736,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0685788,
+          "unknown": false,
+          "seconds": 59.059,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.0046863,
+          "unknown": false,
+          "seconds": 57.046,
+          "turns": 13
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0359368,
+          "unknown": false,
+          "seconds": 35.838,
+          "turns": 4
+        }
+      ]
+    },
+    {
+      "runId": "012-mapping-boundaries-solo-r1",
+      "task": "mapping-boundaries",
+      "arm": "solo",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.0683116,
+      "knownEstimatedUsd": 0.0683116,
+      "seconds": 39.967,
+      "turns": 8,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 279,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 26385,
+        "output": 1046,
+        "cacheRead": 50816,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0683116,
+          "unknown": false,
+          "seconds": 38.755,
+          "turns": 8
+        }
+      ]
+    },
+    {
+      "runId": "013-folded-tabs-workflow-luna-r1",
+      "task": "folded-tabs",
+      "arm": "workflow-luna",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.06415467999999999,
+      "knownEstimatedUsd": 0.06415467999999999,
+      "seconds": 102.537,
+      "turns": 19,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 282,
+      "packetCharacters": 10495,
+      "usage": {
+        "input": 38917,
+        "output": 2920,
+        "cacheRead": 140672,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0472768,
+          "unknown": false,
+          "seconds": 39.821,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.0033582800000000004,
+          "unknown": false,
+          "seconds": 48.441,
+          "turns": 10
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0135196,
+          "unknown": false,
+          "seconds": 10.997,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "014-folded-tabs-solo-r1",
+      "task": "folded-tabs",
+      "arm": "solo",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.04436,
+      "knownEstimatedUsd": 0.04436,
+      "seconds": 34.496,
+      "turns": 5,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 282,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 17140,
+        "output": 912,
+        "cacheRead": 9600,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.04436,
+          "unknown": false,
+          "seconds": 33.393,
+          "turns": 5
+        }
+      ]
+    },
+    {
+      "runId": "015-folded-tabs-workflow-sol-r1",
+      "task": "folded-tabs",
+      "arm": "workflow-sol",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.1189508,
+      "knownEstimatedUsd": 0.1189508,
+      "seconds": 99.808,
+      "turns": 14,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 282,
+      "packetCharacters": 7933,
+      "usage": {
+        "input": 43205,
+        "output": 2504,
+        "cacheRead": 75008,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0646064,
+          "unknown": false,
+          "seconds": 52.382,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0284024,
+          "unknown": false,
+          "seconds": 23.587,
+          "turns": 4
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.025942,
+          "unknown": false,
+          "seconds": 19.521,
+          "turns": 3
+        }
+      ]
+    },
+    {
+      "runId": "016-exponent-integers-solo-r1",
+      "task": "exponent-integers",
+      "arm": "solo",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.0715392,
+      "knownEstimatedUsd": 0.0715392,
+      "seconds": 44.682,
+      "turns": 8,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 267,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 29476,
+        "output": 908,
+        "cacheRead": 35072,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0715392,
+          "unknown": false,
+          "seconds": 43.242,
+          "turns": 8
+        }
+      ]
+    },
+    {
+      "runId": "017-exponent-integers-workflow-sol-r1",
+      "task": "exponent-integers",
+      "arm": "workflow-sol",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.16086879999999998,
+      "knownEstimatedUsd": 0.16086879999999998,
+      "seconds": 90.691,
+      "turns": 13,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 267,
+      "packetCharacters": 8657,
+      "usage": {
+        "input": 65464,
+        "output": 2276,
+        "cacheRead": 71808,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0511648,
+          "unknown": false,
+          "seconds": 41.925,
+          "turns": 6
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.06269559999999999,
+          "unknown": false,
+          "seconds": 30.923,
+          "turns": 5
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.04700839999999999,
+          "unknown": false,
+          "seconds": 13.949,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "018-exponent-integers-workflow-luna-r1",
+      "task": "exponent-integers",
+      "arm": "workflow-luna",
+      "repetition": 1,
+      "success": true,
+      "totalEstimatedUsd": 0.06866126,
+      "knownEstimatedUsd": 0.06866126,
+      "seconds": 85.223,
+      "turns": 10,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 267,
+      "packetCharacters": 9418,
+      "usage": {
+        "input": 35526,
+        "output": 2288,
+        "cacheRead": 76032,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.046191199999999995,
+          "unknown": false,
+          "seconds": 40.163,
+          "turns": 5
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.0018056600000000002,
+          "unknown": false,
+          "seconds": 23.038,
+          "turns": 3
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0206644,
+          "unknown": false,
+          "seconds": 14.847,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "019-mapping-boundaries-workflow-luna-r2",
+      "task": "mapping-boundaries",
+      "arm": "workflow-luna",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.08665866,
+      "knownEstimatedUsd": 0.08665866,
+      "seconds": 137.082,
+      "turns": 15,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 279,
+      "packetCharacters": 25147,
+      "usage": {
+        "input": 48636,
+        "output": 2752,
+        "cacheRead": 141696,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0681036,
+          "unknown": false,
+          "seconds": 61.993,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.00312466,
+          "unknown": false,
+          "seconds": 43.369,
+          "turns": 6
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0154304,
+          "unknown": false,
+          "seconds": 15.084,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "020-mapping-boundaries-solo-r2",
+      "task": "mapping-boundaries",
+      "arm": "solo",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.084276,
+      "knownEstimatedUsd": 0.084276,
+      "seconds": 80.89,
+      "turns": 9,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 279,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 32802,
+        "output": 1336,
+        "cacheRead": 53120,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.084276,
+          "unknown": false,
+          "seconds": 71.278,
+          "turns": 9
+        }
+      ]
+    },
+    {
+      "runId": "021-mapping-boundaries-workflow-sol-r2",
+      "task": "mapping-boundaries",
+      "arm": "workflow-sol",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.1456832,
+      "knownEstimatedUsd": 0.1456832,
+      "seconds": 118.639,
+      "turns": 12,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 279,
+      "packetCharacters": 25208,
+      "usage": {
+        "input": 54098,
+        "output": 2630,
+        "cacheRead": 111872,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.062263599999999995,
+          "unknown": false,
+          "seconds": 61.182,
+          "turns": 6
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.067746,
+          "unknown": false,
+          "seconds": 29.673,
+          "turns": 4
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0156736,
+          "unknown": false,
+          "seconds": 15.729,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "022-folded-tabs-solo-r2",
+      "task": "folded-tabs",
+      "arm": "solo",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.0388328,
+      "knownEstimatedUsd": 0.0388328,
+      "seconds": 33.093,
+      "turns": 5,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 282,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 15146,
+        "output": 776,
+        "cacheRead": 7808,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0388328,
+          "unknown": false,
+          "seconds": 28.894,
+          "turns": 5
+        }
+      ]
+    },
+    {
+      "runId": "023-folded-tabs-workflow-sol-r2",
+      "task": "folded-tabs",
+      "arm": "workflow-sol",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.09190480000000001,
+      "knownEstimatedUsd": 0.09190480000000001,
+      "seconds": 122.471,
+      "turns": 13,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "failed",
+      "workerUpstream": "passed",
+      "finalDeclared": "failed",
+      "upstreamTests": 282,
+      "packetCharacters": 6736,
+      "usage": {
+        "input": 30007,
+        "output": 2471,
+        "cacheRead": 71808,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.040506,
+          "unknown": false,
+          "seconds": 61.119,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0359224,
+          "unknown": false,
+          "seconds": 32.712,
+          "turns": 4
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0154764,
+          "unknown": false,
+          "seconds": 18.449,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "024-folded-tabs-workflow-luna-r2",
+      "task": "folded-tabs",
+      "arm": "workflow-luna",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.05784348,
+      "knownEstimatedUsd": 0.05784348,
+      "seconds": 134.034,
+      "turns": 22,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 282,
+      "packetCharacters": 6711,
+      "usage": {
+        "input": 34310,
+        "output": 2587,
+        "cacheRead": 120832,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.041520800000000004,
+          "unknown": false,
+          "seconds": 37.46,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.00279108,
+          "unknown": false,
+          "seconds": 51.154,
+          "turns": 12
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0135316,
+          "unknown": false,
+          "seconds": 21.66,
+          "turns": 3
+        }
+      ]
+    },
+    {
+      "runId": "025-exponent-integers-workflow-sol-r2",
+      "task": "exponent-integers",
+      "arm": "workflow-sol",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.12777080000000002,
+      "knownEstimatedUsd": 0.12777080000000002,
+      "seconds": 106.26,
+      "turns": 14,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 267,
+      "packetCharacters": 8970,
+      "usage": {
+        "input": 47603,
+        "output": 2404,
+        "cacheRead": 85248,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0453512,
+          "unknown": false,
+          "seconds": 43.017,
+          "turns": 7
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0408772,
+          "unknown": false,
+          "seconds": 39.138,
+          "turns": 5
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0415424,
+          "unknown": false,
+          "seconds": 11.705,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "026-exponent-integers-workflow-luna-r2",
+      "task": "exponent-integers",
+      "arm": "workflow-luna",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.07451502,
+      "knownEstimatedUsd": 0.07451502,
+      "seconds": 106.001,
+      "turns": 13,
+      "parentChanged": false,
+      "workerVisible": "passed",
+      "workerDeclared": "passed",
+      "workerUpstream": "passed",
+      "finalDeclared": "passed",
+      "upstreamTests": 267,
+      "packetCharacters": 9229,
+      "usage": {
+        "input": 42512,
+        "output": 2559,
+        "cacheRead": 97664,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "plan",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0553088,
+          "unknown": false,
+          "seconds": 52.742,
+          "turns": 6
+        },
+        {
+          "phase": "implement",
+          "model": "gpt-6-luna",
+          "status": "completed",
+          "cost": 0.0025918200000000008,
+          "unknown": false,
+          "seconds": 27.831,
+          "turns": 5
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.0166144,
+          "unknown": false,
+          "seconds": 16.915,
+          "turns": 2
+        }
+      ]
+    },
+    {
+      "runId": "027-exponent-integers-solo-r2",
+      "task": "exponent-integers",
+      "arm": "solo",
+      "repetition": 2,
+      "success": true,
+      "totalEstimatedUsd": 0.059860800000000006,
+      "knownEstimatedUsd": 0.059860800000000006,
+      "seconds": 58.961,
+      "turns": 8,
+      "parentChanged": false,
+      "workerVisible": null,
+      "workerDeclared": null,
+      "workerUpstream": null,
+      "finalDeclared": null,
+      "upstreamTests": 267,
+      "packetCharacters": 0,
+      "usage": {
+        "input": 23968,
+        "output": 852,
+        "cacheRead": 34048,
+        "cacheWrite": 0
+      },
+      "phases": [
+        {
+          "phase": "solo",
+          "model": "gpt-6.1-sol",
+          "status": "completed",
+          "cost": 0.059860800000000006,
+          "unknown": false,
+          "seconds": 52.018,
+          "turns": 8
+        }
+      ]
+    }
+  ]
+}
