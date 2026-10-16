@@ -1,0 +1,202 @@
+[
+  {
+    "id": "n01",
+    "repository": "sindresorhus/p-queue",
+    "issue": 256,
+    "url": "https://github.com/sindresorhus/p-queue/issues/256",
+    "title": "Abort during task setup is missed before the running listener is registered",
+    "baseCommit": "de565c42a271bd3c2f8c69d3b6bce33f49f9d344",
+    "fixCommit": "507e7eeab74970b991f1335b3f08cb5e08207ca3",
+    "contractReview": {
+      "reviewedBeforeInference": true,
+      "reviewer": "parent evaluator, not a second human",
+      "mapping": "Original issue explicitly specifies synchronous abort, released concurrency slot and preservation of task-error precedence; solution hint disclosed.",
+      "originalIssueOnly": true
+    },
+    "nativeCommands": [
+      [
+        "node",
+        "--import=tsx/esm",
+        "--test",
+        "test/advanced.ts",
+        "test/basic.ts",
+        "test/debug.ts",
+        "test/priority-queue.ts",
+        "test/rate-limit.ts",
+        "test/strict.ts",
+        "test/validation.ts"
+      ],
+      [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        "--import=tsx/esm",
+        "suffice-hidden-acceptance.mjs"
+      ]
+    ],
+    "control": {
+      "passed": true,
+      "baselineNative": true,
+      "baselineAccepted": false,
+      "referenceAccepted": true
+    }
+  },
+  {
+    "id": "n02",
+    "repository": "sindresorhus/p-memoize",
+    "issue": 62,
+    "url": "https://github.com/sindresorhus/p-memoize/issues/62",
+    "title": "A synchronous cache.has exception permanently caches the rejected promise for that key",
+    "baseCommit": "0729af8f3d01177e2dd329534b1c3d2041fd6298",
+    "fixCommit": "a8cec6126e39752f3aea09bb2ee4825cc9ea58a3",
+    "contractReview": {
+      "reviewedBeforeInference": true,
+      "reviewer": "parent evaluator, not a second human",
+      "mapping": "Original issue specifies recovery after synchronous cache.has throws; solution hint disclosed. Broader unrelated clear behavior in fixing commit is not required.",
+      "originalIssueOnly": true
+    },
+    "nativeCommands": [
+      [
+        "node",
+        "--import=tsx/esm",
+        "--test",
+        "test.ts"
+      ],
+      [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        "--import=tsx/esm",
+        "suffice-hidden-acceptance.mjs"
+      ]
+    ],
+    "control": {
+      "passed": true,
+      "baselineNative": true,
+      "baselineAccepted": false,
+      "referenceAccepted": true
+    }
+  },
+  {
+    "id": "n03",
+    "repository": "sindresorhus/p-throttle",
+    "issue": 49,
+    "url": "https://github.com/sindresorhus/p-throttle/issues/49",
+    "title": "Throttle exceeds limit after a delay",
+    "baseCommit": "948b20ac621e6bc742bd9e7f6e668d69c55fcd07",
+    "fixCommit": "f92c248eef87d0f5fbb2610362560708e5c355c9",
+    "contractReview": {
+      "reviewedBeforeInference": true,
+      "reviewer": "parent evaluator, not a second human",
+      "mapping": "Strict sliding-window rate limit under delayed timers. Deterministic fake clock tests contract rather than exact spacing; excludes unrelated upstream limit-zero and exact-spacing assertions.",
+      "originalIssueOnly": true
+    },
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "--serial",
+        "--no-cache",
+        "--timeout=90s",
+        "test.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        "suffice-hidden-acceptance.mjs"
+      ]
+    ],
+    "control": {
+      "passed": true,
+      "baselineNative": true,
+      "baselineAccepted": false,
+      "referenceAccepted": true
+    }
+  },
+  {
+    "id": "n04",
+    "repository": "sindresorhus/p-retry",
+    "issue": 71,
+    "url": "https://github.com/sindresorhus/p-retry/issues/71",
+    "title": "Remove the signal.onabort listener when finished",
+    "baseCommit": "285fdc3f890a6f3d199b3d4abb0bad7c172c2233",
+    "fixCommit": "95a3a4a667494ac585e6ba7ff5154f04d30941f2",
+    "contractReview": {
+      "reviewedBeforeInference": true,
+      "reviewer": "parent evaluator, not a second human",
+      "mapping": "Listener cleanup after task settlement. Native Node24 abort wording mismatch excluded by exact named test for both actors; independent signal cleanup checks success and failure.",
+      "originalIssueOnly": true
+    },
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "--serial",
+        "--no-cache",
+        "--timeout=90s",
+        "--match=!aborts with an AbortSignal",
+        "test.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        "suffice-hidden-acceptance.mjs"
+      ]
+    ],
+    "control": {
+      "passed": true,
+      "baselineNative": true,
+      "baselineAccepted": false,
+      "referenceAccepted": true
+    }
+  },
+  {
+    "id": "n06",
+    "repository": "sindresorhus/p-retry",
+    "issue": 100,
+    "url": "https://github.com/sindresorhus/p-retry/pull/100",
+    "title": "Preserve errors for fractional retry counts",
+    "baseCommit": "35681f6c70f8ca2bdcb9542281147679184269fa",
+    "fixCommit": "3c220355c7a60e563947049ea4f5fd38e113172f",
+    "contractReview": {
+      "reviewedBeforeInference": true,
+      "reviewer": "parent evaluator, not a second human",
+      "mapping": "Fractional retry count validation from original issue. Requires TypeError and no input execution; no exact error message requirement.",
+      "originalIssueOnly": true
+    },
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "--serial",
+        "--no-cache",
+        "--timeout=90s",
+        "test.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        "suffice-hidden-acceptance.mjs"
+      ]
+    ],
+    "control": {
+      "passed": true,
+      "baselineNative": true,
+      "baselineAccepted": false,
+      "referenceAccepted": true
+    }
+  }
+]

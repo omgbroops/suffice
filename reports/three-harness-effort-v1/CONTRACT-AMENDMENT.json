@@ -1,0 +1,30 @@
+{
+  "reason": "n06 selected a PR whose fractional-retry compatibility requirements contradict the fixing commit and grader",
+  "invalidTask": "n06",
+  "preserveRawGrades": true,
+  "invalidAttemptCostsIncludedInAllAttemptLedger": true,
+  "replacement": {
+    "id": "n07",
+    "url": "https://github.com/sindresorhus/p-debounce/issues/34",
+    "title": "Keep later debounce batches abortable when an earlier call finishes",
+    "isActualIssue": true,
+    "publicRequirement": "Finishing an earlier debounce invocation must not remove the abort listener of a later waiting batch; abort rejects that batch with the original reason and prevents its execution.",
+    "controls": {
+      "passed": true,
+      "baselineAccepted": false,
+      "referenceAccepted": true
+    },
+    "taskSha256": "6bc73037b766e093c5abafb16d8c4a387f00a1106f06b648e1915239185fa86b"
+  },
+  "declaredBeforeReplacementInference": true,
+  "validTasks": [
+    "n01",
+    "n02",
+    "n03",
+    "n04",
+    "n07"
+  ],
+  "plannedValidAttempts": 30,
+  "totalAttemptsIncludingInvalid": 36,
+  "selectionLimitation": "Replacement selected after earlier task outcomes were known. All comparisons remain exploratory."
+}
