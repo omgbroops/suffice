@@ -8,7 +8,13 @@ export const REAL_ARMS = Object.freeze([
   {id:'luna-prune',model:'gpt-6-luna',prune:true},
   {id:'luna-state-prune',model:'gpt-6-luna',state:true,prune:true},
   {id:'luna-repro',model:'gpt-6-luna',repro:true},
+  {id:'luna-bo3',model:'gpt-6-luna',best:3},
 ]);
+// Best-of-N: first attempt that completed and passed the visible checks wins; otherwise the first attempt.
+export function pickAttempt(attempts){
+  const i=attempts.findIndex(a=>a.status==='completed'&&a.visiblePassed);
+  return i<0?0:i;
+}
 export const API_METHODS = new Set(['valid','clean','inc','diff','major','minor','patch','prerelease','compare','compareBuild','rcompare','gt','gte','lt','lte','eq','neq','cmp','satisfies','validRange','subset','intersects','minVersion','maxSatisfying','minSatisfying','toComparators','outside','gtr','ltr','coerce','parse']);
 export function validateCases(cases){
   if(!Array.isArray(cases)||cases.length<1||cases.length>24||JSON.stringify(cases).length>16000)throw new Error('Provide 1-24 bounded declarative cases.');
