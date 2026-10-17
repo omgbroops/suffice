@@ -1,0 +1,69 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-x1/src/index.js	2026-10-17 05:08:20
+@@ -37,7 +37,7 @@
+   var i = 0;
+   var name = 0;
+   var pos = 0;
+-  var backtrack = '';
++  var sep = ''; // literal text since the previous param or wildcard
+   var m;
+ 
+   if (path instanceof RegExp) {
+@@ -73,33 +73,34 @@
+     /\\.|(\/)?(\.)?:(\w+)(\(.*?\))?(\*)?(\?)?|[.*]|\/\(/g,
+     function (match, slash, format, key, capture, star, optional, offset) {
+       if (match[0] === '\\') {
+-        backtrack += match;
++        sep += match;
+         pos += 2;
+         return match;
+       }
+ 
+       if (match === '.') {
+-        backtrack += '\\.';
++        sep += '\\.';
+         extraOffset += 1;
+         pos += 1;
+         return '\\.';
+       }
+ 
+       if (slash || format) {
+-        backtrack = '';
++        sep = '';
+       } else {
+-        backtrack += path.slice(pos, offset);
++        sep += path.slice(pos, offset);
+       }
+ 
+       pos = offset + match.length;
+ 
+       if (match === '*') {
++        sep = '';
+         extraOffset += 3;
+         return '(.*)';
+       }
+ 
+       if (match === '/(') {
+-        backtrack += '/';
++        sep += '/';
+         extraOffset += 2;
+         return '/(?:';
+       }
+@@ -109,7 +110,7 @@
+       optional = optional || '';
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+-        (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++        (sep ? '((?:(?!/|' + sep + ').)+?)' : '([^/' + format + ']+?)');
+ 
+       keys.push({
+         name: key,
+@@ -117,6 +118,8 @@
+         offset: offset + extraOffset
+       });
+ 
++      sep = '';
++
+       var result = '(?:'
+         + format + slash + capture
+         + (star ? '((?:[/' + format + '].+?)?)' : '')

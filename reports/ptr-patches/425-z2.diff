@@ -1,0 +1,11 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-z2/src/index.js	2026-10-17 05:09:13
+@@ -110,6 +110,8 @@
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+         (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++      // Only the literal text since the previous param is the separator; earlier text must not leak in.
++      backtrack = '';
+ 
+       keys.push({
+         name: key,
