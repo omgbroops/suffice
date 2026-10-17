@@ -14,4 +14,5 @@ for (const [, neg, i, p] of src.matchAll(re)) {
   rows.push({ input: un(i), pattern: un(p), expected, bash: r.status === 0 });
 }
 const dis = rows.filter(r => r.expected !== r.bash);
-console.log(JSON.stringify({ checked: rows.length, disagree: dis.length, dis }, null, 1));
+const calls = (src.match(/isMatch\(/g) ?? []).length; // option/variable/double-quoted asserts are not replayed
+console.log(JSON.stringify({ checked: rows.length, skipped: calls - rows.length, disagree: dis.length, dis }, null, 1));
