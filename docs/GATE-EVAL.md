@@ -3,12 +3,12 @@
 What was measured (own runs, `scripts/mutant-bank.mjs`, `scripts/spec-gate-eval.mjs`; results in `.suffice/mutant-bank-results.json`):
 three real picomatch bugs (#142, #99, #187; `scripts/prepare-picomatch.mjs`), six spec files written blind by Claude subagents
 (`symptom` = issue title only; `contract` = the task prompt, which leaks the key inputs). 84 single-edit mutants of the reference fix
-were generated; 37 fail hidden acceptance (labelled wrong), the rest are equivalent or untested by the PR test.
+were generated; 37 fail hidden acceptance (labelled wrong), the other 47 are UNLABELLED (no equivalence check; the weak PR test cannot tell equivalent from missed). Mutants are clustered (e.g. 3 on one line; 5 symptom escapes all in #187), so Wilson intervals assume independence they lack; effective n is ~3 tasks.
 
 | spec set | reference passes | wrong mutants killed |
 |---|---|---|
-| symptom (3 specs) | 3/3 | 30/37 (81%, Wilson95 65-90%) |
-| contract (3 specs) | 2/3 (#142 spec asserts a wrong guess; it also rejects the reference) | 17/19 on #99+#187 (89%); #142 "18/18" is meaningless because that spec rejects everything |
+| symptom (3 specs) | 3/3 | 30/37 (81%, Wilson95 66-91%, optimistic) |
+| contract (3 specs) | 2/3 (#142 spec asserts a wrong guess; it also rejects the reference) | 17/19 on #99+#187 (90%); #142 "18/18" is meaningless because that spec rejects everything |
 
 Escapes: #187 `===` in the lone-negation check (both specs), #99 `===` bail-out (both), #187 guards (symptom only).
 
@@ -47,3 +47,11 @@ Pooled over all 15 real attempts (acceptance 11/15): visible tests agree 11/15 (
 contract spec 12/15 (1 false accept, 2 false rejects, both on the #142 contract spec that also rejects the reference). Agreement is equal, error types differ:
 leaky-prompt spec = fewer escapes but spurious rejects; issue-title spec = no spurious rejects but weak on guard-heavy bugs (#187).
 One wrong attempt (142-s2 widened strictSlashes) was correctly caught by both specs. n=15, 3 tasks, one model: direction only, no significance.
+
+
+## Refuter-6 caveats (research/refuter-6.md)
+- Cost model inputs are NOT from this data: p=1/3 and $ are semver-control; measured Haiku p=11/15. alpha .19 is mutant-based; on real wrong attempts symptom accepted 3/4 (.75), contract 1/4 (.25); with alpha .75 gate pass ~0.5. beta and g are unsourced. Treat the 87% as an artifact.
+- Symptom escapes: 7 total, incl. #142 L1184 `===`.
+- 187-a1/a3 identical diffs: 2 distinct wrong patches, 1 task. No symptom-only attempts on #187.
+- Contract pooled 12/15 includes the broken 142 spec; excluding it contract 10/12 vs symptom 9/12 (no difference).
+- Attempt reads (reference/hidden tests at absolute paths) unauditable; attempts are in gitignored .suffice. arXiv citations unverified.
