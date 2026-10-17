@@ -19,7 +19,9 @@ Replays recorded runs, no model calls. Cost is a known-cost floor (one luna-repr
 | luna-repro -> sol when repro not established | 5/6 | >=0.0372 | 3 | 1 |
 | luna -> sol when not "completed" (no-op gate) | 2/6 | 0.0048 | 0 | 4 |
 
-Caveats (refuter-3, accepted): the gate was chosen after seeing this data; n=6 is 3 tasks x 2 repetitions; pooled cheap-family
+Caveats (refuter-3/4, accepted): the replay reuses the same-repetition recorded Sol run as the escalation run (not a fresh
+workspace) and gates on status==='completed' as a proxy for `escalationNeeded`; two runs (luna-repro and luna) have unknown cost;
+Fisher exact for Sol 6/6 vs Luna 2/6 is p~0.06; pooled cheap-family counts mix five Luna variants; the gate was chosen after seeing this data; n=6 is 3 tasks x 2 repetitions; pooled cheap-family
 pass is 0/10, 3/10, 8/10 per task, so the saving is task routing, not proven gate skill; 5/6 vs 6/6 is statistically
 indistinguishable. Break-even (own arithmetic): escalation costs less than Sol-only whenever Luna's gate accepts more than
 about 7.5% of runs; the real risk is the false-accept rate, which cuts pass rate.
@@ -33,17 +35,18 @@ acceptance file; batch-queue has 4 subsets that hang to the 15 s timeout rather 
 
 ## Live campaign (when subscription auth exists)
 `node scripts/real-experiment.mjs --campaign esc-v1 --arms sol,luna,luna-repro,luna-esc,luna-review --repetitions 3`
-Needed n for a 15-point pass-rate difference (95% vs 80%) at 80% power is about 70 per arm (normal approximation, own
-calculation); the semver set has only 3 tasks, so a live result at this size is directional, not conclusive.
+Needed n for a 15-point pass-rate difference (95% vs 80%) at 80% power is about 72-75 per arm (normal approximation, own
+calculation, ignores task clustering); the semver set has only 3 tasks, so a live result at this size is directional, not conclusive.
 The catalog runner (`scripts/experiment.mjs`) has no requirement-derived gate, so `luna-esc` is wired into the real runner only.
 
 ## Why a test gate and not a Sol reviewer (from `luna-review` phases in semver-control-v1, n=6)
 Sol review phase alone costs $0.017-0.048 (mean about $0.036), roughly two thirds of a whole Sol-solo run ($0.055).
-The reviewer returned "repair" 6/6, including 3 runs whose Luna patch already passed hidden checks, so the
-repair phase ($0.024-0.097) is Sol redoing the work. An LLM verifier that reads the patch therefore cannot be cheaper than
-Sol solo here; a verifier must cost far less than about $0.01 (executable checks, not a model read) to leave any saving.
+The reviewer returned "repair" 6/6, including 3 runs whose Luna patch already passed hidden checks (its findings there cite concrete
+regressions, so the hidden checks may be weak rather than the review wasted). Measured: Sol-as-reviewer was not cheaper than Sol solo.
+Cheaper reviewers were NOT tested. Verifier budget for a gate accepting fraction a of runs is about a*0.055-0.0047 per run
+(about $0.023 at a=0.5); an executable check fits easily, a Sol read does not.
 
-## Hard-split saturation screen (Claude Haiku subagents, not Luna/Sol; n=1 per cell, 2026-10-17)
+## Hard-split saturation screen (Claude Haiku subagents, not Luna/Sol; n=1 per cell, subagent harness is not the Luna harness, isolation from acceptance files unchecked, 2026-10-17)
 Haiku solo, isolated copy, ~26k subagent tokens each: lru-flight, ttl-sweep, token-bucket, batch-queue all 4/4 accepted with the
 full contract README, and again 4/4 with a symptom-only README (no per-bug bullets). Sources are 25-40 lines, so bugs are found by
 reading. Conclusion: the four synthetic hard tasks do not discriminate even the cheapest Claude model; they remain useful as
