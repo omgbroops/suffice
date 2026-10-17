@@ -1,0 +1,12 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-b3/src/index.js	2026-10-17 05:12:19
+@@ -117,6 +117,9 @@
+         offset: offset + extraOffset
+       });
+ 
++      // Reset so a key's preceding separator doesn't accumulate into later keys' lookahead.
++      backtrack = '';
++
+       var result = '(?:'
+         + format + slash + capture
+         + (star ? '((?:[/' + format + '].+?)?)' : '')

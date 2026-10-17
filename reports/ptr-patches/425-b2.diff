@@ -1,0 +1,28 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-b2/src/index.js	2026-10-17 05:12:31
+@@ -85,10 +85,15 @@
+         return '\\.';
+       }
+ 
++      // Separator directly before this param; the param must not start with it.
++      var gap = slash || format ? '' : path.slice(pos, offset);
++      var sep = gap.match(/[^\w]$/);
++      sep = sep ? '(?!' + sep[0].replace(/\W/g, '\\$&') + ')' : '';
++
+       if (slash || format) {
+         backtrack = '';
+       } else {
+-        backtrack += path.slice(pos, offset);
++        backtrack += gap;
+       }
+ 
+       pos = offset + match.length;
+@@ -109,7 +114,7 @@
+       optional = optional || '';
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+-        (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++        (backtrack ? '(' + sep + '(?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
+ 
+       keys.push({
+         name: key,

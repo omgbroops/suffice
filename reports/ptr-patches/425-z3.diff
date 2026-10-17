@@ -1,0 +1,19 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-z3/src/index.js	2026-10-17 05:11:40
+@@ -95,6 +95,7 @@
+ 
+       if (match === '*') {
+         extraOffset += 3;
++        backtrack = '';
+         return '(.*)';
+       }
+ 
+@@ -110,6 +111,8 @@
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+         (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++      // Only the literal text since the previous param may constrain this one.
++      backtrack = '';
+ 
+       keys.push({
+         name: key,

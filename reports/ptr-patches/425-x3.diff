@@ -1,0 +1,25 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-x3/src/index.js	2026-10-17 05:11:23
+@@ -85,10 +85,12 @@
+         return '\\.';
+       }
+ 
++      var sep = '';
+       if (slash || format) {
+         backtrack = '';
+       } else {
+-        backtrack += path.slice(pos, offset);
++        sep = path.slice(pos, offset);
++        backtrack += sep;
+       }
+ 
+       pos = offset + match.length;
+@@ -109,7 +111,7 @@
+       optional = optional || '';
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+-        (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++        (backtrack ? '((?!' + sep + ')(?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
+ 
+       keys.push({
+         name: key,
