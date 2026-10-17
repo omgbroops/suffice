@@ -1,0 +1,22 @@
+[
+  {
+    "file": "src/lru.mjs",
+    "old": "    return { found: true, value: entry.value };",
+    "new": "    this.entries.delete(key); this.entries.set(key, entry);\n    return { found: true, value: entry.value };"
+  },
+  {
+    "file": "src/lru.mjs",
+    "old": "while (this.entries.size > 0 && this.entries.size + this.inflight.size > this.capacity) {",
+    "new": "while (this.entries.size > this.capacity) {"
+  },
+  {
+    "file": "src/lru.mjs",
+    "old": "    const load = (async () => {",
+    "new": "    if (this.inflight.has(key)) return this.inflight.get(key);\n    const load = (async () => {"
+  },
+  {
+    "file": "src/lru.mjs",
+    "old": "      const value = await loader();\n      this.store(key, value);\n      this.inflight.delete(key);\n      return value;",
+    "new": "      try {\n        const value = await loader();\n        this.store(key, value);\n        return value;\n      } finally {\n        this.inflight.delete(key);\n      }"
+  }
+]
