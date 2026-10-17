@@ -14,7 +14,7 @@ const base = resolve(stateDir, 'real-tasks', ID, 'workspace'), tdir = f => resol
 const prompt = readFileSync(resolve(import.meta.dirname, '../reports/ptr-prompts/symptom-only.md'), 'utf8').replace('SUFFICE_WORKSPACE=<workspace>', 'SUFFICE_WORKSPACE=$PWD');
 const pass = async (ws, f) => (await runNodeTests(ws, f)).status === 'passed';
 const load = () => existsSync(POOL) ? JSON.parse(readFileSync(POOL, 'utf8')) : [];
-const fresh = model => { const ws = mkdtempSync(resolve(realpathSync(tmpdir()), `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; };
+const fresh = model => { const ws = mkdtempSync(resolve(process.env.INREPO === '1' ? resolve(stateDir, 'tmp') : realpathSync(tmpdir()), `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; };
 const run = (model, ws, text) => new Promise(done => {
   const p = spawn('claude', ['-p', text, '--model', model, '--output-format', 'json', '--permission-mode', 'acceptEdits', '--allowedTools', 'Read Edit Write Bash Glob Grep', '--max-turns', '30'], { cwd: ws });
   let out = ''; p.stdout.on('data', d => out += d); p.on('close', () => {
