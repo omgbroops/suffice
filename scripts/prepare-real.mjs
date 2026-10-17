@@ -11,7 +11,7 @@ const receipts=[];
 const subsetSource=await readFile(resolve(upstreamDir,'test/ranges/subset.js'),'utf8');
 const literal=subsetSource.match(/const cases = (\[[\s\S]*?\n\])/)[1];
 const subsetCases=JSON.parse(JSON.stringify(runInNewContext(literal,{}, {timeout:1000})));
-for(const task of realTasks){
+for(const task of realTasks.filter(t=>!t.repo)){
   const taskDir=dirname(task.workspaceDir);
   await mkdir(resolve(task.workspaceDir,'src'),{recursive:true});
   // Retain the repository layout under src/ to reuse the existing scoped tools.
