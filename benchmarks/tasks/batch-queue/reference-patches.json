@@ -1,0 +1,22 @@
+[
+  {
+    "file": "src/batcher.mjs",
+    "old": "if (this.pending.length > this.maxSize) this.flush();",
+    "new": "if (this.pending.length >= this.maxSize) this.flush();"
+  },
+  {
+    "file": "src/batcher.mjs",
+    "old": "} catch (err) { } finally {",
+    "new": "} catch (err) { batch.forEach(entry => entry.reject(err)); } finally {"
+  },
+  {
+    "file": "src/batcher.mjs",
+    "old": "const batch = this.pending.slice();\n    try {\n      const results = await this.flushFn(batch.map(entry => entry.item));\n      this.pending = [];",
+    "new": "const batch = this.pending.splice(0);\n    try {\n      const results = await this.flushFn(batch.map(entry => entry.item));"
+  },
+  {
+    "file": "src/batcher.mjs",
+    "old": "    this.timer = null;\n    if (this.busy",
+    "new": "    clearTimeout(this.timer); this.timer = null;\n    if (this.busy"
+  }
+]

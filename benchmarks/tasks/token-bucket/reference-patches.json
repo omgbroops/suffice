@@ -1,0 +1,22 @@
+[
+  {
+    "file": "src/bucket.mjs",
+    "old": "this.tokens = this.tokens + ((t - this.lastRefill) / 1000) * this.refillPerSec;",
+    "new": "this.tokens = Math.min(this.capacity, this.tokens + ((t - this.lastRefill) / 1000) * this.refillPerSec);"
+  },
+  {
+    "file": "src/bucket.mjs",
+    "old": "this.lastRefill = this.createdAt;",
+    "new": "this.lastRefill = t;"
+  },
+  {
+    "file": "src/bucket.mjs",
+    "old": "if (n > this.tokens) { this.tokens = 0; return false; }",
+    "new": "if (n > this.tokens) return false;"
+  },
+  {
+    "file": "src/bucket.mjs",
+    "old": "return Math.ceil(deficit / this.refillPerSec);",
+    "new": "return Math.ceil((deficit * 1000) / this.refillPerSec);"
+  }
+]
