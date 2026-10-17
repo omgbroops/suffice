@@ -1,0 +1,11 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 03:45:40
++++ /tmp/ptr-t3/src/index.js	2026-10-17 03:46:50
+@@ -88,7 +88,7 @@
+       if (slash || format) {
+         backtrack = '';
+       } else {
+-        backtrack += path.slice(pos, offset);
++        backtrack = path.slice(pos, offset);
+       }
+ 
+       pos = offset + match.length;
