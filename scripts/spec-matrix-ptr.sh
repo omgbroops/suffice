@@ -1,0 +1,4 @@
+# spec x patch matrix for path-to-regexp-425 (1 = passes). Cols: symptom contract haiku, then hidden acceptance.
+cd ~/suffice; S=~/overnight-2026-10-16/tracks/harness/research/specs
+specs="$S/path-to-regexp-425.symptom.spec.mjs $S/path-to-regexp-425.contract.spec.mjs reports/picomatch-haiku-specs/path-to-regexp-425.haiku.spec.mjs"
+for w in .suffice/real-tasks/path-to-regexp-425/reference /tmp/ptr-a{1,2,3,4} /tmp/ptr-t{1,2,3,4,5,6,7} .suffice/real-tasks/path-to-regexp-425/workspace; do case $w in /*) W=$w;; *) W=$PWD/$w;; esac; printf "%-10s " $(basename $(dirname $w))/$(basename $w) ; for sp in $specs; do SUFFICE_WORKSPACE=$W node --test $sp >/dev/null 2>&1 && printf 1 || printf 0; done; SUFFICE_WORKSPACE=$W node --test benchmarks/real/path-to-regexp-425.test.mjs >/dev/null 2>&1 && echo " ACC=1" || echo " ACC=0"; done
