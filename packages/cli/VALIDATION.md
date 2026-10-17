@@ -1,5 +1,21 @@
 # CLI alpha.1 validation — 2026-10-17
 
+## Alpha.2 follow-up — simpler launch and project selection
+
+The clone now exposes its `suffice` executable directly: `npm ci` once, then `npx suffice`. The root bin entry and package-lock metadata were updated on the CLI branch; frozen experiment worktrees are untouched. A clean temporary clone layout installed all 120 dependencies successfully with ordinary `npm ci`; `npx suffice doctor` then passed without package-selection flags. `npx --offline suffice --version` also resolved the local CLI rather than an npm registry package.
+
+Interactive launches now use Pi 1.2.0's `InteractiveMode` and `AgentSessionRuntime` directly, with Suffice's existing codemode/tools and prompt. A small extension supplies the Suffice header, usage display, and `/project`/`/cd` commands. Native login, model selection, settings, session switching and input/tool rendering are inherited. Project selection uses Pi's own selector/input dialogs and its session-switch API with a valid empty session header. Each runtime rebuilds repository tools and loads only its target project's instructions.
+
+Windows terminal checks covered the native UI launch, selecting another directory through `/project`, and native quit. Automated checks cover path handling, recent projects, a valid Pi session target, invalid-path rejection, and distinct repository instructions/history with zero inference. Root `npx suffice` and fresh dependency installation were verified without the previous package flags. Helper state is directed to the selected Suffice home and embedded-engine update advertisements are disabled. Some upstream Pi wording and resume hints remain; use `npx suffice --continue` from the checkout or the native `/resume` picker.
+
+macOS remains unverified on physical hardware. The original alpha.1 live-model receipts below remain unchanged; this UI follow-up does not claim a new benchmark result.
+
+A Sonion Linux smoke run also called the session directly, as the native UI does, instead of going through the print wrapper. Codemode executed the verification command successfully; two responses cost $0.0042868 API-equivalent with complete usage. Its events include the native lifecycle task-end record. This checks that usage accounting remains active when Pi owns the input loop.
+
+Final alpha.2: six automated tests pass. The native selector and directory-input dialog were also exercised through an actual terminal before successfully switching projects. The alpha.2 tarball contains thirteen allowlisted files, is 28,742 bytes compressed, and has SHA-256 `eaae7533b14065f0eb799a77a04cba7db3f76b9ff6b5c8027489a598304752b1`. Source, documentation and metadata decode as UTF-8.
+
+## Original alpha.1 validation
+
 This release packages a general-v1-derived agent for interactive use. No frozen benchmark source, configuration or artifact was modified. The main research launcher remains `npm run pi`; the new product is `packages/cli/bin/suffice.mjs`.
 
 Verified:
