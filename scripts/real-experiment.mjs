@@ -1,8 +1,8 @@
-import {readFile,writeFile,mkdir,cp,statfs,rm} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,cp,statfs} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {createRuntime,stateDir,root} from '../src/runtime.mjs';
 import {realTasks,repository,baseRevision} from '../benchmarks/real/tasks.mjs';
-import {REAL_ARMS,parseReview,aggregatePhases,reviewEligible,phaseCompletion,pickAttempt} from '../src/real-policy.mjs';
+import {REAL_ARMS,parseReview,aggregatePhases,reviewEligible,phaseCompletion} from '../src/real-policy.mjs';
 import {runRealAgent,sourceSnapshot} from '../src/real-agent.mjs';
 import {filesIn,hash,runNodeTests} from '../src/workspace.mjs';
 
@@ -38,22 +38,9 @@ for(const [index,item]of schedule.entries()){
   const workspace=resolve(runDir,'workspace');await cp(task.workspaceDir,workspace,{recursive:true});
   console.log(JSON.stringify({event:'run_start',runId,index:index+1,total:schedule.length}));
   const params={runtime,workspace,baseline:task.workspaceDir,sourceFiles:validation.sourceFiles,task,arm};
-  let worker=await runRealAgent({...params,runDir:resolve(runDir,'worker')});
-  const extra=[];
-  if(arm.best>1){
-    // Attempts run on fresh copies; stop at the first one passing visible tests, then promote it to `workspace`.
-    const attempts=[{worker,dir:workspace,visiblePassed:(await runNodeTests(workspace,resolve(workspace,'tests/visible.test.mjs'))).status==='passed'}];
-    for(let n=2;n<=arm.best&&!(attempts.at(-1).worker.status==='completed'&&attempts.at(-1).visiblePassed);n++){
-      const dir=resolve(runDir,`workspace-${n}`);await cp(task.workspaceDir,dir,{recursive:true});
-      const w=await runRealAgent({...params,workspace:dir,runDir:resolve(runDir,`worker-${n}`)});
-      attempts.push({worker:w,dir,visiblePassed:(await runNodeTests(dir,resolve(dir,'tests/visible.test.mjs'))).status==='passed'});
-    }
-    const chosen=attempts[pickAttempt(attempts.map(a=>({status:a.worker.status,visiblePassed:a.visiblePassed})))];
-    if(chosen.dir!==workspace){await rm(workspace,{recursive:true,force:true});await cp(chosen.dir,workspace,{recursive:true});}
-    worker=chosen.worker;extra.push(...attempts.filter(a=>a!==chosen).map(a=>a.worker));
-  }
+  const worker=await runRealAgent({...params,runDir:resolve(runDir,'worker')});
   await writeFile(resolve(runDir,'worker.json'),JSON.stringify(worker,null,2));
-  const phases=[worker,...extra];let review=null,preReviewWorkspace=null;
+  const phases=[worker];let review=null,preReviewWorkspace=null;
   if(arm.review&&reviewEligible(worker.status)){
     preReviewWorkspace=resolve(runDir,'before-review');await cp(workspace,preReviewWorkspace,{recursive:true});
     const assessment=await runRealAgent({...params,arm:{...arm,state:false,prune:false,repro:false},phase:'review',runDir:resolve(runDir,'review'),timeoutMs:180000,maxTurns:12,

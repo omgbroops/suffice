@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {compactReadOutputs,validateCases,parseReview,aggregatePhases,caseTestSource,phaseCompletion,reviewEligible,pickAttempt,REAL_ARMS} from '../src/real-policy.mjs';
+import {compactReadOutputs,validateCases,parseReview,aggregatePhases,caseTestSource,phaseCompletion,reviewEligible} from '../src/real-policy.mjs';
 test('pruning preserves task instructions, edits, tests and recent evidence',()=>{
   const messages=[{role:'user',content:'contract'},
     {role:'assistant',content:[]},{role:'toolResult',toolName:'file_read',content:[{type:'text',text:'x'.repeat(20000)}]},
@@ -40,9 +40,4 @@ test('review can rescue exhausted workers but cannot hide provider or repair fai
   assert.equal(phaseCompletion([{status:'completed'},{status:'completed'},{status:'timeout'}],arm,review),'timeout');
   assert.equal(phaseCompletion([{status:'provider_error'}],arm,review),'provider_error');
   assert.equal(phaseCompletion([{status:'completed',reproduction:{before:'failed',after:'failed'}}],{repro:true}),'verification_failed');
-});
-test('best-of-N picks first completed attempt passing visible checks, else the first',()=>{
-  assert.equal(pickAttempt([{status:'completed',visiblePassed:false},{status:'timeout',visiblePassed:true},{status:'completed',visiblePassed:true}]),2);
-  assert.equal(pickAttempt([{status:'completed',visiblePassed:false},{status:'completed',visiblePassed:false}]),0);
-  assert.equal(REAL_ARMS.find(a=>a.id==='luna-bo3').best,3);
 });
