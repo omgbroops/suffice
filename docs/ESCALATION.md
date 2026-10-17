@@ -36,3 +36,9 @@ acceptance file; batch-queue has 4 subsets that hang to the 15 s timeout rather 
 Needed n for a 15-point pass-rate difference (95% vs 80%) at 80% power is about 70 per arm (normal approximation, own
 calculation); the semver set has only 3 tasks, so a live result at this size is directional, not conclusive.
 The catalog runner (`scripts/experiment.mjs`) has no requirement-derived gate, so `luna-esc` is wired into the real runner only.
+
+## Why a test gate and not a Sol reviewer (from `luna-review` phases in semver-control-v1, n=6)
+Sol review phase alone costs $0.017-0.048 (mean about $0.036), roughly two thirds of a whole Sol-solo run ($0.055).
+The reviewer returned "repair" 6/6, including 3 runs whose Luna patch already passed hidden checks, so the
+repair phase ($0.024-0.097) is Sol redoing the work. An LLM verifier that reads the patch therefore cannot be cheaper than
+Sol solo here; a verifier must cost far less than about $0.01 (executable checks, not a model read) to leave any saving.
