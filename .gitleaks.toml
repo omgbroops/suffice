@@ -1,0 +1,8 @@
+[extend]
+useDefault = true
+
+# Reviewed 2026-10-17: 151 hits are sha256 fixture hashes in reports/*.json; 29 are GitHub's public client-side
+# Segment writeKey inside archived node-fetch timeline pages. No credentials.
+[[allowlists]]
+description = "archived reports and historical research fixtures"
+paths = ['''^reports/.*\.json$''', '''^research/historical/.*''']
