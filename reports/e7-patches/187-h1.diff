@@ -1,0 +1,9 @@
+--- .suffice/real-tasks/picomatch-187/workspace/src/lib/parse.js	2026-10-17 01:45:20
++++ .suffice/attempts-e7/picomatch-187-h1/src/lib/parse.js	2026-10-17 02:43:37
+@@ -749,5 +749,5 @@
+       }
+ 
+-      if (opts.posix === true && value === '!' && prev.value === '[') {
++      if (value === '!' && prev.value === '[') {
+         value = '^';
+       }
