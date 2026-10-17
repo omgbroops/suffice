@@ -9,7 +9,7 @@ const specsDir = resolve(process.argv[2] ?? resolve(import.meta.dirname, '../../
 const specs = (await readdir(specsDir)).filter(f => /\.spec\.mjs$/.test(f)).sort();
 const rows = [];
 for (const dir of (await readdir(resolve(stateDir, 'attempts'))).sort()) {
-  const [, id] = /^([a-z]+-\d+)-[as]\d+$/.exec(dir) ?? []; if (!id) continue;
+  const [, id] = /^([a-z-]+?-\d+)-[ast]\d+$/.exec(dir) ?? []; if (!id) continue;
   const ws = resolve(stateDir, 'attempts', dir), base = resolve(stateDir, 'real-tasks', id, 'workspace');
   const status = async p => (await runNodeTests(ws, p)).status === 'passed';
   const row = { attempt: dir, acceptance: await status(resolve(import.meta.dirname, `../benchmarks/real/${id}.test.mjs`)), visible: await status(resolve(ws, 'tests/visible.test.mjs')) };
