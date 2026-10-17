@@ -64,3 +64,6 @@ The spec's `test/utils/x.js` vs `test(/utils/**)/x.js` assertion contradicted th
 
 ## Addendum 3: gate model with measured p/alpha (refuter-6b: addenda numbers verified; framing = 2 distinct wrong patches on 1 task, contract spec fixed post-hoc, 38k tokens unverifiable)
 `--gate-model` now also prints p=11/18, beta=0, g=$0.01 (invented), $ from semver-control: symptom gate $0.018 / pass 0.67; contract gate $0.033 / pass 0.94; Sol solo $0.055 / 1.0. Contract looks ~40% cheaper at ~94% pass, but alpha=1/7 rests on 2 distinct wrong patches and beta=0 on a spec tuned after the fact. UNVERIFIED as a Luna/Sol result.
+
+## Addendum 4: picomatch-202 (newline in globstar, PR #202 applied to 4.0.7)
+Task validated (baseline fails / reference passes). 3 symptom-only Haiku attempts: 3/3 pass acceptance, identical fix (`.` -> `[\s\S]`). Saturated, no gate information; no specs written for it. #197 considered and dropped (already fixed in 4.0.7 base). Pooled: 21 attempts, 14 correct; still only #187 (and 142-s2) produce wrong patches.
