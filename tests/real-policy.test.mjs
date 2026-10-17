@@ -52,3 +52,8 @@ test('escalation fires unless the cheap worker proved fail-then-pass',()=>{
   assert.equal(phaseCompletion([{status:'verification_failed'},{status:'completed'}],arm),'completed');
   assert.equal(phaseCompletion([{status:'verification_failed'},{status:'timeout'}],arm),'timeout');
 });
+test('infrastructure errors do not trigger escalation',()=>{
+  assert.equal(escalationNeeded({status:'provider_error'}),false);
+  assert.equal(escalationNeeded({status:'harness_error'}),false);
+  assert.equal(escalationNeeded({status:'timeout'}),true);
+});

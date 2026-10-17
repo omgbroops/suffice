@@ -68,7 +68,7 @@ for(const [index,item]of schedule.entries()){
   const completion=phaseCompletion(phases,arm,review),completed=completion==='completed';
   const original=await sourceSnapshot(task.workspaceDir,validation.sourceFiles),current=await sourceSnapshot(workspace,validation.sourceFiles);
   const changed=validation.sourceFiles.filter(p=>original[p]!==current[p]);
-  const result={runId,...item,...aggregate,status:completion,success:completed&&patchAccepted,patchAccepted,immutableIntact,changed,
+  const result={runId,...item,...aggregate,status:completion,success:completed&&patchAccepted,escalated:phases.length>1&&!!arm.escalate,patchAccepted,immutableIntact,changed,
     phases,review,acceptance:{...acceptance,stdout:undefined,stderr:undefined},regression:{...regression,stdout:undefined,stderr:undefined},
     beforeReviewAccepted:beforeReviewAcceptance?.status==='passed',endedAt:new Date().toISOString()};
   await writeFile(resolve(runDir,'acceptance.json'),JSON.stringify({acceptance,regression,beforeReviewAcceptance},null,2));
@@ -77,7 +77,7 @@ for(const [index,item]of schedule.entries()){
   console.log(JSON.stringify({event:'run_end',runId,success:result.success,status:result.status,cost:result.totalEstimatedUsd,turns:aggregate.turns,review:review?.verdict,pruned:worker.prunedRequests,repro:worker.reproduction?.after}));
   const authorizationFailure=phases.some(p=>(p.errors??[]).some(e=>/unauthoriz|authentication|invalid.*token|expired.*token|quota|usage.limit|subscription|insufficient|rate.limit/i.test(e)));
   if(authorizationFailure){console.log(JSON.stringify({event:'campaign_stopped',reason:'authorization_or_usage_limit'}));process.exitCode=3;break;}
-  const providerProblem=phases.some(p=>p.status==='provider_error'||p.status==='harness_error');consecutiveErrors=providerProblem?consecutiveErrors+1:0;
+  const providerProblem=(arm.escalate?phases.slice(-1):phases).some(p=>p.status==='provider_error'||p.status==='harness_error');consecutiveErrors=providerProblem?consecutiveErrors+1:0;
   if(consecutiveErrors>=2){console.log(JSON.stringify({event:'campaign_stopped',reason:'two_provider_or_harness_failures'}));process.exitCode=2;break;}
 }
 console.log(JSON.stringify({event:process.exitCode?'campaign_partial':'campaign_complete',directory,knownCost}));

@@ -51,7 +51,8 @@ export function aggregatePhases(phases){
   return {usage,knownEstimatedUsd:usage.estimatedApiUsd,totalEstimatedUsd:unknown?null:usage.estimatedApiUsd,usageCostUnknown:unknown,latencyMs:phases.reduce((n,p)=>n+p.latencyMs,0),turns:phases.reduce((n,p)=>n+p.turns,0)};
 }
 // Escalate to a fresh Sol attempt unless Luna established a failing reproducer and then made it pass.
-export function escalationNeeded(worker){return !(worker.status==='completed'&&worker.reproduction?.before==='failed'&&worker.reproduction?.after==='passed');}
+// Provider/harness errors never escalate (they are infrastructure, not capability, failures).
+export function escalationNeeded(worker){return ['completed','verification_failed','turn_limit','tool_limit','timeout'].includes(worker.status)&&!(worker.status==='completed'&&worker.reproduction?.before==='failed'&&worker.reproduction?.after==='passed');}
 export function reviewEligible(status){return ['completed','turn_limit','tool_limit','timeout'].includes(status);}
 export function phaseCompletion(phases,arm,review){
   const worker=phases[0];
