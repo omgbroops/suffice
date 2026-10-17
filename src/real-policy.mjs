@@ -8,6 +8,7 @@ export const REAL_ARMS = Object.freeze([
   {id:'luna-prune',model:'gpt-6-luna',prune:true},
   {id:'luna-state-prune',model:'gpt-6-luna',state:true,prune:true},
   {id:'luna-repro',model:'gpt-6-luna',repro:true},
+  {id:'luna-esc',model:'gpt-6-luna',repro:true,escalate:true},
 ]);
 export const API_METHODS = new Set(['valid','clean','inc','diff','major','minor','patch','prerelease','compare','compareBuild','rcompare','gt','gte','lt','lte','eq','neq','cmp','satisfies','validRange','subset','intersects','minVersion','maxSatisfying','minSatisfying','toComparators','outside','gtr','ltr','coerce','parse']);
 export function validateCases(cases){
@@ -49,9 +50,12 @@ export function aggregatePhases(phases){
   const unknown=phases.some(p=>p.usageCostUnknown);
   return {usage,knownEstimatedUsd:usage.estimatedApiUsd,totalEstimatedUsd:unknown?null:usage.estimatedApiUsd,usageCostUnknown:unknown,latencyMs:phases.reduce((n,p)=>n+p.latencyMs,0),turns:phases.reduce((n,p)=>n+p.turns,0)};
 }
+// Escalate to a fresh Sol attempt unless Luna established a failing reproducer and then made it pass.
+export function escalationNeeded(worker){return !(worker.status==='completed'&&worker.reproduction?.before==='failed'&&worker.reproduction?.after==='passed');}
 export function reviewEligible(status){return ['completed','turn_limit','tool_limit','timeout'].includes(status);}
 export function phaseCompletion(phases,arm,review){
   const worker=phases[0];
+  if(arm.escalate&&phases.length>1)return phases.at(-1).status;
   if(!arm.review){
     if(worker.status!=='completed')return worker.status;
     if(arm.repro&&!(worker.reproduction?.before==='failed'&&worker.reproduction?.after==='passed'))return 'verification_failed';

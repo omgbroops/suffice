@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {compactReadOutputs,validateCases,parseReview,aggregatePhases,caseTestSource,phaseCompletion,reviewEligible} from '../src/real-policy.mjs';
+import {compactReadOutputs,validateCases,parseReview,aggregatePhases,caseTestSource,phaseCompletion,reviewEligible,escalationNeeded} from '../src/real-policy.mjs';
 test('pruning preserves task instructions, edits, tests and recent evidence',()=>{
   const messages=[{role:'user',content:'contract'},
     {role:'assistant',content:[]},{role:'toolResult',toolName:'file_read',content:[{type:'text',text:'x'.repeat(20000)}]},
@@ -40,4 +40,15 @@ test('review can rescue exhausted workers but cannot hide provider or repair fai
   assert.equal(phaseCompletion([{status:'completed'},{status:'completed'},{status:'timeout'}],arm,review),'timeout');
   assert.equal(phaseCompletion([{status:'provider_error'}],arm,review),'provider_error');
   assert.equal(phaseCompletion([{status:'completed',reproduction:{before:'failed',after:'failed'}}],{repro:true}),'verification_failed');
+});
+test('escalation fires unless the cheap worker proved fail-then-pass',()=>{
+  const ok={status:'completed',reproduction:{before:'failed',after:'passed'}};
+  assert.equal(escalationNeeded(ok),false);
+  assert.equal(escalationNeeded({status:'completed'}),true);
+  assert.equal(escalationNeeded({...ok,status:'verification_failed'}),true);
+  assert.equal(escalationNeeded({status:'completed',reproduction:{before:'failed',after:'failed'}}),true);
+  const arm={escalate:true,repro:true};
+  assert.equal(phaseCompletion([ok],arm),'completed');
+  assert.equal(phaseCompletion([{status:'verification_failed'},{status:'completed'}],arm),'completed');
+  assert.equal(phaseCompletion([{status:'verification_failed'},{status:'timeout'}],arm),'timeout');
 });

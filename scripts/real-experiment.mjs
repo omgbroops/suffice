@@ -1,8 +1,8 @@
-import {readFile,writeFile,mkdir,cp,statfs} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,cp,rm,statfs} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {createRuntime,stateDir,root} from '../src/runtime.mjs';
 import {realTasks,repository,baseRevision} from '../benchmarks/real/tasks.mjs';
-import {REAL_ARMS,parseReview,aggregatePhases,reviewEligible,phaseCompletion} from '../src/real-policy.mjs';
+import {REAL_ARMS,parseReview,aggregatePhases,reviewEligible,phaseCompletion,escalationNeeded} from '../src/real-policy.mjs';
 import {runRealAgent,sourceSnapshot} from '../src/real-agent.mjs';
 import {filesIn,hash,runNodeTests} from '../src/workspace.mjs';
 
@@ -41,6 +41,10 @@ for(const [index,item]of schedule.entries()){
   const worker=await runRealAgent({...params,runDir:resolve(runDir,'worker')});
   await writeFile(resolve(runDir,'worker.json'),JSON.stringify(worker,null,2));
   const phases=[worker];let review=null,preReviewWorkspace=null;
+  if(arm.escalate&&escalationNeeded(worker)){
+    await rm(workspace,{recursive:true});await cp(task.workspaceDir,workspace,{recursive:true});
+    phases.push(await runRealAgent({...params,arm:REAL_ARMS.find(a=>a.id==='sol'),runDir:resolve(runDir,'escalation')}));
+  }
   if(arm.review&&reviewEligible(worker.status)){
     preReviewWorkspace=resolve(runDir,'before-review');await cp(workspace,preReviewWorkspace,{recursive:true});
     const assessment=await runRealAgent({...params,arm:{...arm,state:false,prune:false,repro:false},phase:'review',runDir:resolve(runDir,'review'),timeoutMs:180000,maxTurns:12,
