@@ -16,7 +16,7 @@ export function replay(runs,{cheap='luna-repro',strong='sol',gate=r=>r.status===
 }
 export function summarize(name,rows){
   const n=rows.length,ok=rows.filter(r=>r.success).length,usd=rows.reduce((a,r)=>a+r.usd,0);
-  return {policy:name,n,pass:`${ok}/${n}`,meanUsd:+(usd/n).toFixed(4),usdPerSuccess:ok?+(usd/ok).toFixed(4):null,escalated:rows.filter(r=>r.escalated).length,gateFalseAccepts:rows.filter(r=>r.gateWrong).length,runsWithUnknownCost:rows.filter(r=>r.unknown).length};
+  return {policy:name,n,pass:`${ok}/${n}`,meanUsdKnownFloor:+(usd/n).toFixed(4),usdPerSuccess:ok?+(usd/ok).toFixed(4):null,escalated:rows.filter(r=>r.escalated).length,gateFalseAccepts:rows.filter(r=>r.gateWrong).length,runsWithUnknownCost:rows.filter(r=>r.unknown).length};
 }
 export function plain(runs,arm){return runs.filter(r=>r.arm===arm).map(r=>({k:`${r.task}#${r.repetition}`,escalated:false,success:r.success,usd:r.knownEstimatedUsd,unknown:r.usageCostUnknown,gateWrong:false}));}
 // Pooled attempts per task from the cheap family: if no attempt ever passes, best-of-N cannot help.
