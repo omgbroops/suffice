@@ -42,3 +42,11 @@ Sol review phase alone costs $0.017-0.048 (mean about $0.036), roughly two third
 The reviewer returned "repair" 6/6, including 3 runs whose Luna patch already passed hidden checks, so the
 repair phase ($0.024-0.097) is Sol redoing the work. An LLM verifier that reads the patch therefore cannot be cheaper than
 Sol solo here; a verifier must cost far less than about $0.01 (executable checks, not a model read) to leave any saving.
+
+## Hard-split saturation screen (Claude Haiku subagents, not Luna/Sol; n=1 per cell, 2026-10-17)
+Haiku solo, isolated copy, ~26k subagent tokens each: lru-flight, ttl-sweep, token-bucket, batch-queue all 4/4 accepted with the
+full contract README, and again 4/4 with a symptom-only README (no per-bug bullets). Sources are 25-40 lines, so bugs are found by
+reading. Conclusion: the four synthetic hard tasks do not discriminate even the cheapest Claude model; they remain useful as
+selector-validity fixtures (mutant matrix) but not as a capability benchmark. Discriminating signal so far came only from real-repo
+tasks (node-semver: Luna 2/6). Different model family than the Luna arm, so Luna saturation is UNVERIFIED. Next tasks need real
+multi-file code with ambiguous reports.
