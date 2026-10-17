@@ -2,7 +2,7 @@
 // `table` replays variant policies over the pool, so every variant is priced from measured attempts, not simulated ones.
 // Usage: node scripts/variants.mjs collect <model> <n> [tag] | node scripts/variants.mjs table
 // shortcut: one task (path-to-regexp-425), policies are offline replays over pooled attempts; upgrade to live per-variant runs when a task has >1 non-saturated case.
-import { cpSync, mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { cpSync, realpathSync, mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
@@ -14,12 +14,13 @@ const base = resolve(stateDir, 'real-tasks', ID, 'workspace'), tdir = f => resol
 const prompt = readFileSync(resolve(import.meta.dirname, '../reports/ptr-prompts/symptom-only.md'), 'utf8').replace('SUFFICE_WORKSPACE=<workspace>', 'SUFFICE_WORKSPACE=$PWD');
 const pass = async (ws, f) => (await runNodeTests(ws, f)).status === 'passed';
 const load = () => existsSync(POOL) ? JSON.parse(readFileSync(POOL, 'utf8')) : [];
-const fresh = model => { const ws = mkdtempSync(resolve(stateDir, 'tmp', `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; };
+const fresh = model => { const ws = mkdtempSync(resolve(realpathSync(tmpdir()), `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; };
 const run = (model, ws, text) => new Promise(done => {
   const p = spawn('claude', ['-p', text, '--model', model, '--output-format', 'json', '--permission-mode', 'acceptEdits', '--allowedTools', 'Read Edit Write Bash Glob Grep', '--max-turns', '30'], { cwd: ws });
   let out = ''; p.stdout.on('data', d => out += d); p.on('close', () => {
     let j = {}; try { j = JSON.parse(out); } catch {}
     const u = j.usage ?? {};
+    if (j.total_cost_usd == null) console.error('WARN: no cost in claude output'); // refuter-11: silent $0 made arms look cheaper
     done({ usd: j.total_cost_usd ?? 0, tokens: (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0) + (u.output_tokens ?? 0) });
   });
 });
@@ -27,7 +28,7 @@ const score = async ws => ({ visible: await pass(ws, resolve(ws, 'tests/visible.
 const attempt = async (model, tag, i) => { const ws = fresh(model), r = await run(model, ws, prompt); return { id: `${model}-${tag}${i}`, model, ...r, ...await score(ws) }; };
 // V4 counterexample-driven repair: free property gate -> feed the violating probe back to the same cheap model, up to 2 rounds.
 const repair = async (model, tag, i) => { const ws = fresh(model); let r = await run(model, ws, prompt), s = await score(ws), rounds = 0;
-  while (rounds < 2 && !s.property) { const v = violations(ws)[0]; rounds++; const x = await run(model, ws, `${prompt}\n\nYour current patch in this workspace is still wrong: ${v.replace(' ~ ', '.exec on ')} succeeds and a captured parameter starts with the separator that precedes it in the pattern. Fix src so no such match exists, keeping the smoke test green.`); r = { usd: r.usd + x.usd, tokens: r.tokens + x.tokens }; s = await score(ws); }
+  while (rounds < 2 && !s.property) { const v = violations(ws)[0]; rounds++; const x = await run(model, ws, `${prompt}\n\nYour current patch in this workspace is still wrong: ${/MUST-MATCH|CRASH/.test(v) ? `${v} (a valid pattern no longer matches or throws)` : `${v.replace(' ~ ', '.exec on ')} succeeds and a captured parameter starts with the separator that precedes it in the pattern`}. Fix src so this is resolved, keeping the smoke test green.`); r = { usd: r.usd + x.usd, tokens: r.tokens + x.tokens }; s = await score(ws); }
   return { id: `${model}-repair-${tag}${i}`, model: `${model}-repair`, rounds, ...r, ...s }; };
 if (process.argv[2] === 'collect') { // POOL path: reports/variants-pool.json, or ..-repair.json when mode=repair
   const [, , , model, n, tag = 'v', mode] = process.argv, pool = load(), go = mode === 'repair' ? repair : attempt;
