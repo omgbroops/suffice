@@ -120,7 +120,7 @@ export async function runRealAgent({runtime,workspace,baseline,sourceFiles,runDi
       log({type:'assistant',turn:turns,model:m.model,usage:m.usage,stopReason:m.stopReason,content:m.content.filter(p=>p.type!=='thinking'),error:m.stopReason==='error'?safeError(m.errorMessage):undefined});
       if(turns>=maxTurns&&m.content.some(p=>p.type==='toolCall'))abort('turn_limit');
     }});
-    await session.prompt(`Repository: node-semver, under src/. Read README.md for workspace details.\nTask: ${task.prompt}\n${feedback}`);
+    await session.prompt(`Repository: ${task.repo??'node-semver'}, under src/. Read README.md for workspace details.\nTask: ${task.prompt}\n${feedback}`);
     const last=[...session.messages].reverse().find(m=>m.role==='assistant');
     const status=abortReason??(['error','aborted'].includes(last?.stopReason)?'provider_error':'completed');
     let reproAfter=null;if(reproduction)reproAfter=await runNodeTests(workspace,reproduction.path);
