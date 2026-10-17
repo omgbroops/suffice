@@ -61,3 +61,6 @@ All 3 (s1-s3) make the same 2-line edit (drop the `opts.posix` guard), fail acce
 
 ## Addendum 2: #142 contract spec fixed
 The spec's `test/utils/x.js` vs `test(/utils/**)/x.js` assertion contradicted the reference (reference: false); removed. Spec now passes reference (7/7). Rescored all 18 attempts (reports/picomatch-haiku-attempts-v2.json): acceptance 11/18, visible 18/18 agree only 11/18; symptom spec agrees 12/18; contract agrees 17/18 (misses 187-a2). Wrong attempts = 7 (142-s2, 187 x6): symptom accepts 6/7, contract accepts 1/7. Still 2 tasks that discriminate, spec fixed after seeing its failure (not blind).
+
+## Addendum 3: gate model with measured p/alpha (refuter-6b: addenda numbers verified; framing = 2 distinct wrong patches on 1 task, contract spec fixed post-hoc, 38k tokens unverifiable)
+`--gate-model` now also prints p=11/18, beta=0, g=$0.01 (invented), $ from semver-control: symptom gate $0.018 / pass 0.67; contract gate $0.033 / pass 0.94; Sol solo $0.055 / 1.0. Contract looks ~40% cheaper at ~94% pass, but alpha=1/7 rests on 2 distinct wrong patches and beta=0 on a spec tuned after the fact. UNVERIFIED as a Luna/Sol result.

@@ -41,4 +41,7 @@ if(import.meta.url===`file://${process.argv[1]}`&&process.argv[3]!=='--gate-mode
 if(import.meta.url===`file://${process.argv[1]}`&&process.argv[3]==='--gate-model'){
   const [p,alpha,beta,c,s]=[1/3,0.19,0.17,0.0048,0.0549];
   console.table([0.005,0.01,0.02].map(g=>({g,...gateModel({p,alpha,beta,g,c,s})})).concat([{g:'sol solo',usd:s,pass:1}]));
+  // Measured on 18 Haiku picomatch attempts (docs/GATE-EVAL.md addenda); $ still semver-control, g invented.
+  const m=11/18;
+  console.table([['symptom',6/7],['contract',1/7]].map(([gate,a])=>({gate,...gateModel({p:m,alpha:a,beta:0,g:0.01,c,s})})));
 }
