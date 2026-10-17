@@ -17,17 +17,12 @@ const sh = (s) => {
   }
   return out;
 };
-test('backslashes inside quoted words stay literal', () => {
-  assert.equal(quote(['a\\x']), "'a\\x'");
-  assert.equal(quote(['a"b']), '\'a"b\'');
-  assert.equal(quote(['"a"b"']), '\'"a"b"\'');
-  assert.equal(quote(['a\\"b']), '\'a\\"b\'');
-  assert.equal(quote(['a\\b']), '\'a\\b\'');
-  assert.equal(quote(['`:\\a\\b']), "'`:\\a\\b'");
+test('backslashes with spaces or double quotes round-trip through the shell', () => {
+  // oracle is semantic (round-trip), not the upstream exact quoting form; refuter-7b showed exact-string asserts reject correct fixes
+  for (const s of ['a b\\x', 'a"b\\c', 'a\\"b', '"a"b\\"', 'x y\\\\z', '`:\\a\\b "q"']) assert.equal(sh(s), s, s);
 });
 test('issue example round-trips through the shell', () => {
-  const s = 'find /home -type f -name "*.json" -exec ls -l {} \;';
-  assert.equal(quote([s]), `'${s}'`);
+  const s = 'find /home -type f -name "*.json" -exec ls -l {} \\;';
   assert.equal(sh(s), s);
 });
 test('words that also contain a single quote keep working', () => {
