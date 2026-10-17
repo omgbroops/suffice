@@ -67,3 +67,6 @@ The spec's `test/utils/x.js` vs `test(/utils/**)/x.js` assertion contradicted th
 
 ## Addendum 4: picomatch-202 (newline in globstar, PR #202 applied to 4.0.7)
 Task validated (baseline fails / reference passes). 3 symptom-only Haiku attempts: 3/3 pass acceptance, identical fix (`.` -> `[\s\S]`). Saturated, no gate information; no specs written for it. #197 considered and dropped (already fixed in 4.0.7 base). Pooled: 21 attempts, 14 correct; still only #187 (and 142-s2) produce wrong patches.
+
+## Addendum 5: Haiku as spec writer (blind, contract prompt, ~9k subagent tokens each, no edits after writing)
+Specs in reports/picomatch-haiku-specs/. All 3 are valid gates: fail baseline (assertion), pass reference. Verdicts on the 18 attempts: #142 and #99 agree with acceptance 12/12 (incl. rejecting 142-s2); #187 accepts all 6 wrong attempts (no assertion on the posix-off default path). Overall agreement 12/18, wrong accepted 6/7 — same as the Sonnet symptom spec, worse than the Sonnet contract spec (1/7). So a cheaper spec writer cut g but, on the one discriminating task, also lost the discrimination; the gate's value depends on the writer reading every stated option. n=1 task.
