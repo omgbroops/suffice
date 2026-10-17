@@ -20,4 +20,5 @@ test('ordinary multi-param segments keep matching', () => {
   assert.deepEqual(run('/:a/:b', '/x/y'), ['x', 'y']);
   assert.deepEqual(run('/:a-:b', '/1-2'), ['1', '2']);
   assert.equal(run('/:a-:b-:c', '/1-2/3-4'), null);
+  assert.deepEqual(run('/x-:a', '/x-1-2'), ['1-2']); // a param may still contain the separator when nothing follows it
 });
