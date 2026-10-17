@@ -23,11 +23,12 @@ export async function gateSpec({ source, specPath, baseline, candidate }) {
   const after = await runNodeTests(candidate, specPath);
   return { usable: true, before: before.status, after: after.status, accepted: after.status === 'passed' };
 }
+// shortcut: smallest diff may favour special-casing; fine while the spec, not the diff, is the real filter.
 // Pick among parallel attempts. Attempts failing the spec are never chosen; ties go to the smallest diff then lowest index.
 // Returns { chosen: index|null, reason }. null means escalate.
 export function selectAttempt(attempts) {
   const ok = attempts.map((a, index) => ({ ...a, index })).filter(a => a.status === 'completed' && a.specAccepted && a.visiblePassed);
   if (!ok.length) return { chosen: null, reason: 'no_attempt_passed_spec' };
-  ok.sort((a, b) => (a.diffLines ?? Infinity) - (b.diffLines ?? Infinity) || a.index - b.index);
+  ok.sort((a, b) => (Number.isFinite(a.diffLines) ? a.diffLines : Infinity) - (Number.isFinite(b.diffLines) ? b.diffLines : Infinity) || a.index - b.index);
   return { chosen: ok[0].index, reason: ok.length > 1 ? 'smallest_diff_among_survivors' : 'single_survivor' };
 }

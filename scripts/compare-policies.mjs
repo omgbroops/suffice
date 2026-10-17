@@ -24,11 +24,21 @@ export function cheapFamily(runs,arms){
   const t={};for(const r of runs.filter(r=>arms.includes(r.arm))){(t[r.task]??={n:0,pass:0}).n++;if(r.success)t[r.task].pass++;}
   return t;
 }
-if(import.meta.url===`file://${process.argv[1]}`){
+// Analytic model of a spec gate: p=cheap pass rate, alpha=P(gate accepts a wrong patch), beta=P(gate rejects a correct patch),
+// g=gate (spec-writer) cost, c=cheap cost, s=strong cost, q=strong pass rate. Wrong-patch alpha comes from mutants, not real cheap-model errors.
+export function gateModel({p,alpha,beta,g,c,s,q=1}){
+  const accept=p*(1-beta)+(1-p)*alpha,esc=1-accept;
+  return {usd:+(g+c+esc*s).toFixed(4),pass:+(p*(1-beta)+esc*q).toFixed(3),escalated:+esc.toFixed(3),breakEvenG:+(s-c-esc*s).toFixed(4)};
+}
+if(import.meta.url===`file://${process.argv[1]}`&&process.argv[3]!=='--gate-model'){
   const campaign=process.argv[2]??'semver-control-v1',runs=JSON.parse(await readFile(resolve(root,`reports/${campaign}.json`),'utf8')).runs;
   const table=[...new Set(runs.map(r=>r.arm))].map(a=>summarize(a,plain(runs,a)));
   table.push(summarize('replay: luna-repro, escalate to sol if repro not established',replay(runs)));
   table.push(summarize('replay: luna, escalate to sol if not completed',replay(runs,{cheap:'luna'})));
   console.table(table);
   console.log('cheap-family pooled pass per task (luna,state,prune,state-prune,repro):',JSON.stringify(cheapFamily(runs,['luna','luna-state','luna-prune','luna-state-prune','luna-repro'])));
+}
+if(import.meta.url===`file://${process.argv[1]}`&&process.argv[3]==='--gate-model'){
+  const [p,alpha,beta,c,s]=[1/3,0.19,0.17,0.0048,0.0549];
+  console.table([0.005,0.01,0.02].map(g=>({g,...gateModel({p,alpha,beta,g,c,s})})).concat([{g:'sol solo',usd:s,pass:1}]));
 }
