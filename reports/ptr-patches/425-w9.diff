@@ -1,0 +1,18 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 03:54:35
++++ /tmp/ptr-w9/src/index.js	2026-10-17 03:54:50
+@@ -94,6 +94,7 @@
+       pos = offset + match.length;
+ 
+       if (match === '*') {
++        backtrack = ''; // wildcard can absorb anything, so no fixed anchor follows it
+         extraOffset += 3;
+         return '(.*)';
+       }
+@@ -123,6 +124,7 @@
+         + ')'
+         + optional;
+ 
++      backtrack = ''; // each param only excludes the literal text directly before it
+       extraOffset += result.length - match.length;
+ 
+       return result;

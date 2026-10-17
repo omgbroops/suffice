@@ -1,0 +1,20 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 03:54:35
++++ /tmp/ptr-w10/src/index.js	2026-10-17 03:54:58
+@@ -94,6 +94,7 @@
+       pos = offset + match.length;
+ 
+       if (match === '*') {
++        backtrack = '';
+         extraOffset += 3;
+         return '(.*)';
+       }
+@@ -125,6 +126,9 @@
+ 
+       extraOffset += result.length - match.length;
+ 
++      // Literal text after a parameter must not leak into the next parameter's exclusion.
++      backtrack = '';
++
+       return result;
+     });
+ 
