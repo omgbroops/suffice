@@ -1,0 +1,11 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 03:45:40
++++ /tmp/ptr-t5/src/index.js	2026-10-17 03:51:01
+@@ -110,6 +110,8 @@
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+         (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++      // shortcut: backtrack only reset after a param, so literals before a param accumulate across params; a separator-only prefix is enough here
++      backtrack = '';
+ 
+       keys.push({
+         name: key,
