@@ -2,7 +2,7 @@
 // `table` replays variant policies over the pool, so every variant is priced from measured attempts, not simulated ones.
 // Usage: node scripts/variants.mjs collect <model> <n> [tag] | node scripts/variants.mjs table
 // shortcut: one task (path-to-regexp-425), policies are offline replays over pooled attempts; upgrade to live per-variant runs when a task has >1 non-saturated case.
-import { cpSync, realpathSync, mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, cpSync, realpathSync, mkdtempSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
@@ -14,9 +14,10 @@ const base = resolve(stateDir, 'real-tasks', ID, 'workspace'), tdir = f => resol
 const prompt = readFileSync(resolve(import.meta.dirname, '../reports/ptr-prompts/symptom-only.md'), 'utf8').replace('SUFFICE_WORKSPACE=<workspace>', 'SUFFICE_WORKSPACE=$PWD');
 const pass = async (ws, f) => (await runNodeTests(ws, f)).status === 'passed';
 const load = () => existsSync(POOL) ? JSON.parse(readFileSync(POOL, 'utf8')) : [];
-const fresh = model => { const ws = mkdtempSync(resolve(process.env.INREPO === '1' ? resolve(stateDir, 'tmp') : realpathSync(tmpdir()), `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; };
+const decoy = () => { const d = mkdtempSync(resolve(realpathSync(tmpdir()), 'decoy-')), h = resolve(import.meta.dirname, '..'); for (const f of ['src', 'tests', 'package.json']) cpSync(resolve(h, f), resolve(d, f), { recursive: true }); mkdirSync(resolve(d, '.suffice/tmp'), { recursive: true }); return resolve(d, '.suffice'); }; // PARENT=1: /tmp workspace under a fake suffice-like parent (no .git)
+const fresh = model => { if (process.env.PARENT === '1') { const ws = mkdtempSync(resolve(decoy(), 'tmp', `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; } const ws = mkdtempSync(resolve(process.env.INREPO === '1' ? resolve(stateDir, 'tmp') : realpathSync(tmpdir()), `var-${model}-`)); cpSync(base, ws, { recursive: true }); return ws; };
 const run = (model, ws, text) => new Promise(done => {
-  const p = spawn('claude', ['-p', text, '--model', model, '--output-format', 'json', '--permission-mode', 'acceptEdits', '--allowedTools', 'Read Edit Write Bash Glob Grep', '--max-turns', '30'], { cwd: ws });
+  const p = spawn('claude', ['-p', text, '--model', model, '--output-format', 'json', '--permission-mode', 'acceptEdits', '--allowedTools', 'Read Edit Write Bash Glob Grep', '--max-turns', '30', ...(process.env.CLAUDE_ARGS?.split(' ') ?? [])], { cwd: ws });
   let out = ''; p.stdout.on('data', d => out += d); p.on('close', () => {
     let j = {}; try { j = JSON.parse(out); } catch {}
     const u = j.usage ?? {};
