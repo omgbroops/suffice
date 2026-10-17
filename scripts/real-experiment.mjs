@@ -33,6 +33,7 @@ for(const [index,item]of schedule.entries()){
   const runId=`${String(index+1).padStart(3,'0')}-${item.task}-${item.arm}-r${item.repetition}`,runDir=resolve(directory,runId);
   if(args['--resume']){try{const old=JSON.parse(await readFile(resolve(runDir,'result.json'),'utf8'));knownCost+=old.knownEstimatedUsd;continue;}catch(e){if(e.code!=='ENOENT')throw e;}}
   const disk=await statfs(root);if(disk.bavail*disk.bsize<5*1024**3||knownCost>=12)throw new Error('Storage or estimated usage cap reached');
+  if(args['--resume'])await rm(runDir,{recursive:true,force:true}); // partial run without result.json; redo it
   await mkdir(runDir);const task=tasks.find(t=>t.id===item.task),arm=arms.find(a=>a.id===item.arm);
   const validation=JSON.parse(await readFile(resolve(dirname(task.workspaceDir),'validation.json'),'utf8'));
   const workspace=resolve(runDir,'workspace');await cp(task.workspaceDir,workspace,{recursive:true});
