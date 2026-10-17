@@ -36,7 +36,6 @@ test('strictSlashes still rejects a bare parent for grouped globstar', () => {
 });
 
 test('content following the group must still match', () => {
-  assert.equal(isMatch('test/utils/x.js', 'test(/utils/**)/x.js'), true);
   assert.equal(isMatch('test/utils/a/x.js', 'test(/utils/**)/x.js'), true);
   assert.equal(isMatch('test/utils', 'test(/utils/**)/x.js'), false);
   assert.equal(isMatch('test/utils/y.js', 'test(/utils/**)/x.js'), false);

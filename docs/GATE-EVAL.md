@@ -55,3 +55,9 @@ One wrong attempt (142-s2 widened strictSlashes) was correctly caught by both sp
 - 187-a1/a3 identical diffs: 2 distinct wrong patches, 1 task. No symptom-only attempts on #187.
 - Contract pooled 12/15 includes the broken 142 spec; excluding it contract 10/12 vs symptom 9/12 (no difference).
 - Attempt reads (reference/hidden tests at absolute paths) unauditable; attempts are in gitignored .suffice. arXiv citations unverified.
+
+## Addendum: symptom-only attempts on #187 (3 Haiku, ~38k tokens)
+All 3 (s1-s3) make the same 2-line edit (drop the `opts.posix` guard), fail acceptance, pass visible. Symptom spec accepts 3/3 wrong; contract spec rejects 3/3. #187 totals: 6 wrong attempts, only 2 distinct patches. Symptom-spec real false-accept on wrong attempts is now 6/7 (wrong across tasks) vs contract 1/7; this confirms refuter-6's alpha warning (mutant alpha .19 understates it) but remains one task, one failure mode. Pooled acceptance 11/18.
+
+## Addendum 2: #142 contract spec fixed
+The spec's `test/utils/x.js` vs `test(/utils/**)/x.js` assertion contradicted the reference (reference: false); removed. Spec now passes reference (7/7). Rescored all 18 attempts (reports/picomatch-haiku-attempts-v2.json): acceptance 11/18, visible 18/18 agree only 11/18; symptom spec agrees 12/18; contract agrees 17/18 (misses 187-a2). Wrong attempts = 7 (142-s2, 187 x6): symptom accepts 6/7, contract accepts 1/7. Still 2 tasks that discriminate, spec fixed after seeing its failure (not blind).
