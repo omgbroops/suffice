@@ -19,6 +19,10 @@ const tasks = [{
   issue: 'https://github.com/micromatch/picomatch/issues/187', // reference = micromatch/picomatch@ef533d0d
   edits: [[`      if (opts.posix === true && value === '!' && prev.value === '[') {\n        value = '^';\n      }`,
 `      if (value === '!' && prev.value === '[' && opts.literalBrackets !== true) {\n        const isLoneNegation = peek() === ']' && !remaining().slice(1).includes(']');\n        if (!isLoneNegation) {\n          value = '^';\n        }\n      }`]],
+}, {
+  id: 'picomatch-202', base: ['4.0.7', '697b463be3cdbd9ffc8f4194fd5019a69ddf95875fb703d78b2b115cc9e740a8'], referenceFile: 'lib/parse.js',
+  issue: 'https://github.com/micromatch/picomatch/pull/202', // both globstar sites; PR diff applied to 4.0.7
+  edits: [['(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`', '(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL})[\\\\s\\\\S])*?)`']], all: true,
 }];
 const unpack = (v, sha) => {
   const dir = resolve(tmpdir(), `pm-${v}-${process.pid}`);
@@ -44,7 +48,7 @@ for (const t of tasks.map(t => ({ ...t, prompt: realTasks.find(r => r.id === t.i
   if (fix) await cp(resolve(fix, t.referenceFile), target);
   else {
     let text = await readFile(target, 'utf8');
-    for (const [from, to] of t.edits) { if (text.split(from).length !== 2) throw new Error(`edit anchor not unique in ${t.id}`); text = text.replace(from, () => to); }
+    for (const [from, to] of t.edits) { if (text.split(from).length !== (t.all ? 3 : 2)) throw new Error(`edit anchor not unique in ${t.id}`); text = text.replaceAll(from, () => to); }
     await writeFile(target, text);
   }
   const acc = resolve(root, `benchmarks/real/${t.id}.test.mjs`), vis = resolve(ws, 'tests/visible.test.mjs');
