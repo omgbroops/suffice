@@ -23,26 +23,31 @@ const tasks = [{
   id: 'picomatch-202', base: ['4.0.7', '697b463be3cdbd9ffc8f4194fd5019a69ddf95875fb703d78b2b115cc9e740a8'], referenceFile: 'lib/parse.js',
   issue: 'https://github.com/micromatch/picomatch/pull/202', // both globstar sites; PR diff applied to 4.0.7
   edits: [['(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`', '(?!${START_ANCHOR}${opts.dot ? DOTS_SLASH : DOT_LITERAL})[\\\\s\\\\S])*?)`']], all: true,
+}, {
+  pkg: 'bytes', id: 'bytes-51', base: ['3.1.0', 'f7d93a3df7a62e19b6853ef0d6999b5f50122475b951bbfd09c2c56fb9e00cf0'],
+  fix: ['3.1.1', 'c102b4cc428564c9662240370438cf0d1fb054bf36c87c40de587aa79955abdc'], referenceFile: 'index.js',
+  issue: 'https://github.com/visionmedia/bytes.js/issues/51',
 }];
-const unpack = (v, sha) => {
-  const dir = resolve(tmpdir(), `pm-${v}-${process.pid}`);
+const only = process.argv[2];
+const unpack = (pkg, v, sha) => {
+  const dir = resolve(tmpdir(), `${pkg}-${v}-${process.pid}`);
   return mkdir(dir, { recursive: true }).then(async () => {
-    const p = spawnSync('npm', ['pack', `picomatch@${v}`, '--silent'], { cwd: dir, encoding: 'utf8' });
+    const p = spawnSync('npm', ['pack', `${pkg}@${v}`, '--silent'], { cwd: dir, encoding: 'utf8' });
     if (p.status !== 0) throw new Error(`npm pack failed: ${p.stderr}`);
-    const tgz = resolve(dir, `picomatch-${v}.tgz`);
-    if (hash(await readFile(tgz)) !== sha) throw new Error(`checksum mismatch for picomatch@${v}`);
+    const tgz = resolve(dir, `${pkg}-${v}.tgz`);
+    if (hash(await readFile(tgz)) !== sha) throw new Error(`checksum mismatch for ${pkg}@${v}`);
     if (spawnSync('tar', ['-xzf', tgz, '-C', dir]).status !== 0) throw new Error('tar failed');
     return resolve(dir, 'package');
   });
 };
-for (const t of tasks.map(t => ({ ...t, prompt: realTasks.find(r => r.id === t.id).prompt }))) {
+for (const t of tasks.filter(t => !only || t.id === only).map(t => ({ pkg: 'picomatch', ...t, prompt: realTasks.find(r => r.id === t.id).prompt }))) {
   const taskDir = resolve(stateDir, 'real-tasks', t.id), ws = resolve(taskDir, 'workspace'), ref = resolve(taskDir, 'reference');
   await rm(taskDir, { recursive: true, force: true });
-  const base = await unpack(...t.base), fix = t.fix && await unpack(...t.fix);
+  const base = await unpack(t.pkg, ...t.base), fix = t.fix && await unpack(t.pkg, ...t.fix);
   await mkdir(resolve(ws, 'tests'), { recursive: true });
   await cp(base, resolve(ws, 'src'), { recursive: true });
-  await cp(resolve(root, 'benchmarks/real/picomatch-visible.test.mjs'), resolve(ws, 'tests/visible.test.mjs'));
-  await writeFile(resolve(ws, 'README.md'), `# picomatch repair task\n\n${t.prompt}\n\nThe upstream package is under src/. Only production JavaScript under src/lib may be edited. The provided test tool runs a small smoke suite; hidden acceptance is evaluated separately. No dependency installation is needed.\n`);
+  await cp(resolve(root, `benchmarks/real/${t.pkg}-visible.test.mjs`), resolve(ws, 'tests/visible.test.mjs'));
+  await writeFile(resolve(ws, 'README.md'), `# ${t.pkg} repair task\n\n${t.prompt}\n\nThe upstream package is under src/. Only production JavaScript under src may be edited. The provided test tool runs a small smoke suite; hidden acceptance is evaluated separately. No dependency installation is needed.\n`);
   await cp(ws, ref, { recursive: true });
   const target = resolve(ref, 'src', t.referenceFile);
   if (fix) await cp(resolve(fix, t.referenceFile), target);
