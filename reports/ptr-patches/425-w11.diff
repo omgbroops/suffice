@@ -1,0 +1,13 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-w11/src/index.js	2026-10-17 04:13:18
+@@ -111,6 +111,10 @@
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+         (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
+ 
++      // A param cannot start with the literal text that precedes it, so the
++      // preceding literal must restart after each param.
++      backtrack = '';
++
+       keys.push({
+         name: key,
+         optional: !!optional,

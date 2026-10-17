@@ -1,0 +1,39 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-w13/src/index.js	2026-10-17 04:15:16
+@@ -37,6 +37,7 @@
+   var i = 0;
+   var name = 0;
+   var pos = 0;
++  var keyEnd = 0;
+   var backtrack = '';
+   var m;
+ 
+@@ -85,13 +86,18 @@
+         return '\\.';
+       }
+ 
++      // Separator text between the previous key and this one; the capture must not start with it.
++      var sep = path.slice(keyEnd, offset);
++      // shortcut: only plain or escaped literals are used as the lookahead; wildcards and other regex syntax are skipped, extend to cover them.
++      if (slash || format || !/^(?:\\.|[^\\.*()[\]{}|^$?+])*$/.test(sep)) sep = '';
++
+       if (slash || format) {
+         backtrack = '';
+       } else {
+         backtrack += path.slice(pos, offset);
+       }
+ 
+-      pos = offset + match.length;
++      pos = keyEnd = offset + match.length;
+ 
+       if (match === '*') {
+         extraOffset += 3;
+@@ -109,7 +115,7 @@
+       optional = optional || '';
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+-        (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
++        (backtrack ? (sep ? '(?!' + sep + ')' : '') + '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
+ 
+       keys.push({
+         name: key,

@@ -1,0 +1,28 @@
+--- .suffice/real-tasks/path-to-regexp-425/workspace/src/index.js	2026-10-17 04:03:36
++++ /tmp/ptr-w12/src/index.js	2026-10-17 04:13:43
+@@ -85,10 +85,13 @@
+         return '\\.';
+       }
+ 
++      // Literal text directly before this parameter, if any.
++      var gap = slash || format ? '' : path.slice(pos, offset);
++
+       if (slash || format) {
+         backtrack = '';
+       } else {
+-        backtrack += path.slice(pos, offset);
++        backtrack += gap;
+       }
+ 
+       pos = offset + match.length;
+@@ -107,8 +110,10 @@
+       slash = slash || '';
+       format = format ? '\\.' : '';
+       optional = optional || '';
++      // shortcut: default capture only; explicit custom regexes are left as written.
+       capture = capture ?
+         capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
++        (gap ? '(?!' + gap.slice(-1).replace(/[.*+?^${}()|[\]\\\/-]/g, '\\$&') + ')' : '') +
+         (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
+ 
+       keys.push({
