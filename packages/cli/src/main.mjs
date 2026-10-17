@@ -4,18 +4,18 @@ import {randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {createInterface} from 'node:readline/promises';
 import {ModelRuntime} from '@earendil-works/pi-coding-agent';
-import {VERSION, HELP} from './options.mjs';
+import {VERSION} from './options.mjs';
 import {createSufficeSession} from './session.mjs';
 import {repositoryTools} from './tools.mjs';
 
-async function login(runtime,options) {
+async function login(runtime,options,sharedReader) {
   const identity=resolve(options.home,'host-id');
   let deviceId;
   try {deviceId=(await readFile(identity,'utf8')).trim();}
   catch(e) {if(e.code!=='ENOENT') throw e;deviceId=randomUUID();await writeFile(identity,deviceId,{mode:0o600});}
   const controller=new AbortController();
   const cancel=()=>controller.abort();process.on('SIGINT',cancel);
-  const timer=setTimeout(cancel,15*60_000);let reader;
+  const timer=setTimeout(cancel,15*60_000);let reader=sharedReader;
   try {
     await runtime.login('openai','oauth',{
       signal:controller.signal,
@@ -35,7 +35,7 @@ async function login(runtime,options) {
       }
     },{getDeviceId:()=>deviceId,agentName:'Suffice'});
     console.log('Signed in. You can now run suffice in your project.');
-  } finally {clearTimeout(timer);process.off('SIGINT',cancel);reader?.close();}
+  } finally {clearTimeout(timer);process.off('SIGINT',cancel);if(reader!==sharedReader) reader?.close();}
 }
 
 export async function main(options) {
@@ -54,69 +54,27 @@ export async function main(options) {
     if(!available) process.exitCode=1;
     return;
   }
-  if(!runtime.isUsingSubscription('openai')) throw new Error('Sign in first with: suffice login (or use --home with your existing Suffice credential directory). No API-key fallback.');
-  const interactive=Boolean(process.stdin.isTTY && !options.print);
-  if(!options.prompt && !interactive) {
+  if(process.stdin.isTTY && !options.print) {
+    const {runInteractive}=await import('./interactive.mjs');
+    return runInteractive(options,runtime);
+  }
+  if(!runtime.isUsingSubscription('openai')) throw new Error('Sign in first with: npx suffice login. No API-key fallback.');
+  if(!options.prompt) {
     const chunks=[];for await(const chunk of process.stdin) chunks.push(chunk);
     options.prompt=Buffer.concat(chunks).toString('utf8').trim();
     if(!options.prompt) throw new Error('Provide a task, or start suffice in an interactive terminal.');
   }
-  let reader, busy=false, agent;
-  const notify=message=>process.stderr.write(`${message}\n`);
-  const cancel=()=>{if(busy) agent?.abort();else reader?.close();};
-  process.on('SIGINT',cancel);
-  const open=async()=>createSufficeSession(options,runtime,{
-    onTool(name,input) {
-      const detail=input?.path || (name==='bash'?input.command:'');
-      notify(`  ${name}${detail?' · '+String(detail).replace(/[\r\n\x1b]/g,' ').slice(0,140):''}`);
-    },
-    onAssistant(message) {
-      if(interactive) for(const c of message.content) if(c.type==='text' && c.text.trim()) console.log(`\n${c.text}\n`);
-    }
+  const agent=await createSufficeSession(options,runtime,{
+    onTool(name){console.error(`  ${name}`);}
   });
-  const usage=()=>notify(`${agent.totals.modelCalls} model calls · API-equivalent ${agent.totals.costUnknown?'at least ':''}$${agent.totals.estimatedApiUsd.toFixed(4)}${agent.totals.costUnknown?' (incomplete usage)':''}`);
-  const run=async prompt=>{
-    busy=true;
-    const pulse=setInterval(()=>notify('  Working…'),30_000);
-    try {const answer=await agent.run(prompt);if(!interactive) console.log(answer);}
-    finally {clearInterval(pulse);busy=false;usage();}
-  };
+  const cancel=()=>agent.abort();process.on('SIGINT',cancel);
   try {
-    agent=await open();
-    notify(`Suffice ${VERSION} · ${options.model} · ${agent.session.thinkingLevel}\n${options.cwd}\nCommands run with your user permissions; this preview is not sandboxed.`);
-    if(options.prompt) await run(options.prompt);
-    if(!interactive) return;
-    reader=createInterface({input:process.stdin,output:process.stdout});
-    reader.on('SIGINT',cancel);
-    console.log('Type a task, /help for commands, or /exit to leave.');
-    while(true) {
-      let input;
-      try {input=(await reader.question('suffice > ')).trim();}
-      catch(e) {if(e.code==='ERR_USE_AFTER_CLOSE' || e.code==='ABORT_ERR') break;throw e;}
-      if(!input) continue;
-      if(['/exit','/quit'].includes(input)) break;
-      try {
-        if(input==='/help') console.log(HELP);
-        else if(input==='/usage') usage();
-        else if(input==='/new') {await agent.dispose();options.continue=false;agent=await open();console.log('Started a new session.');}
-        else if(input.startsWith('/model ')) {
-          const id=input.slice(7).trim(),model=runtime.getModel('openai',id);
-          if(!model) throw new Error(`Unknown catalog model: ${id}`);
-          await agent.session.setModel(model);options.model=id;
-          notify(`Model: ${id} · effort: ${agent.session.thinkingLevel}`);
-        }
-        else if(input.startsWith('/effort ')) {
-          const effort=input.slice(8).trim();
-          if(!['off','minimal','low','medium','high','xhigh'].includes(effort)) throw new Error('Invalid effort');
-          agent.session.setThinkingLevel(effort);options.effort=agent.session.thinkingLevel;
-          notify(`Effort: ${options.effort}`);
-        }
-        else if(input.startsWith('/')) console.log('Unknown command. Use /help.');
-        else await run(input);
-      } catch(e) {notify(`Suffice: ${e.message}`);}
-    }
+    console.error(`Suffice ${VERSION} | ${options.model} | ${agent.session.thinkingLevel}`);
+    console.log(await agent.run(options.prompt));
   } finally {
-    reader?.close();process.off('SIGINT',cancel);
-    if(agent) {notify(`Session: ${agent.sessionPath()??'(no messages)'}\nReceipts: ${agent.eventPath}`);await agent.dispose();}
+    process.off('SIGINT',cancel);
+    console.error(`${agent.totals.modelCalls} model calls | API-equivalent ${agent.totals.costUnknown?'at least ':''}$${agent.totals.estimatedApiUsd.toFixed(4)}`);
+    console.error(`Receipts: ${agent.eventPath}`);
+    await agent.dispose();
   }
 }

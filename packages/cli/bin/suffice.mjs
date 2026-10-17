@@ -7,6 +7,8 @@ try {
   else if(options.version) console.log(`Suffice ${VERSION}`);
   else {
     if(Number(process.versions.node.split('.')[0])<24) throw new Error('Suffice requires Node.js 24 or newer.');
+    // Keep native UI helpers and crash data in Suffice's selected state directory.
+    process.env.PI_CODING_AGENT_DIR=options.home;
     const {main}=await import('../src/main.mjs');
     await main(options);
   }
