@@ -81,7 +81,9 @@ of `bycontinuity/decomp-v2`: `bench/v7.py`, `bench/v6.py`, THIN/A7 settings,
 * Codex `cap.py` text decoding is weaker than our existing original-byte recovery.
   SQLite fact ledgers and compaction/session capsules need freshness and provenance.
   Claude event/config glue is not portable to Pi. ROUTER is a proposed design,
-  not the measured v7 implementation. No external skill package is installed here.
+  not the measured v7 implementation. The complete recursive Git tree (207 entries,
+  not truncated) at this revision contains no `SKILL.md`. No external skill package
+  is installed here; packaged skills outside this repository remain uninspected.
 
 Fresh ablation protocol and results live under `benchmark/shared` and
 `reports/shared-core-v1`. All previous campaigns remain immutable.

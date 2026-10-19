@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {pathToFileURL} from 'node:url';
+const {default:memoize}=await import(pathToFileURL(process.cwd()+'/index.ts'));
+let lookups=0;
+const reason=new Error('temporary cache outage');
+const cache={has(){if(++lookups===1)throw reason;return false;},get(){},set(){},delete(){}};
+const run=memoize(async key=>'ok:'+key,{cache});
+await assert.rejects(run('key'),error=>error===reason);
+assert.equal(await run('key'),'ok:key');assert.equal(await run('key'),'ok:key');
+assert.equal(lookups,3,'recovered cache must be consulted on subsequent attempts');
+console.log('public contract: synchronous cache.has rejection is not permanently memoized');

@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {pathToFileURL} from 'node:url';
+const {default:debounce}=await import(pathToFileURL(process.cwd()+'/index.js'));
+const started=Promise.withResolvers(),release=Promise.withResolvers(),controller=new AbortController();
+let calls=0;
+const run=debounce(async value=>{calls++;started.resolve();await release.promise;return value;},100,{signal:controller.signal});
+const first=run('first');await started.promise;
+const second=run('second');const observed=second.then(value=>({value}),error=>({error}));
+release.resolve();assert.equal(await first,'first');
+const reason=new Error('public issue abort');controller.abort(reason);
+assert.equal((await observed).error,reason,'waiting batch must reject with the abort reason');
+assert.equal(calls,1,'aborted waiting batch must not invoke the function');
+console.log('public contract: running batch completes; waiting batch remains abortable');

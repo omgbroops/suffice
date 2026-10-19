@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {pathToFileURL} from 'node:url';
+const {default:timeout,TimeoutError}=await import(pathToFileURL(process.cwd()+'/index.js'));
+let scheduled=0,cleared=0;
+const customTimers={setTimeout(...args){assert.equal(this,undefined);scheduled++;return setTimeout(...args);},clearTimeout(...args){assert.equal(this,undefined);cleared++;return clearTimeout(...args);}};
+const e=new Error('source rejection');
+await assert.rejects(timeout(Promise.reject(e),{milliseconds:500,customTimers}),error=>error===e);
+await assert.rejects(timeout(new Promise(()=>{}),{milliseconds:5,customTimers}),TimeoutError);
+const release=Promise.withResolvers();const pending=timeout(release.promise,{milliseconds:500,customTimers});
+pending.clear();release.resolve(91);assert.equal(await pending,91);assert.ok(scheduled>=3&&cleared>=3);
