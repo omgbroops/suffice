@@ -9,7 +9,7 @@ This is an early preview built on **Pi 1.2.0's actual interactive terminal inter
 From a clone (Node.js 24+ required):
 
 ```bash
-git clone --branch codex/suffice-cli-alpha https://github.com/bycontinuity/suffice.git
+git clone --branch main https://github.com/bycontinuity/suffice.git
 cd suffice
 npm ci
 npx suffice
@@ -27,15 +27,24 @@ Examples from the checkout:
 npx suffice doctor
 npx suffice --print "Investigate the failing tests and fix the cause"
 npx suffice --model gpt-6-luna --effort xhigh
+npx suffice --routing off
 npx suffice --continue
 npx suffice --cwd /path/to/repo --max-cost 1 --timeout 300
 ```
 
-The default is GPT-6.1 Sol at low effort. `login` uses your own OpenAI subscription through the engine's OAuth flow. Model availability depends on your account. This preview has no API-key fallback. Existing research credentials can be selected explicitly with `--home C:\path\to\suffice\.suffice\pi`; credentials are never included in the package.
+The default is automatic model routing: **GPT-6 Luna High** for simpler requests and **GPT-6.1 Sol Low** for requests classified as complex. The classifier is a deterministic text heuristic copied from the v2 routing experiment; selection makes no model call. `--routing off` retains manual model selection. Supplying `--model` or `--effort` also selects manual mode; combining either with `--routing auto` is rejected rather than silently ignoring a setting.
+
+`login` uses your own OpenAI subscription through the engine's OAuth flow. Model availability depends on your account. This preview has no API-key fallback. Existing research credentials can be selected explicitly with `--home C:\path\to\suffice\.suffice\pi`; credentials are never included in the package.
 
 ## Working with it
 
 Type a task in Pi's normal input editor. `/project [PATH]` (or `/cd`) changes projects; `/login` opens Pi's login flow; `/model` opens its model selector; `/settings` opens preferences; `/new` starts fresh; `/resume` opens previous sessions; `/usage` shows current-run usage. Pi's keyboard shortcuts and tool output rendering are retained. Escape interrupts; Ctrl+D exits from an empty editor. `--print` runs one task and returns a nonzero exit code on errors, cancellation or limits. When there is no terminal, supply a task argument or pipe it through stdin.
+
+`/routing` shows the current mode; `/routing auto` and `/routing off` change it. Choosing a model or effort through Pi's native controls disables automatic routing for the current process, including project switches. New CLI launches use the CLI flags or the automatic default. Model selection, route reasons and failures are saved in event receipts; routing messages are not injected into the model's context.
+
+Routing occurs on idle user input and keeps the same conversation history and tool access. After a complex request or an image, it keeps Sol for later short follow-ups; `/new` or switching to a fresh project session resets that context. Resumed history is checked for complex requests. Steering/follow-up messages queued during an active run keep the active model; any newly observed complexity affects the next idle request. A failed model selection handles the input with an error rather than silently using a different model.
+
+This ports model selection only. It adds no planner, packet workers, context compression, or benchmark-specific test commands and repair stage. Verification remains the normal agent workflow. The first-task classifier matches the experiment, but conversational handling and this product release have not received a comparative live benchmark; historical savings do not certify this CLI's cost or accuracy.
 
 Repository-wide read/edit/write, native Bash execution, and `symbols`, `symbol_read`, and `symbol_references` are available through codemode. Edits are serialized by the engine. Commands have a 180-second maximum. Per-task limits are 600 seconds, 60 assistant responses, 240 tool calls and $10 **API-equivalent** inference by default. Cost checks happen between responses, so an individual response can cross the allowance; this is not a provider billing cap. Failed and retried responses remain in event receipts. Subscription spending is not inferred from API-equivalent estimates.
 
