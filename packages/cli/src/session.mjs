@@ -19,7 +19,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   let tail=Promise.resolve(), logError, session, allowance, taskTimer, managedRun=false;
   const totals={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,costUnknown:false};
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
-  const tools=repositoryTools({workspace,shellPath:options.shellPath});
+  const tools=repositoryTools({workspace,shellPath:options.shellPath}).filter(t=>!options.allowedTools||options.allowedTools.includes(t.name));
   const names=tools.map(t=>t.name);
   const settings=SettingsManager.inMemory({compaction:{enabled:false},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
@@ -35,12 +35,12 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     pi.on('before_provider_request',e=>{
       if(logError) throw logError;
       if(allowance && (allowance.reason || allowance.spent>=options.maxCost || allowance.turns>=60)) throw new Error('Task allowance exhausted');
-      log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,bytes:JSON.stringify(e.payload).length});
+      log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,bytes:JSON.stringify(e.payload).length,toolNames:(e.payload.tools??[]).map(t=>t.name),prefixHash:hash(JSON.stringify((e.payload.input??[]).filter(m=>['system','developer'].includes(m.role))))});
     });
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
     pi.on('session_shutdown',async()=>{finish();await tail;if(logError) throw logError;});
   };
-  const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,noExtensions:true,noSkills:true,noPromptTemplates:true,noThemes:true,noContextFiles:false,systemPrompt:PROMPT,extensionFactories:[createCodemodeExtension({mode:'only',models:false,inlineBudget:2000}),observer,...(options.extensions??[])]});
+  const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,noExtensions:true,noSkills:true,noPromptTemplates:true,noThemes:true,noContextFiles:false,systemPrompt:options.systemPrompt??PROMPT,extensionFactories:[createCodemodeExtension({mode:'only',models:false,inlineBudget:2000}),observer,...(options.extensions??[])]});
   await loader.reload();
   const model=options.modelObject??runtime.getModel('openai',options.model);
   if(!model) throw new Error(`Model is absent from the pinned catalog: ${options.model}`);
@@ -81,7 +81,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     }
     onAssistant(m);
   });
-  log({type:'startup',version:`suffice-cli-${VERSION}`,profile:'general-v1-derived',cwd:workspace,model:model.id,effort:session.thinkingLevel,systemPrompt:PROMPT,tools:session.getActiveToolNames(),sandbox:false});
+  log({type:'startup',version:`suffice-cli-${VERSION}`,profile:'general-v1-derived',cwd:workspace,model:model.id,provider:model.provider,pricing:model.cost,effort:session.thinkingLevel,systemPrompt:options.systemPrompt??PROMPT,tools:session.getActiveToolNames(),sandbox:process.env.SUFFICE_EXECUTION_BOUNDARY==='bwrap-v1'});
   return {
     session, totals, eventPath, sessionPath:()=>manager.getSessionFile(), created,
     services:{cwd:workspace,agentDir:options.home,modelRuntime:runtime,settingsManager:settings,resourceLoader:loader,diagnostics:[]},
