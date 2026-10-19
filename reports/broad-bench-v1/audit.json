@@ -1,0 +1,1173 @@
+{
+  "catalogConsistency": {
+    "gpt-6.1-sol": true,
+    "gpt-6-luna": true
+  },
+  "catalogsByModel": {
+    "gpt-6.1-sol": [
+      {
+        "mode": "codexSolMedium",
+        "rates": {
+          "input": 2,
+          "output": 10,
+          "cacheRead": 0.1,
+          "cacheWrite": 2.5,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 4,
+              "output": 15,
+              "cacheRead": 0.2,
+              "cacheWrite": 5
+            }
+          ]
+        }
+      },
+      {
+        "mode": "v1SolMedium",
+        "rates": {
+          "input": 2,
+          "output": 10,
+          "cacheRead": 0.1,
+          "cacheWrite": 2.5,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 4,
+              "output": 15,
+              "cacheRead": 0.2,
+              "cacheWrite": 5
+            }
+          ]
+        }
+      },
+      {
+        "mode": "v1SolMedium",
+        "rates": {
+          "input": 2,
+          "output": 10,
+          "cacheRead": 0.1,
+          "cacheWrite": 2.5,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 4,
+              "output": 15,
+              "cacheRead": 0.2,
+              "cacheWrite": 5
+            }
+          ]
+        }
+      },
+      {
+        "mode": "codexSolMedium",
+        "rates": {
+          "input": 2,
+          "output": 10,
+          "cacheRead": 0.1,
+          "cacheWrite": 2.5,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 4,
+              "output": 15,
+              "cacheRead": 0.2,
+              "cacheWrite": 5
+            }
+          ]
+        }
+      }
+    ],
+    "gpt-6-luna": [
+      {
+        "mode": "v2LunaHigh",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      },
+      {
+        "mode": "v2LunaHigh",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      },
+      {
+        "mode": "v2LunaHigh",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      },
+      {
+        "mode": "v1LunaHigh",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      },
+      {
+        "mode": "v1LunaHigh",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "attempts": [
+    {
+      "id": "b01",
+      "mode": "codexSolMedium",
+      "responses": 7,
+      "rawResponses": 7,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "events.live.jsonl",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "responses": 7,
+          "repricedUsd": 0.0589828,
+          "toolNames": []
+        }
+      ],
+      "catalogModels": [
+        "gpt-6.1-sol"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0589828,
+      "reportedResponseUsd": 0.0589828,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b01",
+      "mode": "v1SolMedium",
+      "responses": 6,
+      "rawResponses": 6,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394663145-fbf5c0c0-ccb3-4c6f-b958-9fa8a722327e.jsonl",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "responses": 6,
+          "repricedUsd": 0.0532388,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6.1-sol"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0532388,
+      "reportedResponseUsd": 0.0532388,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b01",
+      "mode": "v2LunaHigh",
+      "responses": 9,
+      "rawResponses": 9,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394701515-fbb26213-0f64-4685-ac69-84d8b2268446.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "responses": 9,
+          "repricedUsd": 0.0029017400000000003,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0029017400000000003,
+      "reportedResponseUsd": 0.00290174,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b02",
+      "mode": "v1SolMedium",
+      "responses": 5,
+      "rawResponses": 5,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394618868-03e1741f-e17b-41a3-ae6b-64f92c2cfe46.jsonl",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "responses": 5,
+          "repricedUsd": 0.06152479999999999,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6.1-sol"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.06152479999999999,
+      "reportedResponseUsd": 0.0615248,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b02",
+      "mode": "v2LunaHigh",
+      "responses": 11,
+      "rawResponses": 11,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394669890-3190f55e-1fbd-4e39-8938-b68177e4ab6c.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "responses": 11,
+          "repricedUsd": 0.0035771799999999997,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0035771799999999997,
+      "reportedResponseUsd": 0.00357718,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b03",
+      "mode": "v2LunaHigh",
+      "responses": 11,
+      "rawResponses": 11,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394618891-c8d87ee7-30c6-4bdc-9052-962f64611122.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "responses": 11,
+          "repricedUsd": 0.00339604,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.00339604,
+      "reportedResponseUsd": 0.00339604,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b03",
+      "mode": "v1LunaHigh",
+      "responses": 3,
+      "rawResponses": 1,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": false,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394724645-09aa45fb-58c6-4aa4-a03c-239e2e41a03f.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "responses": 3,
+          "repricedUsd": 0.0001873,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0001873,
+      "reportedResponseUsd": 0.00018730000000000003,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b04",
+      "mode": "v1LunaHigh",
+      "responses": 9,
+      "rawResponses": 9,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "solve/state/events/1792394618935-e0c4782e-97c3-4dce-b282-610a3923a86e.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "responses": 9,
+          "repricedUsd": 0.0028767999999999997,
+          "toolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "codemode"
+          ]
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0028767999999999997,
+      "reportedResponseUsd": 0.0028768,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "b04",
+      "mode": "codexSolMedium",
+      "responses": 6,
+      "rawResponses": 6,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "events.live.jsonl",
+          "model": "gpt-6.1-sol",
+          "effort": "medium",
+          "responses": 6,
+          "repricedUsd": 0.0561328,
+          "toolNames": []
+        }
+      ],
+      "catalogModels": [
+        "gpt-6.1-sol"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0561328,
+      "reportedResponseUsd": 0.0561328,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    }
+  ],
+  "localSourceMatchesFreeze": true,
+  "source": [
+    {
+      "path": "benchmark/broad/cohort.json",
+      "expected": "5b87398d38040a9784cc26c749e0b1efe06c9df1982c29739419f91b719fe5e2",
+      "actual": "5b87398d38040a9784cc26c749e0b1efe06c9df1982c29739419f91b719fe5e2"
+    },
+    {
+      "path": "benchmark/broad/cohort-a.json",
+      "expected": "6bfdef76b2395ff52743bd5948ee1371df1fd2c6b8ba14bbe750e3d0e0054810",
+      "actual": "6bfdef76b2395ff52743bd5948ee1371df1fd2c6b8ba14bbe750e3d0e0054810"
+    },
+    {
+      "path": "benchmark/broad/cohort-b.json",
+      "expected": "439806fe088c867a44b504af0a102f77fee78ffb6e21eab4461b08e4ce86a4d7",
+      "actual": "439806fe088c867a44b504af0a102f77fee78ffb6e21eab4461b08e4ce86a4d7"
+    },
+    {
+      "path": "benchmark/broad/cohort-c.json",
+      "expected": "d1cd9d3dbc63f66b8ffc17b29d2491cee6beff821bb6743bd5a1e224a5bbc72d",
+      "actual": "d1cd9d3dbc63f66b8ffc17b29d2491cee6beff821bb6743bd5a1e224a5bbc72d"
+    },
+    {
+      "path": "benchmark/broad/cohort-d.json",
+      "expected": "d6a76d8e7bb29b2faba17419c3e77f44d2da42b969d75462266a864ad1810378",
+      "actual": "d6a76d8e7bb29b2faba17419c3e77f44d2da42b969d75462266a864ad1810378"
+    },
+    {
+      "path": "benchmark/broad/cohort-e.json",
+      "expected": "34222e82b04f55b2c0b58550532209f53a2ddcc274545c8d3902b107cf55dfde",
+      "actual": "34222e82b04f55b2c0b58550532209f53a2ddcc274545c8d3902b107cf55dfde"
+    },
+    {
+      "path": "benchmark/broad/graders/a/b01.mjs",
+      "expected": "e23e5436c63d4b8318aacc3cd95cc83840c5165121d121843353c27a1e1b496f",
+      "actual": "e23e5436c63d4b8318aacc3cd95cc83840c5165121d121843353c27a1e1b496f"
+    },
+    {
+      "path": "benchmark/broad/graders/a/b02.mjs",
+      "expected": "1ef0e62e8fa1951e4828955fbfa770043d933e9d87006292f848aad450fad3a2",
+      "actual": "1ef0e62e8fa1951e4828955fbfa770043d933e9d87006292f848aad450fad3a2"
+    },
+    {
+      "path": "benchmark/broad/graders/a/b03.mjs",
+      "expected": "d87224c31eb4ad8f24037bf8d713f3f9924eca55122d07a1a04d16c5f5e8a6db",
+      "actual": "d87224c31eb4ad8f24037bf8d713f3f9924eca55122d07a1a04d16c5f5e8a6db"
+    },
+    {
+      "path": "benchmark/broad/graders/b/SAFETY.md",
+      "expected": "3938c42405af1623beff158a51bcec261af7efa6e5efdfe0f06e2cd9a5911d04",
+      "actual": "3938c42405af1623beff158a51bcec261af7efa6e5efdfe0f06e2cd9a5911d04"
+    },
+    {
+      "path": "benchmark/broad/graders/b/b04.cjs",
+      "expected": "29a5341f0ee03fdfc47b422e3d0b498671d22fd4915789a133d232765197d874",
+      "actual": "29a5341f0ee03fdfc47b422e3d0b498671d22fd4915789a133d232765197d874"
+    },
+    {
+      "path": "benchmark/broad/graders/b/b05.cjs",
+      "expected": "078d8371f717043eecba77f1bf7e7d2df92e679338d0e09a66286287e21cd05d",
+      "actual": "078d8371f717043eecba77f1bf7e7d2df92e679338d0e09a66286287e21cd05d"
+    },
+    {
+      "path": "benchmark/broad/graders/b/b06.cjs",
+      "expected": "075c89865fbddbe925dfe0ec4cc05dec42baedfd18ddeff3f3bb7ca78b962fae",
+      "actual": "075c89865fbddbe925dfe0ec4cc05dec42baedfd18ddeff3f3bb7ca78b962fae"
+    },
+    {
+      "path": "benchmark/broad/graders/c/b07.mjs",
+      "expected": "8136d4a81367ed76819f2e83e79b938fef6ba93e5fa8703652e56a9334de6b73",
+      "actual": "8136d4a81367ed76819f2e83e79b938fef6ba93e5fa8703652e56a9334de6b73"
+    },
+    {
+      "path": "benchmark/broad/graders/c/b08.mjs",
+      "expected": "5a59f50e8d3f3afb264d5385d716abce1248e52dd81f95273303caf3040b7da9",
+      "actual": "5a59f50e8d3f3afb264d5385d716abce1248e52dd81f95273303caf3040b7da9"
+    },
+    {
+      "path": "benchmark/broad/graders/c/b09.mjs",
+      "expected": "f267e362a6767c7df1f0d872019d3ad148b657aaa4e08763f8a7229221939f50",
+      "actual": "f267e362a6767c7df1f0d872019d3ad148b657aaa4e08763f8a7229221939f50"
+    },
+    {
+      "path": "benchmark/broad/graders/d/PROVENANCE.md",
+      "expected": "b89c3f7dc6edd95860d299544c6a77aeb5e76f6eff5d574cba129e7ad554bca9",
+      "actual": "b89c3f7dc6edd95860d299544c6a77aeb5e76f6eff5d574cba129e7ad554bca9"
+    },
+    {
+      "path": "benchmark/broad/graders/d/b10.mjs",
+      "expected": "a913ccdd31dc146ce0c775558ffa114a397520e5f20a183f0f51255ac2fbad0c",
+      "actual": "a913ccdd31dc146ce0c775558ffa114a397520e5f20a183f0f51255ac2fbad0c"
+    },
+    {
+      "path": "benchmark/broad/graders/d/b11.mjs",
+      "expected": "48e97ad23fe2d61360a670d2b29daa1eacf3aca1f691265e8fcd9f7f5375e687",
+      "actual": "48e97ad23fe2d61360a670d2b29daa1eacf3aca1f691265e8fcd9f7f5375e687"
+    },
+    {
+      "path": "benchmark/broad/graders/d/b12.mjs",
+      "expected": "65c4668e3c5f82f90da5bbc1a27715552f711cc6b4910d9531e1301e155a233e",
+      "actual": "65c4668e3c5f82f90da5bbc1a27715552f711cc6b4910d9531e1301e155a233e"
+    },
+    {
+      "path": "benchmark/broad/graders/e/b13.cjs",
+      "expected": "bb18d163aea25be8e21c3b178a31e88546c5d7c991540984484356c654f11547",
+      "actual": "bb18d163aea25be8e21c3b178a31e88546c5d7c991540984484356c654f11547"
+    },
+    {
+      "path": "benchmark/broad/graders/e/b14.cjs",
+      "expected": "cdb8c0d664d434b6256faf01d1f2d97f08198a4be66e6e79ee658e9e1b3fa15d",
+      "actual": "cdb8c0d664d434b6256faf01d1f2d97f08198a4be66e6e79ee658e9e1b3fa15d"
+    },
+    {
+      "path": "benchmark/broad/graders/e/b15.mjs",
+      "expected": "9c63ac302f9b5ea80ff442af80d5b3283393f79eb4019617eac65881fc97ee96",
+      "actual": "9c63ac302f9b5ea80ff442af80d5b3283393f79eb4019617eac65881fc97ee96"
+    },
+    {
+      "path": "benchmark/broad/preparation-amendments.json",
+      "expected": "7ef3fd663ea61c6e59edeb88318f6b508a37ad17333789f5ad88c7edf0b5c2a9",
+      "actual": "7ef3fd663ea61c6e59edeb88318f6b508a37ad17333789f5ad88c7edf0b5c2a9"
+    },
+    {
+      "path": "benchmark/broad/prepare.py",
+      "expected": "52b4df58d5b792ec8758bdcfa1cec01cc3da20299cecb41e3bd20b81e986fd20",
+      "actual": "52b4df58d5b792ec8758bdcfa1cec01cc3da20299cecb41e3bd20b81e986fd20"
+    },
+    {
+      "path": "src/packets/entry.mjs",
+      "expected": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+      "actual": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9"
+    },
+    {
+      "path": "src/packets/executor.mjs",
+      "expected": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+      "actual": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2"
+    },
+    {
+      "path": "src/packets/policy.mjs",
+      "expected": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+      "actual": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42"
+    },
+    {
+      "path": "src/pipeline/context.mjs",
+      "expected": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+      "actual": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21"
+    },
+    {
+      "path": "src/pipeline/entry.mjs",
+      "expected": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+      "actual": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2"
+    },
+    {
+      "path": "src/pipeline/executor.mjs",
+      "expected": "d1e0a4b9ac02a1e5ca87fdcbb792f975f8aacce1b0b6f3e6a36e493458d44497",
+      "actual": "d1e0a4b9ac02a1e5ca87fdcbb792f975f8aacce1b0b6f3e6a36e493458d44497"
+    },
+    {
+      "path": "src/pipeline/fleet.mjs",
+      "expected": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+      "actual": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774"
+    },
+    {
+      "path": "src/pipeline/knowledge.mjs",
+      "expected": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+      "actual": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52"
+    },
+    {
+      "path": "src/pipeline/notices.mjs",
+      "expected": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+      "actual": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1"
+    },
+    {
+      "path": "src/pipeline/observations.mjs",
+      "expected": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+      "actual": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1"
+    },
+    {
+      "path": "src/pipeline/policy.mjs",
+      "expected": "f7c1d0ce579fbec4aed1ac81b2da1c4747d0a5a25147979b5af098ada56414e7",
+      "actual": "f7c1d0ce579fbec4aed1ac81b2da1c4747d0a5a25147979b5af098ada56414e7"
+    },
+    {
+      "path": "src/pipeline/preparation.mjs",
+      "expected": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+      "actual": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a"
+    },
+    {
+      "path": "src/pipeline/session.mjs",
+      "expected": "bb6e1c5de195b39e7baab81dad06673c7425bb60ea6f9bd5eb0656f62857520b",
+      "actual": "bb6e1c5de195b39e7baab81dad06673c7425bb60ea6f9bd5eb0656f62857520b"
+    },
+    {
+      "path": "src/pipeline/tools.mjs",
+      "expected": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+      "actual": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802"
+    },
+    {
+      "path": "packages/cli/src/interactive.mjs",
+      "expected": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+      "actual": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c"
+    },
+    {
+      "path": "packages/cli/src/main.mjs",
+      "expected": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+      "actual": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389"
+    },
+    {
+      "path": "packages/cli/src/navigation.mjs",
+      "expected": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+      "actual": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a"
+    },
+    {
+      "path": "packages/cli/src/options.mjs",
+      "expected": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+      "actual": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61"
+    },
+    {
+      "path": "packages/cli/src/projects.mjs",
+      "expected": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+      "actual": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e"
+    },
+    {
+      "path": "packages/cli/src/session.mjs",
+      "expected": "f830b14bacdf002a566b6e54c4f4808f038275573f1399128aadaf50d2490fb7",
+      "actual": "f830b14bacdf002a566b6e54c4f4808f038275573f1399128aadaf50d2490fb7"
+    },
+    {
+      "path": "packages/cli/src/tools.mjs",
+      "expected": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+      "actual": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658"
+    },
+    {
+      "path": "packages/cli/src/workspace.mjs",
+      "expected": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+      "actual": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e"
+    },
+    {
+      "path": "benchmark/broad-runner.mjs",
+      "expected": "67a7f02581e452f9c959dfc4294f380f450655fb5f8bb8e42159c08729365667",
+      "actual": "67a7f02581e452f9c959dfc4294f380f450655fb5f8bb8e42159c08729365667"
+    },
+    {
+      "path": "benchmark/broad-driver.py",
+      "expected": "117305788ac1e3a04dcd6d0a2400a5934e41eec7f42ce4de284a4288a726616d",
+      "actual": "117305788ac1e3a04dcd6d0a2400a5934e41eec7f42ce4de284a4288a726616d"
+    },
+    {
+      "path": "benchmark/broad-sonion.py",
+      "expected": "f128ff9d99413e66e45956a09b50703a6432e814a71cfee92f93ed55905974ca",
+      "actual": "f128ff9d99413e66e45956a09b50703a6432e814a71cfee92f93ed55905974ca"
+    },
+    {
+      "path": "benchmark/broad-execution.mjs",
+      "expected": "b6e32f2072d3fe78a9bdb290a1c12b5758b5bd378a4c30ad4e623d8abd4e7fe0",
+      "actual": "b6e32f2072d3fe78a9bdb290a1c12b5758b5bd378a4c30ad4e623d8abd4e7fe0"
+    },
+    {
+      "path": "benchmark/broad-native-worker.mjs",
+      "expected": "0a05a2aaabfc6e6ae1cce82c124ef5d637d07db534d45cf28ad7588dcb0e83ce",
+      "actual": "0a05a2aaabfc6e6ae1cce82c124ef5d637d07db534d45cf28ad7588dcb0e83ce"
+    },
+    {
+      "path": "benchmark/broad-plan.md",
+      "expected": "944fa0ebffa1d9a58cae845099bbae6a96bda0ef60d0a3280afef01c5a4f4294",
+      "actual": "944fa0ebffa1d9a58cae845099bbae6a96bda0ef60d0a3280afef01c5a4f4294"
+    },
+    {
+      "path": "package.json",
+      "expected": "03d5d96e55c77a8fdf43588ebb762785342b43925688041d65495a33badb1e7f",
+      "actual": "03d5d96e55c77a8fdf43588ebb762785342b43925688041d65495a33badb1e7f"
+    },
+    {
+      "path": "package-lock.json",
+      "expected": "a850750d24d39b10bb0510fb6de0de27c09b5d0e759342598134ca74c3ac36af",
+      "actual": "a850750d24d39b10bb0510fb6de0de27c09b5d0e759342598134ca74c3ac36af"
+    }
+  ],
+  "localRemoteSourceParity": {
+    "files": 78,
+    "allMatch": true,
+    "checks": {
+      "package.json": true,
+      "package-lock.json": true,
+      "SOURCE-PROVENANCE.json": true,
+      "README.md": true,
+      ".gitignore": true,
+      "src/packets/entry.mjs": true,
+      "src/packets/executor.mjs": true,
+      "src/packets/policy.mjs": true,
+      "src/pipeline/context.mjs": true,
+      "src/pipeline/entry.mjs": true,
+      "src/pipeline/executor.mjs": true,
+      "src/pipeline/fleet.mjs": true,
+      "src/pipeline/knowledge.mjs": true,
+      "src/pipeline/notices.mjs": true,
+      "src/pipeline/observations.mjs": true,
+      "src/pipeline/policy.mjs": true,
+      "src/pipeline/preparation.mjs": true,
+      "src/pipeline/session.mjs": true,
+      "src/pipeline/tools.mjs": true,
+      "packages/cli/npm-shrinkwrap.json": true,
+      "packages/cli/package.json": true,
+      "packages/cli/README.md": true,
+      "packages/cli/THIRD-PARTY-NOTICES.md": true,
+      "packages/cli/VALIDATION.md": true,
+      "packages/cli/bin/suffice.mjs": true,
+      "packages/cli/src/interactive.mjs": true,
+      "packages/cli/src/main.mjs": true,
+      "packages/cli/src/navigation.mjs": true,
+      "packages/cli/src/options.mjs": true,
+      "packages/cli/src/projects.mjs": true,
+      "packages/cli/src/session.mjs": true,
+      "packages/cli/src/tools.mjs": true,
+      "packages/cli/src/workspace.mjs": true,
+      "packages/cli/test/cli.test.mjs": true,
+      "tests/packets.test.mjs": true,
+      "tests/pipeline-context.test.mjs": true,
+      "tests/pipeline-executor.test.mjs": true,
+      "tests/pipeline-fleet.test.mjs": true,
+      "tests/pipeline-knowledge.test.mjs": true,
+      "tests/pipeline-notices.test.mjs": true,
+      "tests/pipeline-observations.test.mjs": true,
+      "tests/pipeline-preparation.test.mjs": true,
+      "tests/pipeline-session.test.mjs": true,
+      "benchmark/broad-runner.mjs": true,
+      "benchmark/broad-driver.py": true,
+      "benchmark/broad-sonion.py": true,
+      "benchmark/broad-execution.mjs": true,
+      "benchmark/broad-native-worker.mjs": true,
+      "benchmark/broad-plan.md": true,
+      "benchmark/broad/cohort-a.json": true,
+      "benchmark/broad/cohort-b.json": true,
+      "benchmark/broad/cohort-c.json": true,
+      "benchmark/broad/cohort-d.json": true,
+      "benchmark/broad/cohort-e.json": true,
+      "benchmark/broad/cohort.json": true,
+      "benchmark/broad/preparation-amendments.json": true,
+      "benchmark/broad/prepare.py": true,
+      "benchmark/broad/graders/a/b01.mjs": true,
+      "benchmark/broad/graders/a/b02.mjs": true,
+      "benchmark/broad/graders/a/b03.mjs": true,
+      "benchmark/broad/graders/b/b04.cjs": true,
+      "benchmark/broad/graders/b/b05.cjs": true,
+      "benchmark/broad/graders/b/b06.cjs": true,
+      "benchmark/broad/graders/b/SAFETY.md": true,
+      "benchmark/broad/graders/c/b07.mjs": true,
+      "benchmark/broad/graders/c/b08.mjs": true,
+      "benchmark/broad/graders/c/b09.mjs": true,
+      "benchmark/broad/graders/d/b10.mjs": true,
+      "benchmark/broad/graders/d/b11.mjs": true,
+      "benchmark/broad/graders/d/b12.mjs": true,
+      "benchmark/broad/graders/d/PROVENANCE.md": true,
+      "benchmark/broad/graders/e/b13.cjs": true,
+      "benchmark/broad/graders/e/b14.cjs": true,
+      "benchmark/broad/graders/e/b15.mjs": true,
+      "review/broad-orchestration-check.py": true,
+      "review/broad-postflight.py": true,
+      "review/broad-pull.py": true,
+      "review/broad-report.py": true
+    }
+  },
+  "exportedReceiptIntegrity": {
+    "files": 2394,
+    "allMatch": true
+  },
+  "remotePostflight": {
+    "frozenChecks": {
+      "inputs:benchmark/broad/cohort.json": true,
+      "inputs:benchmark/broad/cohort-a.json": true,
+      "inputs:benchmark/broad/cohort-b.json": true,
+      "inputs:benchmark/broad/cohort-c.json": true,
+      "inputs:benchmark/broad/cohort-d.json": true,
+      "inputs:benchmark/broad/cohort-e.json": true,
+      "inputs:benchmark/broad/graders/a/b01.mjs": true,
+      "inputs:benchmark/broad/graders/a/b02.mjs": true,
+      "inputs:benchmark/broad/graders/a/b03.mjs": true,
+      "inputs:benchmark/broad/graders/b/SAFETY.md": true,
+      "inputs:benchmark/broad/graders/b/b04.cjs": true,
+      "inputs:benchmark/broad/graders/b/b05.cjs": true,
+      "inputs:benchmark/broad/graders/b/b06.cjs": true,
+      "inputs:benchmark/broad/graders/c/b07.mjs": true,
+      "inputs:benchmark/broad/graders/c/b08.mjs": true,
+      "inputs:benchmark/broad/graders/c/b09.mjs": true,
+      "inputs:benchmark/broad/graders/d/PROVENANCE.md": true,
+      "inputs:benchmark/broad/graders/d/b10.mjs": true,
+      "inputs:benchmark/broad/graders/d/b11.mjs": true,
+      "inputs:benchmark/broad/graders/d/b12.mjs": true,
+      "inputs:benchmark/broad/graders/e/b13.cjs": true,
+      "inputs:benchmark/broad/graders/e/b14.cjs": true,
+      "inputs:benchmark/broad/graders/e/b15.mjs": true,
+      "inputs:benchmark/broad/preparation-amendments.json": true,
+      "inputs:benchmark/broad/prepare.py": true,
+      "inputs:src/packets/entry.mjs": true,
+      "inputs:src/packets/executor.mjs": true,
+      "inputs:src/packets/policy.mjs": true,
+      "inputs:src/pipeline/context.mjs": true,
+      "inputs:src/pipeline/entry.mjs": true,
+      "inputs:src/pipeline/executor.mjs": true,
+      "inputs:src/pipeline/fleet.mjs": true,
+      "inputs:src/pipeline/knowledge.mjs": true,
+      "inputs:src/pipeline/notices.mjs": true,
+      "inputs:src/pipeline/observations.mjs": true,
+      "inputs:src/pipeline/policy.mjs": true,
+      "inputs:src/pipeline/preparation.mjs": true,
+      "inputs:src/pipeline/session.mjs": true,
+      "inputs:src/pipeline/tools.mjs": true,
+      "inputs:packages/cli/src/interactive.mjs": true,
+      "inputs:packages/cli/src/main.mjs": true,
+      "inputs:packages/cli/src/navigation.mjs": true,
+      "inputs:packages/cli/src/options.mjs": true,
+      "inputs:packages/cli/src/projects.mjs": true,
+      "inputs:packages/cli/src/session.mjs": true,
+      "inputs:packages/cli/src/tools.mjs": true,
+      "inputs:packages/cli/src/workspace.mjs": true,
+      "inputs:benchmark/broad-runner.mjs": true,
+      "inputs:benchmark/broad-driver.py": true,
+      "inputs:benchmark/broad-sonion.py": true,
+      "inputs:benchmark/broad-execution.mjs": true,
+      "inputs:benchmark/broad-native-worker.mjs": true,
+      "inputs:benchmark/broad-plan.md": true,
+      "inputs:package.json": true,
+      "inputs:package-lock.json": true,
+      "runtimeInputs:src/packets/entry.mjs": true,
+      "runtimeInputs:src/packets/executor.mjs": true,
+      "runtimeInputs:src/packets/policy.mjs": true,
+      "runtimeInputs:src/pipeline/context.mjs": true,
+      "runtimeInputs:src/pipeline/entry.mjs": true,
+      "runtimeInputs:src/pipeline/executor.mjs": true,
+      "runtimeInputs:src/pipeline/fleet.mjs": true,
+      "runtimeInputs:src/pipeline/knowledge.mjs": true,
+      "runtimeInputs:src/pipeline/notices.mjs": true,
+      "runtimeInputs:src/pipeline/observations.mjs": true,
+      "runtimeInputs:src/pipeline/policy.mjs": true,
+      "runtimeInputs:src/pipeline/preparation.mjs": true,
+      "runtimeInputs:src/pipeline/session.mjs": true,
+      "runtimeInputs:src/pipeline/tools.mjs": true,
+      "runtimeInputs:packages/cli/src/interactive.mjs": true,
+      "runtimeInputs:packages/cli/src/main.mjs": true,
+      "runtimeInputs:packages/cli/src/navigation.mjs": true,
+      "runtimeInputs:packages/cli/src/options.mjs": true,
+      "runtimeInputs:packages/cli/src/projects.mjs": true,
+      "runtimeInputs:packages/cli/src/session.mjs": true,
+      "runtimeInputs:packages/cli/src/tools.mjs": true,
+      "runtimeInputs:packages/cli/src/workspace.mjs": true,
+      "runtimeInputs:package.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-v1/evaluator-data.py": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-4g-v1/execution.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-v1/variants.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-v1/native-worker.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex/bin/codex.js": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex-linux-x64/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/bin/codex": true,
+      "externalInputs:/home/eric_qin/suffice-general-runtime/app/node_modules/@earendil-works/pi-coding-agent/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b01/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/cd6f048a3b3269afa2d4/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/cd6f048a3b3269afa2d4/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/cd6f048a3b3269afa2d4/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b01/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/a/b01.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b02/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b02/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/a/b02.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b03/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6abe01d7d16fa787bfde/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6abe01d7d16fa787bfde/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6abe01d7d16fa787bfde/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b03/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/a/b03.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b04/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/4e24d49ecf1e8f454db4/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/4e24d49ecf1e8f454db4/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/4e24d49ecf1e8f454db4/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b04/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/b/b04.cjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b05/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/c9a18dbc6df442a53cab/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/c9a18dbc6df442a53cab/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/c9a18dbc6df442a53cab/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b05/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/b/b05.cjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b06/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6a63da632aacf77b0dc9/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6a63da632aacf77b0dc9/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6a63da632aacf77b0dc9/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b06/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/b/b06.cjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b07/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/1ee9b4a720b7de835693/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/1ee9b4a720b7de835693/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/1ee9b4a720b7de835693/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b07/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/c/b07.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b08/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/cd675bbd62c34d23d870/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/cd675bbd62c34d23d870/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/cd675bbd62c34d23d870/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b08/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/c/b08.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b09/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/1d8d1e3f05835d4521da/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/1d8d1e3f05835d4521da/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/1d8d1e3f05835d4521da/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b09/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/c/b09.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b10/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/b8be565e1ab03e3e565b/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/b8be565e1ab03e3e565b/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/b8be565e1ab03e3e565b/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b10/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/d/b10.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b11/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6038db60066628f46019/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6038db60066628f46019/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/6038db60066628f46019/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b11/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/d/b11.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b12/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/de32532d51d279a0796c/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/de32532d51d279a0796c/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/de32532d51d279a0796c/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b12/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/d/b12.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b13/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/5f3dcd888ac879655f70/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/5f3dcd888ac879655f70/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/5f3dcd888ac879655f70/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b13/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/e/b13.cjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b14/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/8450c58bd4639af8bea8/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/8450c58bd4639af8bea8/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/8450c58bd4639af8bea8/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b14/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/e/b14.cjs": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/tasks/b15/task.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/e97a04db6aeeb9cb4ed6/node_modules/.package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/e97a04db6aeeb9cb4ed6/package-lock.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/dependencies/e97a04db6aeeb9cb4ed6/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/.suffice/broad-bench-v1/fixtures/v3/b15/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-broad-v1/benchmark/broad/graders/e/b15.mjs": true
+    },
+    "sourceSyncChecks": {
+      "package.json": true,
+      "package-lock.json": true,
+      "SOURCE-PROVENANCE.json": true,
+      "README.md": true,
+      ".gitignore": true,
+      "src/packets/entry.mjs": true,
+      "src/packets/executor.mjs": true,
+      "src/packets/policy.mjs": true,
+      "src/pipeline/context.mjs": true,
+      "src/pipeline/entry.mjs": true,
+      "src/pipeline/executor.mjs": true,
+      "src/pipeline/fleet.mjs": true,
+      "src/pipeline/knowledge.mjs": true,
+      "src/pipeline/notices.mjs": true,
+      "src/pipeline/observations.mjs": true,
+      "src/pipeline/policy.mjs": true,
+      "src/pipeline/preparation.mjs": true,
+      "src/pipeline/session.mjs": true,
+      "src/pipeline/tools.mjs": true,
+      "packages/cli/npm-shrinkwrap.json": true,
+      "packages/cli/package.json": true,
+      "packages/cli/README.md": true,
+      "packages/cli/THIRD-PARTY-NOTICES.md": true,
+      "packages/cli/VALIDATION.md": true,
+      "packages/cli/bin/suffice.mjs": true,
+      "packages/cli/src/interactive.mjs": true,
+      "packages/cli/src/main.mjs": true,
+      "packages/cli/src/navigation.mjs": true,
+      "packages/cli/src/options.mjs": true,
+      "packages/cli/src/projects.mjs": true,
+      "packages/cli/src/session.mjs": true,
+      "packages/cli/src/tools.mjs": true,
+      "packages/cli/src/workspace.mjs": true,
+      "packages/cli/test/cli.test.mjs": true,
+      "tests/packets.test.mjs": true,
+      "tests/pipeline-context.test.mjs": true,
+      "tests/pipeline-executor.test.mjs": true,
+      "tests/pipeline-fleet.test.mjs": true,
+      "tests/pipeline-knowledge.test.mjs": true,
+      "tests/pipeline-notices.test.mjs": true,
+      "tests/pipeline-observations.test.mjs": true,
+      "tests/pipeline-preparation.test.mjs": true,
+      "tests/pipeline-session.test.mjs": true,
+      "benchmark/broad-runner.mjs": true,
+      "benchmark/broad-driver.py": true,
+      "benchmark/broad-sonion.py": true,
+      "benchmark/broad-execution.mjs": true,
+      "benchmark/broad-native-worker.mjs": true,
+      "benchmark/broad-plan.md": true,
+      "benchmark/broad/cohort-a.json": true,
+      "benchmark/broad/cohort-b.json": true,
+      "benchmark/broad/cohort-c.json": true,
+      "benchmark/broad/cohort-d.json": true,
+      "benchmark/broad/cohort-e.json": true,
+      "benchmark/broad/cohort.json": true,
+      "benchmark/broad/preparation-amendments.json": true,
+      "benchmark/broad/prepare.py": true,
+      "benchmark/broad/graders/a/b01.mjs": true,
+      "benchmark/broad/graders/a/b02.mjs": true,
+      "benchmark/broad/graders/a/b03.mjs": true,
+      "benchmark/broad/graders/b/b04.cjs": true,
+      "benchmark/broad/graders/b/b05.cjs": true,
+      "benchmark/broad/graders/b/b06.cjs": true,
+      "benchmark/broad/graders/b/SAFETY.md": true,
+      "benchmark/broad/graders/c/b07.mjs": true,
+      "benchmark/broad/graders/c/b08.mjs": true,
+      "benchmark/broad/graders/c/b09.mjs": true,
+      "benchmark/broad/graders/d/b10.mjs": true,
+      "benchmark/broad/graders/d/b11.mjs": true,
+      "benchmark/broad/graders/d/b12.mjs": true,
+      "benchmark/broad/graders/d/PROVENANCE.md": true,
+      "benchmark/broad/graders/e/b13.cjs": true,
+      "benchmark/broad/graders/e/b14.cjs": true,
+      "benchmark/broad/graders/e/b15.mjs": true,
+      "review/broad-orchestration-check.py": true,
+      "review/broad-postflight.py": true,
+      "review/broad-pull.py": true,
+      "review/broad-report.py": true
+    },
+    "gitExposure": {
+      "b01": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b02": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b03": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b04": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b05": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b06": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b07": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b08": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b09": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b10": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b11": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b12": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b13": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b14": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "b15": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      }
+    },
+    "valid": true
+  },
+  "allChecksPassed": false
+}

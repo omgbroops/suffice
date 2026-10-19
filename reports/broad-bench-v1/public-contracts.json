@@ -1,0 +1,242 @@
+{
+  "b01": {
+    "repository": "motdotla/dotenv",
+    "issue": 605,
+    "title": "Calling dotenv.config() results in a TypeError",
+    "publicBody": "Since upgrading from dotenv 14.2.0 to 14.3.0 I get the following error when calling `dotenv.config()`\r\n\r\nCODE (foo.js):\r\n```\r\n...\r\nimport * as dotenv from \"dotenv\";\r\ndotenv.config(); // line 20\r\n...\r\n```\r\n\r\nERROR:\r\n```\r\n$ yarn build\r\n$ tslint -c tslint.json -p tsconfig.json --fix\r\n$ tsc\r\n$ node --es-module-specifier-resolution=node .\r\nfile:///..../foo.js:20\r\ndotenv.config();\r\n       ^\r\n\r\nTypeError: dotenv.config is not a function\r\n    at file:///..../foo.js:20:8\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:185:25)\r\n    at async Promise.all (index 0)\r\n    at async ESMLoader.import (node:internal/modules/esm/loader:281:24)\r\n    at async loadESM (node:internal/process/esm_loader:88:5)\r\n    at async handleMainPromise (node:internal/modules/run_main:65:12)\r\n```\r\n\r\nDowngrading to 14.2.0 solves the error.",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/tap/bin/run.js",
+        "--no-coverage",
+        "tests/test-parse.js",
+        "tests/test-config.js",
+        "tests/test-parse-multiline.js",
+        "tests/test-env-options.js",
+        "tests/test-cli-options.js",
+        "tests/test-config-cli.js"
+      ]
+    ]
+  },
+  "b02": {
+    "repository": "motdotla/dotenv",
+    "issue": 601,
+    "title": "# inside double quotes still treated as inline comment",
+    "publicBody": "v14.2.0\r\n`SOME_KEY={\"field1\":\"some value\", \"field2\": \"stops here#this is discarded\"}`\r\nWhen above line is parsed generates the following output\r\n`SOME_KEY: {\"field1\":\"some value\", \"field2\": \"stops here`\r\nwhich in turns gives a SyntaxError: Unexpected end of JSON input",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/tap/bin/run.js",
+        "--no-coverage",
+        "tests/test-parse.js",
+        "tests/test-config.js",
+        "tests/test-parse-multiline.js",
+        "tests/test-env-options.js",
+        "tests/test-cli-options.js",
+        "tests/test-config-cli.js"
+      ]
+    ]
+  },
+  "b03": {
+    "repository": "sindresorhus/p-map",
+    "issue": 75,
+    "title": "Memory leak when using abort signals",
+    "publicBody": "We have encountered a memory leak issue. After an extensive search for the source of the leak, it was found that it occurred in pMap. Upon reviewing the source code of your package, I discovered that you subscribe to the AbortSignal event but do not unsubscribe from it, which causes the memory leak.",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test.js",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b04": {
+    "repository": "ljharb/qs",
+    "issue": 510,
+    "title": "The parse method returns incorrect output when both strictNullHandling and allowEmptyArrays are set to true",
+    "publicBody": "Here is the test code: when `strictNullHandling` and `allowEmptyArrays` are both set to true, the parse function does not correctly interpret the result of stringify.\r\n```javascript\r\nimport { expect, test } from 'vitest';\r\nimport qs from 'qs';\r\n\r\nconst beforeParams = {\r\n  testEmptyArray: [],\r\n};\r\n\r\n// stringify result\r\nconst searchStr = 'testEmptyArray[]';\r\n\r\n// expect parse result\r\nconst afterParams = {\r\n  testEmptyArray: [],\r\n};\r\n\r\ntest('stringify', () => {\r\n  expect(\r\n    qs.stringify(beforeParams, {\r\n      strictNullHandling: true,\r\n      allowEmptyArrays: true,\r\n    }),\r\n  ).toBe(searchStr);\r\n});\r\n\r\ntest('parseSearchStr', () => {\r\n  expect(\r\n    qs.parse(searchStr, { strictNullHandling: true, allowEmptyArrays: true }),\r\n  ).toStrictEqual(afterParams);\r\n  //  expect { testEmptyArray:[] } but return { testEmptyArray:[null] }\r\n});\r\n```\r\n---\r\nVersion:  6.12.2\r\n\r\n\r\n",
+    "nativeCommands": [
+      [
+        "node",
+        "test/parse.js"
+      ],
+      [
+        "node",
+        "test/stringify.js"
+      ],
+      [
+        "node",
+        "test/utils.js"
+      ]
+    ]
+  },
+  "b05": {
+    "repository": "ljharb/qs",
+    "issue": 357,
+    "title": "Parsing object with array doesn't split a value",
+    "publicBody": "Parsing a query string object with parameter that intended to be an array doesn't split value by comma, while query string in a form of string is parsed correctly.\r\n\r\nThis is an issue when integrating with frameworks like HAPI that provides query string as a dictionary.\r\n\r\nExample\r\n```\r\nconst qs = require('qs');\r\n\r\n// Works\r\nconsole.log(qs.parse('color=a,b', { comma: true }));\r\n// Result: { color: [ 'a', 'b' ] }\r\n\r\n// Doesn't work\r\nconsole.log(qs.parse({ color: 'a,b' }, { comma: true }))\r\n// Result: { color: 'a,b' }\r\n// Expected result as above: { color: [ 'a', 'b' ] }\r\n```",
+    "nativeCommands": [
+      [
+        "node",
+        "test/index.js"
+      ]
+    ]
+  },
+  "b06": {
+    "repository": "isaacs/minimatch",
+    "issue": 157,
+    "title": "Globstar not matching zero",
+    "publicBody": "According to the docs, minimatch should behave like Bash 4.1.\r\n\r\nAccording to this comment, the `/path/**/*.html` pattern should match `/path/to/page.html`, `/path/to/web/page.html`, and also `/path/page.html`, for Bash 4 and above. This works in my Bash 4.4.20.\r\n\r\nHowever, if I use minimatch to create a RegExp for the pattern above:\r\n\r\n```\r\nconst makeRe = require(\"minimatch\").makeRe;\r\nconst regex = makeRe(\"/path/**/*.html\");\r\n```\r\nthe resulting RegExp seems to be `^(?:\\/path\\/(?:(?!(?:\\/|^)\\.).)*?\\/(?!\\.)(?=.)[^\\/]*?\\.html)$`, which although matches `/path/to/page.html` and `/path/to/web/page.html`, it doesn't match `/path/page.html`",
+    "nativeCommands": [
+      [
+        "node",
+        "-e",
+        "const fs=require('node:fs'),path=require('node:path'),Module=require('node:module');const f=path.resolve('test/basic.js'),s=fs.readFileSync(f,'utf8'),marker='    t.equal(tapOpts.re, expectRe, null, tapOpts)';if(s.split(marker).length!==2)throw Error('Pinned native assertion marker changed');const m=new Module(f,module);m.filename=f;m.paths=Module._nodeModulePaths(path.dirname(f));m._compile(s.replace(marker,'    // Omit obsolete RegExp rendering snapshots; retain matching assertions.'),f);"
+      ],
+      [
+        "node",
+        "node_modules/tap/bin/run.js",
+        "--no-coverage",
+        "test/brace-expand.js",
+        "test/defaults.js",
+        "test/extglob-ending-with-state-char.js",
+        "test/extglob-unfinished.js",
+        "test/no-path-module.js",
+        "test/partial.js",
+        "test/redos.js",
+        "test/tricky-negations.js",
+        "test/win-path-sep.js"
+      ]
+    ]
+  },
+  "b07": {
+    "repository": "sindresorhus/execa",
+    "issue": 1175,
+    "title": "Escaped newlines break arguments in version 9",
+    "publicBody": "After upgrading from version 8 to 9, some of my multi-line formatted commands have broken.\r\n\r\nReproduction:\r\n\r\n```js\r\nimport {$} from \"execa\";\r\n\r\ntry {\r\n  // 404 is just a stupid way to get an error for some details.\r\n  // Some commands are large, so I break them up by escaping newlines in templates:\r\n  //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#multi-line_strings\r\n  await $`404 abc\\\r\n  def`;\r\n} catch (error) {\r\n  console.log(\"command\", error.command); // 404 abc  ef\r\n  console.log(\"escaped\", error.escapedCommand); // 404 \"abc \" ef\r\n}\r\n```\r\n\r\nExpected command: `404 abc  def` or something close enough\r\nActual commands: `404 abc  ef` or `404 \"abc \" ef`\r\n\r\nI suspect it may be related to the difference between the template strings and the raw strings passed to a tag function. Example:\r\n\r\n```js\r\nfunction poo(foo, ...bar) {\r\n  console.log(\"strings\", foo.slice());\r\n  console.log(\"raw\", foo.raw);\r\n}\r\n\r\npoo`404 abc def`;\r\npoo`404 abc\r\n  def`;\r\npoo`404 abc\\\r\n  def`;\r\n```\r\n\r\nIn the first two examples, the raw strings and the strings arrays match up.\r\n```text\r\nstrings (1) ['404 abc def']\r\nraw (1) ['404 abc def']\r\n\r\nstrings (1) ['404 abc\r\n  def']\r\nraw (1) ['404 abc\r\n  def']\r\n```\r\n\r\nIn the 3rd sample however the generated strings and the raw strings are different.\r\n```text\r\nstrings (1) ['404 abc  def']\r\nraw (1) ['404 abc\\\\\r\n  def']\r\n```\r\n\r\nI suspect there may be some code that may be mixing up the raw strings with the regular strings causing some of the escaping to be offset by a character. But that is just a theory \ud83e\udd37.\r\n",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test/methods/template.js",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b08": {
+    "repository": "sindresorhus/execa",
+    "issue": 1219,
+    "title": "Fix using both `stdin: 'inherit'` and `input` options",
+    "publicBody": "See #1218.\n\nWhen using any of the following options:\n  - `{input: 'foo', stdio: 'inherit'}`   \n  - `{input: 'foo', stdio: ['inherit', ...]}`\n  - `{input: 'foo', stdin: 'inherit'}`\n\nExeca should silently use the following instead: `{input: 'foo', stdin: 'pipe', ...}`.\n\nPlease note that if users need multiple inputs, they can still use the `{stdin: ['inherit', {string: 'foo'}]` option.\n\nThis is technically a breaking change, so should be in a major release.",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test/io/input-option.js",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b09": {
+    "repository": "sindresorhus/p-queue",
+    "issue": 190,
+    "title": "Default value for priority doesn't get applied",
+    "publicBody": "According to the documentation, when priority is left undefined, it should default to 0. However this doesn't seem to be the case.\r\nInstead, the promises seem to be executed in a random order (not the order they were inserted into the queue in!).\r\nWhen manually setting the priority to 0, the queue behaves as expected.\r\n\r\nExample code:\r\n```ts\r\nimport PQueue from \"p-queue\";\r\n\r\nfunction delay(ms: number) {\r\n  return new Promise((resolve) => setTimeout(resolve, ms));\r\n}\r\n\r\nfunction addToQueue(name: string, priority?: number) {\r\n  console.log(`adding ${name} to queue`);\r\n  return queue.add(\r\n    async () => {\r\n      await delay(1000);\r\n      console.log(`finished ${name}`);\r\n      return Promise.resolve();\r\n    },\r\n    { priority }\r\n  );\r\n}\r\n\r\nconst queue = new PQueue({ concurrency: 1 });\r\nconst first = addToQueue(\"first\");\r\nconst second = addToQueue(\"second\");\r\nconst priority = addToQueue(\"priority\", 1);\r\nconst third = addToQueue(\"third\");\r\n```\r\n| Example output | Expected output |\r\n| --- | --- |\r\n| adding first to queue | adding first to queue |\r\n| adding second to queue | adding second to queue |\r\n| adding priority to queue | adding priority to queue | \r\n| adding third to queue | adding third to queue |\r\n| finished first | finished first |\r\n| finished third | finished priority |\r\n| finished priority | finished second |\r\n| finished second | finished third |",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test/test.ts",
+        "--match",
+        "*priority*",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b10": {
+    "repository": "chalk/ansi-regex",
+    "issue": 36,
+    "title": "Can't match cursorSave and cursorRestore",
+    "publicBody": "Today I was working with the regex and noticed that [`cursorSave`](https://github.com/sindresorhus/ansi-escapes/blob/main/index.js#L49) and [`cursorRestore` ](https://github.com/sindresorhus/ansi-escapes/blob/main/index.js#L50) don't get stripped with `strip-ansi`.\r\n\r\nI didn't check the other use cases yet, but wanted to make sure first that it is correct what I assume here.\r\n\r\nIt is the case, happy to send a PR.",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/cli.js",
+        "test.js",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b11": {
+    "repository": "chalk/ansi-regex",
+    "issue": 56,
+    "title": "Unable to match links ended with `\\u001B` rather than `\\u0007`.",
+    "publicBody": "`ansi-regex` cannot match link regexes that end in `\\u0001B`, as the regex only allows `\\u0007`.\r\n\r\nExample: `\\x1b]8;;http://example.com/\\x1b\\\\This is a link\\x1b]8;;\\x1b\\\\ hello`\r\nReference: https://github.com/nodejs/node/issues/53697",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/cli.js",
+        "test.js",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b12": {
+    "repository": "sindresorhus/string-width",
+    "issue": 70,
+    "title": "TypeError when string contains certain Unicode Format characters",
+    "publicBody": "## Summary\n\n`string-width` 8.1.0 crashes with `TypeError: Expected a code point, got 'undefined'` when processing strings that contain certain Unicode Format characters that are **not** in the `Default_Ignorable_Code_Point` category.\n\n## Environment\n\n- **string-width version**: 8.1.0\n- **get-east-asian-width version**: 1.3.0\n- **Node.js version**: 22.x / Bun 1.x\n- **OS**: macOS, Linux, Windows (all affected)\n\n## Steps to Reproduce\n\n```javascript\nimport stringWidth from 'string-width';\n\n// These Unicode Format characters cause the crash:\n// They are in \\p{Format} but NOT in \\p{Default_Ignorable_Code_Point}\n\nstringWidth('\\u0600'); // ARABIC NUMBER SIGN - CRASH!\nstringWidth('\\u0601'); // ARABIC SIGN SANAH - CRASH!\nstringWidth('\\u0602'); // ARABIC FOOTNOTE MARKER - CRASH!\nstringWidth('\\u0603'); // ARABIC SIGN SAFHA - CRASH!\nstringWidth('\\u0604'); // ARABIC SIGN SAMVAT - CRASH!\nstringWidth('\\u0605'); // ARABIC NUMBER MARK ABOVE - CRASH!\nstringWidth('\\u06DD'); // ARABIC END OF AYAH - CRASH!\nstringWidth('\\u070F'); // SYRIAC ABBREVIATION MARK - CRASH!\nstringWidth('\\u0890'); // ARABIC POUND MARK ABOVE - CRASH!\nstringWidth('\\u0891'); // ARABIC PIASTRE MARK ABOVE - CRASH!\nstringWidth('\\u08E2'); // ARABIC DISPUTED END OF AYAH - CRASH!\nstringWidth('\\u110BD'); // KAITHI NUMBER SIGN - CRASH!\nstringWidth('\\u110CD'); // KAITHI NUMBER SIGN ABOVE - CRASH!\n\n// Real-world example - Arabic text often contains these:\nconst arabicText = '\u0600\u0661\u0662\u0663'; // Arabic number sign followed by digits\nconsole.log(stringWidth(arabicText)); // CRASH!\n```\n\n## Expected Behavior\n\nThe function should return `0` for zero-width Format characters, or handle them gracefully without throwing.\n\n## Actual Behavior\n\n```\nTypeError: Expected a code point, got `undefined`.\n    at validate (node_modules/get-east-asian-width/index.js:5:13)\n    at eastAsianWidth (node_modules/get-east-asian-width/index.js:16:2)\n    at node_modules/string-width/index.js:82:12\n```\n\n## Root Cause Analysis\n\nThe bug is a mismatch between `zeroWidthClusterRegex` and `leadingNonPrintingRegex` in `string-width/index.js`.\n\n### The Problem\n\n1. **`zeroWidthClusterRegex`** uses `\\p{Default_Ignorable_Code_Point}`:\n   ```javascript\n   const zeroWidthClusterRegex = /^(?:\\p{Default_Ignorable_Code_Point}|\\p{Control}|\\p{Mark}|\\p{Surrogate})+$/v;\n   ```\n\n2. **`leadingNonPrintingRegex`** uses `\\p{Format}`:\n   ```javascript\n   const leadingNonPrintingRegex = /^[\\p{Default_Ignorable_Code_Point}\\p{Control}\\p{Format}\\p{Mark}\\p{Surrogate}]+/v;\n   ```\n\n3. **The gap**: Some Unicode `\\p{Format}` characters are **NOT** in `\\p{Default_Ignorable_Code_Point}`. These include:\n   - U+0600-U+0605 (Arabic number signs)\n   - U+06DD (Arabic end of ayah)\n   - U+070F (Syriac abbreviation mark)\n   - U+0890-U+0891 (Arabic pound/piastre marks)\n   - U+08E2 (Arabic disputed end of ayah)\n   - U+110BD, U+110CD (Kaithi number signs)\n   - And others...\n\n4. **The fatal sequence** (lines 66-73 in index.js):\n   ```javascript\n   for (const {segment} of segmenter.segment(string)) {\n       // Zero-width / non-printing clusters\n       if (isZeroWidthCluster(segment)) {\n           continue;  // \u274c Does NOT catch \\u0600 (not Default_Ignorable)\n       }\n       // ...\n       const codePoint = baseVisible(segment).codePointAt(0);\n       //                 \u2191 Strips \\u0600 via \\p{Format}, returns ''\n       //                                      \u2191 Returns undefined for ''\n       width += eastAsianWidth(codePoint);  // \ud83d\udca5 CRASH!\n   }\n   ```\n\n### Why these specific characters?\n\nThe Unicode Standard defines `Default_Ignorable_Code_Point` as characters that should be ignored in rendering if not supported. However, some Format characters like Arabic number signs are **not** default-ignorable because they carry semantic meaning in certain contexts (e.g., Quranic text formatting).\n\nThe `leadingNonPrintingRegex` correctly includes `\\p{Format}` to strip these characters, but `zeroWidthClusterRegex` doesn't use `\\p{Format}`, creating a gap where a segment consisting only of these Format characters passes the zero-width check but gets completely stripped by `baseVisible()`.\n\n## Suggested Fix\n\nThere are two possible fixes:\n\n### Option 1: Guard against empty string after `baseVisible()` (Minimal fix)\n\n```javascript\n// In string-width/index.js, after baseVisible() call:\nconst base = baseVisible(segment);\nif (base.length === 0) {\n    continue; // Skip segments that become empty after stripping ignorables\n}\nconst codePoint = base.codePointAt(0);\n```\n\n### Option 2: Expand `isZeroWidthCluster()` to catch all Format characters (More thorough)\n\n```javascript\n// Add explicit check for Format-only segments before baseVisible():\nconst isFormatOnlyCluster = segment => /^[\\p{Cf}]+$/u.test(segment);\n\n// Then in the loop:\nif (isControlCluster(segment) || isZeroWidthCluster(segment) || isFormatOnlyCluster(segment)) {\n    continue;\n}\n```\n\n### Option 3: Fix in `get-east-asian-width` (Defense in depth)\n\nThe `validate()` function in `get-east-asian-width` could handle `undefined` gracefully:\n\n```javascript\nfunction validate(codePoint) {\n    if (codePoint === undefined || codePoint === null) {\n        return; // Allow undefined, caller will handle\n    }\n    if (!Number.isSafeInteger(codePoint)) {\n        throw new TypeError(`Expected a code point, got \\`${typeof codePoint}\\`.`);\n    }\n}\n\nexport function eastAsianWidth(codePoint, {ambiguousAsWide = false} = {}) {\n    validate(codePoint);\n    if (codePoint === undefined || codePoint === null) {\n        return 1; // Default to narrow width for invalid input\n    }\n    // ... rest of function\n}\n```\n\n## Recommended Fix\n\n**Option 1** is the cleanest fix for `string-width` - it's minimal, targeted, and handles the root cause (empty string after stripping ignorables).\n\n## Workaround\n\nUntil this is fixed upstream, users can sanitize input before calling `string-width`:\n\n```javascript\n// Remove problematic Format characters before measuring\nconst PROBLEMATIC_FORMAT_CHARS = /[\\u061C\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]/g;\n\nfunction safeStringWidth(str) {\n    return stringWidth(str.replace(PROBLEMATIC_FORMAT_CHARS, ''));\n}\n```\n\n## Impact\n\nThis bug affects any application using `string-width` 8.x that processes:\n- Text copied from web pages (often contains invisible direction marks)\n- Text from PDFs (frequently include formatting characters)\n- Internationalized text (RTL languages use bidirectional marks)\n- User-generated content (may contain any Unicode characters)\n\nPopular affected packages include:\n- `ink` (React for CLI) - crashes during terminal rendering\n- `cli-table3`, `boxen`, `ora` - any CLI tool measuring string widths\n- `prettier`, `eslint` - when processing files with these characters\n\n## Related Issues\n\n- Similar crash reported in badlogic/pi-mono#371\n\n## Test Cases\n\n```javascript\nimport stringWidth from 'string-width';\nimport { describe, it, expect } from 'your-test-framework';\n\ndescribe('Format characters not in Default_Ignorable_Code_Point', () => {\n    // These are the characters that ACTUALLY crash in 8.1.0\n    it('should not crash on ARABIC NUMBER SIGN (U+0600)', () => {\n        expect(() => stringWidth('\\u0600')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC SIGN SANAH (U+0601)', () => {\n        expect(() => stringWidth('\\u0601')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC FOOTNOTE MARKER (U+0602)', () => {\n        expect(() => stringWidth('\\u0602')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC SIGN SAFHA (U+0603)', () => {\n        expect(() => stringWidth('\\u0603')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC SIGN SAMVAT (U+0604)', () => {\n        expect(() => stringWidth('\\u0604')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC NUMBER MARK ABOVE (U+0605)', () => {\n        expect(() => stringWidth('\\u0605')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC END OF AYAH (U+06DD)', () => {\n        expect(() => stringWidth('\\u06DD')).not.toThrow();\n    });\n\n    it('should not crash on SYRIAC ABBREVIATION MARK (U+070F)', () => {\n        expect(() => stringWidth('\\u070F')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC POUND MARK ABOVE (U+0890)', () => {\n        expect(() => stringWidth('\\u0890')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC PIASTRE MARK ABOVE (U+0891)', () => {\n        expect(() => stringWidth('\\u0891')).not.toThrow();\n    });\n\n    it('should not crash on ARABIC DISPUTED END OF AYAH (U+08E2)', () => {\n        expect(() => stringWidth('\\u08E2')).not.toThrow();\n    });\n\n    it('should handle Arabic text with number signs', () => {\n        // U+0600 followed by Arabic-Indic digits\n        expect(() => stringWidth('\\u0600\\u0661\\u0662\\u0663')).not.toThrow();\n    });\n});\n```\n\n## Complete List of Affected Characters\n\nAll Unicode `\\p{Format}` characters that are NOT in `\\p{Default_Ignorable_Code_Point}`:\n\n| Code Point | Name | Script |\n|------------|------|--------|\n| U+0600 | ARABIC NUMBER SIGN | Arabic |\n| U+0601 | ARABIC SIGN SANAH | Arabic |\n| U+0602 | ARABIC FOOTNOTE MARKER | Arabic |\n| U+0603 | ARABIC SIGN SAFHA | Arabic |\n| U+0604 | ARABIC SIGN SAMVAT | Arabic |\n| U+0605 | ARABIC NUMBER MARK ABOVE | Arabic |\n| U+06DD | ARABIC END OF AYAH | Arabic |\n| U+070F | SYRIAC ABBREVIATION MARK | Syriac |\n| U+0890 | ARABIC POUND MARK ABOVE | Arabic |\n| U+0891 | ARABIC PIASTRE MARK ABOVE | Arabic |\n| U+08E2 | ARABIC DISPUTED END OF AYAH | Arabic |\n| U+110BD | KAITHI NUMBER SIGN | Kaithi |\n| U+110CD | KAITHI NUMBER SIGN ABOVE | Kaithi |\n",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test.js",
+        "--no-cache"
+      ]
+    ]
+  },
+  "b13": {
+    "repository": "micromatch/micromatch",
+    "issue": 119,
+    "title": "Negation doesn't work properly with matchBase",
+    "publicBody": "## What is happening (but shouldn't):\r\nNegation pattern does not work properly with option `matchBase` in `micromatch@3.1.6`.\r\n\r\n## Code\r\n```\r\nvar mm = require('micromatch');   \r\nmm.isMatch(\"./x/y.js\", \"*.js\", { matchBase: true });    \r\n// true    \r\nmm.isMatch(\"./x/y.js\", \"!*.js\", { matchBase: true });    \r\n// true, but it should be false    \r\nmm.isMatch(\"./x/y.js\", \"**/*.js\", { matchBase: true });    \r\n// true    \r\nmm.isMatch(\"./x/y.js\", \"!**/*.js\", { matchBase: true });    \r\n// false    \r\n```\r\n",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/mocha/bin/_mocha",
+        "test/api.js",
+        "test/options.js"
+      ]
+    ]
+  },
+  "b14": {
+    "repository": "micromatch/micromatch",
+    "issue": 96,
+    "title": "basename: true and unixify: true breaks .not()",
+    "publicBody": "_(Thanks for reporting an issue to micromatch! If you haven't already read the [contributor guidelines](contributing.md), Please do that now, then procede to fill out the details below.)_\r\n\r\n## Please describe the **minimum necessary steps** to reproduce this issue:\r\n\r\n``` shell\r\n$ node\r\n> let mm = require(\"micromatch\")\r\nundefined\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"*.xml\"], {basename: true, unixify: true})\r\n[ 'C:\\\\bla\\\\bar.xml' ]\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"*.xml\"], {basename: true, unixify: false})\r\n[]\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"**/*.xml\"], {basename: false, unixify: true})\r\n[ 'C:\\\\bla\\\\bar.xml' ]\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"**/*.xml\"], {basename: false, unixify: false})\r\n[]\r\n>\r\n```\r\n\u2026\r\n\r\n## What is happening (but shouldn't):\r\n\r\nSpecifying basename: true and unixify: true  on Windows breaks the .not() function (inverts its logic)\r\n\r\n\u2026\r\n\r\n## What should be happening instead?\r\n\r\nSpecifying basename: true and unixify: true  on Windows does not break the .not() function (inverts its logic)\r\n\r\n\u2026\r\n",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/mocha/bin/_mocha",
+        "test/api.js",
+        "test/options.js"
+      ]
+    ]
+  },
+  "b15": {
+    "repository": "sindresorhus/globby",
+    "issue": 146,
+    "title": "The pattern in the subdirectory gitignore is not correctly excluded",
+    "publicBody": "file structure:\r\n```\r\n.\r\n\u251c\u2500\u2500 dir\r\n\u2502   \u251c\u2500\u2500 .gitignore\r\n\u2502   \u251c\u2500\u2500 bar.log\r\n\u2502   \u2514\u2500\u2500 subdir\r\n\u2502       \u2514\u2500\u2500 baz.log\r\n\u2514\u2500\u2500 foo.log\r\n```\r\n\r\n`./dir/.gitignore`:\r\n```\r\n*.log\r\n```\r\n\r\nList of files to be excluded by git:\r\n\r\n```console\r\n$ git check-ignore ./foo.log ./dir/bar.log ./dir/subdir/baz.log\r\n./dir/bar.log\r\n./dir/subdir/baz.log\r\n```\r\n\r\nIf globby works correctly, only the `foo.log` file should be output:\r\n\r\n```js\r\nconst globby = require('globby');\r\n\r\n(async () => {\r\n  const paths = await globby(['**/*.log'], { gitignore: true });\r\n  console.log(paths);\r\n  // expected: [ 'foo.log' ]\r\n})();\r\n```\r\n\r\nHowever, `globby@11.0.1` outputs like this:\r\n\r\n```js\r\n[ 'foo.log', 'dir/subdir/baz.log' ]\r\n```\r\n\r\nThe file `dir/subdir/baz.log` is not excluded!\r\n\r\n---\r\n\r\nWhen `globby@11.0.1` parses the `.gitignore` in a subdirectory, it adds the path of the parent to the beginning of each rule:\r\n\r\nhttps://github.com/sindresorhus/globby/blob/v11.0.1/gitignore.js#L18-L24\r\n\r\nSo, internally, `globby@11.0.1` has changed the contents of the `./dir/.gitignore` file to look like this:\r\n\r\n```diff\r\n- *.log\r\n+ dir/*.log\r\n```\r\n\r\nTherefore, you can avoid this problem by modifying the contents of the `./dir/.gitignore` file as follows:\r\n\r\n```\r\n**/*.log\r\n```\r\n\r\nHowever, this writing style is redundant. [Most projects will probably be written in the `*.log` style](https://github.com/github/gitignore/blob/18aa6d83774d514da479d73a4beb864cd4220231/Node.gitignore#L3).\r\n\r\nI believe this is a bug that should be fixed.\r\n",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "tests/globby.js",
+        "tests/ignore.js",
+        "--no-cache"
+      ]
+    ]
+  }
+}

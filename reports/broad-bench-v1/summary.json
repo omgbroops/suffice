@@ -1,0 +1,1133 @@
+{
+  "scope": "Fifteen issues unused in prior local evaluation/development, across the frozen cohort repositories. Historical public issues may have appeared in model training; no training-unseen claim. Four arm, one attempt per issue/arm, counterbalanced issue blocks.",
+  "costScope": "API-equivalent; all advice, repair, takeover and failed-response usage included. Engineering inference excluded.",
+  "planned": 60,
+  "completed": 9,
+  "arms": {
+    "codexSolMedium": {
+      "attempts": 2,
+      "accepted": 2,
+      "success": 1,
+      "knownCostUsd": 0.11511559999999998,
+      "unknownCosts": 1,
+      "costPerAcceptedTask": null,
+      "operationalFailures": 0,
+      "medianLatencySeconds": 43.965500000000006,
+      "p90LatencySeconds": 46.402,
+      "meanLatencySeconds": 43.965500000000006,
+      "modelCalls": 13,
+      "toolCalls": 12,
+      "reasoningFieldCoverage": {
+        "responses": 13,
+        "present": 13
+      },
+      "reasoningOutputTokens": 247,
+      "meanStageWallSeconds": 0.0,
+      "meanVerificationSeconds": 0.0,
+      "meanOtherControllerSeconds": 43.965500000000006,
+      "meanProviderReceiptSeconds": 0,
+      "meanCodemodeIntervalSeconds": 0,
+      "freshInput": 31618,
+      "cachedInput": 244096,
+      "output": 2747,
+      "maxPeakRssBytes": 1461837824,
+      "repairs": 0,
+      "adviceStages": 0,
+      "escalations": 0
+    },
+    "v1SolMedium": {
+      "attempts": 2,
+      "accepted": 1,
+      "success": 1,
+      "knownCostUsd": 0.1147636,
+      "unknownCosts": 0,
+      "costPerAcceptedTask": 0.1147636,
+      "operationalFailures": 0,
+      "medianLatencySeconds": 42.254999999999995,
+      "p90LatencySeconds": 48.537,
+      "meanLatencySeconds": 42.254999999999995,
+      "modelCalls": 11,
+      "toolCalls": 30,
+      "reasoningFieldCoverage": {
+        "responses": 11,
+        "present": 11
+      },
+      "reasoningOutputTokens": 536,
+      "meanStageWallSeconds": 41.95099999999999,
+      "meanVerificationSeconds": 0.3015,
+      "meanOtherControllerSeconds": 0.0025,
+      "meanProviderReceiptSeconds": 40.483999729156494,
+      "meanCodemodeIntervalSeconds": 1.2939999103546143,
+      "freshInput": 41881,
+      "cachedInput": 44416,
+      "output": 2656,
+      "maxPeakRssBytes": 362786816,
+      "repairs": 0,
+      "adviceStages": 0,
+      "escalations": 0
+    },
+    "v2LunaHigh": {
+      "attempts": 3,
+      "accepted": 2,
+      "success": 2,
+      "knownCostUsd": 0.00987496,
+      "unknownCosts": 0,
+      "costPerAcceptedTask": 0.00493748,
+      "operationalFailures": 0,
+      "medianLatencySeconds": 99.655,
+      "p90LatencySeconds": 106.609,
+      "meanLatencySeconds": 95.564,
+      "modelCalls": 31,
+      "toolCalls": 65,
+      "reasoningFieldCoverage": {
+        "responses": 31,
+        "present": 31
+      },
+      "reasoningOutputTokens": 3049,
+      "meanStageWallSeconds": 94.12566666666666,
+      "meanVerificationSeconds": 1.4193333333333333,
+      "meanOtherControllerSeconds": 0.019,
+      "meanProviderReceiptSeconds": 91.81666668256123,
+      "meanCodemodeIntervalSeconds": 2.1413333415985107,
+      "freshInput": 42352,
+      "cachedInput": 261376,
+      "output": 6052,
+      "maxPeakRssBytes": 346124288,
+      "repairs": 0,
+      "adviceStages": 0,
+      "escalations": 0
+    },
+    "v1LunaHigh": {
+      "attempts": 2,
+      "accepted": 1,
+      "success": 1,
+      "knownCostUsd": 0.0030640999999999997,
+      "unknownCosts": 1,
+      "costPerAcceptedTask": null,
+      "operationalFailures": 0,
+      "medianLatencySeconds": 42.682,
+      "p90LatencySeconds": 72.807,
+      "meanLatencySeconds": 42.682,
+      "modelCalls": 12,
+      "toolCalls": 18,
+      "reasoningFieldCoverage": {
+        "responses": 10,
+        "present": 10
+      },
+      "reasoningOutputTokens": 374,
+      "meanStageWallSeconds": 42.4825,
+      "meanVerificationSeconds": 0.198,
+      "meanOtherControllerSeconds": 0.0015,
+      "meanProviderReceiptSeconds": 39.52299988269806,
+      "meanCodemodeIntervalSeconds": 0.34250009059906006,
+      "freshInput": 20047,
+      "cachedInput": 48640,
+      "output": 1146,
+      "maxPeakRssBytes": 222437376,
+      "repairs": 0,
+      "adviceStages": 0,
+      "escalations": 0
+    }
+  },
+  "rows": [
+    {
+      "id": "b01",
+      "mode": "codexSolMedium",
+      "repository": "motdotla/dotenv",
+      "issue": 605,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.058982799999999995,
+      "totalCostUsd": 0.058982799999999995,
+      "usage": {
+        "input": 15901,
+        "cacheRead": 135808,
+        "cacheWrite": 0,
+        "output": 1360,
+        "totalTokens": 153069,
+        "estimatedApiUsd": 0.058982799999999995,
+        "modelCalls": 7,
+        "toolCalls": 6
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 148,
+      "modelCalls": 7,
+      "latencyMs": 41529,
+      "outerLatencyMs": 42179,
+      "peakRssBytes": 1461837824,
+      "resourceStop": null,
+      "features": {
+        "outputControl": false,
+        "preparedContext": false,
+        "guidance": false,
+        "notices": false,
+        "advice": false,
+        "repairs": false,
+        "solTakeover": false
+      },
+      "profile": "baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "patchPaths": [
+        "lib/main.js",
+        "tests/test-esm.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 0,
+      "verificationMs": 0,
+      "otherControllerMs": 41529,
+      "reasoningFieldCoverage": {
+        "responses": 7,
+        "present": 7
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 0,
+        "codemodeIntervalSeconds": 0,
+        "providerPairs": 0,
+        "codemodePairs": 0,
+        "unpairedEvents": 7,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b01",
+      "mode": "v1SolMedium",
+      "repository": "motdotla/dotenv",
+      "issue": 605,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0532388,
+      "totalCostUsd": 0.0532388,
+      "usage": {
+        "input": 20166,
+        "cacheRead": 23168,
+        "cacheWrite": 0,
+        "output": 1059,
+        "estimatedApiUsd": 0.0532388,
+        "modelCalls": 6,
+        "toolCalls": 14,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 133,
+      "modelCalls": 6,
+      "latencyMs": 35973,
+      "outerLatencyMs": 36575,
+      "peakRssBytes": 362786816,
+      "resourceStop": null,
+      "features": {
+        "outputControl": false,
+        "preparedContext": false,
+        "guidance": false,
+        "notices": false,
+        "advice": false,
+        "repairs": false,
+        "solTakeover": false
+      },
+      "profile": "baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/tap/bin/run.js",
+                "--no-coverage",
+                "tests/test-parse.js",
+                "tests/test-config.js",
+                "tests/test-parse-multiline.js",
+                "tests/test-env-options.js",
+                "tests/test-cli-options.js",
+                "tests/test-config-cli.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# Subtest: tests/test-parse.js\n    1..34\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - respects double quotes inside single quotes\n    ok 10 - respects single quotes inside double quotes\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - expands newlines but only if double quoted\n    ok 13 - expands newlines but only if double quoted\n    ok 14 - ignores commented lines\n    ok 15 - ignores inline comments\n    ok 16 - ignores inline comments, but respects \\# character inside of single quotes\n    ok 17 - ignores inline comments, but respects \\# character inside of double quotes\n    ok 18 - respects equals signs in values\n    ok 19 - retains inner quotes\n    ok 20 - retains leading double quote\n    ok 21 - retains leading single quote\n    ok 22 - reatins trailing double quote\n    ok 23 - retains trailing single quote\n    ok 24 - retains inner quotes\n    ok 25 - retains spaces in string\n    ok 26 - parses email addresses completely\n    ok 27 - parses keys and values surrounded by spaces\n    ok 28 - should parse a buffer into an object\n    ok 29 - can parse (\\\\r) line endings\n    ok 30 - can parse (\\\\n) line endings\n    ok 31 - can parse (\\\\r\\\\n) line endings\n    ok 32 - expect truthy value\n    ok 33 - should be equal\n    ok 34 - should be equal\n    # time=7.116ms\nok 1 - tests/test-parse.js # time=7.116ms\n\n# Subtest: tests/test-config.js\n    1..14\n    # Subtest: takes option for path\n        1..1\n        ok 1 - should be equal\n    ok 1 - takes option for path # time=2.812ms\n    \n    # Subtest: takes option for path along with home directory char ~\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 2 - takes option for path along with home directory char ~ # time=1.874ms\n    \n    # Subtest: takes option for encoding\n        1..1\n        ok 1 - should be equal\n    ok 3 - takes option for encoding # time=0.549ms\n    \n    # Subtest: takes option for debug\n        1..1\n        ok 1 - expect truthy value\n    ok 4 - takes option for debug # time=0.647ms\n    \n    # Subtest: takes option for multiline\n        1..1\n        ok 1 - should be equal\n    ok 5 - takes option for multiline # time=0.341ms\n    \n    # Subtest: reads path with encoding, parsing output to process.env\n        1..2\n        ok 1 - should be equivalent\n        ok 2 - should be equal\n    ok 6 - reads path with encoding, parsing output to process.env # time=1.578ms\n    \n    # Subtest: does not write over keys already in process.env\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 7 - does not write over keys already in process.env # time=0.297ms\n    \n    # Subtest: does write over keys already in process.env if override turned on\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 8 - does write over keys already in process.env if override turned on # time=0.392ms\n    \n    # Subtest: does not write over keys already in process.env if the key has a falsy value\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect falsey value\n    ok 9 - does not write over keys already in process.env if the key has a falsy value # time=0.479ms\n    \n    # Subtest: does write over keys already in process.env if the key has a falsy value but override is set to true\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 10 - does write over keys already in process.env if the key has a falsy value but override is set to true # time=0.364ms\n    \n    # Subtest: returns parsed object\n        1..2\n        ok 1 - expect falsey value\n        ok 2 - should be equivalent\n    ok 11 - returns parsed object # time=0.66ms\n    \n    # Subtest: returns any errors thrown from reading file or parsing\n        1..1\n        ok 1 - type is Error\n    ok 12 - returns any errors thrown from reading file or parsing # time=0.384ms\n    \n    # Subtest: logs any errors thrown from reading file or parsing when in debug mode\n        1..2\n        ok 1 - expect truthy value\n        ok 2 - type is Error\n    ok 13 - logs any errors thrown from reading file or parsing when in debug mode # time=0.543ms\n    \n    # Subtest: logs any errors parsing when in debug and override mode\n        1..1\n        ok 1 - expect truthy value\n    ok 14 - logs any errors parsing when in debug and override mode # time=0.427ms\n    \n    # time=41.225ms\nok 2 - tests/test-config.js # time=41.225ms\n\n# Subtest: tests/test-parse-multiline.js\n    1..26\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - expands newlines but only if double quoted\n    ok 10 - expands newlines but only if double quoted\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - ignores commented lines\n    ok 13 - respects equals signs in values\n    ok 14 - retains inner quotes\n    ok 15 - retains inner quotes\n    ok 16 - retains spaces in string\n    ok 17 - parses email addresses completely\n    ok 18 - parses keys and values surrounded by spaces\n    ok 19 - parses multi-line strings when using double quotes\n    ok 20 - parses multi-line strings when using single quotes\n    ok 21 - parses multi-line strings when using single quotes\n    ok 22 - should parse a buffer into an object\n    ok 23 - can parse (\\\\r) line endings\n    ok 24 - can parse (\\\\n) line endings\n    ok 25 - can parse (\\\\r\\\\n) line endings\n    ok 26 - expect truthy value\n    # time=7.426ms\nok 3 - tests/test-parse-multiline.js # time=7.426ms\n\n# Subtest: tests/test-env-options.js\n    1..6\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    # time=6.934ms\nok 4 - tests/test-env-options.js # time=6.934ms\n\n# Subtest: tests/test-cli-options.js\n    1..7\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    ok 7 - should be equivalent\n    # time=6.058ms\nok 5 - tests/test-cli-options.js # time=6.058ms\n\n# Subtest: tests/test-config-cli.js\n    1..3\n    ok 1 - should be equal\n    ok 2 - should be equal\n    ok 3 - should be equal\n    # time=90.43ms\nok 6 - tests/test-config-cli.js # time=90.43ms\n\n1..6\n# time=185.705ms\n",
+              "error": null,
+              "latencyMs": 305
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "lib/main.js",
+        "tests/test-import.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 35666,
+      "verificationMs": 305,
+      "otherControllerMs": 2,
+      "reasoningFieldCoverage": {
+        "responses": 6,
+        "present": 6
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 34.36399984359741,
+        "codemodeIntervalSeconds": 1.1629998683929443,
+        "providerPairs": 6,
+        "codemodePairs": 5,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b01",
+      "mode": "v2LunaHigh",
+      "repository": "motdotla/dotenv",
+      "issue": 605,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0029017400000000003,
+      "totalCostUsd": 0.0029017400000000003,
+      "usage": {
+        "input": 13142,
+        "cacheRead": 63104,
+        "cacheWrite": 0,
+        "output": 1913,
+        "estimatedApiUsd": 0.0029017400000000003,
+        "modelCalls": 9,
+        "toolCalls": 26,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 1029,
+      "modelCalls": 9,
+      "latencyMs": 80428,
+      "outerLatencyMs": 80976,
+      "peakRssBytes": 346124288,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/tap/bin/run.js",
+                "--no-coverage",
+                "tests/test-parse.js",
+                "tests/test-config.js",
+                "tests/test-parse-multiline.js",
+                "tests/test-env-options.js",
+                "tests/test-cli-options.js",
+                "tests/test-config-cli.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# Subtest: tests/test-parse.js\n    1..34\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - respects double quotes inside single quotes\n    ok 10 - respects single quotes inside double quotes\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - expands newlines but only if double quoted\n    ok 13 - expands newlines but only if double quoted\n    ok 14 - ignores commented lines\n    ok 15 - ignores inline comments\n    ok 16 - ignores inline comments, but respects \\# character inside of single quotes\n    ok 17 - ignores inline comments, but respects \\# character inside of double quotes\n    ok 18 - respects equals signs in values\n    ok 19 - retains inner quotes\n    ok 20 - retains leading double quote\n    ok 21 - retains leading single quote\n    ok 22 - reatins trailing double quote\n    ok 23 - retains trailing single quote\n    ok 24 - retains inner quotes\n    ok 25 - retains spaces in string\n    ok 26 - parses email addresses completely\n    ok 27 - parses keys and values surrounded by spaces\n    ok 28 - should parse a buffer into an object\n    ok 29 - can parse (\\\\r) line endings\n    ok 30 - can parse (\\\\n) line endings\n    ok 31 - can parse (\\\\r\\\\n) line endings\n    ok 32 - expect truthy value\n    ok 33 - should be equal\n    ok 34 - should be equal\n    # time=6.67ms\nok 1 - tests/test-parse.js # time=6.67ms\n\n# Subtest: tests/test-config.js\n    1..14\n    # Subtest: takes option for path\n        1..1\n        ok 1 - should be equal\n    ok 1 - takes option for path # time=1.902ms\n    \n    # Subtest: takes option for path along with home directory char ~\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 2 - takes option for path along with home directory char ~ # time=0.805ms\n    \n    # Subtest: takes option for encoding\n        1..1\n        ok 1 - should be equal\n    ok 3 - takes option for encoding # time=0.628ms\n    \n    # Subtest: takes option for debug\n        1..1\n        ok 1 - expect truthy value\n    ok 4 - takes option for debug # time=0.867ms\n    \n    # Subtest: takes option for multiline\n        1..1\n        ok 1 - should be equal\n    ok 5 - takes option for multiline # time=0.318ms\n    \n    # Subtest: reads path with encoding, parsing output to process.env\n        1..2\n        ok 1 - should be equivalent\n        ok 2 - should be equal\n    ok 6 - reads path with encoding, parsing output to process.env # time=1.778ms\n    \n    # Subtest: does not write over keys already in process.env\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 7 - does not write over keys already in process.env # time=0.237ms\n    \n    # Subtest: does write over keys already in process.env if override turned on\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 8 - does write over keys already in process.env if override turned on # time=0.3ms\n    \n    # Subtest: does not write over keys already in process.env if the key has a falsy value\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect falsey value\n    ok 9 - does not write over keys already in process.env if the key has a falsy value # time=0.493ms\n    \n    # Subtest: does write over keys already in process.env if the key has a falsy value but override is set to true\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 10 - does write over keys already in process.env if the key has a falsy value but override is set to true # time=0.358ms\n    \n    # Subtest: returns parsed object\n        1..2\n        ok 1 - expect falsey value\n        ok 2 - should be equivalent\n    ok 11 - returns parsed object # time=0.613ms\n    \n    # Subtest: returns any errors thrown from reading file or parsing\n        1..1\n        ok 1 - type is Error\n    ok 12 - returns any errors thrown from reading file or parsing # time=0.345ms\n    \n    # Subtest: logs any errors thrown from reading file or parsing when in debug mode\n        1..2\n        ok 1 - expect truthy value\n        ok 2 - type is Error\n    ok 13 - logs any errors thrown from reading file or parsing when in debug mode # time=0.499ms\n    \n    # Subtest: logs any errors parsing when in debug and override mode\n        1..1\n        ok 1 - expect truthy value\n    ok 14 - logs any errors parsing when in debug and override mode # time=0.645ms\n    \n    # time=35.705ms\nok 2 - tests/test-config.js # time=35.705ms\n\n# Subtest: tests/test-parse-multiline.js\n    1..26\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - expands newlines but only if double quoted\n    ok 10 - expands newlines but only if double quoted\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - ignores commented lines\n    ok 13 - respects equals signs in values\n    ok 14 - retains inner quotes\n    ok 15 - retains inner quotes\n    ok 16 - retains spaces in string\n    ok 17 - parses email addresses completely\n    ok 18 - parses keys and values surrounded by spaces\n    ok 19 - parses multi-line strings when using double quotes\n    ok 20 - parses multi-line strings when using single quotes\n    ok 21 - parses multi-line strings when using single quotes\n    ok 22 - should parse a buffer into an object\n    ok 23 - can parse (\\\\r) line endings\n    ok 24 - can parse (\\\\n) line endings\n    ok 25 - can parse (\\\\r\\\\n) line endings\n    ok 26 - expect truthy value\n    # time=6.103ms\nok 3 - tests/test-parse-multiline.js # time=6.103ms\n\n# Subtest: tests/test-env-options.js\n    1..6\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    # time=5.14ms\nok 4 - tests/test-env-options.js # time=5.14ms\n\n# Subtest: tests/test-cli-options.js\n    1..7\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    ok 7 - should be equivalent\n    # time=4.468ms\nok 5 - tests/test-cli-options.js # time=4.468ms\n\n# Subtest: tests/test-config-cli.js\n    1..3\n    ok 1 - should be equal\n    ok 2 - should be equal\n    ok 3 - should be equal\n    # time=75.729ms\nok 6 - tests/test-config-cli.js # time=75.729ms\n\n1..6\n# time=165.818ms\n",
+              "error": null,
+              "latencyMs": 281
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "7ce0ec9f-a74c-429a-8992-e5c1b2d533a4",
+            "kind": "codemode",
+            "bytes": 13401,
+            "newlines": 13,
+            "complete": true
+          }
+        },
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "5856f976-94c8-4de8-9673-62bc924d80b3",
+            "kind": "codemode",
+            "bytes": 7577,
+            "newlines": 7,
+            "complete": true
+          }
+        },
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "ab2c2d94-2b9b-4e7d-ba43-4fb76d240fab",
+            "kind": "codemode",
+            "bytes": 7985,
+            "newlines": 9,
+            "complete": true
+          }
+        }
+      ],
+      "patchPaths": [
+        "lib/main.js",
+        "tests/test-esm.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 80128,
+      "verificationMs": 281,
+      "otherControllerMs": 19,
+      "reasoningFieldCoverage": {
+        "responses": 9,
+        "present": 9
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 78.9300000667572,
+        "codemodeIntervalSeconds": 1.059999942779541,
+        "providerPairs": 9,
+        "codemodePairs": 8,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b02",
+      "mode": "v1SolMedium",
+      "repository": "motdotla/dotenv",
+      "issue": 601,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.06152479999999999,
+      "totalCostUsd": 0.06152479999999999,
+      "usage": {
+        "input": 21715,
+        "cacheRead": 21248,
+        "cacheWrite": 0,
+        "output": 1597,
+        "estimatedApiUsd": 0.06152479999999999,
+        "modelCalls": 5,
+        "toolCalls": 16,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 403,
+      "modelCalls": 5,
+      "latencyMs": 48537,
+      "outerLatencyMs": 49190,
+      "peakRssBytes": 216109056,
+      "resourceStop": null,
+      "features": {
+        "outputControl": false,
+        "preparedContext": false,
+        "guidance": false,
+        "notices": false,
+        "advice": false,
+        "repairs": false,
+        "solTakeover": false
+      },
+      "profile": "baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/tap/bin/run.js",
+                "--no-coverage",
+                "tests/test-parse.js",
+                "tests/test-config.js",
+                "tests/test-parse-multiline.js",
+                "tests/test-env-options.js",
+                "tests/test-cli-options.js",
+                "tests/test-config-cli.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# Subtest: tests/test-parse.js\n    1..39\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - respects double quotes inside single quotes\n    ok 10 - respects single quotes inside double quotes\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - expands newlines but only if double quoted\n    ok 13 - expands newlines but only if double quoted\n    ok 14 - ignores commented lines\n    ok 15 - ignores inline comments\n    ok 16 - ignores inline comments, but respects \\# character inside of single quotes\n    ok 17 - ignores inline comments, but respects \\# character inside of double quotes\n    ok 18 - retains hashes inside JSON strings\n    ok 19 - retains valid JSON containing a hash\n    ok 20 - ignores comments after JSON containing a hash\n    ok 21 - protects hashes in embedded single and double quoted sections\n    ok 22 - still ignores comments without preceding whitespace\n    ok 23 - respects equals signs in values\n    ok 24 - retains inner quotes\n    ok 25 - retains leading double quote\n    ok 26 - retains leading single quote\n    ok 27 - reatins trailing double quote\n    ok 28 - retains trailing single quote\n    ok 29 - retains inner quotes\n    ok 30 - retains spaces in string\n    ok 31 - parses email addresses completely\n    ok 32 - parses keys and values surrounded by spaces\n    ok 33 - should parse a buffer into an object\n    ok 34 - can parse (\\\\r) line endings\n    ok 35 - can parse (\\\\n) line endings\n    ok 36 - can parse (\\\\r\\\\n) line endings\n    ok 37 - expect truthy value\n    ok 38 - should be equal\n    ok 39 - should be equal\n    # time=7.014ms\nok 1 - tests/test-parse.js # time=7.014ms\n\n# Subtest: tests/test-config.js\n    1..14\n    # Subtest: takes option for path\n        1..1\n        ok 1 - should be equal\n    ok 1 - takes option for path # time=3.258ms\n    \n    # Subtest: takes option for path along with home directory char ~\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 2 - takes option for path along with home directory char ~ # time=0.939ms\n    \n    # Subtest: takes option for encoding\n        1..1\n        ok 1 - should be equal\n    ok 3 - takes option for encoding # time=0.398ms\n    \n    # Subtest: takes option for debug\n        1..1\n        ok 1 - expect truthy value\n    ok 4 - takes option for debug # time=0.55ms\n    \n    # Subtest: takes option for multiline\n        1..1\n        ok 1 - should be equal\n    ok 5 - takes option for multiline # time=0.325ms\n    \n    # Subtest: reads path with encoding, parsing output to process.env\n        1..2\n        ok 1 - should be equivalent\n        ok 2 - should be equal\n    ok 6 - reads path with encoding, parsing output to process.env # time=1.567ms\n    \n    # Subtest: does not write over keys already in process.env\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 7 - does not write over keys already in process.env # time=0.27ms\n    \n    # Subtest: does write over keys already in process.env if override turned on\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 8 - does write over keys already in process.env if override turned on # time=0.342ms\n    \n    # Subtest: does not write over keys already in process.env if the key has a falsy value\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect falsey value\n    ok 9 - does not write over keys already in process.env if the key has a falsy value # time=0.484ms\n    \n    # Subtest: does write over keys already in process.env if the key has a falsy value but override is set to true\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 10 - does write over keys already in process.env if the key has a falsy value but override is set to true # time=0.392ms\n    \n    # Subtest: returns parsed object\n        1..2\n        ok 1 - expect falsey value\n        ok 2 - should be equivalent\n    ok 11 - returns parsed object # time=0.616ms\n    \n    # Subtest: returns any errors thrown from reading file or parsing\n        1..1\n        ok 1 - type is Error\n    ok 12 - returns any errors thrown from reading file or parsing # time=0.38ms\n    \n    # Subtest: logs any errors thrown from reading file or parsing when in debug mode\n        1..2\n        ok 1 - expect truthy value\n        ok 2 - type is Error\n    ok 13 - logs any errors thrown from reading file or parsing when in debug mode # time=0.477ms\n    \n    # Subtest: logs any errors parsing when in debug and override mode\n        1..1\n        ok 1 - expect truthy value\n    ok 14 - logs any errors parsing when in debug and override mode # time=0.418ms\n    \n    # time=37.182ms\nok 2 - tests/test-config.js # time=37.182ms\n\n# Subtest: tests/test-parse-multiline.js\n    1..26\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - expands newlines but only if double quoted\n    ok 10 - expands newlines but only if double quoted\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - ignores commented lines\n    ok 13 - respects equals signs in values\n    ok 14 - retains inner quotes\n    ok 15 - retains inner quotes\n    ok 16 - retains spaces in string\n    ok 17 - parses email addresses completely\n    ok 18 - parses keys and values surrounded by spaces\n    ok 19 - parses multi-line strings when using double quotes\n    ok 20 - parses multi-line strings when using single quotes\n    ok 21 - parses multi-line strings when using single quotes\n    ok 22 - should parse a buffer into an object\n    ok 23 - can parse (\\\\r) line endings\n    ok 24 - can parse (\\\\n) line endings\n    ok 25 - can parse (\\\\r\\\\n) line endings\n    ok 26 - expect truthy value\n    # time=5.614ms\nok 3 - tests/test-parse-multiline.js # time=5.614ms\n\n# Subtest: tests/test-env-options.js\n    1..6\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    # time=5.068ms\nok 4 - tests/test-env-options.js # time=5.068ms\n\n# Subtest: tests/test-cli-options.js\n    1..7\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    ok 7 - should be equivalent\n    # time=5.518ms\nok 5 - tests/test-cli-options.js # time=5.518ms\n\n# Subtest: tests/test-config-cli.js\n    1..3\n    ok 1 - should be equal\n    ok 2 - should be equal\n    ok 3 - should be equal\n    # time=78.704ms\nok 6 - tests/test-config-cli.js # time=78.704ms\n\n1..6\n# time=175.797ms\n",
+              "error": null,
+              "latencyMs": 298
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "README.md",
+        "lib/main.js",
+        "tests/test-parse.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 1,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 48236,
+      "verificationMs": 298,
+      "otherControllerMs": 3,
+      "reasoningFieldCoverage": {
+        "responses": 5,
+        "present": 5
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 46.603999614715576,
+        "codemodeIntervalSeconds": 1.4249999523162842,
+        "providerPairs": 5,
+        "codemodePairs": 4,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b02",
+      "mode": "v2LunaHigh",
+      "repository": "motdotla/dotenv",
+      "issue": 601,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0035771800000000006,
+      "totalCostUsd": 0.0035771800000000006,
+      "usage": {
+        "input": 14438,
+        "cacheRead": 98688,
+        "cacheWrite": 0,
+        "output": 2293,
+        "estimatedApiUsd": 0.0035771800000000006,
+        "modelCalls": 11,
+        "toolCalls": 20,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 1511,
+      "modelCalls": 11,
+      "latencyMs": 106609,
+      "outerLatencyMs": 107118,
+      "peakRssBytes": 223457280,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/tap/bin/run.js",
+                "--no-coverage",
+                "tests/test-parse.js",
+                "tests/test-config.js",
+                "tests/test-parse-multiline.js",
+                "tests/test-env-options.js",
+                "tests/test-cli-options.js",
+                "tests/test-config-cli.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# Subtest: tests/test-parse.js\n    1..35\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - respects double quotes inside single quotes\n    ok 10 - respects single quotes inside double quotes\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - expands newlines but only if double quoted\n    ok 13 - expands newlines but only if double quoted\n    ok 14 - ignores commented lines\n    ok 15 - ignores inline comments\n    ok 16 - ignores inline comments, but respects \\# character inside of single quotes\n    ok 17 - ignores inline comments, but respects \\# character inside of double quotes\n    ok 18 - preserves \\# inside double-quoted strings in unquoted values\n    ok 19 - respects equals signs in values\n    ok 20 - retains inner quotes\n    ok 21 - retains leading double quote\n    ok 22 - retains leading single quote\n    ok 23 - reatins trailing double quote\n    ok 24 - retains trailing single quote\n    ok 25 - retains inner quotes\n    ok 26 - retains spaces in string\n    ok 27 - parses email addresses completely\n    ok 28 - parses keys and values surrounded by spaces\n    ok 29 - should parse a buffer into an object\n    ok 30 - can parse (\\\\r) line endings\n    ok 31 - can parse (\\\\n) line endings\n    ok 32 - can parse (\\\\r\\\\n) line endings\n    ok 33 - expect truthy value\n    ok 34 - should be equal\n    ok 35 - should be equal\n    # time=5.696ms\nok 1 - tests/test-parse.js # time=5.696ms\n\n# Subtest: tests/test-config.js\n    1..14\n    # Subtest: takes option for path\n        1..1\n        ok 1 - should be equal\n    ok 1 - takes option for path # time=1.922ms\n    \n    # Subtest: takes option for path along with home directory char ~\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 2 - takes option for path along with home directory char ~ # time=0.908ms\n    \n    # Subtest: takes option for encoding\n        1..1\n        ok 1 - should be equal\n    ok 3 - takes option for encoding # time=0.44ms\n    \n    # Subtest: takes option for debug\n        1..1\n        ok 1 - expect truthy value\n    ok 4 - takes option for debug # time=0.593ms\n    \n    # Subtest: takes option for multiline\n        1..1\n        ok 1 - should be equal\n    ok 5 - takes option for multiline # time=0.334ms\n    \n    # Subtest: reads path with encoding, parsing output to process.env\n        1..2\n        ok 1 - should be equivalent\n        ok 2 - should be equal\n    ok 6 - reads path with encoding, parsing output to process.env # time=1.503ms\n    \n    # Subtest: does not write over keys already in process.env\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 7 - does not write over keys already in process.env # time=0.306ms\n    \n    # Subtest: does write over keys already in process.env if override turned on\n        1..2\n        ok 1 - should be equal\n        ok 2 - should be equal\n    ok 8 - does write over keys already in process.env if override turned on # time=0.375ms\n    \n    # Subtest: does not write over keys already in process.env if the key has a falsy value\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect falsey value\n    ok 9 - does not write over keys already in process.env if the key has a falsy value # time=0.519ms\n    \n    # Subtest: does write over keys already in process.env if the key has a falsy value but override is set to true\n        1..2\n        ok 1 - should be equal\n        ok 2 - expect truthy value\n    ok 10 - does write over keys already in process.env if the key has a falsy value but override is set to true # time=0.344ms\n    \n    # Subtest: returns parsed object\n        1..2\n        ok 1 - expect falsey value\n        ok 2 - should be equivalent\n    ok 11 - returns parsed object # time=0.623ms\n    \n    # Subtest: returns any errors thrown from reading file or parsing\n        1..1\n        ok 1 - type is Error\n    ok 12 - returns any errors thrown from reading file or parsing # time=0.353ms\n    \n    # Subtest: logs any errors thrown from reading file or parsing when in debug mode\n        1..2\n        ok 1 - expect truthy value\n        ok 2 - type is Error\n    ok 13 - logs any errors thrown from reading file or parsing when in debug mode # time=0.423ms\n    \n    # Subtest: logs any errors parsing when in debug and override mode\n        1..1\n        ok 1 - expect truthy value\n    ok 14 - logs any errors parsing when in debug and override mode # time=0.353ms\n    \n    # time=33.597ms\nok 2 - tests/test-config.js # time=33.597ms\n\n# Subtest: tests/test-parse-multiline.js\n    1..26\n    ok 1 - should return an object\n    ok 2 - sets basic environment variable\n    ok 3 - reads after a skipped line\n    ok 4 - defaults empty values to empty string\n    ok 5 - escapes single quoted values\n    ok 6 - respects surrounding spaces in single quotes\n    ok 7 - escapes double quoted values\n    ok 8 - respects surrounding spaces in double quotes\n    ok 9 - expands newlines but only if double quoted\n    ok 10 - expands newlines but only if double quoted\n    ok 11 - expands newlines but only if double quoted\n    ok 12 - ignores commented lines\n    ok 13 - respects equals signs in values\n    ok 14 - retains inner quotes\n    ok 15 - retains inner quotes\n    ok 16 - retains spaces in string\n    ok 17 - parses email addresses completely\n    ok 18 - parses keys and values surrounded by spaces\n    ok 19 - parses multi-line strings when using double quotes\n    ok 20 - parses multi-line strings when using single quotes\n    ok 21 - parses multi-line strings when using single quotes\n    ok 22 - should parse a buffer into an object\n    ok 23 - can parse (\\\\r) line endings\n    ok 24 - can parse (\\\\n) line endings\n    ok 25 - can parse (\\\\r\\\\n) line endings\n    ok 26 - expect truthy value\n    # time=5.454ms\nok 3 - tests/test-parse-multiline.js # time=5.454ms\n\n# Subtest: tests/test-env-options.js\n    1..6\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    # time=7.371ms\nok 4 - tests/test-env-options.js # time=7.371ms\n\n# Subtest: tests/test-cli-options.js\n    1..7\n    ok 1 - should be equivalent\n    ok 2 - should be equivalent\n    ok 3 - should be equivalent\n    ok 4 - should be equivalent\n    ok 5 - should be equivalent\n    ok 6 - should be equivalent\n    ok 7 - should be equivalent\n    # time=4.174ms\nok 5 - tests/test-cli-options.js # time=4.174ms\n\n# Subtest: tests/test-config-cli.js\n    1..3\n    ok 1 - should be equal\n    ok 2 - should be equal\n    ok 3 - should be equal\n    # time=78.757ms\nok 6 - tests/test-config-cli.js # time=78.757ms\n\n1..6\n# time=173.332ms\n",
+              "error": null,
+              "latencyMs": 296
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "4aba741c-c8cc-4fb0-adfc-f0c66a80459c",
+            "kind": "codemode",
+            "bytes": 7045,
+            "newlines": 192,
+            "complete": true
+          }
+        }
+      ],
+      "patchPaths": [
+        "lib/main.js",
+        "tests/test-parse.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 1,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 106294,
+      "verificationMs": 296,
+      "otherControllerMs": 19,
+      "reasoningFieldCoverage": {
+        "responses": 11,
+        "present": 11
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 105.08299970626831,
+        "codemodeIntervalSeconds": 1.062000036239624,
+        "providerPairs": 11,
+        "codemodePairs": 10,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b03",
+      "mode": "v2LunaHigh",
+      "repository": "sindresorhus/p-map",
+      "issue": 75,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.00339604,
+      "totalCostUsd": 0.00339604,
+      "usage": {
+        "input": 14772,
+        "cacheRead": 99584,
+        "cacheWrite": 0,
+        "output": 1846,
+        "estimatedApiUsd": 0.00339604,
+        "modelCalls": 11,
+        "toolCalls": 19,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 509,
+      "modelCalls": 11,
+      "latencyMs": 99655,
+      "outerLatencyMs": 100269,
+      "peakRssBytes": 327065600,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/ava/entrypoints/cli.mjs",
+                "test.js",
+                "--no-cache"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "\n  \u2714 handles empty iterable\n  \u2714 asyncIterator - handles empty iterable\n  \u2714 pMapIterable - empty\n  \u2714 removes abort listener when pMap settles\n  \u2714 invalid mapper\n  \u2714 already aborted signal\n  \u2714 pMapIterable - iterable that throws\n  \u2714 pMapSkip\n  \u2714 pMapIterable - mapper that throws\n  \u2714 all pMapSkips\n  \u2714 multiple pMapSkips\n  \u2714 pMapIterable - pMapSkip\n  \u2714 enforce number in options.concurrency\n  \u2714 asyncIterator - enforce number in options.concurrency\n  \u2714 asyncIterator - pMapSkip\n  \u2714 asyncIterator - all pMapSkips\n  \u2714 asyncIterator - multiple pMapSkips\n  \u2714 abort by AbortController\n  \u2714 no unhandled rejected promises from mapper throws - infinite concurrency (102ms)\n  \u2714 no unhandled rejected promises from mapper throws - concurrency 1 (101ms)\n  \u2714 pMapIterable - stop on error (102ms)\n  \u2714 async with concurrency: 2 (out of order time sequence) (203ms)\n  \u2714 async with concurrency: 2 (problematic time sequence) (208ms)\n  \u2714 asyncIterator - async with concurrency: 2 (out of order time sequence) (210ms)\n  \u2714 asyncIterator - async with concurrency: 2 (problematic time sequence) (255ms)\n  \u2714 asyncIterator - async with concurrency: 2 (random time sequence) (268ms)\n  \u2714 main (305ms)\n  \u2714 pMapIterable (302ms)\n  \u2714 catches exception from source iterator - 1st item (305ms)\n  \u2714 asyncIterator - main (311ms)\n  \u2714 async with concurrency: 2 (random time sequence) (338ms)\n  \u2714 pMapIterable - concurrency: 2 (352ms)\n  \u2714 catches exception from source iterator - 2nd item (402ms)\n  \u2714 catches exception from source iterator - 2nd item after 1st item mapper throw (402ms)\n  \u2714 asyncIterator - get the correct exception after stop-on-error (501ms)\n  \u2714 incorrect input type (501ms)\n  \u2714 immediately rejects when stopOnError is true (524ms)\n  \u2714 asyncIterator - immediately rejects when stopOnError is true (570ms)\n  \u2714 all mappers should run when concurrency is infinite, even after stop-on-error happened (603ms)\n  \u2714 pMapIterable - index in mapper (602ms)\n  \u2714 concurrency: 1 (605ms)\n  \u2714 pMapIterable - concurrency: 1 (602ms)\n  \u2714 asyncIterator - all mappers should run when concurrency is infinite, even after stop-on-error happened (610ms)\n  \u2714 asyncIterator - concurrency: 1 (631ms)\n  \u2714 pMapIterable - backpressure (1s)\n  \u2714 aggregate errors when stopOnError is false (1.2s)\n  \u2714 asyncIterator - aggregate errors when stopOnError is false (1.3s)\n  \u2714 concurrency: 4 (2.8s)\n  \u2714 asyncIterator - concurrency: 4 (3.3s)\n  \u2500\n\n  49 tests passed\n",
+              "error": null,
+              "latencyMs": 3681
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "index.js",
+        "test.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 95955,
+      "verificationMs": 3681,
+      "otherControllerMs": 19,
+      "reasoningFieldCoverage": {
+        "responses": 11,
+        "present": 11
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 91.4370002746582,
+        "codemodeIntervalSeconds": 4.302000045776367,
+        "providerPairs": 11,
+        "codemodePairs": 10,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b03",
+      "mode": "v1LunaHigh",
+      "repository": "sindresorhus/p-map",
+      "issue": 75,
+      "status": "cost_unknown",
+      "accepted": false,
+      "budgetEligible": false,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": true,
+      "knownCostUsd": 0.00018730000000000003,
+      "totalCostUsd": null,
+      "usage": {
+        "input": 1668,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "output": 41,
+        "estimatedApiUsd": 0.00018730000000000003,
+        "modelCalls": 3,
+        "toolCalls": 0,
+        "costUnknown": true
+      },
+      "receiptsMatched": false,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 8,
+      "modelCalls": 3,
+      "latencyMs": 12557,
+      "outerLatencyMs": 13141,
+      "peakRssBytes": 170823680,
+      "resourceStop": null,
+      "features": {
+        "outputControl": false,
+        "preparedContext": false,
+        "guidance": false,
+        "notices": false,
+        "advice": false,
+        "repairs": false,
+        "solTakeover": false
+      },
+      "profile": "baseline",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [],
+      "notes": [
+        {
+          "kind": "failure",
+          "error": "solve: Task stopped: cancelled"
+        }
+      ],
+      "patchPaths": [],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 1,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 12556,
+      "verificationMs": 0,
+      "otherControllerMs": 1,
+      "reasoningFieldCoverage": {
+        "responses": 1,
+        "present": 1
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 7.4709999561309814,
+        "codemodeIntervalSeconds": 0,
+        "providerPairs": 2,
+        "codemodePairs": 0,
+        "unpairedEvents": 2,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b04",
+      "mode": "v1LunaHigh",
+      "repository": "ljharb/qs",
+      "issue": 510,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0028767999999999997,
+      "totalCostUsd": 0.0028767999999999997,
+      "usage": {
+        "input": 18379,
+        "cacheRead": 48640,
+        "cacheWrite": 0,
+        "output": 1105,
+        "estimatedApiUsd": 0.0028767999999999997,
+        "modelCalls": 9,
+        "toolCalls": 18,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 366,
+      "modelCalls": 9,
+      "latencyMs": 72807,
+      "outerLatencyMs": 73441,
+      "peakRssBytes": 222437376,
+      "resourceStop": null,
+      "features": {
+        "outputControl": false,
+        "preparedContext": false,
+        "guidance": false,
+        "notices": false,
+        "advice": false,
+        "repairs": false,
+        "solTakeover": false
+      },
+      "profile": "baseline",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "test/parse.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# parse()\nok 1 parses a single nested string\nok 2 parses a double nested string\nok 3 defaults to a depth of 5\nok 4 parses a simple array\nok 5 supports keys that begin with a number\n# parses a simple string\nok 6 should be deeply equivalent\nok 7 should be deeply equivalent\nok 8 should be deeply equivalent\nok 9 should be deeply equivalent\nok 10 should be deeply equivalent\nok 11 should be deeply equivalent\nok 12 should be deeply equivalent\nok 13 should be deeply equivalent\nok 14 should be deeply equivalent\nok 15 should be deeply equivalent\nok 16 should be deeply equivalent\nok 17 should be deeply equivalent\nok 18 should be deeply equivalent\nok 19 should be deeply equivalent\nok 20 should be deeply equivalent\nok 21 should be deeply equivalent\n# comma: false\nok 22 should be deeply equivalent\nok 23 should be deeply equivalent\nok 24 should be deeply equivalent\nok 25 should be deeply equivalent\n# comma: true\nok 26 should be deeply equivalent\nok 27 should be deeply equivalent\nok 28 should be deeply equivalent\nok 29 should be deeply equivalent\n# allows enabling dot notation\nok 30 should be deeply equivalent\nok 31 should be deeply equivalent\n# decode dot keys correctly\nok 32 with allowDots false and decodeDotInKeys false\nok 33 with allowDots false and decodeDotInKeys false\nok 34 with allowDots true and decodeDotInKeys false\nok 35 with allowDots true and decodeDotInKeys true\nok 36 with allowDots false and decodeDotInKeys false\nok 37 with allowDots true and decodeDotInKeys false\nok 38 with allowDots true and decodeDotInKeys true\nok 39 with allowDots and decodeDotInKeys undefined\n# should decode dot in key of object, and allow enabling dot notation when decodeDotInKeys is set to true and allowDots is undefined\nok 40 with allowDots undefined and decodeDotInKeys true\n# should throw when decodeDotInKeys is not of type boolean\nok 41 should throw\nok 42 should throw\nok 43 should throw\nok 44 should throw\n# allows empty arrays in obj values\nok 45 should be deeply equivalent\nok 46 should be deeply equivalent\nok 47 should be deeply equivalent\nok 48 should be deeply equivalent\n# should throw when allowEmptyArrays is not of type boolean\nok 49 should throw\nok 50 should throw\nok 51 should throw\nok 52 should throw\n# only parses one level when depth = 1\nok 53 should be deeply equivalent\nok 54 should be deeply equivalent\n# uses original key when depth = 0\nok 55 should be deeply equivalent\nok 56 should be deeply equivalent\n# uses original key when depth = false\nok 57 should be deeply equivalent\nok 58 should be deeply equivalent\n# parses an explicit array\nok 59 should be deeply equivalent\nok 60 should be deeply equivalent\nok 61 should be deeply equivalent\n# parses a mix of simple and explicit arrays\nok 62 should be deeply equivalent\nok 63 should be deeply equivalent\nok 64 should be deeply equivalent\nok 65 should be deeply equivalent\nok 66 should be deeply equivalent\nok 67 should be deeply equivalent\nok 68 should be deeply equivalent\nok 69 should be deeply equivalent\nok 70 should be deeply equivalent\nok 71 should be deeply equivalent\n# parses a nested array\nok 72 should be deeply equivalent\nok 73 should be deeply equivalent\n# allows to specify array indices\nok 74 should be deeply equivalent\nok 75 should be deeply equivalent\nok 76 should be deeply equivalent\nok 77 should be deeply equivalent\nok 78 should be deeply equivalent\n# limits specific array indices to arrayLimit\nok 79 should be deeply equivalent\nok 80 should be deeply equivalent\nok 81 should be deeply equivalent\nok 82 should be deeply equivalent\n# supports encoded = signs\nok 83 should be deeply equivalent\n# is ok with url encoded strings\nok 84 should be deeply equivalent\nok 85 should be deeply equivalent\n# allows brackets in the value\nok 86 should be deeply equivalent\nok 87 should be deeply equivalent\n# allows empty values\nok 88 should be deeply equivalent\nok 89 should be deeply equivalent\nok 90 should be deeply equivalent\n# transforms arrays to objects\nok 91 should be deeply equivalent\nok 92 should be deeply equivalent\nok 93 should be deeply equivalent\nok 94 should be deeply equivalent\nok 95 should be deeply equivalent\nok 96 should be deeply equivalent\nok 97 should be deeply equivalent\nok 98 should be deeply equivalent\nok 99 should be deeply equivalent\nok 100 should be deeply equivalent\n# transforms arrays to objects (dot notation)\nok 101 should be deeply equivalent\nok 102 should be deeply equivalent\nok 103 should be deeply equivalent\nok 104 should be deeply equivalent\nok 105 should be deeply equivalent\nok 106 should be deeply equivalent\nok 107 should be deeply equivalent\nok 108 should be deeply equivalent\nok 109 should be deeply equivalent\nok 110 should be deeply equivalent\n# correctly prunes undefined values when converting an array to an object\nok 111 should be deeply equivalent\n# supports malformed uri characters\nok 112 should be deeply equivalent\nok 113 should be deeply equivalent\nok 114 should be deeply equivalent\n# doesn't produce empty keys\nok 115 should be deeply equivalent\n# cannot access Object prototype\nok 116 should be strictly equal\n# parses arrays of objects\nok 117 should be deeply equivalent\nok 118 should be deeply equivalent\n# allows for empty strings in arrays\nok 119 should be deeply equivalent\nok 120 with arrayLimit 20 + array indices: null then empty string works\nok 121 with arrayLimit 0 + array brackets: null then empty string works\nok 122 with arrayLimit 20 + array indices: empty string then null works\nok 123 with arrayLimit 0 + array brackets: empty string then null works\nok 124 array brackets: empty strings work\n# compacts sparse arrays\nok 125 should be deeply equivalent\nok 126 should be deeply equivalent\nok 127 should be deeply equivalent\nok 128 should be deeply equivalent\n# parses sparse arrays\nok 129 should be deeply equivalent\nok 130 should be deeply equivalent\nok 131 should be deeply equivalent\nok 132 should be deeply equivalent\n# parses semi-parsed strings\nok 133 should be deeply equivalent\nok 134 should be deeply equivalent\n# parses buffers correctly\nok 135 should be deeply equivalent\n# parses jquery-param strings\nok 136 should be deeply equivalent\n# continues parsing when no parent is found\nok 137 should be deeply equivalent\nok 138 should be deeply equivalent\nok 139 should be deeply equivalent\n# does not error when parsing a very long array\nok 140 should not throw\n# should not throw when a native prototype has an enumerable property\nok 141 should not throw\nok 142 should be deeply equivalent\nok 143 should not throw\nok 144 should be deeply equivalent\n# parses a string with an alternative string delimiter\nok 145 should be deeply equivalent\n# parses a string with an alternative RegExp delimiter\nok 146 should be deeply equivalent\n# does not use non-splittable objects as delimiters\nok 147 should be deeply equivalent\n# allows overriding parameter limit\nok 148 should be deeply equivalent\n# allows setting the parameter limit to Infinity\nok 149 should be deeply equivalent\n# allows overriding array limit\nok 150 should be deeply equivalent\nok 151 should be deeply equivalent\nok 152 should be deeply equivalent\nok 153 should be deeply equivalent\nok 154 should be deeply equivalent\nok 155 should be deeply equivalent\n# allows disabling array parsing\nok 156 should be deeply equivalent\nok 157 parseArrays:false, indices case is not an array\nok 158 should be deeply equivalent\nok 159 parseArrays:false, empty brackets case is not an array\n# allows for query string prefix\nok 160 should be deeply equivalent\nok 161 should be deeply equivalent\nok 162 should be deeply equivalent\n# parses an object\nok 163 should be deeply equivalent\n# parses string with comma as array divider\nok 164 should be deeply equivalent\nok 165 should be deeply equivalent\nok 166 should be deeply equivalent\nok 167 should be deeply equivalent\nok 168 should be deeply equivalent\nok 169 should be deeply equivalent\nok 170 should be deeply equivalent\nok 171 should be deeply equivalent\nok 172 should be deeply equivalent\nok 173 should be deeply equivalent\nok 174 should be deeply equivalent\n# parses values with comma as array divider\nok 175 should be deeply equivalent\nok 176 should be deeply equivalent\n# use number decoder, parses string that has one number with comma option enabled\nok 177 should be deeply equivalent\nok 178 should be deeply equivalent\n# parses brackets holds array of arrays when having two parts of strings with comma as array divider\nok 179 should be deeply equivalent\nok 180 should be deeply equivalent\nok 181 should be deeply equivalent\nok 182 should be deeply equivalent\n# parses url-encoded brackets holds array of arrays when having two parts of strings with comma as array divider\nok 183 should be deeply equivalent\nok 184 should be deeply equivalent\nok 185 should be deeply equivalent\nok 186 should be deeply equivalent\n# parses comma delimited array while having percent-encoded comma treated as normal text\nok 187 should be deeply equivalent\nok 188 should be deeply equivalent\nok 189 should be deeply equivalent\n# parses an object in dot notation\nok 190 should be deeply equivalent\n# parses an object and not child values\nok 191 should be deeply equivalent\n# does not blow up when Buffer global is missing\nok 192 should be deeply equivalent\n# does not crash when parsing circular references\nok 193 should not throw\nok 194 parsed has \"foo\" property\nok 195 should be strictly equal\nok 196 should be strictly equal\nok 197 should be strictly equal\nok 198 should be deeply equivalent\n# does not crash when parsing deep objects\nok 199 should not throw\nok 200 parsed has \"foo\" property\nok 201 parsed is 5000 properties deep\n# parses null objects correctly\nok 202 should be deeply equivalent\nok 203 result has \"a\" property\nok 204 should be deeply equivalent\n# parses dates correctly\nok 205 should be deeply equivalent\n# parses regular expressions correctly\nok 206 should be deeply equivalent\n# does not allow overwriting prototype properties\nok 207 should be deeply equivalent\nok 208 should be deeply equivalent\nok 209 bare \"toString\" results in {}\n# can allow overwriting prototype properties\nok 210 should be deeply equivalent\nok 211 should be deeply equivalent\nok 212 bare \"toString\" results in { toString: \"\" }\n# does not crash when the global Object prototype is frozen\nok 213 regular assignment of an inherited non-writable property throws\nok 214 parsing a nonwritable Object.prototype property does not throw\nok 215 bare \"frozenProp\" results in {}\n# params starting with a closing bracket\nok 216 should be deeply equivalent\nok 217 should be deeply equivalent\nok 218 should be deeply equivalent\n# params starting with a starting bracket\nok 219 should be deeply equivalent\nok 220 should be deeply equivalent\nok 221 should be deeply equivalent\n# add keys to objects\nok 222 can add keys to objects\nok 223 can not overwrite prototype\nok 224 can overwrite prototype with allowPrototypes true\nok 225 can overwrite prototype with plainObjects true\n# dunder proto is ignored\nok 226 silent [[Prototype]] payload\nok 227 silent [[Prototype]] payload: plain objects\nok 228 is not an array\nok 229 is not instanceof an array\nok 230 should be deeply equivalent\nok 231 stringifies as a non-array\nok 232 hidden values\nok 233 hidden values: plain objects\n# can return null objects\nok 234 should be deeply equivalent\nok 235 should be deeply equivalent\nok 236 should be deeply equivalent\n# can parse with custom encoding\nok 237 should be deeply equivalent\n# receives the default decoder as a second argument\nok 238 should be strictly equal\n# throws error with wrong decoder\nok 239 should throw\n# does not mutate the options argument\nok 240 should be deeply equivalent\n# throws if an invalid charset is specified\nok 241 should throw\n# parses an iso-8859-1 string if asked to\nok 242 should be deeply equivalent\n# prefers an utf-8 charset specified by the utf8 sentinel to a default charset of iso-8859-1\nok 243 should be deeply equivalent\n# prefers an iso-8859-1 charset specified by the utf8 sentinel to a default charset of utf-8\nok 244 should be deeply equivalent\n# does not require the utf8 sentinel to be defined before the parameters whose decoding it affects\nok 245 should be deeply equivalent\n# should ignore an utf8 sentinel with an unknown value\nok 246 should be deeply equivalent\n# uses the utf8 sentinel to switch to utf-8 when no default charset is given\nok 247 should be deeply equivalent\n# uses the utf8 sentinel to switch to iso-8859-1 when no default charset is given\nok 248 should be deeply equivalent\n# interprets numeric entities in iso-8859-1 when `interpretNumericEntities`\nok 249 should be deeply equivalent\n# handles a custom decoder returning `null`, in the `iso-8859-1` charset, when `interpretNumericEntities`\nok 250 should be deeply equivalent\n# does not interpret numeric entities in iso-8859-1 when `interpretNumericEntities` is absent\nok 251 should be deeply equivalent\n# does not interpret numeric entities when the charset is utf-8, even when `interpretNumericEntities`\nok 252 should be deeply equivalent\n# does not interpret %uXXXX syntax in iso-8859-1 mode\nok 253 should be deeply equivalent\n# allows for decoding keys and values differently\nok 254 should be deeply equivalent\n# parses empty keys\n# skips empty string key with &\nok 255 should be deeply equivalent\n# skips empty string key with &&\nok 256 should be deeply equivalent\n# skips empty string key with &=\nok 257 should be deeply equivalent\n# skips empty string key with &=&\nok 258 should be deeply equivalent\n# skips empty string key with &=&=\nok 259 should be deeply equivalent\n# skips empty string key with &=&=&\nok 260 should be deeply equivalent\n# skips empty string key with =\nok 261 should be deeply equivalent\n# skips empty string key with =&\nok 262 should be deeply equivalent\n# skips empty string key with =&&&\nok 263 should be deeply equivalent\n# skips empty string key with =&=&=&\nok 264 should be deeply equivalent\n# skips empty string key with =&a[]=b&a[1]=c\nok 265 should be deeply equivalent\n# skips empty string key with =a\nok 266 should be deeply equivalent\n# skips empty string key with a==a\nok 267 should be deeply equivalent\n# skips empty string key with =&a[]=b\nok 268 should be deeply equivalent\n# skips empty string key with =&a[]=b&a[]=c&a[2]=d\nok 269 should be deeply equivalent\n# skips empty string key with =a&=b\nok 270 should be deeply equivalent\n# skips empty string key with =a&foo=b\nok 271 should be deeply equivalent\n# skips empty string key with a[]=b&a=c&=\nok 272 should be deeply equivalent\n# skips empty string key with a[]=b&a=c&=\nok 273 should be deeply equivalent\n# skips empty string key with a[0]=b&a=c&=\nok 274 should be deeply equivalent\n# skips empty string key with a=b&a[]=c&=\nok 275 should be deeply equivalent\n# skips empty string key with a=b&a[0]=c&=\nok 276 should be deeply equivalent\n# skips empty string key with []=a&[]=b& []=1\nok 277 should be deeply equivalent\n# skips empty string key with [0]=a&[1]=b&a[0]=1&a[1]=2\nok 278 should be deeply equivalent\n# skips empty string key with [deep]=a&[deep]=2\nok 279 should be deeply equivalent\n# skips empty string key with %5B0%5D=a&%5B1%5D=b\nok 280 should be deeply equivalent\n# `duplicates` option\nok 281 throws on invalid option: null\nok 282 throws on invalid option: true\nok 283 throws on invalid option: false\nok 284 throws on invalid option: 0\nok 285 throws on invalid option: -0\nok 286 throws on invalid option: 42\nok 287 throws on invalid option: Infinity\nok 288 throws on invalid option: -Infinity\nok 289 throws on invalid option: -1.3\nok 290 throws on invalid option: 0.2\nok 291 throws on invalid option: 1.8\nok 292 throws on invalid option: 0.3333333333333333\nok 293 throws on invalid option: Symbol(Symbol.iterator)\nok 294 throws on invalid option: Symbol()\nok 295 throws on invalid option: Symbol(foo)\nok 296 throws on invalid option: Symbol(undefined)\nok 297 throws on invalid option: Symbol(registered!)\nok 298 throws on invalid option: Symbol(IntlLegacyConstructedSymbol)\nok 299 throws on invalid option: {}\nok 300 throws on invalid option: { valueOf: [Function: valueOf], toString: [Function: toString] }\nok 301 throws on invalid option: { valueOf: [Function: valueOf], toString: [Function: toString] }\nok 302 throws on invalid option: { valueOf: [Function: valueOf], toString: [Function: toString] }\nok 303 throws on invalid option: { valueOf: [Function: valueOf], toString: [Function: toString] }\nok 304 throws on invalid option: 42n\nok 305 throws on invalid option: 0n\nok 306 throws on invalid option: 'not a valid option'\nok 307 duplicates: default, combine\nok 308 duplicates: combine\nok 309 duplicates: first\nok 310 duplicates: last\n\n1..310\n# tests 310\n# pass  310\n\n# ok\n\n",
+              "error": null,
+              "latencyMs": 197
+            },
+            {
+              "command": [
+                "node",
+                "test/stringify.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# stringify()\n# stringifies a querystring object\nok 1 should be strictly equal\nok 2 should be strictly equal\nok 3 should be strictly equal\nok 4 should be strictly equal\nok 5 should be strictly equal\nok 6 should be strictly equal\nok 7 should be strictly equal\nok 8 should be strictly equal\n# stringifies falsy values\nok 9 should be strictly equal\nok 10 should be strictly equal\nok 11 should be strictly equal\nok 12 should be strictly equal\nok 13 should be strictly equal\n# stringifies symbols\nok 14 should be strictly equal\nok 15 should be strictly equal\nok 16 should be strictly equal\nok 17 should be strictly equal\n# stringifies bigints\nok 18 should be strictly equal\nok 19 should be strictly equal\nok 20 should be strictly equal\nok 21 should be strictly equal\nok 22 should be strictly equal\nok 23 should be strictly equal\nok 24 should be strictly equal\n# encodes dot in key of object when encodeDotInKeys and allowDots is provided\nok 25 with allowDots false and encodeDotInKeys false\nok 26 with allowDots true and encodeDotInKeys false\nok 27 with allowDots false and encodeDotInKeys true\nok 28 with allowDots true and encodeDotInKeys true\nok 29 with allowDots false and encodeDotInKeys false\nok 30 with allowDots false and encodeDotInKeys false\nok 31 with allowDots false and encodeDotInKeys true\nok 32 with allowDots true and encodeDotInKeys true\n# should encode dot in key of object, and automatically set allowDots to `true` when encodeDotInKeys is true and allowDots in undefined\nok 33 with allowDots undefined and encodeDotInKeys true\n# should encode dot in key of object when encodeDotInKeys and allowDots is provided, and nothing else when encodeValuesOnly is provided\nok 34 should be strictly equal\nok 35 should be strictly equal\n# throws when `commaRoundTrip` is not a boolean\nok 36 throws when `commaRoundTrip` is not a boolean\n# throws when `encodeDotInKeys` is not a boolean\nok 37 should throw\nok 38 should throw\nok 39 should throw\nok 40 should throw\n# adds query prefix\nok 41 should be strictly equal\n# with query prefix, outputs blank string given an empty object\nok 42 should be strictly equal\n# stringifies nested falsy values\nok 43 should be strictly equal\nok 44 should be strictly equal\nok 45 should be strictly equal\n# stringifies a nested object\nok 46 should be strictly equal\nok 47 should be strictly equal\n# `allowDots` option: stringifies a nested object with dots notation\nok 48 should be strictly equal\nok 49 should be strictly equal\n# stringifies an array value\nok 50 indices => indices\nok 51 brackets => brackets\nok 52 comma => comma\nok 53 comma round trip => comma\nok 54 default => indices\n# `skipNulls` option\nok 55 omits nulls when asked\nok 56 omits nested nulls when asked\n# omits array indices when asked\nok 57 should be strictly equal\n# omits object key/value pair when value is empty array\nok 58 should be strictly equal\n# should not omit object key/value pair when value is empty array and when asked\nok 59 should be strictly equal\nok 60 should be strictly equal\nok 61 should be strictly equal\n# should throw when allowEmptyArrays is not of type boolean\nok 62 should throw\nok 63 should throw\nok 64 should throw\nok 65 should throw\n# stringifies an array value with one item vs multiple items\n# non-array item\nok 66 should be strictly equal\nok 67 should be strictly equal\nok 68 should be strictly equal\nok 69 should be strictly equal\n# array with a single item\nok 70 should be strictly equal\nok 71 should be strictly equal\nok 72 should be strictly equal\nok 73 should be strictly equal\nok 74 should be strictly equal\n# array with multiple items\nok 75 should be strictly equal\nok 76 should be strictly equal\nok 77 should be strictly equal\nok 78 should be strictly equal\nok 79 should be strictly equal\n# array with multiple items with a comma inside\nok 80 should be strictly equal\nok 81 should be strictly equal\nok 82 should be strictly equal\nok 83 should be strictly equal\n# stringifies a nested array value\nok 84 should be strictly equal\nok 85 should be strictly equal\nok 86 should be strictly equal\nok 87 should be strictly equal\n# stringifies comma and empty array values\nok 88 should be strictly equal\nok 89 should be strictly equal\nok 90 should be strictly equal\nok 91 should be strictly equal\nok 92 should be strictly equal\nok 93 should be strictly equal\nok 94 should be strictly equal\nok 95 should be strictly equal\nok 96 should be strictly equal\nok 97 should be strictly equal\nok 98 should be strictly equal\nok 99 should be strictly equal\n# stringifies comma and empty non-array values\nok 100 should be strictly equal\nok 101 should be strictly equal\nok 102 should be strictly equal\nok 103 should be strictly equal\nok 104 should be strictly equal\nok 105 should be strictly equal\nok 106 should be strictly equal\nok 107 should be strictly equal\nok 108 should be strictly equal\nok 109 should be strictly equal\nok 110 should be strictly equal\nok 111 should be strictly equal\n# stringifies a nested array value with dots notation\nok 112 indices: stringifies with dots + indices\nok 113 brackets: stringifies with dots + brackets\nok 114 comma: stringifies with dots + comma\nok 115 default: stringifies with dots + indices\n# stringifies an object inside an array\nok 116 indices => indices\nok 117 repeat => repeat\nok 118 brackets => brackets\nok 119 default => indices\nok 120 indices => indices\nok 121 repeat => repeat\nok 122 brackets => brackets\nok 123 default => indices\n# stringifies an array with mixed objects and primitives\nok 124 indices => indices\nok 125 brackets => brackets\nok 126 brackets => brackets # SKIP TODO: figure out what this should do\nok 127 default => indices\n# stringifies an object inside an array with dots notation\nok 128 indices => indices\nok 129 brackets => brackets\nok 130 default => indices\nok 131 indices => indices\nok 132 brackets => brackets\nok 133 default => indices\n# does not omit object keys when indices = false\nok 134 should be strictly equal\n# uses indices notation for arrays when indices=true\nok 135 should be strictly equal\n# uses indices notation for arrays when no arrayFormat is specified\nok 136 should be strictly equal\n# uses indices notation for arrays when arrayFormat=indices\nok 137 should be strictly equal\n# uses repeat notation for arrays when arrayFormat=repeat\nok 138 should be strictly equal\n# uses brackets notation for arrays when arrayFormat=brackets\nok 139 should be strictly equal\n# stringifies a complicated object\nok 140 should be strictly equal\n# stringifies an empty value\nok 141 should be strictly equal\nok 142 should be strictly equal\nok 143 should be strictly equal\nok 144 should be strictly equal\nok 145 should be strictly equal\nok 146 should be strictly equal\nok 147 should be strictly equal\n# stringifies an empty array in different arrayFormat\nok 148 should be strictly equal\nok 149 should be strictly equal\nok 150 should be strictly equal\nok 151 should be strictly equal\nok 152 should be strictly equal\nok 153 should be strictly equal\nok 154 should be strictly equal\nok 155 should be strictly equal\nok 156 should be strictly equal\nok 157 should be strictly equal\nok 158 should be strictly equal\nok 159 should be strictly equal\nok 160 should be strictly equal\nok 161 should be strictly equal\nok 162 should be strictly equal\n# stringifies a null object\nok 163 should be strictly equal\n# returns an empty string for invalid input\nok 164 should be strictly equal\nok 165 should be strictly equal\nok 166 should be strictly equal\nok 167 should be strictly equal\n# stringifies an object with a null object as a child\nok 168 should be strictly equal\n# drops keys with a value of undefined\nok 169 should be strictly equal\nok 170 should be strictly equal\nok 171 should be strictly equal\nok 172 should be strictly equal\n# url encodes values\nok 173 should be strictly equal\n# stringifies a date\nok 174 should be strictly equal\n# stringifies the weird object from qs\nok 175 should be strictly equal\n# skips properties that are part of the object prototype\nok 176 should be strictly equal\nok 177 should be strictly equal\n# stringifies boolean values\nok 178 should be strictly equal\nok 179 should be strictly equal\nok 180 should be strictly equal\nok 181 should be strictly equal\n# stringifies buffer values\nok 182 should be strictly equal\nok 183 should be strictly equal\n# stringifies an object using an alternative delimiter\nok 184 should be strictly equal\n# does not blow up when Buffer global is missing\nok 185 should be strictly equal\n# does not crash when parsing circular references\nok 186 cyclic values throw\nok 187 cyclic values throw\nok 188 non-cyclic values do not throw\n# non-circular duplicated references can still work\nok 189 should be strictly equal\nok 190 should be strictly equal\nok 191 should be strictly equal\n# selects properties when filter=array\nok 192 should be strictly equal\nok 193 should be strictly equal\nok 194 indices => indices\nok 195 brackets => brackets\nok 196 default => indices\n# supports custom representations when filter=function\nok 197 prefix is empty\nok 198 should be strictly equal\nok 199 should be strictly equal\nok 200 should be strictly equal\nok 201 should be strictly equal\n# can disable uri encoding\nok 202 should be strictly equal\nok 203 should be strictly equal\nok 204 should be strictly equal\n# can sort the keys\nok 205 should be strictly equal\nok 206 should be strictly equal\n# can sort the keys at depth 3 or more too\nok 207 should be strictly equal\nok 208 should be strictly equal\n# can stringify with custom encoding\nok 209 should be strictly equal\n# receives the default encoder as a second argument\nok 210 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'string'\nok 211 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'number'\nok 212 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'string'\nok 213 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'string'\nok 214 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'string'\nok 215 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'boolean'\nok 216 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'string'\nok 217 The input matched the regular expression /^(?:string|number|boolean)$/. Input: 'number'\n# receives the default encoder as a second argument\nok 218 should be strictly equal\nok 219 should be strictly equal\n# throws error with wrong encoder\nok 220 should throw\n# can use custom encoder for a buffer object\nok 221 should be strictly equal\nok 222 should be strictly equal\n# serializeDate option\nok 223 default is toISOString\nok 224 should throw\nok 225 toISOString works even when method is not locally present\nok 226 custom serializeDate function called\nok 227 works with arrayFormat comma\nok 228 works with arrayFormat comma\n# RFC 1738 serialization\nok 229 should be strictly equal\nok 230 should be strictly equal\nok 231 should be strictly equal\nok 232 should be strictly equal\n# RFC 3986 spaces serialization\nok 233 should be strictly equal\nok 234 should be strictly equal\nok 235 should be strictly equal\n# Backward compatibility to RFC 3986\nok 236 should be strictly equal\nok 237 should be strictly equal\n# Edge cases and unknown formats\nok 238 should throw\nok 239 should throw\nok 240 should throw\nok 241 should throw\nok 242 should throw\nok 243 should throw\n# encodeValuesOnly\nok 244 encodeValuesOnly + indices\nok 245 encodeValuesOnly + brackets\nok 246 encodeValuesOnly + repeat\nok 247 no encodeValuesOnly + indices\nok 248 no encodeValuesOnly + brackets\nok 249 no encodeValuesOnly + repeat\n# encodeValuesOnly - strictNullHandling\nok 250 should be strictly equal\n# throws if an invalid charset is specified\nok 251 should throw\n# respects a charset of iso-8859-1\nok 252 should be strictly equal\n# encodes unrepresentable chars as numeric entities in iso-8859-1 mode\nok 253 should be strictly equal\n# respects an explicit charset of utf-8 (the default)\nok 254 should be strictly equal\n# `charsetSentinel` option\nok 255 adds the right sentinel when instructed to and the charset is utf-8\nok 256 adds the right sentinel when instructed to and the charset is iso-8859-1\n# does not mutate the options argument\nok 257 should be deeply equivalent\n# strictNullHandling works with custom filter\nok 258 should be strictly equal\n# strictNullHandling works with null serializeDate\nok 259 should be strictly equal\n# allows for encoding keys and values differently\nok 260 should be deeply equivalent\n# objects inside arrays\nok 261 no array, no arrayFormat\nok 262 no array, bracket\nok 263 no array, indices\nok 264 no array, repeat\nok 265 no array, comma\nok 266 array, no arrayFormat\nok 267 array, bracket\nok 268 array, indices\nok 269 array, repeat\nok 270 array, comma # SKIP TODO: figure out what this should do\n# stringifies sparse arrays\nok 271 should be strictly equal\nok 272 should be strictly equal\nok 273 should be strictly equal\nok 274 should be strictly equal\nok 275 should be strictly equal\nok 276 should be strictly equal\nok 277 should be strictly equal\nok 278 should be strictly equal\nok 279 should be strictly equal\nok 280 should be strictly equal\nok 281 should be strictly equal\nok 282 should be strictly equal\n# encodes a very long string\nok 283 should be strictly equal\n# stringifies empty keys\n# stringifies an object with empty string key with &\nok 284 test case: &, indices\nok 285 test case: &, brackets\nok 286 test case: &, repeat\n# stringifies an object with empty string key with &&\nok 287 test case: &&, indices\nok 288 test case: &&, brackets\nok 289 test case: &&, repeat\n# stringifies an object with empty string key with &=\nok 290 test case: &=, indices\nok 291 test case: &=, brackets\nok 292 test case: &=, repeat\n# stringifies an object with empty string key with &=&\nok 293 test case: &=&, indices\nok 294 test case: &=&, brackets\nok 295 test case: &=&, repeat\n# stringifies an object with empty string key with &=&=\nok 296 test case: &=&=, indices\nok 297 test case: &=&=, brackets\nok 298 test case: &=&=, repeat\n# stringifies an object with empty string key with &=&=&\nok 299 test case: &=&=&, indices\nok 300 test case: &=&=&, brackets\nok 301 test case: &=&=&, repeat\n# stringifies an object with empty string key with =\nok 302 test case: =, indices\nok 303 test case: =, brackets\nok 304 test case: =, repeat\n# stringifies an object with empty string key with =&\nok 305 test case: =&, indices\nok 306 test case: =&, brackets\nok 307 test case: =&, repeat\n# stringifies an object with empty string key with =&&&\nok 308 test case: =&&&, indices\nok 309 test case: =&&&, brackets\nok 310 test case: =&&&, repeat\n# stringifies an object with empty string key with =&=&=&\nok 311 test case: =&=&=&, indices\nok 312 test case: =&=&=&, brackets\nok 313 test case: =&=&=&, repeat\n# stringifies an object with empty string key with =&a[]=b&a[1]=c\nok 314 test case: =&a[]=b&a[1]=c, indices\nok 315 test case: =&a[]=b&a[1]=c, brackets\nok 316 test case: =&a[]=b&a[1]=c, repeat\n# stringifies an object with empty string key with =a\nok 317 test case: =a, indices\nok 318 test case: =a, brackets\nok 319 test case: =a, repeat\n# stringifies an object with empty string key with a==a\nok 320 test case: a==a, indices\nok 321 test case: a==a, brackets\nok 322 test case: a==a, repeat\n# stringifies an object with empty string key with =&a[]=b\nok 323 test case: =&a[]=b, indices\nok 324 test case: =&a[]=b, brackets\nok 325 test case: =&a[]=b, repeat\n# stringifies an object with empty string key with =&a[]=b&a[]=c&a[2]=d\nok 326 test case: =&a[]=b&a[]=c&a[2]=d, indices\nok 327 test case: =&a[]=b&a[]=c&a[2]=d, brackets\nok 328 test case: =&a[]=b&a[]=c&a[2]=d, repeat\n# stringifies an object with empty string key with =a&=b\nok 329 test case: =a&=b, indices\nok 330 test case: =a&=b, brackets\nok 331 test case: =a&=b, repeat\n# stringifies an object with empty string key with =a&foo=b\nok 332 test case: =a&foo=b, indices\nok 333 test case: =a&foo=b, brackets\nok 334 test case: =a&foo=b, repeat\n# stringifies an object with empty string key with a[]=b&a=c&=\nok 335 test case: a[]=b&a=c&=, indices\nok 336 test case: a[]=b&a=c&=, brackets\nok 337 test case: a[]=b&a=c&=, repeat\n# stringifies an object with empty string key with a[]=b&a=c&=\nok 338 test case: a[]=b&a=c&=, indices\nok 339 test case: a[]=b&a=c&=, brackets\nok 340 test case: a[]=b&a=c&=, repeat\n# stringifies an object with empty string key with a[0]=b&a=c&=\nok 341 test case: a[0]=b&a=c&=, indices\nok 342 test case: a[0]=b&a=c&=, brackets\nok 343 test case: a[0]=b&a=c&=, repeat\n# stringifies an object with empty string key with a=b&a[]=c&=\nok 344 test case: a=b&a[]=c&=, indices\nok 345 test case: a=b&a[]=c&=, brackets\nok 346 test case: a=b&a[]=c&=, repeat\n# stringifies an object with empty string key with a=b&a[0]=c&=\nok 347 test case: a=b&a[0]=c&=, indices\nok 348 test case: a=b&a[0]=c&=, brackets\nok 349 test case: a=b&a[0]=c&=, repeat\n# stringifies an object with empty string key with []=a&[]=b& []=1\nok 350 test case: []=a&[]=b& []=1, indices\nok 351 test case: []=a&[]=b& []=1, brackets\nok 352 test case: []=a&[]=b& []=1, repeat\n# stringifies an object with empty string key with [0]=a&[1]=b&a[0]=1&a[1]=2\nok 353 test case: [0]=a&[1]=b&a[0]=1&a[1]=2, indices\nok 354 test case: [0]=a&[1]=b&a[0]=1&a[1]=2, brackets\nok 355 test case: [0]=a&[1]=b&a[0]=1&a[1]=2, repeat\n# stringifies an object with empty string key with [deep]=a&[deep]=2\nok 356 test case: [deep]=a&[deep]=2, indices\nok 357 test case: [deep]=a&[deep]=2, brackets\nok 358 test case: [deep]=a&[deep]=2, repeat\n# stringifies an object with empty string key with %5B0%5D=a&%5B1%5D=b\nok 359 test case: %5B0%5D=a&%5B1%5D=b, indices\nok 360 test case: %5B0%5D=a&%5B1%5D=b, brackets\nok 361 test case: %5B0%5D=a&%5B1%5D=b, repeat\n# edge case with object/arrays\nok 362 should be deeply equivalent\nok 363 should be deeply equivalent\nok 364 should be deeply equivalent\nok 365 should be deeply equivalent\n\n1..365\n# tests 365\n# pass  365\n\n# ok\n\n",
+              "error": null,
+              "latencyMs": 127
+            },
+            {
+              "command": [
+                "node",
+                "test/utils.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "TAP version 13\n# merge()\nok 1 merges true into null\nok 2 merges null into an array\nok 3 merges two objects with the same key\nok 4 merges a standalone and an object into an array\nok 5 merges a standalone and two objects into an array\nok 6 merges an object sandwiched by two standalones into an array\nok 7 should be deeply equivalent\nok 8 should be deeply equivalent\n# avoids invoking array setters unnecessarily\nok 9 should be strictly equal\nok 10 should be strictly equal\nok 11 should be strictly equal\nok 12 should be strictly equal\n# assign()\nok 13 returns the target\nok 14 target and source are merged\nok 15 source is untouched\n# combine()\n# both arrays\nok 16 a is not mutated\nok 17 b is not mutated\nok 18 a !== combined\nok 19 b !== combined\nok 20 combined is a + b\n# one array, one non-array\nok 21 b is not mutated\nok 22 aN + b !== aN\nok 23 aN + b !== a\nok 24 aN + b !== bN\nok 25 aN + b !== b\nok 26 first argument is array-wrapped when not an array\nok 27 a is not mutated\nok 28 a + bN !== aN\nok 29 a + bN !== a\nok 30 a + bN !== bN\nok 31 a + bN !== b\nok 32 second argument is array-wrapped when not an array\n# neither is an array\nok 33 1 + 2 !== 1\nok 34 1 + 2 !== 2\nok 35 both arguments are array-wrapped when not an array\n# isBuffer()\nok 36 null is not a buffer\nok 37 undefined is not a buffer\nok 38 true is not a buffer\nok 39 false is not a buffer\nok 40 '' is not a buffer\nok 41 'abc' is not a buffer\nok 42 42 is not a buffer\nok 43 0 is not a buffer\nok 44 NaN is not a buffer\nok 45 {} is not a buffer\nok 46 [] is not a buffer\nok 47 [Function (anonymous)] is not a buffer\nok 48 /a/g is not a buffer\nok 49 fake buffer is not a buffer\nok 50 SaferBuffer instance is a buffer\nok 51 real Buffer instance is a buffer\n\n1..51\n# tests 51\n# pass  51\n\n# ok\n\n",
+              "error": null,
+              "latencyMs": 72
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "lib/parse.js",
+        "test/parse.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          },
+          {
+            "exit": 0,
+            "resource": null
+          },
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 72409,
+      "verificationMs": 396,
+      "otherControllerMs": 2,
+      "reasoningFieldCoverage": {
+        "responses": 9,
+        "present": 9
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 71.57499980926514,
+        "codemodeIntervalSeconds": 0.6850001811981201,
+        "providerPairs": 9,
+        "codemodePairs": 8,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "b04",
+      "mode": "codexSolMedium",
+      "repository": "ljharb/qs",
+      "issue": 510,
+      "status": "provider_error",
+      "accepted": true,
+      "budgetEligible": false,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": true,
+      "knownCostUsd": 0.0561328,
+      "totalCostUsd": null,
+      "usage": {
+        "input": 15717,
+        "cacheRead": 108288,
+        "cacheWrite": 0,
+        "output": 1387,
+        "totalTokens": 125392,
+        "estimatedApiUsd": 0.0561328,
+        "modelCalls": 6,
+        "toolCalls": 6
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "catalogPricesMatch": true,
+      "reasoningTokens": 99,
+      "modelCalls": 6,
+      "latencyMs": 46402,
+      "outerLatencyMs": 46988,
+      "peakRssBytes": 1377050624,
+      "resourceStop": null,
+      "features": {
+        "outputControl": false,
+        "preparedContext": false,
+        "guidance": false,
+        "notices": false,
+        "advice": false,
+        "repairs": false,
+        "solTakeover": false
+      },
+      "profile": "baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "patchPaths": [
+        "lib/parse.js",
+        "test/parse.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          },
+          {
+            "exit": 0,
+            "resource": null
+          },
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 0,
+      "verificationMs": 0,
+      "otherControllerMs": 46402,
+      "reasoningFieldCoverage": {
+        "responses": 6,
+        "present": 6
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 0,
+        "codemodeIntervalSeconds": 0,
+        "providerPairs": 0,
+        "codemodePairs": 0,
+        "unpairedEvents": 6,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    }
+  ]
+}
