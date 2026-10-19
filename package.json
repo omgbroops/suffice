@@ -1,27 +1,25 @@
 {
-  "name": "suffice",
+  "name": "suffice-v2",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "bin": {
     "suffice": "packages/cli/bin/suffice.mjs"
   },
-  "files": ["packages/cli/bin/", "packages/cli/src/", "packages/cli/README.md", "packages/cli/THIRD-PARTY-NOTICES.md"],
-  "description": "Controlled experiments for an adaptive Pi-based coding harness",
+  "files": [
+    "packages/cli/bin/",
+    "packages/cli/src/",
+    "packages/cli/README.md",
+    "packages/cli/THIRD-PARTY-NOTICES.md"
+  ],
+  "description": "Opt-in Suffice execution pipeline and packet research prototype",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "pi": "node scripts/pi.mjs",
-    "login": "node scripts/login.mjs",
-    "preflight": "node scripts/preflight.mjs",
-    "smoke:models": "node scripts/smoke-models.mjs",
-    "smoke:watchers": "node scripts/smoke-watchers.mjs",
-    "experiment": "node scripts/experiment.mjs",
-    "pilot": "node scripts/run-pilot.mjs",
-    "report": "node scripts/report.mjs",
-    "privacy-check": "node scripts/privacy-check.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs packages/cli/test/*.test.mjs",
+    "packet": "node src/packets/entry.mjs",
+    "pipeline": "node src/pipeline/entry.mjs"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.2.0",
