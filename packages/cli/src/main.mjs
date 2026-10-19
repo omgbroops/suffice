@@ -7,6 +7,7 @@ import {ModelRuntime} from '@earendil-works/pi-coding-agent';
 import {VERSION} from './options.mjs';
 import {createSufficeSession} from './session.mjs';
 import {repositoryTools} from './tools.mjs';
+import {ROUTING_POLICY} from './routing.mjs';
 
 async function login(runtime,options,sharedReader) {
   const identity=resolve(options.home,'host-id');
@@ -49,8 +50,10 @@ export async function main(options) {
     const bash=tools.find(t=>t.name==='bash');
     const result=await bash.execute('doctor',{command:'printf SUFFICE_SHELL_OK',timeout:10});
     if(!result.content?.some(c=>c.text?.includes('SUFFICE_SHELL_OK')) || result.isError) throw new Error('Bash check failed. On Windows, install Git for Windows (Git Bash).');
-    const available=Boolean(runtime.getModel('openai',options.model));
-    console.log(JSON.stringify({name:'Suffice',version:VERSION,node:process.versions.node,cwd:options.cwd,home:options.home,model:options.model,modelInCatalog:available,subscription:runtime.isUsingSubscription('openai'),shell:'ready',tools:tools.map(t=>t.name),sandbox:false},null,2));
+    const ids=options.routing==='auto'?[ROUTING_POLICY.sol,ROUTING_POLICY.luna]:[options.model];
+    const modelsInCatalog=Object.fromEntries(ids.map(id=>[id,Boolean(runtime.getModel('openai',id))]));
+    const available=Object.values(modelsInCatalog).every(Boolean);
+    console.log(JSON.stringify({name:'Suffice',version:VERSION,node:process.versions.node,cwd:options.cwd,home:options.home,model:options.model,modelInCatalog:available,routing:options.routing,modelsInCatalog,subscription:runtime.isUsingSubscription('openai'),shell:'ready',tools:tools.map(t=>t.name),sandbox:false},null,2));
     if(!available) process.exitCode=1;
     return;
   }
@@ -65,11 +68,12 @@ export async function main(options) {
     if(!options.prompt) throw new Error('Provide a task, or start suffice in an interactive terminal.');
   }
   const agent=await createSufficeSession(options,runtime,{
-    onTool(name){console.error(`  ${name}`);}
+    onTool(name){console.error(`  ${name}`);},
+    onRoute(route){console.error(`Route: ${route.model} · ${route.effort}${route.complexContext?' · keeping complex context':''}`);}
   });
   const cancel=()=>agent.abort();process.on('SIGINT',cancel);
   try {
-    console.error(`Suffice ${VERSION} | ${options.model} | ${agent.session.thinkingLevel}`);
+    console.error(`Suffice ${VERSION} | ${options.routing==='auto'?'routing auto':`${agent.session.model.id} | ${agent.session.thinkingLevel}`}`);
     console.log(await agent.run(options.prompt));
   } finally {
     process.off('SIGINT',cancel);
