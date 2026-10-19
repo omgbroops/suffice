@@ -4,6 +4,14 @@
 `strategy: "flexible"` or `"efficient"`, `workspace`, `runDir` outside the workspace,
 and `prompt`. This separate entry point does not change the installed CLI or its defaults.
 
+For example, save a request JSON and pipe it with `Get-Content request.json -Raw |
+npm run execute --silent` in PowerShell, or `npm run execute --silent < request.json`
+in a POSIX shell. Supply `authPath` for existing Pi-compatible authentication, or
+set `SUFFICE_AUTH_PATH`; credentials do not belong in the request body or repository.
+Explicit `maxCostUsd`, `timeoutMs`, `maxTurns` and `maxCalls` control the shared task
+allowance. The experimental controller falls back to $0.25, 300 seconds, 40
+responses and 160 tool calls, independently of the unchanged installed CLI defaults.
+
 Flexible keeps the V1 prompt, codemode, AST navigation, cache settings and native
 session when enhancements are off. It accepts explicit model, provider and effort.
 Its fallback model/effort is Sol/low, matching the original CLI. Efficient retains
