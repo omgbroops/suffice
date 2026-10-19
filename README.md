@@ -2,6 +2,8 @@
 
 An additional opt-in execution pipeline now lives in `src/pipeline/`, launched with `npm run pipeline`. It supports prepared public context, recoverable output control, deterministic verification, Luna implementation/repair, selective Sol advice/takeover, independent-task fleets, and explicit knowledge/handoff artifacts. See [PIPELINE.md](docs/PIPELINE.md) for flags, JSON requests, evidence boundaries and limitations. Original packet code and frozen results below remain preserved.
 
+The `codex/suffice-medium-accuracy` branch adds `npm run accuracy`: a separate Medium experiment with a fresh read-only compatibility review and one bounded correction. Its costs and inconclusive reviews remain visible. See [MEDIUM-ACCURACY.md](docs/MEDIUM-ACCURACY.md); model review is not independent acceptance.
+
 This is a separate research prototype copied from Suffice CLI `af06ce5`. The original checkout, Pi interface and frozen benchmark artifacts are unchanged. `SOURCE-PROVENANCE.json` records every copied file's original hash. No credentials or session histories were copied.
 
 Normal `npx suffice` still uses the existing Pi-native interface and lean agent. Experimental execution is opt-in through `npm run packet`, which reads a JSON request on stdin. Requests select `mode: "baseline"`, `"routing"` or `"packets"`; routing and packets additionally require `experimental: true`. This prototype does not change the interactive agent's default behavior.
