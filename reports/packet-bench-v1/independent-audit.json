@@ -1,0 +1,251 @@
+{
+  "attempts": [
+    {
+      "attempt": "f01-baseline",
+      "repricedApiEquivalentUsd": 0.037327599999999996,
+      "calls": 6,
+      "toolCalls": 13,
+      "valid": true
+    },
+    {
+      "attempt": "f01-routing",
+      "repricedApiEquivalentUsd": 0.08576360000000001,
+      "calls": 8,
+      "toolCalls": 20,
+      "valid": true
+    },
+    {
+      "attempt": "f01-packets",
+      "repricedApiEquivalentUsd": 0.03860646,
+      "calls": 15,
+      "toolCalls": 37,
+      "valid": true
+    },
+    {
+      "attempt": "f04-routing",
+      "repricedApiEquivalentUsd": 0.0707584,
+      "calls": 8,
+      "toolCalls": 16,
+      "valid": true
+    },
+    {
+      "attempt": "f04-packets",
+      "repricedApiEquivalentUsd": 0.138298,
+      "calls": 10,
+      "toolCalls": 24,
+      "valid": true
+    },
+    {
+      "attempt": "f04-baseline",
+      "repricedApiEquivalentUsd": 0.0674268,
+      "calls": 6,
+      "toolCalls": 14,
+      "valid": true
+    },
+    {
+      "attempt": "f08-packets",
+      "repricedApiEquivalentUsd": 0.02172152,
+      "calls": 10,
+      "toolCalls": 23,
+      "valid": true
+    },
+    {
+      "attempt": "f08-baseline",
+      "repricedApiEquivalentUsd": 0.0408136,
+      "calls": 6,
+      "toolCalls": 13,
+      "valid": true
+    },
+    {
+      "attempt": "f08-routing",
+      "repricedApiEquivalentUsd": 0.030878799999999998,
+      "calls": 6,
+      "toolCalls": 11,
+      "valid": true
+    },
+    {
+      "attempt": "f10-baseline",
+      "repricedApiEquivalentUsd": 0.0494608,
+      "calls": 5,
+      "toolCalls": 11,
+      "valid": true
+    },
+    {
+      "attempt": "f10-routing",
+      "repricedApiEquivalentUsd": 0.00387238,
+      "calls": 12,
+      "toolCalls": 21,
+      "valid": true
+    },
+    {
+      "attempt": "f10-packets",
+      "repricedApiEquivalentUsd": 0.0034379000000000002,
+      "calls": 10,
+      "toolCalls": 19,
+      "valid": true
+    },
+    {
+      "attempt": "f13-routing",
+      "repricedApiEquivalentUsd": 0.007666760000000002,
+      "calls": 21,
+      "toolCalls": 48,
+      "valid": true
+    },
+    {
+      "attempt": "f13-packets",
+      "repricedApiEquivalentUsd": 0.005114439999999998,
+      "calls": 15,
+      "toolCalls": 31,
+      "valid": true
+    },
+    {
+      "attempt": "f13-baseline",
+      "repricedApiEquivalentUsd": 0.0811208,
+      "calls": 8,
+      "toolCalls": 20,
+      "valid": true
+    },
+    {
+      "attempt": "f14-packets",
+      "repricedApiEquivalentUsd": 0.0430325,
+      "calls": 16,
+      "toolCalls": 37,
+      "valid": true
+    },
+    {
+      "attempt": "f14-baseline",
+      "repricedApiEquivalentUsd": 0.050909199999999995,
+      "calls": 7,
+      "toolCalls": 13,
+      "valid": true
+    },
+    {
+      "attempt": "f14-routing",
+      "repricedApiEquivalentUsd": 0.0361724,
+      "calls": 6,
+      "toolCalls": 12,
+      "valid": true
+    }
+  ],
+  "modelBreakdown": [
+    {
+      "arm": "baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "calls": 38,
+      "cachedCalls": 28,
+      "cost": 0.3270588,
+      "input": 118036,
+      "cached": 215168,
+      "output": 6947,
+      "reasoning": 221
+    },
+    {
+      "arm": "routing",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "calls": 28,
+      "cachedCalls": 23,
+      "cost": 0.22357320000000003,
+      "input": 75048,
+      "cached": 207872,
+      "output": 5269,
+      "reasoning": 181
+    },
+    {
+      "arm": "packets",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "calls": 57,
+      "cachedCalls": 51,
+      "cost": 0.020148020000000003,
+      "input": 89265,
+      "cached": 583552,
+      "output": 10772,
+      "reasoning": 3321
+    },
+    {
+      "arm": "packets",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "calls": 19,
+      "cachedCalls": 12,
+      "cost": 0.23006279999999996,
+      "input": 91308,
+      "cached": 125568,
+      "output": 3489,
+      "reasoning": 47
+    },
+    {
+      "arm": "routing",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "calls": 33,
+      "cachedCalls": 30,
+      "cost": 0.01153914,
+      "input": 45983,
+      "cached": 387584,
+      "output": 6130,
+      "reasoning": 2307
+    }
+  ],
+  "arms": {
+    "baseline": {
+      "calls": 38,
+      "cachedCalls": 28,
+      "cost": 0.3270588,
+      "planning": 0,
+      "fallbacks": 0,
+      "packets": 0,
+      "escalations": 0
+    },
+    "routing": {
+      "calls": 61,
+      "cachedCalls": 53,
+      "cost": 0.23511234000000006,
+      "planning": 0,
+      "fallbacks": 0,
+      "packets": 0,
+      "escalations": 0
+    },
+    "packets": {
+      "calls": 76,
+      "cachedCalls": 63,
+      "cost": 0.25021082,
+      "planning": 0.13106879999999999,
+      "fallbacks": 1,
+      "packets": 3,
+      "escalations": 0
+    }
+  },
+  "frozenInputsValid": true,
+  "checksummedFiles": 45,
+  "gitExposure": {
+    "f01": {
+      "reachableCommitCount": 2,
+      "referenceCommitAvailable": false
+    },
+    "f04": {
+      "reachableCommitCount": 1,
+      "referenceCommitAvailable": false
+    },
+    "f08": {
+      "reachableCommitCount": 1,
+      "referenceCommitAvailable": false
+    },
+    "f10": {
+      "reachableCommitCount": 1,
+      "referenceCommitAvailable": false
+    },
+    "f13": {
+      "reachableCommitCount": 2,
+      "referenceCommitAvailable": false
+    },
+    "f14": {
+      "reachableCommitCount": 2,
+      "referenceCommitAvailable": false
+    }
+  },
+  "independentRepricingValid": true,
+  "basis": "Raw provider usage repriced against per-stage pinned model catalog prices; API-equivalent, not subscription spending. Reasoning tokens are already included in output."
+}

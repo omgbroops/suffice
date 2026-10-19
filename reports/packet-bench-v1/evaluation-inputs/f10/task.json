@@ -1,0 +1,77 @@
+{
+  "id": "f10",
+  "repository": "tj/commander.js",
+  "issue": 2342,
+  "title": "copyInheritedSettings and configureOutput have side-effects",
+  "publicBody": "Hi - noticed something that maybe isn't desired behaviour with the above two methods. Since `copyInheritedSettings` sets `this._outputConfiguration = sourceCommand._outputConfiguration` and `configureOutput` does `Object.assign(...)` - this means that one command can change another command's settings unexpectedly:\n\n```ts\nimport {program, Command} from 'commander'\n\nconst one = new Command('one')\n  .description('A very very very very very very very very very very very very very very very very very very very very very very very very long description')\n  .action(() => console.log('hi i am one'))\n  .configureOutput({\n    writeOut: str => console.log(str + '\ud83d\ude80\ud83d\ude80\ud83d\ude80\ud83d\ude80'),\n    getOutHelpWidth: () => 70,\n  })\n\nconst two = new Command('two')\n  .copyInheritedSettings(one)\n  .description('Another very very very very very very very very very very very very very very very very very very very very very very very very long description')\n  .action(() => console.log('hi i am two'))\n  .configureOutput({\n    getOutHelpWidth: () => 200,\n  })\n\nprogram\n  .addCommand(one)\n  .addCommand(two)\n\nprogram.parse()\n```\n\nWhen you do `mycommand one --help` it uses 200 for the help width, not 70 as I'd expect. (Note: `mycommand two --help` prints the `\ud83d\ude80\ud83d\ude80\ud83d\ude80\ud83d\ude80` at the bottom, which _is_ correct/expected, IMO).\n\nSuggested solution: use a spread operator in either/both of the methods.",
+  "url": "https://github.com/tj/commander.js/issues/2342",
+  "cohort": "historical",
+  "baseCommit": "672e3806c68421f91b3a1f628f6207b8b26d1a2c",
+  "fixCommit": "68199e64b31851839c03dff1567a81d7714baa08",
+  "baseDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f10/base",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/dependencies/46be2e3cb16e1505/node_modules",
+  "nativeCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "node_modules/jest/bin/jest.js",
+      "--runInBand",
+      "--no-cache",
+      "--coverage=false",
+      "tests/command.configureOutput.test.js"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "node_modules/jest/bin/jest.js",
+      "--runInBand",
+      "--no-cache",
+      "--coverage=false",
+      "tests/command.configureOutput.test.js"
+    ]
+  ],
+  "graderOverlay": [
+    {
+      "source": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f10/private/reference/tests/command.configureOutput.test.js",
+      "target": "tests/command.configureOutput.test.js"
+    }
+  ],
+  "referencePatchJson": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f10/private/reference-patch.json",
+  "nativeParser": "exit-only",
+  "controls": {
+    "baselineAccepted": false,
+    "referenceAccepted": true,
+    "nativeExitCodes": [
+      0
+    ]
+  },
+  "ready": true,
+  "contractReview": {
+    "reviewedBeforeInference": true,
+    "reviewer": "parent evaluator distinct from coding actors, upstream-authored regression tests; no second human reviewer",
+    "originalIssueOnly": true,
+    "excludedUnrelatedUpstreamTests": false,
+    "optionalFeatureNamingAmbiguityExcluded": true,
+    "graderAmendments": []
+  },
+  "environmentNotes": {
+    "omittedDevelopmentDependencies": [
+      "@eslint/js",
+      "eslint",
+      "eslint-config-prettier",
+      "eslint-plugin-jest",
+      "globals",
+      "prettier",
+      "tsd",
+      "typescript-eslint"
+    ],
+    "installScriptsDisabled": true,
+    "platform": "Sonion Linux Node24.15.0",
+    "browserAndOtherPlatformsNotScored": true,
+    "excludedExternalNetworkTests": [],
+    "viteConfigLoaderNative": false,
+    "typescriptDependencyLibraryCompatibility": null
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "f08",
+  "repository": "NaturalIntelligence/fast-xml-parser",
+  "issue": 874,
+  "title": "XMLParser.parse returns an empty object for a plain Uint8Array",
+  "publicBody": "### Description\n\n`XMLParser.parse()` declares support for `string | Uint8Array`, but a plain `Uint8Array` containing valid UTF-8 XML produces an empty object. With validation enabled, it raises an error about the first digit of the byte array. The same XML succeeds as a string or a Node.js Buffer.\n\n### Input / code\n\n```js\nimport { XMLParser } from 'fast-xml-parser';\n\nconst parser = new XMLParser();\nconst xml = '<root>hello</root>';\nconst bytes = new TextEncoder().encode(xml);\n\nconsole.log(parser.parse(xml)); // { root: 'hello' }\nconsole.log(parser.parse(bytes)); // {}\nconsole.log(parser.parse(bytes, true)); // Error: char '6' is not expected.:1:1\n```\n\n### Expected output\n\nBoth byte-array calls should return `{ root: 'hello' }`, matching the string input and the public TypeScript overloads.\n\n### Cause and proposed fix\n\nThe non-string input branch calls `.toString()`. A plain Uint8Array converts to a comma-separated list of byte values; a Node Buffer decodes UTF-8. Decode plain Uint8Array inputs as UTF-8 while retaining the existing Buffer conversion. Decoding the view also respects its byte offset and length.\n\nThe related type declaration change was discussed in #764. The earlier large-file/streaming request in #347 concerns a separate use case; this reproduction contains a small complete XML document.\n\n### Environment and validation\n\n- fast-xml-parser master at `3617550adfb280989f482d662b7e9ece55a32a34`, package version 5.11.1.\n- Node.js v24.16.0 on Windows 11.\n- Five regression cases fail against the original implementation, covering UTF-8 input, a Uint8Array subview, validation, and preserved node order.\n- A local fix passes all seven input-type tests and the full suite (331 specs, zero failures, two pending).\n\nInvestigated with OpenAI Codex assistance; the reproductions and tests were run locally. A patch with regression coverage is prepared.\n",
+  "url": "https://github.com/NaturalIntelligence/fast-xml-parser/issues/874",
+  "cohort": "historical",
+  "baseCommit": "3617550adfb280989f482d662b7e9ece55a32a34",
+  "fixCommit": "bb2ec6ce4bfc3f62d621df6e6bf2b3152965175a",
+  "baseDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f08/base",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/dependencies/503abc68e402653e/node_modules",
+  "nativeCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "node_modules/jasmine/bin/jasmine.js",
+      "--random=false",
+      "spec/inputType_spec.js",
+      "spec/attr_spec.js"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "node_modules/jasmine/bin/jasmine.js",
+      "--random=false",
+      "spec/inputType_spec.js",
+      "spec/attr_spec.js"
+    ]
+  ],
+  "graderOverlay": [
+    {
+      "source": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f08/private/input-type-contract.js",
+      "target": "spec/inputType_spec.js"
+    }
+  ],
+  "referencePatchJson": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f08/private/reference-patch.json",
+  "nativeParser": "exit-only",
+  "controls": {
+    "baselineAccepted": false,
+    "referenceAccepted": true,
+    "nativeExitCodes": [
+      0
+    ]
+  },
+  "ready": true,
+  "contractReview": {
+    "reviewedBeforeInference": true,
+    "reviewer": "parent evaluator distinct from coding actors, upstream-authored regression tests; no second human reviewer",
+    "originalIssueOnly": true,
+    "excludedUnrelatedUpstreamTests": false,
+    "optionalFeatureNamingAmbiguityExcluded": true,
+    "graderAmendments": [
+      "Invalid XML must reject; do not require an unstated error-message phrase."
+    ]
+  },
+  "environmentNotes": {
+    "omittedDevelopmentDependencies": [
+      "@babel/core",
+      "@babel/plugin-transform-runtime",
+      "@babel/preset-env",
+      "@babel/register",
+      "@byspec/xml",
+      "babel-loader",
+      "c8",
+      "eslint",
+      "prettier",
+      "webpack",
+      "webpack-cli"
+    ],
+    "installScriptsDisabled": true,
+    "platform": "Sonion Linux Node24.15.0",
+    "browserAndOtherPlatformsNotScored": true,
+    "excludedExternalNetworkTests": [],
+    "viteConfigLoaderNative": false,
+    "typescriptDependencyLibraryCompatibility": null
+  }
+}

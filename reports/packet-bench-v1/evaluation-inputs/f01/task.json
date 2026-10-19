@@ -1,0 +1,121 @@
+{
+  "id": "f01",
+  "repository": "axios/axios",
+  "issue": 7192,
+  "title": "1.13.0 regresses reading error response bodies with responseType: stream",
+  "publicBody": "### Describe the bug\n\nUpgrading from `1.12.2` to `1.13.0` breaks code that reads the `error.response.data` body when using `responseType: stream`.\nThe stream seems to no longer contain the body data when read, for example, resulting in `SyntaxError: Unexpected end of JSON input`.\n\n\n### To Reproduce\n\nThis small code sample reproduces the issue. As this happens for streams in reject/catch cases the URL `https://api.github.com/orgs/ORG/repos` in the snippet is expected to return a `404` and reject/throw.\n\nWith `1.13.0` this gives:\n```\nSyntaxError: Unexpected end of JSON input\n    at parse (<anonymous>)\n    at json (node:stream/consumers:78:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n```\n\n### Code snippet\n\n```js\nimport { json } from 'node:stream/consumers';\nimport { Readable } from 'node:stream';\nimport axios from 'axios';\n\nlet data;\ntry {\n  const response = await axios.get('https://api.github.com/orgs/ORG/repos', {\n    headers: {\n      Accept: 'application/vnd.github+json',\n      'X-GitHub-Api-Version': '2022-11-28'\n    },\n    responseType: 'stream'\n  })\n  data = response.data;\n} catch (e) {\n  data = e.response.data\n};\nconsole.log(await json(Readable.toWeb(data)));\n```\n\n### Expected behavior\n\nWith `1.12.2` this snippet correctly outputs the json body:\n```text\n{\n  message: 'Not Found',\n  documentation_url: 'https://docs.github.com/rest/repos/repos#list-organization-repositories',\n  status: '404'\n}\n```\n\n\n### Axios Version\n\n1.13.0\n\n### Adapter Version\n\nhttp\n\n### Browser\n\n_No response_\n\n### Browser Version\n\n_No response_\n\n### Node.js Version\n\n20.19.5\n\n### OS\n\n_No response_\n\n### Additional Library Versions\n\n```bash\n\n```\n\n### Additional context/Screenshots\n\n\nIf I use the `text` consumer instead of `json` I just get empty output text so it seems that it is unable to get any stream data rather than, for example, partially reading the json to get the `SyntaxError`.\n\nThis might be related to the changes for \"Fixed streams cancellation bugs\" introduced in #7150, which seem to be the only thing between 1.12.2/1.13.0 that might touch this area.\n",
+  "url": "https://github.com/axios/axios/issues/7192",
+  "cohort": "historical",
+  "baseCommit": "c9b33712aac00ca6da7e9767426ff2e0a36c7eed",
+  "fixCommit": "bcd5581d208cd372055afdcb2fd10b68ca40613c",
+  "baseDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f01/base",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/dependencies/167bd84a2fac2b08/node_modules",
+  "nativeCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "node_modules/mocha/bin/mocha.js",
+      "--timeout",
+      "20000",
+      "--exit",
+      "test/unit/adapters/http.js",
+      "--grep",
+      "should support HTTPS protocol|DNS.*should handle errors",
+      "--invert"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "node_modules/mocha/bin/mocha.js",
+      "--timeout",
+      "20000",
+      "--exit",
+      "test/unit/adapters/http.js",
+      "--grep",
+      "should not abort stream on settle rejection"
+    ]
+  ],
+  "graderOverlay": [
+    {
+      "source": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f01/private/reference/test/unit/adapters/http.js",
+      "target": "test/unit/adapters/http.js"
+    }
+  ],
+  "referencePatchJson": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f01/private/reference-patch.json",
+  "nativeParser": "exit-only",
+  "controls": {
+    "baselineAccepted": false,
+    "referenceAccepted": true,
+    "nativeExitCodes": [
+      0
+    ]
+  },
+  "ready": true,
+  "contractReview": {
+    "reviewedBeforeInference": true,
+    "reviewer": "parent evaluator distinct from coding actors, upstream-authored regression tests; no second human reviewer",
+    "originalIssueOnly": true,
+    "excludedUnrelatedUpstreamTests": false,
+    "optionalFeatureNamingAmbiguityExcluded": true,
+    "graderAmendments": []
+  },
+  "environmentNotes": {
+    "omittedDevelopmentDependencies": [
+      "@babel/core",
+      "@babel/preset-env",
+      "@commitlint/cli",
+      "@commitlint/config-conventional",
+      "@release-it/conventional-changelog",
+      "@rollup/plugin-alias",
+      "@rollup/plugin-babel",
+      "@rollup/plugin-commonjs",
+      "@rollup/plugin-json",
+      "@rollup/plugin-multi-entry",
+      "@rollup/plugin-node-resolve",
+      "auto-changelog",
+      "chalk",
+      "coveralls",
+      "cross-env",
+      "dtslint",
+      "es6-promise",
+      "eslint",
+      "gulp",
+      "handlebars",
+      "husky",
+      "istanbul-instrumenter-loader",
+      "jasmine-core",
+      "karma",
+      "karma-chrome-launcher",
+      "karma-firefox-launcher",
+      "karma-jasmine",
+      "karma-jasmine-ajax",
+      "karma-rollup-preprocessor",
+      "karma-safari-launcher",
+      "karma-sauce-launcher",
+      "karma-sinon",
+      "karma-sourcemap-loader",
+      "memoizee",
+      "minimist",
+      "pacote",
+      "pretty-bytes",
+      "release-it",
+      "rollup",
+      "rollup-plugin-auto-external",
+      "rollup-plugin-bundle-size",
+      "rollup-plugin-terser",
+      "string-replace-async",
+      "typescript"
+    ],
+    "installScriptsDisabled": true,
+    "platform": "Sonion Linux Node24.15.0",
+    "browserAndOtherPlatformsNotScored": true,
+    "excludedExternalNetworkTests": [
+      "should support HTTPS protocol",
+      "DNS should handle errors"
+    ],
+    "viteConfigLoaderNative": false,
+    "typescriptDependencyLibraryCompatibility": null
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "f13",
+  "repository": "postcss/postcss",
+  "issue": 2168,
+  "title": "Invalid mapping (generated column -1) when CSS contains <style and HTML escaping applies",
+  "publicBody": "Since 8.5.29, `SafeStringifier.escapeHTML` escapes `<style` / `<!--` in the output. When escaping kicks in, the source map generator adds a mapping with `generated.column: -1`, and `source-map-js` prints `Invalid mapping`.\n\n### Reproduction\n\n```js\nimport postcss from 'postcss'\n\nconst css = '/* see <style> */\\na { color: red }\\n'\nconst result = await postcss([{ postcssPlugin: 'noop', Once() {} }])\n  .process(css, { from: 'in.css', map: { inline: false } })\nconsole.log(result.css)\n```\n\nOutput (postcss 8.5.29, Node 24):\n\n```\nInvalid mapping: {\"generated\":{\"column\":-1,\"line\":3},\"source\":\"in.css\",\"original\":{\"column\":0,\"line\":3},\"name\":null}\n/* see \\3c style> */\na { color: red }\n```\n\nWithout `<style` in the CSS there is no warning.\n\n### Cause\n\nIn `lib/stringify.js`, if the escaped CSS differs from the original, the whole string is passed to the builder at once: `builder(escaped, node)` with the root node and no `type`. `MapGenerator.generateString` then treats it as both start and end of the root. For the end mapping it uses `column - 2`, and when the escaped string ends with `\\n`, `column` is `1`, so the generated column becomes `-1`.\n\n### Real-world impact\n\nVite 8 depends on `postcss@^8.5.29`, so any Vue SFC `<style>` block whose comment mentions `<style>` (for example `/* keep this in <style> */`) prints `Invalid mapping` in `nuxt dev` / `vite dev`.\n",
+  "url": "https://github.com/postcss/postcss/issues/2168",
+  "cohort": "historical",
+  "baseCommit": "1fd8f881875330b284d65961c2c158f61d4e3bab",
+  "fixCommit": "6c9bc73d9d2ad2c9c8e998ace707ebe067bc8425",
+  "baseDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f13/base",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/dependencies/80e71a5acad4e951/node_modules",
+  "nativeCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "-r",
+      "ts-node/register/transpile-only",
+      "-e",
+      "require('./test/map.test.ts')"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "-r",
+      "ts-node/register/transpile-only",
+      "-e",
+      "require('./test/map.test.ts')"
+    ]
+  ],
+  "graderOverlay": [
+    {
+      "source": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f13/private/reference/test/map.test.ts",
+      "target": "test/map.test.ts"
+    }
+  ],
+  "referencePatchJson": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f13/private/reference-patch.json",
+  "nativeParser": "exit-only",
+  "controls": {
+    "baselineAccepted": false,
+    "referenceAccepted": true,
+    "nativeExitCodes": [
+      0
+    ]
+  },
+  "ready": true,
+  "contractReview": {
+    "reviewedBeforeInference": true,
+    "reviewer": "parent evaluator distinct from coding actors, upstream-authored regression tests; no second human reviewer",
+    "originalIssueOnly": true,
+    "excludedUnrelatedUpstreamTests": false,
+    "optionalFeatureNamingAmbiguityExcluded": true,
+    "graderAmendments": []
+  },
+  "environmentNotes": {
+    "omittedDevelopmentDependencies": [
+      "@logux/eslint-config",
+      "@logux/oxc-configs",
+      "@size-limit/preset-small-lib",
+      "c8",
+      "check-dts",
+      "eslint",
+      "multiocular",
+      "simple-git-hooks",
+      "size-limit"
+    ],
+    "installScriptsDisabled": true,
+    "platform": "Sonion Linux Node24.15.0",
+    "browserAndOtherPlatformsNotScored": true,
+    "excludedExternalNetworkTests": [],
+    "viteConfigLoaderNative": false,
+    "typescriptDependencyLibraryCompatibility": null
+  }
+}

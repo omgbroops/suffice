@@ -1,0 +1,2000 @@
+{
+  "at": "2026-10-18T21:18:07.212845+00:00",
+  "scope": "Development-reused real issues; not a fresh held-out superiority test.",
+  "summary": {
+    "baseline": {
+      "attempts": 6,
+      "independentAccepted": 5,
+      "budgetEligibleSuccesses": 5,
+      "unknownCosts": 0,
+      "codingFailures": 1,
+      "operationalFailures": 0,
+      "knownCostUsd": 0.3270588,
+      "completeCostUsd": 0.3270588,
+      "meanCostPerAttempt": 0.0545098,
+      "medianCostPerAttempt": 0.050184999999999994,
+      "costPerAccepted": 0.06541176,
+      "costPerBudgetEligibleSuccess": 0.06541176,
+      "tokens": {
+        "input": 118036,
+        "cacheRead": 215168,
+        "cacheWrite": 0,
+        "output": 6947
+      },
+      "costComponents": {
+        "input": 0.236072,
+        "cacheRead": 0.021516800000000003,
+        "cacheWrite": 0,
+        "output": 0.06947
+      },
+      "cachedInputFraction": 0.6457545527664734,
+      "reasoningTokens": 221,
+      "modelCalls": 38,
+      "toolCalls": 84,
+      "latencySecondsMean": 65.49116666666667,
+      "packetizedTasks": 0,
+      "packetStages": 0,
+      "escalations": 0
+    },
+    "routing": {
+      "attempts": 6,
+      "independentAccepted": 5,
+      "budgetEligibleSuccesses": 5,
+      "unknownCosts": 0,
+      "codingFailures": 1,
+      "operationalFailures": 0,
+      "knownCostUsd": 0.23511234,
+      "completeCostUsd": 0.23511234,
+      "meanCostPerAttempt": 0.03918539,
+      "medianCostPerAttempt": 0.0335256,
+      "costPerAccepted": 0.047022468,
+      "costPerBudgetEligibleSuccess": 0.047022468,
+      "tokens": {
+        "input": 121031,
+        "cacheRead": 595456,
+        "cacheWrite": 0,
+        "output": 11399
+      },
+      "costComponents": {
+        "input": 0.1546943,
+        "cacheRead": 0.02466304,
+        "cacheWrite": 0,
+        "output": 0.055755000000000006
+      },
+      "cachedInputFraction": 0.8310771863271769,
+      "reasoningTokens": 2488,
+      "modelCalls": 61,
+      "toolCalls": 128,
+      "latencySecondsMean": 93.4145,
+      "packetizedTasks": 0,
+      "packetStages": 0,
+      "escalations": 0
+    },
+    "packets": {
+      "attempts": 6,
+      "independentAccepted": 5,
+      "budgetEligibleSuccesses": 5,
+      "unknownCosts": 0,
+      "codingFailures": 1,
+      "operationalFailures": 0,
+      "knownCostUsd": 0.25021082,
+      "completeCostUsd": 0.25021082,
+      "meanCostPerAttempt": 0.041701803333333336,
+      "medianCostPerAttempt": 0.030163989999999998,
+      "costPerAccepted": 0.050042164,
+      "costPerBudgetEligibleSuccess": 0.050042164,
+      "tokens": {
+        "input": 180573,
+        "cacheRead": 709120,
+        "cacheWrite": 0,
+        "output": 14261
+      },
+      "costComponents": {
+        "input": 0.1915425,
+        "cacheRead": 0.01839232,
+        "cacheWrite": 0,
+        "output": 0.040276
+      },
+      "cachedInputFraction": 0.7970389786139713,
+      "reasoningTokens": 3368,
+      "modelCalls": 76,
+      "toolCalls": 171,
+      "latencySecondsMean": 102.68766666666666,
+      "packetizedTasks": 3,
+      "packetStages": 3,
+      "escalations": 0
+    }
+  },
+  "attempts": [
+    {
+      "id": "f01",
+      "mode": "baseline",
+      "repository": "axios/axios",
+      "issue": 7192,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0373276,
+      "totalCostUsd": 0.0373276,
+      "usage": {
+        "input": 12677,
+        "cacheRead": 30336,
+        "cacheWrite": 0,
+        "output": 894,
+        "estimatedApiUsd": 0.0373276,
+        "modelCalls": 6,
+        "toolCalls": 13,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 36,
+      "modelCalls": 6,
+      "latencyMs": 153060,
+      "outerLatencyMs": 154224,
+      "peakRssBytes": 491532288,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "baseline",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/adapters/http.js",
+        "test/unit/adapters/http.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f01",
+      "mode": "routing",
+      "repository": "axios/axios",
+      "issue": 7192,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.08576360000000001,
+      "totalCostUsd": 0.08576360000000001,
+      "usage": {
+        "input": 33397,
+        "cacheRead": 64896,
+        "cacheWrite": 0,
+        "output": 1248,
+        "estimatedApiUsd": 0.08576360000000001,
+        "modelCalls": 8,
+        "toolCalls": 20,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 44,
+      "modelCalls": 8,
+      "latencyMs": 165514,
+      "outerLatencyMs": 166084,
+      "peakRssBytes": 481808384,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "routing",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/adapters/http.js",
+        "test/unit/adapters/http.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f01",
+      "mode": "packets",
+      "repository": "axios/axios",
+      "issue": 7192,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.038606459999999995,
+      "totalCostUsd": 0.038606459999999995,
+      "usage": {
+        "input": 37022,
+        "cacheRead": 191744,
+        "cacheWrite": 0,
+        "output": 2924,
+        "estimatedApiUsd": 0.038606459999999995,
+        "modelCalls": 15,
+        "toolCalls": 37,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 756,
+      "modelCalls": 15,
+      "latencyMs": 211671,
+      "outerLatencyMs": 212212,
+      "peakRssBytes": 488132608,
+      "resourceStop": null,
+      "packetizationActivated": true,
+      "packetStages": 1,
+      "escalations": 0,
+      "route": {
+        "mode": "packets",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/adapters/http.js",
+        "test/unit/adapters/http.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f04",
+      "mode": "routing",
+      "repository": "APIDevTools/json-schema-ref-parser",
+      "issue": 370,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0707584,
+      "totalCostUsd": 0.0707584,
+      "usage": {
+        "input": 23994,
+        "cacheRead": 91904,
+        "cacheWrite": 0,
+        "output": 1358,
+        "estimatedApiUsd": 0.0707584,
+        "modelCalls": 8,
+        "toolCalls": 16,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 51,
+      "modelCalls": 8,
+      "latencyMs": 68795,
+      "outerLatencyMs": 69819,
+      "peakRssBytes": 487751680,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "routing",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "compatibility",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        ".yarn/install-state.gz",
+        "lib/pointer.ts",
+        "test/specs/root/root.spec.ts"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f04",
+      "mode": "packets",
+      "repository": "APIDevTools/json-schema-ref-parser",
+      "issue": 370,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.138298,
+      "totalCostUsd": 0.138298,
+      "usage": {
+        "input": 55864,
+        "cacheRead": 96000,
+        "cacheWrite": 0,
+        "output": 1697,
+        "estimatedApiUsd": 0.138298,
+        "modelCalls": 10,
+        "toolCalls": 24,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 47,
+      "modelCalls": 10,
+      "latencyMs": 77816,
+      "outerLatencyMs": 78357,
+      "peakRssBytes": 489467904,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "packets",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "compatibility",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [
+        {
+          "kind": "planning_fallback",
+          "error": "Unsafe packet paths"
+        }
+      ],
+      "patchPaths": [
+        "lib/pointer.ts",
+        "test/specs/circular/circular.spec.ts"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f04",
+      "mode": "baseline",
+      "repository": "APIDevTools/json-schema-ref-parser",
+      "issue": 370,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0674268,
+      "totalCostUsd": 0.0674268,
+      "usage": {
+        "input": 24029,
+        "cacheRead": 73088,
+        "cacheWrite": 0,
+        "output": 1206,
+        "estimatedApiUsd": 0.0674268,
+        "modelCalls": 6,
+        "toolCalls": 14,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 66,
+      "modelCalls": 6,
+      "latencyMs": 52954,
+      "outerLatencyMs": 53923,
+      "peakRssBytes": 510988288,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "baseline",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "compatibility",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/pointer.ts",
+        "test/specs/circular/recursive-sibling.spec.ts"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f08",
+      "mode": "packets",
+      "repository": "NaturalIntelligence/fast-xml-parser",
+      "issue": 874,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.02172152,
+      "totalCostUsd": 0.02172152,
+      "usage": {
+        "input": 14819,
+        "cacheRead": 38912,
+        "cacheWrite": 0,
+        "output": 2054,
+        "estimatedApiUsd": 0.02172152,
+        "modelCalls": 10,
+        "toolCalls": 23,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 414,
+      "modelCalls": 10,
+      "latencyMs": 64019,
+      "outerLatencyMs": 64593,
+      "peakRssBytes": 871792640,
+      "resourceStop": null,
+      "packetizationActivated": true,
+      "packetStages": 1,
+      "escalations": 0,
+      "route": {
+        "mode": "packets",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "spec/inputType_spec.js",
+        "src/xmlparser/XMLParser.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 3,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f08",
+      "mode": "baseline",
+      "repository": "NaturalIntelligence/fast-xml-parser",
+      "issue": 874,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0408136,
+      "totalCostUsd": 0.0408136,
+      "usage": {
+        "input": 12614,
+        "cacheRead": 16256,
+        "cacheWrite": 0,
+        "output": 1396,
+        "estimatedApiUsd": 0.0408136,
+        "modelCalls": 6,
+        "toolCalls": 13,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 28,
+      "modelCalls": 6,
+      "latencyMs": 47378,
+      "outerLatencyMs": 47968,
+      "peakRssBytes": 891015168,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "baseline",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "spec/inputType_spec.js",
+        "src/xmlparser/XMLParser.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 3,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f08",
+      "mode": "routing",
+      "repository": "NaturalIntelligence/fast-xml-parser",
+      "issue": 874,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0308788,
+      "totalCostUsd": 0.0308788,
+      "usage": {
+        "input": 7327,
+        "cacheRead": 21248,
+        "cacheWrite": 0,
+        "output": 1410,
+        "estimatedApiUsd": 0.0308788,
+        "modelCalls": 6,
+        "toolCalls": 11,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 11,
+      "modelCalls": 6,
+      "latencyMs": 49762,
+      "outerLatencyMs": 50330,
+      "peakRssBytes": 892641280,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "routing",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "spec/inputType_spec.js",
+        "src/xmlparser/XMLParser.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 3,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f10",
+      "mode": "baseline",
+      "repository": "tj/commander.js",
+      "issue": 2342,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0494608,
+      "totalCostUsd": 0.0494608,
+      "usage": {
+        "input": 19019,
+        "cacheRead": 12928,
+        "cacheWrite": 0,
+        "output": 1013,
+        "estimatedApiUsd": 0.0494608,
+        "modelCalls": 5,
+        "toolCalls": 11,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 12,
+      "modelCalls": 5,
+      "latencyMs": 33001,
+      "outerLatencyMs": 33702,
+      "peakRssBytes": 334204928,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "baseline",
+        "complexity": {
+          "score": 0,
+          "complex": false,
+          "reasons": []
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/command.js",
+        "tests/command.configureOutput.test.js",
+        "tests/fixtures/another-dir/pm",
+        "tests/fixtures/other-dir/pm",
+        "tests/fixtures/pmlink"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f10",
+      "mode": "routing",
+      "repository": "tj/commander.js",
+      "issue": 2342,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.00387238,
+      "totalCostUsd": 0.00387238,
+      "usage": {
+        "input": 22098,
+        "cacheRead": 75008,
+        "cacheWrite": 0,
+        "output": 1825,
+        "estimatedApiUsd": 0.00387238,
+        "modelCalls": 12,
+        "toolCalls": 21,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 780,
+      "modelCalls": 12,
+      "latencyMs": 66707,
+      "outerLatencyMs": 67290,
+      "peakRssBytes": 274948096,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "routing",
+        "complexity": {
+          "score": 0,
+          "complex": false,
+          "reasons": []
+        },
+        "model": "gpt-6-luna"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/command.js",
+        "tests/command.copySettings.test.js",
+        "tests/fixtures/another-dir/pm",
+        "tests/fixtures/other-dir/pm",
+        "tests/fixtures/pmlink"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f10",
+      "mode": "packets",
+      "repository": "tj/commander.js",
+      "issue": 2342,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0034379000000000002,
+      "totalCostUsd": 0.0034379000000000002,
+      "usage": {
+        "input": 20274,
+        "cacheRead": 51200,
+        "cacheWrite": 0,
+        "output": 1797,
+        "estimatedApiUsd": 0.0034379000000000002,
+        "modelCalls": 10,
+        "toolCalls": 19,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 428,
+      "modelCalls": 10,
+      "latencyMs": 62019,
+      "outerLatencyMs": 62586,
+      "peakRssBytes": 309334016,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "packets",
+        "complexity": {
+          "score": 0,
+          "complex": false,
+          "reasons": []
+        },
+        "model": "gpt-6-luna"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/command.js",
+        "tests/command.configureOutput.test.js",
+        "tests/command.copySettings.test.js",
+        "tests/fixtures/another-dir/pm",
+        "tests/fixtures/other-dir/pm",
+        "tests/fixtures/pmlink"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f13",
+      "mode": "routing",
+      "repository": "postcss/postcss",
+      "issue": 2168,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.007666760000000002,
+      "totalCostUsd": 0.007666760000000002,
+      "usage": {
+        "input": 23885,
+        "cacheRead": 312576,
+        "cacheWrite": 0,
+        "output": 4305,
+        "estimatedApiUsd": 0.007666760000000002,
+        "modelCalls": 21,
+        "toolCalls": 48,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 1527,
+      "modelCalls": 21,
+      "latencyMs": 146771,
+      "outerLatencyMs": 147343,
+      "peakRssBytes": 340258816,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "routing",
+        "complexity": {
+          "score": 0,
+          "complex": false,
+          "reasons": []
+        },
+        "model": "gpt-6-luna"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/stringify.js",
+        "test/map.test.ts"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f13",
+      "mode": "packets",
+      "repository": "postcss/postcss",
+      "issue": 2168,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.00511444,
+      "totalCostUsd": 0.00511444,
+      "usage": {
+        "input": 21340,
+        "cacheRead": 214144,
+        "cacheWrite": 0,
+        "output": 1678,
+        "estimatedApiUsd": 0.00511444,
+        "modelCalls": 15,
+        "toolCalls": 31,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 616,
+      "modelCalls": 15,
+      "latencyMs": 70973,
+      "outerLatencyMs": 71479,
+      "peakRssBytes": 311656448,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "packets",
+        "complexity": {
+          "score": 0,
+          "complex": false,
+          "reasons": []
+        },
+        "model": "gpt-6-luna"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/stringify.js",
+        "test/map.test.ts"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f13",
+      "mode": "baseline",
+      "repository": "postcss/postcss",
+      "issue": 2168,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0811208,
+      "totalCostUsd": 0.0811208,
+      "usage": {
+        "input": 32130,
+        "cacheRead": 55808,
+        "cacheWrite": 0,
+        "output": 1128,
+        "estimatedApiUsd": 0.0811208,
+        "modelCalls": 8,
+        "toolCalls": 20,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 20,
+      "modelCalls": 8,
+      "latencyMs": 43089,
+      "outerLatencyMs": 43614,
+      "peakRssBytes": 402944000,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "baseline",
+        "complexity": {
+          "score": 0,
+          "complex": false,
+          "reasons": []
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/stringify.js",
+        "test/map.test.ts"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f14",
+      "mode": "packets",
+      "repository": "nodejs/undici",
+      "issue": 5728,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0430325,
+      "totalCostUsd": 0.0430325,
+      "usage": {
+        "input": 31254,
+        "cacheRead": 117120,
+        "cacheWrite": 0,
+        "output": 4111,
+        "estimatedApiUsd": 0.0430325,
+        "modelCalls": 16,
+        "toolCalls": 37,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 1107,
+      "modelCalls": 16,
+      "latencyMs": 129628,
+      "outerLatencyMs": 130190,
+      "peakRssBytes": 670396416,
+      "resourceStop": null,
+      "packetizationActivated": true,
+      "packetStages": 1,
+      "escalations": 0,
+      "route": {
+        "mode": "packets",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/web/fetch/index.js",
+        "test/fetch/redirect.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f14",
+      "mode": "baseline",
+      "repository": "nodejs/undici",
+      "issue": 5728,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.050909199999999995,
+      "totalCostUsd": 0.050909199999999995,
+      "usage": {
+        "input": 17567,
+        "cacheRead": 26752,
+        "cacheWrite": 0,
+        "output": 1310,
+        "estimatedApiUsd": 0.050909199999999995,
+        "modelCalls": 7,
+        "toolCalls": 13,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 59,
+      "modelCalls": 7,
+      "latencyMs": 63465,
+      "outerLatencyMs": 64269,
+      "peakRssBytes": 345714688,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "baseline",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/web/fetch/index.js",
+        "test/fetch/redirect.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    },
+    {
+      "id": "f14",
+      "mode": "routing",
+      "repository": "nodejs/undici",
+      "issue": 5728,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0361724,
+      "totalCostUsd": 0.0361724,
+      "usage": {
+        "input": 10330,
+        "cacheRead": 29824,
+        "cacheWrite": 0,
+        "output": 1253,
+        "estimatedApiUsd": 0.0361724,
+        "modelCalls": 6,
+        "toolCalls": 12,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 75,
+      "modelCalls": 6,
+      "latencyMs": 62938,
+      "outerLatencyMs": 63442,
+      "peakRssBytes": 350580736,
+      "resourceStop": null,
+      "packetizationActivated": false,
+      "packetStages": 0,
+      "escalations": 0,
+      "route": {
+        "mode": "routing",
+        "complexity": {
+          "score": 3,
+          "complex": true,
+          "reasons": [
+            "async",
+            "failure",
+            "long_specification"
+          ]
+        },
+        "model": "gpt-6.1-sol"
+      },
+      "notes": [],
+      "patchPaths": [
+        "lib/web/fetch/index.js",
+        "test/fetch/redirect.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      }
+    }
+  ],
+  "stages": [
+    {
+      "attempt": "f01-baseline",
+      "mode": "baseline",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 94777,
+      "cost": 0.0373276,
+      "modelCalls": 6
+    },
+    {
+      "attempt": "f01-routing",
+      "mode": "routing",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 107356,
+      "cost": 0.08576360000000001,
+      "modelCalls": 8
+    },
+    {
+      "attempt": "f01-packets",
+      "mode": "packets",
+      "label": "plan",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 20536,
+      "cost": 0.0332588,
+      "modelCalls": 3
+    },
+    {
+      "attempt": "f01-packets",
+      "mode": "packets",
+      "label": "packet-1",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 132921,
+      "cost": 0.005347660000000001,
+      "modelCalls": 12
+    },
+    {
+      "attempt": "f04-routing",
+      "mode": "routing",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 66874,
+      "cost": 0.0707584,
+      "modelCalls": 8
+    },
+    {
+      "attempt": "f04-packets",
+      "mode": "packets",
+      "label": "plan",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 20837,
+      "cost": 0.039304000000000006,
+      "modelCalls": 3
+    },
+    {
+      "attempt": "f04-packets",
+      "mode": "packets",
+      "label": "fallback-solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 55266,
+      "cost": 0.09899400000000001,
+      "modelCalls": 7
+    },
+    {
+      "attempt": "f04-baseline",
+      "mode": "baseline",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 51090,
+      "cost": 0.0674268,
+      "modelCalls": 6
+    },
+    {
+      "attempt": "f08-packets",
+      "mode": "packets",
+      "label": "plan",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 17944,
+      "cost": 0.019858,
+      "modelCalls": 3
+    },
+    {
+      "attempt": "f08-packets",
+      "mode": "packets",
+      "label": "packet-1",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 45217,
+      "cost": 0.00186352,
+      "modelCalls": 7
+    },
+    {
+      "attempt": "f08-baseline",
+      "mode": "baseline",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 46483,
+      "cost": 0.0408136,
+      "modelCalls": 6
+    },
+    {
+      "attempt": "f08-routing",
+      "mode": "routing",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 48964,
+      "cost": 0.0308788,
+      "modelCalls": 6
+    },
+    {
+      "attempt": "f10-baseline",
+      "mode": "baseline",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 32511,
+      "cost": 0.0494608,
+      "modelCalls": 5
+    },
+    {
+      "attempt": "f10-routing",
+      "mode": "routing",
+      "label": "solve",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 66180,
+      "cost": 0.00387238,
+      "modelCalls": 12
+    },
+    {
+      "attempt": "f10-packets",
+      "mode": "packets",
+      "label": "solve",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 61530,
+      "cost": 0.0034379000000000002,
+      "modelCalls": 10
+    },
+    {
+      "attempt": "f13-routing",
+      "mode": "routing",
+      "label": "solve",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 146513,
+      "cost": 0.007666760000000002,
+      "modelCalls": 21
+    },
+    {
+      "attempt": "f13-packets",
+      "mode": "packets",
+      "label": "solve",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 70709,
+      "cost": 0.00511444,
+      "modelCalls": 15
+    },
+    {
+      "attempt": "f13-baseline",
+      "mode": "baseline",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 42838,
+      "cost": 0.0811208,
+      "modelCalls": 8
+    },
+    {
+      "attempt": "f14-packets",
+      "mode": "packets",
+      "label": "plan",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 22304,
+      "cost": 0.038648,
+      "modelCalls": 3
+    },
+    {
+      "attempt": "f14-packets",
+      "mode": "packets",
+      "label": "packet-1",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "latencyMs": 99895,
+      "cost": 0.0043844999999999995,
+      "modelCalls": 13
+    },
+    {
+      "attempt": "f14-baseline",
+      "mode": "baseline",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 56019,
+      "cost": 0.050909199999999995,
+      "modelCalls": 7
+    },
+    {
+      "attempt": "f14-routing",
+      "mode": "routing",
+      "label": "solve",
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "latencyMs": 55465,
+      "cost": 0.0361724,
+      "modelCalls": 6
+    }
+  ],
+  "audit": [
+    {
+      "attempt": "f01-baseline",
+      "valid": true,
+      "modelCalls": 6,
+      "knownCostUsd": 0.0373276,
+      "responses": [
+        "resp_0050976f3b82ebc3016ad532c8542c87d1857c9abd5dbe7aaf",
+        "resp_0050976f3b82ebc3016ad532cb5a5c87d19ac5c1760bd280d8",
+        "resp_0050976f3b82ebc3016ad532cee0f087d19885328e59eb5299",
+        "resp_0050976f3b82ebc3016ad532d26ae087d199bf1c27a6abddb0",
+        "resp_0050976f3b82ebc3016ad532db742c87d191376234f5076a22",
+        "resp_0050976f3b82ebc3016ad5331fe6c087d19bed93fa792f5716"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f01-routing",
+      "valid": true,
+      "modelCalls": 8,
+      "knownCostUsd": 0.0857636,
+      "responses": [
+        "resp_07ef0aef514b58de016ad5339b96f887d1bcc299c27cd26696",
+        "resp_07ef0aef514b58de016ad5339f19dc87d1812086884caed863",
+        "resp_07ef0aef514b58de016ad533a3805487d19929dd5824778ef9",
+        "resp_07ef0aef514b58de016ad533a6f81c87d1abf511f7b927b9e4",
+        "resp_07ef0aef514b58de016ad533b2b4ec87d1b4c924f09dad6ed4",
+        "resp_07ef0aef514b58de016ad533bc07f887d1a9ebb4c8f97cf206",
+        "resp_07ef0aef514b58de016ad533fdc1f487d1a86218896f4f1778",
+        "resp_07ef0aef514b58de016ad53401e33487d1968626fd1f4fa38c"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f01-packets",
+      "valid": true,
+      "modelCalls": 15,
+      "knownCostUsd": 0.038606459999999995,
+      "responses": [
+        "resp_0b4ee12c54ad9e13016ad534911ff887d18f6e0b212eeeb800",
+        "resp_0b4ee12c54ad9e13016ad53495aee887d1a5571bd7c0960cca",
+        "resp_0b4ee12c54ad9e13016ad5349a332087d1a61a51eeea6e7246",
+        "resp_0b4ee12c54ad9e13016ad5349fc3bc87d18cf2aa212fec19c4",
+        "resp_0b4ee12c54ad9e13016ad534a9469487d194108eb26f13052b",
+        "resp_0b4ee12c54ad9e13016ad534af0d8887d193cae08604701faf",
+        "resp_0b4ee12c54ad9e13016ad534b44b6487d183481a7257225395",
+        "resp_0b4ee12c54ad9e13016ad534b9269487d1a240bd6f49c60665",
+        "resp_0b4ee12c54ad9e13016ad534c71ca087d18a6f35ab6cb61cdd",
+        "resp_0b4ee12c54ad9e13016ad53506401487d1b5f6b1dfccb4e77d",
+        "resp_0b4ee12c54ad9e13016ad5350a421887d1b31f57a40dc63e6b",
+        "resp_0b4ee12c54ad9e13016ad5350ffd6c87d1a9dbfb116e1c6231",
+        "resp_02277c211312c58d016ad5347c9fec87d18ba9051f9cd743c8",
+        "resp_02277c211312c58d016ad53480742c87d19b396cadb2bcc227",
+        "resp_02277c211312c58d016ad53485e33487d180cfe979fd0f6bf2"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f04-routing",
+      "valid": true,
+      "modelCalls": 8,
+      "knownCostUsd": 0.0707584,
+      "responses": [
+        "resp_09334041b44697e3016ad532c8d5e887d19e6bc9c2b900301f",
+        "resp_09334041b44697e3016ad532cc6c1c87d1ad183361cd984abc",
+        "resp_09334041b44697e3016ad532cfc26887d1bd0275decbcaa64c",
+        "resp_09334041b44697e3016ad532d6c51487d191192c9b2e861ed8",
+        "resp_09334041b44697e3016ad532e1c04887d1b8fc839299a1323b",
+        "resp_09334041b44697e3016ad532ee357087d1b2eb2a33f1d71c5c",
+        "resp_09334041b44697e3016ad532fc227c87d186f0d6a371cb5b5f",
+        "resp_09334041b44697e3016ad533017e3487d1b4ebffbc7869c9a2"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f04-packets",
+      "valid": true,
+      "modelCalls": 10,
+      "knownCostUsd": 0.138298,
+      "responses": [
+        "resp_08ad83628386c81b016ad53323e6c487d1b3d4be39453e6e9c",
+        "resp_08ad83628386c81b016ad5332909c487d19f966ef8bcfb17a7",
+        "resp_08ad83628386c81b016ad5332cc81c87d1a9b35f106b563c18",
+        "resp_08ad83628386c81b016ad53331a3f087d188a380bc32b8c8f4",
+        "resp_08ad83628386c81b016ad53342e06887d197410c2523dbbcbc",
+        "resp_08ad83628386c81b016ad53351fc6487d1bafa6c1ad84f1fb3",
+        "resp_08ad83628386c81b016ad533563dd887d18d8424d6ecdc3d10",
+        "resp_0104f42a644917fa016ad5330f649c87d18b73805ed7d30e1f",
+        "resp_0104f42a644917fa016ad53314037887d1bf5dc80f100e5a5b",
+        "resp_0104f42a644917fa016ad53317ba3887d1b5eb2b9c7ca1a181"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f04-baseline",
+      "valid": true,
+      "modelCalls": 6,
+      "knownCostUsd": 0.0674268,
+      "responses": [
+        "resp_03df275f5b978ebe016ad53361990487d19471161c948a97fc",
+        "resp_03df275f5b978ebe016ad533652a6887d1b1dd2b9272000046",
+        "resp_03df275f5b978ebe016ad5336892d487d19263cc500babed3d",
+        "resp_03df275f5b978ebe016ad5337a7b9887d181b0d3a471ac8ec0",
+        "resp_03df275f5b978ebe016ad53387ff3c87d1967372c56183d998",
+        "resp_03df275f5b978ebe016ad5338e736087d1bd0923e820cdc27b"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f08-packets",
+      "valid": true,
+      "modelCalls": 10,
+      "knownCostUsd": 0.02172152,
+      "responses": [
+        "resp_0f23f09b71c29b6f016ad5359e4b5c87d192da74b0bfc97439",
+        "resp_0f23f09b71c29b6f016ad535a320c887d1a3b3a1f7ac659570",
+        "resp_0f23f09b71c29b6f016ad535ace23087d1bb5e0ee0a33646b1",
+        "resp_0f23f09b71c29b6f016ad535b8fa8c87d18f7ccebfa6b5a4a5",
+        "resp_0f23f09b71c29b6f016ad535bd825487d1a423fe1e073844d2",
+        "resp_0f23f09b71c29b6f016ad535c3c39487d1aec4fb1083f3712f",
+        "resp_0f23f09b71c29b6f016ad535c7c06887d18c523b29325ad89b",
+        "resp_0c88490c5b583a98016ad5358c563c87d19c8a9c770dc112db",
+        "resp_0c88490c5b583a98016ad53590065887d1928432d92ec8de2c",
+        "resp_0c88490c5b583a98016ad5359383b087d1828d67879cae0e0e"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f08-baseline",
+      "valid": true,
+      "modelCalls": 6,
+      "knownCostUsd": 0.0408136,
+      "responses": [
+        "resp_0a81d24c7fea713f016ad535cfc4bc87d1b661d981fd026c88",
+        "resp_0a81d24c7fea713f016ad535d3079087d1b95cc112d53cbd7f",
+        "resp_0a81d24c7fea713f016ad535d6719c87d1a1f1549114ac7875",
+        "resp_0a81d24c7fea713f016ad535e2e97087d1a7193c50f35a3dd6",
+        "resp_0a81d24c7fea713f016ad535ed6d5887d188b027872806d015",
+        "resp_0a81d24c7fea713f016ad535f8ff1c87d1902d8f2550b23bc2"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f08-routing",
+      "valid": true,
+      "modelCalls": 6,
+      "knownCostUsd": 0.030878800000000005,
+      "responses": [
+        "resp_085230dc7f791b29016ad536026b3c87d1bb116e81fc057276",
+        "resp_085230dc7f791b29016ad536086de087d18726975dd007ece4",
+        "resp_085230dc7f791b29016ad5360b930c87d18ef336b9b9f54f53",
+        "resp_085230dc7f791b29016ad53618f54c87d19dd90ee572c34bd1",
+        "resp_085230dc7f791b29016ad53624d14c87d1a839bffba78c4dae",
+        "resp_085230dc7f791b29016ad5362ecc4887d18deac1f3c74ea3a1"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f10-baseline",
+      "valid": true,
+      "modelCalls": 5,
+      "knownCostUsd": 0.0494608,
+      "responses": [
+        "resp_09c3e185ec176759016ad5358bffac87d1804301731844a966",
+        "resp_09c3e185ec176759016ad5358f55fc87d195561e86d9cac191",
+        "resp_09c3e185ec176759016ad53593060c87d1adfc73518031f187",
+        "resp_09c3e185ec176759016ad535a2b31487d19a873b84085a655e",
+        "resp_09c3e185ec176759016ad535a8208887d18cbbbeff972008ee"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f10-routing",
+      "valid": true,
+      "modelCalls": 12,
+      "knownCostUsd": 0.00387238,
+      "responses": [
+        "resp_01ef810a8c0ff6fd016ad535af196887d19c727fa2e17c0ddd",
+        "resp_01ef810a8c0ff6fd016ad535b2963487d1aa1e4859807dfeaa",
+        "resp_01ef810a8c0ff6fd016ad535b83c8487d1b3c4dde7ed33dd4a",
+        "resp_01ef810a8c0ff6fd016ad535bb507c87d1a2b0bdf896850cec",
+        "resp_01ef810a8c0ff6fd016ad535c4e94c87d1bf9a30578cbe58d8",
+        "resp_01ef810a8c0ff6fd016ad535ca5d7c87d1a543bf74c17483fa",
+        "resp_01ef810a8c0ff6fd016ad535d1a5e487d198c28b3cf2fea5ad",
+        "resp_01ef810a8c0ff6fd016ad535d8128087d1a1330d701f6ee7eb",
+        "resp_01ef810a8c0ff6fd016ad535db7c2487d197c1233bbe91432a",
+        "resp_01ef810a8c0ff6fd016ad535e2009487d1896b7562ede01d40",
+        "resp_01ef810a8c0ff6fd016ad535e8508087d19c90a3f289e91f3a",
+        "resp_01ef810a8c0ff6fd016ad535ecd34887d1b8e2990d937cd91c"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f10-packets",
+      "valid": true,
+      "modelCalls": 10,
+      "knownCostUsd": 0.0034379000000000002,
+      "responses": [
+        "resp_02d7d88a5adc9ce2016ad535f37f4887d193d2a6b5616aa654",
+        "resp_02d7d88a5adc9ce2016ad535f6d0fc87d1820fdbed7e3350b9",
+        "resp_02d7d88a5adc9ce2016ad535faf4cc87d1a35508f188ccdcd1",
+        "resp_02d7d88a5adc9ce2016ad535fe1f8087d1bef12d835fb6b99d",
+        "resp_02d7d88a5adc9ce2016ad53605ef5087d1872eb8980822b8a8",
+        "resp_02d7d88a5adc9ce2016ad5360c4fec87d1bd576fd55f513de8",
+        "resp_02d7d88a5adc9ce2016ad53615c45487d18ca3d00e22077153",
+        "resp_02d7d88a5adc9ce2016ad53621be9487d1b3d8b9a45a718d49",
+        "resp_02d7d88a5adc9ce2016ad536277d2887d1b208a553a9d3ea5c",
+        "resp_02d7d88a5adc9ce2016ad5362d55b487d198c6d057fc0abaf3"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f13-routing",
+      "valid": true,
+      "modelCalls": 21,
+      "knownCostUsd": 0.00766676,
+      "responses": [
+        "resp_027d7e25e5837f89016ad53637959487d1a4f9f75998fb483d",
+        "resp_027d7e25e5837f89016ad5363b983c87d19d3e8b307f50ea58",
+        "resp_027d7e25e5837f89016ad53643d74c87d1aa9497c4037b4267",
+        "resp_027d7e25e5837f89016ad53649209c87d1a682480c2f3193d5",
+        "resp_027d7e25e5837f89016ad5364f808487d1ab761b17356e8857",
+        "resp_027d7e25e5837f89016ad53654aa7487d19d0aa481ec4962da",
+        "resp_027d7e25e5837f89016ad53657409887d1906689ab4a4886ed",
+        "resp_027d7e25e5837f89016ad5365fc6c887d1a3acea7cbaf62744",
+        "resp_027d7e25e5837f89016ad5366647dc87d1aeb1f7a2079e2c6c",
+        "resp_027d7e25e5837f89016ad53669e81c87d1b063ec135de68329",
+        "resp_027d7e25e5837f89016ad5366c2fc887d1ae3790a26acfb818",
+        "resp_027d7e25e5837f89016ad53675ecec87d185e6443cd4aa3d92",
+        "resp_027d7e25e5837f89016ad53685ec9887d19a8a0269b6f1d6bc",
+        "resp_027d7e25e5837f89016ad5368fe89487d18fdfe3438fe9ce86",
+        "resp_027d7e25e5837f89016ad5369420b087d19466ec996a11b5ad",
+        "resp_027d7e25e5837f89016ad5369cdd1887d1bd1cdb7f89995067",
+        "resp_027d7e25e5837f89016ad536a5424887d1b16d124457d86154",
+        "resp_027d7e25e5837f89016ad536ae272c87d18db9072da8a75d29",
+        "resp_027d7e25e5837f89016ad536b5556887d194fdd37984a98884",
+        "resp_027d7e25e5837f89016ad536bb12c087d18aea063cafd47afa",
+        "resp_027d7e25e5837f89016ad536c2e2fc87d198c6f5fd79195091"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f13-packets",
+      "valid": true,
+      "modelCalls": 15,
+      "knownCostUsd": 0.0051144400000000005,
+      "responses": [
+        "resp_01f7490eccb895eb016ad536cc1b2c87d1bf81de5d56ede0c3",
+        "resp_01f7490eccb895eb016ad536d1328887d1ac737eb1601ddfb8",
+        "resp_01f7490eccb895eb016ad536d771e487d1b9bd2110ef0eed3c",
+        "resp_01f7490eccb895eb016ad536dd1a0487d1b29417a139c31504",
+        "resp_01f7490eccb895eb016ad536e29cfc87d181f3105a9685f500",
+        "resp_01f7490eccb895eb016ad536e75a2087d19c460693521aa642",
+        "resp_01f7490eccb895eb016ad536ea211087d1980d9a635644877f",
+        "resp_01f7490eccb895eb016ad536ed2bd087d19396292fc6eca71a",
+        "resp_01f7490eccb895eb016ad536f3f1a887d1b41d82783c24b77c",
+        "resp_01f7490eccb895eb016ad536f7d4dc87d185a16e4c13ff95aa",
+        "resp_01f7490eccb895eb016ad536fa8c7487d18864813ef4659def",
+        "resp_01f7490eccb895eb016ad53700757487d18463718c33470c79",
+        "resp_01f7490eccb895eb016ad53704e46c87d18388169e1640c155",
+        "resp_01f7490eccb895eb016ad5370ba1d887d191db6d92cc7ba9e4",
+        "resp_01f7490eccb895eb016ad5370f0aa087d18cdb8e7ae3db8522"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f13-baseline",
+      "valid": true,
+      "modelCalls": 8,
+      "knownCostUsd": 0.08112079999999999,
+      "responses": [
+        "resp_07a4e8bad1ca9736016ad537146e4887d1a5031274680a3016",
+        "resp_07a4e8bad1ca9736016ad5371796c087d1b418a578b33ede92",
+        "resp_07a4e8bad1ca9736016ad5371d68ec87d190d58c7008b4f646",
+        "resp_07a4e8bad1ca9736016ad53721ac4487d1b52d7c9d1ef942d6",
+        "resp_07a4e8bad1ca9736016ad53724f16887d1869d7512e4d4f537",
+        "resp_07a4e8bad1ca9736016ad5373008ac87d1a3f773ea4d973671",
+        "resp_07a4e8bad1ca9736016ad53737569c87d1acf7199940cde4af",
+        "resp_07a4e8bad1ca9736016ad5373a5dcc87d1bd4511b70cdbfb4c"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f14-packets",
+      "valid": true,
+      "modelCalls": 16,
+      "knownCostUsd": 0.043032499999999994,
+      "responses": [
+        "resp_09fd32754eb1a701016ad5364e6f6c87d180c3a42abeadae90",
+        "resp_09fd32754eb1a701016ad5365327ec87d19faa2d7d331765d0",
+        "resp_09fd32754eb1a701016ad53657212487d19bf3975157befd91",
+        "resp_09fd32754eb1a701016ad5365f2a8887d18034a6074db3e74a",
+        "resp_09fd32754eb1a701016ad53667e45487d191f639c5c7285d01",
+        "resp_09fd32754eb1a701016ad5366d86f487d1a32abc6894d7b1b6",
+        "resp_09fd32754eb1a701016ad5367a0f7487d196bce34067c74e44",
+        "resp_09fd32754eb1a701016ad5367dc8b087d1b25c185ee133cbb1",
+        "resp_09fd32754eb1a701016ad5368c7dcc87d1984cdca7ec201682",
+        "resp_09fd32754eb1a701016ad536901ab887d18676d189ce61cf0b",
+        "resp_09fd32754eb1a701016ad5369e4c9887d189aa363314ec7911",
+        "resp_09fd32754eb1a701016ad536a34bbc87d1b81946a112f7fe88",
+        "resp_09fd32754eb1a701016ad536ad929887d19dbe4ddf8b0b8014",
+        "resp_085472246dad98f9016ad53638328087d19cd983af0fac116a",
+        "resp_085472246dad98f9016ad5363c547087d1be07381ac6c49842",
+        "resp_085472246dad98f9016ad53640f12087d1bddd4edd9f8c805f"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f14-baseline",
+      "valid": true,
+      "modelCalls": 7,
+      "knownCostUsd": 0.0509092,
+      "responses": [
+        "resp_0c900d125601eee7016ad536c2ec7887d1be92b0c89feab26b",
+        "resp_0c900d125601eee7016ad536c5febc87d1a47b28215768b816",
+        "resp_0c900d125601eee7016ad536c8d69087d185c984e28418378f",
+        "resp_0c900d125601eee7016ad536cc4cdc87d18a74783cecb61f06",
+        "resp_0c900d125601eee7016ad536d55a0087d19317ed4a8767afab",
+        "resp_0c900d125601eee7016ad536ec139487d1a3cc0edde2ab2f2c",
+        "resp_0c900d125601eee7016ad536f1c68487d1820ba964ffd6cf3c"
+      ],
+      "sourcePromptHash": true
+    },
+    {
+      "attempt": "f14-routing",
+      "valid": true,
+      "modelCalls": 6,
+      "knownCostUsd": 0.0361724,
+      "responses": [
+        "resp_0e89b1d79f1874bf016ad5370b484887d18265132d9832b91f",
+        "resp_0e89b1d79f1874bf016ad5370ea31c87d1b924b02aadfe5392",
+        "resp_0e89b1d79f1874bf016ad53711c04487d1b7fc2ed23b0b3d3f",
+        "resp_0e89b1d79f1874bf016ad53715c61487d1a130958bfc7a770c",
+        "resp_0e89b1d79f1874bf016ad53730867887d1a418301e8053636a",
+        "resp_0e89b1d79f1874bf016ad5373dd7b087d199f867c6a9c84f8d"
+      ],
+      "sourcePromptHash": true
+    }
+  ],
+  "sourceIntegrity": [
+    {
+      "path": "src/packets/entry.mjs",
+      "matches": true
+    },
+    {
+      "path": "src/packets/executor.mjs",
+      "matches": true
+    },
+    {
+      "path": "src/packets/policy.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/interactive.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/main.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/navigation.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/options.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/projects.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/session.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/tools.mjs",
+      "matches": true
+    },
+    {
+      "path": "packages/cli/src/workspace.mjs",
+      "matches": true
+    },
+    {
+      "path": "benchmark/driver.py",
+      "matches": true
+    },
+    {
+      "path": "benchmark/report.py",
+      "matches": true
+    },
+    {
+      "path": "benchmark/runner.mjs",
+      "matches": true
+    },
+    {
+      "path": "benchmark/sonion.py",
+      "matches": true
+    },
+    {
+      "path": "tests/packets.test.mjs",
+      "matches": true
+    },
+    {
+      "path": "package.json",
+      "matches": true
+    },
+    {
+      "path": "package-lock.json",
+      "matches": true
+    }
+  ],
+  "allComplete": true,
+  "allReceiptsValid": true,
+  "costBasis": "API-equivalent; all planning, packet, escalation and failed-response usage included. Engineering inference excluded."
+}

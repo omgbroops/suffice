@@ -1,0 +1,82 @@
+{
+  "id": "f14",
+  "repository": "nodejs/undici",
+  "issue": 5728,
+  "title": "fetch follow does not dump 3xx bodies and hangs when the redirect body is large",
+  "publicBody": "## Bug Description\n`fetch({ redirect: 'follow' })` does not dump 3xx response bodies. If the redirect body is big enough (I think it just needs to be is larger than the unread stream highWaterMark) the connection stays `running`. The follow-up request then cannot use that connection.\n\n`request()` appears to already ignore 3xx bodies and keeps reading. I'm unsure then if this is expected behaviour or a bug but thought it would be worth reporting regardless.\n\nAdditionally with redirect follow the intermediate 3xx responses are never exposed so it's impossible to clean them up / free the connection.\n\nThis is especially painful with an `Agent` used as `dispatcher` and a `connections` limit as each redirect can pin a pool slot and exhaust the pool. \n\n## Reproduction\nStandalone reproduction script:\n\n```\n'use strict'\nconst { test } = require('node:test')\nconst { createServer } = require('node:http')\nconst { once } = require('node:events')\nconst { fetch, Agent } = require('undici') // use require('..') inside this repo\ntest('fetch follow does not pin the keep-alive socket on a 301 with a large body', { timeout: 15_000 }, async (t) => {\n  t.plan(3)\n  const redirectBody = Buffer.alloc(128 * 1024, 0x78)\n  const server = createServer((req, res) => {\n    if (req.url === '/redirect') {\n      res.writeHead(301, { Location: '/final' })\n      res.end(redirectBody)\n      return\n    }\n    res.end('ok')\n  })\n  const dispatcher = new Agent({ connections: 1, keepAliveTimeout: 10_000 })\n  t.after(async () => {\n    await dispatcher.destroy()\n    server.close()\n  })\n  server.listen(0)\n  await once(server, 'listening')\n  const url = `http://127.0.0.1:${server.address().port}/redirect`\n  const first = await fetch(url, { dispatcher, redirect: 'follow' })\n  t.assert.strictEqual(first.status, 200)\n  t.assert.strictEqual(await first.text(), 'ok')\n  t.assert.ok(first.redirected)\n})\n```\n\n## Expected Behavior\nfetch follows the 301, dumps the unused redirect body, returns the /final 200, and releases the connection. \n\n## Actual Behavior\nfetch never resolves. The only pooled socket is stuck on the unread 301 body, so the follow-up GET to /final queues forever.\n\n## Logs & Screenshots\n\n\u2716 fetch follow does not pin the keep-alive socket on a 301 with a large body (15006.989667ms)\n\u2139 tests 1\n\u2139 pass 0\n\u2139 fail 0\n\u2139 cancelled 1\n\u2139 duration_ms 15208.42675\n\u2716 failing tests:\ntest at test/repro-fetch-follow-redirect-body.js:11:1\n\u2716 fetch follow does not pin the keep-alive socket on a 301 with a large body (15006.989667ms)\n  'test timed out after 15000ms'\n\n## Environment\nOS: macOS 26.6 (Darwin 25.6.0 arm64)\nNode.js version: v24.15.0\nundici version: 7.25.0 (happens on main too)\n\n### Additional Context",
+  "url": "https://github.com/nodejs/undici/issues/5728",
+  "cohort": "historical",
+  "baseCommit": "f3cbe486706da6163b4ca226022e74df73168dd5",
+  "fixCommit": "8145595e221779980d91ff611f14e5a984661388",
+  "baseDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f14/base",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/dependencies/5f2820f4e8e5d871/node_modules",
+  "nativeCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "--test",
+      "test/fetch/redirect.js",
+      "test/fetch/redirect-cross-origin-header.js",
+      "test/fetch/fetch-url-after-redirect.js"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "--no-experimental-strip-types",
+      "--test",
+      "test/fetch/issue-5728.js"
+    ]
+  ],
+  "graderOverlay": [
+    {
+      "source": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f14/private/reference/test/fetch/issue-5728.js",
+      "target": "test/fetch/issue-5728.js"
+    }
+  ],
+  "referencePatchJson": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f14/private/reference-patch.json",
+  "nativeParser": "exit-only",
+  "controls": {
+    "baselineAccepted": false,
+    "referenceAccepted": true,
+    "nativeExitCodes": [
+      0
+    ]
+  },
+  "ready": true,
+  "contractReview": {
+    "reviewedBeforeInference": true,
+    "reviewer": "parent evaluator distinct from coding actors, upstream-authored regression tests; no second human reviewer",
+    "originalIssueOnly": true,
+    "excludedUnrelatedUpstreamTests": false,
+    "optionalFeatureNamingAmbiguityExcluded": true,
+    "graderAmendments": []
+  },
+  "environmentNotes": {
+    "omittedDevelopmentDependencies": [
+      "@metcoder95/https-pem",
+      "@types/node",
+      "abort-controller",
+      "borp",
+      "c8",
+      "cross-env",
+      "dns-packet",
+      "esbuild",
+      "eslint",
+      "fast-check",
+      "husky",
+      "jest",
+      "jsondiffpatch",
+      "neostandard",
+      "proxy",
+      "tsd",
+      "typescript"
+    ],
+    "installScriptsDisabled": true,
+    "platform": "Sonion Linux Node24.15.0",
+    "browserAndOtherPlatformsNotScored": true,
+    "excludedExternalNetworkTests": [],
+    "viteConfigLoaderNative": false,
+    "typescriptDependencyLibraryCompatibility": null
+  }
+}

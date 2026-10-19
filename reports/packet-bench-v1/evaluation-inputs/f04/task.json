@@ -1,0 +1,90 @@
+{
+  "id": "f04",
+  "repository": "APIDevTools/json-schema-ref-parser",
+  "issue": 370,
+  "title": "Recursive (Circular) model $ref doesn't dereference unless wrapped in anyOf (sibling keys alongside $ref keys)",
+  "publicBody": "[Pydantic recently released an update](https://github.com/pydantic/pydantic/pull/10029) changing their JSON schema generator. \n\nPreviously the generated schema looked like \n\n```\n{\n    \"$defs\": {\n        \"RecursiveModel\": {\n            \"additionalProperties\": false,\n            \"properties\": {\n                \"value\": {\n                    \"description\": \"A string\",\n                    \"type\": \"string\"\n                },\n                \"children\": {\n                    \"description\": \"Children with strings\",\n                    \"items\": {\n                        \"$ref\": \"#/$defs/RecursiveModel\"\n                    },\n                    \"type\": \"array\"\n                }\n            },\n            \"required\": [\n                \"value\",\n                \"children\"\n            ],\n            \"title\": \"RecursiveModel\",\n            \"type\": \"object\"\n        }\n    },\n    \"allOf\": [\n        {\n            \"$ref\": \"#/$defs/RecursiveModel\"\n        }\n    ]\n}\n```\n\nwhich dereferences properly with json-schema-ref-parser. However, now the generated schema looks like\n\n```\n{\n    \"$defs\": {\n        \"RecursiveModel\": {\n            \"additionalProperties\": false,\n            \"properties\": {\n                \"value\": {\n                    \"description\": \"A string\",\n                    \"type\": \"string\"\n                },\n                \"children\": {\n                    \"description\": \"Children with strings\",\n                    \"items\": {\n                        \"$ref\": \"#/$defs/RecursiveModel\"\n                    },\n                    \"type\": \"array\"\n                }\n            },\n            \"required\": [\n                \"value\",\n                \"children\"\n            ],\n            \"title\": \"RecursiveModel\",\n            \"type\": \"object\"\n        }\n    },\n    \"$ref\": \"#/$defs/RecursiveModel\"\n}\n```\n \nwhich results in an unresolved `'$ref': '#/%24defs/RecursiveModel/properties/children/items'` after `$RefParser.dereference()`. As far as I can tell the [newer schema should be valid](https://www.jsonschemavalidator.net/s/7nBBwmht).\n\nHere's a full script showing the difference, and unresolved `$ref`\n```JavaScript\nimport $RefParser from \"@apidevtools/json-schema-ref-parser\";\n\nasync function main() {\n  console.log(\"----OLD----\");\n  const old_dereferenced = await $RefParser.dereference({\n    \"$defs\": {\n      \"RecursiveModel\": {\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"value\": {\n            \"description\": \"A string\",\n            \"type\": \"string\",\n          },\n          \"children\": {\n            \"description\": \"Children with strings\",\n            \"items\": {\n              \"$ref\": \"#/$defs/RecursiveModel\",\n            },\n            \"type\": \"array\",\n          },\n        },\n        \"required\": [\"value\", \"children\"],\n        \"title\": \"RecursiveModel\",\n        \"type\": \"object\",\n      },\n    },\n    \"allOf\": [\n      {\n        \"$ref\": \"#/$defs/RecursiveModel\",\n      },\n    ],\n  });\n  console.log(old_dereferenced[\"$defs\"][\"RecursiveModel\"][\"properties\"]);\n\n  console.log(\"----NEW----\");\n  const new_dereferenced = await $RefParser.dereference({\n    \"$defs\": {\n      \"RecursiveModel\": {\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"value\": {\n            \"description\": \"A string\",\n            \"type\": \"string\",\n          },\n          \"children\": {\n            \"description\": \"Children with strings\",\n            \"items\": {\n              \"$ref\": \"#/$defs/RecursiveModel\",\n            },\n            \"type\": \"array\",\n          },\n        },\n        \"required\": [\"value\", \"children\"],\n        \"title\": \"RecursiveModel\",\n        \"type\": \"object\",\n      },\n    },\n    \"$ref\": \"#/$defs/RecursiveModel\",\n  });\n  console.log(new_dereferenced[\"$defs\"][\"RecursiveModel\"][\"properties\"]);\n}\n\nmain();\n```\n\nI get the output\n\n```\n----OLD----\n<ref *1> {\n  value: { description: 'A string', type: 'string' },\n  children: {\n    description: 'Children with strings',\n    items: {\n      additionalProperties: false,\n      properties: [Circular *1],\n      required: [Array],\n      title: 'RecursiveModel',\n      type: 'object'\n    },\n    type: 'array'\n  }\n}\n----NEW----\n{\n  value: { description: 'A string', type: 'string' },\n  children: {\n    description: 'Children with strings',\n    items: {\n      '$defs': [Object],\n      '$ref': '#/%24defs/RecursiveModel/properties/children/items'\n    },\n    type: 'array'\n  }\n}\n```\n\nIs this expected? Should I be using some different option?",
+  "url": "https://github.com/APIDevTools/json-schema-ref-parser/issues/370",
+  "cohort": "historical",
+  "baseCommit": "78b33236ebc4faadf733c24e95cfa58b2c6774ff",
+  "fixCommit": "cd9737cce5cac16a61668754ed07da117556fcd9",
+  "baseDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f04/base",
+  "dependencyDir": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/dependencies/d0e035d506ac1d6b/node_modules",
+  "nativeCommands": [
+    [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--configLoader",
+      "native",
+      "--no-cache",
+      "--maxWorkers=1",
+      "test/specs/circular",
+      "test/specs/defs",
+      "test/specs/root"
+    ]
+  ],
+  "acceptanceCommands": [
+    [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--configLoader",
+      "native",
+      "--no-cache",
+      "--maxWorkers=1",
+      "test/specs/circular-external-self/"
+    ]
+  ],
+  "graderOverlay": [
+    {
+      "source": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f04/private/reference/test/specs/circular-external-self/sibling-ref.spec.ts",
+      "target": "test/specs/circular-external-self/sibling-ref.spec.ts"
+    }
+  ],
+  "referencePatchJson": "/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f04/private/reference-patch.json",
+  "nativeParser": "exit-only",
+  "controls": {
+    "baselineAccepted": false,
+    "referenceAccepted": true,
+    "nativeExitCodes": [
+      0
+    ]
+  },
+  "ready": true,
+  "contractReview": {
+    "reviewedBeforeInference": true,
+    "reviewer": "parent evaluator distinct from coding actors, upstream-authored regression tests; no second human reviewer",
+    "originalIssueOnly": true,
+    "excludedUnrelatedUpstreamTests": true,
+    "optionalFeatureNamingAmbiguityExcluded": true,
+    "graderAmendments": []
+  },
+  "environmentNotes": {
+    "omittedDevelopmentDependencies": [
+      "@eslint/compat",
+      "@eslint/js",
+      "@types/eslint",
+      "@typescript-eslint/eslint-plugin",
+      "@typescript-eslint/parser",
+      "@vitest/coverage-v8",
+      "cross-env",
+      "eslint",
+      "eslint-config-prettier",
+      "eslint-plugin-import",
+      "eslint-plugin-prettier",
+      "eslint-plugin-promise",
+      "eslint-plugin-unused-imports",
+      "globals",
+      "prettier",
+      "rimraf",
+      "typescript-eslint"
+    ],
+    "installScriptsDisabled": true,
+    "platform": "Sonion Linux Node24.15.0",
+    "browserAndOtherPlatformsNotScored": true,
+    "excludedExternalNetworkTests": [],
+    "viteConfigLoaderNative": true,
+    "typescriptDependencyLibraryCompatibility": null
+  }
+}
