@@ -1,9 +1,5 @@
 # Suffice
 
-The **Suffice CLI alpha** is available in [packages/cli](packages/cli/README.md). From this clone, run `npm ci` once, then `npx suffice`. It uses Pi's native terminal interface with Suffice's tools and branding: `/project` selects a repository and `/login` signs in. No global install or tarball step is needed. The research scripts below and frozen benchmark worktrees are unchanged.
-
-The CLI now includes deterministic Luna High / Sol Low routing. Use `/routing auto|off`, or choose `--model`/`--effort` for manual control. Routing retains one agent session and adds no planner or packet workers. See the [CLI guide](packages/cli/README.md) and [validation limits](packages/cli/VALIDATION.md); this interactive port has not received a new comparative live benchmark.
-
 Newest completed investigations: [Nemotron retrieval and revision-aware evidence](reports/EVIDENCE-EXPERIMENTS-RESULTS.md). Semantic retrieval improved offline region coverage but cost 6.3% more in scored repairs; the evidence record cost 85.2% more, and record plus directed checks 105.5% more. Every scored arm passed. No new policy was enabled by default. These are bounded observations, not general accuracy or cost guarantees. Independent saved-patch audits and isolated exported-layout replays passed; see [status](STATUS.md).
 
 Earlier completed investigations: [architect workflow and five parallel experiments](reports/PARALLEL-EXPERIMENTS-RESULTS.md). Delegation cost more than solo, dynamic history retention cost 43.8% more, and fixed test checkpoints showed a narrow 16.5% efficiency signal with a feedback-loss risk. Harder tasks now expose real baseline failures, but no capability-frontier gain is established. [Full project handoff](docs/CHATGPT-HANDOFF.md) and [status](STATUS.md) include model settings, preserved failures and limitations.
