@@ -23,6 +23,34 @@ def write_result(folder, value, errors=()):
     worker = folder/'worker'; worker.mkdir(exist_ok=True)
     (worker/'worker.json').write_text(json.dumps({'errors': list(errors)}), encoding='utf8')
 
+def classifier_cases():
+    d = load()
+    request = {'type': 'provider_request'}
+    capacity = {'type': 'assistant', 'error': 'Our servers are currently overloaded.', 'usage': {'input': 0, 'output': 0}}
+    raw = {'type': 'provider_usage', 'responseId': 'known-response'}
+    success = {'type': 'assistant', 'stopReason': 'toolUse', 'usage': {'input': 100, 'output': 10}}
+    abort = {'type': 'assistant', 'error': 'This operation was aborted', 'usage': {'input': 0, 'output': 0}}
+    sequence = [request, capacity, request, raw, success, abort]
+    scenarios = [
+        ('pi-capacity-then-local-abort', sequence, True),
+        ('pi-unrelated-failure', [request, capacity, request, {'type': 'assistant', 'error': 'Unexpected stream disconnect'}], False),
+        ('pi-unpaired-request', [request, capacity, request], False),
+        ('pi-success-without-usage', [request, capacity, request, success], False),
+        ('pi-nonzero-abort', sequence[:-1] + [{**abort, 'usage': {'input': 20, 'output': 0}}], False),
+        ('pi-abort-with-provider-identity', sequence[:-1] + [{**abort, 'responseId': 'unfinished-response'}], False),
+    ]
+    results = []
+    with tempfile.TemporaryDirectory(prefix='suffice-resume-classifier-') as temp:
+        root = pathlib.Path(temp)
+        for name, events, expected in scenarios:
+            p = root/name; write_result(p, {'costUnknown': True})
+            directory = p/'worker/solve/state/events'; directory.mkdir(parents=True)
+            (directory/'events.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events), encoding='utf8')
+            actual = d.capacity_unknown(p, {'costUnknown': True})
+            assert actual is expected, (name, actual, expected)
+            results.append({'scenario': name, 'passed': True})
+    return results
+
 def scenario(kind):
     d = load()
     with tempfile.TemporaryDirectory(prefix='suffice-resume-check-') as temp:
@@ -94,6 +122,6 @@ def scenario(kind):
 
 if __name__ == '__main__':
     results = [scenario(k) for k in ['complete', 'new-capacity', 'saved-unknown', 'saved-invalid',
-                                    'partial', 'ceiling', 'new-identity', 'new-unknown', 'mixed-error']]
+                                    'partial', 'ceiling', 'new-identity', 'new-unknown', 'mixed-error']] + classifier_cases()
     print(json.dumps({'inferenceCalls': 0, 'passed': all(r['passed'] for r in results), 'scenarios': results}, indent=2))
     raise SystemExit(0 if all(r['passed'] for r in results) else 1)
