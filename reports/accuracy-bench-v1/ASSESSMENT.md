@@ -1,0 +1,9 @@
+# Assessment
+
+Do not promote mandatory Medium compatibility review as an efficiency or accuracy improvement from this replay. It produced the same 2/3 acceptance as historical Medium at roughly 2.54 times the total spend and 2.19 times the mean latency. Historical v2 High remains the provisional quality-first candidate on these three cases: 3/3 accepted at lower total cost and latency than this treatment. The sample is small and exposed, so this is a decision about what to test next, not a general model ranking.
+
+The implementation behaved as designed: fresh read-only reviews ran even after green public checks, raw usage included all stages, source evidence was mechanically checked, and one bounded correction followed each revise verdict. Both revised attempts remained honestly labeled `revised_unreviewed`. There were no missing/unknown receipts, unreported cap failures or hidden acceptance feedback into workers.
+
+The treatment did not demonstrate useful correction quality. On f09 the worker made no edits after its review, so its extra $0.00538064 and 84.720 seconds of review/correction work cannot be credited with improving the final patch. On f11 the reviewer identified a different dispatch concern, and the worker edited that path while leaving three independently tested help-option configurations unresolved. Source-backed findings mean the quoted evidence exists and was inspected; they do not prove a finding's semantic importance or the corrected patch's compatibility.
+
+The generic contract instructions also change the initial solve prompt, so this campaign does not isolate the reviewer alone. No pre-correction independent grade was run. We cannot claim that review caused the final f11 failure or that its initial patch would have passed. Keep the complete failed trace, avoid tuning this treatment against these known cases, and use fresh issues for any subsequent accuracy experiment. No broader campaign has been dispatched.

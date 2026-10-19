@@ -1,0 +1,802 @@
+{
+  "catalogConsistency": {
+    "gpt-6-luna": true
+  },
+  "catalogsByModel": {
+    "gpt-6-luna": [
+      {
+        "mode": "mediumAccuracy",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      },
+      {
+        "mode": "mediumAccuracy",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      },
+      {
+        "mode": "mediumAccuracy",
+        "rates": {
+          "input": 0.1,
+          "output": 0.5,
+          "cacheRead": 0.01,
+          "cacheWrite": 0.125,
+          "tiers": [
+            {
+              "inputTokensAbove": 272000,
+              "input": 0.2,
+              "output": 0.75,
+              "cacheRead": 0.02,
+              "cacheWrite": 0.25
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "attempts": [
+    {
+      "id": "f16",
+      "mode": "mediumAccuracy",
+      "responses": 15,
+      "rawResponses": 15,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "contract-review/state/events/1792392199904-b6d1ddba-a757-4749-9374-f78972d0ffcb.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": true,
+          "correction": false,
+          "startupToolNames": [
+            "read",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "changes",
+            "codemode"
+          ],
+          "toolNames": [
+            "changes",
+            "codemode",
+            "read"
+          ],
+          "responses": 4,
+          "repricedUsd": 0.00147688
+        },
+        {
+          "eventFile": "solve/state/events/1792392129674-16f2a336-500b-4051-bba7-6d1011579808.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": false,
+          "correction": false,
+          "startupToolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ],
+          "toolNames": [
+            "bash",
+            "codemode",
+            "command_output",
+            "edit",
+            "read",
+            "symbol_read",
+            "symbols"
+          ],
+          "responses": 11,
+          "repricedUsd": 0.0026133000000000003
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.0040901800000000006,
+      "reportedResponseUsd": 0.00409018,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "f09",
+      "mode": "mediumAccuracy",
+      "responses": 35,
+      "rawResponses": 35,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "contract-correction/state/events/1792392210389-8aaed3b0-e18b-4d6e-a06b-8f70b317db32.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": false,
+          "correction": true,
+          "startupToolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ],
+          "toolNames": [
+            "bash",
+            "codemode",
+            "read",
+            "symbol_read",
+            "symbols"
+          ],
+          "responses": 12,
+          "repricedUsd": 0.0036592800000000004
+        },
+        {
+          "eventFile": "contract-review/state/events/1792392193788-be1ed56d-4495-499d-81b3-96b1e538d854.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": true,
+          "correction": false,
+          "startupToolNames": [
+            "read",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "changes",
+            "codemode"
+          ],
+          "toolNames": [
+            "changes",
+            "codemode",
+            "read",
+            "symbols"
+          ],
+          "responses": 6,
+          "repricedUsd": 0.00172136
+        },
+        {
+          "eventFile": "solve/state/events/1792392129675-c71d2c47-0994-458b-a6f8-6cd0fab3d0af.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": false,
+          "correction": false,
+          "startupToolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ],
+          "toolNames": [
+            "bash",
+            "codemode",
+            "edit",
+            "read",
+            "symbol_read",
+            "symbols"
+          ],
+          "responses": 17,
+          "repricedUsd": 0.006011540000000001
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.011392180000000002,
+      "reportedResponseUsd": 0.01139218,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    },
+    {
+      "id": "f11",
+      "mode": "mediumAccuracy",
+      "responses": 29,
+      "rawResponses": 29,
+      "partialJsonLines": [],
+      "tokenReceiptsMatch": true,
+      "identityMatches": true,
+      "stages": [
+        {
+          "eventFile": "contract-correction/state/events/1792392383761-e2c779b9-0b23-466f-95e8-aeb8989a94e1.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": false,
+          "correction": true,
+          "startupToolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ],
+          "toolNames": [
+            "bash",
+            "codemode",
+            "edit",
+            "symbol_read",
+            "symbols"
+          ],
+          "responses": 12,
+          "repricedUsd": 0.003832059999999999
+        },
+        {
+          "eventFile": "contract-review/state/events/1792392365316-098a9a8e-3c59-460f-9eec-71b3bfd7ef27.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": true,
+          "correction": false,
+          "startupToolNames": [
+            "read",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "changes",
+            "codemode"
+          ],
+          "toolNames": [
+            "changes",
+            "codemode",
+            "read",
+            "symbol_read",
+            "symbols"
+          ],
+          "responses": 6,
+          "repricedUsd": 0.0014493
+        },
+        {
+          "eventFile": "solve/state/events/1792392280571-49d0326b-aa9e-440f-8d64-92ef72abadff.jsonl",
+          "model": "gpt-6-luna",
+          "effort": "medium",
+          "reviewer": false,
+          "correction": false,
+          "startupToolNames": [
+            "read",
+            "bash",
+            "edit",
+            "write",
+            "symbols",
+            "symbol_read",
+            "symbol_references",
+            "command_output",
+            "codemode"
+          ],
+          "toolNames": [
+            "bash",
+            "codemode",
+            "edit"
+          ],
+          "responses": 11,
+          "repricedUsd": 0.0028324599999999998
+        }
+      ],
+      "catalogModels": [
+        "gpt-6-luna"
+      ],
+      "missingCatalogModels": [],
+      "independentRepricedUsd": 0.008113819999999999,
+      "reportedResponseUsd": 0.00811382,
+      "matchesAttempt": true,
+      "repricedMatches": true
+    }
+  ],
+  "localSourceMatchesFreeze": true,
+  "source": [
+    {
+      "path": "src/accuracy/entry.mjs",
+      "expected": "9596b9a28092b387dd5775ab639f35db1ab92773c003bc9db04f82b7a25f1bf0",
+      "actual": "9596b9a28092b387dd5775ab639f35db1ab92773c003bc9db04f82b7a25f1bf0"
+    },
+    {
+      "path": "src/accuracy/executor.mjs",
+      "expected": "5d5f276f40d39a57a637e2339de6d266e010794a673727c496d3da6a52e61f06",
+      "actual": "5d5f276f40d39a57a637e2339de6d266e010794a673727c496d3da6a52e61f06"
+    },
+    {
+      "path": "src/accuracy/policy.mjs",
+      "expected": "c16a2a22a75178b53d7d4e52fa17cf52f66cbd3a7075e096f9f675152ad22157",
+      "actual": "c16a2a22a75178b53d7d4e52fa17cf52f66cbd3a7075e096f9f675152ad22157"
+    },
+    {
+      "path": "src/accuracy/review.mjs",
+      "expected": "763b7b8b2c21ef5ad572d96ff3d6f07ec3d3fc29f10b4c8a67bea2cbf96e0238",
+      "actual": "763b7b8b2c21ef5ad572d96ff3d6f07ec3d3fc29f10b4c8a67bea2cbf96e0238"
+    },
+    {
+      "path": "src/accuracy/tools.mjs",
+      "expected": "c2c6c7e5259f2070580451499391466761e4c539748e56de4ca936a243cf321c",
+      "actual": "c2c6c7e5259f2070580451499391466761e4c539748e56de4ca936a243cf321c"
+    },
+    {
+      "path": "src/packets/entry.mjs",
+      "expected": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+      "actual": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9"
+    },
+    {
+      "path": "src/packets/executor.mjs",
+      "expected": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+      "actual": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2"
+    },
+    {
+      "path": "src/packets/policy.mjs",
+      "expected": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+      "actual": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42"
+    },
+    {
+      "path": "src/pipeline/context.mjs",
+      "expected": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+      "actual": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21"
+    },
+    {
+      "path": "src/pipeline/entry.mjs",
+      "expected": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+      "actual": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2"
+    },
+    {
+      "path": "src/pipeline/executor.mjs",
+      "expected": "d1e0a4b9ac02a1e5ca87fdcbb792f975f8aacce1b0b6f3e6a36e493458d44497",
+      "actual": "d1e0a4b9ac02a1e5ca87fdcbb792f975f8aacce1b0b6f3e6a36e493458d44497"
+    },
+    {
+      "path": "src/pipeline/fleet.mjs",
+      "expected": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+      "actual": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774"
+    },
+    {
+      "path": "src/pipeline/knowledge.mjs",
+      "expected": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+      "actual": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52"
+    },
+    {
+      "path": "src/pipeline/notices.mjs",
+      "expected": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+      "actual": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1"
+    },
+    {
+      "path": "src/pipeline/observations.mjs",
+      "expected": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+      "actual": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1"
+    },
+    {
+      "path": "src/pipeline/policy.mjs",
+      "expected": "f7c1d0ce579fbec4aed1ac81b2da1c4747d0a5a25147979b5af098ada56414e7",
+      "actual": "f7c1d0ce579fbec4aed1ac81b2da1c4747d0a5a25147979b5af098ada56414e7"
+    },
+    {
+      "path": "src/pipeline/preparation.mjs",
+      "expected": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+      "actual": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a"
+    },
+    {
+      "path": "src/pipeline/session.mjs",
+      "expected": "bb6e1c5de195b39e7baab81dad06673c7425bb60ea6f9bd5eb0656f62857520b",
+      "actual": "bb6e1c5de195b39e7baab81dad06673c7425bb60ea6f9bd5eb0656f62857520b"
+    },
+    {
+      "path": "src/pipeline/tools.mjs",
+      "expected": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+      "actual": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802"
+    },
+    {
+      "path": "packages/cli/src/interactive.mjs",
+      "expected": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+      "actual": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c"
+    },
+    {
+      "path": "packages/cli/src/main.mjs",
+      "expected": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+      "actual": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389"
+    },
+    {
+      "path": "packages/cli/src/navigation.mjs",
+      "expected": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+      "actual": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a"
+    },
+    {
+      "path": "packages/cli/src/options.mjs",
+      "expected": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+      "actual": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61"
+    },
+    {
+      "path": "packages/cli/src/projects.mjs",
+      "expected": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+      "actual": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e"
+    },
+    {
+      "path": "packages/cli/src/session.mjs",
+      "expected": "f830b14bacdf002a566b6e54c4f4808f038275573f1399128aadaf50d2490fb7",
+      "actual": "f830b14bacdf002a566b6e54c4f4808f038275573f1399128aadaf50d2490fb7"
+    },
+    {
+      "path": "packages/cli/src/tools.mjs",
+      "expected": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+      "actual": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658"
+    },
+    {
+      "path": "packages/cli/src/workspace.mjs",
+      "expected": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+      "actual": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e"
+    },
+    {
+      "path": "benchmark/accuracy-runner.mjs",
+      "expected": "39a57f4a74cccf12ab4b94230ac41843644b057ea5fe317904e20b496dc63c44",
+      "actual": "39a57f4a74cccf12ab4b94230ac41843644b057ea5fe317904e20b496dc63c44"
+    },
+    {
+      "path": "benchmark/accuracy-driver.py",
+      "expected": "818cb661369f728bebbc267686550013b3fac6e4a667626a3f850b5347f74a21",
+      "actual": "818cb661369f728bebbc267686550013b3fac6e4a667626a3f850b5347f74a21"
+    },
+    {
+      "path": "benchmark/accuracy-sonion.py",
+      "expected": "58ad5ffd9c9daabf53348cd87b93d182685415bb3cca66e5061be36771dd7544",
+      "actual": "58ad5ffd9c9daabf53348cd87b93d182685415bb3cca66e5061be36771dd7544"
+    },
+    {
+      "path": "tests/accuracy-executor.test.mjs",
+      "expected": "0e5aed2817a7e4f7667c4f7c67eb0b8441efd54d57cab0697bd8ed4bbb40494d",
+      "actual": "0e5aed2817a7e4f7667c4f7c67eb0b8441efd54d57cab0697bd8ed4bbb40494d"
+    },
+    {
+      "path": "tests/packets.test.mjs",
+      "expected": "0992491c6c4f2933df4bdc7158efe1fbf252550e1c4a9a07bc98e948278c9c62",
+      "actual": "0992491c6c4f2933df4bdc7158efe1fbf252550e1c4a9a07bc98e948278c9c62"
+    },
+    {
+      "path": "tests/pipeline-context.test.mjs",
+      "expected": "a7424f5ba0878fd25cc629ba5f674594c32538b0365fbcb60946efc2b86b0d0b",
+      "actual": "a7424f5ba0878fd25cc629ba5f674594c32538b0365fbcb60946efc2b86b0d0b"
+    },
+    {
+      "path": "tests/pipeline-executor.test.mjs",
+      "expected": "b684186a0f2dac4ec34d59340a3d21503d61cef148d075080ce8d7aaac549424",
+      "actual": "b684186a0f2dac4ec34d59340a3d21503d61cef148d075080ce8d7aaac549424"
+    },
+    {
+      "path": "tests/pipeline-fleet.test.mjs",
+      "expected": "48f9cc8f06c908ae6d836e325a5c127ff962390e19243e0030cfe0bde5903059",
+      "actual": "48f9cc8f06c908ae6d836e325a5c127ff962390e19243e0030cfe0bde5903059"
+    },
+    {
+      "path": "tests/pipeline-knowledge.test.mjs",
+      "expected": "bfe73f56ed7377b087e951ce594f643a4ec78082cc52c0f0ed14bab9bf6f7f66",
+      "actual": "bfe73f56ed7377b087e951ce594f643a4ec78082cc52c0f0ed14bab9bf6f7f66"
+    },
+    {
+      "path": "tests/pipeline-notices.test.mjs",
+      "expected": "f9162ea0560cb95da0c01e9b169e6ccd3f5a0dea6704bcfd22fadb6621e93253",
+      "actual": "f9162ea0560cb95da0c01e9b169e6ccd3f5a0dea6704bcfd22fadb6621e93253"
+    },
+    {
+      "path": "tests/pipeline-observations.test.mjs",
+      "expected": "62b16abf6be0a326000e61f5cb096b97b34d5c8ec1de44d306dac4e3c497fbcb",
+      "actual": "62b16abf6be0a326000e61f5cb096b97b34d5c8ec1de44d306dac4e3c497fbcb"
+    },
+    {
+      "path": "tests/pipeline-preparation.test.mjs",
+      "expected": "9f124b774a9c5cfd22ffa3392c7a0c33720f65cd0af6d148149af3491a3d6053",
+      "actual": "9f124b774a9c5cfd22ffa3392c7a0c33720f65cd0af6d148149af3491a3d6053"
+    },
+    {
+      "path": "tests/pipeline-session.test.mjs",
+      "expected": "b6b9396ec9544c4b4dd7f8960a2bc6698c8d5e77b0df5ec392b084186598a922",
+      "actual": "b6b9396ec9544c4b4dd7f8960a2bc6698c8d5e77b0df5ec392b084186598a922"
+    },
+    {
+      "path": "benchmark/accuracy-plan.md",
+      "expected": "0dabbffe493cefdcb8e005344ecf88525a86866dfe869754facdee32796faced",
+      "actual": "0dabbffe493cefdcb8e005344ecf88525a86866dfe869754facdee32796faced"
+    },
+    {
+      "path": "package.json",
+      "expected": "2e625e2541b923ca9d9aa3644a094af6026135ed6c254479c5c6c7eff92adb0d",
+      "actual": "2e625e2541b923ca9d9aa3644a094af6026135ed6c254479c5c6c7eff92adb0d"
+    },
+    {
+      "path": "package-lock.json",
+      "expected": "a850750d24d39b10bb0510fb6de0de27c09b5d0e759342598134ca74c3ac36af",
+      "actual": "a850750d24d39b10bb0510fb6de0de27c09b5d0e759342598134ca74c3ac36af"
+    }
+  ],
+  "localRemoteSourceParity": {
+    "files": 53,
+    "allMatch": true,
+    "checks": {
+      "package.json": true,
+      "package-lock.json": true,
+      "SOURCE-PROVENANCE.json": true,
+      "README.md": true,
+      ".gitignore": true,
+      "src/accuracy/entry.mjs": true,
+      "src/accuracy/executor.mjs": true,
+      "src/accuracy/policy.mjs": true,
+      "src/accuracy/review.mjs": true,
+      "src/accuracy/tools.mjs": true,
+      "src/packets/entry.mjs": true,
+      "src/packets/executor.mjs": true,
+      "src/packets/policy.mjs": true,
+      "src/pipeline/context.mjs": true,
+      "src/pipeline/entry.mjs": true,
+      "src/pipeline/executor.mjs": true,
+      "src/pipeline/fleet.mjs": true,
+      "src/pipeline/knowledge.mjs": true,
+      "src/pipeline/notices.mjs": true,
+      "src/pipeline/observations.mjs": true,
+      "src/pipeline/policy.mjs": true,
+      "src/pipeline/preparation.mjs": true,
+      "src/pipeline/session.mjs": true,
+      "src/pipeline/tools.mjs": true,
+      "packages/cli/npm-shrinkwrap.json": true,
+      "packages/cli/package.json": true,
+      "packages/cli/README.md": true,
+      "packages/cli/THIRD-PARTY-NOTICES.md": true,
+      "packages/cli/VALIDATION.md": true,
+      "packages/cli/bin/suffice.mjs": true,
+      "packages/cli/src/interactive.mjs": true,
+      "packages/cli/src/main.mjs": true,
+      "packages/cli/src/navigation.mjs": true,
+      "packages/cli/src/options.mjs": true,
+      "packages/cli/src/projects.mjs": true,
+      "packages/cli/src/session.mjs": true,
+      "packages/cli/src/tools.mjs": true,
+      "packages/cli/src/workspace.mjs": true,
+      "packages/cli/test/cli.test.mjs": true,
+      "tests/accuracy-executor.test.mjs": true,
+      "tests/packets.test.mjs": true,
+      "tests/pipeline-context.test.mjs": true,
+      "tests/pipeline-executor.test.mjs": true,
+      "tests/pipeline-fleet.test.mjs": true,
+      "tests/pipeline-knowledge.test.mjs": true,
+      "tests/pipeline-notices.test.mjs": true,
+      "tests/pipeline-observations.test.mjs": true,
+      "tests/pipeline-preparation.test.mjs": true,
+      "tests/pipeline-session.test.mjs": true,
+      "benchmark/accuracy-runner.mjs": true,
+      "benchmark/accuracy-driver.py": true,
+      "benchmark/accuracy-sonion.py": true,
+      "benchmark/accuracy-plan.md": true
+    }
+  },
+  "exportedReceiptIntegrity": {
+    "files": 233,
+    "allMatch": true
+  },
+  "remotePostflight": {
+    "frozenChecks": {
+      "inputs:src/accuracy/entry.mjs": true,
+      "inputs:src/accuracy/executor.mjs": true,
+      "inputs:src/accuracy/policy.mjs": true,
+      "inputs:src/accuracy/review.mjs": true,
+      "inputs:src/accuracy/tools.mjs": true,
+      "inputs:src/packets/entry.mjs": true,
+      "inputs:src/packets/executor.mjs": true,
+      "inputs:src/packets/policy.mjs": true,
+      "inputs:src/pipeline/context.mjs": true,
+      "inputs:src/pipeline/entry.mjs": true,
+      "inputs:src/pipeline/executor.mjs": true,
+      "inputs:src/pipeline/fleet.mjs": true,
+      "inputs:src/pipeline/knowledge.mjs": true,
+      "inputs:src/pipeline/notices.mjs": true,
+      "inputs:src/pipeline/observations.mjs": true,
+      "inputs:src/pipeline/policy.mjs": true,
+      "inputs:src/pipeline/preparation.mjs": true,
+      "inputs:src/pipeline/session.mjs": true,
+      "inputs:src/pipeline/tools.mjs": true,
+      "inputs:packages/cli/src/interactive.mjs": true,
+      "inputs:packages/cli/src/main.mjs": true,
+      "inputs:packages/cli/src/navigation.mjs": true,
+      "inputs:packages/cli/src/options.mjs": true,
+      "inputs:packages/cli/src/projects.mjs": true,
+      "inputs:packages/cli/src/session.mjs": true,
+      "inputs:packages/cli/src/tools.mjs": true,
+      "inputs:packages/cli/src/workspace.mjs": true,
+      "inputs:benchmark/accuracy-runner.mjs": true,
+      "inputs:benchmark/accuracy-driver.py": true,
+      "inputs:benchmark/accuracy-sonion.py": true,
+      "inputs:tests/accuracy-executor.test.mjs": true,
+      "inputs:tests/packets.test.mjs": true,
+      "inputs:tests/pipeline-context.test.mjs": true,
+      "inputs:tests/pipeline-executor.test.mjs": true,
+      "inputs:tests/pipeline-fleet.test.mjs": true,
+      "inputs:tests/pipeline-knowledge.test.mjs": true,
+      "inputs:tests/pipeline-notices.test.mjs": true,
+      "inputs:tests/pipeline-observations.test.mjs": true,
+      "inputs:tests/pipeline-preparation.test.mjs": true,
+      "inputs:tests/pipeline-session.test.mjs": true,
+      "inputs:benchmark/accuracy-plan.md": true,
+      "inputs:package.json": true,
+      "inputs:package-lock.json": true,
+      "runtimeInputs:src/accuracy/entry.mjs": true,
+      "runtimeInputs:src/accuracy/executor.mjs": true,
+      "runtimeInputs:src/accuracy/policy.mjs": true,
+      "runtimeInputs:src/accuracy/review.mjs": true,
+      "runtimeInputs:src/accuracy/tools.mjs": true,
+      "runtimeInputs:src/packets/entry.mjs": true,
+      "runtimeInputs:src/packets/executor.mjs": true,
+      "runtimeInputs:src/packets/policy.mjs": true,
+      "runtimeInputs:src/pipeline/context.mjs": true,
+      "runtimeInputs:src/pipeline/entry.mjs": true,
+      "runtimeInputs:src/pipeline/executor.mjs": true,
+      "runtimeInputs:src/pipeline/fleet.mjs": true,
+      "runtimeInputs:src/pipeline/knowledge.mjs": true,
+      "runtimeInputs:src/pipeline/notices.mjs": true,
+      "runtimeInputs:src/pipeline/observations.mjs": true,
+      "runtimeInputs:src/pipeline/policy.mjs": true,
+      "runtimeInputs:src/pipeline/preparation.mjs": true,
+      "runtimeInputs:src/pipeline/session.mjs": true,
+      "runtimeInputs:src/pipeline/tools.mjs": true,
+      "runtimeInputs:packages/cli/src/interactive.mjs": true,
+      "runtimeInputs:packages/cli/src/main.mjs": true,
+      "runtimeInputs:packages/cli/src/navigation.mjs": true,
+      "runtimeInputs:packages/cli/src/options.mjs": true,
+      "runtimeInputs:packages/cli/src/projects.mjs": true,
+      "runtimeInputs:packages/cli/src/session.mjs": true,
+      "runtimeInputs:packages/cli/src/tools.mjs": true,
+      "runtimeInputs:packages/cli/src/workspace.mjs": true,
+      "runtimeInputs:package.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-v1/evaluator-data.py": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-4g-v1/execution.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-v1/variants.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/experiments/luna-sol-field-v1/native-worker.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex/bin/codex.js": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex-linux-x64/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-codex-runtime-0163/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/bin/codex": true,
+      "externalInputs:/home/eric_qin/suffice-general-runtime/app/node_modules/@earendil-works/pi-coding-agent/package.json": true,
+      "externalInputs:/home/eric_qin/suffice-v7-pipeline/.suffice/pipeline-bench-v1/manifest.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/controls/f16.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f16/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f16/private/headers-contract.mjs": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/controls/f09.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f09/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f09/private/reference/spec/attr_spec.js": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/controls/f11.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f11/private/reference-patch.json": true,
+      "externalInputs:/home/eric_qin/suffice-field-v1/.suffice/luna-sol-field-v1/tasks/f11/private/reference/tests/command.helpCommand.test.js": true
+    },
+    "sourceSyncChecks": {
+      "package.json": true,
+      "package-lock.json": true,
+      "SOURCE-PROVENANCE.json": true,
+      "README.md": true,
+      ".gitignore": true,
+      "src/accuracy/entry.mjs": true,
+      "src/accuracy/executor.mjs": true,
+      "src/accuracy/policy.mjs": true,
+      "src/accuracy/review.mjs": true,
+      "src/accuracy/tools.mjs": true,
+      "src/packets/entry.mjs": true,
+      "src/packets/executor.mjs": true,
+      "src/packets/policy.mjs": true,
+      "src/pipeline/context.mjs": true,
+      "src/pipeline/entry.mjs": true,
+      "src/pipeline/executor.mjs": true,
+      "src/pipeline/fleet.mjs": true,
+      "src/pipeline/knowledge.mjs": true,
+      "src/pipeline/notices.mjs": true,
+      "src/pipeline/observations.mjs": true,
+      "src/pipeline/policy.mjs": true,
+      "src/pipeline/preparation.mjs": true,
+      "src/pipeline/session.mjs": true,
+      "src/pipeline/tools.mjs": true,
+      "packages/cli/npm-shrinkwrap.json": true,
+      "packages/cli/package.json": true,
+      "packages/cli/README.md": true,
+      "packages/cli/THIRD-PARTY-NOTICES.md": true,
+      "packages/cli/VALIDATION.md": true,
+      "packages/cli/bin/suffice.mjs": true,
+      "packages/cli/src/interactive.mjs": true,
+      "packages/cli/src/main.mjs": true,
+      "packages/cli/src/navigation.mjs": true,
+      "packages/cli/src/options.mjs": true,
+      "packages/cli/src/projects.mjs": true,
+      "packages/cli/src/session.mjs": true,
+      "packages/cli/src/tools.mjs": true,
+      "packages/cli/src/workspace.mjs": true,
+      "packages/cli/test/cli.test.mjs": true,
+      "tests/accuracy-executor.test.mjs": true,
+      "tests/packets.test.mjs": true,
+      "tests/pipeline-context.test.mjs": true,
+      "tests/pipeline-executor.test.mjs": true,
+      "tests/pipeline-fleet.test.mjs": true,
+      "tests/pipeline-knowledge.test.mjs": true,
+      "tests/pipeline-notices.test.mjs": true,
+      "tests/pipeline-observations.test.mjs": true,
+      "tests/pipeline-preparation.test.mjs": true,
+      "tests/pipeline-session.test.mjs": true,
+      "benchmark/accuracy-runner.mjs": true,
+      "benchmark/accuracy-driver.py": true,
+      "benchmark/accuracy-sonion.py": true,
+      "benchmark/accuracy-plan.md": true
+    },
+    "gitExposure": {
+      "f16": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "f09": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      },
+      "f11": {
+        "reachableCommitCount": 1,
+        "fixCommitAvailable": false
+      }
+    },
+    "valid": true
+  },
+  "oldExecutableSourceParity": {
+    "src/packets/entry.mjs": true,
+    "src/packets/executor.mjs": true,
+    "src/packets/policy.mjs": true,
+    "src/pipeline/context.mjs": true,
+    "src/pipeline/entry.mjs": true,
+    "src/pipeline/executor.mjs": true,
+    "src/pipeline/fleet.mjs": true,
+    "src/pipeline/knowledge.mjs": true,
+    "src/pipeline/notices.mjs": true,
+    "src/pipeline/observations.mjs": true,
+    "src/pipeline/policy.mjs": true,
+    "src/pipeline/preparation.mjs": true,
+    "src/pipeline/session.mjs": true,
+    "src/pipeline/tools.mjs": true,
+    "packages/cli/src/interactive.mjs": true,
+    "packages/cli/src/main.mjs": true,
+    "packages/cli/src/navigation.mjs": true,
+    "packages/cli/src/options.mjs": true,
+    "packages/cli/src/projects.mjs": true,
+    "packages/cli/src/session.mjs": true,
+    "packages/cli/src/tools.mjs": true,
+    "packages/cli/src/workspace.mjs": true
+  },
+  "historicalPublicPromptParity": {
+    "f16": true,
+    "f09": true,
+    "f11": true
+  },
+  "allChecksPassed": true
+}

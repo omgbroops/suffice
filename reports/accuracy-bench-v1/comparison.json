@@ -1,0 +1,809 @@
+{
+  "scope": "Asynchronous descriptive comparison on three exposed development tasks; no historical control reruns.",
+  "oldV2High": {
+    "attempts": 3,
+    "accepted": 3,
+    "success": 3,
+    "knownCostUsd": 0.020844240000000003,
+    "unknownCosts": 0,
+    "costPerAcceptedTask": 0.0069480800000000014,
+    "meanLatencySeconds": 87.04899999999999,
+    "modelCalls": 47,
+    "toolCalls": 124,
+    "freshInput": 120142,
+    "cachedInput": 527104,
+    "output": 7118,
+    "maxPeakRssBytes": 679137280,
+    "repairs": 0,
+    "adviceStages": 0,
+    "escalations": 0
+  },
+  "oldV2Medium": {
+    "attempts": 3,
+    "accepted": 2,
+    "success": 2,
+    "knownCostUsd": 0.00927542,
+    "unknownCosts": 0,
+    "costPerAcceptedTask": 0.00463771,
+    "meanLatencySeconds": 63.47266666666666,
+    "modelCalls": 41,
+    "toolCalls": 75,
+    "reasoningFieldCoverage": {
+      "responses": 41,
+      "present": 41
+    },
+    "reasoningOutputTokens": 303,
+    "meanStageWallSeconds": 63.20066666666666,
+    "meanVerificationSeconds": 0.25133333333333335,
+    "meanOtherControllerSeconds": 0.020666666666666667,
+    "meanProviderReceiptSeconds": 61.953666528066,
+    "meanCodemodeIntervalSeconds": 1.068666934967041,
+    "freshInput": 41347,
+    "cachedInput": 367872,
+    "output": 2924,
+    "maxPeakRssBytes": 352563200,
+    "repairs": 0,
+    "adviceStages": 0,
+    "escalations": 0
+  },
+  "oldV1LunaHigh": {
+    "attempts": 3,
+    "accepted": 2,
+    "success": 2,
+    "knownCostUsd": 0.01598388,
+    "unknownCosts": 0,
+    "costPerAcceptedTask": 0.00799194,
+    "meanLatencySeconds": 93.202,
+    "modelCalls": 46,
+    "toolCalls": 95,
+    "reasoningFieldCoverage": {
+      "responses": 46,
+      "present": 46
+    },
+    "reasoningOutputTokens": 2661,
+    "meanStageWallSeconds": 92.93833333333333,
+    "meanVerificationSeconds": 0.26266666666666666,
+    "meanOtherControllerSeconds": 0.001,
+    "meanProviderReceiptSeconds": 90.70200022061665,
+    "meanCodemodeIntervalSeconds": 2.04366668065389,
+    "freshInput": 81676,
+    "cachedInput": 438528,
+    "output": 6862,
+    "maxPeakRssBytes": 497168384,
+    "repairs": 0,
+    "adviceStages": 0,
+    "escalations": 0
+  },
+  "newArms": {
+    "mediumAccuracy": {
+      "attempts": 3,
+      "accepted": 2,
+      "success": 2,
+      "knownCostUsd": 0.02359618,
+      "unknownCosts": 0,
+      "costPerIndependentAcceptedTask": 0.01179809,
+      "costPerAcceptedTask": 0.01179809,
+      "meanLatencySeconds": 139.228,
+      "modelCalls": 79,
+      "toolCalls": 148,
+      "reasoningFieldCoverage": {
+        "responses": 79,
+        "present": 79
+      },
+      "reasoningOutputTokens": 717,
+      "meanStageWallSeconds": 138.74633333333333,
+      "meanVerificationSeconds": 0.43266666666666664,
+      "meanOtherControllerSeconds": 0.049,
+      "meanProviderReceiptSeconds": 135.4556666215261,
+      "meanCodemodeIntervalSeconds": 1.96233336130778,
+      "freshInput": 148950,
+      "cachedInput": 570368,
+      "output": 5995,
+      "maxPeakRssBytes": 367321088,
+      "reviewStatuses": {
+        "pass": 1,
+        "revised_unreviewed": 2
+      },
+      "reviewCorrections": 2,
+      "reviewCostUsd": 0.00464754,
+      "correctionCostUsd": 0.007491339999999999,
+      "meanReviewSeconds": 15.195,
+      "meanCorrectionSeconds": 50.77133333333334,
+      "repairs": 0,
+      "adviceStages": 0,
+      "escalations": 0
+    }
+  },
+  "oldMediumRows": [
+    {
+      "id": "f16",
+      "mode": "v2Medium",
+      "repository": "websockets/ws",
+      "issue": 2230,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.00175424,
+      "totalCostUsd": 0.00175424,
+      "usage": {
+        "input": 10236,
+        "cacheRead": 46464,
+        "cacheWrite": 0,
+        "output": 532,
+        "estimatedApiUsd": 0.00175424,
+        "modelCalls": 7,
+        "toolCalls": 11,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 113,
+      "modelCalls": 7,
+      "latencyMs": 39013,
+      "outerLatencyMs": 40196,
+      "peakRssBytes": 233967616,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/mocha/./bin/mocha",
+                "--timeout",
+                "20000",
+                "--exit",
+                "test/websocket-server.test.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "\n\n  WebSocketServer\n    #ctor\n      \u2713 throws an error if no option object is passed\n      \u2713 emits an error if http server bind fails\n      \u2713 starts a server on a given port\n      \u2713 binds the server on any IPv6 address when available\n      \u2713 uses a precreated http server\n      \u2713 426s for non-Upgrade requests\n      \u2713 uses a precreated http server listening on IPC\n      options\n        \u2713 throws an error if required options are not specified\n        \u2713 throws an error if mutually exclusive options are specified\n        \u2713 exposes options passed to constructor\n        \u2713 accepts the `maxPayload` option\n        \u2713 honors the `WebSocket` option\n        \u2713 honors the `autoPong` option\n    #address\n      \u2713 returns the address of the server\n      \u2713 throws an error when operating in \"noServer\" mode\n      \u2713 returns `null` if called after close\n    #close\n      \u2713 does not throw if called multiple times\n      \u2713 doesn't close a precreated server\n      \u2713 invokes the callback in noServer mode\n      \u2713 cleans event handlers on precreated server\n      \u2713 emits the 'close' event after the server closes\n      \u2713 emits the 'close' event if client tracking is disabled\n      \u2713 calls the callback if the server is already closed\n      \u2713 emits the 'close' event if the server is already closed\n    #clients\n      \u2713 returns a list of connected clients\n      \u2713 can be disabled\n      \u2713 is updated when client terminates the connection\n      \u2713 is updated when client closes the connection\n    #shouldHandle\n      \u2713 returns true when the path matches\n      \u2713 returns false when the path doesn't match\n    #handleUpgrade\n      \u2713 can be used for a pre-existing server\n      \u2713 closes the connection when path doesn't match\n      \u2713 closes the connection when protocol version is Hixie-76\n      \u2713 completes a WebSocket upgrade over any duplex stream\n    #completeUpgrade\n      \u2713 throws an error if called twice with the same socket\n    Connection establishing\n      \u2713 fails if the HTTP method is not GET\n      \u2713 fails if the Upgrade header field value is not \"websocket\"\n      \u2713 fails if the Sec-WebSocket-Key header is invalid (1/2)\n      \u2713 fails if the Sec-WebSocket-Key header is invalid (2/2)\n      \u2713 fails if the Sec-WebSocket-Version header is invalid (1/2)\n      \u2713 fails if the Sec-WebSocket-Version header is invalid (2/2)\n      \u2713 fails is the Sec-WebSocket-Protocol header is invalid\n      \u2713 fails if the Sec-WebSocket-Extensions header is invalid\n      \u2713 emits the 'wsClientError' event\n      \u2713 fails if the WebSocket server is closing or closed\n      \u2713 handles unsupported extensions\n      \u2713 doesn't emit the 'connection' event if socket is closed prematurely\n      \u2713 handles data passed along with the upgrade request\n      \u2713 emits the 'headers' event\n      `verifyClient`\n        \u2713 can reject client synchronously\n        \u2713 can accept client synchronously\n        \u2713 can accept client asynchronously\n        \u2713 can reject client asynchronously\n        \u2713 can reject client asynchronously w/ status code\n        \u2713 can reject client asynchronously w/ custom headers\n      `handleProtocols`\n        \u2713 allows to select a subprotocol\n    permessage-deflate\n      \u2713 is disabled by default\n      \u2713 uses configuration options\n\n\n  58 passing (77ms)\n\n",
+              "error": null,
+              "latencyMs": 183
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "lib/websocket-server.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 38817,
+      "verificationMs": 183,
+      "otherControllerMs": 13,
+      "reasoningFieldCoverage": {
+        "responses": 7,
+        "present": 7
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 38.13600015640259,
+        "codemodeIntervalSeconds": 0.49200010299682617,
+        "providerPairs": 7,
+        "codemodePairs": 6,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "f09",
+      "mode": "v2Medium",
+      "repository": "NaturalIntelligence/fast-xml-parser",
+      "issue": 705,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.00398658,
+      "totalCostUsd": 0.00398658,
+      "usage": {
+        "input": 16249,
+        "cacheRead": 176768,
+        "cacheWrite": 0,
+        "output": 1188,
+        "estimatedApiUsd": 0.00398658,
+        "modelCalls": 18,
+        "toolCalls": 33,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 0,
+      "modelCalls": 18,
+      "latencyMs": 95454,
+      "outerLatencyMs": 96012,
+      "peakRssBytes": 281174016,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "--no-experimental-strip-types",
+                "node_modules/jasmine/bin/jasmine.js",
+                "--random=false",
+                "spec/attr_spec.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "Started\n...................\n\n\n19 specs, 0 failures\nFinished in 0.008 seconds\n",
+              "error": null,
+              "latencyMs": 73
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "spec/attr_spec.js",
+        "src/xmlparser/OrderedObjParser.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 95357,
+      "verificationMs": 73,
+      "otherControllerMs": 24,
+      "reasoningFieldCoverage": {
+        "responses": 18,
+        "present": 18
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 94.04399943351746,
+        "codemodeIntervalSeconds": 1.138000249862671,
+        "providerPairs": 18,
+        "codemodePairs": 17,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    },
+    {
+      "id": "f11",
+      "mode": "v2Medium",
+      "repository": "tj/commander.js",
+      "issue": 1863,
+      "status": "completed",
+      "accepted": false,
+      "budgetEligible": true,
+      "success": false,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0035345999999999997,
+      "totalCostUsd": 0.0035345999999999997,
+      "usage": {
+        "input": 14862,
+        "cacheRead": 144640,
+        "cacheWrite": 0,
+        "output": 1204,
+        "estimatedApiUsd": 0.0035345999999999997,
+        "modelCalls": 16,
+        "toolCalls": 31,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 190,
+      "modelCalls": 16,
+      "latencyMs": 55951,
+      "outerLatencyMs": 56536,
+      "peakRssBytes": 352563200,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "medium",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "--no-experimental-strip-types",
+                "node_modules/jest/bin/jest.js",
+                "--runInBand",
+                "--no-cache",
+                "--coverage=false",
+                "tests/command.helpCommand.test.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "PASS tests/command.helpCommand.test.js\n  help command listed in helpInformation\n    \u2713 when program has no subcommands then no automatic help command (2 ms)\n    \u2713 when program has no subcommands and add help command then has help command (1 ms)\n    \u2713 when program has subcommands then has automatic help command (1 ms)\n    \u2713 when program has subcommands and specify only unknown option then display help (1 ms)\n    \u2713 when program has subcommands and suppress help command then no help command (1 ms)\n    \u2713 when add custom help command then custom help command\n  help command processed on correct command\n    \u2713 when \"program help\" then program (2 ms)\n    \u2713 when \"program help unknown\" then program (1 ms)\n    \u2713 when help option disabled then \"program help sub1\" displays subcommand help (1 ms)\n    \u2713 when \"program help sub1\" then sub1 (1 ms)\n    \u2713 when \"program sub1 help sub2\" then sub2 (1 ms)\n    \u2713 when default command and \"program help\" then program (1 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       12 passed, 12 total\nSnapshots:   0 total\nTime:        0.282 s\nRan all test suites matching /tests\\/command.helpCommand.test.js/i.\n",
+              "error": null,
+              "latencyMs": 498
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [],
+      "patchPaths": [
+        "lib/command.js",
+        "tests/command.helpCommand.test.js",
+        "tests/fixtures/another-dir/pm",
+        "tests/fixtures/other-dir/pm",
+        "tests/fixtures/pmlink"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": false,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 1,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0,
+      "stageWallMs": 55428,
+      "verificationMs": 498,
+      "otherControllerMs": 25,
+      "reasoningFieldCoverage": {
+        "responses": 16,
+        "present": 16
+      },
+      "timingReceipts": {
+        "providerIntervalSeconds": 53.680999994277954,
+        "codemodeIntervalSeconds": 1.576000452041626,
+        "providerPairs": 16,
+        "codemodePairs": 15,
+        "unpairedEvents": 0,
+        "basis": "Union of receipt timestamp intervals, not provider compute or network attribution."
+      }
+    }
+  ],
+  "oldHighRows": [
+    {
+      "id": "f16",
+      "mode": "v2",
+      "repository": "websockets/ws",
+      "issue": 2230,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.003922340000000001,
+      "totalCostUsd": 0.003922340000000001,
+      "usage": {
+        "input": 16887,
+        "cacheRead": 116864,
+        "cacheWrite": 0,
+        "output": 2130,
+        "estimatedApiUsd": 0.003922340000000001,
+        "modelCalls": 12,
+        "toolCalls": 28,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 759,
+      "modelCalls": 12,
+      "latencyMs": 67326,
+      "outerLatencyMs": 67855,
+      "peakRssBytes": 232538112,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "node_modules/mocha/./bin/mocha",
+                "--timeout",
+                "20000",
+                "--exit",
+                "test/websocket-server.test.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "\n\n  WebSocketServer\n    #ctor\n      \u2713 throws an error if no option object is passed\n      \u2713 emits an error if http server bind fails\n      \u2713 starts a server on a given port\n      \u2713 binds the server on any IPv6 address when available\n      \u2713 uses a precreated http server\n      \u2713 426s for non-Upgrade requests\n      \u2713 uses a precreated http server listening on IPC\n      options\n        \u2713 throws an error if required options are not specified\n        \u2713 throws an error if mutually exclusive options are specified\n        \u2713 exposes options passed to constructor\n        \u2713 accepts the `maxPayload` option\n        \u2713 honors the `WebSocket` option\n        \u2713 honors the `autoPong` option\n    #address\n      \u2713 returns the address of the server\n      \u2713 throws an error when operating in \"noServer\" mode\n      \u2713 returns `null` if called after close\n    #close\n      \u2713 does not throw if called multiple times\n      \u2713 doesn't close a precreated server\n      \u2713 invokes the callback in noServer mode\n      \u2713 cleans event handlers on precreated server\n      \u2713 emits the 'close' event after the server closes\n      \u2713 emits the 'close' event if client tracking is disabled\n      \u2713 calls the callback if the server is already closed\n      \u2713 emits the 'close' event if the server is already closed\n    #clients\n      \u2713 returns a list of connected clients\n      \u2713 can be disabled\n      \u2713 is updated when client terminates the connection\n      \u2713 is updated when client closes the connection\n    #shouldHandle\n      \u2713 returns true when the path matches\n      \u2713 returns false when the path doesn't match\n    #handleUpgrade\n      \u2713 can be used for a pre-existing server\n      \u2713 closes the connection when path doesn't match\n      \u2713 closes the connection when protocol version is Hixie-76\n      \u2713 completes a WebSocket upgrade over any duplex stream\n    #completeUpgrade\n      \u2713 throws an error if called twice with the same socket\n    Connection establishing\n      \u2713 fails if the HTTP method is not GET\n      \u2713 fails if the Upgrade header is omitted due to maxHeadersCount\n      \u2713 fails if the Upgrade header field value is not \"websocket\"\n      \u2713 fails if the Sec-WebSocket-Key header is invalid (1/2)\n      \u2713 fails if the Sec-WebSocket-Key header is invalid (2/2)\n      \u2713 fails if the Sec-WebSocket-Version header is invalid (1/2)\n      \u2713 fails if the Sec-WebSocket-Version header is invalid (2/2)\n      \u2713 fails is the Sec-WebSocket-Protocol header is invalid\n      \u2713 fails if the Sec-WebSocket-Extensions header is invalid\n      \u2713 emits the 'wsClientError' event\n      \u2713 fails if the WebSocket server is closing or closed\n      \u2713 handles unsupported extensions\n      \u2713 doesn't emit the 'connection' event if socket is closed prematurely\n      \u2713 handles data passed along with the upgrade request\n      \u2713 emits the 'headers' event\n      `verifyClient`\n        \u2713 can reject client synchronously\n        \u2713 can accept client synchronously\n        \u2713 can accept client asynchronously\n        \u2713 can reject client asynchronously\n        \u2713 can reject client asynchronously w/ status code\n        \u2713 can reject client asynchronously w/ custom headers\n      `handleProtocols`\n        \u2713 allows to select a subprotocol\n    permessage-deflate\n      \u2713 is disabled by default\n      \u2713 uses configuration options\n\n\n  59 passing (88ms)\n\n",
+              "error": null,
+              "latencyMs": 206
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "0f321d00-89bb-47b3-88cd-f90c322fbeb4",
+            "kind": "codemode",
+            "bytes": 18208,
+            "newlines": 410,
+            "complete": true
+          }
+        }
+      ],
+      "patchPaths": [
+        "lib/websocket-server.js",
+        "test/websocket-server.test.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0
+    },
+    {
+      "id": "f09",
+      "mode": "v2",
+      "repository": "NaturalIntelligence/fast-xml-parser",
+      "issue": 705,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.0073790600000000015,
+      "totalCostUsd": 0.0073790600000000015,
+      "usage": {
+        "input": 42737,
+        "cacheRead": 212736,
+        "cacheWrite": 0,
+        "output": 1956,
+        "estimatedApiUsd": 0.0073790600000000015,
+        "modelCalls": 18,
+        "toolCalls": 41,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 382,
+      "modelCalls": 18,
+      "latencyMs": 77965,
+      "outerLatencyMs": 78503,
+      "peakRssBytes": 312025088,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "--no-experimental-strip-types",
+                "node_modules/jasmine/bin/jasmine.js",
+                "--random=false",
+                "spec/attr_spec.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "Started\n...................\n\n\n19 specs, 0 failures\nFinished in 0.009 seconds\n",
+              "error": null,
+              "latencyMs": 73
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "115fc10b-8d9b-4a41-8463-0deadb6a1594",
+            "kind": "codemode",
+            "bytes": 16259,
+            "newlines": 11,
+            "complete": true
+          }
+        },
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "197f0f1d-75c7-46b9-a83d-16f87df97e46",
+            "kind": "codemode",
+            "bytes": 10761,
+            "newlines": 336,
+            "complete": true
+          }
+        },
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "3e37bf49-4805-409f-a33e-68eebb13f30c",
+            "kind": "codemode",
+            "bytes": 8109,
+            "newlines": 221,
+            "complete": true
+          }
+        }
+      ],
+      "patchPaths": [
+        "spec/attr_spec.js",
+        "src/xmlparser/OrderedObjParser.js"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0
+    },
+    {
+      "id": "f11",
+      "mode": "v2",
+      "repository": "tj/commander.js",
+      "issue": 1863,
+      "status": "completed",
+      "accepted": true,
+      "budgetEligible": true,
+      "success": true,
+      "operationalFailure": false,
+      "costUnknown": false,
+      "knownCostUsd": 0.009542840000000002,
+      "totalCostUsd": 0.009542840000000002,
+      "usage": {
+        "input": 60518,
+        "cacheRead": 197504,
+        "cacheWrite": 0,
+        "output": 3032,
+        "estimatedApiUsd": 0.009542840000000002,
+        "modelCalls": 17,
+        "toolCalls": 55,
+        "costUnknown": false
+      },
+      "receiptsMatched": true,
+      "identity": true,
+      "reasoningTokens": 1269,
+      "modelCalls": 17,
+      "latencyMs": 115856,
+      "outerLatencyMs": 116435,
+      "peakRssBytes": 679137280,
+      "resourceStop": null,
+      "features": {
+        "outputControl": true,
+        "preparedContext": true,
+        "guidance": true,
+        "notices": true,
+        "advice": "on_failure",
+        "repairs": true,
+        "solTakeover": true
+      },
+      "profile": "thin",
+      "model": "gpt-6-luna",
+      "effort": "high",
+      "adviceStages": 0,
+      "escalations": 0,
+      "verification": [
+        {
+          "label": "initial",
+          "outcomes": [
+            {
+              "command": [
+                "node",
+                "--no-experimental-strip-types",
+                "node_modules/jest/bin/jest.js",
+                "--runInBand",
+                "--no-cache",
+                "--coverage=false",
+                "tests/command.helpCommand.test.js"
+              ],
+              "expectedExitCode": 0,
+              "exitCode": 0,
+              "passed": true,
+              "output": "PASS tests/command.helpCommand.test.js\n  help command listed in helpInformation\n    \u2713 when program has no subcommands then no automatic help command (1 ms)\n    \u2713 when program has no subcommands and add help command then has help command (1 ms)\n    \u2713 when program has subcommands then has automatic help command\n    \u2713 when program has subcommands and specify only unknown option then display help (2 ms)\n    \u2713 when program has subcommands and suppress help command then no help command\n    \u2713 when add custom help command then custom help command (1 ms)\n  help command processed on correct command\n    \u2713 when \"program help\" then program (2 ms)\n    \u2713 when \"program help unknown\" then program (1 ms)\n    \u2713 when \"program help sub1\" then sub1 (1 ms)\n    \u2713 when help option disabled then implicit help command still displays command help (1 ms)\n    \u2713 when \"program sub1 help sub2\" then sub2 (1 ms)\n    \u2713 when default command and \"program help\" then program (1 ms)\n\nTest Suites: 1 passed, 1 total\nTests:       12 passed, 12 total\nSnapshots:   0 total\nTime:        0.278 s\nRan all test suites matching /tests\\/command.helpCommand.test.js/i.\n",
+              "error": null,
+              "latencyMs": 492
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "notes": [
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "3c4f1d07-6879-44d5-959d-46478eed511b",
+            "kind": "codemode",
+            "bytes": 7585,
+            "newlines": 4,
+            "complete": true
+          }
+        },
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "722826d7-daee-48a8-9a76-92c2189cc877",
+            "kind": "codemode",
+            "bytes": 12773,
+            "newlines": 4,
+            "complete": true
+          }
+        },
+        {
+          "kind": "output_control",
+          "tool": "codemode",
+          "observation": {
+            "id": "51bec8ed-ba8b-410b-8a03-401262e86ca2",
+            "kind": "codemode",
+            "bytes": 21604,
+            "newlines": 4,
+            "complete": true
+          }
+        }
+      ],
+      "patchPaths": [
+        "lib/command.js",
+        "tests/command.helpCommand.test.js",
+        "tests/fixtures/another-dir/pm",
+        "tests/fixtures/other-dir/pm",
+        "tests/fixtures/pmlink"
+      ],
+      "grading": {
+        "nativePassed": true,
+        "accepted": true,
+        "native": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "hidden": [
+          {
+            "exit": 0,
+            "resource": null
+          }
+        ],
+        "protectedTestsRestored": true
+      },
+      "repairs": 0
+    }
+  ]
+}

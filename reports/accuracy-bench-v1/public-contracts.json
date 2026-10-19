@@ -1,0 +1,57 @@
+{
+  "f16": {
+    "repository": "websockets/ws",
+    "issue": 2230,
+    "title": "Throws TypeError when there are too many HTTP headers",
+    "publicBody": "### Is there an existing issue for this?\n\n- [X] I've searched for any related issues and avoided creating a duplicate issue.\n\n### Description\n\nI use this package for a websocket server. In the process of changing some options to try to make my websocket server slightly more resistant to DoS, I lowered the [maxHeadersCount](https://nodejs.org/docs/latest-v21.x/api/https.html#servermaxheaderscount) field on the HTTP server from its default of 2000 to a lower value. I then tested to see whether the server would reject requests with too many headers. Instead, the server crashed due to a `TypeError` from [websocket-server.js line 246](https://github.com/websockets/ws/blob/6a00029edd924499f892aed8003cef1fa724cfe5/lib/websocket-server.js#L246). This seems like a DoS issue.\r\n\r\nI found this similar issue: #1838\n\n### ws version\n\n8.17.0\n\n### Node.js Version\n\nv21.5.0\n\n### System\n\nOS: Debian GNU/Linux 12 (bookworm)\r\nCPU: x64 Intel Core i5 CPU\r\nMemory: 2.62 GB / 6.58 GB\r\nContainer: Yes\r\nShell: /bin/bash\n\n### Expected result\n\nI expected the websocket server to refuse the handshake. Maybe respond with a 400 Bad Request. I did not expect my server app to crash from a `TypeError`.\n\n### Actual result\n\n```\r\nwebpack://somewhere/node_modules/ws/lib/websocket-server.js:246\r\n    if (req.headers.upgrade.toLowerCase() !== 'websocket') {\r\n                            ^\r\n\r\n\r\nTypeError: Cannot read properties of undefined (reading 'toLowerCase')\r\n    at handleUpgrade (webpack://somewhere/node_modules/ws/lib/websocket-server.js:246:29)\r\n    at Server.upgrade (webpack://somewhere/node_modules/ws/lib/websocket-server.js:119:16)\r\n    at Server.emit (node:events:519:28)\r\n    at onParserExecuteCommon (node:_http_server:942:14)\r\n    at onParserExecute (node:_http_server:836:3)\r\n\r\nNode.js v21.5.0\r\n```\n\n### Attachments\n\n_No response_",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/mocha/./bin/mocha",
+        "--timeout",
+        "20000",
+        "--exit",
+        "test/websocket-server.test.js"
+      ]
+    ]
+  },
+  "f09": {
+    "repository": "NaturalIntelligence/fast-xml-parser",
+    "issue": 705,
+    "title": "preserveOrder with attributesGroupName option creates extra hirarchy",
+    "publicBody": "* [x] Are you running the latest version?\r\n* [x] Have you included sample input, output, error, and expected output? \r\n* [x] Have you checked if you are using correct configuration?\r\n* [x] Did you try online [tool](https://naturalintelligence.github.io/fast-xml-parser/)?\r\n* [x] Have you checked the [docs](https://github.com/NaturalIntelligence/fast-xml-parser/tree/master/docs) for helpful APIs and examples?\r\n\r\n### Description\r\n<!-- Please provide following data to avoid long communication and fast resolution. -->  \r\nWhen I use both options together, then the `attributeGroup` gets wrapped by an extra object with the key specified by `attributesGroupName`.\r\n\r\n### Code\r\n```js\r\nconst parser = new  XMLParser({\r\n    attributesGroupName: ':@',\r\n    preserveOrder: true,\r\n    ignoreAttributes: false,\r\n});\r\nconst parsed = parser.parse('<root xmlns:ex=\"http://example.com\"><p test=\"foo\"></p></root>');\r\nconsole.log(parsed);\r\n```\r\n\r\n### Output\r\n```\r\n[\r\n  {\r\n    root: [\r\n      p: [],\r\n      ':@': {\r\n        ':@': {\r\n          '@_test': 'foo',\r\n        },\r\n      },\r\n    ],\r\n    ':@': {\r\n      ':@': {\r\n        '@_xmlns:ex': 'http://example.com',\r\n      },\r\n    },\r\n  },\r\n]\r\n```\r\n\r\n### expected data\r\n<!-- Please include expected output data here -->\r\n```\r\n[\r\n  {\r\n    root: [\r\n      p: [],\r\n      ':@': {\r\n        '@_test': 'foo',\r\n      },\r\n    ],\r\n    ':@': {\r\n      '@_xmlns:ex': 'http://example.com',\r\n    },\r\n  },\r\n]\r\n```\r\n\r\n**Would you like to work on this issue?**\r\n<!-- choose one by changing [ ] to [x] -->\r\n- [ ] Yes\r\n- [x] No\r\n\r\n[Bookmark](https://github.com/NaturalIntelligence/fast-xml-parser/stargazers) this repository for further updates. Visit [SoloThought](https://solothought.com) to know about recent features.\r\n\r\n<!-- Love Fast-XML-Parser? Please consider supporting us:\r\n\ud83d\udc49   https://opencollective.com/fast-xml-parser/donate\r\n\ud83d\udc49   https://paypal.me/naturalintelligence \r\n\ud83d\udc49\ud83d\udc49  https://github.com/sponsors/NaturalIntelligence -->\r\n",
+    "nativeCommands": [
+      [
+        "node",
+        "--no-experimental-strip-types",
+        "node_modules/jasmine/bin/jasmine.js",
+        "--random=false",
+        "spec/attr_spec.js"
+      ]
+    ]
+  },
+  "f11": {
+    "repository": "tj/commander.js",
+    "issue": 1863,
+    "title": ".helpOption(false) also disables subcommand help command",
+    "publicBody": "In this example, I'd like to disable impilcit help **option** and only leave impicit help **command**.\r\n`test.mjs`:\r\n```\r\n#!/usr/bin/env node\r\nimport { Command } from 'commander';\r\nconst cmd = new Command ();\r\ncmd\r\n   .helpOption (false)\r\n   .command ('meow')\r\n   .option ('-l, [--loud]')\r\n\r\ncmd.parse ();\r\n```\r\nIf I run `test.mjs`, I get \r\n```\r\nUsage: test [command]\r\n\r\nCommands:\r\n  meow [options]\r\n  help [command]  display help for command\r\n```\r\nas expected, but if I run `test.mjs help meow`, I get an error:\r\n\r\n`error: unknown option '--help' // what option, I thought I was calling help command?`,\r\n\r\nwhile expected outcome would be\r\n```\r\nUsage: test meow [options]\r\n\r\nOptions:\r\n  -l, [--loud]\r\n```",
+    "nativeCommands": [
+      [
+        "node",
+        "--no-experimental-strip-types",
+        "node_modules/jest/bin/jest.js",
+        "--runInBand",
+        "--no-cache",
+        "--coverage=false",
+        "tests/command.helpCommand.test.js"
+      ]
+    ],
+    "publicReadme": {
+      "path": "Readme.md",
+      "sha256": "d211096699a7c7ebd962a6ef000c88bcc0516b1f221e16a9e900ae6f36111f90",
+      "firstLine": 895,
+      "lastLine": 910,
+      "text": "### .helpOption(flags, description)\n\nBy default every command has a help option. You may change the default help flags and description. Pass false to disable the built-in help option.\n\n```js\nprogram\n  .helpOption('-e, --HELP', 'read more information');\n```\n\n### .addHelpCommand()\n\nA help command is added by default if your command has subcommands. You can explicitly turn on or off the implicit help command with `.addHelpCommand()` and `.addHelpCommand(false)`.\n\nYou can both turn on and customise the help command by supplying the name and description:\n\n```js"
+    }
+  }
+}

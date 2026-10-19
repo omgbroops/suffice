@@ -37,7 +37,7 @@ def main():
    if p.parent.name!='events' and p.name!='events.live.jsonl':continue
    for n,line in enumerate(p.read_text(encoding='utf8').splitlines(),1):
     if not line:continue
-    try:events.append({**json.loads(line),'_eventFile':str(p.relative_to(attempt/'worker'))})
+    try:events.append({**json.loads(line),'_eventFile':p.relative_to(attempt/'worker').as_posix()})
     except ValueError:bad.append([str(p.relative_to(ROOT)),n])
   replies=[e for e in events if e.get('type')=='assistant'];raw={e['responseId']:e for e in events if e.get('type')=='provider_usage'}
   catalogs=[e for e in events if e.get('type')=='startup'];rates={}
@@ -70,6 +70,7 @@ def main():
   row['reviewValidation']=worker.get('reviews',[])
   row['reviewCorrections']=worker.get('reviewCorrections',0)
   row['reviewStatus']=worker.get('reviewStatus','not_run')
+  row['reviewCaps']=[{k:x.get(k) for k in ['replyCount','limits','capHit','stopReason','error','usage']} for x in worker.get('stages',[]) if x.get('reviewer')]
   row['reviewCostUsd']=sum(x['repricedUsd'] for x in stageRows if x['reviewer'])
   row['correctionCostUsd']=sum(x['repricedUsd'] for x in stageRows if x['correction'])
   row['reviewLatencyMs']=sum(x.get('latencyMs',0) for x in worker.get('stages',[]) if x.get('reviewer'))
