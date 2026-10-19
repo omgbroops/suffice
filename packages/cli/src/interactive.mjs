@@ -23,7 +23,7 @@ export function sufficeInterface(options) {
         render:()=>[
           theme.fg('accent',theme.bold(`Suffice ${VERSION}`)),
           theme.fg('muted','Pi interface and engine · Suffice tools and codemode'),
-          theme.fg('dim','/project choose a project · /login sign in · /model choose model'),
+          theme.fg('dim','/project choose a project · /login sign in · /routing auto/off'),
           theme.fg('dim','/settings preferences · /resume sessions · Ctrl+C interrupt'),
         ],invalidate(){}
       }));
@@ -63,9 +63,10 @@ export function sufficeInterface(options) {
 
 export async function runInteractive(options,runtime) {
   const controls=[];let host;
+  const routingPreference={mode:options.routing??'off'};
   const factory=async({cwd,sessionManager})=>{
     let control;
-    control=await createSufficeSession({...options,cwd,sessionManager,modelObject:host?.session.model,effort:host?.session.thinkingLevel??options.effort,deferBindings:true,extensions:[sufficeInterface({...options,getUsage:()=>control?.totals})]},runtime);
+    control=await createSufficeSession({...options,cwd,sessionManager,modelObject:host?.session.model,effort:host?.session.thinkingLevel??options.effort,routingPreference,deferBindings:true,extensions:[sufficeInterface({...options,getUsage:()=>control?.totals})]},runtime);
     controls.push(control);
     // Native quit exits the process after session_shutdown; flush durable receipts
     // in the shutdown event rather than relying only on a surrounding finally.
