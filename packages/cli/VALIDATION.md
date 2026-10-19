@@ -1,5 +1,13 @@
 # CLI alpha.1 validation — 2026-10-17
 
+## Alpha.3 — routing-only integration
+
+The routing release uses the frozen v2 first-task classifier to choose Luna High or Sol Low through Pi's native input/model events. It retains the existing prompt, codemode, navigation, tools, append-only history and cumulative per-task usage limits. `/routing auto|off`, manual-model/effort overrides, conservative complex-context retention and queued-input handling adapt the single-task policy to interactive conversations. No packet executor or benchmark-specific test/repair gate is included.
+
+Fourteen automated CLI tests passed on Windows before publication was requested. They cover existing repository tools and project/session isolation plus routing defaults and overrides, first-task classification, short follow-ups, manual controls, deferred steering, restored history, images and failure handling. A real Pi dispatch check used deliberately disabled authentication and confirmed that failed routing made zero model calls and no provider request. No further tests, builds or benchmarks were run for the commit/push operation.
+
+Live routed-provider calls, macOS hardware and a comparative benchmark of this interactive port remain unverified. The separately frozen v2 development experiment is not a product-performance certification. Original alpha.1/alpha.2 records below remain historical; no frozen benchmark artifact was changed.
+
 ## Alpha.2 follow-up — simpler launch and project selection
 
 The clone now exposes its `suffice` executable directly: `npm ci` once, then `npx suffice`. The root bin entry and package-lock metadata were updated on the CLI branch; frozen experiment worktrees are untouched. A clean temporary clone layout installed all 120 dependencies successfully with ordinary `npm ci`; `npx suffice doctor` then passed without package-selection flags. `npx --offline suffice --version` also resolved the local CLI rather than an npm registry package.
