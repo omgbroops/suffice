@@ -4,6 +4,8 @@ import {createSufficeSession} from '../../packages/cli/src/session.mjs';
 import {repositoryTools} from '../../packages/cli/src/tools.mjs';
 import {createPipelineSession} from './session.mjs';
 import {normalizeRequest,PIPELINE_POLICY,THIN_PROMPT,ADVICE_PROMPT} from './policy.mjs';
+import {prepareExecutionInput,executionNotices,withExecutionOutput} from '../execution/core.mjs';
+import {verifyPublicContracts} from '../execution/verification.mjs';
 
 const save=async(p,v)=>{await mkdir(resolve(p,'..'),{recursive:true});await writeFile(p,JSON.stringify(v,null,2)+'\n',{mode:0o600});};
 const quote=s=>"'"+s.replaceAll("'","'\\''")+"'";
@@ -24,7 +26,7 @@ export async function executePipeline(request,deps={}) {
   const workspace=await realpath(r.workspace),runDir=resolve(r.runDir);
   await mkdir(runDir,{recursive:true});
   if(contained(workspace,await realpath(runDir)))throw Error('runDir must be outside the working repository');
-  await writeFile(resolve(runDir,'request.json'),JSON.stringify({profile:r.profile,features:f,model:r.model,effort:r.effort,maxCostUsd:r.maxCostUsd,timeoutMs:r.timeoutMs,maxTurns:r.maxTurns,maxCalls:r.maxCalls,checks:r.checks},null,2)+'\n',{flag:'wx',mode:0o600});
+  await writeFile(resolve(runDir,'request.json'),JSON.stringify({profile:r.profile,features:f,model:r.model,effort:r.effort,maxCostUsd:r.maxCostUsd,timeoutMs:r.timeoutMs,maxTurns:r.maxTurns,maxCalls:r.maxCalls,checks:r.checks,...(r.strategy?{strategy:r.strategy}:{}),...(r.provider?{provider:r.provider}:{}),...(r.contractVerification?{contractVerification:r.contractVerification}:{})},null,2)+'\n',{flag:'wx',mode:0o600});
   const clock=deps.now??Date.now,started=clock(),deadline=started+r.timeoutMs;
   const usage={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,toolCalls:0,costUnknown:false};
   const stages=[],verification=[],notes=[],extensions=[];
@@ -36,9 +38,7 @@ export async function executePipeline(request,deps={}) {
   }
   let prepared=r.prompt;
   async function prepare(label) {
-    if(!(f.preparedContext||f.guidance||f.runbooks))return r.prompt;
-    const {preparePipelineInput}=await import('./preparation.mjs');
-    return (await preparePipelineInput({workspace,prompt:r.prompt,runDir:resolve(runDir,'inputs-'+label),features:f,context:{paths:r.contextPaths,contracts:r.contracts??[],guidance:r.guidance??[],commands:Object.fromEntries(r.checks.map((c,i)=>[`check-${i+1}`,c.command.map(quote).join(' ')]))},runbooks:r.runbooks??[]})).prompt;
+    return prepareExecutionInput(r,workspace,runDir,label);
   }
   async function stage(label,model,effort,text,{advisor=false}={}) {
     assertAllowance(true);const stageDir=resolve(runDir,label),before={...usage},begin=clock();
@@ -47,14 +47,10 @@ export async function executePipeline(request,deps={}) {
       usage.toolCalls++;
       if(usage.toolCalls>r.maxCalls||clock()>=deadline||remaining()<=0||usage.costUnknown){queueMicrotask(()=>control?.abort());return {block:true,reason:'Shared task allowance exhausted'};}
     });};
-    const opt={cwd:workspace,home:resolve(stageDir,'state'),model,effort,maxCost:remaining(),timeout:Math.max(.01,(deadline-clock())/1000),maxTurns:advisor?1:r.maxTurns-usage.modelCalls,maxCalls:r.maxCalls-usage.toolCalls,profile:r.profile,noTools:advisor,
+    let opt={cwd:workspace,home:resolve(stageDir,'state'),model,provider:advisor?'openai':r.provider??'openai',effort,maxCost:remaining(),timeout:Math.max(.01,(deadline-clock())/1000),maxTurns:advisor?1:r.maxTurns-usage.modelCalls,maxCalls:r.maxCalls-usage.toolCalls,profile:r.profile,noTools:advisor,
       systemPrompt:advisor?ADVICE_PROMPT:r.profile==='thin'?THIN_PROMPT:undefined,extensions:[gate,...extensions],...(advisor?{allowedTools:[],noContextFiles:true}:{})};
-    if(!advisor&&f.outputControl) {
-      const {createObservedRepositoryTools}=await import('./tools.mjs');
-      const observed=await createObservedRepositoryTools({workspace,artifactDir:resolve(runDir,'observations'),record:e=>notes.push(e)});
-      opt.tools=observed.tools;opt.extensions.splice(1,0,observed.extension);
-    }
-    const factory=deps.createSession??(r.profile==='baseline'&&!advisor&&!f.outputControl?createSufficeSession:createPipelineSession);
+    opt=await withExecutionOutput(opt,{workspace,artifactDir:resolve(runDir,'observations'),enabled:!advisor&&f.outputControl,record:e=>notes.push(e)});
+    const factory=deps.createSession??(r.profile==='baseline'&&!advisor&&!f.outputControl&&opt.provider==='openai'?createSufficeSession:createPipelineSession);
     try {
       control=await factory(opt,r.runtime,{onAssistant(m){
         replyCount++;usage.modelCalls++;const u=m.usage;
@@ -82,7 +78,9 @@ export async function executePipeline(request,deps={}) {
       const out=await (deps.runCheck??runPublicCheck)({workspace,check:c,timeoutMs:time});
       outcomes.push({...out,latencyMs:clock()-begin});
     }
-    const record={label,outcomes,passed:outcomes.length>0&&outcomes.every(x=>x.passed)};
+    const contracts=await verifyPublicContracts({plan:r.contractVerification,workspace,runCheck:deps.runCheck??runPublicCheck,deadline,now:clock});
+    outcomes.push(...contracts.outcomes);
+    const record={label,outcomes,passed:outcomes.length>0&&outcomes.every(x=>x.passed),...(r.contractVerification?{contracts}:{})};
     verification.push(record);await save(resolve(runDir,`checks-${label}.json`),record);return record;
   }
   const failed=result=>result.outcomes.some(x=>!x.passed);
@@ -93,10 +91,7 @@ export async function executePipeline(request,deps={}) {
     return advice.slice(0,1800);
   }
   try {
-    if(f.notices) {
-      const {createNoticeExtension}=await import('./preparation.mjs');
-      extensions.push(createNoticeExtension({workspace,record:e=>notes.push(e)}));
-    }
+    extensions.push(...executionNotices({workspace,enabled:f.notices,record:e=>notes.push(e)}));
     if(f.advice==='upfront')await advise('advice-upfront');
     prepared=await prepare('solve');
     final=await stage('solve',r.model,r.effort,prepared+(advice?`\n\nAdvisory hypotheses; verify against source:\n${advice.slice(0,1800)}`:''));
@@ -116,7 +111,7 @@ export async function executePipeline(request,deps={}) {
     }
     if(failed(checked))status='verification_failed';
   }catch(e){status=/allowance|cost_limit|turn_limit|tool_limit|timeout/i.test(e.message)?'budget_stopped':usage.costUnknown?'cost_unknown':'operational_failure';notes.push({kind:'failure',error:e.message});}
-  const result={version:PIPELINE_POLICY.version,profile:r.profile,features:f,model:r.model,effort:r.effort,status,usage,stages,verification,notes,repairs,escalations,adviceCalls:stages.filter(s=>s.advisor).length,final,latencyMs:clock()-started,verificationStatus:!r.checks.length?'not_configured':verification.at(-1)?.passed?'passed':'failed',
+  const result={version:PIPELINE_POLICY.version,...(r.strategy?{strategy:r.strategy}:{}),profile:r.profile,features:f,model:r.model,effort:r.effort,status,usage,stages,verification,notes,repairs,escalations,adviceCalls:stages.filter(s=>s.advisor).length,final,latencyMs:clock()-started,verificationStatus:!r.checks.length&&!r.contractVerification?'not_configured':verification.at(-1)?.passed?'passed':'failed',
     budgetEligible:status==='completed'&&!usage.costUnknown&&usage.estimatedApiUsd<=r.maxCostUsd&&clock()<=deadline&&usage.modelCalls<=r.maxTurns&&usage.toolCalls<=r.maxCalls};
   await save(resolve(runDir,'worker.json'),result);return result;
 }

@@ -44,7 +44,7 @@ export async function createPipelineSession(options, runtime, {onTool=()=>{}, on
   };
   const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,noExtensions:true,noSkills:true,noPromptTemplates:true,noThemes:true,noContextFiles:options.noContextFiles??false,systemPrompt:options.systemPrompt??PROMPT,extensionFactories:[...(options.noTools?[]:[createCodemodeExtension({mode:'only',models:false,inlineBudget:2000})]),observer,...(options.extensions??[])]});
   await loader.reload();
-  const model=options.modelObject??runtime.getModel('openai',options.model);
+  const model=options.modelObject??runtime.getModel(options.provider??'openai',options.model);
   if(!model) throw new Error(`Model is absent from the pinned catalog: ${options.model}`);
   const manager=options.sessionManager??(options.continue?SessionManager.continueRecent(workspace,sessionDir):SessionManager.create(workspace,sessionDir));
   const created=await createAgentSession({cwd:workspace,agentDir:options.home,modelRuntime:runtime,model,thinkingLevel:options.effort,resourceLoader:loader,settingsManager:settings,sessionManager:manager,tools:activeNames,customTools:options.noTools?[]:tools});
