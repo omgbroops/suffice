@@ -1,0 +1,134 @@
+[
+  {
+    "id": "b13",
+    "repository": "micromatch/micromatch",
+    "issue": 119,
+    "title": "Negation doesn't work properly with matchBase",
+    "publicBody": "## What is happening (but shouldn't):\r\nNegation pattern does not work properly with option `matchBase` in `micromatch@3.1.6`.\r\n\r\n## Code\r\n```\r\nvar mm = require('micromatch');   \r\nmm.isMatch(\"./x/y.js\", \"*.js\", { matchBase: true });    \r\n// true    \r\nmm.isMatch(\"./x/y.js\", \"!*.js\", { matchBase: true });    \r\n// true, but it should be false    \r\nmm.isMatch(\"./x/y.js\", \"**/*.js\", { matchBase: true });    \r\n// true    \r\nmm.isMatch(\"./x/y.js\", \"!**/*.js\", { matchBase: true });    \r\n// false    \r\n```\r\n",
+    "url": "https://github.com/micromatch/micromatch/issues/119",
+    "baseCommit": "43e71ba703777c17c013914663e86599604e8f01",
+    "fixCommit": "04f49310fc3291191f8a8e952c6dda70bd0b5d04",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/mocha/bin/_mocha",
+        "test/api.js",
+        "test/options.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b13.cjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "bash-match",
+      "for-own",
+      "is-windows",
+      "minimatch",
+      "minimist",
+      "mocha",
+      "multimatch"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b13.cjs": "benchmark/broad/graders/e/b13.cjs"
+    },
+    "changedPaths": [
+      "lib/utils.js",
+      "examples/issue-119.js"
+    ],
+    "sources": [
+      "https://github.com/micromatch/micromatch/issues/119",
+      "https://github.com/micromatch/micromatch/commit/04f49310fc3291191f8a8e952c6dda70bd0b5d04",
+      "https://github.com/micromatch/micromatch/blob/43e71ba703777c17c013914663e86599604e8f01/README.md"
+    ],
+    "contractNotes": "Negated basename patterns must test the basename, with both matchBase and basename aliases; preserve positive, globstar and default non-basename behavior."
+  },
+  {
+    "id": "b14",
+    "repository": "micromatch/micromatch",
+    "issue": 96,
+    "title": "basename: true and unixify: true breaks .not()",
+    "publicBody": "_(Thanks for reporting an issue to micromatch! If you haven't already read the [contributor guidelines](contributing.md), Please do that now, then procede to fill out the details below.)_\r\n\r\n## Please describe the **minimum necessary steps** to reproduce this issue:\r\n\r\n``` shell\r\n$ node\r\n> let mm = require(\"micromatch\")\r\nundefined\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"*.xml\"], {basename: true, unixify: true})\r\n[ 'C:\\\\bla\\\\bar.xml' ]\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"*.xml\"], {basename: true, unixify: false})\r\n[]\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"**/*.xml\"], {basename: false, unixify: true})\r\n[ 'C:\\\\bla\\\\bar.xml' ]\r\n> mm.not([\"C:\\\\bla\\\\bar.xml\"], [\"**/*.xml\"], {basename: false, unixify: false})\r\n[]\r\n>\r\n```\r\n\u2026\r\n\r\n## What is happening (but shouldn't):\r\n\r\nSpecifying basename: true and unixify: true  on Windows breaks the .not() function (inverts its logic)\r\n\r\n\u2026\r\n\r\n## What should be happening instead?\r\n\r\nSpecifying basename: true and unixify: true  on Windows does not break the .not() function (inverts its logic)\r\n\r\n\u2026\r\n",
+    "url": "https://github.com/micromatch/micromatch/issues/96",
+    "baseCommit": "7c4657ee15e35a1542f7a9300925850d074ab724",
+    "fixCommit": "0fd6207e9caf7711020edf42504f0c4cfc63dd89",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/mocha/bin/_mocha",
+        "test/api.js",
+        "test/options.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b14.cjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "bash-match",
+      "for-own",
+      "is-windows",
+      "minimatch",
+      "minimist",
+      "mocha",
+      "multimatch"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b14.cjs": "benchmark/broad/graders/e/b14.cjs"
+    },
+    "changedPaths": [
+      "index.js"
+    ],
+    "sources": [
+      "https://github.com/micromatch/micromatch/issues/96",
+      "https://github.com/micromatch/micromatch/commit/0fd6207e9caf7711020edf42504f0c4cfc63dd89",
+      "https://github.com/micromatch/micromatch/blob/7c4657ee15e35a1542f7a9300925850d074ab724/README.md"
+    ],
+    "contractNotes": "Explicit unixify:true exercises Windows-style strings portably on Linux. .not returns normalized nonmatches, supports basename aliases, multiple patterns and nodupes without mutating caller arrays."
+  },
+  {
+    "id": "b15",
+    "repository": "sindresorhus/globby",
+    "issue": 146,
+    "title": "The pattern in the subdirectory gitignore is not correctly excluded",
+    "publicBody": "file structure:\r\n```\r\n.\r\n\u251c\u2500\u2500 dir\r\n\u2502   \u251c\u2500\u2500 .gitignore\r\n\u2502   \u251c\u2500\u2500 bar.log\r\n\u2502   \u2514\u2500\u2500 subdir\r\n\u2502       \u2514\u2500\u2500 baz.log\r\n\u2514\u2500\u2500 foo.log\r\n```\r\n\r\n`./dir/.gitignore`:\r\n```\r\n*.log\r\n```\r\n\r\nList of files to be excluded by git:\r\n\r\n```console\r\n$ git check-ignore ./foo.log ./dir/bar.log ./dir/subdir/baz.log\r\n./dir/bar.log\r\n./dir/subdir/baz.log\r\n```\r\n\r\nIf globby works correctly, only the `foo.log` file should be output:\r\n\r\n```js\r\nconst globby = require('globby');\r\n\r\n(async () => {\r\n  const paths = await globby(['**/*.log'], { gitignore: true });\r\n  console.log(paths);\r\n  // expected: [ 'foo.log' ]\r\n})();\r\n```\r\n\r\nHowever, `globby@11.0.1` outputs like this:\r\n\r\n```js\r\n[ 'foo.log', 'dir/subdir/baz.log' ]\r\n```\r\n\r\nThe file `dir/subdir/baz.log` is not excluded!\r\n\r\n---\r\n\r\nWhen `globby@11.0.1` parses the `.gitignore` in a subdirectory, it adds the path of the parent to the beginning of each rule:\r\n\r\nhttps://github.com/sindresorhus/globby/blob/v11.0.1/gitignore.js#L18-L24\r\n\r\nSo, internally, `globby@11.0.1` has changed the contents of the `./dir/.gitignore` file to look like this:\r\n\r\n```diff\r\n- *.log\r\n+ dir/*.log\r\n```\r\n\r\nTherefore, you can avoid this problem by modifying the contents of the `./dir/.gitignore` file as follows:\r\n\r\n```\r\n**/*.log\r\n```\r\n\r\nHowever, this writing style is redundant. [Most projects will probably be written in the `*.log` style](https://github.com/github/gitignore/blob/18aa6d83774d514da479d73a4beb864cd4220231/Node.gitignore#L3).\r\n\r\nI believe this is a bug that should be fixed.\r\n",
+    "url": "https://github.com/sindresorhus/globby/issues/146",
+    "baseCommit": "0a4df0eeeded8cdbfaae0db2612cfd446e26ed53",
+    "fixCommit": "2cb6088a0a4c45b2687c8c5c181fcd12f7dc2c63",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "tests/globby.js",
+        "tests/ignore.js",
+        "--no-cache"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b15.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "ava",
+      "tempy"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b15.mjs": "benchmark/broad/graders/e/b15.mjs"
+    },
+    "changedPaths": [
+      "ignore.js"
+    ],
+    "sources": [
+      "https://github.com/sindresorhus/globby/issues/146",
+      "https://github.com/sindresorhus/globby/commit/2cb6088a0a4c45b2687c8c5c181fcd12f7dc2c63",
+      "https://github.com/sindresorhus/globby/blob/0a4df0eeeded8cdbfaae0db2612cfd446e26ed53/README.md"
+    ],
+    "contractNotes": "Nested ignore patterns without middle/leading slash apply below their directory; root scope, slash anchoring, nested path patterns and negation preserve public gitignore semantics. Async, sync and streaming APIs must agree."
+  }
+]

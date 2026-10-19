@@ -1,0 +1,138 @@
+[
+  {
+    "id": "b01",
+    "repository": "motdotla/dotenv",
+    "issue": 605,
+    "title": "Calling dotenv.config() results in a TypeError",
+    "publicBody": "Since upgrading from dotenv 14.2.0 to 14.3.0 I get the following error when calling `dotenv.config()`\r\n\r\nCODE (foo.js):\r\n```\r\n...\r\nimport * as dotenv from \"dotenv\";\r\ndotenv.config(); // line 20\r\n...\r\n```\r\n\r\nERROR:\r\n```\r\n$ yarn build\r\n$ tslint -c tslint.json -p tsconfig.json --fix\r\n$ tsc\r\n$ node --es-module-specifier-resolution=node .\r\nfile:///..../foo.js:20\r\ndotenv.config();\r\n       ^\r\n\r\nTypeError: dotenv.config is not a function\r\n    at file:///..../foo.js:20:8\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:185:25)\r\n    at async Promise.all (index 0)\r\n    at async ESMLoader.import (node:internal/modules/esm/loader:281:24)\r\n    at async loadESM (node:internal/process/esm_loader:88:5)\r\n    at async handleMainPromise (node:internal/modules/run_main:65:12)\r\n```\r\n\r\nDowngrading to 14.2.0 solves the error.",
+    "url": "https://github.com/motdotla/dotenv/issues/605",
+    "baseCommit": "a1bf6c1371c8c9c5ab51f9ecb08ebfae46007910",
+    "fixCommit": "4da9ad31d612bef80941b6164be951675f1daea2",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/tap/bin/run.js",
+        "--no-coverage",
+        "tests/test-parse.js",
+        "tests/test-config.js",
+        "tests/test-parse-multiline.js",
+        "tests/test-env-options.js",
+        "tests/test-cli-options.js",
+        "tests/test-config-cli.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b01.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "tap",
+      "sinon",
+      "decache"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b01.mjs": "benchmark/broad/graders/a/b01.mjs"
+    },
+    "changedPaths": [
+      "lib/main.js"
+    ],
+    "sources": [
+      "https://github.com/motdotla/dotenv/issues/605",
+      "https://github.com/motdotla/dotenv/commit/4da9ad31d612bef80941b6164be951675f1daea2",
+      "https://github.com/motdotla/dotenv/blob/a1bf6c1371c8c9c5ab51f9ecb08ebfae46007910/README.md"
+    ],
+    "contractNotes": "Restore public namespace import config() and parse() while preserving CommonJS/default imports, actual custom-file loading, existing environment handling, and returned error behavior. Independent assertions are API-level, no requirement to emit exact upstream statements. Fix production change is only lib/main.js."
+  },
+  {
+    "id": "b02",
+    "repository": "motdotla/dotenv",
+    "issue": 601,
+    "title": "# inside double quotes still treated as inline comment",
+    "publicBody": "v14.2.0\r\n`SOME_KEY={\"field1\":\"some value\", \"field2\": \"stops here#this is discarded\"}`\r\nWhen above line is parsed generates the following output\r\n`SOME_KEY: {\"field1\":\"some value\", \"field2\": \"stops here`\r\nwhich in turns gives a SyntaxError: Unexpected end of JSON input",
+    "url": "https://github.com/motdotla/dotenv/issues/601",
+    "baseCommit": "5dcb53ba0000b0f15619dcfcf87ccbc043ada1f3",
+    "fixCommit": "e4d210d8e645842514ddbca532f6b15beb31bf6b",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/tap/bin/run.js",
+        "--no-coverage",
+        "tests/test-parse.js",
+        "tests/test-config.js",
+        "tests/test-parse-multiline.js",
+        "tests/test-env-options.js",
+        "tests/test-cli-options.js",
+        "tests/test-config-cli.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b02.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "tap",
+      "sinon",
+      "decache"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b02.mjs": "benchmark/broad/graders/a/b02.mjs"
+    },
+    "changedPaths": [
+      "lib/main.js"
+    ],
+    "sources": [
+      "https://github.com/motdotla/dotenv/issues/601",
+      "https://github.com/motdotla/dotenv/commit/e4d210d8e645842514ddbca532f6b15beb31bf6b",
+      "https://github.com/motdotla/dotenv/blob/5dcb53ba0000b0f15619dcfcf87ccbc043ada1f3/README.md"
+    ],
+    "contractNotes": "Retain complete unquoted JSON strings containing a non-whitespace-preceded hash, as original issue reproduction requires, plus retain documented basic parsing/comment/quote/trim/Buffer/newline behavior. No new multiline, interpolation, hash-with-whitespace-inside-unquoted-JSON requirements. The historical patch explicitly specifies whitespace before inline comments; broad parser overhaul is not demanded."
+  },
+  {
+    "id": "b03",
+    "repository": "sindresorhus/p-map",
+    "issue": 75,
+    "title": "Memory leak when using abort signals",
+    "publicBody": "We have encountered a memory leak issue. After an extensive search for the source of the leak, it was found that it occurred in pMap. Upon reviewing the source code of your package, I discovered that you subscribe to the AbortSignal event but do not unsubscribe from it, which causes the memory leak.",
+    "url": "https://github.com/sindresorhus/p-map/issues/75",
+    "baseCommit": "a38d5a7180ba9ecd6a02e37ec5cc6ae11f3433ac",
+    "fixCommit": "65e893e306f97fc4fbf1f12d126ba3141dafde48",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test.js",
+        "--no-cache"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b03.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "ava",
+      "chalk",
+      "delay",
+      "in-range",
+      "random-int",
+      "time-span"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b03.mjs": "benchmark/broad/graders/a/b03.mjs"
+    },
+    "changedPaths": [
+      "index.js"
+    ],
+    "sources": [
+      "https://github.com/sindresorhus/p-map/issues/75",
+      "https://github.com/sindresorhus/p-map/commit/65e893e306f97fc4fbf1f12d126ba3141dafde48",
+      "https://github.com/sindresorhus/p-map/blob/a38d5a7180ba9ecd6a02e37ec5cc6ae11f3433ac/readme.md"
+    ],
+    "contractNotes": "Settled mapping must not keep AbortSignal event listeners; verify success, empty and skipped input, mapper and aggregate errors, shared-signal reuse, and active cancellation while preserving results/error identity and optional-signal behavior. Uses Node public getEventListeners API rather than monkeypatching implementation. Pre-aborted cleanup is deliberately not graded because the historical reference still adds a listener after already-aborted rejection."
+  }
+]

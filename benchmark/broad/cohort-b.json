@@ -1,0 +1,150 @@
+[
+  {
+    "id": "b04",
+    "repository": "ljharb/qs",
+    "issue": 510,
+    "title": "The parse method returns incorrect output when both strictNullHandling and allowEmptyArrays are set to true",
+    "publicBody": "Here is the test code: when `strictNullHandling` and `allowEmptyArrays` are both set to true, the parse function does not correctly interpret the result of stringify.\r\n```javascript\r\nimport { expect, test } from 'vitest';\r\nimport qs from 'qs';\r\n\r\nconst beforeParams = {\r\n  testEmptyArray: [],\r\n};\r\n\r\n// stringify result\r\nconst searchStr = 'testEmptyArray[]';\r\n\r\n// expect parse result\r\nconst afterParams = {\r\n  testEmptyArray: [],\r\n};\r\n\r\ntest('stringify', () => {\r\n  expect(\r\n    qs.stringify(beforeParams, {\r\n      strictNullHandling: true,\r\n      allowEmptyArrays: true,\r\n    }),\r\n  ).toBe(searchStr);\r\n});\r\n\r\ntest('parseSearchStr', () => {\r\n  expect(\r\n    qs.parse(searchStr, { strictNullHandling: true, allowEmptyArrays: true }),\r\n  ).toStrictEqual(afterParams);\r\n  //  expect { testEmptyArray:[] } but return { testEmptyArray:[null] }\r\n});\r\n```\r\n---\r\nVersion:  6.12.2\r\n\r\n\r\n",
+    "url": "https://github.com/ljharb/qs/issues/510",
+    "baseCommit": "7ebf48b42a4780b3b0b18f12be727bd57a49256b",
+    "fixCommit": "1bf9f7a7f5efb3888f3653137f90a96f32fe95ff",
+    "nativeCommands": [
+      [
+        "node",
+        "test/parse.js"
+      ],
+      [
+        "node",
+        "test/stringify.js"
+      ],
+      [
+        "node",
+        "test/utils.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance.cjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "tape",
+      "has-property-descriptors",
+      "iconv-lite",
+      "mock-property",
+      "has-override-mistake",
+      "safer-buffer",
+      "es-value-fixtures",
+      "object-inspect",
+      "has-symbols",
+      "for-each"
+    ],
+    "graderFiles": {
+      ".broad-acceptance.cjs": "benchmark/broad/graders/b/b04.cjs"
+    },
+    "changedPaths": [
+      "lib/parse.js"
+    ],
+    "sources": [
+      "https://github.com/ljharb/qs/issues/510",
+      "https://github.com/ljharb/qs/commit/1bf9f7a7f5efb3888f3653137f90a96f32fe95ff",
+      "https://github.com/ljharb/qs/blob/7ebf48b42a4780b3b0b18f12be727bd57a49256b/README.md"
+    ],
+    "contractNotes": "Issue states stringify/parse round-trip with strictNullHandling and allowEmptyArrays must preserve empty arrays. Cases vary field names, nested paths, encoded brackets and preserve scalar-null and nonempty-array behavior. No solution comments enter actor prompt."
+  },
+  {
+    "id": "b05",
+    "repository": "ljharb/qs",
+    "issue": 357,
+    "title": "Parsing object with array doesn't split a value",
+    "publicBody": "Parsing a query string object with parameter that intended to be an array doesn't split value by comma, while query string in a form of string is parsed correctly.\r\n\r\nThis is an issue when integrating with frameworks like HAPI that provides query string as a dictionary.\r\n\r\nExample\r\n```\r\nconst qs = require('qs');\r\n\r\n// Works\r\nconsole.log(qs.parse('color=a,b', { comma: true }));\r\n// Result: { color: [ 'a', 'b' ] }\r\n\r\n// Doesn't work\r\nconsole.log(qs.parse({ color: 'a,b' }, { comma: true }))\r\n// Result: { color: 'a,b' }\r\n// Expected result as above: { color: [ 'a', 'b' ] }\r\n```",
+    "url": "https://github.com/ljharb/qs/issues/357",
+    "baseCommit": "cbd246947c235b51d706811cc9f6f8c55b6522dd",
+    "fixCommit": "a80b84a87d3e41425ac5f5777c615fe744988f7c",
+    "nativeCommands": [
+      [
+        "node",
+        "test/index.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance.cjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "tape",
+      "iconv-lite",
+      "safer-buffer",
+      "object-inspect",
+      "for-each"
+    ],
+    "graderFiles": {
+      ".broad-acceptance.cjs": "benchmark/broad/graders/b/b05.cjs"
+    },
+    "changedPaths": [
+      "lib/parse.js"
+    ],
+    "sources": [
+      "https://github.com/ljharb/qs/issues/357",
+      "https://github.com/ljharb/qs/commit/a80b84a87d3e41425ac5f5777c615fe744988f7c",
+      "https://github.com/ljharb/qs/blob/cbd246947c235b51d706811cc9f6f8c55b6522dd/README.md"
+    ],
+    "contractNotes": "Issue explicitly expects comma splitting of object-form query input, just as string input. Cases vary flat/nested keys and multiple fields while preserving no-comma, comma:false, primitive values, and input immutability."
+  },
+  {
+    "id": "b06",
+    "repository": "isaacs/minimatch",
+    "issue": 157,
+    "title": "Globstar not matching zero",
+    "publicBody": "According to the docs, minimatch should behave like Bash 4.1.\r\n\r\nAccording to this comment, the `/path/**/*.html` pattern should match `/path/to/page.html`, `/path/to/web/page.html`, and also `/path/page.html`, for Bash 4 and above. This works in my Bash 4.4.20.\r\n\r\nHowever, if I use minimatch to create a RegExp for the pattern above:\r\n\r\n```\r\nconst makeRe = require(\"minimatch\").makeRe;\r\nconst regex = makeRe(\"/path/**/*.html\");\r\n```\r\nthe resulting RegExp seems to be `^(?:\\/path\\/(?:(?!(?:\\/|^)\\.).)*?\\/(?!\\.)(?=.)[^\\/]*?\\.html)$`, which although matches `/path/to/page.html` and `/path/to/web/page.html`, it doesn't match `/path/page.html`",
+    "url": "https://github.com/isaacs/minimatch/issues/157",
+    "baseCommit": "9c7c4bcd9abe9d2de9139383d6f69fd50a0cd990",
+    "fixCommit": "a979c0663b393f50bd18689d59b29b3163d3b61b",
+    "nativeCommands": [
+      [
+        "node",
+        "-e",
+        "const fs=require('node:fs'),path=require('node:path'),Module=require('node:module');const f=path.resolve('test/basic.js'),s=fs.readFileSync(f,'utf8'),marker='    t.equal(tapOpts.re, expectRe, null, tapOpts)';if(s.split(marker).length!==2)throw Error('Pinned native assertion marker changed');const m=new Module(f,module);m.filename=f;m.paths=Module._nodeModulePaths(path.dirname(f));m._compile(s.replace(marker,'    // Omit obsolete RegExp rendering snapshots; retain matching assertions.'),f);"
+      ],
+      [
+        "node",
+        "node_modules/tap/bin/run.js",
+        "--no-coverage",
+        "test/brace-expand.js",
+        "test/defaults.js",
+        "test/extglob-ending-with-state-char.js",
+        "test/extglob-unfinished.js",
+        "test/no-path-module.js",
+        "test/partial.js",
+        "test/redos.js",
+        "test/tricky-negations.js",
+        "test/win-path-sep.js"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance.cjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "tap"
+    ],
+    "graderFiles": {
+      ".broad-acceptance.cjs": "benchmark/broad/graders/b/b06.cjs"
+    },
+    "changedPaths": [
+      "minimatch.js",
+      "package.json"
+    ],
+    "sources": [
+      "https://github.com/isaacs/minimatch/issues/157",
+      "https://github.com/isaacs/minimatch/commit/a979c0663b393f50bd18689d59b29b3163d3b61b",
+      "https://github.com/isaacs/minimatch/blob/9c7c4bcd9abe9d2de9139383d6f69fd50a0cd990/README.md"
+    ],
+    "contractNotes": "Issue requires makeRe globstar to span zero or more directories. Cases cover absolute/relative/leading/adjacent globstars and existing dot/nocase/noglobstar contracts. Reference package.json change adds only snap test script; production matching change is minimatch.js. Preflight amendment before inference: exclude the separate hidden-directory makeRe bug (both historical base and reference match it); native basic tests omit exact RegExp rendering snapshots through an in-memory public-source loader, retaining actual matching assertions and the rest of the file. Original failed preflight receipts are retained; controls must rerun under a new fixture revision."
+  }
+]

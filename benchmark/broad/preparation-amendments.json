@@ -1,0 +1,28 @@
+{
+  "phase": "pre-inference evaluation preparation",
+  "scoredAttempts": 0,
+  "v1": {
+    "controlsPassed": 6,
+    "changes": [
+      "AVA read-only cache incompatibility identified",
+      "Normalize non-global RegExp match arrays before comparing matched strings",
+      "Execa grader stops combining mutually exclusive stdio and stdout/stderr aliases",
+      "Minimatch original checks contain one obsolete exact-RegExp-rendering assertion; transparently omit that representation-only assertion and retain behavioral checks",
+      "Exclude an unrelated pre-existing minimatch hidden-directory bug from this issue grader"
+    ]
+  },
+  "v2": {
+    "controlsPassed": 9,
+    "referenceBehavioralAcceptancePassed": 15,
+    "changes": [
+      "AVA --no-cache still records run-status cache, so use isolated per-command dependency cache tmpfs",
+      "Install the pinned execa fixture helper dependency log-process-errors"
+    ]
+  },
+  "preservation": "Prior preparation fixtures and all failed control receipts remain under .suffice/broad-bench-v1; subsequent fixtures use explicit revisions. No scored model outcomes informed preparation.",
+  "v3": {
+    "controlsPassed": 15,
+    "scoredAttempts": 0,
+    "note": "All source/native, base-fail, reference-pass and pristine networked actor controls pass under final environment."
+  }
+}

@@ -1,0 +1,135 @@
+[
+  {
+    "id": "b07",
+    "repository": "sindresorhus/execa",
+    "issue": 1175,
+    "title": "Escaped newlines break arguments in version 9",
+    "publicBody": "After upgrading from version 8 to 9, some of my multi-line formatted commands have broken.\r\n\r\nReproduction:\r\n\r\n```js\r\nimport {$} from \"execa\";\r\n\r\ntry {\r\n  // 404 is just a stupid way to get an error for some details.\r\n  // Some commands are large, so I break them up by escaping newlines in templates:\r\n  //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#multi-line_strings\r\n  await $`404 abc\\\r\n  def`;\r\n} catch (error) {\r\n  console.log(\"command\", error.command); // 404 abc  ef\r\n  console.log(\"escaped\", error.escapedCommand); // 404 \"abc \" ef\r\n}\r\n```\r\n\r\nExpected command: `404 abc  def` or something close enough\r\nActual commands: `404 abc  ef` or `404 \"abc \" ef`\r\n\r\nI suspect it may be related to the difference between the template strings and the raw strings passed to a tag function. Example:\r\n\r\n```js\r\nfunction poo(foo, ...bar) {\r\n  console.log(\"strings\", foo.slice());\r\n  console.log(\"raw\", foo.raw);\r\n}\r\n\r\npoo`404 abc def`;\r\npoo`404 abc\r\n  def`;\r\npoo`404 abc\\\r\n  def`;\r\n```\r\n\r\nIn the first two examples, the raw strings and the strings arrays match up.\r\n```text\r\nstrings (1) ['404 abc def']\r\nraw (1) ['404 abc def']\r\n\r\nstrings (1) ['404 abc\r\n  def']\r\nraw (1) ['404 abc\r\n  def']\r\n```\r\n\r\nIn the 3rd sample however the generated strings and the raw strings are different.\r\n```text\r\nstrings (1) ['404 abc  def']\r\nraw (1) ['404 abc\\\\\r\n  def']\r\n```\r\n\r\nI suspect there may be some code that may be mixing up the raw strings with the regular strings causing some of the escaping to be offset by a character. But that is just a theory 🤷.\r\n",
+    "url": "https://github.com/sindresorhus/execa/issues/1175",
+    "baseCommit": "c8cff27a47b6e6f1cfbfec2bf7fa9dcd08cefed1",
+    "fixCommit": "2aa3b0ceeb76bc9bd5e4e4789d965cc483dba185",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test/methods/template.js",
+        "--no-cache"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b07.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "ava",
+      "path-key"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b07.mjs": "benchmark/broad/graders/c/b07.mjs"
+    },
+    "changedPaths": [
+      "lib/methods/template.js"
+    ],
+    "sources": [
+      "https://github.com/sindresorhus/execa/issues/1175",
+      "https://github.com/sindresorhus/execa/commit/2aa3b0ceeb76bc9bd5e4e4789d965cc483dba185",
+      "https://github.com/sindresorhus/execa/blob/c8cff27a47b6e6f1cfbfec2bf7fa9dcd08cefed1/readme.md"
+    ],
+    "contractNotes": "Template line continuations must not lose argument characters; verify whitespace, joined words, repeated continuations, interpolation and ordinary compatibility. Cases independently authored from issue plus public template API."
+  },
+  {
+    "id": "b08",
+    "repository": "sindresorhus/execa",
+    "issue": 1219,
+    "title": "Fix using both `stdin: 'inherit'` and `input` options",
+    "publicBody": "See #1218.\n\nWhen using any of the following options:\n  - `{input: 'foo', stdio: 'inherit'}`   \n  - `{input: 'foo', stdio: ['inherit', ...]}`\n  - `{input: 'foo', stdin: 'inherit'}`\n\nExeca should silently use the following instead: `{input: 'foo', stdin: 'pipe', ...}`.\n\nPlease note that if users need multiple inputs, they can still use the `{stdin: ['inherit', {string: 'foo'}]` option.\n\nThis is technically a breaking change, so should be in a major release.",
+    "url": "https://github.com/sindresorhus/execa/issues/1219",
+    "baseCommit": "f3a2e8481a1e9138de3895827895c834078b9456",
+    "fixCommit": "3ed0544b697fea99a367869a80a69589c026c4a8",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test/io/input-option.js",
+        "--no-cache"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        ".broad-acceptance/b08.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "ava",
+      "path-key",
+      "log-process-errors"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b08.mjs": "benchmark/broad/graders/c/b08.mjs"
+    },
+    "changedPaths": [
+      "lib/stdio/handle.js"
+    ],
+    "sources": [
+      "https://github.com/sindresorhus/execa/issues/1219",
+      "https://github.com/sindresorhus/execa/commit/3ed0544b697fea99a367869a80a69589c026c4a8",
+      "https://github.com/sindresorhus/execa/blob/f3a2e8481a1e9138de3895827895c834078b9456/readme.md"
+    ],
+    "contractNotes": "Explicit input takes precedence over a lone inherited stdin across async/sync and stdin/stdio spellings. Compare two payloads against deliberately different inherited stdin. No external commands or network. Public issue explicitly requests semantic change for major release."
+  },
+  {
+    "id": "b09",
+    "repository": "sindresorhus/p-queue",
+    "issue": 190,
+    "title": "Default value for priority doesn't get applied",
+    "publicBody": "According to the documentation, when priority is left undefined, it should default to 0. However this doesn't seem to be the case.\r\nInstead, the promises seem to be executed in a random order (not the order they were inserted into the queue in!).\r\nWhen manually setting the priority to 0, the queue behaves as expected.\r\n\r\nExample code:\r\n```ts\r\nimport PQueue from \"p-queue\";\r\n\r\nfunction delay(ms: number) {\r\n  return new Promise((resolve) => setTimeout(resolve, ms));\r\n}\r\n\r\nfunction addToQueue(name: string, priority?: number) {\r\n  console.log(`adding ${name} to queue`);\r\n  return queue.add(\r\n    async () => {\r\n      await delay(1000);\r\n      console.log(`finished ${name}`);\r\n      return Promise.resolve();\r\n    },\r\n    { priority }\r\n  );\r\n}\r\n\r\nconst queue = new PQueue({ concurrency: 1 });\r\nconst first = addToQueue(\"first\");\r\nconst second = addToQueue(\"second\");\r\nconst priority = addToQueue(\"priority\", 1);\r\nconst third = addToQueue(\"third\");\r\n```\r\n| Example output | Expected output |\r\n| --- | --- |\r\n| adding first to queue | adding first to queue |\r\n| adding second to queue | adding second to queue |\r\n| adding priority to queue | adding priority to queue | \r\n| adding third to queue | adding third to queue |\r\n| finished first | finished first |\r\n| finished third | finished priority |\r\n| finished priority | finished second |\r\n| finished second | finished third |",
+    "url": "https://github.com/sindresorhus/p-queue/issues/190",
+    "baseCommit": "5ecfda8d64a24f7baf7bab9dfaba2e9c73bb04be",
+    "fixCommit": "439d512cd901adc5c7053745ade15c9048982c53",
+    "nativeCommands": [
+      [
+        "node",
+        "node_modules/ava/entrypoints/cli.mjs",
+        "test/test.ts",
+        "--match",
+        "*priority*",
+        "--no-cache"
+      ]
+    ],
+    "acceptanceCommands": [
+      [
+        "node",
+        "--import=tsx/esm",
+        ".broad-acceptance/b09.mjs"
+      ]
+    ],
+    "selectedDevDependencies": [
+      "ava",
+      "delay",
+      "in-range",
+      "time-span",
+      "random-int",
+      "p-defer",
+      "tsx",
+      "@sindresorhus/tsconfig"
+    ],
+    "graderFiles": {
+      ".broad-acceptance/b09.mjs": "benchmark/broad/graders/c/b09.mjs"
+    },
+    "changedPaths": [
+      "source/priority-queue.ts"
+    ],
+    "sources": [
+      "https://github.com/sindresorhus/p-queue/issues/190",
+      "https://github.com/sindresorhus/p-queue/commit/439d512cd901adc5c7053745ade15c9048982c53",
+      "https://github.com/sindresorhus/p-queue/blob/5ecfda8d64a24f7baf7bab9dfaba2e9c73bb04be/readme.md"
+    ],
+    "contractNotes": "Undefined priority defaults to zero; equal priorities preserve insertion order, explicit priorities sort descending, sizeBy zero sees default-priority items. Native selection tests existing priority cases.",
+    "dependencyOverrides": {
+      "tsx": "4.20.6"
+    }
+  }
+]
