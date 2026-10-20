@@ -1,0 +1,97 @@
+{
+  "arm": "v2-upfront",
+  "originalResultSha256": "dc1cf04536d5a6bb55d0a7d9d7aa95c47cf983b93230208d755d64762cac3fb3",
+  "originalWorkerSha256": "fd2599b36c4d2ddc5ae5710c72b082e38c5c0df4665e2ea2319388558d0bcbee",
+  "sourceSha256": "3b21f65d5df265ac1e7faf8fe42aa52571d094c0fef9121b0e137b4455d85f69",
+  "eventInputs": [
+    {
+      "path": "trials/filter-js-from-html-v2-upfront/agent/receipts/advice-upfront/state/events/1792534755854-41d94b92-62a0-4e39-a646-2f6118a0062b.jsonl",
+      "sha256": "ee2769bed8a9402d6295f4486d4c4a6f93707509906dfa67963a60317a8a79d4"
+    },
+    {
+      "path": "trials/filter-js-from-html-v2-upfront/agent/receipts/solve/state/events/1792534762374-6214ba07-0e3b-4ce8-b073-040edb47518e.jsonl",
+      "sha256": "375bda11fb7e0c58cce67c544567acebb08c51683e6277ca098ae89aea192450"
+    }
+  ],
+  "mutations": [
+    {
+      "callId": "call_ZjdyjNxTpqmrEPX8tKkRxC5p|ctc_0ebe9dd709185769016ad7e902f85487d1b65e6a463aca1ae5/1",
+      "operation": "write",
+      "sourceSha256": "83c464b7c6ff8643f228df5ea9b2e7d01d45455d9bdd5cd264547ed1301e554d"
+    },
+    {
+      "callId": "call_lXUSRIsYNqNxZeUWfh5wWrDX|ctc_0ebe9dd709185769016ad7e9374e4487d18eeadddc854d2858/1",
+      "operation": "edit",
+      "sourceSha256": "d68ebb6769a887f8ae63c56241caa78a285da76669036a9a67f9bc8db938fd7e"
+    },
+    {
+      "callId": "call_42QSjss71Kb7K9m2ZursARxj|ctc_0ebe9dd709185769016ad7e944b05487d1ac8690123dbb9c64/1",
+      "operation": "edit",
+      "sourceSha256": "99aa7aeb5265309eeddf7af5e67101a28c7ec164d752575bb9443003f7de1d10"
+    },
+    {
+      "callId": "call_0IPq4FRt1UdHNSVmRlmAo2Hv|ctc_0ebe9dd709185769016ad7e957c64087d1bff6477ab65fa2fe/1",
+      "operation": "edit",
+      "skippedFailed": true
+    },
+    {
+      "callId": "call_oIqYpSxiBCKmj9B1CE5kGRmL|ctc_0ebe9dd709185769016ad7e95dffbc87d1b42c6105c2a4c78a/1",
+      "operation": "literal shell replacements",
+      "replacements": [
+        [
+          "\\\\s",
+          "\\s"
+        ],
+        [
+          "\\\\=",
+          "\\="
+        ]
+      ],
+      "sourceSha256": "3b21f65d5df265ac1e7faf8fe42aa52571d094c0fef9121b0e137b4455d85f69"
+    }
+  ],
+  "shellCallsReviewed": [
+    {
+      "callId": "call_EluOGmK9ZAqQH8LKkKqtKM2F|ctc_0ebe9dd709185769016ad7e8ecbf7087d191e0473e3baa8993/1",
+      "command": "ls -la /app && sed -n '1,240p' /public-checks/calibration-public-check.py",
+      "isError": false
+    },
+    {
+      "callId": "call_vUEFCKnCwOy76ndzMmbiOr2Q|ctc_0ebe9dd709185769016ad7e8efad0487d1b8413db3d5a3ba05/1",
+      "command": "grep -n -A80 'def html_filter' /public-checks/calibration-public-check.py",
+      "isError": false
+    },
+    {
+      "callId": "call_aHewnbMoegxTg3lp4SlTsoPR|ctc_0ebe9dd709185769016ad7e926201487d1a23fbf78a94b08f1/1",
+      "command": "python3 -m py_compile /app/filter.py && python3 /public-checks/calibration-public-check.py filter-js-from-html && python3 - <<'PY'\nimport sys,tempfile,subprocess\nfrom pathlib import Path\np=Path('/tmp/filter-test.html')\ns='''<html>\\r\\n<p onclick=\"x\" class='ok' title=\"a>b\">ok</p><a href=\"java&#x73;cript:alert(1)\">x</a><svg><a xlink:href=\"JaVa\\nScRiPt:foo\">y</a><script>alert(1)</script></svg><iframe srcdoc=\"&lt;script&gt;x&lt;/script&gt;\"></iframe><style>.x{color:red}</style></html>'''\np.write_bytes(s.encode()); subprocess.run([sys.executable,'/app/filter.py',str(p)],check=True)\nprint(p.read_bytes().decode())\nPY",
+      "isError": false
+    },
+    {
+      "callId": "call_CsYmeWn5yqzvOKPrh49RLcep|ctc_0ebe9dd709185769016ad7e94012f087d1b634cc65f8864b67/1",
+      "command": "python3 -m py_compile /app/filter.py && python3 /public-checks/calibration-public-check.py filter-js-from-html && sed -n '120,160p' /app/filter.py",
+      "isError": true
+    },
+    {
+      "callId": "call_cnKxPNIiz7crxKMHP2oFHfLc|ctc_0ebe9dd709185769016ad7e948c05c87d1862b123c223552f4/1",
+      "command": "python3 -m py_compile /app/filter.py && python3 /public-checks/calibration-public-check.py filter-js-from-html && python3 - <<'PY'\nfrom pathlib import Path\nimport sys,subprocess\np=Path('/tmp/filter-test.html'); p.write_text('<meta http-equiv=\"refresh\" content=\"0;url=javascript:alert(1)\"><img srcset=\"x.png 1x, javascript:alert(2) 2x\">')\nsubprocess.run([sys.executable,'/app/filter.py',str(p)],check=True)\nprint(p.read_text())\nPY",
+      "isError": false
+    },
+    {
+      "callId": "call_AjiCraw4vWC3bTOoPl4bLCF4|ctc_0ebe9dd709185769016ad7e94fb71087d18de1cfcd9dcd0d1b/1",
+      "command": "sed -n '145,162p' /app/filter.py",
+      "isError": false
+    },
+    {
+      "callId": "call_lC2xrmHaTGwhuv35TDzc9XCa|ctc_0ebe9dd709185769016ad7e953ede487d1bf0d47f32e2eea18/1",
+      "command": "sed -n '1,35p' /app/filter.py",
+      "isError": false
+    },
+    {
+      "callId": "call_oIqYpSxiBCKmj9B1CE5kGRmL|ctc_0ebe9dd709185769016ad7e95dffbc87d1b42c6105c2a4c78a/1",
+      "command": "python3 - <<'PY'\np='/app/filter.py'\ns=open(p).read().replace(r'\\\\s', r'\\s').replace(r'\\\\=', r'\\=')\nopen(p,'w').write(s)\nPY\npython3 -m py_compile /app/filter.py && python3 /public-checks/calibration-public-check.py filter-js-from-html && python3 - <<'PY'\nfrom pathlib import Path\nimport sys,subprocess\np=Path('/tmp/filter-test.html'); p.write_text('<meta http-equiv=\"refresh\" content=\"0;url=javascript:alert(1)\"><img srcset=\"x.png 1x, javascript:alert(2) 2x\">')\nsubprocess.run([sys.executable,'/app/filter.py',str(p)],check=True)\nprint(p.read_text())\nPY",
+      "isError": false
+    }
+  ],
+  "finalReadbackCallId": null,
+  "limitation": "Reconstructed from successful recorded mutations; no original filesystem snapshot/hash exists."
+}

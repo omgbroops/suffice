@@ -1,0 +1,63 @@
+{
+  "arm": "v2-alone",
+  "originalResultSha256": "d5baf84ac51fc81a326d988ecdcc8eb5557af078ec93544fa2c0b49c10a4e3dc",
+  "originalWorkerSha256": "cf1dd86d2077c92afbd63eb21a5ae1d86026ada7f7ea202635a97847468596e6",
+  "sourceSha256": "280dca4efb2c027e9d5e67d379b388458cb2b94810a001741eba37385cc5c0bc",
+  "eventInputs": [
+    {
+      "path": "trials/filter-js-from-html-v2-alone/agent/receipts/solve/state/events/1792533485983-e2bab64c-7041-449d-98ea-8bdc7e01238d.jsonl",
+      "sha256": "0cad4dc47e8e9d7932b117e04faef10d594dff7bfd4a3c3884033d6a584061dc"
+    }
+  ],
+  "mutations": [
+    {
+      "callId": "call_SVhVP1Y2tYTfLxjwCGGe8U9N|ctc_0c2acb695aad1e25016ad7e40ac35887d1895f5e9b8a99228c/1",
+      "operation": "write",
+      "sourceSha256": "d7b39a73ae39ab3676c5ea494bc02cb58c425ed541e8066cb41349874d699593"
+    },
+    {
+      "callId": "call_rJs3Zvik50MTOraebrVatlrq|ctc_0c2acb695aad1e25016ad7e43ee5a887d1bc9d6d245f74d2bc/1",
+      "operation": "edit",
+      "skippedFailed": true
+    },
+    {
+      "callId": "call_QKqCaN9iYMi9fTXVpL74H4ms|ctc_0c2acb695aad1e25016ad7e454da9c87d1a80344f990a498f0/1",
+      "operation": "edit",
+      "skippedFailed": true
+    },
+    {
+      "callId": "call_89szsK5qYGPFq64UjHMVIj96|ctc_0c2acb695aad1e25016ad7e45e93b487d1a4d2ff4519d1d0f0/1",
+      "operation": "edit",
+      "sourceSha256": "280dca4efb2c027e9d5e67d379b388458cb2b94810a001741eba37385cc5c0bc"
+    }
+  ],
+  "shellCallsReviewed": [
+    {
+      "callId": "call_TTr6JuLY92Id95t0R62QgsH6|ctc_0c2acb695aad1e25016ad7e3f0427487d1be4281e540a709a5/1",
+      "command": "ls -la /app && sed -n '1,240p' /public-checks/calibration-public-check.py",
+      "isError": false
+    },
+    {
+      "callId": "call_hn0Xba0gZrzmNZFdq5iM7Lpn|ctc_0c2acb695aad1e25016ad7e3f42d2487d1ab783220b5640490/1",
+      "command": "grep -n -A70 -B5 'def html_filter' /public-checks/calibration-public-check.py",
+      "isError": false
+    },
+    {
+      "callId": "call_rhYs7qQhBi1DD43J8jcqbspE|ctc_0c2acb695aad1e25016ad7e430489487d1b8e01a3b80fe188e/1",
+      "command": "python3 /public-checks/calibration-public-check.py filter-js-from-html && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/app')\nfrom filter import _sanitize\ncases = [\n('<DIV only=\"keep\" onclick=\"x\" class=\"a\">x</DIV>','<DIV only=\"keep\"  class=\"a\">x</DIV>'),\n('<img src=\"java&#x09;script:alert(1)\" alt=\"x\">','<img  alt=\"x\">'),\n('<!-- <script>x</script> --><p>ok</p>','<!-- <script>x</script> --><p>ok</p>'),\n('<script src=x></script><p>x</p>','<p>x</p>'),\n]\nfor src, expected in cases:\n out=_sanitize(src)\n print(repr(out))\n assert out == expected\nPY",
+      "isError": true
+    },
+    {
+      "callId": "call_IA8No9Pmn2qIWg2ZslODSyuS|ctc_0c2acb695aad1e25016ad7e450223c87d1a0eaad9ae56f0160/1",
+      "command": "grep -n -A8 -B2 'script\\|dangerous =' /app/filter.py",
+      "isError": false
+    },
+    {
+      "callId": "call_bT0JYbj6LN491v0dAsPCX2DS|ctc_0c2acb695aad1e25016ad7e46f27fc87d1a8f2126b4dc0d453/1",
+      "command": "python3 -m py_compile /app/filter.py && python3 /public-checks/calibration-public-check.py filter-js-from-html && python3 - <<'PY'\nimport sys\nsys.path.insert(0, '/app')\nfrom filter import _sanitize\ncases = [\n    '<DIV only=\"keep\" onclick=\"x\" class=\"a\">x</DIV>',\n    '<img src=\"java&#x09;script:alert(1)\" alt=\"x\">',\n    '<!-- <script>x</script> --><p>ok</p>',\n    '<script src=x></script><p>x</p>',\n    '<svg><a xlink:href=\"javascript:alert(1)\" onload=\"x\">ok</a></svg>',\n]\nfor source in cases: print(repr(_sanitize(source)))\nassert _sanitize(cases[0]) == '<DIV only=\"keep\"  class=\"a\">x</DIV>'\nassert 'javascript:' not in _sanitize(cases[1]).lower()\nassert _sanitize(cases[2]) == cases[2]\nassert _sanitize(cases[3]) == '<p>x</p>'\nassert 'onload' not in _sanitize(cases[4]) and 'javascript:' not in _sanitize(cases[4]).lower()\nPY",
+      "isError": false
+    }
+  ],
+  "finalReadbackCallId": null,
+  "limitation": "Reconstructed from successful recorded mutations; no original filesystem snapshot/hash exists."
+}
