@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import statistics
 import time
+from datetime import datetime
 
 STATE=Path('/home/eric_qin/suffice-harnesstax-sol61')
 OUT=Path('/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/reports/harnesstax-sol61-v1')
@@ -22,24 +23,47 @@ for job in manifest['jobs']:
     accepted=bool(reward) and all(v==1 for v in reward.values())
     unknown=not worker or usage.get('costUnknown',False) or worker.get('usageCostUnknown',False)
     identity=worker.get('identity')
-    requests=[]
+    requests=[];assistants=[];raw_usage={}
     for p in root.rglob('*.jsonl'):
         if '/events/' not in str(p) and p.name!='events.live.jsonl': continue
         for line in p.read_text(errors='replace').splitlines():
             try: event=json.loads(line)
             except json.JSONDecodeError: unknown=True;continue
-            if event.get('type')=='provider_request': requests.append(event)
+            if event.get('type')=='provider_request': requests.append({**event,'stage':p.relative_to(root).parts[0]})
+            if event.get('type')=='assistant': assistants.append(event)
+            if event.get('type')=='provider_usage' and event.get('responseId'): raw_usage[event['responseId']]=event
     if job['arm'] in ['v1','v2']:
-        identity=bool(requests) and all(e.get('model') in
-            (['gpt-6.1-sol'] if job['arm']=='v1' else ['gpt-6-luna','gpt-6.1-sol'])
-            for e in requests)
-    row={**job,'accepted':accepted,'officialReward':reward,
+        identity=bool(requests)
+        for e in requests:
+            advisor=e['stage'].startswith('advice-');sol_stage=advisor or e['stage']=='sol-takeover'
+            model='gpt-6.1-sol' if job['arm']=='v1' or sol_stage else 'gpt-6-luna'
+            effort='low' if job['arm']=='v2' and sol_stage else 'high'
+            identity=identity and e.get('model')==model and (e.get('reasoning') or {}).get('effort')==effort
+            identity=identity and e.get('toolNames')==([] if advisor else ['codemode'])
+    totals={k:sum((e.get('usage') or {}).get(k,0) for e in assistants) for k in ['input','cacheRead','cacheWrite','output']}
+    ledger_cost=sum(((e.get('usage') or {}).get('cost') or {}).get('total',0) for e in assistants)
+    matched=bool(assistants) and len(raw_usage)==len(assistants) and abs(ledger_cost-usage.get('estimatedApiUsd',0))<1e-9
+    matched=matched and all(totals[k]==usage.get(k,0) for k in totals)
+    matched=matched and sum(e['usage'].get('input_tokens',0) for e in raw_usage.values())==sum(totals[k] for k in ['input','cacheRead','cacheWrite'])
+    matched=matched and sum(e['usage'].get('output_tokens',0) for e in raw_usage.values())==totals['output']
+    if job['arm']=='codex': matched=matched and bool(worker.get('recordsMatchedFinalAggregate'))
+    else: matched=matched and len(requests)==len(assistants)
+    unknown=unknown or not matched
+    phase=trial.get('agent_execution') or {}
+    phase_ms=None
+    if phase.get('started_at') and phase.get('finished_at'):
+        phase_ms=(datetime.fromisoformat(phase['finished_at'])-datetime.fromisoformat(phase['started_at'])).total_seconds()*1000
+    responses=worker.get('modelCalls',worker.get('turns',usage.get('modelCalls')))
+    calls=worker.get('toolCalls',worker.get('calls',usage.get('toolCalls')))
+    eligible=bool(worker.get('status')=='completed' and identity and matched and not unknown
+      and usage.get('estimatedApiUsd',0)<=5 and responses is not None and responses<=100
+      and calls is not None and calls<=240)
+    row={**job,'accepted':accepted,'policyValidSuccess':accepted and eligible,'officialReward':reward,
       'status':worker.get('status'),'identity':identity,
       'costUnknown':bool(unknown),'knownCostUsd':usage.get('estimatedApiUsd',0),
       'costUsd':None if unknown else usage.get('estimatedApiUsd'),
-      'latencyMs':worker.get('latencyMs'),'usage':usage,
-      'modelCalls':worker.get('modelCalls',worker.get('turns',usage.get('modelCalls'))),
-      'toolCalls':worker.get('toolCalls',worker.get('calls',usage.get('toolCalls'))),
+      'latencyMs':worker.get('latencyMs'),'agentPhaseMs':phase_ms,'usage':usage,
+      'modelCalls':responses,'toolCalls':calls,'receiptsMatched':matched,
       'publicVerification':worker.get('verificationStatus'),
       'adviceCalls':worker.get('adviceCalls',0),'repairs':worker.get('repairs',0),
       'takeovers':worker.get('escalations',0),
@@ -51,8 +75,9 @@ for job in manifest['jobs']:
 summary=[]
 for arm in ['codex','pi','v1','v2']:
     group=[r for r in rows if r['arm']==arm]
-    lat=[r['latencyMs']/1000 for r in group if r['latencyMs'] is not None]
+    lat=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None]
     summary.append({'arm':arm,'completed':len(group),'accepted':sum(r['accepted'] for r in group),
+      'policyValidSuccesses':sum(r['policyValidSuccess'] for r in group),
       'knownCostUsd':sum(r['knownCostUsd'] for r in group),
       'unknownCosts':sum(r['costUnknown'] for r in group),
       'meanSeconds':statistics.mean(lat) if lat else None,
@@ -62,13 +87,14 @@ OUT.mkdir(parents=True,exist_ok=True)
 data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':summary}
 (OUT/'results.json').write_text(json.dumps(data,indent=2)+'\n')
 lines=['# HarnessTax Sol 6.1 single round', '',f'Completed: {len(rows)}/120 attempts. '+('Final.' if len(rows)==120 else 'Interim; not a final comparison.'),'',
- '| Arm | Completed | Accepted | Known cost (USD) | Unknown costs | Mean agent seconds |',
- '| --- | ---: | ---: | ---: | ---: | ---: |']
+ '| Arm | Completed | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |',
+ '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
 for r in summary:
     seconds='—' if r['meanSeconds'] is None else f"{r['meanSeconds']:.1f}"
-    lines.append(f"| {r['arm']} | {r['completed']}/30 | {r['accepted']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
+    lines.append(f"| {r['arm']} | {r['completed']}/30 | {r['accepted']} | {r['policyValidSuccesses']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
 lines+=['','API-equivalent cost estimates, not subscription charges. Unknown costs remain unknown.',
  'One attempt per task/arm; no replacement runs. All errors and failures remain in the denominator.',
+ 'Latency is the full Harbor agent phase, including wrapper/runtime startup and receipt export. Worker-only timings are also retained in results.json.',
  'V2 changes model as well as pipeline. Codex/Pi/V1 match Sol High; V2 is a system comparison.',
  '100-response cap; first provider-failed attempt had the initial 60 cap but made zero responses.',
  'V2 controller smoke checks cover 3/30 tasks, solely from public instructions. Other tasks have no controller verification trigger.',

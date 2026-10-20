@@ -22,9 +22,9 @@ Stock Pi retains its own prompt and four tools; Suffice retains codemode and AST
 navigation. No production defaults change. There are no globally added skills.
 
 This is an adapted comparison, not a reproduction of the published point estimates:
-model generation, harness versions and repetition count differ. The common cap is
-60 model responses, preserving V1's existing hard limit, rather than the paper's
-100 native turns. Tool-call ceiling is 240; V1's native internal tool counter also
+model generation, harness versions and repetition count differ. Following the
+user amendment below, the common cap is 100 model responses; native harness turn
+definitions can differ. Tool-call ceiling is 240; V1's native internal tool counter also
 remains unchanged. Each attempt has a $5 API-equivalent cost guard, checked between
 responses (one response can cross the cap). Task-specific original wall-clock and
 Docker resource limits remain in force. Setup and evaluation durations are recorded
