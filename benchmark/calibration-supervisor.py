@@ -63,8 +63,9 @@ def main():
         validate_review(os.environ['CALIBRATION_REVIEW'])
     with (LOCAL/'campaign.log').open('ab',buffering=0) as log:
         resume=os.environ.get('CALIBRATION_RESUME')=='1'
-        script='/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-resume.py' if resume else STATE+'/runtime/benchmark/calibration-campaign.py'
-        child=subprocess.Popen(['wsl.exe','-d','Ubuntu','--exec',PYTHON,script,*([] if resume else ['run'])],stdin=subprocess.DEVNULL,stdout=log,stderr=log)
+        replacements=os.environ.get('CALIBRATION_REPLACEMENTS')=='1'
+        script='/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-replacements.py' if replacements else '/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-resume.py' if resume else STATE+'/runtime/benchmark/calibration-campaign.py'
+        child=subprocess.Popen(['wsl.exe','-d','Ubuntu','--exec',PYTHON,script,*([] if resume and not replacements else ['run'])],stdin=subprocess.DEVNULL,stdout=log,stderr=log)
         started=time.time()
         while True:
             code=child.poll()

@@ -16,7 +16,7 @@ def main():
     data=json.loads((OUT/'results.json').read_text());rows=data['attempts'];manifest=json.loads((STATE/'manifest.json').read_text())
     metrics=[]
     for row in rows:
-        root=STATE/'trials'/(row['task']+'-'+row['arm'])/'agent/receipts';events=[]
+        root=STATE/row.get('receiptStateRelative','')/'trials'/(row['task']+'-'+row['arm'])/'agent/receipts';events=[]
         for path in root.rglob('*.jsonl'):
             if 'events' not in path.parts and path.name!='events.live.jsonl':continue
             for line in path.read_text(encoding='utf-8').split('\n'):
@@ -49,7 +49,7 @@ def main():
         times=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None];unknown=any(r['costUnknown'] for r in group)
         per=f'{cost/accepted:.6f}' if accepted else 'undefined'
         lines.append(f"| {arm} | {accepted}/{len(group)} | {'≥' if unknown else ''}{cost:.6f} | {'≥' if unknown and accepted else ''}{per} | {statistics.mean(times):.1f} | {sum(r['usage'].get('output',0) for r in group)} | {sum(m['visibleTextChars'] for m in metrics if m['arm']==arm)} | {sum(r['adviceCalls'] for r in group)} | {sum(r['repairs'] for r in group)} | {sum(r['takeovers'] for r in group)} |" if times else f'| {arm} | 0/0 | 0 | undefined | unavailable | 0 | 0 | 0 | 0 | 0 |')
-    lines+=['','## Matched comparisons','', 'Task order and arm policies were frozen before inference. Every failed attempt remains in cost denominators. Partial or unknown costs are floors.']
+    lines+=['','## Matched comparisons','', 'Task order and arm policies were frozen before inference. Every selected failed attempt remains in cost denominators. User-authorized provider-interruption originals are excluded separately. Partial or unknown costs are floors.']
     for control,treatment in [('pi','v1-original'),('v1-original','v1-refined'),('v1-refined','v1-concise'),('v2-alone','v2-upfront'),('v2-alone','v2-selective'),('v2-upfront','v2-selective'),('v2-selective','v2-concise')]:
         a={r['task']:r for r in rows if r['arm']==control};b={r['task']:r for r in rows if r['arm']==treatment};keys=sorted(a.keys()&b.keys())
         if not keys:continue
@@ -76,7 +76,12 @@ def main():
         'Four purposively chosen tasks and one attempt per configuration cannot establish population accuracy or robust causal gains. V1 scope and repair are a bundle; V2 assistance arms compare routing policies with the rest of the core held fixed. Concise changes instructions only.',
         'At most four containers share the host; observed-memory admission may reduce overlap. Shared CPU, network, caching and grading contention limit latency comparisons. No JS/TS source task measures the AST-navigation advantage.',
         'Required product state is not classified as an optional prerequisite. Missing checker infrastructure remains unverified, never accepted by the controller. Independent grading remains separate and cannot trigger assistance.',
-        'No global skills, arbitrary compaction, default changes or outcome-selected replacements. Original campaign reports and runtime receipts remain preserved.']
+        'No global skills, arbitrary compaction or default changes. Original campaign reports and runtime receipts remain preserved.']
+    if data.get('replacementPlan'):
+        lines+=['','## Provider-interruption replacement amendment','',
+            'The user explicitly requested one fresh replacement for each of two interrupted refined-V1 attempts, before replacement outcomes. Those originals are removed from the main comparison, including its costs and latency. Each replacement counts regardless of outcome; there is no fallback to an original or repeat-until-pass.',
+            f"Selected comparison known cost: ${data['selectedKnownCostUsd']:.8f}. Excluded originals known cost floor: ${data['excludedKnownCostUsd']:.8f}. Total actual campaign usage floor: ${data['totalKnownSpendIncludingExcludedUsd']:.8f}, with {data['totalUnknownCostsIncludingExcluded']} incomplete costs.",
+            'All excluded receipts remain listed in results.json. The frozen runtime, task requirements, public checks, models and effort are unchanged. Later retries and differing service conditions further limit causal comparisons.']
     if (STATE/'admission-amendment.json').exists():
         amendment=json.loads((STATE/'admission-amendment.json').read_text())
         lines+=['','## Admission amendment','',amendment['reason'],'Completed attempts, including the capacity-affected rejection and incomplete cost, are preserved. Only untouched pending jobs resume at two-way concurrency. The frozen actor runtimes, task limits, prompts, checks and policies are unchanged. Mixed concurrency further limits latency attribution.']

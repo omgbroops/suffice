@@ -1,0 +1,1602 @@
+{
+  "asOf": 1792536067.1946404,
+  "complete": false,
+  "attempts": [
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.028477999999999996,
+      "costUsd": 0.028477999999999996,
+      "latencyMs": 26883,
+      "agentPhaseMs": 28399.895999999997,
+      "usage": {
+        "input": 10119,
+        "cacheRead": 3200,
+        "cacheWrite": 0,
+        "output": 792,
+        "estimatedApiUsd": 0.028477999999999996,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 5,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:41:10.400927Z",
+        "finished_at": "2026-10-20T21:41:38.800823Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:41:08.847350Z",
+        "finished_at": "2026-10-20T21:41:10.400837Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "c72d34f38e23c3e52be650fd2dd488cb9f2bf020209f6fd78e34b992db2902e5",
+      "workerSha256": "9577c40e16284e4a2f2e05da9a374d83b0f4a298d894b2a44967d26356e5c1e3",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": []
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v1-original",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.023486,
+      "costUsd": 0.023486,
+      "latencyMs": 31430,
+      "agentPhaseMs": 34078.159999999996,
+      "usage": {
+        "input": 6641,
+        "cacheRead": 16640,
+        "cacheWrite": 0,
+        "output": 854,
+        "estimatedApiUsd": 0.023486,
+        "modelCalls": 5,
+        "toolCalls": 9,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 9,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:41:11.217152Z",
+        "finished_at": "2026-10-20T21:41:45.295312Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:41:09.804935Z",
+        "finished_at": "2026-10-20T21:41:11.217061Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "a3e30695e8695e4d2674bdb37f770e1a41ff902cc24534ebe1035df707a9e342",
+      "workerSha256": "4030a711e50bf6eabf326a7177662f9a09aa3b350c57c68855bc190091144b62",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 6641,
+            "cacheRead": 16640,
+            "cacheWrite": 0,
+            "output": 854,
+            "estimatedApiUsd": 0.023486,
+            "modelCalls": 5,
+            "toolCalls": 9
+          },
+          "latencyMs": 31338,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v1-refined",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0398972,
+      "costUsd": 0.0398972,
+      "latencyMs": 31375,
+      "agentPhaseMs": 33305.23,
+      "usage": {
+        "input": 14691,
+        "cacheRead": 7552,
+        "cacheWrite": 0,
+        "output": 976,
+        "estimatedApiUsd": 0.0398972,
+        "modelCalls": 4,
+        "toolCalls": 6,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:41:12.636086Z",
+        "finished_at": "2026-10-20T21:41:45.941316Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:41:11.136487Z",
+        "finished_at": "2026-10-20T21:41:12.635998Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "e8e4dd00fa8487d154a2b47736f9f688e16570d8b886089a6563697f4bd17df0",
+      "workerSha256": "3e8bfb17393154867336e996fdc16c0b8f6f44bfe15c271ecb42374782a1f726",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 14691,
+            "cacheRead": 7552,
+            "cacheWrite": 0,
+            "output": 976,
+            "estimatedApiUsd": 0.0398972,
+            "modelCalls": 4,
+            "toolCalls": 6
+          },
+          "latencyMs": 31284,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v1-concise",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0244832,
+      "costUsd": 0.0244832,
+      "latencyMs": 27801,
+      "agentPhaseMs": 29853.413,
+      "usage": {
+        "input": 7471,
+        "cacheRead": 13312,
+        "cacheWrite": 0,
+        "output": 821,
+        "estimatedApiUsd": 0.0244832,
+        "modelCalls": 4,
+        "toolCalls": 6,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:41:13.506635Z",
+        "finished_at": "2026-10-20T21:41:43.360048Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:41:11.855886Z",
+        "finished_at": "2026-10-20T21:41:13.506527Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "3665717072f55ac15ab6ea0fb53f65e5645d8c61a5ae1997406cb3d9c508ae6e",
+      "workerSha256": "c08f2dc0aecd420bd5a9cd233c93181d1e902403d21c5be503017dfacf59d484",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 7471,
+            "cacheRead": 13312,
+            "cacheWrite": 0,
+            "output": 821,
+            "estimatedApiUsd": 0.0244832,
+            "modelCalls": 4,
+            "toolCalls": 6
+          },
+          "latencyMs": 27716,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-alone",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0022053000000000003,
+      "costUsd": 0.0022053000000000003,
+      "latencyMs": 31870,
+      "agentPhaseMs": 33210.118,
+      "usage": {
+        "input": 16027,
+        "cacheRead": 5760,
+        "cacheWrite": 0,
+        "output": 1090,
+        "estimatedApiUsd": 0.0022053000000000003,
+        "modelCalls": 5,
+        "toolCalls": 8,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:42:08.431356Z",
+        "finished_at": "2026-10-20T21:42:41.641474Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:42:07.382387Z",
+        "finished_at": "2026-10-20T21:42:08.431278Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "7597047b4bc3fa93481253d35eb271ba9e2a93e6fd2e508d416bb31295725ac6",
+      "workerSha256": "610f2443122f24eae9f2deb1fcdf0296aca9812f596b88cf2119f49c9a2e2013",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 16027,
+            "cacheRead": 5760,
+            "cacheWrite": 0,
+            "output": 1090,
+            "estimatedApiUsd": 0.0022053000000000003,
+            "modelCalls": 5,
+            "toolCalls": 8
+          },
+          "latencyMs": 31783,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-upfront",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0040458000000000004,
+      "costUsd": 0.0040458000000000004,
+      "latencyMs": 29401,
+      "agentPhaseMs": 30661.128,
+      "usage": {
+        "input": 8423,
+        "cacheRead": 8320,
+        "cacheWrite": 0,
+        "output": 913,
+        "estimatedApiUsd": 0.0040458000000000004,
+        "modelCalls": 5,
+        "toolCalls": 6,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 1,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:42:13.377479Z",
+        "finished_at": "2026-10-20T21:42:44.038607Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:42:12.441742Z",
+        "finished_at": "2026-10-20T21:42:13.377371Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "9915ecba77ef7e067651e34479f91b5d5415b496c7c18359c661aaef8f5109c1",
+      "workerSha256": "a33781a2bea9dc7064c05416effba12b62763efab8f5f0ba96ca9643969116dc",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "advice-upfront",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "usage": {
+            "input": 492,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 182,
+            "estimatedApiUsd": 0.002804,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "latencyMs": 5563,
+          "error": null,
+          "includesNestedLatency": null
+        },
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 7931,
+            "cacheRead": 8320,
+            "cacheWrite": 0,
+            "output": 731,
+            "estimatedApiUsd": 0.0012418000000000004,
+            "modelCalls": 4,
+            "toolCalls": 6
+          },
+          "latencyMs": 23755,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-selective",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0013878200000000001,
+      "costUsd": 0.0013878200000000001,
+      "latencyMs": 24593,
+      "agentPhaseMs": 25787.355000000003,
+      "usage": {
+        "input": 9236,
+        "cacheRead": 6272,
+        "cacheWrite": 0,
+        "output": 803,
+        "estimatedApiUsd": 0.0013878200000000001,
+        "modelCalls": 4,
+        "toolCalls": 6,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:42:24.513844Z",
+        "finished_at": "2026-10-20T21:42:50.301199Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:42:23.568748Z",
+        "finished_at": "2026-10-20T21:42:24.513762Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "d33e22c70d68d0bc79a48b1cc632eda96264bf10dcc9776653fcf449b9c1b10b",
+      "workerSha256": "804ed21e650d3c9f180fc36b7caa10ef6457f3ff635850b512b5960f37b6eef3",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 9236,
+            "cacheRead": 6272,
+            "cacheWrite": 0,
+            "output": 803,
+            "estimatedApiUsd": 0.0013878200000000001,
+            "modelCalls": 4,
+            "toolCalls": 6
+          },
+          "latencyMs": 24507,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-concise",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00108288,
+      "costUsd": 0.00108288,
+      "latencyMs": 22441,
+      "agentPhaseMs": 23617.248,
+      "usage": {
+        "input": 5977,
+        "cacheRead": 10368,
+        "cacheWrite": 0,
+        "output": 763,
+        "estimatedApiUsd": 0.00108288,
+        "modelCalls": 4,
+        "toolCalls": 6,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:42:39.703755Z",
+        "finished_at": "2026-10-20T21:43:03.321003Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:42:38.794073Z",
+        "finished_at": "2026-10-20T21:42:39.703680Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "6fb6f15f16f76a7a34e7fdb5c8c8a614763df961da812ff8796230c5cd428693",
+      "workerSha256": "44d25cdb9009e927995e4b7407390e1571df252b4178029aa5f67bf56c71aa38",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 5977,
+            "cacheRead": 10368,
+            "cacheWrite": 0,
+            "output": 763,
+            "estimatedApiUsd": 0.00108288,
+            "modelCalls": 4,
+            "toolCalls": 6
+          },
+          "latencyMs": 22360,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-original",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.039724800000000005,
+      "costUsd": 0.039724800000000005,
+      "latencyMs": 66760,
+      "agentPhaseMs": 68461.121,
+      "usage": {
+        "input": 11610,
+        "cacheRead": 5248,
+        "cacheWrite": 0,
+        "output": 1598,
+        "estimatedApiUsd": 0.039724800000000005,
+        "modelCalls": 4,
+        "toolCalls": 11,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 11,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:43:10.925533Z",
+        "finished_at": "2026-10-20T21:44:19.386654Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:43:09.953733Z",
+        "finished_at": "2026-10-20T21:43:10.925435Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "c2f58d2a755fa4e498a3441b700188e601cfc784c7d7b2744423dab04cd5e496",
+      "workerSha256": "a792d9a91b28142eb8656e4c83c5af83b732a70871e2522dedd366bd7c0cb74f",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 11610,
+            "cacheRead": 5248,
+            "cacheWrite": 0,
+            "output": 1598,
+            "estimatedApiUsd": 0.039724800000000005,
+            "modelCalls": 4,
+            "toolCalls": 11
+          },
+          "latencyMs": 66434,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-refined",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "cost_unknown",
+      "identity": true,
+      "costUnknown": true,
+      "knownCostUsd": 0.01517,
+      "costUsd": null,
+      "latencyMs": 23445,
+      "agentPhaseMs": 24679.752,
+      "usage": {
+        "input": 5580,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "output": 401,
+        "estimatedApiUsd": 0.01517,
+        "modelCalls": 4,
+        "toolCalls": 2,
+        "costUnknown": true
+      },
+      "modelCalls": 4,
+      "toolCalls": 2,
+      "receiptsMatched": false,
+      "publicVerification": "not_run",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:43:27.985960Z",
+        "finished_at": "2026-10-20T21:43:52.665712Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:43:27.022405Z",
+        "finished_at": "2026-10-20T21:43:27.985823Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "55bfd8c2533ee4ed1dbc3a3257fdaa882b04745c2850f6091863bdde10d0eff1",
+      "workerSha256": "77efd4dd7ac65ee7c954d5a435e4828407f6bdd00273b770151b2ace5a648388",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 5580,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 401,
+            "estimatedApiUsd": 0.01517,
+            "modelCalls": 4,
+            "toolCalls": 2
+          },
+          "latencyMs": 23444,
+          "error": "Task stopped: cancelled",
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-concise",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0331756,
+      "costUsd": 0.0331756,
+      "latencyMs": 95003,
+      "agentPhaseMs": 96283.721,
+      "usage": {
+        "input": 7343,
+        "cacheRead": 16896,
+        "cacheWrite": 0,
+        "output": 1680,
+        "estimatedApiUsd": 0.0331756,
+        "modelCalls": 5,
+        "toolCalls": 12,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 12,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:43:28.967253Z",
+        "finished_at": "2026-10-20T21:45:05.250974Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:43:28.019185Z",
+        "finished_at": "2026-10-20T21:43:28.967172Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "091677849aa330c5d045aecd1283fadb1089be586e108c6f15b90421874f7e0e",
+      "workerSha256": "1970945b5e1b728e66fda101f774fffdb37482375cb2da15641fc6c25a8ff80d",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 7343,
+            "cacheRead": 16896,
+            "cacheWrite": 0,
+            "output": 1680,
+            "estimatedApiUsd": 0.0331756,
+            "modelCalls": 5,
+            "toolCalls": 12
+          },
+          "latencyMs": 94661,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-alone",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00198502,
+      "costUsd": 0.00198502,
+      "latencyMs": 66330,
+      "agentPhaseMs": 67597.463,
+      "usage": {
+        "input": 10127,
+        "cacheRead": 21632,
+        "cacheWrite": 0,
+        "output": 1512,
+        "estimatedApiUsd": 0.00198502,
+        "modelCalls": 9,
+        "toolCalls": 16,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 16,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:43:55.766845Z",
+        "finished_at": "2026-10-20T21:45:03.364308Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:43:54.803203Z",
+        "finished_at": "2026-10-20T21:43:55.766707Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "71cbe1c39cd845a2b40551e1850f63b16d24f9f332d0512d326a43ae8692a006",
+      "workerSha256": "265a8a0cf440551ff343ed87556355a9f226e91fbac4310821a6b6b29afd55af",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 10127,
+            "cacheRead": 21632,
+            "cacheWrite": 0,
+            "output": 1512,
+            "estimatedApiUsd": 0.00198502,
+            "modelCalls": 9,
+            "toolCalls": 16
+          },
+          "latencyMs": 65993,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-upfront",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0049647400000000005,
+      "costUsd": 0.0049647400000000005,
+      "latencyMs": 67793,
+      "agentPhaseMs": 69073.364,
+      "usage": {
+        "input": 13324,
+        "cacheRead": 38144,
+        "cacheWrite": 0,
+        "output": 1539,
+        "estimatedApiUsd": 0.0049647400000000005,
+        "modelCalls": 11,
+        "toolCalls": 19,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 19,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 1,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:46:12.512494Z",
+        "finished_at": "2026-10-20T21:47:21.585858Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:46:11.350865Z",
+        "finished_at": "2026-10-20T21:46:12.512418Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "aafa6c38f70e315039652a5b816347f43b4807fd7c3d7b253cdf1381a6a5db36",
+      "workerSha256": "f27abe14dd94c99a30888428babb3cb989ac65e21e9d35c367cdd74c4b23fa0d",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "advice-upfront",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "usage": {
+            "input": 421,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 177,
+            "estimatedApiUsd": 0.002612,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "latencyMs": 5567,
+          "error": null,
+          "includesNestedLatency": null
+        },
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 12903,
+            "cacheRead": 38144,
+            "cacheWrite": 0,
+            "output": 1362,
+            "estimatedApiUsd": 0.0023527400000000003,
+            "modelCalls": 10,
+            "toolCalls": 19
+          },
+          "latencyMs": 61895,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-selective",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00265318,
+      "costUsd": 0.00265318,
+      "latencyMs": 68274,
+      "agentPhaseMs": 69716.342,
+      "usage": {
+        "input": 14288,
+        "cacheRead": 41088,
+        "cacheWrite": 0,
+        "output": 1627,
+        "estimatedApiUsd": 0.00265318,
+        "modelCalls": 11,
+        "toolCalls": 20,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 20,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:46:12.839254Z",
+        "finished_at": "2026-10-20T21:47:22.555596Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:46:11.769957Z",
+        "finished_at": "2026-10-20T21:46:12.839175Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "6b26607f3ea04755b8fc0d80c0fad411b555d02be686d978bc96d80c9378ad27",
+      "workerSha256": "7a868f1a69ddde2c126cb69af7f660e5369fc553ebecd19c2a6ef49f06327a56",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 14288,
+            "cacheRead": 41088,
+            "cacheWrite": 0,
+            "output": 1627,
+            "estimatedApiUsd": 0.00265318,
+            "modelCalls": 11,
+            "toolCalls": 20
+          },
+          "latencyMs": 67924,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-concise",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0024572,
+      "costUsd": 0.0024572,
+      "latencyMs": 63104,
+      "agentPhaseMs": 64329.886,
+      "usage": {
+        "input": 14660,
+        "cacheRead": 17920,
+        "cacheWrite": 0,
+        "output": 1624,
+        "estimatedApiUsd": 0.0024572,
+        "modelCalls": 9,
+        "toolCalls": 16,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 16,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:47:33.591261Z",
+        "finished_at": "2026-10-20T21:48:37.921147Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:47:32.626915Z",
+        "finished_at": "2026-10-20T21:47:33.591184Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "d423c32891fac7a179386d58379749b0458895b810878e70ad560ba0f2f4ac54",
+      "workerSha256": "ef5865a36c35e9f48b58d291be9a4efe595459bd6c1a872aa4cd25c4f4790995",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 14660,
+            "cacheRead": 17920,
+            "cacheWrite": 0,
+            "output": 1624,
+            "estimatedApiUsd": 0.0024572,
+            "modelCalls": 9,
+            "toolCalls": 16
+          },
+          "latencyMs": 62674,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0336404,
+      "costUsd": 0.0336404,
+      "latencyMs": 62743,
+      "agentPhaseMs": 63914.275,
+      "usage": {
+        "input": 7820,
+        "cacheRead": 27904,
+        "cacheWrite": 0,
+        "output": 1521,
+        "estimatedApiUsd": 0.0336404,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 9,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:47:39.058320Z",
+        "finished_at": "2026-10-20T21:48:42.972595Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:47:38.098133Z",
+        "finished_at": "2026-10-20T21:47:39.058239Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "17fa5b4021ad0e1ebc4ac61f1402c0745806cdc1026c93b49a81eca5542efc15",
+      "workerSha256": "9b7fe8d6af77404fe69508253e21ee9c1b1a27629aa1cb51e7eb9392e33822a0",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": []
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v1-refined",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "cost_unknown",
+      "identity": true,
+      "costUnknown": true,
+      "knownCostUsd": 0.0097876,
+      "costUsd": null,
+      "latencyMs": 909621,
+      "agentPhaseMs": 911921.2119999999,
+      "usage": {
+        "input": 3697,
+        "cacheRead": 1536,
+        "cacheWrite": 0,
+        "output": 224,
+        "estimatedApiUsd": 0.0097876,
+        "modelCalls": 3,
+        "toolCalls": 4,
+        "costUnknown": true
+      },
+      "modelCalls": 3,
+      "toolCalls": 4,
+      "receiptsMatched": false,
+      "publicVerification": "not_run",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:48:58.968833Z",
+        "finished_at": "2026-10-20T22:04:10.890045Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:48:57.586217Z",
+        "finished_at": "2026-10-20T21:48:58.968653Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "ed6f202d337759e34c6c88c27eca1b7815872587f4a7aac2a9f0dc0df049c2ee",
+      "workerSha256": "cedc18c7324b6dd07b5b7c4f6c76b4ed2f4236a0e5d8af15908a09def5e369e3",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 3697,
+            "cacheRead": 1536,
+            "cacheWrite": 0,
+            "output": 224,
+            "estimatedApiUsd": 0.0097876,
+            "modelCalls": 3,
+            "toolCalls": 4
+          },
+          "latencyMs": 909616,
+          "error": "Task stopped: cancelled",
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v1-concise",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.32329959999999996,
+      "costUsd": 0.32329959999999996,
+      "latencyMs": 461950,
+      "agentPhaseMs": 463352.426,
+      "usage": {
+        "input": 53495,
+        "cacheRead": 125696,
+        "cacheWrite": 0,
+        "output": 20374,
+        "estimatedApiUsd": 0.32329959999999996,
+        "modelCalls": 12,
+        "toolCalls": 24,
+        "costUnknown": false
+      },
+      "modelCalls": 12,
+      "toolCalls": 24,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T21:49:04.785804Z",
+        "finished_at": "2026-10-20T21:56:48.138230Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:49:03.708878Z",
+        "finished_at": "2026-10-20T21:49:04.785714Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "725ab680a83e66681475d0a09c046a8171e390982a640d1639e316134563527f",
+      "workerSha256": "0a45e384476bac0cffc0e00dd8cdd67daff420a200e11db908cacc204e44e3e5",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "usage": {
+            "input": 53495,
+            "cacheRead": 125696,
+            "cacheWrite": 0,
+            "output": 20374,
+            "estimatedApiUsd": 0.32329959999999996,
+            "modelCalls": 12,
+            "toolCalls": 24
+          },
+          "latencyMs": 461592,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-alone",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00456386,
+      "costUsd": 0.00456386,
+      "latencyMs": 139629,
+      "agentPhaseMs": 140777.743,
+      "usage": {
+        "input": 11843,
+        "cacheRead": 57856,
+        "cacheWrite": 0,
+        "output": 5602,
+        "estimatedApiUsd": 0.00456386,
+        "modelCalls": 10,
+        "toolCalls": 18,
+        "costUnknown": false
+      },
+      "modelCalls": 10,
+      "toolCalls": 18,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "VerifierTimeoutError",
+      "agentTiming": {
+        "started_at": "2026-10-20T21:58:04.991939Z",
+        "finished_at": "2026-10-20T22:00:25.769682Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T21:58:04.075535Z",
+        "finished_at": "2026-10-20T21:58:04.991863Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "d5baf84ac51fc81a326d988ecdcc8eb5557af078ec93544fa2c0b49c10a4e3dc",
+      "workerSha256": "cf1dd86d2077c92afbd63eb21a5ae1d86026ada7f7ea202635a97847468596e6",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 11843,
+            "cacheRead": 57856,
+            "cacheWrite": 0,
+            "output": 5602,
+            "estimatedApiUsd": 0.00456386,
+            "modelCalls": 10,
+            "toolCalls": 18
+          },
+          "latencyMs": 139478,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-upfront",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0064116600000000004,
+      "costUsd": 0.0064116600000000004,
+      "latencyMs": 130294,
+      "agentPhaseMs": 131962.605,
+      "usage": {
+        "input": 9870,
+        "cacheRead": 84096,
+        "cacheWrite": 0,
+        "output": 4976,
+        "estimatedApiUsd": 0.0064116600000000004,
+        "modelCalls": 14,
+        "toolCalls": 24,
+        "costUnknown": false
+      },
+      "modelCalls": 14,
+      "toolCalls": 24,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 1,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "VerifierTimeoutError",
+      "agentTiming": {
+        "started_at": "2026-10-20T22:19:14.385057Z",
+        "finished_at": "2026-10-20T22:21:26.347662Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T22:19:11.883561Z",
+        "finished_at": "2026-10-20T22:19:14.384732Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "dc1cf04536d5a6bb55d0a7d9d7aa95c47cf983b93230208d755d64762cac3fb3",
+      "workerSha256": "fd2599b36c4d2ddc5ae5710c72b082e38c5c0df4665e2ea2319388558d0bcbee",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "advice-upfront",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "usage": {
+            "input": 273,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 166,
+            "estimatedApiUsd": 0.002206,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "latencyMs": 6515,
+          "error": null,
+          "includesNestedLatency": null
+        },
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 9597,
+            "cacheRead": 84096,
+            "cacheWrite": 0,
+            "output": 4810,
+            "estimatedApiUsd": 0.00420566,
+            "modelCalls": 13,
+            "toolCalls": 24
+          },
+          "latencyMs": 123598,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-selective",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.004536340000000001,
+      "costUsd": 0.004536340000000001,
+      "latencyMs": 123980,
+      "agentPhaseMs": 125702.197,
+      "usage": {
+        "input": 15323,
+        "cacheRead": 53504,
+        "cacheWrite": 0,
+        "output": 4938,
+        "estimatedApiUsd": 0.004536340000000001,
+        "modelCalls": 10,
+        "toolCalls": 18,
+        "costUnknown": false
+      },
+      "modelCalls": 10,
+      "toolCalls": 18,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "VerifierTimeoutError",
+      "agentTiming": {
+        "started_at": "2026-10-20T22:19:14.451934Z",
+        "finished_at": "2026-10-20T22:21:20.154131Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T22:19:11.883610Z",
+        "finished_at": "2026-10-20T22:19:14.451413Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "f0031ab68dfb07c64a917c92f1c17472b85cae4649dd0ae0cf334afa9cd34ced",
+      "workerSha256": "7abdf3ca4915a68335770841fd2397253a678cce58b143c22777cde62f15d55e",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 15323,
+            "cacheRead": 53504,
+            "cacheWrite": 0,
+            "output": 4938,
+            "estimatedApiUsd": 0.004536340000000001,
+            "modelCalls": 10,
+            "toolCalls": 18
+          },
+          "latencyMs": 123825,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "arm": "pi",
+      "completed": 2,
+      "accepted": 2,
+      "graded": 2,
+      "ungraded": 0,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.0621184,
+      "unknownCosts": 0,
+      "meanSeconds": 46.1570855,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v1-original",
+      "completed": 2,
+      "accepted": 2,
+      "graded": 2,
+      "ungraded": 0,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.06321080000000001,
+      "unknownCosts": 0,
+      "meanSeconds": 51.2696405,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v1-refined",
+      "completed": 3,
+      "accepted": 1,
+      "graded": 3,
+      "ungraded": 0,
+      "policyValidSuccesses": 1,
+      "knownCostUsd": 0.0648548,
+      "unknownCosts": 2,
+      "meanSeconds": 323.30206466666664,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v1-concise",
+      "completed": 3,
+      "accepted": 2,
+      "graded": 3,
+      "ungraded": 0,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.3809584,
+      "unknownCosts": 0,
+      "meanSeconds": 196.49652,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v2-alone",
+      "completed": 3,
+      "accepted": 2,
+      "graded": 2,
+      "ungraded": 1,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.00875418,
+      "unknownCosts": 0,
+      "meanSeconds": 80.52844133333333,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v2-upfront",
+      "completed": 3,
+      "accepted": 2,
+      "graded": 2,
+      "ungraded": 1,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.0154222,
+      "unknownCosts": 0,
+      "meanSeconds": 77.23236566666667,
+      "adviceCalls": 3,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v2-selective",
+      "completed": 3,
+      "accepted": 1,
+      "graded": 2,
+      "ungraded": 1,
+      "policyValidSuccesses": 1,
+      "knownCostUsd": 0.008577340000000001,
+      "unknownCosts": 0,
+      "meanSeconds": 73.735298,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v2-concise",
+      "completed": 2,
+      "accepted": 2,
+      "graded": 2,
+      "ungraded": 0,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.00354008,
+      "unknownCosts": 0,
+      "meanSeconds": 43.973567,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    }
+  ],
+  "excludedInfrastructureAttempts": [],
+  "completedExecutionsIncludingExcluded": 21,
+  "selectedKnownCostUsd": 0.6074362,
+  "excludedKnownCostUsd": 0,
+  "totalKnownSpendIncludingExcludedUsd": 0.6074362,
+  "totalUnknownCostsIncludingExcluded": 2,
+  "replacementPlan": null
+}

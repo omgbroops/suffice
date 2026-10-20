@@ -13,10 +13,14 @@ manifest=json.loads((STATE/'manifest.json').read_text())
 arms=manifest.get('arms',['codex','pi','v1','v2'])
 expected=len(manifest['jobs'])
 replacement_plan=json.loads((STATE/'replacement-plan.json').read_text()) if (STATE/'replacement-plan.json').exists() else None
+replacement_relative=Path(replacement_plan.get('directory','replacements/receipt-permissions-r1')) if replacement_plan else None
+if replacement_relative is not None:
+    assert not replacement_relative.is_absolute() and '..' not in replacement_relative.parts
+replacement_root=STATE/replacement_relative if replacement_relative is not None else None
 replacement_keys={(j['task'],j['arm']) for j in replacement_plan['replacements']} if replacement_plan else set()
 sources=[{'job':job,'base':STATE,'excluded':(job['task'],job['arm']) in replacement_keys,'execution':'original'} for job in manifest['jobs']]
 if replacement_plan:
-    sources += [{'job':{'task':j['task'],'arm':j['arm']},'base':STATE/'replacements/receipt-permissions-r1',
+    sources += [{'job':{'task':j['task'],'arm':j['arm']},'base':replacement_root,
                  'excluded':False,'execution':'replacement-r1'} for j in replacement_plan['replacements']]
 rows=[];excluded=[]
 for source in sources:
@@ -94,12 +98,13 @@ for source in sources:
       'workerSha256':hashlib.sha256(worker_path.read_bytes()).hexdigest() if worker_path.exists() else None}
     row['usageSource']='worker aggregate' if worker else 'partial response receipts; whole-attempt cost unknown'
     row['execution']=source['execution']
+    if source['base']!=STATE:row['receiptStateRelative']=source['base'].relative_to(STATE).as_posix()
     row['delegations']=worker.get('delegations',0)
     row['coordinatorCostUsd']=worker.get('coordinatorCostUsd')
     row['workerCostUsd']=worker.get('workerCostUsd')
     row['stages']=[{k:s.get(k) for k in ['label','model','effort','usage','latencyMs','error','includesNestedLatency']} for s in worker.get('stages',[])]
     if source['excluded']:
-        row['excludedReason']='User-authorized replacement for receipt permissions failure before grading'
+        row['excludedReason']=replacement_plan.get('reason','User-authorized replacement for receipt permissions failure before grading')
         excluded.append(row)
     else:rows.append(row)
 summary=[]
@@ -137,8 +142,8 @@ if ungraded:
     lines+=['',f'{len(ungraded)} completed attempts lack official grades. These remain in the campaign denominator but must not be presented as graded patch rejections.']
     lines += [f"- {r['task']} / {r['arm']}: {r['exceptionType'] or 'official reward missing'}" for r in ungraded]
 if replacement_plan:
-    pending=sum(not (STATE/'replacements/receipt-permissions-r1/results'/(j['task']+'-'+j['arm']+'.json')).exists() for j in replacement_plan['replacements'])
-    lines+=['',f'Six infrastructure replacements were authorized before their outcomes. Pending replacements: {pending}.',
+    pending=sum(not (replacement_root/'results'/(j['task']+'-'+j['arm']+'.json')).exists() for j in replacement_plan['replacements'])
+    lines+=['',f"{len(replacement_plan['replacements'])} infrastructure replacements were authorized before their outcomes. Pending replacements: {pending}.",
         f"Excluded originals: {len(excluded)}; completed executions including excluded: {len(rows)+len(excluded)}.",
         f"Selected comparison known cost: ${data['selectedKnownCostUsd']:.6f}; excluded infrastructure known cost: ${data['excludedKnownCostUsd']:.6f}; total known campaign spend including excluded: ${data['totalKnownSpendIncludingExcludedUsd']:.6f}.",
         'Excluded originals do not count toward comparison accuracy, cost per task, or latency. Their receipts and costs remain in the audit trail and total spend. Replacement failures count; no outcome-based fallback to originals.']
@@ -181,8 +186,11 @@ if manifest.get('version')=='calibration-v1':
         'Unavailable checker prerequisites remain unverified and do not trigger paid repairs. No independent grader feedback reaches actors.',
         'Up to four containers share the host, with observed-memory admission. Latency includes the full agent phase and can be affected by contention.',
         'Prepared context/output/notices stay fixed within V2 policy comparisons. Concise changes communication instructions only; model, effort, tools and checks stay fixed.',
-        'All failures, timeouts and ungraded attempts remain reported. No replacements or outcome-selected reruns. Original reports and production defaults remain unchanged.',
+        ('Two specific provider interruptions are excluded from comparison accuracy, latency and cost at the user\'s request. Each has exactly one predeclared replacement, selected regardless of its outcome. Other failures and ungraded results remain in the comparison.' if replacement_plan else 'All failures, timeouts and ungraded attempts remain reported. No replacements or outcome-selected reruns. Original reports and production defaults remain unchanged.'),
         '',f"Sol advice calls: {sum(r['adviceCalls'] for r in rows)}; repairs: {sum(r['repairs'] for r in rows)}; takeovers: {sum(r['takeovers'] for r in rows)}."]
     lines += [f"Ungraded: {r['task']} / {r['arm']}: {r['exceptionType']}" for r in rows if not r['graded']]
+    if replacement_plan:
+        lines+=['',f"Selected comparison cost: ${data['selectedKnownCostUsd']:.6f}; excluded original cost floor: ${data['excludedKnownCostUsd']:.6f}; total campaign spend floor: ${data['totalKnownSpendIncludingExcludedUsd']:.6f}.",
+            f'Pending replacements: {pending}. Original receipts are retained separately; incomplete provider costs remain unknown. Exclusion does not erase incurred usage.']
 (OUT/'RESULTS.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps({'completed':len(rows),'summary':summary}))

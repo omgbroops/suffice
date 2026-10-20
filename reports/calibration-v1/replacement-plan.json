@@ -1,0 +1,34 @@
+{
+  "at": 1792536079.0041583,
+  "directory": "replacements/provider-interruptions-r1",
+  "manifestSha256": "1a5b39e634b455406b4b80e8f1102a7fe1dc985a85327c6bcba404ffb9cb9aeb",
+  "runnerSha256": "d24c529512814240c13c880f66f541b062615adc423e42b518718e49bdc08e50",
+  "attemptsPerReplacement": 1,
+  "reason": "User explicitly requested fresh replacements for the two provider interruptions and exclusion of original interrupted outcomes/costs from the main benchmark comparison. Preserve their receipts and known spend separately.",
+  "authorization": "Can u redo the 2 provider interruptions and don\u2019t count their failed costs",
+  "replacements": [
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-refined",
+      "originalWorkerSha256": "77efd4dd7ac65ee7c954d5a435e4828407f6bdd00273b770151b2ace5a648388",
+      "originalTrialSha256": "55bfd8c2533ee4ed1dbc3a3257fdaa882b04745c2850f6091863bdde10d0eff1",
+      "originalKnownCostFloorUsd": 0.01517
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v1-refined",
+      "originalWorkerSha256": "cedc18c7324b6dd07b5b7c4f6c76b4ed2f4236a0e5d8af15908a09def5e369e3",
+      "originalTrialSha256": "ed6f202d337759e34c6c88c27eca1b7815872587f4a7aac2a9f0dc0df049c2ee",
+      "originalKnownCostFloorUsd": 0.0097876
+    }
+  ],
+  "selection": "Use each replacement regardless of success, rejection, timeout or provider failure. Never fall back to originals or retry until passing.",
+  "actorPolicy": "Same frozen source, models, effort, checks, prompts, limits and fresh task environments. No private grader feedback.",
+  "scheduling": "After original controller completion, sequential replacements; no overlap or increase above two-way global concurrency. Preserve quota floor and spending/memory guards.",
+  "snapshotHashes": {
+    "ANALYSIS.md": "6de6af84da3afb946b32324a68b0c2888705bbc4b7711a09a7edf0961a867cdf",
+    "communication-metrics.json": "21895f15a867459ac77ed854e06cb3df3123097294b72dc40b2252f5f54f8119",
+    "results.json": "2d0d83bf9916fdf9a1a32c55287d020826987107b60b976e5e5785204f56c444",
+    "RESULTS.md": "73fa37e0ec925def6def2ad91e64b0969611493430dc5184064a5849fd1c7306"
+  }
+}

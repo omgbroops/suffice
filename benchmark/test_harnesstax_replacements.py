@@ -9,12 +9,14 @@ import unittest
 
 
 class ReplacementReportTests(unittest.TestCase):
-    def report(self,replacement_reward):
+    def report(self,replacement_reward,directory='replacements/receipt-permissions-r1'):
         with tempfile.TemporaryDirectory() as folder:
             state=Path(folder);out=state/'out'
             jobs=[{'task':'a','arm':'v1'},{'task':'b','arm':'pi'}]
             (state/'manifest.json').write_text(json.dumps({'jobs':jobs}))
-            (state/'replacement-plan.json').write_text(json.dumps({'replacements':[jobs[0]]}))
+            plan={'replacements':[jobs[0]]}
+            if directory!='replacements/receipt-permissions-r1':plan['directory']=directory
+            (state/'replacement-plan.json').write_text(json.dumps(plan))
             def receipt(base,job,reward,cost):
                 name=job['task']+'-'+job['arm'];p=base/'results';p.mkdir(parents=True,exist_ok=True)
                 (p/(name+'.json')).write_text(json.dumps({'verifier_result':None if reward is None else {'rewards':{'reward':reward}},
@@ -23,7 +25,7 @@ class ReplacementReportTests(unittest.TestCase):
                 (r/'worker.json').write_text(json.dumps({'status':'completed','identity':True,'usage':{'estimatedApiUsd':cost}}))
             receipt(state,jobs[0],None,3);receipt(state,jobs[1],1,1)
             if replacement_reward is not None:
-                receipt(state/'replacements/receipt-permissions-r1',jobs[0],replacement_reward,5)
+                receipt(state/directory,jobs[0],replacement_reward,5)
             result=subprocess.run([sys.executable,str(Path(__file__).with_name('harnesstax-report.py'))],
                 env={**os.environ,'HARNESS_TAX_REPORT_STATE':str(state),'HARNESS_TAX_REPORT_OUT':str(out)},
                 stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
@@ -44,6 +46,16 @@ class ReplacementReportTests(unittest.TestCase):
         self.assertEqual([r['task'] for r in data['attempts']],['b'])
         self.assertEqual(len(data['excludedInfrastructureAttempts']),1)
         self.assertEqual(data['totalKnownSpendIncludingExcludedUsd'],4)
+
+    def test_provider_replacement_directory_and_selected_receipt_provenance(self):
+        directory='replacements/provider-interruptions-r1'
+        data=self.report(1,directory)
+        selected=next(r for r in data['attempts'] if r['task']=='a')
+        self.assertTrue(selected['accepted'])
+        self.assertEqual(selected['receiptStateRelative'],directory)
+        self.assertEqual(data['selectedKnownCostUsd'],6)
+        self.assertEqual(data['excludedKnownCostUsd'],3)
+        self.assertEqual(data['totalKnownSpendIncludingExcludedUsd'],9)
 
 
 if __name__=='__main__':unittest.main()
