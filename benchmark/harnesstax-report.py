@@ -45,13 +45,14 @@ for source in sources:
             if event.get('type')=='provider_request': requests.append({**event,'stage':p.relative_to(root).parts[0]})
             if event.get('type')=='assistant': assistants.append(event)
             if event.get('type')=='provider_usage' and event.get('responseId'): raw_usage[event['responseId']]=event
-    if job['arm'] in ['v1','v2','v3']:
+    canonical_arm=manifest.get('armAliases',{}).get(job['arm'],job['arm'])
+    if canonical_arm in ['v1','v2','v3']:
         identity=bool(requests)
         for e in requests:
             advisor=e['stage'].startswith('advice-');sol_stage=advisor or e['stage']=='sol-takeover'
-            model='gpt-6.1-sol' if job['arm']=='v1' or sol_stage else 'gpt-6-luna'
-            effort='low' if job['arm']=='v2' and sol_stage else 'high'
-            if job['arm']=='v3':
+            model='gpt-6.1-sol' if canonical_arm=='v1' or sol_stage else 'gpt-6-luna'
+            effort='low' if canonical_arm=='v2' and sol_stage else 'high'
+            if canonical_arm=='v3':
                 model='gpt-6.1-sol' if e['stage']=='coordinate' else 'gpt-6-luna'
                 identity=identity and (e['stage']=='coordinate' or e['stage'].startswith('delegate-'))
             identity=identity and e.get('model')==model and (e.get('reasoning') or {}).get('effort')==effort
@@ -169,6 +170,19 @@ if manifest.get('version')=='refinement-pilot-v1':
         'At most two 2 GiB containers run concurrently. Shared host load may affect latency. Mean seconds covers full Harbor agent execution, not setup or official grading.',
         'This small purposive system comparison does not isolate individual features or establish population accuracy. Original campaign results and production defaults remain unchanged.',
         '',f"Upfront/advisory calls: {sum(r['adviceCalls'] for r in rows)}; repair counter: {sum(r['repairs'] for r in rows)}; takeovers: {sum(r['takeovers'] for r in rows)}; V3 delegations: {sum(r['delegations'] for r in rows)}."]
+    lines += [f"Ungraded: {r['task']} / {r['arm']}: {r['exceptionType']}" for r in rows if not r['graded']]
+if manifest.get('version')=='calibration-v1':
+    lines=lines[:6+len(summary)]+['',
+        f"Known campaign spend: ${data['totalKnownSpendIncludingExcludedUsd']:.6f}; incomplete cost records: {data['totalUnknownCostsIncludingExcluded']}.",
+        'API-equivalent estimates, not subscription charges. All planning, repairs and takeovers are included.',
+        'Four fresh tasks, one attempt per arm. Same-model/effort paired controls; exact treatments are frozen in manifest.json and benchmark/calibration-plan.md.',
+        'V1-original source is pinned at 526eee4. Pi uses Sol High; V1 variants use Sol High; V2 workers use Luna High and any Sol assistance uses Low.',
+        'Public checks are partial, visible to every actor, and run with the task system Python. Required product installations remain candidate assertions.',
+        'Unavailable checker prerequisites remain unverified and do not trigger paid repairs. No independent grader feedback reaches actors.',
+        'Up to four containers share the host, with observed-memory admission. Latency includes the full agent phase and can be affected by contention.',
+        'Prepared context/output/notices stay fixed within V2 policy comparisons. Concise changes communication instructions only; model, effort, tools and checks stay fixed.',
+        'All failures, timeouts and ungraded attempts remain reported. No replacements or outcome-selected reruns. Original reports and production defaults remain unchanged.',
+        '',f"Sol advice calls: {sum(r['adviceCalls'] for r in rows)}; repairs: {sum(r['repairs'] for r in rows)}; takeovers: {sum(r['takeovers'] for r in rows)}."]
     lines += [f"Ungraded: {r['task']} / {r['arm']}: {r['exceptionType']}" for r in rows if not r['graded']]
 (OUT/'RESULTS.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps({'completed':len(rows),'summary':summary}))
