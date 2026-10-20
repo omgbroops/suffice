@@ -1,5 +1,6 @@
 """Visible partial checks derived only from public task text and initial data."""
 import csv
+from contextlib import closing
 import hashlib
 import importlib
 import importlib.metadata
@@ -79,7 +80,7 @@ def wal():
     with tempfile.TemporaryDirectory(prefix='public-wal-') as folder:
         db=Path(folder)/'main.db';shutil.copyfile(APP/'main.db',db)
         if (APP/'main.db-wal').exists():shutil.copyfile(APP/'main.db-wal',Path(str(db)+'-wal'))
-        with sqlite3.connect(db) as connection:
+        with closing(sqlite3.connect(db)) as connection:
             connection.row_factory=sqlite3.Row
             tables=[r[0] for r in connection.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")]
             candidates=[]

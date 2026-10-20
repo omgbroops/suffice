@@ -1,0 +1,68 @@
+"""Offline paired calibration analysis. Never modifies actors or reads private tests."""
+import json
+import os
+from pathlib import Path
+import statistics
+import subprocess
+import sys
+
+ROOT=Path(__file__).resolve().parents[1]
+STATE=Path(os.environ.get('HARNESS_TAX_REPORT_STATE',r'\\wsl.localhost\Ubuntu\home\eric_qin\suffice-calibration-v1' if os.name=='nt' else '/home/eric_qin/suffice-calibration-v1'))
+OUT=Path(os.environ.get('HARNESS_TAX_REPORT_OUT',str(ROOT/'reports/calibration-v1')))
+
+def main():
+    env={**os.environ,'HARNESS_TAX_REPORT_STATE':str(STATE),'HARNESS_TAX_REPORT_OUT':str(OUT)}
+    subprocess.run([sys.executable,'-X','utf8',str(ROOT/'benchmark/harnesstax-report.py')],env=env,check=True,stdout=subprocess.DEVNULL)
+    data=json.loads((OUT/'results.json').read_text());rows=data['attempts'];manifest=json.loads((STATE/'manifest.json').read_text())
+    metrics=[]
+    for row in rows:
+        root=STATE/'trials'/(row['task']+'-'+row['arm'])/'agent/receipts';events=[]
+        for path in root.rglob('*.jsonl'):
+            if 'events' not in path.parts and path.name!='events.live.jsonl':continue
+            for line in path.read_text(encoding='utf-8').split('\n'):
+                if not line.strip():continue
+                try:events.append(json.loads(line))
+                except json.JSONDecodeError:pass # Aggregate report already marks malformed/incomplete receipts unknown.
+        assistants=[e for e in events if e.get('type')=='assistant']
+        raw={e['responseId']:e['usage'] for e in events if e.get('type')=='provider_usage' and e.get('responseId')}
+        worker=json.loads((root/'worker.json').read_text()) if (root/'worker.json').exists() else {}
+        # Pi observer omits assistant content; its stock JSON stream retains it.
+        if row['arm']=='pi' and (root/'pi-events.jsonl').exists():
+            assistants=[]
+            for line in (root/'pi-events.jsonl').read_text(encoding='utf-8').split('\n'):
+                if not line.strip():continue
+                try:e=json.loads(line)
+                except json.JSONDecodeError:continue
+                if e.get('type')=='message_end' and e.get('message',{}).get('role')=='assistant':assistants.append(e['message'])
+        blocks=[b for e in assistants for b in e.get('content',[]) if isinstance(b,dict)]
+        metrics.append({'task':row['task'],'arm':row['arm'],'visibleTextChars':sum(len(b.get('text','')) for b in blocks if b.get('type')=='text'),
+            'thinkingChars':sum(len(b.get('thinking','')) for b in blocks if b.get('type')=='thinking'),
+            'reasoningTokens':sum(u['output_tokens_details']['reasoning_tokens'] for u in raw.values()) if raw and all('reasoning_tokens' in u.get('output_tokens_details',{}) for u in raw.values()) else None,
+            'rawUsageResponses':len(raw),'communication':(manifest['policies'][row['arm']].get('execution') or {}).get('communication','default'),
+            'stageCostMatch':abs(sum((s.get('usage') or {}).get('estimatedApiUsd',0) for s in worker.get('stages',[]))-row['knownCostUsd'])<1e-9 if row['arm']!='pi' else None})
+    (OUT/'communication-metrics.json').write_text(json.dumps({'attempts':metrics},indent=2)+'\n',encoding='utf-8')
+    lines=['# Calibration analysis','',f"Completed: {len(rows)}/32. "+('Final.' if data['complete'] else 'Interim; compare only matched completed pairs.'),'',
+        '| Arm | Accepted / completed | Known USD | USD / accepted | Mean seconds | Output tokens | Visible text chars | Sol calls | Repairs | Takeovers |',
+        '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
+    for arm in manifest['arms']:
+        group=[r for r in rows if r['arm']==arm];accepted=sum(r['accepted'] for r in group);cost=sum(r['knownCostUsd'] for r in group)
+        times=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None];unknown=any(r['costUnknown'] for r in group)
+        per=f'{cost/accepted:.6f}' if accepted else 'undefined'
+        lines.append(f"| {arm} | {accepted}/{len(group)} | {'≥' if unknown else ''}{cost:.6f} | {'≥' if unknown and accepted else ''}{per} | {statistics.mean(times):.1f} | {sum(r['usage'].get('output',0) for r in group)} | {sum(m['visibleTextChars'] for m in metrics if m['arm']==arm)} | {sum(r['adviceCalls'] for r in group)} | {sum(r['repairs'] for r in group)} | {sum(r['takeovers'] for r in group)} |" if times else f'| {arm} | 0/0 | 0 | undefined | unavailable | 0 | 0 | 0 | 0 | 0 |')
+    lines+=['','## Matched comparisons','', 'Task order and arm policies were frozen before inference. Every failed attempt remains in cost denominators. Partial or unknown costs are floors.']
+    for control,treatment in [('pi','v1-original'),('v1-original','v1-refined'),('v1-refined','v1-concise'),('v2-alone','v2-upfront'),('v2-alone','v2-selective'),('v2-upfront','v2-selective'),('v2-selective','v2-concise')]:
+        a={r['task']:r for r in rows if r['arm']==control};b={r['task']:r for r in rows if r['arm']==treatment};keys=sorted(a.keys()&b.keys())
+        if not keys:continue
+        wins=[k for k in keys if b[k]['accepted'] and not a[k]['accepted']];losses=[k for k in keys if a[k]['accepted'] and not b[k]['accepted']]
+        cost_a=sum(a[k]['knownCostUsd'] for k in keys);cost_b=sum(b[k]['knownCostUsd'] for k in keys)
+        lines+=['',f'{treatment} versus {control}: {len(keys)} matched tasks, known cost ${cost_b:.6f} versus ${cost_a:.6f}; wins: {", ".join(wins) or "none"}; regressions: {", ".join(losses) or "none"}.']
+    lines+=['','## Every outcome','', '| Task | Arm | Independent grade | Public verification | Status | Known USD |', '| --- | --- | --- | --- | --- | ---: |']
+    for r in rows:lines.append(f"| {r['task']} | {r['arm']} | {'ungraded' if not r['graded'] else 'pass' if r['accepted'] else 'fail'} | {r['publicVerification']} | {r['status']} | {'≥' if r['costUnknown'] else ''}{r['knownCostUsd']:.6f} |")
+    lines+=['','API-equivalent estimates, not subscription charges. Full stage costs, cache tokens, calls, identity and receipt reconciliation are in results.json. Visible text is measured in characters, not billed tokens; reasoning and tool arguments can dominate output cost.',
+        'Four purposively chosen tasks and one attempt per configuration cannot establish population accuracy or robust causal gains. V1 scope and repair are a bundle; V2 assistance arms compare routing policies with the rest of the core held fixed. Concise changes instructions only.',
+        'At most four containers share the host; observed-memory admission may reduce overlap. Shared CPU, network, caching and grading contention limit latency comparisons. No JS/TS source task measures the AST-navigation advantage.',
+        'Required product state is not classified as an optional prerequisite. Missing checker infrastructure remains unverified, never accepted by the controller. Independent grading remains separate and cannot trigger assistance.',
+        'No global skills, arbitrary compaction, default changes or outcome-selected replacements. Original campaign reports and runtime receipts remain preserved.']
+    (OUT/'ANALYSIS.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    print(json.dumps({'completed':len(rows),'summary':data['summary']}))
+if __name__=='__main__':main()
