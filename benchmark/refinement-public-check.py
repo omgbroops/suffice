@@ -121,6 +121,11 @@ CHECKS={'cancel-async-tasks':cancellation,'cobol-modernization':cobol,
         'custom-memory-heap-crash':heap,'modernize-scientific-stack':climate,'polyglot-c-py':polyglot}
 if __name__=='__main__':
     try:
+        if sys.argv[1]=='cancel-async-tasks' and '--system-python' not in sys.argv:
+            # The task explicitly asks for system Python. The independent check
+            # launcher must not change the interpreter used for this candidate.
+            print(run(['python3',__file__,'cancel-async-tasks','--system-python']),end='')
+            sys.exit(0)
         CHECKS[sys.argv[1]]()
         print(json.dumps({'status':'passed','coverage':'public smoke contracts only'}))
     except Exception as error:

@@ -57,12 +57,13 @@ def setup():
         (STATE/'public-fixtures'/name/'Dockerfile').unlink(missing_ok=True)
         tasks.append({'id':name,'instructionSha256':sha(task/'instruction.md'),'taskSha256':sha(task/'task.toml'),
             'timeoutSec':cfg['agent']['timeout_sec'],'environment':cfg['environment'],
-            'checks':[{'command':['python3','/public-checks/refinement-public-check.py',name],'timeoutMs':60000}]})
+            'checks':[{'command':['/public-python/bin/python3','/public-checks/refinement-public-check.py',name],'timeoutMs':60000}]})
     inputs={str(p.relative_to(RUNTIME)):sha(p) for folder in ['src','packages/cli/src','benchmark']
             for p in (RUNTIME/folder).rglob('*') if p.is_file()}
     manifest={'version':'refinement-pilot-v1','created':time.time(),'arms':ARMS,'tasks':tasks,
         'jobs':[{'task':t['id'],'arm':ARMS[(i+j)%4]} for i,t in enumerate(tasks) for j in range(4)],
         'sourceHead':subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip(),
+        'publicPython':{'root':str(Path(sys.executable).resolve().parent.parent),'executableSha256':sha(Path(sys.executable).resolve())},
         'taskCommit':old['taskCommit'],'runtimeInputs':inputs,'dependencies':tree_hash(RUNTIME/'node_modules'),
         'publicInputs':{str(p.relative_to(STATE)):sha(p) for folder in ['public-checks','public-fixtures'] for p in (STATE/folder).rglob('*') if p.is_file()},
         'maxResponses':100,'maxCostUsd':5,'maxCalls':240,'concurrency':2,
@@ -86,7 +87,8 @@ def base():
     original=b.mounts
     b.mounts=lambda receipts=None:original(receipts)+[
         {'type':'bind','source':str(STATE/'public-checks'),'target':'/public-checks','read_only':True},
-        {'type':'bind','source':str(STATE/'public-fixtures'),'target':'/public-fixtures','read_only':True}]
+        {'type':'bind','source':str(STATE/'public-fixtures'),'target':'/public-fixtures','read_only':True},
+        {'type':'bind','source':str(Path(sys.executable).resolve().parent.parent),'target':'/public-python','read_only':True}]
     return b
 
 def preflight():
@@ -96,12 +98,13 @@ def preflight():
         subprocess.run(['docker','pull',image],check=True,stdout=subprocess.DEVNULL)
         tools={'cancel-async-tasks':['python3'],'cobol-modernization':['python3','cobc'],
             'custom-memory-heap-crash':['python3','g++','valgrind'],
-            'modernize-scientific-stack':['python3'],'polyglot-c-py':['python3','gcc']}[name]
-        mounts=['-v',str(STATE/'public-checks')+':/public-checks:ro','-v',str(STATE/'public-fixtures')+':/public-fixtures:ro']
+            'modernize-scientific-stack':['python3'],'polyglot-c-py':['gcc']}[name]
+        mounts=['-v',str(STATE/'public-checks')+':/public-checks:ro','-v',str(STATE/'public-fixtures')+':/public-fixtures:ro',
+                '-v',str(Path(sys.executable).resolve().parent.parent)+':/public-python:ro']
         probe=subprocess.run(['docker','run','--rm','--memory','2g','--cpus','1',*mounts,'--entrypoint','sh',image,
             '-c',' && '.join('command -v '+tool for tool in tools)],capture_output=True,text=True,timeout=60)
         assert probe.returncode==0,(name,probe.stderr)
-        negative=subprocess.run(['docker','run','--rm','--memory','2g','--cpus','1',*mounts,'--entrypoint','python3',image,
+        negative=subprocess.run(['docker','run','--rm','--memory','2g','--cpus','1',*mounts,'--entrypoint','/public-python/bin/python3',image,
             '/public-checks/refinement-public-check.py',name],capture_output=True,text=True,timeout=90)
         assert negative.returncode==1,(name,negative.stdout,negative.stderr)
         result=json.loads(negative.stdout.splitlines()[-1]);assert result['status']=='failed'

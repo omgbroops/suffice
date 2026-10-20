@@ -33,6 +33,8 @@ Exact check status and retained worker outputs remain available for review.
 All coordinator and worker responses share the same whole-task allowances.
 This is not an automatic every-tool-call interception policy. Stage usage is
 non-overlapping; parent elapsed time includes nested worker time.
+Sol can retrieve bounded byte ranges of original worker output directly, including
+base64 for binary bytes. The retrieval tool cannot read arbitrary receipt paths.
 
 All arms receive the identical original task plus the same public self-check
 command and coverage warning. Read-only public check scripts and initial source/
@@ -50,6 +52,13 @@ Coverage is partial. A pass does not certify correctness. Before inference,
 exercise negative controls in fresh containers and validate check infrastructure.
 Preserve initial failures and check receipts. No hidden tests or solutions are
 read during check preparation. Do not replace tasks based on actor outcomes.
+
+Pre-inference amendment: the polyglot image has GCC but lacks Python. All arms
+receive a separate read-only portable Python mount for the public check launcher.
+Candidate execution still uses the task's system Python, and cancellation checks
+re-execute on system Python as explicitly required. The checker runtime is not
+silently installed as the task interpreter. Preserve the initial preflight failure
+and initial manifest; re-freeze all source/check/task hashes before paid attempts.
 
 Reuse pinned TB2 revision 69671fbaac6d67a7ef0dfec016cc38a64ef7a77c,
 Harbor 0.24.0 and existing model catalog/authentication. Freeze source, dependency,
