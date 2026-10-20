@@ -35,10 +35,10 @@ if(r.arm==='codex') {
 export default function(pi) {
  let turns=0,spent=0,calls=0,stopped=null;
  const log=e=>appendFileSync('/receipts/events.live.jsonl',JSON.stringify(e)+'\\n');
- pi.on('before_provider_request',e=>{if(turns>=60||spent>=5)throw Error('Task allowance exhausted');log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,toolNames:(e.payload.tools??[]).map(t=>t.name)});});
+ pi.on('before_provider_request',e=>{if(turns>=100||spent>=5)throw Error('Task allowance exhausted');log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,toolNames:(e.payload.tools??[]).map(t=>t.name)});});
  pi.on('provider_stream_event',e=>{if(e.data?.response?.usage)log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
  pi.on('tool_call',(e,ctx)=>{calls++;log({type:'tool_call',name:e.toolName,input:e.input});if(calls>240){stopped='tool_limit';ctx.abort();return {block:true,reason:'Task allowance exhausted'};}});
- pi.on('turn_end',(e,ctx)=>{turns++;spent+=e.message.usage?.cost?.total??0;log({type:'assistant',model:e.message.model,usage:e.message.usage,stopReason:e.message.stopReason});if(e.message.content.some(c=>c.type==='toolCall')&&(turns>=60||spent>=5)){stopped=turns>=60?'turn_limit':'cost_limit';ctx.abort();}writeFileSync('/receipts/pi-counter.json',JSON.stringify({turns,spent,calls,stopped}));});
+ pi.on('turn_end',(e,ctx)=>{turns++;spent+=e.message.usage?.cost?.total??0;log({type:'assistant',model:e.message.model,usage:e.message.usage,stopReason:e.message.stopReason});if(e.message.content.some(c=>c.type==='toolCall')&&(turns>=100||spent>=5)){stopped=turns>=100?'turn_limit':'cost_limit';ctx.abort();}writeFileSync('/receipts/pi-counter.json',JSON.stringify({turns,spent,calls,stopped}));});
 }`;
   await writeFile('/agent-home/pi-observer.ts',extension);
   const args=['/runtime/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js',

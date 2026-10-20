@@ -8,6 +8,33 @@ import {createPipelineSession} from '../src/pipeline/session.mjs';
 import {createObservedRepositoryTools} from '../src/pipeline/tools.mjs';
 import {ADVICE_PROMPT,THIN_PROMPT} from '../src/pipeline/policy.mjs';
 import {createSufficeSession} from '../packages/cli/src/session.mjs';
+import {createAssistantMessageEventStream} from '@earendil-works/pi-ai';
+
+test('explicit V1 response allowance is enforced while the default permits a longer conversation',async t=>{
+  const dir=await mkdtemp(resolve(tmpdir(),'suffice-turn-allowance-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+  const repo=resolve(dir,'repo');await mkdir(repo);
+  const runtime=await ModelRuntime.create({authPath:resolve(dir,'auth.json'),refreshOnCreate:false,allowModelNetwork:false});
+  await runtime.setRuntimeApiKey('openai','offline-fixture-not-sent');
+  for(const maxTurns of [2,undefined]) {
+    const control=await createSufficeSession({cwd:repo,home:resolve(dir,String(maxTurns)),model:'gpt-6.1-sol',effort:'high',timeout:30,maxCost:1,...(maxTurns?{maxTurns}:{})},runtime);
+    let responses=0;
+    control.session.agent.streamFunction=()=>{
+      const stream=createAssistantMessageEventStream(),n=++responses;
+      const message={role:'assistant',api:'openai-responses',provider:'openai',model:'gpt-6.1-sol',timestamp:Date.now(),
+        content:n<=3?[{type:'toolCall',id:'fixture-'+n,name:'codemode',arguments:{code:'text(1)'}}]:[{type:'text',text:'Complete'}],
+        stopReason:n<=3?'toolUse':'stop',usage:{input:1,output:1,cacheRead:0,cacheWrite:0,totalTokens:2,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}}};
+      queueMicrotask(()=>{stream.push({type:'done',reason:message.stopReason,message});stream.end(message);});
+      return stream;
+    };
+    try {
+      // The synthetic stream deliberately bypasses provider hooks and ignores
+      // cancellation. The session must still reject the run as over allowance;
+      // the default branch must accept the identical conversation.
+      if(maxTurns) {await assert.rejects(control.run('Exercise the allowance'),/turn_limit/);}
+      else {await control.run('Exercise the allowance');assert.equal(responses,4);}
+    }finally{await control.dispose();}
+  }
+});
 
 test('advisor native session has no active tools or repository instructions, worker keeps codemode and AST',async t=>{
   const dir=await mkdtemp(resolve(tmpdir(),'suffice-pipeline-session-'));t.after(()=>rm(dir,{recursive:true,force:true}));

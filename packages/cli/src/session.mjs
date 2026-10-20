@@ -34,7 +34,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     pi.on('tool_result',e=>log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:e.content,details:e.details}));
     pi.on('before_provider_request',e=>{
       if(logError) throw logError;
-      if(allowance && (allowance.reason || allowance.spent>=options.maxCost || allowance.turns>=60)) throw new Error('Task allowance exhausted');
+      if(allowance && (allowance.reason || allowance.spent>=options.maxCost || allowance.turns>=(options.maxTurns??60))) throw new Error('Task allowance exhausted');
       log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,bytes:JSON.stringify(e.payload).length,toolNames:(e.payload.tools??[]).map(t=>t.name),prefixHash:hash(JSON.stringify((e.payload.input??[]).filter(m=>['system','developer'].includes(m.role))))});
     });
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
@@ -76,7 +76,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
       allowance.turns++; allowance.spent+=known?u.cost.total:0;
       if(m.content.some(c=>c.type==='toolCall')) {
         if(allowance.spent>=options.maxCost) stop('cost_limit');
-        else if(allowance.turns>=60) stop('turn_limit');
+        else if(allowance.turns>=(options.maxTurns??60)) stop('turn_limit');
       }
     }
     onAssistant(m);

@@ -53,3 +53,20 @@ Primary references:
 
 Historical Pi mean: $0.420517 per attempt on GPT-5.6-Sol High, including failures.
 Do not treat that historical price or score as a contemporaneous control.
+
+## User amendment, before the second scheduled attempt
+
+The user explicitly authorized a 100-response limit. V1 now accepts an explicit
+`maxTurns` option; its production default stays 60. All remaining attempts use 100.
+The first scheduled Codex attempt made zero model responses, failed on provider
+connection, and is preserved. Its 60-response cap never bound. No replacement run.
+
+Read current weekly subscription usage before admitting each new attempt. At
+40% remaining or less, pause if fewer than 100 attempts are complete. At 100/120
+or later, the user authorized finishing the round. Missing quota information stops
+admission. Do not redeem resets. An active attempt can finish before the pause.
+
+The first task image lacked system CA certificates, causing the native Codex
+HTTP client to fail before inference. Agent installation now supplies the host's
+standard CA bundle via `SSL_CERT_FILE`, hashed in the amended runtime manifest;
+TLS verification is not disabled. Node already carries its own CA bundle.

@@ -971,18 +971,20 @@
     "src/execution/entry.mjs": "b639ca9376ed9e051d2bbbd2fcff0a33154ce34c29eb12c28d82ce1fe6d1bbe9",
     "packages/cli/src/projects.mjs": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
     "packages/cli/src/options.mjs": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
-    "packages/cli/src/session.mjs": "f830b14bacdf002a566b6e54c4f4808f038275573f1399128aadaf50d2490fb7",
+    "packages/cli/src/session.mjs": "5ca14bd23aa9842ae10c151eb220d61bb96591191638da43cd63588e96e5a084",
     "packages/cli/src/workspace.mjs": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
     "packages/cli/src/tools.mjs": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
     "packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
     "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
     "packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
-    "benchmark/harnesstax-agent.py": "849f74ed4db5c955940832ed127768543a1c5722fdb3c39ece4bdd7be041597b",
-    "benchmark/harnesstax-campaign.py": "bfdbd2f3d4284d6b7a8ac8729b3f47ea469bd5d1747fd75e87a2253c8475dadd",
-    "benchmark/harnesstax-worker.mjs": "630cb22a1969858edef267ce77d569e09515e6998a06c3e86181804796cefb67",
-    "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79"
+    "benchmark/harnesstax-agent.py": "0935f1399af06b1b5d00710089dbc71f1799fb7389f7acf3d5b6862ed7ae4010",
+    "benchmark/harnesstax-campaign.py": "2ec4220f5524fe581e0092554f9fe82672f480ee36741cdf8ff584b42a145ab4",
+    "benchmark/harnesstax-worker.mjs": "a550388d6f0a94ec3f040557e729fb865a320e5fc1812ef630db14f1c8a66302",
+    "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79",
+    "ca-certificates.crt": "7975117e54f05f0ed1e1e767efd1f6827d662d720282ad4a360eecc636958de8",
+    "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e"
   },
-  "maxResponses": 60,
+  "maxResponses": 100,
   "maxCostUsd": 5,
   "maxCalls": 240,
   "concurrency": 1,
@@ -990,5 +992,17 @@
   "pi": "1.2.0",
   "codex": "0.163.0",
   "historicalCohort": "terminal-bench-v2-common-n30-turncap100-20260906",
-  "checksProvenance": "Explicit public instructions only, smoke coverage on 3/30; no hidden verifier feedback."
+  "checksProvenance": "Explicit public instructions only, smoke coverage on 3/30; no hidden verifier feedback.",
+  "amendments": [
+    {
+      "at": 1792468531.9463336,
+      "reason": "User authorized 100 turns and pause at 40% remaining unless >=100 complete; added system CA prerequisite after first connection failure.",
+      "priorManifestSha256": "2d80f50046d76dc622ef04f1fbf8364be46e13a7ea291fd2a08a5c26b526f53b",
+      "priorAttempt": "adaptive-rejection-sampler-codex",
+      "priorModelResponses": 0,
+      "pauseRemainingPercent": 40,
+      "nearCompletionMinimum": 100,
+      "productionDefaultResponses": 60
+    }
+  ]
 }

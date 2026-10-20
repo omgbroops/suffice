@@ -63,8 +63,9 @@ def setup():
         shutil.copytree(ROOT/name,RUNTIME/name,dirs_exist_ok=True)
     for name in ['package.json','package-lock.json']:
         shutil.copy2(ROOT/name,RUNTIME/name)
+    shutil.copy2('/etc/ssl/certs/ca-certificates.crt',RUNTIME/'ca-certificates.crt')
     shutil.copytree('/home/eric_qin/suffice-general-runtime/app/node_modules',RUNTIME/'node_modules',symlinks=True,dirs_exist_ok=True)
-    for name in ['harnesstax-worker.mjs','harnesstax-agent.py','harnesstax-campaign.py']:
+    for name in ['harnesstax-worker.mjs','harnesstax-agent.py','harnesstax-campaign.py','harnesstax-quota.py']:
         (RUNTIME/'benchmark').mkdir(exist_ok=True)
         shutil.copy2(ROOT/'benchmark'/name,RUNTIME/'benchmark'/name)
     native=(ROOT/'benchmark/broad-native-worker.mjs').read_text()
@@ -90,7 +91,7 @@ def setup():
     jobs=[{'task':task['id'],'arm':ARMS[(i+j)%4]} for i,task in enumerate(tasks) for j in range(4)]
     manifest={'version':'harnesstax-sol61-v1','created':time.time(),'tasks':tasks,'jobs':jobs,
       'taskCommit':commit,'sourceHead':subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip(),
-      'runtimeInputs':inputs,'maxResponses':60,'maxCostUsd':5,'maxCalls':240,'concurrency':1,
+      'runtimeInputs':inputs,'maxResponses':100,'maxCostUsd':5,'maxCalls':240,'concurrency':1,
       'harbor':'0.24.0','pi':'1.2.0','codex':'0.163.0',
       'historicalCohort':'terminal-bench-v2-common-n30-turncap100-20260906',
       'checksProvenance':'Explicit public instructions only, smoke coverage on 3/30; no hidden verifier feedback.'}
@@ -124,7 +125,7 @@ async def attempt(task, arm, preflight=False):
     from harbor.models.trial.config import TrialConfig,TaskConfig,AgentConfig,EnvironmentConfig,VerifierConfig
     from harbor.trial.trial import Trial
     # Hyphenated source filename is loaded under a normal module identity.
-    spec=importlib.util.spec_from_file_location('suffice_harnesstax_agent',ROOT/'benchmark/harnesstax-agent.py')
+    spec=importlib.util.spec_from_file_location('suffice_harnesstax_agent',RUNTIME/'benchmark/harnesstax-agent.py')
     module=importlib.util.module_from_spec(spec);sys.modules[spec.name]=module;spec.loader.exec_module(module)
     name=('preflight-' if preflight else '')+task['id']+'-'+arm
     trials=STATE/('preflight' if preflight else 'trials')
@@ -154,6 +155,19 @@ async def campaign():
         result=STATE/'results'/(name+'.json')
         if result.exists(): continue
         if (STATE/'STOP').exists(): print('STOP requested',flush=True);return
+        quota_spec=importlib.util.spec_from_file_location('suffice_harnesstax_quota',RUNTIME/'benchmark/harnesstax-quota.py')
+        quota_module=importlib.util.module_from_spec(quota_spec);quota_spec.loader.exec_module(quota_module)
+        # Fail closed if current quota cannot be read. Never redeem a reset or
+        # silently continue into purchased credits after a usage stop.
+        quota=await asyncio.to_thread(quota_module.read_quota)
+        completed=len(list((STATE/'results').glob('*.json')))
+        save(STATE/'quota-latest.json',quota)
+        with (STATE/'quota.jsonl').open('a') as log: log.write(json.dumps(quota)+'\n')
+        if quota['remainingPercent']<=0 or (quota['remainingPercent']<=40 and completed<100):
+            save(STATE/'paused-for-quota.json',{'at':time.time(),'completed':completed,'quota':quota,
+              'reason':'User requested pause at 40% remaining unless at least 100/120 complete.'})
+            print(json.dumps({'pausedForQuota':True,'completed':completed,'remaining':quota['remainingPercent']}),flush=True)
+            return
         try:
             await attempt(tasks[job['task']],job['arm'])
         except Exception as error:
@@ -164,7 +178,7 @@ async def campaign():
         receipt=STATE/'trials'/name/'agent/receipts/worker.json'
         if receipt.exists():
             value=json.loads(receipt.read_text())
-            if value.get('status') in ['provider_error','operational_failure','cost_unknown']:
+            if value.get('status') in ['provider_error','operational_failure','cost_unknown'] or value.get('usage',{}).get('costUnknown') or value.get('usageCostUnknown'):
                 raise RuntimeError('Inspect operational failure before admitting another attempt: '+name)
         else:
             raise RuntimeError('Missing worker receipt; inspect before admitting another attempt: '+name)

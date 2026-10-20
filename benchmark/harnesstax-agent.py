@@ -37,7 +37,7 @@ class HarnessTaxAgent(BaseInstalledAgent):
         request = {
             'arm': arm, 'workspace': workspace, 'prompt': instruction,
             'checks': checks, 'timeoutMs': timeout*1000,
-            'maxCostUsd': 5, 'maxTurns': 60, 'maxCalls': 240,
+            'maxCostUsd': 5, 'maxTurns': 100, 'maxCalls': 240,
         }
         path = self.logs_dir/'actor-request.json'
         path.write_text(json.dumps(request, indent=2)+'\n')
@@ -48,7 +48,8 @@ class HarnessTaxAgent(BaseInstalledAgent):
             env={'PATH':'/runtime-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
                  'HARNESS_TAX_ARM':arm, 'CODEX_HOME':'/agent-home/codex',
                  'PI_CODING_AGENT_DIR':'/agent-home/pi',
-                 'BENCHMARK_MODEL':'gpt-6.1-sol','BENCHMARK_EFFORT':'high'})
+                 'BENCHMARK_MODEL':'gpt-6.1-sol','BENCHMARK_EFFORT':'high',
+                 'SSL_CERT_FILE':'/runtime/ca-certificates.crt'})
         # Refreshes persist only in the dedicated auth mount. These paths are not
         # part of the agent log export or public report.
         await environment.download_dir('/receipts', self.logs_dir/'receipts')
