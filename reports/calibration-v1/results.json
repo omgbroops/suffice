@@ -1,5 +1,5 @@
 {
-  "asOf": 1792536179.128479,
+  "asOf": 1792536665.0286646,
   "complete": false,
   "attempts": [
     {
@@ -1336,6 +1336,76 @@
           "includesNestedLatency": null
         }
       ]
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-concise",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00311438,
+      "costUsd": 0.00311438,
+      "latencyMs": 114303,
+      "agentPhaseMs": 115836.73400000001,
+      "usage": {
+        "input": 7836,
+        "cacheRead": 32128,
+        "cacheWrite": 0,
+        "output": 4019,
+        "estimatedApiUsd": 0.00311438,
+        "modelCalls": 8,
+        "toolCalls": 14,
+        "costUnknown": false
+      },
+      "modelCalls": 8,
+      "toolCalls": 14,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T22:36:54.268490Z",
+        "finished_at": "2026-10-20T22:38:50.105224Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T22:36:52.152019Z",
+        "finished_at": "2026-10-20T22:36:54.267886Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "cb95f143193a3ae2b3d2d61301e606a375a34fa388535dbca90bcd39a5ce6e48",
+      "workerSha256": "97936da2cd939a775cad0174d14e10c9308e355469ae19ffe11200fc4abdd6f4",
+      "usageSource": "worker aggregate",
+      "execution": "original",
+      "delegations": 0,
+      "coordinatorCostUsd": null,
+      "workerCostUsd": null,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "usage": {
+            "input": 7836,
+            "cacheRead": 32128,
+            "cacheWrite": 0,
+            "output": 4019,
+            "estimatedApiUsd": 0.00311438,
+            "modelCalls": 8,
+            "toolCalls": 14
+          },
+          "latencyMs": 114150,
+          "error": null,
+          "includesNestedLatency": null
+        }
+      ]
     }
   ],
   "summary": [
@@ -1439,14 +1509,14 @@
     },
     {
       "arm": "v2-concise",
-      "completed": 2,
+      "completed": 3,
       "accepted": 2,
-      "graded": 2,
+      "graded": 3,
       "ungraded": 0,
       "policyValidSuccesses": 2,
-      "knownCostUsd": 0.00354008,
+      "knownCostUsd": 0.00665446,
       "unknownCosts": 0,
-      "meanSeconds": 43.973567,
+      "meanSeconds": 67.92795600000001,
       "adviceCalls": 0,
       "repairs": 0,
       "takeovers": 0
@@ -1596,10 +1666,10 @@
       "excludedReason": "User explicitly requested fresh replacements for the two provider interruptions and exclusion of original interrupted outcomes/costs from the main benchmark comparison. Preserve their receipts and known spend separately."
     }
   ],
-  "completedExecutionsIncludingExcluded": 21,
-  "selectedKnownCostUsd": 0.5824786,
+  "completedExecutionsIncludingExcluded": 22,
+  "selectedKnownCostUsd": 0.5855929799999999,
   "excludedKnownCostUsd": 0.0249576,
-  "totalKnownSpendIncludingExcludedUsd": 0.6074362,
+  "totalKnownSpendIncludingExcludedUsd": 0.61055058,
   "totalUnknownCostsIncludingExcluded": 2,
   "replacementPlan": {
     "at": 1792536079.0041583,

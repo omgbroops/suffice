@@ -64,7 +64,8 @@ def main():
     with (LOCAL/'campaign.log').open('ab',buffering=0) as log:
         resume=os.environ.get('CALIBRATION_RESUME')=='1'
         replacements=os.environ.get('CALIBRATION_REPLACEMENTS')=='1'
-        script='/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-replacements.py' if replacements else '/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-resume.py' if resume else STATE+'/runtime/benchmark/calibration-campaign.py'
+        scheduler=os.environ.get('CALIBRATION_SCHEDULER')=='1'
+        script='/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-scheduler.py' if scheduler else '/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-replacements.py' if replacements else '/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/benchmark/calibration-resume.py' if resume else STATE+'/runtime/benchmark/calibration-campaign.py'
         child=subprocess.Popen(['wsl.exe','-d','Ubuntu','--exec',PYTHON,script,*([] if resume and not replacements else ['run'])],stdin=subprocess.DEVNULL,stdout=log,stderr=log)
         started=time.time()
         while True:
@@ -74,7 +75,8 @@ def main():
                 report_code=report.returncode
             except (OSError,subprocess.TimeoutExpired) as error:report_code=str(error)
             value={'pid':os.getpid(),'childPid':child.pid,'started':started,'heartbeat':time.time(),'controllerExitCode':code,'reportExitCode':report_code,'state':'running' if code is None else 'controller_exited'}
-            tmp=LOCAL/'supervisor.tmp';tmp.write_text(json.dumps(value,indent=2)+'\n');tmp.replace(LOCAL/'supervisor.json')
+            status_name='scheduler-supervisor' if scheduler else 'supervisor'
+            tmp=LOCAL/(status_name+'.tmp');tmp.write_text(json.dumps(value,indent=2)+'\n');tmp.replace(LOCAL/(status_name+'.json'))
             if code is not None:break
             time.sleep(25)
 if __name__=='__main__':main()

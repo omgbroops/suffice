@@ -1,0 +1,28 @@
+{
+  "at": 1792536558.7181933,
+  "manifestSha256": "1a5b39e634b455406b4b80e8f1102a7fe1dc985a85327c6bcba404ffb9cb9aeb",
+  "handoffToken": "scheduler-handoff-d056e01d-d2ad-431d-b94a-4679497ef9b2",
+  "adoptedTrials": [
+    "filter-js-from-html-pi",
+    "filter-js-from-html-v1-original"
+  ],
+  "maxModels": 2,
+  "maxContainers": 4,
+  "controllerInputs": {
+    "calibration-scheduler.py": "3304e0ebb86acb37f25926c5c89bbf6426b7a80db962da781bf4f53ad1513a93",
+    "calibration-slots.py": "0b5126db622ba792af3df1847be903dc755c51b1779c249301a1e537ddb07ea7"
+  },
+  "reason": "Release a model slot after a terminal worker receipt while official grading continues. Adopt existing trials without interruption. Old controller admission is stopped by the owned handoff marker. Keep frozen actors, checks, grading rules, timeouts and per-attempt resources unchanged.",
+  "gradingResourceObservation": {
+    "container": "filter-js-from-html-v2-concise__env-main-1",
+    "memoryLimitBytes": 2147483648,
+    "memoryAtLimit": true,
+    "oomKilledFlag": true,
+    "chromiumProcesses": 240,
+    "chromeCrashpadProcesses": 54,
+    "processCount": 300,
+    "reportedPidsIncludingThreads": 2998,
+    "causeLimits": "Process metadata only. No private grader cases read. This suggests resource exhaustion, but does not identify browser leakage versus candidate-driven behavior."
+  },
+  "latencyCaveat": "Remaining attempts overlap coding with grading at up to four total containers; contention and changed scheduling further limit latency comparisons. Verifier timeouts remain ungraded; no score-changing retries."
+}

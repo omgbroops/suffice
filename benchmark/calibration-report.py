@@ -85,6 +85,11 @@ def main():
     if (STATE/'admission-amendment.json').exists():
         amendment=json.loads((STATE/'admission-amendment.json').read_text())
         lines+=['','## Admission amendment','',amendment['reason'],'Completed attempts, including the capacity-affected rejection and incomplete cost, are preserved. Only untouched pending jobs resume at two-way concurrency. The frozen actor runtimes, task limits, prompts, checks and policies are unchanged. Mixed concurrency further limits latency attribution.']
+    if (STATE/'scheduler-amendment.json').exists():
+        lines+=['','## Grading-overlap scheduling amendment','',
+            'Following observed browser-grader resource exhaustion and repeated 900-second verifier timeouts, remaining trials use at most two active model jobs and four total task containers. A complete known-cost worker receipt releases its model slot while the official grader continues. Existing trials were adopted without restart; only untouched frozen jobs are admitted.',
+            'The previous admission controller was drained with an owned handoff stop. Quota, observed-memory and spending guards remain. Frozen model policies, checks, grading rules, timeouts and per-container CPU/memory limits are unchanged. The model/grading overlap changes contention and further limits latency comparisons.',
+            'Resource metadata showed an OOM flag and roughly 240 Chromium processes in one 2 GiB grader container. This suggests resource exhaustion, but does not establish whether browser cleanup, candidate behavior or another cause is responsible. No private grader cases were inspected or altered.']
     (OUT/'ANALYSIS.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     print(json.dumps({'completed':len(rows),'summary':data['summary']}))
 if __name__=='__main__':main()

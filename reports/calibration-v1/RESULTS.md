@@ -1,6 +1,6 @@
 # calibration-v1
 
-Completed comparison slots: 19/32. Interim; not a final comparison.
+Completed comparison slots: 20/32. Interim; not a final comparison.
 
 | Arm | Completed | Graded | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -11,9 +11,9 @@ Completed comparison slots: 19/32. Interim; not a final comparison.
 | v2-alone | 3/4 | 2 | 2 | 2 | 0.008754 | 0 | 80.5 |
 | v2-upfront | 3/4 | 2 | 2 | 2 | 0.015422 | 0 | 77.2 |
 | v2-selective | 3/4 | 2 | 1 | 1 | 0.008577 | 0 | 73.7 |
-| v2-concise | 2/4 | 2 | 2 | 2 | 0.003540 | 0 | 44.0 |
+| v2-concise | 3/4 | 3 | 2 | 2 | 0.006654 | 0 | 67.9 |
 
-Known campaign spend: $0.607436; incomplete cost records: 2.
+Known campaign spend: $0.610551; incomplete cost records: 2.
 API-equivalent estimates, not subscription charges. All planning, repairs and takeovers are included.
 Four fresh tasks, one attempt per arm. Same-model/effort paired controls; exact treatments are frozen in manifest.json and benchmark/calibration-plan.md.
 V1-original source is pinned at 526eee4. Pi uses Sol High; V1 variants use Sol High; V2 workers use Luna High and any Sol assistance uses Low.
@@ -28,5 +28,5 @@ Ungraded: filter-js-from-html / v2-alone: VerifierTimeoutError
 Ungraded: filter-js-from-html / v2-upfront: VerifierTimeoutError
 Ungraded: filter-js-from-html / v2-selective: VerifierTimeoutError
 
-Selected comparison cost: $0.582479; excluded original cost floor: $0.024958; total campaign spend floor: $0.607436.
+Selected comparison cost: $0.585593; excluded original cost floor: $0.024958; total campaign spend floor: $0.610551.
 Pending replacements: 2. Original receipts are retained separately; incomplete provider costs remain unknown. Exclusion does not erase incurred usage.
