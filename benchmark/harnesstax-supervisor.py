@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import time
+import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 LOCAL=ROOT/'.suffice/harnesstax-sol61'
@@ -19,6 +20,8 @@ def main():
     LOCAL.mkdir(parents=True,exist_ok=True)
     status=LOCAL/'supervisor.json'
     command=['wsl.exe','-d','Ubuntu','--exec',PYTHON,STATE+'/runtime/benchmark/harnesstax-campaign.py','run']
+    if '--replacements-first' in sys.argv:
+        command=['wsl.exe','-d','Ubuntu','--exec',PYTHON,STATE+'/replacement-runtime/harnesstax-replacements.py','run']
     with (LOCAL/'detached-campaign.log').open('ab',buffering=0) as log:
         child=subprocess.Popen(command,stdin=subprocess.DEVNULL,stdout=log,stderr=log)
         started=time.time()

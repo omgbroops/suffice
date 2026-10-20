@@ -4,18 +4,26 @@ import json
 from pathlib import Path
 import statistics
 import time
+import os
 from datetime import datetime
 
-STATE=Path('/home/eric_qin/suffice-harnesstax-sol61')
-OUT=Path('/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/reports/harnesstax-sol61-v1')
+STATE=Path(os.environ.get('HARNESS_TAX_REPORT_STATE','/home/eric_qin/suffice-harnesstax-sol61'))
+OUT=Path(os.environ.get('HARNESS_TAX_REPORT_OUT','/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/reports/harnesstax-sol61-v1'))
 manifest=json.loads((STATE/'manifest.json').read_text())
-rows=[]
-for job in manifest['jobs']:
+replacement_plan=json.loads((STATE/'replacement-plan.json').read_text()) if (STATE/'replacement-plan.json').exists() else None
+replacement_keys={(j['task'],j['arm']) for j in replacement_plan['replacements']} if replacement_plan else set()
+sources=[{'job':job,'base':STATE,'excluded':(job['task'],job['arm']) in replacement_keys,'execution':'original'} for job in manifest['jobs']]
+if replacement_plan:
+    sources += [{'job':{'task':j['task'],'arm':j['arm']},'base':STATE/'replacements/receipt-permissions-r1',
+                 'excluded':False,'execution':'replacement-r1'} for j in replacement_plan['replacements']]
+rows=[];excluded=[]
+for source in sources:
+    job=source['job']
     name=job['task']+'-'+job['arm']
-    path=STATE/'results'/(name+'.json')
+    path=source['base']/'results'/(name+'.json')
     if not path.exists(): continue
     trial=json.loads(path.read_text())
-    root=STATE/'trials'/name/'agent/receipts'
+    root=source['base']/'trials'/name/'agent/receipts'
     worker_path=root/'worker.json'
     worker=json.loads(worker_path.read_text()) if worker_path.exists() else {}
     usage=worker.get('usage',{})
@@ -76,7 +84,11 @@ for job in manifest['jobs']:
       'trialResultSha256':hashlib.sha256(path.read_bytes()).hexdigest(),
       'workerSha256':hashlib.sha256(worker_path.read_bytes()).hexdigest() if worker_path.exists() else None}
     row['usageSource']='worker aggregate' if worker else 'partial response receipts; whole-attempt cost unknown'
-    rows.append(row)
+    row['execution']=source['execution']
+    if source['excluded']:
+        row['excludedReason']='User-authorized replacement for receipt permissions failure before grading'
+        excluded.append(row)
+    else:rows.append(row)
 summary=[]
 for arm in ['codex','pi','v1','v2']:
     group=[r for r in rows if r['arm']==arm]
@@ -90,9 +102,15 @@ for arm in ['codex','pi','v1','v2']:
       'adviceCalls':sum(r['adviceCalls'] for r in group),
       'repairs':sum(r['repairs'] for r in group),'takeovers':sum(r['takeovers'] for r in group)})
 OUT.mkdir(parents=True,exist_ok=True)
-data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':summary}
+data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':summary,
+      'excludedInfrastructureAttempts':excluded,'completedExecutionsIncludingExcluded':len(rows)+len(excluded),
+      'selectedKnownCostUsd':sum(r['knownCostUsd'] for r in rows),
+      'excludedKnownCostUsd':sum(r['knownCostUsd'] for r in excluded),
+      'totalKnownSpendIncludingExcludedUsd':sum(r['knownCostUsd'] for r in rows+excluded),
+      'totalUnknownCostsIncludingExcluded':sum(r['costUnknown'] for r in rows+excluded),
+      'replacementPlan':replacement_plan}
 (OUT/'results.json').write_text(json.dumps(data,indent=2)+'\n')
-lines=['# HarnessTax Sol 6.1 single round', '',f'Completed: {len(rows)}/120 attempts. '+('Final.' if len(rows)==120 else 'Interim; not a final comparison.'),'',
+lines=['# HarnessTax Sol 6.1 single round', '',f'Completed comparison slots: {len(rows)}/120. '+('Final.' if len(rows)==120 else 'Interim; not a final comparison.'),'',
  '| Arm | Completed | Graded | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |',
  '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
 if (STATE/'paused-for-quota.json').exists():
@@ -105,13 +123,19 @@ ungraded=[r for r in rows if not r['graded']]
 if ungraded:
     lines+=['',f'{len(ungraded)} completed attempts lack official grades. These remain in the campaign denominator but must not be presented as graded patch rejections.']
     lines += [f"- {r['task']} / {r['arm']}: {r['exceptionType'] or 'official reward missing'}" for r in ungraded]
+if replacement_plan:
+    pending=sum(not (STATE/'replacements/receipt-permissions-r1/results'/(j['task']+'-'+j['arm']+'.json')).exists() for j in replacement_plan['replacements'])
+    lines+=['',f'Six infrastructure replacements were authorized before their outcomes. Pending replacements: {pending}.',
+        f"Excluded originals: {len(excluded)}; completed executions including excluded: {len(rows)+len(excluded)}.",
+        f"Selected comparison known cost: ${data['selectedKnownCostUsd']:.6f}; excluded infrastructure known cost: ${data['excludedKnownCostUsd']:.6f}; total known campaign spend including excluded: ${data['totalKnownSpendIncludingExcludedUsd']:.6f}.",
+        'Excluded originals do not count toward comparison accuracy, cost per task, or latency. Their receipts and costs remain in the audit trail and total spend. Replacement failures count; no outcome-based fallback to originals.']
 lines+=['','API-equivalent cost estimates, not subscription charges. Unknown costs remain unknown.',
- 'One attempt per task/arm; no replacement runs. All errors and failures remain in the denominator.',
+ ('One selected attempt per task/arm. Only the six preselected, ungraded permissions failures are replaced at the user\'s request; all other original failures remain in the comparison.' if replacement_plan else 'One attempt per task/arm; no replacement runs. All errors and failures remain in the denominator.'),
  'Latency is the full Harbor agent phase, including wrapper/runtime startup and receipt export. Worker-only timings are also retained in results.json.',
  'The Pi adaptive-rejection-sampler actor and grader completed before a host interruption during artifact collection. Original receipts were recovered and hash checked against its container; outer phase timing is missing. No actor or grader rerun.',
  'After the first two attempts, concurrency is at most two, with a combined 4 GiB task reservation; tasks above 2 GiB run alone. Shared resources may affect latency.',
  'After attempt 55, actor receipts are bind-mounted to the host so timeout cancellation cannot skip export. Timed-out actors are stopped before grading; timeout failures remain in the denominator and incomplete costs remain unknown. No retries.',
- 'A receipt permissions error prevented grading for some resumed V1/V2 attempts. Those original attempts remain ungraded infrastructure failures. The adapter now reads private receipts as root inside the container before host ownership cleanup.',
+ 'A receipt permissions error prevented grading for six V1/V2 attempts. Those originals remain in the audit trail. The adapter now reads private receipts as root inside the container before host ownership cleanup.',
  'V2 changes model as well as pipeline. Codex/Pi/V1 match Sol High; V2 is a system comparison.',
  '100-response cap; first provider-failed attempt had the initial 60 cap but made zero responses.',
  'V2 controller smoke checks cover 3/30 tasks, solely from public instructions. Other tasks have no controller verification trigger.',

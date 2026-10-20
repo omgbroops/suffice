@@ -112,3 +112,25 @@ Reports distinguish ungraded infrastructure failures from graded rejections.
 Remaining adapters read the aggregate as root inside the container, before grading;
 receipts and their original permissions stay unchanged. The repair was verified
 with the actual permissions failure in a Docker container with networking disabled.
+
+## User-authorized infrastructure replacements
+
+The user explicitly requested rerunning the six ungraded permissions failures
+and excluding their originals from the comparison. Replacement selection is fixed
+before outcomes: V1 and V2 on merge-diff-arc-agi-task, multi-source-data-merger,
+and nginx-request-logging. Each receives exactly one fresh attempt using the same
+frozen actor settings and corrected adapter. No failed graded patch is replaced.
+
+Original containers/workspaces were removed and artifacts contain no recoverable
+task state, so grading the original patches without inference is unavailable.
+Original result and receipt files remain immutable. The six originals are excluded
+from comparison accuracy, latency, and cost per task; their spend remains separately
+reported and included in total campaign spend. A failed replacement counts as a
+failure. A pending replacement leaves its comparison slot pending, without fallback
+to the original or denominator shrinkage. Final scope is 120 selected task/arm
+slots from up to 126 executions, including the six excluded originals.
+
+Replacement plan, original result hashes and runner hash are frozen separately in
+replacement-plan.json. The original queue drains admitted work, the six replacements
+run within the same resource and quota limits, then the untouched original queue
+resumes. No hidden grader information is supplied to replacement actors.
