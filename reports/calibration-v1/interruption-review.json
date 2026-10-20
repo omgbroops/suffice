@@ -1,0 +1,51 @@
+{
+  "at": 1792534592.1640968,
+  "manifestSha256": "1a5b39e634b455406b4b80e8f1102a7fe1dc985a85327c6bcba404ffb9cb9aeb",
+  "concurrency": 2,
+  "replaceCompletedAttempts": false,
+  "interruptions": [
+    {
+      "attempt": "kv-store-grpc-v1-refined",
+      "workerSha256": "77efd4dd7ac65ee7c954d5a435e4828407f6bdd00273b770151b2ace5a648388",
+      "status": "cost_unknown",
+      "knownCostUsd": 0.01517,
+      "wholeAttemptCostKnown": false,
+      "latencyMs": 23445,
+      "providerRequests": 3,
+      "rawUsageResponses": 2,
+      "assistantRecords": 4,
+      "errors": [
+        {
+          "at": "2026-10-20T21:43:38.808Z",
+          "stopReason": "error",
+          "error": "OpenAI API error (503): {\"message\":\"The ChatGPT user is temporarily unavailable. Please try again later.\",\"type\":\"service_unavailable_error\",\"param\":null,\"code\":\"subscription_sharing_user_unavailable\"}"
+        },
+        {
+          "at": "2026-10-20T21:43:52.509Z",
+          "stopReason": "error",
+          "error": "This operation was aborted"
+        }
+      ]
+    },
+    {
+      "attempt": "filter-js-from-html-v1-refined",
+      "workerSha256": "cedc18c7324b6dd07b5b7c4f6c76b4ed2f4236a0e5d8af15908a09def5e369e3",
+      "status": "cost_unknown",
+      "knownCostUsd": 0.0097876,
+      "wholeAttemptCostKnown": false,
+      "latencyMs": 909621,
+      "providerRequests": 3,
+      "rawUsageResponses": 2,
+      "assistantRecords": 3,
+      "errors": [
+        {
+          "at": "2026-10-20T22:04:09.912Z",
+          "stopReason": "error",
+          "error": "OpenAI Responses stream ended before a terminal response event"
+        }
+      ]
+    }
+  ],
+  "decision": "Preserve both interruptions, official grades, partial usage and unknown full costs. Resume untouched queued jobs only after the existing controller exits and all interruptions match these reviewed receipts. Any new interruption requires a separate review. No runtime, prompt, tool, model, effort, budget, timeout or check changes.",
+  "causeLimits": "503 is a provider service/account availability response. The second stream lacked a terminal response event; receipts cannot establish whether provider, proxy or network closed it. No evidence establishes concurrency causation. No complete provider usage can be recovered from these receipts."
+}
