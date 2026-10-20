@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,readFile,rm} from 'node:fs/promises';
+import {mkdtemp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {executeStrategy} from '../src/execution/strategies.mjs';
@@ -26,11 +26,18 @@ test('Sol cannot edit; Luna implements; nested usage is attributed exactly once'
           assert.ok(names.includes('delegate')&&names.includes('verify')&&names.includes('read'));
           const output=await opt.tools.find(t=>t.name==='delegate').execute('one',{kind:'implement',brief:'Implement then test the public behavior.'});
           assert.match(output.content[0].text,/Worker claim/);
+          const retrieve=opt.tools.find(t=>t.name==='worker_output');
+          const exact=JSON.parse((await retrieve.execute('bytes',{stage:'delegate-1-implement',id:'fixture',encoding:'base64'})).content[0].text);
+          assert.deepEqual(Buffer.from(exact.data,'base64'),Buffer.from([0,255,65]));
+          await assert.rejects(retrieve.execute('escape',{stage:'coordinate',id:'fixture'}),/Unknown/);
+          await assert.rejects(retrieve.execute('escape',{stage:'delegate-1-implement',id:'../../worker'}),/Invalid/);
           await opt.tools.find(t=>t.name==='verify').execute('verify',{});
           cb.onAssistant(message(.03));return 'Reviewed public evidence';
         }
         assert.equal(opt.model,'gpt-6-luna');assert.equal(opt.effort,'high');
         assert.ok(opt.tools.some(t=>t.name==='write'));
+        await mkdir(join(opt.home,'../output'),{recursive:true});
+        await writeFile(join(opt.home,'../output/fixture.log'),Buffer.from([0,255,65]));
         cb.onAssistant(message(.01));return 'Changed implementation.js; test exit 0';
       }};
     }};
