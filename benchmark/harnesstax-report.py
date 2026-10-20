@@ -33,8 +33,11 @@ for source in sources:
     identity=worker.get('identity')
     requests=[];assistants=[];raw_usage={}
     for p in root.rglob('*.jsonl'):
-        if '/events/' not in str(p) and p.name!='events.live.jsonl': continue
-        for line in p.read_text(errors='replace').splitlines():
+        if '/events/' not in p.as_posix() and p.name!='events.live.jsonl': continue
+        # JSONL is delimited by LF. splitlines() also splits legal JSON string
+        # characters such as U+0085/U+2028 from binary-like tool output.
+        for line in p.read_text(errors='replace').split('\n'):
+            if not line.strip(): continue
             try: event=json.loads(line)
             except json.JSONDecodeError: unknown=True;continue
             if event.get('type')=='provider_request': requests.append({**event,'stage':p.relative_to(root).parts[0]})
@@ -130,6 +133,8 @@ if replacement_plan:
         f"Selected comparison known cost: ${data['selectedKnownCostUsd']:.6f}; excluded infrastructure known cost: ${data['excludedKnownCostUsd']:.6f}; total known campaign spend including excluded: ${data['totalKnownSpendIncludingExcludedUsd']:.6f}.",
         'Excluded originals do not count toward comparison accuracy, cost per task, or latency. Their receipts and costs remain in the audit trail and total spend. Replacement failures count; no outcome-based fallback to originals.']
 lines+=['','API-equivalent cost estimates, not subscription charges. Unknown costs remain unknown.',
+ 'An offline accounting audit reconciled all eight financial-document-processor / V1 responses at $0.186490. Its former unknown flag came from splitting JSONL on legal Unicode characters inside tool output; no usage or evaluator score changed. See cost-accounting-audit.json.',
+ 'Two original costs remain unconfirmed: Codex adaptive-rejection-sampler failed in routing discovery with zero recorded model responses; V1 make-doom-for-mips lost receipts on its early outer timeout. Neither is treated as confirmed zero spend.',
  ('One selected attempt per task/arm. Only the six preselected, ungraded permissions failures are replaced at the user\'s request; all other original failures remain in the comparison.' if replacement_plan else 'One attempt per task/arm; no replacement runs. All errors and failures remain in the denominator.'),
  'Latency is the full Harbor agent phase, including wrapper/runtime startup and receipt export. Worker-only timings are also retained in results.json.',
  'The Pi adaptive-rejection-sampler actor and grader completed before a host interruption during artifact collection. Original receipts were recovered and hash checked against its container; outer phase timing is missing. No actor or grader rerun.',
