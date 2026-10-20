@@ -1,5 +1,5 @@
 {
-  "asOf": 1792508286.6827118,
+  "asOf": 1792509601.7241626,
   "complete": false,
   "attempts": [
     {
@@ -1625,15 +1625,15 @@
       "arm": "v1",
       "graded": true,
       "accepted": true,
-      "policyValidSuccess": false,
+      "policyValidSuccess": true,
       "officialReward": {
         "reward": 1.0
       },
       "status": "completed",
       "identity": true,
-      "costUnknown": true,
+      "costUnknown": false,
       "knownCostUsd": 0.18649000000000002,
-      "costUsd": null,
+      "costUsd": 0.18649000000000002,
       "latencyMs": 130334,
       "agentPhaseMs": 131546.602,
       "usage": {
@@ -3960,6 +3960,286 @@
       "execution": "original"
     },
     {
+      "task": "regex-log",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.093602,
+      "costUsd": 0.093602,
+      "latencyMs": 103728,
+      "agentPhaseMs": 105616.55500000001,
+      "usage": {
+        "input": 17844,
+        "cacheRead": 90240,
+        "cacheWrite": 0,
+        "output": 4889,
+        "totalTokens": 112973,
+        "estimatedApiUsd": 0.093602
+      },
+      "modelCalls": 6,
+      "toolCalls": 5,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T14:57:14.868846Z",
+        "finished_at": "2026-10-20T14:59:00.485401Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T14:57:13.895674Z",
+        "finished_at": "2026-10-20T14:57:14.868757Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0a2880a477649eebf121632b0a257960c2cf20ca6a8651e2978dbadf57074718",
+      "workerSha256": "13b6bdc36f4ef7b65838dc2c7f7e91b4d1e667b7fd317723648b60198c7481c4",
+      "usageSource": "worker aggregate",
+      "execution": "original"
+    },
+    {
+      "task": "regex-log",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0260752,
+      "costUsd": 0.0260752,
+      "latencyMs": 45928,
+      "agentPhaseMs": 47068.255,
+      "usage": {
+        "input": 4640,
+        "cacheRead": 4352,
+        "cacheWrite": 0,
+        "output": 1636,
+        "estimatedApiUsd": 0.0260752,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 3,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T14:57:15.555101Z",
+        "finished_at": "2026-10-20T14:58:02.623356Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T14:57:14.624116Z",
+        "finished_at": "2026-10-20T14:57:15.555022Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "cc47944af8bf2e1bbcd6f2ec18a92279ad272b580a7c36911cb59c740a636b65",
+      "workerSha256": "b1ef50f3375a7da9ae90e83a5a587a21c685d12e8cd69c24b60442099b4830d3",
+      "usageSource": "worker aggregate",
+      "execution": "original"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00378212,
+      "costUsd": 0.00378212,
+      "latencyMs": 179488,
+      "agentPhaseMs": 181278.04499999998,
+      "usage": {
+        "input": 9778,
+        "cacheRead": 37632,
+        "cacheWrite": 0,
+        "output": 4856,
+        "estimatedApiUsd": 0.00378212,
+        "modelCalls": 8,
+        "toolCalls": 17,
+        "costUnknown": false
+      },
+      "modelCalls": 8,
+      "toolCalls": 17,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T15:01:29.431771Z",
+        "finished_at": "2026-10-20T15:04:30.709816Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T15:01:27.724812Z",
+        "finished_at": "2026-10-20T15:01:29.427020Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "8b819c88b4397290c374515f3f395022768790d30c8bbbad19b6d82d34fbd0d3",
+      "workerSha256": "487df50cb86b764bb96575128426f5411d9a0b2a4d7e528cbaa6c58a9e983439",
+      "usageSource": "worker aggregate",
+      "execution": "original"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.24079119999999998,
+      "costUsd": 0.24079119999999998,
+      "latencyMs": 376689,
+      "agentPhaseMs": 380427.754,
+      "usage": {
+        "input": 31159,
+        "cacheRead": 207232,
+        "cacheWrite": 0,
+        "output": 15775,
+        "totalTokens": 254166,
+        "estimatedApiUsd": 0.24079119999999998
+      },
+      "modelCalls": 10,
+      "toolCalls": 9,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T15:01:38.161501Z",
+        "finished_at": "2026-10-20T15:07:58.589255Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T15:01:36.892870Z",
+        "finished_at": "2026-10-20T15:01:38.161417Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "d2afb3ff547b903e08112933957e4f8b5cc4351a87577b9f8c9d265d5d9bccd8",
+      "workerSha256": "edea84660ddeca423c0f53149eab4ef0d6570b450f20afcc84ca2011f70f3cdf",
+      "usageSource": "worker aggregate",
+      "execution": "original"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.1311328,
+      "costUsd": 0.1311328,
+      "latencyMs": 294071,
+      "agentPhaseMs": 295912.73,
+      "usage": {
+        "input": 14373,
+        "cacheRead": 77568,
+        "cacheWrite": 0,
+        "output": 9463,
+        "estimatedApiUsd": 0.1311328,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 13,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T15:08:47.266911Z",
+        "finished_at": "2026-10-20T15:13:43.179641Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T15:08:45.073258Z",
+        "finished_at": "2026-10-20T15:08:47.266494Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "ed4eca69141cd24108eb49f77f907f25b0e83a5bb15c79660ff353c07721fd7d",
+      "workerSha256": "d230ca534b52e2aa1aaee17f5ef552647bbbaa4da4e16cca52cbd86da440cd84",
+      "usageSource": "worker aggregate",
+      "execution": "original"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.11793280000000002,
+      "costUsd": 0.11793280000000002,
+      "latencyMs": 239119,
+      "agentPhaseMs": 240485.218,
+      "usage": {
+        "input": 20839,
+        "cacheRead": 21248,
+        "cacheWrite": 0,
+        "output": 7413,
+        "estimatedApiUsd": 0.11793280000000002,
+        "modelCalls": 7,
+        "toolCalls": 19,
+        "costUnknown": false
+      },
+      "modelCalls": 7,
+      "toolCalls": 19,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T15:10:28.260476Z",
+        "finished_at": "2026-10-20T15:14:28.745694Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T15:10:27.238780Z",
+        "finished_at": "2026-10-20T15:10:28.260396Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "3d869c2bc31f896cfa5373f3f5c9d0f4a53d2fb77c6ee8a461625028fe192a95",
+      "workerSha256": "4158b2c75b4a28ae6d8ff0d1d2d05baf9c2decbcb7bec40ff33a3217dacda478",
+      "usageSource": "worker aggregate",
+      "execution": "original"
+    },
+    {
       "task": "merge-diff-arc-agi-task",
       "arm": "v1",
       "graded": true,
@@ -4251,56 +4531,56 @@
   "summary": [
     {
       "arm": "codex",
-      "completed": 22,
-      "accepted": 18,
-      "graded": 22,
+      "completed": 24,
+      "accepted": 20,
+      "graded": 24,
       "ungraded": 0,
-      "policyValidSuccesses": 18,
-      "knownCostUsd": 3.5975800000000002,
+      "policyValidSuccesses": 20,
+      "knownCostUsd": 3.9319732000000003,
       "unknownCosts": 1,
-      "meanSeconds": 153.56451049999998,
+      "meanSeconds": 161.01931416666667,
       "adviceCalls": 0,
       "repairs": 0,
       "takeovers": 0
     },
     {
       "arm": "pi",
-      "completed": 22,
-      "accepted": 20,
-      "graded": 22,
+      "completed": 24,
+      "accepted": 22,
+      "graded": 24,
       "ungraded": 0,
-      "policyValidSuccesses": 20,
-      "knownCostUsd": 2.6414696,
+      "policyValidSuccesses": 22,
+      "knownCostUsd": 2.7986776000000004,
       "unknownCosts": 0,
-      "meanSeconds": 217.75769257142858,
+      "meanSeconds": 213.7344577826087,
       "adviceCalls": 0,
       "repairs": 0,
       "takeovers": 0
     },
     {
       "arm": "v1",
-      "completed": 23,
-      "accepted": 20,
-      "graded": 23,
+      "completed": 24,
+      "accepted": 21,
+      "graded": 24,
       "ungraded": 0,
-      "policyValidSuccesses": 19,
-      "knownCostUsd": 2.3371424,
-      "unknownCosts": 2,
-      "meanSeconds": 196.31804886956522,
+      "policyValidSuccesses": 21,
+      "knownCostUsd": 2.4550752,
+      "unknownCosts": 1,
+      "meanSeconds": 198.15834758333332,
       "adviceCalls": 0,
       "repairs": 0,
       "takeovers": 0
     },
     {
       "arm": "v2",
-      "completed": 23,
-      "accepted": 15,
-      "graded": 23,
+      "completed": 24,
+      "accepted": 16,
+      "graded": 24,
       "ungraded": 0,
-      "policyValidSuccesses": 15,
-      "knownCostUsd": 0.13901268,
+      "policyValidSuccesses": 16,
+      "knownCostUsd": 0.1427948,
       "unknownCosts": 0,
-      "meanSeconds": 186.9006947826087,
+      "meanSeconds": 186.66641770833334,
       "adviceCalls": 0,
       "repairs": 0,
       "takeovers": 0
@@ -4590,11 +4870,11 @@
       "excludedReason": "User-authorized replacement for receipt permissions failure before grading"
     }
   ],
-  "completedExecutionsIncludingExcluded": 96,
-  "selectedKnownCostUsd": 8.715204680000001,
+  "completedExecutionsIncludingExcluded": 102,
+  "selectedKnownCostUsd": 9.3285208,
   "excludedKnownCostUsd": 0.22305644000000002,
-  "totalKnownSpendIncludingExcludedUsd": 8.93826112,
-  "totalUnknownCostsIncludingExcluded": 3,
+  "totalKnownSpendIncludingExcludedUsd": 9.55157724,
+  "totalUnknownCostsIncludingExcluded": 2,
   "replacementPlan": {
     "created": 1792507347.8452518,
     "authorization": "User requested rerunning the six ungraded attempts and excluding their originals from the comparison.",

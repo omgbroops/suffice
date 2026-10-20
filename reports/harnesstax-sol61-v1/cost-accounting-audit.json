@@ -1,0 +1,98 @@
+{
+  "scope": "Offline audit of three incomplete accounting flags; no model or grader reruns and no original receipt changes.",
+  "recovered": {
+    "attempt": "financial-document-processor-v1",
+    "estimatedApiUsd": 0.18649,
+    "responses": 8,
+    "usage": {
+      "input": 68654,
+      "cacheRead": 241920,
+      "cacheWrite": 0,
+      "output": 2499
+    },
+    "finding": "All LF-delimited JSON records are valid. Python splitlines() incorrectly split legal Unicode characters in a tool result. Worker, assistant ledger and provider receipts reconcile.",
+    "spuriousLineSplits": 28,
+    "modelIdentityVerified": true,
+    "effect": "Cost unchanged; costUnknown false and the already accepted patch now satisfies accounting policy."
+  },
+  "unresolved": [
+    {
+      "attempt": "adaptive-rejection-sampler-codex",
+      "knownCostUsd": 0,
+      "observedModelResponses": 0,
+      "finding": "Workspace routing discovery failed before any response or usage record. Model cost is likely zero, but the failed transport provides no final provider accounting acknowledgment. Retain unknown whole-attempt cost."
+    },
+    {
+      "attempt": "make-doom-for-mips-v1",
+      "knownCostUsd": 0,
+      "finding": "Outer timeout at approximately 900 seconds. No worker or response receipts survived. Original config did not bind-mount /receipts; original container no longer exists. No exact historical usage can be recovered from retained artifacts.",
+      "prevention": "Later attempts already persist live receipts and stop timed-out actor processes before grading."
+    }
+  ],
+  "originalArtifactSha256Before": {
+    "adaptive-rejection-sampler-codex": {
+      "results/adaptive-rejection-sampler-codex.json": "4d40f0dfda92ba21384bec5ba7415596bb8bfafefc716f48f2b4e089938da71f",
+      "trials/adaptive-rejection-sampler-codex/agent/actor-request.json": "f7deadf290c20bb38ce4985b07cde639cb5a329521ba8acb7c09222c35568083",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/console.jsonl": "48e6dafb8aaeef5233a437b8dabcbd33b256eaf2839ce08c389d754d4d6249b5",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/events.live.jsonl": "9cf6739bf9eebc543d4494a6ad5f5131199e6eb40edb15308eeb84f5ab7ea7fc",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/native-command.json": "87f7673e63022a6b2aaaa5b6f8f7452b1bf9900b7162d2c960088a515ff9a996",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/native-events.jsonl": "3d1d8540eb41ba2f0019ca0fc173274a7710fa55605a12946ea29a9a1f6761a4",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/native-stderr.txt": "5161bd9ee0d55b27f52352a61c3bbe47a64f24384c9219298eef60e15627349f",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/worker.json": "63fe3a88908afe9f83c2d67c79e7e8af623a0020920da3068ea984ed8c5945fd",
+      "trials/adaptive-rejection-sampler-codex/agent/runtime-preflight.txt": "67c83a8dbf212f7a5a400e4b2348240d04b2fb25dcd600809b241674fba32af4"
+    },
+    "financial-document-processor-v1": {
+      "results/financial-document-processor-v1.json": "771be3fe5d2e2abf6d7ef789519f9985875e1b6b61e40ba6079f20ea5df57833",
+      "trials/financial-document-processor-v1/agent/actor-request.json": "c7f2802a585367f299b75bd70c784a7ba211e0c1d7d076c6a337ed1ae9479529",
+      "trials/financial-document-processor-v1/agent/receipts/checks-initial.json": "df7ce7116e1740d03a43903f8f91c464eea0cc71406dcc9ff6e45337b372582d",
+      "trials/financial-document-processor-v1/agent/receipts/console.jsonl": "ad99e4ef3134d14ee13e072b8d552b20c77a8aae7143ea32f7c5d22df868c116",
+      "trials/financial-document-processor-v1/agent/receipts/request.json": "aea90abf7861b30557ae9de644e1ea98c9836c7e5fdf6126a885497fa85e3943",
+      "trials/financial-document-processor-v1/agent/receipts/solve/stage.json": "e6c6e070079aa0a2623ed84a4d222c768debee3d3b695788f0d0a649dce17bc3",
+      "trials/financial-document-processor-v1/agent/receipts/solve/state/events/1792476601490-0df19eff-3d6e-458c-9c85-319ec397d279.jsonl": "a3113548165a02989f8d766f6997110820cec497f0c80939db5b1de8dfd687ab",
+      "trials/financial-document-processor-v1/agent/receipts/solve/state/sessions/f53b52ad6d21cceb72df/2026-10-20T06-10-01-496Z_01a157ee-5c97-707d-a90a-ba4082a85ea7.jsonl": "7d69a2d4be75fb7d471abababae882898d0a5b77fafcb4c115a9390ee69f58fc",
+      "trials/financial-document-processor-v1/agent/receipts/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trials/financial-document-processor-v1/agent/receipts/worker.json": "e51fe8581836b7b5ab8852724efca4fa415cbf0a9f0aacd4092a24963dcbc8c4",
+      "trials/financial-document-processor-v1/agent/runtime-preflight.txt": "67c83a8dbf212f7a5a400e4b2348240d04b2fb25dcd600809b241674fba32af4"
+    },
+    "make-doom-for-mips-v1": {
+      "results/make-doom-for-mips-v1.json": "c8f67f7cb4ee4b6875ac25ca721a04189cf65a5f1179573ffc8cfba65de003c3",
+      "trials/make-doom-for-mips-v1/agent/actor-request.json": "af1baba5160b404575903d37f4ca61ed6c16551f84d262ddce8795a7fa4cb177",
+      "trials/make-doom-for-mips-v1/agent/runtime-preflight.txt": "67c83a8dbf212f7a5a400e4b2348240d04b2fb25dcd600809b241674fba32af4"
+    }
+  },
+  "originalArtifactSha256After": {
+    "adaptive-rejection-sampler-codex": {
+      "results/adaptive-rejection-sampler-codex.json": "4d40f0dfda92ba21384bec5ba7415596bb8bfafefc716f48f2b4e089938da71f",
+      "trials/adaptive-rejection-sampler-codex/agent/actor-request.json": "f7deadf290c20bb38ce4985b07cde639cb5a329521ba8acb7c09222c35568083",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/console.jsonl": "48e6dafb8aaeef5233a437b8dabcbd33b256eaf2839ce08c389d754d4d6249b5",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/events.live.jsonl": "9cf6739bf9eebc543d4494a6ad5f5131199e6eb40edb15308eeb84f5ab7ea7fc",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/native-command.json": "87f7673e63022a6b2aaaa5b6f8f7452b1bf9900b7162d2c960088a515ff9a996",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/native-events.jsonl": "3d1d8540eb41ba2f0019ca0fc173274a7710fa55605a12946ea29a9a1f6761a4",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/native-stderr.txt": "5161bd9ee0d55b27f52352a61c3bbe47a64f24384c9219298eef60e15627349f",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trials/adaptive-rejection-sampler-codex/agent/receipts/worker.json": "63fe3a88908afe9f83c2d67c79e7e8af623a0020920da3068ea984ed8c5945fd",
+      "trials/adaptive-rejection-sampler-codex/agent/runtime-preflight.txt": "67c83a8dbf212f7a5a400e4b2348240d04b2fb25dcd600809b241674fba32af4"
+    },
+    "financial-document-processor-v1": {
+      "results/financial-document-processor-v1.json": "771be3fe5d2e2abf6d7ef789519f9985875e1b6b61e40ba6079f20ea5df57833",
+      "trials/financial-document-processor-v1/agent/actor-request.json": "c7f2802a585367f299b75bd70c784a7ba211e0c1d7d076c6a337ed1ae9479529",
+      "trials/financial-document-processor-v1/agent/receipts/checks-initial.json": "df7ce7116e1740d03a43903f8f91c464eea0cc71406dcc9ff6e45337b372582d",
+      "trials/financial-document-processor-v1/agent/receipts/console.jsonl": "ad99e4ef3134d14ee13e072b8d552b20c77a8aae7143ea32f7c5d22df868c116",
+      "trials/financial-document-processor-v1/agent/receipts/request.json": "aea90abf7861b30557ae9de644e1ea98c9836c7e5fdf6126a885497fa85e3943",
+      "trials/financial-document-processor-v1/agent/receipts/solve/stage.json": "e6c6e070079aa0a2623ed84a4d222c768debee3d3b695788f0d0a649dce17bc3",
+      "trials/financial-document-processor-v1/agent/receipts/solve/state/events/1792476601490-0df19eff-3d6e-458c-9c85-319ec397d279.jsonl": "a3113548165a02989f8d766f6997110820cec497f0c80939db5b1de8dfd687ab",
+      "trials/financial-document-processor-v1/agent/receipts/solve/state/sessions/f53b52ad6d21cceb72df/2026-10-20T06-10-01-496Z_01a157ee-5c97-707d-a90a-ba4082a85ea7.jsonl": "7d69a2d4be75fb7d471abababae882898d0a5b77fafcb4c115a9390ee69f58fc",
+      "trials/financial-document-processor-v1/agent/receipts/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trials/financial-document-processor-v1/agent/receipts/worker.json": "e51fe8581836b7b5ab8852724efca4fa415cbf0a9f0aacd4092a24963dcbc8c4",
+      "trials/financial-document-processor-v1/agent/runtime-preflight.txt": "67c83a8dbf212f7a5a400e4b2348240d04b2fb25dcd600809b241674fba32af4"
+    },
+    "make-doom-for-mips-v1": {
+      "results/make-doom-for-mips-v1.json": "c8f67f7cb4ee4b6875ac25ca721a04189cf65a5f1179573ffc8cfba65de003c3",
+      "trials/make-doom-for-mips-v1/agent/actor-request.json": "af1baba5160b404575903d37f4ca61ed6c16551f84d262ddce8795a7fa4cb177",
+      "trials/make-doom-for-mips-v1/agent/runtime-preflight.txt": "67c83a8dbf212f7a5a400e4b2348240d04b2fb25dcd600809b241674fba32af4"
+    }
+  },
+  "originalsUnchanged": true,
+  "comparisonScores": "No evaluator reward changed. Existing snapshots remain unchanged. No replacement or additional attempt authorized or performed by this audit."
+}
