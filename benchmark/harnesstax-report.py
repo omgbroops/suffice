@@ -89,6 +89,9 @@ data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':sum
 lines=['# HarnessTax Sol 6.1 single round', '',f'Completed: {len(rows)}/120 attempts. '+('Final.' if len(rows)==120 else 'Interim; not a final comparison.'),'',
  '| Arm | Completed | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |',
  '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+if (STATE/'paused-for-quota.json').exists():
+    pause=json.loads((STATE/'paused-for-quota.json').read_text())
+    lines[2]+=f" Paused at the requested quota floor: {pause['quota']['remainingPercent']}% remaining."
 for r in summary:
     seconds='—' if r['meanSeconds'] is None else f"{r['meanSeconds']:.1f}"
     lines.append(f"| {r['arm']} | {r['completed']}/30 | {r['accepted']} | {r['policyValidSuccesses']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
