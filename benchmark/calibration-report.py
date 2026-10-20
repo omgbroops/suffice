@@ -58,6 +58,18 @@ def main():
         lines+=['',f'{treatment} versus {control}: {len(keys)} matched tasks, known cost floors ${cost_b:.6f} versus ${cost_a:.6f}; accepted-outcome wins (including infrastructure effects): {", ".join(wins) or "none"}; regressions: {", ".join(losses) or "none"}.']
         clean=[k for k in keys if all(r['graded'] and r['identity'] and not r['costUnknown'] and r['receiptsMatched'] for r in [a[k],b[k]])]
         lines.append(f'Fully accounted matched pairs: {len(clean)}/{len(keys)}; costs ${sum(b[k]["knownCostUsd"] for k in clean):.6f} versus ${sum(a[k]["knownCostUsd"] for k in clean):.6f}. Excluded from this accounting-only comparison: {", ".join(k for k in keys if k not in clean) or "none"}. All outcomes remain in the table and overall denominator.')
+        if clean:
+            ca=sum(a[k]['knownCostUsd'] for k in clean);cb=sum(b[k]['knownCostUsd'] for k in clean)
+            timed=[k for k in clean if a[k]['agentPhaseMs'] is not None and b[k]['agentPhaseMs'] is not None]
+            ta=sum(a[k]['agentPhaseMs'] for k in timed);tb=sum(b[k]['agentPhaseMs'] for k in timed)
+            lines.append(f'On these accounting pairs, cost change: {(cb/ca-1)*100:+.2f}%; '+(f'wall-time change across {len(timed)} timed pairs: {(tb/ta-1)*100:+.2f}%.' if ta else 'wall-time change unavailable.')+' These are observed changes, with shared-host and provider contention.')
+    lines+=['','## Verification gaps','',
+        'Independent grades are observed only after actor shutdown and never fed into routing. A passed partial public check can therefore leave a real defect undetected. This is a coverage limit, not evidence that assistance was unnecessary.',
+        '', '| Arm | Independent failures after public pass | Public failures | Unavailable / not run |', '| --- | ---: | ---: | ---: |']
+    for arm in manifest['arms']:
+        group=[r for r in rows if r['arm']==arm]
+        gaps=sum(r['graded'] and not r['accepted'] and r['publicVerification']=='passed' for r in group)
+        lines.append(f"| {arm} | {gaps} | {sum(r['publicVerification']=='failed' for r in group)} | {sum(r['publicVerification'] in ['unavailable','not_run'] for r in group)} |")
     lines+=['','## Every outcome','', '| Task | Arm | Independent grade | Public verification | Status | Known USD |', '| --- | --- | --- | --- | --- | ---: |']
     for r in rows:lines.append(f"| {r['task']} | {r['arm']} | {'ungraded' if not r['graded'] else 'pass' if r['accepted'] else 'fail'} | {r['publicVerification']} | {r['status']} | {'≥' if r['costUnknown'] else ''}{r['knownCostUsd']:.6f} |")
     lines+=['','API-equivalent estimates, not subscription charges. Full stage costs, cache tokens, calls, identity and receipt reconciliation are in results.json. Visible text is measured in characters, not billed tokens; reasoning and tool arguments can dominate output cost.',
