@@ -1,17 +1,21 @@
 # HarnessTax Sol 6.1 single round
 
-Completed comparison slots: 96/120. Interim; not a final comparison.
+Completed comparison slots: 120/120. Final.
 
 | Arm | Completed | Graded | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| codex | 24/30 | 24 | 20 | 20 | 3.931973 | 1 | 161.0 |
-| pi | 24/30 | 24 | 22 | 22 | 2.798678 | 0 | 213.7 |
-| v1 | 24/30 | 24 | 21 | 21 | 2.455075 | 1 | 198.2 |
-| v2 | 24/30 | 24 | 16 | 16 | 0.142795 | 0 | 186.7 |
+| codex | 30/30 | 29 | 23 | 23 | 5.333171 | 1 | 187.0 |
+| pi | 30/30 | 30 | 27 | 27 | 3.472287 | 0 | 255.5 |
+| v1 | 30/30 | 30 | 25 | 25 | 3.324570 | 1 | 241.2 |
+| v2 | 30/30 | 29 | 18 | 18 | 0.176999 | 1 | 271.0 |
+
+2 completed attempts lack official grades. These remain in the campaign denominator but must not be presented as graded patch rejections.
+- torch-tensor-parallelism / v2: VerifierTimeoutError
+- torch-tensor-parallelism / codex: VerifierTimeoutError
 
 Six infrastructure replacements were authorized before their outcomes. Pending replacements: 0.
-Excluded originals: 6; completed executions including excluded: 102.
-Selected comparison known cost: $9.328521; excluded infrastructure known cost: $0.223056; total known campaign spend including excluded: $9.551577.
+Excluded originals: 6; completed executions including excluded: 126.
+Selected comparison known cost: $12.307028; excluded infrastructure known cost: $0.223056; total known campaign spend including excluded: $12.530084.
 Excluded originals do not count toward comparison accuracy, cost per task, or latency. Their receipts and costs remain in the audit trail and total spend. Replacement failures count; no outcome-based fallback to originals.
 
 API-equivalent cost estimates, not subscription charges. Unknown costs remain unknown.
