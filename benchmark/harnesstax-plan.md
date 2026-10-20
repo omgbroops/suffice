@@ -101,3 +101,14 @@ Missing final accounting stays unknown, with any observable cost shown as a floo
 Recorded task timeouts no longer stop admission of unrelated remaining jobs.
 Provider/account failures, unexplained missing receipts, and quota failures still
 stop admission. No task retries, extra actor time, or hidden-test-driven changes.
+
+## Private receipt ownership repair
+
+The live receipt mount exposed a host permissions error: Suffice writes private
+mode-0600 files as container root, while the host controller runs as Eric Qin.
+Harbor transfers ownership during cleanup, after the adapter reads the aggregate.
+Affected completed attempts retain their original missing grades and exceptions.
+Reports distinguish ungraded infrastructure failures from graded rejections.
+Remaining adapters read the aggregate as root inside the container, before grading;
+receipts and their original permissions stay unchanged. The repair was verified
+with the actual permissions failure in a Docker container with networking disabled.

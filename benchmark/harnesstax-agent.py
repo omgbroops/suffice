@@ -63,9 +63,12 @@ class HarnessTaxAgent(BaseInstalledAgent):
         # Refreshes persist only in the dedicated auth mount. These paths are not
         # part of the agent log export or public report.
         # /receipts is mounted directly to this trial's host log directory.
-        worker = self.logs_dir/'receipts/worker.json'
-        if worker.exists():
-            value = json.loads(worker.read_text())
+        # Actors run as root and may create mode-0600 receipts. Harbor assigns
+        # host ownership during final cleanup, after this method returns. Read
+        # the aggregate through the container while it still owns those files.
+        aggregate = await environment.exec(command='cat /receipts/worker.json',user='root',timeout_sec=10)
+        if aggregate.return_code == 0:
+            value = json.loads(aggregate.stdout)
             usage = value.get('usage', {})
             context.n_input_tokens = sum(usage.get(k,0) for k in ('input','cacheRead','cacheWrite'))
             context.n_cache_tokens = usage.get('cacheRead',0)
