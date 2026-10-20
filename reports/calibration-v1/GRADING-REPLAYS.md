@@ -45,3 +45,18 @@ that case is an expected admission handoff, not a failed verifier result.
 
 The alone replay returned reward 0 with no grading exception. Upfront and
 selective verdicts were pending when this amendment was recorded.
+
+## Completed replay outcomes
+
+| Artifact | Replay verdict | Grading exception |
+| --- | --- | --- |
+| V2 alone | Rejected (reward 0) | None |
+| V2 upfront | Ungraded | VerifierTimeoutError |
+| V2 selective | Ungraded | VerifierTimeoutError |
+
+Both concurrent graders hit the unchanged 900-second verification limit.
+No further replay or model attempt was launched. These timeouts do not establish
+patch incorrectness. The cause remains unresolved; parallel regrading did not
+resolve it. Additional model inference cost was zero. Original frozen scores
+and original attempt costs remain intact. See `grading-replays/html-r1/outcomes.json`
+for original replay-result hashes and timestamps.
