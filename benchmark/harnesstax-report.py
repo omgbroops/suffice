@@ -42,6 +42,9 @@ for job in manifest['jobs']:
             identity=identity and e.get('toolNames')==([] if advisor else ['codemode'])
     totals={k:sum((e.get('usage') or {}).get(k,0) for e in assistants) for k in ['input','cacheRead','cacheWrite','output']}
     ledger_cost=sum(((e.get('usage') or {}).get('cost') or {}).get('total',0) for e in assistants)
+    if not worker and assistants:
+        # This is only a floor: the final in-flight response may be unrecorded.
+        usage={**totals,'estimatedApiUsd':ledger_cost,'costUnknown':True}
     matched=bool(assistants) and len(raw_usage)==len(assistants) and abs(ledger_cost-usage.get('estimatedApiUsd',0))<1e-9
     matched=matched and all(totals[k]==usage.get(k,0) for k in totals)
     matched=matched and sum(e['usage'].get('input_tokens',0) for e in raw_usage.values())==sum(totals[k] for k in ['input','cacheRead','cacheWrite'])
@@ -55,7 +58,7 @@ for job in manifest['jobs']:
         phase_ms=(datetime.fromisoformat(phase['finished_at'])-datetime.fromisoformat(phase['started_at'])).total_seconds()*1000
     responses=worker.get('modelCalls',worker.get('turns',usage.get('modelCalls')))
     calls=worker.get('toolCalls',worker.get('calls',usage.get('toolCalls')))
-    eligible=bool(worker.get('status')=='completed' and identity and matched and not unknown
+    eligible=bool(not trial.get('exception_info') and worker.get('status')=='completed' and identity and matched and not unknown
       and usage.get('estimatedApiUsd',0)<=5 and responses is not None and responses<=100
       and calls is not None and calls<=240)
     row={**job,'accepted':accepted,'policyValidSuccess':accepted and eligible,'officialReward':reward,
@@ -72,6 +75,7 @@ for job in manifest['jobs']:
       'recovery':trial.get('recovery'),
       'trialResultSha256':hashlib.sha256(path.read_bytes()).hexdigest(),
       'workerSha256':hashlib.sha256(worker_path.read_bytes()).hexdigest() if worker_path.exists() else None}
+    row['usageSource']='worker aggregate' if worker else 'partial response receipts; whole-attempt cost unknown'
     rows.append(row)
 summary=[]
 for arm in ['codex','pi','v1','v2']:
@@ -101,6 +105,7 @@ lines+=['','API-equivalent cost estimates, not subscription charges. Unknown cos
  'Latency is the full Harbor agent phase, including wrapper/runtime startup and receipt export. Worker-only timings are also retained in results.json.',
  'The Pi adaptive-rejection-sampler actor and grader completed before a host interruption during artifact collection. Original receipts were recovered and hash checked against its container; outer phase timing is missing. No actor or grader rerun.',
  'After the first two attempts, concurrency is at most two, with a combined 4 GiB task reservation; tasks above 2 GiB run alone. Shared resources may affect latency.',
+ 'After attempt 55, actor receipts are bind-mounted to the host so timeout cancellation cannot skip export. Timed-out actors are stopped before grading; timeout failures remain in the denominator and incomplete costs remain unknown. No retries.',
  'V2 changes model as well as pipeline. Codex/Pi/V1 match Sol High; V2 is a system comparison.',
  '100-response cap; first provider-failed attempt had the initial 60 cap but made zero responses.',
  'V2 controller smoke checks cover 3/30 tasks, solely from public instructions. Other tasks have no controller verification trigger.',
