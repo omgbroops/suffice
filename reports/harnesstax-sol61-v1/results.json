@@ -1,5 +1,5 @@
 {
-  "asOf": 1792468705.136309,
+  "asOf": 1792469924.8412478,
   "complete": false,
   "attempts": [
     {
@@ -41,8 +41,74 @@
         "started_at": "2026-10-20T03:49:13.440396Z",
         "finished_at": "2026-10-20T03:49:14.585247Z"
       },
+      "recovery": null,
       "trialResultSha256": "4d40f0dfda92ba21384bec5ba7415596bb8bfafefc716f48f2b4e089938da71f",
       "workerSha256": "63fe3a88908afe9f83c2d67c79e7e8af623a0020920da3068ea984ed8c5945fd"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "pi",
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.22568560000000004,
+      "costUsd": 0.22568560000000004,
+      "latencyMs": 379967,
+      "agentPhaseMs": null,
+      "usage": {
+        "input": 28680,
+        "cacheRead": 134656,
+        "cacheWrite": 0,
+        "output": 15486,
+        "estimatedApiUsd": 0.22568560000000004,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": null,
+      "setupTiming": null,
+      "recovery": {
+        "at": 1792469743.0903842,
+        "reason": "Host controller disappeared during artifact collection; actor and official grader had already finished.",
+        "actorRerun": false,
+        "verifierRerun": false,
+        "receiptHashesVerifiedAgainstContainer": {
+          "./pi-counter.json": "bb69e63e4d1065f09d08d1a00afc31085062154a51462a370bfa2246dbe3a225",
+          "./stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "./events.live.jsonl": "20ece3aab8d4e56bc78e67dc7bc59653e313dc0fe2e2574b88d77f8f76273717",
+          "./pi-sessions/2026-10-20T03-55-48-268Z_01a15773-7aab-732e-b387-3d40348b4395.jsonl": "8adeb12f2fc736641616128a4400ccce1e485c04ce13b0074f3ea97fdbf56923",
+          "./native-command.json": "7128c804e805324113061fa29875f3de87f0bb6c088ce23415d3e73f98a1b3e6",
+          "./pi-events.jsonl": "2327b6d8f3f8e7f4925a3180608486c527e4757b011c7000ce0ff9d1a7206a2f",
+          "./pi-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "./console.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "./worker.json": "ec6df57b4f9f2b628af391c481a9577c7257bfaadd4e7aa68f359795c81bba1a"
+        },
+        "evidenceHashes": {
+          "lock.json": "ce7f6ad04013901e3c3d610c53b5cb50f608edd40d134f4ff29f8ab1b5f59084",
+          "config.json": "536f02448899f9d15320043dfe788a46143d47099d19bf0dfbf2587b72f1027f",
+          "trial.log": "5868e519b78e4f2f267470e411fb5e62ab85729eb3642ffbddd64e569930f993",
+          "verifier/reward.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "verifier/ctrf.json": "2dd9b4c386222a7f1e1ed0aa511381d44f89e6e9f21df140a87ecf088f514b8c"
+        },
+        "missing": [
+          "original Harbor trial ID",
+          "outer phase timings",
+          "complete artifact finalization"
+        ]
+      },
+      "trialResultSha256": "d9d7306beacc9ca5204fecc5b6139b9e27405569b0ca51bc5d9a5f603e8d09a3",
+      "workerSha256": "ec6df57b4f9f2b628af391c481a9577c7257bfaadd4e7aa68f359795c81bba1a"
     }
   ],
   "summary": [
@@ -60,10 +126,10 @@
     },
     {
       "arm": "pi",
-      "completed": 0,
-      "accepted": 0,
-      "policyValidSuccesses": 0,
-      "knownCostUsd": 0,
+      "completed": 1,
+      "accepted": 1,
+      "policyValidSuccesses": 1,
+      "knownCostUsd": 0.22568560000000004,
       "unknownCosts": 0,
       "meanSeconds": null,
       "adviceCalls": 0,
