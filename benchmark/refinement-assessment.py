@@ -12,15 +12,17 @@ def main():
     rows=data['attempts'];arms=['pi','v1','v2','v3']
     lines=['# Five-task refinement pilot assessment','',
         'One attempt per task/arm on five purposively selected fresh tasks. These are system comparisons, not feature ablations or reliable population accuracy estimates. No previous result is replaced.','',
-        '| Arm | Accepted | Graded | Known total USD | Known cost / accepted | Mean agent seconds | Incomplete costs |',
-        '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+        '| Arm | Accepted | Graded | Policy valid | Public checks passed | Known total USD | Known cost / accepted | Mean agent seconds | Incomplete costs |',
+        '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
     for arm in arms:
         group=[r for r in rows if r['arm']==arm];accepted=sum(r['accepted'] for r in group)
         cost=sum(r['knownCostUsd'] for r in group);unknown=sum(r['costUnknown'] for r in group)
         latency=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None]
         per=f'{cost/accepted:.6f}' if accepted else 'undefined (no accepted tasks)'
         seconds=f'{statistics.mean(latency):.1f}' if latency else 'unavailable'
-        lines.append(f"| {arm} | {accepted}/5 | {sum(r['graded'] for r in group)} | {'≥' if unknown else ''}{cost:.6f} | {'≥' if unknown and accepted else ''}{per} | {seconds} | {unknown} |")
+        valid=sum(r['policyValidSuccess'] for r in group)
+        public=sum(r['publicVerification']=='passed' for r in group)
+        lines.append(f"| {arm} | {accepted}/5 | {sum(r['graded'] for r in group)} | {valid}/5 | {public}/5 | {'≥' if unknown else ''}{cost:.6f} | {'≥' if unknown and accepted else ''}{per} | {seconds} | {unknown} |")
     lines+=['','All known costs include failures, planning, delegation and repairs. These are API-equivalent estimates, not subscription charges. Incomplete accounting is retained as a floor, never silently zeroed.','',
         '| Task | Pi | V1 | V2 | V3 |','| --- | --- | --- | --- | --- |']
     for task in dict.fromkeys(r['task'] for r in rows):
