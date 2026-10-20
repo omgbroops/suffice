@@ -6,6 +6,7 @@ import {createPipelineSession} from './session.mjs';
 import {normalizeRequest,PIPELINE_POLICY,THIN_PROMPT,ADVICE_PROMPT} from './policy.mjs';
 import {prepareExecutionInput,executionNotices,withExecutionOutput} from '../execution/core.mjs';
 import {verifyPublicContracts} from '../execution/verification.mjs';
+import {executionSystemPrompt} from '../execution/scope.mjs';
 
 const save=async(p,v)=>{await mkdir(resolve(p,'..'),{recursive:true});await writeFile(p,JSON.stringify(v,null,2)+'\n',{mode:0o600});};
 const quote=s=>"'"+s.replaceAll("'","'\\''")+"'";
@@ -26,7 +27,7 @@ export async function executePipeline(request,deps={}) {
   const workspace=await realpath(r.workspace),runDir=resolve(r.runDir);
   await mkdir(runDir,{recursive:true});
   if(contained(workspace,await realpath(runDir)))throw Error('runDir must be outside the working repository');
-  await writeFile(resolve(runDir,'request.json'),JSON.stringify({profile:r.profile,features:f,model:r.model,effort:r.effort,maxCostUsd:r.maxCostUsd,timeoutMs:r.timeoutMs,maxTurns:r.maxTurns,maxCalls:r.maxCalls,checks:r.checks,...(r.strategy?{strategy:r.strategy}:{}),...(r.provider?{provider:r.provider}:{}),...(r.contractVerification?{contractVerification:r.contractVerification}:{})},null,2)+'\n',{flag:'wx',mode:0o600});
+  await writeFile(resolve(runDir,'request.json'),JSON.stringify({profile:r.profile,features:f,model:r.model,effort:r.effort,executionScope:r.executionScope,maxCostUsd:r.maxCostUsd,timeoutMs:r.timeoutMs,maxTurns:r.maxTurns,maxCalls:r.maxCalls,checks:r.checks,...(r.strategy?{strategy:r.strategy}:{}),...(r.provider?{provider:r.provider}:{}),...(r.contractVerification?{contractVerification:r.contractVerification}:{})},null,2)+'\n',{flag:'wx',mode:0o600});
   const clock=deps.now??Date.now,started=clock(),deadline=started+r.timeoutMs;
   const usage={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,toolCalls:0,costUnknown:false};
   const stages=[],verification=[],notes=[],extensions=[];
@@ -48,7 +49,7 @@ export async function executePipeline(request,deps={}) {
       if(usage.toolCalls>r.maxCalls||clock()>=deadline||remaining()<=0||usage.costUnknown){queueMicrotask(()=>control?.abort());return {block:true,reason:'Shared task allowance exhausted'};}
     });};
     let opt={cwd:workspace,home:resolve(stageDir,'state'),model,provider:advisor?'openai':r.provider??'openai',effort,maxCost:remaining(),timeout:Math.max(.01,(deadline-clock())/1000),maxTurns:advisor?1:r.maxTurns-usage.modelCalls,maxCalls:r.maxCalls-usage.toolCalls,profile:r.profile,noTools:advisor,
-      systemPrompt:advisor?ADVICE_PROMPT:r.profile==='thin'?THIN_PROMPT:undefined,extensions:[gate,...extensions],...(advisor?{allowedTools:[],noContextFiles:true}:{})};
+      systemPrompt:advisor?ADVICE_PROMPT:executionSystemPrompt(r.executionScope,r.profile==='thin'?THIN_PROMPT:undefined),extensions:[gate,...extensions],...(advisor?{allowedTools:[],noContextFiles:true}:{})};
     opt=await withExecutionOutput(opt,{workspace,artifactDir:resolve(runDir,'observations'),enabled:!advisor&&f.outputControl,record:e=>notes.push(e)});
     const factory=deps.createSession??(r.profile==='baseline'&&!advisor&&!f.outputControl&&opt.provider==='openai'?createSufficeSession:createPipelineSession);
     try {
@@ -86,8 +87,10 @@ export async function executePipeline(request,deps={}) {
   const failed=result=>result.outcomes.some(x=>!x.passed);
   const feedback=result=>JSON.stringify(result.outcomes.filter(x=>!x.passed).map(x=>({command:x.command,exitCode:x.exitCode,output:x.output.slice(-5000)})));
   async function advise(label,failures='No implementation has been made yet.') {
-    prepared=await prepare(label);
-    advice=await stage(label,PIPELINE_POLICY.advisor,PIPELINE_POLICY.advisorEffort,`${prepared}\n\nPublic execution evidence:\n${failures}\nGive only a short diagnosis and concrete next steps. No code.`,{advisor:true});
+    // An upfront plan sees public task requirements only. Do not pay to scan or
+    // duplicate prepared repository context for a tool-free planning call.
+    const evidence=label==='advice-upfront'?r.prompt:await prepare(label);
+    advice=await stage(label,PIPELINE_POLICY.advisor,PIPELINE_POLICY.advisorEffort,`${evidence}\n\nPublic execution evidence:\n${failures}\nGive only a short diagnosis and concrete next steps. No code.`,{advisor:true});
     return advice.slice(0,1800);
   }
   try {
@@ -111,7 +114,9 @@ export async function executePipeline(request,deps={}) {
     }
     if(failed(checked))status='verification_failed';
   }catch(e){status=/allowance|cost_limit|turn_limit|tool_limit|timeout/i.test(e.message)?'budget_stopped':usage.costUnknown?'cost_unknown':'operational_failure';notes.push({kind:'failure',error:e.message});}
-  const result={version:PIPELINE_POLICY.version,...(r.strategy?{strategy:r.strategy}:{}),profile:r.profile,features:f,model:r.model,effort:r.effort,status,usage,stages,verification,notes,repairs,escalations,adviceCalls:stages.filter(s=>s.advisor).length,final,latencyMs:clock()-started,verificationStatus:!r.checks.length&&!r.contractVerification?'not_configured':verification.at(-1)?.passed?'passed':'failed',
+  const verificationStatus=!r.checks.length&&!r.contractVerification?'not_configured':!verification.length?'not_run':verification.at(-1)?.passed?'passed':'failed';
+  const result={version:PIPELINE_POLICY.version,...(r.strategy?{strategy:r.strategy}:{}),profile:r.profile,features:f,model:r.model,effort:r.effort,executionScope:r.executionScope,status,usage,stages,verification,notes,repairs,escalations,adviceCalls:stages.filter(s=>s.advisor).length,final,latencyMs:clock()-started,verificationStatus,
+    completionEvidence:verificationStatus==='passed'?'public_checks_passed':verificationStatus==='failed'?'public_checks_failed':'unverified',
     budgetEligible:status==='completed'&&!usage.costUnknown&&usage.estimatedApiUsd<=r.maxCostUsd&&clock()<=deadline&&usage.modelCalls<=r.maxTurns&&usage.toolCalls<=r.maxCalls};
   await save(resolve(runDir,'worker.json'),result);return result;
 }

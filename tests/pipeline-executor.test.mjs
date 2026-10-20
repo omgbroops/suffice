@@ -43,6 +43,37 @@ test('a provider request without a corresponding response keeps cost unknown',as
 test('missing checks are reported unverified and never trigger advice',async t=>{
   const d=fake([.01],[]);const out=await executePipeline({...await fixture(t),checks:[],features:{advice:'on_failure',repairs:true}},d);
   assert.equal(out.verificationStatus,'not_configured');assert.equal(out.adviceCalls,0);assert.equal(out.repairs,0);
+  assert.equal(out.completionEvidence,'unverified');
+});
+
+test('isolated task scope is explicit and does not change the default repository prompt',async t=>{
+  const defaults=fake([.01],[true]);
+  await executePipeline({...await fixture(t),profile:'baseline'},defaults);
+  assert.equal(defaults.options[0].systemPrompt,undefined);
+  const d=fake([.01],[true]);
+  const out=await executePipeline({...await fixture(t),profile:'baseline',executionScope:'isolated-task'},d);
+  assert.match(d.options[0].systemPrompt,/task defines the authorized paths/);
+  assert.match(d.options[0].systemPrompt,/File tools are repository-scoped/);
+  assert.equal(out.executionScope,'isolated-task');
+  assert.equal(out.completionEvidence,'public_checks_passed');
+});
+
+test('upfront tool-free Sol plan is charged and failed public checks still reach takeover',async t=>{
+  const d=fake([.01,.02,.03,.04],[false,false,true]);
+  const out=await executePipeline({...await fixture(t),features:{advice:'upfront',repairs:true,solTakeover:true}},d);
+  assert.equal(out.adviceCalls,1);assert.equal(out.repairs,1);assert.equal(out.escalations,1);
+  assert.deepEqual(out.stages.map(s=>s.label),['advice-upfront','solve','repair-1','sol-takeover']);
+  assert.equal(d.options[0].noTools,true);assert.equal(d.options[0].noContextFiles,true);
+  assert.match(d.prompts[1],/Advisory hypotheses/);
+  assert.equal(out.verificationStatus,'passed');
+  assert.ok(Math.abs(out.usage.estimatedApiUsd-.1)<1e-10);
+});
+
+test('a failed actor does not claim that configured verification ran',async t=>{
+  const d=fake([null],[]);
+  const out=await executePipeline(await fixture(t),d);
+  assert.equal(out.verification.length,0);assert.equal(out.verificationStatus,'not_run');
+  assert.equal(out.completionEvidence,'unverified');
 });
 test('receipt path cannot expose runtime records inside actor workspace',async t=>{
   const r=await fixture(t);await assert.rejects(executePipeline({...r,runDir:join(r.workspace,'receipts')},fake([.01],[true])),/outside/);
@@ -53,6 +84,7 @@ test('configuration rejects mistyped features and invalid check protocols',()=>{
   assert.throws(()=>normalizeRequest({...base,checks:[{command:'npm test'}]}),/argv/);
   assert.throws(()=>normalizeRequest({...base,features:{repairs:'false'}}),/boolean/);
   assert.throws(()=>normalizeRequest({...base,maxTurns:1.1}),/maxTurns/);
+  assert.throws(()=>normalizeRequest({...base,executionScope:'all-files'}),/executionScope/);
   assert.throws(()=>normalizeRequest({...base,checks:[{command:['node'],timeoutMs:-1}]}),/timeoutMs/);
 });
 test('terminal completion at exact response allowance may run deterministic checks',async t=>{

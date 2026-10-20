@@ -6,6 +6,8 @@ const flags=['outputControl','preparedContext','guidance','runbooks','notices','
 export function normalizeRequest(request) {
   const r={profile:'thin',model:PIPELINE_POLICY.worker,effort:PIPELINE_POLICY.workerEffort,maxCostUsd:.25,timeoutMs:300000,maxTurns:40,maxCalls:160,maxRepairAttempts:1,...request};
   if(!['baseline','thin'].includes(r.profile))throw Error('Invalid profile');
+  r.executionScope??='repository';
+  if(!['repository','isolated-task'].includes(r.executionScope))throw Error('Invalid executionScope');
   if(!r.experimental)throw Error('Pipeline requires experimental: true');
   for(const k of ['workspace','runDir','prompt'])if(typeof r[k]!=='string'||!r[k].trim())throw Error(`${k} is required`);
   for(const k of ['maxCostUsd','timeoutMs','maxTurns','maxCalls'])if(!Number.isFinite(r[k])||r[k]<=0)throw Error(`Invalid ${k}`);
