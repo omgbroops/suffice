@@ -1,22 +1,23 @@
 """Offline activation/accounting audit. Reads completed actor receipts only."""
 import hashlib
 import json
+import os
 from pathlib import Path
 
-STATE=Path('/home/eric_qin/suffice-refinement-pilot')
-OUT=Path('/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/reports/refinement-pilot-v1')
+STATE=Path(os.environ.get('HARNESS_TAX_REPORT_STATE','/home/eric_qin/suffice-refinement-pilot'))
+OUT=Path(os.environ.get('HARNESS_TAX_REPORT_OUT',str(Path(__file__).resolve().parents[1]/'reports/refinement-pilot-v1')))
 
 def main():
     audited=[]
     for result in sorted((STATE/'results').glob('*.json')):
         root=STATE/'trials'/result.stem/'agent/receipts'
         if not (root/'worker.json').exists():continue
-        worker=json.loads((root/'worker.json').read_text())
+        worker=json.loads((root/'worker.json').read_text(encoding='utf-8'))
         if worker.get('strategy') not in ['efficient','orchestrated']:continue
         events=[]
         files=[p for p in root.rglob('*.jsonl') if '/events/' in p.as_posix()]
         for p in files:
-            events += [{**json.loads(line),'stage':p.relative_to(root).parts[0]} for line in p.read_text().split('\n') if line.strip()]
+            events += [{**json.loads(line),'stage':p.relative_to(root).parts[0]} for line in p.read_text(encoding='utf-8').split('\n') if line.strip()]
         assistants=[e for e in events if e.get('type')=='assistant']
         cost=sum(e.get('usage',{}).get('cost',{}).get('total',0) for e in assistants)
         stage_cost=sum(s['usage']['estimatedApiUsd'] for s in worker.get('stages',[]))
@@ -39,6 +40,6 @@ def main():
             'coordinatorToolCalls':coordinator_tools,'knownCostUsd':worker['usage']['estimatedApiUsd'],
             'stageAndLedgerCostMatch':matched,'costUnknown':worker['usage'].get('costUnknown',False),
             'workerSha256':hashlib.sha256((root/'worker.json').read_bytes()).hexdigest()})
-    (OUT/'activation-audit.json').write_text(json.dumps({'scope':'Completed actor receipts only; no evaluator feedback or actor mutation.','attempts':audited},indent=2)+'\n')
+    (OUT/'activation-audit.json').write_text(json.dumps({'scope':'Completed actor receipts only; no evaluator feedback or actor mutation.','attempts':audited},indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'audited':len(audited),'matched':sum(r['stageAndLedgerCostMatch'] for r in audited)}))
 if __name__=='__main__':main()

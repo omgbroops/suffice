@@ -1,7 +1,7 @@
 # Shared execution strategies (experimental)
 
 `npm run execute` accepts one JSON request on stdin. Set `experimental: true`,
-`strategy: "flexible"` or `"efficient"`, `workspace`, `runDir` outside the workspace,
+`strategy: "flexible"`, `"efficient"` or `"orchestrated"`, `workspace`, `runDir` outside the workspace,
 and `prompt`. This separate entry point does not change the installed CLI or its defaults.
 
 For example, save a request JSON and pipe it with `Get-Content request.json -Raw |
@@ -19,6 +19,36 @@ the V2 thin prompt, Luna/high default and selective Sol/low advice/takeover. Bot
 use the same controller, tools, preparation, accounting and verification services.
 Flexible never switches model or effort; an explicitly enabled repair uses the
 same model and effort. No feature is being promoted into production defaults.
+
+## V3 delegation experiment
+
+`strategy: "orchestrated"` selects the separate V3 experiment. Its default is
+Sol/high coordinating Luna/high workers. The coordinator can read source, navigate
+ASTs, delegate, retrieve retained output and run fixed caller-supplied public
+checks. It has no editing tools or general shell. Its prompt also prohibits
+writing source in delegation briefs; that text instruction is not a semantic
+guarantee about every generated token.
+
+Luna receives the original task plus a focused brief and implements with the
+existing codemode and recoverable output tools. Investigation-only delegates
+have read-only source tools. Up to four sequential delegations share the same
+workspace, deadline, response/tool allowance and cost budget with Sol. This is
+not parallel editing or automatic interception of every tool call. Deterministic
+reads and retained-output retrieval do not require another model delegation.
+
+`worker_output` retrieves bounded original worker output directly, with base64
+available for exact bytes. A worker summary is not proof: Sol can inspect source
+and run `verify`, and the controller checks again after coordination completes.
+Missing checks remain unverified. All model stages contribute to the total cost;
+coordinator elapsed time includes nested worker time and must not be summed.
+The initial five-task system comparison is in `reports/refinement-pilot-v1`.
+Keep V3 opt-in pending broader evidence; delegation can add cost and latency.
+
+For an already isolated task environment, `executionScope: "isolated-task"`
+clarifies that the task defines authorized paths and operations. The default
+remains `"repository"`. This is prompt guidance, not a sandbox or a relaxation
+of the file tools' path guards. Configured but unexecuted verification is
+`not_run`, and completion evidence is explicitly `unverified` until checks run.
 
 Independent opt-ins under `features` are `outputControl`, `preparedContext`,
 `guidance`, `notices`, and `runbooks`. Guidance and runbooks require scoped inputs;

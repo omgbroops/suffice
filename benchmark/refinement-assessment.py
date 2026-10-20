@@ -19,13 +19,25 @@ def main():
         cost=sum(r['knownCostUsd'] for r in group);unknown=sum(r['costUnknown'] for r in group)
         latency=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None]
         per=f'{cost/accepted:.6f}' if accepted else 'undefined (no accepted tasks)'
-        lines.append(f"| {arm} | {accepted}/5 | {sum(r['graded'] for r in group)} | {'≥' if unknown else ''}{cost:.6f} | {'≥' if unknown and accepted else ''}{per} | {statistics.mean(latency):.1f} | {unknown} |")
+        seconds=f'{statistics.mean(latency):.1f}' if latency else 'unavailable'
+        lines.append(f"| {arm} | {accepted}/5 | {sum(r['graded'] for r in group)} | {'≥' if unknown else ''}{cost:.6f} | {'≥' if unknown and accepted else ''}{per} | {seconds} | {unknown} |")
     lines+=['','All known costs include failures, planning, delegation and repairs. These are API-equivalent estimates, not subscription charges. Incomplete accounting is retained as a floor, never silently zeroed.','',
         '| Task | Pi | V1 | V2 | V3 |','| --- | --- | --- | --- | --- |']
     for task in dict.fromkeys(r['task'] for r in rows):
         group={r['arm']:r for r in rows if r['task']==task}
         label=lambda r:'ungraded' if not r['graded'] else 'pass' if r['accepted'] else 'fail'
         lines.append('| '+task+' | '+' | '.join(label(group[a]) for a in arms)+' |')
+    lines+=['','## Per-task cost and latency','',
+        'Each cell is whole-attempt known USD / agent seconds; incomplete costs carry a ≥ prefix. Setup and independent grading are excluded from agent latency.','',
+        '| Task | Pi | V1 | V2 | V3 |','| --- | --- | --- | --- | --- |']
+    for task in dict.fromkeys(r['task'] for r in rows):
+        group={r['arm']:r for r in rows if r['task']==task}
+        cells=[]
+        for arm in arms:
+            row=group[arm]
+            seconds=f"{row['agentPhaseMs']/1000:.1f}s" if row['agentPhaseMs'] is not None else 'unavailable'
+            cells.append(f"{'≥' if row['costUnknown'] else ''}${row['knownCostUsd']:.6f} / {seconds}")
+        lines.append('| '+task+' | '+' | '.join(cells)+' |')
     lines+=['','## Assistance and delegation','']
     for arm in ['v2','v3']:
         group=[r for r in rows if r['arm']==arm]
@@ -34,6 +46,11 @@ def main():
             stages=[s for r in group for s in r['stages'] if s['model']==model]
             value=sum((s.get('usage') or {}).get('estimatedApiUsd',0) for s in stages)
             lines.append(f'- {model}: known stage cost ${value:.6f}.')
+    audit_path=OUT/'activation-audit.json'
+    if audit_path.exists():
+        audited=json.loads(audit_path.read_text())['attempts']
+        peaks=[r['roles']['coordinate']['peakContextTokens'] for r in audited if 'coordinate' in r['roles']]
+        if peaks:lines+=['',f'Largest recorded V3 coordinator input context: {max(peaks):,} tokens. No compaction treatment was enabled or tested.']
     lines+=['','## Regressions against the same-task Pi control','']
     control={r['task']:r for r in rows if r['arm']=='pi'}
     for arm in arms[1:]:
@@ -41,11 +58,20 @@ def main():
         misses=[r['task'] for r in group if control[r['task']]['accepted'] and r['graded'] and not r['accepted']]
         wins=[r['task'] for r in group if r['accepted'] and control[r['task']]['graded'] and not control[r['task']]['accepted']]
         lines.append(f"{arm}: Pi-only successes: {', '.join(misses) or 'none'}; arm-only successes: {', '.join(wins) or 'none'}.")
+    lines+=['','## Public-check disagreements','']
+    for arm in arms:
+        group=[r for r in rows if r['arm']==arm]
+        false_pass=[r['task'] for r in group if r['graded'] and not r['accepted'] and r['publicVerification']=='passed']
+        false_failure=[r['task'] for r in group if r['accepted'] and r['publicVerification']=='failed']
+        lines.append(f"{arm}: public pass but independent failure: {', '.join(false_pass) or 'none'}; public failure but independent acceptance: {', '.join(false_failure) or 'none'}.")
     lines+=['','## Interpretation limits','',
         'Every arm receives the original task and identical visible public check command. Suffice controller feedback/repair is an explicit treatment; Pi receives no extra post-completion model turn. A public check pass covers only its published assertions.',
         'V1 changes scope guidance and public repair. V2 additionally changes model, preparation/output behavior and upfront planning. V3 changes orchestration and the model mix. This run cannot attribute a difference to any single component.',
         'Four sequential V3 delegations are allowed. Only Luna has implementation/shell tools; Sol can inspect source and fixed verification evidence and retrieve original worker output. Worker summaries alone are not accepted as verification.',
         'One shared budget per attempt includes all stages. Parent V3 elapsed time contains nested worker time; stage elapsed times must not be added. At most two task containers share this host, so latency can include resource contention.',
+        'The selected cohort has no JavaScript/TypeScript tasks and does not measure the value of Suffice\'s JavaScript/TypeScript AST navigation. Public smoke checks were authored before actor inference; their coverage is partial and explicitly reported.',
+        'The polyglot task image lacks system python3. The preflight provided a separate checker interpreter, but the frozen public check invokes system python3 for the candidate. Pi was independently accepted despite that public check reporting a missing interpreter. This check conflates environment readiness with source correctness and can cause unnecessary installation or repair work. Preserve this discrepancy; do not count it as a demonstrated code defect or silently amend this cohort. A follow-up should distinguish unavailable prerequisites from failing candidate behavior.',
+        'V1\'s polyglot initial controller check failed solely with the missing-python3 diagnostic; its subsequent same-model repair cost $0.031034 and passed the check. This is observed environment-repair overhead, not evidence that the original source needed a correctness repair.',
         'No production defaults were changed. Select a follow-up on fresh tasks based on failure mechanisms and cost per accepted task; do not promote an experimental mode solely from five outcomes.']
     (OUT/'ASSESSMENT.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     print('\n'.join(lines[:10]))
