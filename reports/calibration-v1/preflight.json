@@ -1,0 +1,48 @@
+{
+  "at": 1792532220.84892,
+  "inference": false,
+  "simultaneousProbes": 4,
+  "checks": [
+    {
+      "task": "log-summary-date-ranges",
+      "infrastructureExit": 0,
+      "negativeControl": {
+        "status": "failed",
+        "error": "[Errno 2] No such file or directory: '/app/summary.csv'"
+      }
+    },
+    {
+      "task": "kv-store-grpc",
+      "infrastructureExit": 0,
+      "negativeControl": {
+        "status": "failed",
+        "error": "No module named 'grpc'"
+      }
+    },
+    {
+      "task": "filter-js-from-html",
+      "infrastructureExit": 0,
+      "negativeControl": {
+        "status": "failed",
+        "error": "filter.py missing"
+      }
+    },
+    {
+      "task": "db-wal-recovery",
+      "infrastructureExit": 0,
+      "negativeControl": {
+        "status": "failed",
+        "error": "[Errno 2] No such file or directory: '/app/recovered.json'"
+      }
+    }
+  ],
+  "installOnly": "passed",
+  "finalPublicCheckSha256": "ac2b9b592152ba0eead4e1086ba01f7461c28a0680fdcdcd07da04d19365c0bc",
+  "positiveNegativeFixtures": {
+    "localFixtureTests": 3,
+    "grpcWorkingService": "passed",
+    "grpcStoppedService": "rejected",
+    "inference": false
+  },
+  "fixtureValidatedAt": 1792532461.598922
+}

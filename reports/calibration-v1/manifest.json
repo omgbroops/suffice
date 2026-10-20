@@ -1,0 +1,510 @@
+{
+  "version": "calibration-v1",
+  "created": 1792532202.6211169,
+  "arms": [
+    "pi",
+    "v1-original",
+    "v1-refined",
+    "v1-concise",
+    "v2-alone",
+    "v2-upfront",
+    "v2-selective",
+    "v2-concise"
+  ],
+  "armAliases": {
+    "pi": "pi",
+    "v1-original": "v1",
+    "v1-refined": "v1",
+    "v1-concise": "v1",
+    "v2-alone": "v2",
+    "v2-upfront": "v2",
+    "v2-selective": "v2",
+    "v2-concise": "v2"
+  },
+  "policies": {
+    "pi": {
+      "executionArm": "pi",
+      "execution": {}
+    },
+    "v1-original": {
+      "executionArm": "v1",
+      "baseline": true,
+      "execution": {
+        "features": {}
+      }
+    },
+    "v1-refined": {
+      "executionArm": "v1",
+      "execution": {
+        "executionScope": "isolated-task",
+        "features": {
+          "repairs": true
+        }
+      }
+    },
+    "v1-concise": {
+      "executionArm": "v1",
+      "execution": {
+        "executionScope": "isolated-task",
+        "features": {
+          "repairs": true
+        },
+        "communication": "concise"
+      }
+    },
+    "v2-alone": {
+      "executionArm": "v2",
+      "execution": {
+        "executionScope": "isolated-task",
+        "features": {
+          "advice": false,
+          "repairs": true,
+          "solTakeover": false
+        }
+      }
+    },
+    "v2-upfront": {
+      "executionArm": "v2",
+      "execution": {
+        "executionScope": "isolated-task",
+        "features": {
+          "advice": "upfront",
+          "repairs": true,
+          "solTakeover": true
+        }
+      }
+    },
+    "v2-selective": {
+      "executionArm": "v2",
+      "execution": {
+        "executionScope": "isolated-task",
+        "features": {
+          "advice": "on_failure",
+          "repairs": true,
+          "solTakeover": true
+        }
+      }
+    },
+    "v2-concise": {
+      "executionArm": "v2",
+      "execution": {
+        "executionScope": "isolated-task",
+        "features": {
+          "advice": "on_failure",
+          "repairs": true,
+          "solTakeover": true
+        },
+        "communication": "concise"
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "log-summary-date-ranges",
+      "instructionSha256": "c1d4516ad4ec2238209740eaf01291df9ab48b0028a3fc5df383c6f831453484",
+      "taskSha256": "6d52ee3cd752b917e290d0cbbc99ae856ce7e851169b9cd9bb0c332404bc6873",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/log-summary-date-ranges:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/calibration-public-check.py",
+            "log-summary-date-ranges"
+          ],
+          "prerequisites": [
+            {
+              "purpose": "infrastructure",
+              "command": [
+                "python3",
+                "-c",
+                "import sys,sqlite3; assert sys.version_info >= (3,10)"
+              ]
+            }
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "kv-store-grpc",
+      "instructionSha256": "f4b3facc199d5b1c78db6e603ffa29ec1b93a77ff7d291e1a92b42e6bf582bed",
+      "taskSha256": "b93d343ae7dd483b15d3b846fd6c13f136a279143e840d83beb521772f4c208d",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/kv-store-grpc:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/calibration-public-check.py",
+            "kv-store-grpc"
+          ],
+          "prerequisites": [
+            {
+              "purpose": "infrastructure",
+              "command": [
+                "python3",
+                "-c",
+                "import sys,sqlite3; assert sys.version_info >= (3,10)"
+              ]
+            }
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "filter-js-from-html",
+      "instructionSha256": "608fd501693f5ceb3e313db03841d910d29497569a7de018c7e1b965eeb96f34",
+      "taskSha256": "44e7a7f84eb1c603b54abd948f5e72205aa51bbb3dbbecdaabefebb59803515b",
+      "timeoutSec": 1800.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/filter-js-from-html:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/calibration-public-check.py",
+            "filter-js-from-html"
+          ],
+          "prerequisites": [
+            {
+              "purpose": "infrastructure",
+              "command": [
+                "python3",
+                "-c",
+                "import sys,sqlite3; assert sys.version_info >= (3,10)"
+              ]
+            }
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "db-wal-recovery",
+      "instructionSha256": "5a20375162921b8911c67035d1905df7fd335d1bed03044271e608b2c3c93b26",
+      "taskSha256": "2ff8fa659f95fd16932114f50d16c44229ffeb05f116c6f9e0c7b6b376e087e2",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/db-wal-recovery:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/calibration-public-check.py",
+            "db-wal-recovery"
+          ],
+          "prerequisites": [
+            {
+              "purpose": "infrastructure",
+              "command": [
+                "python3",
+                "-c",
+                "import sys,sqlite3; assert sys.version_info >= (3,10)"
+              ]
+            }
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "pi"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v1-original"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v1-refined"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v1-concise"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-alone"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-upfront"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-selective"
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "arm": "v2-concise"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-original"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-refined"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v1-concise"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-alone"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-upfront"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-selective"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "v2-concise"
+    },
+    {
+      "task": "kv-store-grpc",
+      "arm": "pi"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v1-refined"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v1-concise"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-alone"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-upfront"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-selective"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v2-concise"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "pi"
+    },
+    {
+      "task": "filter-js-from-html",
+      "arm": "v1-original"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v1-concise"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v2-alone"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v2-upfront"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v2-selective"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v2-concise"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "pi"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v1-original"
+    },
+    {
+      "task": "db-wal-recovery",
+      "arm": "v1-refined"
+    }
+  ],
+  "sourceHead": "0f58e4496184a514d9b9422a9345dbbd5512651d",
+  "baselineCommit": "526eee4aac71c469c4f9b2b08c5d49f25dd61cb8",
+  "taskCommit": "69671fbaac6d67a7ef0dfec016cc38a64ef7a77c",
+  "runtimeInputs": {
+    "src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+    "src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+    "src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+    "src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+    "src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+    "src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+    "src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+    "src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+    "src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+    "src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+    "src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+    "src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "src/packets/entry.mjs": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+    "src/packets/executor.mjs": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+    "src/packets/policy.mjs": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+    "src/pipeline/notices.mjs": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+    "src/pipeline/fleet.mjs": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+    "src/pipeline/context.mjs": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+    "src/pipeline/session.mjs": "1e03ecd7782d5f0a2be548c857aa5c506d70eb113ad9d6a25dc8a58f5506ea1f",
+    "src/pipeline/tools.mjs": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+    "src/pipeline/knowledge.mjs": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+    "src/pipeline/observations.mjs": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+    "src/pipeline/preparation.mjs": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+    "src/pipeline/entry.mjs": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+    "src/pipeline/executor.mjs": "bf9644836226c502d8fdda3bc66402e3eb80cbb79271bf1650cee87eaa43039d",
+    "src/pipeline/policy.mjs": "41d2f27a3ad3e46eb7a67c23f1c97d3d15d59d59547f297cb8e99d66bb6e353e",
+    "src/execution/orchestrated.mjs": "30afdf31a7db9454b85303a40dae3dffaaa1cc0bcf49efbcdef2bf4af371a711",
+    "src/execution/strategies.mjs": "9b2be048415f7ce586ef067889241d5544ef3cdc9e39fd24abfe8eb805145f92",
+    "src/execution/core.mjs": "5672e27a87fc034e092de6b26f1004bbaf9358d93ccfec629d508c5553cf57e8",
+    "src/execution/verification.mjs": "cbca2c8900d6c9a9d4bbe508be0a3c2113b27a4865c4b9a11fb27b05b162f0c5",
+    "src/execution/entry.mjs": "b639ca9376ed9e051d2bbbd2fcff0a33154ce34c29eb12c28d82ce1fe6d1bbe9",
+    "src/execution/check-evidence.mjs": "4ca24c84acd78209e68aa3fe12aa21cfeb04d4df617dc52884ada24baba75e57",
+    "src/execution/scope.mjs": "f7aa6def4defd41fb41cd8eaa0fa0462bdf115344bab62ad68b040f5ffab2127",
+    "packages/cli/src/projects.mjs": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+    "packages/cli/src/options.mjs": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+    "packages/cli/src/session.mjs": "5ca14bd23aa9842ae10c151eb220d61bb96591191638da43cd63588e96e5a084",
+    "packages/cli/src/workspace.mjs": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+    "packages/cli/src/tools.mjs": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+    "packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+    "benchmark/harnesstax-agent.py": "f4ccebeb2667e89bb47b7ffc2e27de71db1d3a538e3bdc17f0bbeeaebb18f694",
+    "benchmark/calibration-arms.mjs": "526f7275a97c4a3d03dd76b6536d0a66cdae584c1c72a7a9ede8af18682977b1",
+    "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e",
+    "benchmark/harnesstax-campaign.py": "f5437d44ed0fa4525467eb3c12d6fdfd3c591c0a5ace5c68daff2186ae45ef2c",
+    "benchmark/harnesstax-process.mjs": "35c916c7f84753765048cc182d650272e892de31a084f654bd55ab0ff4b6b42b",
+    "benchmark/harnesstax-worker.mjs": "0d44991edcda91df395d9efb6522f0b92fcd18e1ebaf7ccdf928c7e577ac3ea5",
+    "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79",
+    "benchmark/calibration-campaign.py": "4df787f77fb2bb5a0522d14da4aafe7852e820b48c9d0e5e7883052a54d33c92"
+  },
+  "baselineInputs": {
+    "src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+    "src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+    "src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+    "src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+    "src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+    "src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+    "src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+    "src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+    "src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+    "src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+    "src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+    "src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "src/packets/entry.mjs": "53e890c989fec804d478d6b45aee651063c12a5a3df1b817fa5c2de7d32cbe81",
+    "src/packets/executor.mjs": "8fb789d36637e4136ac80e26701d03c757afda7a128b450d7f88a733208be51e",
+    "src/packets/policy.mjs": "165bb2e6635074ced08f4e1400745739f3378d2c28e36ded55a6c0eb806b184b",
+    "src/pipeline/notices.mjs": "20cbdb70b145d628b698f8f9fe998db1f1e4bc3905fa1ba5a3f052b5b273844f",
+    "src/pipeline/fleet.mjs": "5c225d640092214f5561775c18170bb909f9cd39bbf31dbe0c3ab4f0b5442c26",
+    "src/pipeline/context.mjs": "3f3b9efeee1a4c9558904a31a47d66db38ce511f6d9f192da2058f8b48995c16",
+    "src/pipeline/session.mjs": "1e03ecd7782d5f0a2be548c857aa5c506d70eb113ad9d6a25dc8a58f5506ea1f",
+    "src/pipeline/tools.mjs": "10378ccd71375eef01733ce55a6fd45d1d589fac3db69d0ad6e2d2adc12aab5d",
+    "src/pipeline/knowledge.mjs": "f95686849f854aaaeeed8fdb42f39af15c74d231749837edb3ec3bdf983e5171",
+    "src/pipeline/observations.mjs": "220b8419c27bd9cc9879f221320a2162d75e7a8d0c76c955ffbd5b514d17df9c",
+    "src/pipeline/preparation.mjs": "75ad27574cd284366aeea3e2930e74675ed50ed6deb370e62a8ba09570c8e91c",
+    "src/pipeline/entry.mjs": "71c8c306158528767db3955cfc94a4d83c593466c9dbf0a97468d92740820a26",
+    "src/pipeline/executor.mjs": "8e2be9fe259f44780eb007f276008e5d3148516b6bd51de86310c2b44ba7d7e7",
+    "src/pipeline/policy.mjs": "dca14ce11d50be41a5fe719a9f2b916409752137c585de4f070f2dc7f037f217",
+    "src/execution/strategies.mjs": "f90e5f21e588aceca87db9f707699fbbb692935b3815a4fc6595e806562c7e5b",
+    "src/execution/core.mjs": "a1bfaaa77078a2f1d746ce0ba27c2ff3b9bcd456e7c81b8dc7cd91991fdf3cbc",
+    "src/execution/verification.mjs": "9c061831ba7a2b4c4c8d86a73cdb2442eef7f2578044266ccb6ec446150a204a",
+    "src/execution/entry.mjs": "7d1c946b3dcab8e1347409f01ef9646d7444aaeb1240b58f1ef25eb17df20b18",
+    "packages/cli/src/projects.mjs": "920dffed714fe56c5040e826615f332df346da01c443ece463a49c76c9dc4b10",
+    "packages/cli/src/options.mjs": "c1a30d1da1a513857dab44a95c94db7b12934edc6f4d2f562ed78d3212b61f6f",
+    "packages/cli/src/session.mjs": "fbb76b3e96068657b16745a2edb6982bed71ba61c0971ea14f422dc8871c6f4d",
+    "packages/cli/src/workspace.mjs": "f0b8300e39bde271ef92f62af35aebe05531834130d67e71dcbdb4011e80955f",
+    "packages/cli/src/tools.mjs": "7141a445c4d05b08b1ad323767e15fa932155fcd03cdea8facd42d3d6c333fa5",
+    "packages/cli/src/navigation.mjs": "9d2bd79c1e1d466458c1516973c8d44d89a49653d126bffbe9c639e6f6a83122",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/interactive.mjs": "e395edcc50b5520edb60c7d88171e893fab0b186d3d6f6a5a73186c74b62bd26"
+  },
+  "publicInputs": {
+    "public-checks/calibration-public-check.py": "ac2b9b592152ba0eead4e1086ba01f7461c28a0680fdcdcd07da04d19365c0bc",
+    "public-data/logs.json": "97fec9c8821224e9217af23154880e124a074a7ea144c1435a2f6396310e3e97"
+  },
+  "dependencies": {
+    "sha256": "ae637d3185a186ec5ff32d5864d13ddb7a2659e77ffb71b874acc32ec7fe0195",
+    "files": 15057
+  },
+  "planSha256": "ee9c7ae88f2f89edfef7a30aaf8cb7e6ecef39a61901e12e91e4490478f95610",
+  "maxResponses": 100,
+  "maxCostUsd": 5,
+  "maxCalls": 240,
+  "concurrency": 4,
+  "minAvailableMiB": 1536,
+  "admissionSpendStopUsd": 10,
+  "harbor": "0.24.0",
+  "pi": "1.2.0",
+  "models": {
+    "sol": [
+      "gpt-6.1-sol",
+      "high"
+    ],
+    "luna": [
+      "gpt-6-luna",
+      "high"
+    ],
+    "advisor": [
+      "gpt-6.1-sol",
+      "low"
+    ]
+  },
+  "amendments": [
+    {
+      "at": 1792532330.4417126,
+      "beforeInference": true,
+      "reason": "Explicitly close SQLite handles after a Windows checker-fixture cleanup failure. Positive/negative fixtures now pass. No actor inference or hidden test access."
+    },
+    {
+      "at": 1792532410.8010466,
+      "beforeInference": true,
+      "reason": "Live gRPC positive fixture found protobuf descriptor keys returns a list; explicitly convert it to a set. No actor inference or evaluator access."
+    }
+  ]
+}

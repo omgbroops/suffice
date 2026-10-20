@@ -38,7 +38,7 @@ def grpc_store():
         if 'KVStore' in candidate.DESCRIPTOR.services_by_name:module=candidate;service=candidate.DESCRIPTOR.services_by_name['KVStore'];break
     assert service is not None,'KVStore service missing'
     methods=service.methods_by_name
-    assert {'GetVal','SetVal'}<=methods.keys(),'Required RPCs missing'
+    assert {'GetVal','SetVal'}<=set(methods.keys()),'Required RPCs missing'
     get,setter=methods['GetVal'],methods['SetVal']
     assert get.input_type.name=='GetValRequest' and get.output_type.name=='GetValResponse'
     assert setter.input_type.name=='SetValRequest' and setter.output_type.name=='SetValResponse'
