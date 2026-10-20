@@ -55,7 +55,9 @@ def main():
         if not keys:continue
         wins=[k for k in keys if b[k]['accepted'] and not a[k]['accepted']];losses=[k for k in keys if a[k]['accepted'] and not b[k]['accepted']]
         cost_a=sum(a[k]['knownCostUsd'] for k in keys);cost_b=sum(b[k]['knownCostUsd'] for k in keys)
-        lines+=['',f'{treatment} versus {control}: {len(keys)} matched tasks, known cost ${cost_b:.6f} versus ${cost_a:.6f}; wins: {", ".join(wins) or "none"}; regressions: {", ".join(losses) or "none"}.']
+        lines+=['',f'{treatment} versus {control}: {len(keys)} matched tasks, known cost floors ${cost_b:.6f} versus ${cost_a:.6f}; accepted-outcome wins (including infrastructure effects): {", ".join(wins) or "none"}; regressions: {", ".join(losses) or "none"}.']
+        clean=[k for k in keys if all(r['graded'] and r['identity'] and not r['costUnknown'] and r['receiptsMatched'] for r in [a[k],b[k]])]
+        lines.append(f'Fully accounted matched pairs: {len(clean)}/{len(keys)}; costs ${sum(b[k]["knownCostUsd"] for k in clean):.6f} versus ${sum(a[k]["knownCostUsd"] for k in clean):.6f}. Excluded from this accounting-only comparison: {", ".join(k for k in keys if k not in clean) or "none"}. All outcomes remain in the table and overall denominator.')
     lines+=['','## Every outcome','', '| Task | Arm | Independent grade | Public verification | Status | Known USD |', '| --- | --- | --- | --- | --- | ---: |']
     for r in rows:lines.append(f"| {r['task']} | {r['arm']} | {'ungraded' if not r['graded'] else 'pass' if r['accepted'] else 'fail'} | {r['publicVerification']} | {r['status']} | {'≥' if r['costUnknown'] else ''}{r['knownCostUsd']:.6f} |")
     lines+=['','API-equivalent estimates, not subscription charges. Full stage costs, cache tokens, calls, identity and receipt reconciliation are in results.json. Visible text is measured in characters, not billed tokens; reasoning and tool arguments can dominate output cost.',
@@ -63,6 +65,9 @@ def main():
         'At most four containers share the host; observed-memory admission may reduce overlap. Shared CPU, network, caching and grading contention limit latency comparisons. No JS/TS source task measures the AST-navigation advantage.',
         'Required product state is not classified as an optional prerequisite. Missing checker infrastructure remains unverified, never accepted by the controller. Independent grading remains separate and cannot trigger assistance.',
         'No global skills, arbitrary compaction, default changes or outcome-selected replacements. Original campaign reports and runtime receipts remain preserved.']
+    if (STATE/'admission-amendment.json').exists():
+        amendment=json.loads((STATE/'admission-amendment.json').read_text())
+        lines+=['','## Admission amendment','',amendment['reason'],'Completed attempts, including the capacity-affected rejection and incomplete cost, are preserved. Only untouched pending jobs resume at two-way concurrency. The frozen actor runtimes, task limits, prompts, checks and policies are unchanged. Mixed concurrency further limits latency attribution.']
     (OUT/'ANALYSIS.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     print(json.dumps({'completed':len(rows),'summary':data['summary']}))
 if __name__=='__main__':main()

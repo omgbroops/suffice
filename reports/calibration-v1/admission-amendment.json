@@ -1,0 +1,12 @@
+{
+  "at": 1792532763.0704906,
+  "concurrency": 2,
+  "replaceCompletedAttempts": false,
+  "completedBeforeResume": 12,
+  "reason": "After 12 completed attempts, kv-store-grpc-v1-refined encountered an OpenAI-provider HTTP 503 subscription_sharing_user_unavailable response, then an aborted response. Causation by concurrency is unproven. All other active attempts finished before the controller exited. Reduce admission concurrency from four to two as a precaution; preserve that attempt and its incomplete cost, never retry or replace it.",
+  "originalControllerError": {
+    "at": 1792532713.4904785,
+    "error": "Inspect operational failure before admitting another attempt: kv-store-grpc-v1-refined"
+  },
+  "frozenManifestSha256": "1a5b39e634b455406b4b80e8f1102a7fe1dc985a85327c6bcba404ffb9cb9aeb"
+}
