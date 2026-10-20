@@ -66,7 +66,7 @@ def setup():
         shutil.copy2(ROOT/name,RUNTIME/name)
     shutil.copy2('/etc/ssl/certs/ca-certificates.crt',RUNTIME/'ca-certificates.crt')
     shutil.copytree('/home/eric_qin/suffice-general-runtime/app/node_modules',RUNTIME/'node_modules',symlinks=True,dirs_exist_ok=True)
-    for name in ['harnesstax-worker.mjs','harnesstax-agent.py','harnesstax-campaign.py','harnesstax-quota.py']:
+    for name in ['harnesstax-worker.mjs','harnesstax-agent.py','harnesstax-campaign.py','harnesstax-quota.py','harnesstax-process.mjs']:
         (RUNTIME/'benchmark').mkdir(exist_ok=True)
         shutil.copy2(ROOT/'benchmark'/name,RUNTIME/'benchmark'/name)
     native=(ROOT/'benchmark/broad-native-worker.mjs').read_text()
@@ -114,11 +114,12 @@ def validate():
     return m
 
 
-def mounts():
+def mounts(receipts=None):
     pairs=[(RUNTIME,'/runtime',True),
       (Path('/home/eric_qin/suffice-general-runtime/bin'),'/runtime-bin',True),
       (Path('/home/eric_qin/suffice-codex-runtime-0163'),'/codexruntime',True),
       (AUTH,'/agent-auth',False)]
+    if receipts is not None: pairs.append((receipts,'/receipts',False))
     return [dict(type='bind',source=str(s),target=d,**({'read_only':True} if ro else {})) for s,d,ro in pairs]
 
 
@@ -137,9 +138,10 @@ async def attempt(task, arm, preflight=False):
     cfg=TrialConfig(task=TaskConfig(path=DATASET/task['id']),trial_name=name,trials_dir=trials,
       install_only=preflight,agent=AgentConfig(import_path='suffice_harnesstax_agent:HarnessTaxAgent',
         model_name='openai/'+('gpt-6-luna' if arm=='v2' else 'gpt-6.1-sol'),override_setup_timeout_sec=120),
-      environment=EnvironmentConfig(type='docker',delete=True,mounts=mounts()),
+      environment=EnvironmentConfig(type='docker',delete=True,mounts=mounts(trials/name/'agent/receipts')),
       verifier=VerifierConfig())
     trial=await Trial.create(cfg)
+    (trials/name/'agent/receipts').mkdir(parents=True,exist_ok=True)
     result=await trial.run()
     save(STATE/('preflight-results' if preflight else 'results')/(name+'.json'),result.model_dump(mode='json'))
     print(json.dumps({'attempt':name,'exception':str(result.exception_info) if result.exception_info else None,
@@ -156,8 +158,18 @@ def memory_gib(task):
 
 def check_receipt(name):
     receipt=STATE/'trials'/name/'agent/receipts/worker.json'
+    result=json.loads((STATE/'results'/(name+'.json')).read_text())
+    if (result.get('exception_info') or {}).get('exception_type')=='AgentTimeoutError':
+        save(STATE/'timeout-accounting'/(name+'.json'),{'at':time.time(),'attempt':name,
+            'workerReceiptExists':receipt.exists(),'costMayBeIncomplete':True,
+            'action':'Keep the failed attempt and available receipts; continue remaining jobs without retry.'})
+        print(json.dumps({'preservedTimeout':name,'accountingMayBeIncomplete':True}),flush=True)
+        return
     if not receipt.exists(): raise RuntimeError('Missing worker receipt; inspect before admitting another attempt: '+name)
     value=json.loads(receipt.read_text())
+    if value.get('status')=='timeout':
+        print(json.dumps({'preservedTimeout':name,'costUnknown':value.get('usage',{}).get('costUnknown',False)}),flush=True)
+        return
     if value.get('status') in ['provider_error','operational_failure','cost_unknown'] or value.get('usage',{}).get('costUnknown') or value.get('usageCostUnknown'):
         raise RuntimeError('Inspect operational failure before admitting another attempt: '+name)
 

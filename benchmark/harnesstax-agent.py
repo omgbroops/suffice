@@ -4,6 +4,7 @@ This module never reads task tests/solutions or receives verifier results.
 Only runtime files (read-only) and campaign-specific OAuth files are mounted.
 """
 import json
+import asyncio
 import os
 import shlex
 from pathlib import Path
@@ -42,17 +43,26 @@ class HarnessTaxAgent(BaseInstalledAgent):
         path = self.logs_dir/'actor-request.json'
         path.write_text(json.dumps(request, indent=2)+'\n')
         await environment.upload_file(path, '/agent-home/request.json')
-        result = await environment.exec(
-            command='/runtime-bin/node /runtime/benchmark/harnesstax-worker.mjs < /agent-home/request.json > /receipts/console.jsonl 2> /receipts/stderr.txt',
-            cwd=workspace, timeout_sec=timeout+30,
-            env={'PATH':'/runtime-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        try:
+            result = await environment.exec(
+                command='/runtime-bin/node /runtime/benchmark/harnesstax-process.mjs start < /agent-home/request.json > /receipts/console.jsonl 2> /receipts/stderr.txt',
+                cwd=workspace, timeout_sec=timeout+30,
+                env={'PATH':'/runtime-bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
                  'HARNESS_TAX_ARM':arm, 'CODEX_HOME':'/agent-home/codex',
                  'PI_CODING_AGENT_DIR':'/agent-home/pi',
                  'BENCHMARK_MODEL':'gpt-6.1-sol','BENCHMARK_EFFORT':'high',
-                 'SSL_CERT_FILE':'/runtime/ca-certificates.crt'})
+                     'SSL_CERT_FILE':'/runtime/ca-certificates.crt'})
+        except (asyncio.CancelledError,TimeoutError):
+            # Harbor's outer timeout can fire before the worker writes its final
+            # aggregate. Live bind-mounted receipts survive container removal.
+            # Stop actor descendants before Harbor injects the official verifier.
+            await environment.exec(command='/runtime-bin/node /runtime/benchmark/harnesstax-process.mjs stop',
+                timeout_sec=15,user='root')
+            context.metadata={'arm':arm,'status':'timeout','costUnknown':True}
+            raise
         # Refreshes persist only in the dedicated auth mount. These paths are not
         # part of the agent log export or public report.
-        await environment.download_dir('/receipts', self.logs_dir/'receipts')
+        # /receipts is mounted directly to this trial's host log directory.
         worker = self.logs_dir/'receipts/worker.json'
         if worker.exists():
             value = json.loads(worker.read_text())

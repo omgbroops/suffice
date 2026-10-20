@@ -12,6 +12,20 @@ c=importlib.util.module_from_spec(spec);spec.loader.exec_module(c)
 
 
 class SchedulerTests(unittest.IsolatedAsyncioTestCase):
+    def test_timeout_without_worker_is_preserved_and_does_not_stop_queue(self):
+        with tempfile.TemporaryDirectory() as folder:
+            state=Path(folder);(state/'results').mkdir()
+            (state/'results/timeout-v1.json').write_text(json.dumps({'exception_info':{'exception_type':'AgentTimeoutError'}}))
+            with patch.object(c,'STATE',state): c.check_receipt('timeout-v1')
+            self.assertTrue((state/'timeout-accounting/timeout-v1.json').exists())
+
+    def test_missing_receipt_without_timeout_still_stops_queue(self):
+        with tempfile.TemporaryDirectory() as folder:
+            state=Path(folder);(state/'results').mkdir()
+            (state/'results/missing-v1.json').write_text('{}')
+            with patch.object(c,'STATE',state),self.assertRaisesRegex(RuntimeError,'Missing worker receipt'):
+                c.check_receipt('missing-v1')
+
     async def run_schedule(self,memories,quotas,completed=0):
         with tempfile.TemporaryDirectory() as folder:
             state=Path(folder);(state/'results').mkdir();(state/'preflight-ok.json').write_text('{}')

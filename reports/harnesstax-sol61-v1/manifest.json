@@ -977,12 +977,13 @@
     "packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
     "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
     "packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
-    "benchmark/harnesstax-agent.py": "0935f1399af06b1b5d00710089dbc71f1799fb7389f7acf3d5b6862ed7ae4010",
-    "benchmark/harnesstax-campaign.py": "91d5ec54ddbca56acec7cb8c6cee4c0f8aba789c8ba5fe73a39b316f96ea0658",
+    "benchmark/harnesstax-agent.py": "f2af9970957f4940af93f64673e73e21ff14c83994f52cde55227fbf21b36b43",
+    "benchmark/harnesstax-campaign.py": "f5437d44ed0fa4525467eb3c12d6fdfd3c591c0a5ace5c68daff2186ae45ef2c",
     "benchmark/harnesstax-worker.mjs": "619ec28ee6543be3b6a2b276b09971e1482e32e397548400bb987fee3797adcc",
     "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79",
     "ca-certificates.crt": "7975117e54f05f0ed1e1e767efd1f6827d662d720282ad4a360eecc636958de8",
-    "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e"
+    "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e",
+    "benchmark/harnesstax-process.mjs": "35c916c7f84753765048cc182d650272e892de31a084f654bd55ab0ff4b6b42b"
   },
   "maxResponses": 100,
   "maxCostUsd": 5,
@@ -1027,6 +1028,85 @@
       "largeTasksAlone": true,
       "actorPromptsToolsModelsChecksBudgetsChanged": false,
       "completedPiRecoveredWithoutRerun": true
+    },
+    {
+      "at": 1792501908.3405938,
+      "reason": "Preserve live receipts and stop actor process group on outer timeout; keep original timeout failures and continue remaining tasks.",
+      "priorManifestSha256": "fc4e4a85c49ac24eed19587ae3cf6ba6bfb4f88a576aad6759286add5b539d7a",
+      "priorAttemptCount": 55,
+      "priorResultHashes": {
+        "fix-git-pi.json": "85aab9de92eca7721588e3c238abfb2be147d96419d916832e4a5ca3bf496a53",
+        "gcode-to-text-pi.json": "a5e15e56598e178c8c4feb01c90c4b0f99c9f24ddf3036774371c104a62beef4",
+        "fix-code-vulnerability-v2.json": "05cc929f80c329f75a762b9bd6b5ddef5a1f92c023d095bb0ebd58299cd8d50c",
+        "build-pmars-codex.json": "b7c1e95f37b3934e9c687fb7f85b9ce61d9b1169ba6e6b033df66d5c9e4e3e63",
+        "compile-compcert-v2.json": "01fb8108281ef392728dc74fef3494164d52526c88f881baab25458f2afc4fc8",
+        "adaptive-rejection-sampler-pi.json": "d9d7306beacc9ca5204fecc5b6139b9e27405569b0ca51bc5d9a5f603e8d09a3",
+        "gcode-to-text-codex.json": "a185b2af073056317a51a7c02350ce821de5d2757a911a9f8bb7e3cd9599bbb2",
+        "configure-git-webserver-v1.json": "c79773370a23ab95b65ad75e9027c648f2d1f56f0604d2093b05625f1dcb5b1f",
+        "financial-document-processor-pi.json": "7450b4884a6bfca42bf3288297d94f1139051b632564bfc7d94f43bab9233594",
+        "fix-code-vulnerability-codex.json": "304843208b0c7d8fd869920bcd908c48789a21a8c2c1697b47db0e9f88010793",
+        "headless-terminal-v1.json": "78d708551d1af3ecfad8272b5a3c8c9ef4add4a87f2e617360bba2d9b70e01f3",
+        "compile-compcert-pi.json": "0afb2c279754bbf9f87ac9b0804cacc9ee37033913cdb84f99b00555abbd04c6",
+        "configure-git-webserver-pi.json": "9683974d039a0d3ba5d2fe27568e5f432e3c5399b6246fa287a2c0f3d4c3f0b5",
+        "headless-terminal-v2.json": "75f5b817be355258536836f4b871fb670fd46bca8495b8b7611e73bda5add6e3",
+        "build-cython-ext-pi.json": "ca8dd28e24347db56d55328d54cef4db838b7d19045b2f1c400f128a314d5dd7",
+        "feal-linear-cryptanalysis-v2.json": "e8ef08a0b1ad8e3268e63eff337e81c77ea13412de0be7cb50d407e299099294",
+        "gcode-to-text-v1.json": "46ffb52b1b9e0ad2832a4a50735a1b92274b3c52f703cc7e4663988b6af17045",
+        "build-cython-ext-v1.json": "b4a64c5c538c5469a26e856cbb43161bf8b2a4231c37f8754a81c792f3bdd6ad",
+        "financial-document-processor-v2.json": "4b721370140bfec5ba4ad2099415698ff6eb832f551496effee79c6257d65648",
+        "code-from-image-codex.json": "f41fba8d947621368f663ebdf439588182276ebbfe381ae161a38eff2cd4e39f",
+        "headless-terminal-pi.json": "b0dca4c092c0a52d9c1a8454fe4995c4bf8e586d0c5f3cb6dbf70b2431ac81bc",
+        "code-from-image-pi.json": "7030dff0f55e934a108d7722e865f8416a4fe5144a5e9673e69ce90a59b4550a",
+        "feal-linear-cryptanalysis-v1.json": "96e085eef181ae87a940a8d9bdd80f14069fd3760645fbebf31d3acaaf9d94b7",
+        "make-doom-for-mips-v2.json": "62b57fa0cc20d56727d54224e516f6b42a9b6d948e233430d2aef02e9b5bcb74",
+        "build-pmars-v2.json": "84a7aeb232db0c679e0333ca326a1b6ba08854d9c12d394e35bfc311dff38b9e",
+        "headless-terminal-codex.json": "649dbc602dbe4ea6337b8f6fdc5c8b62b7abdd665456a15057393f7e64cf6007",
+        "build-cython-ext-v2.json": "70aa7e481b26cddcbc9b41e5f8eba81a9a8e49927d4f7002d549318e64d4c063",
+        "financial-document-processor-v1.json": "771be3fe5d2e2abf6d7ef789519f9985875e1b6b61e40ba6079f20ea5df57833",
+        "fix-code-vulnerability-v1.json": "6363e9ee10690d930d689b2d93308474d5d0bcb4c3b78631a9498ae14517782d",
+        "code-from-image-v1.json": "529020c9da41c9307f6b78cddd78fbe9b8b5f9724a38bd81568a9c05597b0743",
+        "build-cython-ext-codex.json": "09fa1db77faded3b1c0e0bf459fdd6b75a04845e4ce1af55800e66cbe3d96263",
+        "configure-git-webserver-codex.json": "57c53342800c3246a1693cb22595b03c8fe2b3ced83b37b8f07267243be17b60",
+        "fix-git-v1.json": "6645b53df373cedcfcee572346c6d0f1fc4bdc2be4208d369c034a531a30fc84",
+        "constraints-scheduling-v2.json": "483351106c1d9a4af4d6881e1ff87709d88726e09b634dd8457e729e986c522f",
+        "financial-document-processor-codex.json": "d5722a0117cba860f46aa3baaf3a95d7860146f6e8f6800f97cb2ecbe24cc49b",
+        "constraints-scheduling-pi.json": "ebf564d4bad9cdc1f3e8b413d283559809306d91fead599b5fe6ce733f860187",
+        "adaptive-rejection-sampler-v2.json": "4b1b86de206fbb60f42bf6d836238ec3ccd16f8816db12f9d6907f11596d50c0",
+        "feal-linear-cryptanalysis-codex.json": "5a13be01b0990b076567c4665700fbf7430bb5b8fede75cb5f35b0dc61dc6d00",
+        "configure-git-webserver-v2.json": "6fb27483ba2bd825c2eba9564b714c514183d55b809fc4bd9293bca04475aa5c",
+        "constraints-scheduling-codex.json": "67275f14ccfe5b7e4f78f64628023650df461846b576923de6b50b76202f570e",
+        "feal-linear-cryptanalysis-pi.json": "0a54a4424ad2f8c392338dd58416e3b2e35fe81c705725a1143dd5e457a6e3b1",
+        "build-pmars-pi.json": "3aa22d28cb31f02ff9ff38d7c06d1e6d8dacb976bf2d543e390ba89d309416cc",
+        "compile-compcert-codex.json": "b24232186d0242a81e3ebbe6b6e575f80ec3f040a931855a4c276a5d0ebb1bfd",
+        "fix-git-v2.json": "64b0544e2d96f6c6cc0c0d3fde5468ecb00773fb4be11f994967c2b47737abbe",
+        "make-doom-for-mips-pi.json": "ee1daaa0f410346ef9b627446a3219fa565ba9302cd7ca270faee3735a6898c4",
+        "make-doom-for-mips-v1.json": "c8f67f7cb4ee4b6875ac25ca721a04189cf65a5f1179573ffc8cfba65de003c3",
+        "build-pmars-v1.json": "0d43fa8fc315fda45a95465e307e141f30a58a38679e1a0f1230958915c5b193",
+        "adaptive-rejection-sampler-v1.json": "7d1e9c32ef5e272d0a269fb3b383a4ee8f83cf9bbc791e53d15936c38bd09de9",
+        "adaptive-rejection-sampler-codex.json": "4d40f0dfda92ba21384bec5ba7415596bb8bfafefc716f48f2b4e089938da71f",
+        "compile-compcert-v1.json": "01ef77c3a225e320bdf72415421282be571778e333ad6b79cc9ee02e9455bd8b",
+        "constraints-scheduling-v1.json": "9d9dbe66f2ad5b2f3d7335d75d7c93b5323080ef0926acb7c41a5df06578530d",
+        "code-from-image-v2.json": "0cb833df843f150acf5aeda7e8e96242854283f1513e5e83fcfb4be6f038d8e6",
+        "fix-code-vulnerability-pi.json": "346febeedf94a43df90ca6d48cc531a0e1816c8b450e498fec39f688312619f4",
+        "gcode-to-text-v2.json": "38fbdebd2cda7b02c354d4f703e8bfca107d50cd6eb00455d48b6250c32f6f9a",
+        "fix-git-codex.json": "8a7f4286c708c0469811a332afdd8be0a3b4c731aa9ad87c15697bad4ca28745"
+      },
+      "changedRuntimeInputs": {
+        "benchmark/harnesstax-campaign.py": {
+          "before": "91d5ec54ddbca56acec7cb8c6cee4c0f8aba789c8ba5fe73a39b316f96ea0658",
+          "after": "f5437d44ed0fa4525467eb3c12d6fdfd3c591c0a5ace5c68daff2186ae45ef2c"
+        },
+        "benchmark/harnesstax-agent.py": {
+          "before": "0935f1399af06b1b5d00710089dbc71f1799fb7389f7acf3d5b6862ed7ae4010",
+          "after": "f2af9970957f4940af93f64673e73e21ff14c83994f52cde55227fbf21b36b43"
+        },
+        "benchmark/harnesstax-process.mjs": {
+          "before": null,
+          "after": "35c916c7f84753765048cc182d650272e892de31a084f654bd55ab0ff4b6b42b"
+        }
+      },
+      "actorPromptsToolsModelsChecksBudgetsChanged": false,
+      "retries": 0
     }
   ]
 }

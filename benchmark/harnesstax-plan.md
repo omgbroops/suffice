@@ -89,3 +89,15 @@ The first Pi actor and official grader had completed when the original host
 controller disappeared during artifact collection. Its existing reward and all
 receipt files are recovered with container-to-host hash checks. No actor or
 verifier is rerun; missing outer timings and artifact finalization remain missing.
+
+## Timeout collection amendment, after attempt 55
+
+An outer Harbor timeout skipped the adapter's receipt download on
+make-doom-for-mips-v1. That original failure and its unknown cost remain untouched.
+For remaining attempts only, /receipts is bind-mounted to the trial's host log
+directory. A process-group wrapper stops the timed-out actor before grading;
+completed response receipts remain available even without a final worker aggregate.
+Missing final accounting stays unknown, with any observable cost shown as a floor.
+Recorded task timeouts no longer stop admission of unrelated remaining jobs.
+Provider/account failures, unexplained missing receipts, and quota failures still
+stop admission. No task retries, extra actor time, or hidden-test-driven changes.
