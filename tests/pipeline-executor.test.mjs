@@ -46,6 +46,44 @@ test('missing checks are reported unverified and never trigger advice',async t=>
   assert.equal(out.completionEvidence,'unverified');
 });
 
+test('explicit unavailable infrastructure does not fund advice, repair or takeover',async t=>{
+  const d=fake([.01],[]);
+  d.runCheck=async()=>({status:'unavailable',exitCode:null,passed:false,output:'Compiler unavailable',error:'Declared infrastructure prerequisite unavailable'});
+  const out=await executePipeline({...await fixture(t),features:{advice:'on_failure',repairs:true,solTakeover:true}},d);
+  assert.equal(out.status,'verification_unavailable');assert.equal(out.verificationStatus,'unavailable');
+  assert.equal(out.completionEvidence,'unverified');assert.equal(out.budgetEligible,false);
+  assert.equal(out.stages.length,1);assert.equal(out.repairs,0);assert.equal(out.adviceCalls,0);assert.equal(out.escalations,0);
+});
+
+test('concise communication is opt-in and leaves model, effort and checks intact',async t=>{
+  const d=fake([.01],[true]),r=await fixture(t);
+  const out=await executePipeline({...r,profile:'baseline',model:'gpt-6.1-sol',effort:'high',communication:'concise'},d);
+  assert.match(d.options[0].systemPrompt,/Investigate relevant contracts/);
+  assert.match(d.options[0].systemPrompt,/Do not narrate routine tool calls/);
+  assert.match(d.options[0].systemPrompt,/brevity is not permission to skip checks/);
+  assert.equal(d.options[0].model,'gpt-6.1-sol');assert.equal(d.options[0].effort,'high');
+  assert.equal(out.verificationStatus,'passed');
+});
+
+test('unavailable checks do not hide a separate real candidate failure',async t=>{
+  const d=fake([.01,.02],[]);let calls=0;
+  d.runCheck=async()=>++calls%2?{status:'unavailable',exitCode:null,passed:false,output:'missing checker'}:{passed:calls>2,exitCode:calls>2?0:1,output:'candidate mismatch'};
+  const r=await fixture(t);r.checks.push({command:['node','other.mjs']});
+  const out=await executePipeline({...r,features:{repairs:true}},d);
+  assert.equal(out.repairs,1);assert.equal(out.verificationStatus,'unavailable');assert.equal(out.completionEvidence,'unverified');
+  assert.match(d.prompts[1],/candidate mismatch/);assert.doesNotMatch(d.prompts[1],/missing checker/);
+});
+
+test('declared infrastructure preflight skips candidate execution while a required-state check still fails',async t=>{
+  const r=await fixture(t);
+  const unavailable=await runPublicCheck({workspace:r.workspace,check:{command:['node','-e','throw Error("Candidate should not run")'],prerequisites:[{purpose:'infrastructure',command:['node','-e','process.exit(23)']}]},timeoutMs:10000});
+  assert.equal(unavailable.status,'unavailable');assert.equal(unavailable.exitCode,null);assert.equal(unavailable.prerequisites[0].exitCode,23);
+  assert.doesNotMatch(unavailable.output,/Candidate should not run/);
+  const required=await runPublicCheck({workspace:r.workspace,check:{command:['node','-e','process.exit(23)']},timeoutMs:10000});
+  assert.equal(required.status,'failed');assert.equal(required.exitCode,23);
+  assert.throws(()=>normalizeRequest({...r,checks:[{command:['node'],prerequisites:[{command:['node']}]}]}),/infrastructure purpose/);
+});
+
 test('isolated task scope is explicit and does not change the default repository prompt',async t=>{
   const defaults=fake([.01],[true]);
   await executePipeline({...await fixture(t),profile:'baseline'},defaults);

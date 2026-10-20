@@ -83,6 +83,23 @@ requirements should be reported as unverified. Keep evaluator scripts read-only
 and outside the editable actor tree. A passed plan proves only its covered checks.
 Independent grading is separate and never enters repair/escalation decisions.
 
+Checks may declare up to four `prerequisites`, each with `purpose:
+"infrastructure"`, argv `command` and optional `timeoutMs` (at most 10 seconds).
+These describe checker infrastructure only. A missing prerequisite skips the
+candidate check, records its exact diagnostic as `unavailable`, and leaves
+completion evidence `unverified`. It cannot trigger paid advice, repair or
+takeover. Required product installations or performance requirements belong in
+the candidate check and still fail normally. No output-text heuristic decides
+that a real failure was merely infrastructure. Mixed outcomes retain and repair
+real candidate failures while leaving unavailable coverage unverified.
+
+`communication: "concise"` is a separate opt-in prompt treatment for worker and
+advisor communication. It requests short plans/finals without routine narration,
+while retaining exact errors, exit codes and unverified requirements. Default
+prompts, reasoning effort, tool access and output budgets are unchanged. Its
+token, cost and correctness effects must be measured; shorter visible text does
+not imply less internal reasoning or lower total cost.
+
 The low-overhead path is: reuse project checks, then execute a small public issue
 reproducer and a public compatibility check. On observed failure, allow one bounded
 repair; Efficient may also request its existing concise Sol advice. Report uncovered

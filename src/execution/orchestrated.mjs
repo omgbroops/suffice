@@ -6,7 +6,8 @@ import {createPipelineSession} from '../pipeline/session.mjs';
 import {repositoryTools} from '../../packages/cli/src/tools.mjs';
 import {createObservationController} from '../pipeline/observations.mjs';
 import {withExecutionOutput} from './core.mjs';
-import {executionSystemPrompt} from './scope.mjs';
+import {executionSystemPrompt,CONCISE_COMMUNICATION} from './scope.mjs';
+import {checkEvidence,verificationState} from './check-evidence.mjs';
 import {runPublicCheck} from '../pipeline/executor.mjs';
 
 export const COORDINATOR_PROMPT='You coordinate an implementation in the authorized environment. Do not write source code or perform edits yourself. Delegate implementation to Luna with a focused outcome and the task constraints. Use investigate delegation only when a bounded source investigation is needed; cheap reads and AST navigation are available directly. After delegation, inspect the relevant evidence and use verify to check the actual implementation. A worker summary is a claim, not proof. Preserve exact paths and diagnostics, retrieve retained output when needed, and repair observed public failures through delegation. Never claim that partial public checks establish full correctness. Keep delegation briefs and final reports concise.';
@@ -70,9 +71,9 @@ export async function executeOrchestrated(request,deps={}) {
     const outcomes=[];
     for(const check of r.checks) {
       allowance();
-      outcomes.push(await (deps.runCheck??runPublicCheck)({workspace,check,timeoutMs:Math.min(check.timeoutMs??60000,deadline-now())}));
+      outcomes.push(checkEvidence({...await (deps.runCheck??runPublicCheck)({workspace,check,timeoutMs:Math.min(check.timeoutMs??60000,deadline-now())}),expectedExitCode:check.expectedExitCode??0}));
     }
-    const record={outcomes,passed:outcomes.length>0&&outcomes.every(x=>x.passed&&x.exitCode===0&&!x.error)};
+    const record={outcomes,status:verificationState(outcomes),passed:verificationState(outcomes)==='passed'};
     verification.push(record);await save(resolve(runDir,`checks-${verification.length}.json`),record);
     return record;
   }
@@ -88,7 +89,7 @@ export async function executeOrchestrated(request,deps={}) {
         const prompt=`Original public task:\n${r.prompt}\n\nCoordinator brief (within the original task):\n${brief}\n\n${kind==='investigate'?'Inspect only; do not edit.':'Implement and verify in the existing workspace.'} Return a concise handoff with exact paths, commands and exit codes actually observed, remaining failures, and uncertainties. Do not claim unrun checks.`;
         const summary=await stage(label,PIPELINE_POLICY.worker,PIPELINE_POLICY.workerEffort,prompt,
           kind==='investigate'?readOnly:undefined,
-          kind==='investigate'?'Investigate the supplied task using read-only source tools. Return evidence and uncertainties; do not write code.':executionSystemPrompt(r.executionScope,THIN_PROMPT),
+          kind==='investigate'?'Investigate the supplied task using read-only source tools. Return evidence and uncertainties; do not write code.':executionSystemPrompt(r.executionScope,THIN_PROMPT,r.communication),
           {outputControl:kind==='implement'});
         const ids=(await readdir(resolve(runDir,label,'output')).catch(()=>[])).filter(p=>p.endsWith('.log')).map(p=>p.slice(0,-4));
         return observation.presentResult({content:[{type:'text',text:JSON.stringify({stage:label,workerClaim:summary,
@@ -117,11 +118,12 @@ export async function executeOrchestrated(request,deps={}) {
     }};
   const coordinatorTools=[...observation.wrapTools(readOnly),delegate,verifyTool,observation.readTool,workerOutput];
   try {
-    final=await stage('coordinate',r.model,r.effort,r.prompt,coordinatorTools,COORDINATOR_PROMPT);
+    final=await stage('coordinate',r.model,r.effort,r.prompt,coordinatorTools,COORDINATOR_PROMPT+(r.communication==='concise'?`\n\n${CONCISE_COMMUNICATION}`:''));
     const checked=await verify();
-    if(checked.outcomes.length&&!checked.passed)status='verification_failed';
+    if(checked.status==='failed')status='verification_failed';
+    else if(checked.status==='unavailable')status='verification_unavailable';
   }catch(e){status=usage.costUnknown?'cost_unknown':/allowance|timeout/i.test(e.message)?'budget_stopped':'operational_failure';notes.push({kind:'failure',error:e.message});}
-  const verificationStatus=!r.checks.length?'not_configured':!verification.length?'not_run':verification.at(-1).passed?'passed':'failed';
+  const verificationStatus=!r.checks.length?'not_configured':!verification.length?'not_run':verification.at(-1).status;
   // Response callbacks attribute usage to exactly one stage. Coordinator elapsed
   // time contains worker time; do not sum nested stage latency as wall time.
   const workerCost=stages.filter(s=>s.label.startsWith('delegate-')).reduce((n,s)=>n+s.usage.estimatedApiUsd,0);

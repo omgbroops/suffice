@@ -2,22 +2,33 @@ import {mkdir,writeFile,realpath} from 'node:fs/promises';
 import {resolve,relative,isAbsolute,sep} from 'node:path';
 import {createSufficeSession} from '../../packages/cli/src/session.mjs';
 import {repositoryTools} from '../../packages/cli/src/tools.mjs';
-import {createPipelineSession} from './session.mjs';
+import {createPipelineSession,PROMPT} from './session.mjs';
 import {normalizeRequest,PIPELINE_POLICY,THIN_PROMPT,ADVICE_PROMPT} from './policy.mjs';
 import {prepareExecutionInput,executionNotices,withExecutionOutput} from '../execution/core.mjs';
 import {verifyPublicContracts} from '../execution/verification.mjs';
-import {executionSystemPrompt} from '../execution/scope.mjs';
+import {executionSystemPrompt,CONCISE_COMMUNICATION} from '../execution/scope.mjs';
+import {checkEvidence,validatePrerequisites,verificationState} from '../execution/check-evidence.mjs';
 
 const save=async(p,v)=>{await mkdir(resolve(p,'..'),{recursive:true});await writeFile(p,JSON.stringify(v,null,2)+'\n',{mode:0o600});};
 const quote=s=>"'"+s.replaceAll("'","'\\''")+"'";
 const contained=(root,p)=>{const r=relative(root,p);return r===''||(!isAbsolute(r)&&r!=='..'&&!r.startsWith('..'+sep));};
 export async function runPublicCheck({workspace,check,timeoutMs,signal}) {
+  validatePrerequisites(check);
+  const started=Date.now(),prerequisites=[];
+  for(const prerequisite of check.prerequisites??[]) {
+    const time=Math.min(prerequisite.timeoutMs??5000,timeoutMs-(Date.now()-started));
+    const result=time>0?await runPublicCheck({workspace,check:{command:prerequisite.command},timeoutMs:time,signal}):{passed:false,exitCode:null,error:'Verification allowance exhausted',output:''};
+    prerequisites.push(result);
+    if(!result.passed)return {command:check.command,expectedExitCode:check.expectedExitCode??0,exitCode:null,passed:false,status:'unavailable',output:result.output,error:'Declared infrastructure prerequisite unavailable; candidate check did not run',prerequisites};
+  }
+  timeoutMs-=Date.now()-started;
+  if(timeoutMs<=0)return {command:check.command,expectedExitCode:check.expectedExitCode??0,exitCode:null,passed:false,status:'unavailable',output:'',error:'Verification allowance exhausted before candidate check',prerequisites};
   const bash=repositoryTools({workspace,commandTimeout:Math.max(1,timeoutMs/1000)}).find(t=>t.name==='bash');
   let result,error;
   try {result=await bash.execute('public-check',{command:check.command.map(quote).join(' '),timeout:Math.max(.01,timeoutMs/1000)},signal);}catch(e){error=e.message;}
   const data=result?.structuredContent??result?.details??{};
   const exitCode=data.exit_code??data.exitCode??null;
-  return {command:check.command,expectedExitCode:check.expectedExitCode??0,exitCode,passed:!error&&Number.isInteger(exitCode)&&exitCode===(check.expectedExitCode??0),output:result?.content?.filter(c=>c.type==='text').map(c=>c.text).join('\n')??error??'',error:error??null};
+  return checkEvidence({command:check.command,expectedExitCode:check.expectedExitCode??0,exitCode,passed:!error&&Number.isInteger(exitCode)&&exitCode===(check.expectedExitCode??0),output:result?.content?.filter(c=>c.type==='text').map(c=>c.text).join('\n')??error??'',error:error??null,...(prerequisites.length?{prerequisites}:{})});
 }
 
 // A controller owns the stages; every model response draws from one allowance.
@@ -27,7 +38,7 @@ export async function executePipeline(request,deps={}) {
   const workspace=await realpath(r.workspace),runDir=resolve(r.runDir);
   await mkdir(runDir,{recursive:true});
   if(contained(workspace,await realpath(runDir)))throw Error('runDir must be outside the working repository');
-  await writeFile(resolve(runDir,'request.json'),JSON.stringify({profile:r.profile,features:f,model:r.model,effort:r.effort,executionScope:r.executionScope,maxCostUsd:r.maxCostUsd,timeoutMs:r.timeoutMs,maxTurns:r.maxTurns,maxCalls:r.maxCalls,checks:r.checks,...(r.strategy?{strategy:r.strategy}:{}),...(r.provider?{provider:r.provider}:{}),...(r.contractVerification?{contractVerification:r.contractVerification}:{})},null,2)+'\n',{flag:'wx',mode:0o600});
+  await writeFile(resolve(runDir,'request.json'),JSON.stringify({profile:r.profile,features:f,model:r.model,effort:r.effort,executionScope:r.executionScope,communication:r.communication,maxCostUsd:r.maxCostUsd,timeoutMs:r.timeoutMs,maxTurns:r.maxTurns,maxCalls:r.maxCalls,checks:r.checks,...(r.strategy?{strategy:r.strategy}:{}),...(r.provider?{provider:r.provider}:{}),...(r.contractVerification?{contractVerification:r.contractVerification}:{})},null,2)+'\n',{flag:'wx',mode:0o600});
   const clock=deps.now??Date.now,started=clock(),deadline=started+r.timeoutMs;
   const usage={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,toolCalls:0,costUnknown:false};
   const stages=[],verification=[],notes=[],extensions=[];
@@ -49,7 +60,7 @@ export async function executePipeline(request,deps={}) {
       if(usage.toolCalls>r.maxCalls||clock()>=deadline||remaining()<=0||usage.costUnknown){queueMicrotask(()=>control?.abort());return {block:true,reason:'Shared task allowance exhausted'};}
     });};
     let opt={cwd:workspace,home:resolve(stageDir,'state'),model,provider:advisor?'openai':r.provider??'openai',effort,maxCost:remaining(),timeout:Math.max(.01,(deadline-clock())/1000),maxTurns:advisor?1:r.maxTurns-usage.modelCalls,maxCalls:r.maxCalls-usage.toolCalls,profile:r.profile,noTools:advisor,
-      systemPrompt:advisor?ADVICE_PROMPT:executionSystemPrompt(r.executionScope,r.profile==='thin'?THIN_PROMPT:undefined),extensions:[gate,...extensions],...(advisor?{allowedTools:[],noContextFiles:true}:{})};
+      systemPrompt:advisor?ADVICE_PROMPT+(r.communication==='concise'?`\n\n${CONCISE_COMMUNICATION}`:''):executionSystemPrompt(r.executionScope,r.profile==='thin'?THIN_PROMPT:r.communication==='concise'?PROMPT:undefined,r.communication),extensions:[gate,...extensions],...(advisor?{allowedTools:[],noContextFiles:true}:{})};
     opt=await withExecutionOutput(opt,{workspace,artifactDir:resolve(runDir,'observations'),enabled:!advisor&&f.outputControl,record:e=>notes.push(e)});
     const factory=deps.createSession??(r.profile==='baseline'&&!advisor&&!f.outputControl&&opt.provider==='openai'?createSufficeSession:createPipelineSession);
     try {
@@ -77,15 +88,15 @@ export async function executePipeline(request,deps={}) {
     for(const c of r.checks) {
       assertAllowance();const begin=clock(),time=Math.min(c.timeoutMs??60000,deadline-clock());
       const out=await (deps.runCheck??runPublicCheck)({workspace,check:c,timeoutMs:time});
-      outcomes.push({...out,latencyMs:clock()-begin});
+      outcomes.push(checkEvidence({...out,expectedExitCode:c.expectedExitCode??0,latencyMs:clock()-begin}));
     }
     const contracts=await verifyPublicContracts({plan:r.contractVerification,workspace,runCheck:deps.runCheck??runPublicCheck,deadline,now:clock});
     outcomes.push(...contracts.outcomes);
-    const record={label,outcomes,passed:outcomes.length>0&&outcomes.every(x=>x.passed),...(r.contractVerification?{contracts}:{})};
+    const record={label,outcomes,status:verificationState(outcomes),passed:verificationState(outcomes)==='passed',...(r.contractVerification?{contracts}:{})};
     verification.push(record);await save(resolve(runDir,`checks-${label}.json`),record);return record;
   }
-  const failed=result=>result.outcomes.some(x=>!x.passed);
-  const feedback=result=>JSON.stringify(result.outcomes.filter(x=>!x.passed).map(x=>({command:x.command,exitCode:x.exitCode,output:x.output.slice(-5000)})));
+  const failed=result=>result.status==='failed';
+  const feedback=result=>JSON.stringify(result.outcomes.filter(x=>x.status==='failed').map(x=>({command:x.command,exitCode:x.exitCode,output:x.output.slice(-5000)})));
   async function advise(label,failures='No implementation has been made yet.') {
     // An upfront plan sees public task requirements only. Do not pay to scan or
     // duplicate prepared repository context for a tool-free planning call.
@@ -113,8 +124,9 @@ export async function executePipeline(request,deps={}) {
       checked=await check('takeover');
     }
     if(failed(checked))status='verification_failed';
+    else if(checked.status==='unavailable')status='verification_unavailable';
   }catch(e){status=/allowance|cost_limit|turn_limit|tool_limit|timeout/i.test(e.message)?'budget_stopped':usage.costUnknown?'cost_unknown':'operational_failure';notes.push({kind:'failure',error:e.message});}
-  const verificationStatus=!r.checks.length&&!r.contractVerification?'not_configured':!verification.length?'not_run':verification.at(-1)?.passed?'passed':'failed';
+  const verificationStatus=!r.checks.length&&!r.contractVerification?'not_configured':!verification.length?'not_run':verification.at(-1).status;
   const result={version:PIPELINE_POLICY.version,...(r.strategy?{strategy:r.strategy}:{}),profile:r.profile,features:f,model:r.model,effort:r.effort,executionScope:r.executionScope,status,usage,stages,verification,notes,repairs,escalations,adviceCalls:stages.filter(s=>s.advisor).length,final,latencyMs:clock()-started,verificationStatus,
     completionEvidence:verificationStatus==='passed'?'public_checks_passed':verificationStatus==='failed'?'public_checks_failed':'unverified',
     budgetEligible:status==='completed'&&!usage.costUnknown&&usage.estimatedApiUsd<=r.maxCostUsd&&clock()<=deadline&&usage.modelCalls<=r.maxTurns&&usage.toolCalls<=r.maxCalls};

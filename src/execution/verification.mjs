@@ -1,4 +1,5 @@
 // An explicit public contract plan, not hidden acceptance or an LLM correctness score.
+import {checkEvidence,validatePrerequisites,verificationState} from './check-evidence.mjs';
 const nonempty=x=>typeof x==='string'&&x.trim().length>0;
 export function validateContractPlan(plan) {
   if (plan===undefined) return undefined;
@@ -13,6 +14,7 @@ export function validateContractPlan(plan) {
   }
   const checks=new Set(),covered=new Set();
   for (const c of plan.checks) {
+    validatePrerequisites(c);
     if (!nonempty(c.id)||checks.has(c.id)||!Array.isArray(c.command)||!c.command.length||
         c.command.some(a=>typeof a!=='string'||a.includes('\0'))||
         !Array.isArray(c.covers)||!c.covers.length||c.covers.some(id=>!ids.has(id))||
@@ -36,12 +38,12 @@ export async function verifyPublicContracts({plan,workspace,runCheck,deadline=In
     try {result=await runCheck({workspace,check:{...c,expectedExitCode:0},timeoutMs:Math.min(c.timeoutMs??10000,end-now())});}
     catch(error) {result={passed:false,exitCode:null,error:error.message,output:''};}
     // A friendly "passed" string or asserted boolean cannot override a missing/nonzero status.
-    outcomes.push({...result,id:c.id,kind:'contract',command:c.command,covers:c.covers,
-      passed:result.passed===true&&result.exitCode===0&&!result.error,latencyMs:now()-begin});
+    outcomes.push(checkEvidence({...result,id:c.id,kind:'contract',command:c.command,covers:c.covers,
+      expectedExitCode:0,latencyMs:now()-begin}));
   }
   const coverage=plan.requirements.map(r=>({id:r.id,statement:r.statement,source:r.source,
     checkIds:outcomes.filter(c=>c.covers.includes(r.id)).map(c=>c.id),
     passed:outcomes.filter(c=>c.covers.includes(r.id)).every(c=>c.passed)}));
-  return {status:outcomes.every(x=>x.passed)?'passed':'failed',outcomes,coverage,latencyMs:now()-started,
+  return {status:verificationState(outcomes),outcomes,coverage,latencyMs:now()-started,
     interpretation:'Only these explicit public contracts were checked; independent acceptance remains separate.'};
 }
