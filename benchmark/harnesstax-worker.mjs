@@ -1,4 +1,4 @@
-import {readFile,writeFile,mkdir,cp,copyFile,access} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,cp,copyFile,access,rename} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
 import {ModelRuntime} from '@earendil-works/pi-coding-agent';
 
@@ -18,9 +18,16 @@ await mkdir('/agent-home/codex',{recursive:true,mode:0o700});
 await mkdir('/agent-home/pi',{recursive:true,mode:0o700});
 await copyFile('/agent-auth/codex.json','/agent-home/codex/auth.json');
 await copyFile('/agent-auth/pi.json','/agent-home/pi/auth.json');
+const initialAuth=new Map(await Promise.all(['pi','codex'].map(async name=>[name,await readFile(`/agent-home/${name}/auth.json`)])));
 const persistAuth=async()=>{
-  for(const [from,to] of [['/agent-home/pi/auth.json','/agent-auth/pi.json'],['/agent-home/codex/auth.json','/agent-auth/codex.json']])
-    await copyFile(from,to);
+  // Never publish an unused stale credential copy over another worker's refresh.
+  // Atomic rename also prevents another container reading a partially copied file.
+  for(const name of ['pi','codex']) {
+    const value=await readFile(`/agent-home/${name}/auth.json`);
+    if(value.equals(initialAuth.get(name)))continue;
+    const dest=`/agent-auth/${name}.json`,temp=`${dest}.${process.pid}.${Date.now()}.tmp`;
+    await writeFile(temp,value,{mode:0o600});await rename(temp,dest);
+  }
 };
 if(r.arm==='codex') {
   // Reuse the previous campaign's native response ledger, with no prompt/tool

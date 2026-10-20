@@ -70,3 +70,22 @@ The first task image lacked system CA certificates, causing the native Codex
 HTTP client to fail before inference. Agent installation now supplies the host's
 standard CA bundle via `SSL_CERT_FILE`, hashed in the amended runtime manifest;
 TLS verification is not disabled. Node already carries its own CA bundle.
+
+## Scheduling and recovery amendment, after two actors
+
+At the user's request to speed up the queue, remaining attempts may run two at
+a time with at most 4 GiB of combined task memory reservations. Tasks above 2 GiB
+run alone, retaining original resource limits. Admission checks quota separately
+for every attempt. At a pause, at most two already admitted attempts may finish.
+Shared host resources can affect latency; this change is not a harness improvement.
+
+Each Harbor trial runs in a separate process so adapter environment variables
+cannot cross between actors. Refreshed credentials are published atomically and
+unchanged credential copies are not written back. Prompts, model settings, tools,
+checks and budgets stay frozen. A detached Windows supervisor launches WSL,
+updates reports, and records controller exit. It does not restart failed attempts.
+
+The first Pi actor and official grader had completed when the original host
+controller disappeared during artifact collection. Its existing reward and all
+receipt files are recovered with container-to-host hash checks. No actor or
+verifier is rerun; missing outer timings and artifact finalization remain missing.

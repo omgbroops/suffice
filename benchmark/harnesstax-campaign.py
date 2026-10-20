@@ -1,4 +1,4 @@
-"""Pinned, sequential, one-shot Terminal-Bench campaign. Run in Sonion WSL.
+"""Pinned, resource-bounded, one-shot Terminal-Bench campaign. Run in Sonion WSL.
 
 setup performs no inference. preflight validates one container without inference.
 run admits each frozen job once; existing or partial jobs are never overwritten.
@@ -15,6 +15,7 @@ import subprocess
 import sys
 import time
 import tomllib
+import re
 
 ROOT = Path('/mnt/c/Users/Eric Qin/Documents/GitHub/suffice')
 STATE = Path('/home/eric_qin/suffice-harnesstax-sol61')
@@ -146,20 +147,62 @@ async def attempt(task, arm, preflight=False):
     return result
 
 
+def memory_gib(task):
+    value=str(task['environment'].get('memory','2G')).upper()
+    match=re.fullmatch(r'([0-9.]+)([KMGTP])B?',value)
+    if not match: raise ValueError('Unrecognized task memory: '+value)
+    return float(match[1])*{'K':2**-20,'M':2**-10,'G':1,'T':1024,'P':1024**2}[match[2]]
+
+
+def check_receipt(name):
+    receipt=STATE/'trials'/name/'agent/receipts/worker.json'
+    if not receipt.exists(): raise RuntimeError('Missing worker receipt; inspect before admitting another attempt: '+name)
+    value=json.loads(receipt.read_text())
+    if value.get('status') in ['provider_error','operational_failure','cost_unknown'] or value.get('usage',{}).get('costUnknown') or value.get('usageCostUnknown'):
+        raise RuntimeError('Inspect operational failure before admitting another attempt: '+name)
+
+
 async def campaign():
     m=validate()
     if not (STATE/'preflight-ok.json').exists(): raise RuntimeError('Successful no-inference preflight required')
     tasks={t['id']:t for t in m['tasks']}
+    active={}
+    stopped=None
+    async def reap():
+        nonlocal stopped
+        for name,(proc,waiter,memory) in list(active.items()):
+            if not waiter.done(): continue
+            code=waiter.result();del active[name]
+            try:
+                if code: raise RuntimeError('Attempt controller exited '+str(code)+': '+name)
+                check_receipt(name)
+            except Exception as error:
+                stopped=str(error)
+                save(STATE/'controller-error.json',{'job':name,'error':stopped,'at':time.time()})
     for job in m['jobs']:
         name=job['task']+'-'+job['arm']
         result=STATE/'results'/(name+'.json')
         if result.exists(): continue
-        if (STATE/'STOP').exists(): print('STOP requested',flush=True);return
+        memory=memory_gib(tasks[job['task']])
+        # Preserve frozen order. Two small tasks may overlap; >2 GiB tasks run alone.
+        while active and (len(active)>=m.get('concurrency',1) or memory>2 or
+                sum(v[2] for v in active.values())+memory>4):
+            await asyncio.wait([v[1] for v in active.values()],return_when=asyncio.FIRST_COMPLETED)
+            await reap()
+        await reap()
+        if stopped or (STATE/'STOP').exists(): break
         quota_spec=importlib.util.spec_from_file_location('suffice_harnesstax_quota',RUNTIME/'benchmark/harnesstax-quota.py')
         quota_module=importlib.util.module_from_spec(quota_spec);quota_spec.loader.exec_module(quota_module)
         # Fail closed if current quota cannot be read. Never redeem a reset or
         # silently continue into purchased credits after a usage stop.
-        quota=await asyncio.to_thread(quota_module.read_quota)
+        try:
+            quota=await asyncio.to_thread(quota_module.read_quota)
+        except Exception as error:
+            stopped='Quota read failed: '+str(error)
+            save(STATE/'controller-error.json',{'job':job,'error':stopped,'at':time.time()})
+            break
+        await reap()
+        if stopped: break
         completed=len(list((STATE/'results').glob('*.json')))
         save(STATE/'quota-latest.json',quota)
         with (STATE/'quota.jsonl').open('a') as log: log.write(json.dumps(quota)+'\n')
@@ -167,21 +210,22 @@ async def campaign():
             save(STATE/'paused-for-quota.json',{'at':time.time(),'completed':completed,'quota':quota,
               'reason':'User requested pause at 40% remaining unless at least 100/120 complete.'})
             print(json.dumps({'pausedForQuota':True,'completed':completed,'remaining':quota['remainingPercent']}),flush=True)
-            return
+            break
         try:
-            await attempt(tasks[job['task']],job['arm'])
+            # Each Harbor instance gets its own process/environment. In-process
+            # concurrency would race the adapter's HARNESS_TAX_* environment.
+            proc=await asyncio.create_subprocess_exec(sys.executable,__file__,'one',job['task'],job['arm'])
+            active[name]=(proc,asyncio.create_task(proc.wait()),memory)
+            print(json.dumps({'admitted':name,'active':len(active),'at':time.time()}),flush=True)
         except Exception as error:
             save(STATE/'controller-error.json',{'job':job,'error':str(error),'at':time.time()})
-            raise
-        # Auth/capacity/ledger failures should stop admission, not turn the
-        # remaining tasks into predictable provider failures.
-        receipt=STATE/'trials'/name/'agent/receipts/worker.json'
-        if receipt.exists():
-            value=json.loads(receipt.read_text())
-            if value.get('status') in ['provider_error','operational_failure','cost_unknown'] or value.get('usage',{}).get('costUnknown') or value.get('usageCostUnknown'):
-                raise RuntimeError('Inspect operational failure before admitting another attempt: '+name)
-        else:
-            raise RuntimeError('Missing worker receipt; inspect before admitting another attempt: '+name)
+            stopped=str(error)
+            break
+    # Quota/operational stops close admission but do not kill already paid work.
+    if active:
+        await asyncio.gather(*(v[1] for v in active.values()))
+        await reap()
+    if stopped: raise RuntimeError(stopped)
 
 
 async def main():
@@ -193,6 +237,10 @@ async def main():
         if r.exception_info: raise RuntimeError(str(r.exception_info))
         save(STATE/'preflight-ok.json',{'at':time.time(),'inference':False})
     elif mode=='run': await campaign()
+    elif mode=='one':
+        m=validate();task=next(t for t in m['tasks'] if t['id']==sys.argv[2])
+        if sys.argv[3] not in ARMS: raise ValueError('Unknown arm')
+        await attempt(task,sys.argv[3])
     else: raise ValueError('setup | validate | preflight | run')
 
 

@@ -1,0 +1,1008 @@
+{
+  "version": "harnesstax-sol61-v1",
+  "created": 1792468052.689574,
+  "tasks": [
+    {
+      "id": "adaptive-rejection-sampler",
+      "instructionSha256": "3530999e72b651f260dabab69c2594cefae66e55123136b72663efe71546007e",
+      "taskSha256": "4b743f614201e2df2138f70c2b6ede2478b5646801c726393cad02892d039683",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/adaptive-rejection-sampler:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "Rscript",
+            "-e",
+            "source(\"/app/ars.R\"); stopifnot(is.function(ars),is.function(test)); test()"
+          ],
+          "timeoutMs": 30000
+        }
+      ]
+    },
+    {
+      "id": "build-cython-ext",
+      "instructionSha256": "7e52874e45f88505bd21540229719de6639a401477557d814489981d472f0e34",
+      "taskSha256": "eb6bfabb7b75243c3f4d127a10c4c349d44e7e5b7bffb428edebd467adc43843",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/build-cython-ext:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python",
+            "-c",
+            "import numpy; assert numpy.__version__ == \"2.3.0\"; from pyknotid.spacecurves import chelpers,ccomplexity; from pyknotid import cinvariants; import pyknotid.make as mk; import pyknotid.spacecurves as sp; k=sp.Knot(mk.three_twist(num_points=100)); print(k.alexander_polynomial(-1))"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "build-pmars",
+      "instructionSha256": "1606850579342a8b8f2189de0e499fae6be21198150d8dd1e4d18c2efbcf3b82",
+      "taskSha256": "02de864f98eaba9d3b9fe2b65e36ec32a824a1cd85b9b5246caf70de222d48ac",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/build-pmars:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "code-from-image",
+      "instructionSha256": "8c3af6483e409defef9786da51f318ae2ca71afe2327b94471d2f0e2e367442c",
+      "taskSha256": "ccaeb57fa92193f2256f924b32d5c4281e573ae449ef29e44d5e9cba84ef6fca",
+      "timeoutSec": 1200.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/code-from-image:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "-c",
+            "from pathlib import Path; assert Path(\"/app/output.txt\").read_text().strip().startswith(\"bee26a\")"
+          ],
+          "timeoutMs": 10000
+        }
+      ]
+    },
+    {
+      "id": "compile-compcert",
+      "instructionSha256": "d6efce07c47484fcd13c7918f68bd4af6314392de43751c4cad1e62530c2ad06",
+      "taskSha256": "581a6b17e4aa16406379cfa7e005c7df4ddabbd80c9a65eeb95ea143754a0e7b",
+      "timeoutSec": 2400.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/compile-compcert:20251031",
+        "cpus": 2,
+        "memory": "4G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "configure-git-webserver",
+      "instructionSha256": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+      "taskSha256": "ae983718634fb47c8280aa6aacd9b645e35f8e88a6d1deb8b8e676aec4ee87f3",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/configure-git-webserver:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "constraints-scheduling",
+      "instructionSha256": "342def78177f9bc41bea4d11af679bc385a9dda2ac8a1e425be384a5b7f937b6",
+      "taskSha256": "db3d457bcae683d1d0dab33f2a059da9ef30beaa08271d766fae09d1c0054c83",
+      "timeoutSec": 1200.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/constraints-scheduling:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "feal-linear-cryptanalysis",
+      "instructionSha256": "a2f1669d4067af6c7b8ac05ff7d5849ca5df68397c94701645c4b9a3b6f71b03",
+      "taskSha256": "bc0732054a35a1153ea30fd75d2ed8c4684ac10dd4716f9253f62f2fc012746f",
+      "timeoutSec": 1800.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/feal-linear-cryptanalysis:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "financial-document-processor",
+      "instructionSha256": "b21cf2af1891922732327bf586d14b250d36d96de7867479c15bd1c58ef0db58",
+      "taskSha256": "f667f368cd55dc12cfbe69d3cf335458341e9f1ff4d9f191cd474eb37db5ab5d",
+      "timeoutSec": 1200.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/financial-document-processor:20251031",
+        "cpus": 1,
+        "memory": "4G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "fix-code-vulnerability",
+      "instructionSha256": "89b1abdf0af19399f720233b5cdf6b2e8e0ff7b6e3fe3e2a3af0d4d298a8641a",
+      "taskSha256": "495ee049055867fb5e14a7fcab5c1488941825be2f84eac29851b886b9b8de93",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/fix-code-vulnerability:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "fix-git",
+      "instructionSha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+      "taskSha256": "65ed15b71751a10df66cd1fba4658762156f34bacd9f7ba1688a13947d0999e6",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/fix-git:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "gcode-to-text",
+      "instructionSha256": "ee524a8f846b35f1784a7c9fb01c17f077f6b3b61c8b61d0d2f2a87c0be3166b",
+      "taskSha256": "e816483601f36d4fa37324203d2e4716f524dd50d516e4e787ea993a7d9b68f2",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G",
+        "docker_image": "alexgshaw/gcode-to-text:20251031"
+      },
+      "checks": []
+    },
+    {
+      "id": "headless-terminal",
+      "instructionSha256": "004ac3efa98dd4c564f3888fe199962772d23de405c96ec9232c1eab1a2089e8",
+      "taskSha256": "4d1448e9d3d0ef2043b6b888361a55e609a9ab8b07f4aca44c0ee870b2049c7e",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G",
+        "docker_image": "alexgshaw/headless-terminal:20251031"
+      },
+      "checks": []
+    },
+    {
+      "id": "make-doom-for-mips",
+      "instructionSha256": "1903b660e4c64966ff257f828c932adff2b289de589bd6aee22b933bb4fef429",
+      "taskSha256": "c9f3a979796e64c64f38606ac1168b2e31993e835c232c24840ad9b88bb24e16",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/make-doom-for-mips:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "merge-diff-arc-agi-task",
+      "instructionSha256": "2d826479873e5ac1c94c1f802763bf85c22bb04624384685ebdf6b153fe0278e",
+      "taskSha256": "32696fcfedf2df9a089b97a7fb4dcb6f757b7bb438e5bff5c8c0076ea622af3a",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/merge-diff-arc-agi-task:20251031",
+        "cpus": 1,
+        "memory": "4G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "multi-source-data-merger",
+      "instructionSha256": "d1d28bb6e37f7a255a1b7f78aae8591f35c0494f33e4913392424ad954aab944",
+      "taskSha256": "fc843176948791287d9d9cb0d31b1da0b4e5734d2c68b8d3746ceab5abdc559a",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G",
+        "docker_image": "alexgshaw/multi-source-data-merger:20251031"
+      },
+      "checks": []
+    },
+    {
+      "id": "nginx-request-logging",
+      "instructionSha256": "26a7ac98aced6107f147206790ada77bbf8ed3c25fb360cf323d5fc6889edf99",
+      "taskSha256": "f41393eea6490092669c0a6abcb3087b751e933d1182fb04471fc56495aeb377",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/nginx-request-logging:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "openssl-selfsigned-cert",
+      "instructionSha256": "38054a3371f7c2c853478a2f9af0bff858437d5b28a9a07483238f06e566921f",
+      "taskSha256": "c3db93a3f924a942490f93b87e2bc9045a15a7a296f3de38ac795576ebe77947",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/openssl-selfsigned-cert:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "path-tracing",
+      "instructionSha256": "9f36e02d636f5dc0946619bc518f2e51c24fa75251da9d1f0ca9eca612cb9572",
+      "taskSha256": "016873f8804418c8bd20bbba314c0ebdc304ad0beb621df07bb0ad6e5d721fdf",
+      "timeoutSec": 1800.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/path-tracing:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "path-tracing-reverse",
+      "instructionSha256": "03e4ef347c1b6bde7ad020b297571cf22c74cfb0434b399b267f3d87462e1176",
+      "taskSha256": "595d0926686b5aaa2242e197bc92fc115a82baa0eb3d0e60498453c87ea9eb3f",
+      "timeoutSec": 1800.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/path-tracing-reverse:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "pypi-server",
+      "instructionSha256": "1c537e4a311a8e71155e121f57bfc03f742fbfb99d05314cd03e433996a28a31",
+      "taskSha256": "e82d539a1e56fa080f9a12bc723eef047220af4425c7f18d88e1ee9a3466c473",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/pypi-server:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "query-optimize",
+      "instructionSha256": "d25a6de62832a1732c2d3aee10fb0308df1bef5f9aba5234f7a04ceb7442a91d",
+      "taskSha256": "f596916d1fc10769e1cc82e2df0957952ff82736f935c742b15f4daee7258f19",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G",
+        "docker_image": "alexgshaw/query-optimize:20251031"
+      },
+      "checks": []
+    },
+    {
+      "id": "regex-log",
+      "instructionSha256": "4f7ac05e70cf9220ea0f1e5a052c5f908cd0fa884e847d80b0bd51bae2e96f9c",
+      "taskSha256": "cbffabfe62b495480b06a8a34dfa3b11bd5a86ff20b0c82a1406491b6f50665c",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/regex-log:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "reshard-c4-data",
+      "instructionSha256": "1810abbf666e51e410950b4f495d3dae88d392ad056afa392e4c687ff31e3992",
+      "taskSha256": "4b3076bfb05e29290ca07e260c08707d5bd22fbd4f867e845a9744b7b8bac8a2",
+      "timeoutSec": 3600.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/reshard-c4-data:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "sam-cell-seg",
+      "instructionSha256": "0ef90109155c26d518e800a9e21464f8ee8671c95cbd12d1dccf667552e3c73c",
+      "taskSha256": "0479c1bfb2230a6bd205b11209163a798a69bb47a6d7eb8f4ae21d4d72c3efee",
+      "timeoutSec": 7200.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "cpus": 1,
+        "memory": "4G",
+        "storage": "10G",
+        "docker_image": "alexgshaw/sam-cell-seg:20251031"
+      },
+      "checks": []
+    },
+    {
+      "id": "sparql-university",
+      "instructionSha256": "22eeab47d3b27b06df2627b3c21cfbd579ed7dcc85ebcb7c4b3a241c3c35f449",
+      "taskSha256": "21a45de8a465d331d2bfbe2335c07315789f9b26f330bb74d768b223f34a494b",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/sparql-university:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "sqlite-db-truncate",
+      "instructionSha256": "465c135cd80be49023ea3ecf8f1d840c679b3a960efe425d510894e417b9d802",
+      "taskSha256": "8b4c4d2abfe7dc8b7a3bac4567f60c08f7a9219b2cc65df0de7c5ee3d37721d6",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/sqlite-db-truncate:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "torch-tensor-parallelism",
+      "instructionSha256": "121d36637699e55f88943be97ec22aaefc287abf072d8d3acaa42718ea72f7e1",
+      "taskSha256": "60720f55f91254706ff01852d20d579d564ae471204c9eaeb09294d4c322ae9f",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/torch-tensor-parallelism:20251031",
+        "cpus": 1,
+        "memory": "4G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "train-fasttext",
+      "instructionSha256": "b701c31f4c5eb6f7e9a6b74d62a52eb696dcae9548a8252c78c0fa850714f998",
+      "taskSha256": "b1a39378c96e6971a5583a713a4f84782c3535fe889f0916198f971c9b844153",
+      "timeoutSec": 3600.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/train-fasttext:20251031",
+        "cpus": 1,
+        "memory": "4G",
+        "storage": "10G"
+      },
+      "checks": []
+    },
+    {
+      "id": "video-processing",
+      "instructionSha256": "15936f5e61823ae4794994d6e1b7e4e776b40968ea382405b868c501dfe032db",
+      "taskSha256": "49e4a92b9b04a3dd12ac1f0818e75574128d2b981f7b7e4c3707f7781933b805",
+      "timeoutSec": 3600.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/video-processing:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": []
+    }
+  ],
+  "jobs": [
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "codex"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "pi"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "v1"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "v2"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "pi"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "v1"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "v2"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "codex"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "v1"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "v2"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "codex"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "pi"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "v2"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "codex"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "pi"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "v1"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "codex"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "pi"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "v1"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "v2"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "pi"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "v1"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "v2"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "codex"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "v1"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "v2"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "codex"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "pi"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "v2"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "codex"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "pi"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "v1"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "codex"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "pi"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "v1"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "v2"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "pi"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "v1"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "v2"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "codex"
+    },
+    {
+      "task": "fix-git",
+      "arm": "v1"
+    },
+    {
+      "task": "fix-git",
+      "arm": "v2"
+    },
+    {
+      "task": "fix-git",
+      "arm": "codex"
+    },
+    {
+      "task": "fix-git",
+      "arm": "pi"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "v2"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "codex"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "pi"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "v1"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "codex"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "pi"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "v1"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "v2"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "pi"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "v1"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "v2"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "codex"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "v1"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "v2"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "codex"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "pi"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "v2"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "codex"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "pi"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "v1"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "codex"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "pi"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "v1"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "v2"
+    },
+    {
+      "task": "openssl-selfsigned-cert",
+      "arm": "pi"
+    },
+    {
+      "task": "openssl-selfsigned-cert",
+      "arm": "v1"
+    },
+    {
+      "task": "openssl-selfsigned-cert",
+      "arm": "v2"
+    },
+    {
+      "task": "openssl-selfsigned-cert",
+      "arm": "codex"
+    },
+    {
+      "task": "path-tracing",
+      "arm": "v1"
+    },
+    {
+      "task": "path-tracing",
+      "arm": "v2"
+    },
+    {
+      "task": "path-tracing",
+      "arm": "codex"
+    },
+    {
+      "task": "path-tracing",
+      "arm": "pi"
+    },
+    {
+      "task": "path-tracing-reverse",
+      "arm": "v2"
+    },
+    {
+      "task": "path-tracing-reverse",
+      "arm": "codex"
+    },
+    {
+      "task": "path-tracing-reverse",
+      "arm": "pi"
+    },
+    {
+      "task": "path-tracing-reverse",
+      "arm": "v1"
+    },
+    {
+      "task": "pypi-server",
+      "arm": "codex"
+    },
+    {
+      "task": "pypi-server",
+      "arm": "pi"
+    },
+    {
+      "task": "pypi-server",
+      "arm": "v1"
+    },
+    {
+      "task": "pypi-server",
+      "arm": "v2"
+    },
+    {
+      "task": "query-optimize",
+      "arm": "pi"
+    },
+    {
+      "task": "query-optimize",
+      "arm": "v1"
+    },
+    {
+      "task": "query-optimize",
+      "arm": "v2"
+    },
+    {
+      "task": "query-optimize",
+      "arm": "codex"
+    },
+    {
+      "task": "regex-log",
+      "arm": "v1"
+    },
+    {
+      "task": "regex-log",
+      "arm": "v2"
+    },
+    {
+      "task": "regex-log",
+      "arm": "codex"
+    },
+    {
+      "task": "regex-log",
+      "arm": "pi"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "v2"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "codex"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "pi"
+    },
+    {
+      "task": "reshard-c4-data",
+      "arm": "v1"
+    },
+    {
+      "task": "sam-cell-seg",
+      "arm": "codex"
+    },
+    {
+      "task": "sam-cell-seg",
+      "arm": "pi"
+    },
+    {
+      "task": "sam-cell-seg",
+      "arm": "v1"
+    },
+    {
+      "task": "sam-cell-seg",
+      "arm": "v2"
+    },
+    {
+      "task": "sparql-university",
+      "arm": "pi"
+    },
+    {
+      "task": "sparql-university",
+      "arm": "v1"
+    },
+    {
+      "task": "sparql-university",
+      "arm": "v2"
+    },
+    {
+      "task": "sparql-university",
+      "arm": "codex"
+    },
+    {
+      "task": "sqlite-db-truncate",
+      "arm": "v1"
+    },
+    {
+      "task": "sqlite-db-truncate",
+      "arm": "v2"
+    },
+    {
+      "task": "sqlite-db-truncate",
+      "arm": "codex"
+    },
+    {
+      "task": "sqlite-db-truncate",
+      "arm": "pi"
+    },
+    {
+      "task": "torch-tensor-parallelism",
+      "arm": "v2"
+    },
+    {
+      "task": "torch-tensor-parallelism",
+      "arm": "codex"
+    },
+    {
+      "task": "torch-tensor-parallelism",
+      "arm": "pi"
+    },
+    {
+      "task": "torch-tensor-parallelism",
+      "arm": "v1"
+    },
+    {
+      "task": "train-fasttext",
+      "arm": "codex"
+    },
+    {
+      "task": "train-fasttext",
+      "arm": "pi"
+    },
+    {
+      "task": "train-fasttext",
+      "arm": "v1"
+    },
+    {
+      "task": "train-fasttext",
+      "arm": "v2"
+    },
+    {
+      "task": "video-processing",
+      "arm": "pi"
+    },
+    {
+      "task": "video-processing",
+      "arm": "v1"
+    },
+    {
+      "task": "video-processing",
+      "arm": "v2"
+    },
+    {
+      "task": "video-processing",
+      "arm": "codex"
+    }
+  ],
+  "taskCommit": "69671fbaac6d67a7ef0dfec016cc38a64ef7a77c",
+  "sourceHead": "bf396d41bd319866196f4bb02266b9eff383fa60",
+  "runtimeInputs": {
+    "src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+    "src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+    "src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+    "src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+    "src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+    "src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+    "src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+    "src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+    "src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+    "src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+    "src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+    "src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "src/packets/entry.mjs": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+    "src/packets/executor.mjs": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+    "src/packets/policy.mjs": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+    "src/pipeline/notices.mjs": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+    "src/pipeline/fleet.mjs": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+    "src/pipeline/context.mjs": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+    "src/pipeline/session.mjs": "1e03ecd7782d5f0a2be548c857aa5c506d70eb113ad9d6a25dc8a58f5506ea1f",
+    "src/pipeline/tools.mjs": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+    "src/pipeline/knowledge.mjs": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+    "src/pipeline/observations.mjs": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+    "src/pipeline/preparation.mjs": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+    "src/pipeline/entry.mjs": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+    "src/pipeline/executor.mjs": "4a65be3579cc16c85af1950bd43bfedffeb74050df83b32659e01bf7a0cf486f",
+    "src/pipeline/policy.mjs": "ca351c0b41e5dd42c2c9801c5e5925fe2a4e9e7fc74b0e0da6f89379b6cf52f1",
+    "src/execution/strategies.mjs": "068d641adb6d03301ea7ce70370f0a02c8399cf106d62d6ccb6bfd30c83e34e8",
+    "src/execution/core.mjs": "5672e27a87fc034e092de6b26f1004bbaf9358d93ccfec629d508c5553cf57e8",
+    "src/execution/verification.mjs": "31532fcab10c778944949b7c3159303442b4bd65a626c3ce98c9c43420790a7b",
+    "src/execution/entry.mjs": "b639ca9376ed9e051d2bbbd2fcff0a33154ce34c29eb12c28d82ce1fe6d1bbe9",
+    "packages/cli/src/projects.mjs": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+    "packages/cli/src/options.mjs": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+    "packages/cli/src/session.mjs": "5ca14bd23aa9842ae10c151eb220d61bb96591191638da43cd63588e96e5a084",
+    "packages/cli/src/workspace.mjs": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+    "packages/cli/src/tools.mjs": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+    "packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+    "benchmark/harnesstax-agent.py": "0935f1399af06b1b5d00710089dbc71f1799fb7389f7acf3d5b6862ed7ae4010",
+    "benchmark/harnesstax-campaign.py": "2ec4220f5524fe581e0092554f9fe82672f480ee36741cdf8ff584b42a145ab4",
+    "benchmark/harnesstax-worker.mjs": "a550388d6f0a94ec3f040557e729fb865a320e5fc1812ef630db14f1c8a66302",
+    "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79",
+    "ca-certificates.crt": "7975117e54f05f0ed1e1e767efd1f6827d662d720282ad4a360eecc636958de8",
+    "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e"
+  },
+  "maxResponses": 100,
+  "maxCostUsd": 5,
+  "maxCalls": 240,
+  "concurrency": 1,
+  "harbor": "0.24.0",
+  "pi": "1.2.0",
+  "codex": "0.163.0",
+  "historicalCohort": "terminal-bench-v2-common-n30-turncap100-20260906",
+  "checksProvenance": "Explicit public instructions only, smoke coverage on 3/30; no hidden verifier feedback.",
+  "amendments": [
+    {
+      "at": 1792468531.9463336,
+      "reason": "User authorized 100 turns and pause at 40% remaining unless >=100 complete; added system CA prerequisite after first connection failure.",
+      "priorManifestSha256": "2d80f50046d76dc622ef04f1fbf8364be46e13a7ea291fd2a08a5c26b526f53b",
+      "priorAttempt": "adaptive-rejection-sampler-codex",
+      "priorModelResponses": 0,
+      "pauseRemainingPercent": 40,
+      "nearCompletionMinimum": 100,
+      "productionDefaultResponses": 60
+    }
+  ]
+}

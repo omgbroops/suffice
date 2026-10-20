@@ -978,8 +978,8 @@
     "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
     "packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
     "benchmark/harnesstax-agent.py": "0935f1399af06b1b5d00710089dbc71f1799fb7389f7acf3d5b6862ed7ae4010",
-    "benchmark/harnesstax-campaign.py": "2ec4220f5524fe581e0092554f9fe82672f480ee36741cdf8ff584b42a145ab4",
-    "benchmark/harnesstax-worker.mjs": "a550388d6f0a94ec3f040557e729fb865a320e5fc1812ef630db14f1c8a66302",
+    "benchmark/harnesstax-campaign.py": "91d5ec54ddbca56acec7cb8c6cee4c0f8aba789c8ba5fe73a39b316f96ea0658",
+    "benchmark/harnesstax-worker.mjs": "619ec28ee6543be3b6a2b276b09971e1482e32e397548400bb987fee3797adcc",
     "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79",
     "ca-certificates.crt": "7975117e54f05f0ed1e1e767efd1f6827d662d720282ad4a360eecc636958de8",
     "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e"
@@ -987,7 +987,7 @@
   "maxResponses": 100,
   "maxCostUsd": 5,
   "maxCalls": 240,
-  "concurrency": 1,
+  "concurrency": 2,
   "harbor": "0.24.0",
   "pi": "1.2.0",
   "codex": "0.163.0",
@@ -1003,6 +1003,30 @@
       "pauseRemainingPercent": 40,
       "nearCompletionMinimum": 100,
       "productionDefaultResponses": 60
+    },
+    {
+      "at": 1792469791.4275107,
+      "reason": "User requested faster concurrent execution; detached supervisor and resource-bounded process isolation after host controller disappearance.",
+      "priorManifestSha256": "462b4843f8d4b6bb2849a008141f86538dbd908c97a71936bb1283e387fdc03a",
+      "priorAttemptsPreserved": [
+        "adaptive-rejection-sampler-codex",
+        "adaptive-rejection-sampler-pi"
+      ],
+      "changedRuntimeInputs": {
+        "benchmark/harnesstax-campaign.py": {
+          "before": "2ec4220f5524fe581e0092554f9fe82672f480ee36741cdf8ff584b42a145ab4",
+          "after": "91d5ec54ddbca56acec7cb8c6cee4c0f8aba789c8ba5fe73a39b316f96ea0658"
+        },
+        "benchmark/harnesstax-worker.mjs": {
+          "before": "a550388d6f0a94ec3f040557e729fb865a320e5fc1812ef630db14f1c8a66302",
+          "after": "619ec28ee6543be3b6a2b276b09971e1482e32e397548400bb987fee3797adcc"
+        }
+      },
+      "memoryReservationGiB": 4,
+      "maxConcurrent": 2,
+      "largeTasksAlone": true,
+      "actorPromptsToolsModelsChecksBudgetsChanged": false,
+      "completedPiRecoveredWithoutRerun": true
     }
   ]
 }
