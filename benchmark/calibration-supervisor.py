@@ -42,7 +42,8 @@ def validate_review(path, state=None, report_path=None):
             assert (state/'results'/(trial.name+'.json')).exists(), 'Partial attempt needs review: '+trial.name
     report = json.loads((report_path or ROOT/'reports/calibration-v1/results.json').read_text())
     for row in report['attempts']:
-        if row['costUnknown'] or row['status'] in ['operational_failure','budget_stopped']:
+        if (row['costUnknown'] or not row.get('graded') or row.get('exceptionType')
+                or row['status'] in ['operational_failure','budget_stopped']):
             name = row['task']+'-'+row['arm']
             assert name in reviewed, 'New interruption needs review: '+name
             worker = state/'trials'/name/'agent/receipts/worker.json'

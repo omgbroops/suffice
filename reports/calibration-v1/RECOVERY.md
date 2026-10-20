@@ -29,3 +29,16 @@ Existing quota, memory, spending and operational stop conditions remain active.
 Recovery guards were checked without inference: a matching review is accepted;
 changed receipts, a partial actor workspace, and an unreviewed interruption are
 rejected. The production CLI and previous benchmark reports are unchanged.
+
+The subsequently completed `filter-js-from-html-v2-alone` actor has complete
+model usage ($0.00456386), but its independent verifier timed out at 900 seconds.
+Its public checks passed. It remains ungraded: the available metadata does not
+establish whether candidate behavior or grader infrastructure caused the timeout.
+No grader contents were inspected and no rerun was substituted.
+
+The queued recovery admitted two untouched jobs because its guard checked actor
+interruptions and unknown inference costs, but missed a verifier-only exception.
+This recovery guard has now been corrected to require review for ungraded results
+or any outer trial exception too. This is a controller-only change; live actors
+and frozen inputs are unchanged. Both newly admitted jobs continue under the
+existing limits. This grader-timeout outcome is retained for final accounting.

@@ -36,7 +36,7 @@ def main():
             assert digest(dataset / task['id'] / name) == task[field]
     assert digest(ROOT / 'benchmark/calibration-plan.md') == manifest['planSha256']
     for row in data['attempts']:
-        assert row['graded'] and row['identity'], (row['task'], row['arm'])
+        assert row['identity'], (row['task'], row['arm'])
         base = STATE / 'trials' / (row['task'] + '-' + row['arm'])
         assert digest(base / 'agent/receipts/worker.json') == row['workerSha256']
         assert digest(STATE / 'results' / (row['task'] + '-' + row['arm'] + '.json')) == row['trialResultSha256']
@@ -47,7 +47,9 @@ def main():
         if row['arm'] != 'pi':
             assert abs(sum(stage['usage']['estimatedApiUsd'] for stage in row['stages']) - row['knownCostUsd']) < 1e-9
     value = {
-        'attempts': len(actual), 'allGraded': True, 'allModelIdentitiesMatched': True,
+        'attempts': len(actual), 'allGraded': all(row['graded'] for row in data['attempts']),
+        'ungradedAttempts': [row['task'] + '-' + row['arm'] for row in data['attempts'] if not row['graded']],
+        'allModelIdentitiesMatched': True,
         'inputHashesMatched': counts, 'taskHashesMatched': len(manifest['tasks']),
         'knownCostUsd': sum(row['knownCostUsd'] for row in data['attempts']),
         'unknownWholeAttemptCosts': [row['task'] + '-' + row['arm'] for row in data['attempts'] if row['costUnknown']],
