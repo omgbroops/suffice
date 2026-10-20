@@ -1,0 +1,320 @@
+{
+  "version": "refinement-pilot-v1",
+  "created": 1792526920.0900276,
+  "arms": [
+    "pi",
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "tasks": [
+    {
+      "id": "cancel-async-tasks",
+      "instructionSha256": "23d22f7039b50682941652c716f96dac314b8585c32c133614cac77dc067f47e",
+      "taskSha256": "4eb6fe419024e101c630f3ee7702df67049851ae13ebed00ea4138b62dec47b2",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/cancel-async-tasks:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/refinement-public-check.py",
+            "cancel-async-tasks"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "cobol-modernization",
+      "instructionSha256": "a87074f1141b7345394cd88053d0debb0dc8f7de95308882c6538ee9a3b359da",
+      "taskSha256": "a08e001d2547fe84f64452bb075d27603aed7abfc01799f80924f81e6f2af410",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/cobol-modernization:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/refinement-public-check.py",
+            "cobol-modernization"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "custom-memory-heap-crash",
+      "instructionSha256": "53c68ae14a3c3af9a97c40bfd9bdc30a5d98b37eaa2f69f763475745f70f108d",
+      "taskSha256": "7642b99bb9af870eeefa26e21681a7308b5b4fb9eb249a4255019a6da40cb6c1",
+      "timeoutSec": 1800.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/custom-memory-heap-crash:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/refinement-public-check.py",
+            "custom-memory-heap-crash"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "modernize-scientific-stack",
+      "instructionSha256": "666b8ac370ae81b0e3780a36e722c91b0f986fccbdc6ed36ab3bd17e6943da0f",
+      "taskSha256": "73e171f42ee5631d5e45ab48149934b98c9952ade191a0bf786047fd28ac7c52",
+      "timeoutSec": 600.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G",
+        "docker_image": "alexgshaw/modernize-scientific-stack:20251031"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/refinement-public-check.py",
+            "modernize-scientific-stack"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "id": "polyglot-c-py",
+      "instructionSha256": "a57c0c0e1232113113cd29a154ea7e0ac9ea45e4aedc16958fbc6bc753a4ef96",
+      "taskSha256": "02c98637eba6754d556594f679404ba5ac282436d089f53d1c839b17eff9c710",
+      "timeoutSec": 900.0,
+      "environment": {
+        "build_timeout_sec": 600.0,
+        "docker_image": "alexgshaw/polyglot-c-py:20251031",
+        "cpus": 1,
+        "memory": "2G",
+        "storage": "10G"
+      },
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/refinement-public-check.py",
+            "polyglot-c-py"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "task": "cancel-async-tasks",
+      "arm": "pi"
+    },
+    {
+      "task": "cancel-async-tasks",
+      "arm": "v1"
+    },
+    {
+      "task": "cancel-async-tasks",
+      "arm": "v2"
+    },
+    {
+      "task": "cancel-async-tasks",
+      "arm": "v3"
+    },
+    {
+      "task": "cobol-modernization",
+      "arm": "v1"
+    },
+    {
+      "task": "cobol-modernization",
+      "arm": "v2"
+    },
+    {
+      "task": "cobol-modernization",
+      "arm": "v3"
+    },
+    {
+      "task": "cobol-modernization",
+      "arm": "pi"
+    },
+    {
+      "task": "custom-memory-heap-crash",
+      "arm": "v2"
+    },
+    {
+      "task": "custom-memory-heap-crash",
+      "arm": "v3"
+    },
+    {
+      "task": "custom-memory-heap-crash",
+      "arm": "pi"
+    },
+    {
+      "task": "custom-memory-heap-crash",
+      "arm": "v1"
+    },
+    {
+      "task": "modernize-scientific-stack",
+      "arm": "v3"
+    },
+    {
+      "task": "modernize-scientific-stack",
+      "arm": "pi"
+    },
+    {
+      "task": "modernize-scientific-stack",
+      "arm": "v1"
+    },
+    {
+      "task": "modernize-scientific-stack",
+      "arm": "v2"
+    },
+    {
+      "task": "polyglot-c-py",
+      "arm": "pi"
+    },
+    {
+      "task": "polyglot-c-py",
+      "arm": "v1"
+    },
+    {
+      "task": "polyglot-c-py",
+      "arm": "v2"
+    },
+    {
+      "task": "polyglot-c-py",
+      "arm": "v3"
+    }
+  ],
+  "sourceHead": "e0d35a61cabbe114303aeec200ccaa084fece049",
+  "taskCommit": "69671fbaac6d67a7ef0dfec016cc38a64ef7a77c",
+  "runtimeInputs": {
+    "src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+    "src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+    "src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+    "src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+    "src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+    "src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+    "src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+    "src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+    "src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+    "src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+    "src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+    "src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+    "src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "src/packets/entry.mjs": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+    "src/packets/executor.mjs": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+    "src/packets/policy.mjs": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+    "src/pipeline/notices.mjs": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+    "src/pipeline/fleet.mjs": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+    "src/pipeline/context.mjs": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+    "src/pipeline/session.mjs": "1e03ecd7782d5f0a2be548c857aa5c506d70eb113ad9d6a25dc8a58f5506ea1f",
+    "src/pipeline/tools.mjs": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+    "src/pipeline/knowledge.mjs": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+    "src/pipeline/observations.mjs": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+    "src/pipeline/preparation.mjs": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+    "src/pipeline/entry.mjs": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+    "src/pipeline/executor.mjs": "dd7639fe804ed9f8c2fff0d9a007cdb841e5adcca2e616bbebe5990accedbc7c",
+    "src/pipeline/policy.mjs": "c9c9a5b67ecf396a1fbb456561ff568ed8232b834accfc81ed062d1ce4b0befe",
+    "src/execution/orchestrated.mjs": "f507bf4637d9e40eadd0b342e139a1bcf0be5ef0e8935886328d048bb8a14152",
+    "src/execution/strategies.mjs": "9b2be048415f7ce586ef067889241d5544ef3cdc9e39fd24abfe8eb805145f92",
+    "src/execution/core.mjs": "5672e27a87fc034e092de6b26f1004bbaf9358d93ccfec629d508c5553cf57e8",
+    "src/execution/verification.mjs": "31532fcab10c778944949b7c3159303442b4bd65a626c3ce98c9c43420790a7b",
+    "src/execution/entry.mjs": "b639ca9376ed9e051d2bbbd2fcff0a33154ce34c29eb12c28d82ce1fe6d1bbe9",
+    "src/execution/scope.mjs": "7e332f78cfe277d9c8eb5d07eedb140b90770c4ea5f408cddf77a97f52fc4ff7",
+    "packages/cli/src/projects.mjs": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+    "packages/cli/src/options.mjs": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+    "packages/cli/src/session.mjs": "5ca14bd23aa9842ae10c151eb220d61bb96591191638da43cd63588e96e5a084",
+    "packages/cli/src/workspace.mjs": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+    "packages/cli/src/tools.mjs": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+    "packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+    "benchmark/harnesstax-agent.py": "f4ccebeb2667e89bb47b7ffc2e27de71db1d3a538e3bdc17f0bbeeaebb18f694",
+    "benchmark/harnesstax-quota.py": "84e5e75315a71af804c52d23ea38515ed13db5bfbca241033b157b93e4d7e83e",
+    "benchmark/refinement-pilot.py": "d04e8acc271b272a85339f170f87ad44a011cc917ed89e881644459d303cf034",
+    "benchmark/harnesstax-campaign.py": "f5437d44ed0fa4525467eb3c12d6fdfd3c591c0a5ace5c68daff2186ae45ef2c",
+    "benchmark/harnesstax-process.mjs": "35c916c7f84753765048cc182d650272e892de31a084f654bd55ab0ff4b6b42b",
+    "benchmark/harnesstax-worker.mjs": "33db78b0d9e57d6a0895715a7ae4d4217508b4f59e5fd4bf1ace7233b1b15a00",
+    "benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79"
+  },
+  "dependencies": {
+    "sha256": "ae637d3185a186ec5ff32d5864d13ddb7a2659e77ffb71b874acc32ec7fe0195",
+    "files": 15057
+  },
+  "publicInputs": {
+    "public-checks/refinement-public-check.py": "5f9ca0820904cd1f189127fed7b75563f00456c2ba3449d27e579310025efd0a",
+    "public-fixtures/modernize-scientific-stack/pyproject.toml": "61af7819ffd0080a50f642018b889092b52006995429f3c19cd394b8af86f755",
+    "public-fixtures/custom-memory-heap-crash/program/main.cpp": "b94538c76887cc2b2ab739b5ac4731cddd0faa8f4a9892a6265c062bbbeede14",
+    "public-fixtures/custom-memory-heap-crash/program/user.cpp": "92b203786fed1bf0b3aa1675c9cd2d82b2651170675064da8ffee73b98ef14f9",
+    "public-fixtures/custom-memory-heap-crash/program/user.h": "f43d155995a56c22b9cd1417daef7c3b5a976cdc662a98eef0feb438ae1eee77",
+    "public-fixtures/custom-memory-heap-crash/patches/locale_classes.tcc.patch": "16951f4a4df6bf253886ac75f5a39fdbc328e415194493f63cb7589a364aa817",
+    "public-fixtures/custom-memory-heap-crash/patches/locale_init.cc.patch": "e97f133ceebd86f8881f972e0e45b0ec0a13a9bfa428d8032008707683d54292",
+    "public-fixtures/modernize-scientific-stack/climate_analyzer/analyze_climate.py": "112e26265c2b7a579403c9690f5d58cbc1bf59468bfcb7496e4fdbec9a565dd0",
+    "public-fixtures/modernize-scientific-stack/climate_analyzer/requirements_old.txt": "64dbcdcfaef03141a6ad0da4551c841cb75b2fc38e500eee205137d69e0ea759",
+    "public-fixtures/modernize-scientific-stack/climate_analyzer/config.ini": "6ae640937b468eea85f75a4c2e4583a0f474f71d3fd323672a2e665ec37bb8c9",
+    "public-fixtures/modernize-scientific-stack/climate_analyzer/sample_data/climate_data.csv": "97c2b98ec5506c1d31580ab95ae24588c1badb85a07a69b52500cb5b662e3e0a",
+    "public-fixtures/cobol-modernization/data/TRANSACTIONS.DAT": "1fa4cc5420ded94d585c563e8196b85166ebbae2bb8924b20014717fb2fb9ee3",
+    "public-fixtures/cobol-modernization/data/ACCOUNTS.DAT": "46f63eb29442ebc6716bcd8a0c36f4367910f2783f6b84a307ed9a61ccd1046e",
+    "public-fixtures/cobol-modernization/data/BOOKS.DAT": "db04da646207cd87f8e9c5b6f0b57d95953899f3eef22de1a81423f06ef4a9fd",
+    "public-fixtures/cobol-modernization/src/program.cbl": "27cb0e56f65f52fa75f346720b37a180b8e034ebe7d7622b979f195087bd6ebb",
+    "public-fixtures/cobol-modernization/src/INPUT.DAT": "52fc984f0cf14af1495285d7efe02b9bae13159eea59255560ee938c4f78afee"
+  },
+  "maxResponses": 100,
+  "maxCostUsd": 5,
+  "maxCalls": 240,
+  "concurrency": 2,
+  "models": {
+    "pi": [
+      "gpt-6.1-sol",
+      "high"
+    ],
+    "v1": [
+      "gpt-6.1-sol",
+      "high"
+    ],
+    "v2": [
+      "gpt-6-luna",
+      "high"
+    ],
+    "advisor": [
+      "gpt-6.1-sol",
+      "low"
+    ],
+    "v3": [
+      "gpt-6.1-sol",
+      "high"
+    ],
+    "delegate": [
+      "gpt-6-luna",
+      "high"
+    ]
+  },
+  "harbor": "0.24.0",
+  "pi": "1.2.0",
+  "planSha256": "2724e1d5aba2463d2bff309b875697a4e6faa771468d86c5465ae7839f37e23d",
+  "checksProvenance": "Public instruction and initial environment files only; no hidden tests or solutions; same self-check visible to every arm."
+}

@@ -1,0 +1,47 @@
+{
+  "at": 1792527298.3638854,
+  "inference": false,
+  "checks": [
+    {
+      "task": "cancel-async-tasks",
+      "infrastructure": "/usr/local/bin/python3\n",
+      "negativeControl": {
+        "status": "failed",
+        "error": "python3 exit 1: {\"status\": \"failed\", \"error\": \"[Errno 2] No such file or directory: '/app/run.py'\"}\n"
+      }
+    },
+    {
+      "task": "cobol-modernization",
+      "infrastructure": "/usr/local/bin/python3\n/usr/bin/cobc\n",
+      "negativeControl": {
+        "status": "failed",
+        "error": "Missing /app/program.py"
+      }
+    },
+    {
+      "task": "custom-memory-heap-crash",
+      "infrastructure": "/usr/bin/python3\n/usr/bin/g++\n/usr/bin/valgrind\n",
+      "negativeControl": {
+        "status": "failed",
+        "error": "/app/release exit -11: === Monte Carlo \u03c0 Estimation Application ===\n\n=== Running Monte Carlo Simulation ===\n\nEstimating \u03c0 using Monte Carlo method...\nSamples: 1000000\nEstimated \u03c0: 3.142428\nActual \u03c0: 3.141593\nError: 0.000835\nAccuracy: 99.97%\n\n=== Computation completed successfully ===\n"
+      }
+    },
+    {
+      "task": "modernize-scientific-stack",
+      "infrastructure": "/usr/local/bin/python3\n",
+      "negativeControl": {
+        "status": "failed",
+        "error": "[Errno 2] No such file or directory: '/app/analyze_climate_modern.py'"
+      }
+    },
+    {
+      "task": "polyglot-c-py",
+      "infrastructure": "/usr/bin/gcc\n",
+      "negativeControl": {
+        "status": "failed",
+        "error": "gcc exit 1: cc1: fatal error: /app/polyglot/main.py.c: No such file or directory\ncompilation terminated.\n"
+      }
+    }
+  ],
+  "runtimeInstallOnly": "passed"
+}
