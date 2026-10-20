@@ -61,7 +61,7 @@ for job in manifest['jobs']:
     eligible=bool(not trial.get('exception_info') and worker.get('status')=='completed' and identity and matched and not unknown
       and usage.get('estimatedApiUsd',0)<=5 and responses is not None and responses<=100
       and calls is not None and calls<=240)
-    row={**job,'accepted':accepted,'policyValidSuccess':accepted and eligible,'officialReward':reward,
+    row={**job,'graded':bool(reward),'accepted':accepted,'policyValidSuccess':accepted and eligible,'officialReward':reward,
       'status':worker.get('status'),'identity':identity,
       'costUnknown':bool(unknown),'knownCostUsd':usage.get('estimatedApiUsd',0),
       'costUsd':None if unknown else usage.get('estimatedApiUsd'),
@@ -82,6 +82,7 @@ for arm in ['codex','pi','v1','v2']:
     group=[r for r in rows if r['arm']==arm]
     lat=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None]
     summary.append({'arm':arm,'completed':len(group),'accepted':sum(r['accepted'] for r in group),
+      'graded':sum(r['graded'] for r in group),'ungraded':sum(not r['graded'] for r in group),
       'policyValidSuccesses':sum(r['policyValidSuccess'] for r in group),
       'knownCostUsd':sum(r['knownCostUsd'] for r in group),
       'unknownCosts':sum(r['costUnknown'] for r in group),
@@ -92,20 +93,25 @@ OUT.mkdir(parents=True,exist_ok=True)
 data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':summary}
 (OUT/'results.json').write_text(json.dumps(data,indent=2)+'\n')
 lines=['# HarnessTax Sol 6.1 single round', '',f'Completed: {len(rows)}/120 attempts. '+('Final.' if len(rows)==120 else 'Interim; not a final comparison.'),'',
- '| Arm | Completed | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |',
- '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+ '| Arm | Completed | Graded | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |',
+ '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
 if (STATE/'paused-for-quota.json').exists():
     pause=json.loads((STATE/'paused-for-quota.json').read_text())
     lines[2]+=f" Paused at the requested quota floor: {pause['quota']['remainingPercent']}% remaining."
 for r in summary:
     seconds='—' if r['meanSeconds'] is None else f"{r['meanSeconds']:.1f}"
-    lines.append(f"| {r['arm']} | {r['completed']}/30 | {r['accepted']} | {r['policyValidSuccesses']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
+    lines.append(f"| {r['arm']} | {r['completed']}/30 | {r['graded']} | {r['accepted']} | {r['policyValidSuccesses']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
+ungraded=[r for r in rows if not r['graded']]
+if ungraded:
+    lines+=['',f'{len(ungraded)} completed attempts lack official grades. These remain in the campaign denominator but must not be presented as graded patch rejections.']
+    lines += [f"- {r['task']} / {r['arm']}: {r['exceptionType'] or 'official reward missing'}" for r in ungraded]
 lines+=['','API-equivalent cost estimates, not subscription charges. Unknown costs remain unknown.',
  'One attempt per task/arm; no replacement runs. All errors and failures remain in the denominator.',
  'Latency is the full Harbor agent phase, including wrapper/runtime startup and receipt export. Worker-only timings are also retained in results.json.',
  'The Pi adaptive-rejection-sampler actor and grader completed before a host interruption during artifact collection. Original receipts were recovered and hash checked against its container; outer phase timing is missing. No actor or grader rerun.',
  'After the first two attempts, concurrency is at most two, with a combined 4 GiB task reservation; tasks above 2 GiB run alone. Shared resources may affect latency.',
  'After attempt 55, actor receipts are bind-mounted to the host so timeout cancellation cannot skip export. Timed-out actors are stopped before grading; timeout failures remain in the denominator and incomplete costs remain unknown. No retries.',
+ 'A receipt permissions error prevented grading for some resumed V1/V2 attempts. Those original attempts remain ungraded infrastructure failures. The adapter now reads private receipts as root inside the container before host ownership cleanup.',
  'V2 changes model as well as pipeline. Codex/Pi/V1 match Sol High; V2 is a system comparison.',
  '100-response cap; first provider-failed attempt had the initial 60 cap but made zero responses.',
  'V2 controller smoke checks cover 3/30 tasks, solely from public instructions. Other tasks have no controller verification trigger.',

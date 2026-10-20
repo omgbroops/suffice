@@ -1,0 +1,3193 @@
+{
+  "asOf": 1792503618.5648103,
+  "complete": false,
+  "attempts": [
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "codex",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "provider_error",
+      "identity": true,
+      "costUnknown": true,
+      "knownCostUsd": 0,
+      "costUsd": null,
+      "latencyMs": 21964,
+      "agentPhaseMs": 24317.513000000003,
+      "usage": {
+        "input": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "output": 0,
+        "totalTokens": 0,
+        "estimatedApiUsd": 0
+      },
+      "modelCalls": 0,
+      "toolCalls": 0,
+      "receiptsMatched": false,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T03:49:14.585366Z",
+        "finished_at": "2026-10-20T03:49:38.902879Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T03:49:13.440396Z",
+        "finished_at": "2026-10-20T03:49:14.585247Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "4d40f0dfda92ba21384bec5ba7415596bb8bfafefc716f48f2b4e089938da71f",
+      "workerSha256": "63fe3a88908afe9f83c2d67c79e7e8af623a0020920da3068ea984ed8c5945fd",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.22568560000000004,
+      "costUsd": 0.22568560000000004,
+      "latencyMs": 379967,
+      "agentPhaseMs": null,
+      "usage": {
+        "input": 28680,
+        "cacheRead": 134656,
+        "cacheWrite": 0,
+        "output": 15486,
+        "estimatedApiUsd": 0.22568560000000004,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": null,
+      "setupTiming": null,
+      "recovery": {
+        "at": 1792469743.0903842,
+        "reason": "Host controller disappeared during artifact collection; actor and official grader had already finished.",
+        "actorRerun": false,
+        "verifierRerun": false,
+        "receiptHashesVerifiedAgainstContainer": {
+          "./pi-counter.json": "bb69e63e4d1065f09d08d1a00afc31085062154a51462a370bfa2246dbe3a225",
+          "./stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "./events.live.jsonl": "20ece3aab8d4e56bc78e67dc7bc59653e313dc0fe2e2574b88d77f8f76273717",
+          "./pi-sessions/2026-10-20T03-55-48-268Z_01a15773-7aab-732e-b387-3d40348b4395.jsonl": "8adeb12f2fc736641616128a4400ccce1e485c04ce13b0074f3ea97fdbf56923",
+          "./native-command.json": "7128c804e805324113061fa29875f3de87f0bb6c088ce23415d3e73f98a1b3e6",
+          "./pi-events.jsonl": "2327b6d8f3f8e7f4925a3180608486c527e4757b011c7000ce0ff9d1a7206a2f",
+          "./pi-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "./console.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "./worker.json": "ec6df57b4f9f2b628af391c481a9577c7257bfaadd4e7aa68f359795c81bba1a"
+        },
+        "evidenceHashes": {
+          "lock.json": "ce7f6ad04013901e3c3d610c53b5cb50f608edd40d134f4ff29f8ab1b5f59084",
+          "config.json": "536f02448899f9d15320043dfe788a46143d47099d19bf0dfbf2587b72f1027f",
+          "trial.log": "5868e519b78e4f2f267470e411fb5e62ab85729eb3642ffbddd64e569930f993",
+          "verifier/reward.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "verifier/ctrf.json": "2dd9b4c386222a7f1e1ed0aa511381d44f89e6e9f21df140a87ecf088f514b8c"
+        },
+        "missing": [
+          "original Harbor trial ID",
+          "outer phase timings",
+          "complete artifact finalization"
+        ]
+      },
+      "trialResultSha256": "d9d7306beacc9ca5204fecc5b6139b9e27405569b0ca51bc5d9a5f603e8d09a3",
+      "workerSha256": "ec6df57b4f9f2b628af391c481a9577c7257bfaadd4e7aa68f359795c81bba1a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.29603,
+      "costUsd": 0.29603,
+      "latencyMs": 478715,
+      "agentPhaseMs": 480095.02900000004,
+      "usage": {
+        "input": 40866,
+        "cacheRead": 276480,
+        "cacheWrite": 0,
+        "output": 18665,
+        "estimatedApiUsd": 0.29603,
+        "modelCalls": 12,
+        "toolCalls": 30,
+        "costUnknown": false
+      },
+      "modelCalls": 12,
+      "toolCalls": 30,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:16:47.818180Z",
+        "finished_at": "2026-10-20T04:24:47.913209Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:16:46.331223Z",
+        "finished_at": "2026-10-20T04:16:47.817895Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "7d1e9c32ef5e272d0a269fb3b383a4ee8f83cf9bbc791e53d15936c38bd09de9",
+      "workerSha256": "c365319202d08469133057aa3c293eee3f6c65e8a5c9e246cb63f3ebebd08a00",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "adaptive-rejection-sampler",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00783208,
+      "costUsd": 0.00783208,
+      "latencyMs": 358752,
+      "agentPhaseMs": 360196.327,
+      "usage": {
+        "input": 28715,
+        "cacheRead": 97408,
+        "cacheWrite": 0,
+        "output": 7973,
+        "estimatedApiUsd": 0.00783208,
+        "modelCalls": 14,
+        "toolCalls": 26,
+        "costUnknown": false
+      },
+      "modelCalls": 14,
+      "toolCalls": 26,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:16:47.859945Z",
+        "finished_at": "2026-10-20T04:22:48.056272Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:16:46.536646Z",
+        "finished_at": "2026-10-20T04:16:47.859850Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "4b1b86de206fbb60f42bf6d836238ec3ccd16f8816db12f9d6907f11596d50c0",
+      "workerSha256": "56f42e0d7241b8668c7df21a4fcd6180f1609dcae7566495975647491eb6784f",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.24887040000000002,
+      "costUsd": 0.24887040000000002,
+      "latencyMs": 350773,
+      "agentPhaseMs": 351803.72699999996,
+      "usage": {
+        "input": 49489,
+        "cacheRead": 612224,
+        "cacheWrite": 0,
+        "output": 8867,
+        "estimatedApiUsd": 0.24887040000000002,
+        "costUnknown": false
+      },
+      "modelCalls": 22,
+      "toolCalls": 43,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:25:53.991764Z",
+        "finished_at": "2026-10-20T04:31:45.795491Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:25:52.762396Z",
+        "finished_at": "2026-10-20T04:25:53.991509Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "ca8dd28e24347db56d55328d54cef4db838b7d19045b2f1c400f128a314d5dd7",
+      "workerSha256": "1b5022b4b69e16668327829a092ceae52a55e88af36847ad0cf2926a9c972016",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.1898616,
+      "costUsd": 0.1898616,
+      "latencyMs": 332553,
+      "agentPhaseMs": 333638.94299999997,
+      "usage": {
+        "input": 51359,
+        "cacheRead": 231936,
+        "cacheWrite": 0,
+        "output": 6395,
+        "estimatedApiUsd": 0.1898616,
+        "modelCalls": 12,
+        "toolCalls": 38,
+        "costUnknown": false
+      },
+      "modelCalls": 12,
+      "toolCalls": 38,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:26:21.394676Z",
+        "finished_at": "2026-10-20T04:31:55.033619Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:26:20.404950Z",
+        "finished_at": "2026-10-20T04:26:21.394557Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "b4a64c5c538c5469a26e856cbb43161bf8b2a4231c37f8754a81c792f3bdd6ad",
+      "workerSha256": "5c53740e950378a0346a57f97274c72935e5467602cee687ac2e9f2e65f754ef",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "v2",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0130413,
+      "costUsd": 0.0130413,
+      "latencyMs": 447932,
+      "agentPhaseMs": 449035.29500000004,
+      "usage": {
+        "input": 32287,
+        "cacheRead": 584960,
+        "cacheWrite": 0,
+        "output": 7926,
+        "estimatedApiUsd": 0.0130413,
+        "modelCalls": 44,
+        "toolCalls": 87,
+        "costUnknown": false
+      },
+      "modelCalls": 44,
+      "toolCalls": 87,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:31:57.876884Z",
+        "finished_at": "2026-10-20T04:39:26.912179Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:31:56.924549Z",
+        "finished_at": "2026-10-20T04:31:57.876803Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "70aa7e481b26cddcbc9b41e5f8eba81a9a8e49927d4f7002d549318e64d4c063",
+      "workerSha256": "e864eab8156935d8a120a1e7ab24c2a2b1bcd75c65d3a516dfdd9ab6e9340b5a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-cython-ext",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.29390560000000004,
+      "costUsd": 0.29390560000000004,
+      "latencyMs": 231058,
+      "agentPhaseMs": 232691.24,
+      "usage": {
+        "input": 57811,
+        "cacheRead": 980736,
+        "cacheWrite": 0,
+        "output": 8021,
+        "totalTokens": 1046568,
+        "estimatedApiUsd": 0.29390560000000004
+      },
+      "modelCalls": 23,
+      "toolCalls": 22,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:32:06.249520Z",
+        "finished_at": "2026-10-20T04:35:58.940760Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:32:05.372437Z",
+        "finished_at": "2026-10-20T04:32:06.249437Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "09fa1db77faded3b1c0e0bf459fdd6b75a04845e4ce1af55800e66cbe3d96263",
+      "workerSha256": "6190dbcec09547fc898068d96897a579aba447096e70e218a84bc246d31e2406",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.13043760000000001,
+      "costUsd": 0.13043760000000001,
+      "latencyMs": 156563,
+      "agentPhaseMs": 157549.133,
+      "usage": {
+        "input": 34513,
+        "cacheRead": 182016,
+        "cacheWrite": 0,
+        "output": 4321,
+        "estimatedApiUsd": 0.13043760000000001,
+        "modelCalls": 11,
+        "toolCalls": 24,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 24,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:36:25.753775Z",
+        "finished_at": "2026-10-20T04:39:03.302908Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:36:24.883733Z",
+        "finished_at": "2026-10-20T04:36:25.753690Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0d43fa8fc315fda45a95465e307e141f30a58a38679e1a0f1230958915c5b193",
+      "workerSha256": "c3d6e4e39cd7d141c7542db4bee53fd021ed437021fdbb442db2a42a7efdfe94",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00518856,
+      "costUsd": 0.00518856,
+      "latencyMs": 291090,
+      "agentPhaseMs": 292155.52,
+      "usage": {
+        "input": 22807,
+        "cacheRead": 148736,
+        "cacheWrite": 0,
+        "output": 2841,
+        "estimatedApiUsd": 0.00518856,
+        "modelCalls": 20,
+        "toolCalls": 38,
+        "costUnknown": false
+      },
+      "modelCalls": 20,
+      "toolCalls": 38,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:39:38.701843Z",
+        "finished_at": "2026-10-20T04:44:30.857363Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:39:37.844382Z",
+        "finished_at": "2026-10-20T04:39:38.701763Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "84a7aeb232db0c679e0333ca326a1b6ba08854d9c12d394e35bfc311dff38b9e",
+      "workerSha256": "b16e3c04a7d517c932354af40e015117ac4bdbc5e998d5a08c1562d6047b8090",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.139174,
+      "costUsd": 0.139174,
+      "latencyMs": 117339,
+      "agentPhaseMs": 118990.717,
+      "usage": {
+        "input": 31859,
+        "cacheRead": 466560,
+        "cacheWrite": 0,
+        "output": 2880,
+        "totalTokens": 501299,
+        "estimatedApiUsd": 0.139174
+      },
+      "modelCalls": 19,
+      "toolCalls": 18,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:39:55.336692Z",
+        "finished_at": "2026-10-20T04:41:54.327409Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:39:54.518595Z",
+        "finished_at": "2026-10-20T04:39:55.336610Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "b7c1e95f37b3934e9c687fb7f85b9ce61d9b1169ba6e6b033df66d5c9e4e3e63",
+      "workerSha256": "5882aee17e1f1b9efc06397e625dba0093a6a5476860f27e338a50744d49678e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "build-pmars",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.13165439999999998,
+      "costUsd": 0.13165439999999998,
+      "latencyMs": 268538,
+      "agentPhaseMs": 269531.602,
+      "usage": {
+        "input": 35851,
+        "cacheRead": 337024,
+        "cacheWrite": 0,
+        "output": 2625,
+        "estimatedApiUsd": 0.13165439999999998,
+        "costUnknown": false
+      },
+      "modelCalls": 18,
+      "toolCalls": 20,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:42:42.443060Z",
+        "finished_at": "2026-10-20T04:47:11.974662Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:42:41.471378Z",
+        "finished_at": "2026-10-20T04:42:42.442963Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "3aa22d28cb31f02ff9ff38d7c06d1e6d8dacb976bf2d543e390ba89d309416cc",
+      "workerSha256": "5f278b91f9779a69bfec9be278db0f2c766246b5e304a3d2ce65a6256d852fc3",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00075096,
+      "costUsd": 0.00075096,
+      "latencyMs": 21817,
+      "agentPhaseMs": 22859.855,
+      "usage": {
+        "input": 4141,
+        "cacheRead": 11136,
+        "cacheWrite": 0,
+        "output": 451,
+        "estimatedApiUsd": 0.00075096,
+        "modelCalls": 5,
+        "toolCalls": 8,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": "passed",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:45:01.064462Z",
+        "finished_at": "2026-10-20T04:45:23.924317Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:45:00.197426Z",
+        "finished_at": "2026-10-20T04:45:01.064374Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0cb833df843f150acf5aeda7e8e96242854283f1513e5e83fcfb4be6f038d8e6",
+      "workerSha256": "55026a9a6d0d0f7daaca94226fbee97016fae8c7bfa4ee295a310886fdec525e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.022043600000000003,
+      "costUsd": 0.022043600000000003,
+      "latencyMs": 14117,
+      "agentPhaseMs": 15704.84,
+      "usage": {
+        "input": 7169,
+        "cacheRead": 38656,
+        "cacheWrite": 0,
+        "output": 384,
+        "totalTokens": 46209,
+        "estimatedApiUsd": 0.022043600000000003
+      },
+      "modelCalls": 3,
+      "toolCalls": 2,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:46:18.138153Z",
+        "finished_at": "2026-10-20T04:46:33.842993Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:46:17.277932Z",
+        "finished_at": "2026-10-20T04:46:18.138071Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "f41fba8d947621368f663ebdf439588182276ebbfe381ae161a38eff2cd4e39f",
+      "workerSha256": "6ce3b026b0e9ba29dabddd3b2d35a8a912846df1e3a7fcd5505fbc17846fb9c3",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0094284,
+      "costUsd": 0.0094284,
+      "latencyMs": 14672,
+      "agentPhaseMs": 15656.976999999999,
+      "usage": {
+        "input": 3164,
+        "cacheRead": 5504,
+        "cacheWrite": 0,
+        "output": 255,
+        "estimatedApiUsd": 0.0094284,
+        "costUnknown": false
+      },
+      "modelCalls": 4,
+      "toolCalls": 3,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:46:56.378613Z",
+        "finished_at": "2026-10-20T04:47:12.035590Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:46:55.505182Z",
+        "finished_at": "2026-10-20T04:46:56.378530Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "7030dff0f55e934a108d7722e865f8416a4fe5144a5e9673e69ce90a59b4550a",
+      "workerSha256": "e7fe3a91bbb3dc6400c2b3d97b953c17b4a08b51167d4fac713afc0b6aa09cb4",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "code-from-image",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.012840800000000001,
+      "costUsd": 0.012840800000000001,
+      "latencyMs": 17507,
+      "agentPhaseMs": 18571.110999999997,
+      "usage": {
+        "input": 3812,
+        "cacheRead": 3968,
+        "cacheWrite": 0,
+        "output": 482,
+        "estimatedApiUsd": 0.012840800000000001,
+        "modelCalls": 3,
+        "toolCalls": 6,
+        "costUnknown": false
+      },
+      "modelCalls": 3,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:47:29.712963Z",
+        "finished_at": "2026-10-20T04:47:48.284074Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:47:28.870131Z",
+        "finished_at": "2026-10-20T04:47:29.712877Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "529020c9da41c9307f6b78cddd78fbe9b8b5f9724a38bd81568a9c05597b0743",
+      "workerSha256": "55f3ab0a7ea2c12637495ebad68ed16a7324de51c7a92f520107d510ca95ce9b",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.5782151999999999,
+      "costUsd": 0.5782151999999999,
+      "latencyMs": 740133,
+      "agentPhaseMs": 742086.2919999999,
+      "usage": {
+        "input": 71722,
+        "cacheRead": 3290112,
+        "cacheWrite": 0,
+        "output": 10576,
+        "totalTokens": 3372410,
+        "estimatedApiUsd": 0.5782151999999999
+      },
+      "modelCalls": 62,
+      "toolCalls": 61,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T04:48:42.161566Z",
+        "finished_at": "2026-10-20T05:01:04.247858Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T04:48:41.445050Z",
+        "finished_at": "2026-10-20T04:48:42.161464Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "b24232186d0242a81e3ebbe6b6e575f80ec3f040a931855a4c276a5d0ebb1bfd",
+      "workerSha256": "2097f5ccd7b481b09ad67163ca87aee3c425481dcd788ed3fd5dd65495c3c634",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.30248400000000014,
+      "costUsd": 0.30248400000000014,
+      "latencyMs": 1093511,
+      "agentPhaseMs": 1094725.4579999999,
+      "usage": {
+        "input": 72741,
+        "cacheRead": 1041920,
+        "cacheWrite": 0,
+        "output": 5281,
+        "estimatedApiUsd": 0.30248400000000014,
+        "costUnknown": false
+      },
+      "modelCalls": 35,
+      "toolCalls": 43,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:01:34.359262Z",
+        "finished_at": "2026-10-20T05:19:49.084720Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:01:32.939125Z",
+        "finished_at": "2026-10-20T05:01:34.359183Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0afb2c279754bbf9f87ac9b0804cacc9ee37033913cdb84f99b00555abbd04c6",
+      "workerSha256": "0a2720d49f2636473b28ace84e20aa280ce9a252785489dcc10f41de859b0e08",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.2937012,
+      "costUsd": 0.2937012,
+      "latencyMs": 678668,
+      "agentPhaseMs": 679777.094,
+      "usage": {
+        "input": 63225,
+        "cacheRead": 733312,
+        "cacheWrite": 0,
+        "output": 9392,
+        "estimatedApiUsd": 0.2937012,
+        "modelCalls": 24,
+        "toolCalls": 48,
+        "costUnknown": false
+      },
+      "modelCalls": 24,
+      "toolCalls": 48,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:21:24.746495Z",
+        "finished_at": "2026-10-20T05:32:44.523589Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:21:23.548165Z",
+        "finished_at": "2026-10-20T05:21:24.746410Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "01ef77c3a225e320bdf72415421282be571778e333ad6b79cc9ee02e9455bd8b",
+      "workerSha256": "356c4314e180d0d84e0368e77cdca1a5b63e47f1c29062517b0c13455ed24368",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "compile-compcert",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.007825019999999999,
+      "costUsd": 0.007825019999999999,
+      "latencyMs": 440710,
+      "agentPhaseMs": 441737.485,
+      "usage": {
+        "input": 41381,
+        "cacheRead": 184192,
+        "cacheWrite": 0,
+        "output": 3690,
+        "estimatedApiUsd": 0.007825019999999999,
+        "modelCalls": 22,
+        "toolCalls": 42,
+        "costUnknown": false
+      },
+      "modelCalls": 22,
+      "toolCalls": 42,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:34:12.165915Z",
+        "finished_at": "2026-10-20T05:41:33.903400Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:34:11.259256Z",
+        "finished_at": "2026-10-20T05:34:12.165829Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "01fb8108281ef392728dc74fef3494164d52526c88f881baab25458f2afc4fc8",
+      "workerSha256": "79d3797547424fa308fcc0a137d4460579020224720f2f37e72f5272d6fd7299",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "pi",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0510868,
+      "costUsd": 0.0510868,
+      "latencyMs": 76649,
+      "agentPhaseMs": 77646.56,
+      "usage": {
+        "input": 12255,
+        "cacheRead": 42368,
+        "cacheWrite": 0,
+        "output": 2234,
+        "estimatedApiUsd": 0.0510868,
+        "costUnknown": false
+      },
+      "modelCalls": 8,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:42:55.392132Z",
+        "finished_at": "2026-10-20T05:44:13.038692Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:42:54.329350Z",
+        "finished_at": "2026-10-20T05:42:55.392046Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "9683974d039a0d3ba5d2fe27568e5f432e3c5399b6246fa287a2c0f3d4c3f0b5",
+      "workerSha256": "b9f54133ca094b3e3294d8a830beab23614891dd34802558417508bd7f617897",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "v1",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.105164,
+      "costUsd": 0.105164,
+      "latencyMs": 160344,
+      "agentPhaseMs": 161409.874,
+      "usage": {
+        "input": 21983,
+        "cacheRead": 52480,
+        "cacheWrite": 0,
+        "output": 5595,
+        "estimatedApiUsd": 0.105164,
+        "modelCalls": 12,
+        "toolCalls": 28,
+        "costUnknown": false
+      },
+      "modelCalls": 12,
+      "toolCalls": 28,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:42:56.615303Z",
+        "finished_at": "2026-10-20T05:45:38.025177Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:42:55.685621Z",
+        "finished_at": "2026-10-20T05:42:56.615219Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "c79773370a23ab95b65ad75e9027c648f2d1f56f0604d2093b05625f1dcb5b1f",
+      "workerSha256": "00a23164f6fbd0a698862953c3745b5c4f2b92f0630bfb64f13ad895f36c040c",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "v2",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0036203600000000004,
+      "costUsd": 0.0036203600000000004,
+      "latencyMs": 89524,
+      "agentPhaseMs": 90714.796,
+      "usage": {
+        "input": 17043,
+        "cacheRead": 3456,
+        "cacheWrite": 0,
+        "output": 3763,
+        "estimatedApiUsd": 0.0036203600000000004,
+        "modelCalls": 5,
+        "toolCalls": 10,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 10,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:45:30.818785Z",
+        "finished_at": "2026-10-20T05:47:01.533581Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:45:29.920771Z",
+        "finished_at": "2026-10-20T05:45:30.818700Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "6fb27483ba2bd825c2eba9564b714c514183d55b809fc4bd9293bca04475aa5c",
+      "workerSha256": "05b9add7fac66e2143066d6205984b77b3d5a3a4e80952fe44ddfe8a65e9de4a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "codex",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0915224,
+      "costUsd": 0.0915224,
+      "latencyMs": 94579,
+      "agentPhaseMs": 96278.58600000001,
+      "usage": {
+        "input": 19936,
+        "cacheRead": 178304,
+        "cacheWrite": 0,
+        "output": 3382,
+        "totalTokens": 201622,
+        "estimatedApiUsd": 0.0915224
+      },
+      "modelCalls": 9,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:46:37.180237Z",
+        "finished_at": "2026-10-20T05:48:13.458823Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:46:36.348583Z",
+        "finished_at": "2026-10-20T05:46:37.180157Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "57c53342800c3246a1693cb22595b03c8fe2b3ced83b37b8f07267243be17b60",
+      "workerSha256": "3d6cdacdee8ce69ec3d338f0454d3dd2e6dbe9a1700f7fac35c75edaeb3f6e40",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0531196,
+      "costUsd": 0.0531196,
+      "latencyMs": 66172,
+      "agentPhaseMs": 67249.226,
+      "usage": {
+        "input": 12579,
+        "cacheRead": 12416,
+        "cacheWrite": 0,
+        "output": 2672,
+        "estimatedApiUsd": 0.0531196,
+        "modelCalls": 6,
+        "toolCalls": 10,
+        "costUnknown": false
+      },
+      "modelCalls": 6,
+      "toolCalls": 10,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:48:48.610159Z",
+        "finished_at": "2026-10-20T05:49:55.859385Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:48:47.685873Z",
+        "finished_at": "2026-10-20T05:48:48.610078Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "9d9dbe66f2ad5b2f3d7335d75d7c93b5323080ef0926acb7c41a5df06578530d",
+      "workerSha256": "8ff91945907ab1095f74cd5b86ae225d5e0acb3e1dfd09387705b764a8c8dc95",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00235664,
+      "costUsd": 0.00235664,
+      "latencyMs": 52015,
+      "agentPhaseMs": 53077.077000000005,
+      "usage": {
+        "input": 12921,
+        "cacheRead": 8704,
+        "cacheWrite": 0,
+        "output": 1955,
+        "estimatedApiUsd": 0.00235664,
+        "modelCalls": 5,
+        "toolCalls": 8,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:49:10.152744Z",
+        "finished_at": "2026-10-20T05:50:03.229821Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:49:09.259071Z",
+        "finished_at": "2026-10-20T05:49:10.152654Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "483351106c1d9a4af4d6881e1ff87709d88726e09b634dd8457e729e986c522f",
+      "workerSha256": "40f1dfa552a3de144bfcb048001f8ae58e2b60148693d4e2b9d23cf84123d00d",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0632696,
+      "costUsd": 0.0632696,
+      "latencyMs": 53768,
+      "agentPhaseMs": 55471.397000000004,
+      "usage": {
+        "input": 13502,
+        "cacheRead": 70656,
+        "cacheWrite": 0,
+        "output": 2920,
+        "totalTokens": 87078,
+        "estimatedApiUsd": 0.0632696
+      },
+      "modelCalls": 5,
+      "toolCalls": 4,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:50:59.662325Z",
+        "finished_at": "2026-10-20T05:51:55.133722Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:50:58.781775Z",
+        "finished_at": "2026-10-20T05:50:59.662240Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "67275f14ccfe5b7e4f78f64628023650df461846b576923de6b50b76202f570e",
+      "workerSha256": "11ddb8f93f7ab5d7ca44f4a17463334f66c5fdb8e504ebb36482ff82aa2a96dc",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "constraints-scheduling",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.032569600000000004,
+      "costUsd": 0.032569600000000004,
+      "latencyMs": 47133,
+      "agentPhaseMs": 48237.015999999996,
+      "usage": {
+        "input": 7156,
+        "cacheRead": 11776,
+        "cacheWrite": 0,
+        "output": 1708,
+        "estimatedApiUsd": 0.032569600000000004,
+        "costUnknown": false
+      },
+      "modelCalls": 6,
+      "toolCalls": 7,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:51:10.238536Z",
+        "finished_at": "2026-10-20T05:51:58.475552Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:51:09.227330Z",
+        "finished_at": "2026-10-20T05:51:10.238446Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "ebf564d4bad9cdc1f3e8b413d283559809306d91fead599b5fe6ce733f860187",
+      "workerSha256": "30c1ff646d15ebaaf213d613ff8719d9455cf19cf51e98aefdc5e452f65dc14c",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00559618,
+      "costUsd": 0.00559618,
+      "latencyMs": 191070,
+      "agentPhaseMs": 192267.26400000002,
+      "usage": {
+        "input": 24209,
+        "cacheRead": 80128,
+        "cacheWrite": 0,
+        "output": 4748,
+        "estimatedApiUsd": 0.00559618,
+        "modelCalls": 12,
+        "toolCalls": 25,
+        "costUnknown": false
+      },
+      "modelCalls": 12,
+      "toolCalls": 25,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:53:09.599283Z",
+        "finished_at": "2026-10-20T05:56:21.866547Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:53:08.564530Z",
+        "finished_at": "2026-10-20T05:53:09.599101Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "e8ef08a0b1ad8e3268e63eff337e81c77ea13412de0be7cb50d407e299099294",
+      "workerSha256": "0494a6b64a211e81fdf94f7cd8cb5df713774ae77af2220b287779a282e38ffc",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.09917480000000001,
+      "costUsd": 0.09917480000000001,
+      "latencyMs": 116734,
+      "agentPhaseMs": 118528.152,
+      "usage": {
+        "input": 13553,
+        "cacheRead": 101888,
+        "cacheWrite": 0,
+        "output": 6188,
+        "totalTokens": 121629,
+        "estimatedApiUsd": 0.09917480000000001
+      },
+      "modelCalls": 6,
+      "toolCalls": 5,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:53:09.768524Z",
+        "finished_at": "2026-10-20T05:55:08.296676Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:53:08.818390Z",
+        "finished_at": "2026-10-20T05:53:09.768341Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "5a13be01b0990b076567c4665700fbf7430bb5b8fede75cb5f35b0dc61dc6d00",
+      "workerSha256": "c09d3943eb11ff409c3387cd032df907eed2989ce5c9d6f9ec7f0aad341f6d27",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.071966,
+      "costUsd": 0.071966,
+      "latencyMs": 112191,
+      "agentPhaseMs": 113215.86200000001,
+      "usage": {
+        "input": 10793,
+        "cacheRead": 25600,
+        "cacheWrite": 0,
+        "output": 4782,
+        "estimatedApiUsd": 0.071966,
+        "costUnknown": false
+      },
+      "modelCalls": 6,
+      "toolCalls": 9,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:56:09.742418Z",
+        "finished_at": "2026-10-20T05:58:02.958280Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:56:08.824718Z",
+        "finished_at": "2026-10-20T05:56:09.742328Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0a54a4424ad2f8c392338dd58416e3b2e35fe81c705725a1143dd5e457a6e3b1",
+      "workerSha256": "e1d9e3e886c98bab5de6bdeff5cf8d5ab158bfbfe5d5092da35d86df9c67a44e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.1659048,
+      "costUsd": 0.1659048,
+      "latencyMs": 256819,
+      "agentPhaseMs": 257902.851,
+      "usage": {
+        "input": 20306,
+        "cacheRead": 99328,
+        "cacheWrite": 0,
+        "output": 11536,
+        "estimatedApiUsd": 0.1659048,
+        "modelCalls": 10,
+        "toolCalls": 23,
+        "costUnknown": false
+      },
+      "modelCalls": 10,
+      "toolCalls": 23,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T05:56:55.950534Z",
+        "finished_at": "2026-10-20T06:01:13.853385Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T05:56:55.019771Z",
+        "finished_at": "2026-10-20T05:56:55.950456Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "96e085eef181ae87a940a8d9bdd80f14069fd3760645fbebf31d3acaaf9d94b7",
+      "workerSha256": "4ff167e96f1761a6d7408fee115e8489bc2b71e9ff82b30a5e428d6075719bb7",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.1556996,
+      "costUsd": 0.1556996,
+      "latencyMs": 78281,
+      "agentPhaseMs": 80060.844,
+      "usage": {
+        "input": 49401,
+        "cacheRead": 322176,
+        "cacheWrite": 0,
+        "output": 2468,
+        "totalTokens": 374045,
+        "estimatedApiUsd": 0.1556996
+      },
+      "modelCalls": 10,
+      "toolCalls": 9,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:02:06.078312Z",
+        "finished_at": "2026-10-20T06:03:26.139156Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:02:05.098791Z",
+        "finished_at": "2026-10-20T06:02:06.078229Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "d5722a0117cba860f46aa3baaf3a95d7860146f6e8f6800f97cb2ecbe24cc49b",
+      "workerSha256": "414dc16da6af3f53a0aa8c02d89b7fcdc622480c455713168dc89625ca6fdf9e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.114428,
+      "costUsd": 0.114428,
+      "latencyMs": 150888,
+      "agentPhaseMs": 152116.163,
+      "usage": {
+        "input": 41552,
+        "cacheRead": 99840,
+        "cacheWrite": 0,
+        "output": 2134,
+        "estimatedApiUsd": 0.114428,
+        "costUnknown": false
+      },
+      "modelCalls": 14,
+      "toolCalls": 15,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:05:23.769082Z",
+        "finished_at": "2026-10-20T06:07:55.885245Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:05:22.868973Z",
+        "finished_at": "2026-10-20T06:05:23.768997Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "7450b4884a6bfca42bf3288297d94f1139051b632564bfc7d94f43bab9233594",
+      "workerSha256": "4682f1b3b3433fbd2d03b9824b8a1ca4793d2d141e47d87540cb7146730be741",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": true,
+      "knownCostUsd": 0.18649000000000002,
+      "costUsd": null,
+      "latencyMs": 130334,
+      "agentPhaseMs": 131546.602,
+      "usage": {
+        "input": 68654,
+        "cacheRead": 241920,
+        "cacheWrite": 0,
+        "output": 2499,
+        "estimatedApiUsd": 0.18649000000000002,
+        "modelCalls": 8,
+        "toolCalls": 25,
+        "costUnknown": false
+      },
+      "modelCalls": 8,
+      "toolCalls": 25,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:10:00.519482Z",
+        "finished_at": "2026-10-20T06:12:12.066084Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:09:59.464683Z",
+        "finished_at": "2026-10-20T06:10:00.519391Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "771be3fe5d2e2abf6d7ef789519f9985875e1b6b61e40ba6079f20ea5df57833",
+      "workerSha256": "e51fe8581836b7b5ab8852724efca4fa415cbf0a9f0aacd4092a24963dcbc8c4",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "financial-document-processor",
+      "arm": "v2",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.014370820000000001,
+      "costUsd": 0.014370820000000001,
+      "latencyMs": 229121,
+      "agentPhaseMs": 230306.014,
+      "usage": {
+        "input": 60199,
+        "cacheRead": 628992,
+        "cacheWrite": 0,
+        "output": 4122,
+        "estimatedApiUsd": 0.014370820000000001,
+        "modelCalls": 17,
+        "toolCalls": 44,
+        "costUnknown": false
+      },
+      "modelCalls": 17,
+      "toolCalls": 44,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:13:29.326010Z",
+        "finished_at": "2026-10-20T06:17:19.632024Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:13:28.459867Z",
+        "finished_at": "2026-10-20T06:13:29.325908Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "4b721370140bfec5ba4ad2099415698ff6eb832f551496effee79c6257d65648",
+      "workerSha256": "97e4755b237170b571edd427e3ad2f4ca36e99308ce43f4d2f9ed12e2986233a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0686916,
+      "costUsd": 0.0686916,
+      "latencyMs": 54165,
+      "agentPhaseMs": 55230.006,
+      "usage": {
+        "input": 23070,
+        "cacheRead": 108416,
+        "cacheWrite": 0,
+        "output": 1171,
+        "estimatedApiUsd": 0.0686916,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 15,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:18:20.421204Z",
+        "finished_at": "2026-10-20T06:19:15.651210Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:18:19.490635Z",
+        "finished_at": "2026-10-20T06:18:20.421081Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "346febeedf94a43df90ca6d48cc531a0e1816c8b450e498fec39f688312619f4",
+      "workerSha256": "0d00665da1f78ac71859e9ccc8952469fbd339c0100e985bcf809dad38f165dd",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0523764,
+      "costUsd": 0.0523764,
+      "latencyMs": 37021,
+      "agentPhaseMs": 38188.748,
+      "usage": {
+        "input": 18439,
+        "cacheRead": 54784,
+        "cacheWrite": 0,
+        "output": 1002,
+        "estimatedApiUsd": 0.0523764,
+        "modelCalls": 7,
+        "toolCalls": 16,
+        "costUnknown": false
+      },
+      "modelCalls": 7,
+      "toolCalls": 16,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:18:20.373664Z",
+        "finished_at": "2026-10-20T06:18:58.562412Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:18:19.491405Z",
+        "finished_at": "2026-10-20T06:18:20.373515Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "6363e9ee10690d930d689b2d93308474d5d0bcb4c3b78631a9498ae14517782d",
+      "workerSha256": "844e30bfdfdf0945f889e3df7096a9f2b001d0cab38e4bb18a5756a9393867f1",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0067826399999999995,
+      "costUsd": 0.0067826399999999995,
+      "latencyMs": 124397,
+      "agentPhaseMs": 125474.473,
+      "usage": {
+        "input": 23225,
+        "cacheRead": 270464,
+        "cacheWrite": 0,
+        "output": 3511,
+        "estimatedApiUsd": 0.0067826399999999995,
+        "modelCalls": 20,
+        "toolCalls": 40,
+        "costUnknown": false
+      },
+      "modelCalls": 20,
+      "toolCalls": 40,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:19:08.975004Z",
+        "finished_at": "2026-10-20T06:21:14.449477Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:19:07.961775Z",
+        "finished_at": "2026-10-20T06:19:08.974723Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "05cc929f80c329f75a762b9bd6b5ddef5a1f92c023d095bb0ebd58299cd8d50c",
+      "workerSha256": "066c861d32b4ab09cc7fdb136e63337d86c74113dc6e75efbd8660d0aa864e9d",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.15532400000000002,
+      "costUsd": 0.15532400000000002,
+      "latencyMs": 40708,
+      "agentPhaseMs": 42425.828,
+      "usage": {
+        "input": 64262,
+        "cacheRead": 150400,
+        "cacheWrite": 0,
+        "output": 1176,
+        "totalTokens": 215838,
+        "estimatedApiUsd": 0.15532400000000002
+      },
+      "modelCalls": 7,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:19:24.985712Z",
+        "finished_at": "2026-10-20T06:20:07.411540Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:19:24.052567Z",
+        "finished_at": "2026-10-20T06:19:24.985633Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "304843208b0c7d8fd869920bcd908c48789a21a8c2c1697b47db0e9f88010793",
+      "workerSha256": "39f75014a522769ee355cfd96517c5b6ad25ee6267946d5f88d18f8b52ce3ee1",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-git",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0277988,
+      "costUsd": 0.0277988,
+      "latencyMs": 33839,
+      "agentPhaseMs": 34900.762,
+      "usage": {
+        "input": 7581,
+        "cacheRead": 26368,
+        "cacheWrite": 0,
+        "output": 1000,
+        "estimatedApiUsd": 0.0277988,
+        "modelCalls": 7,
+        "toolCalls": 13,
+        "costUnknown": false
+      },
+      "modelCalls": 7,
+      "toolCalls": 13,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:20:26.470228Z",
+        "finished_at": "2026-10-20T06:21:01.370990Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:20:25.546079Z",
+        "finished_at": "2026-10-20T06:20:26.470092Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "6645b53df373cedcfcee572346c6d0f1fc4bdc2be4208d369c034a531a30fc84",
+      "workerSha256": "94282100258eb0db33188f44809ca76e52e5911f9cbb12cf16d3f3d6f8cf129d",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-git",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0067577600000000015,
+      "costUsd": 0.0067577600000000015,
+      "latencyMs": 90485,
+      "agentPhaseMs": 91639.737,
+      "usage": {
+        "input": 48426,
+        "cacheRead": 73216,
+        "cacheWrite": 0,
+        "output": 2366,
+        "estimatedApiUsd": 0.0067577600000000015,
+        "modelCalls": 14,
+        "toolCalls": 27,
+        "costUnknown": false
+      },
+      "modelCalls": 14,
+      "toolCalls": 27,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:21:20.926225Z",
+        "finished_at": "2026-10-20T06:22:52.565962Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:21:20.002385Z",
+        "finished_at": "2026-10-20T06:21:20.926137Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "64b0544e2d96f6c6cc0c0d3fde5468ecb00773fb4be11f994967c2b47737abbe",
+      "workerSha256": "24e59905b0eac858d64bfda4d4add0bfcfcaeded09ed17525c25079f68bb3026",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-git",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.04920600000000001,
+      "costUsd": 0.04920600000000001,
+      "latencyMs": 31018,
+      "agentPhaseMs": 32662.703999999998,
+      "usage": {
+        "input": 14736,
+        "cacheRead": 109440,
+        "cacheWrite": 0,
+        "output": 879,
+        "totalTokens": 125055,
+        "estimatedApiUsd": 0.04920600000000001
+      },
+      "modelCalls": 7,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:21:23.719358Z",
+        "finished_at": "2026-10-20T06:21:56.382062Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:21:22.807265Z",
+        "finished_at": "2026-10-20T06:21:23.719279Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "8a7f4286c708c0469811a332afdd8be0a3b4c731aa9ad87c15697bad4ca28745",
+      "workerSha256": "74e0b587e326cac8e2653221b2fb8d3d9bbc89b837910c48c060848d2a769481",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "fix-git",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0399048,
+      "costUsd": 0.0399048,
+      "latencyMs": 47007,
+      "agentPhaseMs": 47988.748,
+      "usage": {
+        "input": 12850,
+        "cacheRead": 21248,
+        "cacheWrite": 0,
+        "output": 1208,
+        "estimatedApiUsd": 0.0399048,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 9,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:22:59.083404Z",
+        "finished_at": "2026-10-20T06:23:47.072152Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:22:58.118916Z",
+        "finished_at": "2026-10-20T06:22:59.083323Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "85aab9de92eca7721588e3c238abfb2be147d96419d916832e4a5ca3bf496a53",
+      "workerSha256": "585ed341f454f735e61c4152415058b80daa85314ffc1312de690dfafcbb4418",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "v2",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.00599502,
+      "costUsd": 0.00599502,
+      "latencyMs": 126626,
+      "agentPhaseMs": 127690.575,
+      "usage": {
+        "input": 28822,
+        "cacheRead": 104832,
+        "cacheWrite": 0,
+        "output": 4129,
+        "estimatedApiUsd": 0.00599502,
+        "modelCalls": 16,
+        "toolCalls": 30,
+        "costUnknown": false
+      },
+      "modelCalls": 16,
+      "toolCalls": 30,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:23:16.857048Z",
+        "finished_at": "2026-10-20T06:25:24.547623Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:23:15.930370Z",
+        "finished_at": "2026-10-20T06:23:16.856895Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "38fbdebd2cda7b02c354d4f703e8bfca107d50cd6eb00455d48b6250c32f6f9a",
+      "workerSha256": "3a9ea847e61ef50fb995c665f458143c14baac5c483aef6de9be546e45643c3a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.13517200000000001,
+      "costUsd": 0.13517200000000001,
+      "latencyMs": 94040,
+      "agentPhaseMs": 95660.11399999999,
+      "usage": {
+        "input": 39040,
+        "cacheRead": 315520,
+        "cacheWrite": 0,
+        "output": 2554,
+        "totalTokens": 357114,
+        "estimatedApiUsd": 0.13517200000000001
+      },
+      "modelCalls": 17,
+      "toolCalls": 16,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:24:09.917806Z",
+        "finished_at": "2026-10-20T06:25:45.577920Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:24:09.040027Z",
+        "finished_at": "2026-10-20T06:24:09.917721Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "a185b2af073056317a51a7c02350ce821de5d2757a911a9f8bb7e3cd9599bbb2",
+      "workerSha256": "3c95adb78d99b0db23f68019487d587a8d81e05fc1bfe3327371a82beca8f294",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.045723200000000006,
+      "costUsd": 0.045723200000000006,
+      "latencyMs": 54953,
+      "agentPhaseMs": 55940.81,
+      "usage": {
+        "input": 16380,
+        "cacheRead": 28032,
+        "cacheWrite": 0,
+        "output": 1016,
+        "estimatedApiUsd": 0.045723200000000006,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 10,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:25:57.034155Z",
+        "finished_at": "2026-10-20T06:26:52.974965Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:25:56.161797Z",
+        "finished_at": "2026-10-20T06:25:57.034008Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "a5e15e56598e178c8c4feb01c90c4b0f99c9f24ddf3036774371c104a62beef4",
+      "workerSha256": "f99635a4a29b403dff974bd26a20ce75a4a701e77cf050611e3dcf6212266b94",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0633824,
+      "costUsd": 0.0633824,
+      "latencyMs": 78502,
+      "agentPhaseMs": 79508.373,
+      "usage": {
+        "input": 17094,
+        "cacheRead": 54144,
+        "cacheWrite": 0,
+        "output": 2378,
+        "estimatedApiUsd": 0.0633824,
+        "modelCalls": 9,
+        "toolCalls": 22,
+        "costUnknown": false
+      },
+      "modelCalls": 9,
+      "toolCalls": 22,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:26:48.453287Z",
+        "finished_at": "2026-10-20T06:28:07.961660Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:26:47.572431Z",
+        "finished_at": "2026-10-20T06:26:48.453177Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "46ffb52b1b9e0ad2832a4a50735a1b92274b3c52f703cc7e4663988b6af17045",
+      "workerSha256": "ac446061b87b65e5dc1ef8a59d7586793b0271e1183e95364bd3e19ab6723766",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.11295720000000001,
+      "costUsd": 0.11295720000000001,
+      "latencyMs": 150757,
+      "agentPhaseMs": 152438.436,
+      "usage": {
+        "input": 18925,
+        "cacheRead": 86272,
+        "cacheWrite": 0,
+        "output": 6648,
+        "totalTokens": 111845,
+        "estimatedApiUsd": 0.11295720000000001
+      },
+      "modelCalls": 6,
+      "toolCalls": 5,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:27:16.473367Z",
+        "finished_at": "2026-10-20T06:29:48.911803Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:27:15.595547Z",
+        "finished_at": "2026-10-20T06:27:16.473285Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "649dbc602dbe4ea6337b8f6fdc5c8b62b7abdd665456a15057393f7e64cf6007",
+      "workerSha256": "7dd9c00994ade47fb1548cfbc6e13738bdf57a877c8d84960d62be117b0c3d55",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.07835,
+      "costUsd": 0.07835,
+      "latencyMs": 123806,
+      "agentPhaseMs": 124781.278,
+      "usage": {
+        "input": 13916,
+        "cacheRead": 14080,
+        "cacheWrite": 0,
+        "output": 4911,
+        "estimatedApiUsd": 0.07835,
+        "costUnknown": false
+      },
+      "modelCalls": 7,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:28:38.454192Z",
+        "finished_at": "2026-10-20T06:30:43.235470Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:28:37.515296Z",
+        "finished_at": "2026-10-20T06:28:38.454109Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "b0dca4c092c0a52d9c1a8454fe4995c4bf8e586d0c5f3cb6dbf70b2431ac81bc",
+      "workerSha256": "10e36cec8f6b5bd697be7c4dd29026c550f2ce3da15a8f91debea22d8265ddc6",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "v1",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0873048,
+      "costUsd": 0.0873048,
+      "latencyMs": 137172,
+      "agentPhaseMs": 138235.096,
+      "usage": {
+        "input": 14691,
+        "cacheRead": 3328,
+        "cacheWrite": 0,
+        "output": 5759,
+        "estimatedApiUsd": 0.0873048,
+        "modelCalls": 5,
+        "toolCalls": 10,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 10,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:30:25.112482Z",
+        "finished_at": "2026-10-20T06:32:43.347578Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:30:24.210273Z",
+        "finished_at": "2026-10-20T06:30:25.112339Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "78d708551d1af3ecfad8272b5a3c8c9ef4add4a87f2e617360bba2d9b70e01f3",
+      "workerSha256": "825c8322473499609474ce2f7cd2d87abdaf79dfec43146e200f4091ba871a1d",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "headless-terminal",
+      "arm": "v2",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.004514399999999999,
+      "costUsd": 0.004514399999999999,
+      "latencyMs": 132772,
+      "agentPhaseMs": 133840.41999999998,
+      "usage": {
+        "input": 16419,
+        "cacheRead": 35200,
+        "cacheWrite": 0,
+        "output": 5041,
+        "estimatedApiUsd": 0.004514399999999999,
+        "modelCalls": 11,
+        "toolCalls": 18,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 18,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:31:14.136553Z",
+        "finished_at": "2026-10-20T06:33:27.976973Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:31:13.260481Z",
+        "finished_at": "2026-10-20T06:31:14.136471Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "75f5b817be355258536836f4b871fb670fd46bca8495b8b7611e73bda5add6e3",
+      "workerSha256": "eb3fdf0a86d0c9a08918d1757fb4539017f650d3b298941afde75c5b63d9e01a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "pi",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.454822,
+      "costUsd": 0.454822,
+      "latencyMs": 889490,
+      "agentPhaseMs": 890728.401,
+      "usage": {
+        "input": 71252,
+        "cacheRead": 1665280,
+        "cacheWrite": 0,
+        "output": 14579,
+        "estimatedApiUsd": 0.454822,
+        "costUnknown": false
+      },
+      "modelCalls": 40,
+      "toolCalls": 53,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:33:45.072807Z",
+        "finished_at": "2026-10-20T06:48:35.801208Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:33:44.179603Z",
+        "finished_at": "2026-10-20T06:33:45.072720Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "ee1daaa0f410346ef9b627446a3219fa565ba9302cd7ca270faee3735a6898c4",
+      "workerSha256": "9c53518261d0aa709469921f2c4d9d5f5873fd316083b50e0536210155b1944e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "v1",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": null,
+      "identity": false,
+      "costUnknown": true,
+      "knownCostUsd": 0,
+      "costUsd": null,
+      "latencyMs": null,
+      "agentPhaseMs": 899968.482,
+      "usage": {},
+      "modelCalls": null,
+      "toolCalls": null,
+      "receiptsMatched": false,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "AgentTimeoutError",
+      "agentTiming": {
+        "started_at": "2026-10-20T06:34:16.786579Z",
+        "finished_at": "2026-10-20T06:49:16.755061Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:34:15.877695Z",
+        "finished_at": "2026-10-20T06:34:16.786497Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "c8f67f7cb4ee4b6875ac25ca721a04189cf65a5f1179573ffc8cfba65de003c3",
+      "workerSha256": null,
+      "usageSource": "partial response receipts; whole-attempt cost unknown"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "v2",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.01961828,
+      "costUsd": 0.01961828,
+      "latencyMs": 331385,
+      "agentPhaseMs": 332492.91099999996,
+      "usage": {
+        "input": 96842,
+        "cacheRead": 635008,
+        "cacheWrite": 0,
+        "output": 7168,
+        "estimatedApiUsd": 0.01961828,
+        "modelCalls": 33,
+        "toolCalls": 65,
+        "costUnknown": false
+      },
+      "modelCalls": 33,
+      "toolCalls": 65,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T06:50:00.020151Z",
+        "finished_at": "2026-10-20T06:55:32.513062Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T06:49:59.020821Z",
+        "finished_at": "2026-10-20T06:50:00.020059Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "62b57fa0cc20d56727d54224e516f6b42a9b6d948e233430d2aef02e9b5bcb74",
+      "workerSha256": "d3cbe81a8d0dbbc7c1a8659f69135d72652e309a42eb205d43935e10ae2c2479",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "make-doom-for-mips",
+      "arm": "codex",
+      "graded": true,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": {
+        "reward": 0.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.6841184000000002,
+      "costUsd": 0.6841184000000002,
+      "latencyMs": 535254,
+      "agentPhaseMs": 537468.382,
+      "usage": {
+        "input": 101208,
+        "cacheRead": 3146624,
+        "cacheWrite": 0,
+        "output": 16704,
+        "totalTokens": 3264536,
+        "estimatedApiUsd": 0.6841184000000002
+      },
+      "modelCalls": 45,
+      "toolCalls": 44,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:11:54.937214Z",
+        "finished_at": "2026-10-20T13:20:52.405596Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:11:53.420075Z",
+        "finished_at": "2026-10-20T13:11:54.937140Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0ec3a720bf5e948de303fddf57b310240828e636294d7e12e8424ac7c9a34973",
+      "workerSha256": "a000d61f9e2b34e74ea627375a2a5b5280f3baba3407d84792c3777b9240d97d",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "v1",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.056932800000000006,
+      "costUsd": 0.056932800000000006,
+      "latencyMs": 102728,
+      "agentPhaseMs": 103784.947,
+      "usage": {
+        "input": 11344,
+        "cacheRead": 56448,
+        "cacheWrite": 0,
+        "output": 2860,
+        "estimatedApiUsd": 0.056932800000000006,
+        "modelCalls": 11,
+        "toolCalls": 22,
+        "costUnknown": false
+      },
+      "modelCalls": 11,
+      "toolCalls": 22,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "PermissionError",
+      "agentTiming": {
+        "started_at": "2026-10-20T13:21:27.270170Z",
+        "finished_at": "2026-10-20T13:23:11.055117Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:21:25.982859Z",
+        "finished_at": "2026-10-20T13:21:27.270088Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "4302ac5804e308a28719d365844902633fad82b067628dbee1df5afad514b5d8",
+      "workerSha256": "27c8611d07e73187172ccc489bdbf8f1f85691cd2483fdb1552a25c96628872b",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "v2",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0033854400000000004,
+      "costUsd": 0.0033854400000000004,
+      "latencyMs": 148620,
+      "agentPhaseMs": 149634.431,
+      "usage": {
+        "input": 13034,
+        "cacheRead": 95104,
+        "cacheWrite": 0,
+        "output": 2262,
+        "estimatedApiUsd": 0.0033854400000000004,
+        "modelCalls": 15,
+        "toolCalls": 27,
+        "costUnknown": false
+      },
+      "modelCalls": 15,
+      "toolCalls": 27,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "PermissionError",
+      "agentTiming": {
+        "started_at": "2026-10-20T13:23:17.758739Z",
+        "finished_at": "2026-10-20T13:25:47.393170Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:23:16.888562Z",
+        "finished_at": "2026-10-20T13:23:17.758653Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "3872a4972908385c80e46eb48f3d93dc08369a3d3b839646582fd5567a048afb",
+      "workerSha256": "18017b06e22a07d88d356e1e690a804c52cca62d18174b4239c15d940900ab88",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.11630800000000001,
+      "costUsd": 0.11630800000000001,
+      "latencyMs": 86741,
+      "agentPhaseMs": 88328.598,
+      "usage": {
+        "input": 35742,
+        "cacheRead": 218240,
+        "cacheWrite": 0,
+        "output": 2300,
+        "totalTokens": 256282,
+        "estimatedApiUsd": 0.11630800000000001
+      },
+      "modelCalls": 13,
+      "toolCalls": 12,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:25:54.666692Z",
+        "finished_at": "2026-10-20T13:27:22.995290Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:25:53.753980Z",
+        "finished_at": "2026-10-20T13:25:54.666600Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "0dda4c9490195f66f214370b13f1daa789b5570a7cb4dcf739fd4d81bb0adc73",
+      "workerSha256": "46051266474a4b8725bd41f8f4dc8f6aede115e54ddb92b05e1d051a5ac9029a",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.060204400000000005,
+      "costUsd": 0.060204400000000005,
+      "latencyMs": 72001,
+      "agentPhaseMs": 72990.853,
+      "usage": {
+        "input": 19964,
+        "cacheRead": 59264,
+        "cacheWrite": 0,
+        "output": 1435,
+        "estimatedApiUsd": 0.060204400000000005,
+        "costUnknown": false
+      },
+      "modelCalls": 8,
+      "toolCalls": 10,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:28:16.935334Z",
+        "finished_at": "2026-10-20T13:29:29.926187Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:28:16.099696Z",
+        "finished_at": "2026-10-20T13:28:16.935207Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "15bc3f60c0f6b75cd11c2e207b3492f519d0196e09c3dfcc8ba16fa87cd1025d",
+      "workerSha256": "19558c497c5cb063bd3e2ba3333bec61b2ef24bdd0ccd560f45c7881debcb59b",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "v2",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0018523399999999998,
+      "costUsd": 0.0018523399999999998,
+      "latencyMs": 74451,
+      "agentPhaseMs": 75563.25,
+      "usage": {
+        "input": 5954,
+        "cacheRead": 9344,
+        "cacheWrite": 0,
+        "output": 2327,
+        "estimatedApiUsd": 0.0018523399999999998,
+        "modelCalls": 5,
+        "toolCalls": 8,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "PermissionError",
+      "agentTiming": {
+        "started_at": "2026-10-20T13:30:43.964938Z",
+        "finished_at": "2026-10-20T13:31:59.528188Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:30:43.037514Z",
+        "finished_at": "2026-10-20T13:30:43.964807Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "76c05aac5d343e5ec3d29c20a14b6b0695b425ce60388e89b30a3ada788d6978",
+      "workerSha256": "3848b89e9d7f8a61c80c307e0c93df4e590be214d8b128439d31b7f5fcde875e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.050962400000000005,
+      "costUsd": 0.050962400000000005,
+      "latencyMs": 58177,
+      "agentPhaseMs": 59821.713,
+      "usage": {
+        "input": 9310,
+        "cacheRead": 71424,
+        "cacheWrite": 0,
+        "output": 2520,
+        "totalTokens": 83254,
+        "estimatedApiUsd": 0.050962400000000005
+      },
+      "modelCalls": 5,
+      "toolCalls": 4,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:30:44.317657Z",
+        "finished_at": "2026-10-20T13:31:44.139370Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:30:43.400595Z",
+        "finished_at": "2026-10-20T13:30:44.317528Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "bd31b846bd5cda2bf2c63871c36dd7d3bcde73144328a4e6bee85ff47335eae8",
+      "workerSha256": "8f4179f5742c78bd4509bd60fb29da87b7c5f19df917d7be5ee8679e87b1b8cc",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.036774400000000006,
+      "costUsd": 0.036774400000000006,
+      "latencyMs": 58895,
+      "agentPhaseMs": 59837.107,
+      "usage": {
+        "input": 7423,
+        "cacheRead": 6784,
+        "cacheWrite": 0,
+        "output": 2125,
+        "estimatedApiUsd": 0.036774400000000006,
+        "costUnknown": false
+      },
+      "modelCalls": 5,
+      "toolCalls": 6,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:32:06.511285Z",
+        "finished_at": "2026-10-20T13:33:06.348392Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:32:05.586359Z",
+        "finished_at": "2026-10-20T13:32:06.511205Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "3422f6c2d0db121205e864db3db2f15a77c1f2cf557ab342664ce79251083dea",
+      "workerSha256": "72248761bb81dba90aad9977cf5212f6ee1a9ac6da80d0997856af001e6ccc8e",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "multi-source-data-merger",
+      "arm": "v1",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.059932400000000004,
+      "costUsd": 0.059932400000000004,
+      "latencyMs": 95160,
+      "agentPhaseMs": 96189.642,
+      "usage": {
+        "input": 11380,
+        "cacheRead": 10624,
+        "cacheWrite": 0,
+        "output": 3611,
+        "estimatedApiUsd": 0.059932400000000004,
+        "modelCalls": 6,
+        "toolCalls": 14,
+        "costUnknown": false
+      },
+      "modelCalls": 6,
+      "toolCalls": 14,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "PermissionError",
+      "agentTiming": {
+        "started_at": "2026-10-20T13:33:44.181001Z",
+        "finished_at": "2026-10-20T13:35:20.370643Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:33:43.278685Z",
+        "finished_at": "2026-10-20T13:33:44.180924Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "f17a6f131f4016114d606e8ebc923db3222ed55c909bb1dc7f85e0b3f237e97f",
+      "workerSha256": "63aa496a438c9800e1f2d567b183e449410de77a4ba3a4bc9d47606438567df8",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "codex",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0617152,
+      "costUsd": 0.0617152,
+      "latencyMs": 73916,
+      "agentPhaseMs": 75571.871,
+      "usage": {
+        "input": 13828,
+        "cacheRead": 136192,
+        "cacheWrite": 0,
+        "output": 2044,
+        "totalTokens": 152064,
+        "estimatedApiUsd": 0.0617152
+      },
+      "modelCalls": 9,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:35:05.560931Z",
+        "finished_at": "2026-10-20T13:36:21.132802Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:35:04.588139Z",
+        "finished_at": "2026-10-20T13:35:05.560793Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "73289014672877a2271634baed7241e3fd5d5b867a4db3c606f59e33285b6039",
+      "workerSha256": "39f3b7125fff7ab0d07e192bc8cb91db23144c773f3693a50062c57f1caf2058",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "pi",
+      "graded": true,
+      "accepted": true,
+      "policyValidSuccess": true,
+      "officialReward": {
+        "reward": 1.0
+      },
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.036088,
+      "costUsd": 0.036088,
+      "latencyMs": 53672,
+      "agentPhaseMs": 54612.04,
+      "usage": {
+        "input": 12677,
+        "cacheRead": 7040,
+        "cacheWrite": 0,
+        "output": 1003,
+        "estimatedApiUsd": 0.036088,
+        "costUnknown": false
+      },
+      "modelCalls": 6,
+      "toolCalls": 8,
+      "receiptsMatched": true,
+      "publicVerification": null,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": null,
+      "agentTiming": {
+        "started_at": "2026-10-20T13:35:28.401573Z",
+        "finished_at": "2026-10-20T13:36:23.013613Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:35:27.545947Z",
+        "finished_at": "2026-10-20T13:35:28.401472Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "5d157d9853d32f89570768bbc7c9dbbda2a4e8b27a04ea59c24ce903a2c60757",
+      "workerSha256": "6b7ce4659aa4dd0c3bdd5862dbae8ffc2acbc100bb63f3851e2b9320d55a827f",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "v1",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.09898640000000002,
+      "costUsd": 0.09898640000000002,
+      "latencyMs": 164832,
+      "agentPhaseMs": 165940.076,
+      "usage": {
+        "input": 19603,
+        "cacheRead": 21504,
+        "cacheWrite": 0,
+        "output": 5763,
+        "estimatedApiUsd": 0.09898640000000002,
+        "modelCalls": 8,
+        "toolCalls": 20,
+        "costUnknown": false
+      },
+      "modelCalls": 8,
+      "toolCalls": 20,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "PermissionError",
+      "agentTiming": {
+        "started_at": "2026-10-20T13:37:07.794669Z",
+        "finished_at": "2026-10-20T13:39:53.734745Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:37:06.855794Z",
+        "finished_at": "2026-10-20T13:37:07.794590Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "894e87c7743ad65e4ca48d872aebcf470dc82a4ad0038b48e088c7019245b31c",
+      "workerSha256": "d14811126c7837e79af47bd728f3791ec4c05231fa35477b87fb5efc0c72c1b7",
+      "usageSource": "worker aggregate"
+    },
+    {
+      "task": "nginx-request-logging",
+      "arm": "v2",
+      "graded": false,
+      "accepted": false,
+      "policyValidSuccess": false,
+      "officialReward": null,
+      "status": "completed",
+      "identity": true,
+      "costUnknown": false,
+      "knownCostUsd": 0.0019670599999999996,
+      "costUsd": 0.0019670599999999996,
+      "latencyMs": 65915,
+      "agentPhaseMs": 66871.499,
+      "usage": {
+        "input": 10870,
+        "cacheRead": 16256,
+        "cacheWrite": 0,
+        "output": 1435,
+        "estimatedApiUsd": 0.0019670599999999996,
+        "modelCalls": 7,
+        "toolCalls": 12,
+        "costUnknown": false
+      },
+      "modelCalls": 7,
+      "toolCalls": 12,
+      "receiptsMatched": true,
+      "publicVerification": "not_configured",
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0,
+      "exceptionType": "PermissionError",
+      "agentTiming": {
+        "started_at": "2026-10-20T13:37:10.339279Z",
+        "finished_at": "2026-10-20T13:38:17.210778Z"
+      },
+      "setupTiming": {
+        "started_at": "2026-10-20T13:37:09.392658Z",
+        "finished_at": "2026-10-20T13:37:10.339196Z"
+      },
+      "recovery": null,
+      "trialResultSha256": "6935bf183947fb08080101d41a988914813392d9e02d4ae6ec5a49caf86139b1",
+      "workerSha256": "cbb8ad1858fded3d0852877f8d1e0a02af291c0e51233f8958129f9c135bb59e",
+      "usageSource": "worker aggregate"
+    }
+  ],
+  "summary": [
+    {
+      "arm": "codex",
+      "completed": 17,
+      "accepted": 14,
+      "graded": 17,
+      "ungraded": 0,
+      "policyValidSuccesses": 14,
+      "knownCostUsd": 2.808768,
+      "unknownCosts": 1,
+      "meanSeconds": 151.0886604117647,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "pi",
+      "completed": 17,
+      "accepted": 15,
+      "graded": 17,
+      "ungraded": 0,
+      "policyValidSuccesses": 15,
+      "knownCostUsd": 2.0087316000000004,
+      "unknownCosts": 0,
+      "meanSeconds": 217.81516299999998,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v1",
+      "completed": 17,
+      "accepted": 12,
+      "graded": 14,
+      "ungraded": 3,
+      "policyValidSuccesses": 11,
+      "knownCostUsd": 1.8802636000000001,
+      "unknownCosts": 2,
+      "meanSeconds": 226.14446994117648,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    },
+    {
+      "arm": "v2",
+      "completed": 17,
+      "accepted": 9,
+      "graded": 14,
+      "ungraded": 3,
+      "policyValidSuccesses": 9,
+      "knownCostUsd": 0.11145486,
+      "unknownCosts": 0,
+      "meanSeconds": 190.3268781764706,
+      "adviceCalls": 0,
+      "repairs": 0,
+      "takeovers": 0
+    }
+  ]
+}

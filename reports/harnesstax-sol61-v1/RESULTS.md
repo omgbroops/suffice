@@ -1,13 +1,21 @@
 # HarnessTax Sol 6.1 single round
 
-Completed: 55/120 attempts. Interim; not a final comparison.
+Completed: 68/120 attempts. Interim; not a final comparison.
 
-| Arm | Completed | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| codex | 13/30 | 11 | 11 | 1.895664 | 1 | 139.0 |
-| pi | 14/30 | 12 | 12 | 1.875665 | 0 | 253.7 |
-| v1 | 14/30 | 12 | 11 | 1.664412 | 2 | 248.5 |
-| v2 | 14/30 | 9 | 9 | 0.104250 | 0 | 210.2 |
+| Arm | Completed | Graded | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| codex | 17/30 | 17 | 14 | 14 | 2.808768 | 1 | 151.1 |
+| pi | 17/30 | 17 | 15 | 15 | 2.008732 | 0 | 217.8 |
+| v1 | 17/30 | 14 | 12 | 11 | 1.880264 | 2 | 226.1 |
+| v2 | 17/30 | 14 | 9 | 9 | 0.111455 | 0 | 190.3 |
+
+6 completed attempts lack official grades. These remain in the campaign denominator but must not be presented as graded patch rejections.
+- merge-diff-arc-agi-task / v1: PermissionError
+- merge-diff-arc-agi-task / v2: PermissionError
+- multi-source-data-merger / v2: PermissionError
+- multi-source-data-merger / v1: PermissionError
+- nginx-request-logging / v1: PermissionError
+- nginx-request-logging / v2: PermissionError
 
 API-equivalent cost estimates, not subscription charges. Unknown costs remain unknown.
 One attempt per task/arm; no replacement runs. All errors and failures remain in the denominator.
@@ -15,6 +23,7 @@ Latency is the full Harbor agent phase, including wrapper/runtime startup and re
 The Pi adaptive-rejection-sampler actor and grader completed before a host interruption during artifact collection. Original receipts were recovered and hash checked against its container; outer phase timing is missing. No actor or grader rerun.
 After the first two attempts, concurrency is at most two, with a combined 4 GiB task reservation; tasks above 2 GiB run alone. Shared resources may affect latency.
 After attempt 55, actor receipts are bind-mounted to the host so timeout cancellation cannot skip export. Timed-out actors are stopped before grading; timeout failures remain in the denominator and incomplete costs remain unknown. No retries.
+A receipt permissions error prevented grading for some resumed V1/V2 attempts. Those original attempts remain ungraded infrastructure failures. The adapter now reads private receipts as root inside the container before host ownership cleanup.
 V2 changes model as well as pipeline. Codex/Pi/V1 match Sol High; V2 is a system comparison.
 100-response cap; first provider-failed attempt had the initial 60 cap but made zero responses.
 V2 controller smoke checks cover 3/30 tasks, solely from public instructions. Other tasks have no controller verification trigger.
