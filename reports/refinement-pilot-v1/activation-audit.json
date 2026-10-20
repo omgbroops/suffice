@@ -1,0 +1,209 @@
+{
+  "scope": "Completed actor receipts only; no evaluator feedback or actor mutation.",
+  "attempts": [
+    {
+      "attempt": "cancel-async-tasks-v2",
+      "strategy": "efficient",
+      "roles": {
+        "solve": {
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "requests": 6,
+          "responses": 6,
+          "tokens": {
+            "input": 11802,
+            "cacheRead": 14848,
+            "cacheWrite": 0,
+            "output": 1855
+          },
+          "peakContextTokens": 6066,
+          "knownCostUsd": 0.00225618
+        },
+        "advice-upfront": {
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "requests": 1,
+          "responses": 1,
+          "tokens": {
+            "input": 274,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 165
+          },
+          "peakContextTokens": 274,
+          "knownCostUsd": 0.0021980000000000003
+        }
+      },
+      "adviceCalls": 1,
+      "delegations": 0,
+      "coordinatorToolCalls": [],
+      "knownCostUsd": 0.004454180000000001,
+      "stageAndLedgerCostMatch": true,
+      "costUnknown": false,
+      "workerSha256": "40918fe61446b93287fe763d8e3e82c5e756cdfadce341f7c43e745ee2462992"
+    },
+    {
+      "attempt": "cancel-async-tasks-v3",
+      "strategy": "orchestrated",
+      "roles": {
+        "coordinate": {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "requests": 7,
+          "responses": 7,
+          "tokens": {
+            "input": 8407,
+            "cacheRead": 10240,
+            "cacheWrite": 0,
+            "output": 645
+          },
+          "peakContextTokens": 3946,
+          "knownCostUsd": 0.024288
+        },
+        "delegate-1-implement": {
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "requests": 16,
+          "responses": 16,
+          "tokens": {
+            "input": 17709,
+            "cacheRead": 89856,
+            "cacheWrite": 0,
+            "output": 7001
+          },
+          "peakContextTokens": 11005,
+          "knownCostUsd": 0.00616996
+        }
+      },
+      "adviceCalls": 0,
+      "delegations": 1,
+      "coordinatorToolCalls": [
+        "codemode",
+        "delegate",
+        "read",
+        "verify",
+        "worker_output"
+      ],
+      "knownCostUsd": 0.03045796,
+      "stageAndLedgerCostMatch": true,
+      "costUnknown": false,
+      "workerSha256": "8cb3316ad22ba0dd9c4cfe1ebb97e21ff2d2c4b5c9584237aa6d1c1e720a93da"
+    },
+    {
+      "attempt": "cobol-modernization-v2",
+      "strategy": "efficient",
+      "roles": {
+        "solve": {
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "requests": 11,
+          "responses": 11,
+          "tokens": {
+            "input": 25126,
+            "cacheRead": 56448,
+            "cacheWrite": 0,
+            "output": 3619
+          },
+          "peakContextTokens": 11215,
+          "knownCostUsd": 0.00488658
+        },
+        "advice-upfront": {
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "requests": 1,
+          "responses": 1,
+          "tokens": {
+            "input": 463,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 162
+          },
+          "peakContextTokens": 463,
+          "knownCostUsd": 0.002546
+        }
+      },
+      "adviceCalls": 1,
+      "delegations": 0,
+      "coordinatorToolCalls": [],
+      "knownCostUsd": 0.007432580000000001,
+      "stageAndLedgerCostMatch": true,
+      "costUnknown": false,
+      "workerSha256": "7a2087ef65e21afd5028a6054f4c034ca72c45018bddaa09173e34d57a5c3ce9"
+    },
+    {
+      "attempt": "cobol-modernization-v3",
+      "strategy": "orchestrated",
+      "roles": {
+        "delegate-2-implement": {
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "requests": 14,
+          "responses": 14,
+          "tokens": {
+            "input": 26580,
+            "cacheRead": 87552,
+            "cacheWrite": 0,
+            "output": 3826
+          },
+          "peakContextTokens": 13020,
+          "knownCostUsd": 0.00544652
+        },
+        "coordinate": {
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "requests": 11,
+          "responses": 11,
+          "tokens": {
+            "input": 24882,
+            "cacheRead": 75136,
+            "cacheWrite": 0,
+            "output": 1498
+          },
+          "peakContextTokens": 19588,
+          "knownCostUsd": 0.0722576
+        },
+        "delegate-3-implement": {
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "requests": 21,
+          "responses": 21,
+          "tokens": {
+            "input": 24201,
+            "cacheRead": 205568,
+            "cacheWrite": 0,
+            "output": 8537
+          },
+          "peakContextTokens": 19066,
+          "knownCostUsd": 0.00874428
+        },
+        "delegate-1-implement": {
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "requests": 13,
+          "responses": 13,
+          "tokens": {
+            "input": 20396,
+            "cacheRead": 67712,
+            "cacheWrite": 0,
+            "output": 4122
+          },
+          "peakContextTokens": 10208,
+          "knownCostUsd": 0.00477772
+        }
+      },
+      "adviceCalls": 0,
+      "delegations": 3,
+      "coordinatorToolCalls": [
+        "codemode",
+        "delegate",
+        "read",
+        "verify",
+        "worker_output"
+      ],
+      "knownCostUsd": 0.09122611999999997,
+      "stageAndLedgerCostMatch": true,
+      "costUnknown": false,
+      "workerSha256": "8082ea55cecfb11075914b493c1caa9a40197d0c41bbce2b4602c57f18dc2f05"
+    }
+  ]
+}
