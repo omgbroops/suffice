@@ -69,13 +69,23 @@ export default function(pi) {
     latencyMs:Date.now()-start,modelCalls:assistants.length,toolCalls:counter.calls??0,
     identity:requests.length>0&&requests.every(e=>e.model==='gpt-6.1-sol'&&e.reasoning?.effort==='high'),
     nativeExitCode:code,stockPromptAndToolsUnmodified:true};
+  if(r.publicCheck) {
+    // Observe Pi's completed work without an extra model turn or repair feedback.
+    const checked=Date.now(),chunks=[];
+    const proc=spawn(r.publicCheck.command[0],r.publicCheck.command.slice(1),{cwd:r.workspace,stdio:['ignore','pipe','pipe']});
+    proc.stdout.on('data',b=>chunks.push(b));proc.stderr.on('data',b=>chunks.push(b));
+    const timer=setTimeout(()=>proc.kill('SIGKILL'),r.publicCheck.timeoutMs??60000);
+    const exitCode=await new Promise((yes,no)=>{proc.on('error',no);proc.on('close',yes);});clearTimeout(timer);
+    result.publicVerification={exitCode,passed:exitCode===0,output:Buffer.concat(chunks).toString().slice(-5000),latencyMs:Date.now()-checked};
+    result.verificationStatus=exitCode===0?'passed':'failed';result.latencyMs=Date.now()-start;
+  }
   await writeFile(R+'/worker.json',JSON.stringify(result,null,2));await persistAuth();
 } else {
   const {executeStrategy}=await import('../src/execution/strategies.mjs');
   const runtime=await ModelRuntime.create({authPath:'/agent-home/pi/auth.json',modelsPath:null,allowModelNetwork:false});
-  const result=await executeStrategy({...r,strategy:r.arm==='v2'?'efficient':'flexible',experimental:true,
+  const result=await executeStrategy({...r,strategy:r.arm==='v3'?'orchestrated':r.arm==='v2'?'efficient':'flexible',experimental:true,
     model:r.arm==='v2'?'gpt-6-luna':'gpt-6.1-sol',effort:'high',runtime,runDir:R,
-    checks:r.arm==='v2'?r.checks:[]});
+    ...r.execution,checks:r.checks});
   console.log(JSON.stringify({status:result.status,usage:result.usage,escalations:result.escalations}));
   await persistAuth();
 }

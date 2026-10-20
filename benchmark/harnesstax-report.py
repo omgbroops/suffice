@@ -10,6 +10,8 @@ from datetime import datetime
 STATE=Path(os.environ.get('HARNESS_TAX_REPORT_STATE','/home/eric_qin/suffice-harnesstax-sol61'))
 OUT=Path(os.environ.get('HARNESS_TAX_REPORT_OUT','/mnt/c/Users/Eric Qin/Documents/GitHub/suffice/reports/harnesstax-sol61-v1'))
 manifest=json.loads((STATE/'manifest.json').read_text())
+arms=manifest.get('arms',['codex','pi','v1','v2'])
+expected=len(manifest['jobs'])
 replacement_plan=json.loads((STATE/'replacement-plan.json').read_text()) if (STATE/'replacement-plan.json').exists() else None
 replacement_keys={(j['task'],j['arm']) for j in replacement_plan['replacements']} if replacement_plan else set()
 sources=[{'job':job,'base':STATE,'excluded':(job['task'],job['arm']) in replacement_keys,'execution':'original'} for job in manifest['jobs']]
@@ -43,12 +45,15 @@ for source in sources:
             if event.get('type')=='provider_request': requests.append({**event,'stage':p.relative_to(root).parts[0]})
             if event.get('type')=='assistant': assistants.append(event)
             if event.get('type')=='provider_usage' and event.get('responseId'): raw_usage[event['responseId']]=event
-    if job['arm'] in ['v1','v2']:
+    if job['arm'] in ['v1','v2','v3']:
         identity=bool(requests)
         for e in requests:
             advisor=e['stage'].startswith('advice-');sol_stage=advisor or e['stage']=='sol-takeover'
             model='gpt-6.1-sol' if job['arm']=='v1' or sol_stage else 'gpt-6-luna'
             effort='low' if job['arm']=='v2' and sol_stage else 'high'
+            if job['arm']=='v3':
+                model='gpt-6.1-sol' if e['stage']=='coordinate' else 'gpt-6-luna'
+                identity=identity and (e['stage']=='coordinate' or e['stage'].startswith('delegate-'))
             identity=identity and e.get('model')==model and (e.get('reasoning') or {}).get('effort')==effort
             identity=identity and e.get('toolNames')==([] if advisor else ['codemode'])
     totals={k:sum((e.get('usage') or {}).get(k,0) for e in assistants) for k in ['input','cacheRead','cacheWrite','output']}
@@ -88,12 +93,16 @@ for source in sources:
       'workerSha256':hashlib.sha256(worker_path.read_bytes()).hexdigest() if worker_path.exists() else None}
     row['usageSource']='worker aggregate' if worker else 'partial response receipts; whole-attempt cost unknown'
     row['execution']=source['execution']
+    row['delegations']=worker.get('delegations',0)
+    row['coordinatorCostUsd']=worker.get('coordinatorCostUsd')
+    row['workerCostUsd']=worker.get('workerCostUsd')
+    row['stages']=[{k:s.get(k) for k in ['label','model','effort','usage','latencyMs','error','includesNestedLatency']} for s in worker.get('stages',[])]
     if source['excluded']:
         row['excludedReason']='User-authorized replacement for receipt permissions failure before grading'
         excluded.append(row)
     else:rows.append(row)
 summary=[]
-for arm in ['codex','pi','v1','v2']:
+for arm in arms:
     group=[r for r in rows if r['arm']==arm]
     lat=[r['agentPhaseMs']/1000 for r in group if r['agentPhaseMs'] is not None]
     summary.append({'arm':arm,'completed':len(group),'accepted':sum(r['accepted'] for r in group),
@@ -105,7 +114,7 @@ for arm in ['codex','pi','v1','v2']:
       'adviceCalls':sum(r['adviceCalls'] for r in group),
       'repairs':sum(r['repairs'] for r in group),'takeovers':sum(r['takeovers'] for r in group)})
 OUT.mkdir(parents=True,exist_ok=True)
-data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':summary,
+data={'asOf':time.time(),'complete':len(rows)==expected,'attempts':rows,'summary':summary,
       'excludedInfrastructureAttempts':excluded,'completedExecutionsIncludingExcluded':len(rows)+len(excluded),
       'selectedKnownCostUsd':sum(r['knownCostUsd'] for r in rows),
       'excludedKnownCostUsd':sum(r['knownCostUsd'] for r in excluded),
@@ -113,7 +122,7 @@ data={'asOf':time.time(),'complete':len(rows)==120,'attempts':rows,'summary':sum
       'totalUnknownCostsIncludingExcluded':sum(r['costUnknown'] for r in rows+excluded),
       'replacementPlan':replacement_plan}
 (OUT/'results.json').write_text(json.dumps(data,indent=2)+'\n')
-lines=['# HarnessTax Sol 6.1 single round', '',f'Completed comparison slots: {len(rows)}/120. '+('Final.' if len(rows)==120 else 'Interim; not a final comparison.'),'',
+lines=['# '+manifest.get('version','HarnessTax Sol 6.1 single round'), '',f'Completed comparison slots: {len(rows)}/{expected}. '+('Final.' if len(rows)==expected else 'Interim; not a final comparison.'),'',
  '| Arm | Completed | Graded | Accepted | Policy valid | Known cost (USD) | Unknown costs | Mean agent seconds |',
  '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
 if (STATE/'paused-for-quota.json').exists():
@@ -121,7 +130,7 @@ if (STATE/'paused-for-quota.json').exists():
     lines[2]+=f" Paused at the requested quota floor: {pause['quota']['remainingPercent']}% remaining."
 for r in summary:
     seconds='—' if r['meanSeconds'] is None else f"{r['meanSeconds']:.1f}"
-    lines.append(f"| {r['arm']} | {r['completed']}/30 | {r['graded']} | {r['accepted']} | {r['policyValidSuccesses']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
+    lines.append(f"| {r['arm']} | {r['completed']}/{len(manifest.get('tasks',[])) or 30} | {r['graded']} | {r['accepted']} | {r['policyValidSuccesses']} | {r['knownCostUsd']:.6f} | {r['unknownCosts']} | {seconds} |")
 ungraded=[r for r in rows if not r['graded']]
 if ungraded:
     lines+=['',f'{len(ungraded)} completed attempts lack official grades. These remain in the campaign denominator but must not be presented as graded patch rejections.']
@@ -148,5 +157,18 @@ lines+=['','API-equivalent cost estimates, not subscription charges. Unknown cos
  'Source and dependency pins, full cohort, limits and preflight are in manifest.json, preflight.json and benchmark/harnesstax-plan.md.',
  'Historical Pi $0.420517/attempt was GPT-5.6-Sol High with three repetitions and is not this run\'s control.',
  '',f"Sol advice calls: {sum(r['adviceCalls'] for r in rows)}; repairs: {sum(r['repairs'] for r in rows)}; takeovers: {sum(r['takeovers'] for r in rows)}."]
+if manifest.get('version')=='refinement-pilot-v1':
+    lines=lines[:6+len(summary)]+['',
+        f"Known campaign spend: ${data['totalKnownSpendIncludingExcludedUsd']:.6f}; incomplete cost records: {data['totalUnknownCostsIncludingExcluded']}.",
+        'API-equivalent estimates, not subscription charges. Unknown costs remain unknown.',
+        'Five fresh tasks, one attempt per arm. No outcome-selected replacements. All failures and timeouts remain reported.',
+        'Pi is stock Sol High; V1 is refined Flexible Sol High; V2 uses Luna High with one upfront Sol Low plan and conditional repair/takeover; V3 uses Sol High coordination and Luna High delegation.',
+        'Every arm sees the same original task and public self-check. Only the declared Suffice controller policies use post-implementation public feedback for repair. Hidden evaluator feedback is never sent to an actor.',
+        'Public checks are partial coverage, not correctness certificates. Missing checks are unverified. Independent acceptance is reported separately.',
+        'All Sol planning, coordination, workers and repairs are included in whole-attempt spend. Stage costs do not overlap. V3 coordinator elapsed time includes worker time and must not be summed with worker elapsed time.',
+        'At most two 2 GiB containers run concurrently. Shared host load may affect latency. Mean seconds covers full Harbor agent execution, not setup or official grading.',
+        'This small purposive system comparison does not isolate individual features or establish population accuracy. Original campaign results and production defaults remain unchanged.',
+        '',f"Upfront/advisory calls: {sum(r['adviceCalls'] for r in rows)}; repair counter: {sum(r['repairs'] for r in rows)}; takeovers: {sum(r['takeovers'] for r in rows)}; V3 delegations: {sum(r['delegations'] for r in rows)}."]
+    lines += [f"Ungraded: {r['task']} / {r['arm']}: {r['exceptionType']}" for r in rows if not r['graded']]
 (OUT/'RESULTS.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps({'completed':len(rows),'summary':summary}))

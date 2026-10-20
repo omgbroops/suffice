@@ -40,6 +40,12 @@ class HarnessTaxAgent(BaseInstalledAgent):
             'checks': checks, 'timeoutMs': timeout*1000,
             'maxCostUsd': 5, 'maxTurns': 100, 'maxCalls': 240,
         }
+        # Optional later-campaign treatment; absent in the frozen 120-slot run.
+        extra=json.loads(os.environ.get('HARNESS_TAX_EXECUTION_CONFIG','{}'))
+        if set(extra)-{'execution','publicCheck'}: raise ValueError('Invalid benchmark execution configuration')
+        request.update(extra)
+        if extra.get('publicCheck'):
+            request['prompt'] += '\n\nPublic self-check (partial coverage only; not the independent evaluator): '+shlex.join(extra['publicCheck']['command'])+'\nYou may inspect this read-only check and use it during implementation. Satisfy the full original task, not only this smoke check.'
         path = self.logs_dir/'actor-request.json'
         path.write_text(json.dumps(request, indent=2)+'\n')
         await environment.upload_file(path, '/agent-home/request.json')
