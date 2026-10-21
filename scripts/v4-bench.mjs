@@ -50,7 +50,7 @@ export function loadManifest(path) {
 }
 
 // Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>]
-const FLAGS = ['manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd'];
+const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd'];
 export function parseArgs(argv) {
   const opts = {};
   for (const arg of argv) {
