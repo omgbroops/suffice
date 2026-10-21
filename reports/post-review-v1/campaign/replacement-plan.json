@@ -1,0 +1,24 @@
+{
+  "createdAt": 1792544770.9738438,
+  "authorization": "User: rerun the timeout results and do not count the old one",
+  "agentTimeoutSec": 1800,
+  "maximumAdditionalAttempts": 2,
+  "jobs": [
+    {
+      "task": "queue-aborted",
+      "arm": "review",
+      "original": "queue-aborted-review",
+      "replacement": "queue-aborted-review-r1",
+      "originalResultSha256": "5d21ec21508ede29fb0efe1919c9159e68ec451ec8a5218e34381b6639ea8e87",
+      "reason": "User-authorized replacement of 600-second timeout; original excluded from primary comparison"
+    },
+    {
+      "task": "queue-aborted",
+      "arm": "pi",
+      "original": "queue-aborted-pi",
+      "replacement": "queue-aborted-pi-r1",
+      "originalResultSha256": "0956b1802b64baaf1c9b425901d10bf25794757c11dee414bfc5be4320d5f3ba",
+      "reason": "User-authorized replacement of 600-second timeout; original excluded from primary comparison"
+    }
+  ]
+}

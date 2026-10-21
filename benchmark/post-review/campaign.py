@@ -56,7 +56,7 @@ def partial_worker(receipt):
         'reviewCalls':sum(s['usage']['modelCalls'] for s in stages if s['label']=='post-review'),
         'repairs':int((receipt/'review-repair').exists()),'accountingSource':'partial-assistant-ledger'}
 
-async def one(id,arm,install_only=False):
+async def one(id,arm,install_only=False,replacement=False):
     from harbor.models.trial.config import TrialConfig,TaskConfig,AgentConfig,EnvironmentConfig,VerifierConfig
     from harbor.trial.trial import Trial
     m=validate();assert {'task':id,'arm':arm} in m['jobs']
@@ -64,6 +64,11 @@ async def one(id,arm,install_only=False):
     change=amendment();timeout=change['agentTimeoutSec'] if change else row['timeoutSec']
     load('suffice_harnesstax_agent',STATE/'runtime/benchmark/harnesstax-agent.py')
     name=('preflight-' if install_only else '')+id+'-'+arm
+    if replacement:
+        assert not install_only
+        name+='-r1'
+        plan=json.loads((STATE/'replacement-plan.json').read_text())
+        assert any(j['task']==id and j['arm']==arm and j['replacement']==name for j in plan['jobs']),'Replacement not authorized'
     trials=STATE/('runtime-preflight' if install_only else 'trials');assert not (trials/name).exists(),'Partial/existing trial requires review'
     receipt=trials/name/'agent/receipts'
     mounts=[dict(type='bind',source=str(source),target=target,**({'read_only':True} if readonly else {})) for source,target,readonly in [
@@ -84,11 +89,9 @@ async def one(id,arm,install_only=False):
         'exceptionType':result.exception_info.exception_type if result.exception_info else None}),flush=True)
     if install_only:assert not result.exception_info,'No-inference runtime preflight failed'
 
-def report():
-    m=json.loads((STATE/'manifest.json').read_text());attempts=[]
-    for job in m['jobs']:
-        name=job['task']+'-'+job['arm'];path=STATE/'results'/(name+'.json')
-        if not path.exists():continue
+def read_attempt(job,name):
+        path=STATE/'results'/(name+'.json')
+        if not path.exists():return None
         r=json.loads(path.read_text());wp=STATE/'trials'/name/'agent/receipts/worker.json'
         w=json.loads(wp.read_text()) if wp.exists() else partial_worker(wp.parent);v=(r.get('verifier_result') or {}).get('rewards')
         usage=w.get('usage',{});unknown=not wp.exists() or usage.get('costUnknown',True)
@@ -96,13 +99,19 @@ def report():
         if latency is None and phase.get('finished_at') and phase.get('started_at'):
             latency=(datetime.fromisoformat(phase['finished_at'])-datetime.fromisoformat(phase['started_at'])).total_seconds()*1000
         exception=(r.get('exception_info') or {}).get('exception_type')
-        attempts.append({**job,'accepted':bool(v and v.get('reward')==1),'graded':v is not None,
+        return {**job,'trialName':name,'accepted':bool(v and v.get('reward')==1),'graded':v is not None,
             'status':w.get('status'),'exceptionType':exception,
             'knownCostUsd':usage.get('estimatedApiUsd',0),'costUnknown':unknown,'usage':usage,'latencyMs':latency,
             'agentTimeoutSec':r['config']['agent'].get('override_timeout_sec') or 600,
             'accountingSource':w.get('accountingSource','worker-aggregate'),
             'review':w.get('review'),'reviewCalls':w.get('reviewCalls',0),'repairs':w.get('repairs',0),'stages':w.get('stages',[]),
-            'policyValid':not exception and w.get('budgetEligible',w.get('status')=='completed') and not unknown and usage.get('estimatedApiUsd',0)<=1})
+            'policyValid':not exception and w.get('budgetEligible',w.get('status')=='completed') and not unknown and usage.get('estimatedApiUsd',0)<=1}
+
+def report():
+    m=json.loads((STATE/'manifest.json').read_text());attempts=[]
+    for job in m['jobs']:
+        row=read_attempt(job,job['task']+'-'+job['arm'])
+        if row:attempts.append(row)
     summary=[]
     for arm in ['alone','review','pi']:
         rows=[a for a in attempts if a['arm']==arm];cost=sum(a['knownCostUsd'] for a in rows);accepted=sum(a['accepted'] for a in rows)
@@ -164,6 +173,7 @@ async def run(resume=False):
 
 if __name__=='__main__':
     if sys.argv[1]=='one':asyncio.run(one(*sys.argv[2:4]))
+    elif sys.argv[1]=='one-replacement':asyncio.run(one(*sys.argv[2:4],replacement=True))
     elif sys.argv[1]=='preflight':asyncio.run(one('queue-aborted','alone',True))
     elif sys.argv[1]=='report':print(json.dumps(report()['summary']))
     elif sys.argv[1]=='run':asyncio.run(run())

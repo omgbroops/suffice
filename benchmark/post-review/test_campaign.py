@@ -7,6 +7,8 @@ import unittest
 
 spec=importlib.util.spec_from_file_location('campaign',Path(__file__).with_name('campaign.py'))
 campaign=importlib.util.module_from_spec(spec);spec.loader.exec_module(campaign)
+replacement_spec=importlib.util.spec_from_file_location('replacements',Path(__file__).with_name('replacements.py'))
+replacements=importlib.util.module_from_spec(replacement_spec);replacement_spec.loader.exec_module(replacements)
 
 class AccountingTests(unittest.TestCase):
     def test_partial_stages_do_not_double_count_provider_usage(self):
@@ -38,5 +40,21 @@ class AccountingTests(unittest.TestCase):
             result=campaign.partial_worker(Path(tmp))
             self.assertTrue(result['usage']['costUnknown'])
             self.assertEqual(result['reviewCalls'],0)
+
+    def test_pending_replacement_excludes_old_pass(self):
+        old={'trialName':'task-review','accepted':True,'knownCostUsd':.02}
+        plan={'jobs':[{'original':'task-review','replacement':'task-review-r1'}]}
+        selected,excluded=replacements.select([old],[],plan)
+        self.assertEqual(selected,[])
+        self.assertEqual(excluded,[old])
+
+    def test_failed_replacement_is_selected_without_cherry_picking(self):
+        old={'trialName':'task-review','accepted':True,'knownCostUsd':.02}
+        new={'trialName':'task-review-r1','accepted':False,'knownCostUsd':.03}
+        plan={'jobs':[{'original':'task-review','replacement':'task-review-r1'}]}
+        selected,excluded=replacements.select([old],[new],plan)
+        self.assertEqual(selected,[new])
+        self.assertEqual(excluded,[old])
+        self.assertEqual(sum(r['knownCostUsd'] for r in selected),.03)
 
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,404 @@
+{
+  "asOf": 1792544771.2899377,
+  "complete": false,
+  "summary": [
+    {
+      "arm": "alone",
+      "finished": 2,
+      "accepted": 2,
+      "policyValidSuccesses": 2,
+      "knownCostUsd": 0.0125098,
+      "unknownCosts": 0,
+      "knownUsdPerAccepted": 0.0062549
+    },
+    {
+      "arm": "review",
+      "finished": 1,
+      "accepted": 1,
+      "policyValidSuccesses": 1,
+      "knownCostUsd": 0.00818718,
+      "unknownCosts": 0,
+      "knownUsdPerAccepted": 0.00818718
+    },
+    {
+      "arm": "pi",
+      "finished": 1,
+      "accepted": 1,
+      "policyValidSuccesses": 1,
+      "knownCostUsd": 0.0936344,
+      "unknownCosts": 0,
+      "knownUsdPerAccepted": 0.0936344
+    }
+  ],
+  "selectedAttempts": [
+    {
+      "task": "queue-aborted",
+      "arm": "alone",
+      "trialName": "queue-aborted-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00817878,
+      "costUnknown": false,
+      "usage": {
+        "input": 36527,
+        "cacheRead": 267008,
+        "cacheWrite": 0,
+        "output": 3712,
+        "estimatedApiUsd": 0.00817878,
+        "modelCalls": 21,
+        "toolCalls": 40,
+        "costUnknown": false
+      },
+      "latencyMs": 325198,
+      "agentTimeoutSec": 600,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 323112,
+          "replyCount": 21,
+          "providerRequests": 21,
+          "final": "Implemented handling for tasks added with an already-aborted signal. The task is removed from the built-in priority queue when possible, and `queue.add()` rejects with the signal\u2019s reason. Custom queue implementations remain compatible because queue removal is optional.\n\nChecks passed: `npm test` (166 tests) and `node /public-checks/check.mjs`. XO reports one pre-existing TODO warning. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 36527,
+            "cacheRead": 267008,
+            "cacheWrite": 0,
+            "output": 3712,
+            "estimatedApiUsd": 0.00817878,
+            "modelCalls": 21,
+            "toolCalls": 40
+          },
+          "eventPath": "/receipts/solve/state/events/1792543189510-50b9fb08-10d3-4bda-8db4-1c913b021578.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "queue-timeout",
+      "arm": "review",
+      "trialName": "queue-timeout-review",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00818718,
+      "costUnknown": false,
+      "usage": {
+        "input": 21818,
+        "cacheRead": 204928,
+        "cacheWrite": 0,
+        "output": 2121,
+        "estimatedApiUsd": 0.00818718,
+        "modelCalls": 18,
+        "toolCalls": 35,
+        "costUnknown": false
+      },
+      "latencyMs": 208627,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "reviewed",
+        "decision": "approve",
+        "corrections": []
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 203206,
+          "replyCount": 17,
+          "providerRequests": 17,
+          "final": "Added per-task timeout validation in `add()`, using the constructor\u2019s positive-finite check and matching error message. Added tests confirming `timeout: 0` and `timeout: -1` reject before the task runs.\n\nChecks passed: `npm test` (199 tests) and `node /public-checks/check.mjs`. XO reported three existing warnings. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 20539,
+            "cacheRead": 204928,
+            "cacheWrite": 0,
+            "output": 2072,
+            "estimatedApiUsd": 0.00513918,
+            "modelCalls": 17,
+            "toolCalls": 35
+          },
+          "eventPath": "/receipts/solve/state/events/1792544319736-075f63d9-8414-4a3e-9912-9def462447a3.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 3606,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"approve\",\"corrections\":[]}",
+          "error": null,
+          "usage": {
+            "input": 1279,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 49,
+            "estimatedApiUsd": 0.0030480000000000004,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792544524648-f55387ab-19ce-42ba-b724-0b636c658a67.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "queue-timeout",
+      "arm": "pi",
+      "trialName": "queue-timeout-pi",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.0936344,
+      "costUnknown": false,
+      "usage": {
+        "input": 22988,
+        "cacheRead": 121984,
+        "cacheWrite": 0,
+        "output": 3546,
+        "estimatedApiUsd": 0.0936344,
+        "costUnknown": false
+      },
+      "latencyMs": 218794,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [],
+      "policyValid": true
+    },
+    {
+      "task": "queue-timeout",
+      "arm": "alone",
+      "trialName": "queue-timeout-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00433102,
+      "costUnknown": false,
+      "usage": {
+        "input": 18152,
+        "cacheRead": 159232,
+        "cacheWrite": 0,
+        "output": 1847,
+        "estimatedApiUsd": 0.00433102,
+        "modelCalls": 14,
+        "toolCalls": 26,
+        "costUnknown": false
+      },
+      "latencyMs": 181633,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 179901,
+          "replyCount": 14,
+          "providerRequests": 14,
+          "final": "Implemented per-task timeout validation in `add()`. Invalid defined values\u2014including `0`, negative numbers, `Infinity`, and `NaN`\u2014now reject with the same clear `TypeError` format used by the constructor. Added tests for invalid overrides and for a task inheriting a valid global timeout.\n\nChecks: `node /public-checks/check.mjs` passed; `npm test` passed (199 tests); `git diff --check` passed. XO reported three pre-existing warnings. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 18152,
+            "cacheRead": 159232,
+            "cacheWrite": 0,
+            "output": 1847,
+            "estimatedApiUsd": 0.00433102,
+            "modelCalls": 14,
+            "toolCalls": 26
+          },
+          "eventPath": "/receipts/solve/state/events/1792544547633-bdda3495-64eb-4d7b-9f6b-42dfee91d3a1.jsonl"
+        }
+      ],
+      "policyValid": true
+    }
+  ],
+  "excludedTimeoutOriginals": [
+    {
+      "task": "queue-aborted",
+      "arm": "review",
+      "trialName": "queue-aborted-review",
+      "accepted": true,
+      "graded": true,
+      "status": "interrupted",
+      "exceptionType": "AgentTimeoutError",
+      "knownCostUsd": 0.01757962,
+      "costUnknown": true,
+      "usage": {
+        "input": 64875,
+        "cacheRead": 346752,
+        "cacheWrite": 0,
+        "output": 6285,
+        "estimatedApiUsd": 0.01757962,
+        "modelCalls": 38,
+        "toolCalls": 76,
+        "costUnknown": true
+      },
+      "latencyMs": 601626.8539999999,
+      "agentTimeoutSec": 600,
+      "accountingSource": "partial-assistant-ledger",
+      "review": {
+        "label": "post-review",
+        "model": "gpt-6.1-sol",
+        "effort": "low",
+        "advisor": true,
+        "latencyMs": 7676,
+        "replyCount": 1,
+        "providerRequests": 1,
+        "final": "{\"decision\":\"correct\",\"corrections\":[{\"path\":\"source/index.ts\",\"action\":\"The new check only handles signals aborted before add(). A task whose signal is aborted after add() while waiting behind a running task still cannot reject until it starts. Observe aborts while queued, promptly reject with signal.reason, and remove or safely invalidate the queued task so it never executes. Clean up the abort listener when the task starts or settles, preserving existing running-task behavior.\"},{\"path\":\"test/advanced.ts\",\"action\":\"Add coverage for aborting after add() while the concurrency slot remains occupied. Verify prompt rejection with the exact abort reason, including a custom reason, and verify the canceled task never executes when the slot is released. Also assert that the already-aborted default signal rejects with an AbortError rather than merely any rejection.\"}]}",
+        "error": null,
+        "usage": {
+          "input": 1294,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 213,
+          "estimatedApiUsd": 0.004718,
+          "modelCalls": 1,
+          "toolCalls": 0
+        },
+        "eventPath": "/receipts/post-review/state/events/1792543387298-7447eb93-2d71-4b94-a3f0-621048832051.jsonl"
+      },
+      "reviewCalls": 1,
+      "repairs": 1,
+      "stages": [
+        {
+          "label": "post-review",
+          "usage": {
+            "input": 1294,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 213,
+            "estimatedApiUsd": 0.004718,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "partial": true,
+          "eventPath": "post-review/state/events/1792543387298-7447eb93-2d71-4b94-a3f0-621048832051.jsonl"
+        },
+        {
+          "label": "solve",
+          "usage": {
+            "input": 34397,
+            "cacheRead": 160896,
+            "cacheWrite": 0,
+            "output": 1879,
+            "estimatedApiUsd": 0.005988160000000001,
+            "modelCalls": 15,
+            "toolCalls": 29
+          },
+          "partial": true,
+          "eventPath": "solve/state/events/1792543190347-cd2b86c6-13c8-4283-b2f4-9e1e825a2d7c.jsonl"
+        },
+        {
+          "label": "review-repair",
+          "usage": {
+            "input": 29184,
+            "cacheRead": 185856,
+            "cacheWrite": 0,
+            "output": 4193,
+            "estimatedApiUsd": 0.00687346,
+            "modelCalls": 22,
+            "toolCalls": 47
+          },
+          "partial": true,
+          "eventPath": "review-repair/state/events/1792543394973-24cfb908-687c-41a6-b1f4-e26a5415f067.jsonl"
+        }
+      ],
+      "policyValid": false
+    },
+    {
+      "task": "queue-aborted",
+      "arm": "pi",
+      "trialName": "queue-aborted-pi",
+      "accepted": true,
+      "graded": true,
+      "status": "interrupted",
+      "exceptionType": "AgentTimeoutError",
+      "knownCostUsd": 0.25152560000000007,
+      "costUnknown": true,
+      "usage": {
+        "input": 51631,
+        "cacheRead": 395136,
+        "cacheWrite": 0,
+        "output": 10875,
+        "estimatedApiUsd": 0.25152560000000007,
+        "modelCalls": 23,
+        "toolCalls": 36,
+        "costUnknown": true
+      },
+      "latencyMs": 601692.826,
+      "agentTimeoutSec": 600,
+      "accountingSource": "partial-assistant-ledger",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "pi",
+          "usage": {
+            "input": 51631,
+            "cacheRead": 395136,
+            "cacheWrite": 0,
+            "output": 10875,
+            "estimatedApiUsd": 0.25152560000000007,
+            "modelCalls": 23,
+            "toolCalls": 36
+          },
+          "partial": true,
+          "eventPath": "events.live.jsonl"
+        }
+      ],
+      "policyValid": false
+    }
+  ],
+  "allExecutedKnownCostUsd": 0.38343660000000007,
+  "allExecutedUnknownCosts": 2,
+  "replacementPlan": {
+    "createdAt": 1792544770.9738438,
+    "authorization": "User: rerun the timeout results and do not count the old one",
+    "agentTimeoutSec": 1800,
+    "maximumAdditionalAttempts": 2,
+    "jobs": [
+      {
+        "task": "queue-aborted",
+        "arm": "review",
+        "original": "queue-aborted-review",
+        "replacement": "queue-aborted-review-r1",
+        "originalResultSha256": "5d21ec21508ede29fb0efe1919c9159e68ec451ec8a5218e34381b6639ea8e87",
+        "reason": "User-authorized replacement of 600-second timeout; original excluded from primary comparison"
+      },
+      {
+        "task": "queue-aborted",
+        "arm": "pi",
+        "original": "queue-aborted-pi",
+        "replacement": "queue-aborted-pi-r1",
+        "originalResultSha256": "0956b1802b64baaf1c9b425901d10bf25794757c11dee414bfc5be4320d5f3ba",
+        "reason": "User-authorized replacement of 600-second timeout; original excluded from primary comparison"
+      }
+    ]
+  }
+}
