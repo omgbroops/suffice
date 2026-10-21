@@ -120,9 +120,10 @@ export async function prepWorkspace(task, { polyRoot = POLY } = {}) {
 export async function applyReference(task, dir, { polyRoot = POLY } = {}) {
   const { src } = exerciseSrc(task, polyRoot);
   const cfg = await readFiles(src);
+  // Extra examples (java ocr-numbers Digit.java) go beside the first solution file, as the reference build needs them.
   for (const [i, ex] of cfg.example.entries()) {
-    if (!cfg.solution[i]) break;
-    const to = join(dir, cfg.solution[i]);
+    const to = cfg.solution[i] ? join(dir, cfg.solution[i])
+      : join(dir, dirname(cfg.solution[0]), basename(ex));
     await mkdir(dirname(to), { recursive: true });
     await copyFile(join(src, ex), to);
   }
