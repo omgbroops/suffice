@@ -61,11 +61,14 @@ def report():
         attempts.append({**job,'accepted':bool(v and v.get('reward')==1),'graded':v is not None,
             'status':w.get('status'),'exceptionType':(r.get('exception_info') or {}).get('exception_type'),
             'knownCostUsd':usage.get('estimatedApiUsd',0),'costUnknown':unknown,'usage':usage,'latencyMs':w.get('latencyMs'),
-            'review':w.get('review'),'reviewCalls':w.get('reviewCalls',0),'repairs':w.get('repairs',0),'stages':w.get('stages',[])})
+            'review':w.get('review'),'reviewCalls':w.get('reviewCalls',0),'repairs':w.get('repairs',0),'stages':w.get('stages',[]),
+            'policyValid':w.get('budgetEligible',w.get('status')=='completed') and not unknown and usage.get('estimatedApiUsd',0)<=1})
     summary=[]
     for arm in ['alone','review','pi']:
         rows=[a for a in attempts if a['arm']==arm];cost=sum(a['knownCostUsd'] for a in rows);accepted=sum(a['accepted'] for a in rows)
-        summary.append({'arm':arm,'completed':len(rows),'accepted':accepted,'ungraded':sum(not a['graded'] for a in rows),'knownCostUsd':cost,
+        timed=[a['latencyMs']/1000 for a in rows if a.get('latencyMs') is not None]
+        summary.append({'arm':arm,'completed':len(rows),'accepted':accepted,'policyValidSuccesses':sum(a['accepted'] and a['policyValid'] for a in rows),
+            'meanAgentSeconds':sum(timed)/len(timed) if timed else None,'ungraded':sum(not a['graded'] for a in rows),'knownCostUsd':cost,
             'knownUsdPerAccepted':cost/accepted if accepted else None,'unknownCosts':sum(a['costUnknown'] for a in rows)})
     result={'asOf':time.time(),'complete':len(attempts)==18,'attempts':attempts,'summary':summary}
     save(OUT/'results.json',result)

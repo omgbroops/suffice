@@ -1,0 +1,86 @@
+[
+  {
+    "id": "queue-aborted",
+    "mode": "public",
+    "exitCode": 1,
+    "stdout": "\n> p-queue@9.1.0 build\n> del-cli dist && tsc\n\n",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Already aborted queued add must reject before capacity becomes available\n    at file:///probe/check.mjs:20:9 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "queue-aborted",
+    "mode": "tests",
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Already aborted queued add must reject before capacity becomes available\n    at file:///probe/check.mjs:20:9 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "queue-timeout",
+    "mode": "public",
+    "exitCode": 1,
+    "stdout": "\n> p-queue@9.3.1 build\n> del-cli dist && tsc\n\n",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Invalid per-task timeout must reject clearly\n    at file:///probe/check.mjs:15:9 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "queue-timeout",
+    "mode": "tests",
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Invalid per-task timeout must reject clearly\n    at file:///probe/check.mjs:15:9 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "ky-progress",
+    "mode": "public",
+    "exitCode": 1,
+    "stdout": "\n> ky@2.0.2 build\n> del-cli distribution && tsc --project tsconfig.dist.json\n\n",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Finished empty response must report completion\n\nundefined !== 1\n\n    at file:///probe/check.mjs:16:50\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: 1,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "ky-progress",
+    "mode": "tests",
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Finished empty response must report completion\n\nundefined !== 1\n\n    at file:///probe/check.mjs:16:50\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: 1,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "ky-signal",
+    "mode": "public",
+    "exitCode": 1,
+    "stdout": "\n> ky@2.0.2 build\n> del-cli distribution && tsc --project tsconfig.dist.json\n\n",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Got unwanted rejection.\nActual message: \"This operation was aborted\"\n    at async file:///probe/check.mjs:16:26 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: DOMException [AbortError]: This operation was aborted\n      at new DOMException (node:internal/per_context/domexception:76:18)\n      at AbortController.abort (node:internal/abort_controller:579:18)\n      at file:///probe/check.mjs:16:9,\n  expected: undefined,\n  operator: 'doesNotReject',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "ky-signal",
+    "mode": "tests",
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Got unwanted rejection.\nActual message: \"This operation was aborted\"\n    at async file:///probe/check.mjs:16:26 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: DOMException [AbortError]: This operation was aborted\n      at new DOMException (node:internal/per_context/domexception:76:18)\n      at AbortController.abort (node:internal/abort_controller:579:18)\n      at file:///probe/check.mjs:16:9,\n  expected: undefined,\n  operator: 'doesNotReject',\n  diff: 'simple'\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "pall-types",
+    "mode": "public",
+    "exitCode": 1,
+    "stdout": "../probe/type-check.mts(4,7): error TS2322: Type 'unknown[]' is not assignable to type '{ n: number; }[]'.\n  Type 'unknown' is not assignable to type '{ n: number; }'.\n",
+    "stderr": "node:internal/errors:986\n  const err = new Error(message);\n              ^\n\nError: Command failed: /opt/checker/node_modules/.bin/tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 --skipLibCheck /probe/type-check.mts\n    at genericNodeError (node:internal/errors:986:15)\n    at wrappedFn (node:internal/errors:540:14)\n    at checkExecSyncError (node:child_process:943:11)\n    at execFileSync (node:child_process:979:15)\n    at file:///probe/check.mjs:20:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  status: 2,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 13,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "pall-types",
+    "mode": "tests",
+    "exitCode": 1,
+    "stdout": "../probe/type-check.mts(4,7): error TS2322: Type 'unknown[]' is not assignable to type '{ n: number; }[]'.\n  Type 'unknown' is not assignable to type '{ n: number; }'.\n",
+    "stderr": "node:internal/errors:986\n  const err = new Error(message);\n              ^\n\nError: Command failed: /opt/checker/node_modules/.bin/tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 --skipLibCheck /probe/type-check.mts\n    at genericNodeError (node:internal/errors:986:15)\n    at wrappedFn (node:internal/errors:540:14)\n    at checkExecSyncError (node:child_process:943:11)\n    at execFileSync (node:child_process:979:15)\n    at file:///probe/check.mjs:20:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  status: 2,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 13,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "emitter-value",
+    "mode": "public",
+    "exitCode": 1,
+    "stdout": "../probe/type-check.mts(2,19): error TS1361: 'Emitter' cannot be used as a value because it was imported using 'import type'.\n",
+    "stderr": "node:internal/errors:986\n  const err = new Error(message);\n              ^\n\nError: Command failed: /opt/checker/node_modules/.bin/tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 --skipLibCheck /probe/type-check.mts\n    at genericNodeError (node:internal/errors:986:15)\n    at wrappedFn (node:internal/errors:540:14)\n    at checkExecSyncError (node:child_process:943:11)\n    at execFileSync (node:child_process:979:15)\n    at file:///probe/check.mjs:16:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  status: 2,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 13,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v24.22.0\n"
+  },
+  {
+    "id": "emitter-value",
+    "mode": "tests",
+    "exitCode": 1,
+    "stdout": "../probe/type-check.mts(2,19): error TS1361: 'Emitter' cannot be used as a value because it was imported using 'import type'.\n../probe/type-check.mts(3,17): error TS1361: 'Named' cannot be used as a value because it was imported using 'import type'.\n../probe/type-check.mts(3,74): error TS1361: 'Named' cannot be used as a value because it was imported using 'import type'.\n",
+    "stderr": "node:internal/errors:986\n  const err = new Error(message);\n              ^\n\nError: Command failed: /opt/checker/node_modules/.bin/tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 --skipLibCheck /probe/type-check.mts\n    at genericNodeError (node:internal/errors:986:15)\n    at wrappedFn (node:internal/errors:540:14)\n    at checkExecSyncError (node:child_process:943:11)\n    at execFileSync (node:child_process:979:15)\n    at file:///probe/check.mjs:16:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  status: 2,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 13,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v24.22.0\n"
+  }
+]

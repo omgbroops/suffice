@@ -1,0 +1,350 @@
+{
+  "version": "post-review-v1",
+  "created": 1792543082.8982625,
+  "tasks": [
+    {
+      "number": 241,
+      "title": "signal option does not reject when task is aborted while queued",
+      "body": "When a task is added to a queue that is at capacity and the task's `AbortSignal` is already aborted, the promise returned by `queue.add()` never settles. From the docs:\n\n> When aborted, it will be removed from the queue and the queue.add() call will reject with an [error](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/reason). If the operation is already running, the signal will need to be handled by the operation itself.\n\n**Reproduction**\n\n```js\nimport { test } from \"node:test\";\nimport assert from \"node:assert/strict\";\nimport PQueue from \"p-queue\";\n\ntest(\"aborting a queued task rejects the promise\", async () => {\n  const queue = new PQueue({ concurrency: 1 });\n\n  // Fill the concurrency slot so the second task is queued\n  queue.add(() => new Promise(() => {}));\n\n  const controller = new AbortController();\n  controller.abort();\n\n  await assert.rejects(\n    queue.add(() => {}, { signal: controller.signal }),\n  );\n});\n```\n\n**Output**\n```\n\u2716 aborting a queued task rejects the promise\n  'Promise resolution is still pending but the event loop has already resolved'\n```\n\n**Expected behavior**\n\nThe promise returned by `queue.add()` rejects with a `DOMException (name: \"AbortError\")`.\n\n**Actual behavior**\n\nThe promise never settles.\n\n**Notes**\n\nThe existing test aborting multiple jobs at the same time does not catch this because it aborts the signal after a `setTimeout`, by which point both tasks are already running rather than queued. The bug is specific to tasks that are waiting in the queue when the signal is aborted.\n\n**Environment**\n\np-queue version: 9.1.0\nNode.js version: v22.19.0",
+      "created_at": "2026-03-31T15:15:51Z",
+      "html_url": "https://github.com/sindresorhus/p-queue/issues/241",
+      "state": "closed",
+      "repo": "sindresorhus/p-queue",
+      "baseCommit": "3bd13ea130b105d8521e0ba4115a68671967200d",
+      "id": "queue-aborted",
+      "actorTask": "signal option does not reject when task is aborted while queued\n\nWhen a task is added to a queue that is at capacity and the task's `AbortSignal` is already aborted, the promise returned by `queue.add()` never settles. From the docs:\n\n> When aborted, it will be removed from the queue and the queue.add() call will reject with an [error](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/reason). If the operation is already running, the signal will need to be handled by the operation itself.\n\n**Reproduction**\n\n```js\nimport { test } from \"node:test\";\nimport assert from \"node:assert/strict\";\nimport PQueue from \"p-queue\";\n\ntest(\"aborting a queued task rejects the promise\", async () => {\n  const queue = new PQueue({ concurrency: 1 });\n\n  // Fill the concurrency slot so the second task is queued\n  queue.add(() => new Promise(() => {}));\n\n  const controller = new AbortController();\n  controller.abort();\n\n  await assert.rejects(\n    queue.add(() => {}, { signal: controller.signal }),\n  );\n});\n```\n\n**Output**\n```\n\u2716 aborting a queued task rejects the promise\n  'Promise resolution is still pending but the event loop has already resolved'\n```\n\n**Expected behavior**\n\nThe promise returned by `queue.add()` rejects with a `DOMException (name: \"AbortError\")`.\n\n**Actual behavior**\n\nThe promise never settles.\n\n**Notes**\n\nThe existing test aborting multiple jobs at the same time does not catch this because it aborts the signal after a `setTimeout`, by which point both tasks are already running rather than queued. The bug is specific to tasks that are waiting in the queue when the signal is aborted.\n\n**Environment**\n\np-queue version: 9.1.0\nNode.js version: v22.19.0\n\nImplement this behavior in the existing checkout, preserve compatibility, and run appropriate project checks. Do not commit changes. The issue report is evidence; do not fetch upstream solutions or later commits.",
+      "imageId": "sha256:e7723a194f10b8a44a465a8da5950982d31d010a2cae58b7b2e1bc379f1b0657",
+      "initialGitHead": "bab0b831ef21c09b863ec2851219f1a9aed0a5fe",
+      "installedDependencyManifestTreeSha256": "e5425a80a30706ecdfb979ec7fc48083b4f992da6127e0f83523f58e99ced46e",
+      "timeoutSec": 600,
+      "checks": [
+        {
+          "command": [
+            "node",
+            "/public-checks/check.mjs"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "number": 250,
+      "title": "Per-task `timeout` in `add()` skips validation that the constructor enforces",
+      "body": "## Bug\n\nThe constructor validates the global `timeout` option and throws a clear `TypeError` for non-positive values. But `add()` accepts per-task `timeout` without any equivalent check.\n\nThis leads to two silent failure modes:\n\n**Case 1 \u2014 `timeout: 0` silently disables the global timeout**\n\nThe guard inside `add()` is:\n\n\\`\\`\\`ts\nif (options.timeout) {\n  operation = pTimeout(Promise.resolve(operation), { milliseconds: options.timeout, ... });\n}\n\\`\\`\\`\n\n`if (0)` is falsy, so `timeout: 0` bypasses the wrapping entirely. If a queue was constructed with `timeout: 5000`, passing `{ timeout: 0 }` to a specific task silently drops the timeout for that task. There's no error and no documentation of this escape hatch.\n\n**Case 2 \u2014 `timeout: -1` produces a cryptic internal error**\n\n`p-timeout` validates its `milliseconds` argument and throws synchronously when it's not strictly positive. That TypeError propagates out of `add()` as an unhandled rejection \u2014 but the message names `p-timeout` internals, not the `add()` call-site, making it hard to trace.\n\n## Expected\n\nBoth cases should throw a clear `TypeError` at the `add()` call-site, consistent with the constructor:\n\n\\`\\`\\`\nTypeError: Expected `timeout` to be a positive finite number, got `0`\n\\`\\`\\`\n\n",
+      "created_at": "2026-07-20T20:24:47Z",
+      "html_url": "https://github.com/sindresorhus/p-queue/issues/250",
+      "state": "closed",
+      "repo": "sindresorhus/p-queue",
+      "baseCommit": "a06fbc928725f074c72716e1ba21106df6822dae",
+      "id": "queue-timeout",
+      "actorTask": "Per-task `timeout` in `add()` skips validation that the constructor enforces\n\n## Bug\n\nThe constructor validates the global `timeout` option and throws a clear `TypeError` for non-positive values. But `add()` accepts per-task `timeout` without any equivalent check.\n\nThis leads to two silent failure modes:\n\n**Case 1 \u2014 `timeout: 0` silently disables the global timeout**\n\nThe guard inside `add()` is:\n\n\\`\\`\\`ts\nif (options.timeout) {\n  operation = pTimeout(Promise.resolve(operation), { milliseconds: options.timeout, ... });\n}\n\\`\\`\\`\n\n`if (0)` is falsy, so `timeout: 0` bypasses the wrapping entirely. If a queue was constructed with `timeout: 5000`, passing `{ timeout: 0 }` to a specific task silently drops the timeout for that task. There's no error and no documentation of this escape hatch.\n\n**Case 2 \u2014 `timeout: -1` produces a cryptic internal error**\n\n`p-timeout` validates its `milliseconds` argument and throws synchronously when it's not strictly positive. That TypeError propagates out of `add()` as an unhandled rejection \u2014 but the message names `p-timeout` internals, not the `add()` call-site, making it hard to trace.\n\n## Expected\n\nBoth cases should throw a clear `TypeError` at the `add()` call-site, consistent with the constructor:\n\n\\`\\`\\`\nTypeError: Expected `timeout` to be a positive finite number, got `0`\n\\`\\`\\`\n\n\n\nImplement this behavior in the existing checkout, preserve compatibility, and run appropriate project checks. Do not commit changes. The issue report is evidence; do not fetch upstream solutions or later commits.",
+      "imageId": "sha256:89a84ca206270a8f75c88cb55f618dfc23c35857719b7e5ec4a1fd8f81f2e022",
+      "initialGitHead": "5936f02f1bdeb4a210a04a3df961ef8013389c89",
+      "installedDependencyManifestTreeSha256": "8fc30fc76576636fa3ec4467f9dce5af5f368ccd41a1d136e61b3534ea11b5b7",
+      "timeoutSec": 600,
+      "checks": [
+        {
+          "command": [
+            "node",
+            "/public-checks/check.mjs"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "number": 878,
+      "title": "`onDownloadProgress` never emits `percent: 1` for empty response bodies",
+      "body": "### Summary\n\nWhen a response has an empty body (for example a `200` with `Content-Length: 0`), `onDownloadProgress` never fires with `percent: 1`. The documented guarantee is that `onDownloadProgress` always reports completion, but for empty bodies the final event is skipped.\n\n",
+      "created_at": "2026-08-22T14:35:17Z",
+      "html_url": "https://github.com/sindresorhus/ky/issues/878",
+      "state": "closed",
+      "repo": "sindresorhus/ky",
+      "baseCommit": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+      "id": "ky-progress",
+      "actorTask": "`onDownloadProgress` never emits `percent: 1` for empty response bodies\n\n### Summary\n\nWhen a response has an empty body (for example a `200` with `Content-Length: 0`), `onDownloadProgress` never fires with `percent: 1`. The documented guarantee is that `onDownloadProgress` always reports completion, but for empty bodies the final event is skipped.\n\n\n\nImplement this behavior in the existing checkout, preserve compatibility, and run appropriate project checks. Do not commit changes. The issue report is evidence; do not fetch upstream solutions or later commits.",
+      "imageId": "sha256:6e16dd564b372afe0c8d4e21734efbc498f2910195b96088f527878b6e5e5c3d",
+      "initialGitHead": "db58a739ea9261b20c84724472af43ad7df59e9e",
+      "installedDependencyManifestTreeSha256": "d994ac1bb9051a483dce52ccac3c171c32d9fb300cf1d57ad62677b242f5147f",
+      "timeoutSec": 600,
+      "checks": [
+        {
+          "command": [
+            "node",
+            "/public-checks/check.mjs"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "number": 879,
+      "title": "Bug: `replaceOption` and `undefined` do not work with `signal` option in `ky.extend()`",
+      "body": "### Problem\n\n`replaceOption` does not work when replacing an `AbortSignal` on an extended instance:\n\n```ts\nimport ky, {replaceOption} from 'ky';\n\nconst baseController = new AbortController();\nconst extendedController = new AbortController();\n\nconst base = ky.create({\n  signal: baseController.signal,\n});\n\nconst extended = base.extend({\n  signal: replaceOption(extendedController.signal),\n});\n\n// Aborting the base controller still aborts the extended instance!\nbaseController.abort();\nawait extended('https://example.com'); // Throws AbortError (unexpected)\n```\n\nSimilarly, passing `{signal: undefined}` or `{signal: null}` in `.extend()` does not remove parent signals from being combined via `AbortSignal.any()`.\n\n",
+      "created_at": "2026-08-25T17:09:04Z",
+      "html_url": "https://github.com/sindresorhus/ky/issues/879",
+      "state": "closed",
+      "repo": "sindresorhus/ky",
+      "baseCommit": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+      "id": "ky-signal",
+      "actorTask": "Bug: `replaceOption` and `undefined` do not work with `signal` option in `ky.extend()`\n\n### Problem\n\n`replaceOption` does not work when replacing an `AbortSignal` on an extended instance:\n\n```ts\nimport ky, {replaceOption} from 'ky';\n\nconst baseController = new AbortController();\nconst extendedController = new AbortController();\n\nconst base = ky.create({\n  signal: baseController.signal,\n});\n\nconst extended = base.extend({\n  signal: replaceOption(extendedController.signal),\n});\n\n// Aborting the base controller still aborts the extended instance!\nbaseController.abort();\nawait extended('https://example.com'); // Throws AbortError (unexpected)\n```\n\nSimilarly, passing `{signal: undefined}` or `{signal: null}` in `.extend()` does not remove parent signals from being combined via `AbortSignal.any()`.\n\n\n\nImplement this behavior in the existing checkout, preserve compatibility, and run appropriate project checks. Do not commit changes. The issue report is evidence; do not fetch upstream solutions or later commits.",
+      "imageId": "sha256:1f85bba53fd271ade4fdee7ad70a9ccdf5430a83c717723aa96287b368ffa9b5",
+      "initialGitHead": "db58a739ea9261b20c84724472af43ad7df59e9e",
+      "installedDependencyManifestTreeSha256": "d994ac1bb9051a483dce52ccac3c171c32d9fb300cf1d57ad62677b242f5147f",
+      "timeoutSec": 600,
+      "checks": [
+        {
+          "command": [
+            "node",
+            "/public-checks/check.mjs"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "title": "pAll incorrectly infers type to unknown[] when pAll has nested promises (unless the function is async)",
+      "body": "Unsure if this is a typescript problem, or something related to the definition of p-all's types\r\n\r\nIt seems that if the task passed to `pAll` uses `.then` internally, the api fails to infer the proper type of the result, unless the task is defined as async.\r\n\r\nI am using `pAll` in a complex scenario, but a simplified code in which I was able to reproduce the bug is:\r\n\r\n```ts\r\nconst numbers = [1, 2, 3]\r\npAll(\r\n  numbers.map(\r\n    n => () =>\r\n      Promise.resolve().then(() => ({\r\n        n,\r\n      })),\r\n  ),\r\n).then(function (results) {\r\n  results\r\n})\r\n```\r\n\r\nIf I hover on visual studio code, `results` is inferred as `unknown[]`\r\n\r\n<img width=\"554\" alt=\"image\" src=\"https://github.com/user-attachments/assets/950f5d9d-e122-413c-939b-eb8fec637cc4\" />\r\n\r\nThe proper inference should be `{ n: number } []`\r\n\r\n### Workaround\r\n\r\nIf the task is defined as `async`, the `results` type is inferred correctly\r\n\r\n```ts\r\nconst numbers = [1, 2, 3]\r\npAll(\r\n  numbers.map(\r\n    // async added here\r\n    n => async () =>\r\n      Promise.resolve().then(() => ({\r\n        n,\r\n      })),\r\n  ),\r\n).then(function (results) {\r\n  results\r\n})\r\n```\r\n\r\nThe type is now correctly inferred\r\n\r\n<img width=\"479\" alt=\"image\" src=\"https://github.com/user-attachments/assets/210a0654-83c8-44f5-ac6c-a99c4984f3cc\" />\r\n\r\n\r\nIf I use an intermediate variable, it also works (without async)\r\n\r\n```ts\r\nconst numbers = [1, 2]\r\nconst actions = numbers.map(\r\n  n => () =>\r\n    Promise.resolve().then(() => ({\r\n      n,\r\n    })),\r\n)\r\npAll(\r\n  actions,\r\n).then(function (results) {\r\n  console.log(results)\r\n})\r\n```\r\n\r\nif I hover on VS code:\r\n\r\n<img width=\"500\" alt=\"image\" src=\"https://github.com/user-attachments/assets/71d12655-38cb-4b7e-8f1b-8bf409c23f2b\" />\r\n\r\ntype is correctly inferred\r\n\r\n### Test that should pass\r\n\r\n```ts\r\nimport {expectType} from 'tsd';\r\nimport pAll from './index.js';\r\n\r\nconst numbers1 = [1, 2]\r\n\r\n// this passes\r\nconst result1 = await pAll(numbers1.map(\r\n\tn => async () =>\r\n\t\tPromise.resolve().then(() => ({\r\n\t\t\tn,\r\n\t\t}))), {concurrency: 2});\r\n\r\nexpectType<{ n: number }>(result1[0]);\r\nexpectType<{ n: number }>(result1[1]);\r\n\r\n// this passes as well\r\nimport {expectType} from 'tsd';\r\nimport pAll from './index.js';\r\n\r\nconst numbers2 = [1, 2]\r\n\r\nconst actions2 = numbers.map(\r\n\tn => () =>\r\n\t\tPromise.resolve().then(() => ({\r\n\t\t\tn,\r\n\t\t})))\r\n\r\nconst result2 = await pAll(actions2, {concurrency: 2});\r\n\r\nexpectType<{ n: number }>(result2[0]);\r\nexpectType<{ n: number }>(result2[1]);\r\n\r\n\r\n// this doesn't\r\nconst numbers3 = [1, 2]\r\nconst result3 = await pAll(numbers3.map(\r\n\tn => () =>\r\n\t\tPromise.resolve().then(() => ({\r\n\t\t\tn,\r\n\t\t}))), {concurrency: 2});\r\n\r\nexpectType<{ n: number }>(result3[0]);\r\nexpectType<{ n: number }>(result3[1]);\r\n```",
+      "created_at": "2024-12-18T15:54:39Z",
+      "html_url": "https://github.com/sindresorhus/p-all/issues/15",
+      "state": "closed",
+      "repo": "sindresorhus/p-all",
+      "baseCommit": "cdfa57c7df33a6b097568de091ce57edffad43fd",
+      "id": "pall-types",
+      "actorTask": "pAll incorrectly infers type to unknown[] when pAll has nested promises (unless the function is async)\n\nUnsure if this is a typescript problem, or something related to the definition of p-all's types\r\n\r\nIt seems that if the task passed to `pAll` uses `.then` internally, the api fails to infer the proper type of the result, unless the task is defined as async.\r\n\r\nI am using `pAll` in a complex scenario, but a simplified code in which I was able to reproduce the bug is:\r\n\r\n```ts\r\nconst numbers = [1, 2, 3]\r\npAll(\r\n  numbers.map(\r\n    n => () =>\r\n      Promise.resolve().then(() => ({\r\n        n,\r\n      })),\r\n  ),\r\n).then(function (results) {\r\n  results\r\n})\r\n```\r\n\r\nIf I hover on visual studio code, `results` is inferred as `unknown[]`\r\n\r\n<img width=\"554\" alt=\"image\" src=\"https://github.com/user-attachments/assets/950f5d9d-e122-413c-939b-eb8fec637cc4\" />\r\n\r\nThe proper inference should be `{ n: number } []`\r\n\r\n### Workaround\r\n\r\nIf the task is defined as `async`, the `results` type is inferred correctly\r\n\r\n```ts\r\nconst numbers = [1, 2, 3]\r\npAll(\r\n  numbers.map(\r\n    // async added here\r\n    n => async () =>\r\n      Promise.resolve().then(() => ({\r\n        n,\r\n      })),\r\n  ),\r\n).then(function (results) {\r\n  results\r\n})\r\n```\r\n\r\nThe type is now correctly inferred\r\n\r\n<img width=\"479\" alt=\"image\" src=\"https://github.com/user-attachments/assets/210a0654-83c8-44f5-ac6c-a99c4984f3cc\" />\r\n\r\n\r\nIf I use an intermediate variable, it also works (without async)\r\n\r\n```ts\r\nconst numbers = [1, 2]\r\nconst actions = numbers.map(\r\n  n => () =>\r\n    Promise.resolve().then(() => ({\r\n      n,\r\n    })),\r\n)\r\npAll(\r\n  actions,\r\n).then(function (results) {\r\n  console.log(results)\r\n})\r\n```\r\n\r\nif I hover on VS code:\r\n\r\n<img width=\"500\" alt=\"image\" src=\"https://github.com/user-attachments/assets/71d12655-38cb-4b7e-8f1b-8bf409c23f2b\" />\r\n\r\ntype is correctly inferred\r\n\r\n### Test that should pass\r\n\r\n```ts\r\nimport {expectType} from 'tsd';\r\nimport pAll from './index.js';\r\n\r\nconst numbers1 = [1, 2]\r\n\r\n// this passes\r\nconst result1 = await pAll(numbers1.map(\r\n\tn => async () =>\r\n\t\tPromise.resolve().then(() => ({\r\n\t\t\tn,\r\n\t\t}))), {concurrency: 2});\r\n\r\nexpectType<{ n: number }>(result1[0]);\r\nexpectType<{ n: number }>(result1[1]);\r\n\r\n// this passes as well\r\nimport {expectType} from 'tsd';\r\nimport pAll from './index.js';\r\n\r\nconst numbers2 = [1, 2]\r\n\r\nconst actions2 = numbers.map(\r\n\tn => () =>\r\n\t\tPromise.resolve().then(() => ({\r\n\t\t\tn,\r\n\t\t})))\r\n\r\nconst result2 = await pAll(actions2, {concurrency: 2});\r\n\r\nexpectType<{ n: number }>(result2[0]);\r\nexpectType<{ n: number }>(result2[1]);\r\n\r\n\r\n// this doesn't\r\nconst numbers3 = [1, 2]\r\nconst result3 = await pAll(numbers3.map(\r\n\tn => () =>\r\n\t\tPromise.resolve().then(() => ({\r\n\t\t\tn,\r\n\t\t}))), {concurrency: 2});\r\n\r\nexpectType<{ n: number }>(result3[0]);\r\nexpectType<{ n: number }>(result3[1]);\r\n```\n\nImplement this behavior in the existing checkout, preserve compatibility, and run appropriate project checks. Do not commit changes. The issue report is evidence; do not fetch upstream solutions or later commits.",
+      "imageId": "sha256:42fb1af8f7a3416c87eaaf3193a481c2abd94c75e28f8f19b7a4099e832b91cf",
+      "initialGitHead": "1486119480ebca82fa29b7ed1aa58ff39392b313",
+      "installedDependencyManifestTreeSha256": "b37366946301b35b3d9a52d002b29185e189750d997cca1092245fc6c9817c62",
+      "timeoutSec": 600,
+      "checks": [
+        {
+          "command": [
+            "node",
+            "/public-checks/check.mjs"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    },
+    {
+      "number": 281,
+      "title": "Incorrect typings for index.d.mts",
+      "body": "I was just updating some dependencies of some of my projects and noticed I was getting a new error with the latest eventemitter3 release.\n\n`EventEmitter' cannot be used as a value because it was imported using 'import type'.`\n\nThe [index.d.mts](https://github.com/primus/eventemitter3/blob/master/index.d.mts) file seems to be re-exporting only the type of the EventEmitter class, so TypeScript will not treat it as a value that can be instantiated.",
+      "created_at": "2026-01-19T11:08:29Z",
+      "html_url": "https://github.com/primus/eventemitter3/issues/281",
+      "state": "closed",
+      "repo": "primus/eventemitter3",
+      "baseCommit": "7b6aef8d0452bd64ad02d3a9a4e74502039f2711",
+      "id": "emitter-value",
+      "actorTask": "Incorrect typings for index.d.mts\n\nI was just updating some dependencies of some of my projects and noticed I was getting a new error with the latest eventemitter3 release.\n\n`EventEmitter' cannot be used as a value because it was imported using 'import type'.`\n\nThe [index.d.mts](https://github.com/primus/eventemitter3/blob/master/index.d.mts) file seems to be re-exporting only the type of the EventEmitter class, so TypeScript will not treat it as a value that can be instantiated.\n\nImplement this behavior in the existing checkout, preserve compatibility, and run appropriate project checks. Do not commit changes. The issue report is evidence; do not fetch upstream solutions or later commits.",
+      "imageId": "sha256:f63c53e69b0ba3511703b5ff86d52f46d7fe26d376d4665deb7ca10a82301d08",
+      "initialGitHead": "3b2922421bf6f65b9dfd526fe6280689c3ef14f9",
+      "installedDependencyManifestTreeSha256": "79d9e07b0a8abcbca8e631ecc2d8cdbd381f33db7840a12d5ba5f78f817cf56b",
+      "timeoutSec": 600,
+      "checks": [
+        {
+          "command": [
+            "node",
+            "/public-checks/check.mjs"
+          ],
+          "timeoutMs": 60000
+        }
+      ]
+    }
+  ],
+  "files": {
+    "tasks/queue-timeout/instruction.md": "7d4d48c47a06f692468ffc7f3a82a3290a72ffddd123aa0df0cdadc496d2a95d",
+    "tasks/queue-timeout/task.toml": "9cf07ad53d5117e6cea7fa6f5e8d7e97e5d120ab0f79ce10be75beb39095d17d",
+    "tasks/ky-signal/instruction.md": "a8a5fb8c7e0b56db3f32a50a756f8ba2253fb3c264b71da4d6547978aa180cbf",
+    "tasks/ky-signal/task.toml": "9cf07ad53d5117e6cea7fa6f5e8d7e97e5d120ab0f79ce10be75beb39095d17d",
+    "tasks/queue-aborted/instruction.md": "fd82bd6d73867523a5fe7548afa780e9df77b7a24e39ab55ed0c47eeb1daad79",
+    "tasks/queue-aborted/task.toml": "9cf07ad53d5117e6cea7fa6f5e8d7e97e5d120ab0f79ce10be75beb39095d17d",
+    "tasks/pall-types/instruction.md": "15a7a7e69aa97268e4051196c82a619f18d294e3164cd46263698a6c3a159d91",
+    "tasks/pall-types/task.toml": "9cf07ad53d5117e6cea7fa6f5e8d7e97e5d120ab0f79ce10be75beb39095d17d",
+    "tasks/emitter-value/instruction.md": "d3a9d8a00d5b20cb90ca57983d8b969c4494041247505cf7f75cf97d0268814f",
+    "tasks/emitter-value/task.toml": "9cf07ad53d5117e6cea7fa6f5e8d7e97e5d120ab0f79ce10be75beb39095d17d",
+    "tasks/ky-progress/instruction.md": "eb47fcdfeca20bf77451203fc95eff54a2152ad780383a5b60fe0cb8c97df681",
+    "tasks/ky-progress/task.toml": "9cf07ad53d5117e6cea7fa6f5e8d7e97e5d120ab0f79ce10be75beb39095d17d",
+    "tasks/queue-timeout/tests/test.sh": "75a398182ab69b6c050a7a72f06f0bff67cc4b79f9d957da914996292e705c53",
+    "tasks/queue-timeout/tests/check.mjs": "42f783a93c0cb6e7335848991f4081fdef948b40dc34a24025a10ea161ebd8e6",
+    "tasks/queue-timeout/environment/Dockerfile": "4e23d20ea5897e094e4ecd66d9aae6b970ad8f4cdf353e966cac80ab2e705a20",
+    "tasks/queue-timeout/public/check.mjs": "948e444644ab229611e0f3152952682702bbad919e8321b94e143f1a17c56875",
+    "tasks/ky-signal/tests/test.sh": "75a398182ab69b6c050a7a72f06f0bff67cc4b79f9d957da914996292e705c53",
+    "tasks/ky-signal/tests/check.mjs": "ad0913aa7cf919743c452a0ab37d29f18c6c3056f47c1dfcd96eac86327c08f6",
+    "tasks/ky-signal/environment/Dockerfile": "f49ac6302bee81b5d4934aeebaa20595c6370277995571d933d203263ac368f1",
+    "tasks/ky-signal/public/check.mjs": "780072f3232f9db26c6d9f7ed2851ef193635c547545e4bf9172bb1253cb8f89",
+    "tasks/queue-aborted/tests/test.sh": "75a398182ab69b6c050a7a72f06f0bff67cc4b79f9d957da914996292e705c53",
+    "tasks/queue-aborted/tests/check.mjs": "b0dba6fc9adca55a9726efa968f736e67245e3c5b16808e0ef684d0a6792e3b1",
+    "tasks/queue-aborted/environment/Dockerfile": "3b026833706e28a07149c22938c74203089b713d46493a501ed7695621fd844c",
+    "tasks/queue-aborted/public/check.mjs": "40d353288b3ff58e7ce97889c2b94dd64dde56eee477ac3bcea898ea1c427de0",
+    "tasks/pall-types/tests/type-check.mts": "1abb0adac747a477544384d13376d4b3e9aa067930aa92ef392b6f4e568e6706",
+    "tasks/pall-types/tests/test.sh": "75a398182ab69b6c050a7a72f06f0bff67cc4b79f9d957da914996292e705c53",
+    "tasks/pall-types/tests/check.mjs": "314bccfb2e95eca3b4504cb64d223cbd5beb2968984e59d18bf5097be48fac33",
+    "tasks/pall-types/environment/Dockerfile": "189fc14fd3dee479c0dbb9605c8c651a36fbeede691bd756a6e63b2b9805bd7c",
+    "tasks/pall-types/public/type-check.mts": "da63cdcaeaca8fbd7d20cebc89d00084eac625a55ee7bc151911d8f92d743084",
+    "tasks/pall-types/public/check.mjs": "6527479624d214184fcb55b2ff17463b0d8af39bfb30f42a6ffdd20f5c876021",
+    "tasks/emitter-value/tests/type-check.mts": "b46674b4ecbfdc538ed81d05f216f344fc319c1eb3f1045e7b09ea9c00aae1f9",
+    "tasks/emitter-value/tests/test.sh": "75a398182ab69b6c050a7a72f06f0bff67cc4b79f9d957da914996292e705c53",
+    "tasks/emitter-value/tests/check.mjs": "7f9085efdcbd6ca63a367a582d13012fec20e01a9acfa5ce4dcb51f61c41c42b",
+    "tasks/emitter-value/environment/Dockerfile": "5d9736b8cd9ae6dec7b70d2b5a1f2ed70cd6cba7ff09acf9457f20a23bbf0a75",
+    "tasks/emitter-value/public/type-check.mts": "0dfb5b8ca716c2e6969800ce5356d1503d7653a0596d8ebce03b123aebd88964",
+    "tasks/emitter-value/public/check.mjs": "4cb6cdc02377294c1e0264e730a706f753dc59c832f266e07e81b176a70ac791",
+    "tasks/ky-progress/tests/test.sh": "75a398182ab69b6c050a7a72f06f0bff67cc4b79f9d957da914996292e705c53",
+    "tasks/ky-progress/tests/check.mjs": "d688ef366ffcff8aed76ec4b30d6575dc5d780469104f8dbbb831330200d3b3c",
+    "tasks/ky-progress/environment/Dockerfile": "f5e27a76a3f61cc3885e159b09bfef657b1bd5cde83f0b159449f532317c1bd6",
+    "tasks/ky-progress/public/check.mjs": "61eeccea9a342cb61b4a2e4b6578a48b5702a40dbd640a43c124a31a834aa67a",
+    "runtime/src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+    "runtime/src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+    "runtime/src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+    "runtime/src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+    "runtime/src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+    "runtime/src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+    "runtime/src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "runtime/src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "runtime/src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+    "runtime/src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+    "runtime/src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+    "runtime/src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+    "runtime/src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+    "runtime/src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+    "runtime/src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+    "runtime/src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "runtime/src/packets/entry.mjs": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+    "runtime/src/packets/executor.mjs": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+    "runtime/src/packets/policy.mjs": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+    "runtime/src/pipeline/notices.mjs": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+    "runtime/src/pipeline/fleet.mjs": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+    "runtime/src/pipeline/context.mjs": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+    "runtime/src/pipeline/session.mjs": "1e03ecd7782d5f0a2be548c857aa5c506d70eb113ad9d6a25dc8a58f5506ea1f",
+    "runtime/src/pipeline/tools.mjs": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+    "runtime/src/pipeline/knowledge.mjs": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+    "runtime/src/pipeline/observations.mjs": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+    "runtime/src/pipeline/preparation.mjs": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+    "runtime/src/pipeline/entry.mjs": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+    "runtime/src/pipeline/executor.mjs": "a3ef1734167a9f36f5d8377b564eba2fd8e506219a71bb42883a505535f2bbbf",
+    "runtime/src/pipeline/policy.mjs": "a934a861211b85ffbd43ae47a31e21e2a1b9ec93ba13fcf3921322e1afd9c2ea",
+    "runtime/src/execution/post-review.mjs": "3d7db493c68c4c75629394cfb7438eba0ba776d2a866e1961a7e634add33dbe6",
+    "runtime/src/execution/orchestrated.mjs": "30afdf31a7db9454b85303a40dae3dffaaa1cc0bcf49efbcdef2bf4af371a711",
+    "runtime/src/execution/strategies.mjs": "eb9561c8f42832909eb17fe4aa9b8870b6ed24a4506619e6bec9477d4e745a9a",
+    "runtime/src/execution/core.mjs": "5672e27a87fc034e092de6b26f1004bbaf9358d93ccfec629d508c5553cf57e8",
+    "runtime/src/execution/verification.mjs": "cbca2c8900d6c9a9d4bbe508be0a3c2113b27a4865c4b9a11fb27b05b162f0c5",
+    "runtime/src/execution/entry.mjs": "b639ca9376ed9e051d2bbbd2fcff0a33154ce34c29eb12c28d82ce1fe6d1bbe9",
+    "runtime/src/execution/check-evidence.mjs": "4ca24c84acd78209e68aa3fe12aa21cfeb04d4df617dc52884ada24baba75e57",
+    "runtime/src/execution/scope.mjs": "f7aa6def4defd41fb41cd8eaa0fa0462bdf115344bab62ad68b040f5ffab2127",
+    "runtime/packages/cli/src/projects.mjs": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+    "runtime/packages/cli/src/options.mjs": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+    "runtime/packages/cli/src/session.mjs": "5ca14bd23aa9842ae10c151eb220d61bb96591191638da43cd63588e96e5a084",
+    "runtime/packages/cli/src/workspace.mjs": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+    "runtime/packages/cli/src/tools.mjs": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+    "runtime/packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+    "runtime/packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "runtime/packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+    "runtime/benchmark/harnesstax-agent.py": "f0ac397101dee598b2bd25ec73b4010c349a059a3df6cafe9e7b0612a64ece81",
+    "runtime/benchmark/harnesstax-process.mjs": "35c916c7f84753765048cc182d650272e892de31a084f654bd55ab0ff4b6b42b",
+    "runtime/benchmark/harnesstax-worker.mjs": "2ee52e0fc3f5e8e65933b0628b4205b5505f1dbe6a6492f4d8a9865ed3135df3",
+    "runtime/benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79"
+  },
+  "sourceHead": "f9de657d9a9774acc5295f1faa235cb567e7a409",
+  "jobs": [
+    {
+      "task": "queue-aborted",
+      "arm": "alone"
+    },
+    {
+      "task": "queue-aborted",
+      "arm": "review"
+    },
+    {
+      "task": "queue-aborted",
+      "arm": "pi"
+    },
+    {
+      "task": "queue-timeout",
+      "arm": "review"
+    },
+    {
+      "task": "queue-timeout",
+      "arm": "pi"
+    },
+    {
+      "task": "queue-timeout",
+      "arm": "alone"
+    },
+    {
+      "task": "ky-progress",
+      "arm": "pi"
+    },
+    {
+      "task": "ky-progress",
+      "arm": "alone"
+    },
+    {
+      "task": "ky-progress",
+      "arm": "review"
+    },
+    {
+      "task": "ky-signal",
+      "arm": "alone"
+    },
+    {
+      "task": "ky-signal",
+      "arm": "review"
+    },
+    {
+      "task": "ky-signal",
+      "arm": "pi"
+    },
+    {
+      "task": "pall-types",
+      "arm": "review"
+    },
+    {
+      "task": "pall-types",
+      "arm": "pi"
+    },
+    {
+      "task": "pall-types",
+      "arm": "alone"
+    },
+    {
+      "task": "emitter-value",
+      "arm": "pi"
+    },
+    {
+      "task": "emitter-value",
+      "arm": "alone"
+    },
+    {
+      "task": "emitter-value",
+      "arm": "review"
+    }
+  ],
+  "limits": {
+    "maxCostUsd": 1,
+    "maxTurns": 100,
+    "maxCalls": 240,
+    "concurrency": 2,
+    "admissionSpendStopUsd": 10,
+    "weeklyRemainingStopPercent": 40
+  },
+  "models": {
+    "alone": [
+      "gpt-6-luna",
+      "high"
+    ],
+    "reviewWorker": [
+      "gpt-6-luna",
+      "high"
+    ],
+    "reviewer": [
+      "gpt-6.1-sol",
+      "low"
+    ],
+    "pi": [
+      "gpt-6.1-sol",
+      "high"
+    ]
+  },
+  "grading": "Independently authored issue-contract checks, not Terminal-Bench official grading. Generated only from issue behavior and initial public source; no upstream fix patches used."
+}
