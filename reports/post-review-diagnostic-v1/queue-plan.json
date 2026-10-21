@@ -1,0 +1,230 @@
+{
+  "createdAt": 1792545786.606846,
+  "tasks": [
+    {
+      "id": "query-optimize",
+      "baseImage": "alexgshaw/query-optimize:20251031",
+      "historicalAcceptance": {
+        "pi": true,
+        "v2": false
+      },
+      "baseImageId": "sha256:28de7da87004eab5b29bd5eaf1823579bc5b73ccea4b80349a5623185770da14",
+      "instructionSha256": "d25a6de62832a1732c2d3aee10fb0308df1bef5f9aba5234f7a04ceb7442a91d",
+      "originalTaskSha256": "f596916d1fc10769e1cc82e2df0957952ff82736f935c742b15f4daee7258f19",
+      "timeoutSec": 1800,
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/check.py",
+            "query-optimize"
+          ],
+          "timeoutMs": 150000
+        }
+      ]
+    },
+    {
+      "id": "gcode-to-text",
+      "baseImage": "alexgshaw/gcode-to-text:20251031",
+      "historicalAcceptance": {
+        "pi": true,
+        "v2": false
+      },
+      "baseImageId": "sha256:0979ef40c6a3e8c4e7ab5b6c2524c74625a84799e15cd45dd98dcf83b11efd4d",
+      "instructionSha256": "ee524a8f846b35f1784a7c9fb01c17f077f6b3b61c8b61d0d2f2a87c0be3166b",
+      "originalTaskSha256": "e816483601f36d4fa37324203d2e4716f524dd50d516e4e787ea993a7d9b68f2",
+      "timeoutSec": 1800,
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/check.py",
+            "gcode-to-text"
+          ],
+          "timeoutMs": 150000
+        }
+      ]
+    },
+    {
+      "id": "path-tracing",
+      "baseImage": "alexgshaw/path-tracing:20251031",
+      "historicalAcceptance": {
+        "pi": true,
+        "v2": false
+      },
+      "baseImageId": "sha256:4b44725102cd627dfa895191a5a30d16dae3c5623bb43da6459f79135db6b482",
+      "instructionSha256": "9f36e02d636f5dc0946619bc518f2e51c24fa75251da9d1f0ca9eca612cb9572",
+      "originalTaskSha256": "016873f8804418c8bd20bbba314c0ebdc304ad0beb621df07bb0ad6e5d721fdf",
+      "timeoutSec": 1800,
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/check.py",
+            "path-tracing"
+          ],
+          "timeoutMs": 150000
+        }
+      ]
+    },
+    {
+      "id": "regex-log",
+      "baseImage": "alexgshaw/regex-log:20251031",
+      "historicalAcceptance": {
+        "pi": true,
+        "v2": true
+      },
+      "baseImageId": "sha256:90101b2e815323a8da20528a1439bebc407eb9761c9c68a3d557730856c878e9",
+      "instructionSha256": "4f7ac05e70cf9220ea0f1e5a052c5f908cd0fa884e847d80b0bd51bae2e96f9c",
+      "originalTaskSha256": "cbffabfe62b495480b06a8a34dfa3b11bd5a86ff20b0c82a1406491b6f50665c",
+      "timeoutSec": 1800,
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/check.py",
+            "regex-log"
+          ],
+          "timeoutMs": 150000
+        }
+      ]
+    },
+    {
+      "id": "configure-git-webserver",
+      "baseImage": "alexgshaw/configure-git-webserver:20251031",
+      "historicalAcceptance": {
+        "pi": false,
+        "v2": false
+      },
+      "baseImageId": "sha256:9e48389b917fd4650dda1f64406bd7198bbf20dc1c6b0e5c4d81a3c16369f88c",
+      "instructionSha256": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+      "originalTaskSha256": "ae983718634fb47c8280aa6aacd9b645e35f8e88a6d1deb8b8e676aec4ee87f3",
+      "timeoutSec": 1800,
+      "checks": [
+        {
+          "command": [
+            "python3",
+            "/public-checks/check.py",
+            "configure-git-webserver"
+          ],
+          "timeoutMs": 150000
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "task": "query-optimize",
+      "arm": "alone"
+    },
+    {
+      "task": "query-optimize",
+      "arm": "review"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "review"
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "alone"
+    },
+    {
+      "task": "path-tracing",
+      "arm": "alone"
+    },
+    {
+      "task": "path-tracing",
+      "arm": "review"
+    },
+    {
+      "task": "regex-log",
+      "arm": "review"
+    },
+    {
+      "task": "regex-log",
+      "arm": "alone"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "alone"
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "review"
+    }
+  ],
+  "runtimeFiles": {
+    "runtime/src/workflow-upstream.mjs": "dc25293fb4c40f729e434c9b5cc2623608d15512705c67e69e75dfe8834c82b2",
+    "runtime/src/real-agent.mjs": "d2b13e50669d2dac5d74d264f39b7b433305f4a55667033bdf2b997d603b50c4",
+    "runtime/src/workflow-agent.mjs": "86761784fdbf81faa9bf8f23abdad9e45a49795952fefb134f27621c8a1dedda",
+    "runtime/src/watchers.mjs": "ee87ee82cc3e35b6c613cca0515596c3d0b6f3ed263519918e564560b0f6560e",
+    "runtime/src/control-policy.mjs": "84466c50393564fa210fdeb4e7b20039075986b5437593d768389366d2f5a84a",
+    "runtime/src/real-policy.mjs": "7526792bdef3da96cbb0a2548ed465482ac91980b7ba775da4bdab9001f32930",
+    "runtime/src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "runtime/src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "runtime/src/context-policy.mjs": "31dafc8d669734bbe941ccdae0b8ce7ac7b3fa92ac480c58771a01782d1f9e33",
+    "runtime/src/workflow-policy.mjs": "6e002876797543b55e452b3278e57cda7b7df539d5188c323c6786cb753f9326",
+    "runtime/src/code-graph.mjs": "c72b060dc16d1afe1883cd5d6ce572e156eecdf8798aa6c2240a531fded2d1f8",
+    "runtime/src/budget.mjs": "1afe397dad9aa28b15343367bc27f0f459ec3f26e8a66fdabe86ae85a6642677",
+    "runtime/src/harness.mjs": "d2cb3e82bfbf331cb0fa23ed084b7b7229f5961b6b313fa47231da76855c9109",
+    "runtime/src/planned-reads.mjs": "71800dfd0ad9626bbd693f2c01bccd2168ca2fc3f664919b54855adbb50818f2",
+    "runtime/src/tool-observations.mjs": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7",
+    "runtime/src/symbol-navigation.mjs": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2",
+    "runtime/src/packets/entry.mjs": "b495048eaae3d99429f675793dd3aea2b193d3cb29b133551a131e4a292bf9a9",
+    "runtime/src/packets/executor.mjs": "77df26b7d4e68a3a4d141e5d21c4f8ac66eab630dee56f9f20075b895d606fa2",
+    "runtime/src/packets/policy.mjs": "b7088def061aaa2fbfcd4cccbea569b75cb01b15b06d7791172e955f1b4e4b42",
+    "runtime/src/pipeline/notices.mjs": "85ddc6f7c419399d1e652c6958ece41c5dcd20cfab67699f94104460d40078c1",
+    "runtime/src/pipeline/fleet.mjs": "f9fe94a7bd9b1e1b82df6a1868ea0dce745a47055a72efefa5b9b7cdebaf9774",
+    "runtime/src/pipeline/context.mjs": "de069d93dc5a9dba28d92dff4740a306377cb7a67d0b12148a38fad90d210b21",
+    "runtime/src/pipeline/session.mjs": "1e03ecd7782d5f0a2be548c857aa5c506d70eb113ad9d6a25dc8a58f5506ea1f",
+    "runtime/src/pipeline/tools.mjs": "65d7db4184e98bb508ddeb61de68faa0b723287b18a422bd2345cf035d9fe802",
+    "runtime/src/pipeline/knowledge.mjs": "4b1ca9919f560db0cf972f17796ca19371c4a8d9212c3880bffb186383fb8c52",
+    "runtime/src/pipeline/observations.mjs": "7875a20b6fd46c55598146df96dd2d3d2b0cf49a02550399e285a863fc048ec1",
+    "runtime/src/pipeline/preparation.mjs": "0e43f20e328cc49bd8732a2f8be05b1c1234a226adfbc81fdf7a01e2603b5d2a",
+    "runtime/src/pipeline/entry.mjs": "ee598f45b8da5382c71c7d5007c1f5cff3a04ea20d315517938f77109ec527b2",
+    "runtime/src/pipeline/executor.mjs": "a3ef1734167a9f36f5d8377b564eba2fd8e506219a71bb42883a505535f2bbbf",
+    "runtime/src/pipeline/policy.mjs": "a934a861211b85ffbd43ae47a31e21e2a1b9ec93ba13fcf3921322e1afd9c2ea",
+    "runtime/src/execution/post-review.mjs": "3d7db493c68c4c75629394cfb7438eba0ba776d2a866e1961a7e634add33dbe6",
+    "runtime/src/execution/orchestrated.mjs": "30afdf31a7db9454b85303a40dae3dffaaa1cc0bcf49efbcdef2bf4af371a711",
+    "runtime/src/execution/strategies.mjs": "eb9561c8f42832909eb17fe4aa9b8870b6ed24a4506619e6bec9477d4e745a9a",
+    "runtime/src/execution/core.mjs": "5672e27a87fc034e092de6b26f1004bbaf9358d93ccfec629d508c5553cf57e8",
+    "runtime/src/execution/verification.mjs": "cbca2c8900d6c9a9d4bbe508be0a3c2113b27a4865c4b9a11fb27b05b162f0c5",
+    "runtime/src/execution/entry.mjs": "b639ca9376ed9e051d2bbbd2fcff0a33154ce34c29eb12c28d82ce1fe6d1bbe9",
+    "runtime/src/execution/check-evidence.mjs": "4ca24c84acd78209e68aa3fe12aa21cfeb04d4df617dc52884ada24baba75e57",
+    "runtime/src/execution/scope.mjs": "f7aa6def4defd41fb41cd8eaa0fa0462bdf115344bab62ad68b040f5ffab2127",
+    "runtime/packages/cli/src/projects.mjs": "01b0694adca08f46329bce8a0b7e485004a433118ce977a9e963bed36c67ad9e",
+    "runtime/packages/cli/src/options.mjs": "fe7c53832071af8633355673f534a252ec8b533a0ced81ff2e86e0fbdf70fa61",
+    "runtime/packages/cli/src/session.mjs": "5ca14bd23aa9842ae10c151eb220d61bb96591191638da43cd63588e96e5a084",
+    "runtime/packages/cli/src/workspace.mjs": "8455a06fbc51210e072783989016d2d2868cbc32ccdd873a2c919f1e6b36d50e",
+    "runtime/packages/cli/src/tools.mjs": "fc82f400d885493537602c4fa487fb4b1115d6a478647d6c379b2c989aa8d658",
+    "runtime/packages/cli/src/navigation.mjs": "9bf718d49f3f5a238bc81750073d0105c65e423d8edf20a39c9d293b09ce485a",
+    "runtime/packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "runtime/packages/cli/src/interactive.mjs": "d98a509c087256b7fb1c7d9123c70cb4a9a1f832195ff681e9766a648bc9b54c",
+    "runtime/benchmark/harnesstax-agent.py": "f0ac397101dee598b2bd25ec73b4010c349a059a3df6cafe9e7b0612a64ece81",
+    "runtime/benchmark/harnesstax-process.mjs": "35c916c7f84753765048cc182d650272e892de31a084f654bd55ab0ff4b6b42b",
+    "runtime/benchmark/harnesstax-worker.mjs": "2ee52e0fc3f5e8e65933b0628b4205b5505f1dbe6a6492f4d8a9865ed3135df3",
+    "runtime/benchmark/harnesstax-native-worker.mjs": "08e2a8857c54c8335d76d612a65c43e42fce3d66a222849bae617c015dbbdd79"
+  },
+  "limits": {
+    "maxCostUsd": 1,
+    "maxResponses": 100,
+    "maxToolCalls": 240,
+    "agentTimeoutSec": 1800,
+    "concurrency": 2,
+    "admissionStopUsd": 10,
+    "weeklyRemainingFloor": 40
+  },
+  "historicalPi": "Reference only; different budgets/settings, not a new controlled Pi comparison",
+  "selection": "Outcome-stratified diagnostic on previously analyzed tasks, not held-out evidence",
+  "models": {
+    "worker": [
+      "gpt-6-luna",
+      "high"
+    ],
+    "reviewer": [
+      "gpt-6.1-sol",
+      "low"
+    ]
+  }
+}
