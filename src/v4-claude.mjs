@@ -28,6 +28,7 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     const resume = session?.model === model ? ['--resume', session.id] : [];
     const effortArgs = effort ? ['--effort', effort] : [];
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
+      '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
       '--system-prompt', V4_SYSTEM_PROMPT, '--max-budget-usd', remainingBudgetUsd.toFixed(4), ...effortArgs, ...resume];
     const out = await runProcess(bin, args, { cwd: workspace, timeoutMs });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
