@@ -1,0 +1,613 @@
+{
+  "asOf": 1792550216.9076984,
+  "complete": true,
+  "attempts": [
+    {
+      "task": "query-optimize",
+      "arm": "alone",
+      "trialName": "query-optimize-alone",
+      "accepted": false,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00213604,
+      "costUnknown": false,
+      "usage": {
+        "input": 9406,
+        "cacheRead": 15744,
+        "cacheWrite": 0,
+        "output": 2076,
+        "estimatedApiUsd": 0.00213604,
+        "modelCalls": 6,
+        "toolCalls": 10,
+        "costUnknown": false
+      },
+      "latencyMs": 237878,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 237765,
+          "replyCount": 6,
+          "providerRequests": 6,
+          "final": "Saved the optimized SQLite query to `/app/sol.sql`. It pre-aggregates senses by word and synset, then reuses those counts for the word statistics and top-synset result.\n\nChecks run: the query executed against `/app/oewn.sqlite` and returned 500 rows; the public self-check passed its SQLite syntax/plan check. The original query did not finish within the comparison run\u2019s timeout, so direct output equivalence was not established by that run.",
+          "error": null,
+          "usage": {
+            "input": 9406,
+            "cacheRead": 15744,
+            "cacheWrite": 0,
+            "output": 2076,
+            "estimatedApiUsd": 0.00213604,
+            "modelCalls": 6,
+            "toolCalls": 10
+          },
+          "eventPath": "/receipts/solve/state/events/1792548293570-56cea59f-7591-4efc-a7c9-c0cf3a9684d6.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "query-optimize",
+      "arm": "review",
+      "trialName": "query-optimize-review",
+      "accepted": false,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00474824,
+      "costUnknown": false,
+      "usage": {
+        "input": 14422,
+        "cacheRead": 15104,
+        "cacheWrite": 0,
+        "output": 2073,
+        "estimatedApiUsd": 0.00474824,
+        "modelCalls": 8,
+        "toolCalls": 12,
+        "costUnknown": false
+      },
+      "latencyMs": 245073,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "reviewed",
+        "decision": "approve",
+        "corrections": []
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 240161,
+          "replyCount": 7,
+          "providerRequests": 7,
+          "final": "Saved the optimized SQLite query to `/app/sol.sql`. It executed successfully against `/app/oewn.sqlite` and returned 500 rows. The public self-check passed its SQLite syntax/plan check; it does not establish equivalence or performance.",
+          "error": null,
+          "usage": {
+            "input": 13547,
+            "cacheRead": 15104,
+            "cacheWrite": 0,
+            "output": 2025,
+            "estimatedApiUsd": 0.00251824,
+            "modelCalls": 7,
+            "toolCalls": 12
+          },
+          "eventPath": "/receipts/solve/state/events/1792548293999-fb5e3462-e91b-41db-88b8-6231c425047f.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 4711,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"approve\",\"corrections\":[]}",
+          "error": null,
+          "usage": {
+            "input": 875,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 48,
+            "estimatedApiUsd": 0.0022299999999999998,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792548534267-d77eacae-ee4d-4597-86ca-df2afdac96f3.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "review",
+      "trialName": "gcode-to-text-review",
+      "accepted": false,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.01027994,
+      "costUnknown": false,
+      "usage": {
+        "input": 50866,
+        "cacheRead": 157824,
+        "cacheWrite": 0,
+        "output": 4726,
+        "estimatedApiUsd": 0.01027994,
+        "modelCalls": 22,
+        "toolCalls": 40,
+        "costUnknown": false
+      },
+      "latencyMs": 176147,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "reviewed",
+        "decision": "approve",
+        "corrections": []
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 172375,
+          "replyCount": 21,
+          "providerRequests": 21,
+          "final": "The text will show:\n\nS\n\nI wrote this to `/app/out.txt` and ran the public self-check.",
+          "error": null,
+          "usage": {
+            "input": 50447,
+            "cacheRead": 157824,
+            "cacheWrite": 0,
+            "output": 4678,
+            "estimatedApiUsd": 0.00896194,
+            "modelCalls": 21,
+            "toolCalls": 40
+          },
+          "eventPath": "/receipts/solve/state/events/1792549044290-8d19a702-7f31-4163-97df-bc2e38d4cc00.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 3638,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"approve\",\"corrections\":[]}",
+          "error": null,
+          "usage": {
+            "input": 419,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 48,
+            "estimatedApiUsd": 0.0013179999999999997,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792549216745-4a552dfc-2dc0-4cde-8f90-e584de8762bb.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "gcode-to-text",
+      "arm": "alone",
+      "trialName": "gcode-to-text-alone",
+      "accepted": false,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.006659179999999999,
+      "costUnknown": false,
+      "usage": {
+        "input": 25837,
+        "cacheRead": 133248,
+        "cacheWrite": 0,
+        "output": 5486,
+        "estimatedApiUsd": 0.006659179999999999,
+        "modelCalls": 19,
+        "toolCalls": 35,
+        "costUnknown": false
+      },
+      "latencyMs": 166902,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 166835,
+          "replyCount": 19,
+          "providerRequests": 19,
+          "final": "I wrote `Hello World!` to `/app/out.txt`. The public check confirmed the file is nonempty, but did not verify that the text interpretation is correct.",
+          "error": null,
+          "usage": {
+            "input": 25837,
+            "cacheRead": 133248,
+            "cacheWrite": 0,
+            "output": 5486,
+            "estimatedApiUsd": 0.006659179999999999,
+            "modelCalls": 19,
+            "toolCalls": 35
+          },
+          "eventPath": "/receipts/solve/state/events/1792549114959-bdbc9c6a-39ec-40a9-a504-6a78a2548986.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "path-tracing",
+      "arm": "alone",
+      "trialName": "path-tracing-alone",
+      "accepted": false,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.007358440000000001,
+      "costUnknown": false,
+      "usage": {
+        "input": 20590,
+        "cacheRead": 166144,
+        "cacheWrite": 0,
+        "output": 7276,
+        "estimatedApiUsd": 0.007358440000000001,
+        "modelCalls": 25,
+        "toolCalls": 48,
+        "costUnknown": false
+      },
+      "latencyMs": 245318,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 244966,
+          "replyCount": 25,
+          "providerRequests": 25,
+          "final": "Created `/app/image.c`. It generates `/app/reconstructed.ppm` without reading `image.ppm`.\n\nVerified that it compiles with the requested static GCC command, runs successfully, and passes the public `path-tracing` check. The compressed source is 874 bytes. **Image similarity has not been verified to meet the 0.99 target.**",
+          "error": null,
+          "usage": {
+            "input": 20590,
+            "cacheRead": 166144,
+            "cacheWrite": 0,
+            "output": 7276,
+            "estimatedApiUsd": 0.007358440000000001,
+            "modelCalls": 25,
+            "toolCalls": 48
+          },
+          "eventPath": "/receipts/solve/state/events/1792549266724-3709b195-43cb-4e05-9395-48531367f93a.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "path-tracing",
+      "arm": "review",
+      "trialName": "path-tracing-review",
+      "accepted": false,
+      "graded": true,
+      "status": "budget_stopped",
+      "exceptionType": null,
+      "knownCostUsd": 0.010818980000000002,
+      "costUnknown": false,
+      "usage": {
+        "input": 75532,
+        "cacheRead": 99328,
+        "cacheWrite": 0,
+        "output": 4545,
+        "estimatedApiUsd": 0.010818980000000002,
+        "modelCalls": 19,
+        "toolCalls": 36,
+        "costUnknown": false
+      },
+      "latencyMs": 176133,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "unavailable",
+        "decision": null,
+        "error": "Review input allowance exceeded"
+      },
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 175271,
+          "replyCount": 19,
+          "providerRequests": 19,
+          "final": "Created `/app/image.c`. It generates `reconstructed.ppm` without reading `image.ppm`.\n\nVerified that it compiles with the requested static GCC command, runs successfully, produces a nonempty output, and is under the 2 KB compressed source limit. The public self-check passed; it does not measure image similarity.",
+          "error": null,
+          "usage": {
+            "input": 75532,
+            "cacheRead": 99328,
+            "cacheWrite": 0,
+            "output": 4545,
+            "estimatedApiUsd": 0.010818980000000002,
+            "modelCalls": 19,
+            "toolCalls": 36
+          },
+          "eventPath": "/receipts/solve/state/events/1792549335718-f77bb434-d0c3-431b-b05b-270fe08cb005.jsonl"
+        }
+      ],
+      "policyValid": false
+    },
+    {
+      "task": "regex-log",
+      "arm": "review",
+      "trialName": "regex-log-review",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00542366,
+      "costUnknown": false,
+      "usage": {
+        "input": 12345,
+        "cacheRead": 19456,
+        "cacheWrite": 0,
+        "output": 2616,
+        "estimatedApiUsd": 0.00542366,
+        "modelCalls": 8,
+        "toolCalls": 11,
+        "costUnknown": false
+      },
+      "latencyMs": 76991,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "reviewed",
+        "decision": "approve",
+        "corrections": []
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 71094,
+          "replyCount": 7,
+          "providerRequests": 7,
+          "final": "Saved the regex to `/app/regex.txt`. It requires a valid IPv4 address on the line, matches only valid dates with the requested boundaries, and captures only the last valid date on that line.\n\nThe public self-check passed, and I also compiled the pattern and tested several edge cases.",
+          "error": null,
+          "usage": {
+            "input": 11371,
+            "cacheRead": 19456,
+            "cacheWrite": 0,
+            "output": 2528,
+            "estimatedApiUsd": 0.00259566,
+            "modelCalls": 7,
+            "toolCalls": 11
+          },
+          "eventPath": "/receipts/solve/state/events/1792549592406-01db7b98-2690-44c1-a8d4-6a6b7599b3a8.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 5779,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"approve\",\"corrections\":[]}",
+          "error": null,
+          "usage": {
+            "input": 974,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 88,
+            "estimatedApiUsd": 0.0028280000000000002,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792549663579-e7d52faa-7ea6-4de7-9f87-eb641af3e5aa.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "regex-log",
+      "arm": "alone",
+      "trialName": "regex-log-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00153484,
+      "costUnknown": false,
+      "usage": {
+        "input": 4238,
+        "cacheRead": 5504,
+        "cacheWrite": 0,
+        "output": 2112,
+        "estimatedApiUsd": 0.00153484,
+        "modelCalls": 3,
+        "toolCalls": 4,
+        "costUnknown": false
+      },
+      "latencyMs": 50303,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 50243,
+          "replyCount": 3,
+          "providerRequests": 3,
+          "final": "Saved the regex to `/app/regex.txt`. It captures the last valid date on each line that contains a valid IPv4 address, with alphanumeric boundary checks.\n\nThe public self-check passed. I also ran a small manual check covering multiple dates, invalid IPv4 addresses, and date-like text.",
+          "error": null,
+          "usage": {
+            "input": 4238,
+            "cacheRead": 5504,
+            "cacheWrite": 0,
+            "output": 2112,
+            "estimatedApiUsd": 0.00153484,
+            "modelCalls": 3,
+            "toolCalls": 4
+          },
+          "eventPath": "/receipts/solve/state/events/1792549629413-86269f17-3415-4bd7-8672-013951ac4044.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "alone",
+      "trialName": "configure-git-webserver-alone",
+      "accepted": false,
+      "graded": true,
+      "status": "verification_failed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00490944,
+      "costUnknown": false,
+      "usage": {
+        "input": 22536,
+        "cacheRead": 73984,
+        "cacheWrite": 0,
+        "output": 3832,
+        "estimatedApiUsd": 0.00490944,
+        "modelCalls": 15,
+        "toolCalls": 28,
+        "costUnknown": false
+      },
+      "latencyMs": 116618,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 116525,
+          "replyCount": 15,
+          "providerRequests": 15,
+          "final": "Configured `/git/server` as a bare Git repository. Pushes to `master` check out the site into `/var/www/html`, served over HTTP on port 8080. The repository and web root are writable by the `ubuntu` group; SSH login setup remains yours.\n\nVerified with `python3 /public-checks/check.py configure-git-webserver`; the push-to-HTTP check passed, and the pushed page returned `hello world` from `http://localhost:8080/suffice-public-probe.html`.",
+          "error": null,
+          "usage": {
+            "input": 22536,
+            "cacheRead": 73984,
+            "cacheWrite": 0,
+            "output": 3832,
+            "estimatedApiUsd": 0.00490944,
+            "modelCalls": 15,
+            "toolCalls": 28
+          },
+          "eventPath": "/receipts/solve/state/events/1792549739923-8e8c8a2d-c509-40f3-ae3c-58949cf51caf.jsonl"
+        }
+      ],
+      "policyValid": false
+    },
+    {
+      "task": "configure-git-webserver",
+      "arm": "review",
+      "trialName": "configure-git-webserver-review",
+      "accepted": false,
+      "graded": true,
+      "status": "cost_unknown",
+      "exceptionType": null,
+      "knownCostUsd": 0.00511328,
+      "costUnknown": true,
+      "usage": {
+        "input": 20530,
+        "cacheRead": 89728,
+        "cacheWrite": 0,
+        "output": 4326,
+        "estimatedApiUsd": 0.00511328,
+        "modelCalls": 18,
+        "toolCalls": 32,
+        "costUnknown": true
+      },
+      "latencyMs": 329926,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 329904,
+          "replyCount": 18,
+          "providerRequests": 17,
+          "final": "Configured `/git/server` as an empty bare Git repository. Its `post-receive` hook checks out pushes to `master` into `/var/www/git-site`, which is served on port 8080.\n\nThe public self-check passed, and I also verified that a commit pushed to `master` appeared at `http://localhost:8080/hello.html`. I reset the test data afterward, leaving the repository empty and ready for your clone. SSH login configuration remains for you to set up, as requested.",
+          "error": null,
+          "usage": {
+            "input": 20530,
+            "cacheRead": 89728,
+            "cacheWrite": 0,
+            "output": 4326,
+            "estimatedApiUsd": 0.00511328,
+            "modelCalls": 18,
+            "toolCalls": 32
+          },
+          "eventPath": "/receipts/solve/state/events/1792549773353-a66dd6a8-786b-4ac1-b9ec-13f200087b6b.jsonl"
+        }
+      ],
+      "policyValid": false
+    }
+  ],
+  "summary": [
+    {
+      "arm": "alone",
+      "finished": 5,
+      "accepted": 1,
+      "knownCostUsd": 0.02259794,
+      "unknownCosts": 0,
+      "knownCostPerAccepted": 0.02259794
+    },
+    {
+      "arm": "review",
+      "finished": 5,
+      "accepted": 1,
+      "knownCostUsd": 0.0363841,
+      "unknownCosts": 1,
+      "knownCostPerAccepted": 0.0363841
+    }
+  ]
+}
