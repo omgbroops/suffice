@@ -1,0 +1,1642 @@
+{
+  "scope": "Offline actor traces and public outcome metadata only; never runtime guidance",
+  "classificationMethod": "Non-exclusive mechanism labels; unresolved causes explicitly retained; final statements are actor claims, not verified facts",
+  "attempts": [
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "adaptive-rejection-sampler",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "provider_error",
+      "classifications": [
+        {
+          "category": "provider failures",
+          "confidence": "observed operational signal",
+          "basis": "Provider/usage interruption; exact transport cause may remain unresolved"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\adaptive-rejection-sampler-codex\\agent\\receipts\\worker.json",
+          "sha256": "63fe3a88908afe9f83c2d67c79e7e8af623a0020920da3068ea984ed8c5945fd"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\adaptive-rejection-sampler-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "3d1d8540eb41ba2f0019ca0fc173274a7710fa55605a12946ea29a9a1f6761a4"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "build-cython-ext",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "supported incompleteness, cause uncertain",
+          "basis": "Actor reports approximation, failed runtime, or remaining test failure; does not establish underlying cognitive cause"
+        }
+      ],
+      "actorFinal": "**Implemented and installed** pyknotid 0.5.3 from source in the system Python environment, built against NumPy 2.3.0.\n\n- Added `pyproject.toml` build requirements so source installs build the Cython extensions instead of producing a pure-Python wheel.\n- Replaced removed NumPy aliases (`np.float`, `np.int`, `np.bool`, and `np.complex`) with equivalent built-in types; updated the Cython complexity extension to use `np.int_`.\n- Replaced the removed `fractions.gcd` import with `math.gcd`, which is needed to run the requested example on this Python version.\n\n**Checks run:** Built and installed the package; the README example ran with NumPy 2.3.0 and imported `chelpers`, `ccomplexity`, and `cinvariants` from compiled extension modules. Direct calls to the Cython complexity functions also ran. `tests/test_knot.py` and `tests/test_spacecurve.py` produced 17 passes and one failure.\n\n**Remaining failure:** `test_reconstructed_space_curve` fails with `KeyError: 'pos'` in `representation.py` when using the installed `planarity` version. This is separate from the NumPy compatibility changes. `test_random_curves.py` and `test_catalogue.py` were not run.",
+      "recordedToolErrorCount": 17,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\build-cython-ext-v2\\agent\\receipts\\worker.json",
+          "sha256": "e864eab8156935d8a120a1e7ab24c2a2b1bcd75c65d3a516dfdd9ab6e9340b5a"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\build-cython-ext-v2\\agent\\receipts\\solve\\state\\events\\1792470718860-5c51254d-1fc8-42c9-aea9-e93f21324314.jsonl",
+          "sha256": "e577d7cc2e2eaa395a0893836d92e81379f737177e304f2afb45829fb6162792"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "configure-git-webserver",
+      "arm": "pi",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Configured and tested.\n\n- **Git repository:** `/git/server`, owned by `user`, with default branch `master`.\n- **Deployment hook:** `/git/server/hooks/post-receive` publishes pushes to `master` into `/var/www/server`.\n- **Web server:** nginx is running on port **8080**.\n- SSH login configuration is untouched.\n\nOn your computer, run (including `cd server` after cloning):\n\n```sh\ngit clone user@server:/git/server\ncd server\necho \"hello world\" > hello.html\ngit add hello.html\ngit commit -m \"add hello.html\"\ngit push origin master\n\ncurl http://server:8080/hello.html\n# hello world\n```\n\nVerified initial deployment, updates, and file deletions. Test history was removed, leaving the repository empty for your first commit.\n\nEnsure `server` resolves to this machine and TCP port 8080 is reachable.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-pi\\agent\\receipts\\worker.json",
+          "sha256": "b9f54133ca094b3e3294d8a830beab23614891dd34802558417508bd7f617897"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-pi\\agent\\receipts\\pi-events.jsonl",
+          "sha256": "c29d1346b8f818c166d2eefff36c30f80fbc68efd6b85700c6c15b07c0be4652"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "configure-git-webserver",
+      "arm": "v1",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Implemented in `/app`:\n\n- `setup.sh` creates `/git/server` as a bare repository and installs a hook that publishes `master` to `/git/www`.\n- `serve.sh` serves `/git/www` on port **8080**.\n- `README.md` documents setup and usage.\n- `test.sh` verifies clone, commit, push, HTTP delivery, updates, deletions, and branch isolation.\n\n**To activate on your server**, install Git, Python 3, and util-linux, then prepare the directories:\n```sh\nsudo mkdir -p /git/server /git/www\nsudo chown user /git/server /git/www\n```\n\nAs `user`, from this project directory:\n```sh\n./setup.sh\n./serve.sh\n```\n\nKeep `serve.sh` running and allow inbound TCP port 8080. Your client sequence will then work\u2014add `cd server` immediately after cloning.\n\n**Verification:** shell syntax checks and the end-to-end test passed, including on port 8080. I did not create `/git/server` or leave a server running here because writes are restricted to the workspace and temporary storage.",
+      "recordedToolErrorCount": 2,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-v1\\agent\\receipts\\worker.json",
+          "sha256": "00a23164f6fbd0a698862953c3745b5c4f2b92f0630bfb64f13ad895f36c040c"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-v1\\agent\\receipts\\solve\\state\\events\\1792474977595-8cf595a6-db7b-40f3-aa94-dc109dcd069f.jsonl",
+          "sha256": "229bcc7352ee20d31da99ca0779e3a36a4c020140baa78178ff1f113a05e12c1"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "configure-git-webserver",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Implemented a server setup script that creates the bare `/git/server` repository, deploys pushes to `master` into `/var/www/git-site`, and configures Nginx to serve that directory on port 8080. Added setup and publish instructions in `README.md`.\n\n**Checks:** `bash -n scripts/setup-server.sh` passed. `git diff --check` could not run because Git is not installed in this environment.",
+      "recordedToolErrorCount": 1,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-v2\\agent\\receipts\\worker.json",
+          "sha256": "05b9add7fac66e2143066d6205984b77b3d5a3a4e80952fe44ddfe8a65e9de4a"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-v2\\agent\\receipts\\solve\\state\\events\\1792475131796-ef9e80ad-5058-4939-84a1-01a751093704.jsonl",
+          "sha256": "90c906cd82835c9f4958cf11ca5c53d3eb5880f06b5ed82820fefcc658e4e05a"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "configure-git-webserver",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Configured `/git/server` for `user`. Pushes to `master` automatically publish to nginx on port **8080**. Verified that pushing `hello.html` returns `hello world`; test commits were then removed.\n\nAfter setting up SSH login, run:\n\n```sh\ngit clone user@server:/git/server\ncd server\necho \"hello world\" > hello.html\ngit add hello.html\ngit commit -m \"add hello.html\"\ngit push origin master\ncurl http://server:8080/hello.html\n```\n\nDetails are in [README.md](/app/README.md), including how to restart nginx after a container restart.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-codex\\agent\\receipts\\worker.json",
+          "sha256": "3d6cdacdee8ce69ec3d338f0454d3dd2e6dbe9a1700f7fac35c75edaeb3f6e40"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\configure-git-webserver-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "1e28322ff3c9d495374365f5274b64dbcecab2f87b2d1ac02d1ed415e341aaab"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "financial-document-processor",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "tool/scope issues",
+          "confidence": "actor admission",
+          "basis": "PDF extraction utility unavailable; six PDFs not inspected"
+        },
+        {
+          "category": "misunderstood requirements",
+          "confidence": "incomplete fulfillment admitted",
+          "basis": "Uninspected PDFs classified without content-based evidence"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "- Moved 8 image invoices to `/app/invoices/` and created `summary.csv` with the extracted totals and VAT amounts.\n- Moved the remaining 9 files to `/app/other/`.\n- Confirmed `/app/documents/` contains no files.\n- **Remaining limitation:** I couldn\u2019t extract or inspect the contents of the six PDFs (`pdftotext` was unavailable), so they were placed in `/app/other/` without content-based classification. The CSV totals cover the 8 image invoices only.",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\financial-document-processor-v2\\agent\\receipts\\worker.json",
+          "sha256": "97e4755b237170b571edd427e3ad2f4ca36e99308ce43f4d2f9ed12e2986233a"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\financial-document-processor-v2\\agent\\receipts\\solve\\state\\events\\1792476810280-1daa4c11-a223-4aed-ac37-31acafa18865.jsonl",
+          "sha256": "d381915d6b713bac0c20812700ad3a9e6fed523eb198e39ab01e368625982379"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "gcode-to-text",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Wrote the text to `/app/out.txt`: **Hackaday 2023 v2 - CHALLENGE!**",
+      "recordedToolErrorCount": 2,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\gcode-to-text-v2\\agent\\receipts\\worker.json",
+          "sha256": "3a9ea847e61ef50fb995c665f458143c14baac5c483aef6de9be546e45643c3a"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\gcode-to-text-v2\\agent\\receipts\\solve\\state\\events\\1792477397838-5d225bcf-4a84-447b-9355-1dc75d6706ed.jsonl",
+          "sha256": "48ee21b5973a45ed87075a27beaa5dbdf7944c8da3230dff3788963f9e294886"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "make-doom-for-mips",
+      "arm": "pi",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Built **`/app/doomgeneric_mips`**.\n\nRun it with:\n```sh\ncd /app\nnode vm.js\n```\n\nVerified a four-minute run using your **unchanged `vm.js`**:\n- Doom startup messages printed to stdout.\n- `/tmp/frame.bmp` was repeatedly updated with valid **640\u00d7400 BMPs**.\n- Doom progressed from the title screen into gameplay/demo rendering.\n\nYour `doomgeneric_img.c` is unchanged; it saves every tenth drawn frame, overwriting `/tmp/frame.bmp`. Stop with **Ctrl+C**.\n\nTo rebuild:\n```sh\ncd /app/doomgeneric/doomgeneric\nmake -f Makefile.mips -j8\n```\n\nBuild details are documented in `doomgeneric/doomgeneric/mips/README.md`.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\make-doom-for-mips-pi\\agent\\receipts\\worker.json",
+          "sha256": "9c53518261d0aa709469921f2c4d9d5f5873fd316083b50e0536210155b1944e"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\make-doom-for-mips-pi\\agent\\receipts\\pi-events.jsonl",
+          "sha256": "e0bba8ca44bcc915a337eac512a39da529975e1fe267c06d6e58e48b484317bb"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "make-doom-for-mips",
+      "arm": "v1",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": null,
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Actor deadline exceeded with missing terminal receipt; no reasoning cause established"
+        }
+      ],
+      "actorFinal": "",
+      "recordedToolErrorCount": 0,
+      "evidence": [],
+      "missingWorker": true
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "make-doom-for-mips",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "supported incompleteness, cause uncertain",
+          "basis": "Actor reports approximation, failed runtime, or remaining test failure; does not establish underlying cognitive cause"
+        }
+      ],
+      "actorFinal": "**Built** `/app/doomgeneric_mips` as a 32-bit little-endian MIPS ELF, using the image-output backend. Added a MIPS build target and the missing `my_stdlib.h` compatibility header. I also fixed the image backend\u2019s allocation-failure check and its `free()` pointer on the file-open error path.\n\n**Checks run:** `make -f Makefile.mips` completed successfully, and `readelf` confirmed the output is a MIPS executable.\n\n**Remaining failure:** `node vm.js` ran but terminated at `PC=0x0` after 59 instructions; no `/tmp/frame.bmp` was written. So the ELF builds, but the VM run does not yet reach frame drawing. The build also emits a linker warning about mixing ABICALLS and non-ABICALLS code.",
+      "recordedToolErrorCount": 9,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\make-doom-for-mips-v2\\agent\\receipts\\worker.json",
+          "sha256": "d3cbe81a8d0dbbc7c1a8659f69135d72652e309a42eb205d43935e10ae2c2479"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\make-doom-for-mips-v2\\agent\\receipts\\solve\\state\\events\\1792479001029-208aeb5a-2826-4feb-bc1e-080ac884a02b.jsonl",
+          "sha256": "059272fe3f24724d47bfcc74765fcd6ab31860403908752c4a90a6c04447e770"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "make-doom-for-mips",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Built [doomgeneric_mips](/app/doomgeneric_mips). Run:\n\n```sh\ncd /app\nnode vm.js\n```\n\nVerified startup output and repeated writes of a valid 640\u00d7400 `/tmp/frame.bmp`. Your backend saves every tenth draw. `vm.js` is unchanged.\n\nRebuild with `./build-mips.sh`.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\make-doom-for-mips-codex\\agent\\receipts\\worker.json",
+          "sha256": "a000d61f9e2b34e74ea627375a2a5b5280f3baba3407d84792c3777b9240d97d"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\make-doom-for-mips-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "8270e211a71ecb7bb6295bde1af4f09f1f0822e376a3146274b5ce562fa04d85"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "path-tracing",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "supported incompleteness, cause uncertain",
+          "basis": "Actor reports approximation, failed runtime, or remaining test failure; does not establish underlying cognitive cause"
+        }
+      ],
+      "actorFinal": "Implemented `image.c` to generate `reconstructed.ppm` with a programmatic sky, checkerboard ground, sphere, and shadow.\n\nChecks run: `gcc -static -o image image.c -lm && ./image` succeeded; `image.c` compresses to 672 bytes with gzip.\n\nRemaining failure: the reconstruction is not close enough to the requested 0.99 similarity. My measured normalized L2 similarity was approximately 0.65.",
+      "recordedToolErrorCount": 3,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\path-tracing-v2\\agent\\receipts\\worker.json",
+          "sha256": "c33bb2486cd7b4618ceeaf9e6fabee203b5ed24d14f0d06506f51d7e17f0492b"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\path-tracing-v2\\agent\\receipts\\solve\\state\\events\\1792503957208-b590808d-3bfa-4dde-bcae-11140fe9bd6f.jsonl",
+          "sha256": "cb6eb90ff7fb8752355a3accb707816cd4f6e2e36e390b60ea9c68e4330141a4"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "path-tracing-reverse",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "supported incompleteness, cause uncertain",
+          "basis": "Actor reports approximation, failed runtime, or remaining test failure; does not establish underlying cognitive cause"
+        }
+      ],
+      "actorFinal": "Created `/app/mystery.c` as a standalone C program that writes `image.ppm` and prints rendering progress without invoking `./mystery`.\n\nCheck run: `gcc -static -o reversed mystery.c -lm` succeeded; the compressed source is 504 bytes.\n\nThe generated image is an approximation; exact pixel-for-pixel equivalence with the original has not been verified.",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\path-tracing-reverse-v2\\agent\\receipts\\worker.json",
+          "sha256": "2137a0904875d9c2b2165d6948e5e8667fe0930e69b3b27f9e41c4eea1a1da6e"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\path-tracing-reverse-v2\\agent\\receipts\\solve\\state\\events\\1792504717977-f0a4bafe-c3af-4d59-8e08-856434ef5b4b.jsonl",
+          "sha256": "7d3bbfec7447af27f98e101f6bd03c36a7c9c5c8b9e518089572c3b1c3350120"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "query-optimize",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Saved the optimized SQLite query to `/app/sol.sql`. It aggregates senses once and uses a window function to select each word\u2019s most frequent synset.\n\n**Check run:** Compared its output with the original query on the database; both produced the same 500 rows.",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\query-optimize-v2\\agent\\receipts\\worker.json",
+          "sha256": "2a4b3b8b9ab3039d8345952a7bb0a3e1a4cbd02cef9e28958649901f9e3999d2"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\query-optimize-v2\\agent\\receipts\\solve\\state\\events\\1792506299114-14fd18c8-e043-4319-8431-2ef587be6a4d.jsonl",
+          "sha256": "c1fd50acb462bb14ca2361311137108bc99dfb4efdd70d1476b9db2d7a24be9e"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "query-optimize",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Saved the optimized query to [sol.sql](/app/sol.sql). Verified identical columns, values, and ordering for all 500 rows. Runtime is approximately 0.12 seconds.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\query-optimize-codex\\agent\\receipts\\worker.json",
+          "sha256": "2faf3d8a6e68a7eaa6bb39ca16bbacf02bf4a5994644321ec48484129b7d2139"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\query-optimize-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "304bef20640b4b6fac8908349fdfe8f2d6872f6d91af1a0d3188f36420c5704c"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "sam-cell-seg",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created [convert_masks.py](/app/convert_masks.py). Run it with:\n\n```bash\npython /app/convert_masks.py \\\n  --weights_path /path/to/mobile_sam.pt \\\n  --output_path /path/to/output \\\n  --rgb_path /path/to/image.png \\\n  --csv_path /path/to/metadata.csv\n```\n\nIt uses MobileSAM on CPU and saves `<input_csv_stem>_polylines.csv`, preserving unrelated metadata and updating `type` to `polyline` when present.\n\nValidated all 48 demo cells: connected, nonrectangular polygons with zero overlaps. Larger-image tile testing also passed.\n\n[Refined demo CSV](/app/demo_output/demo_metadata_polylines.csv)",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-codex\\agent\\receipts\\worker.json",
+          "sha256": "2d975756830929417713244dbb02da7c62f6a50ceedc55c2c34bfc01a2a9b884"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "c5dfede51d9b909d06aac71f0727d1460804267790ec0f62f70aac0e914a9f41"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "sam-cell-seg",
+      "arm": "pi",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created **`/app/convert_masks.py`**.\n\nThe script:\n- Uses **MobileSAM `vit_t`** on CPU without modifying its source.\n- Refines every annotation, including existing polylines.\n- Resolves overlaps and retains one contiguous mask per cell.\n- Writes closed, non-rectangular polygons with updated bounding boxes.\n- Preserves row order and unrelated columns; updates `type` to `polyline` when present.\n\nRun it with:\n\n```bash\npython /app/convert_masks.py \\\n  --weights_path /path/to/mobile_sam.pt \\\n  --output_path /path/to/results \\\n  --rgb_path /path/to/image.png \\\n  --csv_path /path/to/metadata.csv\n```\n\nOutput: **`/path/to/results/refined_masks.csv`**\n\nTested with the official MobileSAM weights on all **48 demo cells**. Independent validation confirmed no rasterized overlaps, one contiguous component per cell, and non-rectangular polygons. Large-image tiled inference and topology edge cases were also tested.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-pi\\agent\\receipts\\worker.json",
+          "sha256": "e9be6d6849a97f5c324a046698058184f06b952b0a769b3abc5cf4dafd17043b"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-pi\\agent\\receipts\\pi-events.jsonl",
+          "sha256": "c67bd0368502d9de80a5a4462e92c1879a8d49c442318dc5ab2a482335a7b00d"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "sam-cell-seg",
+      "arm": "v1",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Implemented `/app/convert_masks.py`.\n\nRun it with:\n```bash\npython /app/convert_masks.py \\\n  --weights_path /path/to/mobile_sam.pt \\\n  --output_path /path/to/output \\\n  --rgb_path /path/to/image.png \\\n  --csv_path /path/to/metadata.csv\n```\n\nThe script:\n- Uses **MobileSAM\u2019s distilled `vit_t` model on CPU**.\n- Refines every annotation, including existing polylines.\n- Produces closed, non-rectangular polylines with one connected region per cell and no shared pixels between masks.\n- Updates coordinates, bounding boxes, and the existing `type` column while preserving row order and other metadata.\n- Saves the result as **`<output_path>/refined_masks.csv`**.\n- Reports an error rather than silently dropping a cell or retaining a rectangle if valid conversion is impossible.\n\n**Verification:** Ran the complete conversion with the official MobileSAM checkpoint on the demo. All **48 masks** were refined and independently verified for connectivity, absence of overlap and holes, valid image bounds, and metadata preservation. Syntax, CLI, malformed-input, candidate-selection, and additional geometry checks also passed. MobileSAM source was not modified.",
+      "recordedToolErrorCount": 6,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-v1\\agent\\receipts\\worker.json",
+          "sha256": "c4fae3c7ffabafa9434547d9438b36be97e14704e7c9d605d2ab83fce8288e69"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-v1\\agent\\receipts\\solve\\state\\events\\1792511742353-e7aaa46e-368e-46a6-886c-a4caffd62c1c.jsonl",
+          "sha256": "04b1046ecf89a3384666ec049840327ea5136d9e5c56d580a95066086f7d3ce6"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "sam-cell-seg",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Implemented `/app/convert_masks.py`. It loads MobileSAM\u2019s `vit_t` model, refines each CSV mask using its bounding box and an interior positive point, keeps a single connected component per mask, resolves pixel overlaps by SAM confidence, and writes updated bounds and polyline coordinates while preserving other CSV columns. It uses CPU when CUDA is unavailable and accepts an output directory or CSV path.\n\nChecks: `python -m py_compile convert_masks.py` passed. `git diff --check` could not run successfully because `/app` is not a Git repository.",
+      "recordedToolErrorCount": 3,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-v2\\agent\\receipts\\worker.json",
+          "sha256": "f79296dbc1e33e43b4cccd3a88013520b49dc3c30e269e579dbef7bc853d85d2"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\sam-cell-seg-v2\\agent\\receipts\\solve\\state\\events\\1792512845801-ebc3ac3a-cd48-4141-8133-304420afa318.jsonl",
+          "sha256": "73d240f18ec51c62559b49f871c04d26efdcd4f564ba63a5746670111f7a5372"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "torch-tensor-parallelism",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "VerifierTimeoutError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        }
+      ],
+      "actorFinal": "Implemented `/app/parallel_linear.py` with column-parallel output sharding and gathering, and row-parallel input sharding and summation. Both layers clone their weight shards from `master_weight`; optional biases are initialized to zero.\n\nChecks: reviewed the file. Could not run Python compilation or tests because `python3` is unavailable in the environment. `git diff --check` could not run because `git` is unavailable.",
+      "recordedToolErrorCount": 3,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\torch-tensor-parallelism-v2\\agent\\receipts\\worker.json",
+          "sha256": "3f991bd265fe881191de7e05ae977d628451ac8ab43ce55cba26662064ababae"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\torch-tensor-parallelism-v2\\agent\\receipts\\solve\\state\\events\\1792513983763-8eb6e858-14c3-4ca5-9975-eb02d2808460.jsonl",
+          "sha256": "290f00934072caaee9c47fa9b6aa4d0c0a822a8f98fe403bd4eea5d2ec75c3da"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "torch-tensor-parallelism",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": false,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "VerifierTimeoutError; no private grading content inspected"
+        }
+      ],
+      "actorFinal": "Implemented both classes in [parallel_linear.py](/app/parallel_linear.py), with weight and bias sharding and autograd-aware gather/reduce operations.\n\nVerified outputs and weight, bias, and input gradients against standard PyTorch linear layers for world sizes 1, 2, and 4. All checks passed.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\torch-tensor-parallelism-codex\\agent\\receipts\\worker.json",
+          "sha256": "5762f607fe293464a3c790d76784dbfcb00272eaab9daaadec7e2674e36e3524"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\torch-tensor-parallelism-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "4ef5ca49371fb998e7409ce44aeb189134a63980b5e8f5056c38b65edad66164"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "torch-tensor-parallelism",
+      "arm": "v1",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/parallel_linear.py` with both requested classes.\n\n- **ColumnParallelLinear:** shards output features and bias, then gathers outputs along the last dimension.\n- **RowParallelLinear:** shards input features, sums partial outputs, then adds the full bias once.\n- Both use zero-initialized biases, preserve the master weight\u2019s dtype/device, and support autograd.\n\nUses PyTorch\u2019s `(out_features, in_features)` weight layout and an initialized default distributed process group.\n\n**Verification:** Passed syntax compilation and distributed CPU tests for world sizes **1, 2, and 4**, checking initialization, sharding, outputs, and weight/bias/input gradients against `torch.nn.Linear`.",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\torch-tensor-parallelism-v1\\agent\\receipts\\worker.json",
+          "sha256": "5d3b83c503dff7107d9050d663ed478b60c2e2f83af7adef2251f9bcf12a4448"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\torch-tensor-parallelism-v1\\agent\\receipts\\solve\\state\\events\\1792516473691-b6aa582e-178b-4e7b-a6de-218860d670b1.jsonl",
+          "sha256": "555761b176b8bc6f7d21c0e084a800fa8c4917d82f3dae586f5d310fc6c08a04"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "train-fasttext",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Trained and saved the fastText model to `/app/model.bin`. It is 149,191,164 bytes (about 149.2 MB) and achieved 0.6236 accuracy on the provided 10,000-example test set.\n\nCheck run: loaded the saved model and evaluated its predictions against the test labels.",
+      "recordedToolErrorCount": 10,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\train-fasttext-v2\\agent\\receipts\\worker.json",
+          "sha256": "0e4039a4f4636c001efb21f4ecef45251909323317a01deedbc20ecb0de95879"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\train-fasttext-v2\\agent\\receipts\\solve\\state\\events\\1792521217318-2766a059-6175-44fd-97c5-2c27ec803414.jsonl",
+          "sha256": "450a1fe772b193970c84705433fe8fed0082375b4e6a737d0e9563270be352a3"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "video-processing",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "cost_unknown",
+      "classifications": [
+        {
+          "category": "provider failures",
+          "confidence": "observed operational signal",
+          "basis": "Provider/usage interruption; exact transport cause may remain unresolved"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\video-processing-v2\\agent\\receipts\\worker.json",
+          "sha256": "35a3c00e9401d1e629f96b8a62082fbf4161b2a6425f43bd069fee75824999ea"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\video-processing-v2\\agent\\receipts\\solve\\state\\events\\1792524917596-42378b46-fbf8-4a56-b6c7-623e04214478.jsonl",
+          "sha256": "a5c9aa023b2595ebddfb4d412f8bd513281cd441e2b914191b2fdb73a8ee094a"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "video-processing",
+      "arm": "codex",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": null,
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created [jump_analyzer.py](/app/jump_analyzer.py).\n\nRun:\n```bash\npython /app/jump_analyzer.py /path/to/video.mp4\n```\n\nIt writes [output.toml](/app/output.toml) with exactly the required fields. The example produces takeoff **53** and landing **62**, using zero-based frame numbers.\n\nVerified delayed and slowed clips, plus rejection of an empty track video.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\video-processing-codex\\agent\\receipts\\worker.json",
+          "sha256": "edd0752370b38d9da90b646af747de9546f20e94bc3f97272e900f6970b1a52e"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\video-processing-codex\\agent\\receipts\\native-events.jsonl",
+          "sha256": "63bf79398fc8885bb3fe55ee91fecfbde9879d19f01d137a1204cbbaa64ab38c"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "nginx-request-logging",
+      "arm": "v1",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "tool/scope issues",
+          "confidence": "supported by actor admission",
+          "basis": "Repository restriction left requested system installation/state pending"
+        },
+        {
+          "category": "misunderstood requirements",
+          "confidence": "supported by actor admission",
+          "basis": "Delivered instructions or temporary state instead of completing requested installed state"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Added:\n- **`setup.sh`** \u2014 installs and configures Nginx with all requested settings, checks syntax before restart, and verifies localhost:8080.\n- **`test_setup.py`** \u2014 integration tests using real Nginx.\n- **`README.md`** \u2014 setup and debugging instructions.\n\n**Verification passed:** configuration syntax, repeat runs, index content, custom HTTP 404 page, detailed request logs, rate limiting, and prevention of restart after a syntax error.\n\nA sandbox Nginx instance is currently accessible at **http://localhost:8080**. Its access log is:\n```text\n/tmp/benchmark-nginx-mv7v5i14/var/log/nginx/benchmark-access.log\n```\n\n**System installation remains pending:** repository restrictions prevented modifying `/etc` and `/var`. To stop the sandbox and install using the requested system paths, run:\n```sh\n/tmp/benchmark-nginx-mv7v5i14/bin/nginx -s quit\nsudo sh /app/setup.sh\n```\n\nThe system access log will then be **`/var/log/nginx/benchmark-access.log`**.",
+      "recordedToolErrorCount": 2,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\replacements\\receipt-permissions-r1\\trials\\nginx-request-logging-v1\\agent\\receipts\\worker.json",
+          "sha256": "4c94da3bbd3c1eadca074efd129c2ccf4e3b3daebb50013418253b10c92ca83c"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\replacements\\receipt-permissions-r1\\trials\\nginx-request-logging-v1\\agent\\receipts\\solve\\state\\events\\1792507985680-05a22cfd-cf68-4b22-8148-13852059534b.jsonl",
+          "sha256": "e05d1bf0bd58102131450fbb5fc9ac1fbe2dece6022d30bc9f7c579a8f4d8ede"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "merge-diff-arc-agi-task",
+      "arm": "v1",
+      "excludedOriginal": true,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "PermissionError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        }
+      ],
+      "actorFinal": "Completed in `/app/repo`.\n\n- Created `branch1` and `branch2` by fetching `HEAD` from their respective bundles.\n- Merged `branch2` into `branch1` and resolved the conflict.\n- Implemented `algo.py` with the required `map` function, filling the repeating three-color diagonal pattern.\n- Verified exact outputs for all **3 examples** in `/app/examples.json`.\n- Passed **90 additional synthetic cases**, plus empty and all-zero input checks.\n- Confirmed a clean working tree.\n\nMerge commit: `3581bdf` on `branch1`.",
+      "recordedToolErrorCount": 6,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\merge-diff-arc-agi-task-v1\\agent\\receipts\\worker.json",
+          "sha256": "27c8611d07e73187172ccc489bdbf8f1f85691cd2483fdb1552a25c96628872b"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\merge-diff-arc-agi-task-v1\\agent\\receipts\\solve\\state\\events\\1792502488298-357ee2e2-34fb-455a-9664-b83bd327d8b3.jsonl",
+          "sha256": "6fbcc659fe5cea69f12a0373dc338820de2d3e2692f1987a6e8c2bf612bcec32"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "merge-diff-arc-agi-task",
+      "arm": "v2",
+      "excludedOriginal": true,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "PermissionError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        }
+      ],
+      "actorFinal": "- Initialized `/app/repo`, fetched each bundle\u2019s `HEAD` into `branch1` and `branch2`, and merged `branch2` into `branch1`.\n- Resolved the `algo.py` conflict with a plain-Python `map` implementation that fills the three diagonal bands from the nonzero input colors.\n- Verified all 3 examples in `/app/examples.json` pass. The merge is committed on `branch1`, and the working tree is clean.",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\merge-diff-arc-agi-task-v2\\agent\\receipts\\worker.json",
+          "sha256": "18017b06e22a07d88d356e1e690a804c52cca62d18174b4239c15d940900ab88"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\merge-diff-arc-agi-task-v2\\agent\\receipts\\solve\\state\\events\\1792502598748-3c4612da-1c5e-4a96-870d-80c617ec8267.jsonl",
+          "sha256": "3158eec284f5cd63ea1b89ea6c255bf9b843b9eccd6edc0f6c185cf44d152f65"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "multi-source-data-merger",
+      "arm": "v2",
+      "excludedOriginal": true,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "PermissionError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        }
+      ],
+      "actorFinal": "Created `/app/merged_users.parquet` with four unique users and `/app/conflicts.json` with three field conflicts. Source priority was applied, dates were normalized to `YYYY-MM-DD`, and boolean activity fields were mapped to string statuses.\n\nValidated that the Parquet file has the expected columns and integer `user_id` values, and that the conflict count matches the report.\n\nNo remaining failures.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\multi-source-data-merger-v2\\agent\\receipts\\worker.json",
+          "sha256": "3848b89e9d7f8a61c80c307e0c93df4e590be214d8b128439d31b7f5fcde875e"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\multi-source-data-merger-v2\\agent\\receipts\\solve\\state\\events\\1792503045043-4a3e350f-cd9b-4b03-b61a-e1e6a65fe0c3.jsonl",
+          "sha256": "0817be74cc41b73e7f8ad9590baca54e8611da155ef615a4ddfb414850fc0025"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "multi-source-data-merger",
+      "arm": "v1",
+      "excludedOriginal": true,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "PermissionError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        }
+      ],
+      "actorFinal": "Implemented and generated both output files:\n\n- `/app/merged_users.parquet` \u2014 **4 unique users**, with integer IDs, normalized column names, and dates in `YYYY-MM-DD` format.\n- `/app/conflicts.json` \u2014 **3 field-level conflicts** for user `101`: name, email, and created date. All were resolved using `source_a`.\n\nAlso added:\n- `/app/merge_users.py` \u2014 reusable merge script.\n- `/app/test_merge_users.py` \u2014 automated tests.\n- `/app/requirements.txt` \u2014 dependency declaration.\n\n**Verification:** All 5 tests passed. Generated outputs also passed checks for schema, unique users, date formatting, source priority, and conflict count.\n\nTo regenerate:\n```bash\npython /app/merge_users.py\n```",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\multi-source-data-merger-v1\\agent\\receipts\\worker.json",
+          "sha256": "63aa496a438c9800e1f2d567b183e449410de77a4ba3a4bc9d47606438567df8"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\multi-source-data-merger-v1\\agent\\receipts\\solve\\state\\events\\1792503225178-4198e951-0bd6-4697-87a0-1b54ea70ee67.jsonl",
+          "sha256": "8fb6259973ce7130547bb61fc9a793a0ed3f967a4c26eb8b0ea6a29165f60a34"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "nginx-request-logging",
+      "arm": "v1",
+      "excludedOriginal": true,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "PermissionError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        },
+        {
+          "category": "tool/scope issues",
+          "confidence": "supported by actor admission",
+          "basis": "Repository restriction left requested system installation/state pending"
+        },
+        {
+          "category": "misunderstood requirements",
+          "confidence": "supported by actor admission",
+          "basis": "Delivered instructions or temporary state instead of completing requested installed state"
+        }
+      ],
+      "actorFinal": "Implemented **`setup-nginx.sh`**. Run on Debian/Ubuntu with:\n\n```bash\nsudo ./setup-nginx.sh\n```\n\nIt installs Nginx if needed and configures:\n- Port **8080**, document root, index, and custom 404 page.\n- Detailed access logging with quoted user agents and the requested error log.\n- Per-IP rate limiting at **10 requests/second**, burst **10**, using a **10 MB** zone.\n- Default-site removal, syntax validation, startup/reload, and an HTTP check.\n\nAccess logs: `/var/log/nginx/benchmark-access.log`\n\n**Verification passed:** Bash syntax check and isolated integration tests using real Nginx, covering HTTP responses, logs, rate limiting, repeat runs, and invalid-configuration handling.\n\n**Not deployed on this host:** workspace restrictions prohibit modifying `/etc` and `/var`. Running the script performs deployment and verifies `http://localhost:8080/`. Usage and test instructions are in `README.md`.",
+      "recordedToolErrorCount": 2,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\nginx-request-logging-v1\\agent\\receipts\\worker.json",
+          "sha256": "d14811126c7837e79af47bd728f3791ec4c05231fa35477b87fb5efc0c72c1b7"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\nginx-request-logging-v1\\agent\\receipts\\solve\\state\\events\\1792503428871-feed549a-586a-4f14-8153-fb9511e7155f.jsonl",
+          "sha256": "6817fe8e3012b36194f545a82286154dabf8dd5a8285070436e75c849ef80d4f"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "harnesstax-sol61-v1",
+      "task": "nginx-request-logging",
+      "arm": "v2",
+      "excludedOriginal": true,
+      "officialGraded": false,
+      "publicVerification": "not_configured",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "PermissionError; no private grading content inspected"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "No controller verification configured; worker checks, if any, are only self-reported here"
+        }
+      ],
+      "actorFinal": "Configured and started Nginx on port 8080. It serves `/var/www/html`, uses the requested custom access and error logs, applies the 10 MB per-IP rate-limit zone at 10 requests/second with a burst of 10, and serves the custom 404 page. Removed `/etc/nginx/sites-enabled/default`.\n\nCreated the requested `index.html` and `404.html`. Access logs are at **`/var/log/nginx/benchmark-access.log`**.\n\nChecks run: `nginx -t` passed; localhost returned the expected index content, and a missing URL returned HTTP 404 with the requested page content. Requests appeared in the access log with timestamp, method, status, and quoted user agent. No remaining failures reported.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\nginx-request-logging-v2\\agent\\receipts\\worker.json",
+          "sha256": "cbb8ad1858fded3d0852877f8d1e0a02af291c0e51233f8958129f9c135bb59e"
+        },
+        {
+          "path": "suffice-harnesstax-sol61\\trials\\nginx-request-logging-v2\\agent\\receipts\\solve\\state\\events\\1792503431265-dd54d696-bfee-44c5-9695-7ade4608fb9c.jsonl",
+          "sha256": "435f0abc39ce18c4377ec6febd2f90c4c89681971bc47ea566fb1480b3979541"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "refinement-pilot-v1",
+      "task": "polyglot-c-py",
+      "arm": "v2",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "failed",
+      "status": "verification_failed",
+      "classifications": [
+        {
+          "category": "tool/scope issues",
+          "confidence": "observed public evidence",
+          "basis": "Missing system python3 in fixed invocation; command-local PATH differs from controller environment"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Unavailable prerequisite funded repair; 38-case public artifact replay passes without changing official outcome"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Updated `/app/polyglot/main.py.c` as a single-file Python/C polyglot.\n\n- Both modes print exact Fibonacci numbers using arbitrary-precision arithmetic.\n- Removed Python\u2019s decimal-output digit limit so large results print successfully.\n- Adjusted the polyglot delimiters to compile without warnings.\n\nVerification:\n- Public smoke check passed.\n- Both modes matched independently computed results for indices `0, 1, 2, 12, 50, 93, 100, 1000, 10000, 21000`.\n- Compiled successfully with `gcc -Wall -Wextra`.\n\nEnvironment note: `python3` is not on this container\u2019s default `PATH`, so Python checks used `/public-python/bin/python3`; the public check ran with that directory added to `PATH`. No system installation was changed.",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v2\\agent\\receipts\\worker.json",
+          "sha256": "c236607681e868f83f1b40657da9e7680d442f6e3ac98b60c476b28f0bf674a8"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v2\\agent\\receipts\\repair-1\\state\\events\\1792529437477-27658305-1bce-4f38-9127-0abfb6a8fb26.jsonl",
+          "sha256": "2b90140b925e19de8be2cc81a606d478c818e96b2d77305bd466be27df03aea1"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v2\\agent\\receipts\\solve\\state\\events\\1792529303695-c7b0e3b1-997a-4af0-8166-42f48d3c5411.jsonl",
+          "sha256": "ab6bb8bd8527f9dc8bb6960976f985e18e55c6110929e28238d9cfa30f46da4f"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v2\\agent\\receipts\\advice-upfront\\state\\events\\1792529296056-d8c7285e-f75f-4ae8-9255-578a635ff48d.jsonl",
+          "sha256": "7b1a461c93a9aadc18c24158e2ef2b3ee8c106d248ed81aab9536811129cd825"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v2\\agent\\receipts\\sol-takeover\\state\\events\\1792529496844-6de8ed2f-1538-49ac-aa98-42274d071ba2.jsonl",
+          "sha256": "d18c8c080b6cbbb8ca0651de0cc5ac0e533da380cf19913ff41639afc0d256ee"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "refinement-pilot-v1",
+      "task": "polyglot-c-py",
+      "arm": "v3",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "failed",
+      "status": "verification_failed",
+      "classifications": [
+        {
+          "category": "tool/scope issues",
+          "confidence": "observed public evidence",
+          "basis": "Missing system python3 in fixed invocation; command-local PATH differs from controller environment"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Unavailable prerequisite funded repair; 38-case public artifact replay passes without changing official outcome"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/polyglot/main.py.c`.\n\nRun it either way:\n\n```sh\npython3 /app/polyglot/main.py.c 10\n```\n\n```sh\ngcc /app/polyglot/main.py.c -o /app/polyglot/cmain\n/app/polyglot/cmain 10\n```\n\nBoth print `55`. Both implementations use arbitrary-precision arithmetic, avoiding fixed-width Fibonacci overflow.\n\nValidation: GCC compilation succeeded, and Python/C outputs matched for N = 0, 1, 2, 10, 100, and 1000. GCC emits warnings about the polyglot delimiters but successfully builds the program.\n\nThe public self-check could not complete because its subprocess could not find `python3` on this environment\u2019s PATH. It therefore remains unverified.",
+      "recordedToolErrorCount": 8,
+      "evidence": [
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v3\\agent\\receipts\\worker.json",
+          "sha256": "17196a92b3f73044f54d9d82cbd356086579e78d45f7e88e171824a7f76bc4c9"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v3\\agent\\receipts\\coordinate\\state\\events\\1792529367995-051bb6a3-18fb-430b-a6bd-ad3527f30e17.jsonl",
+          "sha256": "86ddcccf3e40d7798f08721a82d226ffbe4789f42f810d0bb8e6b4856baf5f91"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v3\\agent\\receipts\\delegate-2-investigate\\state\\events\\1792529562484-d0f0568b-2dba-4af6-84f4-56c5ac859a28.jsonl",
+          "sha256": "0d76d7926b167651711db2f0348a629dc1133109e018f6ff456987108d041c64"
+        },
+        {
+          "path": "suffice-refinement-pilot\\trials\\polyglot-c-py-v3\\agent\\receipts\\delegate-1-implement\\state\\events\\1792529380046-e84450f2-1a4b-456c-94c3-1210af426e88.jsonl",
+          "sha256": "b7d2cf7c46f81a3bb80c133e9056493a8ddb89b356851a101911c2c6b0de02f8"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "kv-store-grpc",
+      "arm": "v2-selective",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Installed `grpcio==1.73.0` and `grpcio-tools==1.73.0` system-wide. Created `/app/kv-store.proto`, generated `/app/kv_store_pb2.py` and `/app/kv_store_pb2_grpc.py`, and implemented the `Server` service in `/app/server.py` on port 5328. The server is running in the background.\n\nVerified with `python3 /public-checks/calibration-public-check.py kv-store-grpc` \u2014 passed.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\kv-store-grpc-v2-selective\\agent\\receipts\\worker.json",
+          "sha256": "7a868f1a69ddde2c126cb69af7f660e5369fc553ebecd19c2a6ef49f06327a56"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\kv-store-grpc-v2-selective\\agent\\receipts\\solve\\state\\events\\1792532774108-587a0130-fedb-4052-96af-2e328d76ca99.jsonl",
+          "sha256": "4de46f1f15936b534ba8f8a7eb7ea4b8d7724835ea9feb2653772b6e5c9d0150"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v1-concise",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`.\n\nUsage:\n```bash\npython3 /app/filter.py /path/to/file.html\n```\n\nIt edits the file in place, deleting unsafe source ranges without reformatting retained HTML. It uses `html5lib 1.1`, installed in the environment.\n\nVerified:\n- Public self-check passed.\n- Targeted security, formatting, and encoding tests passed.\n- 2,000 seeded malformed-HTML cases passed script, event-handler, unsafe-URL, and idempotence checks.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v1-concise\\agent\\receipts\\worker.json",
+          "sha256": "0a45e384476bac0cffc0e00dd8cdd67daff420a200e11db908cacc204e44e3e5"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v1-concise\\agent\\receipts\\solve\\state\\events\\1792532946010-b098b372-c7dc-4dc0-be74-7ed48a3e0d70.jsonl",
+          "sha256": "df86106f3b6307905190d4a0abc3be8d44a96a7c0be3fe16cdeec49bba1b8059"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v2-alone",
+      "excludedOriginal": false,
+      "officialGraded": false,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "VerifierTimeoutError; no private grading content inspected"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`. It edits the file in place, removes script elements, standard event-handler attributes, `srcdoc`, JavaScript URLs, and several executable CSS patterns while avoiding HTML reserialization.\n\nVerified with `py_compile`, the public self-check, and additional cases for entity-obfuscated JavaScript URLs, SVG attributes, and scripts inside comments.",
+      "recordedToolErrorCount": 5,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-alone\\agent\\receipts\\worker.json",
+          "sha256": "cf1dd86d2077c92afbd63eb21a5ae1d86026ada7f7ea202635a97847468596e6"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-alone\\agent\\receipts\\solve\\state\\events\\1792533485983-e2bab64c-7041-449d-98ea-8bdc7e01238d.jsonl",
+          "sha256": "0cad4dc47e8e9d7932b117e04faef10d594dff7bfd4a3c3884033d6a584061dc"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v2-upfront",
+      "excludedOriginal": false,
+      "officialGraded": false,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "VerifierTimeoutError; no private grading content inspected"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`. It accepts the HTML file path as `argv[1]`, removes script blocks and potentially executable attributes or URLs in place, and preserves untouched content without reserializing the HTML.\n\nVerified with `py_compile` and the public self-check; both passed. Also tested obfuscated JavaScript URLs, event handlers, `srcdoc`, `srcset`, and meta refresh content.",
+      "recordedToolErrorCount": 3,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-upfront\\agent\\receipts\\worker.json",
+          "sha256": "fd2599b36c4d2ddc5ae5710c72b082e38c5c0df4665e2ea2319388558d0bcbee"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-upfront\\agent\\receipts\\solve\\state\\events\\1792534762374-6214ba07-0e3b-4ce8-b073-040edb47518e.jsonl",
+          "sha256": "375bda11fb7e0c58cce67c544567acebb08c51683e6277ca098ae89aea192450"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-upfront\\agent\\receipts\\advice-upfront\\state\\events\\1792534755854-41d94b92-62a0-4e39-a646-2f6118a0062b.jsonl",
+          "sha256": "ee2769bed8a9402d6295f4486d4c4a6f93707509906dfa67963a60317a8a79d4"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v2-selective",
+      "excludedOriginal": false,
+      "officialGraded": false,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "grading problems",
+          "confidence": "observed",
+          "basis": "VerifierTimeoutError; no private grading content inspected"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`. It removes `<script>` blocks, event-handler and other dangerous attributes, JavaScript URLs, and `srcdoc` while preserving the remaining HTML without reformatting it.\n\nVerified with the public self-check and additional sanitizer checks; all passed.",
+      "recordedToolErrorCount": 5,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-selective\\agent\\receipts\\worker.json",
+          "sha256": "7abdf3ca4915a68335770841fd2397253a678cce58b143c22777cde62f15d55e"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-selective\\agent\\receipts\\solve\\state\\events\\1792534755951-0aa3d9e6-f990-46cf-bf74-f9067d114331.jsonl",
+          "sha256": "6b49f0521375fd554a3d8fc6fe0e0776312b332fdefeedae716c7df176fde9e3"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v2-concise",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`. It modifies the specified HTML file in place, removing `<script>` elements, event-handler and dangerous URL attributes, `srcdoc`, and selected executable CSS while preserving the remaining source formatting.\n\nVerified with `python3 -m py_compile /app/filter.py`, a manual sanitization check, and the public self-check (passed).",
+      "recordedToolErrorCount": 4,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-concise\\agent\\receipts\\worker.json",
+          "sha256": "97936da2cd939a775cad0174d14e10c9308e355469ae19ffe11200fc4abdd6f4"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v2-concise\\agent\\receipts\\solve\\state\\events\\1792535815598-3159989b-1fd2-43be-92c3-2c76ecf8750a.jsonl",
+          "sha256": "c59c38d66bb9f41ad8387ab5fb19901f530e7122e8de346d3cd43c5a791a7d0b"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "pi",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`.\n\nRun it with:\n```bash\npython3 /app/filter.py input.html\n```\n\nIt edits the file in place, removing scripts, event handlers, unsafe URLs, and dangerous CSS while preserving untouched HTML bytes rather than reformatting the document.\n\nThe public self-check passed, along with additional preservation, encoding, and XSS-vector tests.",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-pi\\agent\\receipts\\worker.json",
+          "sha256": "c34e180eaee18edc276512bcd40f0b38afb1dd6c6c9dcb3f58a59b5275e25b1c"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-pi\\agent\\receipts\\pi-events.jsonl",
+          "sha256": "7d4f18ad32cd58a6342d2a7107abab362f09f42b87af711644a0a63a68cd0b72"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v1-original",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`.\n\nRun it with:\n```bash\npython3 /app/filter.py path/to/file.html\n```\n\nIt modifies the file in-place using source-range deletions rather than reformatting HTML. It removes script blocks, event handlers, executable URLs, dangerous CSS, and unsafe embedded content while preserving untouched bytes, whitespace, entities, and line endings.\n\nVerification passed:\n- Public self-check\n- All 7 regression test methods\n- Additional headless Chromium checks covering 15 tricky parsing cases",
+      "recordedToolErrorCount": 3,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v1-original\\agent\\receipts\\worker.json",
+          "sha256": "6052385e644f82ac8986556e6e44930cc6da6efc3d4d1251bfc5d064dfea9180"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v1-original\\agent\\receipts\\solve\\state\\events\\1792536420100-2f5e6cd3-de9c-4e65-99f3-b360e7ce51a4.jsonl",
+          "sha256": "0b2daf738da7e5872c95588f96c0d1b8c7349724fedbf7beed05a23a077dd90a"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "db-wal-recovery",
+      "arm": "v2-upfront",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/recovered.json` with 11 records sorted by `id`, and updated `/app/main.db` so it contains the same records. The public self-check passed.",
+      "recordedToolErrorCount": 3,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\db-wal-recovery-v2-upfront\\agent\\receipts\\worker.json",
+          "sha256": "978dac887f4887ca847e239c14efd32b00397a354c7e5236ecf1a0be2cabbc54"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\db-wal-recovery-v2-upfront\\agent\\receipts\\solve\\state\\events\\1792536707605-0fa9e19c-2df1-45c0-9658-c468b5576745.jsonl",
+          "sha256": "642469de026bd4d9f363c7a18363051306632f414f8b0e55d7e204a8d8b2c5b7"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\db-wal-recovery-v2-upfront\\agent\\receipts\\advice-upfront\\state\\events\\1792536702414-81107d8f-b0e0-48c4-aee6-12a0a6febf62.jsonl",
+          "sha256": "6c9b85ee36ab99b5963a52eca9bd943f4778e4320210dd432acc3b2f7d51e0fd"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "db-wal-recovery",
+      "arm": "v2-concise",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "actor admission",
+          "basis": "WAL lost after SQLite access; missing rows filled by inference rather than recovered evidence"
+        },
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Visible check accepted inferred data despite admitted incomplete recovery"
+        }
+      ],
+      "actorFinal": "`/app/recovered.json` contains 11 sorted rows, and the public self-check passes. However, I can\u2019t verify that rows 6\u201311 match the original data: the WAL disappeared after my initial SQLite access, which showed only the five base rows. I filled in the remaining rows by inference, so the original WAL recovery and exact data recovery remain incomplete.",
+      "recordedToolErrorCount": 1,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\db-wal-recovery-v2-concise\\agent\\receipts\\worker.json",
+          "sha256": "260418e72dc2740740548a217282544c751160b09d8c404801a26b1046a328c7"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\db-wal-recovery-v2-concise\\agent\\receipts\\solve\\state\\events\\1792536824777-63267b09-faed-47e0-a89a-a035540a0c35.jsonl",
+          "sha256": "f46fbf30aaa3a6c7256c14f2074cf01b54df46a64d8bb3f31aa448e82c84ec3b"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v1-refined",
+      "excludedOriginal": false,
+      "officialGraded": true,
+      "publicVerification": "passed",
+      "status": "completed",
+      "classifications": [
+        {
+          "category": "verification gaps",
+          "confidence": "observed",
+          "basis": "Public pass followed by independent non-acceptance; cause of discrepancy is not inferred"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "Created `/app/filter.py`.\n\nUsage:\n```bash\npython3 /app/filter.py /path/to/file.html\n```\n\nIt modifies the file in place using deletion-only edits\u2014without reserializing or reformatting untouched HTML. It handles script elements, event handlers, dangerous URLs and CSS, and nested `srcdoc` content.\n\nInstalled the required `html5lib==1.1` dependency.\n\nVerification passed:\n- Public self-check\n- 18 Chromium execution checks, including malformed HTML cases\n- 12 byte-for-byte CLI checks covering line endings and multiple encodings/BOMs\n- Dependency consistency check",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\replacements\\provider-interruptions-r1\\trials\\filter-js-from-html-v1-refined\\agent\\receipts\\worker.json",
+          "sha256": "5cbc1375f2e1d310b17905c149d34b3e86db1ccc8abfe74d9c20e18d6b71ce73"
+        },
+        {
+          "path": "suffice-calibration-v1\\replacements\\provider-interruptions-r1\\trials\\filter-js-from-html-v1-refined\\agent\\receipts\\solve\\state\\events\\1792537427768-99a4cbfb-00f3-42e6-97ab-6d058eda4219.jsonl",
+          "sha256": "d80758552648a2edaf35bf4100cc60afa581aa88b382845130fae19f94ce491c"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "kv-store-grpc",
+      "arm": "v1-refined",
+      "excludedOriginal": true,
+      "officialGraded": true,
+      "publicVerification": "not_run",
+      "status": "cost_unknown",
+      "classifications": [
+        {
+          "category": "provider failures",
+          "confidence": "observed operational signal",
+          "basis": "Provider/usage interruption; exact transport cause may remain unresolved"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\kv-store-grpc-v1-refined\\agent\\receipts\\worker.json",
+          "sha256": "77efd4dd7ac65ee7c954d5a435e4828407f6bdd00273b770151b2ace5a648388"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\kv-store-grpc-v1-refined\\agent\\receipts\\solve\\state\\events\\1792532609069-c4b083bc-0850-475f-b955-a9d504e52953.jsonl",
+          "sha256": "94d48bb7b7c0d302c1a66da96835c9c21f25ccfdcd9a968c7a437d3826f2d457"
+        }
+      ],
+      "missingWorker": false
+    },
+    {
+      "cohort": "calibration-v1",
+      "task": "filter-js-from-html",
+      "arm": "v1-refined",
+      "excludedOriginal": true,
+      "officialGraded": true,
+      "publicVerification": "not_run",
+      "status": "cost_unknown",
+      "classifications": [
+        {
+          "category": "provider failures",
+          "confidence": "observed operational signal",
+          "basis": "Provider/usage interruption; exact transport cause may remain unresolved"
+        },
+        {
+          "category": "reasoning",
+          "confidence": "unresolved",
+          "basis": "Independent rejection does not identify a reasoning defect; exact candidate failure remains unestablished"
+        }
+      ],
+      "actorFinal": "",
+      "recordedToolErrorCount": 0,
+      "evidence": [
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v1-refined\\agent\\receipts\\worker.json",
+          "sha256": "cedc18c7324b6dd07b5b7c4f6c76b4ed2f4236a0e5d8af15908a09def5e369e3"
+        },
+        {
+          "path": "suffice-calibration-v1\\trials\\filter-js-from-html-v1-refined\\agent\\receipts\\solve\\state\\events\\1792532940328-c960921d-718f-4827-8794-e350021f8b28.jsonl",
+          "sha256": "17e34ce1421abe640e0d93fc124d874363ae03f70d93cb0e70ca4e2381c79e54"
+        }
+      ],
+      "missingWorker": false
+    }
+  ]
+}
