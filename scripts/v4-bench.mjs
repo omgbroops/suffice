@@ -127,7 +127,7 @@ export async function main(argv) {
   const workers = o.workers === undefined ? 2 : Number(o.workers);
   const items = loadManifest(o.manifest);
   // Dynamic import: the workspace provider is a separate module that may not exist yet. Failing here spends nothing.
-  const mod = await import('../src/v4-polyglot.mjs').catch(error => { throw new Error(`workspace provider src/v4-polyglot.mjs unavailable (${error.code ?? error.message})`); });
+  const mod = await import(o.provider === 'swebpro' ? '../src/v4-swebpro.mjs' : '../src/v4-polyglot.mjs').catch(error => { throw new Error(`workspace provider src/v4-polyglot.mjs unavailable (${error.code ?? error.message})`); });
   const provider = mod.default ?? mod.polyglotProvider ?? (mod.prepWorkspace && mod.runAcceptance ? mod : null);
   if (!provider) throw new Error('src/v4-polyglot.mjs exports no provider (expected default or polyglotProvider)');
   const rows = await runBench({
