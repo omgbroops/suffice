@@ -45,3 +45,12 @@ export function effortFor(tier, round) {
   if (!Array.isArray(tier.effort)) return tier.effort ?? null;
   return tier.effort[Math.min(round - 1, tier.effort.length - 1)] ?? null;
 }
+
+// 'v4' is the ladder itself. 'single:<model>' is one tier with the ladder's total rounds and its largest estimate, so both arms share the harness and budget gate.
+export function armTiers(arm, ladder = loadTiers()) {
+  if (arm === 'v4') return ladder;
+  const m = /^single:(.+)$/.exec(arm);
+  if (!m) throw new Error(`unknown arm: ${arm}`);
+  return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),
+    effort: null, costEstimateUsd: Math.max(...ladder.map(t => t.costEstimateUsd)), tools: ladder[0].tools }];
+}
