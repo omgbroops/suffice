@@ -31,7 +31,7 @@ async def one(id,arm,install_only=False):
     load('suffice_harnesstax_agent',STATE/'runtime/benchmark/harnesstax-agent.py')
     name=('preflight-' if install_only else '')+id+'-'+arm
     trials=STATE/('runtime-preflight' if install_only else 'trials');assert not (trials/name).exists(),'Partial/existing trial requires review'
-    receipt=trials/name/'agent/receipts';receipt.mkdir(parents=True)
+    receipt=trials/name/'agent/receipts'
     mounts=[dict(type='bind',source=str(source),target=target,**({'read_only':True} if readonly else {})) for source,target,readonly in [
         (STATE/'runtime','/runtime',True),(STATE.parent/'suffice-general-runtime/bin','/runtime-bin',True),
         (STATE.parent/'suffice-codex-runtime-0163','/codexruntime',True),
@@ -42,7 +42,9 @@ async def one(id,arm,install_only=False):
     cfg=TrialConfig(task=TaskConfig(path=STATE/'tasks'/id),trial_name=name,trials_dir=trials,install_only=install_only,
         agent=AgentConfig(import_path='suffice_harnesstax_agent:HarnessTaxAgent',model_name='openai/'+('gpt-6.1-sol' if arm=='pi' else 'gpt-6-luna'),override_setup_timeout_sec=120),
         environment=EnvironmentConfig(type='docker',delete=True,mounts=mounts),verifier=VerifierConfig())
-    result=await (await Trial.create(cfg)).run()
+    trial=await Trial.create(cfg)
+    receipt.mkdir(parents=True,exist_ok=True)
+    result=await trial.run()
     save(STATE/('runtime-preflight-results' if install_only else 'results')/(name+'.json'),result.model_dump(mode='json'))
     print(json.dumps({'completed':name,'installOnly':install_only,'reward':result.verifier_result.model_dump(mode='json') if result.verifier_result else None,
         'exceptionType':result.exception_info.exception_type if result.exception_info else None}),flush=True)
