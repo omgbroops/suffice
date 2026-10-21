@@ -3,20 +3,24 @@
 Provider: `src/v4-swebpro.mjs` (`prepWorkspace`, `runAcceptance`). Gold check: `scripts/v4-swebpro-gold.mjs <instance_id>`.
 Source of truth: `scaleapi/SWE-bench_Pro-os` `swe_bench_pro_eval.py` (`create_entryscript`, `eval_with_docker`), per-instance `run_scripts/<id>/{run_script.sh,parser.py}`, dataset `ScaleAI/SWE-bench_Pro` (test split) via datasets-server.
 
-## Result: NOT PASSING (gold fails in the emulated container)
+## Result: NOT PASSING (gold is infra_error: toolchain segfault)
+
+Run 2 (Colima vz + Rosetta, after the restart): gold `infra_error` (classified from `signal: segmentation fault` in `asm`/`vet`), empty diff `empty_patch`. Wall 62 s gold+empty, image uncompressed size 596,381,092 bytes (`docker image inspect .Size`, sampled before rmi). Run 1 below (test_fail, 404 s) predates the classifier fix.
+
+Run 1 detail:
 
 | Item | Value |
 |---|---|
 | Instance | instance_flipt-io__flipt-518ec324b66a07fdd95464a5e9ca5fe7681ad8f9 (go) |
 | Image | ghcr.io/scaleapi/swe-bench_pro-v2:<instance_id>, pulled `linux/amd64` |
 | Gold patch applied | yes (all hunks, `git apply --binary`) |
-| Gold verdict | `test_fail`, pass=false (`gold-run.json`) |
+| Gold verdict (run 1) | `test_fail`, pass=false (`gold-run.json`); run 2: `infra_error` |
 | Empty diff verdict | `empty_patch`, pass=false (no container run) |
 | Wall time | 404 s total for the gold + empty run, including pull and eval (`goldWallS` 403.7) |
-| Image size | not recorded: cleanup removed the image (`docker rmi`) after each run |
+| Image size | run 2: 596,381,092 bytes uncompressed; run 1 not recorded |
 | Peak memory | not measured (docker stats not sampled) |
 
-Cause: Go's toolchain segfaults under amd64 emulation in the container (`compile: signal: segmentation fault`, `vet: signal: segmentation fault`, and a `cgo` exit 2 for go-sqlite3). The target package `internal/config` fails with `[build failed]`, so `TestWhitespaceCorsAllowedOrigins` never runs. The patch itself applies. This is an infra failure, but the harness classifies it as `test_fail` because `output.json` exists. Fix before trusting: classify `[build failed]` / toolchain segfault as `infra_error`, and check whether the crash is memory-related (raise `--memory` only with the lead's approval; limits are fixed at 2 CPU / 3 GB).
+Cause: Go's toolchain segfaults under amd64 emulation in the container (`compile: signal: segmentation fault`, `vet: signal: segmentation fault`, and a `cgo` exit 2 for go-sqlite3). The target package `internal/config` fails with `[build failed]`, so `TestWhitespaceCorsAllowedOrigins` never runs. The patch itself applies. This is an infra failure, but the harness classifies it as `test_fail` because `output.json` exists. Toolchain crashes (segfault, SIGSEGV, qemu, exit 137/139) now classify as `infra_error` (`TOOLCHAIN_CRASH` in `src/v4-swebpro.mjs`, tested). Qutebrowser was not run because gold did not pass.
 
 ## Limits and shortcuts
 

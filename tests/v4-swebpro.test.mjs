@@ -44,6 +44,14 @@ test('classify maps markers, missing output, timeouts and verdicts', () => {
   assert.equal(classify({ ...base, hasOutput: true, output: { tests: [] } }), 'test_fail');
 });
 
+test('classify treats toolchain crashes as infra_error even with output.json', () => {
+  const base = { row, hasOutput: true, output: { tests: [] }, timedOut: false };
+  for (const dockerOut of ['compile: signal: segmentation fault (core dumped)', 'qemu: uncaught target signal 11', 'SIGSEGV', 'exit code 137', 'exit status 139']) {
+    assert.equal(classify({ ...base, dockerOut }), 'infra_error', dockerOut);
+  }
+  assert.equal(classify({ ...base, dockerOut: 'FAILED TestA' }), 'test_fail');
+});
+
 test('lastLines keeps the tail only', () => {
   const text = Array.from({ length: 100 }, (_, i) => `l${i}`).join('\n');
   assert.equal(lastLines(text, 2), 'l98\nl99');

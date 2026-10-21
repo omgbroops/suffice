@@ -60,10 +60,13 @@ export function buildEntryScript(row) {
   ].join('\n');
 }
 
+const TOOLCHAIN_CRASH = /segmentation fault|SIGSEGV|signal: segmentation|qemu:|exit (code|status) (137|139)\b/;
+
 export function classify({ timedOut, dockerOut, hasOutput, output, row }) {
   if (timedOut) return 'timeout';
   if (/PATCH_APPLY_FAILED|TEST_PATCH_APPLY_FAILED/.test(dockerOut)) return 'patch_apply_failed';
-  if (!hasOutput) return 'infra_error';
+  // toolchain crash under emulation or OOM kill: not a verdict on the patch
+  if (TOOLCHAIN_CRASH.test(dockerOut) || !hasOutput) return 'infra_error';
   return judge(output, JSON.parse(row.fail_to_pass), JSON.parse(row.pass_to_pass)) ? 'pass' : 'test_fail';
 }
 
@@ -222,7 +225,7 @@ export async function runAcceptance(prep, { timeoutMs = DEFAULT_TIMEOUT_MS } = {
     const output = hasOutput ? JSON.parse(await readFile(outFile, 'utf8')) : null;
     const stdoutLog = existsSync(join(evalDir, 'stdout.log')) ? await readFile(join(evalDir, 'stdout.log'), 'utf8') : '';
     const stderrLog = existsSync(join(evalDir, 'stderr.log')) ? await readFile(join(evalDir, 'stderr.log'), 'utf8') : '';
-    const kind = classify({ timedOut: r.timedOut, dockerOut, hasOutput, output, row });
+    const kind = classify({ timedOut: r.timedOut, dockerOut: dockerOut + stdoutLog + stderrLog, hasOutput, output, row });
     result = { pass: kind === 'pass', kind, output: lastLines(dockerOut + stdoutLog + stderrLog) };
     log = `docker exit ${r.code}\n--- docker ---\n${dockerOut}\n--- stdout.log ---\n${stdoutLog}\n--- stderr.log ---\n${stderrLog}\n--- output.json ---\n${output ? JSON.stringify(output, null, 2) : '(none)'}\n`;
     await rm(evalDir, { recursive: true, force: true });
