@@ -1,4 +1,9 @@
-# Proposed held-out comparison — awaiting review, no paid launch
+# Reviewed held-out comparison design
+
+The user authorized proceeding on October 20, 2026. The concrete selected cohort,
+pre-inference amendments and actual launch conditions are in CAMPAIGN-PLAN.md.
+The following records the reviewed proposal; the cohort manifest records the
+subsequently frozen inputs. No historical benchmark scores were replaced.
 
 ## Question and single treatment
 

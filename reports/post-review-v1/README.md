@@ -1,9 +1,11 @@
 # Post-implementation review prototype
 
 Read [DIAGNOSIS.md](DIAGNOSIS.md) first, then [DESIGN.md](DESIGN.md).
-The diagnosis and proposed paid experiment are ready for user review.
-No paid comparison, model inference, provider setup or dependency installation
-was performed during this work. Existing campaigns/results remain frozen.
+The user reviewed the diagnosis/design and authorized the JS/TS pilot on October
+20, 2026. See [CAMPAIGN-PLAN.md](CAMPAIGN-PLAN.md) for selected issues, controls,
+limits and selection amendments, and `campaign/` for the frozen manifest/results.
+The no-inference prototype validation described below preceded this authorization.
+Existing historical campaigns/results remain frozen.
 
 ## Implementation
 
@@ -67,7 +69,10 @@ metadata. These reports must remain outside future actor/reviewer task workspace
 
 ## Next review decision
 
-Review the diagnosis, six-task selection criteria, source-only support boundary,
-shared spending limits and acceptance-per-dollar decision rule. Only after that
-review should task selection/preflight/freeze and an explicitly authorized paid
-launch proceed. No launch automation or ongoing monitor was created.
+After review, six eligible reports were selected, all 12 public/grading negative
+controls failed as expected, all 12 contract-positive controls passed, and the
+Harbor install-only runtime preflight passed. The finite 18-attempt controller was
+started with two task containers at a time and verified to make Luna High requests.
+The reviewer configuration was checked in the live request receipt. Results are
+written to `campaign/results.json` and `campaign/RESULTS.md` as attempts finish.
+No recurring automation or automatic attempt replacement was created.
