@@ -55,7 +55,7 @@ def queue():
         shutil.copy2(source/'task.toml',target/'original-task.toml')
         # Harbor alone injects the original verifier after actors stop. Do not
         # inspect or mount tests/solutions as actor context.
-        (target/'tests').symlink_to(source/'tests',target_is_directory=True)
+        shutil.copytree(source/'tests',target/'tests')
         shutil.copy2(STATE/'public-check.py',target/'public/check.py')
         tasks.append({'id':name,'baseImage':cfg['environment']['docker_image'],'historicalAcceptance':history,
             'baseImageId':subprocess.check_output(['docker','image','inspect',cfg['environment']['docker_image'],'--format','{{.Id}}'],text=True).strip(),
@@ -126,7 +126,7 @@ async def run():
             if status.get('state')=='stopped':raise RuntimeError('Preceding campaign needs review: '+filename)
             await asyncio.sleep(10)
     save(STATE/'status.json',{'state':'preparing','at':time.time()})
-    await asyncio.to_thread(prepare)
+    if not (STATE/'manifest.json').exists():await asyncio.to_thread(prepare)
     c=load();m=validate()
     await c.one(TASKS[0],'alone',install_only=True)
     quota=c.load('diagnostic_quota',ROOT/'benchmark/harnesstax-quota.py')
