@@ -1,5 +1,6 @@
 import { execFile } from 'node:child_process';
-import { appendFile } from 'node:fs/promises';
+import { appendFile, cp, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
@@ -90,15 +91,22 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
     }
     try {
       const row = await runTask({
-        task: { id: item.taskId, prompt: item.prompt ?? '', workspaceDir: prep.dir },
+        task: { id: item.taskId, prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta,
-        verify: async () => { const r = await provider.runAcceptance(prep); return r === true || r?.pass === true; },
+        verify: async workspace => { await cp(workspace, prep.dir, { recursive: true, force: true }); const r = await provider.runAcceptance(prep); return r === true || r?.pass === true; },
       });
       if (row.status === 'global_cap_refused') capHit = true;
       return row;
     } finally { await prep.cleanup?.(); }
   };
   return schedule({ items, workers, runItem, probe, out: results });
+}
+
+// The hidden tests are not in the workspace; the agent gets the exercise statement and the stub files.
+async function defaultPrompt(prep) {
+  let doc = '';
+  try { doc = await readFile(join(prep.dir, '.docs', 'instructions.md'), 'utf8'); } catch { /* exercise without .docs */ }
+  return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.\n\n${doc}`;
 }
 
 export async function main(argv) {
@@ -112,7 +120,7 @@ export async function main(argv) {
   const items = loadManifest(o.manifest);
   // Dynamic import: the workspace provider is a separate module that may not exist yet. Failing here spends nothing.
   const mod = await import('../src/v4-polyglot.mjs').catch(error => { throw new Error(`workspace provider src/v4-polyglot.mjs unavailable (${error.code ?? error.message})`); });
-  const provider = mod.default ?? mod.polyglotProvider;
+  const provider = mod.default ?? mod.polyglotProvider ?? (mod.prepWorkspace && mod.runAcceptance ? mod : null);
   if (!provider) throw new Error('src/v4-polyglot.mjs exports no provider (expected default or polyglotProvider)');
   const rows = await runBench({
     items, arm: o.arm, workers, globalCapUsd: Number(o['global-cap-usd']), results: o.results,
