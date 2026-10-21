@@ -11,7 +11,7 @@ const split = args['--split'] ?? 'pilot';
 const thinkingLevel = args['--effort'] ?? 'medium';
 if (!['low', 'medium', 'high'].includes(thinkingLevel)) throw new Error('Supported experiment efforts: low, medium, high.');
 const selectedTasks = tasks.filter(t => t.split === split && (!args['--task'] || t.id === args['--task']) && t.id !== args['--exclude-task']);
-const selectedVariants = variants.filter(v => !args['--variants'] || args['--variants'].split(',').includes(v.id));
+const selectedVariants = variants.filter(v => args['--variants'] ? args['--variants'].split(',').includes(v.id) : v.profile !== 'v4');
 if (args['--variants'] && args['--variants'].split(',').some(id => !variants.some(v => v.id === id))) throw new Error('Unknown variant; refusing partial experiment.');
 if (!selectedTasks.length || !selectedVariants.length) throw new Error('No matching tasks or variants.');
 const repetitions = Number(args['--repetitions'] ?? 1);
