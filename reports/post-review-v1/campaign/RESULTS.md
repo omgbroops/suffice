@@ -8,6 +8,6 @@ User-authorized timeout amendment: remaining attempts use 1,800 seconds. The fir
 
 | Arm | Finished | Patch accepted | Policy-valid successes | Known USD | USD / accepted | Unknown costs |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| alone | 1/6 | 1 | 1 | 0.008179 | 0.008179 | 0 |
-| review | 1/6 | 1 | 0 | at least 0.017580 | at least 0.017580 | 1 |
-| pi | 1/6 | 1 | 0 | at least 0.251526 | at least 0.251526 | 1 |
+| alone | 6/6 | 6 | 6 | 0.032674 | 0.005446 | 0 |
+| review | 6/6 | 6 | 5 | at least 0.067509 | at least 0.011252 | 1 |
+| pi | 6/6 | 6 | 5 | at least 0.905008 | at least 0.150835 | 1 |

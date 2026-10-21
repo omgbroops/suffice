@@ -1,33 +1,33 @@
 {
-  "asOf": 1792544771.2899377,
-  "complete": false,
+  "asOf": 1792547633.4604855,
+  "complete": true,
   "summary": [
     {
       "arm": "alone",
-      "finished": 2,
-      "accepted": 2,
-      "policyValidSuccesses": 2,
-      "knownCostUsd": 0.0125098,
+      "finished": 6,
+      "accepted": 6,
+      "policyValidSuccesses": 6,
+      "knownCostUsd": 0.03267364,
       "unknownCosts": 0,
-      "knownUsdPerAccepted": 0.0062549
+      "knownUsdPerAccepted": 0.005445606666666666
     },
     {
       "arm": "review",
-      "finished": 1,
-      "accepted": 1,
-      "policyValidSuccesses": 1,
-      "knownCostUsd": 0.00818718,
+      "finished": 6,
+      "accepted": 6,
+      "policyValidSuccesses": 5,
+      "knownCostUsd": 0.07056878,
       "unknownCosts": 0,
-      "knownUsdPerAccepted": 0.00818718
+      "knownUsdPerAccepted": 0.011761463333333333
     },
     {
       "arm": "pi",
-      "finished": 1,
-      "accepted": 1,
-      "policyValidSuccesses": 1,
-      "knownCostUsd": 0.0936344,
+      "finished": 6,
+      "accepted": 6,
+      "policyValidSuccesses": 6,
+      "knownCostUsd": 0.9546231999999999,
       "unknownCosts": 0,
-      "knownUsdPerAccepted": 0.0936344
+      "knownUsdPerAccepted": 0.15910386666666665
     }
   ],
   "selectedAttempts": [
@@ -235,6 +235,777 @@
         }
       ],
       "policyValid": true
+    },
+    {
+      "task": "ky-progress",
+      "arm": "pi",
+      "trialName": "ky-progress-pi",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.11806159999999999,
+      "costUnknown": false,
+      "usage": {
+        "input": 26364,
+        "cacheRead": 199936,
+        "cacheWrite": 0,
+        "output": 4534,
+        "estimatedApiUsd": 0.11806159999999999,
+        "costUnknown": false
+      },
+      "latencyMs": 234457,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [],
+      "policyValid": true
+    },
+    {
+      "task": "ky-progress",
+      "arm": "alone",
+      "trialName": "ky-progress-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.0056114599999999995,
+      "costUnknown": false,
+      "usage": {
+        "input": 28095,
+        "cacheRead": 125696,
+        "cacheWrite": 0,
+        "output": 3090,
+        "estimatedApiUsd": 0.0056114599999999995,
+        "modelCalls": 16,
+        "toolCalls": 29,
+        "costUnknown": false
+      },
+      "latencyMs": 146825,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 144463,
+          "replyCount": 16,
+          "providerRequests": 16,
+          "final": "Implemented completion progress for empty response bodies. A bodyless `200` response now emits one final event with `percent: 1`, zero transferred bytes, and an empty chunk. Responses with statuses that cannot be wrapped in a body stream retain their existing behavior.\n\nChecks passed: targeted XO lint, build, all 18 tests in `test/stream.ts`, and the public self-check. `npm test` was also attempted but stopped on an unrelated existing lint error in `test/http-error.ts:218` (`no-meaningless-void-operator`). No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 28095,
+            "cacheRead": 125696,
+            "cacheWrite": 0,
+            "output": 3090,
+            "estimatedApiUsd": 0.0056114599999999995,
+            "modelCalls": 16,
+            "toolCalls": 29
+          },
+          "eventPath": "/receipts/solve/state/events/1792544747414-aded4864-71bc-4059-b927-aab56bb2948a.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "ky-progress",
+      "arm": "review",
+      "trialName": "ky-progress-review",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.0067721,
+      "costUnknown": false,
+      "usage": {
+        "input": 12704,
+        "cacheRead": 81920,
+        "cacheWrite": 0,
+        "output": 1860,
+        "estimatedApiUsd": 0.0067721,
+        "modelCalls": 14,
+        "toolCalls": 24,
+        "costUnknown": false
+      },
+      "latencyMs": 87020,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "reviewed",
+        "decision": "approve",
+        "corrections": []
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 77295,
+          "replyCount": 13,
+          "providerRequests": 13,
+          "final": "Updated `withProgress` to emit a final `percent: 1` event with zero transferred bytes and an empty chunk when the stream ends without chunks. Added a test for a `200` response with `Content-Length: 0`.\n\nChecks run:\n- `node /public-checks/check.mjs` \u2014 passed\n- `npx ava test/stream.ts` \u2014 18 tests passed\n- `npx xo source/utils/body.ts test/stream.ts` \u2014 passed\n\nNo changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 11674,
+            "cacheRead": 81920,
+            "cacheWrite": 0,
+            "output": 1671,
+            "estimatedApiUsd": 0.0028220999999999997,
+            "modelCalls": 13,
+            "toolCalls": 24
+          },
+          "eventPath": "/receipts/solve/state/events/1792544808263-a6b9268d-8404-4c05-af69-4660e3a8e5d1.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 7458,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"approve\",\"corrections\":[]}",
+          "error": null,
+          "usage": {
+            "input": 1030,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 189,
+            "estimatedApiUsd": 0.00395,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792544887763-47301b72-baaa-45d8-a26e-a17b830231e8.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "ky-signal",
+      "arm": "alone",
+      "trialName": "ky-signal-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.00563864,
+      "costUnknown": false,
+      "usage": {
+        "input": 20239,
+        "cacheRead": 218624,
+        "cacheWrite": 0,
+        "output": 2857,
+        "estimatedApiUsd": 0.00563864,
+        "modelCalls": 20,
+        "toolCalls": 38,
+        "costUnknown": false
+      },
+      "latencyMs": 146101,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 143451,
+          "replyCount": 20,
+          "providerRequests": 20,
+          "final": "Implemented signal handling in option merging:\n\n- `replaceOption(signal)` now discards inherited signals before using the replacement.\n- `signal: undefined` and `signal: null` in `.extend()` clear inherited signals.\n- Added regression coverage for all three cases.\n\n**Checks:** The public self-check passed; the build passed; and `npx ava test/main.ts` passed (130 tests). `npm test` did not complete because XO reports an existing error in `test/http-error.ts:218` (`no-meaningless-void-operator`). No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 20239,
+            "cacheRead": 218624,
+            "cacheWrite": 0,
+            "output": 2857,
+            "estimatedApiUsd": 0.00563864,
+            "modelCalls": 20,
+            "toolCalls": 38
+          },
+          "eventPath": "/receipts/solve/state/events/1792544912043-36e3c579-7adf-4adf-a7ee-d5b445318305.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "ky-signal",
+      "arm": "review",
+      "trialName": "ky-signal-review",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.01115996,
+      "costUnknown": false,
+      "usage": {
+        "input": 35924,
+        "cacheRead": 187776,
+        "cacheWrite": 0,
+        "output": 2955,
+        "estimatedApiUsd": 0.01115996,
+        "modelCalls": 20,
+        "toolCalls": 36,
+        "costUnknown": false
+      },
+      "latencyMs": 148117,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "reviewed",
+        "decision": "approve",
+        "corrections": []
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 139083,
+          "replyCount": 19,
+          "providerRequests": 19,
+          "final": "Implemented signal handling in `ky.extend()`: `replaceOption(signal)` now replaces inherited signals, and `signal: undefined` or `signal: null` clears them. Added tests covering all three cases.\n\n**Checks:** `npm run build` and `node /public-checks/check.mjs` passed. `npm test` did not complete: lint reported an existing error in `test/http-error.ts:218` (`no-meaningless-void-operator`). No commit was made.",
+          "error": null,
+          "usage": {
+            "input": 34477,
+            "cacheRead": 187776,
+            "cacheWrite": 0,
+            "output": 2801,
+            "estimatedApiUsd": 0.00672596,
+            "modelCalls": 19,
+            "toolCalls": 36
+          },
+          "eventPath": "/receipts/solve/state/events/1792544913241-d2fab227-29f6-4037-ac3b-ce2a105a51c5.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 6433,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"approve\",\"corrections\":[]}",
+          "error": null,
+          "usage": {
+            "input": 1447,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 154,
+            "estimatedApiUsd": 0.0044340000000000004,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792545054872-44a4dc3f-e3ba-453f-8bba-e012ab6d68fa.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "ky-signal",
+      "arm": "pi",
+      "trialName": "ky-signal-pi",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.24493,
+      "costUnknown": false,
+      "usage": {
+        "input": 57792,
+        "cacheRead": 476160,
+        "cacheWrite": 0,
+        "output": 8173,
+        "estimatedApiUsd": 0.24493,
+        "costUnknown": false
+      },
+      "latencyMs": 370811,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [],
+      "policyValid": true
+    },
+    {
+      "task": "pall-types",
+      "arm": "review",
+      "trialName": "pall-types-review",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.0139036,
+      "costUnknown": false,
+      "usage": {
+        "input": 47451,
+        "cacheRead": 136320,
+        "cacheWrite": 0,
+        "output": 5456,
+        "estimatedApiUsd": 0.0139036,
+        "modelCalls": 28,
+        "toolCalls": 50,
+        "costUnknown": false
+      },
+      "latencyMs": 239892,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "repair_completed",
+        "decision": "correct",
+        "corrections": [
+          {
+            "path": "index.d.ts",
+            "action": "Preserve contextual tuple inference for inline task arrays. Replacing `readonly [...Task]` with a bare `Task` causes calls such as `pAll([() => 'text', () => 123])` to infer an array of unions instead of the previously inferred positional tuple. Adjust the signature or add a compatible overload without reintroducing the nested-promise inference bug, and add type tests asserting `Promise<[string, number]>` for this inline call as well as the reported `.map()` case."
+          }
+        ]
+      },
+      "reviewCalls": 1,
+      "repairs": 1,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 105880,
+          "replyCount": 14,
+          "providerRequests": 14,
+          "final": "Updated the `pAll` type signature so inline task arrays are inferred without contextual `unknown` leaking into nested `.then()` calls. Added type tests for both inline and intermediate-variable task arrays.\n\nChecks passed: `npm test`, `node /public-checks/check.mjs`, and `git diff --check`. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 27930,
+            "cacheRead": 82688,
+            "cacheWrite": 0,
+            "output": 2131,
+            "estimatedApiUsd": 0.00468538,
+            "modelCalls": 14,
+            "toolCalls": 26
+          },
+          "eventPath": "/receipts/solve/state/events/1792545080757-0e2fca13-4051-48d5-9ef3-e0fb53cdcc4b.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 6095,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"correct\",\"corrections\":[{\"path\":\"index.d.ts\",\"action\":\"Preserve contextual tuple inference for inline task arrays. Replacing `readonly [...Task]` with a bare `Task` causes calls such as `pAll([() => 'text', () => 123])` to infer an array of unions instead of the previously inferred positional tuple. Adjust the signature or add a compatible overload without reintroducing the nested-promise inference bug, and add type tests asserting `Promise<[string, number]>` for this inline call as well as the reported `.map()` case.\"}]}",
+          "error": null,
+          "usage": {
+            "input": 1747,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 184,
+            "estimatedApiUsd": 0.005334000000000001,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792545187881-e15018de-faaa-47a6-a81a-5ac7ffeb8765.jsonl"
+        },
+        {
+          "label": "review-repair",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 125515,
+          "replyCount": 13,
+          "providerRequests": 13,
+          "final": "Updated the type declarations so inline `.map()` tasks with nested promises infer their resolved result type, while two-item inline task arrays retain positional tuple inference. Added `tsd` coverage for both cases and the named-array case.\n\nVerification passed: `npm test` (xo, ava, and tsd) and `git diff --check`. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 17774,
+            "cacheRead": 53632,
+            "cacheWrite": 0,
+            "output": 3141,
+            "estimatedApiUsd": 0.003884219999999999,
+            "modelCalls": 13,
+            "toolCalls": 24
+          },
+          "eventPath": "/receipts/review-repair/state/events/1792545193980-44498ee6-fcbb-431e-bdee-43c5b324b45f.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "pall-types",
+      "arm": "pi",
+      "trialName": "pall-types-pi",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.1089948,
+      "costUnknown": false,
+      "usage": {
+        "input": 15859,
+        "cacheRead": 173568,
+        "cacheWrite": 0,
+        "output": 5992,
+        "estimatedApiUsd": 0.1089948,
+        "costUnknown": false
+      },
+      "latencyMs": 283773,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [],
+      "policyValid": true
+    },
+    {
+      "task": "pall-types",
+      "arm": "alone",
+      "trialName": "pall-types-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.006426160000000001,
+      "costUnknown": false,
+      "usage": {
+        "input": 33200,
+        "cacheRead": 134016,
+        "cacheWrite": 0,
+        "output": 3532,
+        "estimatedApiUsd": 0.006426160000000001,
+        "modelCalls": 20,
+        "toolCalls": 39,
+        "costUnknown": false
+      },
+      "latencyMs": 151549,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 150337,
+          "replyCount": 20,
+          "providerRequests": 20,
+          "final": "Fixed the type inference for nested promises in inline `pAll` tasks and added type tests for inline and intermediate-array cases.\n\nChecks passed: `npm test` and `node /public-checks/check.mjs`.",
+          "error": null,
+          "usage": {
+            "input": 33200,
+            "cacheRead": 134016,
+            "cacheWrite": 0,
+            "output": 3532,
+            "estimatedApiUsd": 0.006426160000000001,
+            "modelCalls": 20,
+            "toolCalls": 39
+          },
+          "eventPath": "/receipts/solve/state/events/1792545465314-b38a581a-87ec-4038-bf0d-a81b8808e806.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "emitter-value",
+      "arm": "pi",
+      "trialName": "emitter-value-pi",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.0878612,
+      "costUnknown": false,
+      "usage": {
+        "input": 24176,
+        "cacheRead": 81792,
+        "cacheWrite": 0,
+        "output": 3133,
+        "estimatedApiUsd": 0.0878612,
+        "costUnknown": false
+      },
+      "latencyMs": 120981,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [],
+      "policyValid": true
+    },
+    {
+      "task": "emitter-value",
+      "arm": "alone",
+      "trialName": "emitter-value-alone",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.0024875799999999992,
+      "costUnknown": false,
+      "usage": {
+        "input": 15130,
+        "cacheRead": 36608,
+        "cacheWrite": 0,
+        "output": 1217,
+        "estimatedApiUsd": 0.0024875799999999992,
+        "modelCalls": 7,
+        "toolCalls": 16,
+        "costUnknown": false
+      },
+      "latencyMs": 42402,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 41627,
+          "replyCount": 7,
+          "providerRequests": 7,
+          "final": "Updated `index.d.mts` to import `EventEmitter` from `./index.js` rather than using a type-only import from the declaration file. This exposes the class as a value while letting TypeScript resolve its declaration through the implementation path.\n\nChecks passed: public self-check, `npm test` (40 passing), `npm run test-esm` (2 passing), and `git diff --check`. TypeScript compilation was not run because `tsc` is not installed. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 15130,
+            "cacheRead": 36608,
+            "cacheWrite": 0,
+            "output": 1217,
+            "estimatedApiUsd": 0.0024875799999999992,
+            "modelCalls": 7,
+            "toolCalls": 16
+          },
+          "eventPath": "/receipts/solve/state/events/1792545646902-7be015c9-0269-4fcd-86b9-2f64447af5b6.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "emitter-value",
+      "arm": "review",
+      "trialName": "emitter-value-review",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.009906780000000002,
+      "costUnknown": false,
+      "usage": {
+        "input": 30467,
+        "cacheRead": 85248,
+        "cacheWrite": 0,
+        "output": 4210,
+        "estimatedApiUsd": 0.009906780000000002,
+        "modelCalls": 19,
+        "toolCalls": 34,
+        "costUnknown": false
+      },
+      "latencyMs": 153004,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "repair_completed",
+        "decision": "correct",
+        "corrections": [
+          {
+            "path": "index.d.mts",
+            "action": "Use a runtime-compatible module specifier for the value import, such as `import EventEmitter from \"./index.js\";`, rather than importing `./index.d.ts` as a value. The current change can trigger TS2846 when consumers check declaration files without `skipLibCheck`. Verify both named and default imports can be instantiated under NodeNext resolution with `skipLibCheck: false`, and retain CommonJS typing compatibility."
+          }
+        ]
+      },
+      "reviewCalls": 1,
+      "repairs": 1,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 29720,
+          "replyCount": 6,
+          "providerRequests": 6,
+          "final": "Updated `index.d.mts` to use a regular import for `EventEmitter`, so the default and named exports are recognized as constructible values while retaining their existing typings.\n\nChecks passed: the public contract check, `npm test` (40 passing), `npm run test-esm` (2 passing), and `git diff --check`. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 9413,
+            "cacheRead": 35840,
+            "cacheWrite": 0,
+            "output": 582,
+            "estimatedApiUsd": 0.0015907,
+            "modelCalls": 6,
+            "toolCalls": 12
+          },
+          "eventPath": "/receipts/solve/state/events/1792545707469-33c43f9a-aaee-477c-b622-514ef9990746.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 9463,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"correct\",\"corrections\":[{\"path\":\"index.d.mts\",\"action\":\"Use a runtime-compatible module specifier for the value import, such as `import EventEmitter from \\\"./index.js\\\";`, rather than importing `./index.d.ts` as a value. The current change can trigger TS2846 when consumers check declaration files without `skipLibCheck`. Verify both named and default imports can be instantiated under NodeNext resolution with `skipLibCheck: false`, and retain CommonJS typing compatibility.\"}]}",
+          "error": null,
+          "usage": {
+            "input": 589,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 293,
+            "estimatedApiUsd": 0.0041080000000000005,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792545737894-f1d7ffb1-fb54-47ba-be47-3a8c890ca464.jsonl"
+        },
+        {
+          "label": "review-repair",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 112408,
+          "replyCount": 12,
+          "providerRequests": 12,
+          "final": "Updated `index.d.mts` to import the runtime module (`./index.js`) so the default and named exports are usable as values. Also changed the CommonJS declaration\u2019s final assignment to `export = EventEmitter`; this keeps CommonJS typing compatibility and allows the declarations to check with `skipLibCheck: false`.\n\nChecks passed: `npm test` (40 tests), `npm run test-esm` (2 tests), the public check, and NodeNext TypeScript checks with `skipLibCheck: false` for both ESM default/named imports and a CommonJS import. `git diff --check` passed. No changes were committed.",
+          "error": null,
+          "usage": {
+            "input": 20465,
+            "cacheRead": 49408,
+            "cacheWrite": 0,
+            "output": 3335,
+            "estimatedApiUsd": 0.004208080000000001,
+            "modelCalls": 12,
+            "toolCalls": 22
+          },
+          "eventPath": "/receipts/review-repair/state/events/1792545747360-e3567e9a-083d-4946-8b56-c1f7e5201076.jsonl"
+        }
+      ],
+      "policyValid": true
+    },
+    {
+      "task": "queue-aborted",
+      "arm": "review",
+      "trialName": "queue-aborted-review-r1",
+      "accepted": true,
+      "graded": true,
+      "status": "operational_failure",
+      "exceptionType": null,
+      "knownCostUsd": 0.02063916,
+      "costUnknown": false,
+      "usage": {
+        "input": 34371,
+        "cacheRead": 591616,
+        "cacheWrite": 0,
+        "output": 6722,
+        "estimatedApiUsd": 0.02063916,
+        "modelCalls": 35,
+        "toolCalls": 65,
+        "costUnknown": false
+      },
+      "latencyMs": 607602,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": {
+        "status": "unavailable",
+        "decision": null,
+        "error": "Expected ',' or ']' after array element in JSON at position 1204 (line 1 column 1205)"
+      },
+      "reviewCalls": 1,
+      "repairs": 0,
+      "stages": [
+        {
+          "label": "solve",
+          "model": "gpt-6-luna",
+          "effort": "high",
+          "advisor": false,
+          "latencyMs": 587445,
+          "replyCount": 34,
+          "providerRequests": 34,
+          "final": "Implemented queued-task abort handling. Pre-aborted tasks are rejected without being enqueued; tasks aborted while waiting are rejected and removed from the built-in priority queue, which then resumes processing. Custom queue implementations remain compatible because the new `remove` method is optional.\n\nAdded regression coverage and updated an existing test to handle the newly immediate rejection. Verification: `npm test` passed (167 tests), and `node /public-checks/check.mjs` passed. XO reported one pre-existing TODO-comment warning.",
+          "error": null,
+          "usage": {
+            "input": 32460,
+            "cacheRead": 591616,
+            "cacheWrite": 0,
+            "output": 6270,
+            "estimatedApiUsd": 0.01229716,
+            "modelCalls": 34,
+            "toolCalls": 65
+          },
+          "eventPath": "/receipts/solve/state/events/1792545888774-7148666d-323e-45ca-9836-c20d8093f661.jsonl"
+        },
+        {
+          "label": "post-review",
+          "model": "gpt-6.1-sol",
+          "effort": "low",
+          "advisor": true,
+          "latencyMs": 17839,
+          "replyCount": 1,
+          "providerRequests": 1,
+          "final": "{\"decision\":\"correct\",\"corrections\":[{\"path\":\"source/index.ts\",\"action\":\"Queued cancellation silently skips removal for existing custom queue implementations without the new optional `remove` method. The rejected task remains queued and its wrapper can later consume scheduling capacity. Provide a compatibility-safe cancellation mechanism for those queues, and test cancellation after enqueue with a custom queue implementing the original interface.\"},{\"path\":\"source/priority-queue.ts\",\"action\":\"Removal by public task ID can remove a different task when IDs collide, including explicit IDs colliding with automatically generated IDs. Identify the exact queued entry using its callback or a private unique token rather than removing the first matching public ID. Add a regression proving cancellation cannot remove an unrelated task.\"},{\"path\":\"test/advanced.ts\",\"action\":\"The new regression aborts before calling `add()`, so it never exercises the newly added queued-abort listener. Add tests that enqueue behind a blocked task, then abort, asserting prompt rejection with the exact signal reason, removal from queue size, and that the canceled operation never runs after capacity becomes available.\"}",
+          "error": null,
+          "usage": {
+            "input": 1911,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "output": 452,
+            "estimatedApiUsd": 0.008342,
+            "modelCalls": 1,
+            "toolCalls": 0
+          },
+          "eventPath": "/receipts/post-review/state/events/1792546478439-55f1c8ca-7a05-4a69-a564-60e82b318501.jsonl"
+        }
+      ],
+      "policyValid": false
+    },
+    {
+      "task": "queue-aborted",
+      "arm": "pi",
+      "trialName": "queue-aborted-pi-r1",
+      "accepted": true,
+      "graded": true,
+      "status": "completed",
+      "exceptionType": null,
+      "knownCostUsd": 0.30114119999999994,
+      "costUnknown": false,
+      "usage": {
+        "input": 67609,
+        "cacheRead": 645632,
+        "cacheWrite": 0,
+        "output": 10136,
+        "estimatedApiUsd": 0.30114119999999994,
+        "costUnknown": false
+      },
+      "latencyMs": 634772,
+      "agentTimeoutSec": 1800.0,
+      "accountingSource": "worker-aggregate",
+      "review": null,
+      "reviewCalls": 0,
+      "repairs": 0,
+      "stages": [],
+      "policyValid": true
     }
   ],
   "excludedTimeoutOriginals": [
@@ -375,7 +1146,7 @@
       "policyValid": false
     }
   ],
-  "allExecutedKnownCostUsd": 0.38343660000000007,
+  "allExecutedKnownCostUsd": 1.32697084,
   "allExecutedUnknownCosts": 2,
   "replacementPlan": {
     "createdAt": 1792544770.9738438,
