@@ -3,7 +3,7 @@ import { V4Error } from './v4-escalation.mjs';
 
 // Thin profile: tiny system prompt. Tool list comes from the tier config (default is these four).
 export const V4_TOOLS = ['Read', 'Edit', 'Write', 'Bash'];
-export const V4_SYSTEM_PROMPT = 'You are a coding agent. Repair the requested behavior with a minimal correct change in src/. Preserve the public API. Use only Read, Edit, Write and Bash. Do not claim checks that did not run.';
+export const V4_SYSTEM_PROMPT = 'You are a coding agent. Make the requested change with a minimal correct edit to the files in the current directory. Preserve the public API. Work only inside the current directory: never search or list outside it (no find or ls on / or ~), the tests you cannot see are not elsewhere on disk. Use only Read, Edit, Write and Bash. Do not claim checks that did not run.';
 
 export function runProcess(bin, args, { cwd, timeoutMs }) {
   return new Promise((resolveRun, reject) => {

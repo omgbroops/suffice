@@ -21,7 +21,7 @@ export async function probeFreePct() {
 
 // runItem must write its own row (runV4Task does). Only items that never reached it get a row here.
 // Once free memory drops below minFreePct (or the probe fails), no new item starts; the rest get 'aborted_memory'.
-export async function schedule({ items, workers = 3, runItem, probe = probeFreePct, minFreePct = 30, out, write = appendFile }) {
+export async function schedule({ items, workers = 2, runItem, probe = probeFreePct, minFreePct = 30, out, write = appendFile }) {
   if (!Number.isInteger(workers) || workers < 1 || workers > MAX_WORKERS) throw new Error(`workers must be 1..${MAX_WORKERS}`);
   const rows = [];
   let next = 0, aborted = false;
@@ -49,7 +49,7 @@ export function loadManifest(path) {
   return items;
 }
 
-// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=3] [--budget-usd=<USD per run>]
+// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>]
 const FLAGS = ['manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd'];
 export function parseArgs(argv) {
   const opts = {};
@@ -91,7 +91,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
     }
     try {
       const row = await runTask({
-        task: { id: item.taskId, prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
+        task: { id: item.taskId.replace(/\//g, '_'), prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta,
         verify: async workspace => { await cp(workspace, prep.dir, { recursive: true, force: true }); const r = await provider.runAcceptance(prep); return r === true || r?.pass === true; },
       });
@@ -112,11 +112,11 @@ async function defaultPrompt(prep) {
 export async function main(argv) {
   const o = parseArgs(argv);
   if (!o.manifest || !o.arm || !o['global-cap-usd'] || !o.results) {
-    throw new Error('usage: --manifest --arm --global-cap-usd --results [--workers=3] [--budget-usd]');
+    throw new Error('usage: --manifest --arm --global-cap-usd --results [--workers=2] [--budget-usd]');
   }
   assertFresh(o.results);
   assertFresh(`${o.results}.ledger.jsonl`);
-  const workers = o.workers === undefined ? 3 : Number(o.workers);
+  const workers = o.workers === undefined ? 2 : Number(o.workers);
   const items = loadManifest(o.manifest);
   // Dynamic import: the workspace provider is a separate module that may not exist yet. Failing here spends nothing.
   const mod = await import('../src/v4-polyglot.mjs').catch(error => { throw new Error(`workspace provider src/v4-polyglot.mjs unavailable (${error.code ?? error.message})`); });
