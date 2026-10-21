@@ -82,7 +82,7 @@ def prepare():
         # Same clean Git baseline for both arms, required by the experimental
         # patch reviewer. Generated binaries are explicitly outside review scope.
         dockerfile=target/'baseline.Dockerfile'
-        dockerfile.write_text('FROM '+row['baseImage']+'\nWORKDIR /app\nRUN command -v git >/dev/null || (apt-get update && apt-get install -y git)\nRUN command -v python3\nRUN test ! -e .git && git init && git config user.name Baseline && git config user.email baseline@example.invalid && printf "*.ppm\\n*.sqlite\\n*.sqlite-*\\nimage\\n__pycache__/\\n" >> .git/info/exclude && git add -A && git commit --allow-empty -m baseline && test -z "$(git status --porcelain)"\n')
+        dockerfile.write_text('FROM '+row['baseImage']+'\nWORKDIR /app\nRUN command -v git >/dev/null || (apt-get update && apt-get install -y git)\nRUN command -v python3 >/dev/null || (apt-get update && apt-get install -y python3)\nRUN test ! -e .git && git init && git config user.name Baseline && git config user.email baseline@example.invalid && printf "*.ppm\\n*.sqlite\\n*.sqlite-*\\nimage\\n__pycache__/\\n" >> .git/info/exclude && git add -A && git commit --allow-empty -m baseline && test -z "$(git status --porcelain)"\n')
         tag='suffice-review-diagnostic:'+name
         with open(STATE/(name+'-build.log'),'w') as log:
             subprocess.run(['docker','build','-t',tag,'-f',str(dockerfile),str(target)],stdout=log,stderr=subprocess.STDOUT,check=True,timeout=600)
