@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { appendFile, cp, readFile } from 'node:fs/promises';
+import { appendFile, cp, mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { promisify } from 'node:util';
@@ -93,13 +93,21 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
       const row = await runTask({
         task: { id: item.taskId.replace(/\//g, '_'), prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta,
-        verify: async workspace => { await cp(workspace, prep.dir, { recursive: true, force: true }); const r = await provider.runAcceptance(prep); return r === true || r?.pass === true; },
+        verify: async workspace => { await cp(workspace, prep.dir, { recursive: true, force: true }); const r = await provider.runAcceptance(prep); await saveFailure(arm, item.taskId, r); return r === true || r?.pass === true; },
       });
       if (row.status === 'global_cap_refused') capHit = true;
       return row;
     } finally { await prep.cleanup?.(); }
   };
   return schedule({ items, workers, runItem, probe, out: results });
+}
+
+// Keeps why each verdict failed (kind + output tail) per arm/task; polyglot results rows only hold pass/fail.
+async function saveFailure(arm, taskId, r) {
+  if (!r || r === true || r.pass) return;
+  const dir = join('reports', 'v4', 'failures', process.env.V4_RUN_LABEL ?? arm.replace(/[^\w.-]/g, '_'));
+  await mkdir(dir, { recursive: true });
+  await appendFile(join(dir, `${taskId.replace(/\//g, '_')}.log`), `--- ${r.kind}\n${r.output ?? ''}\n`);
 }
 
 // The hidden tests are not in the workspace; the agent gets the exercise statement and the stub files.
