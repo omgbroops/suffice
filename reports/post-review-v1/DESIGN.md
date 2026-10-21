@@ -50,10 +50,21 @@ Propose **six fresh tasks × three arms = 18 attempts**, one predeclared attempt
 pair. Task IDs and manifests are intentionally not selected/frozen until this
 diagnosis and design are reviewed. Select source-change tasks not present in any
 previous Suffice campaign, using only issue text, initial public repository and
-public tests. Include two JavaScript/TypeScript tasks, two Python tasks, and two
-other source-change tasks if feasible. Do not select based on whether Luna fails
-or a reviewer can fix a known defect. If these strata are infeasible, document the
-selection amendment before inference rather than replacing tasks after outcomes.
+public tests. Following the user's JS/TS focus, restrict this pilot to **six
+JavaScript/TypeScript issues**, aiming for four TypeScript and two JavaScript
+issues across at least three repositories. Cover two async/lifecycle/retry issues,
+two API/type/compatibility issues, and two changes spanning module boundaries.
+These describe selection strata, not selected task IDs or invented issue reports.
+Actual issues must be identified, checked for eligibility and frozen before any
+model run. Favor executable existing project checks and independently prepared
+issue-contract grading. Do not select based on whether Luna fails or a reviewer
+can fix a known defect. If these strata are infeasible, document the selection
+amendment before inference rather than replacing tasks after outcomes.
+
+This is a deliberate evaluation of Suffice's intended JS/TS workflow and AST
+navigation, not a replacement or reweighting of previous mixed-language results.
+All three arms get the same eligible issues; include regressions and report only
+JS/TS-scoped conclusions. Six outcomes cannot establish general coding accuracy.
 
 | Arm | Fixed configuration |
 | --- | --- |
