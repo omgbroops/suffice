@@ -1,8 +1,9 @@
-export const V4_CHEAP_MODEL = 'claude-haiku-5-5';
-export const V4_STRONG_MODEL = 'claude-opus-5-5';
-export const V4_ROUNDS = 3;
-// Rate-card estimate from decomp-v2, unreconciled. Used only for the pre-escalation budget check.
-export const V4_STRONG_ESTIMATE_USD = 0.0705;
+import { effortFor, loadTiers } from './v4-config.mjs';
+
+// Default ladder comes from config/v4-tiers.json (cheap haiku x3, then strong opus x1 by default).
+export const DEFAULT_TIERS = loadTiers();
+export const V4_CHEAP_MODEL = DEFAULT_TIERS[0].model;
+export const V4_STRONG_MODEL = DEFAULT_TIERS[1].model;
 // Copied from decomp-v2 bench/polyglot.py:19. Retries carry this verdict and never the test text.
 export const V4_RETRY_MESSAGE = 'The hidden check failed: tests did not pass. Investigate and fix.';
 
@@ -16,11 +17,10 @@ function costOf(result) {
   return result.costUsd;
 }
 
-// attempt({ model, prompt, round }) must resolve to { pass, costUsd } only.
-// The oracle test stays inside the verifier, so the agent sees a verdict, not the test.
-export async function runV4(task, {
-  attempt, budgetUsd, rounds = V4_ROUNDS, strongEstimateUsd = V4_STRONG_ESTIMATE_USD,
-} = {}) {
+// attempt({ model, effort, prompt, round, tier, workspace, tools, remainingBudgetUsd }) must resolve to { pass, costUsd }.
+// Tier i+1 runs only if spent + its costEstimateUsd fits the per-run budget. Each tier starts with the task prompt; later rounds get the verdict only.
+// rounds_used and roundCostsUsd count tier 0 (the cheap tier), so the row schema matches the original ladder.
+export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, workspace, tools } = {}) {
   // Hard refusal: a per-run budget must be passed explicitly.
   if (!Number.isFinite(budgetUsd) || budgetUsd <= 0) throw new V4Error('BUDGET_REQUIRED');
   const row = {
@@ -29,23 +29,28 @@ export async function runV4(task, {
     cheapCostUsd: 0, escalated: false, escalationSkipped: null,
     strongCostUsd: 0, finalPass: false,
   };
-  let prompt = task.prompt;
-  for (let round = 1; round <= rounds; round++) {
-    const result = await attempt({ model: V4_CHEAP_MODEL, prompt, round });
-    const cost = costOf(result);
-    row.roundCostsUsd.push(cost);
-    row.cheapCostUsd += cost;
-    row.roundsUsed = round;
-    if (round === 1) row.firstAttemptPass = result.pass === true;
-    if (result.pass === true) { row.finalPass = true; return row; }
-    if (row.cheapCostUsd >= budgetUsd) { row.escalationSkipped = 'budget'; return row; }
-    prompt = V4_RETRY_MESSAGE;
+  let spent = 0, round = 0;
+  for (const [index, tier] of tiers.entries()) {
+    if (index > 0) {
+      if (spent + tier.costEstimateUsd > budgetUsd) { row.escalationSkipped = 'budget'; return row; }
+      row.escalated = true;
+    }
+    let prompt = task.prompt;
+    for (let r = 1; r <= tier.rounds; r++) {
+      round++;
+      const result = await attempt({
+        model: tier.model, effort: effortFor(tier, r), prompt, round, tier: tier.name,
+        workspace, tools: tools ?? tier.tools, remainingBudgetUsd: budgetUsd - spent,
+      });
+      const cost = costOf(result);
+      spent += cost;
+      if (index === 0) { row.roundCostsUsd.push(cost); row.cheapCostUsd += cost; row.roundsUsed = r; } else row.strongCostUsd += cost;
+      if (round === 1) row.firstAttemptPass = result.pass === true;
+      if (result.pass === true) { row.finalPass = true; return row; }
+      const more = r < tier.rounds || index < tiers.length - 1;
+      if (more && spent >= budgetUsd) { row.escalationSkipped = 'budget'; return row; }
+      prompt = V4_RETRY_MESSAGE;
+    }
   }
-  // Escalate only if one strong attempt still fits the remaining per-run budget.
-  if (row.cheapCostUsd + strongEstimateUsd > budgetUsd) { row.escalationSkipped = 'budget'; return row; }
-  row.escalated = true;
-  const result = await attempt({ model: V4_STRONG_MODEL, prompt: task.prompt, round: rounds + 1 });
-  row.strongCostUsd = costOf(result);
-  row.finalPass = result.pass === true;
   return row;
 }
