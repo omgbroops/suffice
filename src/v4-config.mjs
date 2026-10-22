@@ -61,6 +61,8 @@ export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet' } = {}) {
       : { ...strong, name: 'sonnet', model: V5_SONNET_MODEL, rounds: 1, costEstimateUsd: V5_SONNET_ESTIMATE_USD };
     return [{ ...cheap, rounds: Math.min(cheap.rounds, 2) }, topTier].map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
   }
+  // v6: same two rungs as v5; the cheap rung runs the test writer and K candidates (src/v6-arm.mjs).
+  if (arm === 'v6') return armTiers('v5', ladder, { top });
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),

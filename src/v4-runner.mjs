@@ -7,7 +7,7 @@ import { effortFor } from './v4-config.mjs';
 import { buildAttempt } from './v4-adapters.mjs';
 import { guardAttempt } from './v4-ledger.mjs';
 
-const STATUS_BY_CODE = {
+export const STATUS_BY_CODE = {
   COST_UNKNOWN: 'cost_unknown', HARNESS_ERROR: 'harness_error', RUN_TIMEOUT: 'run_timeout', PROVIDER_ERROR: 'provider_error',
   BUDGET_EXHAUSTED: 'budget_exhausted', BUDGET_REQUIRED: 'refused', GLOBAL_CAP: 'global_cap_refused',
 };

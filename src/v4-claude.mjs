@@ -24,7 +24,7 @@ export function runProcess(bin, args, { cwd, timeoutMs }) {
 // costUsd null means unknown. The hidden verdict is added by buildAttempt, not here.
 // Effort maps to `claude --effort` (low|medium|high|xhigh|max, from claude --help). Unverified live.
 // Shortcut: Bash can read any absolute path, so the oracle is hidden by path and prompt only; upgrade to a sandbox before trusting pass rates.
-export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false } = {}) {
+export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false, systemPrompt } = {}) {
   let session = null; // resume only within the same model; escalation starts fresh with the task prompt
   return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd }) => {
     if (!(remainingBudgetUsd > 0)) throw new V4Error('BUDGET_EXHAUSTED');
@@ -33,7 +33,7 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     const leanArgs = lean ? ['--max-turns', '12'] : [];
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
       '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
-      '--system-prompt', lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT, '--max-budget-usd', remainingBudgetUsd.toFixed(4), ...effortArgs, ...leanArgs, ...resume];
+      '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', remainingBudgetUsd.toFixed(4), ...effortArgs, ...leanArgs, ...resume];
     const out = await runProcess(bin, args, { cwd: workspace, timeoutMs });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
     let json;
