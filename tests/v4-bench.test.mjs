@@ -38,8 +38,8 @@ test('a failed probe aborts (fail closed) and a crashing item still gets a harne
   assert.equal(crashed[0].status, 'harness_error');
 });
 
-test('workers outside 1..4 are refused', async () => {
-  await assert.rejects(schedule({ items, workers: 5, runItem: async () => ({}), out: 'x' }), /workers/);
+test('workers outside 1..16 are refused', async () => {
+  await assert.rejects(schedule({ items, workers: 17, runItem: async () => ({}), out: 'x' }), /workers/);
 });
 
 test('polyglot manifest loads with nine tasks', () => {

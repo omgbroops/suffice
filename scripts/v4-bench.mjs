@@ -13,7 +13,7 @@ import { buildBundle, v5Prompt } from '../src/v5-bundle.mjs';
 import { runV6Task, v6DefaultBudget } from '../src/v6-arm.mjs';
 
 const exec = promisify(execFile);
-export const MAX_WORKERS = 4;
+export const MAX_WORKERS = 16;
 
 // macOS prints "System-wide memory free percentage: 85%". Any probe failure resolves as unknown, which the scheduler treats as unsafe.
 export async function probeFreePct() {
