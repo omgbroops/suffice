@@ -97,3 +97,15 @@ test('rule: Sonnet is skipped when its 0.05 reservation would exceed the budget'
   assert.equal(row.escalationSkipped, 'budget');
   assert.equal(row.finalPass, false);
 });
+
+test('strict: a cheap pass after a failed cheap round escalates; non-strict accepts it', async () => {
+  const fail = selfResult({ signal: 'fail' }), pass = selfResult({ pass: true, signal: 'pass' });
+  const strict = stub([fail, pass, pass]);
+  const s = await runV4(task, { attempt: strict.attempt, budgetUsd: 1, tiers: v5, rule: 'v5', strict: true });
+  assert.equal(s.escalated, true);
+  assert.deepEqual(strict.calls.map(c => c.model), [HAIKU, HAIKU, SONNET]);
+  const loose = stub([fail, pass]);
+  const l = await runV4(task, { attempt: loose.attempt, budgetUsd: 1, tiers: v5, rule: 'v5' });
+  assert.equal(l.escalated, false);
+  assert.equal(l.finalPass, true);
+});

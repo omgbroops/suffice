@@ -35,7 +35,8 @@ export function selfRetryPrompt(tail = '') {
 
 // rule 'v4' (default) is the original self/oracle rule; rule 'v5' uses v5Decision on the self-gate fields.
 // v5: a non-accepted round stays in its tier until the tier's rounds run out, so the cheap tier gets its retry before escalation.
-export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, workspace, tools, rule = 'v4' } = {}) {
+// strict (opt-in): a cheap accept counts only if every cheap round so far signalled 'pass'; otherwise escalate.
+export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, workspace, tools, rule = 'v4', strict = false } = {}) {
   // Hard refusal: a per-run budget must be passed explicitly.
   if (!Number.isFinite(budgetUsd) || budgetUsd <= 0) throw new V4Error('BUDGET_REQUIRED');
   const row = {
@@ -44,7 +45,7 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
     cheapCostUsd: 0, escalated: false, escalationSkipped: null,
     strongCostUsd: 0, finalPass: false, selfTests: [],
   };
-  let spent = 0, round = 0, unverified = 0;
+  let spent = 0, round = 0, unverified = 0, cheapClean = true;
   for (const [index, tier] of tiers.entries()) {
     if (index > 0) {
       if (spent + tier.costEstimateUsd > budgetUsd) { row.escalationSkipped = 'budget'; return row; }
@@ -63,10 +64,12 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
       if (index === 0) { row.roundCostsUsd.push(cost); row.cheapCostUsd += cost; row.roundsUsed = r; } else row.strongCostUsd += cost;
       if (round === 1) row.firstAttemptPass = result.pass === true;
       row.selfTests.push({ round, model: tier.model, cmd: result.selfTestCmd ?? null, signal: result.signal ?? null, tail: String(result.selfTestTail ?? '').slice(-400) });
-      if (result.pass === true) { row.finalPass = true; return row; }
-      if (rule === 'v5') {
-        if (v5Decision(result) === 'accept') { row.finalPass = true; return row; }
-      } else if (result.signal === 'unverified') unverified++;
+      if (index === 0 && result.signal !== 'pass') cheapClean = false;
+      if (result.pass === true || (rule === 'v5' && v5Decision(result) === 'accept')) {
+        if (index > 0 || !strict || cheapClean) { row.finalPass = true; return row; }
+        break; // strict: a cheap accept after a non-pass cheap round is not taken; escalate
+      }
+      if (rule !== 'v5' && result.signal === 'unverified') unverified++;
       const more = r < tier.rounds || index < tiers.length - 1;
       if (more && spent >= budgetUsd) { row.escalationSkipped = 'budget'; return row; }
       prompt = rule === 'v5' && result.signal === 'fail' ? selfRetryPrompt(result.selfTestTail) : V4_RETRY_MESSAGE;

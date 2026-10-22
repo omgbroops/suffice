@@ -41,7 +41,7 @@ export async function pass2Retry({ row, tiers, attempt, workspace, ledger, budge
 // gate 'self' (default): rounds and escalation use only selfSignal; the hidden verify runs after the last round, never inside it.
 // gate 'oracle': the hidden verify decides each round (old behaviour, kept for comparison).
 // protocol 'pass2' (polyglot only): after a failed hidden verify, one more attempt with the last tier's model that sees the hidden output; reported as pass2.
-export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeoutMs, tiers = DEFAULT_TIERS, verify, ledger: globalLedger, meta = {}, gate = 'self', selfCheck, rule = 'v4', protocol = 'pass1', verifyOutput }) {
+export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeoutMs, tiers = DEFAULT_TIERS, verify, ledger: globalLedger, meta = {}, gate = 'self', selfCheck, rule = 'v4', strict = false, protocol = 'pass1', verifyOutput }) {
   const ledger = { spentUsd: 0, costKnown: true };
   const base = { ...meta, task: task.id, variant: meta.arm ?? 'v4', repeat, budgetUsd, gate, protocol };
   let row, snapshot;
@@ -54,7 +54,7 @@ export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeout
     if (gate === 'self') snapshot = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-r1-`)));
     const attempt = buildAttempt({ tiers, workspace, verify: verifyFn, ledger, bin, timeoutMs, gate, original: task.workspaceDir, selfCheck, snapshot });
     const guarded = globalLedger ? guardAttempt(globalLedger, tiers, attempt) : attempt;
-    const result = await runV4(task, { attempt: guarded, budgetUsd, tiers, workspace, rule });
+    const result = await runV4(task, { attempt: guarded, budgetUsd, tiers, workspace, rule, strict });
     row = { ...base, status: 'completed', ...result, costUsd: ledger.spentUsd, costKnown: ledger.costKnown };
     if (gate === 'self') {
       // The one hidden verdict on the final workspace; round 1 is verified from its snapshot unless it was the last attempt. Nothing here feeds back into rounds.

@@ -53,11 +53,12 @@ export function loadManifest(path) {
   return items;
 }
 
-// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>] [--gate=self|oracle] [--v5-top=sonnet|opus] [--v5-cheap=haiku|sonnet] [--protocol=pass1|pass2 (polyglot only)]
-const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate', 'v5-top', 'v5-cheap', 'protocol', 'v6-k', 'v6-plan'];
+// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>] [--gate=self|oracle] [--v5-top=sonnet|opus] [--v5-cheap=haiku|sonnet] [--v5-strict] [--protocol=pass1|pass2 (polyglot only)]
+const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate', 'v5-top', 'v5-cheap', 'v5-strict', 'protocol', 'v6-k', 'v6-plan'];
 export function parseArgs(argv) {
   const opts = {};
   for (const arg of argv) {
+    if (arg === '--v5-strict') { opts['v5-strict'] = true; continue; } // boolean: presence only
     const m = /^--([a-z0-9-]+)=(.*)$/.exec(arg); // digits: --v6-k
     if (!m || !FLAGS.includes(m[1])) throw new Error(`unknown argument: ${arg}`);
     opts[m[1]] = m[2];
@@ -75,7 +76,7 @@ export function defaultBudgetUsd(tiers) { return tiers.reduce((s, t) => s + t.ro
 
 // provider: { prepWorkspace(item) -> {dir, acceptanceCommand, cleanup}, runAcceptance(prep) -> boolean | {pass} }.
 // runTask defaults to runV4Task; tests inject stubs. The first global-cap refusal stops the run: later items get 'aborted_cap' rows.
-export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask: runTaskOpt, gate = 'self', v5Top, v5Cheap, protocol = 'pass1', v6K, v6Plan = 'on' }) {
+export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask: runTaskOpt, gate = 'self', v5Top, v5Cheap, v5Strict = false, protocol = 'pass1', v6K, v6Plan = 'on' }) {
   if (!['on', 'off'].includes(v6Plan)) throw new Error('--v6-plan must be on|off');
   if (!GATES.includes(gate)) throw new Error(`--gate must be one of ${GATES.join('|')}`);
   if (!(globalCapUsd > 0)) throw new Error('--global-cap-usd is required and must be > 0');
@@ -112,7 +113,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
       }
       const row = await runTask({
         task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir },
-        budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate, rule, protocol, k: v6K, plan: v6Plan === 'on',
+        budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate, rule, strict: v5Strict, protocol, k: v6K, plan: v6Plan === 'on',
         verifyOutput: ws => hiddenOutputs.get(ws) ?? '',
         verify: async workspace => {
           // Each verdict gets a pristine copy (provider.cloneForVerify, else a dir copy of prep.dir) plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
@@ -172,7 +173,7 @@ export async function main(argv) {
   if (!provider) throw new Error('src/v4-polyglot.mjs exports no provider (expected default or polyglotProvider)');
   const rows = await runBench({
     items, arm: o.arm, workers, globalCapUsd: Number(o['global-cap-usd']), results: o.results, gate: o.gate ?? 'self',
-    budgetUsd: o['budget-usd'] === undefined ? undefined : Number(o['budget-usd']), provider, probe: probeFreePct, v5Top: o['v5-top'], v5Cheap: o['v5-cheap'], protocol,
+    budgetUsd: o['budget-usd'] === undefined ? undefined : Number(o['budget-usd']), provider, probe: probeFreePct, v5Top: o['v5-top'], v5Cheap: o['v5-cheap'], v5Strict: o['v5-strict'] === true, protocol,
     v6K: o['v6-k'] === undefined ? undefined : Number(o['v6-k']), v6Plan: o['v6-plan'],
   });
   return rows.length;
