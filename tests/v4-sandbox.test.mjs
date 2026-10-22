@@ -2,9 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
-import { tmpdir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { sandboxProfile, sandboxCommand, pathVariants, sbplString } from '../src/v4-claude.mjs';
+
+test('default sandbox denies the swebpro cache (hidden rows.json and eval dirs)', () => {
+  const profile = sandboxProfile({ allowed: [] });
+  assert.ok(profile.includes(`(deny file-read-data (subpath "${join(homedir(), '.cache', 'v4-swebpro')}"))`));
+});
 
 test('sandbox profile denies the given trees and re-allows the workspace base', () => {
   const profile = sandboxProfile({ denied: ['/Users/x/bench-repos'], allowed: ['/Users/x/bench-repos/run'] });

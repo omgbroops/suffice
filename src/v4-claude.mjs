@@ -22,7 +22,8 @@ export function pathVariants(path) {
   return [...new Set([real, '/System/Volumes/Data' + real])];
 }
 
-export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(homedir(), 'suffice-v4'), tmpdir()], allowed, literal = [] }) {
+// ~/.cache/v4-swebpro holds rows.json (hidden test_patch, FAIL_TO_PASS, PASS_TO_PASS); its work/ subdir is re-allowed via `allowed`.
+export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(homedir(), 'suffice-v4'), join(homedir(), '.cache', 'v4-swebpro'), tmpdir()], allowed, literal = [] }) {
   const lines = ['(version 1)', '(allow default)'];
   for (const dir of denied) for (const p of pathVariants(dir)) lines.push(`(deny file-read-data (subpath ${sbplString(p)}))`);
   // Last matching rule wins, so the workspace base re-allows reads inside a denied tree.

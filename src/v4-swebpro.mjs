@@ -209,7 +209,8 @@ export async function runAcceptance(prep, { timeoutMs = DEFAULT_TIMEOUT_MS } = {
     result = { pass: false, kind: 'empty_patch', output: '' };
     log = 'empty diff; no container run\n';
   } else {
-    const evalDir = join(WORK, `eval-${instanceId}-${process.pid}-${Date.now()}`);
+    // Outside WORK: the agent can read WORK siblings, and this dir holds test_patch.patch.
+    const evalDir = join(CACHE, 'eval', `eval-${instanceId}-${process.pid}-${Date.now()}`);
     await mkdir(evalDir, { recursive: true });
     const scripts = await loadScripts(instanceId);
     await writeFile(join(evalDir, 'patch.diff'), diff);
