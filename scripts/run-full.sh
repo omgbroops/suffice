@@ -13,7 +13,15 @@ done
 
 TOTAL_CAP="${TOTAL_CAP:-13}"  # remaining of the owner's $40 cap (~$27 spent 2026-10-21); override explicitly to spend more
 JOBS=(polyglot-v5-cheap polyglot-v5-strict polyglot-single swebpro-v5-cheap swebpro-v5-strict swebpro-single)
-CAPS=(6 5 4 8 8 10)
+CAPS=(6 5 4 3 3 4)
+SUITE="${SUITE:-all}"  # all|polyglot|swebpro
+SWEPRO_MANIFEST="${SWEPRO_MANIFEST:-config/bench-manifest.swebpro20.json}"
+if [[ "$SUITE" != all ]]; then
+  KJ=(); KC=()
+  for i in "${!JOBS[@]}"; do [[ "${JOBS[$i]}" == "$SUITE"-* ]] && { KJ+=("${JOBS[$i]}"); KC+=("${CAPS[$i]}"); }; done
+  (( ${#KJ[@]} )) || { echo "unknown SUITE: $SUITE" >&2; exit 2; }
+  JOBS=("${KJ[@]}"); CAPS=("${KC[@]}")
+fi
 
 # Sets ARGS to one job's node argv; --global-cap-usd and --results are added at launch.
 job_args() {
@@ -21,9 +29,9 @@ job_args() {
     polyglot-v5-cheap)  ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
     polyglot-v5-strict) ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-strict --v5-top=opus) ;;
     polyglot-single)    ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=single:claude-sonnet-5-5) ;;
-    swebpro-v5-cheap)   ARGS=(--provider=swebpro --manifest=config/bench-manifest.swebpro20.json --workers=3 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
-    swebpro-v5-strict)  ARGS=(--provider=swebpro --manifest=config/bench-manifest.swebpro20.json --workers=3 --arm=v5 --v5-strict --v5-top=opus) ;;
-    swebpro-single)     ARGS=(--provider=swebpro --manifest=config/bench-manifest.swebpro20.json --workers=3 --arm=single:claude-sonnet-5-5) ;;
+    swebpro-v5-cheap)   ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
+    swebpro-v5-strict)  ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --arm=v5 --v5-strict --v5-top=opus) ;;
+    swebpro-single)     ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --arm=single:claude-sonnet-5-5) ;;
     *) echo "unknown job: $1" >&2; exit 2 ;;
   esac
 }
@@ -50,15 +58,20 @@ fi
 OUT="reports/full/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$OUT"
 PIDS=()
+fails=0
 for i in "${!JOBS[@]}"; do
   name="${JOBS[$i]}"
   job_args "$name"
   ARGS+=("--global-cap-usd=${CAPS[$i]}" "--results=$OUT/$name.jsonl")
-  nice -n 19 node scripts/v4-bench.mjs "${ARGS[@]}" >"$OUT/$name.out" 2>&1 &
-  PIDS+=("$!")
+  if [[ "$name" == swebpro-* ]]; then
+    # swebpro image refcount is per process, so concurrent arms could rmi an image another arm uses; one ~10GB image at a time also keeps docker under 15GB
+    nice -n 19 node scripts/v4-bench.mjs "${ARGS[@]}" >"$OUT/$name.out" 2>&1 || fails=$((fails + 1))
+  else
+    nice -n 19 node scripts/v4-bench.mjs "${ARGS[@]}" >"$OUT/$name.out" 2>&1 &
+    PIDS+=("$!")
+  fi
 done
 
-fails=0
 for pid in "${PIDS[@]}"; do
   wait "$pid" || fails=$((fails + 1))
 done
