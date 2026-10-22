@@ -55,6 +55,11 @@ export function runProcess(bin, args, { cwd, timeoutMs, env }) {
   });
 }
 
+// --max-budget-usd value, rounded down so the CLI cap never exceeds what is left; 0 means exhausted.
+export function budgetFlag(remainingBudgetUsd) {
+  return (Math.floor(remainingBudgetUsd * 1e4) / 1e4).toFixed(4);
+}
+
 // Adapter contract: attempt({ model, effort, prompt, workspace, tools, remainingBudgetUsd }) -> { costUsd, usage, status }.
 // costUsd null means unknown. The hidden verdict is added by buildAttempt, not here.
 // Effort maps to `claude --effort` (low|medium|high|xhigh|max, from claude --help). Unverified live.
@@ -63,7 +68,8 @@ export function runProcess(bin, args, { cwd, timeoutMs, env }) {
 export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false, systemPrompt } = {}) {
   let session = null; // resume only within the same model; escalation starts fresh with the task prompt
   return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd, maxTurns }) => {
-    if (!(remainingBudgetUsd > 0)) throw new V4Error('BUDGET_EXHAUSTED');
+    const cap = budgetFlag(remainingBudgetUsd);
+    if (!(Number(cap) > 0)) throw new V4Error('BUDGET_EXHAUSTED');
     const resume = session?.model === model ? ['--resume', session.id] : [];
     const effortArgs = effort ? ['--effort', effort] : [];
     const turns = maxTurns ?? (lean ? 12 : null);
@@ -71,7 +77,7 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     // Keeps the system prompt prefix stable across calls (per-machine sections move out of it), so the cache hits.
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
       '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', '--exclude-dynamic-system-prompt-sections', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
-      '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', remainingBudgetUsd.toFixed(4), ...effortArgs, ...leanArgs, ...resume];
+      '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', cap,...effortArgs, ...leanArgs, ...resume];
     const sandboxed = await sandboxCommand(bin, args, workspace);
     const out = await runProcess(sandboxed.bin, sandboxed.args, { cwd: workspace, timeoutMs, env: sandboxed.env });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
