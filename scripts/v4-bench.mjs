@@ -112,7 +112,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
           goldInBundle: Array.isArray(item.goldFiles) ? item.goldFiles.some(g => b.bundledFiles.includes(g)) : null };
       }
       const row = await runTask({
-        task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir },
+        task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir, env: prep.env },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate, rule, strict: v5Strict, protocol, k: v6K, plan: v6Plan === 'on',
         verifyOutput: ws => hiddenOutputs.get(ws) ?? '',
         verify: async workspace => {

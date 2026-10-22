@@ -3,6 +3,7 @@ import { realpathSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { homedir, tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { V4Error } from './v4-escalation.mjs';
 
 // Thin profile: tiny system prompt. Tool list comes from the tier config (default is these four).
@@ -32,6 +33,9 @@ export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(
   return lines.join('\n');
 }
 
+// bin/envrun sits under the denied repo tree; allow reading that one script so the agent can run it.
+const ENVRUN = fileURLToPath(new URL('../bin/envrun', import.meta.url));
+
 // macOS only: wraps the agent command in sandbox-exec and redirects TMPDIR into the workspace base.
 export async function sandboxCommand(bin, args, workspace) {
   if (process.platform !== 'darwin') return { bin, args, env: {} };
@@ -39,7 +43,7 @@ export async function sandboxCommand(bin, args, workspace) {
   const tmp = join(base, 'tmp');
   await mkdir(tmp, { recursive: true });
   // The agent binary itself must stay readable even when it sits in a denied tree (e.g. a test fixture in this repo).
-  const literal = bin.includes('/') ? [resolve(bin)] : [];
+  const literal = [ENVRUN, ...(bin.includes('/') ? [resolve(bin)] : [])];
   return { bin: 'sandbox-exec', args: ['-p', sandboxProfile({ allowed: [base], literal }), bin, ...args], env: { TMPDIR: tmp } };
 }
 
@@ -67,19 +71,19 @@ export function budgetFlag(remainingBudgetUsd) {
 // shortcut: non-darwin runs are unsandboxed (oracle hidden by path and prompt only), add a Linux sandbox before trusting pass rates there.
 export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false, systemPrompt } = {}) {
   let session = null; // resume only within the same model; escalation starts fresh with the task prompt
-  return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd, maxTurns }) => {
+  return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd, maxTurns, env: extraEnv }) => {
     const cap = budgetFlag(remainingBudgetUsd);
     if (!(Number(cap) > 0)) throw new V4Error('BUDGET_EXHAUSTED');
     const resume = session?.model === model ? ['--resume', session.id] : [];
     const effortArgs = effort ? ['--effort', effort] : [];
-    const turns = maxTurns ?? (lean ? 12 : null);
+    const turns = maxTurns ?? (lean ? (Number(process.env.V4_MAX_TURNS) || 12) : null);
     const leanArgs = turns ? ['--max-turns', String(turns)] : [];
     // Keeps the system prompt prefix stable across calls (per-machine sections move out of it), so the cache hits.
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
       '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', '--exclude-dynamic-system-prompt-sections', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
       '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', cap,...effortArgs, ...leanArgs, ...resume];
     const sandboxed = await sandboxCommand(bin, args, workspace);
-    const out = await runProcess(sandboxed.bin, sandboxed.args, { cwd: workspace, timeoutMs, env: sandboxed.env });
+    const out = await runProcess(sandboxed.bin, sandboxed.args, { cwd: workspace, timeoutMs, env: { ...sandboxed.env, ...extraEnv } });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
     let json;
     try { json = JSON.parse(out.stdout); } catch { throw new V4Error(out.code === 0 ? 'HARNESS_ERROR' : 'PROVIDER_ERROR'); }

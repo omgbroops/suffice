@@ -22,12 +22,12 @@ export function makeCommandAdapter({ tier, timeoutMs = 360_000 }) {
 // One attempt function for runV4. gate 'self' (default): the round decision is selfSignal, oracle-free; verify is never called here.
 // gate 'oracle': the old behaviour, the hidden verdict decides each round. Unknown cost returns costUsd null, so runV4 fails closed.
 // snapshot: in self mode round 1 is copied there so runV4Task can verify the first attempt afterwards.
-export function buildAttempt({ tiers, workspace, verify, ledger, bin, timeoutMs, gate = 'self', original, selfCheck = makeSelfCheck(), snapshot }) {
+export function buildAttempt({ tiers, workspace, verify, ledger, bin, timeoutMs, gate = 'self', original, selfCheck = makeSelfCheck(), snapshot, env }) {
   const adapters = new Map(tiers.map(tier => [tier.name, tier.provider === 'claude'
     ? makeClaudeAdapter({ bin, timeoutMs, lean: tier.lean === true })
     : makeCommandAdapter({ tier, timeoutMs })]));
   return async call => {
-    const result = await adapters.get(call.tier)({ ...call, workspace });
+    const result = await adapters.get(call.tier)({ ...call, workspace, env });
     if (!Number.isFinite(result.costUsd)) { ledger.costKnown = false; return { pass: false, costUsd: null }; }
     ledger.spentUsd += result.costUsd;
     if (gate === 'oracle') return { pass: await verify(workspace), costUsd: result.costUsd, usage: result.usage, status: result.status };

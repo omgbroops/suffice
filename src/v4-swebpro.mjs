@@ -18,7 +18,10 @@ const REPORTS = join(HERE, '..', 'reports', 'v4', 'failures');
 const DATASET = 'https://datasets-server.huggingface.co/rows?dataset=ScaleAI/SWE-bench_Pro&config=default&split=test';
 const SCRIPTS_RAW = 'https://raw.githubusercontent.com/scaleapi/SWE-bench_Pro-os/main/run_scripts';
 const INSTRUCTION = 'Edit the source files in the current directory to resolve the issue above. '
-  + 'Do not edit tests. You cannot run the project\'s tests (no runtime is installed). Work only inside the current directory.';
+  + 'Do not edit existing tests; you may add new test files (they do not affect grading). '
+  + 'The project\'s runtime is available via `envrun <command>` (runs in the project\'s Linux container against your current files; e.g. `envrun python -m pytest tests/path -x -q`). '
+  + 'Write and run a minimal test for the issue there. Work only inside the current directory.';
+const REPO_BIN = join(dirname(fileURLToPath(import.meta.url)), '..', 'bin');
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -176,7 +179,8 @@ export async function prepWorkspace(item) {
     const copied = await docker(['cp', `${cid}:/app/.`, dir], { timeoutMs: 900_000 });
     if (copied.code !== 0) throw new Error(`docker cp failed: ${lastLines(copied.stderr, 5)}`);
     // Test files come from the eval's test patch; keep them out of the agent's workspace.
-    for (const f of patchFiles(row.test_patch)) await rm(join(dir, f), { force: true });
+    const hidden = patchFiles(row.test_patch);
+    for (const f of hidden) await rm(join(dir, f), { force: true });
     await rm(join(dir, '.git'), { recursive: true, force: true });
     const git = ['-C', dir, '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', '-c', 'user.name=v4-swebpro', '-c', 'user.email=v4-swebpro@local'];
     await run('git', ['-C', dir, 'init', '-q'], { timeoutMs: 60_000 });
@@ -184,7 +188,9 @@ export async function prepWorkspace(item) {
     await run('git', [...git, 'commit', '-q', '--allow-empty', '-m', 'baseline'], { timeoutMs: 600_000 });
     item.prompt = `${row.problem_statement}\n\n${INSTRUCTION}`;
     const instanceId = item.taskId;
-    return { dir, cleanup: release, cid, image, row, instanceId, prompt: item.prompt, item };
+    // Agent env for bin/envrun: the container image, the hidden test files it must not see, and the repo bin on PATH.
+    const env = { V4_ENV_IMAGE: image, V4_ENV_REMOVED: hidden.join('\n'), V4_ENV_PLATFORM: PLATFORM, PATH: `${REPO_BIN}:${process.env.PATH ?? ''}` };
+    return { dir, cleanup: release, cid, image, row, instanceId, prompt: item.prompt, item, env };
   } catch (error) {
     await release();
     throw error;

@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+// Runs a shell command in the task's container against the current workspace (copied in; nothing copied out).
+// Env: V4_ENV_IMAGE (required), V4_ENV_REMOVED (newline list of hidden test files to delete), V4_ENV_PLATFORM (optional).
+// Node built-ins only. shortcut: files the agent deletes survive in the container (tar extracts over /app), upgrade with an rsync --delete step.
+import { spawn } from 'node:child_process';
+
+const TIMEOUT_MS = 240_000;
+const sq = s => `'${s.replace(/'/g, `'\\''`)}'`;
+
+const image = process.env.V4_ENV_IMAGE;
+const cmd = process.argv.slice(2).join(' ');
+if (!image || !cmd) {
+  console.error('usage: envrun <shell command>   (needs V4_ENV_IMAGE; the provider sets it)');
+  process.exit(2);
+}
+
+const removed = (process.env.V4_ENV_REMOVED ?? '').split('\n').filter(Boolean);
+const rm = removed.length ? `rm -f -- ${removed.map(sq).join(' ')} && ` : '';
+const name = `envrun-${process.pid}-${Date.now()}`;
+const platform = process.env.V4_ENV_PLATFORM ? ['--platform', process.env.V4_ENV_PLATFORM] : [];
+const args = ['run', '--rm', '-i', '--name', name, ...platform, '--network', 'none', '--cpus', '2', '--memory', '3g',
+  '-w', '/app', '--entrypoint', 'sh', image, '-c', `tar -xf - -C /app && ${rm}${cmd}`];
+
+const tar = spawn('tar', ['-cf', '-', '--exclude=.git', '.'], { stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, COPYFILE_DISABLE: '1' } });
+const docker = spawn('docker', args, { stdio: ['pipe', 'inherit', 'inherit'] });
+tar.stdout.pipe(docker.stdin);
+docker.stdin.on('error', () => {}); // docker exiting early closes stdin; its exit code is the answer
+
+let timedOut = false;
+const timer = setTimeout(() => {
+  timedOut = true;
+  spawn('docker', ['rm', '-f', name], { stdio: 'ignore' });
+  tar.kill();
+  docker.kill();
+}, TIMEOUT_MS);
+docker.on('error', error => { clearTimeout(timer); console.error(`envrun: ${error.message}`); process.exitCode = 127; });
+docker.on('close', code => { clearTimeout(timer); process.exitCode = timedOut ? 124 : code ?? 1; });

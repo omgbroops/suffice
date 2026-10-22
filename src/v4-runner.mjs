@@ -52,7 +52,7 @@ export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeout
     await cp(task.workspaceDir, workspace, { recursive: true, verbatimSymlinks: true });
     const verifyFn = verify ?? nodeTestVerdict(task.acceptancePath);
     if (gate === 'self') snapshot = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-r1-`)));
-    const attempt = buildAttempt({ tiers, workspace, verify: verifyFn, ledger, bin, timeoutMs, gate, original: task.workspaceDir, selfCheck, snapshot });
+    const attempt = buildAttempt({ tiers, workspace, verify: verifyFn, ledger, bin, timeoutMs, gate, original: task.workspaceDir, selfCheck, snapshot, env: task.env });
     const guarded = globalLedger ? guardAttempt(globalLedger, tiers, attempt) : attempt;
     const result = await runV4(task, { attempt: guarded, budgetUsd, tiers, workspace, rule, strict });
     row = { ...base, status: 'completed', ...result, costUsd: ledger.spentUsd, costKnown: ledger.costKnown };
