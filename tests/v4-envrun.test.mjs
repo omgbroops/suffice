@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sandboxCommand } from '../src/v4-claude.mjs';
@@ -46,6 +46,33 @@ test('envrunArgs isolates the container and deletes hidden files', () => {
   assert.ok(argv.includes('--network') && argv[argv.indexOf('--network') + 1] === 'none');
   assert.ok(argv.includes('linux/amd64') && argv.includes('img:1'));
   assert.equal(argv.at(-1), "tar -xf - -C /app && rm -f -- '/app/t.py' && python -m pytest");
+});
+
+test('envrunArgs mounts only the run script, read-only, when given', () => {
+  const argv = envrunArgs({ image: 'img:1', removed: [], runScript: '/Users/x/run_script.sh', cmd: 'true', name: 'n' });
+  const i = argv.indexOf('-v');
+  assert.ok(i > 0 && argv[i + 1] === '/Users/x/run_script.sh:/run_tests.sh:ro', argv.join(' '));
+  assert.equal(argv.filter(a => a === '-v').length, 1);
+  assert.ok(!envrunArgs({ image: 'img:1', cmd: 'true', name: 'n' }).includes('-v'));
+});
+
+test('live: envrun sh /run_tests.sh runs the mounted run script', { skip: !HAVE_DOCKER }, async () => {
+  // Under $HOME: colima only bind-mounts $HOME, not the macOS tmpdir.
+  const dir = mkdtempSync(join(homedir(), 'envrun-runscript-'));
+  const script = join(dir, 'run_script.sh');
+  writeFileSync(script, 'echo RUNTESTS "$@"\n');
+  chmodSync(script, 0o644);
+  const { root, ws } = setupWs();
+  const broker = await startEnvrunBroker({ image: 'alpine:latest', removed: [], runScript: script });
+  try {
+    const r = await underSandbox(ws, broker.sock, ENVRUN, ['sh', '/run_tests.sh', 'a', 'b']);
+    assert.equal(r.code, 0, r.out);
+    assert.ok(r.out.split('\n').includes('RUNTESTS a b'), r.out);
+  } finally {
+    await broker.close();
+    rmSync(root, { recursive: true, force: true });
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('broker: container sees workspace minus hidden file, no network', { skip: !HAVE_DOCKER }, async () => {

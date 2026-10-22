@@ -20,7 +20,7 @@ const DATASET = 'https://datasets-server.huggingface.co/rows?dataset=ScaleAI/SWE
 const SCRIPTS_RAW = 'https://raw.githubusercontent.com/scaleapi/SWE-bench_Pro-os/main/run_scripts';
 const INSTRUCTION = 'Edit the source files in the current directory to resolve the issue above. '
   + 'Do not edit existing tests; you may add new test files (they do not affect grading). '
-  + 'The project\'s runtime is available via `envrun <command>` (runs in the project\'s Linux container against your current files; e.g. `envrun python -m pytest tests/path -x -q`). '
+  + 'Run the project\'s tests the way its CI does via `envrun bash /run_tests.sh <test files>` (e.g. `envrun bash /run_tests.sh tests/unit/foo/test_bar.py`); `envrun <command>` runs any other command in the project\'s Linux container against your current files. '
   + 'Write and run a minimal test for the issue there. Work only inside the current directory.';
 const REPO_BIN = join(dirname(fileURLToPath(import.meta.url)), '..', 'bin');
 
@@ -193,7 +193,8 @@ export async function prepWorkspace(item) {
     item.prompt = `${row.problem_statement}\n\n${INSTRUCTION}`;
     const instanceId = item.taskId;
     // Agent env: only the broker socket (image and hidden list stay with the harness) and the repo bin on PATH.
-    broker = await startEnvrunBroker({ image, platform: PLATFORM, removed: hidden });
+    await loadScripts(instanceId); // ensures the cached run_script.sh exists on disk before the broker mounts it
+    broker = await startEnvrunBroker({ image, platform: PLATFORM, removed: hidden, runScript: join(CACHE, 'scripts', instanceId, 'run_script.sh') });
     const env = { V4_ENVRUN_SOCK: broker.sock, PATH: `${REPO_BIN}:${process.env.PATH ?? ''}` };
     return { dir, cleanup: release, cid, image, row, instanceId, prompt: item.prompt, item, env };
   } catch (error) {

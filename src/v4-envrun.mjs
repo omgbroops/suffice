@@ -11,10 +11,12 @@ const TIMEOUT_MS = 240_000;
 const sq = s => `'${s.replace(/'/g, `'\\''`)}'`;
 
 // docker run args for one envrun call. --network none and the hidden-file rm are the isolation.
-export function envrunArgs({ image, platform, removed = [], cmd, name }) {
+// runScript (optional) is one host file mounted read-only as /run_tests.sh; never the eval dir (it holds hidden tests).
+export function envrunArgs({ image, platform, removed = [], runScript, cmd, name }) {
   const rm = removed.length ? `rm -f -- ${removed.map(sq).join(' ')} && ` : '';
   const plat = platform ? ['--platform', platform] : [];
-  return ['run', '--rm', '-i', '--name', name, ...plat, '--network', 'none', '--cpus', '2', '--memory', '3g',
+  const mount = runScript ? ['-v', `${runScript}:/run_tests.sh:ro`] : [];
+  return ['run', '--rm', '-i', '--name', name, ...plat, '--network', 'none', '--cpus', '2', '--memory', '3g', ...mount,
     '-w', '/app', '--entrypoint', 'sh', image, '-c', `tar -xf - -C /app && ${rm}${cmd}`];
 }
 
@@ -27,14 +29,14 @@ const frame = (type, payload) => {
 const exitFrame = code => { const b = Buffer.alloc(4); b.writeInt32BE(code); return frame(2, b); };
 
 // One broker per task. Image and hidden list come from the harness, never from the client.
-export async function startEnvrunBroker({ image, platform, removed }) {
+export async function startEnvrunBroker({ image, platform, removed, runScript }) {
   const dir = await mkdtemp(join(tmpdir(), 'v4-envrun-'));
   const sock = join(dir, 's.sock');
   const open = new Set();
   const server = createServer({ allowHalfOpen: true }, socket => {
     open.add(socket);
     socket.on('close', () => open.delete(socket));
-    serve(socket, { image, platform, removed });
+    serve(socket, { image, platform, removed, runScript });
   });
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(sock, resolve); });
   return {
@@ -47,7 +49,7 @@ export async function startEnvrunBroker({ image, platform, removed }) {
   };
 }
 
-function serve(socket, { image, platform, removed }) {
+function serve(socket, { image, platform, removed, runScript }) {
   socket.on('error', () => {});
   let head = Buffer.alloc(0);
   const onData = chunk => {
@@ -62,7 +64,7 @@ function serve(socket, { image, platform, removed }) {
       return;
     }
     const name = `envrun-${randomUUID()}`;
-    const docker = spawn('docker', envrunArgs({ image, platform, removed, cmd, name }), { stdio: ['pipe', 'pipe', 'pipe'] });
+    const docker = spawn('docker', envrunArgs({ image, platform, removed, runScript, cmd, name }), { stdio: ['pipe', 'pipe', 'pipe'] });
     docker.stdin.on('error', () => {}); // docker exiting early closes stdin; its exit code is the answer
     const out = data => { if (!socket.destroyed) socket.write(frame(1, data)); };
     docker.stdout.on('data', out);

@@ -14,7 +14,7 @@ if (!sock || !cmd) {
 const socket = connect(sock);
 socket.on('error', error => { console.error(`envrun: ${error.message}`); process.exitCode = 127; });
 socket.write(`${JSON.stringify({ cmd })}\n`);
-const tar = spawn('tar', ['-cf', '-', '--exclude=.git', '.'], { stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, COPYFILE_DISABLE: '1' } });
+const tar = spawn('tar', ['-cf', '-', '--no-xattrs', '--exclude=.git', '.'], { stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, COPYFILE_DISABLE: '1' } });
 tar.stdout.pipe(socket);
 
 let buf = Buffer.alloc(0);
