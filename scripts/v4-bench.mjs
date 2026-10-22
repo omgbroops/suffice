@@ -119,7 +119,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
           // Each verdict gets a pristine copy (provider.cloneForVerify, else a dir copy of prep.dir) plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
           const clone = provider.cloneForVerify ? await provider.cloneForVerify(prep) : await dirClone(prep.dir);
           try {
-            await cp(workspace, clone.dir, { recursive: true, force: true });
+            await cp(workspace, clone.dir, { recursive: true, force: true, verbatimSymlinks: true });
             const r = await provider.runAcceptance({ ...prep, ...clone });
             await saveFailure(arm, item.taskId, r);
             hiddenOutputs.set(workspace, r?.output ?? '');
@@ -135,9 +135,9 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
 }
 
 // Keeps why each verdict failed (kind + output tail) per arm/task; polyglot results rows only hold pass/fail.
-async function dirClone(src) {
+export async function dirClone(src) {
   const dir = await mkdtemp(join(tmpdir(), 'v4-verify-'));
-  await cp(src, dir, { recursive: true });
+  await cp(src, dir, { recursive: true, verbatimSymlinks: true });
   return { dir, cleanup: () => rm(dir, { recursive: true, force: true }) };
 }
 
