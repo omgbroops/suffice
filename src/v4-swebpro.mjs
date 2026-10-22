@@ -1,7 +1,7 @@
 // SWE-bench Pro workspace provider for scripts/v4-bench.mjs.
 // Mirrors scaleapi/SWE-bench_Pro-os swe_bench_pro_eval.py (create_entryscript + eval_with_docker),
 // with the v2 ghcr image tag from the dataset row. Node built-ins only.
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { existsSync, realpathSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
@@ -40,6 +40,31 @@ export function patchFiles(patch) {
   const files = new Set();
   for (const m of patch.matchAll(/^diff --git a\/(\S+) b\/(\S+)$/gm)) files.add(m[2]);
   return [...files];
+}
+
+// git show <base>:<file> as a Buffer, or null if the file or repo is missing at base.
+function gitShowAtBase(dir, base, file) {
+  return new Promise(resolve => {
+    execFile('git', ['-C', dir, 'show', `${base}:${file}`], { encoding: 'buffer', maxBuffer: 1 << 30 },
+      (err, stdout) => resolve(err ? null : stdout));
+  });
+}
+
+// Test-patch files that existed at base keep their base content (agents see the regression suite);
+// only files new in the test patch are removed. Returns the removed paths. Must run before .git is deleted.
+export async function hideTestPatch(dir, baseCommit, files) {
+  const removed = [];
+  for (const f of files) {
+    const content = await gitShowAtBase(dir, baseCommit, f);
+    if (content !== null) {
+      await mkdir(dirname(join(dir, f)), { recursive: true });
+      await writeFile(join(dir, f), content);
+    } else {
+      await rm(join(dir, f), { force: true });
+      removed.push(f);
+    }
+  }
+  return removed;
 }
 
 export function lastLines(text, n = 60) {
@@ -195,8 +220,7 @@ export async function prepWorkspace(item) {
     const copied = await docker(['cp', `${cid}:/app/.`, dir], { timeoutMs: 900_000 });
     if (copied.code !== 0) throw new Error(`docker cp failed: ${lastLines(copied.stderr, 5)}`);
     // Test files come from the eval's test patch; keep them out of the agent's workspace.
-    const hidden = patchFiles(row.test_patch);
-    for (const f of hidden) await rm(join(dir, f), { force: true });
+    const hidden = await hideTestPatch(dir, row.base_commit, patchFiles(row.test_patch));
     await rm(join(dir, '.git'), { recursive: true, force: true });
     const git = ['-C', dir, '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', '-c', 'user.name=v4-swebpro', '-c', 'user.email=v4-swebpro@local'];
     await run('git', ['-C', dir, 'init', '-q'], { timeoutMs: 60_000 });
