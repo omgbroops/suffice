@@ -7,6 +7,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { startEnvrunBroker } from './v4-envrun.mjs';
 
 const PLATFORM = 'linux/amd64';
 const LIMITS = ['--cpus', '2', '--memory', '3g'];
@@ -155,12 +156,15 @@ export async function prepWorkspace(item) {
   imageUsers.set(image, (imageUsers.get(image) ?? 0) + 1);
   let cid = null;
   let dir = null;
+  let broker = null;
   const release = async () => {
     // Every step runs even if an earlier one throws (else images leak); rethrow the first error at the end.
     const errors = [];
     const step = async fn => { try { await fn(); } catch (e) { errors.push(e); } };
     const c = cid; cid = null;
     const d = dir; dir = null;
+    const b = broker; broker = null;
+    if (b) await step(() => b.close());
     if (c) await step(() => docker(['rm', '-f', c], { timeoutMs: 60_000 }));
     if (d) await step(() => rm(d, { recursive: true, force: true }));
     const left = imageUsers.get(image) - 1;
@@ -188,8 +192,9 @@ export async function prepWorkspace(item) {
     await run('git', [...git, 'commit', '-q', '--allow-empty', '-m', 'baseline'], { timeoutMs: 600_000 });
     item.prompt = `${row.problem_statement}\n\n${INSTRUCTION}`;
     const instanceId = item.taskId;
-    // Agent env for bin/envrun: the container image, the hidden test files it must not see, and the repo bin on PATH.
-    const env = { V4_ENV_IMAGE: image, V4_ENV_REMOVED: hidden.join('\n'), V4_ENV_PLATFORM: PLATFORM, PATH: `${REPO_BIN}:${process.env.PATH ?? ''}` };
+    // Agent env: only the broker socket (image and hidden list stay with the harness) and the repo bin on PATH.
+    broker = await startEnvrunBroker({ image, platform: PLATFORM, removed: hidden });
+    const env = { V4_ENVRUN_SOCK: broker.sock, PATH: `${REPO_BIN}:${process.env.PATH ?? ''}` };
     return { dir, cleanup: release, cid, image, row, instanceId, prompt: item.prompt, item, env };
   } catch (error) {
     await release();

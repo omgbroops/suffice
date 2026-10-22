@@ -24,12 +24,17 @@ export function pathVariants(path) {
 }
 
 // ~/.cache/v4-swebpro holds rows.json (hidden test_patch, FAIL_TO_PASS, PASS_TO_PASS); its work/ subdir is re-allowed via `allowed`.
-export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(homedir(), 'suffice-v4'), join(homedir(), '.cache', 'v4-swebpro'), tmpdir()], allowed, literal = [] }) {
+export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(homedir(), 'suffice-v4'), join(homedir(), '.cache', 'v4-swebpro'), tmpdir()], allowed, literal = [], socket }) {
   const lines = ['(version 1)', '(allow default)'];
   for (const dir of denied) for (const p of pathVariants(dir)) lines.push(`(deny file-read-data (subpath ${sbplString(p)}))`);
   // Last matching rule wins, so the workspace base re-allows reads inside a denied tree.
   for (const dir of allowed) for (const p of pathVariants(dir)) lines.push(`(allow file-read-data (subpath ${sbplString(p)}))`);
   for (const file of literal) for (const p of pathVariants(file)) lines.push(`(allow file-read-data (literal ${sbplString(p)}))`);
+  // swebpro: no outbound network except the envrun broker socket (no docker, no direct network from the agent).
+  if (socket) {
+    lines.push('(deny network-outbound)');
+    for (const p of pathVariants(socket)) lines.push(`(allow network-outbound (remote unix-socket (path-literal ${sbplString(p)})))`);
+  }
   return lines.join('\n');
 }
 
@@ -37,14 +42,14 @@ export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(
 const ENVRUN = fileURLToPath(new URL('../bin/envrun', import.meta.url));
 
 // macOS only: wraps the agent command in sandbox-exec and redirects TMPDIR into the workspace base.
-export async function sandboxCommand(bin, args, workspace) {
+export async function sandboxCommand(bin, args, workspace, socket) {
   if (process.platform !== 'darwin') return { bin, args, env: {} };
   const base = dirname(resolve(workspace));
   const tmp = join(base, 'tmp');
   await mkdir(tmp, { recursive: true });
   // The agent binary itself must stay readable even when it sits in a denied tree (e.g. a test fixture in this repo).
   const literal = [ENVRUN, ...(bin.includes('/') ? [resolve(bin)] : [])];
-  return { bin: 'sandbox-exec', args: ['-p', sandboxProfile({ allowed: [base], literal }), bin, ...args], env: { TMPDIR: tmp } };
+  return { bin: 'sandbox-exec', args: ['-p', sandboxProfile({ allowed: [base], literal, socket }), bin, ...args], env: { TMPDIR: tmp } };
 }
 
 export function runProcess(bin, args, { cwd, timeoutMs, env }) {
@@ -82,7 +87,7 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
       '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', '--exclude-dynamic-system-prompt-sections', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
       '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', cap,...effortArgs, ...leanArgs, ...resume];
-    const sandboxed = await sandboxCommand(bin, args, workspace);
+    const sandboxed = await sandboxCommand(bin, args, workspace, extraEnv?.V4_ENVRUN_SOCK);
     const out = await runProcess(sandboxed.bin, sandboxed.args, { cwd: workspace, timeoutMs, env: { ...sandboxed.env, ...extraEnv } });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
     let json;
