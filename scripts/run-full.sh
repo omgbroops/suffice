@@ -13,9 +13,10 @@ done
 
 TOTAL_CAP="${TOTAL_CAP:-13}"  # remaining of the owner's $40 cap (~$27 spent 2026-10-21); override explicitly to spend more
 JOBS=(polyglot-v5-cheap polyglot-v5-strict polyglot-single swebpro-v5-cheap swebpro-v5-strict swebpro-single)
-CAPS=(6 5 4 3 3 4)
+CAPS=(6 5 4 3 3 2)
 SUITE="${SUITE:-all}"  # all|polyglot|swebpro
 SWEPRO_MANIFEST="${SWEPRO_MANIFEST:-config/bench-manifest.swebpro20.json}"
+SWEPRO_BUDGET="${SWEPRO_BUDGET:-0.3}"  # per task; the ~$0.11 default starved agents on real repos (2026-10-22 run)
 if [[ "$SUITE" != all ]]; then
   KJ=(); KC=()
   for i in "${!JOBS[@]}"; do [[ "${JOBS[$i]}" == "$SUITE"-* ]] && { KJ+=("${JOBS[$i]}"); KC+=("${CAPS[$i]}"); }; done
@@ -29,9 +30,9 @@ job_args() {
     polyglot-v5-cheap)  ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
     polyglot-v5-strict) ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-strict --v5-top=opus) ;;
     polyglot-single)    ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=single:claude-sonnet-5-5) ;;
-    swebpro-v5-cheap)   ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
-    swebpro-v5-strict)  ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --arm=v5 --v5-strict --v5-top=opus) ;;
-    swebpro-single)     ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --arm=single:claude-sonnet-5-5) ;;
+    swebpro-v5-cheap)   ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --budget-usd=$SWEPRO_BUDGET --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
+    swebpro-v5-strict)  ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --budget-usd=$SWEPRO_BUDGET --arm=v5 --v5-strict --v5-top=opus) ;;
+    swebpro-single)     ARGS=(--provider=swebpro --manifest=$SWEPRO_MANIFEST --workers=1 --budget-usd=$SWEPRO_BUDGET --arm=single:claude-sonnet-5-5) ;;
     *) echo "unknown job: $1" >&2; exit 2 ;;
   esac
 }
