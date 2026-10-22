@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { appendFile, cp, mkdir, mkdtemp, rm } from 'node:fs/promises';
+import { appendFile, cp, lstat, mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
@@ -119,7 +119,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
           // Each verdict gets a pristine copy (provider.cloneForVerify, else a dir copy of prep.dir) plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
           const clone = provider.cloneForVerify ? await provider.cloneForVerify(prep) : await dirClone(prep.dir);
           try {
-            await cp(workspace, clone.dir, { recursive: true, force: true, verbatimSymlinks: true });
+            await cp(workspace, clone.dir, { recursive: true, force: true, verbatimSymlinks: true, filter: overlaySymlinkFilter });
             const r = await provider.runAcceptance({ ...prep, ...clone });
             await saveFailure(arm, item.taskId, r);
             hiddenOutputs.set(workspace, r?.output ?? '');
@@ -135,6 +135,12 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
 }
 
 // Keeps why each verdict failed (kind + output tail) per arm/task; polyglot results rows only hold pass/fail.
+// cp resolves an existing dest symlink (EINVAL/ENOENT); drop it first. rm never follows the link.
+export async function overlaySymlinkFilter(src, dest) {
+  if ((await lstat(src)).isSymbolicLink()) await rm(dest, { force: true });
+  return true;
+}
+
 export async function dirClone(src) {
   const dir = await mkdtemp(join(tmpdir(), 'v4-verify-'));
   await cp(src, dir, { recursive: true, verbatimSymlinks: true });
