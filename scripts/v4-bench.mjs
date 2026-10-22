@@ -8,6 +8,7 @@ import { pathToFileURL } from 'node:url';
 import { runV4Task, GATES } from '../src/v4-runner.mjs';
 import { openLedger } from '../src/v4-ledger.mjs';
 import { armTiers } from '../src/v4-config.mjs';
+import { buildBundle, v5Prompt } from '../src/v5-bundle.mjs';
 
 const exec = promisify(execFile);
 export const MAX_WORKERS = 4;
@@ -92,9 +93,17 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
       return emit({ ...meta, task: item.taskId, status: 'harness_error', error: String(error?.message ?? error).slice(0, 200) });
     }
     try {
+      let prompt = item.prompt ?? await defaultPrompt(prep), rowMeta = meta;
+      if (arm === 'v5') {
+        // Gold files are only compared against the bundle for the report; they never enter the prompt.
+        const b = await buildBundle(prep.dir, prompt);
+        prompt = v5Prompt(prompt, b);
+        rowMeta = { ...meta, localizedFiles: b.files, bundleTokens: b.bundleTokens,
+          goldInBundle: Array.isArray(item.goldFiles) ? item.goldFiles.some(g => b.bundledFiles.includes(g)) : null };
+      }
       const row = await runTask({
-        task: { id: item.taskId.replace(/\//g, '_'), prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
-        budgetUsd: budget, out: results, bin, tiers, ledger, meta, gate,
+        task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir },
+        budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate,
         verify: async workspace => {
           // Each verdict gets its own copy of the untouched prep.dir plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
           const fresh = await mkdtemp(join(tmpdir(), 'v4-verify-'));

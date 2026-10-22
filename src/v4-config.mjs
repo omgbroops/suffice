@@ -49,6 +49,8 @@ export function effortFor(tier, round) {
 // 'v4' is the ladder itself. 'single:<model>' is one tier with the ladder's total rounds and its largest estimate, so both arms share the harness and budget gate.
 export function armTiers(arm, ladder = loadTiers()) {
   if (arm === 'v4') return ladder;
+  // v5: same ladder and gate; the claude call is leaner (see makeClaudeAdapter lean) and tools are fixed.
+  if (arm === 'v5') return ladder.map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),

@@ -24,7 +24,7 @@ export function makeCommandAdapter({ tier, timeoutMs = 360_000 }) {
 // snapshot: in self mode round 1 is copied there so runV4Task can verify the first attempt afterwards.
 export function buildAttempt({ tiers, workspace, verify, ledger, bin, timeoutMs, gate = 'self', original, selfCheck = makeSelfCheck(), snapshot }) {
   const adapters = new Map(tiers.map(tier => [tier.name, tier.provider === 'claude'
-    ? makeClaudeAdapter({ bin, timeoutMs })
+    ? makeClaudeAdapter({ bin, timeoutMs, lean: tier.lean === true })
     : makeCommandAdapter({ tier, timeoutMs })]));
   return async call => {
     const result = await adapters.get(call.tier)({ ...call, workspace });

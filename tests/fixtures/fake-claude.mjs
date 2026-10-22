@@ -3,7 +3,7 @@
 import { appendFileSync, writeFileSync } from 'node:fs';
 const argv = process.argv.slice(2);
 const at = flag => (argv.indexOf(flag) >= 0 ? argv[argv.indexOf(flag) + 1] : undefined);
-appendFileSync(process.env.FAKE_LOG, JSON.stringify({ model: at('--model'), prompt: at('-p'), resume: at('--resume'), budget: at('--max-budget-usd') }) + '\n');
+appendFileSync(process.env.FAKE_LOG, JSON.stringify({ model: at('--model'), prompt: at('-p'), resume: at('--resume'), budget: at('--max-budget-usd'), tools: at('--allowedTools'), maxTurns: at('--max-turns') }) + '\n');
 const mode = process.env.FAKE_MODE;
 if (mode === 'crash') { process.stderr.write('simulated crash'); process.exit(1); }
 if (mode === 'hang') setTimeout(() => {}, 60_000);
