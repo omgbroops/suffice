@@ -23,7 +23,7 @@ const ISSUE = 'parseThing returns the wrong value for padded input';
 
 test("arm 'v5' is the ladder with lean tiers and fixed tools; 'v4' is not lean", () => {
   const v5 = armTiers('v5');
-  assert.deepEqual(v5.map(t => t.model), armTiers('v4').map(t => t.model));
+  assert.deepEqual(v5.map(t => t.model), ['claude-haiku-5-5', 'claude-sonnet-5-5']);
   for (const t of v5) {
     assert.equal(t.lean, true);
     assert.deepEqual(t.tools, ['Read', 'Edit', 'Write', 'Bash']);

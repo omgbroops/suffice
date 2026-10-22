@@ -20,7 +20,16 @@ function costOf(result) {
 // attempt({ model, effort, prompt, round, tier, workspace, tools, remainingBudgetUsd }) must resolve to { pass, costUsd }.
 // Tier i+1 runs only if spent + its costEstimateUsd fits the per-run budget. Each tier starts with the task prompt; later rounds get the verdict only.
 // rounds_used and roundCostsUsd count tier 0 (the cheap tier), so the row schema matches the original ladder.
-export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, workspace, tools } = {}) {
+// v5 self rule. Escalate only when the patch is broken or its SELFTEST ran and failed; an empty patch gets one more cheap round;
+// 'SELFTEST: none' (unverified) is accepted as is.
+export function v5Decision(result) {
+  if (!result.patchNonEmpty) return 'retry';
+  if (result.patchApplies === false || result.inside === false || result.signal === 'fail') return 'escalate';
+  return 'accept';
+}
+
+// rule 'v4' (default) is the original self/oracle rule; rule 'v5' uses v5Decision on the self-gate fields.
+export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, workspace, tools, rule = 'v4' } = {}) {
   // Hard refusal: a per-run budget must be passed explicitly.
   if (!Number.isFinite(budgetUsd) || budgetUsd <= 0) throw new V4Error('BUDGET_REQUIRED');
   const row = {
@@ -48,7 +57,11 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
       if (index === 0) { row.roundCostsUsd.push(cost); row.cheapCostUsd += cost; row.roundsUsed = r; } else row.strongCostUsd += cost;
       if (round === 1) row.firstAttemptPass = result.pass === true;
       if (result.pass === true) { row.finalPass = true; return row; }
-      if (result.signal === 'unverified') unverified++;
+      if (rule === 'v5') {
+        const decision = v5Decision(result);
+        if (decision === 'accept') { row.finalPass = true; return row; }
+        if (decision === 'escalate') break; // skip the rest of this tier; the next tier checks its reservation
+      } else if (result.signal === 'unverified') unverified++;
       const more = r < tier.rounds || index < tiers.length - 1;
       if (more && spent >= budgetUsd) { row.escalationSkipped = 'budget'; return row; }
       prompt = V4_RETRY_MESSAGE;

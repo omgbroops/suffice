@@ -46,11 +46,21 @@ export function effortFor(tier, round) {
   return tier.effort[Math.min(round - 1, tier.effort.length - 1)] ?? null;
 }
 
+// Sonnet top rung for v5. The estimate is a guess until real usage replaces it in the ledger.
+export const V5_SONNET_MODEL = 'claude-sonnet-5-5';
+export const V5_SONNET_ESTIMATE_USD = 0.05;
+
 // 'v4' is the ladder itself. 'single:<model>' is one tier with the ladder's total rounds and its largest estimate, so both arms share the harness and budget gate.
-export function armTiers(arm, ladder = loadTiers()) {
+export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet' } = {}) {
   if (arm === 'v4') return ladder;
-  // v5: same ladder and gate; the claude call is leaner (see makeClaudeAdapter lean) and tools are fixed.
-  if (arm === 'v5') return ladder.map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
+  // v5: Haiku rounds capped at 2, then one top rung (Sonnet; Opus only with top 'opus'). Lean claude call, fixed tools.
+  if (arm === 'v5') {
+    if (top !== 'sonnet' && top !== 'opus') throw new Error(`unknown v5 top: ${top}`);
+    const [cheap, strong] = ladder;
+    const topTier = top === 'opus' ? { ...strong, rounds: 1 }
+      : { ...strong, name: 'sonnet', model: V5_SONNET_MODEL, rounds: 1, costEstimateUsd: V5_SONNET_ESTIMATE_USD };
+    return [{ ...cheap, rounds: Math.min(cheap.rounds, 2) }, topTier].map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
+  }
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),
