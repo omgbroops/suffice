@@ -55,12 +55,12 @@ export async function sandboxCommand(bin, args, workspace, socket) {
 export function runProcess(bin, args, { cwd, timeoutMs, env }) {
   return new Promise((resolveRun, reject) => {
     const child = spawn(bin, args, { cwd, env: env ? { ...process.env, ...env } : process.env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    let stdout = '', timedOut = false;
+    let stdout = '', stderr = '', timedOut = false;
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeoutMs);
     child.stdout.on('data', chunk => { stdout += chunk; });
-    child.stderr.resume();
+    child.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-4000); });
     child.on('error', error => { clearTimeout(timer); reject(error); });
-    child.on('close', code => { clearTimeout(timer); resolveRun({ code, stdout, timedOut }); });
+    child.on('close', code => { clearTimeout(timer); resolveRun({ code, stdout, stderr, timedOut }); });
   });
 }
 
@@ -90,6 +90,8 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     const sandboxed = await sandboxCommand(bin, args, workspace, extraEnv?.V4_ENVRUN_SOCK);
     const out = await runProcess(sandboxed.bin, sandboxed.args, { cwd: workspace, timeoutMs, env: { ...sandboxed.env, ...extraEnv } });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
+    // Provider errors had no saved cause (2026-10-22 strict rerun); keep the CLI's tail in the arm's .out log.
+    if (out.code !== 0) process.stderr.write(`claude exit ${out.code} ${model}\nstdout: ${String(out.stdout).slice(-1500)}\nstderr: ${String(out.stderr).slice(-1500)}\n`);
     let json;
     try { json = JSON.parse(out.stdout); } catch { throw new V4Error(out.code === 0 ? 'HARNESS_ERROR' : 'PROVIDER_ERROR'); }
     if (out.code !== 0 || json.is_error) throw new V4Error(String(json.subtype ?? '').includes('budget') ? 'BUDGET_EXHAUSTED' : 'PROVIDER_ERROR');
