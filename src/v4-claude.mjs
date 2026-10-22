@@ -30,9 +30,9 @@ export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(
   // Last matching rule wins, so the workspace base re-allows reads inside a denied tree.
   for (const dir of allowed) for (const p of pathVariants(dir)) lines.push(`(allow file-read-data (subpath ${sbplString(p)}))`);
   for (const file of literal) for (const p of pathVariants(file)) lines.push(`(allow file-read-data (literal ${sbplString(p)}))`);
-  // swebpro: no outbound network except the envrun broker socket (no docker, no direct network from the agent).
+  // swebpro: no unix-socket connects except the envrun broker (so no docker socket); TCP stays open because the CLI needs its API.
   if (socket) {
-    lines.push('(deny network-outbound)');
+    lines.push('(deny network-outbound (remote unix-socket (path-regex #"^/")))', '(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))');
     for (const p of pathVariants(socket)) lines.push(`(allow network-outbound (remote unix-socket (path-literal ${sbplString(p)})))`);
   }
   return lines.join('\n');
