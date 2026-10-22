@@ -1,5 +1,6 @@
 import { execFile } from 'node:child_process';
-import { appendFile, cp, mkdir, readFile } from 'node:fs/promises';
+import { appendFile, cp, mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { promisify } from 'node:util';
@@ -94,7 +95,17 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
       const row = await runTask({
         task: { id: item.taskId.replace(/\//g, '_'), prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta, gate,
-        verify: async workspace => { await cp(workspace, prep.dir, { recursive: true, force: true }); const r = await provider.runAcceptance(prep); await saveFailure(arm, item.taskId, r); return r === true || r?.pass === true; },
+        verify: async workspace => {
+          // Each verdict gets its own copy of the untouched prep.dir plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
+          const fresh = await mkdtemp(join(tmpdir(), 'v4-verify-'));
+          try {
+            await cp(prep.dir, fresh, { recursive: true });
+            await cp(workspace, fresh, { recursive: true, force: true });
+            const r = await provider.runAcceptance({ ...prep, dir: fresh });
+            await saveFailure(arm, item.taskId, r);
+            return r === true || r?.pass === true;
+          } finally { await rm(fresh, { recursive: true, force: true }); }
+        },
       });
       if (row.status === 'global_cap_refused') capHit = true;
       return row;
