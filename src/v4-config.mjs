@@ -62,7 +62,8 @@ export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet' } = {}) {
     return [{ ...cheap, rounds: Math.min(cheap.rounds, 2) }, topTier].map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
   }
   // v6: same two rungs as v5; the cheap rung runs the test writer and K candidates (src/v6-arm.mjs).
-  if (arm === 'v6') return armTiers('v5', ladder, { top });
+  // Execution calls run at low effort (thinking was about a third of cost) and cannot Write whole files.
+  if (arm === 'v6') return armTiers('v5', ladder, { top }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),

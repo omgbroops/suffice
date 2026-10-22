@@ -26,13 +26,15 @@ export function runProcess(bin, args, { cwd, timeoutMs }) {
 // Shortcut: Bash can read any absolute path, so the oracle is hidden by path and prompt only; upgrade to a sandbox before trusting pass rates.
 export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false, systemPrompt } = {}) {
   let session = null; // resume only within the same model; escalation starts fresh with the task prompt
-  return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd }) => {
+  return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd, maxTurns }) => {
     if (!(remainingBudgetUsd > 0)) throw new V4Error('BUDGET_EXHAUSTED');
     const resume = session?.model === model ? ['--resume', session.id] : [];
     const effortArgs = effort ? ['--effort', effort] : [];
-    const leanArgs = lean ? ['--max-turns', '12'] : [];
+    const turns = maxTurns ?? (lean ? 12 : null);
+    const leanArgs = turns ? ['--max-turns', String(turns)] : [];
+    // Keeps the system prompt prefix stable across calls (per-machine sections move out of it), so the cache hits.
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
-      '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
+      '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', '--exclude-dynamic-system-prompt-sections', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
       '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', remainingBudgetUsd.toFixed(4), ...effortArgs, ...leanArgs, ...resume];
     const out = await runProcess(bin, args, { cwd: workspace, timeoutMs });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
@@ -41,6 +43,6 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     if (out.code !== 0 || json.is_error) throw new V4Error(String(json.subtype ?? '').includes('budget') ? 'BUDGET_EXHAUSTED' : 'PROVIDER_ERROR');
     session = { model, id: json.session_id };
     const cost = json.total_cost_usd;
-    return { costUsd: Number.isFinite(cost) ? cost : null, usage: json.usage ?? null, status: 'ok', text: String(json.result ?? '') };
+    return { costUsd: Number.isFinite(cost) ? cost : null, usage: json.usage ?? null, numTurns: json.num_turns ?? null, status: 'ok', text: String(json.result ?? '') };
   };
 }
