@@ -1,6 +1,6 @@
 import { lstat, realpath } from 'node:fs/promises';
 import { join, relative, resolve, sep } from 'node:path';
-import { runProcess } from './v4-claude.mjs';
+import { runProcess, sandboxCommand } from './v4-claude.mjs';
 
 // Oracle-free gate signal. The hidden acceptance test never reaches this file: only the agent's own SELFTEST command and a tree diff are used.
 const SELFTEST_LINE = /^SELFTEST:\s*(.+?)\s*$/gm;
@@ -13,12 +13,14 @@ export function parseSelfTest(text = '') {
 
 // shortcut: runs the agent's command through /bin/sh, so Windows needs a cmd.exe branch before it is used there.
 // Returns { signal, cmd, tail }; tail is the last 1500 chars of the agent's own SELFTEST output (never hidden-test output).
-export function makeSelfCheck({ timeoutMs = 60_000 } = {}) {
-  return async ({ workspace, text }) => {
+// The agent's command runs in the same sandbox and env as the agent (envrun on PATH, broker socket), since its tail goes back into the retry prompt.
+export function makeSelfCheck({ timeoutMs = 300_000 } = {}) {
+  return async ({ workspace, text, env = {} }) => {
     const cmd = parseSelfTest(text);
     if (!cmd) return { signal: 'unverified', cmd: null, tail: '' };
-    const out = await runProcess('/bin/sh', ['-c', cmd], { cwd: workspace, timeoutMs });
-    const tail = String(out.stdout ?? '').slice(-1500);
+    const sb = await sandboxCommand('/bin/sh', ['-c', cmd], workspace, env.V4_ENVRUN_SOCK);
+    const out = await runProcess(sb.bin, sb.args, { cwd: workspace, timeoutMs, env: { ...env, ...sb.env } });
+    const tail = (String(out.stdout ?? '') + String(out.stderr ?? '')).slice(-1500);
     return { signal: !out.timedOut && out.code === 0 ? 'pass' : 'fail', cmd, tail };
   };
 }
@@ -58,11 +60,11 @@ async function checkPaths(workspace, rels) {
 }
 
 // Returns the per-round gate decision. `signal` is 'pass' | 'fail' | 'unverified' and drives the escalation rule in runV4.
-export async function selfSignal({ original, workspace, text, selfCheck = makeSelfCheck() }) {
+export async function selfSignal({ original, workspace, text, selfCheck = makeSelfCheck(), env }) {
   const ws = await realpath(workspace);
   const rels = await changedPaths(original, ws);
   const { applies, inside } = await checkPaths(ws, rels);
-  const { signal, cmd, tail } = await selfCheck({ workspace: ws, text });
+  const { signal, cmd, tail } = await selfCheck({ workspace: ws, text, env });
   const patchNonEmpty = rels.length > 0;
   return { pass: patchNonEmpty && applies && inside && signal === 'pass', signal, patchNonEmpty, patchApplies: applies, inside, selfTestCmd: cmd, selfTestTail: tail };
 }
