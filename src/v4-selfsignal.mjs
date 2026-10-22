@@ -11,6 +11,13 @@ export function parseSelfTest(text = '') {
   return !cmd || cmd === 'none' ? null : cmd;
 }
 
+// Graders parse test output, not exit codes (qutebrowser's xvfb teardown exits nonzero after all tests pass).
+export function pytestPassed(text = '') {
+  const last = [...String(text).matchAll(/^=+ (.*\b(?:passed|failed|error|errors)\b.*?) in [\d.]+s.*=+\s*$/gm)].at(-1);
+  if (!last) return false;
+  return /\bpassed\b/.test(last[1]) && !/\b(?:failed|errors?)\b/.test(last[1]);
+}
+
 // shortcut: runs the agent's command through /bin/sh, so Windows needs a cmd.exe branch before it is used there.
 // Returns { signal, cmd, tail }; tail is the last 1500 chars of the agent's own SELFTEST output (never hidden-test output).
 // The agent's command runs in the same sandbox and env as the agent (envrun on PATH, broker socket), since its tail goes back into the retry prompt.
@@ -20,8 +27,8 @@ export function makeSelfCheck({ timeoutMs = 300_000 } = {}) {
     if (!cmd) return { signal: 'unverified', cmd: null, tail: '' };
     const sb = await sandboxCommand('/bin/sh', ['-c', cmd], workspace, env.V4_ENVRUN_SOCK);
     const out = await runProcess(sb.bin, sb.args, { cwd: workspace, timeoutMs, env: { ...env, ...sb.env } });
-    const tail = (String(out.stdout ?? '') + String(out.stderr ?? '')).slice(-1500);
-    return { signal: !out.timedOut && out.code === 0 ? 'pass' : 'fail', cmd, tail };
+    const all = String(out.stdout ?? '') + String(out.stderr ?? '');
+    return { signal: !out.timedOut && (out.code === 0 || pytestPassed(all)) ? 'pass' : 'fail', cmd, tail: all.slice(-1500) };
   };
 }
 

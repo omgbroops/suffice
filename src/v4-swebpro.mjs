@@ -21,7 +21,8 @@ const SCRIPTS_RAW = 'https://raw.githubusercontent.com/scaleapi/SWE-bench_Pro-os
 const INSTRUCTION = 'Edit the source files in the current directory to resolve the issue above. '
   + 'Do not edit existing tests; you may add new test files (they do not affect grading). '
   + 'Run the project\'s tests the way its CI does via `envrun bash /run_tests.sh <test files>` (e.g. `envrun bash /run_tests.sh tests/unit/foo/test_bar.py`); `envrun <command>` runs any other command in the project\'s Linux container against your current files. '
-  + 'Write and run a minimal test for the issue there. Work only inside the current directory.';
+  + 'Write and run a minimal test for the issue there. Work only inside the current directory. '
+  + 'Also run the existing test files for the modules you change, and make your SELFTEST command cover both those and your new test.';
 const REPO_BIN = join(dirname(fileURLToPath(import.meta.url)), '..', 'bin');
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -174,7 +175,12 @@ export async function prepWorkspace(item) {
     if (errors.length) throw errors[0];
   };
   try {
-    const pulled = await docker(['pull', '--platform', PLATFORM, image], { timeoutMs: 1800_000 });
+    let pulled;
+    for (let attempt = 1; attempt <= 3; attempt++) { // registry pulls flake; only the third failure is fatal
+      pulled = await docker(['pull', '--platform', PLATFORM, image], { timeoutMs: 1800_000 });
+      if (pulled.code === 0) break;
+      if (attempt < 3) await sleep(15_000);
+    }
     if (pulled.code !== 0) throw new Error(`pull failed: ${lastLines(pulled.stderr, 5)}`);
     const created = await docker(['create', '--platform', PLATFORM, ...LIMITS, image], { timeoutMs: 120_000 });
     if (created.code !== 0) throw new Error(`create failed: ${lastLines(created.stderr, 5)}`);

@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { runV4Task } from '../src/v4-runner.mjs';
-import { parseSelfTest } from '../src/v4-selfsignal.mjs';
+import { parseSelfTest, pytestPassed } from '../src/v4-selfsignal.mjs';
 import { parseArgs, runBench } from '../scripts/v4-bench.mjs';
 
 const fakeBin = resolve(import.meta.dirname, 'fixtures/fake-claude.mjs');
@@ -34,6 +34,13 @@ test('parseSelfTest: last SELFTEST line wins, none or missing means no check', (
   assert.equal(parseSelfTest('SELFTEST: a\nmore\nSELFTEST: node --test x.mjs'), 'node --test x.mjs');
   assert.equal(parseSelfTest('SELFTEST: none'), null);
   assert.equal(parseSelfTest('done'), null);
+});
+
+test('pytestPassed: reads the last pytest summary line, not the exit code', () => {
+  assert.equal(pytestPassed('== 3 passed in 0.4s ==\nXIO: fatal IO error'), true);
+  assert.equal(pytestPassed('== 1 failed, 2 passed in 1s =='), false);
+  assert.equal(pytestPassed('== 2 passed, 1 error in 1s =='), false);
+  assert.equal(pytestPassed('all good, no summary'), false);
 });
 
 test('self gate: a passing first attempt calls the hidden verify once, after the agent finished', async () => {

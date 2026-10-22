@@ -74,7 +74,7 @@ export function budgetFlag(remainingBudgetUsd) {
 // Effort maps to `claude --effort` (low|medium|high|xhigh|max, from claude --help). Unverified live.
 // On macOS the agent runs under sandbox-exec (sandboxCommand): reads of bench-repos, this repo and the temp dir are denied, the workspace base is allowed.
 // shortcut: non-darwin runs are unsandboxed (oracle hidden by path and prompt only), add a Linux sandbox before trusting pass rates there.
-export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false, systemPrompt } = {}) {
+export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = Number(process.env.V4_RUN_TIMEOUT_MS) || 360_000, lean = false, systemPrompt } = {}) {
   let session = null; // resume only within the same model; escalation starts fresh with the task prompt
   return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd, maxTurns, env: extraEnv }) => {
     const cap = budgetFlag(remainingBudgetUsd);
