@@ -24,8 +24,8 @@ export async function probeFreePct() {
 }
 
 // runItem must write its own row (runV4Task does). Only items that never reached it get a row here.
-// Once free memory drops below minFreePct (or the probe fails), no new item starts; the rest get 'aborted_memory'.
-export async function schedule({ items, workers = 2, runItem, probe = probeFreePct, minFreePct = 30, out, write = appendFile }) {
+// Once free memory drops below minFreePct (V4_MIN_FREE_PCT, default 30; a local model server needs it lower) or the probe fails, no new item starts; the rest get 'aborted_memory'.
+export async function schedule({ items, workers = 2, runItem, probe = probeFreePct, minFreePct = Number(process.env.V4_MIN_FREE_PCT ?? 30), out, write = appendFile }) {
   if (!Number.isInteger(workers) || workers < 1 || workers > MAX_WORKERS) throw new Error(`workers must be 1..${MAX_WORKERS}`);
   const rows = [];
   let next = 0, aborted = false;
