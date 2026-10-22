@@ -105,15 +105,14 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
         task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate,
         verify: async workspace => {
-          // Each verdict gets its own copy of the untouched prep.dir plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
-          const fresh = await mkdtemp(join(tmpdir(), 'v4-verify-'));
+          // Each verdict gets a pristine copy (provider.cloneForVerify, else a dir copy of prep.dir) plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
+          const clone = provider.cloneForVerify ? await provider.cloneForVerify(prep) : await dirClone(prep.dir);
           try {
-            await cp(prep.dir, fresh, { recursive: true });
-            await cp(workspace, fresh, { recursive: true, force: true });
-            const r = await provider.runAcceptance({ ...prep, dir: fresh });
+            await cp(workspace, clone.dir, { recursive: true, force: true });
+            const r = await provider.runAcceptance({ ...prep, ...clone });
             await saveFailure(arm, item.taskId, r);
             return r === true || r?.pass === true;
-          } finally { await rm(fresh, { recursive: true, force: true }); }
+          } finally { await clone.cleanup(); }
         },
       });
       if (row.status === 'global_cap_refused') capHit = true;
@@ -124,6 +123,12 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
 }
 
 // Keeps why each verdict failed (kind + output tail) per arm/task; polyglot results rows only hold pass/fail.
+async function dirClone(src) {
+  const dir = await mkdtemp(join(tmpdir(), 'v4-verify-'));
+  await cp(src, dir, { recursive: true });
+  return { dir, cleanup: () => rm(dir, { recursive: true, force: true }) };
+}
+
 async function saveFailure(arm, taskId, r) {
   if (!r || r === true || r.pass) return;
   const dir = join('reports', 'v4', 'failures', process.env.V4_RUN_LABEL ?? arm.replace(/[^\w.-]/g, '_'));

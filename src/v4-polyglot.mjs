@@ -113,8 +113,12 @@ export async function prepWorkspace(task, { polyRoot = POLY } = {}) {
     hiddenFiles: [...cfg.test],
     acceptanceCommand: SPEC[lang].cmd(dir),
     cleanup: () => destroy(base),
+    task, polyRoot,
   };
 }
+
+// Pristine copy for verify: prep.dir is the agent's workspace, so re-prepare the same task (its own hidden dir) instead of copying it.
+export const cloneForVerify = prep => prepWorkspace(prep.task, { polyRoot: prep.polyRoot });
 
 // Copies the reference solution (.meta/example*) over the stub, like polyglot.py apply_example (zip of solution/example).
 export async function applyReference(task, dir, { polyRoot = POLY } = {}) {

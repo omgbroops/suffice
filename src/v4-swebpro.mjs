@@ -180,12 +180,15 @@ export async function prepWorkspace(item) {
     await run('git', [...git, 'commit', '-q', '--allow-empty', '-m', 'baseline'], { timeoutMs: 600_000 });
     item.prompt = `${row.problem_statement}\n\n${INSTRUCTION}`;
     const instanceId = item.taskId;
-    return { dir, cleanup: release, cid, image, row, instanceId, prompt: item.prompt };
+    return { dir, cleanup: release, cid, image, row, instanceId, prompt: item.prompt, item };
   } catch (error) {
     await release();
     throw error;
   }
 }
+
+// Pristine copy for verify: prep.dir is the agent's workspace, so re-prepare the same item (fresh docker cp of the baseline).
+export const cloneForVerify = prep => prepWorkspace(prep.item);
 
 async function gitDiff(dir) {
   await run('git', ['-C', dir, 'add', '-A'], { timeoutMs: 600_000 });
