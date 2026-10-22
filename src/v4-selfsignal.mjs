@@ -21,14 +21,28 @@ export function pytestPassed(text = '') {
 // shortcut: runs the agent's command through /bin/sh, so Windows needs a cmd.exe branch before it is used there.
 // Returns { signal, cmd, tail }; tail is the last 1500 chars of the agent's own SELFTEST output (never hidden-test output).
 // The agent's command runs in the same sandbox and env as the agent (envrun on PATH, broker socket), since its tail goes back into the retry prompt.
+// One instance per task run (runV4Task -> buildAttempt), so `failed` never leaks across tasks.
+// `failed` remembers commands that returned fail: a later pass re-runs them, so narrowing SELFTEST to a passing file can't hide them.
 export function makeSelfCheck({ timeoutMs = 300_000 } = {}) {
-  return async ({ workspace, text, env = {} }) => {
-    const cmd = parseSelfTest(text);
-    if (!cmd) return { signal: 'unverified', cmd: null, tail: '' };
+  const failed = new Set();
+  const exec = async (cmd, workspace, env) => {
     const sb = await sandboxCommand('/bin/sh', ['-c', cmd], workspace, env.V4_ENVRUN_SOCK);
     const out = await runProcess(sb.bin, sb.args, { cwd: workspace, timeoutMs, env: { ...env, ...sb.env } });
     const all = String(out.stdout ?? '') + String(out.stderr ?? '');
-    return { signal: !out.timedOut && (out.code === 0 || pytestPassed(all)) ? 'pass' : 'fail', cmd, tail: all.slice(-1500) };
+    return { signal: !out.timedOut && (out.code === 0 || pytestPassed(all)) ? 'pass' : 'fail', tail: all.slice(-1500) };
+  };
+  return async ({ workspace, text, env = {} }) => {
+    const cmd = parseSelfTest(text);
+    if (!cmd) return { signal: 'unverified', cmd: null, tail: '' };
+    const own = await exec(cmd, workspace, env);
+    if (own.signal === 'fail') { failed.add(cmd); return { signal: 'fail', cmd, tail: own.tail }; }
+    failed.delete(cmd);
+    for (const old of [...failed]) {
+      const again = await exec(old, workspace, env);
+      if (again.signal === 'pass') { failed.delete(old); continue; }
+      return { signal: 'fail', cmd, tail: `earlier failing check still fails: ${old}\n${again.tail}` };
+    }
+    return { signal: 'pass', cmd, tail: own.tail };
   };
 }
 
