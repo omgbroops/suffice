@@ -54,7 +54,7 @@ test('command adapter: argv placeholders are substituted, cost settles, unknown 
   const tiers = validateTiers({ tiers: [{ ...base, name: 'c', provider: 'command', command }, { ...base, name: 'd' }] });
   const ledger = { spentUsd: 0, costKnown: true };
   const verify = async () => true;
-  const attempt = buildAttempt({ tiers, workspace: dir, verify, ledger, timeoutMs: 10_000 });
+  const attempt = buildAttempt({ tiers, workspace: dir, verify, ledger, timeoutMs: 10_000, gate: 'oracle' });
   const ok = await attempt({ tier: 'c', model: 'a{prompt}', effort: 'low', prompt: 'hi there', remainingBudgetUsd: 1, tools: ['Read'] });
   assert.equal(ok.pass, true);
   assert.equal(ok.costUsd, 0.25);

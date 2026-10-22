@@ -3,7 +3,7 @@ import { V4Error } from './v4-escalation.mjs';
 
 // Thin profile: tiny system prompt. Tool list comes from the tier config (default is these four).
 export const V4_TOOLS = ['Read', 'Edit', 'Write', 'Bash'];
-export const V4_SYSTEM_PROMPT = 'You are a coding agent. Make the requested change with a minimal correct edit to the files in the current directory. Preserve the public API. Work only inside the current directory: never search or list outside it (no find or ls on / or ~), the tests you cannot see are not elsewhere on disk. Use only Read, Edit, Write and Bash. Do not claim checks that did not run.';
+export const V4_SYSTEM_PROMPT = 'You are a coding agent. Make the requested change with a minimal correct edit to the files in the current directory. Preserve the public API. Work only inside the current directory: never search or list outside it (no find or ls on / or ~), the tests you cannot see are not elsewhere on disk. Use only Read, Edit, Write and Bash. Do not claim checks that did not run. Workflow: first write a minimal failing test from the issue when feasible, make the edit, run that test, then end your reply with one final line `SELFTEST: <command>` naming the command you ran (or `SELFTEST: none` if you ran none).';
 
 export function runProcess(bin, args, { cwd, timeoutMs }) {
   return new Promise((resolveRun, reject) => {
@@ -37,6 +37,6 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     if (out.code !== 0 || json.is_error) throw new V4Error(String(json.subtype ?? '').includes('budget') ? 'BUDGET_EXHAUSTED' : 'PROVIDER_ERROR');
     session = { model, id: json.session_id };
     const cost = json.total_cost_usd;
-    return { costUsd: Number.isFinite(cost) ? cost : null, usage: json.usage ?? null, status: 'ok' };
+    return { costUsd: Number.isFinite(cost) ? cost : null, usage: json.usage ?? null, status: 'ok', text: String(json.result ?? '') };
   };
 }

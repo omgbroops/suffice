@@ -29,7 +29,7 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
     cheapCostUsd: 0, escalated: false, escalationSkipped: null,
     strongCostUsd: 0, finalPass: false,
   };
-  let spent = 0, round = 0;
+  let spent = 0, round = 0, unverified = 0;
   for (const [index, tier] of tiers.entries()) {
     if (index > 0) {
       if (spent + tier.costEstimateUsd > budgetUsd) { row.escalationSkipped = 'budget'; return row; }
@@ -37,6 +37,7 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
     }
     let prompt = task.prompt;
     for (let r = 1; r <= tier.rounds; r++) {
+      if (index === 0 && unverified >= 2) break; // self gate: one cheap retry for an unverified round, then escalate
       round++;
       const result = await attempt({
         model: tier.model, effort: effortFor(tier, r), prompt, round, tier: tier.name,
@@ -47,6 +48,7 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
       if (index === 0) { row.roundCostsUsd.push(cost); row.cheapCostUsd += cost; row.roundsUsed = r; } else row.strongCostUsd += cost;
       if (round === 1) row.firstAttemptPass = result.pass === true;
       if (result.pass === true) { row.finalPass = true; return row; }
+      if (result.signal === 'unverified') unverified++;
       const more = r < tier.rounds || index < tiers.length - 1;
       if (more && spent >= budgetUsd) { row.escalationSkipped = 'budget'; return row; }
       prompt = V4_RETRY_MESSAGE;

@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
-import { runV4Task } from '../src/v4-runner.mjs';
+import { runV4Task, GATES } from '../src/v4-runner.mjs';
 import { openLedger } from '../src/v4-ledger.mjs';
 import { armTiers } from '../src/v4-config.mjs';
 
@@ -49,8 +49,8 @@ export function loadManifest(path) {
   return items;
 }
 
-// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>]
-const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd'];
+// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>] [--gate=self|oracle]
+const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate'];
 export function parseArgs(argv) {
   const opts = {};
   for (const arg of argv) {
@@ -71,7 +71,8 @@ export function defaultBudgetUsd(tiers) { return tiers.reduce((s, t) => s + t.ro
 
 // provider: { prepWorkspace(item) -> {dir, acceptanceCommand, cleanup}, runAcceptance(prep) -> boolean | {pass} }.
 // runTask defaults to runV4Task; tests inject stubs. The first global-cap refusal stops the run: later items get 'aborted_cap' rows.
-export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask = runV4Task }) {
+export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask = runV4Task, gate = 'self' }) {
+  if (!GATES.includes(gate)) throw new Error(`--gate must be one of ${GATES.join('|')}`);
   if (!(globalCapUsd > 0)) throw new Error('--global-cap-usd is required and must be > 0');
   if (!results) throw new Error('--results is required');
   const ledgerFile = `${results}.ledger.jsonl`;
@@ -92,7 +93,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
     try {
       const row = await runTask({
         task: { id: item.taskId.replace(/\//g, '_'), prompt: item.prompt ?? await defaultPrompt(prep), workspaceDir: prep.dir },
-        budgetUsd: budget, out: results, bin, tiers, ledger, meta,
+        budgetUsd: budget, out: results, bin, tiers, ledger, meta, gate,
         verify: async workspace => { await cp(workspace, prep.dir, { recursive: true, force: true }); const r = await provider.runAcceptance(prep); await saveFailure(arm, item.taskId, r); return r === true || r?.pass === true; },
       });
       if (row.status === 'global_cap_refused') capHit = true;
@@ -131,7 +132,7 @@ export async function main(argv) {
   const provider = mod.default ?? mod.polyglotProvider ?? (mod.prepWorkspace && mod.runAcceptance ? mod : null);
   if (!provider) throw new Error('src/v4-polyglot.mjs exports no provider (expected default or polyglotProvider)');
   const rows = await runBench({
-    items, arm: o.arm, workers, globalCapUsd: Number(o['global-cap-usd']), results: o.results,
+    items, arm: o.arm, workers, globalCapUsd: Number(o['global-cap-usd']), results: o.results, gate: o.gate ?? 'self',
     budgetUsd: o['budget-usd'] === undefined ? undefined : Number(o['budget-usd']), provider, probe: probeFreePct,
   });
   return rows.length;
