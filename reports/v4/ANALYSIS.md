@@ -79,8 +79,8 @@ See `docs/FIXLOG.md` for every fix.
 | Self-test pass judged by the xvfb exit code | Passing tests counted as failing | 3fde8ff (read the pytest summary line) |
 | Prompt omitted Requirements and New interfaces | 0/7 → 6/7 once added | 02ce944 |
 | Removed every file the test_patch touches, including existing tests | qute-9ed748 failed one arm because the agent couldn't see the regression. That is the 6/7 → 7/7 step. | 0ee4256 |
-| Grader applied test_patch on top of agent-created files with the same path | ansible-1ee70f strict failed with "already exists" | 413951c (rerun pending) |
-| Self-gate trusted a narrowed SELFTEST | qute-0b621c failed in 2 arms | f29de90 (rerun pending) |
+| Grader applied test_patch on top of agent-created files with the same path | ansible-1ee70f strict failed with "already exists" | 413951c (fixed: strict pass in rerun 125840) |
+| Self-gate trusted a narrowed SELFTEST | qute-0b621c failed in 2 arms | f29de90 (fixed: 2/2 in rerun 103626) |
 
 ### Failure categories
 
@@ -95,8 +95,8 @@ The full table, with every fix tried, is in `docs/FIXLOG.md`. Totals for the day
 | gate false-fail | ≥1 | no |
 | spec gap | 7+ | no |
 | regression (hidden files) | 1 | no |
-| gate hole | 2 | fix pending rerun |
-| grader collision | 1 | fix pending rerun |
+| gate hole | 2 | no (2/2 after fix) |
+| grader collision | 1 | no (1/1 after fix) |
 | model capability | 0 confirmed | — |
 
 Of the failures we could diagnose, **none were confirmed as the model being unable to do the task**. Every one traced back to the harness, the prompt or the gate.

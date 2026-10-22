@@ -64,8 +64,8 @@ Agents can run `/run_tests.sh` (the grader's test-runner recipe; it contains no 
 | Missing spec (requirements/interface) | #8 official prompt template | — |
 | Can't run the repo's tests | #5 envrun + `/run_tests.sh` | #5 alone moved nothing until #7–#9 |
 | Can't see existing tests → silent regressions | #9 | — |
-| Self-check trusts the agent's chosen command | #7 (false-fails), #12 pending (narrowing) | — |
-| Harness/grader artifacts | #1, #2, #4, #11 pending | — |
+| Self-check trusts the agent's chosen command | #7 (false-fails), #12 (narrowing) | — |
+| Harness/grader artifacts | #1, #2, #4, #11 | — |
 
 ### Token-usage limits (cost or turns run out)
 
