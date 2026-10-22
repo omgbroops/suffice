@@ -54,6 +54,7 @@ Agents can run `/run_tests.sh` (the grader's test-runner recipe; it contains no 
 | 11 | 10:33 | 413951c | grader excludes agent edits to test_patch paths | grader collision | 092150 ansible-1ee70f strict fail → 125840 pass | $0.26 | 171 / 171 | worked (did not check whether the agent recreated the colliding file this time) |
 | 12 | 10:40 | f29de90 | self-check re-runs earlier failing SELFTEST commands | gate hole | 092150 qute-0b621c single+cheap 0/2 → 103626 2/2 | $0.15 + $0.08 | 51 / 112 | **worked** |
 | 13 | 12:50 | d537f6d | keep the CLI's stderr tail when it exits nonzero | harness bug (no cause logged) | 103626 strict ansible-1ee70f: provider_error after 23 min, $0, cause lost → 125840 no error to log | $0.26 | 171 / 171 | infra; the cause of the first error is still unknown |
+| 14 | 13:28 | 92217d6 | Flint arm (local, llama-server); bench memory floor configurable | new arm / harness bug | flint-132819: 3 budget_exhausted (CLI prices the unknown model at about Sonnet rates, so $0.5 ≈ Sonnet's token budget), 5 aborted_memory (30% free floor, server uses 28GB) → rerun pending | $0 real (local) | 145 / 142 | 0/3 at Sonnet's token budget; 5 not run |
 
 ## Limitations
 
