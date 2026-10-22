@@ -11,3 +11,9 @@ test("arm 'v4' is the default ladder; 'single:<model>' sums rounds and takes the
   assert.equal(single.costEstimateUsd, Math.max(...ladder.map(t => t.costEstimateUsd)));
   assert.throws(() => armTiers('bogus'), /unknown arm/);
 });
+
+test("v5 --v5-cheap=sonnet makes the cheap rung Sonnet; top opus gives [sonnet, opus]", () => {
+  const tiers = armTiers('v5', undefined, { cheap: 'sonnet', top: 'opus' });
+  assert.deepEqual(tiers.map(t => t.model), ['claude-sonnet-5-5', 'claude-opus-5-5']);
+  assert.throws(() => armTiers('v5', undefined, { cheap: 'opus' }), /unknown v5 cheap/);
+});

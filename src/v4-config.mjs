@@ -51,19 +51,21 @@ export const V5_SONNET_MODEL = 'claude-sonnet-5-5';
 export const V5_SONNET_ESTIMATE_USD = 0.05;
 
 // 'v4' is the ladder itself. 'single:<model>' is one tier with the ladder's total rounds and its largest estimate, so both arms share the harness and budget gate.
-export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet' } = {}) {
+export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet', cheap = 'haiku' } = {}) {
   if (arm === 'v4') return ladder;
-  // v5: Haiku rounds capped at 2, then one top rung (Sonnet; Opus only with top 'opus'). Lean claude call, fixed tools.
+  // v5: cheap rung (Haiku, or Sonnet with cheap 'sonnet') rounds capped at 2, then one top rung (Sonnet; Opus only with top 'opus'). Lean claude call, fixed tools.
   if (arm === 'v5') {
     if (top !== 'sonnet' && top !== 'opus') throw new Error(`unknown v5 top: ${top}`);
-    const [cheap, strong] = ladder;
+    if (cheap !== 'haiku' && cheap !== 'sonnet') throw new Error(`unknown v5 cheap: ${cheap}`);
+    const [haiku, strong] = ladder;
+    const cheapTier = cheap === 'sonnet' ? { ...haiku, name: 'sonnet-cheap', model: V5_SONNET_MODEL, costEstimateUsd: V5_SONNET_ESTIMATE_USD } : haiku;
     const topTier = top === 'opus' ? { ...strong, rounds: 1 }
       : { ...strong, name: 'sonnet', model: V5_SONNET_MODEL, rounds: 1, costEstimateUsd: V5_SONNET_ESTIMATE_USD };
-    return [{ ...cheap, rounds: Math.min(cheap.rounds, 2) }, topTier].map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
+    return [{ ...cheapTier, rounds: Math.min(cheapTier.rounds, 2) }, topTier].map(t => ({ ...t, lean: true, tools: ['Read', 'Edit', 'Write', 'Bash'] }));
   }
   // v6: same two rungs as v5; the cheap rung runs the test writer and K candidates (src/v6-arm.mjs).
   // Execution calls run at low effort (thinking was about a third of cost) and cannot Write whole files.
-  if (arm === 'v6') return armTiers('v5', ladder, { top }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
+  if (arm === 'v6') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),

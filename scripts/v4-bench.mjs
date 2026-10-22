@@ -53,8 +53,8 @@ export function loadManifest(path) {
   return items;
 }
 
-// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>] [--gate=self|oracle] [--v5-top=sonnet|opus] [--protocol=pass1|pass2 (polyglot only)]
-const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate', 'v5-top', 'protocol', 'v6-k', 'v6-plan'];
+// Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>] [--gate=self|oracle] [--v5-top=sonnet|opus] [--v5-cheap=haiku|sonnet] [--protocol=pass1|pass2 (polyglot only)]
+const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate', 'v5-top', 'v5-cheap', 'protocol', 'v6-k', 'v6-plan'];
 export function parseArgs(argv) {
   const opts = {};
   for (const arg of argv) {
@@ -75,7 +75,7 @@ export function defaultBudgetUsd(tiers) { return tiers.reduce((s, t) => s + t.ro
 
 // provider: { prepWorkspace(item) -> {dir, acceptanceCommand, cleanup}, runAcceptance(prep) -> boolean | {pass} }.
 // runTask defaults to runV4Task; tests inject stubs. The first global-cap refusal stops the run: later items get 'aborted_cap' rows.
-export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask: runTaskOpt, gate = 'self', v5Top, protocol = 'pass1', v6K, v6Plan = 'on' }) {
+export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask: runTaskOpt, gate = 'self', v5Top, v5Cheap, protocol = 'pass1', v6K, v6Plan = 'on' }) {
   if (!['on', 'off'].includes(v6Plan)) throw new Error('--v6-plan must be on|off');
   if (!GATES.includes(gate)) throw new Error(`--gate must be one of ${GATES.join('|')}`);
   if (!(globalCapUsd > 0)) throw new Error('--global-cap-usd is required and must be > 0');
@@ -86,7 +86,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
   assertFresh(results);
   assertFresh(ledgerFile);
   const runTask = runTaskOpt ?? (arm === 'v6' ? runV6Task : runV4Task);
-  const tiers = armTiers(arm, undefined, { top: v5Top ?? 'sonnet' });
+  const tiers = armTiers(arm, undefined, { top: v5Top ?? 'sonnet', cheap: v5Cheap ?? 'haiku' });
   // v5 with the self gate uses the v5 escalation rule; oracle runs keep the v4 rule (their rows carry no self fields).
   const rule = arm === 'v5' && gate === 'self' ? 'v5' : 'v4';
   const budget = budgetUsd ?? (arm === 'v6' ? v6DefaultBudget(tiers, v6K, v6Plan === 'on') : defaultBudgetUsd(tiers));
@@ -172,7 +172,7 @@ export async function main(argv) {
   if (!provider) throw new Error('src/v4-polyglot.mjs exports no provider (expected default or polyglotProvider)');
   const rows = await runBench({
     items, arm: o.arm, workers, globalCapUsd: Number(o['global-cap-usd']), results: o.results, gate: o.gate ?? 'self',
-    budgetUsd: o['budget-usd'] === undefined ? undefined : Number(o['budget-usd']), provider, probe: probeFreePct, v5Top: o['v5-top'], protocol,
+    budgetUsd: o['budget-usd'] === undefined ? undefined : Number(o['budget-usd']), provider, probe: probeFreePct, v5Top: o['v5-top'], v5Cheap: o['v5-cheap'], protocol,
     v6K: o['v6-k'] === undefined ? undefined : Number(o['v6-k']), v6Plan: o['v6-plan'],
   });
   return rows.length;
