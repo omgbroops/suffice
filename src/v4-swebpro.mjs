@@ -46,6 +46,11 @@ export function lastLines(text, n = 60) {
   return text.split('\n').slice(-n).join('\n');
 }
 
+// Official SWE-bench Pro template (scaleapi/SWE-bench_Pro-os helper_code/create_problem_statement.py).
+export function buildPrompt(row) {
+  return `${row.problem_statement ?? ''}\n\nRequirements:\n${row.requirements ?? ''}\n\nNew interfaces introduced:\n${row.interface ?? ''}\n\n${INSTRUCTION}`;
+}
+
 // Container script: the eval's entryscript with markers so failures classify without guessing.
 // shortcut: env exports from the dockerfiles are skipped (image ENV is inherited at docker run), upgrade if an image needs build-time ENV.
 export function buildEntryScript(row) {
@@ -197,7 +202,7 @@ export async function prepWorkspace(item) {
     await run('git', ['-C', dir, 'init', '-q'], { timeoutMs: 60_000 });
     await run('git', [...git, 'add', '-A'], { timeoutMs: 600_000 });
     await run('git', [...git, 'commit', '-q', '--allow-empty', '-m', 'baseline'], { timeoutMs: 600_000 });
-    item.prompt = `${row.problem_statement}\n\n${INSTRUCTION}`;
+    item.prompt = buildPrompt(row);
     const instanceId = item.taskId;
     // Agent env: only the broker socket (image and hidden list stay with the harness) and the repo bin on PATH.
     await loadScripts(instanceId); // ensures the cached run_script.sh exists on disk before the broker mounts it
