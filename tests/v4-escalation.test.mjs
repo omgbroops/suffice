@@ -82,7 +82,7 @@ test('row schema has exactly the reported fields', async () => {
   const row = await runV4(task, { attempt, budgetUsd: 1 });
   assert.deepEqual(Object.keys(row).sort(), [
     'budgetUsd', 'cheapCostUsd', 'escalated', 'escalationSkipped', 'finalPass', 'firstAttemptPass',
-    'roundCostsUsd', 'roundsUsed', 'strongCostUsd', 'task', 'variant',
+    'roundCostsUsd', 'roundsUsed', 'selfTests', 'strongCostUsd', 'task', 'variant',
   ]);
   assert.equal(row.variant, 'v4');
 });

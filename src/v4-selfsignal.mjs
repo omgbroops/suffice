@@ -12,12 +12,14 @@ export function parseSelfTest(text = '') {
 }
 
 // shortcut: runs the agent's command through /bin/sh, so Windows needs a cmd.exe branch before it is used there.
+// Returns { signal, cmd, tail }; tail is the last 1500 chars of the agent's own SELFTEST output (never hidden-test output).
 export function makeSelfCheck({ timeoutMs = 60_000 } = {}) {
   return async ({ workspace, text }) => {
     const cmd = parseSelfTest(text);
-    if (!cmd) return 'unverified';
+    if (!cmd) return { signal: 'unverified', cmd: null, tail: '' };
     const out = await runProcess('/bin/sh', ['-c', cmd], { cwd: workspace, timeoutMs });
-    return !out.timedOut && out.code === 0 ? 'pass' : 'fail';
+    const tail = String(out.stdout ?? '').slice(-1500);
+    return { signal: !out.timedOut && out.code === 0 ? 'pass' : 'fail', cmd, tail };
   };
 }
 
@@ -60,7 +62,7 @@ export async function selfSignal({ original, workspace, text, selfCheck = makeSe
   const ws = await realpath(workspace);
   const rels = await changedPaths(original, ws);
   const { applies, inside } = await checkPaths(ws, rels);
-  const signal = await selfCheck({ workspace: ws, text });
+  const { signal, cmd, tail } = await selfCheck({ workspace: ws, text });
   const patchNonEmpty = rels.length > 0;
-  return { pass: patchNonEmpty && applies && inside && signal === 'pass', signal, patchNonEmpty, patchApplies: applies, inside };
+  return { pass: patchNonEmpty && applies && inside && signal === 'pass', signal, patchNonEmpty, patchApplies: applies, inside, selfTestCmd: cmd, selfTestTail: tail };
 }

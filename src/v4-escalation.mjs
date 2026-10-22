@@ -28,7 +28,13 @@ export function v5Decision(result) {
   return 'accept';
 }
 
+// v5 retry prompt after a failed SELFTEST: the agent sees its own test output only, never the hidden verdict.
+export function selfRetryPrompt(tail = '') {
+  return `${V4_RETRY_MESSAGE}\n\nYour own SELFTEST output (last 1500 chars):\n${String(tail).slice(-1500)}\n\nThe test may itself be wrong: fix the test or the code.`;
+}
+
 // rule 'v4' (default) is the original self/oracle rule; rule 'v5' uses v5Decision on the self-gate fields.
+// v5: a non-accepted round stays in its tier until the tier's rounds run out, so the cheap tier gets its retry before escalation.
 export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, workspace, tools, rule = 'v4' } = {}) {
   // Hard refusal: a per-run budget must be passed explicitly.
   if (!Number.isFinite(budgetUsd) || budgetUsd <= 0) throw new V4Error('BUDGET_REQUIRED');
@@ -36,7 +42,7 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
     task: task.id, variant: 'v4', budgetUsd,
     firstAttemptPass: false, roundsUsed: 0, roundCostsUsd: [],
     cheapCostUsd: 0, escalated: false, escalationSkipped: null,
-    strongCostUsd: 0, finalPass: false,
+    strongCostUsd: 0, finalPass: false, selfTests: [],
   };
   let spent = 0, round = 0, unverified = 0;
   for (const [index, tier] of tiers.entries()) {
@@ -56,15 +62,14 @@ export async function runV4(task, { attempt, budgetUsd, tiers = DEFAULT_TIERS, w
       spent += cost;
       if (index === 0) { row.roundCostsUsd.push(cost); row.cheapCostUsd += cost; row.roundsUsed = r; } else row.strongCostUsd += cost;
       if (round === 1) row.firstAttemptPass = result.pass === true;
+      row.selfTests.push({ round, model: tier.model, cmd: result.selfTestCmd ?? null, signal: result.signal ?? null, tail: String(result.selfTestTail ?? '').slice(-400) });
       if (result.pass === true) { row.finalPass = true; return row; }
       if (rule === 'v5') {
-        const decision = v5Decision(result);
-        if (decision === 'accept') { row.finalPass = true; return row; }
-        if (decision === 'escalate') break; // skip the rest of this tier; the next tier checks its reservation
+        if (v5Decision(result) === 'accept') { row.finalPass = true; return row; }
       } else if (result.signal === 'unverified') unverified++;
       const more = r < tier.rounds || index < tiers.length - 1;
       if (more && spent >= budgetUsd) { row.escalationSkipped = 'budget'; return row; }
-      prompt = V4_RETRY_MESSAGE;
+      prompt = rule === 'v5' && result.signal === 'fail' ? selfRetryPrompt(result.selfTestTail) : V4_RETRY_MESSAGE;
     }
   }
   return row;

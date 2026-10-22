@@ -42,26 +42,27 @@ test('rule: SELFTEST none does not escalate; the patch is accepted on the first 
   assert.equal(row.escalated, false);
 });
 
-test('rule: a failed SELFTEST escalates straight to Sonnet', async () => {
-  const { attempt, calls } = stub([selfResult({ signal: 'fail' }), selfResult({ pass: true, signal: 'pass' })]);
+test('rule: a failed SELFTEST retries in the cheap tier, then escalates to Sonnet', async () => {
+  const { attempt, calls } = stub([selfResult({ signal: 'fail' }), selfResult({ signal: 'fail' }), selfResult({ pass: true, signal: 'pass' })]);
   const row = await runV4(task, { attempt, budgetUsd: 1, tiers: v5, rule: 'v5' });
-  assert.deepEqual(calls.map(c => c.model), [HAIKU, SONNET]);
-  assert.equal(calls[1].prompt, task.prompt);
+  assert.deepEqual(calls.map(c => c.model), [HAIKU, HAIKU, SONNET]);
+  assert.match(calls[1].prompt, /^The hidden check failed/);
+  assert.match(calls[1].prompt, /test may itself be wrong/);
   assert.equal(row.escalated, true);
   assert.equal(row.finalPass, true);
 });
 
 test('rule: a patch that does not apply escalates to Sonnet', async () => {
-  const { attempt, calls } = stub([selfResult({ patchApplies: false }), selfResult({ pass: true, signal: 'pass' })]);
+  const { attempt, calls } = stub([selfResult({ patchApplies: false }), selfResult({ patchApplies: false }), selfResult({ pass: true, signal: 'pass' })]);
   const row = await runV4(task, { attempt, budgetUsd: 1, tiers: v5, rule: 'v5' });
-  assert.deepEqual(calls.map(c => c.model), [HAIKU, SONNET]);
+  assert.deepEqual(calls.map(c => c.model), [HAIKU, HAIKU, SONNET]);
   assert.equal(row.escalated, true);
 });
 
 test('rule: a patch outside cwd escalates to Sonnet', async () => {
   const { attempt, calls } = stub([selfResult({ inside: false }), selfResult({ signal: 'unverified' })]);
   const row = await runV4(task, { attempt, budgetUsd: 1, tiers: v5, rule: 'v5' });
-  assert.deepEqual(calls.map(c => c.model), [HAIKU, SONNET]);
+  assert.deepEqual(calls.map(c => c.model), [HAIKU, HAIKU]);
   assert.equal(row.finalPass, true);
 });
 
@@ -83,16 +84,16 @@ test('rule: an empty patch twice escalates to Sonnet', async () => {
 });
 
 test('rule: a failing Sonnet rung is the final failure with no further calls', async () => {
-  const { attempt, calls } = stub([selfResult({ signal: 'fail' }), selfResult({ signal: 'fail' })]);
+  const { attempt, calls } = stub([selfResult({ signal: 'fail' }), selfResult({ signal: 'fail' }), selfResult({ signal: 'fail' })]);
   const row = await runV4(task, { attempt, budgetUsd: 1, tiers: v5, rule: 'v5' });
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.equal(row.finalPass, false);
 });
 
 test('rule: Sonnet is skipped when its 0.05 reservation would exceed the budget', async () => {
   const { attempt, calls } = stub([selfResult({ signal: 'fail' })]);
   const row = await runV4(task, { attempt, budgetUsd: 0.04, tiers: v5, rule: 'v5' });
-  assert.equal(calls.length, 1);
+  assert.equal(calls.length, 2); // second cheap round runs; Sonnet reservation then fails
   assert.equal(row.escalationSkipped, 'budget');
   assert.equal(row.finalPass, false);
 });
