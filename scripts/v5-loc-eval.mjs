@@ -8,6 +8,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, locate, snippet } from '../src/v5-index.mjs';
 import { prepWorkspace } from '../src/v4-polyglot.mjs';
+import { readPolyglotDocs } from '../src/v4-docs.mjs';
 import { patchFiles } from '../src/v4-swebpro.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -56,8 +57,7 @@ async function evalPoly() {
     const src = join(POLY, task.lang, 'exercises', 'practice', task.taskId.split('/')[1]);
     const cfg = await readJson(join(src, '.meta', 'config.json'));
     const gold = cfg.files.solution;
-    const docs = ['instructions.md', 'instructions.append.md'].map(f => join(src, '.docs', f)).filter(existsSync);
-    const issue = (await Promise.all(docs.map(f => readFile(f, 'utf8')))).join('\n');
+    const issue = await readPolyglotDocs(src);
     const prep = await prepWorkspace(task);
     try {
       const idx = await buildIndex(prep.dir);

@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { appendFile, cp, mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { appendFile, cp, mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
@@ -8,6 +8,7 @@ import { pathToFileURL } from 'node:url';
 import { runV4Task, GATES } from '../src/v4-runner.mjs';
 import { openLedger } from '../src/v4-ledger.mjs';
 import { armTiers } from '../src/v4-config.mjs';
+import { readPolyglotDocs } from '../src/v4-docs.mjs';
 import { buildBundle, v5Prompt } from '../src/v5-bundle.mjs';
 import { runV6Task, v6DefaultBudget } from '../src/v6-arm.mjs';
 
@@ -148,8 +149,7 @@ async function saveFailure(arm, taskId, r) {
 
 // The hidden tests are not in the workspace; the agent gets the exercise statement and the stub files.
 async function defaultPrompt(prep) {
-  let doc = '';
-  try { doc = await readFile(join(prep.dir, '.docs', 'instructions.md'), 'utf8'); } catch { /* exercise without .docs */ }
+  const doc = await readPolyglotDocs(prep.dir);
   return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.\n\n${doc}`;
 }
 
