@@ -13,7 +13,7 @@ done
 
 TOTAL_CAP="${TOTAL_CAP:-13}"  # remaining of the owner's $40 cap (~$27 spent 2026-10-21); override explicitly to spend more
 JOBS=(polyglot-v5-cheap polyglot-v5-strict polyglot-single swebpro-v5-cheap swebpro-v5-strict swebpro-single)
-CAPS=(6 5 4 3 3 2)
+read -ra CAPS <<< "${ARM_CAPS:-6 5 4 3 3 2}"  # one cap per JOBS entry, same order
 SUITE="${SUITE:-all}"  # all|polyglot|swebpro
 SWEPRO_MANIFEST="${SWEPRO_MANIFEST:-config/bench-manifest.swebpro20.json}"
 SWEPRO_BUDGET="${SWEPRO_BUDGET:-0.5}"  # per task; the ~$0.11 default starved agents on real repos (2026-10-22 run)
