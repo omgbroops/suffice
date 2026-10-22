@@ -27,7 +27,8 @@ fi
 # Sets ARGS to one job's node argv; --global-cap-usd and --results are added at launch.
 job_args() {
   # swebpro agents run envrun loops, so they get 30 turns; polyglot keeps the lean default of 12.
-  if [[ "$1" == swebpro-* ]]; then export V4_MAX_TURNS=30; else unset V4_MAX_TURNS; fi
+  ENVP=()  # env prefix for the node command; jobs run in the background, so no export
+  if [[ "$1" == swebpro-* ]]; then ENVP=(V4_MAX_TURNS=30 V4_KEEP_IMAGES=1); fi
   case "$1" in
     polyglot-v5-cheap)  ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
     polyglot-v5-strict) ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-strict --v5-top=opus) ;;
@@ -66,18 +67,19 @@ for i in "${!JOBS[@]}"; do
   name="${JOBS[$i]}"
   job_args "$name"
   ARGS+=("--global-cap-usd=${CAPS[$i]}" "--results=$OUT/$name.jsonl")
-  if [[ "$name" == swebpro-* ]]; then
-    # swebpro image refcount is per process, so concurrent arms could rmi an image another arm uses; one ~10GB image at a time also keeps docker under 15GB
-    nice -n 19 node scripts/v4-bench.mjs "${ARGS[@]}" >"$OUT/$name.out" 2>&1 || fails=$((fails + 1))
-  else
-    nice -n 19 node scripts/v4-bench.mjs "${ARGS[@]}" >"$OUT/$name.out" 2>&1 &
-    PIDS+=("$!")
-  fi
+  env ${ENVP[@]+"${ENVP[@]}"} nice -n 19 node scripts/v4-bench.mjs "${ARGS[@]}" >"$OUT/$name.out" 2>&1 &
+  PIDS+=("$!")
 done
 
 for pid in "${PIDS[@]}"; do
   wait "$pid" || fails=$((fails + 1))
 done
+
+# swebpro arms ran with V4_KEEP_IMAGES=1 (shared images), so images are removed here
+docker images --format '{{.Repository}}:{{.Tag}}' | grep swe-bench_pro | xargs -r docker rmi || true
+rm -rf ~/.cache/v4-swebpro/work/*
+colima ssh -- sudo fstrim -a || true
+df -h /System/Volumes/Data | tail -1
 
 python3 - "$OUT" "${JOBS[@]}" <<'PY'
 import json, os, sys

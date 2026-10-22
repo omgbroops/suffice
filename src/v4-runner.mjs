@@ -44,11 +44,11 @@ export async function pass2Retry({ row, tiers, attempt, workspace, ledger, budge
 export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeoutMs, tiers = DEFAULT_TIERS, verify, ledger: globalLedger, meta = {}, gate = 'self', selfCheck, rule = 'v4', strict = false, protocol = 'pass1', verifyOutput }) {
   const ledger = { spentUsd: 0, costKnown: true };
   const base = { ...meta, task: task.id, variant: meta.arm ?? 'v4', repeat, budgetUsd, gate, protocol };
-  let row, snapshot;
+  let row, snapshot, workspace;
   try {
     if (!GATES.includes(gate)) throw new V4Error('GATE_INVALID');
     if (!PROTOCOLS.includes(protocol)) throw new V4Error('PROTOCOL_INVALID');
-    const workspace = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-`)));
+    workspace = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-`)));
     await cp(task.workspaceDir, workspace, { recursive: true, verbatimSymlinks: true });
     const verifyFn = verify ?? nodeTestVerdict(task.acceptancePath);
     if (gate === 'self') snapshot = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-r1-`)));
@@ -72,6 +72,7 @@ export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeout
     await mkdir(dirname(out), { recursive: true });
     await appendFile(out, JSON.stringify(row) + '\n');
     if (snapshot) await rm(snapshot, { recursive: true, force: true });
+    if (workspace) await rm(workspace, { recursive: true, force: true });
   }
   return row;
 }

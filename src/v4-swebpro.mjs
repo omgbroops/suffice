@@ -169,7 +169,8 @@ export async function prepWorkspace(item) {
     if (d) await step(() => rm(d, { recursive: true, force: true }));
     const left = imageUsers.get(image) - 1;
     imageUsers.set(image, left);
-    if (left === 0) { imageUsers.delete(image); await step(() => docker(['rmi', image], { timeoutMs: 120_000 })); }
+    // Arms run concurrently and share images; run-full.sh removes them at the end.
+    if (left === 0) { imageUsers.delete(image); if (process.env.V4_KEEP_IMAGES !== '1') await step(() => docker(['rmi', image], { timeoutMs: 120_000 })); }
     if (errors.length) throw errors[0];
   };
   try {
