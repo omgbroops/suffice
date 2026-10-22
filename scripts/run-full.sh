@@ -28,7 +28,8 @@ fi
 job_args() {
   # swebpro agents run envrun loops, so they get 30 turns; polyglot keeps the lean default of 12.
   ENVP=()  # env prefix for the node command; jobs run in the background, so no export
-  if [[ "$1" == swebpro-* ]]; then ENVP=(V4_MAX_TURNS=30 V4_RUN_TIMEOUT_MS=1500000 V4_KEEP_IMAGES=1); fi
+  # V4_RUN_LABEL gives each arm its own failure-log dir; ${OUT:-dry} keeps the dry run safe under set -u.
+  if [[ "$1" == swebpro-* ]]; then ENVP=(V4_MAX_TURNS=30 V4_RUN_TIMEOUT_MS=1500000 V4_KEEP_IMAGES=1 "V4_RUN_LABEL=$(basename "${OUT:-dry}")-$1"); fi
   case "$1" in
     polyglot-v5-cheap)  ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-cheap=sonnet --v5-top=opus) ;;
     polyglot-v5-strict) ARGS=(--manifest=config/bench-manifest.polyglot36.json --protocol=pass1 --gate=self --workers=12 --budget-usd=0.6 --arm=v5 --v5-strict --v5-top=opus) ;;
