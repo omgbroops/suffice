@@ -11,7 +11,7 @@ for arg in "$@"; do
   esac
 done
 
-TOTAL_CAP="${TOTAL_CAP:-41}"
+TOTAL_CAP="${TOTAL_CAP:-13}"  # remaining of the owner's $40 cap (~$27 spent 2026-10-21); override explicitly to spend more
 JOBS=(polyglot-v5-cheap polyglot-v5-strict polyglot-single swebpro-v5-cheap swebpro-v5-strict swebpro-single)
 CAPS=(6 5 4 8 8 10)
 
