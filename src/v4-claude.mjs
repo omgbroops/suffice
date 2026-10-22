@@ -1,4 +1,8 @@
 import { spawn } from 'node:child_process';
+import { realpathSync } from 'node:fs';
+import { mkdir } from 'node:fs/promises';
+import { homedir, tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import { V4Error } from './v4-escalation.mjs';
 
 // Thin profile: tiny system prompt. Tool list comes from the tier config (default is these four).
@@ -8,9 +12,39 @@ export const V4_SYSTEM_PROMPT = 'You are a coding agent. Make the requested chan
 // v5 arm: same claude call, tighter. Prompt already holds the ranked files and excerpts, so the model edits first and reads only ranges.
 export const V5_SYSTEM_PROMPT = 'You are a coding agent. The prompt lists likely files with excerpts, ranked most likely first. Edit those files first. Read only with line ranges (Read offset/limit or sed -n A,Bp); never print a whole file. Search only if the listed files fail. Make a minimal correct edit and preserve the public API. Work only inside the current directory. Use only Read, Edit, Write and Bash. Before editing, write a minimal failing test from the issue when feasible, run it, edit, rerun it. Do not claim checks that did not run. End your reply with one final line `SELFTEST: <command>` naming the command you ran, or `SELFTEST: none`.';
 
-export function runProcess(bin, args, { cwd, timeoutMs }) {
+// SBPL string literal: escape backslash and double quote.
+export function sbplString(path) { return `"${path.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`; }
+
+// Realpath plus its /System/Volumes/Data alias on macOS (SBPL matches the resolved path).
+export function pathVariants(path) {
+  let real = path;
+  try { real = realpathSync(path); } catch { /* missing path: keep the raw form */ }
+  return [...new Set([real, '/System/Volumes/Data' + real])];
+}
+
+export function sandboxProfile({ denied = [join(homedir(), 'bench-repos'), join(homedir(), 'suffice-v4'), tmpdir()], allowed, literal = [] }) {
+  const lines = ['(version 1)', '(allow default)'];
+  for (const dir of denied) for (const p of pathVariants(dir)) lines.push(`(deny file-read-data (subpath ${sbplString(p)}))`);
+  // Last matching rule wins, so the workspace base re-allows reads inside a denied tree.
+  for (const dir of allowed) for (const p of pathVariants(dir)) lines.push(`(allow file-read-data (subpath ${sbplString(p)}))`);
+  for (const file of literal) for (const p of pathVariants(file)) lines.push(`(allow file-read-data (literal ${sbplString(p)}))`);
+  return lines.join('\n');
+}
+
+// macOS only: wraps the agent command in sandbox-exec and redirects TMPDIR into the workspace base.
+export async function sandboxCommand(bin, args, workspace) {
+  if (process.platform !== 'darwin') return { bin, args, env: {} };
+  const base = dirname(resolve(workspace));
+  const tmp = join(base, 'tmp');
+  await mkdir(tmp, { recursive: true });
+  // The agent binary itself must stay readable even when it sits in a denied tree (e.g. a test fixture in this repo).
+  const literal = bin.includes('/') ? [resolve(bin)] : [];
+  return { bin: 'sandbox-exec', args: ['-p', sandboxProfile({ allowed: [base], literal }), bin, ...args], env: { TMPDIR: tmp } };
+}
+
+export function runProcess(bin, args, { cwd, timeoutMs, env }) {
   return new Promise((resolveRun, reject) => {
-    const child = spawn(bin, args, { cwd, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(bin, args, { cwd, env: env ? { ...process.env, ...env } : process.env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '', timedOut = false;
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeoutMs);
     child.stdout.on('data', chunk => { stdout += chunk; });
@@ -23,7 +57,8 @@ export function runProcess(bin, args, { cwd, timeoutMs }) {
 // Adapter contract: attempt({ model, effort, prompt, workspace, tools, remainingBudgetUsd }) -> { costUsd, usage, status }.
 // costUsd null means unknown. The hidden verdict is added by buildAttempt, not here.
 // Effort maps to `claude --effort` (low|medium|high|xhigh|max, from claude --help). Unverified live.
-// Shortcut: Bash can read any absolute path, so the oracle is hidden by path and prompt only; upgrade to a sandbox before trusting pass rates.
+// On macOS the agent runs under sandbox-exec (sandboxCommand): reads of bench-repos, this repo and the temp dir are denied, the workspace base is allowed.
+// shortcut: non-darwin runs are unsandboxed (oracle hidden by path and prompt only), add a Linux sandbox before trusting pass rates there.
 export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude', timeoutMs = 360_000, lean = false, systemPrompt } = {}) {
   let session = null; // resume only within the same model; escalation starts fresh with the task prompt
   return async ({ model, effort, prompt, workspace, tools, remainingBudgetUsd, maxTurns }) => {
@@ -36,7 +71,8 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
       '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', '--exclude-dynamic-system-prompt-sections', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
       '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', remainingBudgetUsd.toFixed(4), ...effortArgs, ...leanArgs, ...resume];
-    const out = await runProcess(bin, args, { cwd: workspace, timeoutMs });
+    const sandboxed = await sandboxCommand(bin, args, workspace);
+    const out = await runProcess(sandboxed.bin, sandboxed.args, { cwd: workspace, timeoutMs, env: sandboxed.env });
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
     let json;
     try { json = JSON.parse(out.stdout); } catch { throw new V4Error(out.code === 0 ? 'HARNESS_ERROR' : 'PROVIDER_ERROR'); }
