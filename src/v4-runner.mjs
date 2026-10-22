@@ -49,7 +49,7 @@ export async function runV4Task({ task, repeat = 1, budgetUsd, out, bin, timeout
     if (!GATES.includes(gate)) throw new V4Error('GATE_INVALID');
     if (!PROTOCOLS.includes(protocol)) throw new V4Error('PROTOCOL_INVALID');
     const workspace = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-`)));
-    await cp(task.workspaceDir, workspace, { recursive: true });
+    await cp(task.workspaceDir, workspace, { recursive: true, verbatimSymlinks: true });
     const verifyFn = verify ?? nodeTestVerdict(task.acceptancePath);
     if (gate === 'self') snapshot = await realpath(await mkdtemp(join(tmpdir(), `v4-${task.id}-r1-`)));
     const attempt = buildAttempt({ tiers, workspace, verify: verifyFn, ledger, bin, timeoutMs, gate, original: task.workspaceDir, selfCheck, snapshot });

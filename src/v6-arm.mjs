@@ -83,17 +83,17 @@ export async function planFileBlock(dir, plan, tree, maxTokens = V6_PLAN_FILES_T
 // Real workspace = pristine task copy + the picked candidate's changed files, minus the writer's test files.
 async function materialize(target, original, source, exclude) {
   await rm(target, { recursive: true, force: true });
-  await cp(original, target, { recursive: true });
+  await cp(original, target, { recursive: true, verbatimSymlinks: true });
   for (const rel of await changedPaths(original, source)) {
     if (exclude.has(rel)) continue;
     const from = join(source, rel), to = join(target, rel);
-    if (existsSync(from)) { await mkdir(dirname(to), { recursive: true }); await cp(from, to, { recursive: true, force: true }); }
+    if (existsSync(from)) { await mkdir(dirname(to), { recursive: true }); await cp(from, to, { recursive: true, verbatimSymlinks: true, force: true }); }
     else await rm(to, { recursive: true, force: true });
   }
 }
 
 async function copyRels(from, to, rels) {
-  for (const rel of rels) { await mkdir(dirname(join(to, rel)), { recursive: true }); await cp(join(from, rel), join(to, rel), { recursive: true, force: true }); }
+  for (const rel of rels) { await mkdir(dirname(join(to, rel)), { recursive: true }); await cp(join(from, rel), join(to, rel), { recursive: true, verbatimSymlinks: true, force: true }); }
 }
 
 // Same contract as runV4Task: appends one row to `out` and never throws. claude({ model, effort, prompt, workspace, tools, system, maxTurns, remainingBudgetUsd }) -> { costUsd, text, numTurns, usage }.
@@ -126,7 +126,7 @@ export async function runV6Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
   const fresh = async tag => {
     const dir = await realpath(await mkdtemp(join(tmpdir(), `v6-${task.id}-${tag}-`)));
     scratch.push(dir);
-    await cp(original, dir, { recursive: true });
+    await cp(original, dir, { recursive: true, verbatimSymlinks: true });
     return dir;
   };
   try {

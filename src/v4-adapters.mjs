@@ -31,7 +31,7 @@ export function buildAttempt({ tiers, workspace, verify, ledger, bin, timeoutMs,
     if (!Number.isFinite(result.costUsd)) { ledger.costKnown = false; return { pass: false, costUsd: null }; }
     ledger.spentUsd += result.costUsd;
     if (gate === 'oracle') return { pass: await verify(workspace), costUsd: result.costUsd, usage: result.usage, status: result.status };
-    if (call.round === 1 && snapshot) await cp(workspace, snapshot, { recursive: true });
+    if (call.round === 1 && snapshot) await cp(workspace, snapshot, { recursive: true, verbatimSymlinks: true });
     const { pass, signal, patchNonEmpty, patchApplies, inside, selfTestCmd, selfTestTail } = await selfSignal({ original, workspace, text: result.text, selfCheck });
     return { pass, signal, patchNonEmpty, patchApplies, inside, selfTestCmd, selfTestTail, costUsd: result.costUsd, usage: result.usage, status: result.status };
   };

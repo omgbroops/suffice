@@ -96,7 +96,7 @@ export async function prepWorkspace(task, { polyRoot = POLY } = {}) {
   const dir = join(base, name);
   const hidden = join(base, '.hidden');
   try {
-    await cp(src, dir, { recursive: true, filter: p => !/\/\.(meta|approaches)$/.test(p) });
+    await cp(src, dir, { recursive: true, verbatimSymlinks: true, filter: p => !/\/\.(meta|approaches)$/.test(p) });
     await mkdir(hidden);
     for (const rel of cfg.test) {
       await mkdir(dirname(join(hidden, rel)), { recursive: true });
@@ -142,7 +142,7 @@ export async function runAcceptance(prep, { timeoutMs = TIMEOUT_MS, env = proces
   const result = (pass, kind, out = '') => ({ pass, kind, output: out.split('\n').slice(-20).join('\n') });
   try {
     await mkdir(run);
-    await cp(prep.dir, wd, { recursive: true });
+    await cp(prep.dir, wd, { recursive: true, verbatimSymlinks: true });
     if (prep.lang === 'javascript') {
       if (!existsSync(NODE_MODULES)) return result(false, 'toolchain_missing', `missing ${NODE_MODULES}`);
       await symlink(NODE_MODULES, join(wd, 'node_modules'));

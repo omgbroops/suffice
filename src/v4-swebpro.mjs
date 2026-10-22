@@ -153,13 +153,17 @@ export async function prepWorkspace(item) {
   let cid = null;
   let dir = null;
   const release = async () => {
-    if (cid) await docker(['rm', '-f', cid], { timeoutMs: 60_000 });
-    cid = null;
-    if (dir) await rm(dir, { recursive: true, force: true });
-    dir = null;
+    // Every step runs even if an earlier one throws (else images leak); rethrow the first error at the end.
+    const errors = [];
+    const step = async fn => { try { await fn(); } catch (e) { errors.push(e); } };
+    const c = cid; cid = null;
+    const d = dir; dir = null;
+    if (c) await step(() => docker(['rm', '-f', c], { timeoutMs: 60_000 }));
+    if (d) await step(() => rm(d, { recursive: true, force: true }));
     const left = imageUsers.get(image) - 1;
     imageUsers.set(image, left);
-    if (left === 0) { imageUsers.delete(image); await docker(['rmi', image], { timeoutMs: 120_000 }); }
+    if (left === 0) { imageUsers.delete(image); await step(() => docker(['rmi', image], { timeoutMs: 120_000 })); }
+    if (errors.length) throw errors[0];
   };
   try {
     const pulled = await docker(['pull', '--platform', PLATFORM, image], { timeoutMs: 1800_000 });
@@ -174,7 +178,7 @@ export async function prepWorkspace(item) {
     // Test files come from the eval's test patch; keep them out of the agent's workspace.
     for (const f of patchFiles(row.test_patch)) await rm(join(dir, f), { force: true });
     await rm(join(dir, '.git'), { recursive: true, force: true });
-    const git = ['-C', dir, '-c', 'user.name=v4-swebpro', '-c', 'user.email=v4-swebpro@local'];
+    const git = ['-C', dir, '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', '-c', 'user.name=v4-swebpro', '-c', 'user.email=v4-swebpro@local'];
     await run('git', ['-C', dir, 'init', '-q'], { timeoutMs: 60_000 });
     await run('git', [...git, 'add', '-A'], { timeoutMs: 600_000 });
     await run('git', [...git, 'commit', '-q', '--allow-empty', '-m', 'baseline'], { timeoutMs: 600_000 });
@@ -191,7 +195,7 @@ export async function prepWorkspace(item) {
 export const cloneForVerify = prep => prepWorkspace(prep.item);
 
 async function gitDiff(dir) {
-  await run('git', ['-C', dir, 'add', '-A'], { timeoutMs: 600_000 });
+  await run('git', ['-C', dir, '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', 'add', '-A'], { timeoutMs: 600_000 });
   const d = await run('git', ['-C', dir, 'diff', '--cached', '--binary', 'HEAD'], { timeoutMs: 600_000 });
   if (d.code !== 0) throw new Error(`git diff failed: ${lastLines(d.stderr, 5)}`);
   return d.stdout;
