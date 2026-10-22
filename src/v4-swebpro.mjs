@@ -242,9 +242,11 @@ export async function prepWorkspace(item) {
 // Pristine copy for verify: prep.dir is the agent's workspace, so re-prepare the same item (fresh docker cp of the baseline).
 export const cloneForVerify = prep => prepWorkspace(prep.item);
 
-async function gitDiff(dir) {
+// exclude: test_patch paths the grader adds itself; an agent's own file at the same path would make `git apply` fail.
+export async function gitDiff(dir, exclude = []) {
   await run('git', ['-C', dir, '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', 'add', '-A'], { timeoutMs: 600_000 });
-  const d = await run('git', ['-C', dir, 'diff', '--cached', '--binary', 'HEAD'], { timeoutMs: 600_000 });
+  const pathspec = ['.', ...exclude.map(p => `:(exclude)${p}`)];
+  const d = await run('git', ['-C', dir, 'diff', '--cached', '--binary', 'HEAD', '--', ...pathspec], { timeoutMs: 600_000 });
   if (d.code !== 0) throw new Error(`git diff failed: ${lastLines(d.stderr, 5)}`);
   return d.stdout;
 }
@@ -254,7 +256,7 @@ export async function runAcceptance(prep, { timeoutMs = DEFAULT_TIMEOUT_MS } = {
   const label = process.env.V4_RUN_LABEL || 'adhoc';
   const reportDir = join(REPORTS, label);
   await mkdir(reportDir, { recursive: true });
-  const diff = await gitDiff(dir);
+  const diff = await gitDiff(dir, patchFiles(row.test_patch));
   let result;
   let log = '';
   if (!diff.trim()) {
