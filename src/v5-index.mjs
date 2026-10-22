@@ -27,6 +27,9 @@ const NOT_DECL = /^\s*(return|if|else|for|while|switch|catch|throw|new|case|do|t
 const STOP = new Set(('a an and are as at be but by can could do does for from had has have how i if in into is it its of on or ' +
   'so that the their then there these this to was we what when where which while who why will with would not no yes also get set ' +
   'use used using instead issue bug problem steps reproduce example one true false null none undefined self').split(' '));
+// Test/doc/e2e paths rarely hold the fix; they count only when the issue names the file (basename).
+const TEST_RE = /(^|\/)(tests?|__tests__|spec|specs|docs?|e2e)\/|(^|\/)test_[^/]*$|_test\.[^/]*$|\.(test|spec)\.[^/]*$|_spec\.[^/]*$/i;
+const SRC_RE = /(^|\/)(src|lib|pkg|internal|app)\//;
 const K1 = 1.2;
 const B = 0.75;
 
@@ -128,15 +131,18 @@ export function locate(index, issue, { k = 10, symK = 5 } = {}) {
       return { ...s, score: r };
     });
     const symS = Math.max(0, ...symRel.map(s => s.score));
-    return { doc, bm, pathS, symRel, symS, lit: (litPath.get(doc.rel) ?? 0) + (symRel.some(s => idents.has(s.name)) ? 0.5 : 0) };
+    // Files whose symbols match several distinct backtick identifiers are more likely the edit site.
+    const multi = 0.25 * Math.max(0, new Set(doc.syms.map(s => s.name).filter(n => idents.has(n))).size - 1);
+    return { doc, bm, pathS, symRel, symS, multi, lit: (litPath.get(doc.rel) ?? 0) + (symRel.some(s => idents.has(s.name)) ? 0.5 : 0) };
   });
   const max = key => Math.max(1e-9, ...scored.map(s => s[key]));
   const [mb, mp, ms] = [max('bm'), max('pathS'), max('symS')];
-  const files = scored.map(s => ({
-    path: s.doc.rel,
-    score: s.bm / mb + 0.5 * s.pathS / mp + 0.5 * s.symS / ms + s.lit,
-    symRel: s.symRel,
-  })).filter(f => f.score > 0).sort((a, b) => b.score - a.score || (a.path < b.path ? -1 : 1));
+  const files = scored.map(s => {
+    const base = s.doc.rel.split('/').pop();
+    const testMult = TEST_RE.test(s.doc.rel) && !issue.includes(base) ? 0.4 : 1;
+    const srcB = SRC_RE.test(s.doc.rel) ? 0.1 : 0;
+    return { path: s.doc.rel, symRel: s.symRel, score: testMult * (s.bm / mb + 0.5 * s.pathS / mp + 0.5 * s.symS / ms + s.lit + s.multi + srcB) };
+  }).filter(f => f.score > 0).sort((a, b) => b.score - a.score || (a.path < b.path ? -1 : 1));
   const top = files.slice(0, k).map(f => ({
     path: f.path,
     score: Math.round(f.score * 1000) / 1000,

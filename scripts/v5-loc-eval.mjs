@@ -2,8 +2,8 @@
 // Usage: nice -n 19 node scripts/v5-loc-eval.mjs [--out reports/v5/loc-eval.md]
 import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { readFile, writeFile, mkdir, cp, rm, mkdtemp } from 'node:fs/promises';
-import { homedir, tmpdir } from 'node:os';
+import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
+import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildIndex, locate, snippet } from '../src/v5-index.mjs';
@@ -13,7 +13,7 @@ import { patchFiles } from '../src/v4-swebpro.mjs';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const POLY = join(homedir(), 'bench-repos', 'polyglot-benchmark');
 const SWE_CACHE = join(homedir(), '.cache', 'v4-swebpro');
-const V5_CACHE = join(homedir(), '.cache', 'v5-loc');
+const V5_REPOS = join(homedir(), '.cache', 'v5-repos');
 const KS = [1, 3, 5, 10];
 const OUT = process.argv.includes('--out') ? process.argv[process.argv.indexOf('--out') + 1] : join(ROOT, 'reports', 'v5', 'loc-eval.md');
 
@@ -76,21 +76,18 @@ function git(args, cwd) {
   return new Promise((res, rej) => execFile('git', args, { cwd, maxBuffer: 64 << 20 }, (e, out) => (e ? rej(e) : res(out))));
 }
 
+// Checkout is deleted by the caller after scoring (disk cap); only the base_commit tree is kept while scoring.
 async function sweCheckout(row) {
-  const dir = join(V5_CACHE, 'swe', row.instance_id);
-  if (!existsSync(join(dir, '.ready'))) {
-    await rm(dir, { recursive: true, force: true });
-    await mkdir(dir, { recursive: true });
-    await git(['init', '-q'], dir);
-    await git(['remote', 'add', 'origin', `https://github.com/${row.repo}.git`], dir);
-    await git(['fetch', '-q', '--depth', '1', 'origin', row.base_commit], dir);
-    await git(['checkout', '-q', 'FETCH_HEAD'], dir);
-    await writeFile(join(dir, '.ready'), '');
-  }
-  const work = await mkdtemp(join(tmpdir(), 'v5-swe-'));
-  await cp(dir, work, { recursive: true, filter: p => !/\/\.(git|ready)$/.test(p) && !p.endsWith('/.ready') });
-  for (const f of patchFiles(row.test_patch)) await rm(join(work, f), { force: true });
-  return work;
+  const dir = join(V5_REPOS, row.instance_id);
+  await rm(dir, { recursive: true, force: true });
+  await mkdir(dir, { recursive: true });
+  await git(['init', '-q'], dir);
+  await git(['remote', 'add', 'origin', `https://github.com/${row.repo}.git`], dir);
+  await git(['fetch', '-q', '--depth', '1', 'origin', row.base_commit], dir);
+  await git(['checkout', '-q', 'FETCH_HEAD'], dir);
+  await rm(join(dir, '.git'), { recursive: true, force: true });
+  for (const f of patchFiles(row.test_patch)) await rm(join(dir, f), { force: true });
+  return dir;
 }
 
 async function evalSwe() {
