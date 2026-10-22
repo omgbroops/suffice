@@ -103,7 +103,7 @@ Of the failures we could diagnose, **none were confirmed as the model being unab
 
 ### Targeted rerun of the 3 remaining failures
 
-Pending: `reports/full/fix-20261022-103626`. The results go into `docs/FIXLOG.md` rows #11 and #12.
+Qute-0b621c passed in both arms that failed it (Sonnet $0.15, Sonnet→Opus $0.08; run 103626). Ansible-1ee70f strict passed ($0.26; run 125840, after one provider error). Every task-run that failed in 092150 now passes, but a clean fresh 8×3 run is still needed before claiming 24/24.
 
 ### Next step
 

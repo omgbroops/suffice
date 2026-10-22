@@ -33,8 +33,9 @@ Agents can run `/run_tests.sh` (the grader's test-runner recipe; it contains no 
 | gate false-fail | ≥1 (xvfb exit code) | pass decided by the pytest summary line (3fde8ff) | yes on target; pass rate unchanged |
 | spec gap | 7 (084319), plus most "completed" fails before it (inferred, logs not re-read) | prompt = official template with requirements + interface (02ce944) | **yes: 0/7 → 6/7** |
 | regression (hidden files) | 1 (qute-9ed748) | keep base versions of test-patch files visible (0ee4256) | yes: passes in all 3 arms in 092150 |
-| gate hole | 2 (qute-0b621c, single + cheap) | re-run earlier failed self-tests before accepting (f29de90) | pending rerun |
-| grader collision | 1 (ansible-1ee70f, strict) | grader drops agent edits to test_patch paths (413951c) | pending rerun |
+| gate hole | 2 (qute-0b621c, single + cheap) | re-run earlier failed self-tests before accepting (f29de90) | **yes: 0/2 → 2/2** (rerun 103626) |
+| grader collision | 1 (ansible-1ee70f, strict) | grader drops agent edits to test_patch paths (413951c) | yes: 0/1 → 1/1 (rerun 125840) |
+| provider error (CLI exited nonzero) | 1 (103626 strict) | log the CLI's stderr (d537f6d) | did not recur; cause unknown |
 
 ## Every fix tried, in order
 
@@ -50,8 +51,9 @@ Agents can run `/run_tests.sh` (the grader's test-runner recipe; it contains no 
 | 8 | 08:57 | 02ce944 | prompt includes requirements + interface (official SWE-Pro template) | spec gap | 084319 0/7 → 085801 6/7 | $0.28 | not recorded | **worked** |
 | 9 | 09:21 | 0ee4256 | keep base-commit test files visible, hide only new ones | regression (hidden files) | 085801 qute-9ed748 fail → 092150 pass ×3 | $2.30 (full 8×3: 21/24) | not recorded | worked |
 | 10 | 10:33 | 7209724 | one failure-log dir per arm | logging | logs overwritten → separate | — | — | infra |
-| 11 | 10:33 | 413951c | grader excludes agent edits to test_patch paths | grader collision | 092150 ansible-1ee70f strict fail → ? | pending | logged by rerun | pending |
-| 12 | 10:40 | f29de90 | self-check re-runs earlier failing SELFTEST commands | gate hole | 092150 qute-0b621c single+cheap fail → ? | pending | logged by rerun | pending |
+| 11 | 10:33 | 413951c | grader excludes agent edits to test_patch paths | grader collision | 092150 ansible-1ee70f strict fail → 125840 pass | $0.26 | 171 / 171 | worked (did not check whether the agent recreated the colliding file this time) |
+| 12 | 10:40 | f29de90 | self-check re-runs earlier failing SELFTEST commands | gate hole | 092150 qute-0b621c single+cheap 0/2 → 103626 2/2 | $0.15 + $0.08 | 51 / 112 | **worked** |
+| 13 | 12:50 | d537f6d | keep the CLI's stderr tail when it exits nonzero | harness bug (no cause logged) | 103626 strict ansible-1ee70f: provider_error after 23 min, $0, cause lost → 125840 no error to log | $0.26 | 171 / 171 | infra; the cause of the first error is still unknown |
 
 ## Limitations
 
@@ -76,4 +78,6 @@ Agents can run `/run_tests.sh` (the grader's test-runner recipe; it contains no 
 
 ## Next fix, picked from this log
 
-The remaining failures are all in the **self-check**: it runs only the command the agent names (gate hole, false-fail). The general fix is for the gate itself to add the **existing tests of each touched module** (found by path from the changed source files), so a pass can't skip them. The rerun of #11/#12 goes first, one change at a time.
+The remaining failures are all in the **self-check**: it runs only the command the agent names (gate hole, false-fail). The general fix is for the gate itself to add the **existing tests of each touched module** (found by path from the changed source files), so a pass can't skip them. #11/#12 reruns: 3/3 failed task-runs now pass ($0.49). All 24 task-runs have now passed at least once with the current fixes, but **not in one clean fresh 8×3 run**, which is still needed (~$3, owner approval).
+
+Known open bug: the cost of a crashed attempt is recorded as $0 with costKnown=true, while the ledger flags it unknown_cost.
