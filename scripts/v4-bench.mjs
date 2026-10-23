@@ -143,6 +143,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
 // Keeps why each verdict failed (kind + output tail) per arm/task; polyglot results rows only hold pass/fail.
 // cp resolves an existing dest symlink (EINVAL/ENOENT); drop it first. rm never follows the link.
 export async function overlaySymlinkFilter(src, dest) {
+  if (/^selftest/i.test(basename(src))) return false; // agent's own tests stay re-runnable in the workspace but never reach grading
   if ((await lstat(src)).isSymbolicLink()) await rm(dest, { force: true });
   return true;
 }
@@ -169,8 +170,10 @@ async function defaultPrompt(prep) {
   const mode = process.env.V4_HINT ?? 'exercism';
   const hint = !prep.lang || mode === 'off' ? ''
     : mode === 'generic' ? '\n\nThe hidden tests check the whole statement, not only its examples. Match the API the stub and statement define exactly: names and constants, static vs instance methods, types, and whether errors throw or return a value. Your self-test must cover every edge and error case the statement states or implies, not only the examples below.'
-    : `\n\nThe hidden tests are the Exercism ${prep.lang} track's test suite for "${name}". Match that track's expected API exactly: exported names and constants, static vs instance methods, generic types, and whether errors throw or return a value. Your self-test must cover the cases from Exercism's canonical test data for "${name}" as you recall them, including every edge and error case, not only the examples below.`;
-  return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.${hint}\n\n${doc}`;
+    : `\n\nThe hidden tests are the Exercism ${prep.lang} track's test suite for "${name}". Match that track's expected API exactly: exported names and constants, static vs instance methods, parameter types (keep the stub's concrete types; a template can break brace-initialized calls), and whether errors throw or return a value. Your self-test must cover the cases from Exercism's canonical test data for "${name}" as you recall them, including every edge and error case, not only the examples below.`;
+  // r27 hint run: 15 of 15 escalations came from SELFTEST commands that could not re-run (scratch file gone, /tmp blocked, placeholders, no runner summary), not from wrong code.
+  const self = !prep.lang || mode === 'off' ? '' : `\n\nSelf-test rules: put your test in the current directory in a new file or folder whose name starts with "selftest" (e.g. selftest_test.py, selftest.spec.js, selftest_test.go, tests/selftest.rs, selftest.cpp); it is excluded from grading. Never use /tmp (blocked) and never delete it. Your SELFTEST line is re-run verbatim by /bin/sh from the current directory after you finish, so it must be one complete command with no placeholders, and its output must include a pass count: use the real runner (pytest, jest, go test, cargo test, gradle test), or for C++ print "<N> passed" from your own main().`;
+  return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.${hint}${self}\n\n${doc}`;
 }
 
 export async function main(argv) {
@@ -207,6 +210,11 @@ export async function keepPassTranscripts(store, row, arm, taskId) {
   if (!store.files.length) return;
   if (row?.finalPass === true) {
     const dest = join(dirname(dirname(store.dir)), 'pass', arm.replace(/[^\w.:-]/g, '_'), taskId.replace(/\//g, '_'), basename(store.dir));
+    await mkdir(dirname(dest), { recursive: true });
+    await rename(store.dir, dest);
+    await writeFile(join(dest, 'row.json'), JSON.stringify(row) + '\n');
+  } else if (process.env.V4_KEEP_FAIL === '1') { // failure traces for step analysis
+    const dest = join(dirname(dirname(store.dir)), 'fail', arm.replace(/[^\w.:-]/g, '_'), taskId.replace(/\//g, '_'), basename(store.dir));
     await mkdir(dirname(dest), { recursive: true });
     await rename(store.dir, dest);
     await writeFile(join(dest, 'row.json'), JSON.stringify(row) + '\n');

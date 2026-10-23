@@ -45,6 +45,6 @@ Distilled 2026-10-23 from r27 runs (v5b, v6, v7, opus-alone, hint run), reports/
 4. The owner's eye is the final gate. AI critics score high.
 
 ## Open items
-- [ ] Novel-set result (hint off vs generic): does the gain survive on unseen tasks?
+- [x] Novel-set result, 2026-10-23: 8/8 in both arms. Haiku passed every task on its first try, and every task escalated anyway. The set is too easy to separate the arms. Next: build harder novel tasks with hidden API-shape traps.
 - [ ] Self-test import check (3.1), best checkpoint (4.2), unverified state (3.3): build and measure each on the 5 still-failing tasks.
 - [ ] Re-run the 17 passing tasks with the hint to check for regressions.

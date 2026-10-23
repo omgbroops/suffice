@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cp, mkdtemp, mkdir, symlink, readFile, lstat, readlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { dirClone, overlaySymlinkFilter } from '../scripts/v4-bench.mjs';
 
@@ -39,4 +40,14 @@ test('overlay copy replaces existing absolute and dangling symlinks', async () =
   assert.equal(await readlink(join(dst, 'py')), '/usr/bin/true');
   assert.equal(await readlink(join(dst, 'nm')), './missing');
   assert.ok((await lstat(join(dst, 'nm'))).isSymbolicLink());
+});
+
+test('overlay copy skips agent selftest files and dirs', async () => {
+  const src = await mkdtemp(join(tmpdir(), 'v4-st-src-')), dst = await mkdtemp(join(tmpdir(), 'v4-st-dst-'));
+  await writeFile(join(src, 'a.py'), 'x'); await writeFile(join(src, 'selftest_test.py'), 'x');
+  await mkdir(join(src, 'tests')); await writeFile(join(src, 'tests', 'selftest.rs'), 'x');
+  await cp(src, dst, { recursive: true, force: true, verbatimSymlinks: true, filter: overlaySymlinkFilter });
+  assert.ok(existsSync(join(dst, 'a.py')));
+  assert.ok(!existsSync(join(dst, 'selftest_test.py')));
+  assert.ok(!existsSync(join(dst, 'tests', 'selftest.rs')));
 });
