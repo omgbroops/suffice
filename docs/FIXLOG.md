@@ -55,6 +55,7 @@ Agents can run `/run_tests.sh` (the grader's test-runner recipe; it contains no 
 | 12 | 10:40 | f29de90 | self-check re-runs earlier failing SELFTEST commands | gate hole | 092150 qute-0b621c single+cheap 0/2 → 103626 2/2 | $0.15 + $0.08 | 51 / 112 | **worked** |
 | 13 | 12:50 | d537f6d | keep the CLI's stderr tail when it exits nonzero | harness bug (no cause logged) | 103626 strict ansible-1ee70f: provider_error after 23 min, $0, cause lost → 125840 no error to log | $0.26 | 171 / 171 | infra; the cause of the first error is still unknown |
 | 14 | 13:28 | 92217d6 | Flint arm (local, llama-server); bench memory floor configurable | new arm / harness bug | flint-132819: 3 budget_exhausted (CLI prices the unknown model at about Sonnet rates, so $0.5 ≈ Sonnet's token budget), 5 aborted_memory (30% free floor, server uses 28GB) → rerun pending | $0 real (local) | 145 / 142 | 0/3 at Sonnet's token budget; 5 not run |
+| 15 | 16:35 | — (run config) | Flint rerun: fake-price budget $5, memory floor 10% | budget, memory | flint-132819 0/3 run → flintfree-163546 **2/8** (ansible-11c1, element-w); 2 run_timeout (laptop throttled at 1% battery, ~6.8 tok/s), 4 provider_error = prompt > server's 64K context (llama-server log: 66–73K tokens; CLI never compacts because it assumes a larger window) → rerun of the 6 at `-c 131072` pending | $0 real; 9016 s wall | 140 / 136 | partial |
 
 ## Limitations
 
