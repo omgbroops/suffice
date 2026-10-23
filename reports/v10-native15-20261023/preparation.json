@@ -1,0 +1,677 @@
+{
+  "id": "v10-native15-20261023",
+  "createdAt": "2026-10-23T20:51:01.761Z",
+  "node": "v24.18.0",
+  "taskCount": 15,
+  "baselinePublicTests": 70,
+  "sourcePolicy": "Pinned baseline archives only; no private acceptance, fixed source, reference trees, or graders were used during preparation.",
+  "tasks": [
+    {
+      "id": "dotted-prerelease",
+      "provenance": {
+        "repository": "https://github.com/npm/node-semver",
+        "revision": "efa4be6096c1f9b77d9d27d6132f6220c43b4e31",
+        "url": "https://codeload.github.com/npm/node-semver/tar.gz/efa4be6096c1f9b77d9d27d6132f6220c43b4e31",
+        "archiveSha256": "e5d07eb248ffb4f311de2be058d6266cfb0c6cbaae3689108048f1c703f88206",
+        "pinVerified": true,
+        "downloadBytes": 70707,
+        "archiveFiles": 154,
+        "archiveFileInventorySha256": "e20abadd8de1f709c5cd64356742789a52b559aa77b729dcbedadbf71c170448"
+      },
+      "sourceSuite": "benchmarks/real/visible.test.mjs",
+      "sourceSuiteSha256": "230af7acd7c3e5b2898bf953216231ce81f36c5d080a1076be3af748719802c2",
+      "publicSuiteSha256": "fa4dea6497e2f24cedb96fd3915e08728b377bd6e7510aaf4b03aa716c0fdac4",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "6f86cf6bf76cbfc764e0eb901448aa9d29e83b55c66dd2e119725c546808cd22",
+      "files": 157,
+      "immutableFileInventorySha256": "0673bfaac028f3261129badb866fa0f0e075f5fa3afb75c7e4dbf7f63030dd03",
+      "immutablePaths": 109,
+      "explicitProtectedPaths": 38,
+      "contextBytes": [
+        2691
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 8.1903\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 3.5477\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 3.0381\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 3.5952\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 1.4083\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.4119\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 3.9875\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 183.3883\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "picomatch-142",
+      "provenance": {
+        "repository": "https://github.com/micromatch/picomatch",
+        "package": "picomatch",
+        "version": "4.0.6",
+        "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.6.tgz",
+        "archiveSha256": "0e784763c1045e98a02a258e8678dd985a41ea3f4890b1180002ae2bf26237ac",
+        "pinVerified": true,
+        "downloadBytes": 24126,
+        "archiveFiles": 10,
+        "archiveFileInventorySha256": "3eb42190419463770b0d8bd7f4eae3353c774bb0f5eaaf77afeee03999b53602"
+      },
+      "sourceSuite": "benchmarks/real/picomatch-visible.test.mjs",
+      "sourceSuiteSha256": "4e4d7653ad6ded0fc67ba1216b8e372f0193ab2a50b85e81f954f4efeaf0f830",
+      "publicSuiteSha256": "a1c29a72580a4f48f599e8301b10f79cfc2708381c23ef992a20133a94534c1e",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "81d0483734eec1d1c3eed81e47412d6984d85113076fd2eb3dd3fa3ff1ff3205",
+      "files": 12,
+      "immutableFileInventorySha256": "708192e522ce9b568239d0accccf28c5a51362e57a4bae523f209438da74047c",
+      "immutablePaths": 5,
+      "explicitProtectedPaths": 4,
+      "contextBytes": [
+        479
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic globs\nok 1 - basic globs\n  ---\n  duration_ms: 2.0526\n  type: 'test'\n  ...\n# Subtest: extglobs\nok 2 - extglobs\n  ---\n  duration_ms: 0.891\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 109.5081\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "picomatch-99",
+      "provenance": {
+        "repository": "https://github.com/micromatch/picomatch",
+        "package": "picomatch",
+        "version": "4.0.7",
+        "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+        "archiveSha256": "697b463be3cdbd9ffc8f4194fd5019a69ddf95875fb703d78b2b115cc9e740a8",
+        "pinVerified": true,
+        "downloadBytes": 24326,
+        "archiveFiles": 10,
+        "archiveFileInventorySha256": "f4a7d68d7de57f48c4e112ca0c351b9694461c8084cc541efe349b36bb97417f"
+      },
+      "sourceSuite": "benchmarks/real/picomatch-visible.test.mjs",
+      "sourceSuiteSha256": "4e4d7653ad6ded0fc67ba1216b8e372f0193ab2a50b85e81f954f4efeaf0f830",
+      "publicSuiteSha256": "a1c29a72580a4f48f599e8301b10f79cfc2708381c23ef992a20133a94534c1e",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "693da50a48310b3b481200f66f87fa9e129b32e01db292581e177231ed0ab090",
+      "files": 12,
+      "immutableFileInventorySha256": "8a9dd27a90e1b7caa0df4aa166f1fe49a62226e15891b1cecd54a65f881d9c34",
+      "immutablePaths": 5,
+      "explicitProtectedPaths": 4,
+      "contextBytes": [
+        479
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic globs\nok 1 - basic globs\n  ---\n  duration_ms: 2.2977\n  type: 'test'\n  ...\n# Subtest: extglobs\nok 2 - extglobs\n  ---\n  duration_ms: 0.8885\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 113.0912\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "picomatch-187",
+      "provenance": {
+        "repository": "https://github.com/micromatch/picomatch",
+        "package": "picomatch",
+        "version": "4.0.7",
+        "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+        "archiveSha256": "697b463be3cdbd9ffc8f4194fd5019a69ddf95875fb703d78b2b115cc9e740a8",
+        "pinVerified": true,
+        "downloadBytes": 24326,
+        "archiveFiles": 10,
+        "archiveFileInventorySha256": "f4a7d68d7de57f48c4e112ca0c351b9694461c8084cc541efe349b36bb97417f"
+      },
+      "sourceSuite": "benchmarks/real/picomatch-visible.test.mjs",
+      "sourceSuiteSha256": "4e4d7653ad6ded0fc67ba1216b8e372f0193ab2a50b85e81f954f4efeaf0f830",
+      "publicSuiteSha256": "a1c29a72580a4f48f599e8301b10f79cfc2708381c23ef992a20133a94534c1e",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "53971bbc436bbfb37c78c04ec02039b8dadad1f9c0430466b5e631e8439f6c46",
+      "files": 12,
+      "immutableFileInventorySha256": "e6691238c23f6aea5bdbacb7bb50049dbd365edb431911e738e10badea9d3e97",
+      "immutablePaths": 5,
+      "explicitProtectedPaths": 4,
+      "contextBytes": [
+        479
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic globs\nok 1 - basic globs\n  ---\n  duration_ms: 2.9226\n  type: 'test'\n  ...\n# Subtest: extglobs\nok 2 - extglobs\n  ---\n  duration_ms: 1.0185\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 110.1045\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "picomatch-202",
+      "provenance": {
+        "repository": "https://github.com/micromatch/picomatch",
+        "package": "picomatch",
+        "version": "4.0.7",
+        "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+        "archiveSha256": "697b463be3cdbd9ffc8f4194fd5019a69ddf95875fb703d78b2b115cc9e740a8",
+        "pinVerified": true,
+        "downloadBytes": 24326,
+        "archiveFiles": 10,
+        "archiveFileInventorySha256": "f4a7d68d7de57f48c4e112ca0c351b9694461c8084cc541efe349b36bb97417f"
+      },
+      "sourceSuite": "benchmarks/real/picomatch-visible.test.mjs",
+      "sourceSuiteSha256": "4e4d7653ad6ded0fc67ba1216b8e372f0193ab2a50b85e81f954f4efeaf0f830",
+      "publicSuiteSha256": "a1c29a72580a4f48f599e8301b10f79cfc2708381c23ef992a20133a94534c1e",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "11c94fc45f99c7690fcebcc0b934a2468fb848eca50f6c3a26638622e454fc53",
+      "files": 12,
+      "immutableFileInventorySha256": "a2b524b94918b0aef1b5b466bd33a0e33e410af70092cf487f76e36f496ac5a1",
+      "immutablePaths": 5,
+      "explicitProtectedPaths": 4,
+      "contextBytes": [
+        479
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic globs\nok 1 - basic globs\n  ---\n  duration_ms: 2.1834\n  type: 'test'\n  ...\n# Subtest: extglobs\nok 2 - extglobs\n  ---\n  duration_ms: 0.9821\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 119.4545\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "bytes-51",
+      "provenance": {
+        "repository": "https://github.com/visionmedia/bytes.js",
+        "package": "bytes",
+        "version": "3.1.0",
+        "url": "https://registry.npmjs.org/bytes/-/bytes-3.1.0.tgz",
+        "archiveSha256": "f7d93a3df7a62e19b6853ef0d6999b5f50122475b951bbfd09c2c56fb9e00cf0",
+        "pinVerified": true,
+        "downloadBytes": 4215,
+        "archiveFiles": 5,
+        "archiveFileInventorySha256": "c61e26b3f2acbdfb9f3c17cc886a74027b2dfc1359d3c56f2fad331abf06adc9"
+      },
+      "sourceSuite": "benchmarks/real/bytes-visible.test.mjs",
+      "sourceSuiteSha256": "d54c140dd603a218ebe8e7dc08ec76c324bc6013c8ef85c09b97c991465bf8de",
+      "publicSuiteSha256": "39050101553220e971242d00f9b0a327f2c9f190037b03697e3fa2add4e5a9f2",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "fa7e33d1b5b02ede49be574964d667e5a09a4ef9d87fc5a2414e06ed7691d67e",
+      "files": 7,
+      "immutableFileInventorySha256": "71cccbabe02236bf34c2afc74a0c860d95f831db7d250e50d1481b90923d5fcd",
+      "immutablePaths": 6,
+      "explicitProtectedPaths": 5,
+      "contextBytes": [
+        3469
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: format basics\nok 1 - format basics\n  ---\n  duration_ms: 0.891\n  type: 'test'\n  ...\n# Subtest: thousandsSeparator on integer parts\nok 2 - thousandsSeparator on integer parts\n  ---\n  duration_ms: 0.2167\n  type: 'test'\n  ...\n# Subtest: parse\nok 3 - parse\n  ---\n  duration_ms: 0.2519\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 94.5283\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "cookie-173",
+      "provenance": {
+        "repository": "https://github.com/jshttp/cookie",
+        "package": "cookie",
+        "version": "0.7.0",
+        "url": "https://registry.npmjs.org/cookie/-/cookie-0.7.0.tgz",
+        "archiveSha256": "d02bba3011c277fa35aa803c2739cf7b7abc08068e3c157ca6504c548a1c4ab8",
+        "pinVerified": true,
+        "downloadBytes": 8136,
+        "archiveFiles": 5,
+        "archiveFileInventorySha256": "261e600520a54a440dc58464e1e2150d04a5bd74a22be2ac2f048c240f14824e"
+      },
+      "sourceSuite": "benchmarks/real/cookie-visible.test.mjs",
+      "sourceSuiteSha256": "d433c7923969935e558189c51848f7efcb7fd961e546580b1e47fc21df2ddf2c",
+      "publicSuiteSha256": "db9e6ef221c668f9771334c6b4cf0a89537beb7af4b6f730b3183e58c5b98dd6",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "a3d4c5778debc5b5a503c4dba4fd9ab40bcb12fe4d4c7cb3aeede3a429317d59",
+      "files": 7,
+      "immutableFileInventorySha256": "f18096abfecef650904dec970c67ce748a01755209967ff5c09c723324f4164e",
+      "immutablePaths": 6,
+      "explicitProtectedPaths": 5,
+      "contextBytes": [
+        8037
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: domain without leading dot\nok 1 - domain without leading dot\n  ---\n  duration_ms: 1.1843\n  type: 'test'\n  ...\n# Subtest: parse and serialize basics\nok 2 - parse and serialize basics\n  ---\n  duration_ms: 0.7039\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 107.0098\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "path-to-regexp-425",
+      "provenance": {
+        "repository": "https://github.com/pillarjs/path-to-regexp",
+        "package": "path-to-regexp",
+        "version": "0.1.12",
+        "url": "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-0.1.12.tgz",
+        "archiveSha256": "03ff17fabc974d4f8a925039353c3c2f954020c9c4402a7178c7d1e3f36c50b4",
+        "pinVerified": true,
+        "downloadBytes": 3067,
+        "archiveFiles": 4,
+        "archiveFileInventorySha256": "cc6bf82f4a18290ea2edf1c2c5cecd4acd8a06381f9e35f57484aca0c2c433b6"
+      },
+      "sourceSuite": "benchmarks/real/path-to-regexp-visible.test.mjs",
+      "sourceSuiteSha256": "1ce3d1a02c0a8331c3a61b8bea10d53ae11f89debef0c2d84e70dec2cfccc926",
+      "publicSuiteSha256": "81f1e943f64d2c5cdadeeb7bc5152f45af51308a3f1f23a61a9c807686570e3b",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "a8d56170df949a46ff0cb419ac333bdfb6d6c5a0f209bb243fe675a62700b26f",
+      "files": 6,
+      "immutableFileInventorySha256": "df13bf6630b3ca356648a9d2bbb1444fd23b047daafa951970fd9388f71280d3",
+      "immutablePaths": 5,
+      "explicitProtectedPaths": 4,
+      "contextBytes": [
+        3839
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: path-to-regexp basics\nok 1 - path-to-regexp basics\n  ---\n  duration_ms: 1.1934\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 88.1387\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "numeric-xrange",
+      "provenance": {
+        "repository": "https://github.com/npm/node-semver",
+        "revision": "6b77aa84a648a4b54ea32a21e6db60ebd54d5040",
+        "url": "https://codeload.github.com/npm/node-semver/tar.gz/6b77aa84a648a4b54ea32a21e6db60ebd54d5040",
+        "archiveSha256": "631c9c5b807e2b5d9cb1b14a09b350948e7517f82c2d167146d2dcd5fb495170",
+        "pinVerified": false,
+        "downloadBytes": 71565,
+        "archiveFiles": 154,
+        "archiveFileInventorySha256": "d960abf4e9b0f46d6aa07dd1cdbedba63588bbee47af66e8f36a8b2664dad39e"
+      },
+      "sourceSuite": "benchmarks/real/visible.test.mjs",
+      "sourceSuiteSha256": "230af7acd7c3e5b2898bf953216231ce81f36c5d080a1076be3af748719802c2",
+      "publicSuiteSha256": "fa4dea6497e2f24cedb96fd3915e08728b377bd6e7510aaf4b03aa716c0fdac4",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "d23b9520f1837c17fb88d1ce222080d0e68c6081c23166cb91565df87eec7f4d",
+      "files": 157,
+      "immutableFileInventorySha256": "9973a497780ae4182a87fdfb3bab69260edbf8da940d362ea43b5235547a8529",
+      "immutablePaths": 109,
+      "explicitProtectedPaths": 38,
+      "contextBytes": [
+        2691
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 7.0146\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 2.2976\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 1.9271\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 2.0533\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 0.7561\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 0.6361\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 3.041\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 130.4025\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "caret-prerelease",
+      "provenance": {
+        "repository": "https://github.com/npm/node-semver",
+        "revision": "efafcf8d029faa3d1ab74b5ec98d620112af859d",
+        "url": "https://codeload.github.com/npm/node-semver/tar.gz/efafcf8d029faa3d1ab74b5ec98d620112af859d",
+        "archiveSha256": "43e3a9a5edbb06ce9931a391fec4173487803e2814cc82a72c2947aee73c0f79",
+        "pinVerified": false,
+        "downloadBytes": 71417,
+        "archiveFiles": 154,
+        "archiveFileInventorySha256": "6b19353437de302bdb9a125bc69d2176246760506f8884c1aaf1b8e7284e7711"
+      },
+      "sourceSuite": "benchmarks/real/visible.test.mjs",
+      "sourceSuiteSha256": "230af7acd7c3e5b2898bf953216231ce81f36c5d080a1076be3af748719802c2",
+      "publicSuiteSha256": "fa4dea6497e2f24cedb96fd3915e08728b377bd6e7510aaf4b03aa716c0fdac4",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "248f1ea943a3ff9022bc22a06709727492df0561e059bc9238bd4dc4e068370d",
+      "files": 157,
+      "immutableFileInventorySha256": "7e5502cbd8f44931dd59c4b8a7d224a0f3fd942a59329d278b31b4f02575a559",
+      "immutablePaths": 109,
+      "explicitProtectedPaths": 38,
+      "contextBytes": [
+        2691
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 5.3389\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 2.6689\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 1.661\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 2.0292\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 0.8413\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 0.8552\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 2.7714\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 129.9366\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "prerelease-diff",
+      "provenance": {
+        "repository": "https://github.com/npm/node-semver",
+        "revision": "753e02b9d0cb3ac23e085dc33efcab3e08d61f2b",
+        "url": "https://codeload.github.com/npm/node-semver/tar.gz/753e02b9d0cb3ac23e085dc33efcab3e08d61f2b",
+        "archiveSha256": "808b0943ada1ea1f90e03037a076de2112f9fabbb23c9731d4e2c38b108eef08",
+        "pinVerified": false,
+        "downloadBytes": 66502,
+        "archiveFiles": 150,
+        "archiveFileInventorySha256": "20df0300c22aee69de6965ebe3c9a0cab7b7fccdfe2576c8896b72e04e64d968"
+      },
+      "sourceSuite": "benchmarks/real/visible.test.mjs",
+      "sourceSuiteSha256": "230af7acd7c3e5b2898bf953216231ce81f36c5d080a1076be3af748719802c2",
+      "publicSuiteSha256": "fa4dea6497e2f24cedb96fd3915e08728b377bd6e7510aaf4b03aa716c0fdac4",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "a0cc03ac97cf53ca3714fb867ec3e28dcfc3b2e828eb9d9f445d3ab770b2eadd",
+      "files": 153,
+      "immutableFileInventorySha256": "ab71ede1c361f14936dd60d4d8725ba4bf5b011de0c3b64fd3b63bb0506c0bf0",
+      "immutablePaths": 106,
+      "explicitProtectedPaths": 38,
+      "contextBytes": [
+        2616
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 9.3204\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 3.5286\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 1.9938\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 3.9173\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 1.4368\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.2084\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 4.246\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 201.6561\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "numeric-prerelease",
+      "provenance": {
+        "repository": "https://github.com/npm/node-semver",
+        "revision": "2677f2a88334b0e728dbfe9ad9f5f57458437c87",
+        "url": "https://codeload.github.com/npm/node-semver/tar.gz/2677f2a88334b0e728dbfe9ad9f5f57458437c87",
+        "archiveSha256": "1e39de996f69fd69596dfcd6780c3a77f0c476ca29dffae2369619c26769fa24",
+        "pinVerified": false,
+        "downloadBytes": 67281,
+        "archiveFiles": 150,
+        "archiveFileInventorySha256": "fb5611205a4581411aff1bdc832b33cb65012f987334679d494081d3c0eb7d8e"
+      },
+      "sourceSuite": "benchmarks/real/visible.test.mjs",
+      "sourceSuiteSha256": "230af7acd7c3e5b2898bf953216231ce81f36c5d080a1076be3af748719802c2",
+      "publicSuiteSha256": "fa4dea6497e2f24cedb96fd3915e08728b377bd6e7510aaf4b03aa716c0fdac4",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "67231eb19a5613048fca8984fa1eadbda78385a58b14f351fe229c3fcbf0e862",
+      "files": 153,
+      "immutableFileInventorySha256": "0f1bf93de59fce7bebb4711b0858e8f2b593a1807b37f8af2c8ccda613d742e8",
+      "immutablePaths": 106,
+      "explicitProtectedPaths": 38,
+      "contextBytes": [
+        2616
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 7.2051\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 4.1367\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 2.2623\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 4.2799\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 1.5043\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.0518\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 3.9814\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 183.4528\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "mapping-boundaries",
+      "provenance": {
+        "repository": "https://github.com/nodeca/js-yaml",
+        "revision": "49280f3e799b6deb596ba9a041b0ebe2bba83c77",
+        "url": "https://codeload.github.com/nodeca/js-yaml/tar.gz/49280f3e799b6deb596ba9a041b0ebe2bba83c77",
+        "archiveSha256": "1a830927d421f1845e9d31c4aede95ce79c4f2c4366a18c4a068cfdf6dc242a0",
+        "pinVerified": false,
+        "downloadBytes": 1011786,
+        "archiveFiles": 124,
+        "archiveFileInventorySha256": "fdd40c6b41e87927c43c138d363000739454947baca1080ee0abd2ff10362397"
+      },
+      "sourceSuite": "benchmarks/workflow/visible.test.mjs",
+      "sourceSuiteSha256": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+      "publicSuiteSha256": "c0484b06a392f9817e14ee853292788dd7bf1055be3f242cd1d5f971c917a032",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "a599d2d653828ab4a5761472ce4db6e5f0e014904488b1b3cced54b9bee22211",
+      "files": 126,
+      "immutableFileInventorySha256": "082672971e55fcc49991eb8deed2c0c14a64303ff622fe10e1d5d5e6c41a1035",
+      "immutablePaths": 85,
+      "explicitProtectedPaths": 52,
+      "contextBytes": [
+        3067
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic mapping sequence and scalar loading\nok 1 - basic mapping sequence and scalar loading\n  ---\n  duration_ms: 4.7466\n  type: 'test'\n  ...\n# Subtest: core json and yaml11 scalar and collection round trips\nok 2 - core json and yaml11 scalar and collection round trips\n  ---\n  duration_ms: 7.3761\n  type: 'test'\n  ...\n# Subtest: document streams and explicit endings\nok 3 - document streams and explicit endings\n  ---\n  duration_ms: 0.8882\n  type: 'test'\n  ...\n# Subtest: valid event constructor and AST presentation agree\nok 4 - valid event constructor and AST presentation agree\n  ---\n  duration_ms: 3.0857\n  type: 'test'\n  ...\n# Subtest: scalar escaping unicode and line width preserve values\nok 5 - scalar escaping unicode and line width preserve values\n  ---\n  duration_ms: 2.168\n  type: 'test'\n  ...\n# Subtest: anchors aliases and schema-specific loading\nok 6 - anchors aliases and schema-specific loading\n  ---\n  duration_ms: 0.4021\n  type: 'test'\n  ...\n# Subtest: invalid syntax and explicit scalar tags reject\nok 7 - invalid syntax and explicit scalar tags reject\n  ---\n  duration_ms: 1.2847\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 270.8055\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "folded-tabs",
+      "provenance": {
+        "repository": "https://github.com/nodeca/js-yaml",
+        "revision": "40fcb4f45c1f25e4e9495cf27094405d1d740881",
+        "url": "https://codeload.github.com/nodeca/js-yaml/tar.gz/40fcb4f45c1f25e4e9495cf27094405d1d740881",
+        "archiveSha256": "3ba9acf30d39c604ae47200eaa73c259192e0eee3609a9be5a1bdb58389419f6",
+        "pinVerified": false,
+        "downloadBytes": 1012375,
+        "archiveFiles": 127,
+        "archiveFileInventorySha256": "769eeabce9693e52c80118639b5b5b449ed8db015b0a9cfba2c3bfa251e92072"
+      },
+      "sourceSuite": "benchmarks/workflow/visible.test.mjs",
+      "sourceSuiteSha256": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+      "publicSuiteSha256": "c0484b06a392f9817e14ee853292788dd7bf1055be3f242cd1d5f971c917a032",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "b148e3e00bf5b8e28168276f85ce2549a9cc1e0bd59fa5d542aec754fbc167c7",
+      "files": 129,
+      "immutableFileInventorySha256": "2cc1eacee1dfed064a7aa5b0185db092a71dd13e4331ebfae2fdca4f55aa5843",
+      "immutablePaths": 88,
+      "explicitProtectedPaths": 52,
+      "contextBytes": [
+        3067
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic mapping sequence and scalar loading\nok 1 - basic mapping sequence and scalar loading\n  ---\n  duration_ms: 3.0954\n  type: 'test'\n  ...\n# Subtest: core json and yaml11 scalar and collection round trips\nok 2 - core json and yaml11 scalar and collection round trips\n  ---\n  duration_ms: 4.7713\n  type: 'test'\n  ...\n# Subtest: document streams and explicit endings\nok 3 - document streams and explicit endings\n  ---\n  duration_ms: 0.493\n  type: 'test'\n  ...\n# Subtest: valid event constructor and AST presentation agree\nok 4 - valid event constructor and AST presentation agree\n  ---\n  duration_ms: 1.9423\n  type: 'test'\n  ...\n# Subtest: scalar escaping unicode and line width preserve values\nok 5 - scalar escaping unicode and line width preserve values\n  ---\n  duration_ms: 1.4478\n  type: 'test'\n  ...\n# Subtest: anchors aliases and schema-specific loading\nok 6 - anchors aliases and schema-specific loading\n  ---\n  duration_ms: 0.2529\n  type: 'test'\n  ...\n# Subtest: invalid syntax and explicit scalar tags reject\nok 7 - invalid syntax and explicit scalar tags reject\n  ---\n  duration_ms: 0.7108\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 211.9465\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "exponent-integers",
+      "provenance": {
+        "repository": "https://github.com/nodeca/js-yaml",
+        "revision": "89024c43d898b0dab53b82cb9b29c2cef3aca961",
+        "url": "https://codeload.github.com/nodeca/js-yaml/tar.gz/89024c43d898b0dab53b82cb9b29c2cef3aca961",
+        "archiveSha256": "6df0d135996f941df9a26ba02581e1574d539e3cdbce5a8f320c4a771e096af2",
+        "pinVerified": false,
+        "downloadBytes": 1010075,
+        "archiveFiles": 123,
+        "archiveFileInventorySha256": "b06f170085a30fd2e738892d31c7c2ae694af7d2acc2a686dfaed7f69f22b425"
+      },
+      "sourceSuite": "benchmarks/workflow/visible.test.mjs",
+      "sourceSuiteSha256": "9a287d19c217ca5337d04435d8ab88b40f668dc77657dfaffb0bb4b55397b6ff",
+      "publicSuiteSha256": "c0484b06a392f9817e14ee853292788dd7bf1055be3f242cd1d5f971c917a032",
+      "publicHarnessAdaptations": [
+        "Replace SUFFICE_WORKSPACE with process.cwd()"
+      ],
+      "treeSha256": "b1193e1d6d6dd2b119275ed79f0b10eeca5c11005bd490c3344d90005df48688",
+      "files": 125,
+      "immutableFileInventorySha256": "13d63e147e8a2c26ccb9187868433365758f6356748699bae9dc8a3bc1ae9cbf",
+      "immutablePaths": 84,
+      "explicitProtectedPaths": 51,
+      "contextBytes": [
+        3067
+      ],
+      "requestNormalization": "passed",
+      "baseline": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "TAP version 13\n# Subtest: basic mapping sequence and scalar loading\nok 1 - basic mapping sequence and scalar loading\n  ---\n  duration_ms: 3.4988\n  type: 'test'\n  ...\n# Subtest: core json and yaml11 scalar and collection round trips\nok 2 - core json and yaml11 scalar and collection round trips\n  ---\n  duration_ms: 5.2739\n  type: 'test'\n  ...\n# Subtest: document streams and explicit endings\nok 3 - document streams and explicit endings\n  ---\n  duration_ms: 0.7279\n  type: 'test'\n  ...\n# Subtest: valid event constructor and AST presentation agree\nok 4 - valid event constructor and AST presentation agree\n  ---\n  duration_ms: 1.9721\n  type: 'test'\n  ...\n# Subtest: scalar escaping unicode and line width preserve values\nok 5 - scalar escaping unicode and line width preserve values\n  ---\n  duration_ms: 1.1295\n  type: 'test'\n  ...\n# Subtest: anchors aliases and schema-specific loading\nok 6 - anchors aliases and schema-specific loading\n  ---\n  duration_ms: 0.2564\n  type: 'test'\n  ...\n# Subtest: invalid syntax and explicit scalar tags reject\nok 7 - invalid syntax and explicit scalar tags reject\n  ---\n  duration_ms: 0.6905\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 208.2528\n",
+        "stderr": "",
+        "command": [
+          "node",
+          "--test",
+          "tests/public.test.mjs"
+        ],
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "status": "passed"
+      }
+    }
+  ]
+}
