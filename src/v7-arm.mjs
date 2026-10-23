@@ -1,6 +1,6 @@
-import { appendFile, cp, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
+import { appendFile, cp, lstat, mkdir, mkdtemp, readdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 import { armTiers, effortFor } from './v4-config.mjs';
 import { V4Error } from './v4-escalation.mjs';
@@ -16,6 +16,9 @@ import { V6_WRITER_SYSTEM_PROMPT, V6_WRITER_TOOLS, V6_PLANNER_SYSTEM_PROMPT, V6_
 // The hidden verdict is taken at every checkpoint for logging only; no decision reads it.
 export const V7_STAGES = ['plan', 'blind', 'coder', 'probe', 'sblind', 'review'];
 export const V7_TEST_STAGES = ['blind', 'probe', 'sblind'];
+const BUILD_JUNK = /(^|\/)(node_modules|build|target|dist|out|bin|\.gradle|__pycache__|\.pytest_cache|CMakeFiles)(\/|$)|\.(o|class|pyc)$/;
+// Haiku ran out of 6 turns mid-task in r27 run 1 (PROVIDER_ERROR); 12 leaves room to write, run and fix.
+const V7_EXEC_TURNS = 12;
 export const V7_REVIEW_SYSTEM_PROMPT = 'You review a code change. Read only: do not edit or run anything. Check the code in the current directory against the task. Reply with at most 5 concrete defects (file and what is wrong), then a last line `VERDICT: PASS` or `VERDICT: FAIL`.';
 export const V7_PROBE_SYSTEM_PROMPT = 'You attack a finished implementation. Do not edit any existing file. Read the code, then write one test file aimed at its weakest spots: boundaries, empty input, error paths and the exact formats the task states. Name it with the infix `.probe.` before the extension. Run it once. End your reply with one final line `SELFTEST: <command>`.';
 export const V7_FIX_SYSTEM_PROMPT = `${V6_EXEC_SYSTEM_PROMPT} A test may be wrong. You may edit a test file only if your reply also has \`TESTBUG: <file>: <reason citing the task text>\`; untagged test edits are discarded.`;
@@ -85,7 +88,7 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
   const reserved = globalLedger ? guardAttempt(globalLedger, tiers, raw) : raw;
   // args.role is the stage name. Defaults: the tier's effort and tools, the exec system prompt. Callers override per stage.
   const call = async (tier, args) => {
-    const r = await reserved({ tier: tier.name, model: tier.model, effort: effortFor(tier, 1), tools: tier.tools, maxTurns: V6_EXEC_TURNS, system: V6_EXEC_SYSTEM_PROMPT, ...args });
+    const r = await reserved({ tier: tier.name, model: tier.model, effort: effortFor(tier, 1), tools: tier.tools, maxTurns: V7_EXEC_TURNS, system: V6_EXEC_SYSTEM_PROMPT, ...args });
     if (!Number.isFinite(r.costUsd)) throw new V4Error('COST_UNKNOWN');
     s.stageCosts[args.role] = (s.stageCosts[args.role] ?? 0) + r.costUsd;
     return r;
@@ -95,7 +98,16 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
   const emptyDir = async tag => { const dir = await realpath(await mkdtemp(join(tmpdir(), `v7-${task.id}-${tag}-`))); scratch.push(dir); return dir; };
   const copyOf = async (tag, from) => { const dir = await emptyDir(tag); await cp(from, dir, { recursive: true, verbatimSymlinks: true }); return dir; };
   // New files only: test stages may not change existing code (the probe's "no source edits" rule).
-  const newFiles = async (base, dir) => (await changedPaths(base, dir)).filter(r => !existsSync(join(base, r)));
+  // New files only, expanded out of new dirs; build output is not a test (EISDIR on java/python r27 run 1).
+  const newFiles = async (base, dir) => {
+    const files = [];
+    for (const r of (await changedPaths(base, dir)).filter(r => !existsSync(join(base, r)))) {
+      const st = await lstat(join(dir, r));
+      if (st.isFile()) files.push(r);
+      else if (st.isDirectory()) for (const f of await readdir(join(dir, r), { recursive: true, withFileTypes: true })) if (f.isFile()) files.push(relative(dir, join(f.parentPath, f.name)));
+    }
+    return files.filter(r => !BUILD_JUNK.test(r));
+  };
   const record = (checkpoint, check, flagged, hiddenPass, costUsd = 0) => s.checks.push({ checkpoint, check, flagged, hiddenPass, costUsd });
   const testsDir = await emptyDir('tests');
 

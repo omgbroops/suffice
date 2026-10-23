@@ -114,6 +114,8 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     }
     let json;
     try { json = parseCliOutput(out.stdout); } catch { throw new V4Error(out.code === 0 ? 'HARNESS_ERROR' : 'PROVIDER_ERROR'); }
+    // Out of turns is a normal stop: the edits on disk still count and the caller's checks judge them.
+    if (json.subtype === 'error_max_turns') { session = { model, id: json.session_id }; const c = json.total_cost_usd; return { costUsd: Number.isFinite(c) ? c : null, usage: json.usage ?? null, numTurns: json.num_turns ?? null, status: 'max_turns', text: String(json.result ?? '') }; }
     if (out.code !== 0 || json.is_error) throw new V4Error(String(json.subtype ?? '').includes('budget') ? 'BUDGET_EXHAUSTED' : 'PROVIDER_ERROR');
     session = { model, id: json.session_id };
     const cost = json.total_cost_usd;
