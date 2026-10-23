@@ -44,7 +44,16 @@ Distilled 2026-10-23 from r27 runs (v5b, v6, v7, opus-alone, hint run), reports/
 3. Commit results with the code that produced them. Push nothing without asking.
 4. The owner's eye is the final gate. AI critics score high.
 
+## 8. Lessons from v7 rescue and v8 (2026-10-23)
+1. A frozen self-test anchor protects correct code and also protects a wrong test. An anchor needs an arbiter who did not write it.
+2. Haiku cannot judge whether the test or the code is wrong. Send that one question to a stronger model, tool-less.
+3. Test writers given tools ran about 90% of task cost. Make every non-coding role tool-less and one-turn.
+4. v7 + Opus rescue: 19/27 for $1.21 is the best clean run. Self-fix: 17/27 for $0.17. Opus alone: 22/27 for $5.90.
+5. Workspace location changes pass rates (GATE-EVAL 20–21). Compare only arms run in the same cwd and interleaved in time.
+
 ## Open items
 - [x] Novel-set result, 2026-10-23: 8/8 in both arms. Haiku passed every task on its first try, and every task escalated anyway. The set is too easy to separate the arms. Next: build harder novel tasks with hidden API-shape traps.
 - [ ] Self-test import check (3.1), best checkpoint (4.2), unverified state (3.3): build and measure each on the 5 still-failing tasks.
-- [ ] Re-run the 17 passing tasks with the hint to check for regressions.
+- [x] Hint on the 17 passing tasks: 15/17, so 2 regressions. The hint is not free; gate it on a weak self-test.
+- [ ] Strong-model arbiter for test-vs-code conflicts and TESTBUG claims: one tool-less Sonnet question. Haiku judged these wrong (rust_accumulate, and the frozen-anchor lock-ins).
+- [ ] One clean full-r27 run of self-fix, then the v8 ladder with the arbiter, then Opus rescue. The stitched 22 does not count.

