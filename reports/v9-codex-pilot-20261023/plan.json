@@ -1,0 +1,115 @@
+{
+  "version": "v9-benchmark-1",
+  "id": "v9-codex-development-pilot",
+  "label": "Two authored development fixtures; not held-out efficacy evidence",
+  "seed": 20261023,
+  "repetitions": 1,
+  "limits": {
+    "maxCostUsd": 1,
+    "timeoutMs": 300000,
+    "overallCostUsd": 10
+  },
+  "tasks": [
+    {
+      "id": "retry",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v9-codex-pilot-20261023\\retry",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v9-codex-pilot-20261023\\plan\\inputs\\retry",
+      "sourceHash": "a22ddbe019111097b34c6edb38f44bea81881f1cac90aee7195794ea96f8bd9b",
+      "prompt": "Implement src/retry.mjs exporting async retry(operation, options = {}). Options: attempts defaults to 3 and must be a positive integer; baseDelayMs defaults to 0 and must be finite and nonnegative. Validate both before invoking operation. sleep defaults to an async no-op, shouldRetry defaults to a predicate returning true. Pass a one-based attempt number to operation. Resolve immediately on success. On rejection, preserve the exact error identity; consult shouldRetry(error, attempt) only when another attempt remains. A false predicate stops retries. Between retryable failures call await sleep(baseDelayMs * 2 ** (attempt - 1)); never sleep after success or the final failure. An optional AbortSignal must be checked before each operation and after sleep; reject with signal.reason when present, otherwise an Error named AbortError. No operation runs when already aborted. Predicate and sleep errors propagate unchanged. Preserve the export and existing tests.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/retry.mjs"
+      ],
+      "setup": []
+    },
+    {
+      "id": "json-lines",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v9-codex-pilot-20261023\\json-lines",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v9-codex-pilot-20261023\\plan\\inputs\\json-lines",
+      "sourceHash": "4d4c808a94c9dcd93915151541a3164541d759df27f3ac39e6c068ebf3422210",
+      "prompt": "Implement src/json-lines.mjs exporting async generator parseJsonLines(chunks). Accept sync or async iterables of strings or Uint8Array chunks. Parse newline-delimited JSON across arbitrary chunk boundaries, including UTF-8 multibyte characters split across byte chunks. Both LF and CRLF are line separators. Ignore blank or whitespace-only physical lines. Parse a final nonempty line without a trailing newline. Strip one optional initial UTF-8 BOM, only at the beginning of the entire stream. Yield decoded JSON values in order. Malformed JSON must throw SyntaxError with a numeric lineNumber property giving the one-based physical line, counting blank lines too. Preserve upstream iterator error identity. Use incremental processing, preserving the export and existing tests.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/json-lines.mjs"
+      ],
+      "setup": []
+    }
+  ],
+  "schedule": [
+    {
+      "id": "json-lines-r1-sol",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "sol"
+    },
+    {
+      "id": "json-lines-r1-ladder",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "ladder"
+    },
+    {
+      "id": "json-lines-r1-v9",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "v9"
+    },
+    {
+      "id": "json-lines-r1-luna",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "luna"
+    },
+    {
+      "id": "retry-r1-ladder",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "ladder"
+    },
+    {
+      "id": "retry-r1-v9",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "v9"
+    },
+    {
+      "id": "retry-r1-luna",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "luna"
+    },
+    {
+      "id": "retry-r1-sol",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "sol"
+    }
+  ],
+  "runtimeHash": "d8231c26bba4b05ee44bde438f6dcea868d1c3377b2189ee97e12a0c518e4aaf",
+  "node": "24.18.0",
+  "cliVersion": "codex-cli 0.144.1",
+  "grading": "Deferred only. Evaluator files/configuration must be introduced after execution closes; local paths are not an OS secrecy boundary.",
+  "fingerprint": "4cc879f425619a86558551c43820ca4f9001035296d46253f305a5fd7ae8a022"
+}
