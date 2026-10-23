@@ -1,0 +1,216 @@
+{
+  "version": "v10-benchmark-1",
+  "id": "v10-pi-development-pilot",
+  "label": "Development fixtures and optional historical node-semver replays; not held-out efficacy evidence",
+  "seed": 20261023,
+  "repetitions": 1,
+  "limits": {
+    "maxCostUsd": 0.5,
+    "timeoutMs": 300000,
+    "overallCostUsd": 9
+  },
+  "compactResponses": false,
+  "tasks": [
+    {
+      "id": "retry",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\retry",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\plan-final\\inputs\\retry",
+      "sourceHash": "a22ddbe019111097b34c6edb38f44bea81881f1cac90aee7195794ea96f8bd9b",
+      "prompt": "Implement src/retry.mjs exporting async retry(operation, options = {}). Options: attempts defaults to 3 and must be a positive integer; baseDelayMs defaults to 0 and must be finite and nonnegative. Validate both before invoking operation. sleep defaults to an async no-op, shouldRetry defaults to a predicate returning true. Pass a one-based attempt number to operation. Resolve immediately on success. On rejection, preserve the exact error identity; consult shouldRetry(error, attempt) only when another attempt remains. A false predicate stops retries. Between retryable failures call await sleep(baseDelayMs * 2 ** (attempt - 1)); never sleep after success or the final failure. An optional AbortSignal must be checked before each operation and after sleep; reject with signal.reason when present, otherwise an Error named AbortError. No operation runs when already aborted. Predicate and sleep errors propagate unchanged. Preserve the export and existing tests.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/retry.mjs"
+      ],
+      "setup": []
+    },
+    {
+      "id": "json-lines",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\json-lines",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\plan-final\\inputs\\json-lines",
+      "sourceHash": "4d4c808a94c9dcd93915151541a3164541d759df27f3ac39e6c068ebf3422210",
+      "prompt": "Implement src/json-lines.mjs exporting async generator parseJsonLines(chunks). Accept sync or async iterables of strings or Uint8Array chunks. Parse newline-delimited JSON across arbitrary chunk boundaries, including UTF-8 multibyte characters split across byte chunks. Both LF and CRLF are line separators. Ignore blank or whitespace-only physical lines. Parse a final nonempty line without a trailing newline. Strip one optional initial UTF-8 BOM, only at the beginning of the entire stream. Yield decoded JSON values in order. Malformed JSON must throw SyntaxError with a numeric lineNumber property giving the one-based physical line, counting blank lines too. Preserve upstream iterator error identity. Use incremental processing, preserving the export and existing tests.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/json-lines.mjs"
+      ],
+      "setup": []
+    },
+    {
+      "id": "prerelease-subset",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\prerelease-subset",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\plan-final\\inputs\\prerelease-subset",
+      "sourceHash": "fd9767bbb0813c355da3fd86b5fe4b6109a6b08ad1d18deab63377e214a8ca18",
+      "prompt": "Fix subset() incorrectly rejecting contained prerelease ranges. For example, ^10.2.0-beta.2 should be a subset of ^10.2.0-beta.1. Preserve normal prerelease exclusion, inclusive/exclusive bound semantics, empty ranges, and existing options. Investigate both lower and upper bounds rather than special-casing this example. The upstream repository and its original layout are under src/. Preserve existing tests. Public checks are adapted Node tests, not the complete upstream TAP suite.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/index.js"
+      ],
+      "setup": []
+    },
+    {
+      "id": "build-metadata",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\build-metadata",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\plan-final\\inputs\\build-metadata",
+      "sourceHash": "20196ad44df8a5355732f343948236aa2ba16e7d8db14419884e9bd5e902c463",
+      "prompt": "Fix range parsing with long build metadata. Build metadata must not change range meaning or bleed into version numbers. A loose range consisting of 4.17.0+ followed by 250 letters a and then 3 must mean exactly 4.17.0. The problem also affects comparator whitespace, partial versions, hyphen ranges, tilde/caret ranges and OR sets. Preserve prereleases and existing strict/loose behavior. The upstream repository and its original layout are under src/. Preserve existing tests. Public checks are adapted Node tests, not the complete upstream TAP suite.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/index.js"
+      ],
+      "setup": []
+    }
+  ],
+  "schedule": [
+    {
+      "id": "build-metadata-r1-v10",
+      "taskId": "build-metadata",
+      "repeat": 1,
+      "strategy": "v10"
+    },
+    {
+      "id": "build-metadata-r1-luna",
+      "taskId": "build-metadata",
+      "repeat": 1,
+      "strategy": "luna"
+    },
+    {
+      "id": "build-metadata-r1-sol",
+      "taskId": "build-metadata",
+      "repeat": 1,
+      "strategy": "sol"
+    },
+    {
+      "id": "build-metadata-r1-ladder",
+      "taskId": "build-metadata",
+      "repeat": 1,
+      "strategy": "ladder"
+    },
+    {
+      "id": "retry-r1-luna",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "luna"
+    },
+    {
+      "id": "retry-r1-sol",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "sol"
+    },
+    {
+      "id": "retry-r1-ladder",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "ladder"
+    },
+    {
+      "id": "retry-r1-v10",
+      "taskId": "retry",
+      "repeat": 1,
+      "strategy": "v10"
+    },
+    {
+      "id": "json-lines-r1-sol",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "sol"
+    },
+    {
+      "id": "json-lines-r1-ladder",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "ladder"
+    },
+    {
+      "id": "json-lines-r1-v10",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "v10"
+    },
+    {
+      "id": "json-lines-r1-luna",
+      "taskId": "json-lines",
+      "repeat": 1,
+      "strategy": "luna"
+    },
+    {
+      "id": "prerelease-subset-r1-ladder",
+      "taskId": "prerelease-subset",
+      "repeat": 1,
+      "strategy": "ladder"
+    },
+    {
+      "id": "prerelease-subset-r1-v10",
+      "taskId": "prerelease-subset",
+      "repeat": 1,
+      "strategy": "v10"
+    },
+    {
+      "id": "prerelease-subset-r1-luna",
+      "taskId": "prerelease-subset",
+      "repeat": 1,
+      "strategy": "luna"
+    },
+    {
+      "id": "prerelease-subset-r1-sol",
+      "taskId": "prerelease-subset",
+      "repeat": 1,
+      "strategy": "sol"
+    }
+  ],
+  "runtimeHash": "4be9a88bf200cd50ce875e0b82285e33838b2adc711180da927349172eeabd28",
+  "node": "24.18.0",
+  "agentRuntime": {
+    "runtime": "pi",
+    "packages": {
+      "@earendil-works/pi-coding-agent": "1.2.0",
+      "@earendil-works/pi-ai": "1.2.0"
+    }
+  },
+  "grading": "Deferred only. Evaluator files/configuration must be introduced after execution closes; local paths are not an OS secrecy boundary.",
+  "fingerprint": "e6f7205479333ee311cb012d3bd678fea9069d17075a3be99038181ec8a252d6"
+}

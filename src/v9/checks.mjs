@@ -14,7 +14,7 @@ export function testCount(text='') {
   if(/no tests (?:ran|found)|running 0 tests|NO-SOURCE|0 passing/i.test(s))return 0;
   return null;
 }
-export async function runPublicCheck({workspace,check,timeoutMs}) {
+export async function runPublicCheck({workspace,check,timeoutMs,signal}) {
   validateCommand(check.command);
   const [command,...args]=check.command;
   // npm.cmd is not directly spawnable without a shell on Windows. Use Node's installed npm CLI.
@@ -25,9 +25,11 @@ export async function runPublicCheck({workspace,check,timeoutMs}) {
     if(!existsSync(npmCli))return {id:check.id,status:'unavailable',exitCode:null,output:'Use an explicit node/npm-cli.js argv on this installation',tests:null};
     bin=process.execPath;argv=[npmCli,...args];
   }
-  const out=await runProcess(bin,argv,{cwd:workspace,timeoutMs:Math.max(1,Math.min(timeoutMs,check.timeoutMs??60_000)),maxBytes:1_000_000});
+  const out=await runProcess(bin,argv,{cwd:workspace,timeoutMs:Math.max(1,Math.min(timeoutMs,check.timeoutMs??60_000)),maxBytes:1_000_000,signal});
   const output=(out.stdout+'\n'+out.stderr).slice(-16_000),tests=testCount(output);
-  const status=out.error?'unavailable':out.timedOut||out.overflow?'unverified':tests===0&&check.testsRequired?'unverified':out.exitCode!==0?'failed':check.testsRequired&&tests===null?'unverified':'passed';
+  const executed=[...output.matchAll(/^(?:#|ℹ) (?:pass|fail) (\d+)\s*$/gm)];
+  const noneExecuted=executed.length>0&&executed.every(m=>Number(m[1])===0);
+  const status=out.error?'unavailable':out.timedOut||out.overflow||out.aborted?'unverified':check.testsRequired&&(tests===0||noneExecuted)?'unverified':out.exitCode!==0?'failed':check.testsRequired&&tests===null?'unverified':'passed';
   return {id:check.id,command:check.command,status,exitCode:out.exitCode,tests,output,error:out.error,latencyMs:out.latencyMs};
 }
 export function verificationState(outcomes) {

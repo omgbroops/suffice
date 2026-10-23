@@ -1,5 +1,7 @@
 # Suffice
 
+[V10](docs/V10.md) restores Pi, AST navigation and codemode, with v9's bounded testing/arbitration controller layered on top. Compact output remains optional. [Pilot status](reports/V10-PI-PILOT.md): 31 new tests pass; the 16-attempt comparison is prepared and awaiting separate Pi subscription sign-in.
+
 Experimental [v9 for native Codex](docs/V9.md) combines a bounded Luna worker, independent public-spec tests, arbitration, checkpoint selection and selective Sol takeover. [Benchmark protocol](docs/V9-BENCHMARK.md) compares it with Luna, Sol and a minimal ladder, with grading deferred until execution closes. [Initial live attempt](reports/V9-CODEX-PILOT.md) was rejected by the CLI's model access; 28 offline tests pass. Older experiments below retain their original runtimes and results.
 
 Newest completed investigations: [Nemotron retrieval and revision-aware evidence](reports/EVIDENCE-EXPERIMENTS-RESULTS.md). Semantic retrieval improved offline region coverage but cost 6.3% more in scored repairs; the evidence record cost 85.2% more, and record plus directed checks 105.5% more. Every scored arm passed. No new policy was enabled by default. These are bounded observations, not general accuracy or cost guarantees. Independent saved-patch audits and isolated exported-layout replays passed; see [status](STATUS.md).
