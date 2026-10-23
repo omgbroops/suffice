@@ -163,7 +163,10 @@ async function saveFailure(arm, taskId, r) {
 // The hidden tests are not in the workspace; the agent gets the exercise statement and the stub files.
 async function defaultPrompt(prep) {
   const doc = await readPolyglotDocs(prep.dir);
-  return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.\n\n${doc}`;
+  // Names the hidden suite's origin: r27 misses were mostly wrong API shape (missing constants, non-generic types) and canonical edge cases.
+  const name = basename(prep.dir);
+  const hint = prep.lang ? `\n\nThe hidden tests are the Exercism ${prep.lang} track's test suite for "${name}". Match that track's expected API exactly: exported names and constants, static vs instance methods, generic types, and whether errors throw or return a value. Your self-test must cover the cases from Exercism's canonical test data for "${name}" as you recall them, including every edge and error case, not only the examples below.` : '';
+  return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.${hint}\n\n${doc}`;
 }
 
 export async function main(argv) {
