@@ -11,20 +11,22 @@ test('self check: a later pass cannot hide an earlier failing command, and fixed
   const marker = join(ws, 'a.ok');
   const check = makeSelfCheck({ timeoutMs: 20_000 });
   const say = cmd => ({ workspace: ws, text: `done\nSELFTEST: ${cmd}`, env: {} });
-  const failing = `test -f ${marker}`;
+  const failing = `test -f ${marker} && echo '1 passed'`;
 
   const first = await check(say(failing));
   assert.equal(first.signal, 'fail');
 
-  const narrowed = await check(say('true'));
+  const narrowed = await check(say("echo '1 passed'"));
   assert.equal(narrowed.signal, 'fail');
   assert.equal(narrowed.tail.startsWith(`earlier failing check still fails: ${failing}\n`), true);
 
   await writeFile(marker, '');
-  const fixed = await check(say('true'));
+  const fixed = await check(say("echo '1 passed'"));
   assert.equal(fixed.signal, 'pass');
 
   await unlink(marker);
-  const forgotten = await check(say('true'));
+  const forgotten = await check(say("echo '1 passed'"));
   assert.equal(forgotten.signal, 'pass');
+
+  assert.equal((await check(say('echo "test result: ok. 0 passed"'))).signal, 'fail');
 });

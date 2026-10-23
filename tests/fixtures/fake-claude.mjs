@@ -10,7 +10,7 @@ if (mode === 'hang') setTimeout(() => {}, 60_000);
 else {
   if (mode === 'fix') writeFileSync('src/a.txt', 'fixed\n');
   // Reports its own check like the real system prompt asks; 'unverified' mode omits the SELFTEST line.
-  const text = mode === 'unverified' ? 'done' : 'done\nSELFTEST: test "$(cat src/a.txt)" = fixed';
+  const text = mode === 'unverified' ? 'done' : 'done\nSELFTEST: test "$(cat src/a.txt)" = fixed && echo 1 passed';
   const result = { type: 'result', subtype: 'success', is_error: false, session_id: 'sess-1', result: text };
   if (mode !== 'nocost') result.total_cost_usd = 0.01;
   process.stdout.write(JSON.stringify(result));

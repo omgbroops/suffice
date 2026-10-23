@@ -18,6 +18,13 @@ export function pytestPassed(text = '') {
   return /\bpassed\b/.test(last[1]) && !/\b(?:failed|errors?)\b/.test(last[1]);
 }
 
+// A pass needs a test runner's summary showing at least one test ran; exit 0 alone let `cargo test` with 0 tests and
+// `node -e console.log(...)` through the gate (r27: 8 of 10 v5b hidden fails). shortcut: summary list covers the bench's
+// runners (pytest, unittest, cargo, jest, mocha, node:test, go, ctest, gradle, rspec, phpunit); add one when a new runner false-fails.
+const RAN = [/\b([1-9]\d*) passed\b/, /\bRan ([1-9]\d*) tests?\b/, /\b([1-9]\d*) passing\b/, /^# pass ([1-9]\d*)/m, /^ok\s+\S+\s+[\d.]+s/m,
+  /tests passed, 0 tests failed out of ([1-9]\d*)/, /\bBUILD SUCCESSFUL\b/, /\b([1-9]\d*) examples?, 0 failures\b/, /\bOK \(([1-9]\d*) tests?/];
+export function testsRan(text = '') { return RAN.some(re => re.test(String(text))); }
+
 // shortcut: runs the agent's command through /bin/sh, so Windows needs a cmd.exe branch before it is used there.
 // Returns { signal, cmd, tail }; tail is the last 1500 chars of the agent's own SELFTEST output (never hidden-test output).
 // The agent's command runs in the same sandbox and env as the agent (envrun on PATH, broker socket), since its tail goes back into the retry prompt.
@@ -29,7 +36,9 @@ export function makeSelfCheck({ timeoutMs = 300_000 } = {}) {
     const sb = await sandboxCommand('/bin/sh', ['-c', cmd], workspace, env.V4_ENVRUN_SOCK);
     const out = await runProcess(sb.bin, sb.args, { cwd: workspace, timeoutMs, env: { ...env, ...sb.env } });
     const all = String(out.stdout ?? '') + String(out.stderr ?? '');
-    return { signal: !out.timedOut && (out.code === 0 || pytestPassed(all)) ? 'pass' : 'fail', tail: all.slice(-1500) };
+    const ok = !out.timedOut && (out.code === 0 || pytestPassed(all));
+    if (ok && !testsRan(all)) return { signal: 'fail', tail: `${all.slice(-1300)}\nSELFTEST ran no tests (no runner summary with >=1 test). Run the project's real test suite.` };
+    return { signal: ok ? 'pass' : 'fail', tail: all.slice(-1500) };
   };
   return async ({ workspace, text, env = {} }) => {
     const cmd = parseSelfTest(text);

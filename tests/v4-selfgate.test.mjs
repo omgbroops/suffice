@@ -96,3 +96,13 @@ test('bench CLI accepts --gate and refuses unknown gates before any spend', asyn
   await assert.rejects(runBench({ items: [], arm: 'v4', globalCapUsd: 1, results: join(dir, 'r.jsonl'), gate: 'bogus', provider: {} }), /--gate/);
   assert.equal(existsSync(join(dir, 'r.jsonl')), false);
 });
+
+test('testsRan: zero-test and print-only output are not a pass', async () => {
+  const { testsRan } = await import('../src/v4-selfsignal.mjs');
+  assert.equal(testsRan('test result: ok. 0 passed; 0 failed; 0 ignored'), false);
+  assert.equal(testsRan('that lay in the house that Jack built.\n12\n'), false);
+  assert.equal(testsRan('test result: ok. 7 passed; 0 failed'), true);
+  assert.equal(testsRan('Tests:       12 passed, 12 total'), true);
+  assert.equal(testsRan('===== 3 passed in 0.12s ====='), true);
+  assert.equal(testsRan('BUILD SUCCESSFUL in 4s'), true);
+});
