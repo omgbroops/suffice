@@ -68,14 +68,14 @@ const fixPrompt = (task, failures) =>
   `${task}\n\nThe checks failed. Fix the code. Failures (last 1500 chars each):\n${failures.join('\n---\n')}\n\nA test may be wrong: you may edit a test file only if you also write \`TESTBUG: <file>: <reason citing the task text>\`.`;
 
 // Same contract as runV6Task: appends one row to `out` and never throws. Each check is { checkpoint, check, flagged, hiddenPass, costUsd }.
-export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), agree = false, claude = defaultClaude({ bin, timeoutMs }) }) {
+export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), agree = false, sblindCheap = false, claude = defaultClaude({ bin, timeoutMs }) }) {
   const ledger = { spentUsd: 0, costKnown: true };
   const on = s => stages.has(s);
   const base = { ...meta, task: task.id, variant: 'v7', budgetUsd, stages: [...stages] };
   const [cheap, top] = tiers;
   const original = task.workspaceDir;
   const scratch = [];
-  const s = { agree, planText: null, calls: [], stageCosts: {}, checks: [], gates: [], testbugClaims: [], testRels: [], fixRounds: 0, skipped: [],
+  const s = { agree, sblindCheap, planText: null, calls: [], stageCosts: {}, checks: [], gates: [], testbugClaims: [], testRels: [], fixRounds: 0, skipped: [],
     selfFinalPass: false, finalPass: false };
   const tests = new Map(); // stage -> { cmd, rels }
   let row;
@@ -189,9 +189,11 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
       const p = await call(cheap, { role: 'probe', prompt: `${prompt}\n\nWrite the test file only; do not edit existing files.`, workspace: dir, tools: V6_WRITER_TOOLS, system: V7_PROBE_SYSTEM_PROMPT });
       await addTests('probe', code, dir, p.text);
     } else if (on('probe')) skip('probe');
-    if (on('sblind') && fits(top)) {
+    // sblindCheap: a task-only Haiku writer, independent of the plan and code that blind and the coder share.
+    const sTier = sblindCheap ? cheap : top;
+    if (on('sblind') && fits(sTier)) {
       const dir = await copyOf('sblind', original);
-      const sb = await call(top, { role: 'sblind', prompt: `${task.prompt}\n\nWrite the tests only; do not implement.`, workspace: dir, tools: V6_WRITER_TOOLS, system: testSystem('sblind') });
+      const sb = await call(sTier, { role: 'sblind', prompt: `${task.prompt}\n\nWrite the tests only; do not implement.`, workspace: dir, tools: V6_WRITER_TOOLS, system: testSystem('sblind') });
       await addTests('sblind', original, dir, sb.text);
     } else if (on('sblind')) skip('sblind');
 

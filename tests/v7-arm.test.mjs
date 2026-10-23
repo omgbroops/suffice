@@ -120,3 +120,12 @@ test('agreement gate: one failing suite of two ships, two failing suites block',
   assert.equal(JSON.parse((await readFile(strict.out, 'utf8')).trim()).gates[0].pass, false);
   await strict.cleanup();
 });
+
+test('sblindCheap runs the task-only writer on the cheap tier without the plan', async () => {
+  const f = await fixture();
+  await runV7Task({ task: f.task, budgetUsd: 100, out: f.out, verify: f.verify, claude: f.claude, stages: parseV7Stages('plan,blind,coder,sblind'), agree: true, sblindCheap: true });
+  const sb = f.calls.find(c => c.role === 'sblind');
+  assert.equal(sb.model, armTiers('v7')[0].model);
+  assert.ok(!sb.prompt.includes('PLAN:'));
+  await f.cleanup();
+});

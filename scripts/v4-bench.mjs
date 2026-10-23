@@ -56,7 +56,7 @@ export function loadManifest(path) {
 }
 
 // Usage: nice -n 19 node scripts/v4-bench.mjs --manifest=<json> --arm=v4|single:<model> --global-cap-usd=<USD> --results=<new.jsonl> [--workers=2] [--budget-usd=<USD per run>] [--gate=self|oracle] [--v5-top=sonnet|opus] [--v5-cheap=haiku|sonnet] [--v5-strict] [--protocol=pass1|pass2 (polyglot only)]
-const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate', 'v5-top', 'v5-cheap', 'v5-strict', 'protocol', 'v6-k', 'v6-plan', 'v7-stages', 'v7-agree'];
+const FLAGS = ['provider', 'manifest', 'arm', 'workers', 'global-cap-usd', 'results', 'budget-usd', 'gate', 'v5-top', 'v5-cheap', 'v5-strict', 'protocol', 'v6-k', 'v6-plan', 'v7-stages', 'v7-agree', 'v7-sblind'];
 export function parseArgs(argv) {
   const opts = {};
   for (const arg of argv) {
@@ -78,7 +78,7 @@ export function defaultBudgetUsd(tiers) { return tiers.reduce((s, t) => s + t.ro
 
 // provider: { prepWorkspace(item) -> {dir, acceptanceCommand, cleanup}, runAcceptance(prep) -> boolean | {pass} }.
 // runTask defaults to runV4Task; tests inject stubs. The first global-cap refusal stops the run: later items get 'aborted_cap' rows.
-export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask: runTaskOpt, gate = 'self', v5Top, v5Cheap, v5Strict = false, protocol = 'pass1', v6K, v6Plan = 'on', v7Stages, v7Agree = 'off' }) {
+export async function runBench({ items, arm, workers = 3, globalCapUsd, results, budgetUsd, bin, provider, probe, runTask: runTaskOpt, gate = 'self', v5Top, v5Cheap, v5Strict = false, protocol = 'pass1', v6K, v6Plan = 'on', v7Stages, v7Agree = 'off', v7Sblind = 'sonnet' }) {
   if (!['on', 'off'].includes(v6Plan)) throw new Error('--v6-plan must be on|off');
   const v7Set = arm === 'v7' ? parseV7Stages(v7Stages) : undefined;
   if (!GATES.includes(gate)) throw new Error(`--gate must be one of ${GATES.join('|')}`);
@@ -118,7 +118,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
       const store = { dir: join(process.env.V4_TRANSCRIPT_DIR ?? join(homedir(), '.cache', 'v4-transcripts'), 'staging', `${arm}-${item.taskId.replace(/\//g, '_')}-${Date.now()}`), files: [] };
       const row = await transcriptStore.run(store, () => runTask({
         task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir, env: prep.env },
-        budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate, rule, strict: v5Strict, protocol, k: v6K, plan: v6Plan === 'on', stages: v7Set, agree: v7Agree === 'on',
+        budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate, rule, strict: v5Strict, protocol, k: v6K, plan: v6Plan === 'on', stages: v7Set, agree: v7Agree === 'on', sblindCheap: v7Sblind === 'haiku',
         verifyOutput: ws => hiddenOutputs.get(ws) ?? '',
         verify: async workspace => {
           // Each verdict gets a pristine copy (provider.cloneForVerify, else a dir copy of prep.dir) plus that snapshot's files, so round-1 leftovers cannot reach the final verdict.
@@ -186,7 +186,7 @@ export async function main(argv) {
   const rows = await runBench({
     items, arm: o.arm, workers, globalCapUsd: Number(o['global-cap-usd']), results: o.results, gate: o.gate ?? 'self',
     budgetUsd: o['budget-usd'] === undefined ? undefined : Number(o['budget-usd']), provider, probe: probeFreePct, v5Top: o['v5-top'], v5Cheap: o['v5-cheap'], v5Strict: o['v5-strict'] === true, protocol,
-    v6K: o['v6-k'] === undefined ? undefined : Number(o['v6-k']), v6Plan: o['v6-plan'], v7Stages: o['v7-stages'], v7Agree: o['v7-agree'],
+    v6K: o['v6-k'] === undefined ? undefined : Number(o['v6-k']), v6Plan: o['v6-plan'], v7Stages: o['v7-stages'], v7Agree: o['v7-agree'], v7Sblind: o['v7-sblind'],
   });
   return rows.length;
 }

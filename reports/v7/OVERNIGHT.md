@@ -141,3 +141,27 @@ By category: gate hole 4, model capability 4 (plus 1 shared with a gate hole), r
 5. **rust_book-store timeout:** pre-build `cargo` in the workspace before the coder starts, or raise the coder's timeout for rust. Code only.
 
 **Ceiling:** 100% on r27 isn't reachable with what exists. Opus alone passes 22/27 and 5 never finished. A realistic target is Opus quality (22) at under half the Opus cost, using fixes 1 and 4.
+
+---
+
+# Follow-up 2: independent second writer (dead)
+
+Setup: the second Haiku test writer (`sblind`) sees only the task text: no plan, no code. The agreement gate stays on. Stages are plan, blind, coder, sblind.
+Flags: `--v7-stages=plan,blind,coder,sblind --v7-agree=on --v7-sblind=haiku` (the `sblindCheap` option in `runV7Task`, with an offline test).
+Run: 1 task, then 3, then 23 (12 + 11), 4 at a time. Results are in `reports/v7/r27-v7indep-merged.jsonl`. Weekly usage went from 88% to 89%.
+
+| Arm | Pass | Cost |
+|---|---|---|
+| v5b (old gate) | **17** | **$0.46** |
+| **v7 + independent writer + agreement gate** | **17** | **$0.79** |
+| Haiku alone | 16 | $0.52 |
+| v7 trimmed + agreement gate (shared plan) | 15 | $0.79 |
+
+- **Dead: it ties v5b and doesn't beat it**, at 1.7× the cost. Rule: below 18 means dead.
+- **The independence idea didn't hold.** The gate still failed correct code at 32 of 41 checkpoints (78%), against 81% with a shared plan.
+  - At 32 of 41 checkpoints with correct code, both writers wrongly flagged it. They disagreed at only 6.
+  - So the false alarms aren't caused by the shared plan: Haiku-written tests are wrong in the same way even when the writers can't see each other's inputs.
+- The gate shipped wrong code 3 times and held back correct code 8 times. That beats the shared-plan run (5 and 6) on shipping wrong code, but is worse on holding back correct code.
+- Against the shared-plan run: it gained `python_proverb`, `javascript_alphametics` and `rust_book-store` (no timeout this time) and lost `go_two-bucket`. The +2 net is noise-sized.
+- The cap stopped 2 tasks: `java_affine-cipher` (GLOBAL_CAP after 2 fixes) and `java_all-your-base` (aborted_cap). Both are Opus-only tasks that every cheap arm fails, so the cap didn't cost a pass.
+- **Conclusion:** cheap model-written tests can't be fixed by adding more cheap writers. The remaining options are fix 1 (keep the best checkpoint) and fix 4 (escalate to Opus) from the list above, or fix 3 (check expected values against the task's examples).
