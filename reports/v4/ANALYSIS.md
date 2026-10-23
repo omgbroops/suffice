@@ -110,3 +110,10 @@ Qute-0b621c passed in both arms that failed it (Sonnet $0.15, Sonnet→Opus $0.0
 1. Make the gate run the existing tests of every touched module, not only the command the agent picks.
 2. Then do one clean fresh 8×3 run, which needs about $3 of owner approval.
 3. Getting meaningful intervals needs N ≥ 50 tasks per arm.
+
+### Idea logged, not started: tune the free tier on our own verified passes (Terminal-RSI style)
+
+- Source: arXiv 2610.22192, "Terminal-RSI" (reported 51.7%→86.5% on Terminal-Bench 2.1 for Qwen3.8-27B; long-horizon only 0/46→5/46). Seen only through secondary coverage so far; read the paper before relying on it.
+- Data we have: 277 verified passes on 45 unique tasks, mostly Polyglot (contaminated). We do **not** save trajectories (`--output-format json` keeps only the final result), so there is no SFT data yet. Step 0 is switching to `stream-json` and saving passing transcripts.
+- Compute (estimate, not measured): LoRA on a 27B model at 30–70K-token agent traces will not fit in 48GB. A ~4–8B model with traces cut to ≤16K is plausible with MLX. The RL half (RPR) is out of reach locally.
+- Fit: worth doing only after a few hundred passes on non-contaminated tasks.
