@@ -1,0 +1,306 @@
+{
+  "at": "2026-10-23T22:18:37.273Z",
+  "pi": {
+    "agentRuntime": {
+      "runtime": "pi",
+      "packages": {
+        "@earendil-works/pi-coding-agent": "1.2.0",
+        "@earendil-works/pi-ai": "1.2.0"
+      }
+    },
+    "subscription": true,
+    "models": [
+      {
+        "id": "gpt-6-luna",
+        "present": true
+      },
+      {
+        "id": "gpt-6.1-sol",
+        "present": true
+      }
+    ],
+    "ready": true
+  },
+  "native": {
+    "runtime": "native-codex",
+    "ready": true,
+    "binary": {
+      "path": "/opt/codex/bin/codex",
+      "sha256": "b93f6811d3f653f0fb83be4050d857fb9abbb111dfa2ce160563327daff7f306",
+      "bytes": 308139304,
+      "mtimeMs": 1792726299000
+    },
+    "version": "codex-cli 0.164.0",
+    "models": [
+      {
+        "id": "gpt-6-astra",
+        "displayName": "GPT-6-Astra",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-6.1-sol",
+        "displayName": "GPT-6.1-Sol",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-6-sol",
+        "displayName": "GPT-6-Sol",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-6-luna",
+        "displayName": "GPT-6-Luna",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-5.6-sol",
+        "displayName": "GPT-5.6-Sol",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-5.6-terra",
+        "displayName": "GPT-5.6-Terra",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-5.6-luna",
+        "displayName": "GPT-5.6-Luna",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-daybreak-blue-latest",
+        "displayName": "Daybreak Blue",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-daybreak-red-latest",
+        "displayName": "Daybreak Red",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ],
+        "contextWindow": 372000,
+        "maxContextWindow": 372000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "gpt-5.5",
+        "displayName": "GPT-5.5",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 272000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      },
+      {
+        "id": "codex-auto-review",
+        "displayName": "Codex Auto Review",
+        "supportedReasoningEfforts": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ],
+        "contextWindow": 272000,
+        "maxContextWindow": 872000,
+        "shellType": "unified_exec",
+        "applyPatchToolType": "freeform"
+      }
+    ],
+    "requestedModel": "gpt-6.1-sol",
+    "requestedEffort": "high",
+    "supportedFlags": [
+      "--json",
+      "--ephemeral",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--strict-config",
+      "--model",
+      "--cd",
+      "--sandbox",
+      "--output-last-message"
+    ],
+    "catalogSource": "binary bundled catalog; no refresh",
+    "error": null
+  },
+  "pricing": {
+    "gpt-6-luna": {
+      "input": 0.1,
+      "output": 0.5,
+      "cacheRead": 0.01,
+      "cacheWrite": 0.125,
+      "tiers": [
+        {
+          "inputTokensAbove": 272000,
+          "input": 0.2,
+          "output": 0.75,
+          "cacheRead": 0.02,
+          "cacheWrite": 0.25
+        }
+      ]
+    },
+    "gpt-6.1-sol": {
+      "input": 2,
+      "output": 10,
+      "cacheRead": 0.1,
+      "cacheWrite": 2.5,
+      "tiers": [
+        {
+          "inputTokensAbove": 272000,
+          "input": 4,
+          "output": 15,
+          "cacheRead": 0.2,
+          "cacheWrite": 5
+        }
+      ]
+    }
+  },
+  "isolation": {
+    "directEgressBlocked": true,
+    "ordinaryWebsiteBlocked": true,
+    "modelEndpointReachable": true
+  },
+  "versions": {
+    "node": {
+      "exitCode": 0,
+      "text": "v24.18.0\n"
+    },
+    "go": {
+      "exitCode": 0,
+      "text": "go version go1.19.8 linux/amd64\n"
+    },
+    "rust": {
+      "exitCode": 0,
+      "text": "rustc 1.85.1 (4eb161250 2025-03-15)\n"
+    },
+    "cargo": {
+      "exitCode": 0,
+      "text": "cargo 1.85.1 (d73d2caf9 2024-12-31)\n"
+    },
+    "java": {
+      "exitCode": 0,
+      "text": "openjdk version \"17.0.20.1\" 2026-08-18\nOpenJDK Runtime Environment (build 17.0.20.1+1-1-deb12u1-Debian)"
+    },
+    "cpp": {
+      "exitCode": 0,
+      "text": "g++ (Debian 12.2.0-14+deb12u1) 12.2.0\nCopyright (C) 2022 Free Software Foundation, Inc."
+    },
+    "cmake": {
+      "exitCode": 0,
+      "text": "cmake version 3.25.1\n"
+    },
+    "python": {
+      "exitCode": 0,
+      "text": "Python 3.11.2\n"
+    }
+  },
+  "ready": true,
+  "cleanup": {
+    "stopped": true,
+    "removed": true,
+    "safeToContinue": true,
+    "authSync": {
+      "status": "not_requested"
+    },
+    "errors": []
+  },
+  "actorImage": "sha256:107306b9fa65e533431abfd41812dae98317e1ce6aabbf6e5731468e2eebb2bf",
+  "evidenceDirectory": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\preflight\\inspection-1792793905723"
+}

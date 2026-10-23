@@ -1,0 +1,48 @@
+{
+  "postExecutionReview": true,
+  "scoresChanged": false,
+  "actorsRerun": 0,
+  "acceptanceAssertionsChanged": 0,
+  "interpretation": "17/27 and 24/27 are strict canonical-suite conformance under the frozen public inputs; some canonical API requirements were unavailable in those inputs.",
+  "caveats": [
+    {
+      "tasks": [
+        "python_go-counting"
+      ],
+      "finding": "Both saved implementations fail collection because canonical tests import module constants WHITE, BLACK and NONE. Those names are absent from the supplied starter and public task text."
+    },
+    {
+      "tasks": [
+        "java_affine-cipher",
+        "java_satellite"
+      ],
+      "finding": "Several V10 failures are exact exception-message comparisons. The required literals are absent from the supplied public instructions and solution/helper source."
+    },
+    {
+      "tasks": [
+        "javascript_alphametics"
+      ],
+      "finding": "Public prose illustrates single-equals puzzles; canonical valid test inputs use double equals. V10 accepts single equals and rejects double equals."
+    },
+    {
+      "tasks": [
+        "cpp_phone-number"
+      ],
+      "finding": "Native rejects invalid numbers with invalid_argument, while canonical tests require domain_error. The generic public Catch framework mentioning exception types does not define the exercise exception contract."
+    },
+    {
+      "tasks": [
+        "go_word-search",
+        "rust_book-store"
+      ],
+      "finding": "Public arbitration abstained on coordinate-origin and book-numbering conventions; canonical cases require particular conventions."
+    },
+    {
+      "tasks": [
+        "javascript_two-bucket"
+      ],
+      "finding": "Both implementations defer impossible-goal rejection until solve(); canonical tests expect the constructor to throw."
+    }
+  ],
+  "nextProtocolLesson": "Supply the complete public API contract, including constants, formats, indexing, exception type/message/timing, before hiding new acceptance cases. Freeze that distinct protocol before another cohort. No changes are applied to this cohort."
+}

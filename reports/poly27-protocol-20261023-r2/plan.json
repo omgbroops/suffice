@@ -1,0 +1,2158 @@
+{
+  "version": "poly27-locked-1",
+  "at": "2026-10-23T22:22:01.375Z",
+  "cohort": "27 known development exercises; not a SWE-bench Pro score",
+  "tasks": [
+    {
+      "id": "cpp_sublist",
+      "taskId": "cpp/sublist"
+    },
+    {
+      "id": "cpp_phone-number",
+      "taskId": "cpp/phone-number"
+    },
+    {
+      "id": "cpp_complex-numbers",
+      "taskId": "cpp/complex-numbers"
+    },
+    {
+      "id": "go_alphametics",
+      "taskId": "go/alphametics"
+    },
+    {
+      "id": "go_wordy",
+      "taskId": "go/wordy"
+    },
+    {
+      "id": "go_say",
+      "taskId": "go/say"
+    },
+    {
+      "id": "go_word-search",
+      "taskId": "go/word-search"
+    },
+    {
+      "id": "go_two-bucket",
+      "taskId": "go/two-bucket"
+    },
+    {
+      "id": "cpp_all-your-base",
+      "taskId": "cpp/all-your-base"
+    },
+    {
+      "id": "java_affine-cipher",
+      "taskId": "java/affine-cipher"
+    },
+    {
+      "id": "java_pig-latin",
+      "taskId": "java/pig-latin"
+    },
+    {
+      "id": "java_all-your-base",
+      "taskId": "java/all-your-base"
+    },
+    {
+      "id": "java_satellite",
+      "taskId": "java/satellite"
+    },
+    {
+      "id": "javascript_alphametics",
+      "taskId": "javascript/alphametics"
+    },
+    {
+      "id": "javascript_house",
+      "taskId": "javascript/house"
+    },
+    {
+      "id": "python_affine-cipher",
+      "taskId": "python/affine-cipher"
+    },
+    {
+      "id": "javascript_two-bucket",
+      "taskId": "javascript/two-bucket"
+    },
+    {
+      "id": "python_transpose",
+      "taskId": "python/transpose"
+    },
+    {
+      "id": "python_proverb",
+      "taskId": "python/proverb"
+    },
+    {
+      "id": "python_connect",
+      "taskId": "python/connect"
+    },
+    {
+      "id": "python_go-counting",
+      "taskId": "python/go-counting"
+    },
+    {
+      "id": "rust_book-store",
+      "taskId": "rust/book-store"
+    },
+    {
+      "id": "rust_parallel-letter-frequency",
+      "taskId": "rust/parallel-letter-frequency"
+    },
+    {
+      "id": "rust_accumulate",
+      "taskId": "rust/accumulate"
+    },
+    {
+      "id": "rust_pig-latin",
+      "taskId": "rust/pig-latin"
+    },
+    {
+      "id": "javascript_grade-school",
+      "taskId": "javascript/grade-school"
+    },
+    {
+      "id": "rust_decimal",
+      "taskId": "rust/decimal"
+    }
+  ],
+  "actorImage": "sha256:107306b9fa65e533431abfd41812dae98317e1ce6aabbf6e5731468e2eebb2bf",
+  "graderImage": "sha256:cdacb36624517db8d3418c6478f49c2cf399c03fcb7a34b6b05a357abb894660",
+  "models": {
+    "worker": "gpt-6-luna",
+    "expert": "gpt-6.1-sol",
+    "native": "gpt-6.1-sol"
+  },
+  "timeoutMs": 3000000,
+  "monetaryCap": null,
+  "concurrency": 2,
+  "seed": 20261023,
+  "schedule": [
+    {
+      "id": "rust_parallel-letter-frequency-r1-v10",
+      "taskId": "rust_parallel-letter-frequency",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_parallel-letter-frequency-r1-native",
+      "taskId": "rust_parallel-letter-frequency",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_house-r1-native",
+      "taskId": "javascript_house",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_house-r1-v10",
+      "taskId": "javascript_house",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "java_satellite-r1-v10",
+      "taskId": "java_satellite",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "java_satellite-r1-native",
+      "taskId": "java_satellite",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_word-search-r1-native",
+      "taskId": "go_word-search",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_word-search-r1-v10",
+      "taskId": "go_word-search",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_sublist-r1-v10",
+      "taskId": "cpp_sublist",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_sublist-r1-native",
+      "taskId": "cpp_sublist",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_say-r1-native",
+      "taskId": "go_say",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_say-r1-v10",
+      "taskId": "go_say",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_alphametics-r1-v10",
+      "taskId": "javascript_alphametics",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_alphametics-r1-native",
+      "taskId": "javascript_alphametics",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "java_pig-latin-r1-native",
+      "taskId": "java_pig-latin",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "java_pig-latin-r1-v10",
+      "taskId": "java_pig-latin",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_complex-numbers-r1-v10",
+      "taskId": "cpp_complex-numbers",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_complex-numbers-r1-native",
+      "taskId": "cpp_complex-numbers",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_two-bucket-r1-native",
+      "taskId": "javascript_two-bucket",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_two-bucket-r1-v10",
+      "taskId": "javascript_two-bucket",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_book-store-r1-v10",
+      "taskId": "rust_book-store",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_book-store-r1-native",
+      "taskId": "rust_book-store",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_alphametics-r1-native",
+      "taskId": "go_alphametics",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_alphametics-r1-v10",
+      "taskId": "go_alphametics",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_pig-latin-r1-v10",
+      "taskId": "rust_pig-latin",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_pig-latin-r1-native",
+      "taskId": "rust_pig-latin",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_two-bucket-r1-native",
+      "taskId": "go_two-bucket",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "go_two-bucket-r1-v10",
+      "taskId": "go_two-bucket",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "python_proverb-r1-v10",
+      "taskId": "python_proverb",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "python_proverb-r1-native",
+      "taskId": "python_proverb",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "rust_decimal-r1-native",
+      "taskId": "rust_decimal",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "rust_decimal-r1-v10",
+      "taskId": "rust_decimal",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_grade-school-r1-v10",
+      "taskId": "javascript_grade-school",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "javascript_grade-school-r1-native",
+      "taskId": "javascript_grade-school",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "java_affine-cipher-r1-native",
+      "taskId": "java_affine-cipher",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "java_affine-cipher-r1-v10",
+      "taskId": "java_affine-cipher",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "python_go-counting-r1-v10",
+      "taskId": "python_go-counting",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "python_go-counting-r1-native",
+      "taskId": "python_go-counting",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "python_connect-r1-native",
+      "taskId": "python_connect",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "python_connect-r1-v10",
+      "taskId": "python_connect",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_phone-number-r1-v10",
+      "taskId": "cpp_phone-number",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_phone-number-r1-native",
+      "taskId": "cpp_phone-number",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "python_transpose-r1-native",
+      "taskId": "python_transpose",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "python_transpose-r1-v10",
+      "taskId": "python_transpose",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "go_wordy-r1-v10",
+      "taskId": "go_wordy",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "go_wordy-r1-native",
+      "taskId": "go_wordy",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "java_all-your-base-r1-native",
+      "taskId": "java_all-your-base",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "java_all-your-base-r1-v10",
+      "taskId": "java_all-your-base",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_all-your-base-r1-v10",
+      "taskId": "cpp_all-your-base",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "cpp_all-your-base-r1-native",
+      "taskId": "cpp_all-your-base",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "python_affine-cipher-r1-native",
+      "taskId": "python_affine-cipher",
+      "strategy": "native",
+      "repeat": 1
+    },
+    {
+      "id": "python_affine-cipher-r1-v10",
+      "taskId": "python_affine-cipher",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_accumulate-r1-v10",
+      "taskId": "rust_accumulate",
+      "strategy": "v10",
+      "repeat": 1
+    },
+    {
+      "id": "rust_accumulate-r1-native",
+      "taskId": "rust_accumulate",
+      "strategy": "native",
+      "repeat": 1
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\runtime.mjs",
+      "sha256": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\workspace.mjs",
+      "sha256": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\symbol-navigation.mjs",
+      "sha256": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\tool-observations.mjs",
+      "sha256": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v9\\config.mjs",
+      "sha256": "9caa31c63ef2e75731d7b410e49166d15297e621c135b61ff3e7292a94a9f405"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v9\\checks.mjs",
+      "sha256": "589b10e352ba22c3fb9be685a96edd6723c58ca3a52ecf74f3d5fa1bcf89ca9c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v9\\process.mjs",
+      "sha256": "9fa2ffe5e7995385b55ef08baff1ea40d14721d9ffe5331099faab01e8eeab6a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v9\\workspace.mjs",
+      "sha256": "48c52b9444a052b673a0a2088e0ba30d44ffea8697712cd8a2a1ed901c6ed9da"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v10\\config.mjs",
+      "sha256": "c41048c6b9eb6761ba7027ae7b02b4d764a3241a002254bfb694f9e2305fec15"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v10\\controller.mjs",
+      "sha256": "d9aaa2383c968bab6804b9ed8da9617aff69a637e1d0815fb40bd85378b96f49"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v10\\tools.mjs",
+      "sha256": "9100c8a00a045d996b051e047d9a7646f3b18f3e443dab47787b9fddb856ab6f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\v10\\pi.mjs",
+      "sha256": "034e0807ad6b17d8bc1ae019c297d7a65fb8f4eaaea461442164ce988b4c40a7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\src\\bench\\native-codex.mjs",
+      "sha256": "62a07d0bf289a32d109166dba69766699077e4ce6065c7bf7446514c8c771025"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-container-entry.mjs",
+      "sha256": "ab21cd1c5473802036c1e971d1aaa19ba0b8a19228b9add94353d29018fa57b1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-public-check.mjs",
+      "sha256": "5ed2575d2ed8f9c7f7b922cf6b3b59efe914d1ed7daf26450d6787a270f3c4ee"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-proxy.mjs",
+      "sha256": "08c4981822ac65103088f207f15947a93b11f6ed01ab16c22fad9792233c446a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\package.json",
+      "sha256": "f8bce49d28cded6dde2afc71cff1be6f5db469862c072ab59190eeac3cd06ea6"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\package-lock.json",
+      "sha256": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\containers\\poly27\\Dockerfile",
+      "sha256": "b3dc6dde41fd8ac5eb831e358a25900aa55d4dd2a86f98fc53b49e2cf9780257"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\docs\\POLY27-LOCKED-PROTOCOL.md",
+      "sha256": "ac38e476b652430c489a65230b819577e42458053b545cece7d7ab91c326bb7a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-build.mjs",
+      "sha256": "9718425e12c5e9b469120dd7772b9a3680eefc1798877112b66ef96a5dbb065b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-bench.mjs",
+      "sha256": "98c9e91c5239addb7f7a519c14cb7128a0bfc289ac354af48c4584c7f8b5dc85"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-prepare.mjs",
+      "sha256": "52ebc1ee7d74dd88ade8b7e1a6af5c8095c085c8a4c10a7aad4eea2b9bae201a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-grader-entry.mjs",
+      "sha256": "ecaeae8909663284419b74a9a379bd8b50128f684354bf460f8353bbe33f3b02"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\scripts\\poly27-evaluate.mjs",
+      "sha256": "c7bae17f651bd08dccdc7af5348d4af269551810072d469cc150d692f1829e45"
+    }
+  ],
+  "imageCodeBindings": {
+    "actor": {
+      "version": 1,
+      "image": "sha256:107306b9fa65e533431abfd41812dae98317e1ce6aabbf6e5731468e2eebb2bf",
+      "verifiedAt": "2026-10-23T22:22:00.712Z",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda"
+        },
+        {
+          "path": "package.json",
+          "sha256": "f8bce49d28cded6dde2afc71cff1be6f5db469862c072ab59190eeac3cd06ea6"
+        },
+        {
+          "path": "scripts/poly27-container-entry.mjs",
+          "sha256": "ab21cd1c5473802036c1e971d1aaa19ba0b8a19228b9add94353d29018fa57b1"
+        },
+        {
+          "path": "scripts/poly27-proxy.mjs",
+          "sha256": "08c4981822ac65103088f207f15947a93b11f6ed01ab16c22fad9792233c446a"
+        },
+        {
+          "path": "scripts/poly27-public-check.mjs",
+          "sha256": "5ed2575d2ed8f9c7f7b922cf6b3b59efe914d1ed7daf26450d6787a270f3c4ee"
+        },
+        {
+          "path": "src/bench/native-codex.mjs",
+          "sha256": "62a07d0bf289a32d109166dba69766699077e4ce6065c7bf7446514c8c771025"
+        },
+        {
+          "path": "src/runtime.mjs",
+          "sha256": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01"
+        },
+        {
+          "path": "src/symbol-navigation.mjs",
+          "sha256": "d7d7ab4657341bf7bdcefcbf911dd544839492251c629dd3c2c705cf009c5eb2"
+        },
+        {
+          "path": "src/tool-observations.mjs",
+          "sha256": "97ef27437cb5d90e9ac32ff0e0ce8a479202f51cead7655d710a6a856b7ca1b7"
+        },
+        {
+          "path": "src/v10/config.mjs",
+          "sha256": "c41048c6b9eb6761ba7027ae7b02b4d764a3241a002254bfb694f9e2305fec15"
+        },
+        {
+          "path": "src/v10/controller.mjs",
+          "sha256": "d9aaa2383c968bab6804b9ed8da9617aff69a637e1d0815fb40bd85378b96f49"
+        },
+        {
+          "path": "src/v10/pi.mjs",
+          "sha256": "034e0807ad6b17d8bc1ae019c297d7a65fb8f4eaaea461442164ce988b4c40a7"
+        },
+        {
+          "path": "src/v10/tools.mjs",
+          "sha256": "9100c8a00a045d996b051e047d9a7646f3b18f3e443dab47787b9fddb856ab6f"
+        },
+        {
+          "path": "src/v9/checks.mjs",
+          "sha256": "589b10e352ba22c3fb9be685a96edd6723c58ca3a52ecf74f3d5fa1bcf89ca9c"
+        },
+        {
+          "path": "src/v9/config.mjs",
+          "sha256": "9caa31c63ef2e75731d7b410e49166d15297e621c135b61ff3e7292a94a9f405"
+        },
+        {
+          "path": "src/v9/process.mjs",
+          "sha256": "9fa2ffe5e7995385b55ef08baff1ea40d14721d9ffe5331099faab01e8eeab6a"
+        },
+        {
+          "path": "src/v9/workspace.mjs",
+          "sha256": "48c52b9444a052b673a0a2088e0ba30d44ffea8697712cd8a2a1ed901c6ed9da"
+        },
+        {
+          "path": "src/workspace.mjs",
+          "sha256": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039"
+        }
+      ],
+      "codeSha256": "7d8fcd2c9b966fd7331133b0fc21bd1fea6a53ff8203b141346a92e3031f2242",
+      "probe": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--read-only",
+          "--cap-drop",
+          "ALL",
+          "--security-opt",
+          "no-new-privileges",
+          "--cpus",
+          "2",
+          "--memory",
+          "3g",
+          "--pids-limit",
+          "384",
+          "--entrypoint",
+          "node",
+          "sha256:107306b9fa65e533431abfd41812dae98317e1ce6aabbf6e5731468e2eebb2bf",
+          "--input-type=module",
+          "-e",
+          "import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';const paths=JSON.parse(process.argv[1]);const rows=await Promise.all(paths.map(async path=>({path,sha256:createHash('sha256').update(await readFile('/opt/suffice/'+path)).digest('hex')})));process.stdout.write(JSON.stringify(rows)+'\\n');",
+          "[\"package-lock.json\",\"package.json\",\"scripts/poly27-container-entry.mjs\",\"scripts/poly27-proxy.mjs\",\"scripts/poly27-public-check.mjs\",\"src/bench/native-codex.mjs\",\"src/runtime.mjs\",\"src/symbol-navigation.mjs\",\"src/tool-observations.mjs\",\"src/v10/config.mjs\",\"src/v10/controller.mjs\",\"src/v10/pi.mjs\",\"src/v10/tools.mjs\",\"src/v9/checks.mjs\",\"src/v9/config.mjs\",\"src/v9/process.mjs\",\"src/v9/workspace.mjs\",\"src/workspace.mjs\"]"
+        ],
+        "exitCode": 0,
+        "stdoutSha256": "c581df61f0f9e2df5373de1bc4c7b2ccdbb895c9b3bc1941a7b37ff5aad6e282"
+      }
+    },
+    "grader": {
+      "version": 1,
+      "image": "sha256:cdacb36624517db8d3418c6478f49c2cf399c03fcb7a34b6b05a357abb894660",
+      "verifiedAt": "2026-10-23T22:22:01.221Z",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "sha256": "2bd6bbcf22da64146e0a10b545aed49d69795d8da9e084bf0525250be0804fda"
+        },
+        {
+          "path": "package.json",
+          "sha256": "f8bce49d28cded6dde2afc71cff1be6f5db469862c072ab59190eeac3cd06ea6"
+        },
+        {
+          "path": "scripts/poly27-grader-entry.mjs",
+          "sha256": "ecaeae8909663284419b74a9a379bd8b50128f684354bf460f8353bbe33f3b02"
+        },
+        {
+          "path": "scripts/poly27-public-check.mjs",
+          "sha256": "5ed2575d2ed8f9c7f7b922cf6b3b59efe914d1ed7daf26450d6787a270f3c4ee"
+        },
+        {
+          "path": "src/v9/process.mjs",
+          "sha256": "9fa2ffe5e7995385b55ef08baff1ea40d14721d9ffe5331099faab01e8eeab6a"
+        }
+      ],
+      "codeSha256": "40d0366560222e553992622b1a8bab63c24394c8b8fd7280492b7886446362b0",
+      "probe": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--read-only",
+          "--cap-drop",
+          "ALL",
+          "--security-opt",
+          "no-new-privileges",
+          "--cpus",
+          "2",
+          "--memory",
+          "3g",
+          "--pids-limit",
+          "384",
+          "--entrypoint",
+          "node",
+          "sha256:cdacb36624517db8d3418c6478f49c2cf399c03fcb7a34b6b05a357abb894660",
+          "--input-type=module",
+          "-e",
+          "import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';const paths=JSON.parse(process.argv[1]);const rows=await Promise.all(paths.map(async path=>({path,sha256:createHash('sha256').update(await readFile('/opt/suffice/'+path)).digest('hex')})));process.stdout.write(JSON.stringify(rows)+'\\n');",
+          "[\"package-lock.json\",\"package.json\",\"scripts/poly27-grader-entry.mjs\",\"scripts/poly27-public-check.mjs\",\"src/v9/process.mjs\"]"
+        ],
+        "exitCode": 0,
+        "stdoutSha256": "f3fca4b2a31e8622353986196634cd16342ac21d999ec56c4ab0653f957e78c3"
+      }
+    }
+  },
+  "evaluationFiles": [
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_all-your-base\\canonical-config.json",
+      "sha256": "4c6b1cf0384818b7d63c815a6a90c6ec5517aae9b167d7e01729a6d2b5e2c129"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_all-your-base\\descriptor.json",
+      "sha256": "07e021d22ed53666a08b2d8100715b2b3fafbdefb21ac65cc4b52154e0cfbb2f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_all-your-base\\hidden\\all_your_base_test.cpp",
+      "sha256": "58c7d05e6eaa314346388159cd980886f4b2108bb6f47523a9270bb4e86ce4a3"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_all-your-base\\reference\\.meta\\example.cpp",
+      "sha256": "bc91eb397e874f2eaa73a89b45079e8a172c4a4c2dce6ed81a64bccfb00e1402"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_all-your-base\\reference\\.meta\\example.h",
+      "sha256": "74c5d8da60621c1fce7bafafccf23cfdf40804197f25ddb3358070a0788abcaa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_complex-numbers\\canonical-config.json",
+      "sha256": "14edd9b7f0d96411138d757267a67a67ed853bfaa1a94daa2d90f7aef6b8082f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_complex-numbers\\descriptor.json",
+      "sha256": "cc35b1d74cfdaf3f7d88b96bad0eaa3d653d7b2933b3095b0df81e2c2743066d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_complex-numbers\\hidden\\complex_numbers_test.cpp",
+      "sha256": "0bb911210fddcfe066825d5b562ca6efbf21d45386e62aebfd4693ad1b82897b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_complex-numbers\\reference\\.meta\\example.cpp",
+      "sha256": "690bd58562e2898bc3aeca8ea911b740f31ca2cf508ca2a4465bb80fa2f6440e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_complex-numbers\\reference\\.meta\\example.h",
+      "sha256": "c129b8a67bed8a94964d95592382de06b8c8510ebfb19aea996b8b45cc781bd0"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_phone-number\\canonical-config.json",
+      "sha256": "22cf8096d7a86f8695e94c5b26dcdd33cb6e8f3ee4e3934d75bd6254938baf7b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_phone-number\\descriptor.json",
+      "sha256": "8d6fe8440522524f3daeff86e8bba8e556c72e24a5aeb10953b803af19394149"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_phone-number\\hidden\\phone_number_test.cpp",
+      "sha256": "12aa1d8ef503b67d9be8a6d1b8bc858eabcc88af3db916821ec25dcb3709fee5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_phone-number\\reference\\.meta\\example.cpp",
+      "sha256": "64019a0770afaca5378b1522ac9fbe8716a58bd54be1b45be19cdb2897ff4f5e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_phone-number\\reference\\.meta\\example.h",
+      "sha256": "a784915f3d720e71c7f0288f1b8a7ab023413be5a46d491ad3827d3dfcdbe0a7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_sublist\\canonical-config.json",
+      "sha256": "02cbba27d187dca10978f20dc62ed616e8c50e6ea6ed3b86683708fa2f66fb0e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_sublist\\descriptor.json",
+      "sha256": "bb81c9d446a948dd92913a0e4bb06087108da6ef2f855c06c5d0c5367fe67970"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_sublist\\hidden\\sublist_test.cpp",
+      "sha256": "7120a4a2fa383db1f2f0184c5cb58c46960b39458d37bb3965dfb382ed4f0d00"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_sublist\\reference\\.meta\\example.cpp",
+      "sha256": "166179f13096071796f5b1b37279ef8427729262d3fdfd2d34dbcc2f8844a6cd"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\cpp_sublist\\reference\\.meta\\example.h",
+      "sha256": "7d80cb82eee23060c19f65fc1bfc5be24a110e6b6e8f0f3b5b19d76dea491dd1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_alphametics\\canonical-config.json",
+      "sha256": "273b5b9d421cb5dfcbb359a535aca36e3b52c5902b58b8ec4255de58a05f9038"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_alphametics\\descriptor.json",
+      "sha256": "e1dbd6ec8a558c15d84198a8d34a381caf7fb045e16e855b984b73883b70b1be"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_alphametics\\hidden\\alphametics_test.go",
+      "sha256": "eb22bd718a4fafc450ea9701ec2f81e7f6dafbfe48d4b8cbe66650248836657f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_alphametics\\hidden\\cases_test.go",
+      "sha256": "b3ed6e9601014a28a9ba2abe9472fb7bd985d5f44cf4375a411ed1fbd36ebf49"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_alphametics\\reference\\.meta\\example.go",
+      "sha256": "c238e965240fe0637ecfe2f3ab9d46a75a79f57659bf3a50817d901f8bf2adeb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_say\\canonical-config.json",
+      "sha256": "7eebcccedb59afa111f530f4338f5ee339877359d39d52a756c773acc929ca8b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_say\\descriptor.json",
+      "sha256": "b606d074d284151cb84e9b541f52b947dc1ba2a53bab0513023075ad5304236b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_say\\hidden\\cases_test.go",
+      "sha256": "0e35cd7b2d406e61bef445101ee67d5bb148825609e874bf987673f174c17571"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_say\\hidden\\say_test.go",
+      "sha256": "af574f558244d0e6a055382d5d2f47b7d0c7b3fd0673bd4dd72453f48eb64cf7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_say\\reference\\.meta\\example.go",
+      "sha256": "252cd3cc81c9b31f8ad6d30325ac103ffb3b0f5f34ff8444b1a5629386ece815"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_two-bucket\\canonical-config.json",
+      "sha256": "209d888e10bca728498ca780200d7ba3adc8c0b88a78e99e128377f166c0d804"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_two-bucket\\descriptor.json",
+      "sha256": "471dfff709d4c201b696cccb739357d532640831aa3c7a242302e39d423ac520"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_two-bucket\\hidden\\bonus_test.go",
+      "sha256": "409089870cefb2c6533ae31ecd5d285e062d823e60fd2a563117818b5247494c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_two-bucket\\hidden\\cases_test.go",
+      "sha256": "188f4e0838506a72ceadd1ebbad81614357baac1793c423e2b247e23f0229992"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_two-bucket\\hidden\\two_bucket_test.go",
+      "sha256": "052686779e1b27bbaeb87956c64c56130a736791abe5137df9bced2cc7d8a999"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_two-bucket\\reference\\.meta\\example.go",
+      "sha256": "653cf33e430514255ac45c8ea0b55e1693b945184cf3e38105b1712bbca196b5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_word-search\\canonical-config.json",
+      "sha256": "77797a9833f7b151cd9ae884bfb03973b6897e9ff54f5e1ecd7ee707418851e1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_word-search\\descriptor.json",
+      "sha256": "c182e63df2ef1268e2799113c457013595b0f4d63ff422610d9f12fae7025682"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_word-search\\hidden\\cases_test.go",
+      "sha256": "5ad5dcfcbc6f87829fe4ea4499f1a316b23107efbf4009af16e96ffbdd07eeb9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_word-search\\hidden\\word_search_test.go",
+      "sha256": "fef66b668429e073ad070807fcd09c4390b785dd4329a18362a5c3b2c9d32b92"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_word-search\\reference\\.meta\\example.go",
+      "sha256": "e82c3e1c4347748ed71536b4c12ad568c32b0ad858b32175f8030c9731c95607"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_wordy\\canonical-config.json",
+      "sha256": "117694df056acb34ff614acf6325f6540d149262a8b0c871c9f0b85d87fa4469"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_wordy\\descriptor.json",
+      "sha256": "fbf277e34d1e98dfa24bab8457e0430d947e24d4e417c9c6fe6a96ab8152e7b3"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_wordy\\hidden\\cases_test.go",
+      "sha256": "ed8fe405ac82b61aaf95d803fca036297ad6ccd12e164008d64091012b688bd1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_wordy\\hidden\\wordy_test.go",
+      "sha256": "de2558df42a51dcb9914375fa9c8f7c94e0cb996b68f5bb29c944bb249c5e292"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\go_wordy\\reference\\.meta\\example.go",
+      "sha256": "8e492ec31252bc085b43cc0fed93c60616456acb3fa1f9e017e3929ca5114856"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_affine-cipher\\canonical-config.json",
+      "sha256": "1c58b63f779c2996aa652fdbb0eaa6fbf4154d8ced90f98d64ec727299723adc"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_affine-cipher\\descriptor.json",
+      "sha256": "ea6f520803ed2c60644d578f8c6998297e49990f7daa8425ad71772402c43b6f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_affine-cipher\\hidden\\src\\test\\java\\AffineCipherTest.java",
+      "sha256": "707ebb9e935b89b86da5f20188cf241667d7645539620141bf784a346636f111"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_affine-cipher\\reference\\.meta\\src\\reference\\java\\AffineCipher.java",
+      "sha256": "1bcd55be33cbf765a63bad4171421245b694dbf6a09860d5d6660da44fa7d08d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_all-your-base\\canonical-config.json",
+      "sha256": "d59e9ae4c620bd378ba0ca51a8eaebfa15f4f4e4b5576ea39f2b23c5ca908bbb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_all-your-base\\descriptor.json",
+      "sha256": "78e33081c681ad257a58944f6a754051010fc1b2d5c319e050304f3a75e9948c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_all-your-base\\hidden\\src\\test\\java\\BaseConverterTest.java",
+      "sha256": "1c0205b27ad44733bc30a5c94eecef65a904961004629ac7703be3288ffcf76e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_all-your-base\\reference\\.meta\\src\\reference\\java\\BaseConverter.java",
+      "sha256": "1690849198bcedab41571f4d241390606fcbe35e8732c5dfed86d44a8139eda8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_pig-latin\\canonical-config.json",
+      "sha256": "ee16d2c67dba0809c2069c276191aa1f58e32f6eb485befc037f326e9e0ed12e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_pig-latin\\descriptor.json",
+      "sha256": "a907ce0aa3021c4298930719e6895da5255056d2109049d00462f1a67d003398"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_pig-latin\\hidden\\src\\test\\java\\PigLatinTranslatorTest.java",
+      "sha256": "33d5ab53838e12fca4bfa14caf6c9e54bc686d56d0b3f0deff54a7ae42557f34"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_pig-latin\\reference\\.meta\\src\\reference\\java\\PigLatinTranslator.java",
+      "sha256": "359cf8b7559d1ed5471b31a006d84f4a7f805552ae5557156da663a0689cae9d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_satellite\\canonical-config.json",
+      "sha256": "8bfc804fc2b40be5496621239d664d398afcdf0c38a9081a6ea078fb62b9afb4"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_satellite\\descriptor.json",
+      "sha256": "f25e126d8de5aacec0457121ad79397996375f098097eab9dd6118f12b2138ac"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_satellite\\hidden\\src\\test\\java\\SatelliteTest.java",
+      "sha256": "d0daf7e5604b678271edc1cd2c91ffb98f40e506a6884316e278eaaf7ca05ea2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_satellite\\hidden\\src\\test\\java\\TreeTest.java",
+      "sha256": "a9d8cf104938f067daccb08cfd09196de3d1e063fc1acd15e676c691b7ed7d33"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\java_satellite\\reference\\.meta\\src\\reference\\java\\Satellite.java",
+      "sha256": "b0dcbb8b6104a3bc9b083b9c8af27767706f2554e11feb67485dc816650a04bb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_alphametics\\canonical-config.json",
+      "sha256": "c5a1a38617fccf0fa2183f662070d914931e931922745db13dd547cb30c5bc1d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_alphametics\\descriptor.json",
+      "sha256": "deb6bb740b57352c5018023db6975a97da23c193b489d99fbd536872e2c3f6a2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_alphametics\\hidden\\alphametics.spec.js",
+      "sha256": "d794958b8cebdb8a248947786d417c9184c2d06e327688a60f7ba5b74a2f1b70"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_alphametics\\reference\\.meta\\proof.ci.js",
+      "sha256": "562313b18505b6232a927cf38dac7a42670b48891ea80328b1c7a1e98d5bd908"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_grade-school\\canonical-config.json",
+      "sha256": "f646254aa8e20865ee54514c176d59c463b6abf5918e1569951ba11ac651c99b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_grade-school\\descriptor.json",
+      "sha256": "fbd3e4c137c13f8fe88089e4115288a0edc3ac36b672d3418db60c8005cb171c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_grade-school\\hidden\\grade-school.spec.js",
+      "sha256": "055838a67683c40987054b9df345f4fb8dce41cd4e0fbf54f45b73d6a8e2d024"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_grade-school\\reference\\.meta\\proof.ci.js",
+      "sha256": "681ac5ad5f7c4ed4281f434fc88cba1509fc63e768af982d2fd052cefb70b12c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_house\\canonical-config.json",
+      "sha256": "9b476a5d8a0f83e5e6e90498c021f4526aeaf1924de73d89abc9dbda21ec9956"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_house\\descriptor.json",
+      "sha256": "91e58245811f4d46ce3cf4fba3a523143121df2460e599c8f18663d4d00a64a8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_house\\hidden\\house.spec.js",
+      "sha256": "7391c6ecf557a337f38ea038c75753089906d7438ce0962d769552249df85804"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_house\\reference\\.meta\\proof.ci.js",
+      "sha256": "3d0241e221eb4393cb53b731d68fe93de929000dd67aa2d580bf0ac8985d0a0b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_two-bucket\\canonical-config.json",
+      "sha256": "7a6f7a7ec4098190ed8654883ccb6747c759adb6481928beab06a0955fcd37e6"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_two-bucket\\descriptor.json",
+      "sha256": "7a8423417b817e1515f9ff5cad9e9598d8e5a831ab559c41924f8a8d698d4583"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_two-bucket\\hidden\\two-bucket.spec.js",
+      "sha256": "657458e17a7b037a87a54b6ddee9b32072a86c993c4cc915a1fba174f66fde0a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\javascript_two-bucket\\reference\\.meta\\proof.ci.js",
+      "sha256": "4e74cde06bf36e3adf22c07eb352ffcc9a9b4e0cc01403476334744228e6b26e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_affine-cipher\\canonical-config.json",
+      "sha256": "89f5e3da0cd332167e2f8362493f6c1e2adef433c3fca9b39ad532d4c1fcecb3"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_affine-cipher\\descriptor.json",
+      "sha256": "8ec962c2ed300ff39690e2e0f50f4c2a848d1a07d09f2de433e5600dd31975d1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_affine-cipher\\hidden\\affine_cipher_test.py",
+      "sha256": "4d9dac99b726068707a37e36145d73f74a52704145fb95bb4acaccdd7cd3ef54"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_affine-cipher\\reference\\.meta\\example.py",
+      "sha256": "6952153be60d7690e0bfad52c89c4647e9edb4bd068c77f1c15735e00d9216ba"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_connect\\canonical-config.json",
+      "sha256": "9257e7813dd725d07a0c6f306834f2f7ff71f7e0cf3e17f54f4b495cb416d9f4"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_connect\\descriptor.json",
+      "sha256": "e08ae35ff69441ed83dd2eb1ee3e6105961802a8bcff88dc17c8333c57f037e7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_connect\\hidden\\connect_test.py",
+      "sha256": "4de5c414b9a5023754ebdbb9a192b72ad19fdf402179a3020d87727e9946ce2b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_connect\\reference\\.meta\\example.py",
+      "sha256": "8664d19c48528035ebd15fc7917d19c40f7c43ad9b95c5f488d2633e01520705"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_go-counting\\canonical-config.json",
+      "sha256": "71b3eedcce3022d3b828c9f6bc8f03732566d4ba6db153e2552002628b7ffff9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_go-counting\\descriptor.json",
+      "sha256": "f3e435383ae88d13bb29ebe7bde305e688d691b2a59d4c633e7e947a9c3023ac"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_go-counting\\hidden\\go_counting_test.py",
+      "sha256": "66b355989d67c4120e49bf5e7e1d224f0af21dd1eeb30b884c204640e73fe358"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_go-counting\\reference\\.meta\\example.py",
+      "sha256": "78f9812eec1107283a9b09362eec1b46150f00ecf651ff6b19b581c6e9dbb91d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_proverb\\canonical-config.json",
+      "sha256": "7238a66c62dc3f385c2b2874ff2cc8318b64ee0577141174b8ea5771ac66f4eb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_proverb\\descriptor.json",
+      "sha256": "d333f543546d46e40470422beb9c3b794f586198d23ea8f3311abec1d53840e0"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_proverb\\hidden\\proverb_test.py",
+      "sha256": "6792db661176bc5dfd4447b8f68209d441797631a3896b880421ceba98895682"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_proverb\\reference\\.meta\\example.py",
+      "sha256": "21defe08a5cbfe2c9c25eed0b70c2b8d1367e575ea5a2c25165eb56208bd0a4e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_transpose\\canonical-config.json",
+      "sha256": "34d4e636304d291902f3971d9fe511537a8f84389aeb94a427b3cae8519e5d12"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_transpose\\descriptor.json",
+      "sha256": "eceeb473c789bae6c044eb7572d0f3514cdc10a7be5e9f8e3568809dd1f67314"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_transpose\\hidden\\transpose_test.py",
+      "sha256": "7ac879485ac2de3e925a39b0ebe65788543491625b0931bd08b450293e1f681b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\python_transpose\\reference\\.meta\\example.py",
+      "sha256": "33b60c3de3f36df81ab7443a9b51e788364746914e3cb3bbe67952bca5a7e877"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_accumulate\\canonical-config.json",
+      "sha256": "91e19aef60d68fd76574a074376cd49bb61e1b70bb5b0e0c227a5533cb50a0e2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_accumulate\\descriptor.json",
+      "sha256": "6e9377a0654b186d9a7ecc7346250aab630d202fdbe7ec28d493b317de526dd8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_accumulate\\hidden\\tests\\accumulate.rs",
+      "sha256": "8b8ff91f987ef8a31d10338467d653c08b9db6ddadf0c5c52f82c2516950f48c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_accumulate\\reference\\.meta\\example.rs",
+      "sha256": "04b6f488a00454a89248bd91d496bb10ad2ecea5be7126ed31efe192acafacfc"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_book-store\\canonical-config.json",
+      "sha256": "ba57a764e283bbbf427ac3eeb0abda8d5e928e78ff7b91ca178c5399eda792d2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_book-store\\descriptor.json",
+      "sha256": "d881a5ff4b622ccccca9c214b47c2d14f164998b63786bfc41e35e505eb91832"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_book-store\\hidden\\tests\\book-store.rs",
+      "sha256": "18c4e094adcfcd41afce1e00b4dd2346b0b9a45770d46c6ff416e4fb5e33c626"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_book-store\\reference\\.meta\\example.rs",
+      "sha256": "45b9b49aad3673a599632ae262a73f0bec5770bd9b275a6984df151e30398c9f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_decimal\\canonical-config.json",
+      "sha256": "f9d58aef28928d4350ab5c5e39692be2b11015dc113433cce2f4ec3793718990"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_decimal\\descriptor.json",
+      "sha256": "7d1028110c3e416cc4b16fbe4637c59bc6245c281aed6a81a4686b1851f11bdf"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_decimal\\hidden\\tests\\decimal.rs",
+      "sha256": "23ab08cb56c10ed7a552f194d45892a7e4e1083e3b44ee3f85207c125a012a90"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_decimal\\reference\\.meta\\example.rs",
+      "sha256": "e12932974dca018da02db6297bb50a7aacc3746219b805ed6ae3c6b0ac4e5a4f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_parallel-letter-frequency\\canonical-config.json",
+      "sha256": "50a3be64f1a35a475d068f761ea69cb53d63fc926139a3950734936b1c339bac"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_parallel-letter-frequency\\descriptor.json",
+      "sha256": "59a1f1bab54cc3ebf1510b81793a60d0ba7782ce6f3496ee8980755bd623884e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_parallel-letter-frequency\\hidden\\benches\\benchmark.rs",
+      "sha256": "65308e281e9715106a3fcd26bc1412d2e327d9a42648c2c67c45fec3304ed211"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_parallel-letter-frequency\\hidden\\tests\\parallel-letter-frequency.rs",
+      "sha256": "607ced1ade3929190cbb9a9adb3b0b9c4aab1d06e83f05be186d201434227a12"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_parallel-letter-frequency\\reference\\.meta\\example.rs",
+      "sha256": "d6199536788f596e03010e6bab969251bf981e74a261ee8bfd9a7404b5ffca5e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_pig-latin\\canonical-config.json",
+      "sha256": "7a7ab8a6d715bbb7d4d416324fb98f4f9da9f248d9b87f510aa6247fdb20eddb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_pig-latin\\descriptor.json",
+      "sha256": "36beb1e06891c1ad28e7ada276ca93cfad2a380f27c6c46847fb5623f916aa1e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_pig-latin\\hidden\\tests\\pig-latin.rs",
+      "sha256": "bf14c7a17504d74751706ebc066a6c2df4abdbef0312e50ae7c5c0b02bf2f89d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluators\\rust_pig-latin\\reference\\.meta\\example.rs",
+      "sha256": "55e9f3e163cc1d9b981cd6aaaeda0d765c26928abba4552e28c930ebd40f60b4"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\.docs\\instructions.md",
+      "sha256": "082c4a397183b21c36963c34fec9818c8ad33339dab7ed2d4097e42fbed28b58"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\.docs\\introduction.md",
+      "sha256": "3d008d3f661f5cc18fb60cd2245968f3954d9450b63dfa00db8a3c4f2f546b27"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\all_your_base.cpp",
+      "sha256": "bc2d87c50b0024b7e5a052d444b73c1df315d69ab02b197bab4b8ca49b8e6a9b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\all_your_base.h",
+      "sha256": "5fa8f5c846eec6cc2cc2b64c4096d67462db42e8304bf4ffc5df27f3d0645cb1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\CMakeLists.txt",
+      "sha256": "53d531120e650972adf19a2a42aa2d5bc716c93700ffac74c1c2868fdce633ff"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\PUBLIC-API.md",
+      "sha256": "217833773eba3aad5c8bb2873aa73f9253fd28a9a8a96c3720609137c1c69fd9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\TASK.md",
+      "sha256": "955f46ef2d3ff69fb6eff13c3b6a26258ac91562471c421f4a1e5ec0f75d03fc"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\test\\catch.hpp",
+      "sha256": "681e7505a50887c9085539e5135794fc8f66d8e5de28eadf13a30978627b0f47"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_all-your-base\\all-your-base\\test\\tests-main.cpp",
+      "sha256": "5847fda35c1320d94f8d088aaf34229d689f66f1da235f885cbb28c8f17e4260"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\.docs\\instructions.md",
+      "sha256": "60949140b676a34a7884c23fe931fa9e40e0710e2acc66d9f0303a8fcdb261cc"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\CMakeLists.txt",
+      "sha256": "53d531120e650972adf19a2a42aa2d5bc716c93700ffac74c1c2868fdce633ff"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\complex_numbers.cpp",
+      "sha256": "7621ce4527c8a6a0524e2140b38cb23a3981013e84712b095b88db6587a465ab"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\complex_numbers.h",
+      "sha256": "e08ab6734e9b6a5abd59be8bad5e1936db652651e6f92ed519e3dd1060d9a8b6"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\PUBLIC-API.md",
+      "sha256": "04af77142cecf1eec1d3f27ec5300b3fcd9bcfb1778c6ab7b293cbc4b0a48845"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\TASK.md",
+      "sha256": "c4f24fe5d4858dc09edca02daa1bbec1e98151b0ca081dbf507c37edbc6b9f77"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\test\\catch.hpp",
+      "sha256": "681e7505a50887c9085539e5135794fc8f66d8e5de28eadf13a30978627b0f47"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_complex-numbers\\complex-numbers\\test\\tests-main.cpp",
+      "sha256": "5847fda35c1320d94f8d088aaf34229d689f66f1da235f885cbb28c8f17e4260"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\.docs\\instructions.md",
+      "sha256": "ca1e2c1c43454c151e519a2f784439621c243bb2824715c69a8e0904abc473a5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\CMakeLists.txt",
+      "sha256": "53d531120e650972adf19a2a42aa2d5bc716c93700ffac74c1c2868fdce633ff"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\phone_number.cpp",
+      "sha256": "553c9bc9c79d619428a4a757c56c9d9dcfc2fc1eaf4f08530c8b5ac21d3acee8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\phone_number.h",
+      "sha256": "9177465a5f56ef5aff907a8691fa8a563a318022130f8b2d6c8037d6a90fc38d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\PUBLIC-API.md",
+      "sha256": "6f775c40135519af7a3c0d5793e4e3902d984d8abf08454c84447f39eae7b1a7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\TASK.md",
+      "sha256": "cdae2cd4bb47316f53758304866ee56158aa7d8a3ef9d2fcecd3e02a7f0da284"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\test\\catch.hpp",
+      "sha256": "681e7505a50887c9085539e5135794fc8f66d8e5de28eadf13a30978627b0f47"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_phone-number\\phone-number\\test\\tests-main.cpp",
+      "sha256": "5847fda35c1320d94f8d088aaf34229d689f66f1da235f885cbb28c8f17e4260"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\.docs\\instructions.md",
+      "sha256": "d0e7c47c2d86fb068f35283ae2ff8609069e7c042e78376f7b5536ee5320e2fe"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\CMakeLists.txt",
+      "sha256": "53d531120e650972adf19a2a42aa2d5bc716c93700ffac74c1c2868fdce633ff"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\PUBLIC-API.md",
+      "sha256": "e02bcf474695c0712374877e4478887499c39e71081f6ebd2e1f75eb02db7307"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\sublist.cpp",
+      "sha256": "3d0bb6d257810bb2b42fda1ff4efce28779ce8e7948969786f8ba8a71994442e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\sublist.h",
+      "sha256": "c837b0ccaf42f7cfa0b900732dff0ed141d8f45431b906af61597f91e11f3f59"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\TASK.md",
+      "sha256": "638a1b12ed5e5a780416c400722a77c50e63bd17a1967aa1bb647393bf7e9057"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\test\\catch.hpp",
+      "sha256": "681e7505a50887c9085539e5135794fc8f66d8e5de28eadf13a30978627b0f47"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\cpp_sublist\\sublist\\test\\tests-main.cpp",
+      "sha256": "5847fda35c1320d94f8d088aaf34229d689f66f1da235f885cbb28c8f17e4260"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_alphametics\\alphametics\\.docs\\instructions.append.md",
+      "sha256": "185a46ef90d3e98fff3e551f9af3ddb8cc4ad4781b04f662b6ef0e73403e041f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_alphametics\\alphametics\\.docs\\instructions.md",
+      "sha256": "5344503af3de77f6a97dfa495e723f0053dc824f712819f8dbcfab3ef147ae13"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_alphametics\\alphametics\\alphametics.go",
+      "sha256": "af5b106d430661ed1a9fc8594684124d6d857c2a1e16f872c6344ee46e47170a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_alphametics\\alphametics\\go.mod",
+      "sha256": "77917406d81852eb56b58e8d8846a595f9cf1ca87533f939c6cd1eb6fdce3596"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_alphametics\\alphametics\\TASK.md",
+      "sha256": "6700e9e27dc4f899859cb2335a65ac26aa91c2efba10fcf6e1c2bf8ffe7b3995"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_say\\say\\.docs\\instructions.md",
+      "sha256": "1ba2a9fce5e8e6a301aae2b403de6e61dd2cda174876adeff1ae506ab9318852"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_say\\say\\go.mod",
+      "sha256": "8d1686f091ad56eacadc0eb6afabd0e6238c57407a9ce81fe70d1ca5b5dfd04f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_say\\say\\say.go",
+      "sha256": "75480ace366d860d157a0ac2ea2050f584b4f8922d5e0b7a0ba07ecf58539e05"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_say\\say\\TASK.md",
+      "sha256": "a1c568918d4d79f82a1feb3e1281bea05a08974aa299a823632b09b80a98a843"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_two-bucket\\two-bucket\\.docs\\instructions.append.md",
+      "sha256": "c995a02a5ccc989b800ca632e013eb880cb5da32e9024bb8b7dd11ee33793eeb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_two-bucket\\two-bucket\\.docs\\instructions.md",
+      "sha256": "a75aff16057b2aff15f80e22878c83b36381ff57c105dfdf9b77cee14461ad9d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_two-bucket\\two-bucket\\go.mod",
+      "sha256": "ab06dc3735b944fc1fe108bdea1a0340047b20c051ccbc3005c637a09e2c6a46"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_two-bucket\\two-bucket\\TASK.md",
+      "sha256": "9d2d477849cc22ed5ead938cd9759adaa78e865085750d3a84fa2c6438ae6238"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_two-bucket\\two-bucket\\two_bucket.go",
+      "sha256": "d34182e90548f73fd15a127c2b8fd4501f7f39f825bdb376f039181fc7222b11"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_word-search\\word-search\\.docs\\instructions.md",
+      "sha256": "ec749d7e2303930a7c00de1885b426947ce2ef1289c5e753646a749cf2f4a26b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_word-search\\word-search\\go.mod",
+      "sha256": "0936b7576a61b677fc33775fc72b9b66b68764539fa426ceb82f14ade163f095"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_word-search\\word-search\\TASK.md",
+      "sha256": "329df8ce150c62664a0f36fa0e801defb516a6f490f57af5a90d96b60f272ea0"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_word-search\\word-search\\word_search.go",
+      "sha256": "ec2d35598dfbccf72c1d4dbac40efbdbdd4ef467f103601e87fe41ada1ef5f7d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_wordy\\wordy\\.docs\\instructions.md",
+      "sha256": "b9e24dd95b27fa04f706e4dd9e5c7f430684b1af13a1cfde34faee705300aeee"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_wordy\\wordy\\go.mod",
+      "sha256": "b2824615a8369f9ff20e0767b95e72d7344f110bafb0f5e6db666d427c78d7fa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_wordy\\wordy\\TASK.md",
+      "sha256": "3f641e3334d89e571fda6fdf2808784593b62e78db1cba3f387f63bedad74f73"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\go_wordy\\wordy\\wordy.go",
+      "sha256": "85380381db04b3ff7673b613bd3c705431b0bc7fc6549125115c8094c7c0a3c7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\.docs\\instructions.append.md",
+      "sha256": "cbf650f5c73df14919f03ce2ca7e6543950cb95a771fa85f050f647765721903"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\.docs\\instructions.md",
+      "sha256": "8ca08c38274662d67f1bd6482242161a36a6268851ad1e61acf1bb327b20c729"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\build.gradle",
+      "sha256": "a4c46817089967addcdafc9b979d4b4ef96a1c7f39b594fbeeb28efa7bc0c9c5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\gradle\\wrapper\\gradle-wrapper.jar",
+      "sha256": "cb0da6751c2b753a16ac168bb354870ebb1e162e9083f116729cec9c781156b8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\gradle\\wrapper\\gradle-wrapper.properties",
+      "sha256": "025ad9787315e9eed5f009d42a574e415ffa845cd25f2a0bd42491352c14dcae"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\gradlew",
+      "sha256": "fc977a94723af68aaffa4e5d60496fb4aeed1884b6b19e5e2f2fd7612673313d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\gradlew.bat",
+      "sha256": "bdecf875b6868cbcbd36a1f85eedf0832f358ff28092c5797ed645f7edce77d9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\src\\main\\java\\AffineCipher.java",
+      "sha256": "875f2c85caff6052362e991889b6ad5bb48e31dd29407d151b832c437c589cf9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_affine-cipher\\affine-cipher\\TASK.md",
+      "sha256": "d0e9bc3e25fcc4b9d3082bdba21128e9b2c47b0bf4d7692a2b708319cce3b2d7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\.docs\\instructions.md",
+      "sha256": "082c4a397183b21c36963c34fec9818c8ad33339dab7ed2d4097e42fbed28b58"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\.docs\\introduction.md",
+      "sha256": "3d008d3f661f5cc18fb60cd2245968f3954d9450b63dfa00db8a3c4f2f546b27"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\build.gradle",
+      "sha256": "a4c46817089967addcdafc9b979d4b4ef96a1c7f39b594fbeeb28efa7bc0c9c5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\gradle\\wrapper\\gradle-wrapper.jar",
+      "sha256": "cb0da6751c2b753a16ac168bb354870ebb1e162e9083f116729cec9c781156b8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\gradle\\wrapper\\gradle-wrapper.properties",
+      "sha256": "025ad9787315e9eed5f009d42a574e415ffa845cd25f2a0bd42491352c14dcae"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\gradlew",
+      "sha256": "fc977a94723af68aaffa4e5d60496fb4aeed1884b6b19e5e2f2fd7612673313d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\gradlew.bat",
+      "sha256": "bdecf875b6868cbcbd36a1f85eedf0832f358ff28092c5797ed645f7edce77d9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\src\\main\\java\\BaseConverter.java",
+      "sha256": "fe366c96669a1ad0267b44d19982dc57d7abac0ba78bde26cc0ad11f3d8b0184"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_all-your-base\\all-your-base\\TASK.md",
+      "sha256": "118c5b9fd0f0e0bd5dd1bb446a7153823792f916cac9471dbedf8d8b83f82bfe"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\.docs\\instructions.md",
+      "sha256": "549115cb33a5a91e8e5c4aeea68cf6e672c84fd8d77669d2eeb2518a2d4d6aa5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\.docs\\introduction.md",
+      "sha256": "215d592a2a5bb66bf521678d712e71e395e9f3375219bf59d69dfe0ba524698a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\build.gradle",
+      "sha256": "a4c46817089967addcdafc9b979d4b4ef96a1c7f39b594fbeeb28efa7bc0c9c5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\gradle\\wrapper\\gradle-wrapper.jar",
+      "sha256": "cb0da6751c2b753a16ac168bb354870ebb1e162e9083f116729cec9c781156b8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\gradle\\wrapper\\gradle-wrapper.properties",
+      "sha256": "025ad9787315e9eed5f009d42a574e415ffa845cd25f2a0bd42491352c14dcae"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\gradlew",
+      "sha256": "fc977a94723af68aaffa4e5d60496fb4aeed1884b6b19e5e2f2fd7612673313d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\gradlew.bat",
+      "sha256": "bdecf875b6868cbcbd36a1f85eedf0832f358ff28092c5797ed645f7edce77d9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\src\\main\\java\\PigLatinTranslator.java",
+      "sha256": "9f93d410cfac0a30a6bf13d80e552d5f48f505f2e2e55c4a7d8d35c342894a75"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_pig-latin\\pig-latin\\TASK.md",
+      "sha256": "8bd454a847667a2f694925c0775ebdee873e929649c22a16070991ce48a3e5a2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\.docs\\instructions.md",
+      "sha256": "67550e94d4532b778c52c89892b12e86e96a65cfab97e39a8b1aa0b749cbcf42"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\build.gradle",
+      "sha256": "a4c46817089967addcdafc9b979d4b4ef96a1c7f39b594fbeeb28efa7bc0c9c5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\gradle\\wrapper\\gradle-wrapper.jar",
+      "sha256": "cb0da6751c2b753a16ac168bb354870ebb1e162e9083f116729cec9c781156b8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\gradle\\wrapper\\gradle-wrapper.properties",
+      "sha256": "025ad9787315e9eed5f009d42a574e415ffa845cd25f2a0bd42491352c14dcae"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\gradlew",
+      "sha256": "fc977a94723af68aaffa4e5d60496fb4aeed1884b6b19e5e2f2fd7612673313d"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\gradlew.bat",
+      "sha256": "bdecf875b6868cbcbd36a1f85eedf0832f358ff28092c5797ed645f7edce77d9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\src\\main\\java\\Node.java",
+      "sha256": "4426eb7f51df307ec50ab789eb73093297697c44516b37357b234d15b55f0e65"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\src\\main\\java\\Satellite.java",
+      "sha256": "7eef3131644d20928713963425e06a4e8e38794a43eec7f8c03bf1f9be52f88b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\src\\main\\java\\Tree.java",
+      "sha256": "ff6f866afc8169992696087cee86693b6183444eaf8a0b39c3e7b407e7ab0a92"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\java_satellite\\satellite\\TASK.md",
+      "sha256": "3d246e0d6114844f4c2fbfd44dd56963ca77fe760a20a725b219aff97ecf21a9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\.docs\\instructions.md",
+      "sha256": "8f798632934cfd35d9e2f36b9e66cae5ffa23279a09ddc61974f64e88180c4de"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\.eslintrc",
+      "sha256": "77e1a47bf248ee8ac2f88bb7a68458b36f1c11beff01b081c481c053b163ff75"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\.npmrc",
+      "sha256": "6542f3e59455afe3a988ac72da0d2f92ce61666ad2c258e2c7847b5a75b6743a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\alphametics.js",
+      "sha256": "a92685d4f0ff6101044eec39a638822ed811823c3d3e6d1f812bc102c6c1e18e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\babel.config.js",
+      "sha256": "76d07c91b23ee54d8064fae124c8937f9d02a6f758a63446e137f62923e0e8fa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\LICENSE",
+      "sha256": "e52f804e74f0fbd34e8927962319df346166b8194094309a0aee318693df44df"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\package.json",
+      "sha256": "ccef9743ff6c63164e86b4c4621cccfddb9ce4e1106e371c12c87ef4810b7944"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\PUBLIC-API.md",
+      "sha256": "12a2d2b8da5fbacb7c8c55ac3288e6f5243dbab54d94c9382715daa74379dfed"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_alphametics\\alphametics\\TASK.md",
+      "sha256": "5a00a5d8ad454add08074f1402d3202c38772f6ebc5fefcdea9f975bbdb18f29"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\.docs\\instructions.md",
+      "sha256": "8dc7133cd5f0564717108757c27ad96ebadf44f03b5fde5c35b826aaeb0b4e0f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\.eslintrc",
+      "sha256": "77e1a47bf248ee8ac2f88bb7a68458b36f1c11beff01b081c481c053b163ff75"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\.npmrc",
+      "sha256": "6542f3e59455afe3a988ac72da0d2f92ce61666ad2c258e2c7847b5a75b6743a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\babel.config.js",
+      "sha256": "76d07c91b23ee54d8064fae124c8937f9d02a6f758a63446e137f62923e0e8fa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\grade-school.js",
+      "sha256": "1eb3ebac5d31f2ab784068fc7d3ec8b93ccacfcc5507cb6882efac7a8999dce2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\LICENSE",
+      "sha256": "e52f804e74f0fbd34e8927962319df346166b8194094309a0aee318693df44df"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\package.json",
+      "sha256": "641447fb0a8d3a907c0ad9f8a004d94391e0995fb603a37ee602cb7b1b0a62de"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\PUBLIC-API.md",
+      "sha256": "b9ad11fdf97d477e0f87962f1bb351d92535dd74cc47e0bfb02f0329089146fe"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_grade-school\\grade-school\\TASK.md",
+      "sha256": "3260e6f45e3a834f58d09086f67109eeb0fe8da63bdce265f2ed9646fb7b10b9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\.docs\\instructions.md",
+      "sha256": "70540211217baa8d993ed7545ae35b2e0a917461cce9704f6207a5df92cea22a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\.eslintrc",
+      "sha256": "77e1a47bf248ee8ac2f88bb7a68458b36f1c11beff01b081c481c053b163ff75"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\.npmrc",
+      "sha256": "6542f3e59455afe3a988ac72da0d2f92ce61666ad2c258e2c7847b5a75b6743a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\babel.config.js",
+      "sha256": "76d07c91b23ee54d8064fae124c8937f9d02a6f758a63446e137f62923e0e8fa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\house.js",
+      "sha256": "a4e2c066a4a5be6e9a1537a1eda9ad4183e0394bbcff742cd037371d6860f580"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\LICENSE",
+      "sha256": "e52f804e74f0fbd34e8927962319df346166b8194094309a0aee318693df44df"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\package.json",
+      "sha256": "77110379c5ee790219345d4230d8de67dfed9acfff55eb13942c3be482d5cfe0"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\PUBLIC-API.md",
+      "sha256": "31b89e4ba63c3f2825b278e76a2e2fcb24e4763d243225ff89e65ba659fb953c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_house\\house\\TASK.md",
+      "sha256": "8b68324f6d6f510ea0e0f2bf8e2e6999567bd9bfa4179dc2e0935a8888a52877"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\.docs\\instructions.append.md",
+      "sha256": "9c02267fc3e4f3e6b5c54860967aed87eb929f860a1299ec70f1b6546ccadaef"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\.docs\\instructions.md",
+      "sha256": "69471472c9db28eda2f841096ae4afd07605949293489b8445142f4cb0cd9ff8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\.eslintrc",
+      "sha256": "77e1a47bf248ee8ac2f88bb7a68458b36f1c11beff01b081c481c053b163ff75"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\.npmrc",
+      "sha256": "6542f3e59455afe3a988ac72da0d2f92ce61666ad2c258e2c7847b5a75b6743a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\babel.config.js",
+      "sha256": "76d07c91b23ee54d8064fae124c8937f9d02a6f758a63446e137f62923e0e8fa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\LICENSE",
+      "sha256": "e52f804e74f0fbd34e8927962319df346166b8194094309a0aee318693df44df"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\package.json",
+      "sha256": "b67e23a119005e9360cb2a36707e521cacb9bb833a6d16f9103fd3715f07a600"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\PUBLIC-API.md",
+      "sha256": "645937c67dae359ae745bd707f48b8e738ae080aba234a9897a6cbb0e9ae44c9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\TASK.md",
+      "sha256": "93dede0e5dd212c4a69bae297c9b2c3350b1d3534f9d8f6e9e67efd14f4d11c8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\javascript_two-bucket\\two-bucket\\two-bucket.js",
+      "sha256": "047a8ead7a78bc4d2fc21e5995701847d77ac032146cfacdff6460714521ae67"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_affine-cipher\\affine-cipher\\.docs\\instructions.append.md",
+      "sha256": "e5dc5300128239b38b82ecfa24ed5e64df264b4a99e3ae8e23f10ab6a5253f1b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_affine-cipher\\affine-cipher\\.docs\\instructions.md",
+      "sha256": "8ca08c38274662d67f1bd6482242161a36a6268851ad1e61acf1bb327b20c729"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_affine-cipher\\affine-cipher\\affine_cipher.py",
+      "sha256": "d3164dc77d13a429fb14899cd5e74a81d848ed0c7b95b02db3247a75e0bbd72b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_affine-cipher\\affine-cipher\\TASK.md",
+      "sha256": "3074c30c634b5fc144f7d85ced230ac853355c931d25dea6a605fe6d841e65f2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_connect\\connect\\.docs\\instructions.md",
+      "sha256": "3c717817dc88865be3fd9ad5b084d0244602e8bd416a59eca9c3cbea546b70aa"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_connect\\connect\\connect.py",
+      "sha256": "2e5d51380a8160d906d2eacc8655eceea5ce87abb7f0783a010a1521cf608216"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_connect\\connect\\TASK.md",
+      "sha256": "0a0ae79a78f546ff9584c060b361811d13f08da1a6b9e0d180faf19fa70f4974"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_go-counting\\go-counting\\.docs\\instructions.append.md",
+      "sha256": "c59b9fc9456cc13a6115badad795891a711d44c825d5ac9ce42f1b58a9913f36"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_go-counting\\go-counting\\.docs\\instructions.md",
+      "sha256": "f774382c9c34518f382d9ccbdcc3be778037fa44b5eaac4b0caf0d990fcc109b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_go-counting\\go-counting\\go_counting.py",
+      "sha256": "93533b48aa59c4b85a8ddd8a6f212f28491dfe6c016a660d0ef7c97192ee18d3"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_go-counting\\go-counting\\TASK.md",
+      "sha256": "e4543bed903f251a8983d1297d3f30cc41f9d0e09432d83b305ac828632e7d78"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_proverb\\proverb\\.docs\\instructions.append.md",
+      "sha256": "00a1545be09e9047cdfa45487e0075db4effa19f6143d7939336f2e3c7fa4172"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_proverb\\proverb\\.docs\\instructions.md",
+      "sha256": "db74a89ac1c983d3cd5c8ade251df98fa4748baa60a6967e323ed42b5ff547f7"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_proverb\\proverb\\proverb.py",
+      "sha256": "6ffde7190552cc3a19fdabc7d0624359302e3663a06671b28e1c65b13af61a42"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_proverb\\proverb\\TASK.md",
+      "sha256": "fc023e45d33b9aabe737d57cba4e260ed00e1df0f15641de6b274fa15ce5183b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_transpose\\transpose\\.docs\\instructions.md",
+      "sha256": "4107fc3ed25cb2106df05774f9e6328663bf96777712df14ab5c3090438c6c66"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_transpose\\transpose\\TASK.md",
+      "sha256": "2461adce68b331791435723661d13dc34d7fb16ad34ab1435a0957f13fff8272"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\python_transpose\\transpose\\transpose.py",
+      "sha256": "009152d0e004d0e7ec4de2c7aec36bdfbb0c3dd7061553e9494cabeaae7c4797"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_accumulate\\accumulate\\.docs\\instructions.append.md",
+      "sha256": "dbe698a634d78cdb7b38b656613ff45654b730687535d406e45cd4dd9e99f84f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_accumulate\\accumulate\\.docs\\instructions.md",
+      "sha256": "77f023722b03a24354a89882faf24baa34bcc44b0117737001ec63c0b71bbc60"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_accumulate\\accumulate\\Cargo.toml",
+      "sha256": "3117675b78efa86c56ad52eca2fbdbc5f55c01b4670ba9411b0942a78718a20e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_accumulate\\accumulate\\src\\lib.rs",
+      "sha256": "b9de7bcff417e9fb788f15d5dc63b983460863eb67d02254bba56657f3bb79db"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_accumulate\\accumulate\\TASK.md",
+      "sha256": "b912357e749b3b851a098d924e47d15b08d3247980c7f1a9b450efffa50b28fc"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_book-store\\book-store\\.docs\\instructions.md",
+      "sha256": "025999b58db674568be4d2239fc577b749ec40e98593fc3638e21e72915ad4c5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_book-store\\book-store\\Cargo.toml",
+      "sha256": "13736df23fe8988b854e8bb0cd90ea4408550a3e5bb8cfe54b2831f1afe22408"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_book-store\\book-store\\src\\lib.rs",
+      "sha256": "9875ce1e36e56efda907ad21921fa761d649bf55a7daba23b14d7ab13e51eed6"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_book-store\\book-store\\TASK.md",
+      "sha256": "85cfabe33e4b5f8c355febd7ed9986e5a6af33b8f5670bee7a98646c693cc460"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_decimal\\decimal\\.docs\\instructions.md",
+      "sha256": "1cd7a2b9d7728ff2a00cb537bf640485273f69362a6f98e541e6be68464da391"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_decimal\\decimal\\Cargo.lock",
+      "sha256": "2690260fd4cbe9928421d7c65f0efa9b4c945da0522ba154903f148c6e5efcc1"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_decimal\\decimal\\Cargo.toml",
+      "sha256": "dde57c3e4f81c04a4e548f0b1c003229f96ae49ea126ec6e28960f4216ccf83a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_decimal\\decimal\\src\\lib.rs",
+      "sha256": "054ab15ddb5fcc784ffd24be3dce7eafa2abab8e5c5d90e6df704e25e5f97395"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_decimal\\decimal\\TASK.md",
+      "sha256": "f3d59cc6a93eaded02c9b90017646351086be368cf775ff1976b50c9482712bf"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_parallel-letter-frequency\\parallel-letter-frequency\\.docs\\instructions.append.md",
+      "sha256": "7678d3ab941758afc749cb11fedc0056de63ba513b2cc06a9b84ff509506a620"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_parallel-letter-frequency\\parallel-letter-frequency\\.docs\\instructions.md",
+      "sha256": "2a1c8f08bb586707242baca8ff7f4973233f2a83f2673a3bcda583990c499d86"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_parallel-letter-frequency\\parallel-letter-frequency\\Cargo.toml",
+      "sha256": "eed2d49921f608066e99c6cd40ab229516e941233d0bb655e6da43de91221ebb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_parallel-letter-frequency\\parallel-letter-frequency\\src\\lib.rs",
+      "sha256": "69980435dd2c5ef73f1406646eb49eb84beac357b0a52c3991dd4a418761a00b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_parallel-letter-frequency\\parallel-letter-frequency\\TASK.md",
+      "sha256": "aa2dbfd020e4173f2ab75d4e0f930a60473b118fa09a5758c6c7d654a2e2cb70"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_pig-latin\\pig-latin\\.docs\\instructions.md",
+      "sha256": "9251a0956bafeb2ddd68e2755429be65224907f71163756535b3ccb983e571ee"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_pig-latin\\pig-latin\\.docs\\introduction.md",
+      "sha256": "215d592a2a5bb66bf521678d712e71e395e9f3375219bf59d69dfe0ba524698a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_pig-latin\\pig-latin\\Cargo.lock",
+      "sha256": "99fbcbb9ebbe60cea0c16db46ca6d32c033194a019a5f6daa4b12182c2782592"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_pig-latin\\pig-latin\\Cargo.toml",
+      "sha256": "6bb4e9e5dbe391f3695ffaebeaf0cc0e5c02e194e4bbcaf35be5f7c4161f9f7f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_pig-latin\\pig-latin\\src\\lib.rs",
+      "sha256": "7cbbd5e8c2aea23201d027e2ae258164717dc79e2d0276387686a66270870b5c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\fixtures\\rust_pig-latin\\pig-latin\\TASK.md",
+      "sha256": "1368470ed8cdecbc0ff0ee2d03f12ca72cd60da14196ead7c532b890a03b8c61"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\public-tasks.json",
+      "sha256": "55764a85c9e8cd1fed8c09beb35b4b50c26ed41b71b8c10e10a81c57c1142c45"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\reference-validation.json",
+      "sha256": "a03fcc1ab8d2c9fb58d34378319e652825ae2d23984a9e995196e01d66c1697a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\inspection.json",
+      "sha256": "24b0c4dadf3571c9c42885c9e4941f179fb0e115879dcf09f9194843c50e6373"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\model-canaries.json",
+      "sha256": "65e4eb5bd4ba28ef3c5e2346406fe7cbbb3ac154dcea0d4d176b2d815611ec00"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_all-your-base\\baseline-ff210715dff4153014d2\\host-receipt.json",
+      "sha256": "9022cd1ea0d422eb380c5d2bbd9d674adf8133315d78624c3ea6e4387de42e78"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_all-your-base\\gold-e787c50c994b947ed3d9\\host-receipt.json",
+      "sha256": "7656ba87bafd17f4cec4f5b181d71c31a5e7dc54f9b8a0276e1b0deb538623ac"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_complex-numbers\\baseline-e600eac2d8d2431df126\\host-receipt.json",
+      "sha256": "c09ad13774575ccee0f247adb2749a02db103d4f021b2e16482e03ed2881686c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_complex-numbers\\gold-10cbabb3b535310be548\\host-receipt.json",
+      "sha256": "9899a5630639fd439a8a961c0e38055f4c4fe188afdaf25c856df106ebb191cd"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_phone-number\\baseline-1fe205110273e75493ce\\host-receipt.json",
+      "sha256": "791cc78bdafd0a6b316a28f28b8f7e7e55ce987d95135d74f422a743531f361c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_phone-number\\gold-2e8531f3ba178f1390c8\\host-receipt.json",
+      "sha256": "b6a667ec0d0365dd10ca2fd1beca212cb99c4768b6e9958e8946898ab8132540"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_sublist\\baseline-2e200c05afc68d5e0c2f\\host-receipt.json",
+      "sha256": "4769e27d90969585335cd68ad558fe8915ca96635fed8b344a17e426dd4f2068"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\cpp_sublist\\gold-f6b97bfbd7cc32387221\\host-receipt.json",
+      "sha256": "d9caff4dc1aee8f6c48d1d69d24cb24877de29935f71c21bc0dabd923ccf835c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_alphametics\\baseline-525ac8c2ac674b8a5b1d\\host-receipt.json",
+      "sha256": "68b3498186c2ef547147a0db51914f67d23b05c3bb9ed48ef7cbe4091ec7ff45"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_alphametics\\gold-00188aeea41c86eab1fa\\host-receipt.json",
+      "sha256": "fe2d1681a1c18842e3becf16f81868371d5cbea1b6574f3b9cf6e561f1f06843"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_say\\baseline-4b91fcb03278b29b74e7\\host-receipt.json",
+      "sha256": "34ccc82cd8bd6bd4bc1b122bdb56ac6d0acc6470d2a1132ad2c020e7a2decc71"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_say\\gold-07ec0d05c5dcd103e49d\\host-receipt.json",
+      "sha256": "3f388d3feafe61ede69bd1b055e6e9a0bdd608a4e70a947336306e130fa7ca9b"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_two-bucket\\baseline-b00654bd37318d79764c\\host-receipt.json",
+      "sha256": "d6320b854a312bb10117e7b8d7d36b800d1db8a8ed1d7e6d27d9ddeb571ab91e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_two-bucket\\gold-0c660d0224cea24b6d01\\host-receipt.json",
+      "sha256": "2c588a02049dd288c21e6c5a509591af9b7d8456804c398d1f9f1fb337d94eab"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_word-search\\baseline-131c0d9ead51a646a7fc\\host-receipt.json",
+      "sha256": "5e98aaa6714e19c4c029bcbe543d19cb6a701941ab8be6ccaea2aceb0a46903a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_word-search\\gold-24ac9621529dd8d941c7\\host-receipt.json",
+      "sha256": "6af63df0ad73d226521852d8c32d5a468d49ec350113b15137588f8d5b651f05"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_wordy\\baseline-05ada1a45c1b36bef742\\host-receipt.json",
+      "sha256": "c88cef4b7b5c2730aa8ddcf2b841734fbd77d5663d9f9b3321f219231f13d2df"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\go_wordy\\gold-65ecedf8a17b5613ab17\\host-receipt.json",
+      "sha256": "6b8a9ca45ba3c0eb154d5061ca946f32e8403d90f59bd55b93abeac0cc53a735"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_affine-cipher\\baseline-89eee1533baa87eb7592\\host-receipt.json",
+      "sha256": "c6a5d8bb2bfdf2f188030ee994b3480266646d827cec95ae14cb321d7ef8cea6"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_affine-cipher\\gold-44e44d97241a8ead671a\\host-receipt.json",
+      "sha256": "934d2596b4d9176422f56aa482d215b5f673d877b151fe7ed61727254b2a6e01"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_all-your-base\\baseline-42fa96a611cc2cf238e1\\host-receipt.json",
+      "sha256": "3213d33ce7d42eb220ca01538695bb82e36c12b01eaebdec5b2cd41ec33f549e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_all-your-base\\gold-d7704e47a756dae922ec\\host-receipt.json",
+      "sha256": "df6811a2fade7ddd5db76def9d08ffce7a8745adf0542059a64543df8ef7721a"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_pig-latin\\baseline-86e73c8c2d11dbc0bf0b\\host-receipt.json",
+      "sha256": "17e1d40190892bb225b8d83114ff92babdd4f67d1cf4ff598b01fc0336d3b3b4"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_pig-latin\\gold-f378f594c839a4daa822\\host-receipt.json",
+      "sha256": "229ebfcaf114bb133e4cbd9b9e68427551e83c5de274f8b8543ffbe32c66f97e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_satellite\\baseline-3b2eadf7e8656263ad75\\host-receipt.json",
+      "sha256": "0f49313ecc381dde416eeea56ae161b120f83288367720ca01bdb76da7c40883"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\java_satellite\\gold-46c226a5984e68ab1ce6\\host-receipt.json",
+      "sha256": "5f785665b13601183b645d83782743739c3bb317e5191afc28c0c823eed65304"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_alphametics\\baseline-0e05d65cb3e2fa958256\\host-receipt.json",
+      "sha256": "24472173c576d38a812aaa2343a9facd7aba40652ffa1dbcb58f45914a1a5fe8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_alphametics\\gold-dacae31e0e524d26dd67\\host-receipt.json",
+      "sha256": "f1726d1180585616bc14765fcaecaff50021aa12d4a4d4d3e718bb55d2ee1bba"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_grade-school\\baseline-3f7fb8042e6701c885f7\\host-receipt.json",
+      "sha256": "1af380f253e26151d050adeb3d4a81b4838549320b0d930c7c2ab62a276e6250"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_grade-school\\gold-c45281d2f34db0061d1a\\host-receipt.json",
+      "sha256": "41e9f61483729db60bdab079ff795b1b029e2be8a060306ba65c9eac2e227cb2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_house\\baseline-becb99fbca0e19ebb4b4\\host-receipt.json",
+      "sha256": "74369693bc234973b4a5ce23cebe67b34446e65055ce348354d856edfcc6a33e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_house\\gold-63d93720659a54911de0\\host-receipt.json",
+      "sha256": "000ef90e78df07c1b1bee6ff22ee4f3308cee8a440e8e4137ba5d28f7a0794a9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_two-bucket\\baseline-6d33f1012af96677c234\\host-receipt.json",
+      "sha256": "0b56ade2b35aecf52ecbfc7c29d31f324028a5ae09e0f457d49638e346f9dce3"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\javascript_two-bucket\\gold-c03e3f84184d4eae6884\\host-receipt.json",
+      "sha256": "30db625e1d686b0d1392b072dc82a977ce4b074280aa6ef94e14e6805b1a6e36"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_affine-cipher\\baseline-659dfd7b665930bc3617\\host-receipt.json",
+      "sha256": "e1ec9fd58ceb12a10fbc71520d876894b8e9e0f5fecad3fa105dd34f7ec30f0f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_affine-cipher\\gold-695058f02faa4169672b\\host-receipt.json",
+      "sha256": "145ee3ef8428af4ad4cbfcab18c8e6fab08761262002b2771db94530b06ddcf5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_connect\\baseline-e636e79f320a0ba501df\\host-receipt.json",
+      "sha256": "1333a0a37ed735c9ce72eaa7ffd68e9487454e30baa24e44e7a24a32f96ef9d5"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_connect\\gold-03263b8c255b32d26656\\host-receipt.json",
+      "sha256": "b1f875fed9ecaeedc8af5136ca73955c27940790f3d79343390e66065683c47c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_go-counting\\baseline-a549ef389ef8db905652\\host-receipt.json",
+      "sha256": "8389bc6f4023722a52bcf23531f3aadbb77131f1b1f5317de2fbc190a8af8045"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_go-counting\\gold-64b6c2c6e336a3d29107\\host-receipt.json",
+      "sha256": "00f73c38563001ba45f13b5de809d9c476c931afffcfa8eba53d1867a3ed379c"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_proverb\\baseline-fd6ea198b468f5151a85\\host-receipt.json",
+      "sha256": "df282e409655747dffa67de7239caccad4b46aa92b7b426e3bf14d1da40b1750"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_proverb\\gold-020f1fe93949cec2191e\\host-receipt.json",
+      "sha256": "30b85f7ef73542f9dbea5358981033b169d7d338db617b0e285b710db57c26b9"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_transpose\\baseline-b7f8e05f0d2d2f392aaa\\host-receipt.json",
+      "sha256": "4c1b86a5b388d7e4271e8072271d488fa2d309287db5dd47d690c24a0200d1a2"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\python_transpose\\gold-d59cd36aaa39fe73c966\\host-receipt.json",
+      "sha256": "a34d14bfe1a7a29f47869cae5fb2b46b0245d4daf7f170c757db79267c5e3eb3"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_accumulate\\baseline-89d491c75980e997217f\\host-receipt.json",
+      "sha256": "158b46051df74fc5b3020b286da111a1ea12c1a80f68a38ee89cc904c714c57f"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_accumulate\\gold-7bf57294d1b115d03415\\host-receipt.json",
+      "sha256": "66a64b8263692f1f69a6522088e4b267a14b31a906dc3c8f0420c6f1f2a064dd"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_book-store\\baseline-9705e6d9169883efc164\\host-receipt.json",
+      "sha256": "506c7c814e5c72c1e4a35f31d306e9be2de5334cbdf21329924a0fba733c0edf"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_book-store\\gold-389aaa9ab3b10c71c920\\host-receipt.json",
+      "sha256": "73fb51be11d80d1fd5d0152ead41e6b97f501bc216b7f03b678ebdd4771421a8"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_decimal\\baseline-3461b8795054d128fc48\\host-receipt.json",
+      "sha256": "6049ff3603e260784d99e5a9ed122b5a6872e0df1e1fea4b66a4bede42641fcb"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_decimal\\gold-91d0d61796f05ef51ff5\\host-receipt.json",
+      "sha256": "e04e969eef226d5c885f081a91a0aa12d43c16b50bc83a0177b4bc3ff7620d4e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_parallel-letter-frequency\\baseline-cae3b3d79d3cf0044084\\host-receipt.json",
+      "sha256": "8bd823daab1f1cc827c029ed3a70e6560fc2a25043e84ffde51a67039973d62e"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_parallel-letter-frequency\\gold-3fdb4683600bed7e010a\\host-receipt.json",
+      "sha256": "50afa77dd419b91eda458a91f8a3161d5f6595a263980b51caa8380b0336d0e0"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_pig-latin\\baseline-efc602963a6e5715dc52\\host-receipt.json",
+      "sha256": "821c63f2bdce845f24e0b63a4709866d040556bd744d4ec39c8ee7d6a21bf8a4"
+    },
+    {
+      "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\evaluation\\validation\\rust_pig-latin\\gold-23b4afa71ff3615331ce\\host-receipt.json",
+      "sha256": "c72893c40dfd2446ef4fd206b4fe19850cf9ee02fb5139087cb71152c0e5d059"
+    }
+  ],
+  "pricing": {
+    "gpt-6-luna": {
+      "input": 0.1,
+      "output": 0.5,
+      "cacheRead": 0.01,
+      "cacheWrite": 0.125,
+      "tiers": [
+        {
+          "inputTokensAbove": 272000,
+          "input": 0.2,
+          "output": 0.75,
+          "cacheRead": 0.02,
+          "cacheWrite": 0.25
+        }
+      ]
+    },
+    "gpt-6.1-sol": {
+      "input": 2,
+      "output": 10,
+      "cacheRead": 0.1,
+      "cacheWrite": 2.5,
+      "tiers": [
+        {
+          "inputTokensAbove": 272000,
+          "input": 4,
+          "output": 15,
+          "cacheRead": 0.2,
+          "cacheWrite": 5
+        }
+      ]
+    }
+  },
+  "publicInputsSha256": "55764a85c9e8cd1fed8c09beb35b4b50c26ed41b71b8c10e10a81c57c1142c45",
+  "fingerprint": "56c20e261444daf18367790c37a2814a28425d69f19a05bbc800277f7c6eb8dd"
+}
