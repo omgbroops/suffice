@@ -1,0 +1,224 @@
+{
+  "schema": 1,
+  "frozenAt": "2026-10-23T20:37:44.215Z",
+  "evaluator": "blind-semver-grader",
+  "invocation": "node grade-semver.mjs <build-metadata|prerelease-subset> <workspace>",
+  "moduleLoading": "createRequire(import.meta.url) requiring absolute workspace/src/index.js",
+  "dependencies": "Node built-ins only; standalone grader does not import references or actor-generated oracles",
+  "exitCodes": {
+    "0": "all named tests passed",
+    "1": "one or more named tests failed",
+    "2": "usage or module-loading failure"
+  },
+  "blindness": {
+    "actorSourcesInspected": false,
+    "actorOutputsInspected": false,
+    "actorStatusesOrReceiptsInspected": false,
+    "actorWorkspacesExecuted": false,
+    "modelCalls": false,
+    "inputs": [
+      "original upstream snapshot",
+      "original public test/public.test.mjs in each fixture",
+      "the two exact raw GitHub reference files supplied by the parent"
+    ]
+  },
+  "baseline": {
+    "commit": "efa4be6096c1f9b77d9d27d6132f6220c43b4e31",
+    "version": "7.8.0",
+    "originalTreeSha256": "e998dffa6c861c6ec2a5ba2f107b38611ebd82bda1cafc6dbd50168271887efe"
+  },
+  "referenceReceipts": [
+    {
+      "task": "prerelease-subset",
+      "commit": "5f3ca133e040210b6ea80c350a1d61d9da02e722",
+      "file": "ranges/subset.js",
+      "url": "https://raw.githubusercontent.com/npm/node-semver/5f3ca133e040210b6ea80c350a1d61d9da02e722/ranges/subset.js",
+      "fetchedAt": "2026-10-23T20:31:01.812Z",
+      "status": 200,
+      "sha256": "ceb9eb6ed5bfc6c7ac7af7f47e5c3535444a4e66a0e2b58cdad4bd02a35d454d",
+      "bytes": 7478,
+      "etag": "W/\"4e8e03d45266f89618026defe3d70d26497e64be2c4f6bed53f6530164afeba9\"",
+      "baselineSha256": "87387952fbe154f5874d5f09dd2173e782e894a76fa8370ce23f4120e2ae7eae"
+    },
+    {
+      "task": "build-metadata",
+      "commit": "17aa702d91166472b197a2ea768f085083bee2e4",
+      "file": "classes/range.js",
+      "url": "https://raw.githubusercontent.com/npm/node-semver/17aa702d91166472b197a2ea768f085083bee2e4/classes/range.js",
+      "fetchedAt": "2026-10-23T20:31:01.848Z",
+      "status": 200,
+      "sha256": "ade30be1c8b58bde2b643e25f73dda21fd64d291e31ef9ddfbef07da6321ab30",
+      "bytes": 15207,
+      "etag": "W/\"2df07d88a49cb2f819d259e5249d73ee048ac56f8adf2d4d363b148b013f0d91\"",
+      "baselineSha256": "cf8f8eb6934663ae2a9d04838d4d71555427a2abd3c8748ee5219507969a6b46"
+    }
+  ],
+  "referenceSources": {
+    "baseline": {
+      "path": "references/baseline/src",
+      "treeSha256": "e998dffa6c861c6ec2a5ba2f107b38611ebd82bda1cafc6dbd50168271887efe",
+      "fileCount": 154,
+      "changedFilesFromBaseline": []
+    },
+    "build-metadata": {
+      "path": "references/build-metadata/src",
+      "treeSha256": "dcfa5c2b1598318a2f310ecd145aa2b7df8b06fd294f69afcd9d2b5233c6168d",
+      "fileCount": 154,
+      "changedFilesFromBaseline": [
+        "classes/range.js"
+      ]
+    },
+    "prerelease-subset": {
+      "path": "references/prerelease-subset/src",
+      "treeSha256": "a4f11213b3e1b3f41721960a394ebd8824b5372a3f45d5e6578d8c8d6e163dd4",
+      "fileCount": 154,
+      "changedFilesFromBaseline": [
+        "ranges/subset.js"
+      ]
+    }
+  },
+  "expectedVectorPolicy": "Explicit booleans, canonical ranges, membership lists, arrays and null/throw expectations in the grader. Every final vector passes the exact pinned reference applied alone to the original baseline. No broad current-version oracle is used.",
+  "assertionRationale": {
+    "prerelease-subset": [
+      "The public caret reproduction plus a different tuple and a zero-major caret establish general containment rather than example matching.",
+      "Inclusive lower bounds are tested against upper comparators, and inclusive upper bounds against lower comparators; both prerelease bounds also occur together at different tuples.",
+      "Matching prerelease tuple permission may be supplied by either domain bound. A missing tuple gate remains excluded unless includePrerelease is true.",
+      "Reversed bounds, numeric prerelease ordering, inclusive/exclusive endpoints, -0 upper-bound exception, dominant comparators, tilde/hyphen syntax and OR alternatives exercise the nearby contract.",
+      "Ordinary ranges, exact stable versions, contradictory/equal empty intervals, empty-string any, loose parsing, invalid strict input and Range-instance input protect existing options and behavior.",
+      "The equality branch has no newly invented prerelease behavior; direct satisfaction checks preserve normal prerelease exclusion."
+    ],
+    "build-metadata": [
+      "Every syntax named in the public contract has frozen canonical range and positive/negative membership vectors: whitespace comparators, partial/x versions, hyphens, tilde/caret and OR.",
+      "Each syntax runs with strict short valid metadata and with the loose public long numeric-tail metadata. The original tuple and all inclusive/exclusive boundaries must survive.",
+      "Lengths around the internal safe build boundary plus longer numeric and multi-identifier metadata detect bounded stripping or numeric-tail leakage.",
+      "Prerelease-bearing exact/caret/hyphen/OR ranges retain their prerelease fields and default tuple exclusion. includePrerelease and cache option separation are checked explicitly.",
+      "The strict long-range expectation was observed on the pinned reference, while the same long string remains rejected by SemVer/valid/parse through their independent 256-character version cap.",
+      "Invalid strict grammar, loose zero-padding and prerelease spelling, short SemVer build fields, global comparator stripping and downstream range consumers protect existing behavior."
+    ]
+  },
+  "exclusions": [
+    "A proposed standalone <0.0.0-0 subset-of-prerelease-domain assertion failed the pinned reference because of an existing one-sided-bound limitation. It was removed rather than imposing unrelated future behavior; contradictory-bound empty ranges and ignored empty OR branches remain covered.",
+    "No attempt to repair unrelated equality/OR-union subset limitations, accept overlong version strings, or use later node-semver releases as an oracle."
+  ],
+  "developmentAudit": "pre-freeze-check-01 preserves the initial rejected vector and its validation logs; only final validation.json defines the frozen test suite.",
+  "validation": {
+    "success": true,
+    "node": "v24.18.0",
+    "runs": [
+      {
+        "task": "build-metadata",
+        "implementation": "baseline",
+        "exit": 1,
+        "expectedExit": 1,
+        "total": 67,
+        "passed": 31,
+        "failed": 36,
+        "startedAt": "2026-10-23T20:36:39.721Z",
+        "completedAt": "2026-10-23T20:36:39.944Z",
+        "stdoutLog": "validation-logs/build-metadata-baseline.stdout.log",
+        "stderrLog": "validation-logs/build-metadata-baseline.stderr.log"
+      },
+      {
+        "task": "build-metadata",
+        "implementation": "build-metadata",
+        "exit": 0,
+        "expectedExit": 0,
+        "total": 67,
+        "passed": 67,
+        "failed": 0,
+        "startedAt": "2026-10-23T20:36:39.946Z",
+        "completedAt": "2026-10-23T20:36:40.180Z",
+        "stdoutLog": "validation-logs/build-metadata-reference.stdout.log",
+        "stderrLog": "validation-logs/build-metadata-reference.stderr.log"
+      },
+      {
+        "task": "prerelease-subset",
+        "implementation": "baseline",
+        "exit": 1,
+        "expectedExit": 1,
+        "total": 73,
+        "passed": 52,
+        "failed": 21,
+        "startedAt": "2026-10-23T20:36:40.180Z",
+        "completedAt": "2026-10-23T20:36:40.364Z",
+        "stdoutLog": "validation-logs/prerelease-subset-baseline.stdout.log",
+        "stderrLog": "validation-logs/prerelease-subset-baseline.stderr.log"
+      },
+      {
+        "task": "prerelease-subset",
+        "implementation": "prerelease-subset",
+        "exit": 0,
+        "expectedExit": 0,
+        "total": 73,
+        "passed": 73,
+        "failed": 0,
+        "startedAt": "2026-10-23T20:36:40.364Z",
+        "completedAt": "2026-10-23T20:36:40.601Z",
+        "stdoutLog": "validation-logs/prerelease-subset-reference.stdout.log",
+        "stderrLog": "validation-logs/prerelease-subset-reference.stderr.log"
+      }
+    ]
+  },
+  "artifacts": {
+    "grade-semver.mjs": {
+      "sha256": "e730c13d23e70b3de22e9377f5f8ffa349ac058cb309f79a0f6ab13beb5f470f",
+      "bytes": 19780
+    },
+    "prepare-references.mjs": {
+      "sha256": "521fb12a12b4912a5259d5e1e345a8d5154a24becd96ea3da47cdb67740985b0",
+      "bytes": 2176
+    },
+    "validate-references.mjs": {
+      "sha256": "6fec715a1b6310aae104aacf39903e515ee560d39a8e70021c3ae1a7efba669f",
+      "bytes": 2147
+    },
+    "freeze.mjs": {
+      "sha256": "a95010a8b41ba07943e6723f758fb68b9cf9a3f1331f356c2a5646416d8d5976",
+      "bytes": 8394
+    },
+    "reference-receipts.json": {
+      "sha256": "7c01b91f25fd594cd6dd66b241c5473d5cabcb943d1c8c4d1dc3f8d48cec9c84",
+      "bytes": 1401
+    },
+    "reference-tree-hashes.json": {
+      "sha256": "0395b564ddeefb4033d34374671bd5bdd24dcb10f7be254d908bc7347bc7abd2",
+      "bytes": 93330
+    },
+    "validation.json": {
+      "sha256": "192a870a3358df22cb0ec673787c383d6befa4a023564a6d91d074782d01d949",
+      "bytes": 4568
+    },
+    "validation-logs/build-metadata-baseline.stdout.log": {
+      "sha256": "c6c208161508b311598714461a8522ed2200744f295e5a3bcac17782616c0772",
+      "bytes": 27887
+    },
+    "validation-logs/build-metadata-baseline.stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "validation-logs/build-metadata-reference.stdout.log": {
+      "sha256": "2a571fd7882056c311d56b554073b777e740185f9154e76da58c7f40100735cc",
+      "bytes": 5342
+    },
+    "validation-logs/build-metadata-reference.stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "validation-logs/prerelease-subset-baseline.stdout.log": {
+      "sha256": "a40ff0e4e00e9f0d8bb0f275a3b4cb2200cc35edb43b614b59fd54c2c58f1e7b",
+      "bytes": 16698
+    },
+    "validation-logs/prerelease-subset-baseline.stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "validation-logs/prerelease-subset-reference.stdout.log": {
+      "sha256": "26491cad18f2f657a00f2a5bb5d38c55c40ec5b62b5222dbc94aa7dc81d50d3f",
+      "bytes": 4181
+    },
+    "validation-logs/prerelease-subset-reference.stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  }
+}

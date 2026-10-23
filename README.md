@@ -1,6 +1,6 @@
 # Suffice
 
-[V10](docs/V10.md) restores Pi, AST navigation and codemode, with v9's bounded testing/arbitration controller layered on top. Compact output remains optional. [Pilot status](reports/V10-PI-PILOT.md): 31 new tests pass; the 16-attempt comparison is prepared and awaiting separate Pi subscription sign-in.
+[V10](docs/V10.md) restores Pi, AST navigation and codemode, with v9's bounded testing/arbitration controller layered on top. Compact output remains optional. [Pilot results](reports/V10-PI-PILOT.md): v10 passed 4/4 independent task graders for $0.03515; Luna alone and the minimal ladder also passed 4/4 for less. All v10 usage, including the separately requested uncapped Sol restart, totaled $0.42265. This small development cohort establishes no accuracy advantage; 31 new offline tests pass.
 
 Experimental [v9 for native Codex](docs/V9.md) combines a bounded Luna worker, independent public-spec tests, arbitration, checkpoint selection and selective Sol takeover. [Benchmark protocol](docs/V9-BENCHMARK.md) compares it with Luna, Sol and a minimal ladder, with grading deferred until execution closes. [Initial live attempt](reports/V9-CODEX-PILOT.md) was rejected by the CLI's model access; 28 offline tests pass. Older experiments below retain their original runtimes and results.
 

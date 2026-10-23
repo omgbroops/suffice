@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-10-23T20:34:12.917Z",
+  "nodeVersion": "v24.18.0",
+  "scope": "Original fixtures and independent references only; no actor workspace evaluated.",
+  "allExpectationsMet": true,
+  "runs": [
+    {
+      "kind": "retry",
+      "target": "original",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development\\grade-development.mjs",
+        "retry",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\retry"
+      ],
+      "cwd": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development",
+      "startedAt": "2026-10-23T20:34:12.486Z",
+      "completedAt": "2026-10-23T20:34:12.598Z",
+      "exitCode": 1,
+      "signal": null,
+      "expectedExit": "nonzero",
+      "expectationMet": true,
+      "stdout": "logs/retry-original.stdout.log",
+      "stderr": "logs/retry-original.stderr.log"
+    },
+    {
+      "kind": "retry",
+      "target": "reference",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development\\grade-development.mjs",
+        "retry",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development\\reference\\retry"
+      ],
+      "cwd": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development",
+      "startedAt": "2026-10-23T20:34:12.599Z",
+      "completedAt": "2026-10-23T20:34:12.705Z",
+      "exitCode": 0,
+      "signal": null,
+      "expectedExit": 0,
+      "expectationMet": true,
+      "stdout": "logs/retry-reference.stdout.log",
+      "stderr": "logs/retry-reference.stderr.log"
+    },
+    {
+      "kind": "json-lines",
+      "target": "original",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development\\grade-development.mjs",
+        "json-lines",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\json-lines"
+      ],
+      "cwd": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development",
+      "startedAt": "2026-10-23T20:34:12.706Z",
+      "completedAt": "2026-10-23T20:34:12.812Z",
+      "exitCode": 1,
+      "signal": null,
+      "expectedExit": "nonzero",
+      "expectationMet": true,
+      "stdout": "logs/json-lines-original.stdout.log",
+      "stderr": "logs/json-lines-original.stderr.log"
+    },
+    {
+      "kind": "json-lines",
+      "target": "reference",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development\\grade-development.mjs",
+        "json-lines",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development\\reference\\json-lines"
+      ],
+      "cwd": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\evaluation\\development",
+      "startedAt": "2026-10-23T20:34:12.812Z",
+      "completedAt": "2026-10-23T20:34:12.917Z",
+      "exitCode": 0,
+      "signal": null,
+      "expectedExit": 0,
+      "expectationMet": true,
+      "stdout": "logs/json-lines-reference.stdout.log",
+      "stderr": "logs/json-lines-reference.stderr.log"
+    }
+  ]
+}

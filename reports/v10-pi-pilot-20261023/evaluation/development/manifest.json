@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "frozenAt": "2026-10-23T20:35:57.952Z",
+  "hashAlgorithm": "SHA-256",
+  "status": "Frozen before actor evaluation. Do not mutate the grader, references, rationale, or validation artifacts after this point.",
+  "invocation": "node grade-development.mjs <retry|json-lines> <workspace>",
+  "exitSemantics": "Uses node:test named tests with 8000 ms per-test timeouts; any failed assertion produces nonzero exit. Invalid harness arguments exit 2.",
+  "dependencies": "Node.js built-ins only; validated with Node v24.18.0. No network requests or model calls.",
+  "scope": {
+    "inspectedOriginalSources": [
+      "../../retry/src/retry.mjs",
+      "../../json-lines/src/json-lines.mjs"
+    ],
+    "writes": "Only this evaluation/development directory.",
+    "actorFilesInspected": false,
+    "actorSolutionsEvaluated": false,
+    "actorFinalProseOrStatusInspected": false,
+    "actorReceiptsInspected": false,
+    "directoriesNamedAttemptsOrGradingInspected": false,
+    "runtimeOrRepoSourceEdited": false
+  },
+  "publicContracts": {
+    "retry": "Implement src/retry.mjs exporting async retry(operation, options = {}). attempts default3, positive integer; baseDelayMs default0, finite nonnegative. Validate both before operation. sleep default async no-op, shouldRetry default predicate true. Pass one-based attempt to operation. Resolve immediately on success. Preserve exact rejection error identity. Consult shouldRetry(error,attempt) only when another attempt remains; false stops. Between retryable failures await sleep(baseDelayMs * 2 ** (attempt - 1)), never after success/final failure. Optional AbortSignal checked before each operation and after sleep; reject signal.reason when present, otherwise Error named AbortError. Already aborted => no operation. Predicate/sleep errors propagate unchanged. Preserve export/tests.",
+    "json-lines": "Implement src/json-lines.mjs exporting async generator parseJsonLines(chunks). Accept sync/async iterables of strings or Uint8Array chunks. Parse newline-delimited JSON across arbitrary chunk boundaries including UTF8 multibyte split across byte chunks. LF and CRLF separators. Ignore blank/whitespace-only physical lines. Parse final nonempty line without newline. Strip ONE optional initial UTF8 BOM only at very beginning of entire stream. Yield JSON values in order. Malformed JSON throws SyntaxError with numeric one-based physical lineNumber, counting blanks too. Preserve upstream iterator error identity. Incremental processing, preserve export/tests. Be careful not to require unspecified behavior for malformed UTF8 or arbitrary mixes of strings inside incomplete encoded codepoints."
+  },
+  "assertionRationale": {
+    "retry": [
+      {
+        "test": "retry: public async API export is available",
+        "publicContractBasis": "The contract names src/retry.mjs and its retry export. Only callable export availability is asserted, without requiring a particular function-constructor name."
+      },
+      {
+        "test": "retry: immediate success returns the exact value and does no retry work",
+        "publicContractBasis": "Resolve immediately on success; pass one-based attempt 1; do not consult retry policy or sleep after success. Returning an object must preserve its identity."
+      },
+      {
+        "test": "retry: default options allow three operations with one-based attempts",
+        "publicContractBasis": "attempts defaults to 3, shouldRetry defaults to true, and sleep defaults to an async no-op. Two failures followed by success exercise all three defaults with operation attempts 1, 2, and 3."
+      },
+      {
+        "test": "retry: default budget, delay, predicate arguments, and final error identity",
+        "publicContractBasis": "Defaults are three attempts and zero delay. Consult shouldRetry(error, attempt) only when another attempt remains; sleep only between retryable failures; reject the exact final error."
+      },
+      {
+        "test": "retry: fractional finite base delay doubles only between retryable failures",
+        "publicContractBasis": "baseDelayMs is finite and nonnegative, with no integer requirement. With base 2.5 and four retryable failures, the specified formula gives 2.5, 5, 10, and 20; success permits no further sleep."
+      },
+      {
+        "test": "retry: a single attempt never consults the predicate or sleeps",
+        "publicContractBasis": "One is a positive integer attempt budget. No other attempt remains after its failure, so do not consult the predicate or sleep. Exact rejection identity also applies to a non-Error thrown object."
+      },
+      {
+        "test": "retry: false predicate stops at that failure without another sleep",
+        "publicContractBasis": "Consult shouldRetry with the current error and one-based attempt. A false decision stops retries, preserves the stopping error, and causes no sleep for that failure."
+      },
+      {
+        "test": "retry: predicate exceptions propagate unchanged without sleeping",
+        "publicContractBasis": "Predicate errors propagate unchanged. A thrown predicate error ends retry processing before any sleep or next operation."
+      },
+      {
+        "test": "retry: sleep rejection propagates unchanged without another operation",
+        "publicContractBasis": "Await sleep between retries. Its rejected error propagates unchanged, and no next operation can proceed."
+      },
+      {
+        "test": "retry: a synchronously thrown sleep error also propagates unchanged",
+        "publicContractBasis": "The requirement that sleep errors propagate unchanged includes synchronous throws from the supplied sleep function."
+      },
+      {
+        "test": "retry: sleep is awaited before the next operation",
+        "publicContractBasis": "Between retryable failures await sleep. A setImmediate-resolved sleep records completion before operation 2, without requiring a wall-clock delay."
+      },
+      {
+        "test": "retry: attempts must be a positive integer before the operation runs",
+        "publicContractBasis": "Zero, negative, fractional, nonfinite, and nonnumber values are not positive integers. Validation must happen even if the operation would succeed immediately. No validation error class or message is asserted."
+      },
+      {
+        "test": "retry: baseDelayMs must be finite and nonnegative before the operation runs",
+        "publicContractBasis": "Negative, nonfinite, and nonnumber values do not meet the finite nonnegative numeric delay contract. Validation must happen even with a single attempt and immediate success. No validation error class or message is asserted."
+      },
+      {
+        "test": "retry: zero delay is valid even when no retry will be needed",
+        "publicContractBasis": "Zero satisfies finite and nonnegative. A positive integer budget of one and base zero must allow success."
+      },
+      {
+        "test": "retry: already aborted signals prevent all operations and preserve their reasons",
+        "publicContractBasis": "Check the optional AbortSignal before an operation. An already aborted signal performs no operation, predicate, or sleep and rejects signal.reason. Explicit null, zero, false, and empty-string reasons are present reasons, so they must not be replaced based on truthiness. Native AbortController instances are used."
+      },
+      {
+        "test": "retry: abort without an explicit reason rejects an Error named AbortError",
+        "publicContractBasis": "The abort outcome is the present signal.reason or an Error named AbortError when no reason is available. A normal native abort with no explicit argument produces that required observable AbortError outcome. This does not require duck-typed signals or override native getters."
+      },
+      {
+        "test": "retry: an abort during sleep is observed before any further operation",
+        "publicContractBasis": "Check the signal after the awaited sleep and before another operation. The first backoff remains the specified base delay; reject the exact abort reason."
+      },
+      {
+        "test": "retry: successful operation resolves immediately even if it aborts the signal",
+        "publicContractBasis": "The specified signal checks are before operations and after sleeps. A successful operation resolves immediately; no post-success check is specified."
+      }
+    ],
+    "json-lines": [
+      {
+        "test": "json-lines: public async API export is available",
+        "publicContractBasis": "The contract names src/json-lines.mjs and its parseJsonLines export. Only callable export availability is asserted; generator behavior is tested through iteration."
+      },
+      {
+        "test": "json-lines: sync text chunks yield every JSON value type in order",
+        "publicContractBasis": "Accept a sync iterable of strings and yield parsed JSON values in order, including objects, arrays, strings, numbers, booleans, and null."
+      },
+      {
+        "test": "json-lines: empty streams and whitespace-only physical lines yield nothing",
+        "publicContractBasis": "Ignore blank and whitespace-only physical lines. Empty input and empty chunks contain no JSON value. Both text and byte chunks are accepted."
+      },
+      {
+        "test": "json-lines: text parses across every single boundary including CRLF and escapes",
+        "publicContractBasis": "JSON lines must parse across arbitrary chunk boundaries, support LF and CRLF, ignore whitespace-only physical lines, and parse the final nonempty line without a newline. Exhausting one split position at a time and then character-sized chunks varies partitioning without depending on implementation internals."
+      },
+      {
+        "test": "json-lines: async iterables retain partial lines and parse a final nonempty line",
+        "publicContractBasis": "Accept async iterables of strings, retain records across boundaries including a split CRLF, ignore blanks, and parse a final nonempty line without a newline."
+      },
+      {
+        "test": "json-lines: UTF-8 byte chunks decode across every single boundary and one-byte chunks",
+        "publicContractBasis": "Accept Uint8Array chunks and decode UTF-8 multibyte sequences across byte boundaries. Valid two-, three-, and four-byte codepoints are tested at all single split positions and in one-byte chunks. No malformed UTF-8 expectation is added."
+      },
+      {
+        "test": "json-lines: byte array views respect their offset and length",
+        "publicContractBasis": "A Uint8Array chunk is its viewed bytes, including its offset and length, rather than the entire backing buffer. JSON bytes outside the supplied view are not stream input."
+      },
+      {
+        "test": "json-lines: mixed text and bytes work at complete UTF-8 boundaries",
+        "publicContractBasis": "Chunks may be strings or Uint8Array. Mixed chunks contain complete encoded codepoints at transitions, avoiding the explicitly unspecified case of a string inside an incomplete byte codepoint."
+      },
+      {
+        "test": "json-lines: one initial BOM is accepted across empty chunks and split UTF-8 bytes",
+        "publicContractBasis": "Strip one optional initial UTF-8 BOM only at the beginning of the entire stream. Empty chunks do not move the stream start, and byte boundaries can split the BOM itself."
+      },
+      {
+        "test": "json-lines: a BOM is removed only once and only at the very start",
+        "publicContractBasis": "Exactly one optional initial BOM may be stripped. A second BOM or a BOM following stream whitespace or a physical newline remains in a nonblank JSON line and makes that JSON malformed; the numeric physical line number is asserted. Both initial byte BOMs and text BOMs are covered."
+      },
+      {
+        "test": "json-lines: malformed lines have numeric physical line numbers including blanks",
+        "publicContractBasis": "Malformed JSON throws SyntaxError carrying a numeric one-based physical lineNumber; blank lines still count. Earlier valid values are yielded in order. Malformed terminated lines and a malformed final unterminated line are included. No error-message wording is asserted."
+      },
+      {
+        "test": "json-lines: upstream sync iterator failures retain exact identity",
+        "publicContractBasis": "Preserve upstream iterator error identity for a sync iterable. The parser must not wrap or relabel this non-JSON error."
+      },
+      {
+        "test": "json-lines: upstream async iterator failures retain exact identity after prior values",
+        "publicContractBasis": "Preserve upstream iterator error identity for an async iterable. Incremental processing yields the prior complete valid line before requesting the failing next chunk. The thrown value need not be an Error instance."
+      },
+      {
+        "test": "json-lines: a complete line is yielded while the upstream stream is still open",
+        "publicContractBasis": "Incremental processing must allow a complete JSON line to be yielded without waiting for upstream completion. An upstream gate remains closed until that yield is observed. The 3-second deadline is a hang guard, not a throughput requirement; the gate is released in cleanup. No particular memory bound, lookahead count, or final generator return value is asserted."
+      }
+    ]
+  },
+  "deliberateNonRequirements": [
+    "No source-style, algorithm-shape, helper-name, exact validation-error class, or exact error-message requirements.",
+    "No async shouldRetry behavior, invalid option-container behavior, invalid chunk types, malformed UTF-8 behavior, or mixed string/byte behavior inside an incomplete encoded codepoint is required.",
+    "No cancellation event listener, real retry delay, fixed memory limit, exact iterator lookahead count, or generator final return value is required.",
+    "Existing fixture tests are not edited or loaded. The standalone runtime contract grader loads only the named src module; minimal reference workspaces contain only src. Preservation of submitted fixture test files is not inferred from runtime behavior."
+  ],
+  "referenceIndependence": "References were authored directly from the supplied public contracts after reading only the two original one-line source stubs. Expected grader values are explicit contract examples and are never computed by importing a reference implementation.",
+  "validation": {
+    "report": "validation.json",
+    "allExpectationsMet": true,
+    "summaries": [
+      {
+        "kind": "retry",
+        "target": "original",
+        "exitCode": 1,
+        "tests": 18,
+        "passed": 5,
+        "failed": 13
+      },
+      {
+        "kind": "retry",
+        "target": "reference",
+        "exitCode": 0,
+        "tests": 18,
+        "passed": 18,
+        "failed": 0
+      },
+      {
+        "kind": "json-lines",
+        "target": "original",
+        "exitCode": 1,
+        "tests": 14,
+        "passed": 5,
+        "failed": 9
+      },
+      {
+        "kind": "json-lines",
+        "target": "reference",
+        "exitCode": 0,
+        "tests": 14,
+        "passed": 14,
+        "failed": 0
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "grade-development.mjs",
+      "bytes": 15665,
+      "sha256": "2870a60e2460e30db5c439e78494092ea38d0533a43f73d8eef8f452a8b9997c"
+    },
+    {
+      "path": "reference/retry/src/retry.mjs",
+      "bytes": 1001,
+      "sha256": "7cf0784b31d8d06a1deb3252e480dc32a7a7c44795d969d06181e7a7675bc7e6"
+    },
+    {
+      "path": "reference/json-lines/src/json-lines.mjs",
+      "bytes": 1367,
+      "sha256": "2d054fb328ba94fbd54d997ef2380b9ca9984461594b65540846f26525cdaa1b"
+    },
+    {
+      "path": "validate-development.mjs",
+      "bytes": 2118,
+      "sha256": "8386489c03ad09cbc6644a236424bb20f3d3da1ec0366d441a89a27fc893ddc4"
+    },
+    {
+      "path": "freeze-development.mjs",
+      "bytes": 14546,
+      "sha256": "628a162416c1bce3e354fd91bd07cda82bb095d50c081d83f36ba8392f342d71"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 3790,
+      "sha256": "b76e3a4115a07791f39a03dc5430acafe0b5ab528dc577174dc0474ed45f3289"
+    },
+    {
+      "path": "logs/retry-original.stdout.log",
+      "bytes": 16471,
+      "sha256": "11447b979fa186a68b35caa5e966f02bf2d8f3046499bf9eb6afd103064d5919"
+    },
+    {
+      "path": "logs/retry-original.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/retry-reference.stdout.log",
+      "bytes": 1609,
+      "sha256": "25357b0c329c647f061b25a7a53d329d7245825eb4b89619d0aa3cccdf853d30"
+    },
+    {
+      "path": "logs/retry-reference.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/json-lines-original.stdout.log",
+      "bytes": 10666,
+      "sha256": "358a7b0c16e0cf0318cf8f6505a663fe763f800360c14d57b31605d844dc85e5"
+    },
+    {
+      "path": "logs/json-lines-original.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/json-lines-reference.stdout.log",
+      "bytes": 1346,
+      "sha256": "a37a18f221b9b7bcaaa7c5ca1837ead57f5c4b2fd93f2f996f2670c4ef08e373"
+    },
+    {
+      "path": "logs/json-lines-reference.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

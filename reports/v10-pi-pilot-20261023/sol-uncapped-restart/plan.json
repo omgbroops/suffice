@@ -1,0 +1,60 @@
+{
+  "version": "v10-benchmark-restart-1",
+  "id": "v10-pi-sol-uncapped-restart",
+  "label": "User-requested restart from original source; dollar cap removed before independent grading",
+  "seed": 20261023,
+  "repetitions": 1,
+  "limits": {
+    "maxCostUsd": 1.7976931348623157e+308,
+    "timeoutMs": 300000,
+    "overallCostUsd": 1.7976931348623157e+308
+  },
+  "compactResponses": false,
+  "tasks": [
+    {
+      "id": "build-metadata",
+      "source": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\build-metadata",
+      "inputDir": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-pi-pilot-20261023\\plan-final\\inputs\\build-metadata",
+      "sourceHash": "20196ad44df8a5355732f343948236aa2ba16e7d8db14419884e9bd5e902c463",
+      "prompt": "Fix range parsing with long build metadata. Build metadata must not change range meaning or bleed into version numbers. A loose range consisting of 4.17.0+ followed by 250 letters a and then 3 must mean exactly 4.17.0. The problem also affects comparator whitespace, partial versions, hyphen ranges, tilde/caret ranges and OR sets. Preserve prereleases and existing strict/loose behavior. The upstream repository and its original layout are under src/. Preserve existing tests. Public checks are adapted Node tests, not the complete upstream TAP suite.",
+      "checks": [
+        {
+          "id": "public",
+          "command": [
+            "node",
+            "--test",
+            "test/public.test.mjs"
+          ],
+          "testsRequired": true
+        }
+      ],
+      "protectedPaths": [],
+      "contextPaths": [
+        "src/index.js"
+      ],
+      "setup": []
+    }
+  ],
+  "schedule": [
+    {
+      "id": "build-metadata-r2-sol-uncapped",
+      "taskId": "build-metadata",
+      "repeat": 2,
+      "strategy": "sol"
+    }
+  ],
+  "runtimeHash": "4be9a88bf200cd50ce875e0b82285e33838b2adc711180da927349172eeabd28",
+  "node": "24.18.0",
+  "agentRuntime": {
+    "runtime": "pi",
+    "packages": {
+      "@earendil-works/pi-coding-agent": "1.2.0",
+      "@earendil-works/pi-ai": "1.2.0"
+    }
+  },
+  "grading": "Deferred only. Evaluator files/configuration must be introduced after execution closes; local paths are not an OS secrecy boundary.",
+  "parentFingerprint": "e6f7205479333ee311cb012d3bd678fea9069d17075a3be99038181ec8a252d6",
+  "authorization": "User: can u just restart that task and lowk remove the cap whatever",
+  "monetaryCap": null,
+  "fingerprint": "c84a3d0c0b97bc82f895b3651eb5fdb61ade739ca772e81bced1bca4b2201c71"
+}
