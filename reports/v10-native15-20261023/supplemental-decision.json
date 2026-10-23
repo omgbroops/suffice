@@ -1,0 +1,161 @@
+{
+  "at": "2026-10-23T21:30:42.458Z",
+  "all30ActorsAlreadyClosed": true,
+  "executionClosedAt": "2026-10-23T21:23:53.680Z",
+  "originalFiles": [
+    {
+      "path": "grades.json",
+      "sha256": "80e5ce2595d5d221f4888b7ec3b60afdaa01875326ed935468df19529a2b3802"
+    },
+    {
+      "path": "reference-validation.json",
+      "sha256": "5c5e29666a5fbc05df3b84e343a181a87ba55a28a0c2142f008374d021521965"
+    },
+    {
+      "path": "grading-freeze.json",
+      "sha256": "258e4f70723a178705509d2d8626c60aeb4aafc9d1538ed929c55ddeac05ca8d"
+    },
+    {
+      "path": "execution-complete.json",
+      "sha256": "2312c51b46e4954693052239cbe39004775b99c29ac934f0caa8119c9df4bc89"
+    },
+    {
+      "path": "plan.json",
+      "sha256": "574dd3712f3b5d9365a0ef55e56422918ea5e1b721887da41c8ef71e251329d5"
+    }
+  ],
+  "gradingFreezeSha256": "258e4f70723a178705509d2d8626c60aeb4aafc9d1538ed929c55ddeac05ca8d",
+  "scriptSha256": "4d17ed126dac42e7adb617620ac6197bb5301b44e3be6f2b9bc41970a363fdb1",
+  "review": {
+    "id": "cookie-173",
+    "kind": "reviewed-source-contract-exception",
+    "acceptanceSha256": "31cfadd15e3baccb8dd602fec56b58264c2affd918237f51b8f65a43ef1dce18",
+    "baselineStdoutSha256": "d5913cb4600445876bf0411775f3f289b0618a1594d7264d28bf52623ab44c38",
+    "productionStackFragment": "\\baselines\\cookie-173\\src\\index.js:215:13)",
+    "errorFragment": "error: 'option domain is invalid'",
+    "testName": "a single leading dot in Domain is accepted and preserved",
+    "rationale": "The frozen assertion evaluates the valid-domain serialization first; production throws TypeError before assert.equal. The complete two-test suite fails only this required behavior, fixed reference passes, and both public regressions pass.",
+    "blindReviewText": "# Independent blind review of cookie-173 baseline validation\n\nReviewer: `/root/cookie_validation_review`, completed before either cookie actor was independently scored.\n\nConclusion: cookie-173 is valid, and its baseline fails for the intended source bug. Requiring literal ERR_ASSERTION incorrectly excludes this failure.\n\nInputs read: frozen acceptance source `evaluation/frozen/cookie-173.test.mjs`; all four baseline/reference acceptance/public result.json, stdout.txt and stderr.txt sets under `evaluation/results/`; the cookie-173 entry in grading-freeze.json; and the public contract supplied in the review request. Every stderr file was empty.\n\nNo actor solutions, outputs, grades, or attempts/grading directories were inspected. No files were changed or actor/grader processes run by the reviewer.\n\nThe acceptance assertion calls dom('.example.com') while evaluating the arguments to assert.equal. The baseline serializer throws TypeError: option domain is invalid before the assertion executes. Consequently, absence of ERR_ASSERTION is expected. Its stack points directly from production serialize through the helper to the valid-domain assertion. See frozen source line 8 and baseline acceptance stdout line 8.\n\nThe baseline completed both expected tests: the leading-dot test failed, malformed-domain rejection passed, and no tests were cancelled or skipped. It exited 1 with no execution error, timeout, or overflow. This supports an expected source failure rather than an infrastructure failure. See baseline acceptance stdout line 21 and result.json line 16.\n\nReference acceptance passes both tests; baseline and reference public regressions each pass both tests. See their stdout.txt line 14.\n\nUniform validation criterion: accept either an assertion failure or a reviewed source exception directly demonstrating violation of the public contract, provided the complete expected named suite executes without infrastructure failures or omissions, reference acceptance passes, and required baseline/reference public regressions pass. Arbitrary nonzero exits remain insufficient. Keep all frozen acceptance assertions unchanged.\n"
+  },
+  "originalBaseline": {
+    "acceptance": {
+      "key": "c1eccaa484f4c3247b3c546236fad819936b62614d917c6b51c0969968c52b5b",
+      "at": "2026-10-23T21:25:17.252Z",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "--permission",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\baselines\\cookie-173",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\frozen\\cookie-173.test.mjs",
+        "--max-old-space-size=256",
+        "--test-reporter=tap",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\frozen\\cookie-173.test.mjs"
+      ],
+      "workspace": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\baselines\\cookie-173",
+      "sourceHash": "a3d4c5778debc5b5a503c4dba4fd9ab40bcb12fe4d4c7cb3aeede3a429317d59",
+      "graderSha256": "31cfadd15e3baccb8dd602fec56b58264c2affd918237f51b8f65a43ef1dce18",
+      "expectedTests": 2,
+      "tests": 2,
+      "status": "failed",
+      "assertionFailure": false,
+      "exitCode": 1,
+      "error": null,
+      "timedOut": false,
+      "overflow": false,
+      "latencyMs": 97,
+      "stdoutPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\baseline-cookie-173\\acceptance\\stdout.txt",
+      "stderrPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\baseline-cookie-173\\acceptance\\stderr.txt",
+      "stdoutSha256": "d5913cb4600445876bf0411775f3f289b0618a1594d7264d28bf52623ab44c38",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "regression": {
+      "key": "0ad823775b979d3d5b557cd1d2e204a07958274d383d1eb7471ab533ba8bd90f",
+      "at": "2026-10-23T21:25:17.352Z",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "--permission",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\baselines\\cookie-173",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\baselines\\cookie-173\\tests\\public.test.mjs",
+        "--max-old-space-size=256",
+        "--test-reporter=tap",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\baselines\\cookie-173\\tests\\public.test.mjs"
+      ],
+      "workspace": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\baselines\\cookie-173",
+      "sourceHash": "a3d4c5778debc5b5a503c4dba4fd9ab40bcb12fe4d4c7cb3aeede3a429317d59",
+      "graderSha256": "db9e6ef221c668f9771334c6b4cf0a89537beb7af4b6f730b3183e58c5b98dd6",
+      "expectedTests": 2,
+      "tests": 2,
+      "status": "passed",
+      "assertionFailure": false,
+      "exitCode": 0,
+      "error": null,
+      "timedOut": false,
+      "overflow": false,
+      "latencyMs": 87,
+      "stdoutPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\baseline-cookie-173\\public\\stdout.txt",
+      "stderrPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\baseline-cookie-173\\public\\stderr.txt",
+      "stdoutSha256": "a70dff88e0eb77a06148719793d9d427beb8148de929e7cc7b96794a47f3f685",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "originalReference": {
+    "acceptance": {
+      "key": "eb00e68d0fb39cf955dc18bcef9e23ac521f6c6ea19af1522cdf66bbdbdee911",
+      "at": "2026-10-23T21:25:17.446Z",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "--permission",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\references\\cookie-173",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\frozen\\cookie-173.test.mjs",
+        "--max-old-space-size=256",
+        "--test-reporter=tap",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\frozen\\cookie-173.test.mjs"
+      ],
+      "workspace": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\references\\cookie-173",
+      "sourceHash": "6024a23e76732cc95144341cf7171c573f18f55f55d78a4ae7af9a48258df710",
+      "graderSha256": "31cfadd15e3baccb8dd602fec56b58264c2affd918237f51b8f65a43ef1dce18",
+      "expectedTests": 2,
+      "tests": 2,
+      "status": "passed",
+      "assertionFailure": false,
+      "exitCode": 0,
+      "error": null,
+      "timedOut": false,
+      "overflow": false,
+      "latencyMs": 85,
+      "stdoutPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\reference-cookie-173\\acceptance\\stdout.txt",
+      "stderrPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\reference-cookie-173\\acceptance\\stderr.txt",
+      "stdoutSha256": "7ac5e2e24ffb7c1673672896e23af9eb2e9e29de939565c44220168351e7219f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "regression": {
+      "key": "702b587dadd009e71963afec274579718b632fd0f975e9f99243e1ecf93bcfb4",
+      "at": "2026-10-23T21:25:17.543Z",
+      "command": [
+        "C:\\Users\\Eric Qin\\AppData\\Local\\fnm_multishells\\28368_1792588259406\\node.exe",
+        "--permission",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\references\\cookie-173",
+        "--allow-fs-read=C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\references\\cookie-173\\tests\\public.test.mjs",
+        "--max-old-space-size=256",
+        "--test-reporter=tap",
+        "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\references\\cookie-173\\tests\\public.test.mjs"
+      ],
+      "workspace": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\references\\cookie-173",
+      "sourceHash": "6024a23e76732cc95144341cf7171c573f18f55f55d78a4ae7af9a48258df710",
+      "graderSha256": "db9e6ef221c668f9771334c6b4cf0a89537beb7af4b6f730b3183e58c5b98dd6",
+      "expectedTests": 2,
+      "tests": 2,
+      "status": "passed",
+      "assertionFailure": false,
+      "exitCode": 0,
+      "error": null,
+      "timedOut": false,
+      "overflow": false,
+      "latencyMs": 87,
+      "stdoutPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\reference-cookie-173\\public\\stdout.txt",
+      "stderrPath": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\v10-native15-20261023\\plan\\evaluation\\results\\reference-cookie-173\\public\\stderr.txt",
+      "stdoutSha256": "a3328a4971e4d5f9ba61ddc74d8484f19646181a7270c786a7d2126730702955",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "rule": "Complete expected suite; reviewed production exception violates the public contract; fixed reference and both public regressions pass. No arbitrary nonzero exits."
+}
