@@ -81,7 +81,7 @@ export async function planFileBlock(dir, plan, tree, maxTokens = V6_PLAN_FILES_T
 }
 
 // Real workspace = pristine task copy + the picked candidate's changed files, minus the writer's test files.
-async function materialize(target, original, source, exclude) {
+export async function materialize(target, original, source, exclude) {
   await rm(target, { recursive: true, force: true });
   await cp(original, target, { recursive: true, verbatimSymlinks: true });
   for (const rel of await changedPaths(original, source)) {
@@ -92,7 +92,7 @@ async function materialize(target, original, source, exclude) {
   }
 }
 
-async function copyRels(from, to, rels) {
+export async function copyRels(from, to, rels) {
   for (const rel of rels) { await mkdir(dirname(join(to, rel)), { recursive: true }); await cp(join(from, rel), join(to, rel), { recursive: true, verbatimSymlinks: true, force: true }); }
 }
 

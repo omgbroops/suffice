@@ -145,6 +145,7 @@ export async function runAcceptance(prep, { timeoutMs = TIMEOUT_MS, env = proces
     await cp(prep.dir, wd, { recursive: true, verbatimSymlinks: true });
     if (prep.lang === 'javascript') {
       if (!existsSync(NODE_MODULES)) return result(false, 'toolchain_missing', `missing ${NODE_MODULES}`);
+      await rm(join(wd, 'node_modules'), { recursive: true, force: true }); // agent may leave its own; grade against the pinned one
       await symlink(NODE_MODULES, join(wd, 'node_modules'));
     }
     await chmod(hidden, 0o700);

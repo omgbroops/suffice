@@ -66,6 +66,8 @@ export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet', cheap = 'h
   // v6: same two rungs as v5; the cheap rung runs the test writer and K candidates (src/v6-arm.mjs).
   // Execution calls run at low effort (thinking was about a third of cost) and cannot Write whole files.
   if (arm === 'v6') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
+  // v7: same tiers as v6 (src/v7-arm.mjs). Stages are chosen with --v7-stages, not here.
+  if (arm === 'v7') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),
