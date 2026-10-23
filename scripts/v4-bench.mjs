@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
-import { appendFile, cp, lstat, mkdir, mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { appendFile, cp, lstat, mkdir, mkdtemp, rename, rm, writeFile } from 'node:fs/promises';
+import { homedir, tmpdir } from 'node:os';
+import { basename, dirname, join } from 'node:path';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { promisify } from 'node:util';
 import { pathToFileURL } from 'node:url';
@@ -11,6 +11,7 @@ import { armTiers } from '../src/v4-config.mjs';
 import { readPolyglotDocs } from '../src/v4-docs.mjs';
 import { buildBundle, v5Prompt } from '../src/v5-bundle.mjs';
 import { runV6Task, v6DefaultBudget } from '../src/v6-arm.mjs';
+import { transcriptStore } from '../src/v4-claude.mjs';
 
 const exec = promisify(execFile);
 export const MAX_WORKERS = 16;
@@ -111,7 +112,9 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
         rowMeta = { ...meta, localizedFiles: b.files, bundleTokens: b.bundleTokens,
           goldInBundle: Array.isArray(item.goldFiles) ? item.goldFiles.some(g => b.bundledFiles.includes(g)) : null };
       }
-      const row = await runTask({
+      // Training data (FIXLOG #16): full transcripts of verified passes only, kept outside git; failed runs' transcripts are deleted.
+      const store = { dir: join(process.env.V4_TRANSCRIPT_DIR ?? join(homedir(), '.cache', 'v4-transcripts'), 'staging', `${arm}-${item.taskId.replace(/\//g, '_')}-${Date.now()}`), files: [] };
+      const row = await transcriptStore.run(store, () => runTask({
         task: { id: item.taskId.replace(/\//g, '_'), prompt, workspaceDir: prep.dir, env: prep.env },
         budgetUsd: budget, out: results, bin, tiers, ledger, meta: rowMeta, gate, rule, strict: v5Strict, protocol, k: v6K, plan: v6Plan === 'on',
         verifyOutput: ws => hiddenOutputs.get(ws) ?? '',
@@ -126,7 +129,8 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
             return r === true || r?.pass === true;
           } finally { await clone.cleanup(); }
         },
-      });
+      }));
+      await keepPassTranscripts(store, row, arm, item.taskId);
       if (row.status === 'global_cap_refused') capHit = true;
       return row;
     } finally { await prep.cleanup?.(); }
@@ -187,4 +191,15 @@ export async function main(argv) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main(process.argv.slice(2)).then(n => console.log(`${n} rows`), error => { console.error(error.message); process.exit(2); });
+}
+
+// Moves a passing item's transcripts to <root>/pass/<arm>/<task>/<run>/ with the row beside them; drops the rest.
+export async function keepPassTranscripts(store, row, arm, taskId) {
+  if (!store.files.length) return;
+  if (row?.finalPass === true) {
+    const dest = join(dirname(dirname(store.dir)), 'pass', arm.replace(/[^\w.:-]/g, '_'), taskId.replace(/\//g, '_'), basename(store.dir));
+    await mkdir(dirname(dest), { recursive: true });
+    await rename(store.dir, dest);
+    await writeFile(join(dest, 'row.json'), JSON.stringify(row) + '\n');
+  } else await rm(store.dir, { recursive: true, force: true });
 }

@@ -1,10 +1,23 @@
 import { spawn } from 'node:child_process';
 import { realpathSync } from 'node:fs';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { homedir, tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { V4Error } from './v4-escalation.mjs';
+
+// Per bench item: { dir, files } set by the bench; each CLI call saves its stream-json transcript into dir and records the path. Outside a store nothing is written.
+export const transcriptStore = new AsyncLocalStorage();
+
+// stream-json stdout: the last 'result' event carries the same fields as --output-format json. Plain JSON stdout (fake bins in tests) still parses.
+export function parseCliOutput(stdout) {
+  const lines = String(stdout).trim().split('\n');
+  for (let i = lines.length - 1; i >= 0; i--) {
+    try { const e = JSON.parse(lines[i]); if (e?.type === 'result') return e; } catch {}
+  }
+  return JSON.parse(stdout);
+}
 
 // Thin profile: tiny system prompt. Tool list comes from the tier config (default is these four).
 export const V4_TOOLS = ['Read', 'Edit', 'Write', 'Bash'];
@@ -84,7 +97,7 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     const turns = maxTurns ?? (lean ? (Number(process.env.V4_MAX_TURNS) || 12) : null);
     const leanArgs = turns ? ['--max-turns', String(turns)] : [];
     // Keeps the system prompt prefix stable across calls (per-machine sections move out of it), so the cache hits.
-    const args = ['-p', prompt, '--model', model, '--output-format', 'json', '--tools', tools.join(','), '--allowedTools', tools.join(','),
+    const args = ['-p', prompt, '--model', model, '--output-format', 'stream-json', '--verbose', '--tools', tools.join(','), '--allowedTools', tools.join(','),
       '--strict-mcp-config', '--disable-slash-commands', '--setting-sources', 'project', '--exclude-dynamic-system-prompt-sections', // measured: default config loads ~262K tokens (about $0.26 per call on Haiku); lean flags ~$0.0004
       '--system-prompt', systemPrompt ?? (lean ? V5_SYSTEM_PROMPT : V4_SYSTEM_PROMPT), '--max-budget-usd', cap,...effortArgs, ...leanArgs, ...resume];
     const sandboxed = await sandboxCommand(bin, args, workspace, extraEnv?.V4_ENVRUN_SOCK);
@@ -92,8 +105,15 @@ export function makeClaudeAdapter({ bin = process.env.V4_CLAUDE_BIN ?? 'claude',
     if (out.timedOut) throw new V4Error('RUN_TIMEOUT');
     // Provider errors had no saved cause (2026-10-22 strict rerun); keep the CLI's tail in the arm's .out log.
     if (out.code !== 0) process.stderr.write(`claude exit ${out.code} ${model}\nstdout: ${String(out.stdout).slice(-1500)}\nstderr: ${String(out.stderr).slice(-1500)}\n`);
+    const store = transcriptStore.getStore();
+    if (store && out.stdout) {
+      const file = join(store.dir, `${store.files.length + 1}-${model.replace(/[^\w.-]/g, '_')}.jsonl`);
+      await mkdir(store.dir, { recursive: true });
+      await writeFile(file, out.stdout);
+      store.files.push(file);
+    }
     let json;
-    try { json = JSON.parse(out.stdout); } catch { throw new V4Error(out.code === 0 ? 'HARNESS_ERROR' : 'PROVIDER_ERROR'); }
+    try { json = parseCliOutput(out.stdout); } catch { throw new V4Error(out.code === 0 ? 'HARNESS_ERROR' : 'PROVIDER_ERROR'); }
     if (out.code !== 0 || json.is_error) throw new V4Error(String(json.subtype ?? '').includes('budget') ? 'BUDGET_EXHAUSTED' : 'PROVIDER_ERROR');
     session = { model, id: json.session_id };
     const cost = json.total_cost_usd;
