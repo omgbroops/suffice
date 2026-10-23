@@ -129,3 +129,22 @@ test('sblindCheap runs the task-only writer on the cheap tier without the plan',
   assert.ok(!sb.prompt.includes('PLAN:'));
   await f.cleanup();
 });
+
+test('rescue: when the gate still fails after fixes, the top model solves from the original with the task only', async () => {
+  const f = await fixture({ coder: [BAD, GOOD] }); // 2nd exec call is the rescue
+  const rescue = armTiers('v7-rescue')[0];
+  await runV7Task({ task: f.task, budgetUsd: 100, out: f.out, verify: f.verify, claude: f.claude, stages: parseV7Stages('blind,coder'), rescue });
+  const row = JSON.parse((await readFile(f.out, 'utf8')).trim());
+  const rc = f.calls.filter(c => c.role === 'coder')[1];
+  assert.equal(rc.model, rescue.model);
+  assert.equal(rc.prompt, f.task.prompt);
+  assert.equal(row.rescued, true);
+  assert.equal(row.selfFinalPass, true);
+  assert.equal(row.fixRounds, 3);
+  await f.cleanup();
+  const g = await fixture({ coder: [BAD, GOOD] });
+  const plain = await run(g, 'blind,coder');
+  assert.equal(plain.rescued, false);
+  assert.equal(g.calls.filter(c => c.role === 'coder').length, 1);
+  await g.cleanup();
+});

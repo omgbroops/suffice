@@ -21,6 +21,7 @@ export const V7_DEFAULT_STAGES = ['plan', 'blind', 'coder', 'probe'];
 const BUILD_JUNK = /(^|\/)(node_modules|build|target|dist|out|bin|\.gradle|__pycache__|\.pytest_cache|CMakeFiles)(\/|$)|\.(o|class|pyc)$/;
 // Haiku ran out of 6 turns mid-task in r27 run 1 (PROVIDER_ERROR); 12 leaves room to write, run and fix.
 const V7_EXEC_TURNS = 12;
+const V7_RESCUE_TURNS = 30;
 export const V7_REVIEW_SYSTEM_PROMPT = 'You review a code change. Read only: do not edit or run anything. Check the code in the current directory against the task. Reply with at most 5 concrete defects (file and what is wrong), then a last line `VERDICT: PASS` or `VERDICT: FAIL`.';
 export const V7_PROBE_SYSTEM_PROMPT = 'You attack a finished implementation. Do not edit any existing file. Read the code, then write one test file aimed at its weakest spots: boundaries, empty input, error paths and the exact formats the task states. Name it with the infix `.probe.` before the extension. Run it once. End your reply with one final line `SELFTEST: <command>`.';
 export const V7_FIX_SYSTEM_PROMPT = `${V6_EXEC_SYSTEM_PROMPT} A test may be wrong. You may edit a test file only if your reply also has \`TESTBUG: <file>: <reason citing the task text>\`; untagged test edits are discarded.`;
@@ -68,14 +69,14 @@ const fixPrompt = (task, failures) =>
   `${task}\n\nThe checks failed. Fix the code. Failures (last 1500 chars each):\n${failures.join('\n---\n')}\n\nA test may be wrong: you may edit a test file only if you also write \`TESTBUG: <file>: <reason citing the task text>\`.`;
 
 // Same contract as runV6Task: appends one row to `out` and never throws. Each check is { checkpoint, check, flagged, hiddenPass, costUsd }.
-export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), agree = false, sblindCheap = false, claude = defaultClaude({ bin, timeoutMs }) }) {
+export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), agree = false, sblindCheap = false, rescue = null, claude = defaultClaude({ bin, timeoutMs }) }) {
   const ledger = { spentUsd: 0, costKnown: true };
   const on = s => stages.has(s);
   const base = { ...meta, task: task.id, variant: 'v7', budgetUsd, stages: [...stages] };
   const [cheap, top] = tiers;
   const original = task.workspaceDir;
   const scratch = [];
-  const s = { agree, sblindCheap, planText: null, calls: [], stageCosts: {}, checks: [], gates: [], testbugClaims: [], testRels: [], fixRounds: 0, skipped: [],
+  const s = { agree, sblindCheap, rescued: false, planText: null, calls: [], stageCosts: {}, checks: [], gates: [], testbugClaims: [], testRels: [], fixRounds: 0, skipped: [],
     selfFinalPass: false, finalPass: false };
   const tests = new Map(); // stage -> { cmd, rels }
   let row;
@@ -87,7 +88,7 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
     ledger.spentUsd += cost;
     return { costUsd: cost, text: String(r.text ?? '') };
   };
-  const reserved = globalLedger ? guardAttempt(globalLedger, tiers, raw) : raw;
+  const reserved = globalLedger ? guardAttempt(globalLedger, rescue ? [...tiers, rescue] : tiers, raw) : raw;
   // args.role is the stage name. Defaults: the tier's effort and tools, the exec system prompt. Callers override per stage.
   const call = async (tier, args) => {
     const r = await reserved({ tier: tier.name, model: tier.model, effort: effortFor(tier, 1), tools: tier.tools, maxTurns: V7_EXEC_TURNS, system: V6_EXEC_SYSTEM_PROMPT, ...args });
@@ -219,6 +220,17 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
       s.fixRounds += 1;
       g = await checkpoint(name, code);
     }
+    // Rescue (opt-in, --v7-rescue=opus): if the gate still fails, the top model solves from the original workspace with the task only.
+    // Its code ships without our tests: on r27 they flag correct code ~80% of the time, so they can't veto a stronger model.
+    if (!g.pass && rescue && fits(rescue)) {
+      const dir = await copyOf('rescue', original);
+      await call(rescue, { role: 'rescue', prompt: task.prompt, workspace: dir, tools: rescue.tools, effort: null, maxTurns: V7_RESCUE_TURNS });
+      code = await emptyDir('code-rescue');
+      await materialize(code, original, dir, new Set());
+      s.rescued = true;
+      g = { pass: true, hidden: (await verify(code)) === true };
+      s.checks.push({ checkpoint: 'rescue', check: 'none', flagged: false, hiddenPass: g.hidden, costUsd: s.stageCosts.rescue ?? 0 });
+    } else if (!g.pass && rescue) skip('rescue');
     s.selfFinalPass = g.pass;
     s.finalPass = g.hidden;
     row = { ...base, status: 'completed', ...s, costUsd: ledger.spentUsd, costKnown: ledger.costKnown };

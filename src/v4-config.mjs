@@ -68,6 +68,8 @@ export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet', cheap = 'h
   if (arm === 'v6') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
   // v7: same tiers as v6 (src/v7-arm.mjs). Stages are chosen with --v7-stages, not here.
   if (arm === 'v7') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
+  // v7 rescue tier: the ladder's top model (Opus), full effort and tools, one call.
+  if (arm === 'v7-rescue') return [{ ...ladder[1], name: 'opus-rescue', rounds: 1, lean: true, effort: null, tools: ['Read', 'Edit', 'Write', 'Bash'] }];
   // v8: Haiku coder/fixer, then Sonnet and Opus as test writers only (src/v8-arm.mjs). Writers run at low effort.
   if (arm === 'v8') {
     const [haiku, strong] = armTiers('v5', ladder);
