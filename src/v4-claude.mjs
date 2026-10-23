@@ -67,9 +67,11 @@ export async function sandboxCommand(bin, args, workspace, socket) {
 
 export function runProcess(bin, args, { cwd, timeoutMs, env }) {
   return new Promise((resolveRun, reject) => {
-    const child = spawn(bin, args, { cwd, env: env ? { ...process.env, ...env } : process.env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(bin, args, { cwd, env: env ? { ...process.env, ...env } : process.env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' });
     let stdout = '', stderr = '', timedOut = false;
-    const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeoutMs);
+    // Kill the whole group: an orphaned grandchild (a hung `cargo test` binary) keeps the pipes open and 'close' never fires.
+    const kill = () => { try { process.kill(-child.pid, 'SIGKILL'); } catch { child.kill('SIGKILL'); } };
+    const timer = setTimeout(() => { timedOut = true; kill(); }, timeoutMs);
     child.stdout.on('data', chunk => { stdout += chunk; });
     child.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-4000); });
     child.on('error', error => { clearTimeout(timer); reject(error); });
