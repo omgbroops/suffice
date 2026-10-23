@@ -16,6 +16,8 @@ import { V6_WRITER_SYSTEM_PROMPT, V6_WRITER_TOOLS, V6_PLANNER_SYSTEM_PROMPT, V6_
 // The hidden verdict is taken at every checkpoint for logging only; no decision reads it.
 export const V7_STAGES = ['plan', 'blind', 'coder', 'probe', 'sblind', 'review'];
 export const V7_TEST_STAGES = ['blind', 'probe', 'sblind'];
+// r27 (reports/v7/OVERNIGHT.md): sblind and review caught nothing blind+probe missed at 70% of spend, so they are off by default.
+export const V7_DEFAULT_STAGES = ['plan', 'blind', 'coder', 'probe'];
 const BUILD_JUNK = /(^|\/)(node_modules|build|target|dist|out|bin|\.gradle|__pycache__|\.pytest_cache|CMakeFiles)(\/|$)|\.(o|class|pyc)$/;
 // Haiku ran out of 6 turns mid-task in r27 run 1 (PROVIDER_ERROR); 12 leaves room to write, run and fix.
 const V7_EXEC_TURNS = 12;
@@ -28,7 +30,7 @@ export const testSystem = stage => `${V6_WRITER_SYSTEM_PROMPT} Name your test fi
 
 // Stage list from --v7-stages. coder is required: nothing else produces code.
 export function parseV7Stages(text) {
-  const names = String(text ?? V7_STAGES.join(',')).split(',').map(x => x.trim()).filter(Boolean);
+  const names = String(text ?? V7_DEFAULT_STAGES.join(',')).split(',').map(x => x.trim()).filter(Boolean);
   const bad = names.filter(n => !V7_STAGES.includes(n));
   if (bad.length) throw new Error(`unknown v7 stage: ${bad.join(', ')}`);
   if (!names.includes('coder')) throw new Error('--v7-stages must include coder');
@@ -36,7 +38,7 @@ export function parseV7Stages(text) {
 }
 
 // Budget at estimates: cheap calls = plan, blind, probe, coder, 2 fix rounds; top calls = sblind, one review per checkpoint (up to 4), one top fix.
-export function v7DefaultBudget(tiers, stages = new Set(V7_STAGES)) {
+export function v7DefaultBudget(tiers, stages = new Set(V7_DEFAULT_STAGES)) {
   const [cheap, top] = tiers;
   const on = s => (stages.has(s) ? 1 : 0);
   const cheapCalls = on('plan') + on('blind') + on('probe') + 1 + 2;
@@ -66,7 +68,7 @@ const fixPrompt = (task, failures) =>
   `${task}\n\nThe checks failed. Fix the code. Failures (last 1500 chars each):\n${failures.join('\n---\n')}\n\nA test may be wrong: you may edit a test file only if you also write \`TESTBUG: <file>: <reason citing the task text>\`.`;
 
 // Same contract as runV6Task: appends one row to `out` and never throws. Each check is { checkpoint, check, flagged, hiddenPass, costUsd }.
-export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_STAGES), claude = defaultClaude({ bin, timeoutMs }) }) {
+export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), claude = defaultClaude({ bin, timeoutMs }) }) {
   const ledger = { spentUsd: 0, costKnown: true };
   const on = s => stages.has(s);
   const base = { ...meta, task: task.id, variant: 'v7', budgetUsd, stages: [...stages] };
@@ -201,11 +203,11 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
       const r = await call(tier, { role: 'fix', prompt: fixPrompt(task.prompt, g.failures), workspace: dir, tools: tier.tools, system: V7_FIX_SYSTEM_PROMPT });
       const claims = parseTestbugs(r.text);
       for (const rel of s.testRels) {
-        const edited = (await readFile(join(dir, rel), 'utf8')) !== (await readFile(join(testsDir, rel), 'utf8'));
+        const edited = (await readFile(join(dir, rel), 'utf8').catch(() => null)) !== (await readFile(join(testsDir, rel), 'utf8')); // null = fixer deleted it
         if (!edited) continue;
         const claim = claims.find(c => c.file === rel);
         s.testbugClaims.push({ checkpoint: name, file: rel, reason: claim?.reason ?? null, applied: Boolean(claim) });
-        if (claim) await copyRels(dir, testsDir, [rel]);
+        if (claim && existsSync(join(dir, rel))) await copyRels(dir, testsDir, [rel]); // a deleted test is never accepted, only fixed
       }
       const next = await emptyDir(`code-${name}`);
       await materialize(next, original, dir, new Set(s.testRels));
