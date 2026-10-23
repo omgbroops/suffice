@@ -200,7 +200,8 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
 
     // 5. Checkpoints: coder, then fix rounds (2 cheap, 1 top) while the gate fails. The gate re-runs at each checkpoint.
     let g = await checkpoint('coder', code);
-    for (const [name, tier] of [['fix1', cheap], ['fix2', cheap], ['fix3', top]]) {
+    // With rescue on, one cheap fix round only: later rounds cost most of the fix spend and Opus covers what they would catch.
+    for (const [name, tier] of rescue ? [['fix1', cheap]] : [['fix1', cheap], ['fix2', cheap], ['fix3', top]]) {
       if (g.pass) break;
       if (!fits(tier)) { skip(name); break; }
       const dir = await copyOf(name, code);

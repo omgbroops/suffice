@@ -140,7 +140,7 @@ test('rescue: when the gate still fails after fixes, the top model solves from t
   assert.equal(rc.prompt, f.task.prompt);
   assert.equal(row.rescued, true);
   assert.equal(row.selfFinalPass, true);
-  assert.equal(row.fixRounds, 3);
+  assert.equal(row.fixRounds, 1);
   await f.cleanup();
   const g = await fixture({ coder: [BAD, GOOD] });
   const plain = await run(g, 'blind,coder');
