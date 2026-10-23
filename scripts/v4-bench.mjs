@@ -165,7 +165,11 @@ async function defaultPrompt(prep) {
   const doc = await readPolyglotDocs(prep.dir);
   // Names the hidden suite's origin: r27 misses were mostly wrong API shape (missing constants, non-generic types) and canonical edge cases.
   const name = basename(prep.dir);
-  const hint = prep.lang ? `\n\nThe hidden tests are the Exercism ${prep.lang} track's test suite for "${name}". Match that track's expected API exactly: exported names and constants, static vs instance methods, generic types, and whether errors throw or return a value. Your self-test must cover the cases from Exercism's canonical test data for "${name}" as you recall them, including every edge and error case, not only the examples below.` : '';
+  // V4_HINT: exercism (default, leans on recall of the public suite) | generic (statement only, for unseen sets) | off (pre-6934d20 prompt)
+  const mode = process.env.V4_HINT ?? 'exercism';
+  const hint = !prep.lang || mode === 'off' ? ''
+    : mode === 'generic' ? '\n\nThe hidden tests check the whole statement, not only its examples. Match the API the stub and statement define exactly: names and constants, static vs instance methods, types, and whether errors throw or return a value. Your self-test must cover every edge and error case the statement states or implies, not only the examples below.'
+    : `\n\nThe hidden tests are the Exercism ${prep.lang} track's test suite for "${name}". Match that track's expected API exactly: exported names and constants, static vs instance methods, generic types, and whether errors throw or return a value. Your self-test must cover the cases from Exercism's canonical test data for "${name}" as you recall them, including every edge and error case, not only the examples below.`;
   return `Solve this programming exercise in the current directory by editing the stub source file(s) so the hidden tests pass. Do not edit test files or build config.${hint}\n\n${doc}`;
 }
 

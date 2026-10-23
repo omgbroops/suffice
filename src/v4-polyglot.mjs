@@ -7,7 +7,7 @@ import { chmod, copyFile, cp, mkdir, mkdtemp, readFile, realpath, rename, rm, sy
 import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 
-const POLY = join(homedir(), 'bench-repos', 'polyglot-benchmark');
+const POLY = process.env.V4_POLY_ROOT ?? join(homedir(), 'bench-repos', 'polyglot-benchmark'); // V4_POLY_ROOT: same layout, other task sets (e.g. novel/)
 const NODE_MODULES = join(homedir(), 'bench-repos', 'polyglot-node', 'node_modules');
 const TIMEOUT_MS = 120_000;
 
