@@ -98,3 +98,25 @@ test('disabled stages are skipped', async () => {
   assert.ok(roles.includes('coder') && roles.includes('review'));
   await f.cleanup();
 });
+
+test('agreement gate: one failing suite of two ships, two failing suites block', async () => {
+  const fail = `console.log('# pass 1'); process.exitCode = 1;\n`;
+  const one = await fixture({ blind: { 'check.blind.mjs': fail } });
+  await runV7Task({ task: one.task, budgetUsd: 100, out: one.out, verify: one.verify, claude: one.claude, stages: parseV7Stages('blind,coder,probe'), agree: true });
+  const r1 = JSON.parse((await readFile(one.out, 'utf8')).trim());
+  assert.equal(r1.gates[0].pass, true);
+  assert.equal(r1.fixRounds, 0);
+  assert.equal(r1.checks.find(c => c.checkpoint === 'coder' && c.check === 'blind').flagged, true);
+  await one.cleanup();
+
+  const both = await fixture({ coder: [BAD] });
+  await runV7Task({ task: both.task, budgetUsd: 100, out: both.out, verify: both.verify, claude: both.claude, stages: parseV7Stages('blind,coder,probe'), agree: true });
+  const r2 = JSON.parse((await readFile(both.out, 'utf8')).trim());
+  assert.equal(r2.gates[0].pass, false);
+  await both.cleanup();
+
+  const strict = await fixture({ blind: { 'check.blind.mjs': fail } });
+  await runV7Task({ task: strict.task, budgetUsd: 100, out: strict.out, verify: strict.verify, claude: strict.claude, stages: parseV7Stages('blind,coder,probe') }); // default = strict
+  assert.equal(JSON.parse((await readFile(strict.out, 'utf8')).trim()).gates[0].pass, false);
+  await strict.cleanup();
+});

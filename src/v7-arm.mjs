@@ -68,14 +68,14 @@ const fixPrompt = (task, failures) =>
   `${task}\n\nThe checks failed. Fix the code. Failures (last 1500 chars each):\n${failures.join('\n---\n')}\n\nA test may be wrong: you may edit a test file only if you also write \`TESTBUG: <file>: <reason citing the task text>\`.`;
 
 // Same contract as runV6Task: appends one row to `out` and never throws. Each check is { checkpoint, check, flagged, hiddenPass, costUsd }.
-export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), claude = defaultClaude({ bin, timeoutMs }) }) {
+export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = armTiers('v7'), verify, ledger: globalLedger, meta = {}, stages = new Set(V7_DEFAULT_STAGES), agree = false, claude = defaultClaude({ bin, timeoutMs }) }) {
   const ledger = { spentUsd: 0, costKnown: true };
   const on = s => stages.has(s);
   const base = { ...meta, task: task.id, variant: 'v7', budgetUsd, stages: [...stages] };
   const [cheap, top] = tiers;
   const original = task.workspaceDir;
   const scratch = [];
-  const s = { planText: null, calls: [], stageCosts: {}, checks: [], gates: [], testbugClaims: [], testRels: [], fixRounds: 0, skipped: [],
+  const s = { agree, planText: null, calls: [], stageCosts: {}, checks: [], gates: [], testbugClaims: [], testRels: [], fixRounds: 0, skipped: [],
     selfFinalPass: false, finalPass: false };
   const tests = new Map(); // stage -> { cmd, rels }
   let row;
@@ -118,15 +118,17 @@ export async function runV7Task({ task, budgetUsd, out, bin, timeoutMs, tiers = 
     const hidden = (await verify(code)) === true;
     const gate = await copyOf(`gate-${name}`, code);
     await copyRels(testsDir, gate, s.testRels);
-    let pass = true;
     const failures = [];
-    for (const stage of V7_TEST_STAGES.filter(on)) {
+    const testStages = V7_TEST_STAGES.filter(on);
+    for (const stage of testStages) {
       const t = tests.get(stage);
       const r = t?.cmd ? await runCmd(t.cmd, gate) : { ok: false, tail: 'no test file or no SELFTEST command' };
-      pass &&= r.ok;
       if (!r.ok) failures.push(`${stage}: ${r.tail}`);
       record(name, stage, !r.ok, hidden, name === 'coder' ? (s.stageCosts[stage] ?? 0) : 0);
     }
+    // Agreement gate (opt-in, --v7-agree=on): with 2+ writers the tests block only when at least 2 suites fail.
+    // Off by default: on r27 it scored 15/27 vs 17 strict; both Haiku suites share the plan and fail correct code together. shortcut: counts failing suites, not the same behavior; upgrade with test-name matching.
+    let pass = failures.length < (agree && testStages.length >= 2 ? 2 : 1);
     let review = '';
     if (on('review') && fits(top)) {
       const rv = await call(top, { role: 'review', tools: ['Read'], system: V7_REVIEW_SYSTEM_PROMPT, workspace: gate, prompt: `Task:\n${task.prompt}` });
