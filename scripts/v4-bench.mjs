@@ -12,6 +12,7 @@ import { readPolyglotDocs } from '../src/v4-docs.mjs';
 import { buildBundle, v5Prompt } from '../src/v5-bundle.mjs';
 import { runV6Task, v6DefaultBudget } from '../src/v6-arm.mjs';
 import { runV7Task, v7DefaultBudget, parseV7Stages } from '../src/v7-arm.mjs';
+import { runV8Task, v8DefaultBudget } from '../src/v8-arm.mjs';
 import { transcriptStore } from '../src/v4-claude.mjs';
 
 const exec = promisify(execFile);
@@ -85,15 +86,15 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
   if (!(globalCapUsd > 0)) throw new Error('--global-cap-usd is required and must be > 0');
   if (!results) throw new Error('--results is required');
   // v6 is self-gated and has no pass2 retry: its verdicts come from the writer's tests only.
-  if ((arm === 'v6' || arm === 'v7') && (gate !== 'self' || protocol !== 'pass1')) throw new Error(`--arm=${arm} requires --gate=self and --protocol=pass1`);
+  if ((arm === 'v6' || arm === 'v7' || arm === 'v8') && (gate !== 'self' || protocol !== 'pass1')) throw new Error(`--arm=${arm} requires --gate=self and --protocol=pass1`);
   const ledgerFile = `${results}.ledger.jsonl`;
   assertFresh(results);
   assertFresh(ledgerFile);
-  const runTask = runTaskOpt ?? (arm === 'v6' ? runV6Task : arm === 'v7' ? runV7Task : runV4Task);
+  const runTask = runTaskOpt ?? (arm === 'v6' ? runV6Task : arm === 'v7' ? runV7Task : arm === 'v8' ? runV8Task : runV4Task);
   const tiers = armTiers(arm, undefined, { top: v5Top ?? 'sonnet', cheap: v5Cheap ?? 'haiku' });
   // v5 with the self gate uses the v5 escalation rule; oracle runs keep the v4 rule (their rows carry no self fields).
   const rule = arm === 'v5' && gate === 'self' ? 'v5' : 'v4';
-  const budget = budgetUsd ?? (arm === 'v6' ? v6DefaultBudget(tiers, v6K, v6Plan === 'on') : arm === 'v7' ? v7DefaultBudget(tiers, v7Set) : defaultBudgetUsd(tiers));
+  const budget = budgetUsd ?? (arm === 'v6' ? v6DefaultBudget(tiers, v6K, v6Plan === 'on') : arm === 'v7' ? v7DefaultBudget(tiers, v7Set) : arm === 'v8' ? v8DefaultBudget(tiers) : defaultBudgetUsd(tiers));
   const ledger = openLedger({ file: ledgerFile, globalCapUsd });
   const emit = row => appendFile(results, JSON.stringify(row) + '\n');
   let capHit = false;
@@ -107,7 +108,7 @@ export async function runBench({ items, arm, workers = 3, globalCapUsd, results,
     }
     try {
       let prompt = item.prompt ?? await defaultPrompt(prep), rowMeta = meta;
-      if (arm === 'v5' || arm === 'v6') {
+      if (arm === 'v5' || arm === 'v6' || arm === 'v8') {
         // Gold files are only compared against the bundle for the report; they never enter the prompt.
         const b = await buildBundle(prep.dir, prompt);
         prompt = v5Prompt(prompt, b);

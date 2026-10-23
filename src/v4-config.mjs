@@ -68,6 +68,12 @@ export function armTiers(arm, ladder = loadTiers(), { top = 'sonnet', cheap = 'h
   if (arm === 'v6') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
   // v7: same tiers as v6 (src/v7-arm.mjs). Stages are chosen with --v7-stages, not here.
   if (arm === 'v7') return armTiers('v5', ladder, { top, cheap }).map(t => ({ ...t, effort: 'low', tools: ['Read', 'Edit', 'Bash'] }));
+  // v8: Haiku coder/fixer, then Sonnet and Opus as test writers only (src/v8-arm.mjs). Writers run at low effort.
+  if (arm === 'v8') {
+    const [haiku, strong] = armTiers('v5', ladder);
+    const sonnet = { ...haiku, name: 'sonnet', model: V5_SONNET_MODEL, costEstimateUsd: V5_SONNET_ESTIMATE_USD, effort: 'low', rounds: 1 };
+    return [haiku, sonnet, { ...strong, name: 'opus', model: ladder[1].model, costEstimateUsd: ladder[1].costEstimateUsd, effort: 'low', rounds: 1 }];
+  }
   const m = /^single:(.+)$/.exec(arm);
   if (!m) throw new Error(`unknown arm: ${arm}`);
   return [{ name: 'single', provider: 'claude', model: m[1], rounds: ladder.reduce((s, t) => s + t.rounds, 0),
