@@ -42330,3 +42330,21 @@ Research scratch paths at this closing snapshot are listed below. They are retai
 | `.suffice/handoff-research/root-notes.md` | 44705 | retained until integration/publication verification; then optional user choice |
 | `.suffice/handoff-research/storage-swe-evidence.md` | 2057803 | retained until integration/publication verification; then optional user choice |
 | `.suffice/handoff-research/supplemental-master-table.md` | 7304 | retained until integration/publication verification; then optional user choice |
+
+## Verified GitHub publication receipt
+
+At `2026-10-24 01:55:51 UTC`, `git push -u origin codex/suffice-v11` had completed with exit0 and `git ls-remote origin refs/heads/codex/suffice-v11` returned the same commit as local HEAD: `18b5035001af8637c3413b1770ea91ede4f049e1`. The working tree was clean at that check. A later byte check confirmed identical LF-normalized content. Git `core.autocrlf=true` stores LF in the committed blob while the Windows working copy uses CRLF. An initial exact-byte equality assertion failed on that line-ending difference; no source or evidence content was changed to resolve it. This receipt authenticates the first published snapshot; the later commit adding this receipt is identified in the final conversation reply.
+
+| Published item | Evidence |
+| --- | --- |
+| Repository / branch | `bycontinuity/suffice` / `codex/suffice-v11` |
+| First published commit | [18b5035001af8637c3413b1770ea91ede4f049e1](https://github.com/bycontinuity/suffice/commit/18b5035001af8637c3413b1770ea91ede4f049e1) |
+| First published handoff | [docs/HANDOFF-ALL-EXPERIMENTS-2026-10-23.md](https://github.com/bycontinuity/suffice/blob/18b5035001af8637c3413b1770ea91ede4f049e1/docs/HANDOFF-ALL-EXPERIMENTS-2026-10-23.md) |
+| Git blob bytes / SHA-256 | 4551874 / `4d265372eb86e703cad644a6243e42790ceb9f2984e907034497d574b74eb8e5` |
+| Windows snapshot bytes / SHA-256 | 4594206 / `9ddae7b6c3425c3a419a9dbda7dc248676026e341fd30a75d650478ca6c2ae50` |
+| Line-ending check | 42332 CRLF working-copy lines; LF-normalized content equal |
+| Audit changes in first commit | One canonical Markdown handoff and one `__pycache__/` ignore rule;2files |
+| Preserved project history | Prior V9/V10/V11 source, protocols, tests, results/archives are ancestors of this published branch; no main-branch rewrite |
+| Local-only exclusions | Credentials, host homes, raw all-conversation ZIP, dependencies, Docker data, and working evidence/caches explicitly inventoried above |
+
+No benchmark execution was resumed and no files were deleted during this handoff audit. **Does the user want to remove the specifically listed cleanup candidates?** The scope remains unapproved; protected and unknown-provenance files remain retained.
