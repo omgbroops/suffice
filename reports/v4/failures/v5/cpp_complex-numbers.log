@@ -1,0 +1,84 @@
+--- compile_error
+-- Generating done (0.0s)
+-- Build files have been written to: /private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-cZYlwg/run-bc90e996/complex-numbers/build
+[ 25%] Building CXX object CMakeFiles/complex-numbers.dir/complex_numbers_test.cpp.o
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-cZYlwg/run-bc90e996/complex-numbers/complex_numbers_test.cpp:253:48: error: invalid operands to binary expression ('double' and 'const Complex')
+  253 |     require_approx_equal(Complex(6.0,2.0), 5.0 + c);
+      |                                            ~~~ ^ ~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-cZYlwg/run-bc90e996/complex-numbers/complex_numbers_test.cpp:265:50: error: invalid operands to binary expression ('double' and 'const Complex')
+  265 |     require_approx_equal(Complex(-1.0,-7.0), 4.0 - c);
+      |                                              ~~~ ^ ~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-cZYlwg/run-bc90e996/complex-numbers/complex_numbers_test.cpp:277:50: error: invalid operands to binary expression ('double' and 'const Complex')
+  277 |     require_approx_equal(Complex(10.0,25.0), 5.0 * c);
+      |                                              ~~~ ^ ~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-cZYlwg/run-bc90e996/complex-numbers/complex_numbers_test.cpp:289:49: error: invalid operands to binary expression ('double' and 'const Complex')
+  289 |     require_approx_equal(Complex(2.5,-2.5), 5.0 / c);
+      |                                             ~~~ ^ ~
+4 errors generated.
+make[2]: *** [CMakeFiles/complex-numbers.dir/complex_numbers_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/complex-numbers.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-9TWTdB/run-bfd264ce/complex-numbers/complex_numbers.cpp:19:35: error: use of undeclared identifier 'imag_'; did you mean 'imag'?
+   19 |   return Complex(scale * std::cos(imag_), scale * std::sin(imag_));
+      |                                   ^~~~~
+      |                                   imag
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-9TWTdB/run-bfd264ce/complex-numbers/complex_numbers.cpp:11:17: note: 'imag' declared here
+   11 | double Complex::imag() const { return imag_; }
+      |                 ^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-9TWTdB/run-bfd264ce/complex-numbers/complex_numbers.cpp:19:60: error: use of undeclared identifier 'imag_'; did you mean 'imag'?
+   19 |   return Complex(scale * std::cos(imag_), scale * std::sin(imag_));
+      |                                                            ^~~~~
+      |                                                            imag
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-9TWTdB/run-bfd264ce/complex-numbers/complex_numbers.cpp:11:17: note: 'imag' declared here
+   11 | double Complex::imag() const { return imag_; }
+      |                 ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[2]: *** [CMakeFiles/complex-numbers.dir/complex_numbers.cpp.o] Error 1
+make[1]: *** [CMakeFiles/complex-numbers.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-n93G0G/run-30e8712e/complex-numbers/complex_numbers.h:29:9: note: candidate function not viable: no known conversion from 'const Complex' to 'double' for 1st argument
+   29 | Complex operator*(double lhs, const Complex& rhs);
+      |         ^         ~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-n93G0G/run-30e8712e/complex-numbers/complex_numbers.h:15:11: note: candidate function not viable: no known conversion from 'double' to 'const Complex' for 1st argument
+   15 |   Complex operator*(const Complex& other) const;
+      |           ^         ~~~~~~~~~~~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-n93G0G/run-30e8712e/complex-numbers/complex_numbers_test.cpp:283:47: error: invalid operands to binary expression ('const Complex' and 'double')
+  283 |     require_approx_equal(Complex(1.0,10.0), c / 10.0 );
+      |                                             ~ ^ ~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-n93G0G/run-30e8712e/complex-numbers/complex_numbers.h:30:9: note: candidate function not viable: no known conversion from 'const Complex' to 'double' for 1st argument
+   30 | Complex operator/(double lhs, const Complex& rhs);
+      |         ^         ~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-n93G0G/run-30e8712e/complex-numbers/complex_numbers.h:16:11: note: candidate function not viable: no known conversion from 'double' to 'const Complex' for 1st argument
+   16 |   Complex operator/(const Complex& other) const;
+      |           ^         ~~~~~~~~~~~~~~~~~~~~
+4 errors generated.
+make[2]: *** [CMakeFiles/complex-numbers.dir/complex_numbers_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/complex-numbers.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+      |                                                 ~~~~~ ^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-DUKLNr/run-e22baf83/complex-numbers/complex_numbers.cpp:21:18: error: out-of-line definition of 'operator*' does not match any declaration in 'complex_numbers::Complex'
+   21 | Complex Complex::operator*(const Complex& other) const {
+      |                  ^~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-DUKLNr/run-e22baf83/complex-numbers/complex_numbers.h:8:7: note: Complex defined here
+    8 | class Complex {
+      |       ^~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-DUKLNr/run-e22baf83/complex-numbers/complex_numbers.cpp:22:20: error: use of undeclared identifier 'real_'; did you mean 'real'?
+   22 |     return Complex(real_ * other.real_ - imag_ * other.imag_,
+      |                    ^~~~~
+      |                    real
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-DUKLNr/run-e22baf83/complex-numbers/complex_numbers.cpp:9:17: note: 'real' declared here
+    9 | double Complex::real() const { return real_; }
+      |                 ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[2]: *** [CMakeFiles/complex-numbers.dir/complex_numbers.cpp.o] Error 1
+make[1]: *** [CMakeFiles/complex-numbers.dir/all] Error 2
+make: *** [all] Error 2
+

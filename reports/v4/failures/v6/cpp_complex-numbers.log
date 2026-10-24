@@ -1,0 +1,42 @@
+--- compile_error
+-- Generating done (0.0s)
+-- Build files have been written to: /private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-qmBcaR/run-c3b96a9e/complex-numbers/build
+[ 25%] Building CXX object CMakeFiles/complex-numbers.dir/complex_numbers_test.cpp.o
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-qmBcaR/run-c3b96a9e/complex-numbers/complex_numbers_test.cpp:253:48: error: invalid operands to binary expression ('double' and 'const Complex')
+  253 |     require_approx_equal(Complex(6.0,2.0), 5.0 + c);
+      |                                            ~~~ ^ ~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-qmBcaR/run-c3b96a9e/complex-numbers/complex_numbers_test.cpp:265:50: error: invalid operands to binary expression ('double' and 'const Complex')
+  265 |     require_approx_equal(Complex(-1.0,-7.0), 4.0 - c);
+      |                                              ~~~ ^ ~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-qmBcaR/run-c3b96a9e/complex-numbers/complex_numbers_test.cpp:277:50: error: invalid operands to binary expression ('double' and 'const Complex')
+  277 |     require_approx_equal(Complex(10.0,25.0), 5.0 * c);
+      |                                              ~~~ ^ ~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-qmBcaR/run-c3b96a9e/complex-numbers/complex_numbers_test.cpp:289:49: error: invalid operands to binary expression ('double' and 'const Complex')
+  289 |     require_approx_equal(Complex(2.5,-2.5), 5.0 / c);
+      |                                             ~~~ ^ ~
+4 errors generated.
+make[2]: *** [CMakeFiles/complex-numbers.dir/complex_numbers_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/complex-numbers.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+   28 | static void require_approx_equal(const Complex& lhs, const Complex& rhs) {
+      |             ^                    ~~~~~~~~~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-mYI7SI/run-12e9fa82/complex-numbers/complex_numbers_test.cpp:210:5: error: no matching function for call to 'require_approx_equal'
+  210 |     require_approx_equal(Complex(1.0, -1.0), c.conj());
+      |     ^~~~~~~~~~~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-mYI7SI/run-12e9fa82/complex-numbers/complex_numbers_test.cpp:28:13: note: candidate function not viable: no known conversion from 'Complex<>' (aka 'complex_numbers::Complex<>') to 'int &' for 1st argument
+   28 | static void require_approx_equal(const Complex& lhs, const Complex& rhs) {
+      |             ^                    ~~~~~~~~~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-mYI7SI/run-12e9fa82/complex-numbers/complex_numbers_test.cpp:216:5: error: no matching function for call to 'require_approx_equal'
+  216 |     require_approx_equal(Complex(-1.0, 0.0), c.exp());
+      |     ^~~~~~~~~~~~~~~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-mYI7SI/run-12e9fa82/complex-numbers/complex_numbers_test.cpp:28:13: note: candidate function not viable: no known conversion from 'Complex<>' (aka 'complex_numbers::Complex<>') to 'int &' for 1st argument
+   28 | static void require_approx_equal(const Complex& lhs, const Complex& rhs) {
+      |             ^                    ~~~~~~~~~~~~~~~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[2]: *** [CMakeFiles/complex-numbers.dir/complex_numbers_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/complex-numbers.dir/all] Error 2
+make: *** [all] Error 2
+

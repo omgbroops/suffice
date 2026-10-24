@@ -1,0 +1,126 @@
+--- test_fail
+    +   NaN,
+    +   NaN,
+    + ]
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.517 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+
+      200 |     const plusOne = new ComputeCell(
+      201 |       [inputCell],
+    > 202 |       (inputs) => inputs[0].value + 1,
+          |                             ^
+      203 |     );
+      204 |
+      205 |     const minusOne = new ComputeCell(
+
+      at ComputeCell.value [as fn] (react.spec.js:202:29)
+      at ComputeCell.fn [as recompute] (react.js:56:23)
+      at new recompute (react.js:52:10)
+      at Object.<anonymous> (react.spec.js:200:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.297 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    +   NaN,
+    +   NaN,
+    + ]
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.243 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    TypeError: cb is not a function
+
+      93 |       cell._stableValue = cell._value;
+      94 |       for (const cb of [...cell.callbacks]) {
+    > 95 |         cb(cell._value);
+         |         ^
+      96 |       }
+      97 |     }
+      98 |   }
+
+      at cb (react.js:95:9)
+      at InputCell.propagate [as setValue] (react.js:23:5)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.264 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    +   NaN,
+    +   NaN,
+    + ]
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.417 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+
+    Expected: []
+    Received: undefined
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.258 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+

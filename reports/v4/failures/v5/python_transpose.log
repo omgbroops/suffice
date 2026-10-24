@@ -1,0 +1,21 @@
+--- test_fail
+    return "\n".join("".join(r[i] for r in padded) for i in range(width))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+transpose.py:9: in <genexpr>
+    return "\n".join("".join(r[i] for r in padded) for i in range(width))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x10b3ea260>
+
+>   return "\n".join("".join(r[i] for r in padded) for i in range(width))
+                             ^^^^
+E   IndexError: string index out of range
+
+transpose.py:9: IndexError
+=========================== short test summary info ============================
+FAILED transpose_test.py::TransposeTest::test_first_line_longer_than_second_line
+FAILED transpose_test.py::TransposeTest::test_jagged_triangle - IndexError: s...
+FAILED transpose_test.py::TransposeTest::test_mixed_line_length - IndexError:...
+3 failed, 9 passed in 0.02s
+

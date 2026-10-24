@@ -1,0 +1,126 @@
+--- test_fail
+
+      200 |     const plusOne = new ComputeCell(
+      201 |       [inputCell],
+    > 202 |       (inputs) => inputs[0].value + 1,
+          |                             ^
+      203 |     );
+      204 |
+      205 |     const minusOne = new ComputeCell(
+
+      at ComputeCell.value [as fn] (react.spec.js:202:29)
+      at ComputeCell.fn [as recompute] (react.js:61:23)
+      at new recompute (react.js:57:10)
+      at Object.<anonymous> (react.spec.js:200:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.267 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+
+      43 |       if (cell._value !== previous[i]) {
+      44 |         for (const cb of [...cell.callbacks]) {
+    > 45 |           cb(cell._value);
+         |           ^
+      46 |         }
+      47 |       }
+      48 |     });
+
+      at cb (react.js:45:11)
+          at Array.forEach (<anonymous>)
+      at InputCell.forEach [as setValue] (react.js:42:13)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.23 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    +   NaN,
+    +   NaN,
+    + ]
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.381 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    TypeError: cb is not a function
+
+      77 |   fireCallbacks() {
+      78 |     for (const cb of [...this.callbacks]) {
+    > 79 |       cb(this._value);
+         |       ^
+      80 |     }
+      81 |   }
+      82 |
+
+      at ComputeCell.cb [as fireCallbacks] (react.js:79:7)
+      at InputCell.fireCallbacks [as setValue] (react.js:49:14)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.227 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    +   NaN,
+    +   NaN,
+    + ]
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.382 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    TypeError: cb is not a function
+
+      59 |   _fireCallbacks() {
+      60 |     for (const cb of [...this._callbacks]) {
+    > 61 |       cb(this._value);
+         |       ^
+      62 |     }
+      63 |   }
+      64 | }
+
+      at ComputeCell.cb [as _fireCallbacks] (react.js:61:7)
+      at InputCell._fireCallbacks [as setValue] (react.js:23:14)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.262 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+

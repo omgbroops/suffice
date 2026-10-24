@@ -1,0 +1,42 @@
+--- compile_error
+   43 |         REQUIRE(expected == sublist::sublist({1, 2, 3}, {}));
+      |                                      ^~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-UvQoBr/run-783b6de8/sublist/sublist_test.cpp:43:31: error: no member named 'sublist' in namespace 'sublist'
+   43 |         REQUIRE(expected == sublist::sublist({1, 2, 3}, {}));
+      |                                      ^~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-UvQoBr/run-783b6de8/sublist/sublist_test.cpp:47:11: error: no type named 'List_comparison' in namespace 'sublist'
+   47 |         sublist::List_comparison expected = sublist::List_comparison::equal;
+      |         ~~~~~~~~~^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-UvQoBr/run-783b6de8/sublist/sublist_test.cpp:47:47: error: no member named 'List_comparison' in namespace 'sublist'
+   47 |         sublist::List_comparison expected = sublist::List_comparison::equal;
+      |                                             ~~~~~~~~~^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-UvQoBr/run-783b6de8/sublist/sublist_test.cpp:48:31: error: no member named 'sublist' in namespace 'sublist'
+   48 |         REQUIRE(expected == sublist::sublist({1, 2, 3}, {1, 2, 3}));
+      |                                      ^~~~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[2]: *** [CMakeFiles/sublist.dir/sublist_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/sublist.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+   43 |         REQUIRE(expected == sublist::sublist({1, 2, 3}, {}));
+      |                                      ^~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-82U65D/run-c0c9e17a/sublist/sublist_test.cpp:43:31: error: no member named 'sublist' in namespace 'sublist'
+   43 |         REQUIRE(expected == sublist::sublist({1, 2, 3}, {}));
+      |                                      ^~~~~~~
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-82U65D/run-c0c9e17a/sublist/sublist_test.cpp:47:11: error: no type named 'List_comparison' in namespace 'sublist'
+   47 |         sublist::List_comparison expected = sublist::List_comparison::equal;
+      |         ~~~~~~~~~^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-82U65D/run-c0c9e17a/sublist/sublist_test.cpp:47:47: error: no member named 'List_comparison' in namespace 'sublist'
+   47 |         sublist::List_comparison expected = sublist::List_comparison::equal;
+      |                                             ~~~~~~~~~^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-82U65D/run-c0c9e17a/sublist/sublist_test.cpp:48:31: error: no member named 'sublist' in namespace 'sublist'
+   48 |         REQUIRE(expected == sublist::sublist({1, 2, 3}, {1, 2, 3}));
+      |                                      ^~~~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[2]: *** [CMakeFiles/sublist.dir/sublist_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/sublist.dir/all] Error 2
+make: *** [all] Error 2
+

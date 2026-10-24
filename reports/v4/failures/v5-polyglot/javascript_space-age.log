@@ -1,0 +1,21 @@
+--- test_fail
+
+    Expected: 0.35
+    Received: 0.35016863257806585
+
+      31 |
+      32 |   test('age on Neptune', () => {
+    > 33 |     expect(age('neptune', 1821023456)).toEqual(0.35);
+         |                                        ^
+      34 |   });
+      35 | });
+      36 |
+
+      at Object.toEqual (space-age.spec.js:33:40)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 8 total
+Snapshots:   0 total
+Time:        0.4 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/space-age.js|.\/space-age.spec.js/i.
+

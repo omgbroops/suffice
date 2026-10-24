@@ -1,0 +1,42 @@
+--- timeout
+running 18 tests
+test empty_basket ... ok
+test only_a_single_book ... ok
+test two_different_books ... FAILED
+test three_different_books ... FAILED
+test four_different_books ... FAILED
+test two_of_the_same_book ... FAILED
+test one_group_of_one_and_four_is_cheaper_than_one_group_of_two_and_three ... FAILED
+test group_of_four_plus_group_of_two_is_cheaper_than_two_groups_of_three ... FAILED
+test five_different_books ... FAILED
+test two_groups_of_four_is_cheaper_than_group_of_five_plus_group_of_three ... FAILED
+test two_groups_of_four_is_cheaper_than_groups_of_five_and_three ... FAILED
+test two_each_of_first_four_books_and_one_copy_each_of_rest ... FAILED
+test check_that_groups_of_four_are_created_properly_even_when_there_are_more_groups_of_three_than_groups_of_five has been running for over 60 seconds
+test four_groups_of_four_are_cheaper_than_two_groups_each_of_five_and_three has been running for over 60 seconds
+test one_group_of_one_and_two_plus_three_groups_of_four_is_cheaper_than_one_group_of_each_size has been running for over 60 seconds
+test three_copies_of_first_book_and_two_each_of_remaining has been running for over 60 seconds
+test three_each_of_first_two_books_and_two_each_of_remaining_books has been running for over 60 seconds
+test two_copies_of_each_book has been running for over 60 seconds
+
+--- test_fail
+thread 'two_groups_of_four_is_cheaper_than_group_of_five_plus_group_of_three' (186272931) panicked at src/lib.rs:42:9:
+index out of bounds: the len is 5 but the index is 5
+
+
+failures:
+    check_that_groups_of_four_are_created_properly_even_when_there_are_more_groups_of_three_than_groups_of_five
+    five_different_books
+    four_groups_of_four_are_cheaper_than_two_groups_each_of_five_and_three
+    one_group_of_one_and_two_plus_three_groups_of_four_is_cheaper_than_one_group_of_each_size
+    three_copies_of_first_book_and_two_each_of_remaining
+    three_each_of_first_two_books_and_two_each_of_remaining_books
+    two_copies_of_each_book
+    two_each_of_first_four_books_and_one_copy_each_of_rest
+    two_groups_of_four_is_cheaper_than_group_of_five_plus_group_of_three
+    two_groups_of_four_is_cheaper_than_groups_of_five_and_three
+
+test result: FAILED. 8 passed; 10 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test book-store`
+

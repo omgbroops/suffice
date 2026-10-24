@@ -1,0 +1,88 @@
+--- compile_error
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1128:55: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1128 |   _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_SINCE_CXX20 basic_string(size_type __n, _CharT __c, const _Allocator& __a)
+      |                                                       ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1189:3: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1189 |   basic_string(_InputIterator __first, _InputIterator __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1134:3: note: candidate constructor not viable: requires at least 3 arguments, but 1 was provided
+ 1134 |   basic_string(const basic_string& __str, size_type __pos, size_type __n, const _Allocator& __a = _Allocator())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:950:3: note: candidate constructor template not viable: requires 4 arguments, but 1 was provided
+  950 |   basic_string(__init_with_sentinel_tag, _Iter __first, _Sent __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1156:3: note: candidate constructor template not viable: requires at least 3 arguments, but 1 was provided
+ 1156 |   basic_string(const _Tp& __t, size_type __pos, size_type __n, const allocator_type& __a = allocator_type())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6 errors generated.
+make[2]: *** [CMakeFiles/clock.dir/clock_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/clock.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1128:55: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1128 |   _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_SINCE_CXX20 basic_string(size_type __n, _CharT __c, const _Allocator& __a)
+      |                                                       ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1189:3: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1189 |   basic_string(_InputIterator __first, _InputIterator __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1134:3: note: candidate constructor not viable: requires at least 3 arguments, but 1 was provided
+ 1134 |   basic_string(const basic_string& __str, size_type __pos, size_type __n, const _Allocator& __a = _Allocator())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:950:3: note: candidate constructor template not viable: requires 4 arguments, but 1 was provided
+  950 |   basic_string(__init_with_sentinel_tag, _Iter __first, _Sent __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1156:3: note: candidate constructor template not viable: requires at least 3 arguments, but 1 was provided
+ 1156 |   basic_string(const _Tp& __t, size_type __pos, size_type __n, const allocator_type& __a = allocator_type())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6 errors generated.
+make[2]: *** [CMakeFiles/clock.dir/clock_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/clock.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+CMake Error: The current CMakeCache.txt directory /private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-xCcmGD/run-28b57e02/clock/build/CMakeCache.txt is different than the directory /private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-cpp_clock-Vfr1SZ/build where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+CMake Error: The source "/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-xCcmGD/run-28b57e02/clock/CMakeLists.txt" does not match the source "/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-cpp_clock-Vfr1SZ/CMakeLists.txt" used to generate cache.  Re-run cmake with a different source directory.
+
+--- compile_error
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1128:55: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1128 |   _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_SINCE_CXX20 basic_string(size_type __n, _CharT __c, const _Allocator& __a)
+      |                                                       ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1189:3: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1189 |   basic_string(_InputIterator __first, _InputIterator __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1134:3: note: candidate constructor not viable: requires at least 3 arguments, but 1 was provided
+ 1134 |   basic_string(const basic_string& __str, size_type __pos, size_type __n, const _Allocator& __a = _Allocator())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:950:3: note: candidate constructor template not viable: requires 4 arguments, but 1 was provided
+  950 |   basic_string(__init_with_sentinel_tag, _Iter __first, _Sent __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1156:3: note: candidate constructor template not viable: requires at least 3 arguments, but 1 was provided
+ 1156 |   basic_string(const _Tp& __t, size_type __pos, size_type __n, const allocator_type& __a = allocator_type())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6 errors generated.
+make[2]: *** [CMakeFiles/clock.dir/clock_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/clock.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1128:55: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1128 |   _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_SINCE_CXX20 basic_string(size_type __n, _CharT __c, const _Allocator& __a)
+      |                                                       ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1189:3: note: candidate constructor template not viable: requires 3 arguments, but 1 was provided
+ 1189 |   basic_string(_InputIterator __first, _InputIterator __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1134:3: note: candidate constructor not viable: requires at least 3 arguments, but 1 was provided
+ 1134 |   basic_string(const basic_string& __str, size_type __pos, size_type __n, const _Allocator& __a = _Allocator())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:950:3: note: candidate constructor template not viable: requires 4 arguments, but 1 was provided
+  950 |   basic_string(__init_with_sentinel_tag, _Iter __first, _Sent __last, const allocator_type& __a)
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string:1156:3: note: candidate constructor template not viable: requires at least 3 arguments, but 1 was provided
+ 1156 |   basic_string(const _Tp& __t, size_type __pos, size_type __n, const allocator_type& __a = allocator_type())
+      |   ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6 errors generated.
+make[2]: *** [CMakeFiles/clock.dir/clock_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/clock.dir/all] Error 2
+make: *** [all] Error 2
+

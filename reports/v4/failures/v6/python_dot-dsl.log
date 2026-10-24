@@ -1,0 +1,105 @@
+--- test_fail
+self = <dot_dsl_test.DotDslTest testMethod=test_unknown_item>
+
+    def test_unknown_item(self):
+        with self.assertRaises(ValueError) as err:
+            Graph([(99, 1, 2)])
+        self.assertEqual(type(err.exception), ValueError)
+>       self.assertEqual(err.exception.args[0], "Unknown item")
+E       AssertionError: 'Unknown item type malformed' != 'Unknown item'
+E       - Unknown item type malformed
+E       + Unknown item
+
+dot_dsl_test.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_EDGE - AssertionError: 'ED...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_attr - AssertionError: 'AT...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_graph_item - AssertionErro...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_node - AssertionError: 'NO...
+FAILED dot_dsl_test.py::DotDslTest::test_unknown_item - AssertionError: 'Unkn...
+5 failed, 7 passed in 0.02s
+
+--- test_fail
+self = <dot_dsl_test.DotDslTest testMethod=test_unknown_item>
+
+    def test_unknown_item(self):
+        with self.assertRaises(ValueError) as err:
+            Graph([(99, 1, 2)])
+        self.assertEqual(type(err.exception), ValueError)
+>       self.assertEqual(err.exception.args[0], "Unknown item")
+E       AssertionError: 'Unknown item type malformed' != 'Unknown item'
+E       - Unknown item type malformed
+E       + Unknown item
+
+dot_dsl_test.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_EDGE - AssertionError: 'ED...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_attr - AssertionError: 'AT...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_graph_item - ValueError: E...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_node - AssertionError: 'NO...
+FAILED dot_dsl_test.py::DotDslTest::test_unknown_item - AssertionError: 'Unkn...
+5 failed, 7 passed in 0.02s
+
+--- test_fail
+self = <dot_dsl_test.DotDslTest testMethod=test_unknown_item>
+
+    def test_unknown_item(self):
+        with self.assertRaises(ValueError) as err:
+            Graph([(99, 1, 2)])
+        self.assertEqual(type(err.exception), ValueError)
+>       self.assertEqual(err.exception.args[0], "Unknown item")
+E       AssertionError: 'Unknown item type malformed' != 'Unknown item'
+E       - Unknown item type malformed
+E       + Unknown item
+
+dot_dsl_test.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_EDGE - AssertionError: 'ED...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_attr - AssertionError: 'AT...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_graph_item - AssertionErro...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_node - AssertionError: 'NO...
+FAILED dot_dsl_test.py::DotDslTest::test_unknown_item - AssertionError: 'Unkn...
+5 failed, 7 passed in 0.03s
+
+--- test_fail
+    def test_unknown_item(self):
+        with self.assertRaises(ValueError) as err:
+            Graph([(99, 1, 2)])
+        self.assertEqual(type(err.exception), ValueError)
+>       self.assertEqual(err.exception.args[0], "Unknown item")
+E       AssertionError: 'Unknown item type malformed' != 'Unknown item'
+E       - Unknown item type malformed
+E       + Unknown item
+
+dot_dsl_test.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED dot_dsl_test.py::DotDslTest::test_graph_with_attributes - ValueError: ...
+FAILED dot_dsl_test.py::DotDslTest::test_graph_with_one_attribute - ValueErro...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_EDGE - AssertionError: 'ED...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_attr - AssertionError: 'AT...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_graph_item - AssertionErro...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_node - AssertionError: 'NO...
+FAILED dot_dsl_test.py::DotDslTest::test_unknown_item - AssertionError: 'Unkn...
+7 failed, 5 passed in 0.03s
+
+--- test_fail
+    def test_unknown_item(self):
+        with self.assertRaises(ValueError) as err:
+            Graph([(99, 1, 2)])
+        self.assertEqual(type(err.exception), ValueError)
+>       self.assertEqual(err.exception.args[0], "Unknown item")
+E       AssertionError: 'Unknown tag in item: 99' != 'Unknown item'
+E       - Unknown tag in item: 99
+E       + Unknown item
+
+dot_dsl_test.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED dot_dsl_test.py::DotDslTest::test_graph_with_attributes - ValueError: ...
+FAILED dot_dsl_test.py::DotDslTest::test_graph_with_one_attribute - ValueErro...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_EDGE - AssertionError: 'ED...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_attr - AssertionError: 'AT...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_graph_item - ValueError: I...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_node - AssertionError: 'NO...
+FAILED dot_dsl_test.py::DotDslTest::test_unknown_item - AssertionError: 'Unkn...
+7 failed, 5 passed in 0.02s
+

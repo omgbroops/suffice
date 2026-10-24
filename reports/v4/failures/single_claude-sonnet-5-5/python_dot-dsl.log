@@ -1,0 +1,21 @@
+--- test_fail
+
+self = <dot_dsl_test.DotDslTest testMethod=test_malformed_node>
+
+    def test_malformed_node(self):
+        with self.assertRaises(ValueError) as err:
+            Graph([(NODE, 1, 2, 3)])
+        self.assertEqual(type(err.exception), ValueError)
+>       self.assertEqual(err.exception.args[0], "Node is malformed")
+E       AssertionError: 'NODE malformed' != 'Node is malformed'
+E       - NODE malformed
+E       + Node is malformed
+
+dot_dsl_test.py:108: AssertionError
+=========================== short test summary info ============================
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_EDGE - AssertionError: 'ED...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_attr - AssertionError: 'AT...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_graph_item - ValueError: A...
+FAILED dot_dsl_test.py::DotDslTest::test_malformed_node - AssertionError: 'NO...
+4 failed, 8 passed in 0.02s
+

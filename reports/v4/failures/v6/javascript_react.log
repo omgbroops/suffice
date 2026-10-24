@@ -1,0 +1,105 @@
+--- test_fail
+
+      60 |       this.#stable = this.#value;
+      61 |       for (const cb of [...this.#callbacks]) {
+    > 62 |         cb(this.#value);
+         |         ^
+      63 |       }
+      64 |     }
+      65 |   }
+
+      at ComputeCell.cb [as commit] (react.js:62:9)
+      at commit (react.js:14:10)
+      at InputCell.propagate [as setValue] (react.js:31:5)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.206 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+
+      60 |       this.#stable = this.#value;
+      61 |       for (const cb of [...this.#callbacks]) {
+    > 62 |         cb(this.#value);
+         |         ^
+      63 |       }
+      64 |     }
+      65 |   }
+
+      at ComputeCell.cb [as commit] (react.js:62:9)
+      at commit (react.js:14:10)
+      at InputCell.propagate [as setValue] (react.js:31:5)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.196 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+
+    TypeError: cb is not a function
+
+      36 |       if (cell.value !== cell.stableValue) {
+      37 |         cell.stableValue = cell.value;
+    > 38 |         for (const cb of [...cell.callbacks]) cb(cell.value);
+         |                                               ^
+      39 |       }
+      40 |     }
+      41 |   }
+
+      at InputCell.cb [as setValue] (react.js:38:47)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.305 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    TypeError: Cannot read properties of undefined (reading 'value')
+
+      200 |     const plusOne = new ComputeCell(
+      201 |       [inputCell],
+    > 202 |       (inputs) => inputs[0].value + 1,
+          |                             ^
+      203 |     );
+      204 |
+      205 |     const minusOne = new ComputeCell(
+
+      at value (react.spec.js:202:29)
+      at new fn (react.js:63:18)
+      at Object.<anonymous> (react.spec.js:200:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.308 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+    TypeError: Cannot read properties of undefined (reading 'value')
+
+      200 |     const plusOne = new ComputeCell(
+      201 |       [inputCell],
+    > 202 |       (inputs) => inputs[0].value + 1,
+          |                             ^
+      203 |     );
+      204 |
+      205 |     const minusOne = new ComputeCell(
+
+      at value (react.spec.js:202:29)
+      at new fn (react.js:63:18)
+      at Object.<anonymous> (react.spec.js:200:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.349 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+

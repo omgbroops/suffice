@@ -1,0 +1,21 @@
+--- compile_error
+  3 | where
+  4 |     F: FnMut(i32) -> i32,
+    |        ^^^^^^^^^^^^^^^^^ required by this bound in `map`
+
+error[E0308]: mismatched types
+   --> tests/accumulate.rs:114:14
+    |
+114 |     map(vec![Foo], |_| Bar);
+    |              ^^^ expected `i32`, found `Foo`
+
+error[E0308]: mismatched types
+   --> tests/accumulate.rs:114:24
+    |
+114 |     map(vec![Foo], |_| Bar);
+    |                        ^^^ expected `i32`, found `Bar`
+
+Some errors have detailed explanations: E0277, E0308, E0599, E0631.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `accumulate` (test "accumulate") due to 22 previous errors
+

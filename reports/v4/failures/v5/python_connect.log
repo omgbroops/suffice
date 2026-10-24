@@ -1,0 +1,21 @@
+--- test_fail
+    def _connected(self, player, starts, is_goal):
+        seen = set()
+        queue = deque()
+        for r, c in starts:
+>           if self.grid[r][c] == player:
+               ^^^^^^^^^^^^^^^
+E           IndexError: list index out of range
+
+connect.py:18: IndexError
+=========================== short test summary info ============================
+FAILED connect_test.py::ConnectTest::test_an_empty_board_has_no_winner - Inde...
+FAILED connect_test.py::ConnectTest::test_illegal_diagonal_does_not_make_a_winner
+FAILED connect_test.py::ConnectTest::test_nobody_wins_crossing_adjacent_angles
+FAILED connect_test.py::ConnectTest::test_o_wins_crossing_from_top_to_bottom
+FAILED connect_test.py::ConnectTest::test_only_edges_does_not_make_a_winner
+FAILED connect_test.py::ConnectTest::test_x_wins_crossing_from_left_to_right
+FAILED connect_test.py::ConnectTest::test_x_wins_using_a_convoluted_path - In...
+FAILED connect_test.py::ConnectTest::test_x_wins_using_a_spiral_path - IndexE...
+8 failed, 2 passed in 0.03s
+

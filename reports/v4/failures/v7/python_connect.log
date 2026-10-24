@@ -1,0 +1,21 @@
+--- test_fail
+E       + O
+
+connect_test.py:32: AssertionError
+__________________ ConnectTest.test_x_can_win_on_a_1x1_board ___________________
+
+self = <connect_test.ConnectTest testMethod=test_x_can_win_on_a_1x1_board>
+
+    def test_x_can_win_on_a_1x1_board(self):
+        game = ConnectGame("""X""")
+        winner = game.get_winner()
+>       self.assertEqual(winner, "X")
+E       AssertionError: '' != 'X'
+E       + X
+
+connect_test.py:27: AssertionError
+=========================== short test summary info ============================
+FAILED connect_test.py::ConnectTest::test_o_can_win_on_a_1x1_board - Assertio...
+FAILED connect_test.py::ConnectTest::test_x_can_win_on_a_1x1_board - Assertio...
+2 failed, 8 passed in 0.02s
+

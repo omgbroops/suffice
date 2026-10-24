@@ -1,0 +1,20 @@
+--- test_fail
+--- FAIL: TestForth (0.00s)
+    --- FAIL: TestForth/pushes_negative_numbers_onto_the_stack (0.00s)
+        forth_test.go:19: Forth([]string{"-1 -2 -3 -4 -5"}) expected [-1 -2 -3 -4 -5], got an error: "unknown word"
+    --- FAIL: TestForth/cannot_redefine_negative_numbers (0.00s)
+        forth_test.go:14: Forth([]string{": -1 2 ;"}) expected an error, got []
+FAIL
+FAIL	forth	0.099s
+FAIL
+
+--- test_fail
+--- FAIL: TestForth (0.00s)
+    --- FAIL: TestForth/pushes_negative_numbers_onto_the_stack (0.00s)
+        forth_test.go:19: Forth([]string{"-1 -2 -3 -4 -5"}) expected [-1 -2 -3 -4 -5], got an error: "unknown word"
+    --- FAIL: TestForth/cannot_redefine_negative_numbers (0.00s)
+        forth_test.go:14: Forth([]string{": -1 2 ;"}) expected an error, got []
+FAIL
+FAIL	forth	0.102s
+FAIL
+

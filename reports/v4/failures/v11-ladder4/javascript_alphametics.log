@@ -1,0 +1,84 @@
+--- test_fail
+
+    puzzle has no solutions
+
+      57 |   search(0, 0);
+      58 |
+    > 59 |   if (solutions.length === 0) throw new Error('puzzle has no solutions');
+         |                                     ^
+      60 |   if (solutions.length > 1) throw new Error('puzzle has multiple solutions');
+      61 |   return solutions[0];
+      62 | };
+
+      at solve (alphametics.js:59:37)
+      at Object.<anonymous> (alphametics.spec.js:21:17)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        0.312 s
+Ran all test suites matching /.\/alphametics.js|.\/alphametics.spec.js|.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json/i.
+
+--- test_fail
+
+    puzzle has no solutions
+
+      57 |   search(0, 0);
+      58 |
+    > 59 |   if (solutions.length === 0) throw new Error('puzzle has no solutions');
+         |                                     ^
+      60 |   if (solutions.length > 1) throw new Error('puzzle has multiple solutions');
+      61 |   return solutions[0];
+      62 | };
+
+      at solve (alphametics.js:59:37)
+      at Object.<anonymous> (alphametics.spec.js:21:17)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        0.238 s
+Ran all test suites matching /.\/alphametics.js|.\/alphametics.spec.js|.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json/i.
+
+--- test_fail
+    expect(received).toBeNull()
+
+    Received: undefined
+
+      19 |   test('leading zero solution is invalid', () => {
+      20 |     const puzzle = 'ACA + DD == BD';
+    > 21 |     expect(solve(puzzle)).toBeNull();
+         |                           ^
+      22 |   });
+      23 |
+      24 |   test('puzzle with four letters', () => {
+
+      at Object.toBeNull (alphametics.spec.js:21:27)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        0.225 s
+Ran all test suites matching /.\/alphametics.js|.\/alphametics.spec.js|.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package-lock.json|.\/package.json/i.
+
+--- test_fail
+
+    puzzle has no solutions
+
+      53 |   search(0, 0);
+      54 |
+    > 55 |   if (count === 0) throw new Error('puzzle has no solutions');
+         |                          ^
+      56 |   if (count > 1) throw new Error('puzzle has multiple solutions');
+      57 |
+      58 |   const solution = {};
+
+      at solve (alphametics.js:55:26)
+      at Object.<anonymous> (alphametics.spec.js:21:17)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        0.314 s
+Ran all test suites matching /.\/alphametics.js|.\/alphametics.spec.js|.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package-lock.json|.\/package.json/i.
+

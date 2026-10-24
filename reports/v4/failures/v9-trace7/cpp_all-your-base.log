@@ -1,0 +1,42 @@
+--- compile_error
+
+-------------------------------------------------------------------------------
+multiple_zeros
+-------------------------------------------------------------------------------
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-PJ4S66/run-996c10ea/all-your-base/all_your_base_test.cpp:93
+...............................................................................
+
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-PJ4S66/run-996c10ea/all-your-base/all_your_base_test.cpp:98: FAILED:
+  REQUIRE( expected == out_digits )
+with expansion:
+  {  } == { 0 }
+
+===============================================================================
+test cases: 17 | 15 passed | 2 failed
+assertions: 17 | 15 passed | 2 failed
+
+make[2]: *** [CMakeFiles/test_all-your-base] Error 2
+make[1]: *** [CMakeFiles/test_all-your-base.dir/all] Error 2
+make: *** [all] Error 2
+
+--- compile_error
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:276:55: note: candidate constructor not viable: no known conversion from 'vector<unsigned int>' to 'initializer_list<value_type>' (aka 'initializer_list<int>') for 1st argument
+  276 |   _LIBCPP_CONSTEXPR_SINCE_CXX20 _LIBCPP_HIDE_FROM_ABI vector(initializer_list<value_type> __il) {
+      |                                                       ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:292:55: note: candidate constructor not viable: no known conversion from 'vector<unsigned int>' to 'vector<int> &&' for 1st argument
+  292 |   _LIBCPP_CONSTEXPR_SINCE_CXX20 _LIBCPP_HIDE_FROM_ABI vector(vector&& __x)
+      |                                                       ^      ~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:138:64: note: explicit constructor is not a candidate
+  138 |   _LIBCPP_CONSTEXPR_SINCE_CXX20 _LIBCPP_HIDE_FROM_ABI explicit vector(const allocator_type& __a)
+      |                                                                ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:147:64: note: explicit constructor is not a candidate
+  147 |   _LIBCPP_CONSTEXPR_SINCE_CXX20 _LIBCPP_HIDE_FROM_ABI explicit vector(size_type __n) {
+      |                                                                ^
+/private/var/folders/3d/jrn69vws33d5krkk81pynk200000gn/T/v4-poly-TgCgni/run-4a6027a0/all-your-base/all_your_base.h:11:65: note: passing argument to parameter 'digits' here
+   11 | std::vector<int> convert(int from_base, const std::vector<int>& digits, int to_base);
+      |                                                                 ^
+17 errors generated.
+make[2]: *** [CMakeFiles/all-your-base.dir/all_your_base_test.cpp.o] Error 1
+make[1]: *** [CMakeFiles/all-your-base.dir/all] Error 2
+make: *** [all] Error 2
+

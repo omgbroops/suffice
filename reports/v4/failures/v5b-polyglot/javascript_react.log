@@ -1,0 +1,42 @@
+--- test_fail
+    +   NaN,
+    +   NaN,
+    + ]
+
+      221 |     inputCell.setValue(5);
+      222 |
+    > 223 |     expect(callback.values).toEqual([]);
+          |                             ^
+      224 |   });
+      225 | });
+      226 |
+
+      at Object.toEqual (react.spec.js:223:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.781 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+
+--- test_fail
+
+      45 |     order.forEach((cell, i) => {
+      46 |       if (cell._value !== before[i]) {
+    > 47 |         for (const cb of [...cell.callbacks]) cb(cell._value);
+         |                                               ^
+      48 |       }
+      49 |     });
+      50 |   }
+
+      at cb (react.js:47:47)
+          at Array.forEach (<anonymous>)
+      at InputCell.forEach [as setValue] (react.js:45:11)
+      at Object.setValue (react.spec.js:218:15)
+
+Test Suites: 1 failed, 1 total
+Tests:       11 failed, 2 passed, 13 total
+Snapshots:   0 total
+Time:        0.5 s
+Ran all test suites matching /.\/babel.config.js|.\/LICENSE|.\/node_modules|.\/package.json|.\/react.js|.\/react.spec.js/i.
+

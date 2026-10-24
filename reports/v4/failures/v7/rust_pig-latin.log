@@ -1,0 +1,63 @@
+--- test_fail
+test t::rule4 ... FAILED
+
+failures:
+
+---- t::rule4 stdout ----
+
+thread 't::rule4' (2843549) panicked at tests/sblind_run/pig_latin.sblind.rs:4:5:
+assertion `left == right` failed: input "sky"
+  left: "yskay"
+ right: "kysay"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    t::rule4
+
+test result: FAILED. 5 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test sblind_run`
+
+--- test_fail
+test t::rule4 ... FAILED
+
+failures:
+
+---- t::rule4 stdout ----
+
+thread 't::rule4' (2854698) panicked at tests/sblind_run/pig_latin.sblind.rs:4:5:
+assertion `left == right` failed: input "sky"
+  left: "yskay"
+ right: "kysay"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    t::rule4
+
+test result: FAILED. 5 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test sblind_run`
+
+--- test_fail
+  left: "uaresqay"
+ right: "aresquay"
+
+---- word_beginning_with_qu stdout ----
+
+thread 'word_beginning_with_qu' (3403453) panicked at tests/pig-latin.rs:107:5:
+assertion `left == right` failed
+  left: "ueenqay"
+ right: "eenquay"
+
+
+failures:
+    a_whole_phrase
+    word_beginning_with_qu
+    word_beginning_with_qu_and_a_preceding_consonant
+
+test result: FAILED. 19 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test pig-latin`
+

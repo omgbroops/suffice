@@ -1,0 +1,21 @@
+--- test_fail
+    def test_only_edges_does_not_make_a_winner(self):
+        game = ConnectGame(
+            """O O O X
+                X . . X
+                 X . . X
+                  X O O O"""
+        )
+        winner = game.get_winner()
+>       self.assertEqual(winner, "")
+E       AssertionError: 'X' != ''
+E       - X
+
+connect_test.py:42: AssertionError
+=========================== short test summary info ============================
+FAILED connect_test.py::ConnectTest::test_illegal_diagonal_does_not_make_a_winner
+FAILED connect_test.py::ConnectTest::test_nobody_wins_crossing_adjacent_angles
+FAILED connect_test.py::ConnectTest::test_o_wins_crossing_from_top_to_bottom
+FAILED connect_test.py::ConnectTest::test_only_edges_does_not_make_a_winner
+4 failed, 6 passed in 0.01s
+
