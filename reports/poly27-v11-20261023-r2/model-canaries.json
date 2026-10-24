@@ -1,0 +1,109 @@
+{
+  "at": "2026-10-24T00:15:45.537Z",
+  "actorImage": "sha256:4399caebf821b09814ebd3bd8d1b75823a2afef399351217ca579be2c0b77e17",
+  "passed": true,
+  "results": [
+    {
+      "strategy": "native",
+      "passed": true,
+      "result": {
+        "at": "2026-10-24T00:14:50.631Z",
+        "id": "protocol-canary",
+        "strategy": "native",
+        "status": "completed",
+        "error": null,
+        "sourceHash": "9c03b389cccc60c27f5652666ca60d6de9ca18ed0eb98e5821346997b1307768",
+        "patchSha256": "e226cf1a07c404f01aab466795a47f47001da182b65f4eb3f89efd8dfce1f23e",
+        "protectionViolations": [],
+        "costKnown": true,
+        "costUsd": 0.025188,
+        "knownCostFloorUsd": 0.025188,
+        "actorLatencyMs": 26827,
+        "repairs": 0,
+        "takeovers": 0,
+        "usage": {
+          "inputTokens": 70085,
+          "cachedInputTokens": 65280,
+          "cacheWriteInputTokens": 0,
+          "outputTokens": 905,
+          "reasoningOutputTokens": 8
+        },
+        "completionEvidence": null,
+        "writerRetries": 0,
+        "verificationRecoveries": 0,
+        "controllerPolicyEligible": null,
+        "controllerPolicyViolations": [],
+        "cleanup": {
+          "stopped": true,
+          "removed": true,
+          "safeToContinue": true,
+          "authSync": {
+            "status": "updated"
+          },
+          "errors": []
+        }
+      },
+      "probe": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "CANARY_PASSED\n",
+        "stderr": "",
+        "timedOut": false,
+        "overflow": false,
+        "aborted": false,
+        "error": null,
+        "latencyMs": 572
+      }
+    },
+    {
+      "strategy": "v11",
+      "passed": true,
+      "result": {
+        "at": "2026-10-24T00:15:43.362Z",
+        "id": "protocol-canary",
+        "strategy": "v11",
+        "status": "completed",
+        "error": null,
+        "sourceHash": "0133dee33e70bd02f04f7ecb01d0fd3bd16eac54ef2738e3fee51be5039a982b",
+        "patchSha256": "683e018783543c8a7ba9f573c06d65cbbf97d559b2a1c35fcb76bfde12b0a8f7",
+        "protectionViolations": [],
+        "costKnown": true,
+        "costUsd": 0.0052747,
+        "knownCostFloorUsd": 0.0052747,
+        "actorLatencyMs": 48251,
+        "repairs": 0,
+        "takeovers": 0,
+        "usage": {
+          "inputTokens": 15832,
+          "cachedInputTokens": 11520,
+          "outputTokens": 785
+        },
+        "completionEvidence": "public_checks_passed",
+        "writerRetries": 0,
+        "verificationRecoveries": 0,
+        "controllerPolicyEligible": true,
+        "controllerPolicyViolations": [],
+        "cleanup": {
+          "stopped": true,
+          "removed": true,
+          "safeToContinue": true,
+          "authSync": {
+            "status": "updated"
+          },
+          "errors": []
+        }
+      },
+      "probe": {
+        "exitCode": 0,
+        "signal": null,
+        "stdout": "CANARY_PASSED\n",
+        "stderr": "",
+        "timedOut": false,
+        "overflow": false,
+        "aborted": false,
+        "error": null,
+        "latencyMs": 517
+      }
+    }
+  ]
+}

@@ -1,0 +1,596 @@
+{
+  "at": "2026-10-24T01:04:22.864Z",
+  "passed": true,
+  "auditSha256": "f267bc78545ff6a1d0377bfac7511f76ec9ec8813974fa39bfb236926dce4020",
+  "scriptSha256": "8aa1fed294af2351b8667a051beb5d1699839027b13f11a5c1154f133b0bc0da",
+  "planSha256": "c44292f1c3b3ca8e6a28393edff9d1fd7712d34800311a41125b3ed397f52102",
+  "executionSha256": "1c088cb8a558c99137731fc5c56df90f1ab0f1f48c7fc354ed0fd658499c87fd",
+  "gradesSha256": "491d72cc076649554861beb0c96cf76b412a6a253f8f3c4ab71b9614a788e68d",
+  "counters": {
+    "attemptsExpected": 54,
+    "sourceInventoriesExpected": 54,
+    "sourceInventoriesVerified": 54,
+    "nativeAttemptsExpected": 27,
+    "nativeReceiptsReparsed": 27,
+    "nativeUsageReconciled": 27,
+    "piAttemptsExpected": 27,
+    "piAttemptsReconciled": 27,
+    "piStagesExpected": 61,
+    "piStagesReconciled": 61,
+    "piMessagesWithCompleteUsage": 296,
+    "knownCostAttemptsReconciled": 54,
+    "unknownCostAttempts": 0,
+    "candidateGradesExpected": 54,
+    "candidateGradeReceiptsVerified": 54,
+    "referenceGradeReceiptsVerified": 54
+  },
+  "identities": {
+    "nativePerResponseProven": 0,
+    "nativeNoPerResponseProof": 27,
+    "piMessages": 296
+  },
+  "rawUsageComplete": true,
+  "independentArms": [
+    {
+      "strategy": "v11",
+      "accepted": 17,
+      "graded": 27,
+      "knownCostFloorUsd": 0.43459661999999993,
+      "frozenPolicyValidAccepted": 17,
+      "postrunZeroAnyRestorationAccepted": 15
+    },
+    {
+      "strategy": "native",
+      "accepted": 24,
+      "graded": 27,
+      "knownCostFloorUsd": 1.7888959999999998,
+      "frozenPolicyValidAccepted": 24,
+      "postrunZeroAnyRestorationAccepted": 24
+    }
+  ],
+  "independentPairs": {
+    "bothPass": 17,
+    "v11Only": 0,
+    "nativeOnly": 7,
+    "bothFail": 3,
+    "ungraded": 0
+  },
+  "taskPairs": [
+    {
+      "taskId": "cpp/sublist",
+      "id": "cpp_sublist",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "cpp/phone-number",
+      "id": "cpp_phone-number",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "cpp/complex-numbers",
+      "id": "cpp_complex-numbers",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "go/alphametics",
+      "id": "go_alphametics",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "go/wordy",
+      "id": "go_wordy",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "go/say",
+      "id": "go_say",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "go/word-search",
+      "id": "go_word-search",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "go/two-bucket",
+      "id": "go_two-bucket",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "cpp/all-your-base",
+      "id": "cpp_all-your-base",
+      "v11": false,
+      "native": false
+    },
+    {
+      "taskId": "java/affine-cipher",
+      "id": "java_affine-cipher",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "java/pig-latin",
+      "id": "java_pig-latin",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "java/all-your-base",
+      "id": "java_all-your-base",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "java/satellite",
+      "id": "java_satellite",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "javascript/alphametics",
+      "id": "javascript_alphametics",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "javascript/house",
+      "id": "javascript_house",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "python/affine-cipher",
+      "id": "python_affine-cipher",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "javascript/two-bucket",
+      "id": "javascript_two-bucket",
+      "v11": false,
+      "native": false
+    },
+    {
+      "taskId": "python/transpose",
+      "id": "python_transpose",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "python/proverb",
+      "id": "python_proverb",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "python/connect",
+      "id": "python_connect",
+      "v11": false,
+      "native": true
+    },
+    {
+      "taskId": "python/go-counting",
+      "id": "python_go-counting",
+      "v11": false,
+      "native": false
+    },
+    {
+      "taskId": "rust/book-store",
+      "id": "rust_book-store",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "rust/parallel-letter-frequency",
+      "id": "rust_parallel-letter-frequency",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "rust/accumulate",
+      "id": "rust_accumulate",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "rust/pig-latin",
+      "id": "rust_pig-latin",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "javascript/grade-school",
+      "id": "javascript_grade-school",
+      "v11": true,
+      "native": true
+    },
+    {
+      "taskId": "rust/decimal",
+      "id": "rust_decimal",
+      "v11": true,
+      "native": true
+    }
+  ],
+  "stateCounts": {
+    "v11": {
+      "completed": 25,
+      "unverified": 2
+    },
+    "native": {
+      "completed": 27
+    }
+  },
+  "unverified": [
+    {
+      "id": "python_proverb-r1-v11",
+      "strategy": "v11",
+      "status": "unverified",
+      "costKnown": true,
+      "costUsd": 0.03044784,
+      "usageReconciled": true,
+      "sourceVerified": true,
+      "sourceFiles": 4,
+      "verificationStatus": "unverified",
+      "clarification": "Must proverb accept one sequence of words, such as proverb([\"nail\", \"shoe\"]), or separate positional words, such as proverb(\"nail\", \"shoe\")?",
+      "verificationNotes": [],
+      "writerRetries": 0,
+      "verificationRecoveries": 1,
+      "repairs": 0,
+      "takeovers": 0,
+      "stages": 4
+    },
+    {
+      "id": "python_connect-r1-v11",
+      "strategy": "v11",
+      "status": "unverified",
+      "costKnown": true,
+      "costUsd": 0.03850844,
+      "usageReconciled": true,
+      "sourceVerified": true,
+      "sourceFiles": 3,
+      "verificationStatus": "unverified",
+      "clarification": "Must ConnectGame accept a single newline-delimited board string, a sequence of row strings, or both?",
+      "verificationNotes": [],
+      "writerRetries": 0,
+      "verificationRecoveries": 1,
+      "repairs": 0,
+      "takeovers": 0,
+      "stages": 4
+    }
+  ],
+  "internalProtectionNotes": [
+    {
+      "id": "rust_pig-latin-r1-v11",
+      "taskId": "rust_pig-latin",
+      "status": "completed",
+      "storedPolicyValid": true,
+      "notes": [
+        {
+          "kind": "protected_checks_restored",
+          "label": "initial",
+          "paths": [
+            "Cargo.lock"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rust_decimal-r1-v11",
+      "taskId": "rust_decimal",
+      "status": "completed",
+      "storedPolicyValid": true,
+      "notes": [
+        {
+          "kind": "protected_checks_restored",
+          "label": "initial",
+          "paths": [
+            "Cargo.lock"
+          ]
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "label": "Same 27 known development exercises, unchanged public contracts; not held-out evidence or a SWE-bench Pro score",
+    "evidence": [
+      {
+        "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\plan.json",
+        "sha256": "7943b808584cfaf3b0a641aeb4f9afed87bf1fb9baedbeefe4e01c0498e544f5"
+      },
+      {
+        "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\execution-complete.json",
+        "sha256": "0811cfc7920be7d4b668678f39394bb4e1e915dbf7fcb99645068b52fab41054"
+      },
+      {
+        "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\grades.json",
+        "sha256": "97815120cac74e1aeb8af40e4ee277d7ea392bf6587ac95f71937db76d167b73"
+      },
+      {
+        "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\summary.json",
+        "sha256": "c914f128e868ac96f28c8f85b8a6c946579e084f9fc6b2c41fe5393fcd0878ad"
+      },
+      {
+        "path": "C:\\Users\\Eric Qin\\Documents\\GitHub\\suffice\\.suffice\\poly27-protocol-20261023-r2\\public-tasks.json",
+        "sha256": "55764a85c9e8cd1fed8c09beb35b4b50c26ed41b71b8c10e10a81c57c1142c45"
+      }
+    ],
+    "originalArms": [
+      {
+        "strategy": "v10",
+        "attempts": 27,
+        "accepted": 17,
+        "unknownCosts": 0,
+        "costUsd": 0.22647746
+      },
+      {
+        "strategy": "native",
+        "attempts": 27,
+        "accepted": 24,
+        "unknownCosts": 0,
+        "costUsd": 1.6247924000000002
+      }
+    ],
+    "currentArms": [
+      {
+        "strategy": "v11",
+        "attempts": 27,
+        "accepted": 17,
+        "unknownCosts": 0,
+        "costUsd": 0.43459661999999993
+      },
+      {
+        "strategy": "native",
+        "attempts": 27,
+        "accepted": 24,
+        "unknownCosts": 0,
+        "costUsd": 1.7888959999999998
+      }
+    ],
+    "changes": {
+      "rows": [
+        {
+          "id": "cpp_sublist",
+          "taskId": "cpp/sublist",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "cpp_phone-number",
+          "taskId": "cpp/phone-number",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": false,
+          "nativeFresh": true
+        },
+        {
+          "id": "cpp_complex-numbers",
+          "taskId": "cpp/complex-numbers",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "go_alphametics",
+          "taskId": "go/alphametics",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "go_wordy",
+          "taskId": "go/wordy",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "go_say",
+          "taskId": "go/say",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "go_word-search",
+          "taskId": "go/word-search",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "go_two-bucket",
+          "taskId": "go/two-bucket",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "cpp_all-your-base",
+          "taskId": "cpp/all-your-base",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": false
+        },
+        {
+          "id": "java_affine-cipher",
+          "taskId": "java/affine-cipher",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "java_pig-latin",
+          "taskId": "java/pig-latin",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "java_all-your-base",
+          "taskId": "java/all-your-base",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "java_satellite",
+          "taskId": "java/satellite",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "javascript_alphametics",
+          "taskId": "javascript/alphametics",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "javascript_house",
+          "taskId": "javascript/house",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "python_affine-cipher",
+          "taskId": "python/affine-cipher",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "javascript_two-bucket",
+          "taskId": "javascript/two-bucket",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": false,
+          "nativeFresh": false
+        },
+        {
+          "id": "python_transpose",
+          "taskId": "python/transpose",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "python_proverb",
+          "taskId": "python/proverb",
+          "v10": true,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "python_connect",
+          "taskId": "python/connect",
+          "v10": true,
+          "v11": false,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "python_go-counting",
+          "taskId": "python/go-counting",
+          "v10": false,
+          "v11": false,
+          "nativeEarlier": false,
+          "nativeFresh": false
+        },
+        {
+          "id": "rust_book-store",
+          "taskId": "rust/book-store",
+          "v10": false,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "rust_parallel-letter-frequency",
+          "taskId": "rust/parallel-letter-frequency",
+          "v10": false,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "rust_accumulate",
+          "taskId": "rust/accumulate",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "rust_pig-latin",
+          "taskId": "rust/pig-latin",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "javascript_grade-school",
+          "taskId": "javascript/grade-school",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        },
+        {
+          "id": "rust_decimal",
+          "taskId": "rust/decimal",
+          "v10": true,
+          "v11": true,
+          "nativeEarlier": true,
+          "nativeFresh": true
+        }
+      ],
+      "gained": 2,
+      "lost": 2,
+      "stayedPassed": 15,
+      "stayedFailed": 8,
+      "ungraded": 0
+    },
+    "interpretation": "Original runs are referenced, never modified or regraded. Fresh native results are stochastic; one replay does not establish generalization or a causal improvement."
+  },
+  "taskCsvSha256": "e045002604045bd6c39f043a7e0f326a96349af9910ad1ab20fab3388fa442a2",
+  "findings": [],
+  "evidenceScopes": {
+    "effort": "Requested effort checked against the frozen config/plan and client receipts; provider-response effort is not independently observable.",
+    "modes": "Exact regular-file content membership and digests verified. Recorded Linux permission modes are validated and included in treeHash; Windows host filesystem modes are not claimed as independently reproduced.",
+    "pricing": "Pi per-message catalog pricing including highest eligible tier; native aggregate base-rate estimate retains the existing long-context/cache-write limitations."
+  },
+  "interpretation": [
+    "Known 27-task development replay, not held-out or SWE-bench Pro accuracy.",
+    "Raw canonical acceptance stays separate from the frozen outer policy and supplemental zero-any-restoration count.",
+    "Writer retries and verification recovery are public-spec checks, not access to private candidate grading."
+  ]
+}

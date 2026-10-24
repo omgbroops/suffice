@@ -1,0 +1,61 @@
+{
+  "arms": [
+    {
+      "strategy": "v11",
+      "scheduled": 27,
+      "accepted": 17,
+      "graded": 27,
+      "ungraded": 0,
+      "policyValidAccepted": 17,
+      "strictPolicyValidAccepted": 15,
+      "controllerRestorationAttempts": 2,
+      "operationalCompletions": 25,
+      "unknownCosts": 0,
+      "costKnown": true,
+      "costUsd": 0.43459661999999993,
+      "knownCostFloorUsd": 0.43459661999999993,
+      "costPerAcceptedUsd": 0.025564507058823526,
+      "meanLatencyMs": 102753.18518518518,
+      "meanActorLatencyMs": 98749.03703703704,
+      "repairs": 0,
+      "takeovers": 0,
+      "writerRetries": 0,
+      "verificationRecoveries": 2
+    },
+    {
+      "strategy": "native",
+      "scheduled": 27,
+      "accepted": 24,
+      "graded": 27,
+      "ungraded": 0,
+      "policyValidAccepted": 24,
+      "strictPolicyValidAccepted": 24,
+      "controllerRestorationAttempts": 0,
+      "operationalCompletions": 27,
+      "unknownCosts": 0,
+      "costKnown": true,
+      "costUsd": 1.7888959999999998,
+      "knownCostFloorUsd": 1.7888959999999998,
+      "costPerAcceptedUsd": 0.07453733333333333,
+      "meanLatencyMs": 60329.74074074074,
+      "meanActorLatencyMs": 56179.11111111111,
+      "repairs": 0,
+      "takeovers": 0,
+      "writerRetries": 0,
+      "verificationRecoveries": 0
+    }
+  ],
+  "paired": {
+    "bothPass": 17,
+    "v11Only": 0,
+    "nativeOnly": 7,
+    "bothFail": 3,
+    "ungraded": 0
+  },
+  "policyMetrics": {
+    "policyValidAccepted": "Frozen V10 definition: completed actor, safe outer closure, no outer protected-file restoration, within deadline",
+    "strictPolicyValidAccepted": "Additionally excludes V11 controller-reported internal protected-file restoration; native has no controller layer"
+  },
+  "planSha256": "c44292f1c3b3ca8e6a28393edff9d1fd7712d34800311a41125b3ed397f52102",
+  "graderImage": "sha256:ae7122da7098cf26e8bbbd5bd822a063ecc5a1c91e67231a1b9b06d2eae61679"
+}
