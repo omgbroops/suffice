@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-10-23T21:23:51.0692969-05:00",
+  "computer": "SONION",
+  "scope": "Stop WSL and clean up benchmark resources, preserving source and unique evidence",
+  "taildrop": {
+    "destinationHost": "DESKTOP-67PL8B8",
+    "destinationIp": "100.117.59.52",
+    "intendedDirectory": "C:/Users/Mohammed/Downloads",
+    "file": "HANDOFF-ALL-EXPERIMENTS-2026-10-23.md",
+    "sourceBytes": 4596448,
+    "sourceSha256": "7E1330DD42182A4B342B7F7AF7A9EA4B99088EA7C0BFAA60116B3F1C6BBC1361",
+    "cliReportedSent": true,
+    "remoteFileIndependentlyVerified": false
+  },
+  "docker": {
+    "removedImageCount": 5,
+    "imageRemovalExitCode": 0,
+    "imageRemovalOutput": [
+      "Untagged: ghcr.io/scaleapi/swe-bench_pro-v2:instance_NodeBB__NodeBB-7b8bffd763e2155cf88f3ebc258fa68ebe18188d-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+      "Deleted: sha256:09158ced85c5393d42b7d3264d6322f2ae5d446be60d2068400a31bdcdd89f48",
+      "Untagged: ghcr.io/scaleapi/swe-bench_pro-v2:instance_internetarchive__openlibrary-fdbc0d8f418333c7e575c40b661b582c301ef7ac-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+      "Deleted: sha256:9c3f34d800fee351b489d69a87eac2382c701a16dff4d62e990c889940392edd",
+      "Untagged: ghcr.io/scaleapi/swe-bench_pro-v2:instance_future-architect__vuls-abd80417728b16c6502067914d27989ee575f0ee",
+      "Deleted: sha256:b950522623d288135757712710f69c450d72ef92c018d10ad0fae8236c8437a4",
+      "Untagged: ghcr.io/scaleapi/swe-bench_pro-v2:instance_ansible__ansible-e0c91af45fa9af575d10fd3e724ebc59d2b2d6ac-v30a923fb5c164d6cd18280c02422f75e611e8fb2",
+      "Deleted: sha256:2418504bcebc6ab2603215b5929eb7567c3965e589bb08d1f4343a214592e44a",
+      "Untagged: ghcr.io/scaleapi/swe-bench_pro-v2:instance_flipt-io__flipt-dbe263961b187e1c5d7fe34c65b000985a2da5a0",
+      "Deleted: sha256:f0ec09fbc3643b1a917afbb441405487d09fc6cf814746a8283b04f5e707964d"
+    ],
+    "reportedImageStorageBefore": "71.58GB",
+    "reportedImageStorageAfter": "48.91GB",
+    "reportedImageCountBefore": 86,
+    "reportedImageCountAfter": 81,
+    "note": "Docker accounting is not a measurement of physical host space reclaimed",
+    "unrelatedContainersDeleted": 0,
+    "volumesDeleted": 0,
+    "desktopStopExitCode": 0,
+    "frozenPoly27ToolchainsRetained": true
+  },
+  "shutdownVerification": {
+    "CheckedAt": "2026-10-23T21:23:19.9680774-05:00",
+    "ComputerName": "SONION",
+    "WslRunningOutput": "",
+    "WslListExitCode": 0,
+    "VmProcesses": [],
+    "FreePhysicalMemoryKiB": 2720396,
+    "FreeDiskBytes": 320285749248
+  },
+  "fileDeletion": {
+    "attemptedBatchExecuted": false,
+    "result": "Automatic approval review rejected the bytecode-cache and duplicate-archive deletion command",
+    "statedReason": "blocked by policy",
+    "candidatesRetained": [
+      "34 Python bytecode files under benchmark/**/__pycache__ and reports/shared-core-v1/__pycache__",
+      ".suffice/poly27-runtime/codex-package-linux-curl.tar.gz"
+    ],
+    "rawAuditDirectory": ".suffice/cleanup-20261023/",
+    "note": "No alternative deletion mechanism was used after the rejection"
+  },
+  "preserved": [
+    "Source and handoff documentation",
+    "Unique benchmark results and receipts",
+    "Frozen experiment toolchains and canonical runtime binaries",
+    "Supabase containers, images, and volumes",
+    "Credentials and unrelated application data"
+  ],
+  "benchmarksRestarted": false
+}
