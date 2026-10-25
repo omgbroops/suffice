@@ -5,6 +5,7 @@ import {spawn} from 'node:child_process';
 import {createInterface} from 'node:readline/promises';
 import {ModelRuntime} from '@earendil-works/pi-coding-agent';
 import {VERSION} from './options.mjs';
+import {learnerCommand,learningText} from './learner.mjs';
 import {createSufficeSession} from './session.mjs';
 import {repositoryTools} from './tools.mjs';
 
@@ -41,6 +42,7 @@ async function login(runtime,options,sharedReader) {
 export async function main(options) {
   options.cwd=await realpath(options.cwd);
   if(!(await stat(options.cwd)).isDirectory()) throw new Error('--cwd must be a directory');
+  if(options.command==='learn') {console.log(learningText(await learnerCommand(options)));return;}
   await mkdir(options.home,{recursive:true,mode:0o700});
   const runtime=await ModelRuntime.create({authPath:resolve(options.home,'auth.json'),modelsPath:null,modelsStorePath:resolve(options.home,'catalog.json'),allowModelNetwork:false});
   if(options.command==='login') return login(runtime,options);
