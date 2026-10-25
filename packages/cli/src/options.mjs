@@ -12,13 +12,14 @@ Usage: suffice [options] [task]
   suffice doctor                  Check local setup without model inference
   suffice learn connect PATH      Connect the local Model Learner checkout
   suffice learn status            Show this project’s latest tracked task
+  suffice learn review worked      Save optional human feedback
   suffice learn verify            Attach an independently produced JUnit report
 
 Options:
   --cwd PATH          Starting repository (default: current directory)
   --model ID          gpt-6.1-sol (default), gpt-6-luna, or another catalog ID
   --effort LEVEL      off, minimal, low (default), medium, high, xhigh
-  --learn             Track one fresh task in Model Learner
+  --learn             Record one fresh task without setup questions
   --learn-artifact P  Exact final artifact file for this task
   --learn-test ID     Required independent JUnit case; repeatable
   --report PATH       Independent JUnit report for learn verify
@@ -70,7 +71,7 @@ export function parseOptions(args, env=process.env) {
   if((options.learnReport||options.learnGeneratedAt||options.learnExitCode!==undefined||options.learnIndependent)&&!(options.command==='learn'&&options.learnerArgs[0]==='verify'))throw Error('Verification flags require suffice learn verify.');
   if(options.learn&&options.command)throw Error('--learn is a task option, not a learn subcommand.');
   if(options.learn&&options.continue)throw Error('--learn needs a fresh task; omit --continue.');
-  if(options.learn&&(!options.learnArtifact||!options.learnTests?.length))throw Error('--learn needs --learn-artifact and --learn-test.');
+  if(Boolean(options.learnArtifact)!==Boolean(options.learnTests?.length)&&options.learn)throw Error('Advanced verification needs both --learn-artifact and --learn-test.');
   options.cwd=resolve(options.cwd); options.home=resolve(options.home);
   return options;
 }

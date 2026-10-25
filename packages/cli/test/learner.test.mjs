@@ -46,7 +46,7 @@ async function syntheticCapture(f) {
 }
 
 test('learning options are explicit and cannot accidentally start inference for verify flags',()=>{
-  assert.throws(()=>parseOptions(['--learn']),/artifact/);
+  assert.equal(parseOptions(['--learn']).learn,true);
   assert.throws(()=>parseOptions(['--learn','--continue','--learn-artifact','a','--learn-test','x']),/fresh/);
   assert.throws(()=>parseOptions(['--report','x','task']),/verify/);
   assert.throws(()=>parseOptions(['learn','verify','--exit-code','']),/required|Missing value/);
@@ -56,7 +56,7 @@ test('learning options are explicit and cannot accidentally start inference for 
 });
 
 test('connection failure preserves the old private connection',async t=>{
-  const f=await fixture(t),good=async()=>({protocol:'suffice-learner/v1',runtime_manifests:true});
+  const f=await fixture(t),good=async()=>({protocol:'suffice-learner/v1',runtime_manifests:true,capture_only:true});
   await connectLearner(f.options,f.backend,{call:good});
   const path=resolve(f.home,'learner/connection.json'),before=await readFile(path);
   await assert.rejects(connectLearner(f.options,f.backend,{call:async()=>{throw Error('offline');}}),/offline/);
@@ -117,10 +117,10 @@ test('real pinned SDK lifecycle emits linkage and captures on final settlement w
 test('interactive /learn starts fresh and invokes the current controller',async()=>{
   const commands=new Map(),notices=[],armed=[];let current={hasHistory:()=>true};
   sufficeInterface({home:'/fictional',getControl:()=>current})({on(){},registerCommand:(n,c)=>commands.set(n,c)});
-  const inputs=['artifact.txt','fixture::case'];let fresh=0;
-  const ctx={cwd:'/fictional',waitForIdle:async()=>{},newSession:async()=>{fresh++;current={enableLearning:async o=>armed.push(o)};return {cancelled:false};},ui:{input:async()=>inputs.shift(),setStatus(){},notify:m=>notices.push(m)}};
+  let fresh=0;
+  const ctx={cwd:'/fictional',waitForIdle:async()=>{},newSession:async()=>{fresh++;current={enableLearning:async o=>armed.push(o)};return {cancelled:false};},ui:{input:async()=>{throw Error('Learning must not ask setup questions');},setStatus(){},notify:m=>notices.push(m)}};
   await commands.get('learn').handler('',ctx);
-  assert.equal(fresh,1);assert.deepEqual(armed,[{learnArtifact:'artifact.txt',learnTests:['fixture::case']}]);assert.match(notices[0],/captured automatically/);
+  assert.equal(fresh,1);assert.deepEqual(armed,[{learnArtifact:undefined,learnTests:undefined}]);assert.match(notices[0],/Learning is on/);
 });
 
 test('backend stderr and malformed output never escape into errors',async()=>{
@@ -153,4 +153,16 @@ test('already captured retry does not reinterpret subsequently growing session f
   const capture=await syntheticCapture(f);const original=await capture.control.finish();
   await writeFile(capture.piSession,'subsequent unrelated content');
   const retried=await learnerAction(f.options,'retry');assert.equal(retried.observation_id,original.observation_id);
+});
+
+for(const [review,expected] of [['success','success'],['failure','failure'],['unknown','unknown']])test(`one-step capture and optional ${review} feedback need no artifact or tests`,integration,async t=>{
+  const f=await fixture(t);delete f.options.learnArtifact;delete f.options.learnTests;
+  await connectLearner(f.options,MODEL_LEARNER);
+  const capture=await syntheticCapture(f);const first=await capture.control.finish();
+  assert.equal(first.outcome,'unknown');assert.equal(first.eligible,false);assert.equal(first.summary.capture_only,true);
+  assert.match(learningText(first),/Optional/);
+  const result=await learnerAction({...f.options,learnReview:review},'review');
+  assert.equal(result.outcome,expected);assert.equal(result.verification,'unverified');assert.equal(result.eligible,false);
+  const repeated=await learnerAction({...f.options,learnReview:review},'review');assert.equal(repeated.outcome_id,result.outcome_id);
+  await assert.rejects(learnerAction({...f.options,learnReport:'unused'},'verify'),/without a verification target/);
 });

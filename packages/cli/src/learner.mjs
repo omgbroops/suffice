@@ -48,7 +48,7 @@ export async function connectLearner(options,project,{call=invoke}={}) {
   const config={version:'suffice-learner/v1',project:root,stateRoot,machine_id:'suffice-'+randomUUID(),database:resolve(stateRoot,'ledger.sqlite3')};
   try {const previous=await load(resolve(stateRoot,'connection.json'));config.machine_id=previous.machine_id;}catch(e){if(e.code!=='ENOENT')throw e;}
   const probe=await call(config,'probe',{});
-  if(probe.protocol!=='suffice-learner/v1'||!probe.runtime_manifests) throw Error('Model Learner needs the runtime-link adapter update.');
+  if(probe.protocol!=='suffice-learner/v1'||!probe.runtime_manifests||!probe.capture_only) throw Error('Model Learner needs the runtime-link adapter update.');
   await save(resolve(stateRoot,'connection.json'),config);
   return {connected:true,message:'Model Learner connected. Enable --learn for a fresh task or use /learn.'};
 }
@@ -76,12 +76,12 @@ async function artifactPath(workspace,path) {
 }
 export async function armLearner(options,source,{call=invoke,notify=()=>{}}={}) {
   if(source.hasHistory())throw Error('Learning needs a fresh task session. Use /learn to start one, or omit --continue.');
-  if(!options.learnArtifact||!options.learnTests?.length)throw Error('Learning needs an artifact and named independent tests.');
-  const config=await connection(options),artifact=await artifactPath(options.cwd,options.learnArtifact);
+  if(Boolean(options.learnArtifact)!==Boolean(options.learnTests?.length))throw Error('Advanced verification needs both --learn-artifact and --learn-test.');
+  const config=await connection(options),artifact=options.learnArtifact?await artifactPath(options.cwd,options.learnArtifact):null;
   const run_id=randomUUID(),task_id=randomUUID(),runtime_id=randomUUID();
   const runDir=resolve(config.stateRoot,'runs',run_id);
   await mkdir(runDir,{recursive:true,mode:0o700});
-  const task=await call(config,'prepare',{database:config.database,task_id,tests:options.learnTests});
+  const task=await call(config,'prepare',{database:config.database,task_id,tests:options.learnTests??[]});
   const state={version:'suffice-task/v1',workspace:await realpath(options.cwd),run_id,task_id:task.task_id,runtime_id,
     artifact,receipts:source.receipts,pi_session:source.piSession(),started_at:source.startedAt,
     machine_id:config.machine_id,status:'armed'};
@@ -95,10 +95,10 @@ export async function armLearner(options,source,{call=invoke,notify=()=>{}}={}) 
         state.ended_at=new Date().toISOString();state.status='capturing';
         await save(resolve(runDir,'state.json'),state);
         try {
-          await artifactPath(state.workspace,state.artifact);
+          if(state.artifact)await artifactPath(state.workspace,state.artifact);
           const result=await call(config,'finish',{...state,run_dir:runDir,database:config.database});
           state.status='captured';state.result=result;await save(resolve(runDir,'state.json'),state);
-          notify('Task saved to Model Learner. Outcome is unknown until independent verification.');
+          notify('Task recorded. You can optionally use /learn review to add feedback.');
           return result;
         }catch(error){state.status='capture_failed';await save(resolve(runDir,'state.json'),state);
           notify('Learning capture failed; the task is unverified. Use /learn retry or suffice learn retry.');return {capture_failed:true};}
@@ -117,16 +117,21 @@ export async function learnerAction(options,action,{call=invoke}={}) {
   if(action==='status' && state.status!=='captured')return {status:state.status,outcome:'unknown',eligible:false};
   if(state.status!=='captured')throw Error('Capture must complete before verification.');
   const data={database:config.database,run_id:state.run_id};
-  if(action==='verify') {
+  if(action==='review') {
+    if(!['success','failure','unknown'].includes(options.learnReview))throw Error('Choose worked, did not work, or not sure.');
+    data.review=options.learnReview;
+  } else if(action==='verify') {
+    if(!state.artifact)throw Error('This task was recorded without a verification target. Use /learn review for feedback; advanced independent checks can be configured for a future task.');
     if(!options.learnIndependent||!options.learnReport||!options.learnGeneratedAt||!Number.isInteger(options.learnExitCode))throw Error('Provide --report, --generated-at, --exit-code and --independent for an independently produced report.');
-    await artifactPath(state.workspace,state.artifact);
+    if(state.artifact)await artifactPath(state.workspace,state.artifact);
     Object.assign(data,{report:resolve(options.cwd,options.learnReport),artifact:state.artifact,
       generated_at:options.learnGeneratedAt,exit_code:options.learnExitCode,independent:true});
-  } else if(action!=='status') throw Error('Use learn connect, status, retry or verify.');
+  } else if(action!=='status') throw Error('Use learn connect, status, retry, review or verify.');
   const result=await call(config,action,data);state.result=result;await save(resolve(runDir,'state.json'),state);return result;
 }
 export async function learnerCommand(options) {
   const [action,project,...extra]=options.learnerArgs;
+  if(action==='review'){const choices={worked:'success',failed:'failure',unsure:'unknown'};if(extra.length||!choices[project])throw Error('Use suffice learn review worked|failed|unsure');return learnerAction({...options,learnReview:choices[project]},'review');}
   if(action==='connect') {if(!project||extra.length)throw Error('Use suffice learn connect /path/to/model-learner');return connectLearner(options,project);}
   if(project)throw Error('Use learning flags for the selected report; no positional identity is needed.');
   return learnerAction(options,action??'status');
@@ -138,6 +143,10 @@ export function learningText(result) {
   if(result.status==='armed')return 'Learning is armed for the next task.';
   if(result.status==='capture_failed'||result.capture_failed)return 'Capture needs attention. The task remains unverified; use learn retry.';
   const issues=result.summary?.attribution_issues??[];
+  if(result.summary?.capture_only&&!issues.length) {
+    const feedback=result.outcome==='unknown'?'Optional: /learn review to add feedback.':'Your feedback is saved separately from verified test results.';
+    return 'Task recorded. '+feedback;
+  }
   const verdict=issues.length?'Saved for review. Task boundaries, session history or configuration are ambiguous; this task is excluded from single-configuration learning.':result.outcome==='unknown'?'Saved. Awaiting independent verification.':
     result.eligible?`Independent checks ${result.outcome==='success'?'passed':'failed'}. One verified ${result.outcome} is available for learning.`:
     'Evidence saved, but this task is not eligible for single-configuration learning.';

@@ -75,14 +75,31 @@ already be installed with `uv sync`; Suffice never installs it or calls a model)
 ./packages/cli/bin/suffice.mjs learn connect /absolute/path/to/model-learner
 ```
 
-Then use **`/learn`** in the native interactive interface. It asks for the exact
-artifact file and required independent JUnit case identities, starts a fresh
-session if needed, and arms the next task. Type your task normally. Suffice saves
-its task/session linkage and imports the metadata automatically after final
-settlement. The first outcome is **unknown**, including when the agent says it
-finished or its public checks pass. `/learn status` shows the current result.
+Then enter **`/learn`** in Suffice. There are no setup questions. Send your next
+task normally and Suffice records its metadata automatically when it finishes.
+`/learn` starts a fresh task context when needed. `/learn status` shows the result.
+
+Optionally use **`/learn review`** afterward and choose **Worked**, **Did not work**,
+or **Not sure**. Your feedback is saved separately from independently verified
+test results. Without independent verification, completion stays unknown and
+human feedback stays unverified; neither becomes a verified model-learning label.
+You do not need an artifact file, test names or a manifest for this workflow.
 
 For print mode or an initially armed interactive session:
+
+```sh
+./packages/cli/bin/suffice.mjs --learn --print 'Implement the requested change'
+```
+
+Tracking covers one task per fresh session and cannot be combined with
+`--continue`. Subsequent prompts are untracked until you enter `/learn` again.
+From a terminal, optional feedback is `suffice learn review worked`, `failed`, or
+`unsure`.
+
+### Optional independent test verification
+
+If you need a verified learning label, declare the artifact and independent
+acceptance cases before the task:
 
 ```sh
 ./packages/cli/bin/suffice.mjs --learn \
@@ -90,13 +107,11 @@ For print mode or an initially armed interactive session:
   --print 'Implement the requested change'
 ```
 
-Repeat `--learn-test` for every required independent case. The current adapter
-binds one exact artifact file; it does not certify a whole working tree. Tracking
-is opt-in and limited to one task per fresh session. It cannot be combined with
-`--continue`. `/learn` starts a fresh task context when the current session has
-history; subsequent ordinary prompts are untracked until you arm another fresh
-task. Choose independent acceptance cases yourself, not cases invented by the
-coding agent after seeing its output.
+Repeat `--learn-test` for every required independent case. Both artifact and test
+flags are required for this advanced mode. It binds one exact file, rather than
+certifying a whole working tree. Select independently established cases yourself.
+A task captured with the default no-setup mode has no verification target; use
+`/learn review` for that task or configure independent checks for a future task.
 
 Attach an **already independently produced** JUnit report with `/learn verify`.
 The prompts ask for its path, actual generation time (with timezone), actual
@@ -128,7 +143,7 @@ The connection is global to that home; latest-task pointers are per project.
 There are no new transcript copies. The adapter reads only the session/receipt
 files emitted by the active Suffice controller. Model Learner retains typed
 metadata and hashes, omitting prompts, response/tool bodies and private paths.
-An opt-in `learner_link` record binds the task/run to the Pi session; native v2
+An opt-in `learner_link` record binds the task/run to the Pi session; native v2/v3
 manifests distinguish this runtime linkage from legacy operator-reviewed v1
 imports. It is local source evidence, not authenticated backend attestation.
 

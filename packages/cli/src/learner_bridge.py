@@ -27,6 +27,7 @@ from model_learner.observations.resolution import resolve_assessment
 from model_learner.storage.database import Database, Repository
 from model_learner.verification import (
     JUnitReportBinding,
+    assess_human,
     assess_run,
     file_sha256,
     junit_criterion,
@@ -83,14 +84,24 @@ def operation(name, data):
     if name == "probe":
         if not hasattr(suffice, "RuntimeManifest"):
             raise ValueError("updated adapter required")
-        return {"protocol": "suffice-learner/v1", "runtime_manifests": True}
+        return {
+            "protocol": "suffice-learner/v1",
+            "runtime_manifests": True,
+            "capture_only": hasattr(suffice, "CaptureManifest"),
+        }
     repo = repository(data, initialize=name == "prepare")
     if name == "prepare":
         task_id = UUID(data["task_id"])
-        criterion = junit_criterion(required_test_ids=data["tests"])
+        tests = data.get("tests") or []
+        metadata = (
+            {"junit_verifier": junit_criterion(required_test_ids=tests)}
+            if tests
+            else {}
+        )
+        acceptance = "suffice-independent-tests" if tests else "suffice-feedback"
         existing = repo.get(Task, task_id)
         if existing:
-            if existing.metadata != {"junit_verifier": criterion}:
+            if existing.metadata != metadata:
                 raise ValueError("task identity conflict")
             task = existing
         else:
@@ -98,11 +109,9 @@ def operation(name, data):
                 Task(
                     task_id=task_id,
                     description="Tracked Suffice task",
-                    acceptance_spec=AcceptanceSpec(
-                        identifier="suffice-independent-tests", version="1"
-                    ),
+                    acceptance_spec=AcceptanceSpec(identifier=acceptance, version="1"),
                     task_group="coding",
-                    metadata={"junit_verifier": criterion},
+                    metadata=metadata,
                 )
             )
         return {
@@ -118,7 +127,9 @@ def operation(name, data):
             startup = receipts[0]
             task = repo.get(Task, UUID(data["task_id"]))
             manifest = {
-                "format": "suffice-task-import/v2",
+                "format": "suffice-task-import/v2"
+                if data.get("artifact")
+                else "suffice-task-import/v3",
                 "source_version": startup["version"],
                 "pi_schema_version": 3,
                 "machine_id": data["machine_id"],
@@ -142,9 +153,15 @@ def operation(name, data):
                 "started_at": data["started_at"],
                 "ended_at": data["ended_at"],
                 "declared_at": datetime.now(UTC).isoformat(),
-                "final_artifact_fingerprint": "sha256:" + file_sha256(data["artifact"]),
+                "final_artifact_fingerprint": "sha256:" + file_sha256(data["artifact"])
+                if data.get("artifact")
+                else None,
             }
-            suffice.RuntimeManifest.model_validate(manifest)
+            (
+                suffice.RuntimeManifest
+                if data.get("artifact")
+                else suffice.CaptureManifest
+            ).model_validate(manifest)
             fd = os.open(
                 manifest_path,
                 os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
@@ -180,6 +197,25 @@ def operation(name, data):
                 if outcome and o.outcome_id == outcome.outcome_id
             ),
             None,
+        )
+        return describe(repo, run, observation)
+    if name == "review":
+        if data.get("review") not in {"success", "failure", "unknown"}:
+            raise ValueError("invalid human review")
+        outcome = current(repo, run)
+        if (
+            outcome is None
+            or outcome.status.value != data["review"]
+            or outcome.assessment_source != "human_assessment"
+        ):
+            outcome = assess_human(
+                repo,
+                run_id=run_id,
+                status=data["review"],
+                supersedes_outcome_id=outcome.outcome_id if outcome else None,
+            )
+        observation = build_real_observation(
+            repo, run_id=run_id, outcome_id=outcome.outcome_id, dataset=DATASET
         )
         return describe(repo, run, observation)
     if name != "verify" or data.get("independent") is not True:

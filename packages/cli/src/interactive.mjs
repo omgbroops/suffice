@@ -56,10 +56,16 @@ export function sufficeInterface(options) {
     };
     pi.registerCommand('project',{description:'Choose or switch project directories',handler:project});
     pi.registerCommand('cd',{description:'Switch project directory',handler:project});
-    pi.registerCommand('learn',{description:'Track a fresh task, inspect status, or attach independent verification',handler:async(args,ctx)=>{
+    pi.registerCommand('learn',{description:'Track your next task, add feedback, or inspect status',handler:async(args,ctx)=>{
       try {
         await ctx.waitForIdle();const action=args.trim()||'start';
         if(['status','retry'].includes(action)) {ctx.ui.notify(learningText(await learnerAction({...options,cwd:ctx.cwd},action)),'info');return;}
+        if(action==='review') {
+          const answer=await ctx.ui.select('How did the task go?',['Worked','Did not work','Not sure']);
+          if(!answer)return;
+          const review={'Worked':'success','Did not work':'failure','Not sure':'unknown'}[answer];
+          ctx.ui.notify(learningText(await learnerAction({...options,cwd:ctx.cwd,learnReview:review},'review')),'info');return;
+        }
         if(action==='verify') {
           const report=await ctx.ui.input('Independent JUnit report path');if(!report)return;
           const generated=await ctx.ui.input('Actual report-generation time (ISO with timezone)');if(!generated)return;
@@ -68,14 +74,12 @@ export function sufficeInterface(options) {
           const code=Number(exit);if(!Number.isInteger(code)||code<0||code>255)throw Error('Invalid exit code.');
           ctx.ui.notify(learningText(await learnerAction({...options,cwd:ctx.cwd,learnReport:report,learnGeneratedAt:generated,learnExitCode:code,learnIndependent:true},'verify')),'info');return;
         }
-        if(action!=='start')throw Error('Use /learn, /learn status, /learn retry or /learn verify.');
-        const artifact=await ctx.ui.input('Exact task artifact file',options.learnArtifact);if(!artifact)return;
-        const tests=await ctx.ui.input('Independent JUnit case identities, comma separated',options.learnTests?.join(','));if(!tests)return;
+        if(action!=='start')throw Error('Use /learn, /learn status, /learn review, /learn retry or /learn verify.');
         let control=options.getControl?.();if(!control)throw Error('Task controller unavailable.');
         if(control.hasHistory()||control.learning) {if((await ctx.newSession()).cancelled)return;control=options.getControl();}
-        await control.enableLearning({learnArtifact:artifact,learnTests:tests.split(',').map(s=>s.trim()).filter(Boolean)});
+        await control.enableLearning({learnArtifact:undefined,learnTests:undefined});
         ctx.ui.setStatus('learner','Learning: armed for next task');
-        ctx.ui.notify('Next task will be captured automatically. Independent verification is still required.','info');
+        ctx.ui.notify('Learning is on for your next task. Just send it normally; feedback afterward is optional.','info');
       }catch(error){ctx.ui.notify(error.message,'error');}
     }});
     pi.registerCommand('usage',{description:'Show inference usage for this session',handler:async(_args,ctx)=>{
