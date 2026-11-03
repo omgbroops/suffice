@@ -51,6 +51,7 @@ export async function main(options) {
     if(!result.content?.some(c=>c.text?.includes('SUFFICE_SHELL_OK')) || result.isError) throw new Error('Bash check failed. On Windows, install Git for Windows (Git Bash).');
     const available=Boolean(runtime.getModel('openai',options.model));
     console.log(JSON.stringify({name:'Suffice',version:VERSION,node:process.versions.node,cwd:options.cwd,home:options.home,model:options.model,modelInCatalog:available,subscription:runtime.isUsingSubscription('openai'),shell:'ready',tools:tools.map(t=>t.name),sandbox:false},null,2));
+    console.error(runtime.isUsingSubscription('openai')?'Ready.':'Not signed in. Next: run `suffice login` (needs your own OpenAI account; there is no API-key mode).');
     if(!available) process.exitCode=1;
     return;
   }

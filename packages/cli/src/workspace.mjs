@@ -5,8 +5,13 @@ import {createHash} from 'node:crypto';
 export const hash=value=>createHash('sha256').update(value).digest('hex');
 export async function repositoryPath(workspace, path) {
   if(typeof path!=='string' || !path || path.includes('\0')) throw new Error('A repository file path is required');
-  const root=await realpath(workspace), target=resolve(root,path);
-  const within=p=>{const r=relative(root,p);return r==='' || (!isAbsolute(r) && r!=='..' && !r.startsWith('..'+sep));};
+  const root=await realpath(workspace);
+  const inside=(base,p)=>{const r=relative(base,p);return r==='' || (!isAbsolute(r) && r!=='..' && !r.startsWith('..'+sep));};
+  const within=p=>inside(root,p);
+  let target=resolve(root,path);
+  // Absolute paths spelled through a symlink (macOS /tmp -> /private/tmp) still name this repository.
+  const spelled=resolve(workspace,path);
+  if(!within(target) && inside(resolve(workspace),spelled)) target=resolve(root,relative(resolve(workspace),spelled));
   if(!within(target)) throw new Error('Path is outside the authorized repository');
   let current=target;
   while(true) {
