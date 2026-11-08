@@ -1,0 +1,119 @@
+{
+  "id": "005-dependency-aliases-semantic-r0",
+  "task": "dependency-aliases",
+  "arm": "semantic",
+  "repetition": 0,
+  "status": "completed",
+  "final": "Implemented the repair in `src/` without changing public signatures.\n\n- Alias resolution now follows transitive aliases, detects alias cycles, and rejects missing targets.\n- Build ordering uses resolved node identities for deduplication and dependency-cycle detection.\n- Declared traversal order and reachable-only resolution are preserved.\n\nVerification: the visible suite (`node --test tests/visible.test.mjs`) passed: **1 test, 0 failures**.",
+  "totals": {
+    "input": 5361,
+    "cacheRead": 7680,
+    "cacheWrite": 0,
+    "output": 730,
+    "totalTokens": 13771,
+    "estimatedApiUsd": 0.01879,
+    "modelCalls": 5,
+    "costUnknown": false,
+    "assistantMessages": 5
+  },
+  "wallMs": 24451.403300000005,
+  "cpuMicros": {
+    "user": 281000,
+    "system": 125000
+  },
+  "toolCalls": 13,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/order.mjs",
+      "src/registry.mjs",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 2213,
+    "lines": 44,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1027,
+        "lines": 16
+      },
+      {
+        "path": "src/order.mjs",
+        "bytes": 653,
+        "lines": 15
+      },
+      {
+        "path": "src/registry.mjs",
+        "bytes": 204,
+        "lines": 6
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 329,
+        "lines": 7
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:19:54.197Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "totalEstimatedUsd": 0.01879,
+  "budgetConsumedUsd": 0.01879,
+  "totalWallMs": 24607.403300000005,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 80
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 76
+  },
+  "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+}

@@ -1,0 +1,2675 @@
+{
+  "sourceCommit": "cb60233dc35eff091a2b1bd06c2e2d3b2e45bd99",
+  "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e",
+  "completion": {
+    "scheduled": 18,
+    "executed": 18,
+    "unrun": [],
+    "stopReason": null,
+    "budgetConsumedUsd": 0.37040320000000015,
+    "usageUnknown": false,
+    "capUsd": 7.95,
+    "manifestHash": "7cd01a17c0a2ac846d086e14b34446a74439f0d49eee4050a871c391c77987c3",
+    "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e",
+    "endedAt": "2026-11-08T03:24:46.007Z"
+  },
+  "groups": [
+    {
+      "arm": "baseline",
+      "attempted": 6,
+      "scheduled": 6,
+      "accepted": 6,
+      "completed": 6,
+      "success": 6,
+      "knownCostAttempts": 6,
+      "totalEstimatedUsd": 0.10774159999999999,
+      "meanEstimatedUsd": 0.01795693333333333,
+      "costPerAccepted": 0.01795693333333333,
+      "meanInputTokens": 12553.833333333334,
+      "meanUncachedInput": 5791.166666666667,
+      "meanCachedInput": 6762.666666666667,
+      "meanOutputTokens": 569.8333333333334,
+      "meanModelCalls": 4.333333333333333,
+      "meanToolCalls": 16.666666666666668,
+      "meanWallMs": 21281.208566666664,
+      "meanTotalWallMs": 21486.5419,
+      "meanFilesRead": 7.833333333333333,
+      "meanSourceBytes": 5078.833333333333,
+      "meanSourceLines": 110,
+      "meanChangedFiles": 2.3333333333333335,
+      "graphCalls": 0,
+      "meanIndexingMs": 0,
+      "meanGraphToolMs": 0,
+      "meanAstToolMs": 0,
+      "meanGraphIoBytes": 0,
+      "meanGraphScanMs": 0,
+      "meanCpuMs": 463.5,
+      "regressionsPassed": 6,
+      "unknownCostAttempts": 0
+    },
+    {
+      "arm": "ast",
+      "attempted": 6,
+      "scheduled": 6,
+      "accepted": 6,
+      "completed": 6,
+      "success": 6,
+      "knownCostAttempts": 6,
+      "totalEstimatedUsd": 0.1287724,
+      "meanEstimatedUsd": 0.021462066666666668,
+      "costPerAccepted": 0.021462066666666668,
+      "meanInputTokens": 13843.833333333334,
+      "meanUncachedInput": 7486.5,
+      "meanCachedInput": 6357.333333333333,
+      "meanOutputTokens": 585.3333333333334,
+      "meanModelCalls": 4.333333333333333,
+      "meanToolCalls": 17.5,
+      "meanWallMs": 20948.759116666657,
+      "meanTotalWallMs": 21147.092449999993,
+      "meanFilesRead": 8,
+      "meanSourceBytes": 5092.333333333333,
+      "meanSourceLines": 110.16666666666667,
+      "meanChangedFiles": 2.3333333333333335,
+      "graphCalls": 0,
+      "meanIndexingMs": 0,
+      "meanGraphToolMs": 0,
+      "meanAstToolMs": 0,
+      "meanGraphIoBytes": 0,
+      "meanGraphScanMs": 0,
+      "meanCpuMs": 387.6666666666667,
+      "regressionsPassed": 6,
+      "unknownCostAttempts": 0
+    },
+    {
+      "arm": "semantic",
+      "attempted": 6,
+      "scheduled": 6,
+      "accepted": 6,
+      "completed": 6,
+      "success": 6,
+      "knownCostAttempts": 6,
+      "totalEstimatedUsd": 0.13388919999999999,
+      "meanEstimatedUsd": 0.022314866666666665,
+      "costPerAccepted": 0.022314866666666665,
+      "meanInputTokens": 15870.666666666666,
+      "meanUncachedInput": 7678.666666666667,
+      "meanCachedInput": 8192,
+      "meanOutputTokens": 613.8333333333334,
+      "meanModelCalls": 4.5,
+      "meanToolCalls": 17,
+      "meanWallMs": 23644.21468333334,
+      "meanTotalWallMs": 23845.881350000007,
+      "meanFilesRead": 8,
+      "meanSourceBytes": 5092.333333333333,
+      "meanSourceLines": 110.16666666666667,
+      "meanChangedFiles": 2.3333333333333335,
+      "graphCalls": 0,
+      "meanIndexingMs": 0,
+      "meanGraphToolMs": 0,
+      "meanAstToolMs": 0,
+      "meanGraphIoBytes": 0,
+      "meanGraphScanMs": 0,
+      "meanCpuMs": 340.8333333333333,
+      "regressionsPassed": 6,
+      "unknownCostAttempts": 0
+    }
+  ],
+  "runs": [
+    {
+      "id": "001-prerelease-diff-baseline-r0",
+      "task": "prerelease-diff",
+      "arm": "baseline",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 6081,
+        "cacheRead": 9472,
+        "cacheWrite": 0,
+        "output": 360,
+        "totalTokens": 15913,
+        "estimatedApiUsd": 0.0167092,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 17416.229900000002,
+      "cpuMicros": {
+        "user": 828000,
+        "system": 266000
+      },
+      "toolCalls": 10,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/functions/diff.js",
+          "src/test/functions/diff.js",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 7175,
+        "lines": 166,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 878,
+            "lines": 4
+          },
+          {
+            "path": "src/functions/diff.js",
+            "bytes": 1867,
+            "lines": 66
+          },
+          {
+            "path": "src/test/functions/diff.js",
+            "bytes": 1898,
+            "lines": 58
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 2532,
+            "lines": 38
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:18:21.164Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "totalEstimatedUsd": 0.0167092,
+      "budgetConsumedUsd": 0.016709200000000007,
+      "totalWallMs": 17711.229900000002,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 141
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 154
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "002-prerelease-diff-ast-r0",
+      "task": "prerelease-diff",
+      "arm": "ast",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 7844,
+        "cacheRead": 8320,
+        "cacheWrite": 0,
+        "output": 372,
+        "totalTokens": 16536,
+        "estimatedApiUsd": 0.02024,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 15650.4617,
+      "cpuMicros": {
+        "user": 265000,
+        "system": 78000
+      },
+      "toolCalls": 11,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/functions/diff.js",
+          "tests/visible.test.mjs",
+          "src/test/functions/diff.js"
+        ],
+        "bytes": 7175,
+        "lines": 166,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 878,
+            "lines": 4
+          },
+          {
+            "path": "src/functions/diff.js",
+            "bytes": 1867,
+            "lines": 66
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 2532,
+            "lines": 38
+          },
+          {
+            "path": "src/test/functions/diff.js",
+            "bytes": 1898,
+            "lines": 58
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:18:37.565Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "totalEstimatedUsd": 0.02024,
+      "budgetConsumedUsd": 0.020240000000000008,
+      "totalWallMs": 15920.4617,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 122
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 148
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "003-prerelease-diff-semantic-r0",
+      "task": "prerelease-diff",
+      "arm": "semantic",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 12445,
+        "cacheRead": 5376,
+        "cacheWrite": 0,
+        "output": 386,
+        "totalTokens": 18207,
+        "estimatedApiUsd": 0.029287599999999997,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 25175.102899999998,
+      "cpuMicros": {
+        "user": 187000,
+        "system": 78000
+      },
+      "toolCalls": 10,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/functions/diff.js",
+          "src/test/functions/diff.js",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 7175,
+        "lines": 166,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 878,
+            "lines": 4
+          },
+          {
+            "path": "src/functions/diff.js",
+            "bytes": 1867,
+            "lines": 66
+          },
+          {
+            "path": "src/test/functions/diff.js",
+            "bytes": 1898,
+            "lines": 58
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 2532,
+            "lines": 38
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:19:03.446Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "totalEstimatedUsd": 0.029287599999999997,
+      "budgetConsumedUsd": 0.02928759999999997,
+      "totalWallMs": 25448.102899999998,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 124
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 149
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "004-dependency-aliases-ast-r0",
+      "task": "dependency-aliases",
+      "arm": "ast",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 3159,
+        "cacheRead": 8576,
+        "cacheWrite": 0,
+        "output": 712,
+        "totalTokens": 12447,
+        "estimatedApiUsd": 0.014295599999999999,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 25639.355199999998,
+      "cpuMicros": {
+        "user": 329000,
+        "system": 171000
+      },
+      "toolCalls": 13,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/order.mjs",
+          "src/registry.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 2213,
+        "lines": 44,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1027,
+            "lines": 16
+          },
+          {
+            "path": "src/order.mjs",
+            "bytes": 653,
+            "lines": 15
+          },
+          {
+            "path": "src/registry.mjs",
+            "bytes": 204,
+            "lines": 6
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 329,
+            "lines": 7
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:19:29.532Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/order.mjs",
+        "src/registry.mjs"
+      ],
+      "totalEstimatedUsd": 0.014295599999999999,
+      "budgetConsumedUsd": 0.01429560000000002,
+      "totalWallMs": 25789.355199999998,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 76
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 74
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "005-dependency-aliases-semantic-r0",
+      "task": "dependency-aliases",
+      "arm": "semantic",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 5361,
+        "cacheRead": 7680,
+        "cacheWrite": 0,
+        "output": 730,
+        "totalTokens": 13771,
+        "estimatedApiUsd": 0.01879,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 24451.403300000005,
+      "cpuMicros": {
+        "user": 281000,
+        "system": 125000
+      },
+      "toolCalls": 13,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/order.mjs",
+          "src/registry.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 2213,
+        "lines": 44,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1027,
+            "lines": 16
+          },
+          {
+            "path": "src/order.mjs",
+            "bytes": 653,
+            "lines": 15
+          },
+          {
+            "path": "src/registry.mjs",
+            "bytes": 204,
+            "lines": 6
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 329,
+            "lines": 7
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:19:54.197Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/order.mjs",
+        "src/registry.mjs"
+      ],
+      "totalEstimatedUsd": 0.01879,
+      "budgetConsumedUsd": 0.01879,
+      "totalWallMs": 24607.403300000005,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 80
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 76
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "006-dependency-aliases-baseline-r0",
+      "task": "dependency-aliases",
+      "arm": "baseline",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 3960,
+        "cacheRead": 6272,
+        "cacheWrite": 0,
+        "output": 729,
+        "totalTokens": 10961,
+        "estimatedApiUsd": 0.0158372,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 24381.36630000001,
+      "cpuMicros": {
+        "user": 266000,
+        "system": 78000
+      },
+      "toolCalls": 13,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/order.mjs",
+          "src/registry.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 2213,
+        "lines": 44,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1027,
+            "lines": 16
+          },
+          {
+            "path": "src/order.mjs",
+            "bytes": 653,
+            "lines": 15
+          },
+          {
+            "path": "src/registry.mjs",
+            "bytes": 204,
+            "lines": 6
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 329,
+            "lines": 7
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:20:18.803Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/order.mjs",
+        "src/registry.mjs"
+      ],
+      "totalEstimatedUsd": 0.0158372,
+      "budgetConsumedUsd": 0.015837200000000023,
+      "totalWallMs": 24534.36630000001,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 77
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 76
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "007-inventory-reservations-semantic-r0",
+      "task": "inventory-reservations",
+      "arm": "semantic",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 10989,
+        "cacheRead": 3584,
+        "cacheWrite": 0,
+        "output": 535,
+        "totalTokens": 15108,
+        "estimatedApiUsd": 0.0276864,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 18815.16010000001,
+      "cpuMicros": {
+        "user": 172000,
+        "system": 93000
+      },
+      "toolCalls": 28,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/audit-summary.mjs",
+          "src/checkout.mjs",
+          "src/index.mjs",
+          "src/item-plan.mjs",
+          "src/legacy-cart.mjs",
+          "src/receipt.mjs",
+          "src/request-key.mjs",
+          "src/request-normalizer.mjs",
+          "src/reservation-store.mjs",
+          "src/shipping-estimator.mjs",
+          "src/shop.mjs",
+          "src/stock-repository.mjs",
+          "src/stock-rules.mjs",
+          "src/stock-transaction.mjs",
+          "src/validation.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 6110,
+        "lines": 127,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1243,
+            "lines": 9
+          },
+          {
+            "path": "src/audit-summary.mjs",
+            "bytes": 155,
+            "lines": 5
+          },
+          {
+            "path": "src/checkout.mjs",
+            "bytes": 712,
+            "lines": 15
+          },
+          {
+            "path": "src/index.mjs",
+            "bytes": 48,
+            "lines": 2
+          },
+          {
+            "path": "src/item-plan.mjs",
+            "bytes": 275,
+            "lines": 6
+          },
+          {
+            "path": "src/legacy-cart.mjs",
+            "bytes": 198,
+            "lines": 5
+          },
+          {
+            "path": "src/receipt.mjs",
+            "bytes": 230,
+            "lines": 7
+          },
+          {
+            "path": "src/request-key.mjs",
+            "bytes": 71,
+            "lines": 4
+          },
+          {
+            "path": "src/request-normalizer.mjs",
+            "bytes": 447,
+            "lines": 9
+          },
+          {
+            "path": "src/reservation-store.mjs",
+            "bytes": 328,
+            "lines": 9
+          },
+          {
+            "path": "src/shipping-estimator.mjs",
+            "bytes": 170,
+            "lines": 4
+          },
+          {
+            "path": "src/shop.mjs",
+            "bytes": 477,
+            "lines": 12
+          },
+          {
+            "path": "src/stock-repository.mjs",
+            "bytes": 249,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-rules.mjs",
+            "bytes": 309,
+            "lines": 6
+          },
+          {
+            "path": "src/stock-transaction.mjs",
+            "bytes": 259,
+            "lines": 7
+          },
+          {
+            "path": "src/validation.mjs",
+            "bytes": 422,
+            "lines": 7
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 517,
+            "lines": 11
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:20:37.860Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-repository.mjs",
+        "src/stock-transaction.mjs"
+      ],
+      "totalEstimatedUsd": 0.0276864,
+      "budgetConsumedUsd": 0.027686399999999972,
+      "totalWallMs": 18989.16010000001,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 4,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 88
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 86
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "008-inventory-reservations-baseline-r0",
+      "task": "inventory-reservations",
+      "arm": "baseline",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 5920,
+        "cacheRead": 6016,
+        "cacheWrite": 0,
+        "output": 601,
+        "totalTokens": 12537,
+        "estimatedApiUsd": 0.018451600000000002,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 19449.387300000002,
+      "cpuMicros": {
+        "user": 312000,
+        "system": 187000
+      },
+      "toolCalls": 25,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/item-plan.mjs",
+          "src/checkout.mjs",
+          "src/shop.mjs",
+          "src/index.mjs",
+          "src/reservation-store.mjs",
+          "src/request-key.mjs",
+          "src/request-normalizer.mjs",
+          "src/receipt.mjs",
+          "src/stock-repository.mjs",
+          "src/stock-transaction.mjs",
+          "src/stock-rules.mjs",
+          "src/validation.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 5587,
+        "lines": 113,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1243,
+            "lines": 9
+          },
+          {
+            "path": "src/item-plan.mjs",
+            "bytes": 275,
+            "lines": 6
+          },
+          {
+            "path": "src/checkout.mjs",
+            "bytes": 712,
+            "lines": 15
+          },
+          {
+            "path": "src/shop.mjs",
+            "bytes": 477,
+            "lines": 12
+          },
+          {
+            "path": "src/index.mjs",
+            "bytes": 48,
+            "lines": 2
+          },
+          {
+            "path": "src/reservation-store.mjs",
+            "bytes": 328,
+            "lines": 9
+          },
+          {
+            "path": "src/request-key.mjs",
+            "bytes": 71,
+            "lines": 4
+          },
+          {
+            "path": "src/request-normalizer.mjs",
+            "bytes": 447,
+            "lines": 9
+          },
+          {
+            "path": "src/receipt.mjs",
+            "bytes": 230,
+            "lines": 7
+          },
+          {
+            "path": "src/stock-repository.mjs",
+            "bytes": 249,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-transaction.mjs",
+            "bytes": 259,
+            "lines": 7
+          },
+          {
+            "path": "src/stock-rules.mjs",
+            "bytes": 309,
+            "lines": 6
+          },
+          {
+            "path": "src/validation.mjs",
+            "bytes": 422,
+            "lines": 7
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 517,
+            "lines": 11
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:20:57.582Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-repository.mjs",
+        "src/stock-transaction.mjs"
+      ],
+      "totalEstimatedUsd": 0.018451600000000002,
+      "budgetConsumedUsd": 0.018451600000000012,
+      "totalWallMs": 19620.387300000002,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 4,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 87
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 84
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "009-inventory-reservations-ast-r0",
+      "task": "inventory-reservations",
+      "arm": "ast",
+      "repetition": 0,
+      "status": "completed",
+      "totals": {
+        "input": 10021,
+        "cacheRead": 3200,
+        "cacheWrite": 0,
+        "output": 636,
+        "totalTokens": 13857,
+        "estimatedApiUsd": 0.026722000000000003,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 22211.649599999975,
+      "cpuMicros": {
+        "user": 203000,
+        "system": 172000
+      },
+      "toolCalls": 25,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/index.mjs",
+          "src/shop.mjs",
+          "src/request-normalizer.mjs",
+          "src/reservation-store.mjs",
+          "src/stock-repository.mjs",
+          "src/stock-rules.mjs",
+          "src/stock-transaction.mjs",
+          "src/validation.mjs",
+          "src/request-key.mjs",
+          "src/item-plan.mjs",
+          "src/receipt.mjs",
+          "src/checkout.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 5587,
+        "lines": 113,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1243,
+            "lines": 9
+          },
+          {
+            "path": "src/index.mjs",
+            "bytes": 48,
+            "lines": 2
+          },
+          {
+            "path": "src/shop.mjs",
+            "bytes": 477,
+            "lines": 12
+          },
+          {
+            "path": "src/request-normalizer.mjs",
+            "bytes": 447,
+            "lines": 9
+          },
+          {
+            "path": "src/reservation-store.mjs",
+            "bytes": 328,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-repository.mjs",
+            "bytes": 249,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-rules.mjs",
+            "bytes": 309,
+            "lines": 6
+          },
+          {
+            "path": "src/stock-transaction.mjs",
+            "bytes": 259,
+            "lines": 7
+          },
+          {
+            "path": "src/validation.mjs",
+            "bytes": 422,
+            "lines": 7
+          },
+          {
+            "path": "src/request-key.mjs",
+            "bytes": 71,
+            "lines": 4
+          },
+          {
+            "path": "src/item-plan.mjs",
+            "bytes": 275,
+            "lines": 6
+          },
+          {
+            "path": "src/receipt.mjs",
+            "bytes": 230,
+            "lines": 7
+          },
+          {
+            "path": "src/checkout.mjs",
+            "bytes": 712,
+            "lines": 15
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 517,
+            "lines": 11
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:21:20.068Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-repository.mjs",
+        "src/stock-transaction.mjs"
+      ],
+      "totalEstimatedUsd": 0.026722000000000003,
+      "budgetConsumedUsd": 0.026722000000000024,
+      "totalWallMs": 22381.649599999975,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 4,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 88
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 82
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "010-prerelease-diff-baseline-r1",
+      "task": "prerelease-diff",
+      "arm": "baseline",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 8562,
+        "cacheRead": 6400,
+        "cacheWrite": 0,
+        "output": 419,
+        "totalTokens": 15381,
+        "estimatedApiUsd": 0.021954,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 18211.470700000005,
+      "cpuMicros": {
+        "user": 172000,
+        "system": 141000
+      },
+      "toolCalls": 11,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "tests/visible.test.mjs",
+          "src/test/functions/diff.js",
+          "src/functions/diff.js"
+        ],
+        "bytes": 7175,
+        "lines": 166,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 878,
+            "lines": 4
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 2532,
+            "lines": 38
+          },
+          {
+            "path": "src/test/functions/diff.js",
+            "bytes": 1898,
+            "lines": 58
+          },
+          {
+            "path": "src/functions/diff.js",
+            "bytes": 1867,
+            "lines": 66
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:21:38.778Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "totalEstimatedUsd": 0.021954,
+      "budgetConsumedUsd": 0.021954,
+      "totalWallMs": 18502.470700000005,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 133
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 158
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "011-prerelease-diff-semantic-r1",
+      "task": "prerelease-diff",
+      "arm": "semantic",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 6717,
+        "cacheRead": 10624,
+        "cacheWrite": 0,
+        "output": 430,
+        "totalTokens": 17771,
+        "estimatedApiUsd": 0.018796399999999998,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 17922.3211,
+      "cpuMicros": {
+        "user": 156000,
+        "system": 94000
+      },
+      "toolCalls": 12,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/functions/diff.js",
+          "tests/visible.test.mjs",
+          "src/test/functions/diff.js",
+          "src/README.md"
+        ],
+        "bytes": 7256,
+        "lines": 167,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 878,
+            "lines": 4
+          },
+          {
+            "path": "src/functions/diff.js",
+            "bytes": 1867,
+            "lines": 66
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 2532,
+            "lines": 38
+          },
+          {
+            "path": "src/test/functions/diff.js",
+            "bytes": 1898,
+            "lines": 58
+          },
+          {
+            "path": "src/README.md",
+            "bytes": 81,
+            "lines": 1
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:21:57.455Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "totalEstimatedUsd": 0.018796399999999998,
+      "budgetConsumedUsd": 0.018796399999999963,
+      "totalWallMs": 18200.3211,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 128
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 150
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "012-prerelease-diff-ast-r1",
+      "task": "prerelease-diff",
+      "arm": "ast",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 12225,
+        "cacheRead": 4096,
+        "cacheWrite": 0,
+        "output": 416,
+        "totalTokens": 16737,
+        "estimatedApiUsd": 0.0290196,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 16866.595100000006,
+      "cpuMicros": {
+        "user": 203000,
+        "system": 125000
+      },
+      "toolCalls": 12,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/test/functions/diff.js",
+          "tests/visible.test.mjs",
+          "src/functions/diff.js",
+          "src/README.md"
+        ],
+        "bytes": 7256,
+        "lines": 167,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 878,
+            "lines": 4
+          },
+          {
+            "path": "src/test/functions/diff.js",
+            "bytes": 1898,
+            "lines": 58
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 2532,
+            "lines": 38
+          },
+          {
+            "path": "src/functions/diff.js",
+            "bytes": 1867,
+            "lines": 66
+          },
+          {
+            "path": "src/README.md",
+            "bytes": 81,
+            "lines": 1
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:22:15.011Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/functions/diff.js"
+      ],
+      "totalEstimatedUsd": 0.0290196,
+      "budgetConsumedUsd": 0.029019600000000007,
+      "totalWallMs": 17139.595100000006,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 123
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 7,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 150
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "013-dependency-aliases-ast-r1",
+      "task": "dependency-aliases",
+      "arm": "ast",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 6161,
+        "cacheRead": 5888,
+        "cacheWrite": 0,
+        "output": 815,
+        "totalTokens": 12864,
+        "estimatedApiUsd": 0.0210608,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 25159.52549999999,
+      "cpuMicros": {
+        "user": 156000,
+        "system": 234000
+      },
+      "toolCalls": 16,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/registry.mjs",
+          "tests/visible.test.mjs",
+          "src/order.mjs"
+        ],
+        "bytes": 2213,
+        "lines": 44,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1027,
+            "lines": 16
+          },
+          {
+            "path": "src/registry.mjs",
+            "bytes": 204,
+            "lines": 6
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 329,
+            "lines": 7
+          },
+          {
+            "path": "src/order.mjs",
+            "bytes": 653,
+            "lines": 15
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:22:40.621Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/order.mjs",
+        "src/registry.mjs"
+      ],
+      "totalEstimatedUsd": 0.0210608,
+      "budgetConsumedUsd": 0.02106080000000002,
+      "totalWallMs": 25311.52549999999,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 79
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 73
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "014-dependency-aliases-baseline-r1",
+      "task": "dependency-aliases",
+      "arm": "baseline",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 3912,
+        "cacheRead": 6400,
+        "cacheWrite": 0,
+        "output": 770,
+        "totalTokens": 11082,
+        "estimatedApiUsd": 0.016164,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 29422.129799999995,
+      "cpuMicros": {
+        "user": 172000,
+        "system": 62000
+      },
+      "toolCalls": 13,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/registry.mjs",
+          "src/order.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 2213,
+        "lines": 44,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1027,
+            "lines": 16
+          },
+          {
+            "path": "src/registry.mjs",
+            "bytes": 204,
+            "lines": 6
+          },
+          {
+            "path": "src/order.mjs",
+            "bytes": 653,
+            "lines": 15
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 329,
+            "lines": 7
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:23:10.259Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/order.mjs",
+        "src/registry.mjs"
+      ],
+      "totalEstimatedUsd": 0.016164,
+      "budgetConsumedUsd": 0.016163999999999984,
+      "totalWallMs": 29572.129799999995,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 75
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 75
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "015-dependency-aliases-semantic-r1",
+      "task": "dependency-aliases",
+      "arm": "semantic",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 4983,
+        "cacheRead": 8064,
+        "cacheWrite": 0,
+        "output": 728,
+        "totalTokens": 13775,
+        "estimatedApiUsd": 0.018052400000000003,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 25292.546900000016,
+      "cpuMicros": {
+        "user": 218000,
+        "system": 125000
+      },
+      "toolCalls": 13,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/order.mjs",
+          "src/registry.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 2213,
+        "lines": 44,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1027,
+            "lines": 16
+          },
+          {
+            "path": "src/order.mjs",
+            "bytes": 653,
+            "lines": 15
+          },
+          {
+            "path": "src/registry.mjs",
+            "bytes": 204,
+            "lines": 6
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 329,
+            "lines": 7
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:23:35.765Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/order.mjs",
+        "src/registry.mjs"
+      ],
+      "totalEstimatedUsd": 0.018052400000000003,
+      "budgetConsumedUsd": 0.018052400000000024,
+      "totalWallMs": 25440.546900000016,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 3,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 76
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 72
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "016-inventory-reservations-semantic-r1",
+      "task": "inventory-reservations",
+      "arm": "semantic",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 5577,
+        "cacheRead": 13824,
+        "cacheWrite": 0,
+        "output": 874,
+        "totalTokens": 20275,
+        "estimatedApiUsd": 0.0212764,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "wallMs": 30208.753800000006,
+      "cpuMicros": {
+        "user": 297000,
+        "system": 219000
+      },
+      "toolCalls": 26,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/shop.mjs",
+          "src/item-plan.mjs",
+          "src/reservation-store.mjs",
+          "src/stock-repository.mjs",
+          "src/index.mjs",
+          "src/stock-transaction.mjs",
+          "src/request-normalizer.mjs",
+          "src/stock-rules.mjs",
+          "src/receipt.mjs",
+          "src/validation.mjs",
+          "src/request-key.mjs",
+          "src/checkout.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 5587,
+        "lines": 113,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1243,
+            "lines": 9
+          },
+          {
+            "path": "src/shop.mjs",
+            "bytes": 477,
+            "lines": 12
+          },
+          {
+            "path": "src/item-plan.mjs",
+            "bytes": 275,
+            "lines": 6
+          },
+          {
+            "path": "src/reservation-store.mjs",
+            "bytes": 328,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-repository.mjs",
+            "bytes": 249,
+            "lines": 9
+          },
+          {
+            "path": "src/index.mjs",
+            "bytes": 48,
+            "lines": 2
+          },
+          {
+            "path": "src/stock-transaction.mjs",
+            "bytes": 259,
+            "lines": 7
+          },
+          {
+            "path": "src/request-normalizer.mjs",
+            "bytes": 447,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-rules.mjs",
+            "bytes": 309,
+            "lines": 6
+          },
+          {
+            "path": "src/receipt.mjs",
+            "bytes": 230,
+            "lines": 7
+          },
+          {
+            "path": "src/validation.mjs",
+            "bytes": 422,
+            "lines": 7
+          },
+          {
+            "path": "src/request-key.mjs",
+            "bytes": 71,
+            "lines": 4
+          },
+          {
+            "path": "src/checkout.mjs",
+            "bytes": 712,
+            "lines": 15
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 517,
+            "lines": 11
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:24:06.204Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-repository.mjs",
+        "src/stock-transaction.mjs"
+      ],
+      "totalEstimatedUsd": 0.0212764,
+      "budgetConsumedUsd": 0.021276399999999973,
+      "totalWallMs": 30389.753800000006,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 4,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 95
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 86
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "017-inventory-reservations-ast-r1",
+      "task": "inventory-reservations",
+      "arm": "ast",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 5509,
+        "cacheRead": 8064,
+        "cacheWrite": 0,
+        "output": 561,
+        "totalTokens": 14134,
+        "estimatedApiUsd": 0.0174344,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 20164.967599999974,
+      "cpuMicros": {
+        "user": 234000,
+        "system": 156000
+      },
+      "toolCalls": 28,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/audit-summary.mjs",
+          "src/checkout.mjs",
+          "src/index.mjs",
+          "src/item-plan.mjs",
+          "src/legacy-cart.mjs",
+          "src/receipt.mjs",
+          "src/request-key.mjs",
+          "src/request-normalizer.mjs",
+          "src/reservation-store.mjs",
+          "src/shipping-estimator.mjs",
+          "src/shop.mjs",
+          "src/stock-repository.mjs",
+          "src/stock-rules.mjs",
+          "src/stock-transaction.mjs",
+          "src/validation.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 6110,
+        "lines": 127,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1243,
+            "lines": 9
+          },
+          {
+            "path": "src/audit-summary.mjs",
+            "bytes": 155,
+            "lines": 5
+          },
+          {
+            "path": "src/checkout.mjs",
+            "bytes": 712,
+            "lines": 15
+          },
+          {
+            "path": "src/index.mjs",
+            "bytes": 48,
+            "lines": 2
+          },
+          {
+            "path": "src/item-plan.mjs",
+            "bytes": 275,
+            "lines": 6
+          },
+          {
+            "path": "src/legacy-cart.mjs",
+            "bytes": 198,
+            "lines": 5
+          },
+          {
+            "path": "src/receipt.mjs",
+            "bytes": 230,
+            "lines": 7
+          },
+          {
+            "path": "src/request-key.mjs",
+            "bytes": 71,
+            "lines": 4
+          },
+          {
+            "path": "src/request-normalizer.mjs",
+            "bytes": 447,
+            "lines": 9
+          },
+          {
+            "path": "src/reservation-store.mjs",
+            "bytes": 328,
+            "lines": 9
+          },
+          {
+            "path": "src/shipping-estimator.mjs",
+            "bytes": 170,
+            "lines": 4
+          },
+          {
+            "path": "src/shop.mjs",
+            "bytes": 477,
+            "lines": 12
+          },
+          {
+            "path": "src/stock-repository.mjs",
+            "bytes": 249,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-rules.mjs",
+            "bytes": 309,
+            "lines": 6
+          },
+          {
+            "path": "src/stock-transaction.mjs",
+            "bytes": 259,
+            "lines": 7
+          },
+          {
+            "path": "src/validation.mjs",
+            "bytes": 422,
+            "lines": 7
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 517,
+            "lines": 11
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:24:26.650Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-repository.mjs",
+        "src/stock-transaction.mjs"
+      ],
+      "totalEstimatedUsd": 0.0174344,
+      "budgetConsumedUsd": 0.01743439999999999,
+      "totalWallMs": 20339.967599999974,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 4,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 91
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 84
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    },
+    {
+      "id": "018-inventory-reservations-baseline-r1",
+      "task": "inventory-reservations",
+      "arm": "baseline",
+      "repetition": 1,
+      "status": "completed",
+      "totals": {
+        "input": 6312,
+        "cacheRead": 6016,
+        "cacheWrite": 0,
+        "output": 540,
+        "totalTokens": 12868,
+        "estimatedApiUsd": 0.0186256,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "wallMs": 18806.667399999977,
+      "cpuMicros": {
+        "user": 188000,
+        "system": 109000
+      },
+      "toolCalls": 28,
+      "sourceRetrieval": {
+        "files": [
+          "README.md",
+          "src/audit-summary.mjs",
+          "src/checkout.mjs",
+          "src/index.mjs",
+          "src/item-plan.mjs",
+          "src/legacy-cart.mjs",
+          "src/receipt.mjs",
+          "src/request-key.mjs",
+          "src/request-normalizer.mjs",
+          "src/reservation-store.mjs",
+          "src/shipping-estimator.mjs",
+          "src/shop.mjs",
+          "src/stock-repository.mjs",
+          "src/stock-rules.mjs",
+          "src/stock-transaction.mjs",
+          "src/validation.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "bytes": 6110,
+        "lines": 127,
+        "events": [
+          {
+            "path": "README.md",
+            "bytes": 1243,
+            "lines": 9
+          },
+          {
+            "path": "src/audit-summary.mjs",
+            "bytes": 155,
+            "lines": 5
+          },
+          {
+            "path": "src/checkout.mjs",
+            "bytes": 712,
+            "lines": 15
+          },
+          {
+            "path": "src/index.mjs",
+            "bytes": 48,
+            "lines": 2
+          },
+          {
+            "path": "src/item-plan.mjs",
+            "bytes": 275,
+            "lines": 6
+          },
+          {
+            "path": "src/legacy-cart.mjs",
+            "bytes": 198,
+            "lines": 5
+          },
+          {
+            "path": "src/receipt.mjs",
+            "bytes": 230,
+            "lines": 7
+          },
+          {
+            "path": "src/request-key.mjs",
+            "bytes": 71,
+            "lines": 4
+          },
+          {
+            "path": "src/request-normalizer.mjs",
+            "bytes": 447,
+            "lines": 9
+          },
+          {
+            "path": "src/reservation-store.mjs",
+            "bytes": 328,
+            "lines": 9
+          },
+          {
+            "path": "src/shipping-estimator.mjs",
+            "bytes": 170,
+            "lines": 4
+          },
+          {
+            "path": "src/shop.mjs",
+            "bytes": 477,
+            "lines": 12
+          },
+          {
+            "path": "src/stock-repository.mjs",
+            "bytes": 249,
+            "lines": 9
+          },
+          {
+            "path": "src/stock-rules.mjs",
+            "bytes": 309,
+            "lines": 6
+          },
+          {
+            "path": "src/stock-transaction.mjs",
+            "bytes": 259,
+            "lines": 7
+          },
+          {
+            "path": "src/validation.mjs",
+            "bytes": 422,
+            "lines": 7
+          },
+          {
+            "path": "tests/visible.test.mjs",
+            "bytes": 517,
+            "lines": 11
+          }
+        ]
+      },
+      "navigation": {
+        "calls": 0,
+        "latencyMs": 0
+      },
+      "graph": {
+        "calls": 0,
+        "toolLatencyMs": 0,
+        "updates": [],
+        "indexingMs": 0,
+        "io": {
+          "scans": 0,
+          "bytes": 0,
+          "files": 0,
+          "scanMs": 0
+        },
+        "peakObservedHeapBytes": null
+      },
+      "actualModels": [
+        "gpt-6.1-sol"
+      ],
+      "endedAt": "2026-11-08T03:24:45.736Z",
+      "patchAccepted": true,
+      "completed": true,
+      "success": true,
+      "immutableIntact": true,
+      "modelValid": true,
+      "changed": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-repository.mjs",
+        "src/stock-transaction.mjs"
+      ],
+      "totalEstimatedUsd": 0.0186256,
+      "budgetConsumedUsd": 0.018625599999999992,
+      "totalWallMs": 18978.667399999977,
+      "acceptance": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 4,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 88
+      },
+      "regression": {
+        "status": "passed",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0,
+        "expectedTests": 1,
+        "namesMatch": true,
+        "truncated": false,
+        "latencyMs": 84
+      },
+      "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+    }
+  ]
+}

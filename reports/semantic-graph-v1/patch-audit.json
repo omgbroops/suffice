@@ -1,0 +1,47 @@
+{
+  "attempts": 18,
+  "independentlyRejected": 0,
+  "immutableViolations": 0,
+  "totalChangedFiles": 42,
+  "extraFilesComparedWithReference": [
+    {
+      "id": "007-inventory-reservations-semantic-r0",
+      "extraFiles": [
+        "src/stock-repository.mjs"
+      ]
+    },
+    {
+      "id": "008-inventory-reservations-baseline-r0",
+      "extraFiles": [
+        "src/stock-repository.mjs"
+      ]
+    },
+    {
+      "id": "009-inventory-reservations-ast-r0",
+      "extraFiles": [
+        "src/stock-repository.mjs"
+      ]
+    },
+    {
+      "id": "016-inventory-reservations-semantic-r1",
+      "extraFiles": [
+        "src/stock-repository.mjs"
+      ]
+    },
+    {
+      "id": "017-inventory-reservations-ast-r1",
+      "extraFiles": [
+        "src/stock-repository.mjs"
+      ]
+    },
+    {
+      "id": "018-inventory-reservations-baseline-r1",
+      "extraFiles": [
+        "src/stock-repository.mjs"
+      ]
+    }
+  ],
+  "manualAssessment": "All six inventory repairs add an own-property existence guard in stock-repository.mjs beyond the three-file reference repair. It is a discretionary robustness edit, not established as necessary by the frozen tests. Acceptance does not prove absence of unnecessary changes or all regressions.",
+  "specializedToolCalls": 0,
+  "usageUnknown": 0
+}

@@ -1,0 +1,181 @@
+{
+  "id": "016-inventory-reservations-semantic-r1",
+  "task": "inventory-reservations",
+  "arm": "semantic",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Repaired the production implementation while preserving the public API.\n\n- Scoped request identities by tenant and request ID.\n- Combined duplicate SKU quantities and made item ordering deterministic.\n- Staged stock changes on a snapshot so failed reservations leave stock and request IDs unchanged.\n- Restricted stock reads to existing own properties.\n\nVerification: the visible Node test suite passed — **1 test, 0 failures**. No tests, fixtures, or metadata were modified.",
+  "totals": {
+    "input": 5577,
+    "cacheRead": 13824,
+    "cacheWrite": 0,
+    "output": 874,
+    "totalTokens": 20275,
+    "estimatedApiUsd": 0.0212764,
+    "modelCalls": 5,
+    "costUnknown": false,
+    "assistantMessages": 5
+  },
+  "wallMs": 30208.753800000006,
+  "cpuMicros": {
+    "user": 297000,
+    "system": 219000
+  },
+  "toolCalls": 26,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/shop.mjs",
+      "src/item-plan.mjs",
+      "src/reservation-store.mjs",
+      "src/stock-repository.mjs",
+      "src/index.mjs",
+      "src/stock-transaction.mjs",
+      "src/request-normalizer.mjs",
+      "src/stock-rules.mjs",
+      "src/receipt.mjs",
+      "src/validation.mjs",
+      "src/request-key.mjs",
+      "src/checkout.mjs",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 5587,
+    "lines": 113,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1243,
+        "lines": 9
+      },
+      {
+        "path": "src/shop.mjs",
+        "bytes": 477,
+        "lines": 12
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "bytes": 275,
+        "lines": 6
+      },
+      {
+        "path": "src/reservation-store.mjs",
+        "bytes": 328,
+        "lines": 9
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "bytes": 249,
+        "lines": 9
+      },
+      {
+        "path": "src/index.mjs",
+        "bytes": 48,
+        "lines": 2
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "bytes": 259,
+        "lines": 7
+      },
+      {
+        "path": "src/request-normalizer.mjs",
+        "bytes": 447,
+        "lines": 9
+      },
+      {
+        "path": "src/stock-rules.mjs",
+        "bytes": 309,
+        "lines": 6
+      },
+      {
+        "path": "src/receipt.mjs",
+        "bytes": 230,
+        "lines": 7
+      },
+      {
+        "path": "src/validation.mjs",
+        "bytes": 422,
+        "lines": 7
+      },
+      {
+        "path": "src/request-key.mjs",
+        "bytes": 71,
+        "lines": 4
+      },
+      {
+        "path": "src/checkout.mjs",
+        "bytes": 712,
+        "lines": 15
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 517,
+        "lines": 11
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:24:06.204Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-repository.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "totalEstimatedUsd": 0.0212764,
+  "budgetConsumedUsd": 0.021276399999999973,
+  "totalWallMs": 30389.753800000006,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 95
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 86
+  },
+  "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+}

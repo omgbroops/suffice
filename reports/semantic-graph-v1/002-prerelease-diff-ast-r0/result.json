@@ -1,0 +1,118 @@
+{
+  "id": "002-prerelease-diff-ast-r0",
+  "task": "prerelease-diff",
+  "arm": "ast",
+  "repetition": 0,
+  "status": "completed",
+  "final": "Updated `src/functions/diff.js` so prerelease-to-stable transitions check major and minor core-version differences before using stabilization rules.\n\n- Fixes both reported examples.\n- Remains symmetric through the existing high/low version ordering.\n- Preserves prerelease-to-prerelease classification and the specified stabilization semantics.\n\nVerification: all 7 visible test groups passed. Only the production source file was modified.",
+  "totals": {
+    "input": 7844,
+    "cacheRead": 8320,
+    "cacheWrite": 0,
+    "output": 372,
+    "totalTokens": 16536,
+    "estimatedApiUsd": 0.02024,
+    "modelCalls": 4,
+    "costUnknown": false,
+    "assistantMessages": 4
+  },
+  "wallMs": 15650.4617,
+  "cpuMicros": {
+    "user": 265000,
+    "system": 78000
+  },
+  "toolCalls": 11,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/functions/diff.js",
+      "tests/visible.test.mjs",
+      "src/test/functions/diff.js"
+    ],
+    "bytes": 7175,
+    "lines": 166,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 878,
+        "lines": 4
+      },
+      {
+        "path": "src/functions/diff.js",
+        "bytes": 1867,
+        "lines": 66
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 2532,
+        "lines": 38
+      },
+      {
+        "path": "src/test/functions/diff.js",
+        "bytes": 1898,
+        "lines": 58
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:18:37.565Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "totalEstimatedUsd": 0.02024,
+  "budgetConsumedUsd": 0.020240000000000008,
+  "totalWallMs": 15920.4617,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 122
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 148
+  },
+  "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+}

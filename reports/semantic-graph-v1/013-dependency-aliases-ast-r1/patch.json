@@ -1,0 +1,12 @@
+[
+  {
+    "path": "src/order.mjs",
+    "before": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(name)) return;\r\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(name);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(name); done.add(name); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n",
+    "after": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(target)) return;\r\n    if (active.has(target)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(target);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(target); done.add(target); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n"
+  },
+  {
+    "path": "src/registry.mjs",
+    "before": "export function resolveName(name, nodes, aliases) {\r\n  const target = aliases[name] ?? name;\r\n  if (!(target in nodes)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n",
+    "after": "export function resolveName(name, nodes, aliases) {\n  let target = name;\n  const seen = new Set();\n  while (Object.hasOwn(aliases, target) && aliases[target] != null) {\n    if (seen.has(target)) throw new Error('Alias cycle: ' + target);\n    seen.add(target);\n    target = aliases[target];\n  }\n  if (!Object.hasOwn(nodes, target)) throw new Error('Unknown node: ' + target);\n  return target;\n}\n"
+  }
+]

@@ -1,0 +1,199 @@
+{
+  "id": "017-inventory-reservations-ast-r1",
+  "task": "inventory-reservations",
+  "arm": "ast",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Implemented the repair under `src/` while preserving the public API.\n\n- Duplicate SKUs now combine quantities.\n- Items sort deterministically, so input order does not affect request identity.\n- Request IDs are scoped by tenant using collision-safe keys.\n- Reservations stage stock changes on a copy, preventing partial consumption on failure.\n- Stock reads ignore inherited properties.\n\nExisting snapshot cloning remains intact. No tests, fixtures, or metadata were modified.\n\nVerification: the visible Node test suite passed — **1 test, 0 failures**.",
+  "totals": {
+    "input": 5509,
+    "cacheRead": 8064,
+    "cacheWrite": 0,
+    "output": 561,
+    "totalTokens": 14134,
+    "estimatedApiUsd": 0.0174344,
+    "modelCalls": 4,
+    "costUnknown": false,
+    "assistantMessages": 4
+  },
+  "wallMs": 20164.967599999974,
+  "cpuMicros": {
+    "user": 234000,
+    "system": 156000
+  },
+  "toolCalls": 28,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/audit-summary.mjs",
+      "src/checkout.mjs",
+      "src/index.mjs",
+      "src/item-plan.mjs",
+      "src/legacy-cart.mjs",
+      "src/receipt.mjs",
+      "src/request-key.mjs",
+      "src/request-normalizer.mjs",
+      "src/reservation-store.mjs",
+      "src/shipping-estimator.mjs",
+      "src/shop.mjs",
+      "src/stock-repository.mjs",
+      "src/stock-rules.mjs",
+      "src/stock-transaction.mjs",
+      "src/validation.mjs",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 6110,
+    "lines": 127,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1243,
+        "lines": 9
+      },
+      {
+        "path": "src/audit-summary.mjs",
+        "bytes": 155,
+        "lines": 5
+      },
+      {
+        "path": "src/checkout.mjs",
+        "bytes": 712,
+        "lines": 15
+      },
+      {
+        "path": "src/index.mjs",
+        "bytes": 48,
+        "lines": 2
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "bytes": 275,
+        "lines": 6
+      },
+      {
+        "path": "src/legacy-cart.mjs",
+        "bytes": 198,
+        "lines": 5
+      },
+      {
+        "path": "src/receipt.mjs",
+        "bytes": 230,
+        "lines": 7
+      },
+      {
+        "path": "src/request-key.mjs",
+        "bytes": 71,
+        "lines": 4
+      },
+      {
+        "path": "src/request-normalizer.mjs",
+        "bytes": 447,
+        "lines": 9
+      },
+      {
+        "path": "src/reservation-store.mjs",
+        "bytes": 328,
+        "lines": 9
+      },
+      {
+        "path": "src/shipping-estimator.mjs",
+        "bytes": 170,
+        "lines": 4
+      },
+      {
+        "path": "src/shop.mjs",
+        "bytes": 477,
+        "lines": 12
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "bytes": 249,
+        "lines": 9
+      },
+      {
+        "path": "src/stock-rules.mjs",
+        "bytes": 309,
+        "lines": 6
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "bytes": 259,
+        "lines": 7
+      },
+      {
+        "path": "src/validation.mjs",
+        "bytes": 422,
+        "lines": 7
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 517,
+        "lines": 11
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:24:26.650Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-repository.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "totalEstimatedUsd": 0.0174344,
+  "budgetConsumedUsd": 0.01743439999999999,
+  "totalWallMs": 20339.967599999974,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 91
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 84
+  },
+  "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+}

@@ -1,0 +1,73 @@
+✖ freshness includes literal dynamic import dependents (107.3516ms)
+✖ freshness includes import type dependents (25.1597ms)
+✖ freshness includes JSDoc import type dependents (19.9181ms)
+✖ disposing an expanded graph releases compiler nodes and caches (7.8169ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 609.0277
+
+✖ failing tests:
+
+test at tests\semantic-invalidation.test.mjs:12:3
+✖ freshness includes literal dynamic import dependents (107.3516ms)
+  AssertionError [ERR_ASSERTION]: {"kind":"incremental","revision":"67f595ce5c652eddb3fca06000a7ca303c6a85a0ebfd0cbdcab1e13dd15dc7d6","changed":["a.ts"],"invalidated":["a.ts"],"files":2,"cachedFiles":1,"indexingMs":10.925200000000018,"inputBytes":102,"heapUsedBytes":17234968,"rssBytes":91295744}
+      at TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/tests/semantic-invalidation.test.mjs:19:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\semantic-invalidation.test.mjs:12:3
+✖ freshness includes import type dependents (25.1597ms)
+  AssertionError [ERR_ASSERTION]: {"kind":"incremental","revision":"3643363b5f59925a7b1b3d02488ead7ca12ac2a94da49812302e7e58e369d878","changed":["a.ts"],"invalidated":["a.ts"],"files":2,"cachedFiles":1,"indexingMs":4.230600000000095,"inputBytes":120,"heapUsedBytes":17148736,"rssBytes":91181056}
+      at TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/tests/semantic-invalidation.test.mjs:19:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\semantic-invalidation.test.mjs:12:3
+✖ freshness includes JSDoc import type dependents (19.9181ms)
+  AssertionError [ERR_ASSERTION]: {"kind":"incremental","revision":"a0e19987267f7c227016b71017ba22dc39cbe7c6c2231401d4c8e894f9aaa316","changed":["a.ts"],"invalidated":["a.ts"],"files":2,"cachedFiles":1,"indexingMs":4.086000000000013,"inputBytes":162,"heapUsedBytes":18832000,"rssBytes":92008448}
+      at TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/tests/semantic-invalidation.test.mjs:19:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\semantic-invalidation.test.mjs:24:1
+✖ disposing an expanded graph releases compiler nodes and caches (7.8169ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/tests/semantic-invalidation.test.mjs:28:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

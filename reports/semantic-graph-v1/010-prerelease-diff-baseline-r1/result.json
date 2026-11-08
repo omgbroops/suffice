@@ -1,0 +1,118 @@
+{
+  "id": "010-prerelease-diff-baseline-r1",
+  "task": "prerelease-diff",
+  "arm": "baseline",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Updated `src/functions/diff.js` to compare major and minor core versions before inspecting the stable target’s patch.\n\nThis fixes both reported classifications, preserves symmetry and prerelease-to-prerelease behavior, and retains the existing stabilization rules—including the major result when the prerelease’s minor and patch are both zero.\n\nVerification: all 7 visible test groups passed. These groups do not directly test `diff()`; its existing tests were inspected but not executed by the available test runner.",
+  "totals": {
+    "input": 8562,
+    "cacheRead": 6400,
+    "cacheWrite": 0,
+    "output": 419,
+    "totalTokens": 15381,
+    "estimatedApiUsd": 0.021954,
+    "modelCalls": 4,
+    "costUnknown": false,
+    "assistantMessages": 4
+  },
+  "wallMs": 18211.470700000005,
+  "cpuMicros": {
+    "user": 172000,
+    "system": 141000
+  },
+  "toolCalls": 11,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "tests/visible.test.mjs",
+      "src/test/functions/diff.js",
+      "src/functions/diff.js"
+    ],
+    "bytes": 7175,
+    "lines": 166,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 878,
+        "lines": 4
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 2532,
+        "lines": 38
+      },
+      {
+        "path": "src/test/functions/diff.js",
+        "bytes": 1898,
+        "lines": 58
+      },
+      {
+        "path": "src/functions/diff.js",
+        "bytes": 1867,
+        "lines": 66
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:21:38.778Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "totalEstimatedUsd": 0.021954,
+  "budgetConsumedUsd": 0.021954,
+  "totalWallMs": 18502.470700000005,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 133
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 158
+  },
+  "executionCommit": "a44cc9e7b061ce0c7a99baebfc113b904dab8e3e"
+}
