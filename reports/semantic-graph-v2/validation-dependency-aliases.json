@@ -1,0 +1,80 @@
+{
+  "task": "dependency-aliases",
+  "provenance": "AI-authored synthetic; not a real-world issue",
+  "base": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+  "sourceFiles": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "hashes": {
+    "README.md": "746dc3318d7759f62826eb834688fbb995eb0630291d38ad4e8307cf939a57ed",
+    "src/order.mjs": "6eca0c7bbc224600f3ccb1456eb4d40c01e020d3702ce28d64cbe2ad6fee4462",
+    "src/registry.mjs": "2ad1505e26601898d54bd6d0e041d6e5441ec720af88ea6b19246d79ae14d7e7",
+    "tests/visible.test.mjs": "d6c9f0528c60d86097626123468cb98f540bda09be5435e4f0bccbc2692507f7"
+  },
+  "acceptanceHash": "ff1ea54b151c7c5a0d3eedaaec2f217c876ed6963013efc1c383049ef3826bd0",
+  "baseline": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 3,
+    "passed": 1,
+    "failed": 2,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": false,
+    "stdout": "TAP version 13\n# Subtest: transitive aliases and duplicate identities resolve once\nnot ok 1 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 0.8724\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice\\\\benchmarks\\\\tasks\\\\dependency-aliases\\\\acceptance.test.mjs:11:1'\n  failureType: 'testCodeFailure'\n  error: 'Unknown node: long'\n  code: 'ERR_TEST_FAILURE'\n  stack: |-\n    resolveName (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/registry.mjs:3:33)\n    visit (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/order.mjs:5:20)\n    visit (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/order.mjs:9:64)\n    buildOrder (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/order.mjs:12:29)\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/benchmarks/tasks/dependency-aliases/acceptance.test.mjs:13:20)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 2 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.495\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nnot ok 3 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.5273\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice\\\\benchmarks\\\\tasks\\\\dependency-aliases\\\\acceptance.test.mjs:18:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    The input did not match the regular expression /alias cycle/i. Input:\n    \n    'Error: Unknown node: b'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n  actual:\n  error: 'Unknown node: b'\n  stack: |-\n    resolveName (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/registry.mjs:3:33)\n    visit (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/order.mjs:5:20)\n    buildOrder (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/semantic-tasks-v1/dependency-aliases/workspace/src/order.mjs:12:29)\n    file:///C:/Users/Mohammed/Documents/GitHub/suffice/benchmarks/tasks/dependency-aliases/acceptance.test.mjs:19:23\n    getActual (node:assert:611:5)\n    strict.throws (node:assert:759:24)\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/benchmarks/tasks/dependency-aliases/acceptance.test.mjs:19:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n  operator: 'throws'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/benchmarks/tasks/dependency-aliases/acceptance.test.mjs:19:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n    Test.postRun (node:internal/test_runner/test:1330:19)\n    Test.run (node:internal/test_runner/test:1258:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:831:7)\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 1\n# fail 2\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.2322\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 86
+  },
+  "fixed": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: transitive aliases and duplicate identities resolve once\nok 1 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 1.4673\n  type: 'test'\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 2 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.5554\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nok 3 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.3276\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.4312\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 85
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ordinary dependencies are ordered before a root\nok 1 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 1.4053\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.231\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 83
+  },
+  "fixedRegression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ordinary dependencies are ordered before a root\nok 1 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 1.302\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.977\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 86
+  }
+}
