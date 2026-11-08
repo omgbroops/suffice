@@ -95,7 +95,8 @@ export class ImplicitSemanticContext {
     try{
       if(this.disposed||!this.eligible(path)){audit.reason='irrelevant_path';return null;}
       if(event==='read'&&!this.flags.context){audit.reason='context_disabled';return null;}
-      if(event==='edit'&&(!change?.external||!this.flags.impact&&!this.flags.verification)){audit.reason=change?.kind??'impact_disabled';return null;}
+      if(event==='edit'&&!change?.external){audit.reason=change?.kind??'local_change';return null;}
+      if(event==='edit'&&!this.flags.impact&&!this.flags.verification){audit.reason='impact_disabled';return null;}
       const beforeGeneration=this.graph?.generation??0,r=await this.region(path,span),plan=event==='edit'&&this.flags.verification?this.verificationPlan(r,change):null;
       if(r.parseFailed){audit.reason='parse_failure';return null;}
       if(expectedHash&&hash(await this.source(path))!==expectedHash){audit.reason='stale_source_fallback';audit.staleDetected=true;return null;}
