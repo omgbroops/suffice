@@ -1,10 +1,10 @@
 import {parse} from 'acorn';import {fullAncestor} from 'acorn-walk';import {stripTypeScriptTypes} from 'node:module';import {Type} from 'typebox';import {readText,hash,filesIn} from './workspace.mjs';
 const textResult=data=>({content:[{type:'text',text:JSON.stringify(data)}],structuredContent:data,details:{}});
 const functionTypes=new Set(['FunctionDeclaration','FunctionExpression','ArrowFunctionExpression']);
-export function indexJavaScript(source,path){
+export function indexJavaScript(source,path,{withBindings=false}={}){
   const parseSource=/\.(?:ts|mts|cts)$/.test(path)?stripTypeScriptTypes(source,{mode:'strip'}):source;
   let ast;try{ast=parse(parseSource,{ecmaVersion:'latest',sourceType:'script',locations:true,allowHashBang:true});}catch{ast=parse(parseSource,{ecmaVersion:'latest',sourceType:'module',locations:true,allowHashBang:true});}
-  const symbols=[],imports=[],references=[],lines=source.split('\n');
+  const symbols=[],imports=[],references=[],exportBindings=[],lines=source.split('\n');
   const add=(name,kind,node)=>symbols.push({name,kind,path,start:node.loc.start.line,end:node.loc.end.line,startOffset:node.start,endOffset:node.end});
   fullAncestor(ast,(node,_state,ancestors)=>{
     const parent=ancestors.at(-2),outer=ancestors.slice(0,-1);
@@ -17,7 +17,13 @@ export function indexJavaScript(source,path){
       if(functionTypes.has(node.init?.type))add(node.id.name,'function',parent?.type==='VariableDeclaration'?parent:node);
       else if(!outer.some(n=>functionTypes.has(n.type)))add(node.id.name,'binding',parent?.type==='VariableDeclaration'?parent:node);
     }
-    if(node.type==='ImportDeclaration')imports.push({module:node.source.value,line:node.loc.start.line,text:source.slice(node.start,node.end)});
+    if(node.type==='ImportDeclaration')imports.push({module:node.source.value,line:node.loc.start.line,text:source.slice(node.start,node.end),...(withBindings?{bindings:node.specifiers.map(s=>({imported:s.type==='ImportDefaultSpecifier'?'default':s.type==='ImportNamespaceSpecifier'?'*':s.imported.name??s.imported.value,local:s.local.name}))}:{})});
+    if(withBindings&&node.type==='ExportDefaultDeclaration')exportBindings.push({exported:'default',local:node.declaration.id?.name??(node.declaration.type==='Identifier'?node.declaration.name:null)});
+    if(withBindings&&node.type==='ExportNamedDeclaration'){
+      if(node.declaration?.id?.name)exportBindings.push({exported:node.declaration.id.name,local:node.declaration.id.name});
+      for(const d of node.declaration?.declarations??[])if(d.id.type==='Identifier')exportBindings.push({exported:d.id.name,local:d.id.name});
+      if(!node.source)for(const s of node.specifiers)exportBindings.push({exported:s.exported.name??s.exported.value,local:s.local.name});
+    }
     if(node.type==='VariableDeclarator'&&node.init?.type==='CallExpression'&&node.init.callee.name==='require'&&typeof node.init.arguments[0]?.value==='string')imports.push({module:node.init.arguments[0].value,line:node.loc.start.line,text:source.slice(parent?.start??node.start,parent?.end??node.end)});
     if(node.type==='Identifier'){
       if((parent?.type==='VariableDeclarator'&&parent.id===node)||(functionTypes.has(parent?.type)&&(parent.id===node||parent.params.includes(node)))||(parent?.type==='ClassDeclaration'&&parent.id===node))return;
@@ -25,7 +31,7 @@ export function indexJavaScript(source,path){
     }
   });
   symbols.sort((a,b)=>a.start-b.start||a.name.localeCompare(b.name));
-  return {path,version:hash(source),source,symbols,imports,references};
+  return {path,version:hash(source),source,symbols,imports,references,...(withBindings?{exportBindings}:{})};
 }
 export function createNavigation({workspace,log=()=>{},includeTypeScript=false}){
   const cache=new Map();

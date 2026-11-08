@@ -7,13 +7,13 @@ import { Type } from 'typebox';
 export const MAX_FILE_BYTES = 128 * 1024;
 export function hash(value) { return createHash('sha256').update(value).digest('hex'); }
 
-export async function scopedPath(root, requested, { write = false } = {}) {
+export async function scopedPath(root, requested, { write = false, writeRoots = ['src'] } = {}) {
   if (typeof requested !== 'string' || !requested || isAbsolute(requested) || requested.includes(':')) throw new Error('Use a relative workspace path.');
   const target = resolve(root, requested);
   const rel = relative(root, target);
   if (!rel || rel.startsWith(`..${sep}`) || rel === '..' || isAbsolute(rel)) throw new Error('Path escapes workspace.');
   if (rel.split(sep).some(p => p.startsWith('.'))) throw new Error('Hidden paths are not available.');
-  if (write && !rel.startsWith(`src${sep}`)) throw new Error('Only src/ may be modified.');
+  if (write && !writeRoots.some(prefix=>rel.startsWith(`${prefix}${sep}`))) throw new Error(`Only ${writeRoots.join(', ')}/ may be modified.`);
   let current = root;
   for (const part of rel.split(sep)) {
     current = resolve(current, part);
@@ -51,12 +51,12 @@ export async function readText(root, path) {
   return readFile(target, 'utf8');
 }
 
-export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15_000 } = {}) {
+export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15_000, dependencyReads = [], heapMb = 128 } = {}) {
   const absoluteTest = resolve(testPath);
   const testSource = await readFile(absoluteTest, 'utf8');
   const expectedNames = [...testSource.matchAll(/\btest\(\s*['"]([^'"]+)['"]/g)].map(m => m[1]).filter(n => !n.startsWith('acceptance requires'));
   const args = ['--permission', `--allow-fs-read=${resolve(workspace)}`, `--allow-fs-read=${absoluteTest}`,
-    '--max-old-space-size=128', '--test-reporter=tap', absoluteTest];
+    ...dependencyReads.map(p=>`--allow-fs-read=${resolve(p)}`),`--max-old-space-size=${heapMb}`, '--test-reporter=tap', absoluteTest];
   const started = Date.now();
   return new Promise(resolveResult => {
     const child = spawn(process.execPath, args, { cwd: workspace, windowsHide: true, env: {
@@ -89,7 +89,7 @@ export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15
 
 function toolResult(data) { return { content: [{ type: 'text', text: typeof data === 'string' ? data : JSON.stringify(data) }], structuredContent: data, details: {} }; }
 const unknown = Type.Unknown();
-export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal, defaultReadLimit = 200 }) {
+export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal, defaultReadLimit = 200, writeRoots=['src'], directorySearch=false, testOptions={} }) {
   let serial = Promise.resolve();
   const mutate = fn => { const result = serial.then(fn); serial = result.catch(() => {}); return result; };
   const make = (name, description, parameters, operation) => ({ name, label: name, description, parameters, outputSchema: unknown,
@@ -100,12 +100,12 @@ export function workspaceTools({ workspace, log = () => {}, artifactsDir, signal
       Type.Object({ path: Type.String(), offset: Type.Optional(Type.Integer({ minimum: 1 })), limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })) }),
       async ({ path, offset = 1, limit = defaultReadLimit }) => { const content = await readText(workspace, path); const lines = content.split('\n'); return { path, version: hash(content), totalLines: lines.length, offset, omittedBefore: offset - 1, omittedAfter: Math.max(0, lines.length - offset + 1 - limit), text: lines.slice(offset - 1, offset - 1 + limit).map((l, i) => `${offset + i}: ${l}`).join('\n') }; }),
     make('search', 'Search literal text across workspace source and documentation. Returns matching paths and numbered lines; max 40 matches.', Type.Object({ query: Type.String({ minLength: 1 }), path: Type.Optional(Type.String()) }),
-      async ({ query, path }) => { const paths = path ? [path] : await filesIn(workspace); const matches = []; for (const p of paths) { const text = await readText(workspace, p); text.split('\n').forEach((line, i) => { if (line.toLowerCase().includes(query.toLowerCase()) && matches.length < 40) matches.push({ path: p, line: i + 1, text: line.slice(0, 500) }); }); } return matches; }),
-    make('file_edit', 'Replace one exact unique text occurrence in a src/ file. Fails if old text is missing or ambiguous.', Type.Object({ path: Type.String(), oldText: Type.String({ minLength: 1 }), newText: Type.String() }),
-      args => mutate(async () => { const content = await readText(workspace, args.path); if (content.split(args.oldText).length !== 2) throw new Error('oldText must match exactly once.'); const next = content.replace(args.oldText, args.newText); if (Buffer.byteLength(next) > MAX_FILE_BYTES) throw new Error('File too large.'); await writeFile(await scopedPath(workspace, args.path, { write: true }), next); return { path: args.path, version: hash(next), edited: true }; })),
-    make('file_write', 'Write a complete UTF-8 src/ file; use file_edit for smaller changes.', Type.Object({ path: Type.String(), content: Type.String() }),
-      args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true }); await mkdir(dirname(target), { recursive: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
+      async ({ query, path }) => { let paths=path?[path]:await filesIn(workspace);if(path&&directorySearch&&(await lstat(await scopedPath(workspace,path))).isDirectory())paths=await filesIn(workspace,path); const matches = []; for (const p of paths) { const text = await readText(workspace, p); text.split('\n').forEach((line, i) => { if (line.toLowerCase().includes(query.toLowerCase()) && matches.length < 40) matches.push({ path: p, line: i + 1, text: line.slice(0, 500) }); }); } return matches; }),
+    make('file_edit', `Replace one exact unique text occurrence in a ${writeRoots.join(', ')}/ file. Fails if old text is missing or ambiguous.`, Type.Object({ path: Type.String(), oldText: Type.String({ minLength: 1 }), newText: Type.String() }),
+      args => mutate(async () => { const content = await readText(workspace, args.path); if (content.split(args.oldText).length !== 2) throw new Error('oldText must match exactly once.'); const next = content.replace(args.oldText, args.newText); if (Buffer.byteLength(next) > MAX_FILE_BYTES) throw new Error('File too large.'); await writeFile(await scopedPath(workspace, args.path, { write: true,writeRoots }), next); return { path: args.path, version: hash(next), edited: true }; })),
+    make('file_write', `Write a complete UTF-8 ${writeRoots.join(', ')}/ file; use file_edit for smaller changes.`, Type.Object({ path: Type.String(), content: Type.String() }),
+      args => mutate(async () => { if (Buffer.byteLength(args.content) > MAX_FILE_BYTES) throw new Error('File too large.'); const target = await scopedPath(workspace, args.path, { write: true,writeRoots }); await mkdir(dirname(target), { recursive: true }); await writeFile(target, args.content); return { path: args.path, version: hash(args.content), written: true }; })),
     make('test', 'Run the visible Node test suite. Returns status and diagnostic output. Acceptance tests are run separately by the evaluator.', Type.Object({}),
-      async () => { const result = await runNodeTests(workspace, resolve(workspace, 'tests/visible.test.mjs'), { signal }); await mkdir(artifactsDir, { recursive: true }); const id = `test-${Date.now()}.json`; await writeFile(resolve(artifactsDir, id), JSON.stringify(result)); return { ...result, stdout: result.stdout.slice(0, 12_000), stderr: result.stderr.slice(0, 3000), artifact: id }; }),
+      async () => { const result = await runNodeTests(workspace, resolve(workspace, 'tests/visible.test.mjs'), { ...testOptions,signal }); await mkdir(artifactsDir, { recursive: true }); const id = `test-${Date.now()}.json`; await writeFile(resolve(artifactsDir, id), JSON.stringify(result)); return { ...result, stdout: result.stdout.slice(0, 12_000), stderr: result.stderr.slice(0, 3000), artifact: id }; }),
   ];
 }

@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {resolve} from 'node:path';
+const {load}=createRequire(import.meta.url)(resolve(process.cwd(),'tests/load.cjs')),i=load('src/immer.ts');i.enablePatches();i.enableArrayMethods();
+const base=()=>({arr:[{id:1,a:1,meta:{n:1}},{id:2,a:2,meta:{n:2}},{id:3,a:3,meta:{n:3}}]});const added=()=>({id:9,a:9,meta:{n:9}});
+const replay=recipe=>{const original=base(),[next,p,inv]=i.produceWithPatches(original,recipe);assert.deepEqual(original,base());assert.deepEqual(i.applyPatches(original,p),next);assert.deepEqual(i.applyPatches(next,inv),original);return p;};
+test('shifted children beyond base length replay with nested edits',()=>{replay(d=>{d.arr.unshift(added());d.arr[3].a=99;});replay(d=>{d.arr.unshift(added());d.arr[3].meta.n=99;});replay(d=>{d.arr.unshift(added(),added());d.arr[4].a=99;});replay(d=>{d.arr.splice(1,0,added());d.arr[3].a=99;});});
+test('reordered children do not emit redundant nested array paths',()=>{for(const op of [d=>d.arr.reverse(),d=>d.arr.sort((a,b)=>b.id-a.id),d=>d.arr.shift()]){const p=replay(d=>{op(d);d.arr[0].meta.n=99;});assert.ok(p.every(p=>p.path.length<=2));}});
+test('drafted children before shift and new pushed children remain correct',()=>{replay(d=>{d.arr[2].a=99;d.arr.unshift(added());});replay(d=>{d.arr.push(added());d.arr[3].a=99;});});
+test('nested arrays with shifted parent remain replayable',()=>{const original={rows:[[{v:1}],[{v:2}]]};const [next,p,inv]=i.produceWithPatches(original,d=>{d.rows.unshift([{v:0}]);d.rows[2][0].v=7;});assert.deepEqual(i.applyPatches(original,p),next);assert.deepEqual(i.applyPatches(next,inv),original);});

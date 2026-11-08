@@ -1,0 +1,788 @@
+{
+  "tokenizer": "o200k_base/js-tiktoken-1.0.21",
+  "method": "Named BPE counts over recorded text, not provider serialization. Cumulative replay counts each completed tool observation in every later assistant generation; caches can discount that replay. Exact repeats use whole text equality; source repeats require path+numbered-line equality. Relationship duplicates retain source location, ignore result envelopes/revision. Categories overlap and are not an additive causal decomposition. Provider usage remains authoritative; reasoning attribution and counterfactual extra generations are unidentifiable.",
+  "groups": {
+    "baseline": {
+      "attempts": 6,
+      "mean": {
+        "instructionsTokens": 141,
+        "observationTokens": 3178,
+        "exactRepeatedObservationTokens": 0,
+        "repeatedSourceLineTokens": 0,
+        "graphResultTokens": 0,
+        "relationshipOccurrences": 0,
+        "repeatedRelationships": 0,
+        "cumulativeObservationReplayTokens": 7086,
+        "afterFirstEditGenerations": 1.3333333333333333,
+        "graphLocalMs": 0
+      }
+    },
+    "ast-assisted": {
+      "attempts": 6,
+      "mean": {
+        "instructionsTokens": 179,
+        "observationTokens": 3195.1666666666665,
+        "exactRepeatedObservationTokens": 0,
+        "repeatedSourceLineTokens": 0,
+        "graphResultTokens": 0,
+        "relationshipOccurrences": 0,
+        "repeatedRelationships": 0,
+        "cumulativeObservationReplayTokens": 9327.166666666666,
+        "afterFirstEditGenerations": 1.1666666666666667,
+        "graphLocalMs": 0
+      }
+    },
+    "semantic-assisted": {
+      "attempts": 6,
+      "mean": {
+        "instructionsTokens": 285,
+        "observationTokens": 12203.833333333334,
+        "exactRepeatedObservationTokens": 0,
+        "repeatedSourceLineTokens": 0,
+        "graphResultTokens": 9240.5,
+        "relationshipOccurrences": 23.833333333333332,
+        "repeatedRelationships": 6.666666666666667,
+        "cumulativeObservationReplayTokens": 46926.166666666664,
+        "afterFirstEditGenerations": 2.5,
+        "graphLocalMs": 673.8768833333306
+      }
+    },
+    "semantic-optional": {
+      "attempts": 6,
+      "mean": {
+        "instructionsTokens": 162,
+        "observationTokens": 3032,
+        "exactRepeatedObservationTokens": 0,
+        "repeatedSourceLineTokens": 0,
+        "graphResultTokens": 0,
+        "relationshipOccurrences": 0,
+        "repeatedRelationships": 0,
+        "cumulativeObservationReplayTokens": 6797.666666666667,
+        "afterFirstEditGenerations": 1.3333333333333333,
+        "graphLocalMs": 0
+      }
+    }
+  },
+  "records": [
+    {
+      "id": "001-prerelease-diff-baseline-r0",
+      "arm": "baseline",
+      "provider": {
+        "input": 6063,
+        "cacheRead": 9600,
+        "cacheWrite": 0,
+        "output": 414,
+        "totalTokens": 16077,
+        "estimatedApiUsd": 0.017226,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 141,
+      "observationTokens": 4501,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 10524,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0144404,
+        "wallMs": 15311
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "002-prerelease-diff-ast-assisted-r0",
+      "arm": "ast-assisted",
+      "provider": {
+        "input": 6118,
+        "cacheRead": 13568,
+        "cacheWrite": 0,
+        "output": 445,
+        "totalTokens": 20131,
+        "estimatedApiUsd": 0.0180428,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "instructionsTokens": 179,
+      "observationTokens": 4053,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 11408,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 4,
+        "knownEstimatedUsd": 0.015200000000000002,
+        "wallMs": 15319
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "003-prerelease-diff-semantic-assisted-r0",
+      "arm": "semantic-assisted",
+      "provider": {
+        "input": 11937,
+        "cacheRead": 32640,
+        "cacheWrite": 0,
+        "output": 496,
+        "totalTokens": 45073,
+        "estimatedApiUsd": 0.032097999999999995,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 285,
+      "observationTokens": 9377,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 5656,
+      "relationshipOccurrences": 18,
+      "repeatedRelationships": 4,
+      "cumulativeObservationReplayTokens": 32115,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 4,
+        "knownEstimatedUsd": 0.027285599999999997,
+        "wallMs": 17586
+      },
+      "graphLocalMs": 1665.5858000000007
+    },
+    {
+      "id": "004-prerelease-diff-semantic-optional-r0",
+      "arm": "semantic-optional",
+      "provider": {
+        "input": 7577,
+        "cacheRead": 7936,
+        "cacheWrite": 0,
+        "output": 318,
+        "totalTokens": 15831,
+        "estimatedApiUsd": 0.019127599999999998,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 162,
+      "observationTokens": 3690,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 8141,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0163724,
+        "wallMs": 11700
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "005-dependency-aliases-ast-assisted-r0",
+      "arm": "ast-assisted",
+      "provider": {
+        "input": 6818,
+        "cacheRead": 8192,
+        "cacheWrite": 0,
+        "output": 823,
+        "totalTokens": 15833,
+        "estimatedApiUsd": 0.022685200000000003,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 179,
+      "observationTokens": 1485,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 4977,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 4,
+        "knownEstimatedUsd": 0.015121600000000002,
+        "wallMs": 19661
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "006-dependency-aliases-semantic-assisted-r0",
+      "arm": "semantic-assisted",
+      "provider": {
+        "input": 13524,
+        "cacheRead": 38144,
+        "cacheWrite": 0,
+        "output": 1088,
+        "totalTokens": 52756,
+        "estimatedApiUsd": 0.041742400000000006,
+        "modelCalls": 7,
+        "costUnknown": false,
+        "assistantMessages": 7
+      },
+      "instructionsTokens": 285,
+      "observationTokens": 10834,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 9389,
+      "relationshipOccurrences": 27,
+      "repeatedRelationships": 9,
+      "cumulativeObservationReplayTokens": 36510,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.0269336,
+        "wallMs": 30657
+      },
+      "graphLocalMs": 88.74579999997513
+    },
+    {
+      "id": "007-dependency-aliases-semantic-optional-r0",
+      "arm": "semantic-optional",
+      "provider": {
+        "input": 3559,
+        "cacheRead": 9728,
+        "cacheWrite": 0,
+        "output": 755,
+        "totalTokens": 14042,
+        "estimatedApiUsd": 0.0156408,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "instructionsTokens": 162,
+      "observationTokens": 1350,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 3800,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.010971600000000001,
+        "wallMs": 15535
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "008-dependency-aliases-baseline-r0",
+      "arm": "baseline",
+      "provider": {
+        "input": 3796,
+        "cacheRead": 6528,
+        "cacheWrite": 0,
+        "output": 741,
+        "totalTokens": 11065,
+        "estimatedApiUsd": 0.0156548,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "instructionsTokens": 141,
+      "observationTokens": 1350,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 3800,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0111248,
+        "wallMs": 14137
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "009-inventory-reservations-semantic-assisted-r0",
+      "arm": "semantic-assisted",
+      "provider": {
+        "input": 20526,
+        "cacheRead": 77184,
+        "cacheWrite": 0,
+        "output": 956,
+        "totalTokens": 98666,
+        "estimatedApiUsd": 0.0583304,
+        "modelCalls": 9,
+        "costUnknown": false,
+        "assistantMessages": 9
+      },
+      "instructionsTokens": 285,
+      "observationTokens": 17604,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 13649,
+      "relationshipOccurrences": 25,
+      "repeatedRelationships": 7,
+      "cumulativeObservationReplayTokens": 78567,
+      "afterFirstEditGenerations": 4,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.027862,
+        "wallMs": 19173
+      },
+      "graphLocalMs": 392.05630000002566
+    },
+    {
+      "id": "010-inventory-reservations-semantic-optional-r0",
+      "arm": "semantic-optional",
+      "provider": {
+        "input": 7458,
+        "cacheRead": 7296,
+        "cacheWrite": 0,
+        "output": 573,
+        "totalTokens": 15327,
+        "estimatedApiUsd": 0.021375599999999998,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 162,
+      "observationTokens": 3830,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 7620,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.018312799999999997,
+        "wallMs": 15823
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "011-inventory-reservations-baseline-r0",
+      "arm": "baseline",
+      "provider": {
+        "input": 5931,
+        "cacheRead": 5888,
+        "cacheWrite": 0,
+        "output": 653,
+        "totalTokens": 12472,
+        "estimatedApiUsd": 0.0189808,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 141,
+      "observationTokens": 3485,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 6868,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0159836,
+        "wallMs": 17834
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "012-inventory-reservations-ast-assisted-r0",
+      "arm": "ast-assisted",
+      "provider": {
+        "input": 6451,
+        "cacheRead": 15872,
+        "cacheWrite": 0,
+        "output": 751,
+        "totalTokens": 23074,
+        "estimatedApiUsd": 0.021999199999999997,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 179,
+      "observationTokens": 4267,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 12478,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.01894,
+        "wallMs": 26232
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "013-prerelease-diff-baseline-r1",
+      "arm": "baseline",
+      "provider": {
+        "input": 6178,
+        "cacheRead": 8832,
+        "cacheWrite": 0,
+        "output": 372,
+        "totalTokens": 15382,
+        "estimatedApiUsd": 0.0169592,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 141,
+      "observationTokens": 4545,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 9892,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0143456,
+        "wallMs": 12630
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "014-prerelease-diff-semantic-optional-r1",
+      "arm": "semantic-optional",
+      "provider": {
+        "input": 6715,
+        "cacheRead": 11392,
+        "cacheWrite": 0,
+        "output": 395,
+        "totalTokens": 18502,
+        "estimatedApiUsd": 0.0185192,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 162,
+      "observationTokens": 4552,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 10621,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0158316,
+        "wallMs": 11850
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "015-prerelease-diff-semantic-assisted-r1",
+      "arm": "semantic-assisted",
+      "provider": {
+        "input": 12037,
+        "cacheRead": 32512,
+        "cacheWrite": 0,
+        "output": 498,
+        "totalTokens": 45047,
+        "estimatedApiUsd": 0.0323052,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 285,
+      "observationTokens": 9384,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 5656,
+      "relationshipOccurrences": 18,
+      "repeatedRelationships": 4,
+      "cumulativeObservationReplayTokens": 32095,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 4,
+        "knownEstimatedUsd": 0.027450799999999997,
+        "wallMs": 17304
+      },
+      "graphLocalMs": 1528.2920999999624
+    },
+    {
+      "id": "016-prerelease-diff-ast-assisted-r1",
+      "arm": "ast-assisted",
+      "provider": {
+        "input": 7290,
+        "cacheRead": 12416,
+        "cacheWrite": 0,
+        "output": 429,
+        "totalTokens": 20135,
+        "estimatedApiUsd": 0.020111599999999997,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 179,
+      "observationTokens": 3691,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 9886,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.017289199999999998,
+        "wallMs": 16477
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "017-dependency-aliases-ast-assisted-r1",
+      "arm": "ast-assisted",
+      "provider": {
+        "input": 5634,
+        "cacheRead": 9216,
+        "cacheWrite": 0,
+        "output": 939,
+        "totalTokens": 15789,
+        "estimatedApiUsd": 0.021579600000000004,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 179,
+      "observationTokens": 1444,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 4708,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.019636800000000003,
+        "wallMs": 29809
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "018-dependency-aliases-baseline-r1",
+      "arm": "baseline",
+      "provider": {
+        "input": 5267,
+        "cacheRead": 5120,
+        "cacheWrite": 0,
+        "output": 766,
+        "totalTokens": 11153,
+        "estimatedApiUsd": 0.018706000000000004,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "instructionsTokens": 141,
+      "observationTokens": 1354,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 3809,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.014070000000000001,
+        "wallMs": 14604
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "019-dependency-aliases-semantic-optional-r1",
+      "arm": "semantic-optional",
+      "provider": {
+        "input": 3653,
+        "cacheRead": 9600,
+        "cacheWrite": 0,
+        "output": 748,
+        "totalTokens": 14001,
+        "estimatedApiUsd": 0.015746000000000003,
+        "modelCalls": 5,
+        "costUnknown": false,
+        "assistantMessages": 5
+      },
+      "instructionsTokens": 162,
+      "observationTokens": 1351,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 3802,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.010797600000000001,
+        "wallMs": 14887
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "020-dependency-aliases-semantic-assisted-r1",
+      "arm": "semantic-assisted",
+      "provider": {
+        "input": 20535,
+        "cacheRead": 28032,
+        "cacheWrite": 0,
+        "output": 1048,
+        "totalTokens": 49615,
+        "estimatedApiUsd": 0.0543532,
+        "modelCalls": 7,
+        "costUnknown": false,
+        "assistantMessages": 7
+      },
+      "instructionsTokens": 285,
+      "observationTokens": 9577,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 8133,
+      "relationshipOccurrences": 21,
+      "repeatedRelationships": 6,
+      "cumulativeObservationReplayTokens": 33516,
+      "afterFirstEditGenerations": 2,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.0420632,
+        "wallMs": 26027
+      },
+      "graphLocalMs": 83.65149999997811
+    },
+    {
+      "id": "021-inventory-reservations-semantic-assisted-r1",
+      "arm": "semantic-assisted",
+      "provider": {
+        "input": 19505,
+        "cacheRead": 69120,
+        "cacheWrite": 0,
+        "output": 1036,
+        "totalTokens": 89661,
+        "estimatedApiUsd": 0.056282,
+        "modelCalls": 9,
+        "costUnknown": false,
+        "assistantMessages": 9
+      },
+      "instructionsTokens": 285,
+      "observationTokens": 16447,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 12960,
+      "relationshipOccurrences": 34,
+      "repeatedRelationships": 10,
+      "cumulativeObservationReplayTokens": 68754,
+      "afterFirstEditGenerations": 3,
+      "initialInvestigation": {
+        "modelCalls": 6,
+        "knownEstimatedUsd": 0.0316388,
+        "wallMs": 30023
+      },
+      "graphLocalMs": 284.9298000000417
+    },
+    {
+      "id": "022-inventory-reservations-ast-assisted-r1",
+      "arm": "ast-assisted",
+      "provider": {
+        "input": 9007,
+        "cacheRead": 13312,
+        "cacheWrite": 0,
+        "output": 744,
+        "totalTokens": 23063,
+        "estimatedApiUsd": 0.0267852,
+        "modelCalls": 6,
+        "costUnknown": false,
+        "assistantMessages": 6
+      },
+      "instructionsTokens": 179,
+      "observationTokens": 4231,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 12506,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 5,
+        "knownEstimatedUsd": 0.023836,
+        "wallMs": 26516
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "023-inventory-reservations-baseline-r1",
+      "arm": "baseline",
+      "provider": {
+        "input": 6380,
+        "cacheRead": 6016,
+        "cacheWrite": 0,
+        "output": 535,
+        "totalTokens": 12931,
+        "estimatedApiUsd": 0.018711600000000002,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 141,
+      "observationTokens": 3833,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 7623,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0157488,
+        "wallMs": 14482
+      },
+      "graphLocalMs": 0
+    },
+    {
+      "id": "024-inventory-reservations-semantic-optional-r1",
+      "arm": "semantic-optional",
+      "provider": {
+        "input": 10449,
+        "cacheRead": 3584,
+        "cacheWrite": 0,
+        "output": 596,
+        "totalTokens": 14629,
+        "estimatedApiUsd": 0.0272164,
+        "modelCalls": 4,
+        "costUnknown": false,
+        "assistantMessages": 4
+      },
+      "instructionsTokens": 162,
+      "observationTokens": 3419,
+      "exactRepeatedObservationTokens": 0,
+      "repeatedSourceLineTokens": 0,
+      "graphResultTokens": 0,
+      "relationshipOccurrences": 0,
+      "repeatedRelationships": 0,
+      "cumulativeObservationReplayTokens": 6802,
+      "afterFirstEditGenerations": 1,
+      "initialInvestigation": {
+        "modelCalls": 3,
+        "knownEstimatedUsd": 0.0189696,
+        "wallMs": 15263
+      },
+      "graphLocalMs": 0
+    }
+  ]
+}

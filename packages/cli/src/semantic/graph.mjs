@@ -193,7 +193,7 @@ export class SemanticGraph {
     while (grew) { grew = false; for (const [f,deps] of [...oldModules,...this.modules,...cachedDependencies]) if (!invalidated.has(f) && deps.some(d => invalidated.has(d))) { invalidated.add(f); grew = true; } }
     for (const f of invalidated) this.cache.delete(f);
     // Reused entries contain immutable IDs/locations, never compiler AST objects.
-    const metric = {kind:first?'initial':'incremental', revision, changed:changed.map(f=>this.path(f)), invalidated:[...invalidated].map(f=>this.path(f)),
+    const metric = {kind:first?'initial':'incremental', generation:this.generation,revision, changed:changed.map(f=>this.path(f)), invalidated:[...invalidated].map(f=>this.path(f)),
       files:this.files.size, cachedFiles:this.cache.size, indexingMs:performance.now()-start, inputBytes:this.inputBytes,
       heapUsedBytes:process.memoryUsage().heapUsed, rssBytes:process.memoryUsage().rss};
     this.lastUpdate = metric; this.metrics.push(metric); if (this.metrics.length > 100) this.metrics.shift(); return metric;
@@ -204,6 +204,7 @@ export class SemanticGraph {
     return target && this.files.has(resolve(target)) ? resolve(target) : null;
   }
   symbol(node) {
+    if(!node)return null;
     let symbol = this.checker.getSymbolAtLocation(node);
     const seen = new Set();
     while (symbol?.flags & ts.SymbolFlags.Alias) { if (seen.has(symbol)) return null; seen.add(symbol); symbol = this.checker.getAliasedSymbol(symbol); }
@@ -317,6 +318,40 @@ export class SemanticGraph {
     return {...this.state(),matches:matches.slice(0,cap),total:matches.length,omittedMatches:Math.max(0,matches.length-cap)};
   }
   bound(value,max) { if (!Number.isInteger(value) || value < 1 || value > max) throw new Error(`Limit must be 1-${max}`); return value; }
+  /** Passive retrieval: analyze a bounded one-hop file neighborhood, never allAnalysis. */
+  region({path,startLine=1,endLine=Infinity,maxFiles=6,maxFacts=80}={}) {
+    this.refresh();this.bound(maxFiles,12);this.bound(maxFacts,160);
+    const file=resolve(this.root,path);if(!this.files.has(file))throw new Error('Source is outside the admitted index');
+    const seedCached=this.cache.has(file),seed=this.analyze(file),exported=new Set(seed.edges.filter(e=>e.kind==='exports').map(e=>e.to));
+    const symbols=[...this.nodes.values()].filter(n=>n.path===path&&['function','method','class','interface','type','binding'].includes(n.kind)&&n.line<=endLine&&this.program.getSourceFile(file).getLineAndCharacterOfPosition(n.start+n.length).line+1>=startLine);
+    const candidates=symbols.filter(n=>exported.has(n.id)||[...exported].some(id=>n.id.startsWith(id+'/'))).sort((a,b)=>Math.abs(a.line-startLine)-Math.abs(b.line-startLine)||a.length-b.length||a.id.localeCompare(b.id));
+    const roots=candidates.slice(0,3);
+    const selected=new Set(roots.map(n=>n.id));if(!selected.size)selected.add(path);
+    const rootSymbols=new Set(roots.map(n=>this.declarations.get(n.id)?.name).filter(Boolean).map(n=>this.symbol(n)).filter(Boolean));
+    const touches=id=>selected.has(id)||[...selected].some(root=>id.startsWith(root+'/'))||rootSymbols.has(this.symbol(this.declarations.get(id)?.name));
+    const distances=new Map([[file,0]]),queue=[file];let candidateLimit=false;
+    for(let i=0;i<queue.length;i++){
+      const current=queue[i],distance=distances.get(current);if(distance>=2)continue;
+      const adjacent=[...this.modules].filter(([,deps])=>deps.includes(current)).map(([p])=>p).concat(this.modules.get(current)??[]).sort();
+      for(const next of adjacent)if(!distances.has(next)){if(distances.size>=32){candidateLimit=true;break;}distances.set(next,distance+1);queue.push(next);}
+    }
+    const test=f=>this.nodes.get(this.path(f))?.test?1:0;
+    const neighbors=queue.slice(1).sort((a,b)=>test(a)-test(b)||distances.get(a)-distances.get(b)||a.localeCompare(b));
+    const chosen=neighbors.slice(0,maxFiles-1),testFile=neighbors.find(test);if(testFile&&!chosen.some(test)&&chosen.length>1)chosen[chosen.length-1]=testFile;
+    const files=[file,...chosen],facts=[],unresolved=[];let cacheHits=0,limited=false;
+    for(const candidate of files){
+      if(candidate===file?seedCached:this.cache.has(candidate))cacheHits++;const entry=candidate===file?seed:this.analyze(candidate);limited ||= entry.limited;unresolved.push(...entry.unresolved);
+      for(const e of entry.edges){
+        if(!['calls','references','type_dependency','data_flow','imports','reexports','exports'].includes(e.kind))continue;
+        const from=this.nodes.get(e.from),to=this.nodes.get(e.to);if(!from||!to||from.path===to.path)continue;
+        if(!(from.path===path&&touches(e.from)||to.path===path&&touches(e.to)))continue;
+        facts.push({...e,fromNode:from,toNode:to});
+      }
+    }
+    const priority={calls:0,data_flow:1,type_dependency:2,references:3,reexports:4,imports:5,exports:6};
+    const seen=new Set(),ranked=facts.sort((a,b)=>priority[a.kind]-priority[b.kind]||a.location.path.localeCompare(b.location.path)||a.location.line-b.location.line||a.to.localeCompare(b.to)).filter(e=>{const key=`${e.from}:${e.kind}:${e.to}`;if(seen.has(key))return false;seen.add(key);return true;});
+    return {revision:this.revision,roots:roots.map(n=>n.id),omittedSymbols:Math.max(0,candidates.length-roots.length),facts:ranked.slice(0,maxFacts),omittedFacts:Math.max(0,ranked.length-maxFacts),unresolved,expanded:files.map(f=>this.path(f)),unexpanded:Math.max(0,neighbors.length-chosen.length),cacheHits,limited:limited||this.state().incomplete||candidateLimit||candidates.length>roots.length};
+  }
   requireSymbol(id) { const symbol = this.nodes.get(id); if (!symbol) throw new Error('Unknown symbol identity; refresh semantic_symbols'); return symbol; }
   allAnalysis() {
     const start = performance.now(), edges = [], unresolved = []; let limited = false;

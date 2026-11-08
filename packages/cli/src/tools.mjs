@@ -2,10 +2,11 @@ import {createCodingTools} from '@earendil-works/pi-coding-agent';
 import {repositoryPath} from './workspace.mjs';
 import {createNavigation} from './navigation.mjs';
 import {createSemanticTools} from './semantic-tools.mjs';
+import {implicitToolAdapter} from './implicit-tools.mjs';
 
-export function repositoryTools({workspace, commandTimeout=180, shellPath, navigation=true, semantic=false, recipes=false, log, onDispose}) {
+export function repositoryTools({workspace, commandTimeout=180, shellPath, navigation=true, semantic=false, recipes=false, log, onDispose,autoContext=false,autoImpact=false,autoVerify=false,contextMode='semantic',packetTokens=400,contextTokens=1200}) {
   const native=createCodingTools(workspace,{bash:{shellPath,exposeSessionEnvironment:false}});
-  return [
+  const tools=[
     ...native.map(tool=>({...tool,label:tool.label??tool.name,
       async execute(id,args,signal,onUpdate) {
         if(tool.name!=='bash') await repositoryPath(workspace,args.path);
@@ -21,4 +22,6 @@ export function repositoryTools({workspace, commandTimeout=180, shellPath, navig
     })),
     ...(semantic?createSemanticTools({workspace,recipes,log,onDispose}):[])
   ];
+  const adapted=implicitToolAdapter({workspace,tools,context:autoContext,impact:autoImpact,verification:autoVerify,mode:contextMode,maxPacketTokens:packetTokens,maxTotalTokens:contextTokens,deferToCodemode:true,log,onDispose});
+  Object.defineProperty(adapted.tools,'implicitObserver',{value:adapted.onToolResult});return adapted.tools;
 }

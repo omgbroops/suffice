@@ -20,7 +20,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const totals={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,costUnknown:false};
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
   const disposers=[];
-  const tools=repositoryTools({workspace,shellPath:options.shellPath,semantic:options.semantic,recipes:options.recipes,log,onDispose:fn=>disposers.push(fn)});
+  const tools=repositoryTools({workspace,shellPath:options.shellPath,semantic:options.semantic,recipes:options.recipes,autoContext:options.autoContext,autoImpact:options.autoImpact,autoVerify:options.autoVerify,contextMode:options.contextMode,packetTokens:options.packetTokens,contextTokens:options.contextTokens,log,onDispose:fn=>disposers.push(fn)});
   const names=tools.map(t=>t.name);
   const settings=SettingsManager.inMemory({compaction:{enabled:false},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
@@ -32,7 +32,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
         stop(logError?'receipt_error':'tool_limit'); return {block:true,reason:'Task allowance exhausted'};
       }
     });
-    pi.on('tool_result',e=>log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:e.content,details:e.details}));
+    pi.on('tool_result',async e=>{const patch=await tools.implicitObserver?.(e);log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:patch?.content??e.content,details:e.details});return patch;});
     pi.on('before_provider_request',e=>{
       if(logError) throw logError;
       if(allowance && (allowance.reason || allowance.spent>=options.maxCost || allowance.turns>=60)) throw new Error('Task allowance exhausted');
