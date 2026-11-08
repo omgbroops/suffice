@@ -27,3 +27,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+## TypeScript
+
+The optional semantic graph uses TypeScript 5.9.3, Copyright Microsoft Corporation, licensed under Apache-2.0. Its license is distributed in the installed `typescript` package.

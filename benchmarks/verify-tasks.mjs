@@ -34,8 +34,12 @@ export async function applyReferencePatch(task, workspace) {
     const target = resolve(workspace, file);
     assert.ok(inside(workspace, target), 'Patch must stay within workspace');
     const source = await readFile(target, 'utf8');
-    assert.ok(old.length > 0 && source.split(old).length === 2, `${task.id}: replacement must match exactly once: ${file}`);
-    await writeFile(target, source.replace(old, replacement));
+    // Git for Windows can check out CRLF while JSON patch strings contain LF.
+    // Preserve exact unique matching and the checkout's existing newline style.
+    const newline = source.includes('\r\n') ? '\r\n' : '\n';
+    const normalized = source.replaceAll('\r\n', '\n'), needle = old.replaceAll('\r\n', '\n');
+    assert.ok(needle.length > 0 && normalized.split(needle).length === 2, `${task.id}: replacement must match exactly once: ${file}`);
+    await writeFile(target, normalized.replace(needle, replacement.replaceAll('\r\n', '\n')).replaceAll('\n', newline));
   }
 }
 

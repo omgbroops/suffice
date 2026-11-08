@@ -16,6 +16,8 @@ Options:
   --model ID          gpt-6.1-sol (default), gpt-6-luna, or another catalog ID
   --effort LEVEL      off, minimal, low (default), medium, high, xhigh
   --continue          Continue the most recent session in this repository
+  --semantic          Enable experimental compiler graph and impact tools
+  --recipes           Also enable verified transformation tools (requires --semantic)
   --home PATH         Credential/session directory (default: ~/.suffice)
   --max-cost USD      API-equivalent allowance per task (default: 10)
   --timeout SECONDS   Time allowance per task (default: 600)
@@ -40,12 +42,15 @@ export function parseOptions(args, env=process.env) {
     else if(['--version','-v'].includes(arg)) options.version=true;
     else if(['--print','-p'].includes(arg)) options.print=true;
     else if(arg==='--continue') options.continue=true;
+    else if(arg==='--semantic') options.semantic=true;
+    else if(arg==='--recipes') options.recipes=true;
     else if(values[arg]) { if(!args[i+1] || args[i+1].startsWith('--')) throw new Error(`Missing value for ${arg}`); options[values[arg]]=args[++i]; if(arg==='--cwd') options.cwdExplicit=true; }
     else if(arg.startsWith('-')) throw new Error(`Unknown option: ${arg}`);
     else words.push(arg);
   }
   if(words.length===1 && ['login','doctor'].includes(words[0])) options.command=words[0];
   else options.prompt=words.join(' ');
+  if(options.recipes && !options.semantic) throw new Error('--recipes requires --semantic');
   if(!['off','minimal','low','medium','high','xhigh'].includes(options.effort)) throw new Error('Invalid effort. Use off, minimal, low, medium, high, or xhigh.');
   for(const key of ['maxCost','timeout']) {
     options[key]=Number(options[key]);

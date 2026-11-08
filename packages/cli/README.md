@@ -1,5 +1,7 @@
 # Suffice CLI — alpha
 
+Experimental compiler graph tools are opt-in with `suffice --semantic`; add `--recipes` for preview-first verified transformations. Both are disabled by default. See [architecture and limitations](https://github.com/sufficelabs/suffice/blob/codex/semantic-graph-impact-v1/docs/SEMANTIC-GRAPH.md). Static relationships do not prove runtime correctness or complete test coverage.
+
 A lean coding agent with JavaScript codemode, deterministic repository tools, and source navigation. Requires **Node.js 24+** and Bash (Git for Windows on Windows). No VM is required.
 
 This is an early preview built on **Pi 1.2.0's actual interactive terminal interface and agent engine**, with a Suffice header, project selection and Suffice's tool configuration. Pi remains credited here and in third-party notices. The editor, tool rendering, themes, settings, login, model selector and session controls come from Pi.
