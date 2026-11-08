@@ -1,0 +1,284 @@
+{
+  "id": "012-inventory-reservations-ast-assisted-r0",
+  "task": "inventory-reservations",
+  "arm": "ast-assisted",
+  "repetition": 0,
+  "activation": {
+    "arm": "ast-assisted",
+    "required": true,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/request-key.mjs",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "eae298640f5c9e89bda5b1a02ddb2fefdf15f457d90d20b11ef031557d42ecad",
+        "evidence": {
+          "ast": {
+            "tool": "symbol_read",
+            "callId": "call_60ca2e6cc0514c658b050ae8d526583d|ctc_025872a6dc207829016aeff1c4f98887d1ab53aaa18996b1e0/2",
+            "epoch": 0,
+            "revision": null,
+            "path": "src/request-key.mjs",
+            "name": "requestKey",
+            "sourceHash": "eae298640f5c9e89bda5b1a02ddb2fefdf15f457d90d20b11ef031557d42ecad"
+          }
+        },
+        "afterHash": "159b2ac61247d31ca97ab47648e3dcb6911b4dbbd5ff67c267307be3a0272508",
+        "index": 1
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "epoch": 1,
+        "tool": "file_edit",
+        "beforeHash": "a987d30397056ea74a6ae146f6028b1110f54b10022038b23cfefc77800f44fa",
+        "evidence": null,
+        "afterHash": "06b3730f86e66f74f18386be70f9aef62ef5471afcd9a8feb679a00119d3e331",
+        "index": 2
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "epoch": 2,
+        "tool": "file_edit",
+        "beforeHash": "06b3730f86e66f74f18386be70f9aef62ef5471afcd9a8feb679a00119d3e331",
+        "evidence": null,
+        "afterHash": "f5d3608eff6a7d1adef2aab8d2ab3c632ce0914fc4d0fde8e3a011c8501ad686",
+        "index": 3
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "epoch": 3,
+        "tool": "file_edit",
+        "beforeHash": "1fb570ad06b933139b6befb0326a98b33b40c6aaaf0ef9fa803fe6ab9b4cf1ba",
+        "evidence": null,
+        "afterHash": "887dfb5096497759bfdf8efbb7ea2fff138f61884aa0c44d76ea5275d6b2e02d",
+        "index": 4
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "epoch": 4,
+        "tool": "file_edit",
+        "beforeHash": "68dc8b56c508a071dafdafbdff13f48cb91823e0de2a160b3577ecbf3872860e",
+        "evidence": null,
+        "afterHash": "229af1d8b8fa065c05f1f3b8213980f09b47864aafb4a7fc1700ba5d94ea9066",
+        "index": 5
+      }
+    ],
+    "coveredEdits": 5,
+    "blockedEdits": 0,
+    "evidenceCalls": 10,
+    "astCalls": 10,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 5,
+    "knownEstimatedUsd": 0.01894,
+    "wallMs": 26232
+  },
+  "attemptedTools": {
+    "codemode": 5,
+    "files": 1,
+    "file_read": 13,
+    "symbols": 6,
+    "symbol_read": 5,
+    "file_edit": 5,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Repaired the implementation under `src/` while preserving the public API.\n\n- Scoped request identity to `(tenant, requestId)`.\n- Combined duplicate SKU quantities and sorted items deterministically.\n- Staged stock changes in a snapshot so failed reservations leave stock and request IDs unchanged.\n- Made stock reads ignore inherited properties.\n- Preserved snapshot ownership for initial stock and returned receipts.\n\nVerification: the visible test suite passed — **1 test, 0 failures**. Only existing production source files were modified.",
+  "totals": {
+    "input": 6451,
+    "cacheRead": 15872,
+    "cacheWrite": 0,
+    "output": 751,
+    "totalTokens": 23074,
+    "estimatedApiUsd": 0.021999199999999997,
+    "modelCalls": 6,
+    "costUnknown": false,
+    "assistantMessages": 6
+  },
+  "wallMs": 31094.27119999996,
+  "cpuMicros": {
+    "user": 297000,
+    "system": 109000
+  },
+  "toolCalls": 36,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/index.mjs",
+      "tests/visible.test.mjs",
+      "src/shop.mjs",
+      "src/checkout.mjs",
+      "src/stock-repository.mjs",
+      "src/reservation-store.mjs",
+      "src/request-normalizer.mjs",
+      "src/request-key.mjs",
+      "src/item-plan.mjs",
+      "src/receipt.mjs",
+      "src/stock-transaction.mjs",
+      "src/validation.mjs",
+      "src/stock-rules.mjs"
+    ],
+    "bytes": 6402,
+    "lines": 134,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1243,
+        "lines": 9
+      },
+      {
+        "path": "src/index.mjs",
+        "bytes": 48,
+        "lines": 2
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 517,
+        "lines": 11
+      },
+      {
+        "path": "src/shop.mjs",
+        "bytes": 459,
+        "lines": 11
+      },
+      {
+        "path": "src/checkout.mjs",
+        "bytes": 712,
+        "lines": 15
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "bytes": 249,
+        "lines": 9
+      },
+      {
+        "path": "src/reservation-store.mjs",
+        "bytes": 328,
+        "lines": 9
+      },
+      {
+        "path": "src/request-normalizer.mjs",
+        "bytes": 447,
+        "lines": 9
+      },
+      {
+        "path": "src/request-key.mjs",
+        "bytes": 71,
+        "lines": 4
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "bytes": 275,
+        "lines": 6
+      },
+      {
+        "path": "src/receipt.mjs",
+        "bytes": 230,
+        "lines": 7
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "bytes": 259,
+        "lines": 7
+      },
+      {
+        "path": "src/validation.mjs",
+        "bytes": 422,
+        "lines": 7
+      },
+      {
+        "path": "src/stock-rules.mjs",
+        "bytes": 309,
+        "lines": 6
+      },
+      {
+        "path": "src/request-key.mjs",
+        "bytes": 67,
+        "lines": 3
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "bytes": 271,
+        "lines": 5
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "bytes": 250,
+        "lines": 6
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "bytes": 245,
+        "lines": 8
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 10,
+    "latencyMs": 18.89239999995334
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:51:52.520Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-repository.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "totalEstimatedUsd": 0.021999199999999997,
+  "budgetConsumedUsd": 0.021999200000000024,
+  "totalWallMs": 31263.27119999996,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 86
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 83
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

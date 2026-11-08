@@ -1,0 +1,176 @@
+{
+  "id": "005-dependency-aliases-ast-assisted-r0",
+  "task": "dependency-aliases",
+  "arm": "ast-assisted",
+  "repetition": 0,
+  "activation": {
+    "arm": "ast-assisted",
+    "required": true,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/registry.mjs",
+        "epoch": 0,
+        "tool": "file_write",
+        "beforeHash": "2ad1505e26601898d54bd6d0e041d6e5441ec720af88ea6b19246d79ae14d7e7",
+        "evidence": {
+          "ast": {
+            "tool": "symbol_read",
+            "callId": "call_ca138e3f8f90429da2efba388fdae063|ctc_0d64b7bdf65e2e5f016aeff0f08e0c87d1a6ecd043c816dd4a/2",
+            "epoch": 0,
+            "revision": null,
+            "path": "src/registry.mjs",
+            "name": "resolveName",
+            "sourceHash": "2ad1505e26601898d54bd6d0e041d6e5441ec720af88ea6b19246d79ae14d7e7"
+          }
+        },
+        "afterHash": "d1dfa9d1c9ff88d41a67382164c2db5cd4eac461f94ca432952b3b6bd0fc18bc",
+        "index": 1
+      },
+      {
+        "path": "src/order.mjs",
+        "epoch": 1,
+        "tool": "file_write",
+        "beforeHash": "6eca0c7bbc224600f3ccb1456eb4d40c01e020d3702ce28d64cbe2ad6fee4462",
+        "evidence": null,
+        "afterHash": "c7b546fb6ae78918b8e992317235bce3ad536c2a4d058985fc26258f97a75db7",
+        "index": 2
+      }
+    ],
+    "coveredEdits": 2,
+    "blockedEdits": 0,
+    "evidenceCalls": 4,
+    "astCalls": 4,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 4,
+    "knownEstimatedUsd": 0.015121600000000002,
+    "wallMs": 19661
+  },
+  "attemptedTools": {
+    "codemode": 5,
+    "files": 1,
+    "file_read": 2,
+    "symbols": 3,
+    "symbol_read": 2,
+    "file_write": 2,
+    "file_edit": 1,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Implemented the repair in `src/` while preserving the public API.\n\n- `resolveName` now follows alias chains transitively, detects alias cycles, and rejects missing real targets.\n- `buildOrder` now tracks resolved node identities, preventing duplicate output and detecting dependency cycles through aliases.\n- Declared dependency traversal order and reachable-only resolution are preserved.\n\nVerification: the visible test suite passed (**1/1 tests**). No tests, fixtures, or metadata were modified.",
+  "totals": {
+    "input": 6818,
+    "cacheRead": 8192,
+    "cacheWrite": 0,
+    "output": 823,
+    "totalTokens": 15833,
+    "estimatedApiUsd": 0.022685200000000003,
+    "modelCalls": 6,
+    "costUnknown": false,
+    "assistantMessages": 6
+  },
+  "wallMs": 29941.982700000008,
+  "cpuMicros": {
+    "user": 204000,
+    "system": 171000
+  },
+  "toolCalls": 17,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "tests/visible.test.mjs",
+      "src/order.mjs",
+      "src/registry.mjs"
+    ],
+    "bytes": 2199,
+    "lines": 42,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1027,
+        "lines": 16
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 329,
+        "lines": 7
+      },
+      {
+        "path": "src/order.mjs",
+        "bytes": 643,
+        "lines": 14
+      },
+      {
+        "path": "src/registry.mjs",
+        "bytes": 200,
+        "lines": 5
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 4,
+    "latencyMs": 8.800600000002305
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:48:28.203Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "totalEstimatedUsd": 0.022685200000000003,
+  "budgetConsumedUsd": 0.02268519999999999,
+  "totalWallMs": 30093.982700000008,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 78
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 74
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

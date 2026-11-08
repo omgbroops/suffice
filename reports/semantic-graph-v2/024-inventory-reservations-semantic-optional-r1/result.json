@@ -1,0 +1,252 @@
+{
+  "id": "024-inventory-reservations-semantic-optional-r1",
+  "task": "inventory-reservations",
+  "arm": "semantic-optional",
+  "repetition": 1,
+  "activation": {
+    "arm": "semantic-optional",
+    "required": false,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/item-plan.mjs",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "a987d30397056ea74a6ae146f6028b1110f54b10022038b23cfefc77800f44fa",
+        "evidence": null,
+        "afterHash": "06b3730f86e66f74f18386be70f9aef62ef5471afcd9a8feb679a00119d3e331",
+        "index": 1
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "epoch": 1,
+        "tool": "file_edit",
+        "beforeHash": "06b3730f86e66f74f18386be70f9aef62ef5471afcd9a8feb679a00119d3e331",
+        "evidence": null,
+        "afterHash": "f5d3608eff6a7d1adef2aab8d2ab3c632ce0914fc4d0fde8e3a011c8501ad686",
+        "index": 2
+      },
+      {
+        "path": "src/request-key.mjs",
+        "epoch": 2,
+        "tool": "file_edit",
+        "beforeHash": "eae298640f5c9e89bda5b1a02ddb2fefdf15f457d90d20b11ef031557d42ecad",
+        "evidence": null,
+        "afterHash": "159b2ac61247d31ca97ab47648e3dcb6911b4dbbd5ff67c267307be3a0272508",
+        "index": 3
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "epoch": 3,
+        "tool": "file_edit",
+        "beforeHash": "1fb570ad06b933139b6befb0326a98b33b40c6aaaf0ef9fa803fe6ab9b4cf1ba",
+        "evidence": null,
+        "afterHash": "887dfb5096497759bfdf8efbb7ea2fff138f61884aa0c44d76ea5275d6b2e02d",
+        "index": 4
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "epoch": 4,
+        "tool": "file_edit",
+        "beforeHash": "68dc8b56c508a071dafdafbdff13f48cb91823e0de2a160b3577ecbf3872860e",
+        "evidence": null,
+        "afterHash": "00a370bac47a06d084e8b1f921ce36c0d7a20285b70f49bb361429759bbb66ac",
+        "index": 5
+      }
+    ],
+    "coveredEdits": 5,
+    "blockedEdits": 0,
+    "evidenceCalls": 0,
+    "astCalls": 0,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 3,
+    "knownEstimatedUsd": 0.0189696,
+    "wallMs": 15263
+  },
+  "attemptedTools": {
+    "codemode": 3,
+    "file_read": 14,
+    "files": 1,
+    "file_edit": 5,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Repaired the implementation under `src/` while preserving the public API.\n\n- Duplicate SKU quantities now combine.\n- Items sort deterministically, independent of input order.\n- Request identities are scoped to both tenant and request ID.\n- Stock changes are staged on a copy, preventing partial consumption on failure.\n- Stock reads no longer expose inherited properties.\n\nOnly existing production source files were modified.\n\nVerification: the visible Node test suite passed — **1 test, 0 failures**.",
+  "totals": {
+    "input": 10449,
+    "cacheRead": 3584,
+    "cacheWrite": 0,
+    "output": 596,
+    "totalTokens": 14629,
+    "estimatedApiUsd": 0.0272164,
+    "modelCalls": 4,
+    "costUnknown": false,
+    "assistantMessages": 4
+  },
+  "wallMs": 19784.71789999993,
+  "cpuMicros": {
+    "user": 250000,
+    "system": 156000
+  },
+  "toolCalls": 24,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/index.mjs",
+      "src/shop.mjs",
+      "src/checkout.mjs",
+      "src/item-plan.mjs",
+      "src/receipt.mjs",
+      "src/request-key.mjs",
+      "src/request-normalizer.mjs",
+      "src/reservation-store.mjs",
+      "src/stock-repository.mjs",
+      "src/stock-rules.mjs",
+      "src/stock-transaction.mjs",
+      "src/validation.mjs",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 5587,
+    "lines": 113,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1243,
+        "lines": 9
+      },
+      {
+        "path": "src/index.mjs",
+        "bytes": 48,
+        "lines": 2
+      },
+      {
+        "path": "src/shop.mjs",
+        "bytes": 477,
+        "lines": 12
+      },
+      {
+        "path": "src/checkout.mjs",
+        "bytes": 712,
+        "lines": 15
+      },
+      {
+        "path": "src/item-plan.mjs",
+        "bytes": 275,
+        "lines": 6
+      },
+      {
+        "path": "src/receipt.mjs",
+        "bytes": 230,
+        "lines": 7
+      },
+      {
+        "path": "src/request-key.mjs",
+        "bytes": 71,
+        "lines": 4
+      },
+      {
+        "path": "src/request-normalizer.mjs",
+        "bytes": 447,
+        "lines": 9
+      },
+      {
+        "path": "src/reservation-store.mjs",
+        "bytes": 328,
+        "lines": 9
+      },
+      {
+        "path": "src/stock-repository.mjs",
+        "bytes": 249,
+        "lines": 9
+      },
+      {
+        "path": "src/stock-rules.mjs",
+        "bytes": 309,
+        "lines": 6
+      },
+      {
+        "path": "src/stock-transaction.mjs",
+        "bytes": 259,
+        "lines": 7
+      },
+      {
+        "path": "src/validation.mjs",
+        "bytes": 422,
+        "lines": 7
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 517,
+        "lines": 11
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:57:05.736Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-repository.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "totalEstimatedUsd": 0.0272164,
+  "budgetConsumedUsd": 0.0272164,
+  "totalWallMs": 19969.71789999993,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 101
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 84
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

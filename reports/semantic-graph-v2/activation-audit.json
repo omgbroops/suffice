@@ -1,0 +1,403 @@
+{
+  "executed": 24,
+  "requiredAttempts": 12,
+  "failed": [],
+  "method": "Independent raw-result/transcript audit. Required evidence must be printed in a successful codemode response preceding the assistant generation that issued the edit. This is stronger than call ordering; it still cannot prove good reasoning.",
+  "rows": [
+    {
+      "id": "001-prerelease-diff-baseline-r0",
+      "arm": "baseline",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "002-prerelease-diff-ast-assisted-r0",
+      "arm": "ast-assisted",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/functions/diff.js",
+          "kind": "ast_initial",
+          "sourceRead": true,
+          "discovered": true,
+          "deliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "003-prerelease-diff-semantic-assisted-r0",
+      "arm": "semantic-assisted",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/functions/diff.js",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "004-prerelease-diff-semantic-optional-r0",
+      "arm": "semantic-optional",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "005-dependency-aliases-ast-assisted-r0",
+      "arm": "ast-assisted",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/registry.mjs",
+          "kind": "ast_initial",
+          "sourceRead": true,
+          "discovered": true,
+          "deliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "006-dependency-aliases-semantic-assisted-r0",
+      "arm": "semantic-assisted",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/registry.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 2,
+          "path": "src/order.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "007-dependency-aliases-semantic-optional-r0",
+      "arm": "semantic-optional",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "008-dependency-aliases-baseline-r0",
+      "arm": "baseline",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "009-inventory-reservations-semantic-assisted-r0",
+      "arm": "semantic-assisted",
+      "edits": 4,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/item-plan.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 2,
+          "path": "src/item-plan.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 3,
+          "path": "src/request-key.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 4,
+          "path": "src/stock-transaction.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "010-inventory-reservations-semantic-optional-r0",
+      "arm": "semantic-optional",
+      "edits": 5,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "011-inventory-reservations-baseline-r0",
+      "arm": "baseline",
+      "edits": 6,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "012-inventory-reservations-ast-assisted-r0",
+      "arm": "ast-assisted",
+      "edits": 5,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/request-key.mjs",
+          "kind": "ast_initial",
+          "sourceRead": true,
+          "discovered": true,
+          "deliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "013-prerelease-diff-baseline-r1",
+      "arm": "baseline",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "014-prerelease-diff-semantic-optional-r1",
+      "arm": "semantic-optional",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "015-prerelease-diff-semantic-assisted-r1",
+      "arm": "semantic-assisted",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/functions/diff.js",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "016-prerelease-diff-ast-assisted-r1",
+      "arm": "ast-assisted",
+      "edits": 1,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/functions/diff.js",
+          "kind": "ast_initial",
+          "sourceRead": true,
+          "discovered": true,
+          "deliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "017-dependency-aliases-ast-assisted-r1",
+      "arm": "ast-assisted",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/order.mjs",
+          "kind": "ast_initial",
+          "sourceRead": true,
+          "discovered": true,
+          "deliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "018-dependency-aliases-baseline-r1",
+      "arm": "baseline",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "019-dependency-aliases-semantic-optional-r1",
+      "arm": "semantic-optional",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "020-dependency-aliases-semantic-assisted-r1",
+      "arm": "semantic-assisted",
+      "edits": 2,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/registry.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 2,
+          "path": "src/order.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "021-inventory-reservations-semantic-assisted-r1",
+      "arm": "semantic-assisted",
+      "edits": 3,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/item-plan.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 2,
+          "path": "src/request-key.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        },
+        {
+          "edit": 3,
+          "path": "src/stock-transaction.mjs",
+          "kind": "semantic",
+          "sameIdentity": true,
+          "sameRevision": true,
+          "sameEpoch": true,
+          "relevant": true,
+          "dependenciesDeliveredBeforeEditingModel": true,
+          "impactDeliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "022-inventory-reservations-ast-assisted-r1",
+      "arm": "ast-assisted",
+      "edits": 5,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": [
+        {
+          "edit": 1,
+          "path": "src/item-plan.mjs",
+          "kind": "ast_initial",
+          "sourceRead": true,
+          "discovered": true,
+          "deliveredBeforeEditingModel": true
+        }
+      ]
+    },
+    {
+      "id": "023-inventory-reservations-baseline-r1",
+      "arm": "baseline",
+      "edits": 5,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    },
+    {
+      "id": "024-inventory-reservations-semantic-optional-r1",
+      "arm": "semantic-optional",
+      "edits": 5,
+      "gateCompliant": true,
+      "independentlyAudited": true,
+      "checks": []
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "id": "006-dependency-aliases-semantic-assisted-r0",
+  "task": "dependency-aliases",
+  "arm": "semantic-assisted",
+  "repetition": 0,
+  "activation": {
+    "arm": "semantic-assisted",
+    "required": true,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/registry.mjs",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "2ad1505e26601898d54bd6d0e041d6e5441ec720af88ea6b19246d79ae14d7e7",
+        "evidence": {
+          "semantic": {
+            "tool": "impact_analysis",
+            "callId": "call_9dadc763358e41babaff7e4c09e78711|ctc_0acbcf8e9ea08544016aeff11324a087d18fbd75eeea127d36/2",
+            "epoch": 0,
+            "revision": "ac4988d781ea28d4d4c48771f9cd1d16d7d84e10f3272136af2e691b41172563",
+            "symbol": "src/registry.mjs/function:resolveName:0",
+            "path": "src/registry.mjs",
+            "change": "implementation",
+            "inspection": {
+              "tool": "symbol_dependencies",
+              "callId": "call_9dadc763358e41babaff7e4c09e78711|ctc_0acbcf8e9ea08544016aeff11324a087d18fbd75eeea127d36/1",
+              "epoch": 0,
+              "revision": "ac4988d781ea28d4d4c48771f9cd1d16d7d84e10f3272136af2e691b41172563",
+              "symbol": "src/registry.mjs/function:resolveName:0",
+              "path": "src/registry.mjs",
+              "relationships": 4,
+              "unresolved": 18,
+              "limited": false
+            },
+            "affected": 6,
+            "unresolved": 18,
+            "limited": false
+          },
+          "span": {
+            "start": 53,
+            "end": 181
+          },
+          "target": "src/registry.mjs/function:resolveName:0"
+        },
+        "afterHash": "4f844f7f8d3afa21d12def03e75d034e685d22bbb467bf83e8cb1cf935ad7486",
+        "index": 1
+      },
+      {
+        "path": "src/order.mjs",
+        "epoch": 1,
+        "tool": "file_edit",
+        "beforeHash": "6eca0c7bbc224600f3ccb1456eb4d40c01e020d3702ce28d64cbe2ad6fee4462",
+        "evidence": {
+          "semantic": {
+            "tool": "impact_analysis",
+            "callId": "call_60111a9664744c689b321cb1da709b01|ctc_0acbcf8e9ea08544016aeff11f0be487d1baab761c154f6a8c/4",
+            "epoch": 1,
+            "revision": "7247c65e1cf1c9968c9201bf0c0ebe477beb602dc1674bd8bb107ec81fdad0c9",
+            "symbol": "src/order.mjs/function:buildOrder:0/function:visit:0",
+            "path": "src/order.mjs",
+            "change": "implementation",
+            "inspection": {
+              "tool": "symbol_dependencies",
+              "callId": "call_60111a9664744c689b321cb1da709b01|ctc_0acbcf8e9ea08544016aeff11f0be487d1baab761c154f6a8c/3",
+              "epoch": 1,
+              "revision": "7247c65e1cf1c9968c9201bf0c0ebe477beb602dc1674bd8bb107ec81fdad0c9",
+              "symbol": "src/order.mjs/function:buildOrder:0/function:visit:0",
+              "path": "src/order.mjs",
+              "relationships": 6,
+              "unresolved": 25,
+              "limited": false
+            },
+            "affected": 4,
+            "unresolved": 25,
+            "limited": false
+          },
+          "span": {
+            "start": 261,
+            "end": 533
+          },
+          "target": "src/order.mjs/function:buildOrder:0/function:visit:0"
+        },
+        "afterHash": "7b2393fb6e39254605a59397d8cb6ced07c1347054bf45960cc272a9e71f3e3d",
+        "index": 2
+      }
+    ],
+    "coveredEdits": 2,
+    "blockedEdits": 0,
+    "evidenceCalls": 7,
+    "astCalls": 0,
+    "semanticCalls": 7,
+    "impactCalls": 2
+  },
+  "initialInvestigation": {
+    "modelCalls": 5,
+    "knownEstimatedUsd": 0.0269336,
+    "wallMs": 30657
+  },
+  "attemptedTools": {
+    "codemode": 6,
+    "files": 1,
+    "file_read": 4,
+    "semantic_symbols": 3,
+    "symbol_dependencies": 2,
+    "impact_analysis": 2,
+    "file_edit": 3,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Repaired the implementation in `src/` while preserving the public API.\n\n- Alias resolution now follows transitive chains, detects alias cycles, and rejects missing real targets.\n- Build traversal tracks resolved node identities, preventing duplicate output and detecting dependency cycles through aliases.\n- Declared dependency traversal order and reachable-only resolution are preserved.\n\nVerification: the visible Node test suite passed — **1 test, 0 failures**. Tests, fixtures, and metadata were unchanged.",
+  "totals": {
+    "input": 13524,
+    "cacheRead": 38144,
+    "cacheWrite": 0,
+    "output": 1088,
+    "totalTokens": 52756,
+    "estimatedApiUsd": 0.041742400000000006,
+    "modelCalls": 7,
+    "costUnknown": false,
+    "assistantMessages": 7
+  },
+  "wallMs": 40331.66160000001,
+  "cpuMicros": {
+    "user": 594000,
+    "system": 234000
+  },
+  "toolCalls": 22,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/order.mjs",
+      "src/registry.mjs",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 2213,
+    "lines": 44,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1027,
+        "lines": 16
+      },
+      {
+        "path": "src/order.mjs",
+        "bytes": 653,
+        "lines": 15
+      },
+      {
+        "path": "src/registry.mjs",
+        "bytes": 204,
+        "lines": 6
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 329,
+        "lines": 7
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 7,
+    "toolLatencyMs": 88.74579999997513,
+    "updates": [
+      {
+        "kind": "initial",
+        "revision": "ac4988d781ea28d4d4c48771f9cd1d16d7d84e10f3272136af2e691b41172563",
+        "changed": [
+          "src/order.mjs",
+          "src/registry.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "src/order.mjs",
+          "src/registry.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 3,
+        "cachedFiles": 0,
+        "indexingMs": 8.624300000010408,
+        "inputBytes": 1096,
+        "heapUsedBytes": 82202768,
+        "rssBytes": 194039808
+      },
+      {
+        "kind": "incremental",
+        "revision": "7247c65e1cf1c9968c9201bf0c0ebe477beb602dc1674bd8bb107ec81fdad0c9",
+        "changed": [
+          "src/registry.mjs"
+        ],
+        "invalidated": [
+          "src/registry.mjs",
+          "src/order.mjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 3,
+        "cachedFiles": 0,
+        "indexingMs": 6.924400000018068,
+        "inputBytes": 1315,
+        "heapUsedBytes": 72470552,
+        "rssBytes": 193622016
+      }
+    ],
+    "indexingMs": 15.548700000028475,
+    "io": {
+      "scans": 16,
+      "bytes": 19069,
+      "files": 48,
+      "scanMs": 49.50079999997979
+    },
+    "peakObservedHeapBytes": 82202768
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:49:08.744Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "totalEstimatedUsd": 0.041742400000000006,
+  "budgetConsumedUsd": 0.04174239999999996,
+  "totalWallMs": 40481.66160000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 77
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 73
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

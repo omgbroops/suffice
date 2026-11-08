@@ -1,0 +1,154 @@
+{
+  "id": "013-prerelease-diff-baseline-r1",
+  "task": "prerelease-diff",
+  "arm": "baseline",
+  "repetition": 1,
+  "activation": {
+    "arm": "baseline",
+    "required": false,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/functions/diff.js",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "c6694c00d8a5dd9592b9767c53b3cff370cdd039d3de43a2735be73aa4da7aa2",
+        "evidence": null,
+        "afterHash": "3bb84c339c13e7106cd2cf944bd8bcd94d842291239415785a2c159f33586b4e",
+        "index": 1
+      }
+    ],
+    "coveredEdits": 1,
+    "blockedEdits": 0,
+    "evidenceCalls": 0,
+    "astCalls": 0,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 3,
+    "knownEstimatedUsd": 0.0143456,
+    "wallMs": 12630
+  },
+  "attemptedTools": {
+    "codemode": 3,
+    "files": 1,
+    "file_read": 4,
+    "search": 1,
+    "file_edit": 1,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Implemented the repair in `src/functions/diff.js`.\n\nPrerelease-to-stable transitions now check major and minor differences before the target’s patch value. This fixes both reported cases and preserves symmetry, prerelease-to-prerelease classification, and existing stabilization semantics.\n\nVerification: all **7 visible test groups passed**. No tests, fixtures, or metadata were modified.",
+  "totals": {
+    "input": 6178,
+    "cacheRead": 8832,
+    "cacheWrite": 0,
+    "output": 372,
+    "totalTokens": 15382,
+    "estimatedApiUsd": 0.0169592,
+    "modelCalls": 4,
+    "costUnknown": false,
+    "assistantMessages": 4
+  },
+  "wallMs": 17697.872100000037,
+  "cpuMicros": {
+    "user": 234000,
+    "system": 141000
+  },
+  "toolCalls": 11,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/functions/diff.js",
+      "src/test/functions/diff.js",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 7175,
+    "lines": 166,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 878,
+        "lines": 4
+      },
+      {
+        "path": "src/functions/diff.js",
+        "bytes": 1867,
+        "lines": 66
+      },
+      {
+        "path": "src/test/functions/diff.js",
+        "bytes": 1898,
+        "lines": 58
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 2532,
+        "lines": 38
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:52:10.704Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "totalEstimatedUsd": 0.0169592,
+  "budgetConsumedUsd": 0.016959200000000008,
+  "totalWallMs": 17972.872100000037,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 123
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 152
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

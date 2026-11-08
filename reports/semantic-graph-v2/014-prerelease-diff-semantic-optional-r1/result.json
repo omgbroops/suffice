@@ -1,0 +1,160 @@
+{
+  "id": "014-prerelease-diff-semantic-optional-r1",
+  "task": "prerelease-diff",
+  "arm": "semantic-optional",
+  "repetition": 1,
+  "activation": {
+    "arm": "semantic-optional",
+    "required": false,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/functions/diff.js",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "c6694c00d8a5dd9592b9767c53b3cff370cdd039d3de43a2735be73aa4da7aa2",
+        "evidence": null,
+        "afterHash": "435f9ac295aeb6467298ae1784e51c0a503e3812a6dd1c6d5ffe6cb9a47a1634",
+        "index": 1
+      }
+    ],
+    "coveredEdits": 1,
+    "blockedEdits": 0,
+    "evidenceCalls": 0,
+    "astCalls": 0,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 3,
+    "knownEstimatedUsd": 0.0158316,
+    "wallMs": 11850
+  },
+  "attemptedTools": {
+    "codemode": 3,
+    "files": 1,
+    "file_read": 4,
+    "search": 1,
+    "file_edit": 1,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Implemented the fix in `src/functions/diff.js`.\n\n- Prerelease-to-stable transitions now check major and minor changes before the target’s patch value.\n- Symmetry is preserved through the existing high/low version ordering.\n- Existing stabilization rules and prerelease-to-prerelease classification remain unchanged.\n\nVerification: all 7 visible test groups passed. These groups do not directly test `diff()`.",
+  "totals": {
+    "input": 6715,
+    "cacheRead": 11392,
+    "cacheWrite": 0,
+    "output": 395,
+    "totalTokens": 18502,
+    "estimatedApiUsd": 0.0185192,
+    "modelCalls": 4,
+    "costUnknown": false,
+    "assistantMessages": 4
+  },
+  "wallMs": 15867.424500000023,
+  "cpuMicros": {
+    "user": 218000,
+    "system": 156000
+  },
+  "toolCalls": 11,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/functions/diff.js",
+      "src/test/functions/diff.js",
+      "tests/visible.test.mjs",
+      "src/README.md"
+    ],
+    "bytes": 7256,
+    "lines": 167,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 878,
+        "lines": 4
+      },
+      {
+        "path": "src/functions/diff.js",
+        "bytes": 1867,
+        "lines": 66
+      },
+      {
+        "path": "src/test/functions/diff.js",
+        "bytes": 1898,
+        "lines": 58
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 2532,
+        "lines": 38
+      },
+      {
+        "path": "src/README.md",
+        "bytes": 81,
+        "lines": 1
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:52:27.264Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "totalEstimatedUsd": 0.0185192,
+  "budgetConsumedUsd": 0.018519200000000013,
+  "totalWallMs": 16137.424500000023,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 124
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 146
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

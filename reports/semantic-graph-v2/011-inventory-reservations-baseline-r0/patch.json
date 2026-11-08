@@ -1,0 +1,27 @@
+[
+  {
+    "path": "src/item-plan.mjs",
+    "before": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n",
+    "after": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, (quantities.get(item.sku) ?? 0) + item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n"
+  },
+  {
+    "path": "src/request-key.mjs",
+    "before": "export function requestKey(tenant, id) {\r\n  return id;\r\n}\r\n",
+    "after": "export function requestKey(tenant, id) {\r\n  return JSON.stringify([tenant, id]);\r\n}\r\n"
+  },
+  {
+    "path": "src/request-normalizer.mjs",
+    "before": "import { validateIdentity, validateItem } from './validation.mjs';\r\nimport { combineItems } from './item-plan.mjs';\r\nexport function normalizeRequest(input) {\r\n  validateIdentity(input);\r\n  if (!Array.isArray(input.items) || !input.items.length) throw new Error('Invalid items');\r\n  input.items.forEach(validateItem);\r\n  return { tenant: input.tenant, requestId: input.requestId, items: combineItems(input.items) };\r\n}\r\n",
+    "after": "import { validateIdentity, validateItem } from './validation.mjs';\r\nimport { combineItems } from './item-plan.mjs';\r\nexport function normalizeRequest(input) {\r\n  validateIdentity(input);\r\n  if (!Array.isArray(input.items) || !input.items.length) throw new Error('Invalid items');\r\n  for (const item of input.items) validateItem(item);\r\n  return { tenant: input.tenant, requestId: input.requestId, items: combineItems(input.items) };\r\n}\r\n"
+  },
+  {
+    "path": "src/stock-repository.mjs",
+    "before": "export function makeStock(initial) {\r\n  let values = structuredClone(initial);\r\n  return {\r\n    read: (tenant, sku) => values[tenant]?.[sku],\r\n    current: () => values,\r\n    publish: next => { values = next; },\r\n  };\r\n}\r\n",
+    "after": "export function makeStock(initial) {\r\n  let values = structuredClone(initial);\r\n  return {\r\n    read: (tenant, sku) => Object.hasOwn(values, tenant) && Object.hasOwn(values[tenant], sku)\n      ? values[tenant][sku] : undefined,\r\n    current: () => values,\r\n    publish: next => { values = next; },\r\n  };\r\n}\r\n"
+  },
+  {
+    "path": "src/stock-transaction.mjs",
+    "before": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = repository.current();\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n",
+    "after": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = structuredClone(repository.current());\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n"
+  }
+]

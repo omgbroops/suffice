@@ -1,0 +1,20 @@
+
+> suffice@0.1.0 test:cli
+> node --test packages/cli/test/*.test.mjs
+
+✔ CLI entrypoint works outside the repository and validates options (57.5783ms)
+✔ project selection supports recent and quoted paths and rejects files (19.4977ms)
+✔ native Pi project command creates a valid empty session and preserves state on invalid input (10.2814ms)
+✔ project sessions load distinct repository instructions and history locations without inference (40.5605ms)
+(node:62404) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native tools edit multiple packages, root and hidden config, then run project verification (158.2039ms)
+✔ file scope rejects an escaping directory link, including for new files (4.1604ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2296.6874

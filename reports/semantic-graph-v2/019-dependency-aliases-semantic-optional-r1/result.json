@@ -1,0 +1,164 @@
+{
+  "id": "019-dependency-aliases-semantic-optional-r1",
+  "task": "dependency-aliases",
+  "arm": "semantic-optional",
+  "repetition": 1,
+  "activation": {
+    "arm": "semantic-optional",
+    "required": false,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/registry.mjs",
+        "epoch": 0,
+        "tool": "file_write",
+        "beforeHash": "2ad1505e26601898d54bd6d0e041d6e5441ec720af88ea6b19246d79ae14d7e7",
+        "evidence": null,
+        "afterHash": "ff9ba7980404109f143221dbecc5886706ce1d5d9d9dbd50fe5eb4ad913e44eb",
+        "index": 1
+      },
+      {
+        "path": "src/order.mjs",
+        "epoch": 1,
+        "tool": "file_write",
+        "beforeHash": "6eca0c7bbc224600f3ccb1456eb4d40c01e020d3702ce28d64cbe2ad6fee4462",
+        "evidence": null,
+        "afterHash": "c7b546fb6ae78918b8e992317235bce3ad536c2a4d058985fc26258f97a75db7",
+        "index": 2
+      }
+    ],
+    "coveredEdits": 2,
+    "blockedEdits": 0,
+    "evidenceCalls": 0,
+    "astCalls": 0,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 3,
+    "knownEstimatedUsd": 0.010797600000000001,
+    "wallMs": 14887
+  },
+  "attemptedTools": {
+    "codemode": 4,
+    "file_read": 4,
+    "files": 1,
+    "file_write": 2,
+    "file_edit": 1,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Repaired the implementation under `src/` while preserving the public API.\n\n- `resolveName` follows alias chains transitively, detects alias cycles, and rejects missing real targets.\n- `buildOrder` tracks resolved node identities, preventing duplicate output and detecting dependency cycles through aliases.\n- Declared dependency traversal order and reachable-only resolution are preserved.\n\nVerification: `node --test tests/visible.test.mjs` passed — 1 test, 0 failures.",
+  "totals": {
+    "input": 3653,
+    "cacheRead": 9600,
+    "cacheWrite": 0,
+    "output": 748,
+    "totalTokens": 14001,
+    "estimatedApiUsd": 0.015746000000000003,
+    "modelCalls": 5,
+    "costUnknown": false,
+    "assistantMessages": 5
+  },
+  "wallMs": 24079.03130000003,
+  "cpuMicros": {
+    "user": 235000,
+    "system": 157000
+  },
+  "toolCalls": 13,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/order.mjs",
+      "src/registry.mjs",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 2213,
+    "lines": 44,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 1027,
+        "lines": 16
+      },
+      {
+        "path": "src/order.mjs",
+        "bytes": 653,
+        "lines": 15
+      },
+      {
+        "path": "src/registry.mjs",
+        "bytes": 204,
+        "lines": 6
+      },
+      {
+        "path": "tests/visible.test.mjs",
+        "bytes": 329,
+        "lines": 7
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 0,
+    "latencyMs": 0
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:54:35.978Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "totalEstimatedUsd": 0.015746000000000003,
+  "budgetConsumedUsd": 0.01574600000000001,
+  "totalWallMs": 24230.03130000003,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 79
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 72
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

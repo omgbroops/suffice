@@ -1,0 +1,159 @@
+{
+  "id": "016-prerelease-diff-ast-assisted-r1",
+  "task": "prerelease-diff",
+  "arm": "ast-assisted",
+  "repetition": 1,
+  "activation": {
+    "arm": "ast-assisted",
+    "required": true,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/functions/diff.js",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "c6694c00d8a5dd9592b9767c53b3cff370cdd039d3de43a2735be73aa4da7aa2",
+        "evidence": {
+          "ast": {
+            "tool": "symbol_read",
+            "callId": "call_6526855909de443da9f7b12afc1c6098|ctc_090bf50e010c5d52016aeff2176eec87d1aa10980033e86469/1",
+            "epoch": 0,
+            "revision": null,
+            "path": "src/functions/diff.js",
+            "name": "diff",
+            "sourceHash": "c6694c00d8a5dd9592b9767c53b3cff370cdd039d3de43a2735be73aa4da7aa2"
+          }
+        },
+        "afterHash": "784cad4443928d038ee37f30dc709de5f16327a8b1cd4c9750cb633c14838252",
+        "index": 1
+      }
+    ],
+    "coveredEdits": 1,
+    "blockedEdits": 0,
+    "evidenceCalls": 2,
+    "astCalls": 2,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 5,
+    "knownEstimatedUsd": 0.017289199999999998,
+    "wallMs": 16477
+  },
+  "attemptedTools": {
+    "codemode": 5,
+    "file_read": 2,
+    "symbols": 2,
+    "files": 1,
+    "symbol_read": 1,
+    "file_edit": 1,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Updated `src/functions/diff.js` to compare major and minor versions before using the stable target’s patch for classification.\n\nThis fixes the requested transitions symmetrically while retaining:\n- Existing same-core stabilization semantics.\n- The major classification for prereleases with zero minor and patch.\n- Prerelease-to-prerelease classification.\n\nVerification: all **7 visible test groups passed**. Only the existing production source file was modified.",
+  "totals": {
+    "input": 7290,
+    "cacheRead": 12416,
+    "cacheWrite": 0,
+    "output": 429,
+    "totalTokens": 20135,
+    "estimatedApiUsd": 0.020111599999999997,
+    "modelCalls": 6,
+    "costUnknown": false,
+    "assistantMessages": 6
+  },
+  "wallMs": 20801.65359999996,
+  "cpuMicros": {
+    "user": 203000,
+    "system": 234000
+  },
+  "toolCalls": 13,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/functions/diff.js",
+      "src/test/functions/diff.js"
+    ],
+    "bytes": 4599,
+    "lines": 124,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 878,
+        "lines": 4
+      },
+      {
+        "path": "src/functions/diff.js",
+        "bytes": 1823,
+        "lines": 62
+      },
+      {
+        "path": "src/test/functions/diff.js",
+        "bytes": 1898,
+        "lines": 58
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 2,
+    "latencyMs": 5.493599999987055
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:53:13.314Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "totalEstimatedUsd": 0.020111599999999997,
+  "budgetConsumedUsd": 0.02011159999999998,
+  "totalWallMs": 21070.65359999996,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 122
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 147
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}

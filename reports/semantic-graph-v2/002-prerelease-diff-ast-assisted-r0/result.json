@@ -1,0 +1,171 @@
+{
+  "id": "002-prerelease-diff-ast-assisted-r0",
+  "task": "prerelease-diff",
+  "arm": "ast-assisted",
+  "repetition": 0,
+  "activation": {
+    "arm": "ast-assisted",
+    "required": true,
+    "compliant": true,
+    "edits": [
+      {
+        "path": "src/functions/diff.js",
+        "epoch": 0,
+        "tool": "file_edit",
+        "beforeHash": "c6694c00d8a5dd9592b9767c53b3cff370cdd039d3de43a2735be73aa4da7aa2",
+        "evidence": {
+          "ast": {
+            "tool": "symbol_read",
+            "callId": "call_a18563121e4f4d1bb14d0244eb769224|ctc_0e8e90068b646fbe016aeff0b2500487d1960a98031216c798/1",
+            "epoch": 0,
+            "revision": null,
+            "path": "src/functions/diff.js",
+            "name": "diff",
+            "sourceHash": "c6694c00d8a5dd9592b9767c53b3cff370cdd039d3de43a2735be73aa4da7aa2"
+          }
+        },
+        "afterHash": "18dc234d0de9ebb0f93f248e62bfc94ff6a0ecf0ea1de787460464a07d9b22eb",
+        "index": 1
+      }
+    ],
+    "coveredEdits": 1,
+    "blockedEdits": 0,
+    "evidenceCalls": 2,
+    "astCalls": 2,
+    "semanticCalls": 0,
+    "impactCalls": 0
+  },
+  "initialInvestigation": {
+    "modelCalls": 4,
+    "knownEstimatedUsd": 0.015200000000000002,
+    "wallMs": 15319
+  },
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "file_read": 3,
+    "symbols": 2,
+    "search": 1,
+    "symbol_read": 1,
+    "file_edit": 1,
+    "test": 1
+  },
+  "status": "completed",
+  "final": "Updated `src/functions/diff.js` so prerelease-to-stable transitions check major and minor core changes before using stabilization rules.\n\n- The requested examples now classify as `minor` and `major`, respectively.\n- Symmetry is retained through the existing version ordering.\n- Prerelease-to-prerelease classification and existing stabilization semantics are unchanged.\n\nVerification: all 7 visible test groups passed. Only the production source file was modified.",
+  "totals": {
+    "input": 6118,
+    "cacheRead": 13568,
+    "cacheWrite": 0,
+    "output": 445,
+    "totalTokens": 20131,
+    "estimatedApiUsd": 0.0180428,
+    "modelCalls": 5,
+    "costUnknown": false,
+    "assistantMessages": 5
+  },
+  "wallMs": 20224.9611,
+  "cpuMicros": {
+    "user": 281000,
+    "system": 78000
+  },
+  "toolCalls": 14,
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/test/functions/diff.js",
+      "src/README.md",
+      "src/functions/diff.js"
+    ],
+    "bytes": 5365,
+    "lines": 137,
+    "events": [
+      {
+        "path": "README.md",
+        "bytes": 878,
+        "lines": 4
+      },
+      {
+        "path": "src/test/functions/diff.js",
+        "bytes": 1898,
+        "lines": 58
+      },
+      {
+        "path": "src/README.md",
+        "bytes": 81,
+        "lines": 1
+      },
+      {
+        "path": "src/functions/diff.js",
+        "bytes": 1823,
+        "lines": 62
+      },
+      {
+        "path": "src/README.md",
+        "bytes": 685,
+        "lines": 12
+      }
+    ]
+  },
+  "navigation": {
+    "calls": 2,
+    "latencyMs": 9.880799999998999
+  },
+  "graph": {
+    "calls": 0,
+    "toolLatencyMs": 0,
+    "updates": [],
+    "indexingMs": 0,
+    "io": {
+      "scans": 0,
+      "bytes": 0,
+      "files": 0,
+      "scanMs": 0
+    },
+    "peakObservedHeapBytes": null
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T03:47:16.814Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "activationCompliant": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "totalEstimatedUsd": 0.0180428,
+  "budgetConsumedUsd": 0.018042799999999998,
+  "totalWallMs": 20498.9611,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 126
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 148
+  },
+  "executionCommit": "38ee1437d421fff1257350bb0f00c66fae390b0e"
+}
