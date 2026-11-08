@@ -88,6 +88,7 @@ export class SemanticGraph {
     const revision = digest([...scan.files, ...scan.metadata].map(([f,v]) => `${this.path(f)}:${v.hash}`).join('\n') + JSON.stringify(scan.omitted));
     if (revision === this.revision) return this.lastUpdate;
     const previous = this.files, previousGlobals=this.globalFiles??new Set(), first = !this.revision;
+    const cachedDependencies=[...this.cache].map(([file,entry])=>[file,[...new Set(entry.edges.map(edge=>this.nodes.get(edge.to)?.path).filter(Boolean).map(path=>resolve(this.root,path)))]]);
     const changed = [...new Set([...previous.keys(), ...scan.files.keys()])].filter(f => previous.get(f)?.hash !== scan.files.get(f)?.hash);
     const metadataHash = digest([...scan.metadata].map(([f,v]) => `${f}:${v.hash}`).join('\n'));
     const configChanged = metadataHash !== this.metadataHash;
@@ -168,16 +169,28 @@ export class SemanticGraph {
         if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === 'require' && ts.isStringLiteralLike(node.arguments[0])) {
           const target = this.resolveModule(node.arguments[0].text,file); if (target) imports.push(target);
         }
+        // Dynamic behavior remains unresolved, but a literal module is still an
+        // invalidation dependency. Import types/JSDoc can affect checker results.
+        if(ts.isCallExpression(node)&&node.expression.kind===ts.SyntaxKind.ImportKeyword&&ts.isStringLiteralLike(node.arguments[0])) {
+          const target=this.resolveModule(node.arguments[0].text,file);if(target)imports.push(target);
+        }
+        if(ts.isImportTypeNode(node)&&ts.isLiteralTypeNode(node.argument)&&ts.isStringLiteralLike(node.argument.literal)) {
+          const target=this.resolveModule(node.argument.literal.text,file);if(target)imports.push(target);
+        }
+        for(const doc of node.jsDoc??[])walk(doc);
         ts.forEachChild(node,walk);
       };
-      if (sf) walk(sf); this.modules.set(file,[...new Set(imports)]);
+      if (sf) {walk(sf);for(const ref of sf.referencedFiles??[]){const target=resolve(dirname(file),ref.fileName);if(this.files.has(target))imports.push(target);}}this.modules.set(file,[...new Set(imports)]);
     }
-    this.globalFiles=new Set([...this.files.keys()].filter(f=>{const sf=this.program.getSourceFile(f);return sf&&!ts.isExternalModule(sf);}));
+    this.globalFiles=new Set([...this.files.keys()].filter(f=>{
+      const sf=this.program.getSourceFile(f);if(!sf)return false;if(!ts.isExternalModule(sf))return true;
+      let augmentation=false;const walk=node=>{if(ts.isModuleDeclaration(node)&&(ts.isStringLiteral(node.name)||node.flags&ts.NodeFlags.GlobalAugmentation))augmentation=true;ts.forEachChild(node,walk);};walk(sf);return augmentation;
+    }));
     const invalidated = new Set(changed), globalChange = changed.some(f => previousGlobals.has(f)||this.globalFiles.has(f));
     // Global scripts can change ambient bindings anywhere. Invalidate conservatively.
     if (configChanged || globalChange) for (const f of this.files.keys()) invalidated.add(f);
     let grew = true;
-    while (grew) { grew = false; for (const [f,deps] of [...oldModules,...this.modules]) if (!invalidated.has(f) && deps.some(d => invalidated.has(d))) { invalidated.add(f); grew = true; } }
+    while (grew) { grew = false; for (const [f,deps] of [...oldModules,...this.modules,...cachedDependencies]) if (!invalidated.has(f) && deps.some(d => invalidated.has(d))) { invalidated.add(f); grew = true; } }
     for (const f of invalidated) this.cache.delete(f);
     // Reused entries contain immutable IDs/locations, never compiler AST objects.
     const metric = {kind:first?'initial':'incremental', revision, changed:changed.map(f=>this.path(f)), invalidated:[...invalidated].map(f=>this.path(f)),
@@ -376,5 +389,9 @@ export class SemanticGraph {
       for (const d of [...this.program.getSyntacticDiagnostics(sf),...this.program.getSemanticDiagnostics(sf)]) result.push({path:this.path(file),code:d.code,message:ts.flattenDiagnosticMessageText(d.messageText,' ')});
     } return result;
   }
-  dispose() { this.service?.dispose(); this.files.clear(); this.cache.clear(); this.nodes.clear(); this.program=null; this.checker=null; this.disposed=true; }
+  dispose() {
+    if(this.disposed)return;this.service?.dispose();this.service=null;
+    for(const map of [this.files,this.metadata,this.cache,this.nodes,this.declarations,this.nodeIds,this.modules,this.globalFiles])map?.clear();
+    this.metrics=[];this.program=null;this.checker=null;this.host=null;this.disposed=true;
+  }
 }
