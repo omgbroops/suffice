@@ -1,0 +1,230 @@
+{
+  "id": "022-redux-preloaded-contract-compact-ast-r1",
+  "task": "redux-preloaded-contract",
+  "arm": "compact-ast",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Implemented the Redux preloaded-state type migration.\n\n- Added `Reducer<S, A, PreloadedState = S>` and propagated input-state typing through reducer maps, store creators, enhancers, and middleware.\n- Updated `combineReducers` to accept partial preloaded input shapes while returning full output state.\n- Exported `PreloadedStateShapeFromReducersMapObject`.\n- Removed legacy `PreloadedState` and `CombinedState` tagging types and exports.\n- Preserved runtime initialization and dispatch behavior.\n\nVerification: both visible tests pass.",
+  "totals": {
+    "input": 16896,
+    "cacheRead": 75136,
+    "cacheWrite": 0,
+    "output": 1620,
+    "totalTokens": 93652,
+    "estimatedApiUsd": 0.05750559999999999,
+    "costUnknown": false,
+    "modelCalls": 8
+  },
+  "wallMs": 55775.94610000006,
+  "cpuMicros": {
+    "user": 812000,
+    "system": 453000
+  },
+  "heapStart": 146526536,
+  "toolCalls": 36,
+  "attemptedTools": {
+    "codemode": 7,
+    "files": 1,
+    "file_read": 16,
+    "file_write": 6,
+    "test": 3,
+    "file_edit": 3
+  },
+  "sourceRetrieval": {
+    "files": [
+      "src/types/reducers.ts",
+      "src/types/store.ts",
+      "src/createStore.ts",
+      "src/combineReducers.ts",
+      "src/index.ts",
+      "src/applyMiddleware.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 85146,
+    "lines": 2094,
+    "events": [
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/2",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 8494,
+        "lines": 200
+      },
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/3",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 7761,
+        "lines": 200
+      },
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/4",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7889,
+        "lines": 200
+      },
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/5",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      },
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/6",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_c7bb0d3d63d54963b33bacdd362e243a|ctc_07939a5746540f37016af00042735087d1aa8bec6b4cdeb6d3/7",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1344,
+        "lines": 5
+      },
+      {
+        "callId": "call_adb496c80c654027b77552fa2c78bf6d|ctc_07939a5746540f37016af000467b1487d191cc3ec472cffcc5/1",
+        "path": "src/types/store.ts",
+        "offset": 210,
+        "bytes": 2794,
+        "lines": 57
+      },
+      {
+        "callId": "call_adb496c80c654027b77552fa2c78bf6d|ctc_07939a5746540f37016af000467b1487d191cc3ec472cffcc5/2",
+        "path": "src/createStore.ts",
+        "offset": 435,
+        "bytes": 1817,
+        "lines": 43
+      },
+      {
+        "callId": "call_a521a01e31de4c708fa4eb64bf15c53a|ctc_07939a5746540f37016af00049083487d1906084b34a8a8f48/1",
+        "path": "src/createStore.ts",
+        "offset": 415,
+        "bytes": 714,
+        "lines": 20
+      },
+      {
+        "callId": "call_08987de49ace41f2a1b0264d5f7e7fce|ctc_07939a5746540f37016af0004bff1487d1ba43ec2b23d962c4/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_08987de49ace41f2a1b0264d5f7e7fce|ctc_07939a5746540f37016af0004bff1487d1ba43ec2b23d962c4/3",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 11631,
+        "lines": 266
+      },
+      {
+        "callId": "call_08987de49ace41f2a1b0264d5f7e7fce|ctc_07939a5746540f37016af0004bff1487d1ba43ec2b23d962c4/5",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 19164,
+        "lines": 477
+      },
+      {
+        "callId": "call_08987de49ace41f2a1b0264d5f7e7fce|ctc_07939a5746540f37016af0004bff1487d1ba43ec2b23d962c4/7",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_08987de49ace41f2a1b0264d5f7e7fce|ctc_07939a5746540f37016af0004bff1487d1ba43ec2b23d962c4/9",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7902,
+        "lines": 202
+      },
+      {
+        "callId": "call_08987de49ace41f2a1b0264d5f7e7fce|ctc_07939a5746540f37016af0004bff1487d1ba43ec2b23d962c4/11",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 18,
+    "deliveries": 4,
+    "packetTokens": 302,
+    "extraToolResultTokens": 274,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "no_cross_file_evidence": 3,
+      "already_known_or_read": 2,
+      "contract": 6,
+      "implementation": 2
+    },
+    "cpuMicros": 219000,
+    "latencyMs": 217.23829999973532,
+    "updates": [],
+    "peakObservedHeapBytes": 151734504,
+    "cacheHits": 0,
+    "redundantFacts": 7,
+    "unresolved": 46,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:54:19.916Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/applyMiddleware.ts",
+    "src/combineReducers.ts",
+    "src/createStore.ts",
+    "src/index.ts",
+    "src/types/reducers.ts",
+    "src/types/store.ts"
+  ],
+  "totalEstimatedUsd": 0.05750559999999999,
+  "budgetConsumedUsd": 0.057505600000000046,
+  "totalWallMs": 58318.94610000006,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 1608
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 935
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

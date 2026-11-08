@@ -1,0 +1,315 @@
+{
+  "id": "003-ky-option-merge-implicit-semantic-r0",
+  "task": "ky-option-merge",
+  "arm": "implicit-semantic",
+  "repetition": 0,
+  "status": "completed",
+  "final": "Implemented the repair in `source/utils/merge.ts`.\n\n- Restricted special handling of `headers`, `hooks`, `searchParams`, and `context` to root options, so nested JSON fields remain ordinary data.\n- Restricted recursive merging to arrays and plain objects, including null-prototype objects. Class instances such as dispatchers now retain identity across option overrides.\n- Reviewed the shared merge path used by requests, `create`, and `extend`.\n\nVerification: all 3 visible tests passed, covering root-option merging, factory request execution, explicit replacement, null-prototype data, and validation.\n\nOnly the existing production source file was modified.",
+  "totals": {
+    "input": 11828,
+    "cacheRead": 18048,
+    "cacheWrite": 0,
+    "output": 674,
+    "totalTokens": 30550,
+    "estimatedApiUsd": 0.0322008,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 26141.16410000001,
+  "cpuMicros": {
+    "user": 1266000,
+    "system": 391000
+  },
+  "heapStart": 132667896,
+  "toolCalls": 20,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 2,
+    "file_read": 6,
+    "file_edit": 6,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "source/utils/merge.ts",
+      "source/index.ts",
+      "source/utils/is.ts",
+      "tests/visible.test.mjs",
+      "source/core/Ky.ts"
+    ],
+    "bytes": 22124,
+    "lines": 543,
+    "events": [
+      {
+        "callId": "call_12448d3b8b8d46e2b7a03b690b8cb789|ctc_0c21cd9bd5e1fa47016aeffde4544087d19043002d64b57518/2",
+        "path": "source/utils/merge.ts",
+        "offset": 61,
+        "bytes": 34,
+        "lines": 1
+      },
+      {
+        "callId": "call_12448d3b8b8d46e2b7a03b690b8cb789|ctc_0c21cd9bd5e1fa47016aeffde4544087d19043002d64b57518/2",
+        "path": "source/utils/merge.ts",
+        "offset": 133,
+        "bytes": 86,
+        "lines": 1
+      },
+      {
+        "callId": "call_12448d3b8b8d46e2b7a03b690b8cb789|ctc_0c21cd9bd5e1fa47016aeffde4544087d19043002d64b57518/2",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 97,
+        "lines": 1
+      },
+      {
+        "callId": "call_12448d3b8b8d46e2b7a03b690b8cb789|ctc_0c21cd9bd5e1fa47016aeffde4544087d19043002d64b57518/2",
+        "path": "source/utils/merge.ts",
+        "offset": 282,
+        "bytes": 63,
+        "lines": 1
+      },
+      {
+        "callId": "call_12448d3b8b8d46e2b7a03b690b8cb789|ctc_0c21cd9bd5e1fa47016aeffde4544087d19043002d64b57518/2",
+        "path": "source/utils/merge.ts",
+        "offset": 328,
+        "bytes": 77,
+        "lines": 1
+      },
+      {
+        "callId": "call_12448d3b8b8d46e2b7a03b690b8cb789|ctc_0c21cd9bd5e1fa47016aeffde4544087d19043002d64b57518/2",
+        "path": "source/utils/merge.ts",
+        "offset": 329,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/1",
+        "path": "source/utils/merge.ts",
+        "offset": 1,
+        "bytes": 7125,
+        "lines": 200
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/2",
+        "path": "source/index.ts",
+        "offset": 1,
+        "bytes": 3083,
+        "lines": 88
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/3",
+        "path": "source/utils/is.ts",
+        "offset": 1,
+        "bytes": 182,
+        "lines": 3
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/4",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1659,
+        "lines": 6
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/5",
+        "path": "source/core/Ky.ts",
+        "offset": 20,
+        "bytes": 14,
+        "lines": 1
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/5",
+        "path": "source/core/Ky.ts",
+        "offset": 21,
+        "bytes": 12,
+        "lines": 1
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/5",
+        "path": "source/core/Ky.ts",
+        "offset": 23,
+        "bytes": 27,
+        "lines": 1
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/5",
+        "path": "source/core/Ky.ts",
+        "offset": 386,
+        "bytes": 76,
+        "lines": 1
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/5",
+        "path": "source/core/Ky.ts",
+        "offset": 387,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_1f62da6e2db341378da57851f7c94820|ctc_0c21cd9bd5e1fa47016aeffde6874887d1bd364eec68d8e40f/5",
+        "path": "source/core/Ky.ts",
+        "offset": 435,
+        "bytes": 126,
+        "lines": 1
+      },
+      {
+        "callId": "call_c126495dacca4da5864399626b34efb5|ctc_0c21cd9bd5e1fa47016aeffdec953487d1bca55396b9495cc8/1",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 4786,
+        "lines": 124
+      },
+      {
+        "callId": "call_c126495dacca4da5864399626b34efb5|ctc_0c21cd9bd5e1fa47016aeffdec953487d1bca55396b9495cc8/2",
+        "path": "source/core/Ky.ts",
+        "offset": 320,
+        "bytes": 4597,
+        "lines": 110
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 7,
+    "deliveries": 2,
+    "packetTokens": 165,
+    "extraToolResultTokens": 151,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "no_cross_file_evidence": 3,
+      "implementation": 1
+    },
+    "cpuMicros": 923000,
+    "latencyMs": 675.7643000000098,
+    "updates": [
+      {
+        "kind": "initial",
+        "generation": 1,
+        "revision": "2fa266cfa5ffc7cb77dc81279ee98ce42af5172ce5d2565d5ffac80060930cea",
+        "changed": [
+          "source/core/constants.ts",
+          "source/core/Ky.ts",
+          "source/core/retry-timing.ts",
+          "source/errors/ForceRetryError.ts",
+          "source/errors/HTTPError.ts",
+          "source/errors/KyError.ts",
+          "source/errors/NetworkError.ts",
+          "source/errors/NonError.ts",
+          "source/errors/SchemaValidationError.ts",
+          "source/errors/TimeoutError.ts",
+          "source/index.ts",
+          "source/types/common.ts",
+          "source/types/hooks.ts",
+          "source/types/ky.ts",
+          "source/types/options.ts",
+          "source/types/request.ts",
+          "source/types/response.ts",
+          "source/types/ResponsePromise.ts",
+          "source/types/retry.ts",
+          "source/types/standard-schema.ts",
+          "source/utils/body.ts",
+          "source/utils/delay.ts",
+          "source/utils/is-network-error.ts",
+          "source/utils/is.ts",
+          "source/utils/merge.ts",
+          "source/utils/normalize.ts",
+          "source/utils/options.ts",
+          "source/utils/timeout.ts",
+          "source/utils/type-guards.ts",
+          "source/utils/types.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "source/core/constants.ts",
+          "source/core/Ky.ts",
+          "source/core/retry-timing.ts",
+          "source/errors/ForceRetryError.ts",
+          "source/errors/HTTPError.ts",
+          "source/errors/KyError.ts",
+          "source/errors/NetworkError.ts",
+          "source/errors/NonError.ts",
+          "source/errors/SchemaValidationError.ts",
+          "source/errors/TimeoutError.ts",
+          "source/index.ts",
+          "source/types/common.ts",
+          "source/types/hooks.ts",
+          "source/types/ky.ts",
+          "source/types/options.ts",
+          "source/types/request.ts",
+          "source/types/response.ts",
+          "source/types/ResponsePromise.ts",
+          "source/types/retry.ts",
+          "source/types/standard-schema.ts",
+          "source/utils/body.ts",
+          "source/utils/delay.ts",
+          "source/utils/is-network-error.ts",
+          "source/utils/is.ts",
+          "source/utils/merge.ts",
+          "source/utils/normalize.ts",
+          "source/utils/options.ts",
+          "source/utils/timeout.ts",
+          "source/utils/type-guards.ts",
+          "source/utils/types.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 32,
+        "cachedFiles": 0,
+        "indexingMs": 183.08550000000105,
+        "inputBytes": 144924,
+        "heapUsedBytes": 143644960,
+        "rssBytes": 260501504
+      }
+    ],
+    "peakObservedHeapBytes": 158270056,
+    "cacheHits": 18,
+    "redundantFacts": 12,
+    "unresolved": 794,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:43:46.888Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "source/utils/merge.ts"
+  ],
+  "totalEstimatedUsd": 0.0322008,
+  "budgetConsumedUsd": 0.032200799999999974,
+  "totalWallMs": 27261.16410000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 559
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 561
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

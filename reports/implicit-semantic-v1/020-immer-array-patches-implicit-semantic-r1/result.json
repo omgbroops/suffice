@@ -1,0 +1,226 @@
+{
+  "id": "020-immer-array-patches-implicit-semantic-r1",
+  "task": "immer-array-patches",
+  "arm": "implicit-semantic",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Implemented the repair in `src/plugins/patches.ts`.\n\n- Suppressed descendant patches beneath arrays marked structurally reassigned, avoiding stale-index and redundant nested patches—including for elements first drafted after the operation.\n- Ensured structural array patches retain modified elements rather than deferring to suppressed child patches.\n- Preserved ordinary nested element-edit behavior.\n\nVerification: both visible tests passed (2/2). Only the existing production source file was modified.",
+  "totals": {
+    "input": 15835,
+    "cacheRead": 24448,
+    "cacheWrite": 0,
+    "output": 601,
+    "totalTokens": 40884,
+    "estimatedApiUsd": 0.0401248,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 23315.697000000044,
+  "cpuMicros": {
+    "user": 937000,
+    "system": 250000
+  },
+  "heapStart": 161154024,
+  "toolCalls": 15,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 1,
+    "file_read": 6,
+    "file_edit": 2,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/core/proxy.ts",
+      "src/plugins/arrayMethods.ts",
+      "src/core/finalize.ts",
+      "src/plugins/patches.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 31947,
+    "lines": 964,
+    "events": [
+      {
+        "callId": "call_5becaa06d5494cd9a48dde78653820ad|ctc_02ded4ece7a2b512016aeffff15fd087d1b325472270cb21b4/2",
+        "path": "README.md",
+        "offset": 3,
+        "bytes": 427,
+        "lines": 1
+      },
+      {
+        "callId": "call_5becaa06d5494cd9a48dde78653820ad|ctc_02ded4ece7a2b512016aeffff15fd087d1b325472270cb21b4/2",
+        "path": "src/core/proxy.ts",
+        "offset": 297,
+        "bytes": 77,
+        "lines": 1
+      },
+      {
+        "callId": "call_5becaa06d5494cd9a48dde78653820ad|ctc_02ded4ece7a2b512016aeffff15fd087d1b325472270cb21b4/2",
+        "path": "src/plugins/arrayMethods.ts",
+        "offset": 98,
+        "bytes": 53,
+        "lines": 1
+      },
+      {
+        "callId": "call_c9daedca6c394749b662daddb84d56b5|ctc_02ded4ece7a2b512016aeffff4395487d197eb754551140a68/1",
+        "path": "src/core/proxy.ts",
+        "offset": 1,
+        "bytes": 6840,
+        "lines": 200
+      },
+      {
+        "callId": "call_c9daedca6c394749b662daddb84d56b5|ctc_02ded4ece7a2b512016aeffff4395487d197eb754551140a68/2",
+        "path": "src/core/finalize.ts",
+        "offset": 1,
+        "bytes": 6265,
+        "lines": 200
+      },
+      {
+        "callId": "call_c9daedca6c394749b662daddb84d56b5|ctc_02ded4ece7a2b512016aeffff4395487d197eb754551140a68/3",
+        "path": "src/plugins/arrayMethods.ts",
+        "offset": 1,
+        "bytes": 6653,
+        "lines": 200
+      },
+      {
+        "callId": "call_068f337db89f428ea54204d31704e231|ctc_02ded4ece7a2b512016aeffff7a98087d191b69726097b382b/1",
+        "path": "src/core/finalize.ts",
+        "offset": 194,
+        "bytes": 4020,
+        "lines": 126
+      },
+      {
+        "callId": "call_068f337db89f428ea54204d31704e231|ctc_02ded4ece7a2b512016aeffff7a98087d191b69726097b382b/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 1,
+        "bytes": 6607,
+        "lines": 230
+      },
+      {
+        "callId": "call_068f337db89f428ea54204d31704e231|ctc_02ded4ece7a2b512016aeffff7a98087d191b69726097b382b/3",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1005,
+        "lines": 5
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 7,
+    "deliveries": 5,
+    "packetTokens": 415,
+    "extraToolResultTokens": 380,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "implementation": 1
+    },
+    "cpuMicros": 641000,
+    "latencyMs": 376.17700000002515,
+    "updates": [
+      {
+        "kind": "initial",
+        "generation": 1,
+        "revision": "8a91e0814531391f62260b24a01749021e4c07c1b7947b20c66980a8988352f0",
+        "changed": [
+          "src/core/current.ts",
+          "src/core/finalize.ts",
+          "src/core/immerClass.ts",
+          "src/core/proxy.ts",
+          "src/core/scope.ts",
+          "src/immer.ts",
+          "src/internal.ts",
+          "src/plugins/arrayMethods.ts",
+          "src/plugins/mapset.ts",
+          "src/plugins/patches.ts",
+          "src/types/globals.d.ts",
+          "src/types/types-external.ts",
+          "src/types/types-internal.ts",
+          "src/utils/common.ts",
+          "src/utils/env.ts",
+          "src/utils/errors.ts",
+          "src/utils/plugins.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "src/core/current.ts",
+          "src/core/finalize.ts",
+          "src/core/immerClass.ts",
+          "src/core/proxy.ts",
+          "src/core/scope.ts",
+          "src/immer.ts",
+          "src/internal.ts",
+          "src/plugins/arrayMethods.ts",
+          "src/plugins/mapset.ts",
+          "src/plugins/patches.ts",
+          "src/types/globals.d.ts",
+          "src/types/types-external.ts",
+          "src/types/types-internal.ts",
+          "src/utils/common.ts",
+          "src/utils/env.ts",
+          "src/utils/errors.ts",
+          "src/utils/plugins.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 19,
+        "cachedFiles": 0,
+        "indexingMs": 55.70709999999963,
+        "inputBytes": 100449,
+        "heapUsedBytes": 170076472,
+        "rssBytes": 320299008
+      }
+    ],
+    "peakObservedHeapBytes": 185537376,
+    "cacheHits": 21,
+    "redundantFacts": 36,
+    "unresolved": 452,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:52:28.917Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/plugins/patches.ts"
+  ],
+  "totalEstimatedUsd": 0.0401248,
+  "budgetConsumedUsd": 0.040124800000000016,
+  "totalWallMs": 24390.697000000044,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 542
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 533
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

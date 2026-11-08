@@ -1,0 +1,337 @@
+{
+  "id": "004-ky-option-merge-semantic-impact-r0",
+  "task": "ky-option-merge",
+  "arm": "semantic-impact",
+  "repetition": 0,
+  "status": "completed",
+  "final": "Implemented the repair in `source/utils/merge.ts`.\n\n- Root-only handling for `headers`, `hooks`, `searchParams`, and `context` no longer applies to nested user data.\n- Recursive merging is limited to arrays and plain objects, including null-prototype objects, so class instances such as dispatchers retain identity.\n- Existing root-option merge behavior remains intact.\n\nInvestigated the shared merge path used by requests, `create`, and `extend`.\n\nVerification: all 3 visible tests passed. Only the production merge source file was modified.",
+  "totals": {
+    "input": 11768,
+    "cacheRead": 17408,
+    "cacheWrite": 0,
+    "output": 651,
+    "totalTokens": 29827,
+    "estimatedApiUsd": 0.0317868,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 25453.01860000001,
+  "cpuMicros": {
+    "user": 1515000,
+    "system": 265000
+  },
+  "heapStart": 152440432,
+  "toolCalls": 19,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 2,
+    "file_read": 5,
+    "file_edit": 6,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "source/utils/merge.ts",
+      "source/index.ts",
+      "source/core/Ky.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 21336,
+    "lines": 525,
+    "events": [
+      {
+        "callId": "call_714ccaa3c63743068e2e9af059afe4d4|ctc_0cb968409f7c4145016aeffe000c0887d19da9bd9ce97db370/2",
+        "path": "source/utils/merge.ts",
+        "offset": 61,
+        "bytes": 34,
+        "lines": 1
+      },
+      {
+        "callId": "call_714ccaa3c63743068e2e9af059afe4d4|ctc_0cb968409f7c4145016aeffe000c0887d19da9bd9ce97db370/2",
+        "path": "source/utils/merge.ts",
+        "offset": 133,
+        "bytes": 86,
+        "lines": 1
+      },
+      {
+        "callId": "call_714ccaa3c63743068e2e9af059afe4d4|ctc_0cb968409f7c4145016aeffe000c0887d19da9bd9ce97db370/2",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 97,
+        "lines": 1
+      },
+      {
+        "callId": "call_714ccaa3c63743068e2e9af059afe4d4|ctc_0cb968409f7c4145016aeffe000c0887d19da9bd9ce97db370/2",
+        "path": "source/utils/merge.ts",
+        "offset": 282,
+        "bytes": 63,
+        "lines": 1
+      },
+      {
+        "callId": "call_714ccaa3c63743068e2e9af059afe4d4|ctc_0cb968409f7c4145016aeffe000c0887d19da9bd9ce97db370/2",
+        "path": "source/utils/merge.ts",
+        "offset": 328,
+        "bytes": 77,
+        "lines": 1
+      },
+      {
+        "callId": "call_714ccaa3c63743068e2e9af059afe4d4|ctc_0cb968409f7c4145016aeffe000c0887d19da9bd9ce97db370/2",
+        "path": "source/utils/merge.ts",
+        "offset": 329,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/1",
+        "path": "source/utils/merge.ts",
+        "offset": 1,
+        "bytes": 7125,
+        "lines": 200
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/2",
+        "path": "source/index.ts",
+        "offset": 1,
+        "bytes": 3083,
+        "lines": 88
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/3",
+        "path": "source/core/Ky.ts",
+        "offset": 20,
+        "bytes": 14,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/3",
+        "path": "source/core/Ky.ts",
+        "offset": 21,
+        "bytes": 12,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/3",
+        "path": "source/core/Ky.ts",
+        "offset": 23,
+        "bytes": 27,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/3",
+        "path": "source/core/Ky.ts",
+        "offset": 386,
+        "bytes": 76,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/3",
+        "path": "source/core/Ky.ts",
+        "offset": 387,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/3",
+        "path": "source/core/Ky.ts",
+        "offset": 435,
+        "bytes": 126,
+        "lines": 1
+      },
+      {
+        "callId": "call_89aadc6845d0409f9a8ba40480f8915f|ctc_0cb968409f7c4145016aeffe0259c887d1a1376b74f771c58f/4",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1659,
+        "lines": 6
+      },
+      {
+        "callId": "call_b378e87b5bb54226ad07af4e6864f4fc|ctc_0cb968409f7c4145016aeffe067d2c87d1bb32441c078bfec5/1",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 4786,
+        "lines": 124
+      },
+      {
+        "callId": "call_b378e87b5bb54226ad07af4e6864f4fc|ctc_0cb968409f7c4145016aeffe067d2c87d1bb32441c078bfec5/2",
+        "path": "source/core/Ky.ts",
+        "offset": 310,
+        "bytes": 3991,
+        "lines": 95
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 6,
+    "deliveries": 3,
+    "packetTokens": 306,
+    "extraToolResultTokens": 285,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "no_cross_file_evidence": 2
+    },
+    "cpuMicros": 1171000,
+    "latencyMs": 668.0292999999801,
+    "updates": [
+      {
+        "kind": "initial",
+        "generation": 1,
+        "revision": "2fa266cfa5ffc7cb77dc81279ee98ce42af5172ce5d2565d5ffac80060930cea",
+        "changed": [
+          "source/core/constants.ts",
+          "source/core/Ky.ts",
+          "source/core/retry-timing.ts",
+          "source/errors/ForceRetryError.ts",
+          "source/errors/HTTPError.ts",
+          "source/errors/KyError.ts",
+          "source/errors/NetworkError.ts",
+          "source/errors/NonError.ts",
+          "source/errors/SchemaValidationError.ts",
+          "source/errors/TimeoutError.ts",
+          "source/index.ts",
+          "source/types/common.ts",
+          "source/types/hooks.ts",
+          "source/types/ky.ts",
+          "source/types/options.ts",
+          "source/types/request.ts",
+          "source/types/response.ts",
+          "source/types/ResponsePromise.ts",
+          "source/types/retry.ts",
+          "source/types/standard-schema.ts",
+          "source/utils/body.ts",
+          "source/utils/delay.ts",
+          "source/utils/is-network-error.ts",
+          "source/utils/is.ts",
+          "source/utils/merge.ts",
+          "source/utils/normalize.ts",
+          "source/utils/options.ts",
+          "source/utils/timeout.ts",
+          "source/utils/type-guards.ts",
+          "source/utils/types.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "source/core/constants.ts",
+          "source/core/Ky.ts",
+          "source/core/retry-timing.ts",
+          "source/errors/ForceRetryError.ts",
+          "source/errors/HTTPError.ts",
+          "source/errors/KyError.ts",
+          "source/errors/NetworkError.ts",
+          "source/errors/NonError.ts",
+          "source/errors/SchemaValidationError.ts",
+          "source/errors/TimeoutError.ts",
+          "source/index.ts",
+          "source/types/common.ts",
+          "source/types/hooks.ts",
+          "source/types/ky.ts",
+          "source/types/options.ts",
+          "source/types/request.ts",
+          "source/types/response.ts",
+          "source/types/ResponsePromise.ts",
+          "source/types/retry.ts",
+          "source/types/standard-schema.ts",
+          "source/utils/body.ts",
+          "source/utils/delay.ts",
+          "source/utils/is-network-error.ts",
+          "source/utils/is.ts",
+          "source/utils/merge.ts",
+          "source/utils/normalize.ts",
+          "source/utils/options.ts",
+          "source/utils/timeout.ts",
+          "source/utils/type-guards.ts",
+          "source/utils/types.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 32,
+        "cachedFiles": 0,
+        "indexingMs": 91.36299999999756,
+        "inputBytes": 144924,
+        "heapUsedBytes": 157714176,
+        "rssBytes": 301965312
+      },
+      {
+        "kind": "incremental",
+        "generation": 2,
+        "revision": "34c346b18a555ce4528a763c913c5248785135ae6dfff038324bca12fe1265a7",
+        "changed": [
+          "source/utils/merge.ts"
+        ],
+        "invalidated": [
+          "source/utils/merge.ts",
+          "source/core/Ky.ts",
+          "source/index.ts",
+          "source/types/hooks.ts",
+          "source/types/options.ts",
+          "source/types/retry.ts",
+          "source/utils/body.ts",
+          "source/utils/delay.ts",
+          "source/utils/normalize.ts",
+          "source/utils/options.ts",
+          "source/core/constants.ts",
+          "source/errors/ForceRetryError.ts",
+          "source/errors/HTTPError.ts",
+          "source/types/ky.ts",
+          "source/utils/type-guards.ts"
+        ],
+        "files": 32,
+        "cachedFiles": 3,
+        "indexingMs": 66.42959999998857,
+        "inputBytes": 145000,
+        "heapUsedBytes": 155595712,
+        "rssBytes": 312037376
+      }
+    ],
+    "peakObservedHeapBytes": 164799792,
+    "cacheHits": 13,
+    "redundantFacts": 25,
+    "unresolved": 795,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:44:13.631Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "source/utils/merge.ts"
+  ],
+  "totalEstimatedUsd": 0.0317868,
+  "budgetConsumedUsd": 0.03178679999999995,
+  "totalWallMs": 26758.01860000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 672
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 633
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

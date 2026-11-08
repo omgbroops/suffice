@@ -1,0 +1,508 @@
+{
+  "id": "011-redux-preloaded-contract-baseline-r0",
+  "task": "redux-preloaded-contract",
+  "arm": "baseline",
+  "repetition": 0,
+  "status": "error",
+  "error": "Pre-dispatch budget bound exhausted",
+  "final": "",
+  "totals": {
+    "input": 16457,
+    "cacheRead": 31744,
+    "cacheWrite": 0,
+    "output": 1441,
+    "totalTokens": 49642,
+    "estimatedApiUsd": 0.0504984,
+    "costUnknown": true,
+    "modelCalls": 5
+  },
+  "wallMs": 42214.80819999997,
+  "cpuMicros": {
+    "user": 531000,
+    "system": 203000
+  },
+  "heapStart": 146477504,
+  "toolCalls": 32,
+  "attemptedTools": {
+    "codemode": 5,
+    "files": 1,
+    "file_read": 16,
+    "file_write": 6,
+    "test": 2,
+    "file_edit": 1,
+    "search": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "src/types/reducers.ts",
+      "src/types/store.ts",
+      "src/createStore.ts",
+      "src/combineReducers.ts",
+      "src/index.ts",
+      "src/applyMiddleware.ts",
+      "tests/visible.test.mjs",
+      "package.json",
+      "README.md"
+    ],
+    "bytes": 91233,
+    "lines": 2240,
+    "events": [
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/2",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 8494,
+        "lines": 200
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/3",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 7761,
+        "lines": 200
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/4",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7889,
+        "lines": 200
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/5",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/6",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/7",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1344,
+        "lines": 5
+      },
+      {
+        "callId": "call_270d5387954042df9573bf58dbf9166d|ctc_07a6323f792f9d39016aeffed38f0c87d196684220b1f2eabf/8",
+        "path": "package.json",
+        "offset": 1,
+        "bytes": 3730,
+        "lines": 111
+      },
+      {
+        "callId": "call_0de2d24da27a4e6c8dd996ac512474e2|ctc_07a6323f792f9d39016aeffed6867887d1a0d3ebb7a6ff4ced/1",
+        "path": "src/types/store.ts",
+        "offset": 210,
+        "bytes": 2794,
+        "lines": 57
+      },
+      {
+        "callId": "call_0de2d24da27a4e6c8dd996ac512474e2|ctc_07a6323f792f9d39016aeffed6867887d1a0d3ebb7a6ff4ced/2",
+        "path": "src/createStore.ts",
+        "offset": 420,
+        "bytes": 2419,
+        "lines": 58
+      },
+      {
+        "callId": "call_fe82f0cafb804bb7a746116d7a468a55|ctc_07a6323f792f9d39016aeffedd83c887d180854d0a3dce7ed1/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_fe82f0cafb804bb7a746116d7a468a55|ctc_07a6323f792f9d39016aeffedd83c887d180854d0a3dce7ed1/3",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 11631,
+        "lines": 266
+      },
+      {
+        "callId": "call_fe82f0cafb804bb7a746116d7a468a55|ctc_07a6323f792f9d39016aeffedd83c887d180854d0a3dce7ed1/5",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 19164,
+        "lines": 477
+      },
+      {
+        "callId": "call_fe82f0cafb804bb7a746116d7a468a55|ctc_07a6323f792f9d39016aeffedd83c887d180854d0a3dce7ed1/7",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_fe82f0cafb804bb7a746116d7a468a55|ctc_07a6323f792f9d39016aeffedd83c887d180854d0a3dce7ed1/9",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      },
+      {
+        "callId": "call_fe82f0cafb804bb7a746116d7a468a55|ctc_07a6323f792f9d39016aeffedd83c887d180854d0a3dce7ed1/11",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7902,
+        "lines": 202
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "README.md",
+        "offset": 3,
+        "bytes": 502,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/applyMiddleware.ts",
+        "offset": 59,
+        "bytes": 49,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/applyMiddleware.ts",
+        "offset": 60,
+        "bytes": 45,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/applyMiddleware.ts",
+        "offset": 61,
+        "bytes": 37,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/applyMiddleware.ts",
+        "offset": 63,
+        "bytes": 56,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/combineReducers.ts",
+        "offset": 7,
+        "bytes": 42,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/combineReducers.ts",
+        "offset": 24,
+        "bytes": 55,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/combineReducers.ts",
+        "offset": 119,
+        "bytes": 58,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 80,
+        "bytes": 20,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 82,
+        "bytes": 41,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 83,
+        "bytes": 34,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 91,
+        "bytes": 20,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 93,
+        "bytes": 41,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 94,
+        "bytes": 65,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 106,
+        "bytes": 79,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 116,
+        "bytes": 80,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 117,
+        "bytes": 61,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 118,
+        "bytes": 30,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 132,
+        "bytes": 38,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 137,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 403,
+        "bytes": 81,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 442,
+        "bytes": 81,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 461,
+        "bytes": 20,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 463,
+        "bytes": 41,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 464,
+        "bytes": 34,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 472,
+        "bytes": 20,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 474,
+        "bytes": 41,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 475,
+        "bytes": 65,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/createStore.ts",
+        "offset": 478,
+        "bytes": 62,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/index.ts",
+        "offset": 27,
+        "bytes": 43,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/reducers.ts",
+        "offset": 29,
+        "bytes": 82,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/reducers.ts",
+        "offset": 30,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/reducers.ts",
+        "offset": 42,
+        "bytes": 20,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/reducers.ts",
+        "offset": 43,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/reducers.ts",
+        "offset": 44,
+        "bytes": 100,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/reducers.ts",
+        "offset": 88,
+        "bytes": 57,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/store.ts",
+        "offset": 169,
+        "bytes": 79,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/store.ts",
+        "offset": 182,
+        "bytes": 91,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/store.ts",
+        "offset": 183,
+        "bytes": 43,
+        "lines": 1
+      },
+      {
+        "callId": "call_207c905e9838408e906c9e2aa3d7a77f|ctc_07a6323f792f9d39016aeffef4aac487d1802fcee5fc2a971f/3",
+        "path": "src/types/store.ts",
+        "offset": 184,
+        "bytes": 36,
+        "lines": 1
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 0,
+    "deliveries": 0,
+    "packetTokens": 0,
+    "extraToolResultTokens": 0,
+    "abstentions": {},
+    "cpuMicros": 0,
+    "latencyMs": 0,
+    "updates": [],
+    "peakObservedHeapBytes": null,
+    "cacheHits": 0,
+    "redundantFacts": 0,
+    "unresolved": 0,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:47:59.660Z",
+  "patchAccepted": false,
+  "completed": false,
+  "success": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/applyMiddleware.ts",
+    "src/combineReducers.ts",
+    "src/createStore.ts",
+    "src/index.ts",
+    "src/types/reducers.ts",
+    "src/types/store.ts"
+  ],
+  "totalEstimatedUsd": null,
+  "budgetConsumedUsd": 0.0504984,
+  "totalWallMs": 44631.80819999997,
+  "acceptance": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 3,
+    "passed": 0,
+    "failed": 3,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": false,
+    "truncated": false,
+    "latencyMs": 1458
+  },
+  "regression": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": false,
+    "truncated": false,
+    "latencyMs": 959
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

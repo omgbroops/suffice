@@ -1,0 +1,273 @@
+{
+  "id": "019-immer-array-patches-semantic-impact-r1",
+  "task": "immer-array-patches",
+  "arm": "semantic-impact",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Implemented the repair in `src/plugins/patches.ts`.\n\n- Suppressed nested patches beneath structurally changed arrays, since their index-level patches already contain the finalized elements.\n- Ensured modified drafted elements are included in those structural replacement patches.\n- Preserved ordinary nested element patch generation.\n\nVerification: the visible test suite passed — **2 tests, 0 failures**.",
+  "totals": {
+    "input": 16703,
+    "cacheRead": 28672,
+    "cacheWrite": 0,
+    "output": 533,
+    "totalTokens": 45908,
+    "estimatedApiUsd": 0.0416032,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 22474.72900000005,
+  "cpuMicros": {
+    "user": 1281000,
+    "system": 375000
+  },
+  "heapStart": 143032672,
+  "toolCalls": 18,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 2,
+    "file_read": 8,
+    "file_edit": 2,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "src/plugins/patches.ts",
+      "src/plugins/arrayMethods.ts",
+      "src/core/finalize.ts",
+      "src/core/proxy.ts",
+      "src/types/types-internal.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 33429,
+    "lines": 1026,
+    "events": [
+      {
+        "callId": "call_afc94e19d773482b9df1b54be1dbfc3f|ctc_05947de4b9e545c1016aefffd9b67c87d197690d2055e1fbe3/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 155,
+        "bytes": 32,
+        "lines": 1
+      },
+      {
+        "callId": "call_afc94e19d773482b9df1b54be1dbfc3f|ctc_05947de4b9e545c1016aefffd9b67c87d197690d2055e1fbe3/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 171,
+        "bytes": 31,
+        "lines": 1
+      },
+      {
+        "callId": "call_1faf869f7dc4411ea9deb45d6e94b1f1|ctc_05947de4b9e545c1016aefffdbbabc87d19a4ce379b98775ee/1",
+        "path": "src/plugins/arrayMethods.ts",
+        "offset": 1,
+        "bytes": 6653,
+        "lines": 200
+      },
+      {
+        "callId": "call_1faf869f7dc4411ea9deb45d6e94b1f1|ctc_05947de4b9e545c1016aefffdbbabc87d19a4ce379b98775ee/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 1,
+        "bytes": 5582,
+        "lines": 200
+      },
+      {
+        "callId": "call_1faf869f7dc4411ea9deb45d6e94b1f1|ctc_05947de4b9e545c1016aefffdbbabc87d19a4ce379b98775ee/3",
+        "path": "src/core/finalize.ts",
+        "offset": 1,
+        "bytes": 6265,
+        "lines": 200
+      },
+      {
+        "callId": "call_1faf869f7dc4411ea9deb45d6e94b1f1|ctc_05947de4b9e545c1016aefffdbbabc87d19a4ce379b98775ee/4",
+        "path": "src/core/proxy.ts",
+        "offset": 1,
+        "bytes": 6840,
+        "lines": 200
+      },
+      {
+        "callId": "call_1faf869f7dc4411ea9deb45d6e94b1f1|ctc_05947de4b9e545c1016aefffdbbabc87d19a4ce379b98775ee/5",
+        "path": "src/types/types-internal.ts",
+        "offset": 1,
+        "bytes": 1408,
+        "lines": 56
+      },
+      {
+        "callId": "call_1faf869f7dc4411ea9deb45d6e94b1f1|ctc_05947de4b9e545c1016aefffdbbabc87d19a4ce379b98775ee/6",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1005,
+        "lines": 5
+      },
+      {
+        "callId": "call_a249324901d14a459c6a9c5946aaf528|ctc_05947de4b9e545c1016aefffdf87fc87d1a84d1c80db4d7792/1",
+        "path": "src/core/finalize.ts",
+        "offset": 194,
+        "bytes": 3361,
+        "lines": 100
+      },
+      {
+        "callId": "call_a249324901d14a459c6a9c5946aaf528|ctc_05947de4b9e545c1016aefffdf87fc87d1a84d1c80db4d7792/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 189,
+        "bytes": 2088,
+        "lines": 60
+      },
+      {
+        "callId": "call_a249324901d14a459c6a9c5946aaf528|ctc_05947de4b9e545c1016aefffdf87fc87d1a84d1c80db4d7792/3",
+        "path": "src/core/finalize.ts",
+        "offset": 206,
+        "bytes": 48,
+        "lines": 1
+      },
+      {
+        "callId": "call_a249324901d14a459c6a9c5946aaf528|ctc_05947de4b9e545c1016aefffdf87fc87d1a84d1c80db4d7792/3",
+        "path": "src/plugins/patches.ts",
+        "offset": 50,
+        "bytes": 78,
+        "lines": 1
+      },
+      {
+        "callId": "call_a249324901d14a459c6a9c5946aaf528|ctc_05947de4b9e545c1016aefffdf87fc87d1a84d1c80db4d7792/3",
+        "path": "src/plugins/patches.ts",
+        "offset": 99,
+        "bytes": 38,
+        "lines": 1
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 9,
+    "deliveries": 6,
+    "packetTokens": 532,
+    "extraToolResultTokens": 490,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "already_known_or_read": 1,
+      "no_cross_file_evidence": 1
+    },
+    "cpuMicros": 844000,
+    "latencyMs": 647.7400999997044,
+    "updates": [
+      {
+        "kind": "initial",
+        "generation": 1,
+        "revision": "8a91e0814531391f62260b24a01749021e4c07c1b7947b20c66980a8988352f0",
+        "changed": [
+          "src/core/current.ts",
+          "src/core/finalize.ts",
+          "src/core/immerClass.ts",
+          "src/core/proxy.ts",
+          "src/core/scope.ts",
+          "src/immer.ts",
+          "src/internal.ts",
+          "src/plugins/arrayMethods.ts",
+          "src/plugins/mapset.ts",
+          "src/plugins/patches.ts",
+          "src/types/globals.d.ts",
+          "src/types/types-external.ts",
+          "src/types/types-internal.ts",
+          "src/utils/common.ts",
+          "src/utils/env.ts",
+          "src/utils/errors.ts",
+          "src/utils/plugins.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "src/core/current.ts",
+          "src/core/finalize.ts",
+          "src/core/immerClass.ts",
+          "src/core/proxy.ts",
+          "src/core/scope.ts",
+          "src/immer.ts",
+          "src/internal.ts",
+          "src/plugins/arrayMethods.ts",
+          "src/plugins/mapset.ts",
+          "src/plugins/patches.ts",
+          "src/types/globals.d.ts",
+          "src/types/types-external.ts",
+          "src/types/types-internal.ts",
+          "src/utils/common.ts",
+          "src/utils/env.ts",
+          "src/utils/errors.ts",
+          "src/utils/plugins.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 19,
+        "cachedFiles": 0,
+        "indexingMs": 94.04760000004899,
+        "inputBytes": 100449,
+        "heapUsedBytes": 154131792,
+        "rssBytes": 289673216
+      },
+      {
+        "kind": "incremental",
+        "generation": 2,
+        "revision": "b3a2cb9dbc555485320f9983ffafe2a4d22049b20eea2ad232b6866f06abb717",
+        "changed": [
+          "src/plugins/patches.ts"
+        ],
+        "invalidated": [
+          "src/plugins/patches.ts",
+          "src/immer.ts"
+        ],
+        "files": 19,
+        "cachedFiles": 8,
+        "indexingMs": 50.98400000005495,
+        "inputBytes": 100741,
+        "heapUsedBytes": 166285056,
+        "rssBytes": 316170240
+      }
+    ],
+    "peakObservedHeapBytes": 168837160,
+    "cacheHits": 36,
+    "redundantFacts": 79,
+    "unresolved": 751,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:52:04.401Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/plugins/patches.ts"
+  ],
+  "totalEstimatedUsd": 0.0416032,
+  "budgetConsumedUsd": 0.04160320000000001,
+  "totalWallMs": 23541.72900000005,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 542
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 525
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

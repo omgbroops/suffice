@@ -1,0 +1,27 @@
+✖ local rename abstention requires a complete collision-free binding rename (10.5535ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 330.4312
+
+✖ failing tests:
+
+test at tests\implicit-classification.test.mjs:5:1
+✖ local rename abstention requires a complete collision-free binding rename (10.5535ms)
+  AssertionError [ERR_ASSERTION]: export function f(){const x=1,y=2;return y;}
+      at TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/tests/implicit-classification.test.mjs:14:11)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'local_binding',
+    expected: 'local_binding',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,223 @@
+{
+  "id": "001-ky-option-merge-baseline-r0",
+  "task": "ky-option-merge",
+  "arm": "baseline",
+  "repetition": 0,
+  "status": "completed",
+  "final": "Implemented the repair in `source/utils/merge.ts`.\n\n- Restricted special handling of `headers`, `hooks`, `searchParams`, and `context` to root options, leaving nested user data as ordinary data.\n- Restricted recursive merging to plain objects and arrays, preserving class-instance identity, including dispatchers.\n- Traced `create`, `extend`, and request overrides through their shared `validateAndMerge` path.\n\nVerification: all 3 visible tests passed, covering root-option merging, factory/request execution, explicit replacement, arrays, and null-prototype data.\n\nOnly the existing production source file was modified.",
+  "totals": {
+    "input": 10927,
+    "cacheRead": 16896,
+    "cacheWrite": 0,
+    "output": 734,
+    "totalTokens": 28557,
+    "estimatedApiUsd": 0.030883599999999997,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 53417.9148,
+  "cpuMicros": {
+    "user": 1109000,
+    "system": 375000
+  },
+  "heapStart": 42265264,
+  "toolCalls": 18,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 2,
+    "file_read": 5,
+    "file_edit": 5,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "source/utils/merge.ts",
+      "source/index.ts",
+      "tests/visible.test.mjs",
+      "source/core/Ky.ts"
+    ],
+    "bytes": 20062,
+    "lines": 495,
+    "events": [
+      {
+        "callId": "call_f979a72b0fed4c1d8ce214c227d5e761|ctc_0bf289cf56991505016aeffd96fa2087d1858bee6584310dcc/2",
+        "path": "source/utils/merge.ts",
+        "offset": 61,
+        "bytes": 34,
+        "lines": 1
+      },
+      {
+        "callId": "call_f979a72b0fed4c1d8ce214c227d5e761|ctc_0bf289cf56991505016aeffd96fa2087d1858bee6584310dcc/2",
+        "path": "source/utils/merge.ts",
+        "offset": 133,
+        "bytes": 86,
+        "lines": 1
+      },
+      {
+        "callId": "call_f979a72b0fed4c1d8ce214c227d5e761|ctc_0bf289cf56991505016aeffd96fa2087d1858bee6584310dcc/2",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 97,
+        "lines": 1
+      },
+      {
+        "callId": "call_f979a72b0fed4c1d8ce214c227d5e761|ctc_0bf289cf56991505016aeffd96fa2087d1858bee6584310dcc/2",
+        "path": "source/utils/merge.ts",
+        "offset": 282,
+        "bytes": 63,
+        "lines": 1
+      },
+      {
+        "callId": "call_f979a72b0fed4c1d8ce214c227d5e761|ctc_0bf289cf56991505016aeffd96fa2087d1858bee6584310dcc/2",
+        "path": "source/utils/merge.ts",
+        "offset": 328,
+        "bytes": 77,
+        "lines": 1
+      },
+      {
+        "callId": "call_f979a72b0fed4c1d8ce214c227d5e761|ctc_0bf289cf56991505016aeffd96fa2087d1858bee6584310dcc/2",
+        "path": "source/utils/merge.ts",
+        "offset": 329,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/1",
+        "path": "source/utils/merge.ts",
+        "offset": 1,
+        "bytes": 7125,
+        "lines": 200
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/2",
+        "path": "source/index.ts",
+        "offset": 1,
+        "bytes": 3083,
+        "lines": 88
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/3",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1659,
+        "lines": 6
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/4",
+        "path": "source/core/Ky.ts",
+        "offset": 20,
+        "bytes": 14,
+        "lines": 1
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/4",
+        "path": "source/core/Ky.ts",
+        "offset": 21,
+        "bytes": 12,
+        "lines": 1
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/4",
+        "path": "source/core/Ky.ts",
+        "offset": 23,
+        "bytes": 27,
+        "lines": 1
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/4",
+        "path": "source/core/Ky.ts",
+        "offset": 386,
+        "bytes": 76,
+        "lines": 1
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/4",
+        "path": "source/core/Ky.ts",
+        "offset": 387,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_170af3c5ccf449119da620f360a01605|ctc_0bf289cf56991505016aeffd998d5c87d1be50a181cdc25b3f/4",
+        "path": "source/core/Ky.ts",
+        "offset": 435,
+        "bytes": 126,
+        "lines": 1
+      },
+      {
+        "callId": "call_80dfd74f74654c5e8256b5475c56568c|ctc_0bf289cf56991505016aeffda88ba087d19946aa07e6f669f5/1",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 4786,
+        "lines": 124
+      },
+      {
+        "callId": "call_80dfd74f74654c5e8256b5475c56568c|ctc_0bf289cf56991505016aeffda88ba087d19946aa07e6f669f5/2",
+        "path": "source/core/Ky.ts",
+        "offset": 360,
+        "bytes": 2717,
+        "lines": 65
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 0,
+    "deliveries": 0,
+    "packetTokens": 0,
+    "extraToolResultTokens": 0,
+    "abstentions": {},
+    "cpuMicros": 0,
+    "latencyMs": 0,
+    "updates": [],
+    "peakObservedHeapBytes": null,
+    "cacheHits": 0,
+    "redundantFacts": 0,
+    "unresolved": 0,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:42:55.117Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "source/utils/merge.ts"
+  ],
+  "totalEstimatedUsd": 0.030883599999999997,
+  "budgetConsumedUsd": 0.030883599999999956,
+  "totalWallMs": 54449.9148,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 514
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 518
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

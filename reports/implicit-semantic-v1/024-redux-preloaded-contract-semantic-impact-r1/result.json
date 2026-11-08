@@ -1,0 +1,366 @@
+{
+  "id": "024-redux-preloaded-contract-semantic-impact-r1",
+  "task": "redux-preloaded-contract",
+  "arm": "semantic-impact",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Implemented the preloaded-state generic migration in production source files.\n\n- Added `Reducer<S, A, PreloadedState = S>` and propagated input-state typing through reducer maps, store creators, enhancers, and middleware.\n- Updated `combineReducers` to accept partial reducer input shapes while returning full output state.\n- Exported `PreloadedStateShapeFromReducersMapObject`.\n- Removed the legacy `PreloadedState` and `CombinedState` tagging types and exports.\n- Kept runtime initialization and dispatch behavior unchanged.\n\nVerification: both visible tests pass, including runtime middleware behavior and TypeScript inference checks.",
+  "totals": {
+    "input": 17947,
+    "cacheRead": 80000,
+    "cacheWrite": 0,
+    "output": 1620,
+    "totalTokens": 99567,
+    "estimatedApiUsd": 0.060094,
+    "costUnknown": false,
+    "modelCalls": 8
+  },
+  "wallMs": 59636.70590000006,
+  "cpuMicros": {
+    "user": 1593000,
+    "system": 422000
+  },
+  "heapStart": 148213872,
+  "toolCalls": 36,
+  "attemptedTools": {
+    "codemode": 7,
+    "files": 1,
+    "file_read": 15,
+    "file_write": 6,
+    "test": 4,
+    "file_edit": 3
+  },
+  "sourceRetrieval": {
+    "files": [
+      "src/types/reducers.ts",
+      "src/types/store.ts",
+      "src/createStore.ts",
+      "src/combineReducers.ts",
+      "src/index.ts",
+      "src/applyMiddleware.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 85034,
+    "lines": 2089,
+    "events": [
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/2",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 8494,
+        "lines": 200
+      },
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/3",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 7761,
+        "lines": 200
+      },
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/4",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7889,
+        "lines": 200
+      },
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/5",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      },
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/6",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_fdd0c0478f194d3f99974f7665685266|ctc_0c7195a86845ba16016af000b4dc2087d19591aaf5f4a71cbd/7",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1344,
+        "lines": 5
+      },
+      {
+        "callId": "call_86af1e669c2a44d098cfe100f0b8d625|ctc_0c7195a86845ba16016af000b9149887d19ed47117640971b1/1",
+        "path": "src/types/store.ts",
+        "offset": 210,
+        "bytes": 2794,
+        "lines": 57
+      },
+      {
+        "callId": "call_86af1e669c2a44d098cfe100f0b8d625|ctc_0c7195a86845ba16016af000b9149887d19ed47117640971b1/2",
+        "path": "src/createStore.ts",
+        "offset": 420,
+        "bytes": 2419,
+        "lines": 58
+      },
+      {
+        "callId": "call_6e603aefec574b478494961192e920e8|ctc_0c7195a86845ba16016af000bbdb8087d18d79cd85198b193d/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_6e603aefec574b478494961192e920e8|ctc_0c7195a86845ba16016af000bbdb8087d18d79cd85198b193d/3",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 11631,
+        "lines": 266
+      },
+      {
+        "callId": "call_6e603aefec574b478494961192e920e8|ctc_0c7195a86845ba16016af000bbdb8087d18d79cd85198b193d/5",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 19164,
+        "lines": 477
+      },
+      {
+        "callId": "call_6e603aefec574b478494961192e920e8|ctc_0c7195a86845ba16016af000bbdb8087d18d79cd85198b193d/7",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_6e603aefec574b478494961192e920e8|ctc_0c7195a86845ba16016af000bbdb8087d18d79cd85198b193d/9",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      },
+      {
+        "callId": "call_6e603aefec574b478494961192e920e8|ctc_0c7195a86845ba16016af000bbdb8087d18d79cd85198b193d/11",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7902,
+        "lines": 202
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 18,
+    "deliveries": 8,
+    "packetTokens": 589,
+    "extraToolResultTokens": 533,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "no_cross_file_evidence": 7,
+      "initial_region_already_served": 2
+    },
+    "cpuMicros": 889000,
+    "latencyMs": 1184.029199999757,
+    "updates": [
+      {
+        "kind": "initial",
+        "generation": 1,
+        "revision": "f9d8e544e6016317bbd3f2af9b46f17957cf6fc7e4fa6da9eb2aeebca3e88e5b",
+        "changed": [
+          "src/applyMiddleware.ts",
+          "src/bindActionCreators.ts",
+          "src/combineReducers.ts",
+          "src/compose.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/actions.ts",
+          "src/types/middleware.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts",
+          "src/utils/actionTypes.ts",
+          "src/utils/formatProdErrorMessage.ts",
+          "src/utils/isPlainObject.ts",
+          "src/utils/kindOf.ts",
+          "src/utils/symbol-observable.ts",
+          "src/utils/warning.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "src/applyMiddleware.ts",
+          "src/bindActionCreators.ts",
+          "src/combineReducers.ts",
+          "src/compose.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/actions.ts",
+          "src/types/middleware.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts",
+          "src/utils/actionTypes.ts",
+          "src/utils/formatProdErrorMessage.ts",
+          "src/utils/isPlainObject.ts",
+          "src/utils/kindOf.ts",
+          "src/utils/symbol-observable.ts",
+          "src/utils/warning.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 18,
+        "cachedFiles": 0,
+        "indexingMs": 65.97880000004079,
+        "inputBytes": 59679,
+        "heapUsedBytes": 142682112,
+        "rssBytes": 278765568
+      },
+      {
+        "kind": "incremental",
+        "generation": 2,
+        "revision": "34a8b8f549c9e3644d9f61870c093e5fabdeb527652127569219467693d6eaa8",
+        "changed": [
+          "src/applyMiddleware.ts",
+          "src/combineReducers.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts"
+        ],
+        "invalidated": [
+          "src/applyMiddleware.ts",
+          "src/combineReducers.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts",
+          "src/bindActionCreators.ts",
+          "src/compose.ts",
+          "src/types/actions.ts",
+          "src/types/middleware.ts",
+          "src/utils/actionTypes.ts",
+          "src/utils/formatProdErrorMessage.ts",
+          "src/utils/isPlainObject.ts",
+          "src/utils/kindOf.ts",
+          "src/utils/symbol-observable.ts",
+          "src/utils/warning.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 18,
+        "cachedFiles": 0,
+        "indexingMs": 41.97299999999814,
+        "inputBytes": 58688,
+        "heapUsedBytes": 147684704,
+        "rssBytes": 283901952
+      },
+      {
+        "kind": "incremental",
+        "generation": 3,
+        "revision": "812313d48a7353bb51dd4582fd1be2fa37ce5c0080ae5d401c0f883c6cf365ee",
+        "changed": [
+          "src/createStore.ts"
+        ],
+        "invalidated": [
+          "src/createStore.ts",
+          "src/index.ts"
+        ],
+        "files": 18,
+        "cachedFiles": 10,
+        "indexingMs": 33.73100000002887,
+        "inputBytes": 58703,
+        "heapUsedBytes": 145298456,
+        "rssBytes": 287465472
+      },
+      {
+        "kind": "incremental",
+        "generation": 4,
+        "revision": "c69399eb504a1f8a7d203c7fb0e0a2a54d127c525963c14e25a852ede4d5359b",
+        "changed": [
+          "src/createStore.ts"
+        ],
+        "invalidated": [
+          "src/createStore.ts",
+          "src/index.ts"
+        ],
+        "files": 18,
+        "cachedFiles": 10,
+        "indexingMs": 29.580299999914132,
+        "inputBytes": 58705,
+        "heapUsedBytes": 148356840,
+        "rssBytes": 290148352
+      },
+      {
+        "kind": "incremental",
+        "generation": 5,
+        "revision": "0c03b9f01fd380b735e5f5de00a88d1c93cd1a8404e10215ee06c5a3a51c43be",
+        "changed": [
+          "src/createStore.ts"
+        ],
+        "invalidated": [
+          "src/createStore.ts",
+          "src/index.ts"
+        ],
+        "files": 18,
+        "cachedFiles": 10,
+        "indexingMs": 31.849100000108592,
+        "inputBytes": 58716,
+        "heapUsedBytes": 149057640,
+        "rssBytes": 293621760
+      }
+    ],
+    "peakObservedHeapBytes": 149363360,
+    "cacheHits": 73,
+    "redundantFacts": 30,
+    "unresolved": 1266,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:56:18.148Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/applyMiddleware.ts",
+    "src/combineReducers.ts",
+    "src/createStore.ts",
+    "src/index.ts",
+    "src/types/reducers.ts",
+    "src/types/store.ts"
+  ],
+  "totalEstimatedUsd": 0.060094,
+  "budgetConsumedUsd": 0.06009399999999998,
+  "totalWallMs": 62250.70590000006,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 1679
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 935
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

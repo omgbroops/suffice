@@ -1,0 +1,161 @@
+{
+  "id": "018-immer-array-patches-baseline-r1",
+  "task": "immer-array-patches",
+  "arm": "baseline",
+  "repetition": 1,
+  "status": "completed",
+  "final": "Implemented the repair in `src/plugins/patches.ts`.\n\n- Suppressed descendant patches beneath structurally reassigned arrays, including nested arrays and elements first drafted after the structural operation.\n- Ensured element-level replacement patches include those edits rather than deferring to nested patches.\n- Preserved ordinary nested-edit patch behavior.\n\nVerification: both visible tests passed (2/2). Only production source was modified.",
+  "totals": {
+    "input": 15853,
+    "cacheRead": 27392,
+    "cacheWrite": 0,
+    "output": 520,
+    "totalTokens": 43765,
+    "estimatedApiUsd": 0.0396452,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 27759.94929999998,
+  "cpuMicros": {
+    "user": 281000,
+    "system": 140000
+  },
+  "heapStart": 141380464,
+  "toolCalls": 16,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "file_read": 8,
+    "file_edit": 2,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "src/plugins/arrayMethods.ts",
+      "src/plugins/patches.ts",
+      "src/core/finalize.ts",
+      "src/core/proxy.ts",
+      "src/types/types-internal.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 32540,
+    "lines": 1001,
+    "events": [
+      {
+        "callId": "call_b2b1f5282e3044cc8e53717795969204|ctc_088647957f35248c016aefffc3e2f887d1856422c1d2c2a446/1",
+        "path": "src/plugins/arrayMethods.ts",
+        "offset": 1,
+        "bytes": 6653,
+        "lines": 200
+      },
+      {
+        "callId": "call_b2b1f5282e3044cc8e53717795969204|ctc_088647957f35248c016aefffc3e2f887d1856422c1d2c2a446/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 1,
+        "bytes": 5582,
+        "lines": 200
+      },
+      {
+        "callId": "call_b2b1f5282e3044cc8e53717795969204|ctc_088647957f35248c016aefffc3e2f887d1856422c1d2c2a446/3",
+        "path": "src/core/finalize.ts",
+        "offset": 1,
+        "bytes": 6265,
+        "lines": 200
+      },
+      {
+        "callId": "call_b2b1f5282e3044cc8e53717795969204|ctc_088647957f35248c016aefffc3e2f887d1856422c1d2c2a446/4",
+        "path": "src/core/proxy.ts",
+        "offset": 1,
+        "bytes": 6840,
+        "lines": 200
+      },
+      {
+        "callId": "call_b2b1f5282e3044cc8e53717795969204|ctc_088647957f35248c016aefffc3e2f887d1856422c1d2c2a446/5",
+        "path": "src/types/types-internal.ts",
+        "offset": 1,
+        "bytes": 1408,
+        "lines": 56
+      },
+      {
+        "callId": "call_b2b1f5282e3044cc8e53717795969204|ctc_088647957f35248c016aefffc3e2f887d1856422c1d2c2a446/6",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1005,
+        "lines": 5
+      },
+      {
+        "callId": "call_111831ecb8e141f299f770de6d3f7340|ctc_088647957f35248c016aefffc95d2887d1870390fe52a2157e/1",
+        "path": "src/core/finalize.ts",
+        "offset": 194,
+        "bytes": 2498,
+        "lines": 75
+      },
+      {
+        "callId": "call_111831ecb8e141f299f770de6d3f7340|ctc_088647957f35248c016aefffc95d2887d1870390fe52a2157e/2",
+        "path": "src/plugins/patches.ts",
+        "offset": 187,
+        "bytes": 2289,
+        "lines": 65
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 0,
+    "deliveries": 0,
+    "packetTokens": 0,
+    "extraToolResultTokens": 0,
+    "abstentions": {},
+    "cpuMicros": 0,
+    "latencyMs": 0,
+    "updates": [],
+    "peakObservedHeapBytes": null,
+    "cacheHits": 0,
+    "redundantFacts": 0,
+    "unresolved": 0,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:51:40.735Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/plugins/patches.ts"
+  ],
+  "totalEstimatedUsd": 0.0396452,
+  "budgetConsumedUsd": 0.03964520000000005,
+  "totalWallMs": 28816.94929999998,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 521
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 536
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

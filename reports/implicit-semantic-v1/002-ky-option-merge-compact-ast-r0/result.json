@@ -1,0 +1,414 @@
+{
+  "id": "002-ky-option-merge-compact-ast-r0",
+  "task": "ky-option-merge",
+  "arm": "compact-ast",
+  "repetition": 0,
+  "status": "completed",
+  "final": "Implemented the repair in `source/utils/merge.ts`.\n\n- Scoped special handling for `headers`, `hooks`, `searchParams`, and `context` to root options, leaving nested fields as ordinary data.\n- Restricted recursive merging to plain objects, null-prototype objects, and arrays, preserving class-instance identity.\n- Traced `create`, `extend`, direct requests, and method shortcuts; all use the repaired shared merger.\n\nVerification: all 3 visible tests passed, covering root-option merging, factory/request execution, explicit replacement, arrays, null-prototype data, and validation.\n\nNo tests, fixtures, or metadata were modified.",
+  "totals": {
+    "input": 11825,
+    "cacheRead": 19200,
+    "cacheWrite": 0,
+    "output": 650,
+    "totalTokens": 31675,
+    "estimatedApiUsd": 0.03207,
+    "costUnknown": false,
+    "modelCalls": 5
+  },
+  "wallMs": 23234.51619999999,
+  "cpuMicros": {
+    "user": 1610000,
+    "system": 484000
+  },
+  "heapStart": 45660168,
+  "toolCalls": 18,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 1,
+    "file_read": 6,
+    "file_edit": 5,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "source/core/Ky.ts",
+      "source/index.ts",
+      "source/types/ky.ts",
+      "source/types/options.ts",
+      "source/utils/merge.ts",
+      "source/utils/options.ts",
+      "source/utils/is.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 21010,
+    "lines": 475,
+    "events": [
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/core/Ky.ts",
+        "offset": 20,
+        "bytes": 14,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/core/Ky.ts",
+        "offset": 21,
+        "bytes": 12,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/core/Ky.ts",
+        "offset": 23,
+        "bytes": 27,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/core/Ky.ts",
+        "offset": 386,
+        "bytes": 76,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/core/Ky.ts",
+        "offset": 387,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/core/Ky.ts",
+        "offset": 435,
+        "bytes": 126,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/index.ts",
+        "offset": 7,
+        "bytes": 50,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/index.ts",
+        "offset": 12,
+        "bytes": 133,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/index.ts",
+        "offset": 16,
+        "bytes": 116,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/index.ts",
+        "offset": 19,
+        "bytes": 95,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/index.ts",
+        "offset": 25,
+        "bytes": 65,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/index.ts",
+        "offset": 84,
+        "bytes": 47,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/types/ky.ts",
+        "offset": 98,
+        "bytes": 202,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/types/options.ts",
+        "offset": 114,
+        "bytes": 127,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/types/options.ts",
+        "offset": 344,
+        "bytes": 142,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/types/options.ts",
+        "offset": 370,
+        "bytes": 55,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/types/options.ts",
+        "offset": 389,
+        "bytes": 57,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 30,
+        "bytes": 182,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 32,
+        "bytes": 226,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 54,
+        "bytes": 104,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 61,
+        "bytes": 34,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 64,
+        "bytes": 91,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 122,
+        "bytes": 98,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 127,
+        "bytes": 39,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 133,
+        "bytes": 86,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 136,
+        "bytes": 92,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 97,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 238,
+        "bytes": 56,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 244,
+        "bytes": 74,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 265,
+        "bytes": 65,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 282,
+        "bytes": 63,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 291,
+        "bytes": 32,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 292,
+        "bytes": 36,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 301,
+        "bytes": 68,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 328,
+        "bytes": 77,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/merge.ts",
+        "offset": 329,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_81eff96583414965b4071ea104c68dfd|ctc_0e920cc1baab8008016aeffdcba11087d1960af4dd38b04fe6/2",
+        "path": "source/utils/options.ts",
+        "offset": 3,
+        "bytes": 51,
+        "lines": 1
+      },
+      {
+        "callId": "call_f80802e0dc424dc0ab483752bf7eafe1|ctc_0e920cc1baab8008016aeffdce1a9087d18d51ad446c91db6f/1",
+        "path": "source/utils/merge.ts",
+        "offset": 1,
+        "bytes": 7125,
+        "lines": 200
+      },
+      {
+        "callId": "call_f80802e0dc424dc0ab483752bf7eafe1|ctc_0e920cc1baab8008016aeffdce1a9087d18d51ad446c91db6f/2",
+        "path": "source/utils/is.ts",
+        "offset": 1,
+        "bytes": 182,
+        "lines": 3
+      },
+      {
+        "callId": "call_f80802e0dc424dc0ab483752bf7eafe1|ctc_0e920cc1baab8008016aeffdce1a9087d18d51ad446c91db6f/3",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1659,
+        "lines": 6
+      },
+      {
+        "callId": "call_f80802e0dc424dc0ab483752bf7eafe1|ctc_0e920cc1baab8008016aeffdce1a9087d18d51ad446c91db6f/4",
+        "path": "source/index.ts",
+        "offset": 1,
+        "bytes": 1546,
+        "lines": 40
+      },
+      {
+        "callId": "call_9634f5f0112a43c6912b63a7451f1ecd|ctc_0e920cc1baab8008016aeffdd2066c87d1af8a4c418aed51d8/1",
+        "path": "source/utils/merge.ts",
+        "offset": 207,
+        "bytes": 4786,
+        "lines": 124
+      },
+      {
+        "callId": "call_9634f5f0112a43c6912b63a7451f1ecd|ctc_0e920cc1baab8008016aeffdd2066c87d1af8a4c418aed51d8/2",
+        "path": "source/core/Ky.ts",
+        "offset": 360,
+        "bytes": 2717,
+        "lines": 65
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 7,
+    "deliveries": 3,
+    "packetTokens": 277,
+    "extraToolResultTokens": 256,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "no_cross_file_evidence": 1,
+      "already_known_or_read": 1,
+      "implementation": 1
+    },
+    "cpuMicros": 940000,
+    "latencyMs": 599.3575000000055,
+    "updates": [],
+    "peakObservedHeapBytes": 208034600,
+    "cacheHits": 0,
+    "redundantFacts": 4,
+    "unresolved": 0,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T04:43:19.546Z",
+  "patchAccepted": true,
+  "completed": true,
+  "success": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "source/utils/merge.ts"
+  ],
+  "totalEstimatedUsd": 0.03207,
+  "budgetConsumedUsd": 0.03206999999999999,
+  "totalWallMs": 24273.51619999999,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 528
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "truncated": false,
+    "latencyMs": 511
+  },
+  "executionCommit": "44440b2577e925b150e076a53c88a0e27a599516"
+}

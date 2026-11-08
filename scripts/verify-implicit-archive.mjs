@@ -1,0 +1,29 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve,dirname,relative,isAbsolute,sep} from 'node:path';
+import {gunzipSync} from 'node:zlib';
+import {execFileSync} from 'node:child_process';
+import {hash,runNodeTests} from '../src/workspace.mjs';
+import {SemanticGraph} from '../packages/cli/src/semantic/graph.mjs';
+const root=resolve(import.meta.dirname,'..'),report=resolve(root,process.argv[2]??'reports/implicit-semantic-v1'),manifest=JSON.parse(await readFile(resolve(report,'manifest.json'),'utf8')),bytes=await readFile(resolve(report,'inputs.json.gz'));
+if(hash(bytes)!==manifest.archiveHash)throw new Error('Archive hash mismatch');const archive=JSON.parse(gunzipSync(bytes));let exact=0,newlines=0;
+for(const [key,file]of Object.entries(archive.files)){if(hash(Buffer.from(file.base64,'base64'))!==file.sha256)throw new Error(`Archive entry changed ${key}`);}
+for(const [p,h]of Object.entries(manifest.inputs)){const file=archive.files['implementation/'+p],bytes=Buffer.from(file.base64,'base64');if(file.sha256!==h)throw new Error(`Input changed ${p}`);const blob=execFileSync('git',['show',`${manifest.sourceCommit}:${p}`],{cwd:root,windowsHide:true,maxBuffer:8*1024**2});if(hash(blob)===h)exact++;else if(blob.toString('utf8').replaceAll('\r\n','\n')===bytes.toString('utf8').replaceAll('\r\n','\n'))newlines++;else throw new Error(`Source commit differs ${p}`);}
+const replay=resolve(root,'.suffice/'+(process.argv[3]??'implicit-replay-v1'));await mkdir(replay);const checks=[];
+async function write(key,target){const destination=resolve(replay,target),rel=relative(replay,destination);if(!rel||rel==='..'||rel.startsWith('..'+sep)||isAbsolute(rel))throw new Error('Unsafe replay path');await mkdir(dirname(destination),{recursive:true});await writeFile(destination,Buffer.from(archive.files[key].base64,'base64'));}
+async function workspace(task,label){const base=`${task.id}/${label}`;for(const p of Object.keys(task.hashes)){const key=`tasks/${task.id}/workspace/${p}`;if(archive.files[key].sha256!==task.hashes[p])throw new Error('Snapshot hash mismatch');await write(key,base+'/'+p);}return resolve(replay,base);}
+for(const task of manifest.tasks){
+ const grader=resolve(replay,`${task.id}/acceptance.test.mjs`);await write(`tasks/${task.id}/acceptance.test.mjs`,`${task.id}/acceptance.test.mjs`);if(hash(await readFile(grader))!==task.acceptanceHash)throw new Error('Acceptance hash mismatch');
+ const base=await workspace(task,'baseline'),reference=await workspace(task,'reference'),refs=JSON.parse(Buffer.from(archive.files[`tasks/${task.id}/reference-files.json`].base64,'base64'));
+ for(const [p,s]of Object.entries(refs)){if(!task.sourceFiles.includes(p))throw new Error('Reference outside production');await writeFile(resolve(reference,p),s);}
+ const baseline=await runNodeTests(base,grader,manifest.testOptions),fixed=await runNodeTests(reference,grader,manifest.testOptions),baselineVisible=await runNodeTests(base,resolve(base,'tests/visible.test.mjs'),manifest.testOptions),fixedVisible=await runNodeTests(reference,resolve(reference,'tests/visible.test.mjs'),manifest.testOptions);
+ if(baseline.status!=='failed'||fixed.status!=='passed'||baselineVisible.status!=='passed'||fixedVisible.status!=='passed')throw new Error('Task replay eligibility changed');
+ const graph=new SemanticGraph(base);graph.refresh();const analysis=graph.allAnalysis(),crossFile=analysis.edges.filter(e=>graph.nodes.get(e.from)?.path!==graph.nodes.get(e.to)?.path),moduleImports=analysis.edges.filter(e=>e.kind==='imports').length;graph.dispose();
+ checks.push({task:task.id,kind:'eligibility',baseline:baseline.status,fixed:fixed.status,baselineVisible:baselineVisible.status,fixedVisible:fixedVisible.status,crossFileRelationships:crossFile.length,moduleImports,screeningCorrection:'The frozen validation crossFileRelationships used symbol-ID inequality and included same-file edges. This replay count instead compares owning node paths. Task eligibility, source, grading and schedule are unchanged.'});
+}
+for(const [index,item]of manifest.schedule.entries()){
+ const id=`${String(index+1).padStart(3,'0')}-${item.task}-${item.arm}-r${item.repetition}`;let result;try{result=JSON.parse(await readFile(resolve(report,id,'result.json'),'utf8'));}catch(e){if(e.code==='ENOENT')continue;throw e;}
+ const task=manifest.tasks.find(t=>t.id===item.task),target=await workspace(task,id),patch=JSON.parse(await readFile(resolve(report,id,'patch.json'),'utf8'));
+ for(const edit of patch){if(!task.sourceFiles.includes(edit.path)||await readFile(resolve(target,edit.path),'utf8')!==edit.before||typeof edit.after!=='string')throw new Error('Invalid frozen patch replay');await writeFile(resolve(target,edit.path),edit.after);}
+ const grader=resolve(replay,`${task.id}/acceptance.test.mjs`),acceptance=await runNodeTests(target,grader,manifest.testOptions),regression=await runNodeTests(target,resolve(target,'tests/visible.test.mjs'),manifest.testOptions),accepted=acceptance.status==='passed'&&regression.status==='passed';if(accepted!==result.patchAccepted)throw new Error(`Grading disagreement ${id}`);checks.push({id,kind:'patch',accepted,acceptance:acceptance.status,regression:regression.status});
+}
+const output={archiveHash:manifest.archiveHash,verifiedEntries:Object.keys(archive.files).length,implementationEntriesExact:exact,implementationEntriesGitNewlineEquivalent:newlines,checks,verifiedAt:new Date().toISOString(),note:'Original archive bytes and manifest hashes match exactly. Git text blobs may differ only by CRLF checkout conversion, counted separately. All task and patch grading is replayed from archived bytes without inference.'};await writeFile(resolve(report,'archive-verification.json'),JSON.stringify(output,null,2));console.log(JSON.stringify(output));
