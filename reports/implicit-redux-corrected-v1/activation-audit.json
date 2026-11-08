@@ -1,0 +1,269 @@
+{
+  "tokenizer": "o200k_base/js-tiktoken-1.0.21",
+  "method": "Independent replay of ordinary edits from frozen source; source excerpts and semantic revision hashes checked at each delivery; every packet must occur as a separate model tool-result text block. Novel evidence means not observed in prior ordinary tool outputs and no duplicate relation key, not proven task utility. Packet replay counts later generations seeing retained packet text; no causal saved-call claim. Candidate tests are static suggestions, no execution coverage proof.",
+  "audits": [
+    {
+      "id": "001-redux-preloaded-contract-implicit-semantic-r0",
+      "arm": "implicit-semantic",
+      "task": "redux-preloaded-contract",
+      "repetition": 0,
+      "sourceReadCalls": 15,
+      "productionReadCalls": 14,
+      "productionBytes": 83690,
+      "searchCalls": 0,
+      "afterFirstSourceReads": 14,
+      "packetCount": 8,
+      "packetTokens": 708,
+      "packetReplayTokens": 2798,
+      "novelValidatedFacts": 11,
+      "redundantFacts": 0,
+      "packetsWithFacts": 8,
+      "verificationPackets": 0,
+      "candidateTests": [],
+      "followupVerificationCalls": 3,
+      "repeatedSourceTokens": 7636,
+      "packetOverlapTokens": 84,
+      "exactRepeatedObservationTokens": 0,
+      "cumulativeObservationTokens": 67647,
+      "errors": [],
+      "facts": [
+        {
+          "path": "src/createStore.ts",
+          "line": 309,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 377,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/utils/kindOf.ts",
+          "line": 62,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/actions.ts",
+          "line": 18,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/utils/warning.ts",
+          "line": 6,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/store.ts",
+          "line": 220,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/store.ts",
+          "line": 253,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/middleware.ts",
+          "line": 22,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/actions.ts",
+          "line": 28,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 418,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 416,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        }
+      ],
+      "analysisReasons": {
+        "novel_cross_file_evidence": 8,
+        "irrelevant_path": 1,
+        "impact_disabled": 8
+      },
+      "expandedAnalyses": 8,
+      "expandedAbstentions": 0,
+      "repeatedVerificationInstructions": 0,
+      "planOnlyPackets": 0,
+      "plansWithSpecificTests": 0
+    },
+    {
+      "id": "002-redux-preloaded-contract-semantic-impact-r0",
+      "arm": "semantic-impact",
+      "task": "redux-preloaded-contract",
+      "repetition": 0,
+      "sourceReadCalls": 15,
+      "productionReadCalls": 14,
+      "productionBytes": 82902,
+      "searchCalls": 1,
+      "afterFirstSourceReads": 14,
+      "packetCount": 13,
+      "packetTokens": 1191,
+      "packetReplayTokens": 2050,
+      "novelValidatedFacts": 16,
+      "redundantFacts": 0,
+      "packetsWithFacts": 13,
+      "verificationPackets": 5,
+      "candidateTests": [],
+      "followupVerificationCalls": 1,
+      "repeatedSourceTokens": 7545,
+      "packetOverlapTokens": 119,
+      "exactRepeatedObservationTokens": 0,
+      "cumulativeObservationTokens": 40142,
+      "errors": [],
+      "facts": [
+        {
+          "path": "src/createStore.ts",
+          "line": 309,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 377,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/utils/warning.ts",
+          "line": 6,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/utils/kindOf.ts",
+          "line": 62,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/actions.ts",
+          "line": 18,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/store.ts",
+          "line": 253,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/store.ts",
+          "line": 220,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/store.ts",
+          "line": 259,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 423,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 201,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/actions.ts",
+          "line": 1,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/applyMiddleware.ts",
+          "line": 60,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 378,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/createStore.ts",
+          "line": 477,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/combineReducers.ts",
+          "line": 126,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        },
+        {
+          "path": "src/types/middleware.ts",
+          "line": 22,
+          "valid": true,
+          "alreadyAvailable": false,
+          "repeatedRelationship": false
+        }
+      ],
+      "analysisReasons": {
+        "irrelevant_path": 1,
+        "novel_cross_file_evidence": 13,
+        "total_context_budget": 1
+      },
+      "expandedAnalyses": 14,
+      "expandedAbstentions": 1,
+      "repeatedVerificationInstructions": 4,
+      "planOnlyPackets": 0,
+      "plansWithSpecificTests": 0
+    }
+  ]
+}

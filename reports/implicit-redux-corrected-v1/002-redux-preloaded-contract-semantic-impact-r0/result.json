@@ -1,0 +1,495 @@
+{
+  "id": "002-redux-preloaded-contract-semantic-impact-r0",
+  "task": "redux-preloaded-contract",
+  "arm": "semantic-impact",
+  "repetition": 0,
+  "status": "error",
+  "error": "OpenAI API error (503): {\"message\":\"The ChatGPT user is temporarily unavailable. Please try again later.\",\"type\":\"service_unavailable_error\",\"param\":null,\"code\":\"subscription_sharing_user_unavailable\"}",
+  "final": "",
+  "totals": {
+    "input": 14605,
+    "cacheRead": 16000,
+    "cacheWrite": 0,
+    "output": 1283,
+    "totalTokens": 31888,
+    "estimatedApiUsd": 0.04364,
+    "costUnknown": true,
+    "modelCalls": 5
+  },
+  "wallMs": 44323.4013,
+  "cpuMicros": {
+    "user": 1734000,
+    "system": 468000
+  },
+  "heapStart": 137004968,
+  "toolCalls": 28,
+  "attemptedTools": {
+    "codemode": 4,
+    "files": 1,
+    "search": 1,
+    "file_read": 15,
+    "file_write": 6,
+    "test": 1
+  },
+  "sourceRetrieval": {
+    "files": [
+      "README.md",
+      "src/applyMiddleware.ts",
+      "src/combineReducers.ts",
+      "src/createStore.ts",
+      "src/index.ts",
+      "src/types/store.ts",
+      "src/types/reducers.ts",
+      "tests/visible.test.mjs"
+    ],
+    "bytes": 84748,
+    "lines": 2075,
+    "events": [
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "README.md",
+        "offset": 3,
+        "bytes": 502,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/applyMiddleware.ts",
+        "offset": 4,
+        "bytes": 71,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/applyMiddleware.ts",
+        "offset": 61,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/applyMiddleware.ts",
+        "offset": 63,
+        "bytes": 56,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/combineReducers.ts",
+        "offset": 24,
+        "bytes": 55,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 5,
+        "bytes": 17,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 83,
+        "bytes": 37,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 93,
+        "bytes": 68,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 105,
+        "bytes": 79,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 115,
+        "bytes": 80,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 116,
+        "bytes": 61,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 117,
+        "bytes": 30,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 131,
+        "bytes": 41,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 136,
+        "bytes": 40,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 402,
+        "bytes": 81,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 441,
+        "bytes": 81,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 462,
+        "bytes": 37,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 472,
+        "bytes": 68,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/createStore.ts",
+        "offset": 475,
+        "bytes": 62,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/index.ts",
+        "offset": 13,
+        "bytes": 17,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/types/store.ts",
+        "offset": 36,
+        "bytes": 63,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/types/store.ts",
+        "offset": 39,
+        "bytes": 78,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/types/store.ts",
+        "offset": 45,
+        "bytes": 30,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/types/store.ts",
+        "offset": 212,
+        "bytes": 79,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/types/store.ts",
+        "offset": 227,
+        "bytes": 39,
+        "lines": 1
+      },
+      {
+        "callId": "call_ea825ce82c1a4d88820d06f5a8bd6151|ctc_0dcb51093909cb42016af002a7d37c87d1b000536cc8291414/2",
+        "path": "src/types/store.ts",
+        "offset": 264,
+        "bytes": 36,
+        "lines": 1
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/2",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 8494,
+        "lines": 200
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/3",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7889,
+        "lines": 200
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/4",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 7761,
+        "lines": 200
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/5",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/6",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      },
+      {
+        "callId": "call_761f35cabaf04e9fb72fa6ad004ddbcc|ctc_0dcb51093909cb42016af002ab0ca487d1855e56f28e03e5ce/7",
+        "path": "tests/visible.test.mjs",
+        "offset": 1,
+        "bytes": 1344,
+        "lines": 5
+      },
+      {
+        "callId": "call_bbf914699ee4405096dbcd958ac82ea7|ctc_0dcb51093909cb42016af002af16b487d1a79402cd4edcf2f2/1",
+        "path": "src/types/store.ts",
+        "offset": 220,
+        "bytes": 2195,
+        "lines": 47
+      },
+      {
+        "callId": "call_bbf914699ee4405096dbcd958ac82ea7|ctc_0dcb51093909cb42016af002af16b487d1a79402cd4edcf2f2/2",
+        "path": "src/createStore.ts",
+        "offset": 450,
+        "bytes": 884,
+        "lines": 28
+      },
+      {
+        "callId": "call_75095c3cce9e4a7784e1cbf50f763bd9|ctc_0dcb51093909cb42016af002b74ed887d19b2b2db64fd20f99/1",
+        "path": "src/types/reducers.ts",
+        "offset": 1,
+        "bytes": 2917,
+        "lines": 80
+      },
+      {
+        "callId": "call_75095c3cce9e4a7784e1cbf50f763bd9|ctc_0dcb51093909cb42016af002b74ed887d19b2b2db64fd20f99/3",
+        "path": "src/types/store.ts",
+        "offset": 1,
+        "bytes": 11631,
+        "lines": 266
+      },
+      {
+        "callId": "call_75095c3cce9e4a7784e1cbf50f763bd9|ctc_0dcb51093909cb42016af002b74ed887d19b2b2db64fd20f99/5",
+        "path": "src/createStore.ts",
+        "offset": 1,
+        "bytes": 19164,
+        "lines": 477
+      },
+      {
+        "callId": "call_75095c3cce9e4a7784e1cbf50f763bd9|ctc_0dcb51093909cb42016af002b74ed887d19b2b2db64fd20f99/7",
+        "path": "src/combineReducers.ts",
+        "offset": 1,
+        "bytes": 7902,
+        "lines": 202
+      },
+      {
+        "callId": "call_75095c3cce9e4a7784e1cbf50f763bd9|ctc_0dcb51093909cb42016af002b74ed887d19b2b2db64fd20f99/9",
+        "path": "src/applyMiddleware.ts",
+        "offset": 1,
+        "bytes": 3618,
+        "lines": 84
+      },
+      {
+        "callId": "call_75095c3cce9e4a7784e1cbf50f763bd9|ctc_0dcb51093909cb42016af002b74ed887d19b2b2db64fd20f99/11",
+        "path": "src/index.ts",
+        "offset": 1,
+        "bytes": 1283,
+        "lines": 48
+      }
+    ]
+  },
+  "implicit": {
+    "analyses": 15,
+    "deliveries": 13,
+    "packetTokens": 1191,
+    "extraToolResultTokens": 1100,
+    "abstentions": {
+      "irrelevant_path": 1,
+      "total_context_budget": 1
+    },
+    "cpuMicros": 1123000,
+    "latencyMs": 835.8918000000194,
+    "updates": [
+      {
+        "kind": "initial",
+        "generation": 1,
+        "revision": "6df27ff44fa396fa0cb31cf8ffb37a0de14818b80a851af779f093e5e9d67f08",
+        "changed": [
+          "src/applyMiddleware.ts",
+          "src/bindActionCreators.ts",
+          "src/combineReducers.ts",
+          "src/compose.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/actions.ts",
+          "src/types/middleware.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts",
+          "src/utils/actionTypes.ts",
+          "src/utils/formatProdErrorMessage.ts",
+          "src/utils/isPlainObject.ts",
+          "src/utils/kindOf.ts",
+          "src/utils/symbol-observable.ts",
+          "src/utils/warning.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "invalidated": [
+          "src/applyMiddleware.ts",
+          "src/bindActionCreators.ts",
+          "src/combineReducers.ts",
+          "src/compose.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/actions.ts",
+          "src/types/middleware.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts",
+          "src/utils/actionTypes.ts",
+          "src/utils/formatProdErrorMessage.ts",
+          "src/utils/isPlainObject.ts",
+          "src/utils/kindOf.ts",
+          "src/utils/symbol-observable.ts",
+          "src/utils/warning.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 18,
+        "cachedFiles": 0,
+        "indexingMs": 56.87870000000112,
+        "inputBytes": 60317,
+        "heapUsedBytes": 143848616,
+        "rssBytes": 252104704
+      },
+      {
+        "kind": "incremental",
+        "generation": 2,
+        "revision": "7948f90211329f08d8bb304a80ed2519f0321de9de68213a1ae9c09d3c3ccb07",
+        "changed": [
+          "src/applyMiddleware.ts",
+          "src/combineReducers.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts"
+        ],
+        "invalidated": [
+          "src/applyMiddleware.ts",
+          "src/combineReducers.ts",
+          "src/createStore.ts",
+          "src/index.ts",
+          "src/types/reducers.ts",
+          "src/types/store.ts",
+          "src/bindActionCreators.ts",
+          "src/compose.ts",
+          "src/types/actions.ts",
+          "src/types/middleware.ts",
+          "src/utils/actionTypes.ts",
+          "src/utils/formatProdErrorMessage.ts",
+          "src/utils/isPlainObject.ts",
+          "src/utils/kindOf.ts",
+          "src/utils/symbol-observable.ts",
+          "src/utils/warning.ts",
+          "tests/load.cjs",
+          "tests/visible.test.mjs"
+        ],
+        "files": 18,
+        "cachedFiles": 0,
+        "indexingMs": 62.78369999999995,
+        "inputBytes": 59223,
+        "heapUsedBytes": 146681808,
+        "rssBytes": 279470080
+      }
+    ],
+    "peakObservedHeapBytes": 150088776,
+    "cacheHits": 61,
+    "redundantFacts": 204,
+    "unresolved": 525,
+    "staleDetections": 0
+  },
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "endedAt": "2026-11-08T05:04:23.773Z",
+  "patchAccepted": false,
+  "completed": false,
+  "success": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "changed": [
+    "src/applyMiddleware.ts",
+    "src/combineReducers.ts",
+    "src/createStore.ts",
+    "src/index.ts",
+    "src/types/reducers.ts",
+    "src/types/store.ts"
+  ],
+  "totalEstimatedUsd": null,
+  "budgetConsumedUsd": 0.44297000000000003,
+  "totalWallMs": 46793.4013,
+  "acceptance": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 3,
+    "passed": 0,
+    "failed": 3,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": false,
+    "truncated": false,
+    "latencyMs": 1548
+  },
+  "regression": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": false,
+    "truncated": false,
+    "latencyMs": 922
+  },
+  "executionCommit": "18c6a4b37d9afb30c8a519915897922fbc655bff"
+}

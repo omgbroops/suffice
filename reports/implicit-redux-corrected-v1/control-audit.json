@@ -1,0 +1,50 @@
+{
+  "controls": [
+    {
+      "id": "001-redux-preloaded-contract-implicit-semantic-r0",
+      "corePromptHash": "8e8774c66e643124b33f794bf070d56c72aaa46379d454443216dd6975387461",
+      "tools": [
+        "files",
+        "file_read",
+        "search",
+        "file_edit",
+        "file_write",
+        "test",
+        "codemode"
+      ],
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "taskPromptMatches": true
+    },
+    {
+      "id": "002-redux-preloaded-contract-semantic-impact-r0",
+      "corePromptHash": "8e8774c66e643124b33f794bf070d56c72aaa46379d454443216dd6975387461",
+      "tools": [
+        "files",
+        "file_read",
+        "search",
+        "file_edit",
+        "file_write",
+        "test",
+        "codemode"
+      ],
+      "model": "gpt-6.1-sol",
+      "effort": "low",
+      "taskPromptMatches": true
+    }
+  ],
+  "corePromptHashes": [
+    "8e8774c66e643124b33f794bf070d56c72aaa46379d454443216dd6975387461"
+  ],
+  "toolSets": [
+    "[\"files\",\"file_read\",\"search\",\"file_edit\",\"file_write\",\"test\",\"codemode\"]"
+  ],
+  "models": [
+    "gpt-6.1-sol"
+  ],
+  "efforts": [
+    "low"
+  ],
+  "allTaskPromptsMatch": true,
+  "caveat": "Core prompt comparison normalizes only run working-directory metadata. Paths contain arm names; workers were not blinded. Fixed order is rotated, not fully counterbalanced."
+}

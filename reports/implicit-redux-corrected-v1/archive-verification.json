@@ -1,0 +1,35 @@
+{
+  "archiveHash": "f098b013651014c320cc9eb25fd10c87e2a70ea8ec463feefb6e460c0d6bb0a3",
+  "verifiedEntries": 63,
+  "implementationEntriesExact": 25,
+  "implementationEntriesGitNewlineEquivalent": 14,
+  "checks": [
+    {
+      "task": "redux-preloaded-contract",
+      "kind": "eligibility",
+      "baseline": "failed",
+      "fixed": "passed",
+      "baselineVisible": "passed",
+      "fixedVisible": "passed",
+      "crossFileRelationships": 347,
+      "moduleImports": 82,
+      "screeningCorrection": "The frozen validation crossFileRelationships used symbol-ID inequality and included same-file edges. This replay count instead compares owning node paths. Task eligibility, source, grading and schedule are unchanged."
+    },
+    {
+      "id": "001-redux-preloaded-contract-implicit-semantic-r0",
+      "kind": "patch",
+      "accepted": true,
+      "acceptance": "passed",
+      "regression": "passed"
+    },
+    {
+      "id": "002-redux-preloaded-contract-semantic-impact-r0",
+      "kind": "patch",
+      "accepted": false,
+      "acceptance": "failed",
+      "regression": "failed"
+    }
+  ],
+  "verifiedAt": "2026-11-08T05:07:23.621Z",
+  "note": "Original archive bytes and manifest hashes match exactly. Git text blobs may differ only by CRLF checkout conversion, counted separately. All task and patch grading is replayed from archived bytes without inference."
+}
