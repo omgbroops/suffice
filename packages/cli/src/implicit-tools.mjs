@@ -29,7 +29,17 @@ export function implicitToolAdapter({workspace,tools,context=false,impact=false,
       const after=await source(args.path),data=result.structuredContent;let record;
       if(reads.has(tool.name)){
         if(hash(before.text)!==hash(after.text)||data?.version&&data.version!==hash(after.text)){log({type:'implicit_context',path:after.path,reason:'stale_operation_fallback',staleDetected:true,packetDelivered:false});return result;}
-        const startLine=data?.start??data?.offset??args.offset??1,endLine=data?.end??startLine+(args.limit??200)-1;
+        const startLine=data?.start??data?.offset??args.offset??1,truncation=result.details?.truncation;
+        let returnedLines=0;
+        if(truncation?.firstLineExceedsLimit)returnedLines=0;
+        else if(Number.isInteger(truncation?.outputLines))returnedLines=truncation.outputLines;
+        else if(typeof data?.text==='string')returnedLines=data.text.split('\n').length;
+        else{
+          const observed=typeof data==='string'?data:result.content?.filter(c=>c.type==='text').map(c=>c.text).join('\n')??'',visible=observed.split('\n'),actual=after.text.split('\n');
+          while(returnedLines<visible.length&&startLine-1+returnedLines<actual.length&&visible[returnedLines]===actual[startLine-1+returnedLines])returnedLines++;
+        }
+        const endLine=data?.end??startLine+returnedLines-1;
+        if(endLine<startLine){log({type:'implicit_context',path:after.path,reason:'no_source_span',packetDelivered:false});return result;}
         record={id,tool:tool.name,event:'read',path:after.path,source:after.text,startLine,endLine};
       }else record={id,tool:tool.name,event:'edit',path:after.path,before:before.text,after:after.text};
       if(deferToCodemode){if(pending.size<32)pending.set(id,record);else log({type:'implicit_context',path:after.path,reason:'pending_event_limit',packetDelivered:false});return result;}
