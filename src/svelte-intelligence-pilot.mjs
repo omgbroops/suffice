@@ -36,7 +36,7 @@ export function gradeSvelte(observed,required,{knownFailures=[],knownPending=[],
   const valid=r.stats.tests===r.tests.length&&r.stats.tests===r.passes.length+r.failures.length+r.pending.length&&r.stats.passes===r.passes.length&&r.stats.failures===r.failures.length&&r.stats.pending===r.pending.length&&observed.exitCode===Math.min(255,r.stats.failures)&&multiplicitiesMatch;
   return {status:!valid||missing.length?'invalid_result':unpassed.length||unexpectedFailures.length||unexpectedPending.length?'failed':'passed',exitCode:observed.exitCode,tests:r.stats.tests,passed:r.stats.passes,failed:r.stats.failures,pending:r.stats.pending,required:required.length,requiredPassed:required.length-unpassed.length,missing,unpassed,unexpectedFailures,unexpectedPending,multiplicitiesMatch,knownFailuresStillFailing:[...failed].filter(n=>knownFailures.includes(n)),latencyMs:observed.latencyMs,failures:r.failures,stdout:observed.stdout,stderr:observed.stderr};
 }
-export async function svelteTask({directory=svelteRoot,taskRecord=record,promptNotes='That command omits the Nightmare/Electron suite; three known legacy binding-select failures and existing skips may appear. Existing snapshots encode the old scoping markup and may differ when implementing the requested behavior.'}={}){
+export async function svelteTask({directory=svelteRoot,taskRecord=record,buildProject=buildSvelte,promptNotes='That command omits the Nightmare/Electron suite; three known legacy binding-select failures and existing skips may appear. Existing snapshots encode the old scoping markup and may differ when implementing the requested behavior.'}={}){
   const receipt=JSON.parse(await readFile(resolve(directory,'validation.json'),'utf8'));
   if(!receipt.valid)throw new Error('Svelte empty/reference gates required');
   const record=taskRecord,dependencies=resolve(directory,'dependencies'),expectedDependencies=JSON.parse(await readFile(resolve(directory,'dependency-hashes.json'),'utf8'));
@@ -51,7 +51,7 @@ export async function svelteTask({directory=svelteRoot,taskRecord=record,promptN
     }
     await initializeWorkspaceGit(destination);await linkDependencies(destination,dependencies);
     await applyPatch(destination,record.test_patch,resolve(dirname(workspace),'acceptance.diff'));
-    const build=await buildSvelte(destination);if(build.status!=='passed')return {acceptance:build,regression:{status:'not_run'}};
+    const build=await buildProject(destination);if(build.status!=='passed')return {acceptance:build,regression:{status:'not_run'}};
     const observed=await testSvelte(destination,resolve(dirname(workspace),'grade-mocha.json'));
     await writeFile(resolve(dirname(workspace),'grade-build.json'),JSON.stringify(build,null,2));
     return {acceptance:gradeSvelte(observed,record.FAIL_TO_PASS,receipt),regression:gradeSvelte(observed,record.PASS_TO_PASS,{...receipt,otherEndpointTests:record.FAIL_TO_PASS})};
