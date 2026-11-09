@@ -1,0 +1,286 @@
+{
+  "task": "prerelease-diff",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 24,
+  "runId": "025-prerelease-diff-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 145315.2799999999,
+  "usage": {
+    "input": 19675,
+    "cacheRead": 57216,
+    "cacheWrite": 0,
+    "output": 6247,
+    "estimatedApiUsd": 0.00566316,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00566316,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: prerelease to different stable core uses actual highest changed component\nok 1 - prerelease to different stable core uses actual highest changed component\n  ---\n  duration_ms: 1.2118\n  type: 'test'\n  ...\n# Subtest: same core and initial major stabilization remain compatible\nok 2 - same core and initial major stabilization remain compatible\n  ---\n  duration_ms: 0.2763\n  type: 'test'\n  ...\n# Subtest: prerelease targets and equal versions retain classifications\nok 3 - prerelease targets and equal versions retain classifications\n  ---\n  duration_ms: 0.2297\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.2199\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 198
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 8.4961\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 4.0793\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 2.7851\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 4.2463\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 2.0165\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.4473\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 4.7887\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 37.1144\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 191
+  },
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 1,
+  "verificationCalls": 3,
+  "toolCalls": 19,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:52:02.897Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:52:03.651Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/functions/diff.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:04.101Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/functions/diff.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:20.489Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "tests/visible.test.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:20.919Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/functions/diff.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:21.370Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/functions/diff.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:52:03.472Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a9e373f8aae23dc20f7bcd06d04bb0604d6539c9b1f5b5f5918585cdb014fa8a"
+      },
+      "latencyMs": 574.6631000000052,
+      "parsedFiles": 120,
+      "fileCount": 120,
+      "cacheBytes": 2500846,
+      "heapDeltaBytes": -17765400,
+      "graphBytes": 3560896
+    },
+    {
+      "at": "2026-11-09T05:52:04.099Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6fb565398fc6cff255154082360a88cee3115540df8f8ac17c8a2ef78152aa66"
+      },
+      "latencyMs": 448.00089999998454,
+      "parsedFiles": 1,
+      "fileCount": 120,
+      "cacheBytes": 2502777,
+      "heapDeltaBytes": -34930072,
+      "graphBytes": 3563528
+    },
+    {
+      "at": "2026-11-09T05:52:04.499Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6fb565398fc6cff255154082360a88cee3115540df8f8ac17c8a2ef78152aa66"
+      },
+      "latencyMs": 398.7597999999998,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2502777,
+      "heapDeltaBytes": 8243152,
+      "graphBytes": 3563528
+    },
+    {
+      "at": "2026-11-09T05:52:20.918Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6fb565398fc6cff255154082360a88cee3115540df8f8ac17c8a2ef78152aa66"
+      },
+      "latencyMs": 429.0676000000676,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2502777,
+      "heapDeltaBytes": 23681280,
+      "graphBytes": 3563528
+    },
+    {
+      "at": "2026-11-09T05:52:21.368Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6fb565398fc6cff255154082360a88cee3115540df8f8ac17c8a2ef78152aa66"
+      },
+      "latencyMs": 449.5113999999594,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2502777,
+      "heapDeltaBytes": -37519104,
+      "graphBytes": 3563528
+    },
+    {
+      "at": "2026-11-09T05:52:21.797Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6fb565398fc6cff255154082360a88cee3115540df8f8ac17c8a2ef78152aa66"
+      },
+      "latencyMs": 426.91030000010505,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2502777,
+      "heapDeltaBytes": 9503216,
+      "graphBytes": 3563528
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/functions/diff.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/functions/diff.js",
+          "callId": "call_6b4c9bf206d64e9ab6e89474801b514f|ctc_0ea90ad237d0dfca016af15fa574c887d1a4667f521242614c/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst diff = require('./src/functions/diff.js')\nconst cases = [\n  ['1.7.2-1', '1.8.1', 'minor'],\n  ['1.1.1-pre', '2.1.1', 'major'],\n  ['1.2.0-pre', '1.2.0', 'minor'],\n  ['1.2.3-pre', '1.2.3', 'patch'],\n  ['1.0.0-pre', '1.0.0', 'major'],\n  ['1.0.0-pre', '1.1.1', 'major'],\n  ['1.0.0-pre', '2.0.0-pre', 'premajor'],\n]\nfor (const [a, b, expected] of cases) {\n  assert.equal(diff(a, b), expected, `${a} -> ${b}`)\n  assert.equal(diff(b, a), expected, `${b} -> ${a}`)\n}\nconsole.log(`Passed ${cases.length} diff classification and symmetry cases`)\nNODE",
+        "git status --short && git diff -- src/functions/diff.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/functions/diff.js",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/functions/diff.js",
+          "callId": "call_6b4c9bf206d64e9ab6e89474801b514f|ctc_0ea90ad237d0dfca016af15fa574c887d1a4667f521242614c/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/functions/diff.js",
+      "before": "const parse = require('./parse.js')\n\nconst diff = (version1, version2) => {\n  const v1 = parse(version1, null, true)\n  const v2 = parse(version2, null, true)\n  const comparison = v1.compare(v2)\n\n  if (comparison === 0) {\n    return null\n  }\n\n  const v1Higher = comparison > 0\n  const highVersion = v1Higher ? v1 : v2\n  const lowVersion = v1Higher ? v2 : v1\n  const highHasPre = !!highVersion.prerelease.length\n  const lowHasPre = !!lowVersion.prerelease.length\n\n  if (lowHasPre && !highHasPre) {\n    // Going from prerelease -> no prerelease requires some special casing\n\n    // If the low version has only a major, then it will always be a major\n    // Some examples:\n    // 1.0.0-1 -> 1.0.0\n    // 1.0.0-1 -> 1.1.1\n    // 1.0.0-1 -> 2.0.0\n    if (!lowVersion.patch && !lowVersion.minor) {\n      return 'major'\n    }\n\n    // Otherwise it can be determined by checking the high version\n\n    if (highVersion.patch) {\n      // anything higher than a patch bump would result in the wrong version\n      return 'patch'\n    }\n\n    if (highVersion.minor) {\n      // anything higher than a minor bump would result in the wrong version\n      return 'minor'\n    }\n\n    // bumping major/minor/patch all have same result\n    return 'major'\n  }\n\n  // add the `pre` prefix if we are going to a prerelease version\n  const prefix = highHasPre ? 'pre' : ''\n\n  if (v1.major !== v2.major) {\n    return prefix + 'major'\n  }\n\n  if (v1.minor !== v2.minor) {\n    return prefix + 'minor'\n  }\n\n  if (v1.patch !== v2.patch) {\n    return prefix + 'patch'\n  }\n\n  // high and low are preleases\n  return 'prerelease'\n}\n\nmodule.exports = diff\n",
+      "after": "const parse = require('./parse.js')\n\nconst diff = (version1, version2) => {\n  const v1 = parse(version1, null, true)\n  const v2 = parse(version2, null, true)\n  const comparison = v1.compare(v2)\n\n  if (comparison === 0) {\n    return null\n  }\n\n  const v1Higher = comparison > 0\n  const highVersion = v1Higher ? v1 : v2\n  const lowVersion = v1Higher ? v2 : v1\n  const highHasPre = !!highVersion.prerelease.length\n  const lowHasPre = !!lowVersion.prerelease.length\n\n  if (lowHasPre && !highHasPre) {\n    // Going from prerelease -> no prerelease requires some special casing\n\n    // If the low version has only a major, then it will always be a major\n    // Some examples:\n    // 1.0.0-1 -> 1.0.0\n    // 1.0.0-1 -> 1.1.1\n    // 1.0.0-1 -> 2.0.0\n    if (!lowVersion.patch && !lowVersion.minor) {\n      return 'major'\n    }\n\n    // When the core version changed, classify the first changed component.\n    if (highVersion.major !== lowVersion.major) {\n      return 'major'\n    }\n\n    if (highVersion.minor !== lowVersion.minor) {\n      return 'minor'\n    }\n\n    if (highVersion.patch !== lowVersion.patch) {\n      return 'patch'\n    }\n\n    // Releasing a prerelease without changing its core preserves the existing\n    // stabilization semantics.\n    return lowVersion.patch ? 'patch' : 'minor'\n  }\n\n  // add the `pre` prefix if we are going to a prerelease version\n  const prefix = highHasPre ? 'pre' : ''\n\n  if (v1.major !== v2.major) {\n    return prefix + 'major'\n  }\n\n  if (v1.minor !== v2.minor) {\n    return prefix + 'minor'\n  }\n\n  if (v1.patch !== v2.patch) {\n    return prefix + 'patch'\n  }\n\n  // high and low are preleases\n  return 'prerelease'\n}\n\nmodule.exports = diff\n"
+    }
+  ],
+  "final": "Updated `src/functions/diff.js` to classify prerelease-to-stable transitions with a changed core by the first differing version component. Same-core stabilization and prerelease-to-prerelease classification remain unchanged.\n\n- `SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs` — passed (7 tests).\n- Direct checks for the requested examples, stabilization semantics, prerelease classification, and symmetry — passed.\n- The upstream Tap-based diff test could not run because `tap` is unavailable; no dependencies were installed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\025-prerelease-diff-C-r0\\home\\events\\1794203458031-7905836e-4209-4e3d-a4f3-152c93c16431.jsonl"
+}
