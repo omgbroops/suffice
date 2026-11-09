@@ -1,0 +1,538 @@
+{
+  "task": "exponent-integers",
+  "repetition": 1,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 31,
+  "runId": "031-exponent-integers-B-r1",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 153642.4206999999,
+  "usage": {
+    "input": 38852,
+    "cacheRead": 240384,
+    "cacheWrite": 0,
+    "output": 6603,
+    "estimatedApiUsd": 0.00959054,
+    "modelCalls": 11,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00959054,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: large numbers round trip across every supported numeric schema\nok 1 - large numbers round trip across every supported numeric schema\n  ---\n  duration_ms: 13.179\n  type: 'test'\n  ...\n# Subtest: regular numeric values keep exact identities\nok 2 - regular numeric values keep exact identities\n  ---\n  duration_ms: 1.4087\n  type: 'test'\n  ...\n# Subtest: explicit integer validation stays strict\nok 3 - explicit integer validation stays strict\n  ---\n  duration_ms: 2.0361\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 25.7016\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 226
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: basic mapping sequence and scalar loading\nok 1 - basic mapping sequence and scalar loading\n  ---\n  duration_ms: 4.8002\n  type: 'test'\n  ...\n# Subtest: core json and yaml11 scalar and collection round trips\nok 2 - core json and yaml11 scalar and collection round trips\n  ---\n  duration_ms: 6.8395\n  type: 'test'\n  ...\n# Subtest: document streams and explicit endings\nok 3 - document streams and explicit endings\n  ---\n  duration_ms: 0.6387\n  type: 'test'\n  ...\n# Subtest: valid event constructor and AST presentation agree\nok 4 - valid event constructor and AST presentation agree\n  ---\n  duration_ms: 2.6767\n  type: 'test'\n  ...\n# Subtest: scalar escaping unicode and line width preserve values\nok 5 - scalar escaping unicode and line width preserve values\n  ---\n  duration_ms: 2.0558\n  type: 'test'\n  ...\n# Subtest: anchors aliases and schema-specific loading\nok 6 - anchors aliases and schema-specific loading\n  ---\n  duration_ms: 0.278\n  type: 'test'\n  ...\n# Subtest: invalid syntax and explicit scalar tags reject\nok 7 - invalid syntax and explicit scalar tags reject\n  ---\n  duration_ms: 1.0914\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 30.5719\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 253
+  },
+  "changed": [
+    "src/src/tag/scalar/float_core.ts",
+    "src/src/tag/scalar/float_json.ts",
+    "src/src/tag/scalar/float_yaml11.ts",
+    "src/src/tag/scalar/int_core.ts",
+    "src/src/tag/scalar/int_json.ts",
+    "src/src/tag/scalar/int_yaml11.ts"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 11,
+  "editCalls": 6,
+  "verificationCalls": 2,
+  "toolCalls": 45,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:56:32.462Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:56:33.283Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:56:38.436Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:47.366Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:51.563Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:58.035Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:10.667Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:36.814Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:37.158Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:42.880Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:43.505Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:57.428Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:05.766Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:21.107Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:56:33.282Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 832.4666999999899,
+      "parsedFiles": 90,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 51232728,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:33.604Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 320.09880000003614,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -35748520,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:38.691Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 255.2391999999527,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 10152792,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:47.617Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 257.19490000000224,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 6339936,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:51.817Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 254.9257000000216,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 6425344,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:58.281Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 248.24219999997877,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 6534704,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:10.924Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 257.01989999995567,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -1845320,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:37.151Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ba08d75e44352f7c3ff2b31cf67fd12f2b8472d8bf2e4b7508aaf798f47ca802"
+      },
+      "latencyMs": 337.94289999990724,
+      "parsedFiles": 3,
+      "fileCount": 90,
+      "cacheBytes": 4224863,
+      "heapDeltaBytes": 29070072,
+      "graphBytes": 6374367
+    },
+    {
+      "at": "2026-11-09T05:57:37.442Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ba08d75e44352f7c3ff2b31cf67fd12f2b8472d8bf2e4b7508aaf798f47ca802"
+      },
+      "latencyMs": 288.9904000000097,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4224863,
+      "heapDeltaBytes": -43014928,
+      "graphBytes": 6374367
+    },
+    {
+      "at": "2026-11-09T05:57:43.502Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fbd8c41e6956e7a0f333b8f8f5be99b7f5136591657a3c3f3f2b6d227750a6fc"
+      },
+      "latencyMs": 621.7349000000395,
+      "parsedFiles": 3,
+      "fileCount": 90,
+      "cacheBytes": 4227396,
+      "heapDeltaBytes": -2474160,
+      "graphBytes": 6377445
+    },
+    {
+      "at": "2026-11-09T05:57:43.861Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fbd8c41e6956e7a0f333b8f8f5be99b7f5136591657a3c3f3f2b6d227750a6fc"
+      },
+      "latencyMs": 357.2118999999948,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4227396,
+      "heapDeltaBytes": -28838200,
+      "graphBytes": 6377445
+    },
+    {
+      "at": "2026-11-09T05:57:57.697Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fbd8c41e6956e7a0f333b8f8f5be99b7f5136591657a3c3f3f2b6d227750a6fc"
+      },
+      "latencyMs": 270.32199999992736,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4227396,
+      "heapDeltaBytes": 6466200,
+      "graphBytes": 6377445
+    },
+    {
+      "at": "2026-11-09T05:58:06.048Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fbd8c41e6956e7a0f333b8f8f5be99b7f5136591657a3c3f3f2b6d227750a6fc"
+      },
+      "latencyMs": 282.5576000001747,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4227396,
+      "heapDeltaBytes": -42385912,
+      "graphBytes": 6377445
+    },
+    {
+      "at": "2026-11-09T05:58:21.406Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fbd8c41e6956e7a0f333b8f8f5be99b7f5136591657a3c3f3f2b6d227750a6fc"
+      },
+      "latencyMs": 300.0142000000924,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4227396,
+      "heapDeltaBytes": 8923536,
+      "graphBytes": 6377445
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/examples/format_scalars.mjs",
+        "src/test/core/units/dump-scalar-styles.test.mjs",
+        "src/src/tag/scalar/int_core.ts",
+        "src/src/tag/scalar/int_json.ts"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_26f71dcf689949b5bf35dad8a12d3a14|ctc_0cf6bdcf3af04056016af1608f757087d1bbdcaf3e11d41fc8/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_26f71dcf689949b5bf35dad8a12d3a14|ctc_0cf6bdcf3af04056016af1608f757087d1bbdcaf3e11d41fc8/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/test/core/units/dump-scalar-styles.test.mjs",
+          "callId": "call_26f71dcf689949b5bf35dad8a12d3a14|ctc_0cf6bdcf3af04056016af1608f757087d1bbdcaf3e11d41fc8/4"
+        },
+        {
+          "tool": "edit",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_4d5c43521f154728868f2a8ca390ad55|ctc_0cf6bdcf3af04056016af160c8fd2087d18d7cccb1bd329891/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_4d5c43521f154728868f2a8ca390ad55|ctc_0cf6bdcf3af04056016af160c8fd2087d18d7cccb1bd329891/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff --check; git status --short; git diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts src/src/tag/scalar/float_core.ts src/src/tag/scalar/float_json.ts src/src/tag/scalar/float_yaml11.ts"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/src/tag/scalar/int_core.ts",
+        "src/src/tag/scalar/int_json.ts",
+        "src/src/tag/scalar/int_yaml11.ts",
+        "src/src/dump.ts",
+        "src/src/index.ts",
+        "src/src/schema.ts",
+        "src/benchmark/implementations/current-load/index.mjs",
+        "src/support/demo_template/index.mjs",
+        "src/src/ast/from_events.ts",
+        "src/src/ast/from_js.ts",
+        "src/src/ast/presenter.ts",
+        "src/src/parser/constructor.ts"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict'\nimport * as yaml from './src/src/index.ts'\nconst cases = [undefined, yaml.CORE_SCHEMA, yaml.JSON_SCHEMA, yaml.YAML11_SCHEMA]\nconst numbers = [1e21, -1e21, 1e24, -1e24, Number.MAX_VALUE, 1e20, 1, -5, 0.5, 0, -0]\nfor (const schema of cases) {\n  const opts = schema ? { schema } : {}\n  for (const value of numbers) {\n    const dumped = yaml.dump(value, opts)\n    assert.ok(Object.is(yaml.load(dumped, opts), value), `${String(value)}: ${dumped}`)\n    const nested = { value, list: [value] }\n    assert.deepStrictEqual(yaml.load(yaml.dump(nested, opts), opts), nested)\n  }\n  assert.throws(() => yaml.load('!!int 1e21', opts), /cannot resolve|cannot be resolved|tag/)\n}\nconsole.log('large integer round trips and explicit !!int validation passed')\nEOF",
+        "git diff --check; git status --short; git diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts src/src/tag/scalar/float_core.ts src/src/tag/scalar/float_json.ts src/src/tag/scalar/float_yaml11.ts"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/src/tag/scalar/float_core.ts",
+        "src/src/tag/scalar/float_json.ts",
+        "src/src/tag/scalar/float_yaml11.ts",
+        "src/src/tag/scalar/int_core.ts",
+        "src/src/tag/scalar/int_json.ts",
+        "src/src/tag/scalar/int_yaml11.ts",
+        "src/src/dump.ts",
+        "src/src/index.ts",
+        "src/src/schema.ts",
+        "src/benchmark/implementations/current-load/index.mjs",
+        "src/support/demo_template/index.mjs",
+        "src/src/ast/from_events.ts"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict'\nimport * as yaml from './src/src/index.ts'\nconst cases = [undefined, yaml.CORE_SCHEMA, yaml.JSON_SCHEMA, yaml.YAML11_SCHEMA]\nconst numbers = [1e21, -1e21, 1e24, -1e24, Number.MAX_VALUE, 1e20, 1, -5, 0.5, 0, -0]\nfor (const schema of cases) {\n  const opts = schema ? { schema } : {}\n  for (const value of numbers) {\n    const dumped = yaml.dump(value, opts)\n    assert.ok(Object.is(yaml.load(dumped, opts), value), `${String(value)}: ${dumped}`)\n    const nested = { value, list: [value] }\n    assert.deepStrictEqual(yaml.load(yaml.dump(nested, opts), opts), nested)\n  }\n  assert.throws(() => yaml.load('!!int 1e21', opts), /cannot resolve|cannot be resolved|tag/)\n}\nconsole.log('large integer round trips and explicit !!int validation passed')\nEOF",
+        "git diff --check; git status --short; git diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts src/src/tag/scalar/float_core.ts src/src/tag/scalar/float_json.ts src/src/tag/scalar/float_yaml11.ts"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/src/tag/scalar/float_core.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_FLOAT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^(?:[-+]?[0-9]+(?:\\\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?' +\n  // .2e4, .2\n  '|[-+]?\\\\.[0-9]+(?:[eE][-+]?[0-9]+)?' +\n  // .inf\n  '|[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nconst YAML_FLOAT_SPECIAL_PATTERN = new RegExp(\n  '^(?:' +\n  // .inf\n  '[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nfunction resolveYamlFloat (source: string) {\n  if (!YAML_FLOAT_PATTERN.test(source)) return NOT_RESOLVED\n\n  let value = source.toLowerCase()\n  const sign = value[0] === '-' ? -1 : 1\n\n  if ('+-'.includes(value[0])) value = value.slice(1)\n\n  if (value === '.inf') return sign === 1 ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY\n  if (value === '.nan') return NaN\n\n  const result = sign * parseFloat(value)\n\n  if (Number.isFinite(result) || YAML_FLOAT_SPECIAL_PATTERN.test(source)) return result\n  return NOT_RESOLVED\n}\n\nfunction representYamlFloat (object: number) {\n  if (isNaN(object)) return '.nan'\n  if (object === Number.POSITIVE_INFINITY) return '.inf'\n  if (object === Number.NEGATIVE_INFINITY) return '-.inf'\n  if (Object.is(object, -0)) return '-0.0'\n\n  const result = object.toString(10)\n  return /^[-+]?[0-9]+e/.test(result) ? result.replace('e', '.e') : result\n}\n\nconst floatCoreTag = defineScalarTag('tag:yaml.org,2002:float', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign, '.', or digit\n  // ('.inf'/'.nan' start with '.').\n  implicitFirstChars: ['-', '+', '.', ...'0123456789'],\n  resolve: resolveYamlFloat,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 !== 0 || Object.is(object, -0)),\n  represent: representYamlFloat\n})\n\nexport { floatCoreTag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_FLOAT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^(?:[-+]?[0-9]+(?:\\\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?' +\n  // .2e4, .2\n  '|[-+]?\\\\.[0-9]+(?:[eE][-+]?[0-9]+)?' +\n  // .inf\n  '|[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nconst YAML_FLOAT_SPECIAL_PATTERN = new RegExp(\n  '^(?:' +\n  // .inf\n  '[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nfunction resolveYamlFloat (source: string) {\n  if (!YAML_FLOAT_PATTERN.test(source)) return NOT_RESOLVED\n\n  let value = source.toLowerCase()\n  const sign = value[0] === '-' ? -1 : 1\n\n  if ('+-'.includes(value[0])) value = value.slice(1)\n\n  if (value === '.inf') return sign === 1 ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY\n  if (value === '.nan') return NaN\n\n  const result = sign * parseFloat(value)\n\n  if (Number.isFinite(result) || YAML_FLOAT_SPECIAL_PATTERN.test(source)) return result\n  return NOT_RESOLVED\n}\n\nfunction representYamlFloat (object: number) {\n  if (isNaN(object)) return '.nan'\n  if (object === Number.POSITIVE_INFINITY) return '.inf'\n  if (object === Number.NEGATIVE_INFINITY) return '-.inf'\n  if (Object.is(object, -0)) return '-0.0'\n\n  const result = object.toString(10)\n  return /^[-+]?[0-9]+e/.test(result) ? result.replace('e', '.e') : result\n}\n\nconst floatCoreTag = defineScalarTag('tag:yaml.org,2002:float', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign, '.', or digit\n  // ('.inf'/'.nan' start with '.').\n  implicitFirstChars: ['-', '+', '.', ...'0123456789'],\n  resolve: resolveYamlFloat,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 !== 0 || Object.is(object, -0) || /[eE]/.test(object.toString(10))),\n  represent: representYamlFloat\n})\n\nexport { floatCoreTag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/float_json.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 JSON schema implicit resolution:\n// -? ( 0 | [1-9] [0-9]* ) ( \\. [0-9]* )? ( [eE] [-+]? [0-9]+ )?\nconst YAML_FLOAT_IMPLICIT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^-?(?:0|[1-9][0-9]*)(?:\\\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?$')\n\n// Explicit `!!float` validation is separate from JSON implicit resolution.\nconst YAML_FLOAT_EXPLICIT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^(?:[-+]?[0-9]+(?:\\\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?' +\n  // .2e4, .2\n  '|[-+]?\\\\.[0-9]+(?:[eE][-+]?[0-9]+)?' +\n  // .inf\n  '|[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nfunction resolveYamlFloat (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_FLOAT_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n\n    let value = source.toLowerCase()\n    const sign = value[0] === '-' ? -1 : 1\n\n    if ('+-'.includes(value[0])) value = value.slice(1)\n\n    if (value === '.inf') return sign === 1 ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY\n    if (value === '.nan') return NaN\n\n    const result = sign * parseFloat(value)\n    return Number.isFinite(result) ? result : NOT_RESOLVED\n  }\n\n  if (!YAML_FLOAT_IMPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n\n  const result = Number(source)\n\n  if (Number.isFinite(result)) return result\n  return NOT_RESOLVED\n}\n\nfunction representYamlFloat (object: number) {\n  if (isNaN(object)) return '.nan'\n  if (object === Number.POSITIVE_INFINITY) return '.inf'\n  if (object === Number.NEGATIVE_INFINITY) return '-.inf'\n  if (Object.is(object, -0)) return '-0.0'\n\n  const result = object.toString(10)\n  return /^[-+]?[0-9]+e/.test(result) ? result.replace('e', '.e') : result\n}\n\nconst floatJsonTag = defineScalarTag('tag:yaml.org,2002:float', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional '-' or digit.\n  implicitFirstChars: ['-', ...'0123456789'],\n  resolve: resolveYamlFloat,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 !== 0 || Object.is(object, -0)),\n  represent: representYamlFloat\n})\n\nexport { floatJsonTag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 JSON schema implicit resolution:\n// -? ( 0 | [1-9] [0-9]* ) ( \\. [0-9]* )? ( [eE] [-+]? [0-9]+ )?\nconst YAML_FLOAT_IMPLICIT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^-?(?:0|[1-9][0-9]*)(?:\\\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?$')\n\n// Explicit `!!float` validation is separate from JSON implicit resolution.\nconst YAML_FLOAT_EXPLICIT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^(?:[-+]?[0-9]+(?:\\\\.[0-9]*)?(?:[eE][-+]?[0-9]+)?' +\n  // .2e4, .2\n  '|[-+]?\\\\.[0-9]+(?:[eE][-+]?[0-9]+)?' +\n  // .inf\n  '|[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nfunction resolveYamlFloat (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_FLOAT_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n\n    let value = source.toLowerCase()\n    const sign = value[0] === '-' ? -1 : 1\n\n    if ('+-'.includes(value[0])) value = value.slice(1)\n\n    if (value === '.inf') return sign === 1 ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY\n    if (value === '.nan') return NaN\n\n    const result = sign * parseFloat(value)\n    return Number.isFinite(result) ? result : NOT_RESOLVED\n  }\n\n  if (!YAML_FLOAT_IMPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n\n  const result = Number(source)\n\n  if (Number.isFinite(result)) return result\n  return NOT_RESOLVED\n}\n\nfunction representYamlFloat (object: number) {\n  if (isNaN(object)) return '.nan'\n  if (object === Number.POSITIVE_INFINITY) return '.inf'\n  if (object === Number.NEGATIVE_INFINITY) return '-.inf'\n  if (Object.is(object, -0)) return '-0.0'\n\n  const result = object.toString(10)\n  return /^[-+]?[0-9]+e/.test(result) ? result.replace('e', '.e') : result\n}\n\nconst floatJsonTag = defineScalarTag('tag:yaml.org,2002:float', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional '-' or digit.\n  implicitFirstChars: ['-', ...'0123456789'],\n  resolve: resolveYamlFloat,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 !== 0 || Object.is(object, -0) || /[eE]/.test(object.toString(10))),\n  represent: representYamlFloat\n})\n\nexport { floatJsonTag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/float_yaml11.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_FLOAT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^(?:[-+]?(?:(?:[0-9][0-9_]*)?\\\\.[0-9_]*)(?:[eE][-+][0-9]+)?' +\n  // 190:20:30.15\n  '|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\\\.[0-9_]*' +\n  // .inf\n  '|[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nconst YAML_FLOAT_SPECIAL_PATTERN = new RegExp(\n  '^(?:' +\n  // .inf\n  '[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nfunction resolveYamlFloat (source: string) {\n  if (!YAML_FLOAT_PATTERN.test(source)) return NOT_RESOLVED\n\n  let value = source.toLowerCase().replace(/_/g, '')\n  const sign = value[0] === '-' ? -1 : 1\n\n  if ('+-'.includes(value[0])) value = value.slice(1)\n\n  if (value === '.inf') return sign === 1 ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY\n  if (value === '.nan') return NaN\n\n  let result = 0\n\n  if (value.includes(':')) {\n    for (const part of value.split(':')) result = result * 60 + Number(part)\n    result *= sign\n  } else {\n    result = sign * parseFloat(value)\n  }\n\n  if (Number.isFinite(result) || YAML_FLOAT_SPECIAL_PATTERN.test(source)) return result\n  return NOT_RESOLVED\n}\n\nfunction representYamlFloat (object: number) {\n  if (isNaN(object)) return '.nan'\n  if (object === Number.POSITIVE_INFINITY) return '.inf'\n  if (object === Number.NEGATIVE_INFINITY) return '-.inf'\n  if (Object.is(object, -0)) return '-0.0'\n\n  const result = object.toString(10)\n  return /^[-+]?[0-9]+e/.test(result) ? result.replace('e', '.e') : result\n}\n\nconst floatYaml11Tag = defineScalarTag('tag:yaml.org,2002:float', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign, '.', or digit\n  // ('.inf'/'.nan' start with '.').\n  implicitFirstChars: ['-', '+', '.', ...'0123456789'],\n  resolve: resolveYamlFloat,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 !== 0 || Object.is(object, -0)),\n  represent: representYamlFloat\n})\n\nexport { floatYaml11Tag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_FLOAT_PATTERN = new RegExp(\n  // 2.5e4, 2.5 and integers\n  '^(?:[-+]?(?:(?:[0-9][0-9_]*)?\\\\.[0-9_]*)(?:[eE][-+][0-9]+)?' +\n  // 190:20:30.15\n  '|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\\\\.[0-9_]*' +\n  // .inf\n  '|[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nconst YAML_FLOAT_SPECIAL_PATTERN = new RegExp(\n  '^(?:' +\n  // .inf\n  '[-+]?\\\\.(?:inf|Inf|INF)' +\n  // .nan\n  '|\\\\.(?:nan|NaN|NAN))$')\n\nfunction resolveYamlFloat (source: string) {\n  if (!YAML_FLOAT_PATTERN.test(source)) return NOT_RESOLVED\n\n  let value = source.toLowerCase().replace(/_/g, '')\n  const sign = value[0] === '-' ? -1 : 1\n\n  if ('+-'.includes(value[0])) value = value.slice(1)\n\n  if (value === '.inf') return sign === 1 ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY\n  if (value === '.nan') return NaN\n\n  let result = 0\n\n  if (value.includes(':')) {\n    for (const part of value.split(':')) result = result * 60 + Number(part)\n    result *= sign\n  } else {\n    result = sign * parseFloat(value)\n  }\n\n  if (Number.isFinite(result) || YAML_FLOAT_SPECIAL_PATTERN.test(source)) return result\n  return NOT_RESOLVED\n}\n\nfunction representYamlFloat (object: number) {\n  if (isNaN(object)) return '.nan'\n  if (object === Number.POSITIVE_INFINITY) return '.inf'\n  if (object === Number.NEGATIVE_INFINITY) return '-.inf'\n  if (Object.is(object, -0)) return '-0.0'\n\n  const result = object.toString(10)\n  return /^[-+]?[0-9]+e/.test(result) ? result.replace('e', '.e') : result\n}\n\nconst floatYaml11Tag = defineScalarTag('tag:yaml.org,2002:float', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign, '.', or digit\n  // ('.inf'/'.nan' start with '.').\n  implicitFirstChars: ['-', '+', '.', ...'0123456789'],\n  resolve: resolveYamlFloat,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 !== 0 || Object.is(object, -0) || /[eE]/.test(object.toString(10))),\n  represent: representYamlFloat\n})\n\nexport { floatYaml11Tag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/int_core.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 Core schema implicit resolution:\n// [-+]? [0-9]+ | 0o [0-7]+ | 0x [0-9a-fA-F]+\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  // 0o123\n  '^(?:0o[0-7]+' +\n  // 0x1A\n  '|0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\n// Explicit `!!int` validation is separate from Core implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intCoreTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intCoreTag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 Core schema implicit resolution:\n// [-+]? [0-9]+ | 0o [0-7]+ | 0x [0-9a-fA-F]+\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  // 0o123\n  '^(?:0o[0-7]+' +\n  // 0x1A\n  '|0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\n// Explicit `!!int` validation is separate from Core implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intCoreTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0) && !/[eE]/.test(object.toString(10))),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intCoreTag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/int_json.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 JSON schema implicit resolution:\n// -? ( 0 | [1-9] [0-9]* )\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  '^-?(?:0|[1-9][0-9]*)$')\n\n// Explicit `!!int` validation is separate from JSON implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intJsonTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional '-' or digit.\n  implicitFirstChars: ['-', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intJsonTag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 JSON schema implicit resolution:\n// -? ( 0 | [1-9] [0-9]* )\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  '^-?(?:0|[1-9][0-9]*)$')\n\n// Explicit `!!int` validation is separate from JSON implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intJsonTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional '-' or digit.\n  implicitFirstChars: ['-', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0) && !/[eE]/.test(object.toString(10))),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intJsonTag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/int_yaml11.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_INTEGER_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1_]+' +\n  // 0123\n  '|[-+]?0[0-7_]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F_]+' +\n  // 1:23\n  '|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+' +\n  // 12345\n  '|[-+]?(?:0|[1-9][0-9_]*))$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source.replace(/_/g, '')\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  if (value.includes(':')) {\n    let result = 0\n    for (const part of value.split(':')) result = result * 60 + Number(part)\n    return sign * result\n  }\n\n  if (value !== '0' && value[0] === '0') return sign * parseInt(value, 8)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string) {\n  if (!YAML_INTEGER_PATTERN.test(source)) return NOT_RESOLVED\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intYaml11Tag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intYaml11Tag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_INTEGER_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1_]+' +\n  // 0123\n  '|[-+]?0[0-7_]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F_]+' +\n  // 1:23\n  '|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+' +\n  // 12345\n  '|[-+]?(?:0|[1-9][0-9_]*))$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source.replace(/_/g, '')\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  if (value.includes(':')) {\n    let result = 0\n    for (const part of value.split(':')) result = result * 60 + Number(part)\n    return sign * result\n  }\n\n  if (value !== '0' && value[0] === '0') return sign * parseInt(value, 8)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string) {\n  if (!YAML_INTEGER_PATTERN.test(source)) return NOT_RESOLVED\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intYaml11Tag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0) && !/[eE]/.test(object.toString(10))),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intYaml11Tag }\n"
+    }
+  ],
+  "final": "Updated the integer and float scalar tags for the Core, JSON, and YAML 1.1 schemas. Integer-valued numbers whose decimal form uses exponent notation are now identified as floats, so they’re emitted in a form the schemas can resolve. Integer parsing was left unchanged, preserving rejection of exponent notation explicitly tagged as `!!int`.\n\n**Verification**\n- The unconfigured `node --test tests/visible.test.mjs` could not start because `SUFFICE_WORKSPACE` was unset. With `SUFFICE_WORKSPACE=\"$PWD\"`, the visible suite passed: 7 tests.\n- `cd src && npm run type-check` passed.\n- Additional round-trip checks passed for large exponent-form numbers and ordinary numeric edge cases, under the default, Core, JSON, and YAML 1.1 schemas, both as scalars and in collections. Explicit `!!int 1e21` remained rejected.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\031-exponent-integers-B-r1\\home\\events\\1794203792441-308ae4bf-8ab0-41d2-9a4a-d2e2d251e3c2.jsonl"
+}

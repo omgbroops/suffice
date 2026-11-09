@@ -1,0 +1,598 @@
+{
+  "task": "exponent-integers",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 30,
+  "runId": "031-exponent-integers-B-r0",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 221036.78059999994,
+  "usage": {
+    "input": 73118,
+    "cacheRead": 256512,
+    "cacheWrite": 0,
+    "output": 8896,
+    "estimatedApiUsd": 0.014324920000000001,
+    "modelCalls": 15,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.014324920000000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: large numbers round trip across every supported numeric schema\nok 1 - large numbers round trip across every supported numeric schema\n  ---\n  duration_ms: 15.3292\n  type: 'test'\n  ...\n# Subtest: regular numeric values keep exact identities\nok 2 - regular numeric values keep exact identities\n  ---\n  duration_ms: 1.4631\n  type: 'test'\n  ...\n# Subtest: explicit integer validation stays strict\nok 3 - explicit integer validation stays strict\n  ---\n  duration_ms: 1.4622\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 27.2235\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 229
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: basic mapping sequence and scalar loading\nok 1 - basic mapping sequence and scalar loading\n  ---\n  duration_ms: 4.0926\n  type: 'test'\n  ...\n# Subtest: core json and yaml11 scalar and collection round trips\nok 2 - core json and yaml11 scalar and collection round trips\n  ---\n  duration_ms: 6.6338\n  type: 'test'\n  ...\n# Subtest: document streams and explicit endings\nok 3 - document streams and explicit endings\n  ---\n  duration_ms: 0.5672\n  type: 'test'\n  ...\n# Subtest: valid event constructor and AST presentation agree\nok 4 - valid event constructor and AST presentation agree\n  ---\n  duration_ms: 2.4773\n  type: 'test'\n  ...\n# Subtest: scalar escaping unicode and line width preserve values\nok 5 - scalar escaping unicode and line width preserve values\n  ---\n  duration_ms: 1.5033\n  type: 'test'\n  ...\n# Subtest: anchors aliases and schema-specific loading\nok 6 - anchors aliases and schema-specific loading\n  ---\n  duration_ms: 0.2847\n  type: 'test'\n  ...\n# Subtest: invalid syntax and explicit scalar tags reject\nok 7 - invalid syntax and explicit scalar tags reject\n  ---\n  duration_ms: 0.8947\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 26.9796\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 215
+  },
+  "changed": [
+    "src/src/tag/scalar/int_core.ts",
+    "src/src/tag/scalar/int_json.ts",
+    "src/src/tag/scalar/int_yaml11.ts"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/src/tag/scalar/float_core.ts",
+    "src/src/tag/scalar/float_json.ts",
+    "src/src/tag/scalar/float_yaml11.ts"
+  ],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 15,
+  "editCalls": 3,
+  "verificationCalls": 3,
+  "toolCalls": 58,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:56:32.417Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:56:33.283Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:56:38.589Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:44.256Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:50.284Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:01.615Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:06.035Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:23.687Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:31.097Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:49.263Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:55.098Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:00.013Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:44.502Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:44.858Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:59:01.810Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:59:15.001Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:59:41.752Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:56:33.259Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 858.3662999998778,
+      "parsedFiles": 90,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 50798272,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:33.570Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 286.71249999990687,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -57417856,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:38.859Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 272.0791000002064,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 11768384,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:44.573Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 317.0948999999091,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -37996304,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:56:50.554Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 270.1443999998737,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -49595848,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:01.877Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 262.18949999986216,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 7138016,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:06.292Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 258.94570000004023,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 6475952,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:23.934Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 247.41950000007637,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -9096800,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:31.377Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 279.8157999999821,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -28681312,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:49.528Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 266.38770000007935,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": 7177848,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:57:55.386Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 288.4662000001408,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -51368216,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:58:00.304Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ab190a91356cbe289f3aa4f5c3df989383d5cd34c07e7cd73693f63edab7a363"
+      },
+      "latencyMs": 291.529399999883,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4222360,
+      "heapDeltaBytes": -51242104,
+      "graphBytes": 6371325
+    },
+    {
+      "at": "2026-11-09T05:58:44.856Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d1341ecca6bac55f58f78af077273e81efd12175cdb3f7e6ee5cbd012665640"
+      },
+      "latencyMs": 354.65079999994487,
+      "parsedFiles": 3,
+      "fileCount": 90,
+      "cacheBytes": 4280795,
+      "heapDeltaBytes": -23194992,
+      "graphBytes": 6457444
+    },
+    {
+      "at": "2026-11-09T05:58:45.153Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d1341ecca6bac55f58f78af077273e81efd12175cdb3f7e6ee5cbd012665640"
+      },
+      "latencyMs": 295.0582000000868,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4280795,
+      "heapDeltaBytes": -28661640,
+      "graphBytes": 6457444
+    },
+    {
+      "at": "2026-11-09T05:59:02.084Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d1341ecca6bac55f58f78af077273e81efd12175cdb3f7e6ee5cbd012665640"
+      },
+      "latencyMs": 274.9497999998275,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4280795,
+      "heapDeltaBytes": 6632320,
+      "graphBytes": 6457444
+    },
+    {
+      "at": "2026-11-09T05:59:15.266Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d1341ecca6bac55f58f78af077273e81efd12175cdb3f7e6ee5cbd012665640"
+      },
+      "latencyMs": 265.61229999992065,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4280795,
+      "heapDeltaBytes": 6222672,
+      "graphBytes": 6457444
+    },
+    {
+      "at": "2026-11-09T05:59:42.043Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d1341ecca6bac55f58f78af077273e81efd12175cdb3f7e6ee5cbd012665640"
+      },
+      "latencyMs": 291.25949999992736,
+      "parsedFiles": 0,
+      "fileCount": 90,
+      "cacheBytes": 4280795,
+      "heapDeltaBytes": 6175656,
+      "graphBytes": 6457444
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/examples/format_scalars.mjs",
+        "src/test/core/units/dump-scalar-styles.test.mjs",
+        "src/src/tag/scalar/int_core.ts",
+        "src/src/tag/scalar/int_json.ts"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_f8cc1f31e66e4e0cbc079d057cf7de24|ctc_0cb39388b6e2f3a3016af1609b490087d187ca470995e31d46/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_f8cc1f31e66e4e0cbc079d057cf7de24|ctc_0cb39388b6e2f3a3016af1609b490087d187ca470995e31d46/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_8d704d9ec958410d894086b06d48400d|ctc_0cb39388b6e2f3a3016af16107bb8c87d1bd7b73da6d63f75d/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_8d704d9ec958410d894086b06d48400d|ctc_0cb39388b6e2f3a3016af16107bb8c87d1bd7b73da6d63f75d/2"
+        },
+        {
+          "tool": "write",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_8d704d9ec958410d894086b06d48400d|ctc_0cb39388b6e2f3a3016af16107bb8c87d1bd7b73da6d63f75d/4"
+        },
+        {
+          "tool": "write",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_8d704d9ec958410d894086b06d48400d|ctc_0cb39388b6e2f3a3016af16107bb8c87d1bd7b73da6d63f75d/5"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_01cf8fd2dada4db1a3d3de3f601e4d08|ctc_0cb39388b6e2f3a3016af1612b99dc87d19ba5da0b5ea43a6c/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_01cf8fd2dada4db1a3d3de3f601e4d08|ctc_0cb39388b6e2f3a3016af1612b99dc87d19ba5da0b5ea43a6c/4"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts",
+        "git -C src status --short; git -C src diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/src/tag/scalar/int_core.ts",
+        "src/src/tag/scalar/int_json.ts",
+        "src/src/tag/scalar/int_yaml11.ts",
+        "src/src/dump.ts",
+        "src/src/index.ts",
+        "src/src/schema.ts",
+        "src/benchmark/implementations/current-load/index.mjs",
+        "src/support/demo_template/index.mjs",
+        "src/src/ast/from_events.ts",
+        "src/src/ast/from_js.ts",
+        "src/src/ast/presenter.ts",
+        "src/src/parser/constructor.ts"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_core.ts",
+          "callId": "call_01cf8fd2dada4db1a3d3de3f601e4d08|ctc_0cb39388b6e2f3a3016af1612b99dc87d19ba5da0b5ea43a6c/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_json.ts",
+          "callId": "call_01cf8fd2dada4db1a3d3de3f601e4d08|ctc_0cb39388b6e2f3a3016af1612b99dc87d19ba5da0b5ea43a6c/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/src/tag/scalar/int_yaml11.ts",
+          "callId": "call_01cf8fd2dada4db1a3d3de3f601e4d08|ctc_0cb39388b6e2f3a3016af1612b99dc87d19ba5da0b5ea43a6c/5"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --input-type=module - <<'NODE'\nimport assert from 'node:assert/strict'\nimport { pathToFileURL } from 'node:url'\nimport { resolve } from 'node:path'\nconst y = await import(pathToFileURL(resolve('src/src/index.ts')).href)\nconst schemas = [undefined, y.CORE_SCHEMA, y.JSON_SCHEMA, y.YAML11_SCHEMA]\nconst values = [1e21, -1e21, 1.2e21, -1.2e21, Number.MAX_VALUE, -Number.MAX_VALUE]\nfor (const schema of schemas) {\n  for (const value of values) {\n    const options = schema ? { schema } : {}\n    const scalar = y.dump(value, options)\n    assert.equal(y.load(scalar, options), value, `${value} scalar`)\n    const collection = y.dump([value, { value }], options)\n    const roundTrip = y.load(collection, options)\n    assert.equal(roundTrip[0], value, `${value} sequence`)\n    assert.equal(roundTrip[1].value, value, `${value} mapping`)\n    assert.doesNotMatch(scalar, /e[+-]?\\d+/i)\n  }\n  assert.throws(() => y.load('!!int 1e+21', schema ? { schema } : {}))\n}\nconsole.log('large integer round trips and explicit integer validation passed')\nNODE",
+        "git diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts",
+        "git -C src status --short; git -C src diff -- src/src/tag/scalar/int_core.ts src/src/tag/scalar/int_json.ts src/src/tag/scalar/int_yaml11.ts"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/src/tag/scalar/int_core.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 Core schema implicit resolution:\n// [-+]? [0-9]+ | 0o [0-7]+ | 0x [0-9a-fA-F]+\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  // 0o123\n  '^(?:0o[0-7]+' +\n  // 0x1A\n  '|0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\n// Explicit `!!int` validation is separate from Core implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intCoreTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intCoreTag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 Core schema implicit resolution:\n// [-+]? [0-9]+ | 0o [0-7]+ | 0x [0-9a-fA-F]+\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  // 0o123\n  '^(?:0o[0-7]+' +\n  // 0x1A\n  '|0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\n// Explicit `!!int` validation is separate from Core implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nfunction representYamlInteger (object: number) {\n  const source = object.toString(10)\n  const [coefficient, exponentString] = source.split('e')\n\n  if (exponentString === undefined) return source\n\n  const exponent = Number(exponentString)\n  const negative = coefficient[0] === '-'\n  const unsigned = negative ? coefficient.slice(1) : coefficient\n  const point = unsigned.indexOf('.')\n  const decimalPosition = (point === -1 ? unsigned.length : point) + exponent\n  const digits = unsigned.replace('.', '')\n  const sign = negative ? '-' : ''\n\n  if (decimalPosition >= digits.length) {\n    return sign + digits + '0'.repeat(decimalPosition - digits.length)\n  }\n\n  if (decimalPosition <= 0) {\n    return sign + '0.' + '0'.repeat(-decimalPosition) + digits\n  }\n\n  return sign + digits.slice(0, decimalPosition) + '.' + digits.slice(decimalPosition)\n}\n\nconst intCoreTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: representYamlInteger\n})\n\nexport { intCoreTag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/int_json.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 JSON schema implicit resolution:\n// -? ( 0 | [1-9] [0-9]* )\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  '^-?(?:0|[1-9][0-9]*)$')\n\n// Explicit `!!int` validation is separate from JSON implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intJsonTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional '-' or digit.\n  implicitFirstChars: ['-', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intJsonTag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\n// YAML 1.2 JSON schema implicit resolution:\n// -? ( 0 | [1-9] [0-9]* )\nconst YAML_INTEGER_IMPLICIT_PATTERN = new RegExp(\n  '^-?(?:0|[1-9][0-9]*)$')\n\n// Explicit `!!int` validation is separate from JSON implicit resolution.\nconst YAML_INTEGER_EXPLICIT_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1]+' +\n  // 0o123\n  '|[-+]?0o[0-7]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F]+' +\n  // 12345\n  '|[-+]?[0-9]+)$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0o')) return sign * parseInt(value.slice(2), 8)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string, isExplicit: boolean) {\n  if (isExplicit) {\n    if (!YAML_INTEGER_EXPLICIT_PATTERN.test(source)) return NOT_RESOLVED\n  } else if (!YAML_INTEGER_IMPLICIT_PATTERN.test(source)) {\n    return NOT_RESOLVED\n  }\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nfunction representYamlInteger (object: number) {\n  const source = object.toString(10)\n  const [coefficient, exponentString] = source.split('e')\n\n  if (exponentString === undefined) return source\n\n  const exponent = Number(exponentString)\n  const negative = coefficient[0] === '-'\n  const unsigned = negative ? coefficient.slice(1) : coefficient\n  const point = unsigned.indexOf('.')\n  const decimalPosition = (point === -1 ? unsigned.length : point) + exponent\n  const digits = unsigned.replace('.', '')\n  const sign = negative ? '-' : ''\n\n  if (decimalPosition >= digits.length) {\n    return sign + digits + '0'.repeat(decimalPosition - digits.length)\n  }\n\n  if (decimalPosition <= 0) {\n    return sign + '0.' + '0'.repeat(-decimalPosition) + digits\n  }\n\n  return sign + digits.slice(0, decimalPosition) + '.' + digits.slice(decimalPosition)\n}\n\nconst intJsonTag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional '-' or digit.\n  implicitFirstChars: ['-', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: representYamlInteger\n})\n\nexport { intJsonTag }\n"
+    },
+    {
+      "path": "src/src/tag/scalar/int_yaml11.ts",
+      "before": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_INTEGER_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1_]+' +\n  // 0123\n  '|[-+]?0[0-7_]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F_]+' +\n  // 1:23\n  '|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+' +\n  // 12345\n  '|[-+]?(?:0|[1-9][0-9_]*))$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source.replace(/_/g, '')\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  if (value.includes(':')) {\n    let result = 0\n    for (const part of value.split(':')) result = result * 60 + Number(part)\n    return sign * result\n  }\n\n  if (value !== '0' && value[0] === '0') return sign * parseInt(value, 8)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string) {\n  if (!YAML_INTEGER_PATTERN.test(source)) return NOT_RESOLVED\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nconst intYaml11Tag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: (object: number) => object.toString(10)\n})\n\nexport { intYaml11Tag }\n",
+      "after": "import { defineScalarTag, NOT_RESOLVED } from '../../tag.ts'\n\nconst YAML_INTEGER_PATTERN = new RegExp(\n  // 0b1010\n  '^(?:[-+]?0b[0-1_]+' +\n  // 0123\n  '|[-+]?0[0-7_]+' +\n  // 0x1A\n  '|[-+]?0x[0-9a-fA-F_]+' +\n  // 1:23\n  '|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+' +\n  // 12345\n  '|[-+]?(?:0|[1-9][0-9_]*))$')\n\nfunction parseYamlInteger (source: string) {\n  let value = source.replace(/_/g, '')\n  let sign = 1\n\n  if (value[0] === '-' || value[0] === '+') {\n    if (value[0] === '-') sign = -1\n    value = value.slice(1)\n  }\n\n  if (value.startsWith('0b')) return sign * parseInt(value.slice(2), 2)\n  if (value.startsWith('0x')) return sign * parseInt(value.slice(2), 16)\n\n  if (value.includes(':')) {\n    let result = 0\n    for (const part of value.split(':')) result = result * 60 + Number(part)\n    return sign * result\n  }\n\n  if (value !== '0' && value[0] === '0') return sign * parseInt(value, 8)\n\n  return sign * parseInt(value, 10)\n}\n\nfunction resolveYamlInteger (source: string) {\n  if (!YAML_INTEGER_PATTERN.test(source)) return NOT_RESOLVED\n\n  const result = parseYamlInteger(source)\n  return Number.isFinite(result) ? result : NOT_RESOLVED\n}\n\nfunction representYamlInteger (object: number) {\n  const source = object.toString(10)\n  const [coefficient, exponentString] = source.split('e')\n\n  if (exponentString === undefined) return source\n\n  const exponent = Number(exponentString)\n  const negative = coefficient[0] === '-'\n  const unsigned = negative ? coefficient.slice(1) : coefficient\n  const point = unsigned.indexOf('.')\n  const decimalPosition = (point === -1 ? unsigned.length : point) + exponent\n  const digits = unsigned.replace('.', '')\n  const sign = negative ? '-' : ''\n\n  if (decimalPosition >= digits.length) {\n    return sign + digits + '0'.repeat(decimalPosition - digits.length)\n  }\n\n  if (decimalPosition <= 0) {\n    return sign + '0.' + '0'.repeat(-decimalPosition) + digits\n  }\n\n  return sign + digits.slice(0, decimalPosition) + '.' + digits.slice(decimalPosition)\n}\n\nconst intYaml11Tag = defineScalarTag('tag:yaml.org,2002:int', {\n  implicit: true,\n  // Superset of source.charAt(0) over all matched inputs: optional sign + decimal digit.\n  implicitFirstChars: ['-', '+', ...'0123456789'],\n  resolve: resolveYamlInteger,\n  identify: (object) => Object.prototype.toString.call(object) === '[object Number]' &&\n    (object % 1 === 0 && !Object.is(object, -0)),\n  represent: representYamlInteger\n})\n\nexport { intYaml11Tag }\n"
+    }
+  ],
+  "final": "Updated the Core, JSON, and YAML 1.1 integer tags to expand exponent-form integer representations into plain decimal digits. Integer parsing rules remain unchanged, so exponent notation is still rejected for explicit `!!int` tags; the existing handling of fractions and negative zero is preserved.\n\n**Verification:** `SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs` passed all 7 tests. An additional check passed for large positive and negative integers, including `Number.MAX_VALUE`, across the default, Core, JSON, and YAML 1.1 schemas, in scalars and collections, and confirmed explicit `!!int` exponent notation is rejected.\n\nThe bare test command initially failed because `SUFFICE_WORKSPACE` was unset; setting it to the workspace path allowed the tests to run.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\031-exponent-integers-B-r0\\home\\events\\1794203792391-cbf6d72e-6103-40fb-89f0-d36adadae57a.jsonl"
+}
