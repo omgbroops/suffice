@@ -1,6 +1,6 @@
 # Real-issue repository intelligence evaluation
 
-18 execution attempts recorded; 18/144 planned cells have scorable engineering outcomes. 126 cells remain unrun or affected by infrastructure/configuration problems.
+36 execution attempts recorded; 36/144 planned cells have scorable engineering outcomes. 108 cells remain unrun or affected by infrastructure/configuration problems.
 
 All modes use gpt-6-luna, xhigh and default tier. See `protocol.json` and [methodology](../../../docs/REPOSITORY-INTELLIGENCE-REAL-V3.md). Earlier saturated runs and calibration pilots are not pooled here.
 
@@ -8,18 +8,18 @@ All modes use gpt-6-luna, xhigh and default tier. See `protocol.json` and [metho
 
 | Category | Mode | Accepted / scorable | Planned | Missing / infrastructure | Known estimated cost | Unknown-cost attempts | Mean agent time |
 |---|---|---:|---:|---:|---:|---:|---:|
-| all | Baseline | 5/6 | 48 | 42 | $0.16752 | 0 | 435.3 s |
-| all | Always-guided | 6/6 | 48 | 42 | $0.17006 | 0 | 420.1 s |
-| all | On-demand | 6/6 | 48 | 42 | $0.16099 | 0 | 493.6 s |
-| simple | Baseline | 2/2 | 16 | 14 | $0.01246 | 0 | 113.2 s |
-| simple | Always-guided | 2/2 | 16 | 14 | $0.01798 | 0 | 165.1 s |
-| simple | On-demand | 2/2 | 16 | 14 | $0.01783 | 0 | 187.4 s |
-| cross-file | Baseline | 1/2 | 16 | 14 | $0.03123 | 0 | 264.6 s |
-| cross-file | Always-guided | 2/2 | 16 | 14 | $0.04992 | 0 | 425.1 s |
-| cross-file | On-demand | 2/2 | 16 | 14 | $0.06435 | 0 | 630.0 s |
-| complex | Baseline | 2/2 | 16 | 14 | $0.12382 | 0 | 928.1 s |
-| complex | Always-guided | 2/2 | 16 | 14 | $0.10216 | 0 | 670.0 s |
-| complex | On-demand | 2/2 | 16 | 14 | $0.07881 | 0 | 663.4 s |
+| all | Baseline | 8/12 | 48 | 36 | $0.30083 | 0 | 402.2 s |
+| all | Always-guided | 9/12 | 48 | 36 | $0.35588 | 0 | 440.7 s |
+| all | On-demand | 9/12 | 48 | 36 | $0.34578 | 0 | 509.3 s |
+| simple | Baseline | 2/4 | 16 | 12 | $0.03323 | 0 | 175.0 s |
+| simple | Always-guided | 2/4 | 16 | 12 | $0.06594 | 0 | 238.6 s |
+| simple | On-demand | 2/4 | 16 | 12 | $0.04906 | 0 | 232.4 s |
+| cross-file | Baseline | 3/4 | 16 | 12 | $0.09045 | 0 | 347.0 s |
+| cross-file | Always-guided | 3/4 | 16 | 12 | $0.10101 | 0 | 420.4 s |
+| cross-file | On-demand | 3/4 | 16 | 12 | $0.12402 | 0 | 579.9 s |
+| complex | Baseline | 3/4 | 16 | 12 | $0.17715 | 0 | 684.6 s |
+| complex | Always-guided | 4/4 | 16 | 12 | $0.18893 | 0 | 663.3 s |
+| complex | On-demand | 4/4 | 16 | 12 | $0.17270 | 0 | 715.5 s |
 
 Known cost is a lower bound where usage is missing; `results.json` includes token totals and cost per accepted attempt when measurable. Verified budget-stopped patches can count as accepted; normal completion is separate. Unverified patches do not count as accepted. Infrastructure cells are not reported as coding failures.
 
@@ -27,14 +27,14 @@ Known cost is a lower bound where usage is missing; `results.json` includes toke
 
 | Comparison | Category | Complete tasks, both repetitions | Mean success difference | Conditional task bootstrap 95% |
 |---|---|---:|---:|---|
-| B minus A | all | 3 | 16.7 pp | not estimated |
-| C minus A | all | 3 | 16.7 pp | not estimated |
-| B minus A | simple | 1 | 0.0 pp | not estimated |
-| C minus A | simple | 1 | 0.0 pp | not estimated |
-| B minus A | cross-file | 1 | 50.0 pp | not estimated |
-| C minus A | cross-file | 1 | 50.0 pp | not estimated |
-| B minus A | complex | 1 | 0.0 pp | not estimated |
-| C minus A | complex | 1 | 0.0 pp | not estimated |
+| B minus A | all | 6 | 8.3 pp | -16.7 pp to 33.3 pp |
+| C minus A | all | 6 | 8.3 pp | -16.7 pp to 33.3 pp |
+| B minus A | simple | 2 | 0.0 pp | not estimated |
+| C minus A | simple | 2 | 0.0 pp | not estimated |
+| B minus A | cross-file | 2 | 0.0 pp | not estimated |
+| C minus A | cross-file | 2 | 0.0 pp | not estimated |
+| B minus A | complex | 2 | 25.0 pp | not estimated |
+| C minus A | complex | 2 | 25.0 pp | not estimated |
 
 Intervals describe these sampled tasks and do not establish general superiority or equivalence.
 
@@ -45,7 +45,7 @@ Each entry is accepted/scorable, out of two planned repetitions. Missing and inf
 | Task | Category | Baseline | Always-guided | On-demand |
 |---|---|---:|---:|---:|
 | sveltejs__svelte-1294 | simple | 0/0 | 0/0 | 0/0 |
-| sveltejs__svelte-980 | simple | 0/0 | 0/0 | 0/0 |
+| sveltejs__svelte-980 | simple | 0/2 | 0/2 | 0/2 |
 | sveltejs__svelte-1292 | simple | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-851 | simple | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-1047 | simple | 0/0 | 0/0 | 0/0 |
@@ -57,14 +57,14 @@ Each entry is accepted/scorable, out of two planned repetitions. Missing and inf
 | sveltejs__svelte-1312 | cross-file | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-1364 | cross-file | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-1243 | cross-file | 0/0 | 0/0 | 0/0 |
-| sveltejs__svelte-1420 | cross-file | 0/0 | 0/0 | 0/0 |
+| sveltejs__svelte-1420 | cross-file | 2/2 | 1/2 | 1/2 |
 | sveltejs__svelte-931 | cross-file | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-1309 | cross-file | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-709 | complex | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-599 | complex | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-1345 | complex | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-605 | complex | 0/0 | 0/0 | 0/0 |
-| sveltejs__svelte-1493 | complex | 0/0 | 0/0 | 0/0 |
+| sveltejs__svelte-1493 | complex | 1/2 | 2/2 | 2/2 |
 | sveltejs__svelte-1529 | complex | 0/0 | 0/0 | 0/0 |
 | sveltejs__svelte-835 | complex | 2/2 | 2/2 | 2/2 |
 | sveltejs__svelte-889 | complex | 0/0 | 0/0 | 0/0 |
@@ -73,16 +73,16 @@ Each entry is accepted/scorable, out of two planned repetitions. Missing and inf
 
 | Mode | Uncached input | Cached input | Output | Cost per accepted attempt | Graph queries | Refresh sum | Version-scan sum |
 |---|---:|---:|---:|---|---:|---:|---:|
-| Baseline | 457507 | 7946112 | 84622 | $0.03350 | 0 | 0.00 s | 0.00 s |
-| Always-guided | 580194 | 7414784 | 75794 | $0.02834 | 165 | 318.34 s | 0.00 s |
-| On-demand | 545776 | 6582144 | 81175 | $0.02683 | 58 | 118.25 s | 176.74 s |
+| Baseline | 946605 | 12653696 | 159263 | $0.03760 | 0 | 0.00 s | 0.00 s |
+| Always-guided | 1316711 | 14370560 | 161013 | $0.03954 | 325 | 665.20 s | 0.00 s |
+| On-demand | 1217969 | 13336576 | 181233 | $0.03842 | 122 | 265.92 s | 355.04 s |
 
 Refresh and scan values are summed operation latencies, not a wall-time decomposition. Token/cost totals include infrastructure attempts. Normal completions, accepted partial patches, maximum observed RSS, graph/cache sizes and guidance/request bytes are separate machine-readable fields. Verification-command mentions are a proxy; independent grading establishes the reported test outcomes.
 
 Logged trigger labels (phase/reason), across recorded attempts:
 
-- Always-guided: after-edit:unreported = 23; initial:unreported = 6
-- On-demand: on-demand:editing-exported-module = 26
+- Always-guided: after-edit:unreported = 48; initial:unreported = 12
+- On-demand: on-demand:editing-exported-module = 55
 
 ## Failure and mechanism evidence
 
