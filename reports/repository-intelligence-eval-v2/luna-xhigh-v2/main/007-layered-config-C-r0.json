@@ -1,0 +1,181 @@
+{
+  "task": "layered-config",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "runId": "007-layered-config-C-r0",
+  "category": "simple",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 179934.87419999996,
+  "usage": {
+    "input": 16470,
+    "cacheRead": 29312,
+    "cacheWrite": 0,
+    "output": 9221,
+    "estimatedApiUsd": 0.00655062,
+    "modelCalls": 6,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00655062,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: falsy values override while undefined inherits\nok 1 - falsy values override while undefined inherits\n  ---\n  duration_ms: 1.642\n  type: 'test'\n  ...\n# Subtest: recursive branches and replacement arrays are independently owned\nok 2 - recursive branches and replacement arrays are independently owned\n  ---\n  duration_ms: 1.0407\n  type: 'test'\n  ...\n# Subtest: invalid effective configuration is still rejected\nok 3 - invalid effective configuration is still rejected\n  ---\n  duration_ms: 0.5271\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.3522\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 94
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: later nonempty values replace defaults\nok 1 - later nonempty values replace defaults\n  ---\n  duration_ms: 1.5918\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.4732\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 96
+  },
+  "changed": [
+    "src/merge.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 6,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 16,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:28:01.966Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:28:02.048Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/merge.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:28:02.118Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/merge.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:28:02.037Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "34ff81c3d4b7f8072aa04acbc7f452341404edae78fded0ccb98174d4e94ae22"
+      },
+      "latencyMs": 70.59389999997802,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 19974,
+      "heapDeltaBytes": 1257408,
+      "graphBytes": 32479
+    },
+    {
+      "at": "2026-11-09T05:28:02.118Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "8d11ae2fdaf75e122775993406bcf9af73878b67169d3e877a7758a0b78029e4"
+      },
+      "latencyMs": 69.53250000008848,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 92544,
+      "heapDeltaBytes": 3121008,
+      "graphBytes": 133471
+    },
+    {
+      "at": "2026-11-09T05:28:02.179Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "8d11ae2fdaf75e122775993406bcf9af73878b67169d3e877a7758a0b78029e4"
+      },
+      "latencyMs": 61.63339999993332,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 92544,
+      "heapDeltaBytes": 314752,
+      "graphBytes": 133471
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/merge.mjs",
+        "src/config.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module - <<'NODE'\nimport assert from 'node:assert/strict';\nimport { mergeLayers } from './src/merge.mjs';\nconst base = { keep: { values: [1, { x: true }] }, nested: { a: 1, b: false }, list: [1, 2], flag: true, count: 4, text: 'old', nil: 'old' };\nconst overlay = { nested: { a: 0, b: undefined }, list: [3], flag: false, count: 0, text: '', nil: null };\nconst result = mergeLayers(base, overlay);\nassert.deepEqual(result, { keep: { values: [1, { x: true }] }, nested: { a: 0, b: false }, list: [3], flag: false, count: 0, text: '', nil: null });\nassert.notStrictEqual(result.keep, base.keep);\nassert.notStrictEqual(result.keep.values, base.keep.values);\nassert.notStrictEqual(result.keep.values[1], base.keep.values[1]);\nresult.keep.values[1].x = false;\nassert.equal(base.keep.values[1].x, true);\nassert.deepEqual(base, { keep: { values: [1, { x: true }] }, nested: { a: 1, b: false }, list: [1, 2], flag: true, count: 4, text: 'old', nil: 'old' });\nNODE",
+        "git diff -- src/merge.mjs",
+        "pwd; git rev-parse --show-toplevel; git status --short --untracked-files=all -- src/merge.mjs src/config.mjs; git check-ignore -v src/merge.mjs || true; sed -n '1,220p' src/merge.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/merge.mjs",
+      "before": "function isPlain(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }\r\nexport function mergeLayers(...layers) {\r\n  const result = {};\r\n  for (const layer of layers) {\r\n    for (const [key, value] of Object.entries(layer)) {\r\n      if (!value) continue;\r\n      if (isPlain(value) && isPlain(result[key])) result[key] = mergeLayers(result[key], value);\r\n      else result[key] = value;\r\n    }\r\n  }\r\n  return result;\r\n}\r\n",
+      "after": "function isPlain(value) {\r\n  if (value === null || typeof value !== 'object') return false;\r\n  const prototype = Object.getPrototypeOf(value);\r\n  return prototype === Object.prototype || prototype === null;\r\n}\r\n\r\nfunction enumerableKeys(value) {\r\n  return Reflect.ownKeys(value).filter(key => Object.prototype.propertyIsEnumerable.call(value, key));\r\n}\r\n\r\nfunction setOwn(target, key, value) {\r\n  Object.defineProperty(target, key, {\r\n    value,\r\n    enumerable: true,\r\n    configurable: true,\r\n    writable: true,\r\n  });\r\n}\r\n\r\nfunction cloneValue(value, seen = new WeakMap()) {\r\n  if (value === null || typeof value !== 'object') return value;\r\n  if (seen.has(value)) return seen.get(value);\r\n\r\n  let copy;\r\n  if (Array.isArray(value)) {\r\n    copy = new Array(value.length);\r\n    seen.set(value, copy);\r\n    for (const key of enumerableKeys(value)) setOwn(copy, key, cloneValue(value[key], seen));\r\n    return copy;\r\n  }\r\n  if (isPlain(value)) {\r\n    copy = Object.create(Object.getPrototypeOf(value));\r\n    seen.set(value, copy);\r\n    for (const key of enumerableKeys(value)) setOwn(copy, key, cloneValue(value[key], seen));\r\n    return copy;\r\n  }\r\n  if (value instanceof Date) copy = new Date(value.getTime());\r\n  else if (value instanceof RegExp) {\r\n    copy = new RegExp(value.source, value.flags);\r\n    copy.lastIndex = value.lastIndex;\r\n  } else if (value instanceof Map) {\r\n    copy = new Map();\r\n    seen.set(value, copy);\r\n    for (const [key, entry] of value) copy.set(cloneValue(key, seen), cloneValue(entry, seen));\r\n  } else if (value instanceof Set) {\r\n    copy = new Set();\r\n    seen.set(value, copy);\r\n    for (const entry of value) copy.add(cloneValue(entry, seen));\r\n  } else if (ArrayBuffer.isView(value)) {\r\n    const buffer = cloneValue(value.buffer, seen);\r\n    copy = value instanceof DataView\r\n      ? new DataView(buffer, value.byteOffset, value.byteLength)\r\n      : new value.constructor(buffer, value.byteOffset, value.length);\r\n  } else if (value instanceof ArrayBuffer) {\r\n    copy = value.slice(0);\r\n  } else {\r\n    // Preserve custom object prototypes while detaching their enumerable data.\r\n    copy = Object.create(Object.getPrototypeOf(value));\r\n  }\r\n  seen.set(value, copy);\r\n  for (const key of enumerableKeys(value)) {\r\n    if (ArrayBuffer.isView(value) && typeof key === 'string' && /^(0|[1-9]\\d*)$/.test(key)) continue;\r\n    setOwn(copy, key, cloneValue(value[key], seen));\r\n  }\r\n  return copy;\r\n}\r\n\r\nfunction mergeObjects(base, override) {\r\n  const result = cloneValue(base);\r\n  for (const key of enumerableKeys(override)) {\r\n    const value = override[key];\r\n    if (value === undefined) continue;\r\n\r\n    const current = Object.prototype.hasOwnProperty.call(result, key) ? result[key] : undefined;\r\n    const merged = isPlain(value) && isPlain(current)\r\n      ? mergeObjects(current, value)\r\n      : cloneValue(value);\r\n    setOwn(result, key, merged);\r\n  }\r\n  return result;\r\n}\r\n\r\nexport function mergeLayers(...layers) {\r\n  let result = {};\r\n  for (const layer of layers) {\r\n    for (const key of enumerableKeys(layer)) {\r\n      const value = layer[key];\r\n      if (value === undefined) continue;\r\n\r\n      const current = Object.prototype.hasOwnProperty.call(result, key) ? result[key] : undefined;\r\n      const merged = isPlain(value) && isPlain(current)\r\n        ? mergeObjects(current, value)\r\n        : cloneValue(value);\r\n      setOwn(result, key, merged);\r\n    }\r\n  }\r\n  return result;\r\n}\r\n"
+    }
+  ],
+  "final": "Updated `src/merge.mjs` so layers merge plain objects recursively, replace arrays, and treat `false`, `0`, `''`, and `null` as overrides while skipping `undefined`. Merged values are cloned to avoid sharing mutable branches with inputs; `loadConfig` and its validation remain unchanged.\n\nChecks passed:\n- `node --test tests/visible.test.mjs`\n- Focused inline smoke test for override values, array replacement, and input isolation.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\007-layered-config-C-r0\\home\\events\\1794201962500-c5f44e77-3756-4254-9dc2-8f960e62d8fc.jsonl"
+}
