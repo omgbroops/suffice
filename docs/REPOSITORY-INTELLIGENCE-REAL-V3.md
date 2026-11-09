@@ -60,6 +60,16 @@ dispatch. Exact source/production archives and raw events/sessions remain availa
 owned workspace and grading copies may be removed after their production archive
 is saved. Main inputs and receipts bypass Git newline conversion.
 
+Preparation is staged by the already-seeded balanced waves. The first two waves
+cover the same three tasks twice: local 1048, cross-file 1516 and complex 835.
+The common implementation, all 24 task records, settings and order freeze before
+the first model request. Each task's validation manifest freezes separately before
+that task's first request. Later unprepared tasks stop dispatch with
+`additional_preparation_required`; they are neither skipped nor counted as coding
+failures. Preparing the next wave and resuming uses the same frozen implementation
+and preserves completed cells. This change was made before main inference to get
+the first balanced comparison running without waiting for all 24 environments.
+
 ## Native test adaptation
 
 Only audited classic build commands are expanded from the original package

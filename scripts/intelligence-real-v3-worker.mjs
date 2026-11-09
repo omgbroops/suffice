@@ -26,8 +26,10 @@ try{
   if(resources[0].freeRAM<1.75*1024**3||resources[0].freeDisk<6*1024**3)throw new Error('RESOURCE_FLOOR');
   if(JSON.stringify(await realSourceInputs(root))!==JSON.stringify(protocol.inputs))throw new Error('Frozen implementation drift');
   const descriptor=protocol.tasks.find(task=>task.id===item.task),directory=resolve(base,'tasks',item.task);
+  const gatePath=resolve(published,'task-gates',item.task+'.json'),gate=JSON.parse(await readFile(gatePath,'utf8'));
+  if(gate.task!==item.task||gate.nativeAdapterVersion!==4)throw new Error('Missing immutable task gate');
   const record=JSON.parse(await readFile(resolve(root,'benchmarks/intelligence-real-v3',descriptor.record),'utf8'));
-  if(hash(await readFile(resolve(directory,'validation.json')))!==descriptor.validationSha256)throw new Error('Validation receipt drift');
+  if(hash(await readFile(resolve(directory,'validation.json')))!==gate.validationSha256)throw new Error('Validation receipt drift');
   const {task,receipt,dependencies}=await classicTask(directory,record);
   if(JSON.stringify(await snapshot(task.baseline))!==JSON.stringify(receipt.baselineHashes))throw new Error('Starting files drift');
   if(hash(await readFile(resolve(dependencies,'package-lock.json')))!==receipt.dependencyLockSha256)throw new Error('Pinned dependency lock drift');
@@ -36,7 +38,7 @@ try{
   if(!runtime.isUsingSubscription('openai'))throw new Error('Subscription required; no paid-key or model fallback');
   const model=runtime.getModel('openai',REAL_CONFIG.model),catalog={id:model.id,api:model.api,contextWindow:model.contextWindow,maxTokens:model.maxTokens,cost:model.cost};
   if(JSON.stringify(catalog)!==JSON.stringify(protocol.catalog))throw new Error('Model catalog drift');
-  await writeFile(resolve(published,id+'.manifest.json'),JSON.stringify({version:1,campaign:CAMPAIGN,item,attempt,config:REAL_CONFIG,catalog,protocolSha256:hash(await readFile(resolve(published,'protocol.json'))),commonSourceArchiveSha256:protocol.sourceArchiveSha256,validationSha256:descriptor.validationSha256,task:{id:item.task,prompt:task.prompt,revision:task.revision,baselineHashes:receipt.baselineHashes},initialResources:resources[0],dispatchConcurrency:1},null,2),{flag:'wx'});
+  await writeFile(resolve(published,id+'.manifest.json'),JSON.stringify({version:1,campaign:CAMPAIGN,item,attempt,config:REAL_CONFIG,catalog,protocolSha256:hash(await readFile(resolve(published,'protocol.json'))),commonSourceArchiveSha256:protocol.sourceArchiveSha256,validationSha256:gate.validationSha256,taskGateSha256:hash(await readFile(gatePath)),task:{id:item.task,prompt:task.prompt,revision:task.revision,baselineHashes:receipt.baselineHashes},initialResources:resources[0],dispatchConcurrency:1},null,2),{flag:'wx'});
   entry.state='dispatched';entry.dispatchedAt=new Date().toISOString();await writeLedger(ledgerPath,ledger);dispatched=true;
   timer=setInterval(()=>{sampling=sampling.then(async()=>resources.push(await resource()));},10000);timer.unref();
   result=await runTrial({runtime,task,item,runDir,published,config:REAL_CONFIG});

@@ -11,19 +11,24 @@ const load=async path=>JSON.parse(await readFile(path,'utf8')),sleep=ms=>new Pro
 const cohort=await load(resolve(root,'benchmarks/intelligence-real-v3/cohort.json'));
 await mkdir(published,{recursive:true});const tasks=[];
 const adapterFingerprint=hash(JSON.stringify(await Promise.all(['native-tests.cjs','native-loader-base.cjs','native-compat.cjs'].map(async path=>hash(await readFile(resolve(root,'benchmarks/intelligence-real-v3',path)))))));
-for(const task of cohort.tasks){const path=resolve(base,'tasks',task.id,'validation.json'),validation=await load(path);if(validation.nativeAdapterVersion!==4||validation.nativeAdapterSha256!==adapterFingerprint)throw new Error('Preparation uses an older adapter: '+task.id);tasks.push({...task,valid:validation.valid,validationSha256:hash(await readFile(path)),preparationClassification:validation.classification});}
-if(process.argv.includes('--dry-run')){console.log(JSON.stringify({event:'real_dry_run',tasks:tasks.length,validated:tasks.filter(task=>task.valid).length,cells:realSchedule(tasks).flat().length,config:REAL_CONFIG,modelRequests:0}));process.exit(0);}
-// No main inference is possible until every planned task has an explicit gate result.
+for(const task of cohort.tasks){const path=resolve(base,'tasks',task.id,'validation.json');let validation;try{validation=await load(path);}catch(error){if(error.code!=='ENOENT')throw error;}const current=validation?.nativeAdapterVersion===4&&validation.nativeAdapterSha256===adapterFingerprint;tasks.push({...task,valid:current&&validation.valid,validationSha256:current?hash(await readFile(path)):null,preparationClassification:current?validation.classification:'not_prepared_current_adapter'});}
+if(process.argv.includes('--dry-run')){console.log(JSON.stringify({event:'real_dry_run',tasks:tasks.length,validated:tasks.filter(task=>task.valid).length,readyLeadingWaves:realSchedule(tasks).findIndex(wave=>wave.some(item=>!tasks.find(task=>task.id===item.task)?.valid))===-1?16:realSchedule(tasks).findIndex(wave=>wave.some(item=>!tasks.find(task=>task.id===item.task)?.valid)),cells:realSchedule(tasks).flat().length,config:REAL_CONFIG,modelRequests:0}));process.exit(0);}
+// Each balanced wave requires its own immutable gates; later waves may be prepared later.
 const lockPath=resolve(root,'.suffice/native-evaluation.lock'),lock=await open(lockPath,'wx');
 await lock.writeFile(JSON.stringify({pid:process.pid,kind:'real-v3-coordinator',startedAt:new Date().toISOString()}));
-let status='starting',providerStop=false;
+let status='starting',providerStop=false,needsPreparation=[];
 const state=async detail=>{await writeFile(resolve(published,'execution-status.json'),JSON.stringify({status,at:new Date().toISOString(),...detail},null,2));};
 const releasePending=async()=>{const ledger=await load(ledgerPath);for(const entry of ledger.entries)if(entry.runId.startsWith(CAMPAIGN+'/')&&entry.state==='reserved'){entry.state='not_started';entry.reserved=0;entry.known=0;entry.unknown=false;}await writeLedger(ledgerPath,ledger);};
 try{
   try{if(['provider_unavailable','provider_failure'].includes((await load(resolve(published,'execution-status.json'))).status)&&!process.argv.includes('--resume-provider'))throw new Error('Provider availability stopped this campaign; audit before explicit --resume-provider');}catch(error){if(error.code!=='ENOENT')throw error;}
   if((await load(ledgerPath)).entries.some(e=>e.state==='dispatched'))throw new Error('Dispatched/orphaned inference requires audit');
+  await mkdir(resolve(published,'task-gates'),{recursive:true});
+  for(const task of tasks.filter(task=>task.valid)){
+    const gate={task:task.id,nativeAdapterVersion:4,nativeAdapterSha256:adapterFingerprint,validationSha256:task.validationSha256},path=resolve(published,'task-gates',task.id+'.json');
+    try{if(JSON.stringify(await load(path))!==JSON.stringify(gate))throw new Error('Frozen task gate drift: '+task.id);}catch(error){if(error.code!=='ENOENT')throw error;await writeFile(path,JSON.stringify(gate,null,2),{flag:'wx'});}
+  }
   const inputs=await realSourceInputs(root);let protocol;
-  try{protocol=await load(resolve(published,'protocol.json'));if(JSON.stringify(inputs)!==JSON.stringify(protocol.inputs)||JSON.stringify(tasks)!==JSON.stringify(protocol.tasks)||JSON.stringify(REAL_CONFIG)!==JSON.stringify(protocol.config))throw new Error('Frozen protocol drift; do not pool changed sources');}
+  try{protocol=await load(resolve(published,'protocol.json'));if(JSON.stringify(inputs)!==JSON.stringify(protocol.inputs)||JSON.stringify(cohort.tasks)!==JSON.stringify(protocol.tasks)||JSON.stringify(REAL_CONFIG)!==JSON.stringify(protocol.config))throw new Error('Frozen protocol drift; do not pool changed sources');}
   catch(error){
     if(error.code!=='ENOENT')throw error;
     const runtime=await ModelRuntime.create({authPath:resolve(homedir(),'.suffice/auth.json'),modelsPath:null,modelsStorePath:resolve(homedir(),'.suffice/catalog.json'),allowModelNetwork:false,refreshOnCreate:false});
@@ -31,7 +36,7 @@ try{
     const model=runtime.getModel('openai',REAL_CONFIG.model),catalog={id:model.id,api:model.api,contextWindow:model.contextWindow,maxTokens:model.maxTokens,cost:model.cost};
     const source=resolve(base,'frozen',hash(JSON.stringify(inputs)));for(const [path,expected]of Object.entries(inputs)){const destination=resolve(source,path);await mkdir(dirname(destination),{recursive:true});await cp(resolve(root,path),destination);if(hash(await readFile(destination))!==expected)throw new Error('Source changed during freeze');}
     const archive=resolve(published,'frozen-source.tar.gz');await exec('tar',['-czf',archive,'-C',source,'.'],{windowsHide:true,timeout:60000});
-    protocol={version:1,campaign:CAMPAIGN,phase:'main-prospective-real-cohort',createdAt:new Date().toISOString(),model:REAL_CONFIG.model,effort:REAL_CONFIG.effort,config:REAL_CONFIG,catalog,inputs,tasks,schedule:realSchedule(tasks),sourceArchiveSha256:hash(await readFile(archive)),node:process.version,platform:process.platform,arch:process.arch,resourcePolicy:{maxConcurrent:1,temperatureC:null,temperaturePolicy:'No reliable automatic telemetry: concurrency always one',minWorkerFreeRAMGiB:1.75,parentStartupFreeRAMGiB:2,minFreeDiskGiB:6,projectHeapMiB:384},replacementPolicy:{maxInfrastructureReplacements:1,providerCooldownSeconds:900,eligible:'Explicit provider unavailability or a no-model resource preflight. Never coding failure, test failure, or a spent model budget.',preserveOriginals:true},limits:['One repository family and correlated issues; no population-wide model ranking.','All target/regression labels retained, including non-runtime snapshots.','Native adaptation and known unscored failures remain explicit in task receipts.','Whole category-balanced waves are reserved before dispatch; a cap may stop a balanced subset.','All costs are API-equivalent estimates; unknown usage remains reserved.']};
+    protocol={version:2,taskGatePolicy:'Immutable per-task validation manifest saved before its first inference; later balanced waves may be prepared after earlier waves run.',campaign:CAMPAIGN,phase:'main-prospective-real-cohort',createdAt:new Date().toISOString(),model:REAL_CONFIG.model,effort:REAL_CONFIG.effort,config:REAL_CONFIG,catalog,inputs,tasks:cohort.tasks,schedule:realSchedule(cohort.tasks),sourceArchiveSha256:hash(await readFile(archive)),node:process.version,platform:process.platform,arch:process.arch,resourcePolicy:{maxConcurrent:1,temperatureC:null,temperaturePolicy:'No reliable automatic telemetry: concurrency always one',minWorkerFreeRAMGiB:1.75,parentStartupFreeRAMGiB:2,minFreeDiskGiB:6,projectHeapMiB:384},replacementPolicy:{maxInfrastructureReplacements:1,providerCooldownSeconds:900,eligible:'Explicit provider unavailability or a no-model resource preflight. Never coding failure, test failure, or a spent model budget.',preserveOriginals:true},limits:['One repository family and correlated issues; no population-wide model ranking.','All target/regression labels retained, including non-runtime snapshots.','Native adaptation and known unscored failures remain explicit in task receipts.','Whole category-balanced waves are reserved before dispatch; a cap may stop a balanced subset.','All costs are API-equivalent estimates; unknown usage remains reserved.']};
     await writeFile(resolve(published,'protocol.json'),JSON.stringify(protocol,null,2),{flag:'wx'});
   }
   const resourceReady=async()=>{
@@ -40,6 +45,8 @@ try{
   const readAttempt=async(item,attempt)=>{try{return await load(resolve(published,runId(item,attempt)+'.summary.json'));}catch(error){if(error.code!=='ENOENT')throw error;}try{return await load(resolve(published,runId(item,attempt)+'.json'));}catch(error){if(error.code==='ENOENT')return null;throw error;}};
   status='running';await state({scheduledCells:144});
   outer:for(const wave of protocol.schedule){
+    needsPreparation=[...new Set(wave.map(item=>item.task))].filter(id=>!tasks.find(task=>task.id===id)?.valid);
+    if(needsPreparation.length){status='additional_preparation_required';break;}
     // A provider failure releases unstarted reservations before its cooldown.
     while(true){
       const pending=[];
@@ -78,6 +85,6 @@ try{
       if(!cooldown)break;
     }
   }
-  if(status==='running')status='finished';await state({providerStop,scheduledCells:144});
+  if(status==='running')status='finished';await state({providerStop,scheduledCells:144,needsPreparation});
 }finally{await releasePending();await lock.close();await unlink(lockPath);}
 console.log(JSON.stringify({event:'real_campaign_stopped',status,providerStop}));

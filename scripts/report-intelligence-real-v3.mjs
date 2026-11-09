@@ -21,7 +21,7 @@ for(const item of schedule){
   const candidates=attempts.filter(attempt=>attempt.cellId===cellId(item)).sort((a,b)=>a.attempt-b.attempt);
   if(candidates.length>1&&!providerUnavailable(candidates[0])&&candidates[0].classification!=='resource_stop')throw new Error('Outcome-based or undeclared replacement: '+cellId(item));
   const selected=candidates.at(-1),prepared=protocol?.tasks.find(task=>task.id===item.task);
-  rows.push({...item,cellId:cellId(item),selected:selected?.id??null,attempts:candidates.map(a=>a.id),scorable:!!selected&&['completed','budget_or_incomplete','agent_error'].includes(selected.classification)&&selected.configurationVerified===true&&selected.sourceStable===true,success:selected?.success??null,classification:selected?.classification??(prepared&&!prepared.valid?'evaluator_gate_failure':'not_run'),result:selected??null});
+  rows.push({...item,cellId:cellId(item),selected:selected?.id??null,attempts:candidates.map(a=>a.id),scorable:!!selected&&['completed','budget_or_incomplete','agent_error'].includes(selected.classification)&&selected.configurationVerified===true&&selected.sourceStable===true,success:selected?.success??null,classification:selected?.classification??(prepared?.valid===false?'evaluator_gate_failure':'not_run'),result:selected??null});
 }
 const sum=(values,key)=>values.reduce((n,value)=>n+(value[key]??0),0),mean=values=>values.length?values.reduce((a,b)=>a+b,0)/values.length:null;
 const aggregates=[];
