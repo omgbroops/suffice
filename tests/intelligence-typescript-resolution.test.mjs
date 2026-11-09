@@ -37,6 +37,7 @@ test('unsupported configs, declaration-only targets, JavaScript implicit paths a
   let g=await f.engine.snapshot();assert.ok(g.unresolved.some(e=>e.kind==='module'&&e.reason==='declaration-only-resolution'));assert.ok(g.unresolved.some(e=>e.kind==='module'&&e.evidence.path==='js.mjs'&&e.reason==='missing-or-implicit-module-path'));
   await f.put('a.ts',"import {value} from './value';value();");await f.put('tsconfig.json','{"extends":"./external-config.json"}');g=await f.engine.snapshot();assert.ok(g.unresolved.some(e=>e.kind==='module'&&e.reason==='tsconfig-extends-not-supported'));
   await rm(resolve(f.workspace,'tsconfig.json'));g=await f.engine.snapshot();assert.ok(g.unresolved.some(e=>e.kind==='module'&&e.reason==='typescript-config-not-found'));
+  await f.put('a.ts',"import {declared} from './types.d.ts';declared();");g=await f.engine.snapshot();assert.ok(g.unresolved.some(e=>e.kind==='module'&&e.evidence.path==='a.ts'&&e.reason==='declaration-only-resolution'));assert.ok(!g.edges.some(e=>e.kind==='module'&&e.evidence.path==='a.ts'));
 });
 test('compiler type-source substitution cannot replace an existing literal JavaScript implementation',async t=>{
   const f=await fixture(t,{'tsconfig.json':config({}),'same.ts':'export function value(){return 1}','same.js':'export function value(){return 2}','use.ts':"import {value} from './same.js';value();"});

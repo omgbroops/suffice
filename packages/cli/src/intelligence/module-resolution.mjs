@@ -35,6 +35,7 @@ export async function createModuleResolution(workspace,files,metadata,explicit){
   }
   function resolveTyped(from,specifier,known){
     const direct=explicit(from,specifier,known),configPath=nearest(from,'tsconfig.json');
+    if(direct.path&&/\.d\.(?:ts|mts|cts)$/.test(direct.path))return {reason:'declaration-only-resolution'};
     // Do not replace an existing literal implementation with a type-source twin
     // (for example a.ts beside the explicitly imported a.js).
     if(direct.path&&!/\.d\.(?:ts|mts|cts)$/.test(direct.path))return direct;
