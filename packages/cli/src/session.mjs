@@ -50,7 +50,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     });
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage){
       if(typeof e.data.response.id==='string'&&['response.completed','response.incomplete','response.failed','response.cancelled'].includes(e.data.type))closedRequests.add(e.data.response.id);
-      log({type:'provider_usage',responseId:e.data.response.id,model:e.data.response.model,serviceTier:e.data.response.service_tier,reasoning:e.data.response.reasoning,usage:e.data.response.usage});
+      log({type:'provider_usage',eventType:e.data.type,responseId:e.data.response.id,model:e.data.response.model,serviceTier:e.data.response.service_tier,reasoning:e.data.response.reasoning,usage:e.data.response.usage});
     }});
     pi.on('session_shutdown',async()=>{finish();await tail;if(logError) throw logError;});
   };
