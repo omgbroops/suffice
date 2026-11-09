@@ -1,0 +1,84 @@
+{
+  "task": "pilot-override",
+  "arm": "A",
+  "mode": "off",
+  "repetition": 0,
+  "runId": "001-pilot-override-A-r0",
+  "category": "pilot",
+  "kind": "synthetic-pilot",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 30487.570499999998,
+  "usage": {
+    "input": 3116,
+    "cacheRead": 7296,
+    "cacheWrite": 0,
+    "output": 572,
+    "estimatedApiUsd": 0.0006705600000000001,
+    "modelCalls": 5,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0006705600000000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: pilot-override complete contract\nok 1 - pilot-override complete contract\n  ---\n  duration_ms: 2.902\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 32.1315\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 142
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: public export exists\nok 1 - public export exists\n  ---\n  duration_ms: 1.0203\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.0114\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 152
+  },
+  "changed": [
+    "src/index.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 5,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 13,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/index.mjs",
+      "before": "export function merge(a,b){const out={...a};for(const [k,v]of Object.entries(b))if(v)out[k]=v;return out}\n",
+      "after": "export function merge(a,b){const out={...a};for(const [k,v]of Object.entries(b))if(v!==undefined)out[k]=v;return out}\n"
+    }
+  ],
+  "final": "Updated `merge` to ignore only `undefined`, preserving `null`, `0`, `false`, and empty strings. The API and inputs remain unchanged.\n\nVerified with `node --test tests/visible.test.mjs` (passed).",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\pilot\\001-pilot-override-A-r0\\home\\events\\1794201043290-ff037f56-d070-4086-b9af-291587ddaa76.jsonl"
+}
