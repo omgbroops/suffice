@@ -1,0 +1,124 @@
+diff --git a/lib/plugins/aws/package/lib/mergeCustomProviderResources.js b/lib/plugins/aws/package/lib/mergeCustomProviderResources.js
+index 414b098..8cf64ad 100644
+--- a/lib/plugins/aws/package/lib/mergeCustomProviderResources.js
++++ b/lib/plugins/aws/package/lib/mergeCustomProviderResources.js
+@@ -12,10 +12,36 @@ module.exports = {
+       this.serverless.service.resources.Outputs = {};
+     }
+ 
+-    _.merge(
+-      this.serverless.service.provider.compiledCloudFormationTemplate,
+-      this.serverless.service.resources
+-    );
++    const compiledTemplate = this.serverless.service.provider.compiledCloudFormationTemplate;
++
++    _.merge(compiledTemplate, this.serverless.service.resources);
++
++    const resources = compiledTemplate.Resources;
++    const deploymentLogicalId = _.findKey(resources, {
++      Type: 'AWS::ApiGateway::Deployment',
++    });
++
++    if (deploymentLogicalId) {
++      const deploymentRestApiId = _.get(resources, [
++        deploymentLogicalId,
++        'Properties',
++        'RestApiId',
++      ]);
++
++      _.forEach(resources, (resource) => {
++        if (resource.Type !== 'AWS::ApiGateway::BasePathMapping' ||
++          !_.isEqual(_.get(resource, 'Properties.RestApiId'), deploymentRestApiId)) {
++          return;
++        }
++
++        const dependsOn = [].concat(resource.DependsOn || []);
++        if (!_.includes(dependsOn, deploymentLogicalId)) {
++          resource.DependsOn = dependsOn.length
++            ? dependsOn.concat(deploymentLogicalId)
++            : deploymentLogicalId;
++        }
++      });
++    }
+ 
+     return BbPromise.resolve();
+   },
+diff --git a/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js b/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js
+index 885cf5b..f8f810b 100644
+--- a/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js
++++ b/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js
+@@ -137,6 +137,74 @@ describe('mergeCustomProviderResources', () => {
+       });
+     });
+ 
++    it('should make BasePathMappings depend on the generated API Gateway deployment', () => {
++      const deploymentLogicalId = 'ApiGatewayDeployment1520814106863';
++      const restApiId = { Ref: 'ApiGatewayRestApi' };
++      awsPackage.serverless.service.provider.compiledCloudFormationTemplate
++        .Resources[deploymentLogicalId] = {
++          Type: 'AWS::ApiGateway::Deployment',
++          Properties: { RestApiId: restApiId },
++        };
++      awsPackage.serverless.service.resources = {
++        Resources: {
++          PathMapping: {
++            Type: 'AWS::ApiGateway::BasePathMapping',
++            Properties: {
++              BasePath: 'oauth2',
++              DomainName: 'example.com',
++              RestApiId: restApiId,
++              Stage: 'dev',
++            },
++          },
++          UnrelatedResource: {
++            Type: 'AWS::ApiGateway::ApiKey',
++            Properties: {},
++          },
++          ExternalApiPathMapping: {
++            Type: 'AWS::ApiGateway::BasePathMapping',
++            Properties: {
++              RestApiId: 'external-api-id',
++            },
++          },
++        },
++      };
++
++      return awsPackage.mergeCustomProviderResources().then(() => {
++        const resources = awsPackage.serverless.service.provider
++          .compiledCloudFormationTemplate.Resources;
++        expect(resources.PathMapping.DependsOn).to.equal(deploymentLogicalId);
++        expect(resources.UnrelatedResource.DependsOn).to.equal(undefined);
++        expect(resources.ExternalApiPathMapping.DependsOn).to.equal(undefined);
++      });
++    });
++
++    it('should preserve existing BasePathMapping dependencies', () => {
++      const deploymentLogicalId = 'ApiGatewayDeployment1520814106863';
++      const restApiId = { Ref: 'ApiGatewayRestApi' };
++      awsPackage.serverless.service.provider.compiledCloudFormationTemplate
++        .Resources[deploymentLogicalId] = {
++          Type: 'AWS::ApiGateway::Deployment',
++          Properties: { RestApiId: restApiId },
++        };
++      awsPackage.serverless.service.resources = {
++        Resources: {
++          PathMapping: {
++            Type: 'AWS::ApiGateway::BasePathMapping',
++            DependsOn: ['CustomDependency'],
++            Properties: {
++              RestApiId: restApiId,
++            },
++          },
++        },
++      };
++
++      return awsPackage.mergeCustomProviderResources().then(() => {
++        expect(awsPackage.serverless.service.provider
++          .compiledCloudFormationTemplate.Resources.PathMapping.DependsOn)
++          .to.deep.equal(['CustomDependency', deploymentLogicalId]);
++      });
++    });
++
+     it('should keep the core template definitions when merging custom resources', () => {
+       const customResourcesMock = {
+         NewStringProp: 'New string prop',

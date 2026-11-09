@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "at": "2026-11-09T22:48:39.311Z",
+  "reason": "Host resource floor stopped D before any provider request after A/B completed. Recover only zero-request, zero-cost resource launches and execute remaining never-dispatched cells; no coding-result retry.",
+  "originalProtocolSha256": "363d302b4b5c67535a2ad4c8b9b537c00fda6cc7f68d02d011ff65a38511617f",
+  "originalWorkerSha256": "2727565d408b2e96c258dd775daa2660c4cb76f396b9bef20cf224605e7d01b5",
+  "derivedWorkerSha256": "cead913b59eb527372b58bffc181ee7a34ca58276640c5a49e6c023b71c702e4",
+  "changes": [
+    "attempt storage suffix a0 -> a1",
+    "attempt metadata 0 -> 1"
+  ],
+  "unchanged": "Models, effort, prompts, tools, graph/controller, grading, resource floors and limits",
+  "limits": {
+    "timeout": 1200,
+    "maxTurns": 90,
+    "maxToolCalls": 400,
+    "maxOutputTokens": 16384,
+    "maxProviderPayloadBytes": 1048576,
+    "maxTaskTokens": 4000000,
+    "retryCount": 0,
+    "serviceTier": "default"
+  },
+  "pending": [
+    {
+      "item": {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      "suffix": 1
+    },
+    {
+      "item": {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      "suffix": 0
+    }
+  ],
+  "cap": 25
+}

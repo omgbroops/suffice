@@ -1,0 +1,71 @@
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
+index 57e16cc..7ba8b81 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
+@@ -8,6 +8,21 @@ module.exports = {
+     this.apiGatewayDeploymentLogicalId = this.provider.naming
+       .generateApiGatewayDeploymentLogicalId();
+ 
++    const customResources = _.get(this.serverless.service, 'resources.Resources', {});
++    _.forEach(customResources, (resource) => {
++      const restApiId = _.get(resource, 'Properties.RestApiId');
++      if (resource.Type !== 'AWS::ApiGateway::BasePathMapping'
++        || !_.isEqual(restApiId, this.provider.getApiGatewayRestApiId())) {
++        return;
++      }
++
++      const dependencies = [].concat(resource.DependsOn || []);
++      if (!_.includes(dependencies, this.apiGatewayDeploymentLogicalId)) {
++        dependencies.push(this.apiGatewayDeploymentLogicalId);
++      }
++      resource.DependsOn = dependencies.length === 1 ? dependencies[0] : dependencies;
++    });
++
+     _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {
+       [this.apiGatewayDeploymentLogicalId]: {
+         Type: 'AWS::ApiGateway::Deployment',
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
+index a3354e0..7143b76 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
+@@ -80,6 +80,40 @@ describe('#compileDeployment()', () => {
+   }
+   );
+ 
++  it('should make custom API Gateway base path mappings depend on deployment', () => {
++    serverless.service.resources = {
++      Resources: {
++        BasePathMapping: {
++          Type: 'AWS::ApiGateway::BasePathMapping',
++          Properties: { RestApiId: { Ref: 'ApiGatewayRestApi' } },
++        },
++        CustomBasePathMapping: {
++          Type: 'AWS::ApiGateway::BasePathMapping',
++          DependsOn: ['CustomDependency'],
++          Properties: { RestApiId: { Ref: 'ApiGatewayRestApi' } },
++        },
++        UnrelatedApiBasePathMapping: {
++          Type: 'AWS::ApiGateway::BasePathMapping',
++          Properties: { RestApiId: { Ref: 'AnotherApi' } },
++        },
++        UnrelatedResource: {
++          Type: 'AWS::S3::Bucket',
++          Properties: {},
++        },
++      },
++    };
++
++    return awsCompileApigEvents.compileDeployment().then(() => {
++      const deploymentId = awsCompileApigEvents.apiGatewayDeploymentLogicalId;
++      const resources = serverless.service.resources.Resources;
++      expect(resources.BasePathMapping.DependsOn).to.equal(deploymentId);
++      expect(resources.CustomBasePathMapping.DependsOn)
++        .to.deep.equal(['CustomDependency', deploymentId]);
++      expect(resources.UnrelatedApiBasePathMapping.DependsOn).to.equal(undefined);
++      expect(resources.UnrelatedResource.DependsOn).to.equal(undefined);
++    });
++  });
++
+   it('should add service endpoint output', () =>
+     awsCompileApigEvents.compileDeployment().then(() => {
+       expect(

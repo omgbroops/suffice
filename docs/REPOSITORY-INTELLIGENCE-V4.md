@@ -246,3 +246,81 @@ campaign/output directory and their own explicitly configured cap; never reset
 or overwrite this campaign’s completed attempts. Native dependency adaptation,
 source archives, lock hashes, exact revisions and all failed gates are part of
 the record, rather than an official portable SWE-PolyBench score.
+
+## First execution checkpoint and resource recovery
+
+The first two prospective model attempts finished normally with complete exact
+configuration receipts: Serverless 5926 A failed strict acceptance ($0.01768258,
+34 requests), and B failed strict acceptance ($0.01814198, 14 requests). These
+are two observations on one issue, not a paired study result. No configuration
+has both repetitions yet and neither C nor D has an executed model attempt at
+this checkpoint. The D launch stopped at the resource preflight with zero
+provider requests and known zero cost; it is an infrastructure launch record.
+
+During B the host's available RAM dropped from 2.90 GiB to 0.57 GiB and available
+disk from 13.40 GiB to 3.75 GiB. Its worker's sampled final RSS was about 304 MiB;
+other desktop workloads were active, so the host-wide loss cannot be attributed
+to the graph alone. The Windows pagefile subsequently measured 20.01 GiB; its
+previous size was not measured, so pagefile growth is an inference, not a proven
+accounting of the disk delta. Resource floors were retained. Three reproducible
+v4 Three.js setup-clone groups were removed after verifying the pinned archive
+and preserved framework reports; baselines, sealed patches and raw model
+trajectories remain. This restored free disk to 9.49 GiB. The interrupted earlier
+v3 cleanup was not resumed.
+
+`infrastructure/resource-recovery-amendment.json` permits recovery only of the
+zero-request, zero-cost D resource launch and dispatch of the unstarted C cell.
+The original D receipt remains under a0. Its first real model attempt uses a1
+and a derived worker whose only differences are the storage suffix and attempt
+metadata, recorded by SHA-256. No coding failure is retried. Models, effort,
+limits, prompts, controller and grader stay frozen. The recovery process waits
+for at least 2 GiB available RAM and 6 GiB disk before sending any request.
+
+The same task exposed a possible solution-specific oracle: its issue describes
+API Gateway deployment dependencies, while held-out tests require a specific
+new variable API absent from the issue text. The strict grade is retained; no
+claim is made that either failed patch is behaviorally correct. This concern
+was recorded after A and before B/C/D outcomes and remains a construct-validity
+limitation, not a reason to replace this task after observing results.
+
+B's first cold graph refresh parsed 400 files in 2.796 seconds. Its largest
+serialized graph was 29.48 MiB, and all graph refreshes totaled 29.064 seconds.
+Net heap deltas are not peak memory measures; GC and concurrent desktop activity
+limit attribution. These numbers describe one task, not repository-wide
+performance or an engineering accuracy advantage.
+
+Completed Public attempt state is moved, without deleting bytes, into ignored
+evaluator-only archives after patches and trajectories are published. This
+bounds the native sandbox deny-list length and preserves caches for audit.
+Historical source/graph implementations and default CLI behavior are unchanged.
+
+## Frozen task sources and interpretation limits
+
+All tasks are public historical changes and may be training-contaminated. The full commit and record/test hashes are in `cohort.json`; these source links are for evaluator audit and are unavailable over the actor network. Categories describe reference change breadth. The table does not certify that every valid alternative implementation passes the upstream tests.
+
+| Source | Category | Main interpretation limit |
+|---|---|---|
+| [prettier/prettier #12930](https://github.com/prettier/prettier/pull/12930) | simple | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #10187](https://github.com/prettier/prettier/pull/10187) | cross-file | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #9521](https://github.com/prettier/prettier/pull/9521) | cross-file | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #9866](https://github.com/prettier/prettier/pull/9866) | cross-file | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #12260](https://github.com/prettier/prettier/pull/12260) | cross-file | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #11892](https://github.com/prettier/prettier/pull/11892) | complex | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #12584](https://github.com/prettier/prettier/pull/12584) | complex | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #13019](https://github.com/prettier/prettier/pull/13019) | complex | Exact formatting snapshots may cover more cases than the motivating example. |
+| [prettier/prettier #8381](https://github.com/prettier/prettier/pull/8381) | complex | Exact formatting snapshots may cover more cases than the motivating example. |
+| [serverless/serverless #6977](https://github.com/serverless/serverless/pull/6977) | simple | Unit-level/private-helper assertions may constrain implementation choices. |
+| [serverless/serverless #4372](https://github.com/serverless/serverless/pull/4372) | cross-file | Unit-level/private-helper assertions may constrain implementation choices. |
+| [serverless/serverless #5509](https://github.com/serverless/serverless/pull/5509) | cross-file | The proposal shows a stage.description shape; API/property naming needs scrutiny against the held-out configuration fixture. A mismatch is possible, not established by label inspection. |
+| [serverless/serverless #5728](https://github.com/serverless/serverless/pull/5728) | cross-file | Held-out labels name a new suppressLogIfPrintCommand helper, while the issue specifies clean print output. A behaviorally equivalent inline fix could fail a helper-specific test. |
+| [serverless/serverless #5640](https://github.com/serverless/serverless/pull/5640) | cross-file | Unit-level/private-helper assertions may constrain implementation choices. |
+| [serverless/serverless #4576](https://github.com/serverless/serverless/pull/4576) | cross-file | The issue requests --template-path; the failing label targets walkDirSync noLinks, an internal helper contract not explicitly named in the issue. |
+| [serverless/serverless #5299](https://github.com/serverless/serverless/pull/5299) | complex | Unit-level/private-helper assertions may constrain implementation choices. |
+| [serverless/serverless #5926](https://github.com/serverless/serverless/pull/5926) | complex | Potential solution-specific variable API; see the recorded contract concern. |
+| [serverless/serverless #4892](https://github.com/serverless/serverless/pull/4892) | complex | The proposal offers alternative configuration shapes rather than one finalized option name. Held-out tests constrain a specific plugins-object/local-path interface. |
+| [serverless/serverless #4754](https://github.com/serverless/serverless/pull/4754) | complex | Unit-level/private-helper assertions may constrain implementation choices. |
+| [mrdoob/three.js #14836](https://github.com/mrdoob/three.js/pull/14836) | simple | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
+| [mrdoob/three.js #24461](https://github.com/mrdoob/three.js/pull/24461) | simple | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
+| [mrdoob/three.js #18648](https://github.com/mrdoob/three.js/pull/18648) | cross-file | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
+| [mrdoob/three.js #23796](https://github.com/mrdoob/three.js/pull/23796) | cross-file | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
+| [mrdoob/three.js #22566](https://github.com/mrdoob/three.js/pull/22566) | cross-file | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
