@@ -1,0 +1,265 @@
+{
+  "task": "atomic-ledger",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 17,
+  "runId": "017-atomic-ledger-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 132805.16379999998,
+  "usage": {
+    "input": 16012,
+    "cacheRead": 29952,
+    "cacheWrite": 0,
+    "output": 5664,
+    "estimatedApiUsd": 0.00473272,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00473272,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a later failure rolls back earlier balances and ids\nok 1 - a later failure rolls back earlier balances and ids\n  ---\n  duration_ms: 1.7282\n  type: 'test'\n  ...\n# Subtest: same-batch ids deduplicate and conflict rolls back\nok 2 - same-batch ids deduplicate and conflict rolls back\n  ---\n  duration_ms: 0.2403\n  type: 'test'\n  ...\n# Subtest: ordered staged transfers, validation, self-transfer, snapshot ownership\nok 3 - ordered staged transfers, validation, self-transfer, snapshot ownership\n  ---\n  duration_ms: 0.8779\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.6412\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 87
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a valid transfer conserves funds\nok 1 - a valid transfer conserves funds\n  ---\n  duration_ms: 1.3464\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.9778\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 87
+  },
+  "changed": [
+    "src/ledger.mjs",
+    "src/transfer.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/transfer.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 2,
+  "verificationCalls": 2,
+  "toolCalls": 14,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:43:24.242Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:43:24.322Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:43:24.392Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:43:52.154Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs",
+          "src/transfer.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:43:52.257Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs",
+          "src/transfer.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:43:24.312Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "9219116e5798a18aafa5be639f2d86eb464ec87fb137d73f88df9c10dba85dae"
+      },
+      "latencyMs": 69.65600000001723,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 29336,
+      "heapDeltaBytes": 1662656,
+      "graphBytes": 47387
+    },
+    {
+      "at": "2026-11-09T05:43:24.391Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "25e8de59c2d8aab744a845b7524a306b433c1062eed49abe2783d96693941dd8"
+      },
+      "latencyMs": 68.62170000001788,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 30386,
+      "heapDeltaBytes": 939008,
+      "graphBytes": 48770
+    },
+    {
+      "at": "2026-11-09T05:43:24.454Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "25e8de59c2d8aab744a845b7524a306b433c1062eed49abe2783d96693941dd8"
+      },
+      "latencyMs": 62.77329999994254,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 30386,
+      "heapDeltaBytes": 307440,
+      "graphBytes": 48770
+    },
+    {
+      "at": "2026-11-09T05:43:52.256Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a56680627d0891d8230c6bbd572f059214d5af443ef0c6d449e0b867a3862a81"
+      },
+      "latencyMs": 102.12069999997038,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 31438,
+      "heapDeltaBytes": 973656,
+      "graphBytes": 50124
+    },
+    {
+      "at": "2026-11-09T05:43:52.350Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a56680627d0891d8230c6bbd572f059214d5af443ef0c6d449e0b867a3862a81"
+      },
+      "latencyMs": 93.45440000004601,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 31438,
+      "heapDeltaBytes": 387048,
+      "graphBytes": 50124
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/ledger.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { Ledger } from './src/ledger.mjs';\n\nconst t = (id, from='a', to='b', amount=10) => ({id, from, to, amount});\nconst ledger = new Ledger({a: 100, b: 0});\nassert.deepEqual(ledger.applyBatch([t('same'), t('same')]), {a: 90, b: 10});\nassert.deepEqual(ledger.applyBatch([t('same')]), {a: 90, b: 10});\nconst before = ledger.snapshot();\nassert.throws(() => ledger.applyBatch([t('later'), t('bad', 'a', 'b', 1000)]));\nassert.deepEqual(ledger.snapshot(), before);\nassert.deepEqual(ledger.applyBatch([t('later')]), {a: 80, b: 20});\nassert.throws(() => ledger.applyBatch([t('same', 'a', 'b', 11)]));\nassert.deepEqual(ledger.snapshot(), {a: 80, b: 20});\nassert.deepEqual(ledger.applyBatch([t('self', 'a', 'a', 20)]), {a: 80, b: 20});\nassert.throws(() => ledger.applyBatch([{id:'bad-account', from: 1, to: 'b', amount: 1}]));\nassert.throws(() => ledger.applyBatch([{id:'bad-amount', from: 'a', to: 'b', amount: Number.MAX_SAFE_INTEGER + 1}]));\nconsole.log('Additional batch-contract checks passed');\nEOF",
+        "git diff --check && git diff -- src/ledger.mjs src/transfer.mjs",
+        "git status --short --untracked-files=all && printf '\\n--- tracked status ---\\n' && git ls-files src/ledger.mjs src/transfer.mjs && printf '\\n--- ledger ---\\n' && cat src/ledger.mjs && printf '\\n--- transfer ---\\n' && cat src/transfer.mjs && printf '\\n--- root ---\\n' && git rev-parse --show-toplevel"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/ledger.mjs",
+        "src/transfer.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { Ledger } from './src/ledger.mjs';\n\nconst t = (id, from='a', to='b', amount=10) => ({id, from, to, amount});\nconst ledger = new Ledger({a: 100, b: 0});\nassert.deepEqual(ledger.applyBatch([t('same'), t('same')]), {a: 90, b: 10});\nassert.deepEqual(ledger.applyBatch([t('same')]), {a: 90, b: 10});\nconst before = ledger.snapshot();\nassert.throws(() => ledger.applyBatch([t('later'), t('bad', 'a', 'b', 1000)]));\nassert.deepEqual(ledger.snapshot(), before);\nassert.deepEqual(ledger.applyBatch([t('later')]), {a: 80, b: 20});\nassert.throws(() => ledger.applyBatch([t('same', 'a', 'b', 11)]));\nassert.deepEqual(ledger.snapshot(), {a: 80, b: 20});\nassert.deepEqual(ledger.applyBatch([t('self', 'a', 'a', 20)]), {a: 80, b: 20});\nassert.throws(() => ledger.applyBatch([{id:'bad-account', from: 1, to: 'b', amount: 1}]));\nassert.throws(() => ledger.applyBatch([{id:'bad-amount', from: 'a', to: 'b', amount: Number.MAX_SAFE_INTEGER + 1}]));\nconsole.log('Additional batch-contract checks passed');\nEOF",
+        "git diff --check && git diff -- src/ledger.mjs src/transfer.mjs",
+        "git status --short --untracked-files=all && printf '\\n--- tracked status ---\\n' && git ls-files src/ledger.mjs src/transfer.mjs && printf '\\n--- ledger ---\\n' && cat src/ledger.mjs && printf '\\n--- transfer ---\\n' && cat src/transfer.mjs && printf '\\n--- root ---\\n' && git rev-parse --show-toplevel"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/ledger.mjs",
+      "before": "import { applyTransfer, sameTransfer } from './transfer.mjs';\r\nexport class Ledger {\r\n  constructor(balances) { this.balances = { ...balances }; this.committed = new Map(); }\r\n  snapshot() { return { ...this.balances }; }\r\n  applyBatch(transfers) {\r\n    const balances = this.balances;\r\n    const committed = new Map(this.committed);\r\n    for (const transfer of transfers) {\r\n      const previous = this.committed.get(transfer.id);\r\n      if (previous) {\r\n        if (!sameTransfer(previous, transfer)) throw new Error('Conflicting transfer id');\r\n        continue;\r\n      }\r\n      applyTransfer(balances, transfer); committed.set(transfer.id, { ...transfer });\r\n    }\r\n    this.balances = balances; this.committed = committed;\r\n    return this.snapshot();\r\n  }\r\n}\r\n",
+      "after": "import { applyTransfer, sameTransfer } from './transfer.mjs';\r\nexport class Ledger {\r\n  constructor(balances) { this.balances = { ...balances }; this.committed = new Map(); }\r\n  snapshot() { return { ...this.balances }; }\r\n  applyBatch(transfers) {\r\n    const balances = { ...this.balances };\r\n    const committed = new Map(this.committed);\r\n    for (const transfer of transfers) {\r\n      const previous = committed.get(transfer.id);\r\n      if (committed.has(transfer.id)) {\r\n        if (!sameTransfer(previous, transfer)) throw new Error('Conflicting transfer id');\r\n        continue;\r\n      }\r\n      applyTransfer(balances, transfer);\r\n      committed.set(transfer.id, { ...transfer });\r\n    }\r\n    this.balances = balances; this.committed = committed;\r\n    return this.snapshot();\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/transfer.mjs",
+      "before": "export function applyTransfer(balances, transfer) {\r\n  const { from, to, amount } = transfer;\r\n  if (!Object.hasOwn(balances, from) || !Object.hasOwn(balances, to)) throw new Error('Unknown account');\r\n  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Invalid amount');\r\n  if (balances[from] < amount) throw new Error('Insufficient funds');\r\n  if (from === to) return;\r\n  balances[from] -= amount; balances[to] += amount;\r\n}\r\nexport function sameTransfer(a, b) { return a.from === b.from && a.to === b.to && a.amount === b.amount; }\r\n",
+      "after": "export function applyTransfer(balances, transfer) {\r\n  const { from, to, amount } = transfer;\r\n  if (typeof from !== 'string' || typeof to !== 'string') throw new Error('Invalid account');\r\n  if (!Object.hasOwn(balances, from) || !Object.hasOwn(balances, to)) throw new Error('Unknown account');\r\n  if (!Number.isSafeInteger(amount) || amount <= 0) throw new Error('Invalid amount');\r\n  if (balances[from] < amount) throw new Error('Insufficient funds');\r\n  if (from === to) return;\r\n  balances[from] -= amount; balances[to] += amount;\r\n}\r\nexport function sameTransfer(a, b) { return a.from === b.from && a.to === b.to && a.amount === b.amount; }\r\n"
+    }
+  ],
+  "final": "Implemented the ledger batch repair:\n\n- Batches now stage balances and committed IDs, so a failed transfer leaves the ledger unchanged.\n- Replays and duplicate IDs within a batch are checked against the staged committed IDs.\n- Transfers require string account IDs and positive safe-integer amounts.\n\n`node --test tests/visible.test.mjs` passed. Additional checks for atomic rollback, replays, duplicate IDs, conflicts, self-transfers, and invalid inputs passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\017-atomic-ledger-C-r1\\home\\events\\1794202955205-dcd6b707-37ff-45c2-86c4-2ce4d3f914bc.jsonl"
+}

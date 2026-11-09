@@ -1,0 +1,378 @@
+{
+  "task": "atomic-ledger",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 16,
+  "runId": "017-atomic-ledger-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 151335.99959999998,
+  "usage": {
+    "input": 15381,
+    "cacheRead": 69248,
+    "cacheWrite": 0,
+    "output": 5987,
+    "estimatedApiUsd": 0.00522408,
+    "modelCalls": 12,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00522408,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a later failure rolls back earlier balances and ids\nok 1 - a later failure rolls back earlier balances and ids\n  ---\n  duration_ms: 1.9591\n  type: 'test'\n  ...\n# Subtest: same-batch ids deduplicate and conflict rolls back\nok 2 - same-batch ids deduplicate and conflict rolls back\n  ---\n  duration_ms: 0.4834\n  type: 'test'\n  ...\n# Subtest: ordered staged transfers, validation, self-transfer, snapshot ownership\nok 3 - ordered staged transfers, validation, self-transfer, snapshot ownership\n  ---\n  duration_ms: 1.3078\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 13.6882\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 109
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a valid transfer conserves funds\nok 1 - a valid transfer conserves funds\n  ---\n  duration_ms: 1.5782\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.9561\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 107
+  },
+  "changed": [
+    "src/ledger.mjs",
+    "src/transfer.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/transfer.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 12,
+  "editCalls": 3,
+  "verificationCalls": 1,
+  "toolCalls": 26,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:43:35.209Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:43:35.304Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:43:35.388Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:44:06.312Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs",
+          "src/transfer.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:44:06.634Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs",
+          "src/transfer.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:44:19.367Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs",
+          "src/transfer.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:44:19.439Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ledger.mjs",
+          "src/transfer.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:43:35.292Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "9219116e5798a18aafa5be639f2d86eb464ec87fb137d73f88df9c10dba85dae"
+      },
+      "latencyMs": 82.7905000000028,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 29336,
+      "heapDeltaBytes": 1844800,
+      "graphBytes": 47387
+    },
+    {
+      "at": "2026-11-09T05:43:35.387Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bfa27c2872f3ac12ed042be9012b236e99e268224014837ef10dc77be8412fef"
+      },
+      "latencyMs": 82.81500000000233,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 30391,
+      "heapDeltaBytes": -29351136,
+      "graphBytes": 48776
+    },
+    {
+      "at": "2026-11-09T05:43:35.453Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bfa27c2872f3ac12ed042be9012b236e99e268224014837ef10dc77be8412fef"
+      },
+      "latencyMs": 65.34799999999814,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 30391,
+      "heapDeltaBytes": 642344,
+      "graphBytes": 48776
+    },
+    {
+      "at": "2026-11-09T05:44:06.633Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d0547d85784b12c07128848aee0c738f81b604e742ec9759a5df29e409c353ca"
+      },
+      "latencyMs": 320.91439999989234,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 31443,
+      "heapDeltaBytes": -22291960,
+      "graphBytes": 50130
+    },
+    {
+      "at": "2026-11-09T05:44:06.833Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d0547d85784b12c07128848aee0c738f81b604e742ec9759a5df29e409c353ca"
+      },
+      "latencyMs": 199.54040000005625,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 31443,
+      "heapDeltaBytes": 308240,
+      "graphBytes": 50130
+    },
+    {
+      "at": "2026-11-09T05:44:19.438Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "883dd481485b87f0e1872a5bda549dfe370925451e985951a474473b1e5ee0d0"
+      },
+      "latencyMs": 71.06240000005346,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 33172,
+      "heapDeltaBytes": 970128,
+      "graphBytes": 52285
+    },
+    {
+      "at": "2026-11-09T05:44:19.503Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "883dd481485b87f0e1872a5bda549dfe370925451e985951a474473b1e5ee0d0"
+      },
+      "latencyMs": 64.38419999997132,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 33172,
+      "heapDeltaBytes": 311920,
+      "graphBytes": 52285
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/ledger.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/ledger.mjs",
+          "callId": "call_002f676737d44d0a904f5ae325fd03bb|ctc_0f4874cc08168892016af15dac60b487d1851e91f4208da01f/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/ledger.mjs",
+          "callId": "call_61b09b4eb3ed4c60bdf3b4040eb96839|ctc_0f4874cc08168892016af15dcd280c87d1bd398794cc91f62c/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { Ledger } from \"./src/ledger.mjs\"; const ledger = new Ledger({a: 50, b: 0}); const t = {id:\"x\",from:\"a\",to:\"b\",amount:10}; assert.deepEqual(ledger.applyBatch([t,t]), {a:40,b:10}); assert.deepEqual(ledger.applyBatch([t]), {a:40,b:10}); const before = ledger.snapshot(); assert.throws(() => ledger.applyBatch([{id:\"y\",from:\"a\",to:\"b\",amount:5},{id:\"x\",from:\"a\",to:\"b\",amount:10}])); assert.deepEqual(ledger.snapshot(), before); assert.throws(() => ledger.applyBatch([{id:\"z\",from:\"a\",to:\"b\",amount:100}])); assert.deepEqual(ledger.snapshot(), before); const result = ledger.applyBatch([{id:\"self\",from:\"a\",to:\"a\",amount:40}]); assert.deepEqual(result, before); result.a=0; assert.deepEqual(ledger.snapshot(), before);'",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { Ledger } from \"./src/ledger.mjs\"; const ledger = new Ledger({a: 50, b: 0}); const t = {id:\"x\",from:\"a\",to:\"b\",amount:10}; assert.deepEqual(ledger.applyBatch([t,t]), {a:40,b:10}); assert.deepEqual(ledger.applyBatch([t]), {a:40,b:10}); const before = ledger.snapshot(); assert.throws(() => ledger.applyBatch([{id:\"y\",from:\"a\",to:\"b\",amount:5},{id:\"x\",from:\"a\",to:\"b\",amount:11}])); assert.deepEqual(ledger.snapshot(), before); assert.throws(() => ledger.applyBatch([{id:\"z\",from:\"a\",to:\"b\",amount:100}])); assert.deepEqual(ledger.snapshot(), before); const result = ledger.applyBatch([{id:\"self\",from:\"a\",to:\"a\",amount:40}]); assert.deepEqual(result, before); result.a=0; assert.deepEqual(ledger.snapshot(), before);'",
+        "git diff -- src/ledger.mjs src/transfer.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/ledger.mjs",
+        "src/transfer.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/ledger.mjs",
+          "callId": "call_002f676737d44d0a904f5ae325fd03bb|ctc_0f4874cc08168892016af15dac60b487d1851e91f4208da01f/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/ledger.mjs",
+          "callId": "call_61b09b4eb3ed4c60bdf3b4040eb96839|ctc_0f4874cc08168892016af15dcd280c87d1bd398794cc91f62c/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/transfer.mjs",
+          "callId": "call_61b09b4eb3ed4c60bdf3b4040eb96839|ctc_0f4874cc08168892016af15dcd280c87d1bd398794cc91f62c/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { Ledger } from \"./src/ledger.mjs\"; const ledger = new Ledger({a: 50, b: 0}); const t = {id:\"x\",from:\"a\",to:\"b\",amount:10}; assert.deepEqual(ledger.applyBatch([t,t]), {a:40,b:10}); assert.deepEqual(ledger.applyBatch([t]), {a:40,b:10}); const before = ledger.snapshot(); assert.throws(() => ledger.applyBatch([{id:\"y\",from:\"a\",to:\"b\",amount:5},{id:\"x\",from:\"a\",to:\"b\",amount:10}])); assert.deepEqual(ledger.snapshot(), before); assert.throws(() => ledger.applyBatch([{id:\"z\",from:\"a\",to:\"b\",amount:100}])); assert.deepEqual(ledger.snapshot(), before); const result = ledger.applyBatch([{id:\"self\",from:\"a\",to:\"a\",amount:40}]); assert.deepEqual(result, before); result.a=0; assert.deepEqual(ledger.snapshot(), before);'",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { Ledger } from \"./src/ledger.mjs\"; const ledger = new Ledger({a: 50, b: 0}); const t = {id:\"x\",from:\"a\",to:\"b\",amount:10}; assert.deepEqual(ledger.applyBatch([t,t]), {a:40,b:10}); assert.deepEqual(ledger.applyBatch([t]), {a:40,b:10}); const before = ledger.snapshot(); assert.throws(() => ledger.applyBatch([{id:\"y\",from:\"a\",to:\"b\",amount:5},{id:\"x\",from:\"a\",to:\"b\",amount:11}])); assert.deepEqual(ledger.snapshot(), before); assert.throws(() => ledger.applyBatch([{id:\"z\",from:\"a\",to:\"b\",amount:100}])); assert.deepEqual(ledger.snapshot(), before); const result = ledger.applyBatch([{id:\"self\",from:\"a\",to:\"a\",amount:40}]); assert.deepEqual(result, before); result.a=0; assert.deepEqual(ledger.snapshot(), before);'",
+        "git diff -- src/ledger.mjs src/transfer.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/ledger.mjs",
+        "src/transfer.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/ledger.mjs",
+          "callId": "call_61b09b4eb3ed4c60bdf3b4040eb96839|ctc_0f4874cc08168892016af15dcd280c87d1bd398794cc91f62c/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/transfer.mjs",
+          "callId": "call_61b09b4eb3ed4c60bdf3b4040eb96839|ctc_0f4874cc08168892016af15dcd280c87d1bd398794cc91f62c/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { Ledger } from \"./src/ledger.mjs\"; const ledger = new Ledger({a: 50, b: 0}); const t = {id:\"x\",from:\"a\",to:\"b\",amount:10}; assert.deepEqual(ledger.applyBatch([t,t]), {a:40,b:10}); assert.deepEqual(ledger.applyBatch([t]), {a:40,b:10}); const before = ledger.snapshot(); assert.throws(() => ledger.applyBatch([{id:\"y\",from:\"a\",to:\"b\",amount:5},{id:\"x\",from:\"a\",to:\"b\",amount:10}])); assert.deepEqual(ledger.snapshot(), before); assert.throws(() => ledger.applyBatch([{id:\"z\",from:\"a\",to:\"b\",amount:100}])); assert.deepEqual(ledger.snapshot(), before); const result = ledger.applyBatch([{id:\"self\",from:\"a\",to:\"a\",amount:40}]); assert.deepEqual(result, before); result.a=0; assert.deepEqual(ledger.snapshot(), before);'",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { Ledger } from \"./src/ledger.mjs\"; const ledger = new Ledger({a: 50, b: 0}); const t = {id:\"x\",from:\"a\",to:\"b\",amount:10}; assert.deepEqual(ledger.applyBatch([t,t]), {a:40,b:10}); assert.deepEqual(ledger.applyBatch([t]), {a:40,b:10}); const before = ledger.snapshot(); assert.throws(() => ledger.applyBatch([{id:\"y\",from:\"a\",to:\"b\",amount:5},{id:\"x\",from:\"a\",to:\"b\",amount:11}])); assert.deepEqual(ledger.snapshot(), before); assert.throws(() => ledger.applyBatch([{id:\"z\",from:\"a\",to:\"b\",amount:100}])); assert.deepEqual(ledger.snapshot(), before); const result = ledger.applyBatch([{id:\"self\",from:\"a\",to:\"a\",amount:40}]); assert.deepEqual(result, before); result.a=0; assert.deepEqual(ledger.snapshot(), before);'",
+        "git diff -- src/ledger.mjs src/transfer.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/ledger.mjs",
+      "before": "import { applyTransfer, sameTransfer } from './transfer.mjs';\r\nexport class Ledger {\r\n  constructor(balances) { this.balances = { ...balances }; this.committed = new Map(); }\r\n  snapshot() { return { ...this.balances }; }\r\n  applyBatch(transfers) {\r\n    const balances = this.balances;\r\n    const committed = new Map(this.committed);\r\n    for (const transfer of transfers) {\r\n      const previous = this.committed.get(transfer.id);\r\n      if (previous) {\r\n        if (!sameTransfer(previous, transfer)) throw new Error('Conflicting transfer id');\r\n        continue;\r\n      }\r\n      applyTransfer(balances, transfer); committed.set(transfer.id, { ...transfer });\r\n    }\r\n    this.balances = balances; this.committed = committed;\r\n    return this.snapshot();\r\n  }\r\n}\r\n",
+      "after": "import { applyTransfer, sameTransfer } from './transfer.mjs';\r\nexport class Ledger {\r\n  constructor(balances) { this.balances = { ...balances }; this.committed = new Map(); }\r\n  snapshot() { return { ...this.balances }; }\r\n  applyBatch(transfers) {\r\n    // Stage all changes so a failed transfer cannot partially commit the batch.\r\n    const balances = { ...this.balances };\r\n    const committed = new Map(this.committed);\r\n    for (const transfer of transfers) {\r\n      if (transfer == null || !Object.hasOwn(transfer, 'id')) throw new Error('Invalid transfer');\r\n      const previous = committed.get(transfer.id);\r\n      if (committed.has(transfer.id)) {\r\n        if (!sameTransfer(previous, transfer)) throw new Error('Conflicting transfer id');\r\n        continue;\r\n      }\r\n      applyTransfer(balances, transfer);\r\n      committed.set(transfer.id, { ...transfer });\r\n    }\r\n    this.balances = balances;\r\n    this.committed = committed;\r\n    return this.snapshot();\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/transfer.mjs",
+      "before": "export function applyTransfer(balances, transfer) {\r\n  const { from, to, amount } = transfer;\r\n  if (!Object.hasOwn(balances, from) || !Object.hasOwn(balances, to)) throw new Error('Unknown account');\r\n  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Invalid amount');\r\n  if (balances[from] < amount) throw new Error('Insufficient funds');\r\n  if (from === to) return;\r\n  balances[from] -= amount; balances[to] += amount;\r\n}\r\nexport function sameTransfer(a, b) { return a.from === b.from && a.to === b.to && a.amount === b.amount; }\r\n",
+      "after": "export function applyTransfer(balances, transfer) {\r\n  const { from, to, amount } = transfer;\r\n  if (typeof from !== 'string' || typeof to !== 'string') throw new Error('Invalid account id');\r\n  if (!Object.hasOwn(balances, from) || !Object.hasOwn(balances, to)) throw new Error('Unknown account');\r\n  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Invalid amount');\r\n  if (balances[from] < amount) throw new Error('Insufficient funds');\r\n  if (from === to) return;\r\n  balances[from] -= amount; balances[to] += amount;\r\n}\r\nexport function sameTransfer(a, b) { return a.from === b.from && a.to === b.to && a.amount === b.amount; }\r\n"
+    }
+  ],
+  "final": "Implemented atomic batch handling by staging balances and committed IDs, checking replays against the staged ID map, and publishing changes only after the batch succeeds. Added validation that transfer account IDs are strings and that ledger transfers include an ID.\n\nChecks passed:\n- `node --test tests/visible.test.mjs`\n- Additional inline checks for duplicate transfers, replay conflicts, rollback, self-transfers, and fresh snapshots.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\017-atomic-ledger-C-r0\\home\\events\\1794202955237-3f3c105d-bd97-47d3-be8b-5419908bd863.jsonl"
+}
