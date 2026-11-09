@@ -1,0 +1,198 @@
+{
+  "task": "disjoint-preflight-whitespace",
+  "arm": "C",
+  "mode": "on-demand",
+  "repetition": 0,
+  "category": "simple",
+  "kind": "smoke-only",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/smoke-C-2026-11-09T21-00-04-714Z/workspace",
+    "head": "39de218fdde36592c71287fabf981c3a2e9cec31",
+    "tree": "c8678617cef09e396fdf350b174c49ebccda885e"
+  },
+  "runId": "smoke-C-2026-11-09T21-00-04-714Z",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 55206.533800000005,
+  "usage": {
+    "input": 15930,
+    "cacheRead": 9216,
+    "cacheWrite": 0,
+    "output": 1640,
+    "estimatedApiUsd": 0.0025051600000000006,
+    "modelCalls": 6,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0025051600000000006,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: collapse mixed interior whitespace\nok 1 - collapse mixed interior whitespace\n  ---\n  duration_ms: 0.7541\n  type: 'test'\n  ...\n# Subtest: single whitespace stays valid\nok 2 - single whitespace stays valid\n  ---\n  duration_ms: 0.1399\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.0936\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 88
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: basic account normalization\nok 1 - basic account normalization\n  ---\n  duration_ms: 0.9139\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.4442\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 87
+  },
+  "changed": [
+    "src/names.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/names.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 6,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 14,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T21:01:59.827Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T21:02:00.193Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/names.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T21:02:00.436Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/names.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T21:02:00.084Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "39de218fdde36592c71287fabf981c3a2e9cec31",
+        "sourceContentVersion": "85b2e5ad9e2819936ae3f8674c1346c1887f5d569f6470fc8ba52cf1967660fc",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "affdd0f6640669f8f407a7663aa2d8abea1f30e6e51242224788e9ee6da08df2"
+      },
+      "latencyMs": 256.94340000000375,
+      "parsedFiles": 4,
+      "fileCount": 4,
+      "cacheBytes": 7800,
+      "heapDeltaBytes": 1302200,
+      "graphBytes": 14114
+    },
+    {
+      "at": "2026-11-09T21:02:00.435Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "39de218fdde36592c71287fabf981c3a2e9cec31",
+        "sourceContentVersion": "0d18f3be814b0c4e997c6fc32dbe3d76336f8c6dcec790d2cd71561297b70be3",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "8c5bed5c1ffa226c416918130fc159c923aa6af39178a3adbc5c9a8b0b1b814a"
+      },
+      "latencyMs": 242.55160000000615,
+      "parsedFiles": 1,
+      "fileCount": 4,
+      "cacheBytes": 8008,
+      "heapDeltaBytes": 972272,
+      "graphBytes": 14344
+    },
+    {
+      "at": "2026-11-09T21:02:00.677Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "39de218fdde36592c71287fabf981c3a2e9cec31",
+        "sourceContentVersion": "0d18f3be814b0c4e997c6fc32dbe3d76336f8c6dcec790d2cd71561297b70be3",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "8c5bed5c1ffa226c416918130fc159c923aa6af39178a3adbc5c9a8b0b1b814a"
+      },
+      "latencyMs": 241.5576000000001,
+      "parsedFiles": 0,
+      "fileCount": 4,
+      "cacheBytes": 8008,
+      "heapDeltaBytes": -789360,
+      "graphBytes": 14344
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/names.mjs",
+        "src/account.mjs",
+        "test/public.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node native-verify.cjs; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node --input-type=module -e \"import {normalizeName} from './src/names.mjs'; const cases = [['  A\\\\t\\\\n B  ', 'a b'], ['A   B', 'a b'], ['  Alice  ', 'alice']]; for (const [input, expected] of cases) { if (normalizeName(input) !== expected) throw new Error(JSON.stringify({input, actual: normalizeName(input), expected})); }\"",
+        "git diff --check; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; git status --short; git diff -- src/names.mjs",
+        "node native-verify.cjs; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node --input-type=module -e \"import {normalizeName} from './src/names.mjs'; const cases = [['  A\\t\\n B  ', 'a b'], ['A   B', 'a b'], ['  Alice  ', 'alice']]; for (const [input, expected] of cases) { if (normalizeName(input) !== expected) throw new Error(JSON.stringify({input, actual: normalizeName(input), expected})); }\""
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/names.mjs",
+      "before": "export const normalizeName=value=>String(value).trim().toLowerCase();\n",
+      "after": "export const normalizeName=value=>String(value).trim().toLowerCase().replace(/\\s+/g,' ');\n"
+    }
+  ],
+  "final": "Updated `normalizeName` to collapse each run of interior whitespace to one ordinary space after trimming and lowercasing. Only `src/names.mjs` was changed.\n\nVerified with `node native-verify.cjs` and focused checks for tabs, newlines, repeated spaces, trimming, and lowercasing.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\smoke-C-2026-11-09T21-00-04-714Z\\home\\events\\1794258098890-a3a10395-0f78-4b11-824a-c138b8d6c628.jsonl",
+  "receiptAudit": {
+    "requests": 6,
+    "finalResponses": 6,
+    "exactConfiguration": true
+  }
+}

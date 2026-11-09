@@ -1,0 +1,166 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 13,
+    "tests": 25,
+    "passes": 25,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-11-09T22:16:31.933Z",
+    "end": "2026-11-09T22:16:31.995Z",
+    "duration": 62
+  },
+  "tests": [
+    {
+      "title": "AwsRollback #constructor() should have hooks",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #constructor() should set the provider variable to an instance of AwsProvider",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"before:rollback:initialize\" hook promise chain in order",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"rollback:rollback\" promise chain in order",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"deploy:list\" if timestamp is not specified",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should resolve when the timestamp argument is passed as a string",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should reject in case no deployments are available",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should reject in case this specific deployments is not available",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should resolve set the artifactDirectoryName and resolve",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format invocation report",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format invocation failures",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format lambda console.log lines",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format lambda python logger lines",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should pass through log lines with no tabs",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should pass through log lines with tabs but no date",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #constructor() should have hooks",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #constructor() should have commands",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #constructor() should set the provider variable to an instance of AwsProvider",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #constructor() should set an empty options object if no options are given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #constructor() should run promise chain in order",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #getFunctionToBeRestored() when function and version can be found should return the requested function",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #getFunctionToBeRestored() when function or version could not be found should translate the error message to a custom error message",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #getFunctionToBeRestored() when other error occurred should re-throw the error without translating it to a custom error message",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #fetchFunctionCode() should fetch the zip file content of the previously requested function",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsRollbackFunction #restoreFunction() should restore the provided function",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    }
+  ],
+  "hooks": []
+}

@@ -1,0 +1,3191 @@
+{
+  "version": 1,
+  "campaign": "repository-intelligence-v4",
+  "createdAt": "2026-11-09T22:29:49.593Z",
+  "tasks": [
+    {
+      "id": "prettier__prettier-12930",
+      "repo": "prettier/prettier",
+      "category": "simple",
+      "baseCommit": "3147244f55e6e0aafd2cc6fa5875f7c8cfa8e4e3",
+      "recordSha256": "40493df959b7a2188c5721044f3d0d3b5facf231cffd9dc167f08625fd773b0e",
+      "problemSha256": "8d61550376801e117b9156fbd1b570ddc5529b51904a29dc51d58e6f2dcfae1e",
+      "testPatchSha256": "be65001c46d6368bd30f8b47116d7154aea7bc687141154d0c256ca4eddb4661",
+      "referencePatchSha256": "4141d24f17271be80e4d04c1303edd299d9a3fa5c3077de0b8284ca440d90133",
+      "targetLabels": 1,
+      "regressionLabels": 5,
+      "productionFiles": [
+        "src/language-js/print/typescript.js"
+      ],
+      "patchDiffLines": 43,
+      "title": "Syntax error after formatting when using computed key in TypeScript enum",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/12930",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-10187",
+      "repo": "prettier/prettier",
+      "category": "cross-file",
+      "baseCommit": "a8f35961c066de440ceb31c9b7414c88cf91e7af",
+      "recordSha256": "f96f33be31294aa9e634ec069f9a90b65d1ab8bbd25b275509a5e54d6feb09a1",
+      "problemSha256": "824db38cab448457b056ca632fe1b8776a7f0cb3d6bcc87da6e766489eca5090",
+      "testPatchSha256": "6fb4720f9f93035a9726e8d5799db338076703333eced0b2c782913ba8cb7f5c",
+      "referencePatchSha256": "14c8bb4697a940936bf796ec8d85c13cac100a6bc3a1907cedcf510cd3af25d0",
+      "targetLabels": 1,
+      "regressionLabels": 1,
+      "productionFiles": [
+        "src/language-js/print/ternary.js",
+        "src/language-js/utils.js"
+      ],
+      "patchDiffLines": 194,
+      "title": "Invalid indentation: `return (foo ? bar1 : bar2).baz()`",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/10187",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-9521",
+      "repo": "prettier/prettier",
+      "category": "cross-file",
+      "baseCommit": "95bf0ab7d3d9801539dda770bb6e523510aa6bb7",
+      "recordSha256": "8bb31fd625a691109237334f4a6cc6c129c07354b0e9731614d7a2467a57109b",
+      "problemSha256": "4cb453a1b950df049fd361f35b83ae22633e89bf2756c8554dacedbc6e6b656d",
+      "testPatchSha256": "dc5ee2a698daa96efe9f96298c388aeece368ad3308b77542fc8209085813a9f",
+      "referencePatchSha256": "0630753feff19436dfd55bdb80d5265a2c69b375e8c93c006f76b05d0f73673f",
+      "targetLabels": 8,
+      "regressionLabels": 2,
+      "productionFiles": [
+        "src/language-js/printer-estree.js",
+        "src/language-js/utils.js"
+      ],
+      "patchDiffLines": 276,
+      "title": "Generic is formatted differently between babel and typescript",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/9521",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-9866",
+      "repo": "prettier/prettier",
+      "category": "cross-file",
+      "baseCommit": "892a70e0d3011349155d2f82d56a99532f23fd19",
+      "recordSha256": "b192a60124e26470ab12a885fe00e0f96e60d79d99a5b6eded2c67d86c35f52f",
+      "problemSha256": "e21f549ea5ce2590534927ff5a16698711232fdb6c9854e749b7610b210bef19",
+      "testPatchSha256": "0c7ab1334ad1208fcb5efd8fdebc820463a20d7cb09ea82ed4af6b13432727af",
+      "referencePatchSha256": "e840fba43f1698baa9cd037544fe7711e552c8fa9d41a17646059b93fc31fd5e",
+      "targetLabels": 1,
+      "regressionLabels": 38,
+      "productionFiles": [
+        "src/language-js/print/jsx.js",
+        "src/language-js/utils.js"
+      ],
+      "patchDiffLines": 88,
+      "title": "Unstable JSX formatting with \\u3000",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/9866",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-12260",
+      "repo": "prettier/prettier",
+      "category": "cross-file",
+      "baseCommit": "b1645073b897bfc4318186bc42936bf91e86538b",
+      "recordSha256": "efe7b448a91a05e153aa72733a5dc6a2e1fc8434c9b80e1075f3e8be94df222d",
+      "problemSha256": "87c1dd9a7924a41d9ff7faa1d54359cacfc4dc8e2c50936f98be413b2e0f9c99",
+      "testPatchSha256": "03bdedb4b3ff910543f0244c9437ca2292ddd7740423c105af50daa50f0f69f0",
+      "referencePatchSha256": "ab13db46d7a791c3a626a626938a4d3dafab08ffd7eeac84d6bc952510b7d8de",
+      "targetLabels": 9,
+      "regressionLabels": 67,
+      "productionFiles": [
+        "src/language-js/needs-parens.js",
+        "src/language-js/printer-estree.js"
+      ],
+      "patchDiffLines": 117,
+      "title": "Missing parens for `ClassExpression` with decorators",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/12260",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-11892",
+      "repo": "prettier/prettier",
+      "category": "complex",
+      "baseCommit": "2160e11061eac84c10d6b0200e29a6eb2408de8c",
+      "recordSha256": "82d74aa3d280416369e63d15537b69b0f856e46ddd9f810c9f266d0a563846d4",
+      "problemSha256": "80010295efcd8871ae2cc8732772dc595cc9d20008f5e32b42b56dacb825e269",
+      "testPatchSha256": "5813015774e9afb2df2cf3bb5ce6a3fdd38af1b63295d0d588c653d87be8922f",
+      "referencePatchSha256": "0a6e08eddccd2873a6716d4ebebddafd84cdf160c4d033871f2980ececfe5df5",
+      "targetLabels": 1,
+      "regressionLabels": 7,
+      "productionFiles": [
+        "src/language-css/parser-postcss.js",
+        "src/language-html/parser-html.js",
+        "src/language-js/parse/espree.js",
+        "src/language-js/parse/flow.js",
+        "src/language-js/parse/meriyah.js",
+        "src/language-js/parse/typescript.js"
+      ],
+      "patchDiffLines": 179,
+      "title": "\"TypeError: Cannot set property 'originalText' of undefined\" from TypeScript Jest inline snapshot",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/11892",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-12584",
+      "repo": "prettier/prettier",
+      "category": "complex",
+      "baseCommit": "c50f2bbe3075757840bbd7ed941647a9bde84266",
+      "recordSha256": "a344f5254600087cb1e99af04ec214f4c1be43655c25ff698c07ab110fa56f30",
+      "problemSha256": "4af842b751a6c94c4007960ea18d24db74bb7cf2263d0454a43faedc4d0cc8c2",
+      "testPatchSha256": "748a0db66545a38937bf2849ff6614b47ce30b48be312fe7ca1dc8e995da5cf6",
+      "referencePatchSha256": "0b366ae0acd6e0466da47513252a5e87b462922bbd33297881fdcf5fdb7c09be",
+      "targetLabels": 2,
+      "regressionLabels": 1,
+      "productionFiles": [
+        "src/language-html/embed.js",
+        "src/language-html/print-preprocess.js",
+        "src/language-html/utils/index.js",
+        "src/language-js/parse/babel.js",
+        "src/language-js/parse/parsers.js",
+        "src/language-js/print-preprocess.js",
+        "src/language-js/printer-estree.js",
+        "src/main/comments.js"
+      ],
+      "patchDiffLines": 240,
+      "title": "\"as\" TypeScript keyword yields error within Vue template",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/12584",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-13019",
+      "repo": "prettier/prettier",
+      "category": "complex",
+      "baseCommit": "89f90fc01363c31e4c9b21f34e3f1942994b1565",
+      "recordSha256": "4e471d01f4c8be79f9ea2f49341fbe7ac445547922ed97a4db5f908e42e68bdb",
+      "problemSha256": "ad89b8a14519dc640e351c806d1e27975ea70444796d753f957ead8792d185e2",
+      "testPatchSha256": "a5a43f1e704abe4093df004c8ff5a14b8979d06c7f26d58f1de495a109a6e1a5",
+      "referencePatchSha256": "d43d943bcd413f95d9291a4db31dce490cc619ddda8c67fdc87cb249656517fa",
+      "targetLabels": 4,
+      "regressionLabels": 16,
+      "productionFiles": [
+        "src/cli/constant.js",
+        "src/cli/find-cache-file.js",
+        "src/cli/format.js",
+        "src/cli/utils.js"
+      ],
+      "patchDiffLines": 161,
+      "title": "Better cache handling of multiple (but different) prettier calls",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/13019",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "prettier__prettier-8381",
+      "repo": "prettier/prettier",
+      "category": "complex",
+      "baseCommit": "8718bb4be44f6fd1aed8fcf91717f38931643dd7",
+      "recordSha256": "cdecc0ec35b7bd0b9e22205f0a92165398c11fe7ffdc0bd84fddbcb1f8db0eed",
+      "problemSha256": "0c8b8ddba1165458a05fd70cdd87ec975079edbb708fba28954cf6e135a85455",
+      "testPatchSha256": "0678e910e060b34aad1e6d1731aca622a7bc0e6694424677c6dc99f41b6df784",
+      "referencePatchSha256": "192890837e081f0913c1a454a2f94afe680815fa727d060122ac2daf4815eea7",
+      "targetLabels": 3,
+      "regressionLabels": 2,
+      "productionFiles": [
+        "src/common/util.js",
+        "src/language-css/clean.js",
+        "src/language-css/embed.js",
+        "src/language-css/printer-postcss.js",
+        "src/language-html/clean.js",
+        "src/language-html/printer-html.js",
+        "src/language-html/utils.js",
+        "src/language-markdown/embed.js",
+        "src/language-markdown/printer-markdown.js",
+        "src/utils/front-matter.js"
+      ],
+      "patchDiffLines": 361,
+      "title": "Initial front matter signal (---) with extra text appended breaks formatting",
+      "sourceIssue": "https://github.com/prettier/prettier/pull/8381",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-6977",
+      "repo": "serverless/serverless",
+      "category": "simple",
+      "baseCommit": "578c1bc3ba7e91598dc3ab359f0dc0a4676c1f15",
+      "recordSha256": "839fbd4b8d2a413641a445887bcfa843eff59153f403ee0e3e1b286e05159237",
+      "problemSha256": "a06f58ada66f6f9b659a170175cf1a066c05f285ed90a06a95f7ba8121f4e721",
+      "testPatchSha256": "e7d686f6c893f49f7d481a74c92e641490c94775a062c23259b8d2688468b0d3",
+      "referencePatchSha256": "9d0389b5fd14d4901b1a765bfb226d64ddc51d616741374454398181262479dd",
+      "targetLabels": 2,
+      "regressionLabels": 7,
+      "productionFiles": [
+        "lib/plugins/aws/lib/validate.js"
+      ],
+      "patchDiffLines": 41,
+      "title": "Credentials not found error after upgrade ",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/6977",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-4372",
+      "repo": "serverless/serverless",
+      "category": "cross-file",
+      "baseCommit": "b8e4089e396fe6b595d5116d381fb2fcb5a03eb5",
+      "recordSha256": "96266365ad27ba0f163bfeaf76bb5f9949815bcb4cac2260522298a7609b17d2",
+      "problemSha256": "576b96d5cfb071f90845ab6fbc99cad61f4cc8810d5857825bc3f4e80364ceb9",
+      "testPatchSha256": "81692cdb1eca7b7798cb51ff1f1934c8a70fefc094a811f26490b2872b243e5d",
+      "referencePatchSha256": "37ee0cb5160ed9e5c48c4837b9a4affa2bb4ac1a39929b742244ed063bac16ad",
+      "targetLabels": 2,
+      "regressionLabels": 62,
+      "productionFiles": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/validate.js"
+      ],
+      "patchDiffLines": 65,
+      "title": "Change Authorizer type to \"REQUEST\" (instead of \"TOKEN\")",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/4372",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-5509",
+      "repo": "serverless/serverless",
+      "category": "cross-file",
+      "baseCommit": "fbd9b46ef913d270f062b1c89d62ef3367342984",
+      "recordSha256": "e1f1e11a05632a49dcfe2c8b037d47c33719724d4c0e743e27ab0955b63ea680",
+      "problemSha256": "3ed7319a9e48573fffd239d668a1b01b7f85aeb156c7fb801fd85eb21b1475bc",
+      "testPatchSha256": "7b1243514d29322ddf5b927b967b3d10b9c06d07fef9aad3954875649fbf1e12",
+      "referencePatchSha256": "3a851580734824931aabc363b441b536531f9fa48863f1730a57dceebc67edad",
+      "targetLabels": 2,
+      "regressionLabels": 1,
+      "productionFiles": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+        "lib/plugins/aws/provider/awsProvider.js"
+      ],
+      "patchDiffLines": 95,
+      "title": "Support API Gateway stage deployment description",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/5509",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-5728",
+      "repo": "serverless/serverless",
+      "category": "cross-file",
+      "baseCommit": "253b651539bb979b880bd12b3c0d0a43a0c58b30",
+      "recordSha256": "07e786cd69690523a64feecccd999aef4e8fd824fafbf6d4865fcf15044cfd74",
+      "problemSha256": "63e24484650a3c20943cd1ff090edc86173455ecbf9c85e9097ce1215583a0c2",
+      "testPatchSha256": "36b1f8dc8d655b7dc7433254885f27c3314203ca5e3cc3b10c69b1499f8c1e8d",
+      "referencePatchSha256": "b199fe44be5a3f063d36be0995d0a3769164dc0fac2d29550315092b485d2479",
+      "targetLabels": 5,
+      "regressionLabels": 27,
+      "productionFiles": [
+        "lib/Serverless.js",
+        "lib/classes/CLI.js"
+      ],
+      "patchDiffLines": 47,
+      "title": "'sls print' contains Warnings.",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/5728",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-5640",
+      "repo": "serverless/serverless",
+      "category": "cross-file",
+      "baseCommit": "660804d4a6e471825e291a26413bbbf2cb365dc9",
+      "recordSha256": "f11bb641269b0e95170369f6a1ab23033d51bece3c278f29d7b00cf0126ad8c0",
+      "problemSha256": "0dae2727cb4337d92093dd7eb870b5cce119a75d5d7185fc4f30604067a2fcc1",
+      "testPatchSha256": "7860489da116736816d80afe437cc79629969becd4481a0e9a6f49a45b8919e6",
+      "referencePatchSha256": "0cb64411e65b9e9869b0c48e87456a3cf27dee511d7affcda26ca32da293a118",
+      "targetLabels": 1,
+      "regressionLabels": 205,
+      "productionFiles": [
+        "lib/classes/Service.js",
+        "lib/plugins/print/print.js"
+      ],
+      "patchDiffLines": 26,
+      "title": "Asterisk in default variable value leads to value interpreted as string and not interpolated",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/5640",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-4576",
+      "repo": "serverless/serverless",
+      "category": "cross-file",
+      "baseCommit": "b3b5cba3b938d25c2332e814236045787ad700fb",
+      "recordSha256": "a55acd44cc30d9ffb0e7782c9fc5ae5d7c1e56152ac0a7effd6b011130adb92c",
+      "problemSha256": "322e1a0ff2017ba590306ce304e2aff9021fc5b955275f9fbc052d8e4e89ee9d",
+      "testPatchSha256": "02e6bf82eab1e1471c6564bb450c9a802d7bc6fda56652d5e1185aaf2ae2b2e3",
+      "referencePatchSha256": "04a6ea2f12974c98769811481325cbfbdb21a32d8e4b4cb094b496dbe06d719b",
+      "targetLabels": 1,
+      "regressionLabels": 3,
+      "productionFiles": [
+        "lib/plugins/create/create.js",
+        "lib/utils/fs/copyDirContentsSync.js",
+        "lib/utils/fs/walkDirSync.js"
+      ],
+      "patchDiffLines": 306,
+      "title": "Unable to download template from a private repo or an internal path",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/4576",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-5299",
+      "repo": "serverless/serverless",
+      "category": "complex",
+      "baseCommit": "cfc2ac81f50427e343673e9ed2e2be6cafa99097",
+      "recordSha256": "b20f9c0cf54447690f4f33a24f49fccdc8229ba1805fe691df32a626fcc4ae4a",
+      "problemSha256": "ddd0673a92b174439bb06d68b382555e1ddf34388988f2bf6ce9abcd2bc01af4",
+      "testPatchSha256": "f9c7d2515b7e107da5ad8fcdfceee6ba0ac2e1e741d3ff5e1bf50fff5c768ce9",
+      "referencePatchSha256": "36ad6d44233195523a099be18133896f978cdccfac50d456d1ae348e2269eabd",
+      "targetLabels": 4,
+      "regressionLabels": 68,
+      "productionFiles": [
+        "lib/plugins/aws/deploy/lib/checkForChanges.js",
+        "lib/plugins/aws/deploy/lib/cleanupS3Bucket.js",
+        "lib/plugins/aws/deployList/index.js",
+        "lib/plugins/aws/package/lib/generateArtifactDirectoryName.js",
+        "lib/plugins/aws/provider/awsProvider.js",
+        "lib/plugins/aws/remove/lib/bucket.js",
+        "lib/plugins/aws/rollback/index.js",
+        "lib/plugins/aws/utils/findAndGroupDeployments.js",
+        "lib/plugins/aws/utils/getS3ObjectsFromStacks.js"
+      ],
+      "patchDiffLines": 208,
+      "title": "Allow specifying a custom prefix under which the artifacts will be deployed to S3",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/5299",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-5926",
+      "repo": "serverless/serverless",
+      "category": "complex",
+      "baseCommit": "660804d4a6e471825e291a26413bbbf2cb365dc9",
+      "recordSha256": "6fed23c213f59f5e77b0fcf7adc2d166e021628162afb043c1e585b84721e15a",
+      "problemSha256": "ae9a863f87ad6157de572b741e996f51cf1233cee50518228d9e21e4b56a914e",
+      "testPatchSha256": "385e3d2add1ad665c36c415ee28e251e9b74baa4fb13ae5759d38417986d1d8a",
+      "referencePatchSha256": "230f6ad696a6a99287973c86ca2d3e559d72c200bde9f1d6996cb3067d3db106",
+      "targetLabels": 3,
+      "regressionLabels": 259,
+      "productionFiles": [
+        "lib/Serverless.js",
+        "lib/classes/Variables.js",
+        "lib/plugins/aws/lib/naming.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+        "lib/plugins/aws/package/compile/events/websockets/lib/deployment.js"
+      ],
+      "patchDiffLines": 182,
+      "title": "Not possible to create resources that depend on the ApiGateway::Deployment",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/5926",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-4892",
+      "repo": "serverless/serverless",
+      "category": "complex",
+      "baseCommit": "9e01283f94a8cf7410f6e9a67d2aa45f35e1d44e",
+      "recordSha256": "e9e7e6491e95bfe848b94799c2ae6d2bd1192a98c815a234a6626e77f831e926",
+      "problemSha256": "272b6127f22c90d0b01dca4970595a778eb255c2dba99141967bbee30fa3d9fd",
+      "testPatchSha256": "b2451965fc9aa8819a078a453771a95a0447dfdb565be3513c8bf5975c72e4ab",
+      "referencePatchSha256": "2091e1d9e61e02c456f0b9a58ed91debb85063c898d715957e8d8529f6cf376c",
+      "targetLabels": 18,
+      "regressionLabels": 136,
+      "productionFiles": [
+        "lib/classes/PluginManager.js",
+        "lib/plugins/package/lib/packageService.js",
+        "lib/plugins/plugin/install/install.js",
+        "lib/plugins/plugin/uninstall/uninstall.js",
+        "lib/utils/yamlAstParser.js"
+      ],
+      "patchDiffLines": 580,
+      "title": "Configure local plugins folder",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/4892",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "serverless__serverless-4754",
+      "repo": "serverless/serverless",
+      "category": "complex",
+      "baseCommit": "39caddc404ecabf40ea3fb2aa51d31cbe8db7acd",
+      "recordSha256": "1728668701f82fea586321828028ea70baf85dc12d0811cc738ffe67ebb06c79",
+      "problemSha256": "28b8c2666101116d006dac2f447e050eedeb66f0c33f8e7dc3865f1a63f10301",
+      "testPatchSha256": "ebb4da9ca8f66ba1d61486a37d0a2dd36e549c67dcd0255f83076c84dc008a66",
+      "referencePatchSha256": "4ed63daeb0602c6929c94581f73994b8dd19c8f539d9e304ce2cd2b4bdd25e1a",
+      "targetLabels": 15,
+      "regressionLabels": 79,
+      "productionFiles": [
+        "lib/classes/PromiseTracker.js",
+        "lib/classes/Service.js",
+        "lib/classes/Variables.js",
+        "lib/plugins/print/print.js"
+      ],
+      "patchDiffLines": 583,
+      "title": "A valid service attribute to satisfy the declaration 'self:service.name' could not be found",
+      "sourceIssue": "https://github.com/serverless/serverless/pull/4754",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "mrdoob__three.js-14836",
+      "repo": "mrdoob/three.js",
+      "category": "simple",
+      "baseCommit": "c570b9bd95cf94829715b2cd3a8b128e37768a9c",
+      "recordSha256": "2d4737b8bfe2af09952505d1697de87e221997be17304521e2a1d39f63cb7649",
+      "problemSha256": "3b100059c09103abc524ddbc1b257014f7b1321d98d6514dea9a48d50ee6299e",
+      "testPatchSha256": "f19fa4ab4e4f7f795247f30ec24fc4968c998d1e028c7450163aa9482b896f16",
+      "referencePatchSha256": "369e2aa1528c89e888e4251a5a1422bd9a30a31bb1be72b015405d29a5b7ec5a",
+      "targetLabels": 1,
+      "regressionLabels": 640,
+      "productionFiles": [
+        "src/math/Box3.js"
+      ],
+      "patchDiffLines": 12,
+      "title": "box3.intersectsPlane bug",
+      "sourceIssue": "https://github.com/mrdoob/three.js/pull/14836",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "mrdoob__three.js-24461",
+      "repo": "mrdoob/three.js",
+      "category": "simple",
+      "baseCommit": "9e5512f067e3a0de8d4069217d20903c1725edf7",
+      "recordSha256": "f37898a4ec315da964d19db09ccef211a77852268088f094eeac077db1310ae1",
+      "problemSha256": "d431d104ea0263887d23342ff00e0c0944abc11dc00f931f9cbd7abd0f310261",
+      "testPatchSha256": "771babb03a1479d5420025e374784d84b96c14255b3ddd963eb874bbc7a8e0d6",
+      "referencePatchSha256": "c994ee2d86c095b8eb42f4b8ce836505ca7d6472942611dd401ad4754fb107b6",
+      "targetLabels": 2,
+      "regressionLabels": 716,
+      "productionFiles": [
+        "src/math/Color.js"
+      ],
+      "patchDiffLines": 19,
+      "title": "Color: Support HSL percentage values with decimals.",
+      "sourceIssue": "https://github.com/mrdoob/three.js/pull/24461",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "mrdoob__three.js-18648",
+      "repo": "mrdoob/three.js",
+      "category": "cross-file",
+      "baseCommit": "cceffcbec987ba640b98285503e1267336626f22",
+      "recordSha256": "562061a00f23985d049875e2cd5044226e454b3b211cd0d7db46b293e0b0726a",
+      "problemSha256": "94ca78a4a27a7fc66f87c6f0f92481ce7912c2de6114824c36b4ae956e7a10d1",
+      "testPatchSha256": "510a30a5555aa93e758250142b5870ba341a6ce308fb64cc0464bfa2c6949316",
+      "referencePatchSha256": "76a55c4b4c75aac448ec6073bc2ecc983ae23085b12c1b85fe0f2ba97b53dc32",
+      "targetLabels": 1,
+      "regressionLabels": 699,
+      "productionFiles": [
+        "src/Three.Legacy.js",
+        "src/core/Raycaster.js",
+        "src/objects/Line.js"
+      ],
+      "patchDiffLines": 220,
+      "title": "Inconsistent raycast precision API",
+      "sourceIssue": "https://github.com/mrdoob/three.js/pull/18648",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "mrdoob__three.js-23796",
+      "repo": "mrdoob/three.js",
+      "category": "cross-file",
+      "baseCommit": "1e0cdd9c6304dac238e9d6891652c1ce81f38580",
+      "recordSha256": "66ab09b29419daacdd6ef479e9360b5bcb083d7e1fef57e44180e64a2d4df814",
+      "problemSha256": "bb1813ae34fb0d643d820262bae3cb7720eefa2193a4e54d035d39ac1177cd27",
+      "testPatchSha256": "6e91eaeee36da6a3ae3108eaf9d108778318ab50b13af53ede2665afd091622b",
+      "referencePatchSha256": "11c265e2687128e90edbff02dbd53bf190de1407b2e7873375b3ddb2c60d9488",
+      "targetLabels": 3,
+      "regressionLabels": 716,
+      "productionFiles": [
+        "src/math/Color.js",
+        "src/math/Euler.js",
+        "src/math/Quaternion.js"
+      ],
+      "patchDiffLines": 134,
+      "title": "RFC: Making Euler, Color, Quaternions iterable - and consequently spreadable - like Vector*",
+      "sourceIssue": "https://github.com/mrdoob/three.js/pull/23796",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    },
+    {
+      "id": "mrdoob__three.js-22566",
+      "repo": "mrdoob/three.js",
+      "category": "cross-file",
+      "baseCommit": "7f6a0990feec2946225147ab2a4fbcaf69dcb359",
+      "recordSha256": "c0fd06e123f1bf81ac2cd09534a6fdec5f49d6d13b1449202066cad25acae9ab",
+      "problemSha256": "030a5531af4bffed8573f53c131d82b1454ff26aa3184928e75dfa1797e52c4f",
+      "testPatchSha256": "f2b53ccda14847b451fcb6ee4568d1d45ea1c720bc163cf5bfa51528ceff014a",
+      "referencePatchSha256": "86023b0b41640dbe68c3302c78d231ce35a5025de2fceee0b938631e0cb1cd26",
+      "targetLabels": 15,
+      "regressionLabels": 686,
+      "productionFiles": [
+        "src/core/BufferGeometry.js",
+        "src/geometries/PolyhedronGeometry.js"
+      ],
+      "patchDiffLines": 58,
+      "title": "Clone cylinderGeometry Creates Geometry",
+      "sourceIssue": "https://github.com/mrdoob/three.js/pull/22566",
+      "limitations": [
+        "Public historical issue; foundation-model training contamination cannot be ruled out.",
+        "Category uses audited change breadth, not an established semantic difficulty scale.",
+        "Held-out tests verify their named contracts, not complete behavioral correctness.",
+        "Task families and central source files create correlations."
+      ]
+    }
+  ],
+  "schedule": [
+    [
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-5926",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-23796",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-12584",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5728",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-18648",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-8381",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-6977",
+        "repo": "serverless/serverless",
+        "category": "simple",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-14836",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-13019",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4892",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-22566",
+        "repo": "mrdoob/three.js",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-10187",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-4372",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "mrdoob__three.js-24461",
+        "repo": "mrdoob/three.js",
+        "category": "simple",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-9866",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5640",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-11892",
+        "repo": "prettier/prettier",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4754",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-12260",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5509",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-9521",
+        "repo": "prettier/prettier",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-4576",
+        "repo": "serverless/serverless",
+        "category": "cross-file",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      }
+    ],
+    [
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "prettier__prettier-12930",
+        "repo": "prettier/prettier",
+        "category": "simple",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      },
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 0,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      }
+    ],
+    [
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "arm": "D"
+      },
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "arm": "A"
+      },
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "arm": "C"
+      },
+      {
+        "task": "serverless__serverless-5299",
+        "repo": "serverless/serverless",
+        "category": "complex",
+        "repetition": 1,
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "arm": "B"
+      }
+    ]
+  ],
+  "configurations": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off"
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided"
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand"
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off"
+    }
+  ],
+  "limits": {
+    "timeout": 1200,
+    "maxTurns": 90,
+    "maxToolCalls": 400,
+    "maxOutputTokens": 16384,
+    "maxProviderPayloadBytes": 1048576,
+    "maxTaskTokens": 4000000,
+    "retryCount": 0,
+    "serviceTier": "default"
+  },
+  "costCeilings": {
+    "gpt-6-luna": 0.25,
+    "gpt-6.1-sol": 5
+  },
+  "cap": 25,
+  "includesPreflight": true,
+  "catalogs": [
+    {
+      "id": "gpt-6-luna",
+      "api": "openai-responses",
+      "contextWindow": 272000,
+      "maxTokens": 128000,
+      "cost": {
+        "input": 0.1,
+        "output": 0.5,
+        "cacheRead": 0.01,
+        "cacheWrite": 0.125,
+        "tiers": [
+          {
+            "inputTokensAbove": 272000,
+            "input": 0.2,
+            "output": 0.75,
+            "cacheRead": 0.02,
+            "cacheWrite": 0.25
+          }
+        ]
+      }
+    },
+    {
+      "id": "gpt-6.1-sol",
+      "api": "openai-responses",
+      "contextWindow": 272000,
+      "maxTokens": 128000,
+      "cost": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 0.1,
+        "cacheWrite": 2.5,
+        "tiers": [
+          {
+            "inputTokensAbove": 272000,
+            "input": 4,
+            "output": 15,
+            "cacheRead": 0.2,
+            "cacheWrite": 5
+          }
+        ]
+      }
+    }
+  ],
+  "inputs": {
+    "benchmarks/intelligence-v4/cohort.json": "e5abe8fde651350785aa1d1a12ba71d03a08882612b1c11ce3bd84c472928087",
+    "benchmarks/intelligence-v4/mocha-reporter.cjs": "35160bacf91e379e051c20d6cf0595a5484dacdeb1e442d3e664b516a1e68750",
+    "benchmarks/intelligence-v4/native-runner.cjs": "0a01e2dec16a024d4ceef466d3c7712891e4a778a886a2105d56ddb8bf2b93c6",
+    "benchmarks/intelligence-v4/qunit-runner.cjs": "fcaecf3f5f80fe68ac850669d468f227ecc593ceed671e38ac7f8eea14612e8b",
+    "package-lock.json": "4f08c90a9db1397aab8987a5c7715dee791d6261ece1509877a790e88ecbd0ff",
+    "package.json": "c11229cca1cb10ebda2381b1d3863cff82ab3b1350fbed705f174b6223a5c719",
+    "packages/cli/src/intelligence/graph.mjs": "66acdaacb6a7ac644f744892819154e7416614b086cb81031798958b5b43100a",
+    "packages/cli/src/intelligence/module-resolution.mjs": "32bcdfb4535fb7ec40092859a5aedfe3da08cddd92544da1d04503421cbf47d1",
+    "packages/cli/src/intelligence/on-demand.mjs": "1da1e4cdefdbedd4280228a1c91a14b18e3959d36c2b9f40ffbe248c4e06aeba",
+    "packages/cli/src/intelligence/parse.mjs": "6796bca1f9e265be0072ebddee379dc5141188a303f8560fb128405d428c8824",
+    "packages/cli/src/intelligence/source-files.mjs": "61b10c87363943f88cd1ee797646611a0172d9e1c261990306707169b0840abe",
+    "packages/cli/src/intelligence/tools.mjs": "0a38d8405f80ca6e4f6d9a287a7cf1504d47edf9e79cef4537625d227e1fe840",
+    "packages/cli/src/interactive.mjs": "e395edcc50b5520edb60c7d88171e893fab0b186d3d6f6a5a73186c74b62bd26",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/navigation.mjs": "fda7c7f0b7c058772fd66b3fb56b66cdeff12787082f2518ebf136f8d43873c9",
+    "packages/cli/src/options.mjs": "ffcc4a00f9b1038b54f4e5a68349b2cc7b4bb57355bf1f2c0865573d636d850c",
+    "packages/cli/src/projects.mjs": "920dffed714fe56c5040e826615f332df346da01c443ece463a49c76c9dc4b10",
+    "packages/cli/src/session.mjs": "6a848d3aab147e1e9caecdb6e66e3a2763490a5360a022930fdc4bc57b237da0",
+    "packages/cli/src/tools.mjs": "4c81ad839a19eec88bf93b1e4a1125c42e82214233603d0186401b7b89d74d3d",
+    "packages/cli/src/workspace.mjs": "f0b8300e39bde271ef92f62af35aebe05531834130d67e71dcbdb4011e80955f",
+    "scripts/campaign-intelligence-v4.mjs": "f985d8a7c77f76268fe3d51a8a5e5f4b51d262e77f77f672b81138607079feec",
+    "scripts/intelligence-v4-worker.mjs": "2727565d408b2e96c258dd775daa2660c4cb76f396b9bef20cf224605e7d01b5",
+    "scripts/intelligence-v4.mjs": "254e6883212a36a63791e46315a3c79ad130b5b4992690e0d5a1ff9890167065",
+    "scripts/preflight-intelligence-v4.mjs": "59e1542d9736bfbbb4d3f1ce406a2390bda6a57aba8753516331cf2e99a93c68",
+    "scripts/prepare-intelligence-v4.mjs": "3d7479dadb720fe0640a486ec23eef097ee5fbdfa1eb66ac4c4966c89b75aae9",
+    "scripts/regrade-intelligence-v4.mjs": "740926806ca31d6b4aa8e84f13d1e27afea1c0e59c69c4edb8ebfd7584b0eb84",
+    "src/eval-v4/design.mjs": "2c4851231d3565571fd4fa64d19668a1a23cb33e24e3ed8f2452e1f10c94094c",
+    "src/eval-v4/environment.mjs": "ed150f0d563f7c4f247d594ee46aed9b3d222bc351f6fe3c834c9131725c45be",
+    "src/eval-v4/grading.mjs": "4f7db0b47e86564d6e030235a21659b308fe4dc7b0fe2eab23529988e7febe4d",
+    "src/eval-v4/protocol.mjs": "4475972757ca9b162bf2f49d099f27e4d16a5c482c3f754cba5931757242aee7",
+    "src/eval-v4/sandbox.mjs": "044d0a1ee78484695baf7e80ea3b26f2495942364174effa3ff696d3dc4a5397",
+    "src/intelligence-eval.mjs": "ac2c8de6e128886b5e8198a5a988bdd89006cae6a2430aeff19a489f39344a3d",
+    "src/native-intelligence-eval.mjs": "83de51bce86f739d308d6f62f1df54d87af8720ea99f7fa7fbb23f35fd52c12c",
+    "src/real-intelligence-eval.mjs": "76728581f94adb2e4ab7ed949a572a524a064b1013afa5d2eb2d1c2b6a6c409d",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039"
+  },
+  "node": "v24.15.0",
+  "platform": "win32",
+  "arch": "x64",
+  "toolchain": "C:\\Users\\Public\\SufficeV4\\toolchain",
+  "sandboxSha256": "dd13bdb162a184fa04039488b234a8258ef9b76f84e926c505d5742b19249a6a",
+  "sourceArchiveSha256": "097e6883cab0cbf88a26d2bb0db04e5951d8635c59c7c0d95e03c34624104b11",
+  "resources": {
+    "concurrency": 1,
+    "temperatureC": null,
+    "minWorkerRAMGiB": 1.75,
+    "minParentRAMGiB": 2,
+    "minDiskGiB": 6,
+    "workerHeapMiB": 768,
+    "projectHeapMiB": 384
+  },
+  "primary": "Held-out targets and required regressions passing in pristine production-only reconstruction; completion status separate",
+  "budgetPolicy": "Reserve an entire four-arm task/repetition round before dispatch. Equal common token/wall/tool limits; dollar ceilings differ by model price and binding ceilings are explicitly censored.",
+  "replacementPolicy": "No automatic reruns. Stop on provider, configuration or evaluator failure, preserve all data and require an explicit documented protocol amendment before any replacement.",
+  "uncertainty": "Paired comparisons B-A, C-A, C-B, C-D; task-cluster resampling of complete four-arm rounds with both repetitions, report family/category coverage and missingness. Ties do not demonstrate equivalence.",
+  "taskGatePolicy": "Immutable validation receipt before first inference on each task; additional environments may be prepared between completed balanced rounds. No primary-result-based prompt or controller tuning.",
+  "exclusions": "Public benchmark contamination possible; repository family and task repetitions are correlated; native platform adaptation; estimated prices are not invoices; model/effort comparison includes Sol Medium vs Luna xhigh."
+}

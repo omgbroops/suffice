@@ -1,0 +1,10 @@
+{
+  "framework": "jest",
+  "executionFailure": {
+    "stage": "test",
+    "code": 1,
+    "signal": null,
+    "stdout": "",
+    "stderr": "Watchman:  spawn watchman ENOENT\nnode:events:497\r\n      throw er; // Unhandled 'error' event\r\n      ^\r\n\r\nError: spawn watchman ENOENT\r\n    at ChildProcess._handle.onexit (node:internal/child_process:286:19)\r\n    at onErrorNT (node:internal/child_process:484:16)\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\r\nEmitted 'error' event on Client instance at:\r\n    at spawnError (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\fb-watchman\\index.js:170:10)\r\n    at ChildProcess.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\fb-watchman\\index.js:193:5)\r\n    at ChildProcess.emit (node:events:519:28)\r\n    at ChildProcess._handle.onexit (node:internal/child_process:292:12)\r\n    at onErrorNT (node:internal/child_process:484:16)\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {\r\n  errno: -4058,\r\n  code: 'ENOENT',\r\n  syscall: 'spawn watchman',\r\n  path: 'watchman',\r\n  spawnargs: [ '--no-pretty', 'get-sockname' ]\r\n}\r\n\r\nNode.js v20.16.0\r\n"
+  }
+}

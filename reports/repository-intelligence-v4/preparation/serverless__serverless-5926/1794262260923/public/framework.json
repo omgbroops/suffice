@@ -1,0 +1,136 @@
+{
+  "framework": "mocha",
+  "tests": [
+    {
+      "title": "AwsRollback #constructor() should have hooks",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #constructor() should set the provider variable to an instance of AwsProvider",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"before:rollback:initialize\" hook promise chain in order",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:54:64)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback hooks should run \"rollback:rollback\" promise chain in order",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:63:45)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback hooks should run \"deploy:list\" if timestamp is not specified",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "spawnStub.withArgs(...).resolves is not a function",
+        "stack": "TypeError: spawnStub.withArgs(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:80:69)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should resolve when the timestamp argument is passed as a string",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:111:10)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should reject in case no deployments are available",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:128:10)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should reject in case this specific deployments is not available",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:164:10)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should resolve set the artifactDirectoryName and resolve",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:200:10)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format invocation report",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format invocation failures",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format lambda console.log lines",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format lambda python logger lines",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should pass through log lines with no tabs",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should pass through log lines with tabs but no date",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    }
+  ],
+  "hooks": [
+    {
+      "title": "AwsRollbackFunction \"before each\" hook for \"should have hooks\"",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "sinon.stub(...).resolves is not a function",
+        "stack": "TypeError: sinon.stub(...).resolves is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollbackFunction\\index.test.js:18:30)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollbackFunction \"after each\" hook for \"should have hooks\"",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Cannot read properties of undefined (reading 'cli')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'cli')\n    at Context.<anonymous> (lib\\plugins\\aws\\rollbackFunction\\index.test.js:42:16)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    }
+  ]
+}

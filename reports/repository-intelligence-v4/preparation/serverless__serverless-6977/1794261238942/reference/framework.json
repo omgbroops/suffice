@@ -1,0 +1,70 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 2,
+    "tests": 9,
+    "passes": 9,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-11-09T21:54:59.968Z",
+    "end": "2026-11-09T21:55:00.033Z",
+    "duration": 65
+  },
+  "tests": [
+    {
+      "title": "#validate #validate() should succeed if inside service (servicePath defined)",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should throw error if not inside service (servicePath not defined)",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should default to \"dev\" if stage is not provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should use the service.provider stage if present",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should default to \"us-east-1\" region if region is not provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should use the service.provider region if present",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should check the metadata service and throw an error if no creds and no metadata response",
+      "status": "passed",
+      "durationMs": 42,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should check the metadata service and pass if return credentials",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should not check the metadata service if not using a command that needs creds",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    }
+  ],
+  "hooks": []
+}

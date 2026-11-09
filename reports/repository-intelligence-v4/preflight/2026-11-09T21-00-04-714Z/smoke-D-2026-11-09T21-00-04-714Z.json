@@ -1,0 +1,96 @@
+{
+  "task": "disjoint-preflight-whitespace",
+  "arm": "D",
+  "mode": "off",
+  "repetition": 0,
+  "category": "simple",
+  "kind": "smoke-only",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/smoke-D-2026-11-09T21-00-04-714Z/workspace",
+    "head": "39de218fdde36592c71287fabf981c3a2e9cec31",
+    "tree": "c8678617cef09e396fdf350b174c49ebccda885e"
+  },
+  "runId": "smoke-D-2026-11-09T21-00-04-714Z",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 30420.295899999997,
+  "usage": {
+    "input": 7939,
+    "cacheRead": 17408,
+    "cacheWrite": 0,
+    "output": 740,
+    "estimatedApiUsd": 0.0250188,
+    "modelCalls": 5,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0250188,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: collapse mixed interior whitespace\nok 1 - collapse mixed interior whitespace\n  ---\n  duration_ms: 0.8374\n  type: 'test'\n  ...\n# Subtest: single whitespace stays valid\nok 2 - single whitespace stays valid\n  ---\n  duration_ms: 0.1247\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.3338\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 89
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: basic account normalization\nok 1 - basic account normalization\n  ---\n  duration_ms: 0.77\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.6145\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 85
+  },
+  "changed": [
+    "src/names.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/names.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 5,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 12,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/names.mjs",
+      "before": "export const normalizeName=value=>String(value).trim().toLowerCase();\n",
+      "after": "export const normalizeName=value=>String(value).trim().replace(/\\s+/g,' ').toLowerCase();\n"
+    }
+  ],
+  "final": "Updated `src/names.mjs` to collapse every interior whitespace run into one ordinary space using `/\\s+/g`, while preserving trimming, lowercasing, and string coercion.\n\nVerified:\n- `node native-verify.cjs` — passed.\n- Targeted checks for repeated spaces, tabs, line breaks, Unicode whitespace, and whitespace-only input — passed.\n- `git diff --check` — passed.\n\nOnly `src/names.mjs` changed; public tests and `native-verify.cjs` are untouched.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\smoke-D-2026-11-09T21-00-04-714Z\\home\\events\\1794258155081-37da18c7-7339-48a2-97df-e982a364e6b2.jsonl",
+  "receiptAudit": {
+    "requests": 5,
+    "finalResponses": 5,
+    "exactConfiguration": true
+  }
+}
