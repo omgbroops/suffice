@@ -1,0 +1,266 @@
+{
+  "task": "dependency-aliases",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 39,
+  "runId": "039-dependency-aliases-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "cross-file",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 71489.90910000005,
+  "usage": {
+    "input": 15118,
+    "cacheRead": 18688,
+    "cacheWrite": 0,
+    "output": 2913,
+    "estimatedApiUsd": 0.0031551799999999996,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0031551799999999996,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: transitive aliases and duplicate identities resolve once\nok 1 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 1.4352\n  type: 'test'\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 2 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.4455\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nok 3 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.2254\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.0124\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 88
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ordinary dependencies are ordered before a root\nok 1 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 1.3419\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.9226\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 85
+  },
+  "changed": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 15,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:07:05.394Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T06:07:05.464Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/registry.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:07:05.527Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/registry.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:07:14.984Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/order.mjs",
+          "src/registry.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:07:15.045Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/order.mjs",
+          "src/registry.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:07:05.456Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1735dd4d65cb6a4219460db6ecfb7ba5f2e61635f7ac9310f24d871d68c7e8b7"
+      },
+      "latencyMs": 62.399800000013784,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 23029,
+      "heapDeltaBytes": 3032512,
+      "graphBytes": 37225
+    },
+    {
+      "at": "2026-11-09T06:07:05.526Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "80f31d4ac7702598cb57e9bced5be2359b47f2ec31b1d10114bb1f1070c4469e"
+      },
+      "latencyMs": 61.93779999995604,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 28271,
+      "heapDeltaBytes": 741952,
+      "graphBytes": 44057
+    },
+    {
+      "at": "2026-11-09T06:07:05.586Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "80f31d4ac7702598cb57e9bced5be2359b47f2ec31b1d10114bb1f1070c4469e"
+      },
+      "latencyMs": 59.71450000000186,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28271,
+      "heapDeltaBytes": 307576,
+      "graphBytes": 44057
+    },
+    {
+      "at": "2026-11-09T06:07:15.044Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fed4a947792bceac610c7aad294fd3c3dc020a65a5c095d83351e59f50b0c7b3"
+      },
+      "latencyMs": 60.74429999990389,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 28385,
+      "heapDeltaBytes": 4876640,
+      "graphBytes": 44273
+    },
+    {
+      "at": "2026-11-09T06:07:15.112Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fed4a947792bceac610c7aad294fd3c3dc020a65a5c095d83351e59f50b0c7b3"
+      },
+      "latencyMs": 67.26469999994151,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28385,
+      "heapDeltaBytes": 2346296,
+      "graphBytes": 44273
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/registry.mjs",
+        "src/order.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/order.mjs",
+          "callId": "call_ccfc7f1114ad48cb9112bc0bb50f1f53|ctc_08b4ed54dee507b3016af16308c61087d1968700778c0ddc9f/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module -e \"import assert from 'node:assert/strict'; import { buildOrder } from './src/order.mjs'; import { resolveName } from './src/registry.mjs'; const nodes = { app: { dependencies: ['coreAlias', 'core'] }, core: {} }; const aliases = { appAlias: 'app', coreAlias: 'coreName', coreName: 'core' }; assert.equal(resolveName('appAlias', nodes, aliases), 'app'); assert.deepEqual(buildOrder({ nodes, aliases }, ['appAlias', 'app']), ['core', 'app']); assert.throws(() => resolveName('loopA', nodes, { loopA: 'loopB', loopB: 'loopA' }), /Alias cycle/); assert.throws(() => buildOrder({ nodes: { a: { dependencies: ['aAlias'] } }, aliases: { aAlias: 'a' } }, ['a']), /Dependency cycle/); assert.deepEqual(buildOrder({ nodes: { ok: {}, broken: { dependencies: ['missing'] } } }, ['ok']), ['ok']);\"",
+        "git diff --check && git diff -- src/order.mjs src/registry.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/order.mjs",
+        "src/registry.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module -e \"import assert from 'node:assert/strict'; import { buildOrder } from './src/order.mjs'; import { resolveName } from './src/registry.mjs'; const nodes = { app: { dependencies: ['coreAlias', 'core'] }, core: {} }; const aliases = { appAlias: 'app', coreAlias: 'coreName', coreName: 'core' }; assert.equal(resolveName('appAlias', nodes, aliases), 'app'); assert.deepEqual(buildOrder({ nodes, aliases }, ['appAlias', 'app']), ['core', 'app']); assert.throws(() => resolveName('loopA', nodes, { loopA: 'loopB', loopB: 'loopA' }), /Alias cycle/); assert.throws(() => buildOrder({ nodes: { a: { dependencies: ['aAlias'] } }, aliases: { aAlias: 'a' } }, ['a']), /Dependency cycle/); assert.deepEqual(buildOrder({ nodes: { ok: {}, broken: { dependencies: ['missing'] } } }, ['ok']), ['ok']);\"",
+        "git diff --check && git diff -- src/order.mjs src/registry.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/order.mjs",
+      "before": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(name)) return;\r\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(name);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(name); done.add(name); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n",
+      "after": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (active.has(target)) throw new Error('Dependency cycle: ' + target);\r\n    if (done.has(target)) return;\r\n    active.add(target);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(target); done.add(target); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n"
+    },
+    {
+      "path": "src/registry.mjs",
+      "before": "export function resolveName(name, nodes, aliases) {\r\n  const target = aliases[name] ?? name;\r\n  if (!(target in nodes)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n",
+      "after": "export function resolveName(name, nodes, aliases = {}) {\r\n  let target = name;\r\n  const seen = new Set();\r\n\r\n  while (Object.prototype.hasOwnProperty.call(aliases, target)) {\r\n    if (seen.has(target)) throw new Error('Alias cycle: ' + target);\r\n    seen.add(target);\r\n    target = aliases[target];\r\n  }\r\n\r\n  if (!Object.prototype.hasOwnProperty.call(nodes, target)) {\r\n    throw new Error('Unknown node: ' + target);\r\n  }\r\n  return target;\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented alias-aware dependency ordering in `src/registry.mjs` and `src/order.mjs`. Alias chains now resolve transitively with cycle detection, and build traversal tracks canonical node identities to deduplicate aliases and detect dependency cycles.\n\nVerified with `node --test tests/visible.test.mjs` (1 test passed), additional contract-focused assertions, and `git diff --check`.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\039-dependency-aliases-C-r1\\home\\events\\1794204396727-7cae12ff-dbb1-4019-9ae2-01412edfed98.jsonl"
+}
