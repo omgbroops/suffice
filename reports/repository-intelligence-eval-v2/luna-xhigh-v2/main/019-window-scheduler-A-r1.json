@@ -1,0 +1,86 @@
+{
+  "task": "window-scheduler",
+  "repetition": 1,
+  "arm": "A",
+  "mode": "off",
+  "scheduleIndex": 19,
+  "runId": "019-window-scheduler-A-r1",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 66539.20200000005,
+  "usage": {
+    "input": 10972,
+    "cacheRead": 10112,
+    "cacheWrite": 0,
+    "output": 2075,
+    "estimatedApiUsd": 0.00223582,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00223582,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: half-open booking boundaries and exact window fit\nok 1 - half-open booking boundaries and exact window fit\n  ---\n  duration_ms: 1.6523\n  type: 'test'\n  ...\n# Subtest: overlapping windows deduplicate and sort while real overlap is blocked\nok 2 - overlapping windows deduplicate and sort while real overlap is blocked\n  ---\n  duration_ms: 0.1775\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.2597\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 108
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: interior free slots are offered\nok 1 - interior free slots are offered\n  ---\n  duration_ms: 0.7982\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.4766\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 104
+  },
+  "changed": [
+    "src/intervals.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 12,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/intervals.mjs",
+      "before": "export function overlaps(a, b) { return a.start <= b.end && b.start <= a.end; }\r\nexport function startsInWindow(window, duration, stepMinutes) {\r\n  const starts = [];\r\n  for (let start = window.start; start + duration < window.end; start += stepMinutes) starts.push(start);\r\n  return starts;\r\n}\r\n",
+      "after": "export function overlaps(a, b) { return a.start < b.end && b.start < a.end; }\r\nexport function startsInWindow(window, duration, stepMinutes) {\r\n  const starts = [];\r\n  for (let start = window.start; start + duration <= window.end; start += stepMinutes) starts.push(start);\r\n  return starts;\r\n}\r\n"
+    }
+  ],
+  "final": "Updated `src/intervals.mjs` to use half-open overlap checks and include starts whose meetings end exactly at the window boundary. The scheduler’s existing deduplication, sorting, and earliest-start behavior remains unchanged.\n\nVerified with `node --test tests/visible.test.mjs` and additional boundary/scheduling assertions; all passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\019-window-scheduler-A-r1\\home\\events\\1794202955076-01eee65c-ed75-4432-8b3e-20c3b3327904.jsonl"
+}
