@@ -21,6 +21,8 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const eventPath=resolve(eventDir,`${Date.now()}-${randomUUID()}.jsonl`);
   let tail=Promise.resolve(), logError, session, allowance, taskTimer, managedRun=false;
   const totals={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,costUnknown:false};
+  let dispatchedRequests=0,blockedBeforeDispatch=false;
+  const closedRequests=new Set();
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
   const intelligence=options.intelligence&&options.intelligence!=='off'?createIntelligence({workspace,cacheDir:resolve(options.home,'intelligence'),log}):undefined;
   const tools=repositoryTools({workspace,shellPath:options.shellPath,intelligence,log});
@@ -38,12 +40,18 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     pi.on('tool_result',e=>log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:e.content,details:e.details}));
     pi.on('before_provider_request',e=>{
       if(logError) throw logError;
-      if(allowance && (allowance.reason || allowance.spent+(options.requestReserveUsd??0)>=options.maxCost || allowance.turns>=(options.maxTurns??60))) {stop('allowance');throw new Error('Task allowance exhausted');}
+      if(allowance && (allowance.reason || allowance.spent+(options.requestReserveUsd??0)>=options.maxCost || allowance.turns>=(options.maxTurns??60))) {blockedBeforeDispatch=true;log({type:'provider_request_blocked',reason:'allowance',dispatched:false});stop('allowance');throw new Error('Task allowance exhausted');}
       if(options.serviceTier)e.payload.service_tier=options.serviceTier;
       if(options.maxOutputTokens)e.payload.max_output_tokens=options.maxOutputTokens;
-      log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,serviceTier:e.payload.service_tier,maxOutputTokens:e.payload.max_output_tokens,bytes:JSON.stringify(e.payload).length});
+      const bytes=Buffer.byteLength(JSON.stringify(e.payload));
+      if(options.maxProviderPayloadBytes&&bytes>options.maxProviderPayloadBytes){blockedBeforeDispatch=true;log({type:'provider_request_blocked',reason:'input_payload_limit',bytes,limit:options.maxProviderPayloadBytes,dispatched:false});stop('input_payload_limit');throw new Error('Task input payload allowance exhausted');}
+      blockedBeforeDispatch=false;dispatchedRequests++;
+      log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,serviceTier:e.payload.service_tier,maxOutputTokens:e.payload.max_output_tokens,bytes});
     });
-    pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,model:e.data.response.model,serviceTier:e.data.response.service_tier,reasoning:e.data.response.reasoning,usage:e.data.response.usage});});
+    pi.on('provider_stream_event',e=>{if(e.data?.response?.usage){
+      if(typeof e.data.response.id==='string'&&['response.completed','response.incomplete','response.failed','response.cancelled'].includes(e.data.type))closedRequests.add(e.data.response.id);
+      log({type:'provider_usage',responseId:e.data.response.id,model:e.data.response.model,serviceTier:e.data.response.service_tier,reasoning:e.data.response.reasoning,usage:e.data.response.usage});
+    }});
     pi.on('session_shutdown',async()=>{finish();await tail;if(logError) throw logError;});
   };
   const graphExtension=intelligence?(options.intelligence==='on-demand'?onDemandExtension(intelligence,{workspace,log}):intelligenceExtension(intelligence,{guided:options.intelligence==='guided',log})):undefined;
@@ -77,7 +85,10 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     for(const k of ['input','cacheRead','cacheWrite','output']) totals[k]+=u?.[k]??0;
     const known=Number.isFinite(u?.cost?.total);
     if(known) totals.estimatedApiUsd+=u.cost.total;
-    if(!known || ['error','aborted'].includes(m.stopReason)) totals.costUnknown=true;
+    // A synthetic abort from a preflight rejection made no new model request.
+    // Never clear an earlier unknown request, or assume a dispatched abort is free.
+    const rejectedBeforeRequest=blockedBeforeDispatch&&dispatchedRequests===closedRequests.size&&u?.cost?.total===0;
+    if(!known || ['error','aborted'].includes(m.stopReason)&&!rejectedBeforeRequest) totals.costUnknown=true;
     log({type:'assistant',model:m.model,usage:u,stopReason:m.stopReason,error:m.errorMessage,content:m.content});
     if(allowance) {
       allowance.turns++; allowance.spent+=known?u.cost.total:0;
