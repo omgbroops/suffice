@@ -1,0 +1,115 @@
+{
+  "task": "dependency-aliases",
+  "arm": "D",
+  "mode": "tools",
+  "repetition": 0,
+  "diagnostic": true,
+  "scheduleIndex": 51,
+  "runId": "051-dependency-aliases-D-r0",
+  "dispatchConcurrency": 12,
+  "category": "cross-file",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 83937.89410000015,
+  "usage": {
+    "input": 10247,
+    "cacheRead": 23552,
+    "cacheWrite": 0,
+    "output": 3143,
+    "estimatedApiUsd": 0.0028317200000000002,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0028317200000000002,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: transitive aliases and duplicate identities resolve once\nok 1 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 1.2785\n  type: 'test'\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 2 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.4151\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nok 3 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.2103\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.1361\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 84
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ordinary dependencies are ordered before a root\nok 1 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 1.2093\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.2679\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 79
+  },
+  "changed": [
+    "src/order.mjs",
+    "src/registry.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 19,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:23:46.567Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    }
+  ],
+  "graphGuidance": [],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:23:46.654Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1735dd4d65cb6a4219460db6ecfb7ba5f2e61635f7ac9310f24d871d68c7e8b7"
+      },
+      "latencyMs": 95.45320000033826,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 23029,
+      "heapDeltaBytes": 5829864,
+      "graphBytes": 37225
+    }
+  ],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/order.mjs",
+      "before": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(name)) return;\r\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(name);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(name); done.add(name); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n",
+      "after": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(target)) return;\r\n    if (active.has(target)) throw new Error('Dependency cycle: ' + target);\r\n    active.add(target);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(target); done.add(target); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n"
+    },
+    {
+      "path": "src/registry.mjs",
+      "before": "export function resolveName(name, nodes, aliases) {\r\n  const target = aliases[name] ?? name;\r\n  if (!(target in nodes)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n",
+      "after": "export function resolveName(name, nodes, aliases = {}) {\r\n  const seen = new Set();\r\n  let target = name;\r\n\r\n  while (Object.hasOwn(aliases, target)) {\r\n    if (seen.has(target)) throw new Error('Alias cycle: ' + target);\r\n    seen.add(target);\r\n    target = aliases[target];\r\n  }\r\n\r\n  if (!Object.hasOwn(nodes, target)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the dependency-alias repair:\n\n- `resolveName` now follows alias chains, detects alias cycles, and rejects names without a real node.\n- `buildOrder` tracks completed and active nodes by their resolved identity, so aliases are emitted once and dependency cycles through aliases are detected.\n\nVerification passed: `node --test tests/visible.test.mjs`, additional contract smoke checks, and `git diff --check`.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\051-dependency-aliases-D-r0\\home\\events\\1794205426548-413ab7eb-0c74-48a5-9f07-f71a7e1913c9.jsonl"
+}
