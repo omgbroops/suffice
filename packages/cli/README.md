@@ -43,6 +43,13 @@ search, edit, and execution tools stay available. See the repository's
 [architecture and limitations](../../docs/REPOSITORY-INTELLIGENCE.md) and
 [measured evaluation](../../reports/repository-intelligence-v1/REPORT.md).
 
+`--intelligence on-demand` activates graph guidance after observed exported-module
+edits, coordinated file edits, failed verification, or explicit graph requests.
+It avoids initial graph construction and logs query reasons. To use the v2
+evaluation model/profile interactively, pass `--model gpt-6-luna --effort xhigh`.
+See the [v2 protocol](../../docs/REPOSITORY-INTELLIGENCE-EVAL-V2.md) and
+[v2 measured results](../../reports/repository-intelligence-eval-v2/REPORT.md).
+
 ## Working with it
 
 Type a task in Pi's normal input editor. `/project [PATH]` (or `/cd`) changes projects; `/login` opens Pi's login flow; `/model` opens its model selector; `/settings` opens preferences; `/new` starts fresh; `/resume` opens previous sessions; `/usage` shows current-run usage. Pi's keyboard shortcuts and tool output rendering are retained. Escape interrupts; Ctrl+D exits from an empty editor. `--print` runs one task and returns a nonzero exit code on errors, cancellation or limits. When there is no terminal, supply a task argument or pipe it through stdin.
