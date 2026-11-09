@@ -5,7 +5,7 @@ import {resolve} from 'node:path';
 import {tmpdir} from 'node:os';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {classicBuildSteps} from '../src/classic-svelte-eval.mjs';
+import {classicBuildSteps,classicDependencies} from '../src/classic-svelte-eval.mjs';
 import {svelteTask} from '../src/svelte-intelligence-pilot.mjs';
 import {snapshot} from '../src/intelligence-eval.mjs';
 test('classic build expansion preserves legacy and newer command sequences without invoking npm',()=>{
@@ -13,6 +13,13 @@ test('classic build expansion preserves legacy and newer command sequences witho
 });
 test('unaudited, recursive and escaping build commands are rejected',()=>{
   for(const scripts of [{build:'curl example.com'},{build:'npm run build'},{build:'npm run absent'},{build:'node ../outside.js'},{build:'rollup -c ../outside.js'},{build:'node src/a.js; echo unsafe'}])assert.throws(()=>classicBuildSteps({scripts}));
+});
+test('stale Yarn selectors use compatible locked versions or freeze the declared npm range once',()=>{
+  const lock='foo@^1.0.0:\n  version "1.2.3"\n\nbar@^2.0.0:\n  version "2.4.0"\n';
+  const result=classicDependencies({devDependencies:{foo:'^1.0.0',bar:'^2.3.0',baz:'^3.0.0',nightmare:'^3.0.0'}},lock);
+  assert.deepEqual(result.pinned.dependencies,{bar:'2.4.0',baz:'^3.0.0',foo:'1.2.3'});
+  assert.deepEqual(result.decisions.map(row=>row.method),['compatible-upstream-locked-version','declared-range-resolved-once-and-frozen-in-npm-lock','exact-upstream-lock-selector']);
+  assert.throws(()=>classicDependencies({dependencies:{foo:'git+https://example.invalid/foo.git'}},lock),/non-semver/);
 });
 test('the prospective cohort contains 24 distinct, balanced real issues with runtime criteria',async()=>{
   const cohort=JSON.parse(await readFile(new URL('../benchmarks/intelligence-real-v3/cohort.json',import.meta.url),'utf8'));

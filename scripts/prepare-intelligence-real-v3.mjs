@@ -8,7 +8,7 @@ import {hash} from '../src/workspace.mjs';
 import {snapshot,initializeWorkspaceGit} from '../src/intelligence-eval.mjs';
 import {copySource,linkDependencies,dependencySnapshot,applyPatch} from '../src/native-intelligence-eval.mjs';
 import {testSvelte,gradeSvelte} from '../src/svelte-intelligence-pilot.mjs';
-import {classicBuildSteps,buildClassic} from '../src/classic-svelte-eval.mjs';
+import {classicBuildSteps,buildClassic,classicDependencies} from '../src/classic-svelte-eval.mjs';
 const exec=promisify(execFile),base=resolve(root,'.suffice/intelligence-real-v3'),published=resolve(root,'reports/repository-intelligence-eval-v2/real-v3');
 const cohort=JSON.parse(await readFile(resolve(root,'benchmarks/intelligence-real-v3/cohort.json'),'utf8'));
 const ledger=JSON.parse(await readFile(resolve(root,'reports/repository-intelligence-eval-v2/spending.json'),'utf8'));
@@ -22,30 +22,13 @@ try{
 const adapterFingerprint=hash(JSON.stringify(await Promise.all(['native-tests.cjs','native-loader-base.cjs','native-compat.cjs'].map(async path=>hash(await readFile(resolve(root,'benchmarks/intelligence-real-v3',path)))))));
 const resourceFloor=async()=>{const disk=await statfs(root);if(freemem()<1.75*1024**3||disk.bavail*disk.bsize<6*1024**3)throw new Error('RESOURCE_FLOOR: stop preparation without classifying unattempted tasks');};
 async function download(url,path){try{await readFile(path);}catch(e){if(e.code!=='ENOENT')throw e;await exec('python',['-c','import urllib.request,sys;open(sys.argv[2],"wb").write(urllib.request.urlopen(sys.argv[1],timeout=60).read())',url,path],{windowsHide:true,timeout:90000});}}
-function pinnedDependencies(pkg,lock){
-  const excluded=/^(?:nightmare|electron(?:-.*)?|eslint(?:-.*)?|nyc|codecov|prettier|rollup-watch|husky|lint-staged)$/;
-  const versions={};
-  for(const [name,range]of Object.entries({...pkg.dependencies,...pkg.devDependencies}).sort(([a],[b])=>a.localeCompare(b))){
-    if(excluded.test(name))continue;
-    const selector=name+'@'+range;
-    for(const block of lock.split(/\n(?=[^\s#])/)){
-      const header=block.split('\n')[0].replace(/:$/,'');
-      if(!header.split(', ').map(s=>s.replace(/^"|"$/g,'')).includes(selector))continue;
-      const version=/\n  version "([^"]+)"/.exec(block)?.[1];
-      if(version)versions[name]=version;
-      break;
-    }
-    if(!versions[name])throw new Error('Cannot pin upstream dependency '+selector);
-  }
-  return {name:'svelte-real-v3-native-env',private:true,dependencies:versions};
-}
 async function dependenciesFor(pkg,lock){
-  const pinned=pinnedDependencies(pkg,lock),key=hash(JSON.stringify(pinned)).slice(0,20),directory=resolve(base,'dependencies',key);
+  const {pinned,decisions}=classicDependencies(pkg,lock),key=hash(JSON.stringify(pinned)).slice(0,20),directory=resolve(base,'dependencies',key);
   await mkdir(directory,{recursive:true});
   try{
     const receipt=JSON.parse(await readFile(resolve(directory,'receipt.json'),'utf8'));
     if(JSON.stringify(await dependencySnapshot(resolve(directory,'node_modules')))!==JSON.stringify(receipt.hashes))throw new Error('Shared dependency drift');
-    return {directory,key,receipt};
+    return {directory,key,receipt,pinning:decisions};
   }catch(e){if(e.code!=='ENOENT')throw e;}
   await writeFile(resolve(directory,'package.json'),JSON.stringify(pinned,null,2));
   await exec('cmd.exe',['/d','/s','/c','npm install --package-lock-only --ignore-scripts --legacy-peer-deps --no-audit --no-fund --loglevel=error'],{cwd:directory,windowsHide:true,timeout:180000,maxBuffer:1024**2});
@@ -61,7 +44,7 @@ async function dependenciesFor(pkg,lock){
   const target=resolve(published,'dependencies',key);await mkdir(target,{recursive:true});
   await cp(resolve(directory,'package.json'),resolve(target,'package.json'));await cp(resolve(directory,'package-lock.json'),resolve(target,'package-lock.json'));
   await writeFile(resolve(target,'receipt.json'),JSON.stringify({...receipt,hashes:undefined,contentHashesSha256:hash(JSON.stringify(receipt.hashes))},null,2));
-  return {directory,key,receipt};
+  return {directory,key,receipt,pinning:decisions};
 }
 const selected=process.argv.find(a=>a.startsWith('--task='))?.slice(7),results=[];
 for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
@@ -83,7 +66,7 @@ for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
     const record=JSON.parse(recordBytes),archive=resolve(directory,'source.tar.gz');await download(`https://codeload.github.com/${record.repo}/tar.gz/${record.base_commit}`,archive);receipt.archiveSha256=hash(await readFile(archive));
     await exec('tar',['-xzf',archive,'-C',directory],{windowsHide:true,timeout:60000});
     const upstream=resolve(directory,'svelte-'+record.base_commit),pkg=JSON.parse(await readFile(resolve(upstream,'package.json'),'utf8')),steps=classicBuildSteps(pkg);
-    const deps=await dependenciesFor(pkg,await readFile(resolve(upstream,'yarn.lock'),'utf8'));receipt.dependencyKey=deps.key;receipt.dependencyLockSha256=deps.receipt.lockSha256;receipt.buildSteps=steps;receipt.projectVersion=pkg.version;
+    const deps=await dependenciesFor(pkg,await readFile(resolve(upstream,'yarn.lock'),'utf8'));receipt.dependencyKey=deps.key;receipt.dependencyPinning=deps.pinning;receipt.dependencyLockSha256=deps.receipt.lockSha256;receipt.buildSteps=steps;receipt.projectVersion=pkg.version;
     const baseline=resolve(directory,'baseline');
     try{
       const owner=await realpath(directory),actual=await realpath(baseline);

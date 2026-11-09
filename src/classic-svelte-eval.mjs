@@ -3,7 +3,24 @@ import {resolve,relative,isAbsolute} from 'node:path';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {svelteTask} from './svelte-intelligence-pilot.mjs';
+import semver from 'semver';
 const exec=promisify(execFile);
+export function classicDependencies(pkg,lock){
+  const excluded=/^(?:nightmare|electron(?:-.*)?|eslint(?:-.*)?|nyc|codecov|prettier|rollup-watch|husky|lint-staged)$/;
+  const versions={},decisions=[];
+  const locked=lock.split(/\n(?=[^\s#])/).map(block=>({selectors:block.split('\n')[0].replace(/:$/,'').split(', ').map(s=>s.replace(/^"|"$/g,'')),version:/\n  version "([^"]+)"/.exec(block)?.[1]})).filter(entry=>entry.version);
+  for(const [name,range]of Object.entries({...pkg.dependencies,...pkg.devDependencies}).sort(([a],[b])=>a.localeCompare(b))){
+    if(excluded.test(name))continue;
+    if(!semver.validRange(range))throw new Error('Unpinned non-semver dependency '+name+'@'+range);
+    const exact=locked.find(entry=>entry.selectors.includes(name+'@'+range));
+    const compatible=locked.filter(entry=>entry.selectors.some(selector=>selector.startsWith(name+'@'))&&semver.valid(entry.version)&&semver.satisfies(entry.version,range)).map(entry=>entry.version).sort(semver.rcompare);
+    if(exact){versions[name]=exact.version;decisions.push({name,declared:range,selected:exact.version,method:'exact-upstream-lock-selector'});}
+    else if(compatible.length){versions[name]=compatible[0];decisions.push({name,declared:range,selected:compatible[0],method:'compatible-upstream-locked-version'});}
+    else if(semver.validRange(range)){versions[name]=range;decisions.push({name,declared:range,method:'declared-range-resolved-once-and-frozen-in-npm-lock'});}
+    else throw new Error('Unpinned non-semver dependency '+name+'@'+range);
+  }
+  return {pinned:{name:'svelte-real-v3-native-env',private:true,dependencies:versions},decisions};
+}
 
 /** Expand only the audited classic compiler build commands, without a shell. */
 export function classicBuildSteps(pkg){

@@ -64,8 +64,10 @@ is saved. Main inputs and receipts bypass Git newline conversion.
 
 Only audited classic build commands are expanded from the original package
 scripts: Node scripts, Rollup configurations and recursive `npm run` aliases.
-Execution bypasses a shell. Upstream top-level dependency versions are extracted
-from its Yarn lock; the full installed lock and content hashes are retained.
+Execution bypasses a shell. Upstream top-level dependency versions use exact or compatible Yarn-locked versions.
+If a declared semver range has no compatible locked entry, npm resolves it once
+and the full installed lock and content hashes freeze that choice. Each decision
+is recorded; non-semver fallback sources are rejected.
 Nightmare/Electron and development-only lint/coverage tools are not provisioned.
 
 The loader preserves original source-unit and test-suite discovery. Windows glob
