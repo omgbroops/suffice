@@ -1,0 +1,428 @@
+{
+  "task": "streaming-utf8",
+  "repetition": 1,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 15,
+  "runId": "015-streaming-utf8-B-r1",
+  "dispatchConcurrency": 12,
+  "category": "cross-file",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 78090.63110000003,
+  "usage": {
+    "input": 23612,
+    "cacheRead": 48640,
+    "cacheWrite": 0,
+    "output": 2783,
+    "estimatedApiUsd": 0.004239100000000001,
+    "modelCalls": 8,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.004239100000000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: every byte split preserves multibyte text and CRLF\nok 1 - every byte split preserves multibyte text and CRLF\n  ---\n  duration_ms: 7.5092\n  type: 'test'\n  ...\n# Subtest: lone final CR is content and trailing LF does not invent a line\nok 2 - lone final CR is content and trailing LF does not invent a line\n  ---\n  duration_ms: 0.579\n  type: 'test'\n  ...\n# Subtest: unfinished UTF-8 is replaced only when finalized\nok 3 - unfinished UTF-8 is replaced only when finalized\n  ---\n  duration_ms: 0.661\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 36.5266\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 193
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ASCII lines and a final tail\nok 1 - ASCII lines and a final tail\n  ---\n  duration_ms: 5.4406\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 23.7464\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 209
+  },
+  "changed": [
+    "src/decoder.mjs",
+    "src/lines.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 8,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 18,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:38:18.113Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:38:18.325Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:38:25.930Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:32.464Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:44.531Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:44.632Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:48.914Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:49.062Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:39:03.614Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:39:12.132Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:39:25.671Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:38:18.319Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "b90e33ea1b77f3c7dd4e0484c7b0b45b418c36caf9fdde45e5fa64067ae61e3e"
+      },
+      "latencyMs": 220.03310000000056,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 10820344,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:18.584Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "b90e33ea1b77f3c7dd4e0484c7b0b45b418c36caf9fdde45e5fa64067ae61e3e"
+      },
+      "latencyMs": 257.0234000000055,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": -17711280,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:26.087Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "b90e33ea1b77f3c7dd4e0484c7b0b45b418c36caf9fdde45e5fa64067ae61e3e"
+      },
+      "latencyMs": 160.8856000000087,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 1721296,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:32.580Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "b90e33ea1b77f3c7dd4e0484c7b0b45b418c36caf9fdde45e5fa64067ae61e3e"
+      },
+      "latencyMs": 116.56409999998868,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 1015096,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:44.631Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f9b764e298c5edde14cde73ce3aa4642ac58379b9c77f4d689c1aa815b17bc08"
+      },
+      "latencyMs": 100.88270000001648,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 599256,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:44.968Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f9b764e298c5edde14cde73ce3aa4642ac58379b9c77f4d689c1aa815b17bc08"
+      },
+      "latencyMs": 336.4401000000071,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 314200,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:49.061Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 148.6195000000007,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 1803192,
+      "graphBytes": 31052
+    },
+    {
+      "at": "2026-11-09T05:38:49.186Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 124.31060000002617,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 322648,
+      "graphBytes": 31052
+    },
+    {
+      "at": "2026-11-09T05:39:03.712Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 98.95320000001811,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 481736,
+      "graphBytes": 31052
+    },
+    {
+      "at": "2026-11-09T05:39:12.237Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 105.86290000000736,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 311920,
+      "graphBytes": 31052
+    },
+    {
+      "at": "2026-11-09T05:39:25.754Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 82.81439999997383,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 548464,
+      "graphBytes": 31052
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/lines.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/lines.mjs",
+          "callId": "call_19efdad2ab1a48e4a91b1fe3afa146e1|ctc_0086c04a35a7716f016af15c4ae5dc87d1a099f5a528c16431/2"
+        },
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_19efdad2ab1a48e4a91b1fe3afa146e1|ctc_0086c04a35a7716f016af15c4ae5dc87d1a099f5a528c16431/3"
+        },
+        {
+          "tool": "edit",
+          "path": "src/lines.mjs",
+          "callId": "call_4cb6eae64816435b9a16561f87945002|ctc_0086c04a35a7716f016af15c6171d887d1bb3e7e095a935192/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { LineReader, readLines } from './src/lines.mjs';\nconst encoder = new TextEncoder();\nconst text = 'A💩\\r\\n\\nB\\rC\\r';\nconst bytes = encoder.encode(text);\nconst chunks = Array.from(bytes, byte => Uint8Array.of(byte));\nassert.deepEqual(await readLines(chunks), ['A💩', '', 'B\\rC\\r']);\nassert.deepEqual(await readLines([encoder.encode('first\\n\\n')]), ['first', '']);\nconst reader = new LineReader();\nassert.deepEqual(reader.feed(Uint8Array.of(0xe2)), []);\nassert.deepEqual(reader.feed(Uint8Array.of(0x82)), []);\nassert.deepEqual(reader.end(), ['�']);\nconst malformed = Uint8Array.of(0xe2, 0x28, 0xa1, 0x0a);\nassert.deepEqual(await readLines(Array.from(malformed, byte => Uint8Array.of(byte))), [new TextDecoder().decode(malformed).slice(0, -1)]);\nconsole.log('Additional streaming UTF-8 and line contract checks passed');\nEOF",
+        "git diff -- src/decoder.mjs src/lines.mjs && git status --short -- src",
+        "pwd; git rev-parse --show-toplevel; git status --short --untracked-files=all | head -80; git ls-files --error-unmatch src/lines.mjs src/decoder.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/decoder.mjs",
+        "src/lines.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/lines.mjs",
+          "callId": "call_4cb6eae64816435b9a16561f87945002|ctc_0086c04a35a7716f016af15c6171d887d1bb3e7e095a935192/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { LineReader, readLines } from './src/lines.mjs';\nconst encoder = new TextEncoder();\nconst text = 'A💩\\r\\n\\nB\\rC\\r';\nconst bytes = encoder.encode(text);\nconst chunks = Array.from(bytes, byte => Uint8Array.of(byte));\nassert.deepEqual(await readLines(chunks), ['A💩', '', 'B\\rC\\r']);\nassert.deepEqual(await readLines([encoder.encode('first\\n\\n')]), ['first', '']);\nconst reader = new LineReader();\nassert.deepEqual(reader.feed(Uint8Array.of(0xe2)), []);\nassert.deepEqual(reader.feed(Uint8Array.of(0x82)), []);\nassert.deepEqual(reader.end(), ['�']);\nconst malformed = Uint8Array.of(0xe2, 0x28, 0xa1, 0x0a);\nassert.deepEqual(await readLines(Array.from(malformed, byte => Uint8Array.of(byte))), [new TextDecoder().decode(malformed).slice(0, -1)]);\nconsole.log('Additional streaming UTF-8 and line contract checks passed');\nEOF",
+        "git diff -- src/decoder.mjs src/lines.mjs && git status --short -- src",
+        "pwd; git rev-parse --show-toplevel; git status --short --untracked-files=all | head -80; git ls-files --error-unmatch src/lines.mjs src/decoder.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/decoder.mjs",
+        "src/lines.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { LineReader, readLines } from './src/lines.mjs';\nconst encoder = new TextEncoder();\nconst text = 'A💩\\r\\n\\nB\\rC\\r';\nconst bytes = encoder.encode(text);\nconst chunks = Array.from(bytes, byte => Uint8Array.of(byte));\nassert.deepEqual(await readLines(chunks), ['A💩', '', 'B\\rC\\r']);\nassert.deepEqual(await readLines([encoder.encode('first\\n\\n')]), ['first', '']);\nconst reader = new LineReader();\nassert.deepEqual(reader.feed(Uint8Array.of(0xe2)), []);\nassert.deepEqual(reader.feed(Uint8Array.of(0x82)), []);\nassert.deepEqual(reader.end(), ['�']);\nconst malformed = Uint8Array.of(0xe2, 0x28, 0xa1, 0x0a);\nassert.deepEqual(await readLines(Array.from(malformed, byte => Uint8Array.of(byte))), [new TextDecoder().decode(malformed).slice(0, -1)]);\nconsole.log('Additional streaming UTF-8 and line contract checks passed');\nEOF",
+        "git diff -- src/decoder.mjs src/lines.mjs && git status --short -- src",
+        "pwd; git rev-parse --show-toplevel; git status --short --untracked-files=all | head -80; git ls-files --error-unmatch src/lines.mjs src/decoder.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/decoder.mjs",
+      "before": "export class ChunkDecoder {\r\n  constructor() { this.decoder = new TextDecoder('utf-8'); }\r\n  feed(bytes) { return this.decoder.decode(bytes); }\r\n  end() { return this.decoder.decode(); }\r\n}\r\n",
+      "after": "export class ChunkDecoder {\r\n  constructor() { this.decoder = new TextDecoder('utf-8'); }\r\n  feed(bytes) { return this.decoder.decode(bytes, { stream: true }); }\r\n  end() { return this.decoder.decode(); }\r\n}\r\n"
+    },
+    {
+      "path": "src/lines.mjs",
+      "before": "import { ChunkDecoder } from './decoder.mjs';\r\nexport class LineReader {\r\n  constructor() { this.decoder = new ChunkDecoder(); this.pending = ''; }\r\n  feed(bytes) {\r\n    this.pending += this.decoder.feed(bytes);\r\n    const parts = this.pending.split('\\n'); this.pending = parts.pop();\r\n    return parts.map(line => line.replace(/\\r$/, ''));\r\n  }\r\n  end() {\r\n    this.pending += this.decoder.end();\r\n    const last = this.pending.replace(/\\r$/, ''); this.pending = '';\r\n    return last ? [last] : [];\r\n  }\r\n}\r\nexport async function readLines(chunks) {\r\n  const reader = new LineReader(); const lines = [];\r\n  for await (const chunk of chunks) lines.push(...reader.feed(chunk));\r\n  return [...lines, ...reader.end()];\r\n}\r\n",
+      "after": "import { ChunkDecoder } from './decoder.mjs';\r\nexport class LineReader {\r\n  constructor() { this.decoder = new ChunkDecoder(); this.pending = ''; }\r\n  feed(bytes) {\r\n    this.pending += this.decoder.feed(bytes);\r\n    const parts = this.pending.split('\\n'); this.pending = parts.pop();\r\n    return parts.map(line => line.replace(/\\r$/, ''));\r\n  }\r\n  end() {\r\n    this.pending += this.decoder.end();\r\n    const last = this.pending; this.pending = '';\r\n    return last ? [last] : [];\r\n  }\r\n}\r\nexport async function readLines(chunks) {\r\n  const reader = new LineReader(); const lines = [];\r\n  for await (const chunk of chunks) lines.push(...reader.feed(chunk));\r\n  return [...lines, ...reader.end()];\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the streaming UTF-8 fixes under `src/`:\n\n- `ChunkDecoder.feed()` now preserves decoder state across chunk boundaries.\n- `LineReader.end()` preserves a lone trailing CR as content; CR is removed only when it precedes an LF delimiter.\n\nVerification passed: `node --test tests/visible.test.mjs` (1 test), plus supplemental checks for byte-by-byte UTF-8 chunks, empty lines, CRLF, lone CR, and malformed UTF-8.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\015-streaming-utf8-B-r1\\home\\events\\1794202698085-94edb65c-f212-4164-b9dc-fc83a9dea73b.jsonl"
+}
