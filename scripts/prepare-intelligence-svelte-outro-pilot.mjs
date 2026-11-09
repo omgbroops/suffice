@@ -22,6 +22,10 @@ const baseline=resolve(svelteRoot,'baseline');await copySource(upstream,baseline
 const dependencies=resolve(svelteRoot,'dependencies');await mkdir(dependencies,{recursive:true});
 await cp(resolve(root,'benchmarks/intelligence-svelte-outro-pilot/dependency-package.json'),resolve(dependencies,'package.json'));
 await cp(resolve(root,'benchmarks/intelligence-svelte-outro-pilot/dependency-lock.json'),resolve(dependencies,'package-lock.json'));
+if(process.argv.includes('--reuse-dependencies')){
+  const expected=JSON.parse(await readFile(resolve(svelteRoot,'dependency-hashes.json'),'utf8'));
+  if(JSON.stringify(await dependencySnapshot(resolve(dependencies,'node_modules')))!==JSON.stringify(expected))throw new Error('Cannot reuse drifted dependencies');
+}else{
 await exec('cmd.exe',['/d','/s','/c','npm ci --ignore-scripts --legacy-peer-deps --no-audit --no-fund --loglevel=error'],{cwd:dependencies,windowsHide:true,timeout:180000,maxBuffer:1024**2});
 // tiny-glob 0.2.0 compares native backslash paths with slash-only regexes.
 // This deterministic dependency adaptation preserves the original test globs.
@@ -29,6 +33,7 @@ const globPath=resolve(dependencies,'node_modules/tiny-glob/sync.js');
 const globSource=await readFile(globPath,'utf8');
 if(!globSource.includes('isMatch = lexer.regex.test(relpath);'))throw new Error('Unexpected tiny-glob source');
 await writeFile(globPath,globSource.replace('isMatch = lexer.regex.test(relpath);',"isMatch = lexer.regex.test(relpath.replace(/\\\\/g, '/'));").replace('output.push(relative(opts.cwd, fullpath))',"output.push(relative(opts.cwd, fullpath).replace(/\\\\/g, '/'))"));
+}
 const nodeArchive=resolve(svelteRoot,'node16.zip');await download('https://nodejs.org/dist/v16.20.2/node-v16.20.2-win-x64.zip',nodeArchive);
 if(hash(await readFile(nodeArchive))!=='f8bb35f6c08dc7bf14ac753509c06ed1a7ebf5b390cd3fbdc8f8c1aedd020ec3')throw new Error('Node16 archive differs from official SHASUMS256');
 await exec('python',['-c','import zipfile,pathlib,sys;p=pathlib.Path(sys.argv[2]);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(zipfile.ZipFile(sys.argv[1]).read("node-v16.20.2-win-x64/node.exe"))',nodeArchive,resolve(dependencies,'node_modules/.suffice-node16/node.exe')],{windowsHide:true,timeout:30000});
@@ -43,7 +48,8 @@ const control=await clone('public');observations.public=await testSvelte(control
 if(observations.public.status!=='reported')throw new Error('Public test discovery failed: '+JSON.stringify(observations.public).slice(0,1500));
 const knownFailures=observations.public.report.failures.map(t=>t.fullTitle),knownPending=observations.public.report.pending.map(t=>t.fullTitle);
 let expectedTitleCounts; // Freeze discovery after applying the upstream test patch.
-if(knownFailures.some(n=>!/^runtime binding-select \(/.test(n)))throw new Error('Unexpected baseline infrastructure/regression failures');
+if(knownFailures.some(n=>!/^runtime binding-select \(/.test(n)&&!/^cli (dir-sourcemap|sourcemap)$/.test(n)))throw new Error('Unexpected baseline infrastructure/regression failures');
+if(knownFailures.some(n=>record.FAIL_TO_PASS.includes(n)||record.PASS_TO_PASS.includes(n)))throw new Error('Scored criteria cannot be allowlisted as known failures');
 const gates={};
 for(const variant of ['empty','reference']){
   const workspace=await clone(variant);
@@ -60,7 +66,7 @@ for(const variant of ['empty','reference']){
 }
 // Empty target failures are expected; only the reference must eliminate new failures.
 const valid=gates.empty.acceptance.status==='failed'&&gates.empty.acceptance.unpassed.length===record.FAIL_TO_PASS.length&&gates.empty.acceptance.missing.length===0&&gates.reference.acceptance.status==='passed'&&gates.reference.regression.status==='passed';
-const receipt={version:1,valid,node:process.version,projectNode:'v16.20.2',platform:process.platform,task:record.instance_id,provenance:record.provenance,baselineHashes,dependencyLockSha256:hash(await readFile(resolve(dependencies,'package-lock.json'))),dependencyFiles:Object.keys(dependencyHashes).length,knownFailures,knownPending,expectedTitleCounts,gates,publicStats:observations.public.report.stats,limitations:['Native Windows adaptation; not an official SWE-PolyBench score.','Nightmare/Electron custom-elements suite excluded; zero official F2P/P2P titles belong to that suite. All 6 F2P and 1,863 P2P labels are retained.','Three existing binding-select failures and existing pending tests are reported, never called passes. Acceptance requires exact passing scored titles and no new failing/pending titles.','Duplicate full titles occur in eleven SSR cases; every matching case must pass, and frozen multiplicities prevent dropped cases from counting as success.','All six F2P titles exercise transition behavior at runtime; exact test success is not a proof of every requested transition case.','Agent tools run native host processes under a scope contract, not an OS sandbox.']};
+const receipt={version:1,valid,node:process.version,projectNode:'v16.20.2',platform:process.platform,task:record.instance_id,provenance:record.provenance,baselineHashes,dependencyLockSha256:hash(await readFile(resolve(dependencies,'package-lock.json'))),dependencyFiles:Object.keys(dependencyHashes).length,knownFailures,knownPending,expectedTitleCounts,gates,publicStats:observations.public.report.stats,limitations:['Native Windows adaptation; not an official SWE-PolyBench score.','Nightmare/Electron custom-elements suite excluded; zero official F2P/P2P titles belong to that suite. All 6 F2P and 1,863 P2P labels are retained.','Three existing binding-select failures, two unscored CLI SourceMap write failures and existing pending tests are reported, never called passes. Acceptance requires exact passing scored titles and no new failing/pending titles.','Duplicate full titles retain frozen multiplicities; every matching case must pass and dropped cases cannot count as success.','All six F2P titles exercise transition behavior at runtime; exact test success is not a proof of every requested transition case.','Agent tools run native host processes under a scope contract, not an OS sandbox.']};
 await writeFile(resolve(svelteRoot,'validation.json'),JSON.stringify(receipt,null,2));
 const published=resolve(root,'reports/repository-intelligence-eval-v2/svelte-outro-pilot');await mkdir(published,{recursive:true});await writeFile(resolve(published,'validation.json'),JSON.stringify(receipt,null,2));
 for(const [name,observed]of Object.entries(observations))if(observed.report)await writeFile(resolve(published,name+'-mocha.json'),JSON.stringify(observed.report,null,2));
