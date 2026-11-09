@@ -1,0 +1,91 @@
+{
+  "task": "pilot-interval-union",
+  "arm": "A",
+  "mode": "off",
+  "repetition": 0,
+  "scheduleIndex": 1,
+  "runId": "002-pilot-interval-union-A-r0",
+  "dispatchConcurrency": 9,
+  "category": "pilot",
+  "kind": "synthetic-pilot",
+  "workspaceGit": {
+    "root": "C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-eval-v2/runs/luna-xhigh-isolated-v2/pilot/002-pilot-interval-union-A-r0/workspace",
+    "head": "0565c4df119c3b6c411f3f820a502ae1ba162880",
+    "tree": "7569f0a6344008302644781a21a8104827031569"
+  },
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 99558.7449,
+  "usage": {
+    "input": 14951,
+    "cacheRead": 5888,
+    "cacheWrite": 0,
+    "output": 4206,
+    "estimatedApiUsd": 0.0036569799999999998,
+    "modelCalls": 6,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0036569799999999998,
+  "acceptance": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": false,
+    "stdout": "TAP version 13\n# Subtest: pilot-interval-union complete contract\nnot ok 1 - pilot-interval-union complete contract\n  ---\n  duration_ms: 2.4449\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice\\\\.suffice\\\\intelligence-eval-v2\\\\pilot\\\\pilot-interval-union\\\\acceptance.test.mjs:1:242'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        {\n          end: 5,\n          start: 3\n        },\n        {\n    +     end: 5,\n    -     end: 3,\n          start: 1\n        },\n        {\n          end: 4,\n          start: 2\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0:\n      start: 3\n      end: 5\n    1:\n      start: 1\n      end: 3\n    2:\n      start: 2\n      end: 4\n    3:\n      start: 8\n      end: 8\n  actual:\n    0:\n      start: 3\n      end: 5\n    1:\n      start: 1\n      end: 5\n    2:\n      start: 2\n      end: 4\n    3:\n      start: 8\n      end: 8\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-eval-v2/pilot/pilot-interval-union/acceptance.test.mjs:1:457)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.5314\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 86
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: public export exists\nok 1 - public export exists\n  ---\n  duration_ms: 0.7113\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 6.9755\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 81
+  },
+  "changed": [
+    "src/index.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 6,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 13,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/index.mjs",
+      "before": "export function union(xs){return xs.sort((a,b)=>a.start-b.start).filter(x=>x.end>x.start)}\n",
+      "after": "export function union(intervals) {\n  if (!Array.isArray(intervals)) {\n    throw new TypeError('intervals must be an array');\n  }\n\n  const sorted = intervals.map((interval) => {\n    if (interval === null || typeof interval !== 'object') {\n      throw new TypeError('each interval must be an object');\n    }\n\n    const { start, end } = interval;\n    if (!Number.isFinite(start) || !Number.isFinite(end)) {\n      throw new TypeError('interval start and end must be finite numbers');\n    }\n    if (end < start) {\n      throw new RangeError('interval end must not be less than start');\n    }\n\n    return { interval, start, end };\n  });\n\n  sorted.sort((a, b) => {\n    if (a.start !== b.start) return a.start < b.start ? -1 : 1;\n    if (a.end !== b.end) return a.end < b.end ? -1 : 1;\n    return 0;\n  });\n\n  const result = [];\n  for (const current of sorted) {\n    if (current.start === current.end) continue;\n\n    const previous = result[result.length - 1];\n    if (previous && current.start <= previous.end) {\n      if (current.end > previous.end) {\n        previous.end = current.end;\n        previous.interval.end = current.end;\n      }\n    } else {\n      result.push({\n        start: current.start,\n        end: current.end,\n        interval: current.interval,\n      });\n    }\n  }\n\n  return result.map(({ interval }) => interval);\n}\n"
+    }
+  ],
+  "final": "Repaired `union` to validate interval bounds, ignore zero-width intervals, sort without reordering the input array, and merge overlapping or touching intervals. It returns the original interval objects, extending the retained object’s `end` when needed.\n\nVerification: `node --test tests/visible.test.mjs` passed. I also ran a manual check of merging, object identity, input ordering, and invalid bounds.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-isolated-v2\\pilot\\002-pilot-interval-union-A-r0\\home\\events\\1794206775484-ac95838a-aefa-42a1-868e-35aa41529b8e.jsonl"
+}
