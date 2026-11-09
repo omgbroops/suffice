@@ -1,0 +1,385 @@
+{
+  "task": "layered-routing",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 10,
+  "runId": "011-layered-routing-B-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 149070.6166,
+  "usage": {
+    "input": 31083,
+    "cacheRead": 46976,
+    "cacheWrite": 0,
+    "output": 6526,
+    "estimatedApiUsd": 0.00684106,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00684106,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: exact and longest boundary prefixes override declaration order\nok 1 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 3.2157\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 2 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 2.9847\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 3 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.4324\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 4 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.6008\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 27.9591\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 277
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: route settings inherit defaults and results are owned\nok 1 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 1.7647\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 13.8486\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 284
+  },
+  "changed": [
+    "src/field-merge.mjs",
+    "src/header-merge.mjs",
+    "src/resolution-key.mjs",
+    "src/route-matcher.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 4,
+  "verificationCalls": 1,
+  "toolCalls": 34,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:35:04.345Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:35:04.652Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:35:11.000Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:35:17.769Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:35:57.139Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:35:57.287Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:36:04.139Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:36:39.070Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:37:04.486Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:35:04.651Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d9ed426eea2ca6a8c3575656fa64957de864c0c85423bf5762d7bdb64f6ac522"
+      },
+      "latencyMs": 326.8654000000006,
+      "parsedFiles": 17,
+      "fileCount": 17,
+      "cacheBytes": 88235,
+      "heapDeltaBytes": -6224112,
+      "graphBytes": 154300
+    },
+    {
+      "at": "2026-11-09T05:35:04.854Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d9ed426eea2ca6a8c3575656fa64957de864c0c85423bf5762d7bdb64f6ac522"
+      },
+      "latencyMs": 199.93730000000141,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 88235,
+      "heapDeltaBytes": 4245008,
+      "graphBytes": 154300
+    },
+    {
+      "at": "2026-11-09T05:35:11.361Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d9ed426eea2ca6a8c3575656fa64957de864c0c85423bf5762d7bdb64f6ac522"
+      },
+      "latencyMs": 361.65190000000075,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 88235,
+      "heapDeltaBytes": 1329296,
+      "graphBytes": 154300
+    },
+    {
+      "at": "2026-11-09T05:35:18.041Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d9ed426eea2ca6a8c3575656fa64957de864c0c85423bf5762d7bdb64f6ac522"
+      },
+      "latencyMs": 382.6749999999993,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 88235,
+      "heapDeltaBytes": 1559200,
+      "graphBytes": 154300
+    },
+    {
+      "at": "2026-11-09T05:35:57.286Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53171de4d841fbc9d27e4e047e1f81931be72ff4861ee0f8bc19dfaeb6108084"
+      },
+      "latencyMs": 147.7873000000036,
+      "parsedFiles": 4,
+      "fileCount": 17,
+      "cacheBytes": 96563,
+      "heapDeltaBytes": -200424,
+      "graphBytes": 166952
+    },
+    {
+      "at": "2026-11-09T05:35:57.428Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53171de4d841fbc9d27e4e047e1f81931be72ff4861ee0f8bc19dfaeb6108084"
+      },
+      "latencyMs": 141.90959999999905,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 96563,
+      "heapDeltaBytes": 1554912,
+      "graphBytes": 166952
+    },
+    {
+      "at": "2026-11-09T05:36:04.282Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53171de4d841fbc9d27e4e047e1f81931be72ff4861ee0f8bc19dfaeb6108084"
+      },
+      "latencyMs": 143.28740000000107,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 96563,
+      "heapDeltaBytes": 1477448,
+      "graphBytes": 166952
+    },
+    {
+      "at": "2026-11-09T05:36:39.555Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53171de4d841fbc9d27e4e047e1f81931be72ff4861ee0f8bc19dfaeb6108084"
+      },
+      "latencyMs": 493.90469999999914,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 96563,
+      "heapDeltaBytes": 2270432,
+      "graphBytes": 166952
+    },
+    {
+      "at": "2026-11-09T05:37:04.695Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53171de4d841fbc9d27e4e047e1f81931be72ff4861ee0f8bc19dfaeb6108084"
+      },
+      "latencyMs": 209.5561999999918,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 96563,
+      "heapDeltaBytes": 1469160,
+      "graphBytes": 166952
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/header-format.mjs",
+        "src/header-merge.mjs",
+        "src/settings-merge.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_aaf97ede50c5438eabb4e326ff3e4dc8|ctc_0c82f803123db5c7016af15b87c4b887d18b1d95f5ee83759e/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/settings-merge.mjs",
+          "callId": "call_b9f94cc181624ba08d12f5bf190b61b0|ctc_0c82f803123db5c7016af15b8c841487d1ab943e090e4a6ba0/5"
+        },
+        {
+          "tool": "read",
+          "path": "src/header-merge.mjs",
+          "callId": "call_b9f94cc181624ba08d12f5bf190b61b0|ctc_0c82f803123db5c7016af15b8c841487d1ab943e090e4a6ba0/7"
+        },
+        {
+          "tool": "read",
+          "path": "src/header-format.mjs",
+          "callId": "call_b9f94cc181624ba08d12f5bf190b61b0|ctc_0c82f803123db5c7016af15b8c841487d1ab943e090e4a6ba0/13"
+        },
+        {
+          "tool": "edit",
+          "path": "src/header-merge.mjs",
+          "callId": "call_0657852b2b594d48bb9e4d018ba6bc65|ctc_0c82f803123db5c7016af15bb3152087d1809508bf06fbd07a/3"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git status --short && git diff -- src/route-matcher.mjs src/field-merge.mjs src/header-merge.mjs src/resolution-key.mjs",
+        "pwd; git rev-parse --show-toplevel; git status --short -- src/router.mjs src/route-matcher.mjs src/field-merge.mjs src/header-merge.mjs src/resolution-key.mjs; git check-ignore -v src/route-matcher.mjs || true"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/field-merge.mjs",
+        "src/header-merge.mjs",
+        "src/resolution-key.mjs",
+        "src/route-matcher.mjs",
+        "src/settings-merge.mjs",
+        "src/resolver.mjs",
+        "src/router.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createRouter } from \"./src/index.mjs\"; const defaults={enabled:true,timeout:15,label:\"base\",headers:{keep:\"yes\",remove:\"gone\",blank:\"default\"}}; const routes=[{id:\"star\",pattern:\"*\",settings:{target:\"star\",enabled:false,timeout:0,label:\"\",headers:{remove:null,blank:\"\"}}},{id:\"broad\",pattern:\"/app/*\",settings:{target:\"broad\"}},{id:\"long\",pattern:\"/app/v1/*\",settings:{target:{nested:\"owned\"}}},{id:\"tie-first\",pattern:\"/tie/*\",settings:{target:\"first\"}},{id:\"tie-second\",pattern:\"/tie/*\",settings:{target:\"second\"}},{id:\"exact\",pattern:\"/app/v1/x\",settings:{target:\"exact\"}}]; const router=createRouter({defaults,routes}); assert.equal(router.resolve(\"a\",\"/app/v1/y\").id,undefined); assert.equal(router.resolve(\"a\",\"/app/v1/y\").route,\"long\"); assert.deepEqual(router.resolve(\"a\",\"/app/v1/y\").target,{nested:\"owned\"}); assert.equal(router.resolve(\"a\",\"/app/v1/x\").route,\"exact\"); assert.equal(router.resolve(\"a\",\"/app/y\").route,\"broad\"); assert.equal(router.resolve(\"a\",\"/apple\").route,\"star\"); assert.equal(router.resolve(\"a\",\"/tie/x\").route,\"tie-first\"); const inherited=router.resolve(\"a\",\"/app/y\"); assert.equal(inherited.enabled,true); assert.equal(inherited.headers.remove,\"gone\"); const overrides={enabled:false,timeout:0,label:\"\",headers:{keep:null,tenant:\"red\"}}; router.setTenant(\"red\",overrides); overrides.headers.tenant=\"mutated\"; const red=router.resolve(\"red\",\"/app/y\"); assert.equal(red.enabled,false); assert.equal(red.timeout,0); assert.equal(red.label,\"\"); assert.equal(red.headers.keep,undefined); assert.equal(red.headers.tenant,\"red\"); red.target.nested=\"changed\"; red.headers.tenant=\"changed\"; assert.equal(router.resolve(\"red\",\"/app/y\").target,\"broad\"); assert.equal(router.resolve(\"red\",\"/app/y\").headers.tenant,\"red\"); assert.equal(router.resolve(\"blue\",\"/app/y\").headers.tenant,undefined); router.setTenant(\"red\",{label:\"latest\"}); assert.equal(router.resolve(\"red\",\"/app/y\").label,\"latest\"); assert.equal(router.resolve(\"red\",\"/app/y\").headers.tenant,undefined); console.log(\"contract checks passed\");'",
+        "git diff --check && git status --short && git diff -- src/route-matcher.mjs src/field-merge.mjs src/header-merge.mjs src/resolution-key.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createRouter } from \"./src/index.mjs\"; const defaults={enabled:true,timeout:15,label:\"base\",headers:{keep:\"yes\",remove:\"gone\",blank:\"default\"}}; const routes=[{id:\"star\",pattern:\"*\",settings:{target:\"star\",enabled:false,timeout:0,label:\"\",headers:{remove:null,blank:\"\"}}},{id:\"broad\",pattern:\"/app/*\",settings:{target:\"broad\"}},{id:\"long\",pattern:\"/app/v1/*\",settings:{target:{nested:\"owned\"}}},{id:\"tie-first\",pattern:\"/tie/*\",settings:{target:\"first\"}},{id:\"tie-second\",pattern:\"/tie/*\",settings:{target:\"second\"}},{id:\"exact\",pattern:\"/app/v1/x\",settings:{target:\"exact\"}}]; const router=createRouter({defaults,routes}); assert.equal(router.resolve(\"a\",\"/app/v1/y\").route,\"long\"); assert.deepEqual(router.resolve(\"a\",\"/app/v1/y\").target,{nested:\"owned\"}); assert.equal(router.resolve(\"a\",\"/app/v1/x\").route,\"exact\"); assert.equal(router.resolve(\"a\",\"/app/y\").route,\"broad\"); assert.equal(router.resolve(\"a\",\"/apple\").route,\"star\"); assert.equal(router.resolve(\"a\",\"/tie/x\").route,\"tie-first\"); const inherited=router.resolve(\"a\",\"/app/y\"); assert.equal(inherited.enabled,true); assert.equal(inherited.headers.remove,\"gone\"); const overrides={enabled:false,timeout:0,label:\"\",headers:{keep:null,tenant:\"red\"}}; router.setTenant(\"red\",overrides); overrides.headers.tenant=\"mutated\"; const red=router.resolve(\"red\",\"/app/v1/y\"); assert.equal(red.enabled,false); assert.equal(red.timeout,0); assert.equal(red.label,\"\"); assert.equal(red.headers.keep,undefined); assert.equal(red.headers.tenant,\"red\"); red.target.nested=\"changed\"; red.headers.tenant=\"changed\"; assert.deepEqual(router.resolve(\"red\",\"/app/v1/y\").target,{nested:\"owned\"}); assert.equal(router.resolve(\"red\",\"/app/v1/y\").headers.tenant,\"red\"); assert.equal(router.resolve(\"blue\",\"/app/v1/y\").headers.tenant,undefined); router.setTenant(\"red\",{label:\"latest\"}); assert.equal(router.resolve(\"red\",\"/app/v1/y\").label,\"latest\"); assert.equal(router.resolve(\"red\",\"/app/v1/y\").headers.tenant,undefined); console.log(\"contract checks passed\");'",
+        "pwd; git rev-parse --show-toplevel; git status --short -- src/router.mjs src/route-matcher.mjs src/field-merge.mjs src/header-merge.mjs src/resolution-key.mjs; git check-ignore -v src/route-matcher.mjs || true"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let match = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      match = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return match;\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the routing repairs:\n\n- Route matching now chooses the most specific match and keeps declaration order for ties.\n- Settings merging preserves falsy values such as `false`, `0`, and `\"\"`.\n- Header merging deletes inherited names when overridden with `null`.\n- Cache keys now include tenant, path, and revision.\n\nVerification: `node --test tests/visible.test.mjs` passed (1 test), and supplementary runtime contract checks passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\011-layered-routing-B-r0\\home\\events\\1794202504309-caf647eb-2678-40e1-8e8c-84c261a0ae12.jsonl"
+}
