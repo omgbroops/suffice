@@ -1,0 +1,165 @@
+{
+  "task": "event-routing-workflow",
+  "arm": "D",
+  "mode": "tools",
+  "repetition": 0,
+  "diagnostic": true,
+  "scheduleIndex": 53,
+  "runId": "053-event-routing-workflow-D-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "compound",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 192513.72159999982,
+  "usage": {
+    "input": 25884,
+    "cacheRead": 62848,
+    "cacheWrite": 0,
+    "output": 8349,
+    "estimatedApiUsd": 0.0073913799999999995,
+    "modelCalls": 10,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0073913799999999995,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 10,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 3.5758\n  type: 'test'\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 1.2537\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 1.0346\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.8346\n  type: 'test'\n  ...\n# Subtest: exact and longest boundary prefixes override declaration order\nok 5 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 1.5326\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 6 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 0.6168\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 7 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.5491\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 8 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.429\n  type: 'test'\n  ...\n# Subtest: pair identity cannot collide through separators\nok 9 - pair identity cannot collide through separators\n  ---\n  duration_ms: 0.7644\n  type: 'test'\n  ...\n# Subtest: injected clock governs write and exact expiration\nok 10 - injected clock governs write and exact expiration\n  ---\n  duration_ms: 0.4755\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 10\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 55.05\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 206
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 2.9147\n  type: 'test'\n  ...\n# Subtest: route settings inherit defaults and results are owned\nok 2 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 1.4987\n  type: 'test'\n  ...\n# Subtest: cache reuses a value for the same tenant and resource\nok 3 - cache reuses a value for the same tenant and resource\n  ---\n  duration_ms: 0.5736\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 38.6189\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 188
+  },
+  "changed": [
+    "src/layered-routing/field-merge.mjs",
+    "src/layered-routing/header-merge.mjs",
+    "src/layered-routing/resolution-key.mjs",
+    "src/layered-routing/route-matcher.mjs",
+    "src/tenant-cache/cache.mjs",
+    "src/tenant-cache/store.mjs",
+    "src/tenant-event-feed/batch-commit.mjs",
+    "src/tenant-event-feed/live-bus.mjs",
+    "src/tenant-event-feed/snapshot.mjs",
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 10,
+  "editCalls": 11,
+  "verificationCalls": 2,
+  "toolCalls": 32,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:27:25.397Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    }
+  ],
+  "graphGuidance": [],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:27:25.632Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 235.21629999997094,
+      "parsedFiles": 34,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 2705984,
+      "graphBytes": 396966
+    }
+  ],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/layered-routing/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let match = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      match = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return match;\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-cache/cache.mjs",
+      "before": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return tenant + ':' + resourceId; }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n",
+      "after": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return JSON.stringify([tenant, resourceId]); }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-cache/store.mjs",
+      "before": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: Date.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n",
+      "after": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: this.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const stagedEvents = events.map(validateEvent);\r\n  const records = stagedEvents.map((event, index) => makeRecord(tenant, event, state.sequence + index + 1));\r\n  state.records.push(...records);\r\n  state.sequence += records.length;\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/live-bus.mjs",
+      "before": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) entry.onEvent(snapshot(record));\r\n    },\r\n  };\r\n}\r\n",
+      "after": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) {\r\n        if (entry.tenant === record.tenant) entry.onEvent(snapshot(record));\r\n      }\r\n    },\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\r\n  return structuredClone(record);\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event !== 'object' || Array.isArray(event) || typeof event.type !== 'string' || !event.type) throw new Error('Invalid event');\r\n  const payload = event.payload;\r\n  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Invalid event');\r\n  const prototype = Object.getPrototypeOf(payload);\r\n  if (prototype !== Object.prototype && prototype !== null) throw new Error('Invalid event');\r\n  return { type: event.type, payload: structuredClone(payload) };\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the repairs across all three production areas:\n\n- **Tenant event feed:** Deep-cloned snapshots, validated and staged batches before committing, and filtered live deliveries by tenant.\n- **Layered routing:** Preserved falsy setting values, supported header deletion with `null`, selected the most-specific route, and isolated cached results by tenant, path, and revision.\n- **Tenant cache:** Used collision-safe pair keys and the injected clock for both TTL writes and reads.\n\nVerification passed: `node --test tests/visible.test.mjs` (3 tests), additional contract checks, and `git diff --check`.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\053-event-routing-workflow-D-r0\\home\\events\\1794205645386-f480a7e8-0e22-4958-af4f-9c40c7ce1399.jsonl"
+}
