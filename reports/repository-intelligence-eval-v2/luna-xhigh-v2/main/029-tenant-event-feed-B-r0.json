@@ -1,0 +1,479 @@
+{
+  "task": "tenant-event-feed",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 28,
+  "runId": "029-tenant-event-feed-B-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 159510.53870000015,
+  "usage": {
+    "input": 31197,
+    "cacheRead": 86912,
+    "cacheWrite": 0,
+    "output": 6899,
+    "estimatedApiUsd": 0.00743832,
+    "modelCalls": 10,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00743832,
+  "acceptance": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 4,
+    "passed": 3,
+    "failed": 1,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": false,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nnot ok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 2.522\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice\\\\.suffice\\\\intelligence-eval-v2\\\\acceptance\\\\tenant-event-feed.test.mjs:11:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        1,\n        3,\n        4,\n    +   5\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 1\n    1: 3\n    2: 4\n  actual:\n    0: 1\n    1: 3\n    2: 4\n    3: 5\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-eval-v2/acceptance/tenant-event-feed.test.mjs:17:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 0.8375\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.4051\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.3248\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 3\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 12.3711\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 97
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 1.7544\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.8517\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 95
+  },
+  "changed": [
+    "src/batch-commit.mjs",
+    "src/record.mjs",
+    "src/snapshot.mjs",
+    "src/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/live-bus.mjs"
+  ],
+  "extraChangedFiles": [
+    "src/record.mjs",
+    "src/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 10,
+  "editCalls": 4,
+  "verificationCalls": 1,
+  "toolCalls": 48,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:56:31.747Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:56:32.019Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:56:37.480Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:43.365Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:56:54.329Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:01.531Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:55.702Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:55.797Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:02.175Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:27.856Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:45.286Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:51.766Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:56:32.018Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 302.8993999999948,
+      "parsedFiles": 16,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": 30276840,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:56:32.252Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 230.39650000003166,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": -42802144,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:56:37.561Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 81.936299999943,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": 959248,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:56:43.449Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 90.56079999986105,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": 3816952,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:56:54.422Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 99.05850000004284,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": 1112872,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:57:01.628Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 97.05109999980778,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": 1504736,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:57:55.796Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1d26b885c211a9bd82ffa1717d34726435848559a748a74b757910fd0fcc365c"
+      },
+      "latencyMs": 94.71980000007898,
+      "parsedFiles": 4,
+      "fileCount": 16,
+      "cacheBytes": 93168,
+      "heapDeltaBytes": 2835672,
+      "graphBytes": 165052
+    },
+    {
+      "at": "2026-11-09T05:57:55.891Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1d26b885c211a9bd82ffa1717d34726435848559a748a74b757910fd0fcc365c"
+      },
+      "latencyMs": 94.13409999990836,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93168,
+      "heapDeltaBytes": 2072728,
+      "graphBytes": 165052
+    },
+    {
+      "at": "2026-11-09T05:58:02.271Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1d26b885c211a9bd82ffa1717d34726435848559a748a74b757910fd0fcc365c"
+      },
+      "latencyMs": 96.42430000007153,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93168,
+      "heapDeltaBytes": 1222120,
+      "graphBytes": 165052
+    },
+    {
+      "at": "2026-11-09T05:58:27.950Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1d26b885c211a9bd82ffa1717d34726435848559a748a74b757910fd0fcc365c"
+      },
+      "latencyMs": 94.63839999982156,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93168,
+      "heapDeltaBytes": 1103712,
+      "graphBytes": 165052
+    },
+    {
+      "at": "2026-11-09T05:58:45.367Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1d26b885c211a9bd82ffa1717d34726435848559a748a74b757910fd0fcc365c"
+      },
+      "latencyMs": 82.01759999990463,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93168,
+      "heapDeltaBytes": 1047712,
+      "graphBytes": 165052
+    },
+    {
+      "at": "2026-11-09T05:58:51.852Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1d26b885c211a9bd82ffa1717d34726435848559a748a74b757910fd0fcc365c"
+      },
+      "latencyMs": 86.39319999981672,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93168,
+      "heapDeltaBytes": 959616,
+      "graphBytes": 165052
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "tests/visible.test.mjs",
+        "src/batch-commit.mjs",
+        "src/feed.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/feed.mjs",
+          "callId": "call_4be97ccfd2cc40ec86194b885ff95d95|ctc_0f878cfc6cff9e9a016af160937a0487d1b4eb812fcddcf0c7/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/batch-commit.mjs",
+          "callId": "call_4be97ccfd2cc40ec86194b885ff95d95|ctc_0f878cfc6cff9e9a016af160937a0487d1b4eb812fcddcf0c7/5"
+        },
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_4be97ccfd2cc40ec86194b885ff95d95|ctc_0f878cfc6cff9e9a016af160937a0487d1b4eb812fcddcf0c7/11"
+        },
+        {
+          "tool": "edit",
+          "path": "src/batch-commit.mjs",
+          "callId": "call_69033ac7bbf34fcb8eb11eeeb6f60f74|ctc_0f878cfc6cff9e9a016af160d7d10887d1a43d6528310826a1/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/batch-commit.mjs",
+          "callId": "call_3b152975c183458b9295cc63b873fabe|ctc_0f878cfc6cff9e9a016af16114a18c87d1b2e55b405a96e452/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff -- src/batch-commit.mjs src/record.mjs src/snapshot.mjs src/validation.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/batch-commit.mjs",
+        "src/record.mjs",
+        "src/snapshot.mjs",
+        "src/validation.mjs",
+        "src/publisher.mjs",
+        "src/live-bus.mjs",
+        "src/replay.mjs",
+        "src/feed.mjs",
+        "src/subscription.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/validation.mjs",
+          "callId": "call_3b152975c183458b9295cc63b873fabe|ctc_0f878cfc6cff9e9a016af16114a18c87d1b2e55b405a96e452/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/batch-commit.mjs",
+          "callId": "call_3b152975c183458b9295cc63b873fabe|ctc_0f878cfc6cff9e9a016af16114a18c87d1b2e55b405a96e452/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/record.mjs",
+          "callId": "call_3b152975c183458b9295cc63b873fabe|ctc_0f878cfc6cff9e9a016af16114a18c87d1b2e55b405a96e452/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/snapshot.mjs",
+          "callId": "call_3b152975c183458b9295cc63b873fabe|ctc_0f878cfc6cff9e9a016af16114a18c87d1b2e55b405a96e452/4"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff -- src/batch-commit.mjs src/record.mjs src/snapshot.mjs src/validation.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/index.mjs';\n\nconst feed = createFeed();\nconst original = { nested: { value: 1 }, list: [1], map: new Map([['x', { value: 2 }]]) };\nconst committed = feed.publishBatch('one', [{ type: 'created', payload: original }]);\noriginal.nested.value = 99;\nassert.equal(feed.history('one')[0].payload.nested.value, 1);\ncommitted[0].payload.nested.value = 88;\nassert.equal(feed.history('one')[0].payload.nested.value, 1);\nconst history = feed.history('one');\nhistory[0].payload.map.get('x').value = 77;\nassert.equal(feed.history('one')[0].payload.map.get('x').value, 2);\n\nconst deliveries = [];\nfeed.subscribe('one', 0, record => {\n  deliveries.push(record);\n  record.payload.nested.value = 42;\n});\nconst results = feed.publishBatch('one', [{ type: 'updated', payload: { nested: { value: 3 } } }]);\nassert.equal(results[0].payload.nested.value, 3);\nassert.equal(deliveries[1].payload.nested.value, 42);\nassert.equal(feed.history('one')[1].payload.nested.value, 3);\n\nassert.throws(() => feed.publishBatch('two', [\n  { type: 'ok', payload: { value: 1 } },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('two'), []);\nconst next = feed.publishBatch('two', [{ type: 'ok', payload: { value: 2 } }]);\nassert.equal(next[0].sequence, 3);\nassert.deepEqual(feed.history('two').map(record => record.sequence), [3]);\nconsole.log('contract checks passed');\nEOF",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/index.mjs';\n\nconst feed = createFeed();\nconst original = { nested: { value: 1 }, list: [1], map: new Map([['x', { value: 2 }]]) };\nconst committed = feed.publishBatch('one', [{ type: 'created', payload: original }]);\noriginal.nested.value = 99;\nassert.equal(feed.history('one')[0].payload.nested.value, 1);\ncommitted[0].payload.nested.value = 88;\nassert.equal(feed.history('one')[0].payload.nested.value, 1);\nconst history = feed.history('one');\nhistory[0].payload.map.get('x').value = 77;\nassert.equal(feed.history('one')[0].payload.map.get('x').value, 2);\n\nconst deliveries = [];\nfeed.subscribe('one', 0, record => {\n  deliveries.push(record);\n  if (record.type === 'updated') record.payload.nested.value = 42;\n});\nconst results = feed.publishBatch('one', [{ type: 'updated', payload: { nested: { value: 3 } } }]);\nassert.equal(results[0].payload.nested.value, 3);\nassert.equal(deliveries[1].payload.nested.value, 42);\nassert.equal(feed.history('one')[1].payload.nested.value, 3);\n\nassert.throws(() => feed.publishBatch('two', [\n  { type: 'ok', payload: { value: 1 } },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('two'), []);\nconst next = feed.publishBatch('two', [{ type: 'ok', payload: { value: 2 } }]);\nassert.equal(next[0].sequence, 3);\nassert.deepEqual(feed.history('two').map(record => record.sequence), [3]);\nconsole.log('contract checks passed');\nEOF"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  let sequence = state.sequence;\r\n  const records = [];\r\n  for (const event of events) {\r\n    const validatedEvent = validateEvent(event);\r\n    records.push(makeRecord(tenant, validatedEvent, ++sequence));\r\n  }\r\n  const committedRecords = state.records.concat(records);\r\n  state.records = committedRecords;\r\n  state.sequence = sequence;\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/record.mjs",
+      "before": "import { snapshot } from './snapshot.mjs';\r\nexport function makeRecord(tenant, event, sequence) {\r\n  return snapshot({ tenant, type: event.type, payload: event.payload, sequence });\r\n}\r\n",
+      "after": "export function makeRecord(tenant, event, sequence) {\r\n  return { tenant, type: event.type, payload: event.payload, sequence };\r\n}\r\n"
+    },
+    {
+      "path": "src/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\r\n  return structuredClone(record);\r\n}\r\n"
+    },
+    {
+      "path": "src/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event !== 'object') throw new Error('Invalid event');\r\n  const type = event.type;\r\n  const payload = event.payload;\r\n  if (typeof type !== 'string' || !type || !payload || typeof payload !== 'object' || Object.getPrototypeOf(payload) !== Object.prototype) {\r\n    throw new Error('Invalid event');\r\n  }\r\n  return { type, payload: structuredClone(payload) };\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the feed repairs: batch commits now stage records and sequence changes until validation succeeds, payloads are cloned on input, and returned records and subscriber deliveries use deep snapshots.\n\nVerification:\n- `node --test tests/visible.test.mjs` — passed.\n- Additional checks for deep snapshot ownership and atomic batch failure — passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\029-tenant-event-feed-B-r0\\home\\events\\1794203791706-59703210-c617-48f4-83ed-4aa04418ce33.jsonl"
+}
