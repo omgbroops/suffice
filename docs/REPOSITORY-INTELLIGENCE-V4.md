@@ -29,7 +29,7 @@ reserved in the existing ledger and is never converted to zero.
 
 V3 relied on a workspace contract for shell access. V4 uses the installed Codex
 native Windows MXC command sandbox through Pi's existing `BashOperations` seam.
-The only CLI plumbing change injects that executor; normal CLI defaults and
+Optional CLI plumbing injects that executor and meters a common task token ceiling; normal CLI defaults and
 all intelligence implementations remain unchanged. The agent filesystem tools
 retain their existing workspace path guards.
 
@@ -40,7 +40,7 @@ retain their existing workspace path guards.
 | A | gpt-6-luna | xhigh | off |
 | B | gpt-6-luna | xhigh | always-guided |
 | C | gpt-6-luna | xhigh | existing on-demand controller |
-| D | gpt-6.1-sol | xhigh | off |
+| D | gpt-6.1-sol | medium | off |
 
 All use default tier; the live preflight verifies the exact model, effort and
 tier in provider receipts. No fallback model is permitted. Both catalog entries
@@ -51,8 +51,10 @@ controls remain provider defaults, rather than invented cross-model settings.
 The local catalog estimates input/output/cached-input prices per million tokens
 as $0.10/$0.50/$0.01 for Luna and $2/$10/$0.10 for Sol. These are recorded catalog
 estimates, not invoices or externally verified account billing. Long-context
-tiers are retained in machine-readable metadata. The identical effort label
-does not establish identical internal computation across models.
+tiers are retained in machine-readable metadata. The user explicitly selected
+Sol Medium before primary inference. This compares model/effort configurations,
+not an isolated foundation-model effect at equal effort. Effort labels do not
+establish identical internal computation across models.
 
 ## Preflight and isolation
 
@@ -64,9 +66,10 @@ receipts. These toy tasks are excluded from every engineering success table.
 
 The successful first smoke batch is
 `reports/repository-intelligence-v4/preflight/2026-11-09T21-00-04-714Z`.
-All four passed with exact xhigh/default receipts; total estimated model usage
-was $0.03066122. Failed boundary-launch diagnostics before that batch made no
-model requests and remain preserved.
+All four initially passed with exact xhigh/default receipts; total estimated
+model usage was $0.03066122. Its Sol-xhigh smoke is historical preflight only.
+The separate Sol Medium smoke at `2026-11-09T21-26-51-922Z` also passed: four requests with exact Medium/default receipts, estimated $0.01585920. Total v4 preflight cost is $0.04652042. Failed boundary-
+launch diagnostics before that batch made no model requests and remain preserved.
 
 The boundary denies the host user's home directory, including the evaluator,
 sealed records, prior reports, Git objects and credentials. Each attempt has
@@ -121,8 +124,10 @@ repetitions. Execution remains strictly serial whenever temperature telemetry
 is unavailable. No 85-degree enforcement is claimed. The order is balanced
 across four conditions; a budget stop must retain balanced condition counts and
 explicit missing cells. Actual per-attempt limits and the spending cap must be
-frozen in `protocol.json` before primary inference. The existing $12 ledger limit
-continues to apply unless the user supplies a new v4 budget.
+frozen in `protocol.json` before primary inference. The user authorized a $25 v4
+cap, including v4 preflight. Its separate ledger carries forward the $0.03066122
+already used by v4 smoke runs. Earlier v3 known/unknown usage is preserved in its
+original ledger and is not reset or silently counted as v4 data.
 
 Primary success means held-out acceptance plus required regressions, intact
 evaluation scope, verified model configuration and stable source. Normal
@@ -149,8 +154,95 @@ Keep the architecture optional unless this experiment supplies credible accuracy
 dependency-failure or cost-per-accepted-task improvements. Inconclusive results
 must lead to a targeted follow-up, not a favorable adoption claim.
 
-## Current state
+## Frozen execution design
 
-The audit, isolated four-model smoke batch and primary selection are complete.
-No v4 primary attempts have run. Native family runners, final budget/limits,
-full analysis and primary execution are still in progress.
+The common agent limits are 1,200 seconds, 90 model turns, 400 tool calls,
+16,384 output tokens per response, 1 MiB serialized provider payload, and four
+million cumulative metered tokens (checked at response boundaries). Provider
+retries are disabled. The serial worker has a 768 MiB V8 heap; repository test
+children have 384 MiB. Parent/worker free-RAM floors are 2/1.75 GiB and disk
+floor is 6 GiB. A 40-minute outer worker timeout allows setup and independent
+grading outside the common agent window.
+
+Emergency monetary ceilings are $0.25 for Luna and $5 for Sol, proportional to
+the catalog input/output price ratio. They are admission guards, not equal
+inference budgets. Every binding dollar, payload, token, time or tool guard
+remains visible in the trajectory; cost-censored outcomes must not be presented
+as a pure capability comparison. An entire four-arm task/repetition round is
+reserved before dispatch. If $25 cannot fund another full reservation, remaining
+cells stay missing. The schedule uses Williams-balanced arm positions and
+interleaves repository families; each task has two fresh repetitions.
+
+No correctness retry is allowed. Provider, environment or evaluator failures
+stop dispatch and preserve partial rounds; any replacement requires an explicit
+documented protocol amendment. A balanced subset is the fallback for a budget
+stop, not permission to hide infrastructure-induced missingness.
+
+A task whose original/reference gate fails under the frozen adapter retains all
+eight cells as environment-affected missing data. Other tasks proceed in their
+frozen order; no replacement task is selected. This avoids the v3 failure mode
+where one unsupported environment blocked all later tasks. A new adapter or
+grading change after primary inference would require a separate cohort/version.
+
+The Pi codemode executor was inspected: it runs model scripts in QuickJS WASM
+with only registered tool callbacks, no Node filesystem or network. Native file
+tools retain repository real-path guards; arbitrary shell execution uses MXC.
+Raw framework reports are copied out of a separate precreated grading sibling,
+which actor commands cannot read. Exact Git binary patches are archived before
+reclaiming each attempt’s generated workspace.
+
+The Three.js adapter follows the upstream Node-only `!-webonly` filter. Existing
+TODO stubs remain recorded, including duplicate titles shared with passing tests;
+pending multiplicities are frozen so a newly skipped regression cannot be hidden
+under a pre-existing TODO name. Jest runs serially with Watchman disabled because
+this host has no Watchman daemon. Framework adapters retain every named dataset
+target and regression. These native adaptations limit portability of the scores.
+
+## Validation and execution state
+
+The full root suite passed 145/145 tests in 62.949 seconds. The final offline
+preflight (`2026-11-09T22-28-58-258Z`) passed workspace isolation, external-network
+denial, graph version change, one-file reparse, stable symbol IDs and zero-file
+warm-cache reuse. A separate process-lifetime probe returned in 808 ms and
+confirmed its detached child did not survive sandbox return; no delayed read of
+a future grading directory occurred. These are measured host observations.
+
+Serverless 5926, Prettier 12584 and Three.js 23796 passed original/reference gates.
+Three.js raw reports exposed QUnit duplicate-name trailing-space handling. The
+last stabilization changed only the grading module; `regrade-intelligence-v4.mjs`
+verified unchanged execution inputs and baseline hashes, then regraded archived
+raw reports. Its receipts explicitly state that tests were not rerun. Every
+prior failed validation remains preserved. The same strict grading logic is
+frozen before primary inference; required tests need an active passing case,
+not a TODO result.
+
+The prospective protocol and exact source archive are frozen in
+`reports/repository-intelligence-v4/protocol.json` and `frozen-source.tar.gz`.
+Primary dispatch began with Serverless 5926, condition A, on 2026-11-09 at
+22:29 UTC. Live coverage and outcomes are in `analysis/aggregate.json`; do not
+interpret in-progress partial rounds as a completed comparison.
+
+## Reproduction
+
+Use Node 24.15.0 and the pinned package lock on Windows with preflighted Codex
+MXC support and PowerShell 7. Provision the evaluator-only Suffice subscription
+profile at `~/.suffice/auth.json`; never copy it into Git, reports or an actor
+workspace. Reconstruct sealed records from the SHA-pinned dataset using
+`python scripts/select-intelligence-v4.py`. Install dependencies with `npm ci`.
+
+1. Run `node scripts/preflight-intelligence-v4.mjs` for offline boundary, graph
+   and catalog checks; `--models` incurs four additional disjoint smoke runs
+   against the current ledger.
+2. Run `node scripts/prepare-intelligence-v4.mjs --task=ID` for each next task.
+   Preparation provisions pinned dependency locks and original/reference gates.
+3. Run `node scripts/campaign-intelligence-v4.mjs` to execute serial balanced
+   rounds and stage later environments. It uses the existing session loop and
+   stops on provider/configuration/evaluator faults or the spending/resource cap.
+4. Run `node scripts/report-intelligence-v4.mjs` to rebuild explicit 192-cell
+   coverage, paired task tables and uncertainty artifacts from actual receipts.
+
+The published ledger is historical evidence. Reproductions need a separate
+campaign/output directory and their own explicitly configured cap; never reset
+or overwrite this campaign’s completed attempts. Native dependency adaptation,
+source archives, lock hashes, exact revisions and all failed gates are part of
+the record, rather than an official portable SWE-PolyBench score.
