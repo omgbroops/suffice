@@ -1,0 +1,138 @@
+{
+  "version": 2,
+  "phase": "pilot",
+  "campaign": "luna-xhigh-v2",
+  "config": {
+    "model": "gpt-6-luna",
+    "effort": "xhigh",
+    "serviceTier": "default",
+    "maxOutputTokens": 16384,
+    "maxCost": 0.5,
+    "timeout": 480,
+    "maxTurns": 60,
+    "maxToolCalls": 240,
+    "requestReserveUsd": 0.15,
+    "retryCount": 0
+  },
+  "totalExperimentCapUsd": 12,
+  "requestReserveExplanation": "$0.15 per request exceeds the catalog worst-case 272k input plus 16,384 output at up to 2x pricing; provider retries disabled. $0.50 reserved per dispatched run; unknown totals retain that entire reservation.",
+  "modelSelection": "User fixed gpt-6-luna at xhigh. Pilot checks calibration only; no model, trigger or budget tuning against final labels.",
+  "fastMode": "Requested priority in preflight; provider returned default. All scored calls explicitly request default.",
+  "seed": 20261109,
+  "arms": [
+    {
+      "id": "A",
+      "mode": "off"
+    },
+    {
+      "id": "B",
+      "mode": "guided"
+    },
+    {
+      "id": "C",
+      "mode": "on-demand"
+    }
+  ],
+  "blocks": [
+    [
+      {
+        "task": "pilot-override",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "pilot-interval-union",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "pilot-expression",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      }
+    ]
+  ],
+  "inputs": {
+    "package.json": "4d6968751404861f86cd27a7168e0fbd20aea5b5a64ea695a4068cbeb39f16f9",
+    "package-lock.json": "30b3b5e100a92aa1bdb74625ceb4b98703f837222787df556c46b26fcddfd44a",
+    "scripts/intelligence-eval.mjs": "3aa5607be2ac9884e51d4f23f126f660a12c9d4b14418d74826dfebabae01966",
+    "scripts/prepare-intelligence-eval.mjs": "7e1895c23b0e2c96b3b55fb0e43062b788ca7e213d7768b64758483bdf5d77db",
+    "src/intelligence-eval.mjs": "b3c0ca578853c6ed1f53c21e1f452affb3f6994df48f96e9e56297d800b40c40",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "benchmarks/intelligence-eval-v2/tasks.mjs": "2bd7f02045dd59cb60291201a1338394e6cfd37de8b3c028e3578a2b893af24a",
+    "benchmarks/intelligence-eval-v2/pilot.mjs": "e136df363c3652449031117a259cf1b599cdebd0e6b83889b0441ab650966e99",
+    "packages/cli/src/intelligence/graph.mjs": "8bba2bcd4f0688235862335f8c752fc3b4157a1aa29c2e4f7e533f7ad43ec4ee",
+    "packages/cli/src/intelligence/on-demand.mjs": "cca7767623ab28d674bfbe6792e6a976ba3d1717407002a21a8068f8cdff4e37",
+    "packages/cli/src/intelligence/parse.mjs": "6796bca1f9e265be0072ebddee379dc5141188a303f8560fb128405d428c8824",
+    "packages/cli/src/intelligence/tools.mjs": "c6429033c4efd424c0b66a1821542ce71a52d86cef905bd83f7998659c4df919",
+    "packages/cli/src/interactive.mjs": "e395edcc50b5520edb60c7d88171e893fab0b186d3d6f6a5a73186c74b62bd26",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/navigation.mjs": "fda7c7f0b7c058772fd66b3fb56b66cdeff12787082f2518ebf136f8d43873c9",
+    "packages/cli/src/options.mjs": "ffcc4a00f9b1038b54f4e5a68349b2cc7b4bb57355bf1f2c0865573d636d850c",
+    "packages/cli/src/projects.mjs": "920dffed714fe56c5040e826615f332df346da01c443ece463a49c76c9dc4b10",
+    "packages/cli/src/session.mjs": "10bdd24f7a2d6dfb9bafb2f22186f382e57386066945725680fac0495fd17eae",
+    "packages/cli/src/tools.mjs": "520d56e0eb54a0112305ca5dd6540f701abcd80cb30ebcc301856f0ba400ca81",
+    "packages/cli/src/workspace.mjs": "f0b8300e39bde271ef92f62af35aebe05531834130d67e71dcbdb4011e80955f"
+  },
+  "datasetHash": "082b872a0d77651e04983bf93c58a6f4375c3725df229906e3470c39aaca954d",
+  "tasks": [
+    {
+      "id": "pilot-override",
+      "category": "pilot",
+      "kind": "synthetic-pilot",
+      "family": "pilot-override",
+      "prompt": "Read README.md and repair src/index.mjs. Preserve the API. Do not modify tests or metadata. Run node --test tests/visible.test.mjs. Do not use network access or install dependencies.",
+      "baselineHashes": {
+        "README.md": "65c0248ad28fdf9e215cec14adce3540ec2b2c1d9c358a5cfaadbe8b39bef612",
+        "src/index.mjs": "394131cc403811d687d85cd776b0aad27d895a2a1d0c4958394b6a6655966195",
+        "tests/visible.test.mjs": "d11a3894f22ad8642db8e8469d91c1ec54896c6c6657be77c370b034b0c7c0e3"
+      },
+      "acceptanceHash": "cb933a44556c8410903fc45115843a751c6d09b4a29894ea1ed87b18bc0f8956",
+      "sourceFiles": [
+        "src/index.mjs"
+      ]
+    },
+    {
+      "id": "pilot-interval-union",
+      "category": "pilot",
+      "kind": "synthetic-pilot",
+      "family": "pilot-interval-union",
+      "prompt": "Read README.md and repair src/index.mjs. Preserve the API. Do not modify tests or metadata. Run node --test tests/visible.test.mjs. Do not use network access or install dependencies.",
+      "baselineHashes": {
+        "README.md": "e158feb3d67611d503c3c8c5e1fc4665f12d3326bbe6185771281f91858d3067",
+        "src/index.mjs": "6d17cee8e009522afa2f2d958d384b75fc8f2d376c895af7f3df6d6deddf442b",
+        "tests/visible.test.mjs": "d11a3894f22ad8642db8e8469d91c1ec54896c6c6657be77c370b034b0c7c0e3"
+      },
+      "acceptanceHash": "8922d04bc37c33b8117fda07699f92fb0da9cd365d7abc1223bbc44c426d2c30",
+      "sourceFiles": [
+        "src/index.mjs"
+      ]
+    },
+    {
+      "id": "pilot-expression",
+      "category": "pilot",
+      "kind": "synthetic-pilot",
+      "family": "pilot-expression",
+      "prompt": "Read README.md and repair src/index.mjs. Preserve the API. Do not modify tests or metadata. Run node --test tests/visible.test.mjs. Do not use network access or install dependencies.",
+      "baselineHashes": {
+        "README.md": "ae088c1eede03014e2e9736fda1dfa15d821d742ed3475a815ee666c8a42cf0f",
+        "src/index.mjs": "16b7cfb2abd958c66deb97b171b12b9614c43e41ca6c764c543beb1f07992098",
+        "tests/visible.test.mjs": "d11a3894f22ad8642db8e8469d91c1ec54896c6c6657be77c370b034b0c7c0e3"
+      },
+      "acceptanceHash": "fafebafb130dbe3593e9d3449eb4b9b1b198f8ad846da459bd365d67b72c6089",
+      "sourceFiles": [
+        "src/index.mjs"
+      ]
+    }
+  ],
+  "node": "24.15.0",
+  "platform": "win32",
+  "sourceHead": "26702669ab876564bc113d30307a2bc5aea8d1ad"
+}
