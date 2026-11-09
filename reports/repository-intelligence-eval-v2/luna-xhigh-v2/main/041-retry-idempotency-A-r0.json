@@ -1,0 +1,92 @@
+{
+  "task": "retry-idempotency",
+  "repetition": 0,
+  "arm": "A",
+  "mode": "off",
+  "scheduleIndex": 40,
+  "runId": "041-retry-idempotency-A-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 99852.2518000002,
+  "usage": {
+    "input": 13832,
+    "cacheRead": 15744,
+    "cacheWrite": 0,
+    "output": 4384,
+    "estimatedApiUsd": 0.0037326399999999997,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0037326399999999997,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: POST keys survive retries and separate logical calls\nok 1 - POST keys survive retries and separate logical calls\n  ---\n  duration_ms: 1.7577\n  type: 'test'\n  ...\n# Subtest: retry budget and ordinary errors are respected\nok 2 - retry budget and ordinary errors are respected\n  ---\n  duration_ms: 0.3495\n  type: 'test'\n  ...\n# Subtest: explicit caller identity is preserved without generating another key\nok 3 - explicit caller identity is preserved without generating another key\n  ---\n  duration_ms: 0.9396\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.4148\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 92
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: GET retries a server error and returns success\nok 1 - GET retries a server error and returns success\n  ---\n  duration_ms: 1.4822\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.8647\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 89
+  },
+  "changed": [
+    "src/client.mjs",
+    "src/policy.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 17,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/client.mjs",
+      "before": "import { delayFor, shouldRetry } from './policy.mjs';\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      const outgoing = { ...headers };\r\n      if (method === 'POST') outgoing['idempotency-key'] = keyFactory();\r\n      response = await transport({ method, url, headers: outgoing, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n",
+      "after": "import { delayFor, shouldRetry } from './policy.mjs';\n\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\n  return async function request({ method = 'GET', url, headers = {}, body }) {\n    const hasIdempotencyKey = Object.keys(headers).some(\n      name => name.toLowerCase() === 'idempotency-key'\n    );\n    const generateKey = method === 'POST' && !hasIdempotencyKey;\n    const generatedKey = generateKey ? keyFactory() : undefined;\n\n    let response;\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\n      const outgoing = { ...headers };\n      if (generateKey) outgoing['idempotency-key'] = generatedKey;\n      response = await transport({ method, url, headers: outgoing, body });\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\n      await sleep(delayFor(response, attempt, baseMs));\n    }\n    return response;\n  };\n}\n"
+    },
+    {
+      "path": "src/policy.mjs",
+      "before": "export function delayFor(response, attempt, baseMs) {\r\n  const retryAfter = response.headers?.['retry-after'];\r\n  if (retryAfter !== undefined && Number.isFinite(Number(retryAfter))) return Number(retryAfter);\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\nexport function shouldRetry(response) {\r\n  return response.status === 429 || response.status >= 500;\r\n}\r\n",
+      "after": "export function delayFor(response, attempt, baseMs) {\n  const headers = response?.headers ?? {};\n  const retryAfterName = Object.keys(headers).find(\n    name => name.toLowerCase() === 'retry-after'\n  );\n  const retryAfter = retryAfterName === undefined ? undefined : headers[retryAfterName];\n\n  if (\n    (typeof retryAfter === 'number' ||\n      (typeof retryAfter === 'string' && retryAfter.trim() !== '')) &&\n    Number.isFinite(Number(retryAfter)) &&\n    Number(retryAfter) >= 0\n  ) {\n    return Number(retryAfter) * 1000;\n  }\n\n  return baseMs * 2 ** (attempt - 1);\n}\n\nexport function shouldRetry(response) {\n  const status = response?.status;\n  return status === 429 || (Number.isFinite(status) && status >= 500 && status < 600);\n}\n"
+    }
+  ],
+  "final": "Implemented the retry and idempotency contract in `src/`:\n\n- Generated one idempotency key per POST request when the caller has not supplied one, and reused it across retries.\n- Preserved caller-provided idempotency keys.\n- Restricted retries to 429 and 5xx responses.\n- Converted numeric `Retry-After` values from seconds to milliseconds, with exponential backoff as fallback.\n\nVerification passed: `node --test tests/visible.test.mjs` and additional inline assertions for POST key reuse, caller keys, retry delays, and status boundaries.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\041-retry-idempotency-A-r0\\home\\events\\1794204652242-5262cf32-2d0b-4128-9b5c-e486ec044688.jsonl"
+}
