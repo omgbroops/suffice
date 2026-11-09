@@ -1,0 +1,183 @@
+{
+  "task": "window-scheduler",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 18,
+  "runId": "019-window-scheduler-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 78997.67670000007,
+  "usage": {
+    "input": 16139,
+    "cacheRead": 27392,
+    "cacheWrite": 0,
+    "output": 2363,
+    "estimatedApiUsd": 0.0030693200000000004,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0030693200000000004,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: half-open booking boundaries and exact window fit\nok 1 - half-open booking boundaries and exact window fit\n  ---\n  duration_ms: 2.8287\n  type: 'test'\n  ...\n# Subtest: overlapping windows deduplicate and sort while real overlap is blocked\nok 2 - overlapping windows deduplicate and sort while real overlap is blocked\n  ---\n  duration_ms: 0.3252\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 19.9995\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 254
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: interior free slots are offered\nok 1 - interior free slots are offered\n  ---\n  duration_ms: 1.2893\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.1566\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 165
+  },
+  "changed": [
+    "src/intervals.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 1,
+  "verificationCalls": 1,
+  "toolCalls": 18,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:43:12.831Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:43:13.104Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/intervals.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:43:13.422Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/intervals.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:43:13.079Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4f7c2c344d12a0a3841ebe0da399f100b123b3e248c915287c85f0783e91a2da"
+      },
+      "latencyMs": 247.22939999995288,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 26227,
+      "heapDeltaBytes": 1481064,
+      "graphBytes": 44897
+    },
+    {
+      "at": "2026-11-09T05:43:13.419Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "aeb8f3077f35cccd36706dff19448a8a279d2676cc3ea253fdb81cae755c3c36"
+      },
+      "latencyMs": 315.23379999998724,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 26227,
+      "heapDeltaBytes": 1277968,
+      "graphBytes": 44897
+    },
+    {
+      "at": "2026-11-09T05:43:13.601Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "aeb8f3077f35cccd36706dff19448a8a279d2676cc3ea253fdb81cae755c3c36"
+      },
+      "latencyMs": 181.46330000000307,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 26227,
+      "heapDeltaBytes": 846360,
+      "graphBytes": 44897
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/intervals.mjs",
+        "src/scheduler.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff -- src/intervals.mjs src/scheduler.mjs",
+        "git status --short && cat src/intervals.mjs && git diff --",
+        "node --input-type=module -e \"import assert from 'node:assert/strict'; import { overlaps, startsInWindow } from './src/intervals.mjs'; import { availableStarts, findEarliest } from './src/scheduler.mjs'; assert.equal(overlaps({start:0,end:10},{start:10,end:20}), false); assert.equal(overlaps({start:10,end:20},{start:0,end:10}), false); assert.deepEqual(startsInWindow({start:0,end:60},20,20), [0,20,40]); assert.deepEqual(availableStarts({windows:[{start:0,end:40},{start:20,end:60}],bookings:[{start:0,end:20},{start:40,end:50}],duration:20,stepMinutes:20}), [20]); assert.equal(findEarliest({windows:[{start:0,end:40}],bookings:[],duration:20,stepMinutes:20},21), null);\""
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/intervals.mjs",
+      "before": "export function overlaps(a, b) { return a.start <= b.end && b.start <= a.end; }\r\nexport function startsInWindow(window, duration, stepMinutes) {\r\n  const starts = [];\r\n  for (let start = window.start; start + duration < window.end; start += stepMinutes) starts.push(start);\r\n  return starts;\r\n}\r\n",
+      "after": "export function overlaps(a, b) { return a.start < b.end && b.start < a.end; }\r\nexport function startsInWindow(window, duration, stepMinutes) {\r\n  const starts = [];\r\n  for (let start = window.start; start + duration <= window.end; start += stepMinutes) starts.push(start);\r\n  return starts;\r\n}\r\n"
+    }
+  ],
+  "final": "Updated `src/intervals.mjs` to use half-open overlap checks, so bookings that touch a proposed meeting’s boundary do not block it. Slot generation now includes starts whose meeting ends exactly at the window boundary.\n\nVerification passed:\n- `node --test tests/visible.test.mjs`\n- Additional direct assertions for boundary overlap, final-window slots, deduplication, booking conflicts, and `findEarliest` returning `null`.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\019-window-scheduler-C-r0\\home\\events\\1794202954935-ebc15609-194b-4b9d-99a3-38fe710ef234.jsonl"
+}
