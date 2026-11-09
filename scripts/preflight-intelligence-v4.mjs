@@ -42,17 +42,19 @@ try{
   await writeFile(resolve(baseline,'src/names.mjs'),source['src/names.mjs'].replace('.trim()',".replace(/\\s+/g,' ').trim()"));
   const changed=await engine.get_impact_analysis({paths:['src/names.mjs']}),cached=await engine.get_symbol_context({name:'normalizeName'});
   checks.graph={first,before,changed,cached};
-  if(!JSON.stringify(changed).includes('src/names.mjs'))throw new Error('Graph invalidation evidence missing');
+  if(!JSON.stringify(changed).includes('src/names.mjs')||before.revision.contentVersion===changed.revision.contentVersion||changed.revision.contentVersion!==cached.revision.contentVersion||changed.metrics.parsedFiles!==1||cached.metrics.parsedFiles!==0||JSON.stringify(first.symbols.map(s=>s.id))!==JSON.stringify(cached.symbols.map(s=>s.id)))throw new Error('Graph invalidation, stable identity or warm-cache evidence missing');
   await writeFile(resolve(baseline,'src/names.mjs'),source['src/names.mjs']);
   const runtime=await ModelRuntime.create({authPath:resolve(homedir(),'.suffice/auth.json'),modelsPath:null,allowModelNetwork:false});
   if(!runtime.isUsingSubscription('openai'))throw new Error('Working subscription profile required; no paid-key fallback');
   for(const id of ['gpt-6-luna','gpt-6.1-sol']){const model=runtime.getModel('openai',id);if(!model)throw new Error('Missing exact model '+id);checks.models.push({id:model.id,api:model.api,contextWindow:model.contextWindow,maxTokens:model.maxTokens,cost:model.cost});}
   for(const path of ['scripts/preflight-intelligence-v4.mjs','src/eval-v4/sandbox.mjs','src/eval-v4/design.mjs',...(await allFiles(resolve(root,'packages/cli/src'))).map(path=>'packages/cli/src/'+path)])checks.sourceInputs[path]=hash(await readFile(resolve(root,path)));
-  if(process.argv.includes('--models'))for(const configuration of CONFIGURATIONS){
+  const selectedArm=process.argv.find(arg=>arg.startsWith('--arm='))?.slice(6);
+  if(selectedArm&&!CONFIGURATIONS.some(c=>c.id===selectedArm))throw new Error('Unknown preflight configuration');
+  if(process.argv.includes('--models'))for(const configuration of CONFIGURATIONS.filter(c=>!selectedArm||c.id===selectedArm)){
     const id='smoke-'+configuration.id+'-'+stamp,runDir=resolve(publicWorkspaceRoot(),id),config={model:configuration.model,effort:configuration.effort,serviceTier:'default',maxOutputTokens:2048,maxTurns:12,maxToolCalls:40,timeout:120,maxCost:configuration.id==='D'?0.30:0.10,requestReserveUsd:configuration.id==='D'?0.03:0.01,maxProviderPayloadBytes:128*1024,retryCount:0,bashOperations:lazySandboxOperations({readableRoots:[toolchain],toolchain})};
     const task={id:'disjoint-preflight-whitespace',category:'simple',kind:'smoke-only',baseline,baselineHashes:await snapshot(baseline),sourceFiles:['src/names.mjs','src/account.mjs'],preparedAcceptance:acceptance,acceptanceHash:hash(await readFile(acceptance)),prompt:'Fix account-name normalization so every run of interior whitespace becomes one ordinary space. Preserve trimming and lowercasing. Edit only src/ files; preserve existing public tests and native-verify.cjs. The bash tool runs PowerShell 7 without a profile inside a Windows sandbox. Use node native-verify.cjs to verify. This is a small infrastructure smoke test.',allowsChange:path=>['src/names.mjs','src/account.mjs'].includes(path)||path.startsWith('.v4-tmp/')};
     task.verify=async workspace=>({acceptance:await runNodeTests(workspace,acceptance),regression:await runNodeTests(workspace,resolve(workspace,'test/public.test.mjs'))});
-    const ledgerPath=resolve(root,'reports/repository-intelligence-eval-v2/spending.json'),ledger=JSON.parse(await readFile(ledgerPath,'utf8')),key='intelligence-v4/preflight/'+stamp+'/'+id;
+    const ledgerPath=resolve(root,'reports/repository-intelligence-v4/spending.json'),ledger=JSON.parse(await readFile(ledgerPath,'utf8')),key='intelligence-v4/preflight/'+stamp+'/'+id;
     if(ledger.entries.some(e=>e.state==='dispatched'))throw new Error('Another model attempt is active');
     if(ledger.entries.reduce((n,e)=>n+e.reserved,0)+config.maxCost>ledger.cap)throw new Error('Existing experiment cap prevents this preflight');
     const entry={runId:key,reserved:config.maxCost,known:0,unknown:true,state:'dispatched'};ledger.entries.push(entry);await writeLedger(ledgerPath,ledger);
