@@ -16,7 +16,7 @@ Options:
   --model ID          gpt-6.1-sol (default), gpt-6-luna, or another catalog ID
   --effort LEVEL      off, minimal, low (default), medium, high, xhigh
   --continue          Continue the most recent session in this repository
-  --intelligence MODE off (default), tools, or guided (experimental)
+  --intelligence MODE off (default), tools, guided, or on-demand (experimental)
   --home PATH         Credential/session directory (default: ~/.suffice)
   --max-cost USD      API-equivalent allowance per task (default: 10)
   --timeout SECONDS   Time allowance per task (default: 600)
@@ -53,6 +53,6 @@ export function parseOptions(args, env=process.env) {
     if(!Number.isFinite(options[key]) || options[key]<=0) throw new Error(`${key} must be a positive number`);
   }
   options.cwd=resolve(options.cwd); options.home=resolve(options.home);
-  if(!['off','tools','guided'].includes(options.intelligence))throw new Error('Invalid intelligence mode: use off, tools, or guided.');
+  if(!['off','tools','guided','on-demand'].includes(options.intelligence))throw new Error('Invalid intelligence mode: use off, tools, guided, or on-demand.');
   return options;
 }
