@@ -1,0 +1,452 @@
+{
+  "task": "prerelease-diff",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 24,
+  "runId": "025-prerelease-diff-B-r0",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 163980.69910000009,
+  "usage": {
+    "input": 45991,
+    "cacheRead": 94336,
+    "cacheWrite": 0,
+    "output": 6456,
+    "estimatedApiUsd": 0.00877046,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00877046,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: prerelease to different stable core uses actual highest changed component\nok 1 - prerelease to different stable core uses actual highest changed component\n  ---\n  duration_ms: 1.6638\n  type: 'test'\n  ...\n# Subtest: same core and initial major stabilization remain compatible\nok 2 - same core and initial major stabilization remain compatible\n  ---\n  duration_ms: 0.6178\n  type: 'test'\n  ...\n# Subtest: prerelease targets and equal versions retain classifications\nok 3 - prerelease targets and equal versions retain classifications\n  ---\n  duration_ms: 0.3243\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 12.7295\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 223
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 10.8562\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 6.0013\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 3.5506\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 5.292\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 2.2945\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.849\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 6.0762\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 47.9604\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 228
+  },
+  "changed": [
+    "src/functions/diff.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 1,
+  "verificationCalls": 2,
+  "toolCalls": 31,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:50:58.100Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:50:59.554Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:51:09.285Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:51:16.937Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:51:44.068Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:14.452Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:14.882Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:27.561Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:40.877Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:52:48.916Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:53:17.949Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:50:59.553Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a9e373f8aae23dc20f7bcd06d04bb0604d6539c9b1f5b5f5918585cdb014fa8a"
+      },
+      "latencyMs": 1474.3936999998987,
+      "parsedFiles": 120,
+      "fileCount": 120,
+      "cacheBytes": 2500846,
+      "heapDeltaBytes": 42851464,
+      "graphBytes": 3560896
+    },
+    {
+      "at": "2026-11-09T05:51:00.105Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a9e373f8aae23dc20f7bcd06d04bb0604d6539c9b1f5b5f5918585cdb014fa8a"
+      },
+      "latencyMs": 549.8246999999974,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2500846,
+      "heapDeltaBytes": -26842832,
+      "graphBytes": 3560896
+    },
+    {
+      "at": "2026-11-09T05:51:09.694Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a9e373f8aae23dc20f7bcd06d04bb0604d6539c9b1f5b5f5918585cdb014fa8a"
+      },
+      "latencyMs": 414.52619999996386,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2500846,
+      "heapDeltaBytes": -25880912,
+      "graphBytes": 3560896
+    },
+    {
+      "at": "2026-11-09T05:51:17.356Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a9e373f8aae23dc20f7bcd06d04bb0604d6539c9b1f5b5f5918585cdb014fa8a"
+      },
+      "latencyMs": 422.5800000000745,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2500846,
+      "heapDeltaBytes": 11496000,
+      "graphBytes": 3560896
+    },
+    {
+      "at": "2026-11-09T05:51:44.463Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a9e373f8aae23dc20f7bcd06d04bb0604d6539c9b1f5b5f5918585cdb014fa8a"
+      },
+      "latencyMs": 396.05300000007264,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2500846,
+      "heapDeltaBytes": 7000144,
+      "graphBytes": 3560896
+    },
+    {
+      "at": "2026-11-09T05:52:14.880Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "cd86fa7348718e873eed3e64b0af13af48f03b9723db7a225ba194408c5c8a9c"
+      },
+      "latencyMs": 428.1130000000121,
+      "parsedFiles": 1,
+      "fileCount": 120,
+      "cacheBytes": 2503161,
+      "heapDeltaBytes": 17885696,
+      "graphBytes": 3564052
+    },
+    {
+      "at": "2026-11-09T05:52:15.302Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "cd86fa7348718e873eed3e64b0af13af48f03b9723db7a225ba194408c5c8a9c"
+      },
+      "latencyMs": 420.9458999999333,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2503161,
+      "heapDeltaBytes": 12170272,
+      "graphBytes": 3564052
+    },
+    {
+      "at": "2026-11-09T05:52:27.980Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "cd86fa7348718e873eed3e64b0af13af48f03b9723db7a225ba194408c5c8a9c"
+      },
+      "latencyMs": 421.1677000001073,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2503161,
+      "heapDeltaBytes": 9361920,
+      "graphBytes": 3564052
+    },
+    {
+      "at": "2026-11-09T05:52:41.313Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "cd86fa7348718e873eed3e64b0af13af48f03b9723db7a225ba194408c5c8a9c"
+      },
+      "latencyMs": 436.622199999867,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2503161,
+      "heapDeltaBytes": -47026168,
+      "graphBytes": 3564052
+    },
+    {
+      "at": "2026-11-09T05:52:49.380Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "cd86fa7348718e873eed3e64b0af13af48f03b9723db7a225ba194408c5c8a9c"
+      },
+      "latencyMs": 464.6426999999676,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2503161,
+      "heapDeltaBytes": 8304144,
+      "graphBytes": 3564052
+    },
+    {
+      "at": "2026-11-09T05:53:18.345Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "cd86fa7348718e873eed3e64b0af13af48f03b9723db7a225ba194408c5c8a9c"
+      },
+      "latencyMs": 396.77900000009686,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2503161,
+      "heapDeltaBytes": 6909480,
+      "graphBytes": 3564052
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/ranges/subset.js",
+        "src/test/functions/prerelease.js",
+        "src/functions/prerelease.js",
+        "tests/visible.test.mjs",
+        "src/classes/semver.js",
+        "src/functions/diff.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_97a161294a414c1b820b2c536765f4fe|ctc_041bc3cb458aa9be016af15f461e3087d1bd2a23ca23e24a3e/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/functions/prerelease.js",
+          "callId": "call_97a161294a414c1b820b2c536765f4fe|ctc_041bc3cb458aa9be016af15f461e3087d1bd2a23ca23e24a3e/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/test/functions/prerelease.js",
+          "callId": "call_97a161294a414c1b820b2c536765f4fe|ctc_041bc3cb458aa9be016af15f461e3087d1bd2a23ca23e24a3e/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/functions/diff.js",
+          "callId": "call_97a161294a414c1b820b2c536765f4fe|ctc_041bc3cb458aa9be016af15f461e3087d1bd2a23ca23e24a3e/5"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/semver.js",
+          "callId": "call_97a161294a414c1b820b2c536765f4fe|ctc_041bc3cb458aa9be016af15f461e3087d1bd2a23ca23e24a3e/6"
+        },
+        {
+          "tool": "read",
+          "path": "src/ranges/subset.js",
+          "callId": "call_97a161294a414c1b820b2c536765f4fe|ctc_041bc3cb458aa9be016af15f461e3087d1bd2a23ca23e24a3e/7"
+        },
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_eec675d3189b485f91ad50cb2f98c8b6|ctc_041bc3cb458aa9be016af15f4ded3887d1a88f832670a4b4d2/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/functions/prerelease.js",
+          "callId": "call_eec675d3189b485f91ad50cb2f98c8b6|ctc_041bc3cb458aa9be016af15f4ded3887d1a88f832670a4b4d2/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/test/functions/prerelease.js",
+          "callId": "call_eec675d3189b485f91ad50cb2f98c8b6|ctc_041bc3cb458aa9be016af15f4ded3887d1a88f832670a4b4d2/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/functions/diff.js",
+          "callId": "call_eec675d3189b485f91ad50cb2f98c8b6|ctc_041bc3cb458aa9be016af15f4ded3887d1a88f832670a4b4d2/5"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/semver.js",
+          "callId": "call_eec675d3189b485f91ad50cb2f98c8b6|ctc_041bc3cb458aa9be016af15f4ded3887d1a88f832670a4b4d2/6"
+        },
+        {
+          "tool": "read",
+          "path": "src/ranges/subset.js",
+          "callId": "call_eec675d3189b485f91ad50cb2f98c8b6|ctc_041bc3cb458aa9be016af15f4ded3887d1a88f832670a4b4d2/7"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/semver.js",
+          "callId": "call_b8a6d990e3ec4133879ccd890e71be42|ctc_041bc3cb458aa9be016af15f69124087d18d9a728c6845369f/3"
+        },
+        {
+          "tool": "edit",
+          "path": "src/functions/diff.js",
+          "callId": "call_8b78414294654e71adf932482e8d55ca|ctc_041bc3cb458aa9be016af15f83fa3887d1ae26d2b220f7fa35/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst diff = require('./src/functions/diff.js')\nconst cases = [\n  ['1.7.2-1', '1.8.1', 'minor'],\n  ['1.1.1-pre', '2.1.1', 'major'],\n  ['1.2.0-pre', '1.2.0', 'minor'],\n  ['1.2.3-pre', '1.2.3', 'patch'],\n  ['1.0.0-pre', '1.0.0', 'major'],\n  ['1.0.0-1', '1.1.1', 'major'],\n  ['1.0.0-1', '1.1.0-1', 'preminor'],\n]\nfor (const [a, b, expected] of cases) {\n  assert.equal(diff(a, b), expected, `${a} -> ${b}`)\n  assert.equal(diff(b, a), expected, `${b} -> ${a}`)\n}\nconsole.log('diff regression checks passed')\nNODE",
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs && node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst diff = require('./src/functions/diff.js')\nconst cases = [\n  ['1.7.2-1', '1.8.1', 'minor'],\n  ['1.1.1-pre', '2.1.1', 'major'],\n  ['1.2.0-pre', '1.2.0', 'minor'],\n  ['1.2.3-pre', '1.2.3', 'patch'],\n  ['1.0.0-pre', '1.0.0', 'major'],\n  ['1.0.0-1', '1.1.1', 'major'],\n  ['1.0.0-1', '1.1.0-1', 'preminor'],\n]\nfor (const [a, b, expected] of cases) {\n  assert.equal(diff(a, b), expected, `${a} -> ${b}`)\n  assert.equal(diff(b, a), expected, `${b} -> ${a}`)\n}\nconsole.log('diff regression checks passed')\nNODE",
+        "git diff --check && git status --short && git diff -- src/functions/diff.js",
+        "pwd; git rev-parse --show-toplevel; git status --short -- src/functions/diff.js; git ls-files --stage -- src/functions/diff.js; git check-ignore -v src/functions/diff.js || true; sed -n '1,100p' src/functions/diff.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/functions/diff.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst diff = require('./src/functions/diff.js')\nconst cases = [\n  ['1.7.2-1', '1.8.1', 'minor'],\n  ['1.1.1-pre', '2.1.1', 'major'],\n  ['1.2.0-pre', '1.2.0', 'minor'],\n  ['1.2.3-pre', '1.2.3', 'patch'],\n  ['1.0.0-pre', '1.0.0', 'major'],\n  ['1.0.0-1', '1.1.1', 'major'],\n  ['1.0.0-1', '1.1.0-1', 'preminor'],\n]\nfor (const [a, b, expected] of cases) {\n  assert.equal(diff(a, b), expected, `${a} -> ${b}`)\n  assert.equal(diff(b, a), expected, `${b} -> ${a}`)\n}\nconsole.log('diff regression checks passed')\nNODE",
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs && node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst diff = require('./src/functions/diff.js')\nconst cases = [\n  ['1.7.2-1', '1.8.1', 'minor'],\n  ['1.1.1-pre', '2.1.1', 'major'],\n  ['1.2.0-pre', '1.2.0', 'minor'],\n  ['1.2.3-pre', '1.2.3', 'patch'],\n  ['1.0.0-pre', '1.0.0', 'major'],\n  ['1.0.0-1', '1.1.1', 'major'],\n  ['1.0.0-1', '1.1.0-1', 'preminor'],\n]\nfor (const [a, b, expected] of cases) {\n  assert.equal(diff(a, b), expected, `${a} -> ${b}`)\n  assert.equal(diff(b, a), expected, `${b} -> ${a}`)\n}\nconsole.log('diff regression checks passed')\nNODE",
+        "git diff --check && git status --short && git diff -- src/functions/diff.js",
+        "pwd; git rev-parse --show-toplevel; git status --short -- src/functions/diff.js; git ls-files --stage -- src/functions/diff.js; git check-ignore -v src/functions/diff.js || true; sed -n '1,100p' src/functions/diff.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/functions/diff.js",
+      "before": "const parse = require('./parse.js')\n\nconst diff = (version1, version2) => {\n  const v1 = parse(version1, null, true)\n  const v2 = parse(version2, null, true)\n  const comparison = v1.compare(v2)\n\n  if (comparison === 0) {\n    return null\n  }\n\n  const v1Higher = comparison > 0\n  const highVersion = v1Higher ? v1 : v2\n  const lowVersion = v1Higher ? v2 : v1\n  const highHasPre = !!highVersion.prerelease.length\n  const lowHasPre = !!lowVersion.prerelease.length\n\n  if (lowHasPre && !highHasPre) {\n    // Going from prerelease -> no prerelease requires some special casing\n\n    // If the low version has only a major, then it will always be a major\n    // Some examples:\n    // 1.0.0-1 -> 1.0.0\n    // 1.0.0-1 -> 1.1.1\n    // 1.0.0-1 -> 2.0.0\n    if (!lowVersion.patch && !lowVersion.minor) {\n      return 'major'\n    }\n\n    // Otherwise it can be determined by checking the high version\n\n    if (highVersion.patch) {\n      // anything higher than a patch bump would result in the wrong version\n      return 'patch'\n    }\n\n    if (highVersion.minor) {\n      // anything higher than a minor bump would result in the wrong version\n      return 'minor'\n    }\n\n    // bumping major/minor/patch all have same result\n    return 'major'\n  }\n\n  // add the `pre` prefix if we are going to a prerelease version\n  const prefix = highHasPre ? 'pre' : ''\n\n  if (v1.major !== v2.major) {\n    return prefix + 'major'\n  }\n\n  if (v1.minor !== v2.minor) {\n    return prefix + 'minor'\n  }\n\n  if (v1.patch !== v2.patch) {\n    return prefix + 'patch'\n  }\n\n  // high and low are preleases\n  return 'prerelease'\n}\n\nmodule.exports = diff\n",
+      "after": "const parse = require('./parse.js')\n\nconst diff = (version1, version2) => {\n  const v1 = parse(version1, null, true)\n  const v2 = parse(version2, null, true)\n  const comparison = v1.compare(v2)\n\n  if (comparison === 0) {\n    return null\n  }\n\n  const v1Higher = comparison > 0\n  const highVersion = v1Higher ? v1 : v2\n  const lowVersion = v1Higher ? v2 : v1\n  const highHasPre = !!highVersion.prerelease.length\n  const lowHasPre = !!lowVersion.prerelease.length\n\n  if (lowHasPre && !highHasPre) {\n    // Going from prerelease -> no prerelease requires some special casing\n\n    // If the low version has only a major, then it will always be a major\n    // Some examples:\n    // 1.0.0-1 -> 1.0.0\n    // 1.0.0-1 -> 1.1.1\n    // 1.0.0-1 -> 2.0.0\n    if (!lowVersion.patch && !lowVersion.minor) {\n      return 'major'\n    }\n\n    // A change to the core version determines the release level. Check from\n    // most significant to least significant so a higher patch does not mask\n    // a minor or major change.\n    if (lowVersion.major !== highVersion.major) {\n      return 'major'\n    }\n\n    if (lowVersion.minor !== highVersion.minor) {\n      return 'minor'\n    }\n\n    if (lowVersion.patch !== highVersion.patch) {\n      return 'patch'\n    }\n\n    // Stabilizing the same core version depends on which component is nonzero.\n    if (lowVersion.patch) {\n      return 'patch'\n    }\n\n    if (lowVersion.minor) {\n      return 'minor'\n    }\n\n    // bumping major/minor/patch all have same result\n    return 'major'\n  }\n\n  // add the `pre` prefix if we are going to a prerelease version\n  const prefix = highHasPre ? 'pre' : ''\n\n  if (v1.major !== v2.major) {\n    return prefix + 'major'\n  }\n\n  if (v1.minor !== v2.minor) {\n    return prefix + 'minor'\n  }\n\n  if (v1.patch !== v2.patch) {\n    return prefix + 'patch'\n  }\n\n  // high and low are preleases\n  return 'prerelease'\n}\n\nmodule.exports = diff\n"
+    }
+  ],
+  "final": "Updated `src/functions/diff.js` so prerelease-to-stable transitions classify changed core components from major to minor to patch. Same-core stabilization behavior remains unchanged, and the result stays symmetric.\n\nThe first `node --test tests/visible.test.mjs` run failed because `SUFFICE_WORKSPACE` was unset. Rerunning with `SUFFICE_WORKSPACE=\"$PWD\"` passed all 7 tests. Additional regression checks for the requested examples, stabilization cases, prerelease classification, and symmetry passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\025-prerelease-diff-B-r0\\home\\events\\1794203458069-cb698085-9fb9-4ae0-958d-d5a9fc4b9b9d.jsonl"
+}
