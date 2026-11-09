@@ -3,8 +3,8 @@ import {repositoryPath} from './workspace.mjs';
 import {createNavigation} from './navigation.mjs';
 import {intelligenceTools} from './intelligence/tools.mjs';
 
-export function repositoryTools({workspace, commandTimeout=180, shellPath, intelligence,log}) {
-  const native=createCodingTools(workspace,{bash:{shellPath,exposeSessionEnvironment:false}});
+export function repositoryTools({workspace, commandTimeout=180, shellPath, bashOperations, intelligence,log}) {
+  const native=createCodingTools(workspace,{bash:{shellPath,operations:bashOperations,exposeSessionEnvironment:false}});
   return [
     ...native.map(tool=>({...tool,label:tool.label??tool.name,
       async execute(id,args,signal,onUpdate) {

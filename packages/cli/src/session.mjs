@@ -25,7 +25,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const closedRequests=new Set();
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
   const intelligence=options.intelligence&&options.intelligence!=='off'?createIntelligence({workspace,cacheDir:resolve(options.home,'intelligence'),log}):undefined;
-  const tools=repositoryTools({workspace,shellPath:options.shellPath,intelligence,log});
+  const tools=repositoryTools({workspace,shellPath:options.shellPath,bashOperations:options.bashOperations,intelligence,log});
   const names=tools.map(t=>t.name);
   const settings=SettingsManager.inMemory({compaction:{enabled:false},retry:{enabled:options.retryCount!==0,maxRetries:options.retryCount??1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
