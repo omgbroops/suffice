@@ -1,0 +1,347 @@
+{
+  "kind": "native-environment-calibration-not-model-outcomes",
+  "notes": [
+    "Zero tests from Windows tiny-glob path matching were rejected by gates.",
+    "CLI POSIX shell incompatibility was rejected; adapter preserves test assertions and commands.",
+    "No inference was dispatched for any failed setup.",
+    "Early setup source was not individually frozen; diagnostics record observed reports, not a fully reproducible source epoch."
+  ],
+  "observations": [
+    {
+      "id": "1794219628372",
+      "observations": {
+        "empty-mocha": {
+          "stats": {
+            "tests": 0,
+            "passes": 0,
+            "failures": 0,
+            "pending": 0
+          },
+          "failures": []
+        },
+        "public-mocha": {
+          "stats": {
+            "tests": 0,
+            "passes": 0,
+            "failures": 0,
+            "pending": 0
+          },
+          "failures": []
+        },
+        "reference-mocha": {
+          "stats": {
+            "tests": 0,
+            "passes": 0,
+            "failures": 0,
+            "pending": 0
+          },
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": "1794219765720",
+      "observations": {
+        "public-mocha": {
+          "stats": {
+            "tests": 1932,
+            "passes": 1862,
+            "failures": 14,
+            "pending": 56
+          },
+          "failures": [
+            {
+              "title": "cli basic",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli custom-element",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli dev",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli dir",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli dir-sourcemap",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli dir-subdir",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli globals",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli sourcemap",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli sourcemap-inline",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli ssr",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "cli store",
+              "message": "ENOENT: no such file or directory, scandir 'actual'"
+            },
+            {
+              "title": "runtime binding-select (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n[\n  HTMLOptionElement {\n    __value: 'one'\n  },\n  HTMLOptionElement {\n    __value: 'two'\n  },\n  HTMLOptionElement {\n    __value: 'three'\n  }\n]\n\nshould loosely deep-equal\n\nHTMLOptionsCollection {}"
+            },
+            {
+              "title": "runtime binding-select (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime binding-select (inline helpers)",
+              "message": "skipping test, already failed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1794220182621",
+      "observations": {
+        "public-mocha": {
+          "stats": {
+            "tests": 1932,
+            "passes": 1862,
+            "failures": 14,
+            "pending": 56
+          },
+          "failures": [
+            {
+              "title": "cli basic",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/basic/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/basic/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html > actual/Main.js\n\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/basic/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli custom-element",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/custom-element/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/custom-element/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html --customElement > actual/Main.js\n\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/custom-element/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli dev",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dev/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dev/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -d > actual/Main.js\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dev/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli dir",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -o actual\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli dir-sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir-sourcemap/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir-sourcemap/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -m -o actual\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir-sourcemap/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli dir-subdir",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir-subdir/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir-subdir/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -o actual\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/dir-subdir/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli globals",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/globals/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/globals/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -f iife -g the-answer:theAnswer > actual/Main.js\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/globals/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/sourcemap/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/sourcemap/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -m -o actual/Main.js\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/sourcemap/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli sourcemap-inline",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/sourcemap-inline/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/sourcemap-inline/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -m inline -o actual/Main.js\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/sourcemap-inline/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli ssr",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/ssr/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/ssr/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile --generate ssr src/Main.html > actual/Main.js\n\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/ssr/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "cli store",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/store/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/store/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html --store > actual/Main.js\n\n\t\t\t\n/usr/bin/bash: line 5: C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220182621/public/test/cli/samples/store/node_modules/.suffice-node16/node.exe: No such file or directory\n"
+            },
+            {
+              "title": "runtime binding-select (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n[\n  HTMLOptionElement {\n    __value: 'one'\n  },\n  HTMLOptionElement {\n    __value: 'two'\n  },\n  HTMLOptionElement {\n    __value: 'three'\n  }\n]\n\nshould loosely deep-equal\n\nHTMLOptionsCollection {}"
+            },
+            {
+              "title": "runtime binding-select (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime binding-select (inline helpers)",
+              "message": "skipping test, already failed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1794220298093",
+      "observations": {
+        "public-mocha": {
+          "stats": {
+            "tests": 1932,
+            "passes": 1869,
+            "failures": 7,
+            "pending": 56
+          },
+          "failures": [
+            {
+              "title": "cli dir",
+              "message": "'/* src\\\\Main.html generated by Svelte vx.y.z */\\n' +\n  \"import Widget from './Widget.html';\\n\" +\n  '\\n' +\n  'function create_main_fragment(component, ctx) {\\n' +\n  '\\n' +\n  '\\tvar widget = new Widget({\\n' +\n  '\\t\\troot: component.root\\n' +\n  '\\t});\\n' +\n  '\\n' +\n  '\\treturn {\\n' +\n  '\\t\\tc() {\\n' +\n  '\\t\\t\\twidget._fragment.c();\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tm(target, anchor) {\\n' +\n  '\\t\\t\\twidget._mount(target, anchor);\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tp: noop,\\n' +\n  '\\n' +\n  '\\t\\td(detach) ... == '/* src/Main.html generated by Svelte vx.y.z */\\n' +\n  \"import Widget from './Widget.html';\\n\" +\n  '\\n' +\n  'function create_main_fragment(component, ctx) {\\n' +\n  '\\n' +\n  '\\tvar widget = new Widget({\\n' +\n  '\\t\\troot: component.root\\n' +\n  '\\t});\\n' +\n  '\\n' +\n  '\\treturn {\\n' +\n  '\\t\\tc() {\\n' +\n  '\\t\\t\\twidget._fragment.c();\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tm(target, anchor) {\\n' +\n  '\\t\\t\\twidget._mount(target, anchor);\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tp: noop,\\n' +\n  '\\n' +\n  '\\t\\td(detach) {..."
+            },
+            {
+              "title": "cli dir-sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220298093/public/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220298093/public/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -m -o actual\n\t\t\t\ncompiling src\\Main.html...\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\compile.ts.js:183:16)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\compile.ts.js:140:13\r\n    at Array.forEach (<anonymous>)\r\n    at compileDirectory (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\compile.ts.js:136:27)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\compile.ts.js:129:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "cli dir-subdir",
+              "message": "'/* src\\\\Main.html generated by Svelte vx.y.z */\\n' +\n  \"import Widget from './widget/Widget.html';\\n\" +\n  '\\n' +\n  'function create_main_fragment(component, ctx) {\\n' +\n  '\\n' +\n  '\\tvar widget = new Widget({\\n' +\n  '\\t\\troot: component.root\\n' +\n  '\\t});\\n' +\n  '\\n' +\n  '\\treturn {\\n' +\n  '\\t\\tc() {\\n' +\n  '\\t\\t\\twidget._fragment.c();\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tm(target, anchor) {\\n' +\n  '\\t\\t\\twidget._mount(target, anchor);\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tp: noop,\\n' +\n  '\\n' +\n  '\\t\\td(d... == '/* src/Main.html generated by Svelte vx.y.z */\\n' +\n  \"import Widget from './widget/Widget.html';\\n\" +\n  '\\n' +\n  'function create_main_fragment(component, ctx) {\\n' +\n  '\\n' +\n  '\\tvar widget = new Widget({\\n' +\n  '\\t\\troot: component.root\\n' +\n  '\\t});\\n' +\n  '\\n' +\n  '\\treturn {\\n' +\n  '\\t\\tc() {\\n' +\n  '\\t\\t\\twidget._fragment.c();\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tm(target, anchor) {\\n' +\n  '\\t\\t\\twidget._mount(target, anchor);\\n' +\n  '\\t\\t},\\n' +\n  '\\n' +\n  '\\t\\tp: noop,\\n' +\n  '\\n' +\n  '\\t\\td(de..."
+            },
+            {
+              "title": "cli sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220298093/public/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220298093/public/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -m -o actual/Main.js\n\t\t\t\ncompiling src\\Main.html...\n(5:2) \u00e2\u20ac\u201c 'onrender' has been deprecated in favour of 'oncreate', and will cause an error in Svelte 2.x\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\compile.ts.js:183:16)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\compile.ts.js:132:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220298093\\public\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "runtime binding-select (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n[\n  HTMLOptionElement {\n    __value: 'one'\n  },\n  HTMLOptionElement {\n    __value: 'two'\n  },\n  HTMLOptionElement {\n    __value: 'three'\n  }\n]\n\nshould loosely deep-equal\n\nHTMLOptionsCollection {}"
+            },
+            {
+              "title": "runtime binding-select (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime binding-select (inline helpers)",
+              "message": "skipping test, already failed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1794220440999",
+      "observations": {
+        "empty-mocha": {
+          "stats": {
+            "tests": 1940,
+            "passes": 1873,
+            "failures": 11,
+            "pending": 56
+          },
+          "failures": [
+            {
+              "title": "cli dir-sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/empty/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/empty/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -m -o actual\n\t\t\t\ncompiling src\\Main.html...\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\compile.ts.js:183:16)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\compile.ts.js:140:13\r\n    at Array.forEach (<anonymous>)\r\n    at compileDirectory (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\compile.ts.js:136:27)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\compile.ts.js:129:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "cli sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/empty/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/empty/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -m -o actual/Main.js\n\t\t\t\ncompiling src\\Main.html...\n(5:2) \u00e2\u20ac\u201c 'onrender' has been deprecated in favour of 'oncreate', and will cause an error in Svelte 2.x\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\compile.ts.js:183:16)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\compile.ts.js:132:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\empty\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "runtime binding-select (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n[\n  HTMLOptionElement {\n    __value: 'one'\n  },\n  HTMLOptionElement {\n    __value: 'two'\n  },\n  HTMLOptionElement {\n    __value: 'three'\n  }\n]\n\nshould loosely deep-equal\n\nHTMLOptionsCollection {}"
+            },
+            {
+              "title": "runtime binding-select (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime binding-select (inline helpers)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime transition-js-aborted-outro (shared helpers)",
+              "message": "0.5 == 1"
+            },
+            {
+              "title": "runtime transition-js-aborted-outro (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime transition-js-aborted-outro (inline helpers)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime transition-js-aborted-outro-in-each (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n''\n\nshould loosely deep-equal\n\n'<span>one</span><span>two</span><span>three</span>'"
+            },
+            {
+              "title": "runtime transition-js-aborted-outro-in-each (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime transition-js-aborted-outro-in-each (inline helpers)",
+              "message": "skipping test, already failed"
+            }
+          ]
+        },
+        "public-mocha": {
+          "stats": {
+            "tests": 1932,
+            "passes": 1871,
+            "failures": 5,
+            "pending": 56
+          },
+          "failures": [
+            {
+              "title": "cli dir-sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/public/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/public/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -m -o actual\n\t\t\t\ncompiling src\\Main.html...\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\compile.ts.js:183:16)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\compile.ts.js:140:13\r\n    at Array.forEach (<anonymous>)\r\n    at compileDirectory (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\compile.ts.js:136:27)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\compile.ts.js:129:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "cli sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/public/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/public/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -m -o actual/Main.js\n\t\t\t\ncompiling src\\Main.html...\n(5:2) \u00e2\u20ac\u201c 'onrender' has been deprecated in favour of 'oncreate', and will cause an error in Svelte 2.x\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\compile.ts.js:183:16)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\compile.ts.js:132:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\public\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "runtime binding-select (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n[\n  HTMLOptionElement {\n    __value: 'one'\n  },\n  HTMLOptionElement {\n    __value: 'two'\n  },\n  HTMLOptionElement {\n    __value: 'three'\n  }\n]\n\nshould loosely deep-equal\n\nHTMLOptionsCollection {}"
+            },
+            {
+              "title": "runtime binding-select (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime binding-select (inline helpers)",
+              "message": "skipping test, already failed"
+            }
+          ]
+        },
+        "reference-mocha": {
+          "stats": {
+            "tests": 1940,
+            "passes": 1879,
+            "failures": 5,
+            "pending": 56
+          },
+          "failures": [
+            {
+              "title": "cli dir-sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/reference/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/reference/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src -m -o actual\n\t\t\t\ncompiling src\\Main.html...\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\compile.ts.js:183:16)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\compile.ts.js:140:13\r\n    at Array.forEach (<anonymous>)\r\n    at compileDirectory (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\compile.ts.js:136:27)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\compile.ts.js:129:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "cli sourcemap",
+              "message": "Command failed: shopt -s expand_aliases\nalias svelte='\"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/reference/node_modules/.suffice-node16/node.exe\" --max-old-space-size=384 \"C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-svelte-outro-pilot/validation/1794220440999/reference/svelte\"'\n\t\t\t\tmkdir -p actual\n\t\t\t\trm -rf actual/*\n\t\t\t\tsvelte compile src/Main.html -m -o actual/Main.js\n\t\t\t\ncompiling src\\Main.html...\n(5:2) \u00e2\u20ac\u201c 'onrender' has been deprecated in favour of 'oncreate', and will cause an error in Svelte 2.x\nwrote actual\\Main.js\nnode:internal/errors:478\r\n    ErrorCaptureStackTrace(err);\r\n    ^\r\n\r\nTypeError [ERR_INVALID_ARG_TYPE]: The \"data\" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received an instance of SourceMap\r\n    at Object.writeFileSync (node:fs:2195:5)\r\n    at compileFile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\compile.ts.js:183:16)\r\n    at compile (C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\compile.ts.js:132:9)\r\n    at C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-svelte-outro-pilot\\validation\\1794220440999\\reference\\cli\\index.ts.js:519:9 {\r\n  code: 'ERR_INVALID_ARG_TYPE'\r\n}\r\n"
+            },
+            {
+              "title": "runtime binding-select (shared helpers)",
+              "message": "Expected values to be loosely deep-equal:\n\n[\n  HTMLOptionElement {\n    __value: 'one'\n  },\n  HTMLOptionElement {\n    __value: 'two'\n  },\n  HTMLOptionElement {\n    __value: 'three'\n  }\n]\n\nshould loosely deep-equal\n\nHTMLOptionsCollection {}"
+            },
+            {
+              "title": "runtime binding-select (shared helpers, hydration)",
+              "message": "skipping test, already failed"
+            },
+            {
+              "title": "runtime binding-select (inline helpers)",
+              "message": "skipping test, already failed"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
