@@ -1,0 +1,104 @@
+{
+  "task": "layered-routing",
+  "repetition": 0,
+  "arm": "A",
+  "mode": "off",
+  "scheduleIndex": 10,
+  "runId": "011-layered-routing-A-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 119891.7241,
+  "usage": {
+    "input": 14564,
+    "cacheRead": 18304,
+    "cacheWrite": 0,
+    "output": 5130,
+    "estimatedApiUsd": 0.00420444,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00420444,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: exact and longest boundary prefixes override declaration order\nok 1 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 3.3483\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 2 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 1.7692\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 3 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.5286\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 4 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.3635\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 23.7033\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 232
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: route settings inherit defaults and results are owned\nok 1 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 2.1912\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 15.9563\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 292
+  },
+  "changed": [
+    "src/field-merge.mjs",
+    "src/header-merge.mjs",
+    "src/resolution-key.mjs",
+    "src/route-matcher.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 4,
+  "verificationCalls": 2,
+  "toolCalls": 15,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let match = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      match = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return match;\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the routing repairs:\n\n- Route matching now selects exact matches first, then the longest matching prefix, preserving declaration order for ties.\n- Settings merges preserve falsy values, and header merges support per-name deletion with `null`.\n- Cache keys now include tenant, path, and revision.\n\nVerification: `node --test tests/visible.test.mjs` passed (1/1). Additional inline assertions for matching, merges, tenant updates, cache isolation, and snapshots also passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\011-layered-routing-A-r0\\home\\events\\1794202502925-599711cc-321f-49ed-8036-3459ceca4d8c.jsonl"
+}
