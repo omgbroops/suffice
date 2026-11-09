@@ -25,10 +25,11 @@ export async function snapshot(root){const values={};for(const p of await allFil
 export function random(seed){let value=seed>>>0;return ()=>{value=(Math.imul(value,1664525)+1013904223)>>>0;return value/2**32;};}
 export function schedule(tasks,repetitions=2,seed=20261109){const rand=random(seed),shuffle=xs=>[...xs].sort(()=>0).map(v=>({v,k:rand()})).sort((a,b)=>a.k-b.k).map(x=>x.v),categories=['simple','cross-file','complex'],groups=categories.map(c=>shuffle(tasks.filter(t=>t.category===c))),ordered=[];for(let i=0;i<Math.max(...groups.map(g=>g.length));i++)for(const g of groups)if(g[i])ordered.push(g[i]);const blocks=[];for(const task of ordered)for(let repetition=0;repetition<repetitions;repetition++)blocks.push(shuffle(ARMS).map(arm=>({task:task.id,repetition,arm:arm.id,mode:arm.mode})));return blocks;}
 export async function runTrial({runtime,task,item,runDir,published,config=CONFIG}){
-  const workspace=resolve(runDir,'workspace');await mkdir(runDir,{recursive:true});await cp(task.baseline,workspace,{recursive:true,filter:p=>!p.split(/[\\/]/).includes('node_modules')});const original=await snapshot(workspace);
+  const takeSnapshot=task.snapshot??snapshot;
+  const workspace=resolve(runDir,'workspace');await mkdir(runDir,{recursive:true});if(task.copyWorkspace)await task.copyWorkspace(task.baseline,workspace);else await cp(task.baseline,workspace,{recursive:true,filter:p=>!p.split(/[\\/]/).includes('node_modules')});const original=await takeSnapshot(workspace);
   if(task.baselineHashes&&JSON.stringify(original)!==JSON.stringify(task.baselineHashes))throw new Error('Task starting files drifted');
   const workspaceGit=await initializeWorkspaceGit(workspace);
-  if(JSON.stringify(original)!==JSON.stringify(await snapshot(workspace)))throw new Error('Git initialization changed task contents');
+  if(JSON.stringify(original)!==JSON.stringify(await takeSnapshot(workspace)))throw new Error('Git initialization changed task contents');
   await task.setupWorkspace?.(workspace);
   const started=performance.now(),agent=await createSufficeSession({...parseOptions([]),...config,cwd:workspace,home:resolve(runDir,'home'),intelligence:item.mode},runtime);
   let status='completed',error=null,final='';
@@ -36,7 +37,7 @@ export async function runTrial({runtime,task,item,runDir,published,config=CONFIG
   const latencyMs=performance.now()-started;
   const {acceptance,regression}=task.verify?await task.verify(workspace):{acceptance:await runNodeTests(workspace,task.preparedAcceptance),regression:await runNodeTests(workspace,resolve(workspace,'tests/visible.test.mjs'))};
   if(!task.verify&&hash(await readFile(task.preparedAcceptance))!==task.acceptanceHash)throw new Error('Frozen acceptance drift');
-  const current=await snapshot(workspace),paths=[...new Set([...Object.keys(original),...Object.keys(current)])],changed=paths.filter(p=>original[p]!==current[p]);
+  const current=await takeSnapshot(workspace),paths=[...new Set([...Object.keys(original),...Object.keys(current)])],changed=paths.filter(p=>original[p]!==current[p]);
   const allowed=new Set(task.sourceFiles),immutableIntact=changed.every(p=>task.allowsChange?task.allowsChange(p):allowed.has(p)&&original[p]&&current[p]);
   const events=(await readFile(agent.eventPath,'utf8')).trim().split('\n').map(JSON.parse),assistant=events.filter(e=>e.type==='assistant'),requests=events.filter(e=>e.type==='provider_request'),responses=events.filter(e=>e.type==='provider_usage');
   const modelValid=assistant.length>0&&assistant.every(e=>e.model===config.model)&&requests.length>0&&requests.every(e=>e.model===config.model&&e.reasoning?.effort===config.effort);

@@ -40,13 +40,16 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     pi.on('tool_result',e=>log({type:'tool_result',name:e.toolName,callId:e.toolCallId,parentCallId:e.parentToolCallId,isError:e.isError,content:e.content,details:e.details}));
     pi.on('before_provider_request',e=>{
       if(logError) throw logError;
-      if(allowance && (allowance.reason || allowance.spent+(options.requestReserveUsd??0)>=options.maxCost || allowance.turns>=(options.maxTurns??60))) {blockedBeforeDispatch=true;log({type:'provider_request_blocked',reason:'allowance',dispatched:false});stop('allowance');throw new Error('Task allowance exhausted');}
       if(options.serviceTier)e.payload.service_tier=options.serviceTier;
       if(options.maxOutputTokens)e.payload.max_output_tokens=options.maxOutputTokens;
       const bytes=Buffer.byteLength(JSON.stringify(e.payload));
       if(options.maxProviderPayloadBytes&&bytes>options.maxProviderPayloadBytes){blockedBeforeDispatch=true;log({type:'provider_request_blocked',reason:'input_payload_limit',bytes,limit:options.maxProviderPayloadBytes,dispatched:false});stop('input_payload_limit');throw new Error('Task input payload allowance exhausted');}
+      const reserve=typeof options.requestReserveUsd==='function'?options.requestReserveUsd(e.payload,bytes):(options.requestReserveUsd??0);
+      const meteredTokens=totals.input+totals.cacheRead+totals.cacheWrite+totals.output;
+      if(options.maxTaskTokens&&meteredTokens>=options.maxTaskTokens){blockedBeforeDispatch=true;log({type:'provider_request_blocked',reason:'token_limit',dispatched:false,meteredTokens,limit:options.maxTaskTokens});stop('token_limit');throw new Error('Task token limit exhausted');}
+      if(allowance && (allowance.reason || allowance.spent+reserve>=options.maxCost || allowance.turns>=(options.maxTurns??60))) {blockedBeforeDispatch=true;log({type:'provider_request_blocked',reason:'allowance',dispatched:false,reserveUsd:reserve});stop('allowance');throw new Error('Task allowance exhausted');}
       blockedBeforeDispatch=false;dispatchedRequests++;
-      log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,serviceTier:e.payload.service_tier,maxOutputTokens:e.payload.max_output_tokens,bytes});
+      log({type:'provider_request',model:e.payload.model,reasoning:e.payload.reasoning,serviceTier:e.payload.service_tier,maxOutputTokens:e.payload.max_output_tokens,bytes,reserveUsd:reserve,meteredTokens});
     });
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage){
       if(typeof e.data.response.id==='string'&&['response.completed','response.incomplete','response.failed','response.cancelled'].includes(e.data.type))closedRequests.add(e.data.response.id);
@@ -92,6 +95,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     log({type:'assistant',model:m.model,usage:u,stopReason:m.stopReason,error:m.errorMessage,content:m.content});
     if(allowance) {
       allowance.turns++; allowance.spent+=known?u.cost.total:0;
+      if(options.maxTaskTokens&&totals.input+totals.cacheRead+totals.cacheWrite+totals.output>=options.maxTaskTokens)stop('token_limit');
       if(m.content.some(c=>c.type==='toolCall')) {
         if(allowance.spent>=options.maxCost) stop('cost_limit');
         else if(allowance.turns>=(options.maxTurns??60)) stop('turn_limit');

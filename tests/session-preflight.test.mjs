@@ -8,7 +8,7 @@ import {ModelRuntime} from '@earendil-works/pi-coding-agent';
 import {parseOptions} from '../packages/cli/src/options.mjs';
 import {createSufficeSession} from '../packages/cli/src/session.mjs';
 
-for(const scenario of [{name:'cost allowance',options:{maxCost:0.1,requestReserveUsd:0.15},reason:'allowance'},{name:'payload allowance',options:{maxCost:10,maxProviderPayloadBytes:1},reason:'input_payload_limit'}]){
+for(const scenario of [{name:'dynamic cost allowance',options:{maxCost:0.1,requestReserveUsd:(_payload,bytes)=>{assert.ok(bytes>0);return 0.15;}},reason:'allowance'},{name:'cost allowance',options:{maxCost:0.1,requestReserveUsd:0.15},reason:'allowance'},{name:'payload allowance',options:{maxCost:10,maxProviderPayloadBytes:1},reason:'input_payload_limit'}]){
   test(`a rejected ${scenario.name} makes no HTTP model request and retains known zero usage`,async()=>{
     const dir=await mkdtemp(resolve(tmpdir(),'suffice-preflight-'));let requests=0,agent;
     const server=createServer((_req,res)=>{requests++;res.writeHead(503,{'content-type':'application/json'});res.end('{"error":{"message":"Local test only"}}');});
