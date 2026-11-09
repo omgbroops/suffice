@@ -1,0 +1,700 @@
+{
+  "task": "event-routing-workflow",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "runId": "005-event-routing-workflow-B-r0",
+  "category": "complex",
+  "kind": "compound",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 271399.2807,
+  "usage": {
+    "input": 54917,
+    "cacheRead": 204288,
+    "cacheWrite": 0,
+    "output": 12330,
+    "estimatedApiUsd": 0.013699580000000001,
+    "modelCalls": 14,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.013699580000000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 10,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 2.1308\n  type: 'test'\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 0.6971\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.5192\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.3526\n  type: 'test'\n  ...\n# Subtest: exact and longest boundary prefixes override declaration order\nok 5 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 0.8577\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 6 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 0.4514\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 7 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.5046\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 8 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.4274\n  type: 'test'\n  ...\n# Subtest: pair identity cannot collide through separators\nok 9 - pair identity cannot collide through separators\n  ---\n  duration_ms: 0.5447\n  type: 'test'\n  ...\n# Subtest: injected clock governs write and exact expiration\nok 10 - injected clock governs write and exact expiration\n  ---\n  duration_ms: 0.2345\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 10\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 34.3829\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 126
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 2.2883\n  type: 'test'\n  ...\n# Subtest: route settings inherit defaults and results are owned\nok 2 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 0.6705\n  type: 'test'\n  ...\n# Subtest: cache reuses a value for the same tenant and resource\nok 3 - cache reuses a value for the same tenant and resource\n  ---\n  duration_ms: 0.5134\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 30.7193\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 132
+  },
+  "changed": [
+    "src/layered-routing/field-merge.mjs",
+    "src/layered-routing/header-merge.mjs",
+    "src/layered-routing/resolution-key.mjs",
+    "src/layered-routing/route-matcher.mjs",
+    "src/tenant-cache/cache.mjs",
+    "src/tenant-cache/store.mjs",
+    "src/tenant-event-feed/batch-commit.mjs",
+    "src/tenant-event-feed/live-bus.mjs",
+    "src/tenant-event-feed/snapshot.mjs",
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 14,
+  "editCalls": 11,
+  "verificationCalls": 2,
+  "toolCalls": 93,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:21:30.794Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:21:31.369Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:21:36.573Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:21:40.424Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:21:49.964Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:21:58.791Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:22:32.149Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:27.633Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:27.842Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:35.079Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:04.610Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:11.575Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:21.853Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:34.151Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:34.464Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:25:07.636Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:25:33.989Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:21:31.367Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 614.222299999994,
+      "parsedFiles": 34,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 2769976,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:31.950Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 574.995900000009,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -5246568,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:36.817Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 244.90890000000945,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 1989864,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:40.568Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 144.67980000001262,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -2956096,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:50.069Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 132.48649999999907,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 3111184,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:58.912Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 139.60430000000633,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 2559384,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:22:32.445Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 297.0456000000122,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -6918008,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:23:27.840Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d22194bfe3989857986fb879449a66277baa5a2e70d0daf6e0634fb7d15ebf4"
+      },
+      "latencyMs": 213.18330000003334,
+      "parsedFiles": 10,
+      "fileCount": 34,
+      "cacheBytes": 239763,
+      "heapDeltaBytes": 5919248,
+      "graphBytes": 413865
+    },
+    {
+      "at": "2026-11-09T05:23:28.058Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d22194bfe3989857986fb879449a66277baa5a2e70d0daf6e0634fb7d15ebf4"
+      },
+      "latencyMs": 216.31949999998324,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 239763,
+      "heapDeltaBytes": 2220224,
+      "graphBytes": 413865
+    },
+    {
+      "at": "2026-11-09T05:23:35.237Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d22194bfe3989857986fb879449a66277baa5a2e70d0daf6e0634fb7d15ebf4"
+      },
+      "latencyMs": 158.397399999958,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 239763,
+      "heapDeltaBytes": 2588904,
+      "graphBytes": 413865
+    },
+    {
+      "at": "2026-11-09T05:24:04.745Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d22194bfe3989857986fb879449a66277baa5a2e70d0daf6e0634fb7d15ebf4"
+      },
+      "latencyMs": 135.4550000000163,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 239763,
+      "heapDeltaBytes": -22901520,
+      "graphBytes": 413865
+    },
+    {
+      "at": "2026-11-09T05:24:11.735Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d22194bfe3989857986fb879449a66277baa5a2e70d0daf6e0634fb7d15ebf4"
+      },
+      "latencyMs": 160.53690000000643,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 239763,
+      "heapDeltaBytes": 2147144,
+      "graphBytes": 413865
+    },
+    {
+      "at": "2026-11-09T05:24:22.026Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7d22194bfe3989857986fb879449a66277baa5a2e70d0daf6e0634fb7d15ebf4"
+      },
+      "latencyMs": 174.03039999998873,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 239763,
+      "heapDeltaBytes": 2140736,
+      "graphBytes": 413865
+    },
+    {
+      "at": "2026-11-09T05:24:34.463Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "24e4f2ca12c2ff89b9b788aa9be3ad6ebc29d8cac7a8928ddada99a642fb4d9a"
+      },
+      "latencyMs": 312.1067000000039,
+      "parsedFiles": 1,
+      "fileCount": 34,
+      "cacheBytes": 240190,
+      "heapDeltaBytes": 3848472,
+      "graphBytes": 414436
+    },
+    {
+      "at": "2026-11-09T05:24:34.668Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "24e4f2ca12c2ff89b9b788aa9be3ad6ebc29d8cac7a8928ddada99a642fb4d9a"
+      },
+      "latencyMs": 204.07060000003548,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 240190,
+      "heapDeltaBytes": 2243952,
+      "graphBytes": 414436
+    },
+    {
+      "at": "2026-11-09T05:25:07.805Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "24e4f2ca12c2ff89b9b788aa9be3ad6ebc29d8cac7a8928ddada99a642fb4d9a"
+      },
+      "latencyMs": 169.80689999996684,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 240190,
+      "heapDeltaBytes": 1977368,
+      "graphBytes": 414436
+    },
+    {
+      "at": "2026-11-09T05:25:34.113Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "24e4f2ca12c2ff89b9b788aa9be3ad6ebc29d8cac7a8928ddada99a642fb4d9a"
+      },
+      "latencyMs": 123.82809999998426,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 240190,
+      "heapDeltaBytes": 1972616,
+      "graphBytes": 414436
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/layered-routing/header-format.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/settings-merge.mjs",
+        "src/tenant-event-feed/live-bus.mjs",
+        "src/tenant-event-feed/feed.mjs",
+        "src/tenant-event-feed/subscription.mjs",
+        "src/tenant-event-feed/validation.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/feed.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/validation.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/subscription.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/9"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/live-bus.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/10"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-format.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/18"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-merge.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/19"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/settings-merge.mjs",
+          "callId": "call_998d91cd150a4c85888784abac4e0d2f|ctc_0652bd549fd9c2ed016af15864e06087d1bf03c1841602fc6b/25"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/feed.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/validation.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/subscription.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/8"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/live-bus.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/9"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-format.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/17"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-merge.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/18"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/settings-merge.mjs",
+          "callId": "call_acc5ebba594a443f9048b28794964076|ctc_0652bd549fd9c2ed016af1586b849c87d1b08a080ceddbe5a0/24"
+        },
+        {
+          "tool": "edit",
+          "path": "src/tenant-event-feed/validation.mjs",
+          "callId": "call_0dcbc3a29e274b7e8cb7e1581fac7db2|ctc_0652bd549fd9c2ed016af158b659fc87d1b3211fce0db129e7/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/tenant-event-feed/live-bus.mjs",
+          "callId": "call_0dcbc3a29e274b7e8cb7e1581fac7db2|ctc_0652bd549fd9c2ed016af158b659fc87d1b3211fce0db129e7/4"
+        },
+        {
+          "tool": "edit",
+          "path": "src/layered-routing/header-merge.mjs",
+          "callId": "call_0dcbc3a29e274b7e8cb7e1581fac7db2|ctc_0652bd549fd9c2ed016af158b659fc87d1b3211fce0db129e7/6"
+        }
+      ],
+      "subsequentTestCommands": [],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/layered-routing/field-merge.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/resolution-key.mjs",
+        "src/layered-routing/route-matcher.mjs",
+        "src/tenant-cache/cache.mjs",
+        "src/tenant-cache/store.mjs",
+        "src/tenant-event-feed/batch-commit.mjs",
+        "src/tenant-event-feed/live-bus.mjs",
+        "src/tenant-event-feed/snapshot.mjs",
+        "src/tenant-event-feed/validation.mjs",
+        "src/layered-routing/settings-merge.mjs",
+        "src/layered-routing/resolver.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/tenant-event-feed/batch-commit.mjs",
+          "callId": "call_379b28d9c52241b49d1b659c9a96e502|ctc_0652bd549fd9c2ed016af1590b26a087d1bce817948365ecc1/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git status --short && sed -n '1,120p' src/tenant-event-feed/batch-commit.mjs && sed -n '1,80p' src/layered-routing/route-matcher.mjs",
+        "pwd -P; git rev-parse --show-toplevel; git check-ignore -v src/tenant-event-feed/batch-commit.mjs src/tenant-cache/cache.mjs || true; git ls-files --error-unmatch src/tenant-event-feed/batch-commit.mjs 2>&1 || true; git status --short --untracked-files=all | head -80",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nconst input = { type: 'created', payload: { nested: { value: 1 } } };\nconst [published] = feed.publishBatch('red', [input]);\ninput.payload.nested.value = 99;\npublished.payload.nested.value = 98;\nassert.equal(feed.history('red')[0].payload.nested.value, 1);\nconst deliveries = [];\nfeed.subscribe('red', 0, record => { record.payload.nested.value = -1; deliveries.push(record); });\nfeed.subscribe('red', 0, record => deliveries.push(record));\nfeed.subscribe('blue', 0, () => assert.fail('cross-tenant delivery'));\nassert.throws(() => feed.publishBatch('red', [\n  { type: 'ok', payload: {} },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1]);\nconst [next] = feed.publishBatch('red', [{ type: 'created', payload: { nested: { value: 2 } } }]);\nassert.equal(next.sequence, 2);\nassert.equal(deliveries[0].payload.nested.value, -1);\nassert.equal(deliveries[1].payload.nested.value, 2);\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1, 2]);\nassert.equal(feed.publishBatch('blue', [])[0], undefined);\n\nconst routeInput = { defaults: { enabled: true, timeout: 5, label: 'default', headers: { a: 'one', b: 'two' } },\n  routes: [\n    { id: 'wild', pattern: '*', settings: { target: 'wild' } },\n    { id: 'prefix', pattern: '/app/*', settings: { enabled: false, timeout: 0, label: '' } },\n    { id: 'same-first', pattern: '/app/x/*', settings: { target: 'first' } },\n    { id: 'same-second', pattern: '/app/x/*', settings: { target: 'second' } },\n    { id: 'exact', pattern: '/app', settings: { target: 'exact' } },\n  ] };\nconst router = createRouter(routeInput);\nrouteInput.routes[1].settings.enabled = true;\nrouter.setTenant('red', { headers: { b: null, c: '' }, label: '' });\nconst tenantInput = { enabled: true };\nrouter.setTenant('blue', tenantInput);\ntenantInput.enabled = false;\nassert.equal(router.resolve('red', '/app').route, 'exact');\nconst app = router.resolve('red', '/app/file');\nassert.equal(app.route, 'prefix');\nassert.equal(app.enabled, false);\nassert.equal(app.timeout, 0);\nassert.equal(app.label, '');\nassert.deepEqual(app.headers, { a: 'one', c: '' });\napp.headers.a = 'mutated';\nassert.equal(router.resolve('red', '/app/file').headers.a, 'one');\nassert.equal(router.resolve('red', '/app/x/y').target, 'first');\nassert.equal(router.resolve('red', '/apple').route, 'wild');\nassert.equal(router.resolve('red', '/missing').route, 'wild');\nrouter.setTenant('red', { enabled: true });\nassert.equal(router.resolve('red', '/app/file').enabled, true);\nassert.equal(router.resolve('blue', '/app/file').enabled, false);\n\nlet now = 100;\nconst cache = new TenantCache(new ExpiringStore({ now: () => now }));\nlet loads = 0;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 0; }, 10), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => { loads++; return false; }, 10), false);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 5; }, 10), 0);\nassert.equal(loads, 2);\nnow = 110;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 3; }, 10), 3);\nassert.equal(loads, 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nconst input = { type: 'created', payload: { nested: { value: 1 } } };\nconst [published] = feed.publishBatch('red', [input]);\ninput.payload.nested.value = 99;\npublished.payload.nested.value = 98;\nassert.equal(feed.history('red')[0].payload.nested.value, 1);\nconst deliveries = [];\nfeed.subscribe('red', 0, record => { record.payload.nested.value = -1; deliveries.push(record); });\nfeed.subscribe('red', 0, record => deliveries.push(record));\nfeed.subscribe('blue', 0, () => assert.fail('cross-tenant delivery'));\ndeliveries.length = 0;\nassert.throws(() => feed.publishBatch('red', [\n  { type: 'ok', payload: {} },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1]);\nconst [next] = feed.publishBatch('red', [{ type: 'created', payload: { nested: { value: 2 } } }]);\nassert.equal(next.sequence, 2);\nassert.equal(deliveries[0].payload.nested.value, -1);\nassert.equal(deliveries[1].payload.nested.value, 2);\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1, 2]);\n\nconst routeInput = { defaults: { enabled: true, timeout: 5, label: 'default', headers: { a: 'one', b: 'two' } },\n  routes: [\n    { id: 'wild', pattern: '*', settings: { target: 'wild' } },\n    { id: 'prefix', pattern: '/app/*', settings: { enabled: false, timeout: 0, label: '' } },\n    { id: 'same-first', pattern: '/app/x/*', settings: { target: 'first' } },\n    { id: 'same-second', pattern: '/app/x/*', settings: { target: 'second' } },\n    { id: 'exact', pattern: '/app', settings: { target: 'exact' } },\n  ] };\nconst router = createRouter(routeInput);\nrouteInput.routes[1].settings.enabled = true;\nrouter.setTenant('red', { headers: { b: null, c: '' }, label: '' });\nconst tenantInput = { enabled: true };\nrouter.setTenant('blue', tenantInput);\ntenantInput.enabled = false;\nassert.equal(router.resolve('red', '/app').route, 'exact');\nconst app = router.resolve('red', '/app/file');\nassert.equal(app.route, 'prefix');\nassert.equal(app.enabled, false);\nassert.equal(app.timeout, 0);\nassert.equal(app.label, '');\nassert.deepEqual(app.headers, { a: 'one', c: '' });\napp.headers.a = 'mutated';\nassert.equal(router.resolve('red', '/app/file').headers.a, 'one');\nassert.equal(router.resolve('red', '/app/x/y').target, 'first');\nassert.equal(router.resolve('red', '/apple').route, 'wild');\nassert.equal(router.resolve('red', '/missing').route, 'wild');\nrouter.setTenant('red', { enabled: true });\nassert.equal(router.resolve('red', '/app/file').enabled, true);\nassert.equal(router.resolve('blue', '/app/file').enabled, true);\n\nlet now = 100;\nconst cache = new TenantCache(new ExpiringStore({ now: () => now }));\nlet loads = 0;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 0; }, 10), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => { loads++; return false; }, 10), false);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 5; }, 10), 0);\nassert.equal(loads, 2);\nnow = 110;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 3; }, 10), 3);\nassert.equal(loads, 3);\nconsole.log('additional contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/layered-routing/field-merge.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/resolution-key.mjs",
+        "src/layered-routing/route-matcher.mjs",
+        "src/tenant-cache/cache.mjs",
+        "src/tenant-cache/store.mjs",
+        "src/tenant-event-feed/batch-commit.mjs",
+        "src/tenant-event-feed/live-bus.mjs",
+        "src/tenant-event-feed/snapshot.mjs",
+        "src/tenant-event-feed/validation.mjs",
+        "src/layered-routing/settings-merge.mjs",
+        "src/layered-routing/resolver.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nconst input = { type: 'created', payload: { nested: { value: 1 } } };\nconst [published] = feed.publishBatch('red', [input]);\ninput.payload.nested.value = 99;\npublished.payload.nested.value = 98;\nassert.equal(feed.history('red')[0].payload.nested.value, 1);\nconst deliveries = [];\nfeed.subscribe('red', 0, record => { record.payload.nested.value = -1; deliveries.push(record); });\nfeed.subscribe('red', 0, record => deliveries.push(record));\nfeed.subscribe('blue', 0, () => assert.fail('cross-tenant delivery'));\nassert.throws(() => feed.publishBatch('red', [\n  { type: 'ok', payload: {} },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1]);\nconst [next] = feed.publishBatch('red', [{ type: 'created', payload: { nested: { value: 2 } } }]);\nassert.equal(next.sequence, 2);\nassert.equal(deliveries[0].payload.nested.value, -1);\nassert.equal(deliveries[1].payload.nested.value, 2);\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1, 2]);\nassert.equal(feed.publishBatch('blue', [])[0], undefined);\n\nconst routeInput = { defaults: { enabled: true, timeout: 5, label: 'default', headers: { a: 'one', b: 'two' } },\n  routes: [\n    { id: 'wild', pattern: '*', settings: { target: 'wild' } },\n    { id: 'prefix', pattern: '/app/*', settings: { enabled: false, timeout: 0, label: '' } },\n    { id: 'same-first', pattern: '/app/x/*', settings: { target: 'first' } },\n    { id: 'same-second', pattern: '/app/x/*', settings: { target: 'second' } },\n    { id: 'exact', pattern: '/app', settings: { target: 'exact' } },\n  ] };\nconst router = createRouter(routeInput);\nrouteInput.routes[1].settings.enabled = true;\nrouter.setTenant('red', { headers: { b: null, c: '' }, label: '' });\nconst tenantInput = { enabled: true };\nrouter.setTenant('blue', tenantInput);\ntenantInput.enabled = false;\nassert.equal(router.resolve('red', '/app').route, 'exact');\nconst app = router.resolve('red', '/app/file');\nassert.equal(app.route, 'prefix');\nassert.equal(app.enabled, false);\nassert.equal(app.timeout, 0);\nassert.equal(app.label, '');\nassert.deepEqual(app.headers, { a: 'one', c: '' });\napp.headers.a = 'mutated';\nassert.equal(router.resolve('red', '/app/file').headers.a, 'one');\nassert.equal(router.resolve('red', '/app/x/y').target, 'first');\nassert.equal(router.resolve('red', '/apple').route, 'wild');\nassert.equal(router.resolve('red', '/missing').route, 'wild');\nrouter.setTenant('red', { enabled: true });\nassert.equal(router.resolve('red', '/app/file').enabled, true);\nassert.equal(router.resolve('blue', '/app/file').enabled, false);\n\nlet now = 100;\nconst cache = new TenantCache(new ExpiringStore({ now: () => now }));\nlet loads = 0;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 0; }, 10), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => { loads++; return false; }, 10), false);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 5; }, 10), 0);\nassert.equal(loads, 2);\nnow = 110;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 3; }, 10), 3);\nassert.equal(loads, 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nconst input = { type: 'created', payload: { nested: { value: 1 } } };\nconst [published] = feed.publishBatch('red', [input]);\ninput.payload.nested.value = 99;\npublished.payload.nested.value = 98;\nassert.equal(feed.history('red')[0].payload.nested.value, 1);\nconst deliveries = [];\nfeed.subscribe('red', 0, record => { record.payload.nested.value = -1; deliveries.push(record); });\nfeed.subscribe('red', 0, record => deliveries.push(record));\nfeed.subscribe('blue', 0, () => assert.fail('cross-tenant delivery'));\ndeliveries.length = 0;\nassert.throws(() => feed.publishBatch('red', [\n  { type: 'ok', payload: {} },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1]);\nconst [next] = feed.publishBatch('red', [{ type: 'created', payload: { nested: { value: 2 } } }]);\nassert.equal(next.sequence, 2);\nassert.equal(deliveries[0].payload.nested.value, -1);\nassert.equal(deliveries[1].payload.nested.value, 2);\nassert.deepEqual(feed.history('red').map(r => r.sequence), [1, 2]);\n\nconst routeInput = { defaults: { enabled: true, timeout: 5, label: 'default', headers: { a: 'one', b: 'two' } },\n  routes: [\n    { id: 'wild', pattern: '*', settings: { target: 'wild' } },\n    { id: 'prefix', pattern: '/app/*', settings: { enabled: false, timeout: 0, label: '' } },\n    { id: 'same-first', pattern: '/app/x/*', settings: { target: 'first' } },\n    { id: 'same-second', pattern: '/app/x/*', settings: { target: 'second' } },\n    { id: 'exact', pattern: '/app', settings: { target: 'exact' } },\n  ] };\nconst router = createRouter(routeInput);\nrouteInput.routes[1].settings.enabled = true;\nrouter.setTenant('red', { headers: { b: null, c: '' }, label: '' });\nconst tenantInput = { enabled: true };\nrouter.setTenant('blue', tenantInput);\ntenantInput.enabled = false;\nassert.equal(router.resolve('red', '/app').route, 'exact');\nconst app = router.resolve('red', '/app/file');\nassert.equal(app.route, 'prefix');\nassert.equal(app.enabled, false);\nassert.equal(app.timeout, 0);\nassert.equal(app.label, '');\nassert.deepEqual(app.headers, { a: 'one', c: '' });\napp.headers.a = 'mutated';\nassert.equal(router.resolve('red', '/app/file').headers.a, 'one');\nassert.equal(router.resolve('red', '/app/x/y').target, 'first');\nassert.equal(router.resolve('red', '/apple').route, 'wild');\nassert.equal(router.resolve('red', '/missing').route, 'wild');\nrouter.setTenant('red', { enabled: true });\nassert.equal(router.resolve('red', '/app/file').enabled, true);\nassert.equal(router.resolve('blue', '/app/file').enabled, true);\n\nlet now = 100;\nconst cache = new TenantCache(new ExpiringStore({ now: () => now }));\nlet loads = 0;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 0; }, 10), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => { loads++; return false; }, 10), false);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 5; }, 10), 0);\nassert.equal(loads, 2);\nnow = 110;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 3; }, 10), 3);\nassert.equal(loads, 3);\nconsole.log('additional contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/layered-routing/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let bestRoute = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      bestRoute = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return bestRoute;\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-cache/cache.mjs",
+      "before": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return tenant + ':' + resourceId; }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n",
+      "after": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return JSON.stringify([tenant, resourceId]); }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-cache/store.mjs",
+      "before": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: Date.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n",
+      "after": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: this.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  let sequence = state.sequence;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    records.push(makeRecord(tenant, event, ++sequence));\r\n  }\r\n  state.records = state.records.concat(records);\r\n  state.sequence = sequence;\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/live-bus.mjs",
+      "before": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) entry.onEvent(snapshot(record));\r\n    },\r\n  };\r\n}\r\n",
+      "after": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) {\r\n        if (entry.tenant === record.tenant) entry.onEvent(snapshot(record));\r\n      }\r\n    },\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(value) {\r\n  return structuredClone(value);\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type ||\r\n      !event.payload || typeof event.payload !== 'object' || Array.isArray(event.payload)) {\r\n    throw new Error('Invalid event');\r\n  }\r\n  const prototype = Object.getPrototypeOf(event.payload);\r\n  if (prototype !== Object.prototype && prototype !== null) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the repairs across all three components:\n\n- **Tenant event feed:** batches are staged before commit, payloads and returned/delivered records are deep snapshots, and live events are tenant-filtered.\n- **Layered routing:** explicit falsy settings are preserved, `null` header values delete inherited headers, the most-specific route wins, and cache keys include tenant, path, and revision.\n- **Tenant cache:** tenant/resource keys are collision-safe, and TTL deadlines use the injected clock.\n\nVerification: `node --test tests/visible.test.mjs` passed (3/3). Additional inline contract checks passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\005-event-routing-workflow-B-r0\\home\\events\\1794201690745-5cf94551-67fa-4620-a96d-40c84c15e5a2.jsonl"
+}

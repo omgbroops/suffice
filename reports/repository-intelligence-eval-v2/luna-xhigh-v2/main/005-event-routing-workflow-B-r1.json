@@ -1,0 +1,539 @@
+{
+  "task": "event-routing-workflow",
+  "repetition": 1,
+  "arm": "B",
+  "mode": "guided",
+  "runId": "005-event-routing-workflow-B-r1",
+  "category": "complex",
+  "kind": "compound",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 200295.3829,
+  "usage": {
+    "input": 43270,
+    "cacheRead": 114688,
+    "cacheWrite": 0,
+    "output": 8666,
+    "estimatedApiUsd": 0.009806880000000002,
+    "modelCalls": 10,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.009806880000000002,
+  "acceptance": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 10,
+    "passed": 9,
+    "failed": 1,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 10,
+    "namesMatch": false,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nnot ok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 17.666\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice\\\\.suffice\\\\intelligence-eval-v2\\\\acceptance\\\\event-routing-workflow.test.mjs:14:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        1,\n        3,\n        4,\n    +   5\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 1\n    1: 3\n    2: 4\n  actual:\n    0: 1\n    1: 3\n    2: 4\n    3: 5\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-eval-v2/acceptance/event-routing-workflow.test.mjs:20:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 4.3386\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.7304\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 1.6614\n  type: 'test'\n  ...\n# Subtest: exact and longest boundary prefixes override declaration order\nok 5 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 2.5045\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 6 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 0.802\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 7 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.4625\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 8 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.9017\n  type: 'test'\n  ...\n# Subtest: pair identity cannot collide through separators\nok 9 - pair identity cannot collide through separators\n  ---\n  duration_ms: 0.8566\n  type: 'test'\n  ...\n# Subtest: injected clock governs write and exact expiration\nok 10 - injected clock governs write and exact expiration\n  ---\n  duration_ms: 0.3672\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 9\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 110.2775\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 476
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 3.6219\n  type: 'test'\n  ...\n# Subtest: route settings inherit defaults and results are owned\nok 2 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 1.0267\n  type: 'test'\n  ...\n# Subtest: cache reuses a value for the same tenant and resource\nok 3 - cache reuses a value for the same tenant and resource\n  ---\n  duration_ms: 0.4854\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 58.2745\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 285
+  },
+  "changed": [
+    "src/layered-routing/field-merge.mjs",
+    "src/layered-routing/header-merge.mjs",
+    "src/layered-routing/resolution-key.mjs",
+    "src/layered-routing/route-matcher.mjs",
+    "src/tenant-cache/cache.mjs",
+    "src/tenant-cache/store.mjs",
+    "src/tenant-event-feed/batch-commit.mjs",
+    "src/tenant-event-feed/snapshot.mjs",
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/tenant-event-feed/live-bus.mjs"
+  ],
+  "extraChangedFiles": [
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 10,
+  "editCalls": 9,
+  "verificationCalls": 1,
+  "toolCalls": 82,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:21:30.820Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:21:31.386Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:21:37.566Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:21:46.664Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:21:52.160Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:22:01.643Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:09.454Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:09.630Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:30.944Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:54.516Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:09.696Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:24:19.470Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:21:31.383Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 589.0587000000232,
+      "parsedFiles": 34,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 3551224,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:31.985Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 566.4251999999979,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 4066992,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:37.698Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 132.08809999999357,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -855512,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:46.778Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 140.86670000001322,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -7953728,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:21:52.293Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 133.26490000000922,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -8477576,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:22:01.831Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 235.88399999996182,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": 2560648,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:23:09.628Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "adc7bbd1b69d0500a8fb45ad76096ce9e90147ee12a7a25ecad56822513c4923"
+      },
+      "latencyMs": 179.15889999998035,
+      "parsedFiles": 9,
+      "fileCount": 34,
+      "cacheBytes": 238833,
+      "heapDeltaBytes": 5949600,
+      "graphBytes": 413073
+    },
+    {
+      "at": "2026-11-09T05:23:09.785Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "adc7bbd1b69d0500a8fb45ad76096ce9e90147ee12a7a25ecad56822513c4923"
+      },
+      "latencyMs": 155.93410000001313,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 238833,
+      "heapDeltaBytes": 2306792,
+      "graphBytes": 413073
+    },
+    {
+      "at": "2026-11-09T05:23:31.119Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "adc7bbd1b69d0500a8fb45ad76096ce9e90147ee12a7a25ecad56822513c4923"
+      },
+      "latencyMs": 174.93350000004284,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 238833,
+      "heapDeltaBytes": 2387888,
+      "graphBytes": 413073
+    },
+    {
+      "at": "2026-11-09T05:23:54.845Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "adc7bbd1b69d0500a8fb45ad76096ce9e90147ee12a7a25ecad56822513c4923"
+      },
+      "latencyMs": 329.2866999999969,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 238833,
+      "heapDeltaBytes": 4199744,
+      "graphBytes": 413073
+    },
+    {
+      "at": "2026-11-09T05:24:09.829Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "adc7bbd1b69d0500a8fb45ad76096ce9e90147ee12a7a25ecad56822513c4923"
+      },
+      "latencyMs": 133.83419999998296,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 238833,
+      "heapDeltaBytes": 2130664,
+      "graphBytes": 413073
+    },
+    {
+      "at": "2026-11-09T05:24:19.611Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "adc7bbd1b69d0500a8fb45ad76096ce9e90147ee12a7a25ecad56822513c4923"
+      },
+      "latencyMs": 141.16159999999218,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 238833,
+      "heapDeltaBytes": 2225936,
+      "graphBytes": 413073
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/layered-routing/header-format.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/settings-merge.mjs",
+        "src/tenant-event-feed/live-bus.mjs",
+        "src/tenant-event-feed/feed.mjs",
+        "src/tenant-event-feed/subscription.mjs",
+        "src/tenant-event-feed/validation.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/feed.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/validation.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/6"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/subscription.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/9"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/live-bus.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/10"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-format.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/16"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-merge.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/17"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/settings-merge.mjs",
+          "callId": "call_33c87385ab1047159d82b7fdef7a8290|ctc_0c8c6a3f11ffce50016af1585f9ba487d18e9182053dbbb2da/23"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/feed.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/validation.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/6"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/subscription.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/9"
+        },
+        {
+          "tool": "read",
+          "path": "src/tenant-event-feed/live-bus.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/10"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-format.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/17"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/header-merge.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/18"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-routing/settings-merge.mjs",
+          "callId": "call_0c604c83de0d4781bb66b88abc6b48d1|ctc_0c8c6a3f11ffce50016af15871a1e487d1ac4fc1d7ee738600/24"
+        },
+        {
+          "tool": "edit",
+          "path": "src/tenant-event-feed/validation.mjs",
+          "callId": "call_1d11ca7210444697ac64703cc019c858|ctc_0c8c6a3f11ffce50016af158a3076c87d1893bbc67838f08d7/3"
+        },
+        {
+          "tool": "edit",
+          "path": "src/layered-routing/header-merge.mjs",
+          "callId": "call_1d11ca7210444697ac64703cc019c858|ctc_0c8c6a3f11ffce50016af158a3076c87d1893bbc67838f08d7/5"
+        }
+      ],
+      "subsequentTestCommands": [],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/layered-routing/field-merge.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/resolution-key.mjs",
+        "src/layered-routing/route-matcher.mjs",
+        "src/tenant-cache/cache.mjs",
+        "src/tenant-cache/store.mjs",
+        "src/tenant-event-feed/batch-commit.mjs",
+        "src/tenant-event-feed/snapshot.mjs",
+        "src/tenant-event-feed/validation.mjs",
+        "src/layered-routing/settings-merge.mjs",
+        "src/layered-routing/resolver.mjs",
+        "src/tenant-event-feed/publisher.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nassert.throws(() => feed.publishBatch('t', [\n  { type: 'ok', payload: { nested: { value: 1 } } },\n  { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('t'), []);\nconst input = { nested: { value: 1 } };\nconst committed = feed.publishBatch('t', [{ type: 'ok', payload: input }]);\ninput.nested.value = 2;\ncommitted[0].payload.nested.value = 3;\nconst first = [], second = [];\nfeed.subscribe('t', 0, r => first.push(r));\nfeed.subscribe('t', 0, r => second.push(r));\nfeed.publishBatch('t', [{ type: 'next', payload: { nested: { value: 4 } } }]);\nfirst[1].payload.nested.value = 9;\nassert.equal(second[1].payload.nested.value, 4);\nassert.equal(feed.history('t')[0].payload.nested.value, 1);\nassert.equal(feed.history('t')[1].sequence, 2);\n\nconst router = createRouter({\n  defaults: { enabled: true, timeout: 10, label: 'default', headers: { keep: 'yes', remove: 'me' } },\n  routes: [\n    { id: 'wild', pattern: '*', settings: { target: 'wild' } },\n    { id: 'short', pattern: '/app/*', settings: { target: 'short' } },\n    { id: 'long', pattern: '/app/admin/*', settings: { target: 'long' } },\n    { id: 'exact', pattern: '/app/admin', settings: { target: 'exact' } },\n  ],\n});\nassert.equal(router.resolve('a', '/app/admin').route, 'exact');\nassert.equal(router.resolve('a', '/app/admin/x').route, 'long');\nassert.equal(router.resolve('a', '/apple').route, 'wild');\nrouter.setTenant('a', { enabled: false, timeout: 0, label: '', headers: { remove: null, keep: '' } });\nconst resolved = router.resolve('a', '/app/x');\nassert.equal(resolved.enabled, false);\nassert.equal(resolved.timeout, 0);\nassert.equal(resolved.label, '');\nassert.deepEqual(resolved.headers, { keep: '' });\nrouter.setTenant('a', { enabled: true });\nassert.equal(router.resolve('a', '/app/x').enabled, true);\nassert.equal(router.resolve('b', '/app/x').enabled, true);\n\nlet now = 50;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nlet loads = 0;\nawait cache.getOrLoad('a:b', 'c', async () => { loads++; return false; }, 10);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => { loads++; return 0; }, 10), 0);\nassert.equal(loads, 2);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 1; }, 10), false);\nnow = 60;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => { loads++; return 1; }, 10), 1);\nassert.equal(loads, 3);\nconsole.log('additional contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/layered-routing/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-routing/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let bestRoute = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      bestRoute = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return bestRoute;\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-cache/cache.mjs",
+      "before": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return tenant + ':' + resourceId; }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n",
+      "after": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return JSON.stringify([tenant, resourceId]); }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-cache/store.mjs",
+      "before": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: Date.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n",
+      "after": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: this.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  let sequence = state.sequence;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    records.push(makeRecord(tenant, event, ++sequence));\r\n  }\r\n\r\n  // Commit only after every event has been validated and snapshotted.\r\n  state.sequence = sequence;\r\n  state.records = [...state.records, ...records];\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\r\n  return structuredClone(record);\r\n}\r\n"
+    },
+    {
+      "path": "src/tenant-event-feed/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  const payload = event?.payload;\r\n  const prototype = payload !== null && typeof payload === 'object'\r\n    ? Object.getPrototypeOf(payload)\r\n    : undefined;\r\n  if (\r\n    !event ||\r\n    typeof event.type !== 'string' ||\r\n    !event.type ||\r\n    (prototype !== Object.prototype && prototype !== null)\r\n  ) {\r\n    throw new Error('Invalid event');\r\n  }\r\n  structuredClone(payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the repairs under `src/`:\n\n- **Event feed:** batches commit atomically, and stored records, results, and deliveries use independent deep snapshots.\n- **Layered routing:** falsy overrides are preserved, `null` header values delete inherited headers, route specificity is respected, and cache keys include tenant and revision.\n- **Tenant cache:** pair keys avoid separator collisions, and TTL deadlines use the injected clock.\n\nVerification passed: `node --test tests/visible.test.mjs` (3 tests), plus additional contract checks for batch atomicity, snapshot isolation, routing precedence and overrides, cache-key collisions, and expiry at the deadline.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\005-event-routing-workflow-B-r1\\home\\events\\1794201690777-7d84d15d-f115-4fef-acdf-98cd2943ce8d.jsonl"
+}
