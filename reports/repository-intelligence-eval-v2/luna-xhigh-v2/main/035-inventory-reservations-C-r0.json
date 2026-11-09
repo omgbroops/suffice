@@ -1,0 +1,361 @@
+{
+  "task": "inventory-reservations",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 34,
+  "runId": "035-inventory-reservations-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 93079.4815,
+  "usage": {
+    "input": 18288,
+    "cacheRead": 47232,
+    "cacheWrite": 0,
+    "output": 3759,
+    "estimatedApiUsd": 0.00418062,
+    "modelCalls": 8,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00418062,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: request ids are tenant scoped and delimiter safe\nok 1 - request ids are tenant scoped and delimiter safe\n  ---\n  duration_ms: 1.4565\n  type: 'test'\n  ...\n# Subtest: duplicate totals and reordered retries share one identity\nok 2 - duplicate totals and reordered retries share one identity\n  ---\n  duration_ms: 9.171\n  type: 'test'\n  ...\n# Subtest: later errors roll back stock and allow corrected retries\nok 3 - later errors roll back stock and allow corrected retries\n  ---\n  duration_ms: 0.3032\n  type: 'test'\n  ...\n# Subtest: validation and snapshots preserve ownership\nok 4 - validation and snapshots preserve ownership\n  ---\n  duration_ms: 0.2973\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 20.1707\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 113
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a successful request consumes stock once\nok 1 - a successful request consumes stock once\n  ---\n  duration_ms: 1.7414\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.877\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 97
+  },
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 8,
+  "editCalls": 3,
+  "verificationCalls": 1,
+  "toolCalls": 29,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:00:44.967Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T06:00:45.084Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/item-plan.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:45.172Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/item-plan.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:51.861Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/item-plan.mjs",
+          "src/request-key.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:51.963Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/item-plan.mjs",
+          "src/request-key.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:56.106Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/item-plan.mjs",
+          "src/request-key.mjs",
+          "src/stock-transaction.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:56.196Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/item-plan.mjs",
+          "src/request-key.mjs",
+          "src/stock-transaction.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:00:45.060Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 93.6410999998916,
+      "parsedFiles": 16,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 4482400,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:45.172Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "436b3ef076c4c435e543ba0c65465c2449dad7d9e4e77d8dfbe39ae2afc43e58"
+      },
+      "latencyMs": 87.75900000007823,
+      "parsedFiles": 1,
+      "fileCount": 16,
+      "cacheBytes": 90353,
+      "heapDeltaBytes": 1861416,
+      "graphBytes": 152861
+    },
+    {
+      "at": "2026-11-09T06:00:45.255Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "436b3ef076c4c435e543ba0c65465c2449dad7d9e4e77d8dfbe39ae2afc43e58"
+      },
+      "latencyMs": 83.22049999982119,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 90353,
+      "heapDeltaBytes": 1126592,
+      "graphBytes": 152861
+    },
+    {
+      "at": "2026-11-09T06:00:51.962Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "024d45f6ebab6fe5b365861bc49ac544525fb1940dfb1f61e3a58659038e81fb"
+      },
+      "latencyMs": 100.87699999986216,
+      "parsedFiles": 1,
+      "fileCount": 16,
+      "cacheBytes": 91226,
+      "heapDeltaBytes": 1696408,
+      "graphBytes": 153904
+    },
+    {
+      "at": "2026-11-09T06:00:52.054Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "024d45f6ebab6fe5b365861bc49ac544525fb1940dfb1f61e3a58659038e81fb"
+      },
+      "latencyMs": 91.62989999982528,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91226,
+      "heapDeltaBytes": 1100288,
+      "graphBytes": 153904
+    },
+    {
+      "at": "2026-11-09T06:00:56.195Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6346450fc1e8c86f18529c6f8d9543e0724cd56d3fe33d139d8f3b44d94e3cf8"
+      },
+      "latencyMs": 89.78890000004321,
+      "parsedFiles": 1,
+      "fileCount": 16,
+      "cacheBytes": 91538,
+      "heapDeltaBytes": 1705920,
+      "graphBytes": 154238
+    },
+    {
+      "at": "2026-11-09T06:00:56.283Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6346450fc1e8c86f18529c6f8d9543e0724cd56d3fe33d139d8f3b44d94e3cf8"
+      },
+      "latencyMs": 87.64180000009947,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91538,
+      "heapDeltaBytes": 1045400,
+      "graphBytes": 154238
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-normalizer.mjs",
+        "src/checkout.mjs",
+        "src/shop.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs && git status --short",
+        "node --input-type=module -e \"import assert from 'node:assert/strict'; import { createShop } from './src/index.mjs'; const initial = { t: { a: 10, b: 2 }, u: { a: 3 } }; const shop = createShop(initial); initial.t.a = 0; const first = { tenant: 't', requestId: 'same', items: [{ sku: 'b', quantity: 1 }, { sku: 'a', quantity: 2 }, { sku: 'a', quantity: 1 }] }; const receipt = shop.reserve(first); assert.deepEqual(receipt.items, [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }]); first.items[0].quantity = 2; receipt.items[0].quantity = 99; assert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }] }).items, [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }]); assert.equal(shop.stock('t', 'a'), 7); shop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'a', quantity: 1 }] }); assert.equal(shop.stock('u', 'a'), 2); assert.throws(() => shop.reserve({ tenant: 't', requestId: 'failed', items: [{ sku: 'a', quantity: 2 }, { sku: 'missing', quantity: 1 }] }), /Unknown stock/); assert.equal(shop.stock('t', 'a'), 7); assert.deepEqual(shop.reserve({ tenant: 't', requestId: 'failed', items: [{ sku: 'a', quantity: 1 }] }).items, [{ sku: 'a', quantity: 1 }]); assert.equal(shop.stock('t', 'a'), 6); assert.throws(() => shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'a', quantity: 4 }] }), /Conflicting request/); console.log('contract smoke checks passed');\"",
+        "git rev-parse --show-toplevel; git status --short -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs; git ls-files --error-unmatch src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs 2>&1 || true; git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/request-normalizer.mjs",
+        "src/reservation-store.mjs",
+        "src/checkout.mjs",
+        "src/shop.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs && git status --short",
+        "node --input-type=module -e \"import assert from 'node:assert/strict'; import { createShop } from './src/index.mjs'; const initial = { t: { a: 10, b: 2 }, u: { a: 3 } }; const shop = createShop(initial); initial.t.a = 0; const first = { tenant: 't', requestId: 'same', items: [{ sku: 'b', quantity: 1 }, { sku: 'a', quantity: 2 }, { sku: 'a', quantity: 1 }] }; const receipt = shop.reserve(first); assert.deepEqual(receipt.items, [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }]); first.items[0].quantity = 2; receipt.items[0].quantity = 99; assert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }] }).items, [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }]); assert.equal(shop.stock('t', 'a'), 7); shop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'a', quantity: 1 }] }); assert.equal(shop.stock('u', 'a'), 2); assert.throws(() => shop.reserve({ tenant: 't', requestId: 'failed', items: [{ sku: 'a', quantity: 2 }, { sku: 'missing', quantity: 1 }] }), /Unknown stock/); assert.equal(shop.stock('t', 'a'), 7); assert.deepEqual(shop.reserve({ tenant: 't', requestId: 'failed', items: [{ sku: 'a', quantity: 1 }] }).items, [{ sku: 'a', quantity: 1 }]); assert.equal(shop.stock('t', 'a'), 6); assert.throws(() => shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'a', quantity: 4 }] }), /Conflicting request/); console.log('contract smoke checks passed');\"",
+        "git rev-parse --show-toplevel; git status --short -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs; git ls-files --error-unmatch src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs 2>&1 || true; git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-transaction.mjs",
+        "src/request-normalizer.mjs",
+        "src/reservation-store.mjs",
+        "src/checkout.mjs",
+        "src/shop.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs && git status --short",
+        "node --input-type=module -e \"import assert from 'node:assert/strict'; import { createShop } from './src/index.mjs'; const initial = { t: { a: 10, b: 2 }, u: { a: 3 } }; const shop = createShop(initial); initial.t.a = 0; const first = { tenant: 't', requestId: 'same', items: [{ sku: 'b', quantity: 1 }, { sku: 'a', quantity: 2 }, { sku: 'a', quantity: 1 }] }; const receipt = shop.reserve(first); assert.deepEqual(receipt.items, [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }]); first.items[0].quantity = 2; receipt.items[0].quantity = 99; assert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }] }).items, [{ sku: 'a', quantity: 3 }, { sku: 'b', quantity: 1 }]); assert.equal(shop.stock('t', 'a'), 7); shop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'a', quantity: 1 }] }); assert.equal(shop.stock('u', 'a'), 2); assert.throws(() => shop.reserve({ tenant: 't', requestId: 'failed', items: [{ sku: 'a', quantity: 2 }, { sku: 'missing', quantity: 1 }] }), /Unknown stock/); assert.equal(shop.stock('t', 'a'), 7); assert.deepEqual(shop.reserve({ tenant: 't', requestId: 'failed', items: [{ sku: 'a', quantity: 1 }] }).items, [{ sku: 'a', quantity: 1 }]); assert.equal(shop.stock('t', 'a'), 6); assert.throws(() => shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'a', quantity: 4 }] }), /Conflicting request/); console.log('contract smoke checks passed');\"",
+        "git rev-parse --show-toplevel; git status --short -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs; git ls-files --error-unmatch src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs 2>&1 || true; git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/item-plan.mjs",
+      "before": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n",
+      "after": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) {\r\n    quantities.set(item.sku, (quantities.get(item.sku) ?? 0) + item.quantity);\r\n  }\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n"
+    },
+    {
+      "path": "src/request-key.mjs",
+      "before": "export function requestKey(tenant, id) {\r\n  return id;\r\n}\r\n",
+      "after": "export function requestKey(tenant, id) {\r\n  return JSON.stringify([tenant, id]);\r\n}\r\n"
+    },
+    {
+      "path": "src/stock-transaction.mjs",
+      "before": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = repository.current();\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n",
+      "after": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = structuredClone(repository.current());\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the reservation fixes in `src/`:\n\n- Duplicate SKU quantities are now summed before sorting and storing receipts.\n- Request IDs are keyed by both tenant and ID.\n- Stock changes are applied to a staged clone, so a failed reservation leaves stock unchanged.\n\nVerification passed: `node --test tests/visible.test.mjs` and additional contract smoke checks for tenant isolation, retries, receipt ownership, and atomic failure handling.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\035-inventory-reservations-C-r0\\home\\events\\1794204014231-d504dced-0aaf-4d44-961a-aba6d0c991fb.jsonl"
+}
