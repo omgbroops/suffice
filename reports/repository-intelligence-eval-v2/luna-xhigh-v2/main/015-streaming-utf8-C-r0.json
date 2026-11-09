@@ -1,0 +1,266 @@
+{
+  "task": "streaming-utf8",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 14,
+  "runId": "015-streaming-utf8-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "cross-file",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 66241.0814,
+  "usage": {
+    "input": 14725,
+    "cacheRead": 16256,
+    "cacheWrite": 0,
+    "output": 2284,
+    "estimatedApiUsd": 0.00277706,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00277706,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: every byte split preserves multibyte text and CRLF\nok 1 - every byte split preserves multibyte text and CRLF\n  ---\n  duration_ms: 5.5507\n  type: 'test'\n  ...\n# Subtest: lone final CR is content and trailing LF does not invent a line\nok 2 - lone final CR is content and trailing LF does not invent a line\n  ---\n  duration_ms: 0.3631\n  type: 'test'\n  ...\n# Subtest: unfinished UTF-8 is replaced only when finalized\nok 3 - unfinished UTF-8 is replaced only when finalized\n  ---\n  duration_ms: 0.3115\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 17.4596\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 122
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ASCII lines and a final tail\nok 1 - ASCII lines and a final tail\n  ---\n  duration_ms: 2.4946\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 17.1574\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 142
+  },
+  "changed": [
+    "src/decoder.mjs",
+    "src/lines.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 12,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:38:43.937Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:38:44.080Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/decoder.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:44.207Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/decoder.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:53.155Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/decoder.mjs",
+          "src/lines.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:38:53.262Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/decoder.mjs",
+          "src/lines.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:38:44.065Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "b90e33ea1b77f3c7dd4e0484c7b0b45b418c36caf9fdde45e5fa64067ae61e3e"
+      },
+      "latencyMs": 127.81029999998282,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 1917432,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:44.206Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f9b764e298c5edde14cde73ce3aa4642ac58379b9c77f4d689c1aa815b17bc08"
+      },
+      "latencyMs": 125.40670000002137,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 1545008,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:44.337Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f9b764e298c5edde14cde73ce3aa4642ac58379b9c77f4d689c1aa815b17bc08"
+      },
+      "latencyMs": 131.640699999989,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18319,
+      "heapDeltaBytes": 2632736,
+      "graphBytes": 31283
+    },
+    {
+      "at": "2026-11-09T05:38:53.261Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 106.16029999998864,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 1935048,
+      "graphBytes": 31052
+    },
+    {
+      "at": "2026-11-09T05:38:53.346Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bd32d64e7607eeecef8ab88eace4d22ed7b85af19a5789ef1532bcb8ee8e1cc0"
+      },
+      "latencyMs": 84.499599999981,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 18110,
+      "heapDeltaBytes": 397808,
+      "graphBytes": 31052
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/decoder.mjs",
+        "src/lines.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/lines.mjs",
+          "callId": "call_9af10dc0059240ab9d07e76febcad4d2|ctc_0890553c555134ff016af15c66283487d1b8d6021dd600ae21/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { LineReader, readLines } from './src/lines.mjs';\nconst encoder = new TextEncoder();\nconst utf8 = encoder.encode('A€😀\\r\\n\\nB\\rC\\r');\nconst chunks = [...utf8].map(byte => Uint8Array.of(byte));\nassert.deepEqual(await readLines(chunks), ['A€😀', '', 'B\\rC\\r']);\nassert.deepEqual(await readLines([encoder.encode('x\\n')]), ['x']);\nassert.deepEqual(await readLines([encoder.encode('\\n')]), ['']);\nconst reader = new LineReader();\nassert.deepEqual(reader.feed(Uint8Array.of(0xe2, 0x82)), []);\nassert.deepEqual(reader.feed(Uint8Array.of(0xac, 0x0a)), ['€']);\nassert.deepEqual(reader.end(), []);\nconst invalid = new LineReader();\ninvalid.feed(Uint8Array.of(0xe2));\nassert.deepEqual(invalid.end(), ['�']);\nconsole.log('Additional streaming UTF-8 contract checks passed.');\nEOF\nprintf '\\n--- diff ---\\n' && git diff -- src/decoder.mjs src/lines.mjs",
+        "printf '%s\\n' '--- status ---' && git status --short && printf '%s\\n' '--- decoder ---' && cat src/decoder.mjs && printf '%s\\n' '--- lines ---' && cat src/lines.mjs && printf '%s\\n' '--- tracked? ---' && git ls-files src/decoder.mjs src/lines.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/decoder.mjs",
+        "src/lines.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { LineReader, readLines } from './src/lines.mjs';\nconst encoder = new TextEncoder();\nconst utf8 = encoder.encode('A€😀\\r\\n\\nB\\rC\\r');\nconst chunks = [...utf8].map(byte => Uint8Array.of(byte));\nassert.deepEqual(await readLines(chunks), ['A€😀', '', 'B\\rC\\r']);\nassert.deepEqual(await readLines([encoder.encode('x\\n')]), ['x']);\nassert.deepEqual(await readLines([encoder.encode('\\n')]), ['']);\nconst reader = new LineReader();\nassert.deepEqual(reader.feed(Uint8Array.of(0xe2, 0x82)), []);\nassert.deepEqual(reader.feed(Uint8Array.of(0xac, 0x0a)), ['€']);\nassert.deepEqual(reader.end(), []);\nconst invalid = new LineReader();\ninvalid.feed(Uint8Array.of(0xe2));\nassert.deepEqual(invalid.end(), ['�']);\nconsole.log('Additional streaming UTF-8 contract checks passed.');\nEOF\nprintf '\\n--- diff ---\\n' && git diff -- src/decoder.mjs src/lines.mjs",
+        "printf '%s\\n' '--- status ---' && git status --short && printf '%s\\n' '--- decoder ---' && cat src/decoder.mjs && printf '%s\\n' '--- lines ---' && cat src/lines.mjs && printf '%s\\n' '--- tracked? ---' && git ls-files src/decoder.mjs src/lines.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/decoder.mjs",
+      "before": "export class ChunkDecoder {\r\n  constructor() { this.decoder = new TextDecoder('utf-8'); }\r\n  feed(bytes) { return this.decoder.decode(bytes); }\r\n  end() { return this.decoder.decode(); }\r\n}\r\n",
+      "after": "export class ChunkDecoder {\r\n  constructor() { this.decoder = new TextDecoder('utf-8'); }\r\n  feed(bytes) { return this.decoder.decode(bytes, { stream: true }); }\r\n  end() { return this.decoder.decode(); }\r\n}\r\n"
+    },
+    {
+      "path": "src/lines.mjs",
+      "before": "import { ChunkDecoder } from './decoder.mjs';\r\nexport class LineReader {\r\n  constructor() { this.decoder = new ChunkDecoder(); this.pending = ''; }\r\n  feed(bytes) {\r\n    this.pending += this.decoder.feed(bytes);\r\n    const parts = this.pending.split('\\n'); this.pending = parts.pop();\r\n    return parts.map(line => line.replace(/\\r$/, ''));\r\n  }\r\n  end() {\r\n    this.pending += this.decoder.end();\r\n    const last = this.pending.replace(/\\r$/, ''); this.pending = '';\r\n    return last ? [last] : [];\r\n  }\r\n}\r\nexport async function readLines(chunks) {\r\n  const reader = new LineReader(); const lines = [];\r\n  for await (const chunk of chunks) lines.push(...reader.feed(chunk));\r\n  return [...lines, ...reader.end()];\r\n}\r\n",
+      "after": "import { ChunkDecoder } from './decoder.mjs';\r\nexport class LineReader {\r\n  constructor() { this.decoder = new ChunkDecoder(); this.pending = ''; }\r\n  feed(bytes) {\r\n    this.pending += this.decoder.feed(bytes);\r\n    const parts = this.pending.split('\\n'); this.pending = parts.pop();\r\n    return parts.map(line => line.replace(/\\r$/, ''));\r\n  }\r\n  end() {\r\n    this.pending += this.decoder.end();\r\n    const last = this.pending; this.pending = '';\r\n    return last ? [last] : [];\r\n  }\r\n}\r\nexport async function readLines(chunks) {\r\n  const reader = new LineReader(); const lines = [];\r\n  for await (const chunk of chunks) lines.push(...reader.feed(chunk));\r\n  return [...lines, ...reader.end()];\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the streaming UTF-8 and line-ending fixes:\n\n- `ChunkDecoder.feed()` now preserves incomplete UTF-8 sequences across chunks.\n- `LineReader.end()` preserves a lone trailing CR as line content while still returning no extra line after a trailing newline.\n\n`node --test tests/visible.test.mjs` passed (1 test). Additional checks for split multibyte characters, CRLF, lone CR, empty lines, trailing newlines, and invalid UTF-8 also passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\015-streaming-utf8-C-r0\\home\\events\\1794202698099-2d294e1f-dd11-4cc0-bd65-12f97eb3c5aa.jsonl"
+}
