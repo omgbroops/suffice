@@ -1,4 +1,4 @@
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,open,unlink} from 'node:fs/promises';
 import {resolve,relative} from 'node:path';
 import {createRequire} from 'node:module';
 import {execFileSync} from 'node:child_process';
@@ -11,6 +11,10 @@ import {pilotRoot,pilotTask} from '../benchmarks/intelligence-hard-pilot/tasks.m
 import {svelteRoot,record as svelteRecord} from '../src/svelte-intelligence-pilot.mjs';
 const root=process.cwd(),ledger=JSON.parse(await readFile(resolve(root,'reports/repository-intelligence-eval-v2/spending.json'),'utf8'));
 if(ledger.entries.some(e=>e.state==='dispatched'))throw new Error('Run information measurements after all active inference, not alongside benchmark attempts');
+const leasePath=resolve(root,'.suffice/native-evaluation.lock');let lease;
+try{lease=await open(leasePath,'wx');}catch(error){if(error.code==='EEXIST')process.exit(75);throw error;}
+await lease.writeFile(JSON.stringify({kind:'information-calibration',pid:process.pid}));
+try{
 // Independent semantic oracle: the actual compiler version provisioned for Svelte.
 const require=createRequire(import.meta.url),ts=require(resolve(svelteRoot,'dependencies/node_modules/typescript/lib/typescript.js'));
 if(typeof ts.isTypeNode!=='function')throw new Error('Oracle compiler lacks type-context classification; do not label type-only uses as runtime references');
@@ -110,3 +114,4 @@ for(const path of ['scripts/intelligence-native-information.mjs','packages/cli/s
 const report={kind:'compiler-resolved-source-binding-line-retrieval',implementation,oracleSelfCheck,reports,limitations:['Compiler symbol identity is a static-analysis oracle, not runtime behavioral proof.','Scopes cover named exported definitions in two pinned production trees; anonymous exports and dynamic dispatch are not covered.','Oracle labels omit identifiers in type-only AST positions. Syntactic import/reexport bindings count as source linkage evidence; they are not necessarily emitted at runtime.','The AST tool returns syntactic candidates, which an LLM can inspect; false-positive candidates are not false exactness claims.','Global AST failure on oversized files is recorded separately. The baseline score aggregates its existing per-path API over production files, capped at 80 results per file; literal search is a separate source-line diagnostic.','Graph predictions use stored resolved edges. This is information accuracy analysis, not a resource-matched tool-call comparison.','Oracle 2.7.2 full symbol checking and engine 5.9.3 module-path resolution share the TypeScript resolver family and could share bugs. Engine lexical analysis remains Acorn-based.','An empty graph prediction is not a proof of no dependencies; missing/unparsed definitions are explicitly reported.','Line retrieval does not validate every individual relationship on a line containing multiple references.','No foundation model is used to construct or score these labels.']};
 await writeFile(resolve(process.argv[2]??'reports/repository-intelligence-eval-v2/native-information-v3.json'),JSON.stringify(report,null,2),{flag:'wx'});
 console.log(JSON.stringify(reports.map(r=>({corpus:r.corpus,totals:r.totals,coverage:r.coverage,selected:r.selectedCount}))));
+}finally{await lease.close();await unlink(leasePath);}

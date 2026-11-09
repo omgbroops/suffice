@@ -15,7 +15,8 @@ const ledger=JSON.parse(await readFile(resolve(root,'reports/repository-intellig
 if(ledger.entries.some(e=>e.state==='dispatched'))throw new Error('Do not prepare environments alongside scored inference');
 if(process.platform!=='win32')throw new Error('Pinned native adaptation requires Windows');
 await mkdir(base,{recursive:true});await mkdir(published,{recursive:true});
-const leasePath=resolve(root,'.suffice/native-evaluation.lock'),lease=await open(leasePath,'wx');
+const leasePath=resolve(root,'.suffice/native-evaluation.lock');let lease;
+try{lease=await open(leasePath,'wx');}catch(error){if(error.code==='EEXIST'){console.log(JSON.stringify({event:'preparation_waiting_for_exclusive_lease'}));process.exit(75);}throw error;}
 await lease.writeFile(JSON.stringify({kind:'preparation',pid:process.pid,startedAt:new Date().toISOString()}));
 try{
 const adapterFingerprint=hash(JSON.stringify(await Promise.all(['benchmarks/intelligence-real-v3/native-tests.cjs','benchmarks/intelligence-real-v3/native-loader-base.cjs'].map(async path=>hash(await readFile(resolve(root,path)))))));
