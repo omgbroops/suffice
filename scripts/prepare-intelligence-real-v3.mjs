@@ -52,14 +52,14 @@ for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
   const directory=resolve(base,'tasks',item.id),target=resolve(published,'validation',item.id);await mkdir(directory,{recursive:true});await mkdir(target,{recursive:true});
   try{
     const existing=JSON.parse(await readFile(resolve(directory,'validation.json'),'utf8'));
-    if(existing.valid&&existing.nativeAdapterVersion===3&&existing.nativeAdapterSha256===adapterFingerprint){
+    if(existing.valid&&existing.nativeAdapterVersion===4&&existing.nativeAdapterSha256===adapterFingerprint){
       if(existing.recordSha256!==item.recordSha256||JSON.stringify(await snapshot(resolve(directory,'baseline')))!==JSON.stringify(existing.baselineHashes))throw new Error('Validated task content drift');
       console.log(JSON.stringify({event:'validated_task_reused',task:item.id}));results.push({id:item.id,valid:true});continue;
     }
     if(!existing.valid&&!process.argv.includes('--retry-infrastructure')){results.push({id:item.id,valid:false,classification:existing.classification});continue;}
   }catch(e){if(e.code!=='ENOENT')throw e;}
   const attempt=String(Date.now()),attemptDir=resolve(directory,'validation',attempt),attemptPublished=resolve(target,attempt);await mkdir(attemptDir,{recursive:true});await mkdir(attemptPublished,{recursive:true});
-  const receipt={version:1,nativeAdapterVersion:3,nativeAdapterSha256:adapterFingerprint,task:item.id,recordSha256:item.recordSha256,valid:false,attempt,category:item.category};
+  const receipt={version:1,nativeAdapterVersion:4,nativeAdapterSha256:adapterFingerprint,task:item.id,recordSha256:item.recordSha256,valid:false,attempt,category:item.category};
   console.log(JSON.stringify({event:'task_preparation_start',task:item.id}));
   try{
     const recordBytes=await readFile(resolve(root,'benchmarks/intelligence-real-v3',item.record));if(hash(recordBytes)!==item.recordSha256)throw new Error('Frozen record drift');
@@ -79,9 +79,9 @@ for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
     await cp(resolve(root,'benchmarks/intelligence-real-v3/native-tests.cjs'),resolve(baseline,'native-tests.cjs'));
     await cp(resolve(root,'benchmarks/intelligence-real-v3/native-compat.cjs'),resolve(baseline,'native-compat.cjs'));
     const scored=[...record.FAIL_TO_PASS,...record.PASS_TO_PASS],excludedRuntimeSamples=scored.some(title=>/^runtime binding-select \(/.test(title))?[]:['binding-select'];
-    receipt.nativeEnvironment={excludedRuntimeSamples,reason:'Known Node16/jsdom legacy selection assertion incompatibility; isolated execution can exhaust the 384 MiB heap. Omitted cases are not counted as passes or pending. All official labels are retained.'};
+    receipt.nativeEnvironment={excludedRuntimeSamples,testTimeoutMs:10000,reason:'Known Node16/jsdom legacy selection assertion incompatibility; isolated execution can exhaust the 384 MiB heap. Omitted cases are not counted as passes or pending. All official labels are retained.'};
     await writeFile(resolve(baseline,'native-environment.json'),JSON.stringify(receipt.nativeEnvironment,null,2));
-    const verify=`const {execFileSync}=require('child_process'),path=require('path');\nconst runtime=path.resolve('node_modules/.suffice-node16/node.exe'),env={...process.env,NODE_OPTIONS:''};\nfor(const args of ${JSON.stringify(steps)})execFileSync(runtime,['--max-old-space-size=384',...args],{stdio:'inherit',env,windowsHide:true});\nexecFileSync(runtime,['--max-old-space-size=384','node_modules/mocha/bin/_mocha','--opts','NUL','native-tests.cjs','--reporter','spec','--exit'],{stdio:'inherit',env,windowsHide:true});\n`;
+    const verify=`const {execFileSync}=require('child_process'),path=require('path');\nconst runtime=path.resolve('node_modules/.suffice-node16/node.exe'),env={...process.env,NODE_OPTIONS:''};\nfor(const args of ${JSON.stringify(steps)})execFileSync(runtime,['--max-old-space-size=384',...args],{stdio:'inherit',env,windowsHide:true});\nexecFileSync(runtime,['--max-old-space-size=384','node_modules/mocha/bin/_mocha','--opts','NUL','--timeout','10000','native-tests.cjs','--reporter','spec','--exit'],{stdio:'inherit',env,windowsHide:true});\n`;
     await writeFile(resolve(baseline,'native-verify.cjs'),verify);await linkDependencies(baseline,deps.directory);
     const initialBuild=await buildClassic(baseline,steps);await writeFile(resolve(attemptPublished,'initial-build.json'),JSON.stringify(initialBuild,null,2));if(initialBuild.status!=='passed')throw new Error('Baseline build failed: '+initialBuild.error);
     receipt.baselineHashes=await snapshot(baseline);await writeFile(resolve(directory,'dependency-hashes.json'),JSON.stringify(deps.receipt.hashes));

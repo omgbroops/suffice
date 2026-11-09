@@ -11,7 +11,7 @@ const load=async path=>JSON.parse(await readFile(path,'utf8')),sleep=ms=>new Pro
 const cohort=await load(resolve(root,'benchmarks/intelligence-real-v3/cohort.json'));
 await mkdir(published,{recursive:true});const tasks=[];
 const adapterFingerprint=hash(JSON.stringify(await Promise.all(['native-tests.cjs','native-loader-base.cjs','native-compat.cjs'].map(async path=>hash(await readFile(resolve(root,'benchmarks/intelligence-real-v3',path)))))));
-for(const task of cohort.tasks){const path=resolve(base,'tasks',task.id,'validation.json'),validation=await load(path);if(validation.nativeAdapterVersion!==3||validation.nativeAdapterSha256!==adapterFingerprint)throw new Error('Preparation uses an older adapter: '+task.id);tasks.push({...task,valid:validation.valid,validationSha256:hash(await readFile(path)),preparationClassification:validation.classification});}
+for(const task of cohort.tasks){const path=resolve(base,'tasks',task.id,'validation.json'),validation=await load(path);if(validation.nativeAdapterVersion!==4||validation.nativeAdapterSha256!==adapterFingerprint)throw new Error('Preparation uses an older adapter: '+task.id);tasks.push({...task,valid:validation.valid,validationSha256:hash(await readFile(path)),preparationClassification:validation.classification});}
 if(process.argv.includes('--dry-run')){console.log(JSON.stringify({event:'real_dry_run',tasks:tasks.length,validated:tasks.filter(task=>task.valid).length,cells:realSchedule(tasks).flat().length,config:REAL_CONFIG,modelRequests:0}));process.exit(0);}
 // No main inference is possible until every planned task has an explicit gate result.
 const lockPath=resolve(root,'.suffice/native-evaluation.lock'),lock=await open(lockPath,'wx');

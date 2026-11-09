@@ -21,7 +21,8 @@ export async function buildSvelte(workspace){
 }
 export async function testSvelte(workspace,reportPath){
   let exitCode=0,stdout='',stderr='';const started=performance.now();
-  try{({stdout,stderr}=await exec(resolve(workspace,'node_modules/.suffice-node16/node.exe'),['--max-old-space-size=384','node_modules/mocha/bin/_mocha','--opts','NUL','native-tests.cjs','--reporter',resolve(root,'benchmarks/intelligence-svelte-pilot/reporter.cjs'),'--exit'],{cwd:workspace,windowsHide:true,timeout:120000,maxBuffer:16*1024**2,env:{...process.env,NODE_OPTIONS:'',CI:'true',SUFFICE_MOCHA_REPORT:reportPath}}));}
+  let timeout=[];try{const environment=JSON.parse(await readFile(resolve(workspace,'native-environment.json'),'utf8'));if(environment.testTimeoutMs!==undefined){if(environment.testTimeoutMs!==10000)throw new Error('Unaudited native test timeout');timeout=['--timeout','10000'];}}catch(error){if(error.code!=='ENOENT')throw error;}
+  try{({stdout,stderr}=await exec(resolve(workspace,'node_modules/.suffice-node16/node.exe'),['--max-old-space-size=384','node_modules/mocha/bin/_mocha','--opts','NUL',...timeout,'native-tests.cjs','--reporter',resolve(root,'benchmarks/intelligence-svelte-pilot/reporter.cjs'),'--exit'],{cwd:workspace,windowsHide:true,timeout:120000,maxBuffer:16*1024**2,env:{...process.env,NODE_OPTIONS:'',CI:'true',SUFFICE_MOCHA_REPORT:reportPath}}));}
   catch(e){exitCode=e.code;stdout=e.stdout??'';stderr=e.stderr??'';if(e.killed||typeof e.code!=='number')return {status:'infrastructure_error',error:e.message,stdout,stderr,latencyMs:performance.now()-started};}
   let report;try{report=JSON.parse(await readFile(reportPath,'utf8'));}catch(e){return {status:'invalid_result',error:e.message,stdout,stderr,exitCode};}
   return {status:'reported',report,exitCode,stdout,stderr,latencyMs:performance.now()-started};

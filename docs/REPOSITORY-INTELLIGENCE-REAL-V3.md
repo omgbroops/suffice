@@ -86,6 +86,16 @@ children; source-map path fields are normalized while mappings and source conten
 remain unchanged. Original assertions still run. These setup repairs are applied
 before main inference and revalidated across all modes.
 
+Adapter 4 also routes the newer ShellJS fixtures through the same pinned runtime.
+Their upstream `commandErr` destructuring did not inspect ShellJS's `code`, and
+`actual.forEach` could silently accept absent generated files. The adapter checks
+the child exit code and the complete expected output inventory before the original
+content assertions. Setup diagnostics retain the earlier host-Node failures.
+The cohort uses a ten-second default Mocha test timeout instead of two seconds,
+after original parser tests exceeded two seconds during setup. Explicit per-test
+timeouts and assertions remain intact; the suite process still has its 120-second
+limit. Both original-code and upstream-fix gates are refreshed before inference.
+
 Every task must pass an original-code gate (all target labels fail, all required
 regressions pass) and an upstream-fix gate (all target and regression labels pass).
 Frozen full-title multiplicities prevent dropped duplicate cases. A failed gate
