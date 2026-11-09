@@ -1,0 +1,85 @@
+{
+  "runId": "9-layered-config-B-r0",
+  "task": "layered-config",
+  "arm": "B",
+  "repetition": 0,
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "latencyMs": 30878.657400000026,
+  "usage": {
+    "input": 6824,
+    "cacheRead": 4096,
+    "cacheWrite": 0,
+    "output": 1073,
+    "estimatedApiUsd": 0.0247876,
+    "modelCalls": 4,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0247876,
+  "toolCalls": 9,
+  "graphToolCalls": 0,
+  "graphGuidance": [],
+  "graphMetrics": [
+    {
+      "at": "2026-11-09T04:35:19.985Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "34ff81c3d4b7f8072aa04acbc7f452341404edae78fded0ccb98174d4e94ae22"
+      },
+      "latencyMs": 63.48410000000149,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 19956,
+      "heapDeltaBytes": -421240,
+      "graphBytes": 32479
+    }
+  ],
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: falsy values override while undefined inherits\nok 1 - falsy values override while undefined inherits\n  ---\n  duration_ms: 1.4436\n  type: 'test'\n  ...\n# Subtest: recursive branches and replacement arrays are independently owned\nok 2 - recursive branches and replacement arrays are independently owned\n  ---\n  duration_ms: 1.0435\n  type: 'test'\n  ...\n# Subtest: invalid effective configuration is still rejected\nok 3 - invalid effective configuration is still rejected\n  ---\n  duration_ms: 0.4537\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.0195\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 83
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: later nonempty values replace defaults\nok 1 - later nonempty values replace defaults\n  ---\n  duration_ms: 1.3461\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.0462\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 83
+  },
+  "patches": [
+    {
+      "path": "src/merge.mjs",
+      "before": "function isPlain(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }\r\nexport function mergeLayers(...layers) {\r\n  const result = {};\r\n  for (const layer of layers) {\r\n    for (const [key, value] of Object.entries(layer)) {\r\n      if (!value) continue;\r\n      if (isPlain(value) && isPlain(result[key])) result[key] = mergeLayers(result[key], value);\r\n      else result[key] = value;\r\n    }\r\n  }\r\n  return result;\r\n}\r\n",
+      "after": "function isPlain(value) {\n  if (value === null || typeof value !== 'object') return false;\n  const prototype = Object.getPrototypeOf(value);\n  return prototype === Object.prototype || prototype === null;\n}\n\nfunction clone(value) {\n  if (Array.isArray(value)) return value.map(clone);\n  if (isPlain(value)) return mergeLayers(value);\n  if (value !== null && typeof value === 'object') return structuredClone(value);\n  return value;\n}\n\nexport function mergeLayers(...layers) {\n  const result = {};\n  for (const layer of layers) {\n    for (const [key, value] of Object.entries(layer)) {\n      if (value === undefined) continue;\n      const previous = Object.hasOwn(result, key) ? result[key] : undefined;\n      const next = isPlain(value) && isPlain(previous)\n        ? mergeLayers(previous, value)\n        : clone(value);\n      Object.defineProperty(result, key, {\n        value: next, enumerable: true, writable: true, configurable: true,\n      });\n    }\n  }\n  return result;\n}\n"
+    }
+  ],
+  "final": "Repaired `src/merge.mjs` while preserving the public API and existing validation.\n\n- Explicit `false`, `0`, `''`, and `null` now override earlier values.\n- `undefined` leaves earlier values unchanged.\n- Plain objects merge recursively; arrays replace.\n- Nested objects and arrays are cloned, including untouched branches.\n- Special keys such as `__proto__` are handled safely.\n\nVerification passed:\n- `node --test tests/visible.test.mjs`\n- Additional checks for falsy overrides, nested merging, input isolation, array replacement, special keys, and validation errors."
+}

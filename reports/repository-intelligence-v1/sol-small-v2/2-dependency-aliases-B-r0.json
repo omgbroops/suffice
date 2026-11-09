@@ -1,0 +1,90 @@
+{
+  "runId": "2-dependency-aliases-B-r0",
+  "task": "dependency-aliases",
+  "arm": "B",
+  "repetition": 0,
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "latencyMs": 29556.9537,
+  "usage": {
+    "input": 6148,
+    "cacheRead": 9856,
+    "cacheWrite": 0,
+    "output": 916,
+    "estimatedApiUsd": 0.0224416,
+    "modelCalls": 5,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0224416,
+  "toolCalls": 11,
+  "graphToolCalls": 0,
+  "graphGuidance": [],
+  "graphMetrics": [
+    {
+      "at": "2026-11-09T04:31:57.993Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "1735dd4d65cb6a4219460db6ecfb7ba5f2e61635f7ac9310f24d871d68c7e8b7"
+      },
+      "latencyMs": 73.1669000000038,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 23011,
+      "heapDeltaBytes": 505856,
+      "graphBytes": 37225
+    }
+  ],
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: transitive aliases and duplicate identities resolve once\nok 1 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 1.3746\n  type: 'test'\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 2 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.4975\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nok 3 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.2474\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.5017\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 93
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ordinary dependencies are ordered before a root\nok 1 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 1.3059\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.2215\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 89
+  },
+  "patches": [
+    {
+      "path": "src/order.mjs",
+      "before": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(name)) return;\r\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(name);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(name); done.add(name); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n",
+      "after": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(target)) return;\r\n    if (active.has(target)) throw new Error('Dependency cycle: ' + target);\r\n    active.add(target);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(target); done.add(target); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n"
+    },
+    {
+      "path": "src/registry.mjs",
+      "before": "export function resolveName(name, nodes, aliases) {\r\n  const target = aliases[name] ?? name;\r\n  if (!(target in nodes)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n",
+      "after": "export function resolveName(name, nodes, aliases) {\n  const seen = new Set();\n  while (Object.hasOwn(aliases, name)) {\n    if (seen.has(name)) throw new Error('Alias cycle: ' + name);\n    seen.add(name);\n    name = aliases[name];\n  }\n  if (!Object.hasOwn(nodes, name)) throw new Error('Unknown node: ' + name);\n  return name;\n}\n"
+    }
+  ],
+  "final": "Implemented the repair under `src/`, preserving the public API.\n\n- Alias resolution now follows chains transitively, detects alias cycles, and rejects missing real targets.\n- Build traversal tracks resolved node identities, preventing duplicates and detecting dependency cycles through aliases.\n- Dependency order and reachable-only resolution are preserved.\n\nVerification passed:\n- `node --test tests/visible.test.mjs`\n- Additional assertions covering alias chains, duplicate identities, alias and dependency cycles, missing targets, and unrelated broken nodes."
+}

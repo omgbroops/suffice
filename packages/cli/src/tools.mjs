@@ -1,8 +1,9 @@
 import {createCodingTools} from '@earendil-works/pi-coding-agent';
 import {repositoryPath} from './workspace.mjs';
 import {createNavigation} from './navigation.mjs';
+import {intelligenceTools} from './intelligence/tools.mjs';
 
-export function repositoryTools({workspace, commandTimeout=180, shellPath}) {
+export function repositoryTools({workspace, commandTimeout=180, shellPath, intelligence}) {
   const native=createCodingTools(workspace,{bash:{shellPath,exposeSessionEnvironment:false}});
   return [
     ...native.map(tool=>({...tool,label:tool.label??tool.name,
@@ -17,6 +18,7 @@ export function repositoryTools({workspace, commandTimeout=180, shellPath}) {
         if(args.path) await repositoryPath(workspace,args.path);
         return tool.execute(id,args);
       }
-    }))
+    })),
+    ...(intelligence?intelligenceTools(intelligence,workspace):[])
   ];
 }

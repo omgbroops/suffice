@@ -16,6 +16,7 @@ Options:
   --model ID          gpt-6.1-sol (default), gpt-6-luna, or another catalog ID
   --effort LEVEL      off, minimal, low (default), medium, high, xhigh
   --continue          Continue the most recent session in this repository
+  --intelligence MODE off (default), tools, or guided (experimental)
   --home PATH         Credential/session directory (default: ~/.suffice)
   --max-cost USD      API-equivalent allowance per task (default: 10)
   --timeout SECONDS   Time allowance per task (default: 600)
@@ -30,8 +31,8 @@ Pi's interface and engine, with Suffice's tools, prompt and codemode setup.
 `;
 
 export function parseOptions(args, env=process.env) {
-  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', maxCost:10, timeout:600, prompt:''};
-  const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--max-cost':'maxCost','--timeout':'timeout'};
+  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', maxCost:10, timeout:600, prompt:'',intelligence:'off'};
+  const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--max-cost':'maxCost','--timeout':'timeout','--intelligence':'intelligence'};
   const words=[];
   for(let i=0;i<args.length;i++) {
     const arg=args[i];
@@ -52,5 +53,6 @@ export function parseOptions(args, env=process.env) {
     if(!Number.isFinite(options[key]) || options[key]<=0) throw new Error(`${key} must be a positive number`);
   }
   options.cwd=resolve(options.cwd); options.home=resolve(options.home);
+  if(!['off','tools','guided'].includes(options.intelligence))throw new Error('Invalid intelligence mode: use off, tools, or guided.');
   return options;
 }

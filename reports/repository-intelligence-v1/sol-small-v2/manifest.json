@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "campaign": "sol-small-v2",
+  "base": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+  "sourceHead": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+  "budget": {
+    "model": "gpt-6.1-sol",
+    "effort": "low",
+    "maxCost": 1,
+    "timeout": 180,
+    "maxTurns": 60,
+    "maxToolCalls": 240
+  },
+  "arms": [
+    {
+      "id": "A",
+      "mode": "off"
+    },
+    {
+      "id": "B",
+      "mode": "tools"
+    },
+    {
+      "id": "C",
+      "mode": "guided"
+    }
+  ],
+  "schedule": [
+    {
+      "task": "dependency-aliases",
+      "arm": "A",
+      "repetition": 0
+    },
+    {
+      "task": "dependency-aliases",
+      "arm": "B",
+      "repetition": 0
+    },
+    {
+      "task": "dependency-aliases",
+      "arm": "C",
+      "repetition": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "arm": "B",
+      "repetition": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "arm": "C",
+      "repetition": 0
+    },
+    {
+      "task": "cursor-pagination",
+      "arm": "A",
+      "repetition": 0
+    },
+    {
+      "task": "layered-config",
+      "arm": "C",
+      "repetition": 0
+    },
+    {
+      "task": "layered-config",
+      "arm": "A",
+      "repetition": 0
+    },
+    {
+      "task": "layered-config",
+      "arm": "B",
+      "repetition": 0
+    }
+  ],
+  "inputs": {
+    "scripts/intelligence-benchmark.mjs": "4a557fcdfce607a68ff06b5be3f778e63eb4a1a75d7bef265e834179bb22ec96",
+    "package.json": "4d6968751404861f86cd27a7168e0fbd20aea5b5a64ea695a4068cbeb39f16f9",
+    "package-lock.json": "30b3b5e100a92aa1bdb74625ceb4b98703f837222787df556c46b26fcddfd44a",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "benchmarks/tasks.mjs": "3c04980128e4c50c33ab0231f0e9df2c004cdd7aa59e6c0a10251e21d5902f48",
+    "packages/cli/src/intelligence/graph.mjs": "be884b8907bed8ebc5e53a3c9ca459be682f3c53753bdd3e0568680034d59c4f",
+    "packages/cli/src/intelligence/parse.mjs": "3508d2ff51026c53d4e660bb7007fd85d32f4f179a58f7fa14b43e43f6df0fed",
+    "packages/cli/src/intelligence/tools.mjs": "a8ebed7461bb6c770ca13608e6cad50d57ae36e88df3b906f5e7827bdc9301af",
+    "packages/cli/src/interactive.mjs": "e395edcc50b5520edb60c7d88171e893fab0b186d3d6f6a5a73186c74b62bd26",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/navigation.mjs": "fda7c7f0b7c058772fd66b3fb56b66cdeff12787082f2518ebf136f8d43873c9",
+    "packages/cli/src/options.mjs": "12359c34fb76badd5354e891e97fcb1cfd700528be612ebf86cbea2300857cfd",
+    "packages/cli/src/projects.mjs": "920dffed714fe56c5040e826615f332df346da01c443ece463a49c76c9dc4b10",
+    "packages/cli/src/session.mjs": "c351162783303957ee4aced610f26c932a70e66982d63d222ebb13495915fe11",
+    "packages/cli/src/tools.mjs": "8808a5bef2aed8b5549f058d9f923bb7c8deef117ba7f9323829789b570e79f1",
+    "packages/cli/src/workspace.mjs": "f0b8300e39bde271ef92f62af35aebe05531834130d67e71dcbdb4011e80955f"
+  },
+  "taskInputs": {
+    "dependency-aliases": {
+      "sources": {
+        "README.md": "746dc3318d7759f62826eb834688fbb995eb0630291d38ad4e8307cf939a57ed",
+        "src/order.mjs": "6eca0c7bbc224600f3ccb1456eb4d40c01e020d3702ce28d64cbe2ad6fee4462",
+        "src/registry.mjs": "2ad1505e26601898d54bd6d0e041d6e5441ec720af88ea6b19246d79ae14d7e7",
+        "tests/visible.test.mjs": "d6c9f0528c60d86097626123468cb98f540bda09be5435e4f0bccbc2692507f7"
+      },
+      "prompt": "Read README.md and repair the implementation under src/. Preserve the public API. Run node --test tests/visible.test.mjs. Follow the complete documented contract; visible tests are smoke checks. Use only built-in Node.js APIs.",
+      "acceptance": "ff1ea54b151c7c5a0d3eedaaec2f217c876ed6963013efc1c383049ef3826bd0"
+    },
+    "cursor-pagination": {
+      "sources": {
+        "README.md": "f9e4f27ee79cff3c69ab6f6a48eceacebfb27054fe6737d479b327b71842ca93",
+        "src/collect.mjs": "e2a7c5a42cc2075229d43a9a7335aa4bc0ac15882a69d9de37880911be186de6",
+        "src/repository.mjs": "ce505d43471727a5df8b2850b46b299d0ee64c149fbde751684b4cb25c680817",
+        "tests/visible.test.mjs": "e75dd65e1f3e3da5f150aa4074406f8681e615e672d721557ffc9a00e413fc57"
+      },
+      "prompt": "Read README.md and repair the implementation under src/. Preserve the public API. Run node --test tests/visible.test.mjs. Follow the complete documented contract; visible tests are smoke checks. Use only built-in Node.js APIs.",
+      "acceptance": "a048d02e93ced6bb553d0f75062eb1db906bf8c56aea8a73fbbbc1190d556b3c"
+    },
+    "layered-config": {
+      "sources": {
+        "README.md": "98921b9015c1318d98818643d3548d35f0a88447975bc56aa0423420cd5c4bd4",
+        "src/config.mjs": "06e303c90dda443cf76c6d6d9a41265c996ec7589685c52f1e0551b1574f6c8b",
+        "src/merge.mjs": "f1f52cea40a78c4648f5b1661d038c052eaca122613a069160d009ade6862c5e",
+        "tests/visible.test.mjs": "f45947bb786befd36010cb33b1b9c626e7d5c313385027affbc9520c29ddc19a"
+      },
+      "prompt": "Read README.md and repair the implementation under src/. Preserve the public API. Run node --test tests/visible.test.mjs. Follow the complete documented contract; visible tests are smoke checks. Use only built-in Node.js APIs.",
+      "acceptance": "078cc0774a52becab76b44a8ac98c531e4e12d950d021b8ac4fdc942f10c6a92"
+    }
+  },
+  "limitations": [
+    "Existing AI-authored synthetic tasks, previously used in repository experiments; not an unseen real-repository benchmark.",
+    "One repetition by default; descriptive smoke comparison only, no causal or statistical efficacy claim.",
+    "Same CLI session factory, model, effort, prompt, native tools and allowances in all arms; graph tool descriptions and guided evidence differ.",
+    "Model cache warmth is observed, not controlled.",
+    "Costs are API-equivalent catalog estimates, not invoices.",
+    "Native bash is not an OS sandbox; evaluator checks frozen non-src inputs after execution.",
+    "All attempts retained; unknown usage stops further inference and is not zero."
+  ]
+}

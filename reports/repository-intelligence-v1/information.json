@@ -1,0 +1,334 @@
+{
+  "kind": "deterministic-binding-usage-retrieval",
+  "fixtureHash": "297bd26a005669899410f4c8de11742ea1326694d7e58286b4ac744d6e589c90",
+  "cases": [
+    {
+      "id": "alias-and-shadow",
+      "baseline": {
+        "predicted": [
+          "noise.mjs:2"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 0,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0,
+        "recall": 0
+      },
+      "search": {
+        "predicted": [
+          "noise.mjs:1",
+          "noise.mjs:2",
+          "noise.mjs:4",
+          "noise.mjs:5",
+          "use.mjs:1"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 1,
+        "fp": 4,
+        "fn": 1,
+        "precision": 0.2,
+        "recall": 0.5
+      },
+      "graph": {
+        "predicted": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "astMs": 21.34929999999997,
+      "searchMs": 5.709899999999948,
+      "cold": {
+        "latencyMs": 68.74569999999994,
+        "parsedFiles": 3,
+        "fileCount": 3,
+        "cacheBytes": 3451,
+        "heapDeltaBytes": 953784,
+        "graphBytes": 6318
+      },
+      "warm": {
+        "latencyMs": 57.256399999999985,
+        "parsedFiles": 0,
+        "fileCount": 3,
+        "cacheBytes": 3451,
+        "heapDeltaBytes": 320384,
+        "graphBytes": 6318
+      }
+    },
+    {
+      "id": "default-binding",
+      "baseline": {
+        "predicted": [
+          "noise.mjs:2"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 0,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0,
+        "recall": 0
+      },
+      "search": {
+        "predicted": [
+          "noise.mjs:1",
+          "noise.mjs:2"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 0,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0,
+        "recall": 0
+      },
+      "graph": {
+        "predicted": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "astMs": 5.845299999999952,
+      "searchMs": 6.606999999999971,
+      "cold": {
+        "latencyMs": 61.858600000000024,
+        "parsedFiles": 3,
+        "fileCount": 3,
+        "cacheBytes": 2591,
+        "heapDeltaBytes": 674544,
+        "graphBytes": 4532
+      },
+      "warm": {
+        "latencyMs": 55.950000000000045,
+        "parsedFiles": 0,
+        "fileCount": 3,
+        "cacheBytes": 2591,
+        "heapDeltaBytes": 281480,
+        "graphBytes": 4532
+      }
+    },
+    {
+      "id": "explicit-reexport",
+      "baseline": {
+        "predicted": [
+          "noise.mjs:2"
+        ],
+        "gold": [
+          "barrel.mjs:1",
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 0,
+        "fp": 1,
+        "fn": 3,
+        "precision": 0,
+        "recall": 0
+      },
+      "search": {
+        "predicted": [
+          "barrel.mjs:1",
+          "noise.mjs:1",
+          "noise.mjs:2"
+        ],
+        "gold": [
+          "barrel.mjs:1",
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 1,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333
+      },
+      "graph": {
+        "predicted": [
+          "barrel.mjs:1",
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "gold": [
+          "barrel.mjs:1",
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "astMs": 6.34030000000007,
+      "searchMs": 6.175299999999879,
+      "cold": {
+        "latencyMs": 71.58919999999989,
+        "parsedFiles": 4,
+        "fileCount": 4,
+        "cacheBytes": 2782,
+        "heapDeltaBytes": 663224,
+        "graphBytes": 5436
+      },
+      "warm": {
+        "latencyMs": 62.09660000000008,
+        "parsedFiles": 0,
+        "fileCount": 4,
+        "cacheBytes": 2782,
+        "heapDeltaBytes": 356832,
+        "graphBytes": 5436
+      }
+    },
+    {
+      "id": "same-name-binding",
+      "baseline": {
+        "predicted": [
+          "use.mjs:2",
+          "use.mjs:4"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 1,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.5
+      },
+      "search": {
+        "predicted": [
+          "use.mjs:1",
+          "use.mjs:2",
+          "use.mjs:3",
+          "use.mjs:4",
+          "use.mjs:6",
+          "use.mjs:7"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 2,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.3333333333333333,
+        "recall": 1
+      },
+      "graph": {
+        "predicted": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "gold": [
+          "use.mjs:1",
+          "use.mjs:2"
+        ],
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "astMs": 4.350599999999986,
+      "searchMs": 3.4369000000001506,
+      "cold": {
+        "latencyMs": 60.0003999999999,
+        "parsedFiles": 2,
+        "fileCount": 2,
+        "cacheBytes": 2778,
+        "heapDeltaBytes": 125176,
+        "graphBytes": 5274
+      },
+      "warm": {
+        "latencyMs": 51.954099999999926,
+        "parsedFiles": 0,
+        "fileCount": 2,
+        "cacheBytes": 2778,
+        "heapDeltaBytes": 236768,
+        "graphBytes": 5274
+      }
+    }
+  ],
+  "totals": {
+    "baseline": {
+      "tp": 1,
+      "fp": 4,
+      "fn": 8,
+      "precision": 0.2,
+      "recall": 0.1111111111111111
+    },
+    "search": {
+      "tp": 4,
+      "fp": 12,
+      "fn": 5,
+      "precision": 0.25,
+      "recall": 0.4444444444444444
+    },
+    "graph": {
+      "tp": 9,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    }
+  },
+  "limitations": [
+    "Four authored ESM microfixtures, not general repository accuracy.",
+    "Baseline tool explicitly offers syntactic candidates, not resolved bindings; this measures candidate filtering and alias recall, not a false exactness claim.",
+    "No model reasoning; a baseline agent could inspect candidates and resolve these manually.",
+    "No behavioral correctness inferred from static edges."
+  ],
+  "repository": {
+    "revision": {
+      "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+      "contentVersion": "62d0cc5f7553ff8d5e79dc47b2fa95b3e8b5bc425ff76687d4995d5d56b90764"
+    },
+    "cold": {
+      "latencyMs": 1043.0778,
+      "parsedFiles": 187,
+      "fileCount": 187,
+      "cacheBytes": 9971819,
+      "heapDeltaBytes": 51118376,
+      "graphBytes": 15200148
+    },
+    "warm": {
+      "latencyMs": 459.4794999999999,
+      "parsedFiles": 0,
+      "fileCount": 187,
+      "cacheBytes": 9971819,
+      "heapDeltaBytes": 11569848,
+      "graphBytes": 15200148
+    },
+    "symbols": 5907,
+    "edges": 20380,
+    "unresolved": 9277,
+    "unparsed": []
+  }
+}

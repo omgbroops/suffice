@@ -1,9 +1,13 @@
 import {parse} from 'acorn';import {fullAncestor} from 'acorn-walk';import {stripTypeScriptTypes} from 'node:module';import {Type} from 'typebox';import {readText,hash,filesIn} from './workspace.mjs';
 const textResult=data=>({content:[{type:'text',text:JSON.stringify(data)}],structuredContent:data,details:{}});
 const functionTypes=new Set(['FunctionDeclaration','FunctionExpression','ArrowFunctionExpression']);
-export function indexJavaScript(source,path){
+export function parseJavaScript(source,path){
   const parseSource=/\.(?:ts|mts|cts)$/.test(path)?stripTypeScriptTypes(source,{mode:'strip'}):source;
   let ast;try{ast=parse(parseSource,{ecmaVersion:'latest',sourceType:'script',locations:true,allowHashBang:true});}catch{ast=parse(parseSource,{ecmaVersion:'latest',sourceType:'module',locations:true,allowHashBang:true});}
+  return ast;
+}
+export function indexJavaScript(source,path){
+  const ast=parseJavaScript(source,path);
   const symbols=[],imports=[],references=[],lines=source.split('\n');
   const add=(name,kind,node)=>symbols.push({name,kind,path,start:node.loc.start.line,end:node.loc.end.line,startOffset:node.start,endOffset:node.end});
   fullAncestor(ast,(node,_state,ancestors)=>{

@@ -33,6 +33,16 @@ npx suffice --cwd /path/to/repo --max-cost 1 --timeout 300
 
 The default is GPT-6.1 Sol at low effort. `login` uses your own OpenAI subscription through the engine's OAuth flow. Model availability depends on your account. This preview has no API-key fallback. Existing research credentials can be selected explicitly with `--home C:\path\to\suffice\.suffice\pi`; credentials are never included in the package.
 
+Experimental repository intelligence is available with `--intelligence tools`
+(three evidence-backed graph tools) or `--intelligence guided` (also selects
+initial context and appends edit-impact/test recommendations). The default is
+`off`. Indexes persist under the CLI home and validate source contents on every
+query. Unsupported/dynamic dependencies remain unresolved; recommendations do
+not establish behavioral correctness or test coverage. Existing navigation,
+search, edit, and execution tools stay available. See the repository's
+[architecture and limitations](../../docs/REPOSITORY-INTELLIGENCE.md) and
+[measured evaluation](../../reports/repository-intelligence-v1/REPORT.md).
+
 ## Working with it
 
 Type a task in Pi's normal input editor. `/project [PATH]` (or `/cd`) changes projects; `/login` opens Pi's login flow; `/model` opens its model selector; `/settings` opens preferences; `/new` starts fresh; `/resume` opens previous sessions; `/usage` shows current-run usage. Pi's keyboard shortcuts and tool output rendering are retained. Escape interrupts; Ctrl+D exits from an empty editor. `--print` runs one task and returns a nonzero exit code on errors, cancellation or limits. When there is no terminal, supply a task argument or pipe it through stdin.

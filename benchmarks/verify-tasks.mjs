@@ -33,9 +33,11 @@ export async function applyReferencePatch(task, workspace) {
   for (const { file, old, new: replacement } of patches) {
     const target = resolve(workspace, file);
     assert.ok(inside(workspace, target), 'Patch must stay within workspace');
-    const source = await readFile(target, 'utf8');
-    assert.ok(old.length > 0 && source.split(old).length === 2, `${task.id}: replacement must match exactly once: ${file}`);
-    await writeFile(target, source.replace(old, replacement));
+    const original = await readFile(target, 'utf8');
+    const source = original.replaceAll('\r\n', '\n'), needle=old.replaceAll('\r\n','\n');
+    assert.ok(needle.length > 0 && source.split(needle).length === 2, `${task.id}: replacement must match exactly once: ${file}`);
+    const patched=source.replace(needle,replacement.replaceAll('\r\n','\n'));
+    await writeFile(target,original.includes('\r\n')?patched.replaceAll('\n','\r\n'):patched);
   }
 }
 

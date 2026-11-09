@@ -1,0 +1,163 @@
+{
+  "runId": "3-dependency-aliases-C-r0",
+  "task": "dependency-aliases",
+  "arm": "C",
+  "repetition": 0,
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "latencyMs": 26877.0735,
+  "usage": {
+    "input": 8058,
+    "cacheRead": 19968,
+    "cacheWrite": 0,
+    "output": 844,
+    "estimatedApiUsd": 0.026552799999999998,
+    "modelCalls": 4,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.026552799999999998,
+  "toolCalls": 12,
+  "graphToolCalls": 0,
+  "graphGuidance": [
+    "initial",
+    "after-edit"
+  ],
+  "graphMetrics": [
+    {
+      "at": "2026-11-09T04:32:27.838Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "1735dd4d65cb6a4219460db6ecfb7ba5f2e61635f7ac9310f24d871d68c7e8b7"
+      },
+      "latencyMs": 63.09919999999693,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 23011,
+      "heapDeltaBytes": 57216,
+      "graphBytes": 37225
+    },
+    {
+      "at": "2026-11-09T04:32:27.895Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "1735dd4d65cb6a4219460db6ecfb7ba5f2e61635f7ac9310f24d871d68c7e8b7"
+      },
+      "latencyMs": 55.22009999999864,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 23011,
+      "heapDeltaBytes": 306896,
+      "graphBytes": 37225
+    },
+    {
+      "at": "2026-11-09T04:32:32.221Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "1735dd4d65cb6a4219460db6ecfb7ba5f2e61635f7ac9310f24d871d68c7e8b7"
+      },
+      "latencyMs": 57.450700000001234,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 23011,
+      "heapDeltaBytes": -362272,
+      "graphBytes": 37225
+    },
+    {
+      "at": "2026-11-09T04:32:41.119Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "7bee8b1857ebffc8a28062e93518b2e87e248c6ffd4b843d78787a4ad2d51a4a"
+      },
+      "latencyMs": 60.24090000000433,
+      "parsedFiles": 2,
+      "fileCount": 3,
+      "cacheBytes": 28311,
+      "heapDeltaBytes": -115952,
+      "graphBytes": 43876
+    },
+    {
+      "at": "2026-11-09T04:32:41.176Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "7bee8b1857ebffc8a28062e93518b2e87e248c6ffd4b843d78787a4ad2d51a4a"
+      },
+      "latencyMs": 56.63769999999204,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28311,
+      "heapDeltaBytes": 336888,
+      "graphBytes": 43876
+    },
+    {
+      "at": "2026-11-09T04:32:50.630Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "124e0e194d526064a6b66b951faf4c4d64853f5a",
+        "contentVersion": "7bee8b1857ebffc8a28062e93518b2e87e248c6ffd4b843d78787a4ad2d51a4a"
+      },
+      "latencyMs": 55.510699999998906,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28311,
+      "heapDeltaBytes": -1264568,
+      "graphBytes": 43876
+    }
+  ],
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: transitive aliases and duplicate identities resolve once\nok 1 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 1.3786\n  type: 'test'\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 2 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.5104\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nok 3 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.2601\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.0092\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 81
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ordinary dependencies are ordered before a root\nok 1 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 1.3439\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.907\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 84
+  },
+  "patches": [
+    {
+      "path": "src/order.mjs",
+      "before": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(name)) return;\r\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(name);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(name); done.add(name); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n",
+      "after": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(target)) return;\r\n    if (active.has(target)) throw new Error('Dependency cycle: ' + target);\r\n    active.add(target);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(target); done.add(target); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n"
+    },
+    {
+      "path": "src/registry.mjs",
+      "before": "export function resolveName(name, nodes, aliases) {\r\n  const target = aliases[name] ?? name;\r\n  if (!(target in nodes)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n",
+      "after": "export function resolveName(name, nodes, aliases) {\n  const seen = new Set();\n  while (Object.hasOwn(aliases, name) && aliases[name] != null) {\n    if (seen.has(name)) throw new Error('Alias cycle: ' + name);\n    seen.add(name);\n    name = aliases[name];\n  }\n  if (!Object.hasOwn(nodes, name)) throw new Error('Unknown node: ' + name);\n  return name;\n}\n"
+    }
+  ],
+  "final": "Repaired the implementation under `src/` without changing the public API.\n\n- Alias resolution now follows chains transitively, detects alias cycles, and rejects missing real targets.\n- Build traversal tracks resolved node identities, preventing duplicates and detecting dependency cycles through aliases.\n- Dependency order and reachable-only resolution are preserved.\n\nVerification passed:\n- `node --test tests/visible.test.mjs`\n- Additional assertions for alias chains, cycles, duplicate identities, missing targets, traversal order, and unrelated broken nodes\n- `git diff --check`"
+}
