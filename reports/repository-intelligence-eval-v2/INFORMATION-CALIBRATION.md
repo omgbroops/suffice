@@ -23,6 +23,10 @@ The global AST query aborts on oversized generated files in Svelte (12/12 querie
 
 Line-level deduplication can hide incorrect individual edges on lines with several references. These scores do not validate every graph edge, dynamic dispatch, anonymous exports, or behavioral correctness.
 
+## Pending adapter recheck
+
+A follow-up audit found that the query adapter used variable kinds that do not match the engine schema. Three negative variable definitions were therefore treated as missing instead of queried. The five positive misses were in an independently unparsed file. The v3b source/result are preserved, but precision claims remain provisional until the corrected binding/function adapter is rerun while preparation is idle.
+
 ## Recorded overhead
 
 One sequential local measurement; not a speed comparison. Graph scope includes the entire selected repository tree, while scoring covers production definitions. Cached files and garbage collection make heap deltas approximate.

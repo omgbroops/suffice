@@ -92,8 +92,8 @@ for(const corpus of [{id:'axios',directory:pilotRoot,production:p=>p.startsWith(
     // per-path API permits a production-only fallback, evaluated separately.
     for(const path of sourcePaths){try{const value=(await tool.execute('path-information',{name:target.name,path,limit:80})).structuredContent;out.references.push(...value.references);out.unparsed.push(...value.unparsed);out.omitted+=value.omitted;}catch(e){out.errors.push({path,error:e.message});}}
     const astMs=performance.now()-before;
-    const kinds=target.kind==='FunctionDeclaration'?['function']:target.kind==='ClassDeclaration'?['class']:['const','let','var'];
-    const matches=graph.symbols.filter(s=>s.path===target.path&&s.name===target.name&&!s.import&&kinds.includes(s.kind));
+    const kinds=target.kind==='FunctionDeclaration'?['function']:target.kind==='ClassDeclaration'?['class']:['binding','function'];
+    const matches=graph.symbols.filter(s=>s.path===target.path&&s.name===target.name&&!s.import&&kinds.includes(s.kind)&&s.start<=target.line&&s.end>=target.line);
     const symbol=matches.length===1?matches[0]:null;
     const predicted=symbol?graph.edges.filter(e=>['reference','call','imports','exports'].includes(e.kind)&&e.to===symbol.id&&e.evidence.path!==target.path&&sources.has(e.evidence.path)).map(e=>e.evidence.path+':'+e.evidence.line):[];
     const baseline=(out.references??[]).filter(r=>r.path!==target.path&&sources.has(r.path)).map(r=>r.path+':'+r.line);
