@@ -10,8 +10,8 @@ const exec=promisify(execFile),root=process.cwd(),base=resolve(root,'.suffice/in
 const load=async path=>JSON.parse(await readFile(path,'utf8')),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const cohort=await load(resolve(root,'benchmarks/intelligence-real-v3/cohort.json'));
 await mkdir(published,{recursive:true});const tasks=[];
-const adapterFingerprint=hash(JSON.stringify(await Promise.all(['benchmarks/intelligence-real-v3/native-tests.cjs','benchmarks/intelligence-real-v3/native-loader-base.cjs'].map(async path=>hash(await readFile(resolve(root,path)))))));
-for(const task of cohort.tasks){const path=resolve(base,'tasks',task.id,'validation.json'),validation=await load(path);if(validation.nativeAdapterVersion!==2||validation.nativeAdapterSha256!==adapterFingerprint)throw new Error('Preparation uses an older adapter: '+task.id);tasks.push({...task,valid:validation.valid,validationSha256:hash(await readFile(path)),preparationClassification:validation.classification});}
+const adapterFingerprint=hash(JSON.stringify(await Promise.all(['native-tests.cjs','native-loader-base.cjs','native-compat.cjs'].map(async path=>hash(await readFile(resolve(root,'benchmarks/intelligence-real-v3',path)))))));
+for(const task of cohort.tasks){const path=resolve(base,'tasks',task.id,'validation.json'),validation=await load(path);if(validation.nativeAdapterVersion!==3||validation.nativeAdapterSha256!==adapterFingerprint)throw new Error('Preparation uses an older adapter: '+task.id);tasks.push({...task,valid:validation.valid,validationSha256:hash(await readFile(path)),preparationClassification:validation.classification});}
 if(process.argv.includes('--dry-run')){console.log(JSON.stringify({event:'real_dry_run',tasks:tasks.length,validated:tasks.filter(task=>task.valid).length,cells:realSchedule(tasks).flat().length,config:REAL_CONFIG,modelRequests:0}));process.exit(0);}
 // No main inference is possible until every planned task has an explicit gate result.
 const lockPath=resolve(root,'.suffice/native-evaluation.lock'),lock=await open(lockPath,'wx');
@@ -37,7 +37,7 @@ try{
   const resourceReady=async()=>{
     for(let waited=0;waited<=900;waited+=20){const disk=await statfs(root);if(disk.bavail*disk.bsize<6*1024**3)return false;if(freemem()>=2*1024**3)return true;status='waiting_for_resources';await state({freeRAM:freemem(),waitedSeconds:waited});await sleep(20000);}return false;
   };
-  const readAttempt=async(item,attempt)=>{try{return await load(resolve(published,runId(item,attempt)+'.json'));}catch(error){if(error.code==='ENOENT')return null;throw error;}};
+  const readAttempt=async(item,attempt)=>{try{return await load(resolve(published,runId(item,attempt)+'.summary.json'));}catch(error){if(error.code!=='ENOENT')throw error;}try{return await load(resolve(published,runId(item,attempt)+'.json'));}catch(error){if(error.code==='ENOENT')return null;throw error;}};
   status='running';await state({scheduledCells:144});
   outer:for(const wave of protocol.schedule){
     // A provider failure releases unstarted reservations before its cooldown.

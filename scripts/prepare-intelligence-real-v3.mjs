@@ -19,7 +19,7 @@ const leasePath=resolve(root,'.suffice/native-evaluation.lock');let lease;
 try{lease=await open(leasePath,'wx');}catch(error){if(error.code==='EEXIST'){console.log(JSON.stringify({event:'preparation_waiting_for_exclusive_lease'}));process.exit(75);}throw error;}
 await lease.writeFile(JSON.stringify({kind:'preparation',pid:process.pid,startedAt:new Date().toISOString()}));
 try{
-const adapterFingerprint=hash(JSON.stringify(await Promise.all(['benchmarks/intelligence-real-v3/native-tests.cjs','benchmarks/intelligence-real-v3/native-loader-base.cjs'].map(async path=>hash(await readFile(resolve(root,path)))))));
+const adapterFingerprint=hash(JSON.stringify(await Promise.all(['native-tests.cjs','native-loader-base.cjs','native-compat.cjs'].map(async path=>hash(await readFile(resolve(root,'benchmarks/intelligence-real-v3',path)))))));
 const resourceFloor=async()=>{const disk=await statfs(root);if(freemem()<1.75*1024**3||disk.bavail*disk.bsize<6*1024**3)throw new Error('RESOURCE_FLOOR: stop preparation without classifying unattempted tasks');};
 async function download(url,path){try{await readFile(path);}catch(e){if(e.code!=='ENOENT')throw e;await exec('python',['-c','import urllib.request,sys;open(sys.argv[2],"wb").write(urllib.request.urlopen(sys.argv[1],timeout=60).read())',url,path],{windowsHide:true,timeout:90000});}}
 function pinnedDependencies(pkg,lock){
@@ -69,14 +69,14 @@ for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
   const directory=resolve(base,'tasks',item.id),target=resolve(published,'validation',item.id);await mkdir(directory,{recursive:true});await mkdir(target,{recursive:true});
   try{
     const existing=JSON.parse(await readFile(resolve(directory,'validation.json'),'utf8'));
-    if(existing.valid&&existing.nativeAdapterVersion===2&&existing.nativeAdapterSha256===adapterFingerprint){
+    if(existing.valid&&existing.nativeAdapterVersion===3&&existing.nativeAdapterSha256===adapterFingerprint){
       if(existing.recordSha256!==item.recordSha256||JSON.stringify(await snapshot(resolve(directory,'baseline')))!==JSON.stringify(existing.baselineHashes))throw new Error('Validated task content drift');
       console.log(JSON.stringify({event:'validated_task_reused',task:item.id}));results.push({id:item.id,valid:true});continue;
     }
     if(!existing.valid&&!process.argv.includes('--retry-infrastructure')){results.push({id:item.id,valid:false,classification:existing.classification});continue;}
   }catch(e){if(e.code!=='ENOENT')throw e;}
   const attempt=String(Date.now()),attemptDir=resolve(directory,'validation',attempt),attemptPublished=resolve(target,attempt);await mkdir(attemptDir,{recursive:true});await mkdir(attemptPublished,{recursive:true});
-  const receipt={version:1,nativeAdapterVersion:2,nativeAdapterSha256:adapterFingerprint,task:item.id,recordSha256:item.recordSha256,valid:false,attempt,category:item.category};
+  const receipt={version:1,nativeAdapterVersion:3,nativeAdapterSha256:adapterFingerprint,task:item.id,recordSha256:item.recordSha256,valid:false,attempt,category:item.category};
   console.log(JSON.stringify({event:'task_preparation_start',task:item.id}));
   try{
     const recordBytes=await readFile(resolve(root,'benchmarks/intelligence-real-v3',item.record));if(hash(recordBytes)!==item.recordSha256)throw new Error('Frozen record drift');
@@ -94,6 +94,7 @@ for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
     await copySource(upstream,baseline);
     await cp(resolve(root,'benchmarks/intelligence-real-v3/native-loader-base.cjs'),resolve(baseline,'native-loader-base.cjs'));
     await cp(resolve(root,'benchmarks/intelligence-real-v3/native-tests.cjs'),resolve(baseline,'native-tests.cjs'));
+    await cp(resolve(root,'benchmarks/intelligence-real-v3/native-compat.cjs'),resolve(baseline,'native-compat.cjs'));
     const scored=[...record.FAIL_TO_PASS,...record.PASS_TO_PASS],excludedRuntimeSamples=scored.some(title=>/^runtime binding-select \(/.test(title))?[]:['binding-select'];
     receipt.nativeEnvironment={excludedRuntimeSamples,reason:'Known Node16/jsdom legacy selection assertion incompatibility; isolated execution can exhaust the 384 MiB heap. Omitted cases are not counted as passes or pending. All official labels are retained.'};
     await writeFile(resolve(baseline,'native-environment.json'),JSON.stringify(receipt.nativeEnvironment,null,2));
@@ -105,7 +106,8 @@ for(const item of cohort.tasks.filter(t=>!selected||t.id===selected)){
     const {symlink}=await import('node:fs/promises');const link=resolve(directory,'dependencies');try{await lstat(link);if(await realpath(link)!==await realpath(deps.directory))throw new Error('Task dependency junction drift');}catch(e){if(e.code!=='ENOENT')throw e;await symlink(deps.directory,link,'junction');}
     const clone=async name=>{const workspace=resolve(attemptDir,name);await mkdir(workspace,{recursive:true});await copySource(baseline,workspace);await initializeWorkspaceGit(workspace);await linkDependencies(workspace,deps.directory);return workspace;};
     const observations={},control=await clone('public');observations.public=await testSvelte(control,resolve(attemptPublished,'public-mocha.json'));if(observations.public.status!=='reported'){await writeFile(resolve(attemptPublished,'public-execution.json'),JSON.stringify(observations.public,null,2));throw new Error('Public execution failed: '+observations.public.status);}
-    receipt.knownFailures=observations.public.report.failures.map(t=>t.fullTitle);receipt.knownPending=observations.public.report.pending.map(t=>t.fullTitle);
+    const publicFailures=observations.public.report.failures.map(t=>t.fullTitle);receipt.publicTargetFailures=publicFailures.filter(title=>record.FAIL_TO_PASS.includes(title));
+    receipt.knownFailures=publicFailures.filter(title=>!record.FAIL_TO_PASS.includes(title));receipt.knownPending=observations.public.report.pending.map(t=>t.fullTitle);
     if(receipt.knownFailures.some(n=>!/^runtime binding-select \(/.test(n)&&!/^cli (dir-sourcemap|sourcemap)$/.test(n)))throw new Error('Unclassified public failures: '+receipt.knownFailures.join(', '));
     if(receipt.knownFailures.some(n=>record.FAIL_TO_PASS.includes(n)||record.PASS_TO_PASS.includes(n)))throw new Error('A scored title fails in the public baseline');
     receipt.gates={};

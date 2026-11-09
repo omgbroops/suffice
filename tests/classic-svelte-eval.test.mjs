@@ -40,3 +40,19 @@ test('native runtime exclusions preserve the same sample in SSR discovery',async
   await promisify(execFile)(process.execPath,['native-tests.cjs'],{cwd:dir,windowsHide:true});
   assert.deepEqual(JSON.parse(await readFile(resolve(dir,'observed.json'),'utf8')),{runtime:['ordinary'],ssr:['binding-select','ordinary']});
 });
+test('native SourceMap compatibility preserves mapping content and rejects unrelated objects',async t=>{
+  const dir=await mkdtemp(resolve(tmpdir(),'suffice-map-compat-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+  await cp(new URL('../benchmarks/intelligence-real-v3/native-compat.cjs',import.meta.url),resolve(dir,'compat.cjs'));
+  const source="const fs=require('fs'),compat=require('./compat.cjs');class SourceMap{toString(){return 'map bytes';}}fs.writeFileSync('map.txt',new SourceMap());fs.writeFileSync('binary.txt',Buffer.from('binary'));let rejected=false;try{fs.writeFileSync('invalid.txt',{});}catch{rejected=true;}const value={version:3,file:'out\\\\main.js',sources:['src\\\\main.html'],sourcesContent:['a\\\\b'],mappings:'AAAA',names:[]};fs.writeFileSync('result.json',JSON.stringify({rejected,map:JSON.parse(compat.normalizeSourceMapPaths(JSON.stringify(value)))}));";
+  await writeFile(resolve(dir,'check.cjs'),source);await promisify(execFile)(process.execPath,['check.cjs'],{cwd:dir,windowsHide:true});
+  assert.equal(await readFile(resolve(dir,'map.txt'),'utf8'),'map bytes');assert.equal(await readFile(resolve(dir,'binary.txt'),'utf8'),'binary');
+  assert.deepEqual(JSON.parse(await readFile(resolve(dir,'result.json'),'utf8')),{rejected:true,map:{version:3,file:'out/main.js',sources:['src/main.html'],sourcesContent:['a\\b'],mappings:'AAAA',names:[]}});
+});
+test('native console adaptation supports detached process-warning callbacks',async t=>{
+  const dir=await mkdtemp(resolve(tmpdir(),'suffice-console-compat-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+  await mkdir(resolve(dir,'src'));await mkdir(resolve(dir,'test'));
+  for(const file of ['native-loader-base.cjs','native-compat.cjs'])await cp(new URL('../benchmarks/intelligence-real-v3/'+file,import.meta.url),resolve(dir,file));
+  await writeFile(resolve(dir,'test/setup.js'),"console.error=function(){this._stderr.write('native-warning-probe\\n');};");
+  const result=await promisify(execFile)(process.execPath,['-e',"require('./native-loader-base.cjs');const detached=console.error;detached();"],{cwd:dir,windowsHide:true});
+  assert.match(result.stderr,/native-warning-probe/);
+});
