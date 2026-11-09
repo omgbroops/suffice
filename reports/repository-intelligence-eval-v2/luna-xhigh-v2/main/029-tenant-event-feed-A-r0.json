@@ -1,0 +1,106 @@
+{
+  "task": "tenant-event-feed",
+  "repetition": 0,
+  "arm": "A",
+  "mode": "off",
+  "scheduleIndex": 28,
+  "runId": "029-tenant-event-feed-A-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 129991.27099999995,
+  "usage": {
+    "input": 19926,
+    "cacheRead": 31360,
+    "cacheWrite": 0,
+    "output": 5574,
+    "estimatedApiUsd": 0.0050932,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0050932,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 2.8971\n  type: 'test'\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 0.7866\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.6837\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.527\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 16.5206\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 123
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 2.6585\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.6245\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 114
+  },
+  "changed": [
+    "src/batch-commit.mjs",
+    "src/live-bus.mjs",
+    "src/snapshot.mjs",
+    "src/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 4,
+  "verificationCalls": 2,
+  "toolCalls": 22,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  let sequence = state.sequence;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    records.push(makeRecord(tenant, event, ++sequence));\r\n  }\r\n\r\n  const committedRecords = state.records.concat(records);\r\n  state.records = committedRecords;\r\n  state.sequence = sequence;\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/live-bus.mjs",
+      "before": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) entry.onEvent(snapshot(record));\r\n    },\r\n  };\r\n}\r\n",
+      "after": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) {\r\n        if (entry.tenant === record.tenant) entry.onEvent(snapshot(record));\r\n      }\r\n    },\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\r\n  return structuredClone(record);\r\n}\r\n"
+    },
+    {
+      "path": "src/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type) throw new Error('Invalid event');\r\n  const payload = event.payload;\r\n  if (payload === null || typeof payload !== 'object') throw new Error('Invalid event');\r\n  const prototype = Object.getPrototypeOf(payload);\r\n  if (prototype !== Object.prototype && prototype !== null) throw new Error('Invalid event');\r\n  structuredClone(payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the feed repairs:\n\n- Batch publication now stages records and sequence numbers, committing only after every event validates.\n- Snapshots use `structuredClone` for deep, independent copies.\n- Live notifications are limited to subscribers for the record’s tenant.\n- Payload validation accepts plain objects with either the standard or null prototype and rejects uncloneable values.\n\nVerification passed: `node --test tests/visible.test.mjs` and additional contract checks for atomic retries, tenant isolation, and snapshot independence.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\029-tenant-event-feed-A-r0\\home\\events\\1794203791689-8c9f9c74-4bb1-46ba-aa97-d2c571e1125a.jsonl"
+}
