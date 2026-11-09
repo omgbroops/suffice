@@ -31,7 +31,7 @@ try{
   try{protocol=await load(resolve(published,'protocol.json'));if(JSON.stringify(inputs)!==JSON.stringify(protocol.inputs)||JSON.stringify(cohort.tasks)!==JSON.stringify(protocol.tasks)||JSON.stringify(REAL_CONFIG)!==JSON.stringify(protocol.config))throw new Error('Frozen protocol drift; do not pool changed sources');}
   catch(error){
     if(error.code!=='ENOENT')throw error;
-    const runtime=await ModelRuntime.create({authPath:resolve(homedir(),'.suffice/auth.json'),modelsPath:null,modelsStorePath:resolve(homedir(),'.suffice/catalog.json'),allowModelNetwork:false,refreshOnCreate:false});
+    const runtime=await ModelRuntime.create({authPath:resolve(homedir(),'.suffice/auth.json'),modelsPath:null,modelsStorePath:resolve(homedir(),'.suffice/catalog.json'),allowModelNetwork:false});
     if(!runtime.isUsingSubscription('openai'))throw new Error('Subscription required; no paid API fallback');
     const model=runtime.getModel('openai',REAL_CONFIG.model),catalog={id:model.id,api:model.api,contextWindow:model.contextWindow,maxTokens:model.maxTokens,cost:model.cost};
     const source=resolve(base,'frozen',hash(JSON.stringify(inputs)));for(const [path,expected]of Object.entries(inputs)){const destination=resolve(source,path);await mkdir(dirname(destination),{recursive:true});await cp(resolve(root,path),destination);if(hash(await readFile(destination))!==expected)throw new Error('Source changed during freeze');}

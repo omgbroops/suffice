@@ -34,7 +34,7 @@ try{
   if(JSON.stringify(await snapshot(task.baseline))!==JSON.stringify(receipt.baselineHashes))throw new Error('Starting files drift');
   if(hash(await readFile(resolve(dependencies,'package-lock.json')))!==receipt.dependencyLockSha256)throw new Error('Pinned dependency lock drift');
   if(JSON.stringify(await dependencySnapshot(resolve(dependencies,'node_modules')))!==JSON.stringify(JSON.parse(await readFile(resolve(directory,'dependency-hashes.json'),'utf8'))))throw new Error('Pinned dependency content drift before inference');
-  const runtime=await ModelRuntime.create({authPath:resolve(homedir(),'.suffice/auth.json'),modelsPath:null,modelsStorePath:resolve(homedir(),'.suffice/catalog.json'),allowModelNetwork:false,refreshOnCreate:false});
+  const runtime=await ModelRuntime.create({authPath:resolve(homedir(),'.suffice/auth.json'),modelsPath:null,modelsStorePath:resolve(homedir(),'.suffice/catalog.json'),allowModelNetwork:false});
   if(!runtime.isUsingSubscription('openai'))throw new Error('Subscription required; no paid-key or model fallback');
   const model=runtime.getModel('openai',REAL_CONFIG.model),catalog={id:model.id,api:model.api,contextWindow:model.contextWindow,maxTokens:model.maxTokens,cost:model.cost};
   if(JSON.stringify(catalog)!==JSON.stringify(protocol.catalog))throw new Error('Model catalog drift');
