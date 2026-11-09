@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "logs": [
+    {
+      "args": [
+        "src/shared/_build.js"
+      ],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "node_modules/rollup/bin/rollup",
+        "-c"
+      ],
+      "stdout": "",
+      "stderr": "\nsrc/index.ts → compiler/svelte.js...\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\AwaitBlock.ts -> src\\compile\\nodes\\PendingBlock.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\AwaitBlock.ts -> src\\compile\\nodes\\ThenBlock.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\AwaitBlock.ts -> src\\compile\\nodes\\CatchBlock.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\Component.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\EachBlock.ts -> src\\compile\\nodes\\ElseBlock.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\EachBlock.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\Element.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\Head.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\IfBlock.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\n(!) Circular dependency: src\\compile\\nodes\\shared\\mapChildren.ts -> src\\compile\\nodes\\Title.ts -> src\\compile\\nodes\\shared\\mapChildren.ts\ncreated compiler/svelte.js in 6.8s\n\nsrc/ssr/register.js → ssr/register.js...\ncreated ssr/register.js in 57ms\n\nsrc/cli/index.ts → cli...\n(!) Generated an empty bundle\ncreated cli in 323ms\n\nsrc/shared/index.js → shared.js...\ncreated shared.js in 70ms\n"
+    },
+    {
+      "args": [
+        "node_modules/rollup/bin/rollup",
+        "-c",
+        "rollup.store.config.js"
+      ],
+      "stdout": "",
+      "stderr": "\nstore.js → store.umd.js...\ncreated store.umd.js in 157ms\n"
+    }
+  ],
+  "latencyMs": 8505.693499999994
+}

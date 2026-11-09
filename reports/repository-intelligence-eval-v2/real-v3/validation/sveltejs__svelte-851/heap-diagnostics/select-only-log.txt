@@ -1,0 +1,33 @@
+
+<--- Last few GCs --->
+
+[176076:000002C48B07D640]     4684 ms: Mark-sweep 381.5 (385.4) -> 381.5 (387.1) MB, 9.0 / 0.0 ms  (average mu = 0.123, current mu = 0.002) allocation failure GC in old space requested
+[176076:000002C48B07D640]     4693 ms: Mark-sweep (reduce) 381.5 (387.1) -> 381.5 (384.1) MB, 8.7 / 0.0 ms  (average mu = 0.067, current mu = 0.002) last resort GC in old space requested
+
+
+<--- JS stacktrace --->
+
+FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+ 1: 00007FF6FBBC158F v8::internal::CodeObjectRegistry::~CodeObjectRegistry+122159
+ 2: 00007FF6FBB4B326 DSA_meth_get_flags+64118
+ 3: 00007FF6FBB4C3A2 DSA_meth_get_flags+68338
+ 4: 00007FF6FC482374 v8::Isolate::ReportExternalAllocationLimitReached+116
+ 5: 00007FF6FC46C93D v8::SharedArrayBuffer::Externalize+781
+ 6: 00007FF6FC30FEBC v8::internal::Heap::EphemeronKeyWriteBarrierFromCode+1468
+ 7: 00007FF6FC31CB69 v8::internal::Heap::PublishPendingAllocations+1129
+ 8: 00007FF6FC319B3A v8::internal::Heap::PageFlagsAreConsistent+2842
+ 9: 00007FF6FC30C799 v8::internal::Heap::CollectGarbage+2137
+10: 00007FF6FC30B862 v8::internal::Heap::CollectAllAvailableGarbage+130
+11: 00007FF6FC30A9DF v8::internal::Heap::AllocateExternalBackingStore+2143
+12: 00007FF6FC328660 v8::internal::FreeListManyCached::Reset+1408
+13: 00007FF6FC328D15 v8::internal::Factory::AllocateRaw+37
+14: 00007FF6FC33E5CF v8::internal::FactoryBase<v8::internal::Factory>::NewRawTwoByteString+79
+15: 00007FF6FC12271D v8::internal::String::SlowFlatten+477
+16: 00007FF6FBE8D1EB v8::internal::WasmTableObject::Fill+603
+17: 00007FF6FC11F168 v8::internal::FlatStringReader::FlatStringReader+968
+18: 00007FF6FC04539B v8::internal::OptimizingCompileDispatcher::set_finalize+6955
+19: 00007FF6FC510051 v8::internal::SetupIsolateDelegate::SetupHeap+494417
+20: 00007FF6FC586D2B v8::internal::SetupIsolateDelegate::SetupHeap+981035
+21: 00007FF6FC589424 v8::internal::SetupIsolateDelegate::SetupHeap+991012
+22: 00007FF6FC58A29F v8::internal::SetupIsolateDelegate::SetupHeap+994719
+23: 000002C48D085269 

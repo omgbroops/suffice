@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "logs": [
+    {
+      "args": [
+        "src/shared/_build.js"
+      ],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "node_modules/rollup/bin/rollup",
+        "-c"
+      ],
+      "stdout": "",
+      "stderr": "\nsrc/index.ts → compiler/svelte.js...\ncreated compiler/svelte.js in 9.8s\n\nsrc/server-side-rendering/register.js → ssr/register.js...\ncreated ssr/register.js in 207ms\n\nsrc/shared/index.js → shared.js...\ncreated shared.js in 65ms\n"
+    },
+    {
+      "args": [
+        "node_modules/rollup/bin/rollup",
+        "-c",
+        "rollup.store.config.js"
+      ],
+      "stdout": "",
+      "stderr": "\nstore.js → store.umd.js...\ncreated store.umd.js in 134ms\n"
+    }
+  ],
+  "latencyMs": 11752.1241
+}

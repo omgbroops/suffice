@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "logs": [
+    {
+      "args": [
+        "src/shared/_build.js"
+      ],
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "node_modules/rollup/bin/rollup",
+        "-c"
+      ],
+      "stdout": "",
+      "stderr": "\nsrc/index.ts → compiler/svelte.js...\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\AwaitBlock.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\Component.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\EachBlock.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\Element.ts -> src\\generators\\server-side-rendering\\visitors\\Slot.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\Element.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\Head.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\IfBlock.ts -> src\\generators\\server-side-rendering\\visit.ts\n(!) Circular dependency: src\\generators\\server-side-rendering\\visit.ts -> src\\generators\\server-side-rendering\\visitors\\index.ts -> src\\generators\\server-side-rendering\\visitors\\Title.ts -> src\\generators\\server-side-rendering\\visit.ts\ncreated compiler/svelte.js in 17.8s\n\nsrc/server-side-rendering/register.js → ssr/register.js...\ncreated ssr/register.js in 47ms\n\nsrc/shared/index.js → shared.js...\ncreated shared.js in 57ms\n"
+    },
+    {
+      "args": [
+        "node_modules/rollup/bin/rollup",
+        "-c",
+        "rollup.store.config.js"
+      ],
+      "stdout": "",
+      "stderr": "\nstore.js → store.umd.js...\ncreated store.umd.js in 113ms\n"
+    }
+  ],
+  "latencyMs": 18955.358899999992
+}
