@@ -1,0 +1,84 @@
+{
+  "task": "layered-config",
+  "repetition": 1,
+  "arm": "A",
+  "mode": "off",
+  "runId": "007-layered-config-A-r1",
+  "category": "simple",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 271010.54219999997,
+  "usage": {
+    "input": 18753,
+    "cacheRead": 69248,
+    "cacheWrite": 0,
+    "output": 13445,
+    "estimatedApiUsd": 0.00929028,
+    "modelCalls": 11,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00929028,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: falsy values override while undefined inherits\nok 1 - falsy values override while undefined inherits\n  ---\n  duration_ms: 1.6799\n  type: 'test'\n  ...\n# Subtest: recursive branches and replacement arrays are independently owned\nok 2 - recursive branches and replacement arrays are independently owned\n  ---\n  duration_ms: 1.0723\n  type: 'test'\n  ...\n# Subtest: invalid effective configuration is still rejected\nok 3 - invalid effective configuration is still rejected\n  ---\n  duration_ms: 0.4944\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.9233\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 100
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: later nonempty values replace defaults\nok 1 - later nonempty values replace defaults\n  ---\n  duration_ms: 1.5029\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.5953\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 88
+  },
+  "changed": [
+    "src/merge.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 11,
+  "editCalls": 2,
+  "verificationCalls": 2,
+  "toolCalls": 24,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/merge.mjs",
+      "before": "function isPlain(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }\r\nexport function mergeLayers(...layers) {\r\n  const result = {};\r\n  for (const layer of layers) {\r\n    for (const [key, value] of Object.entries(layer)) {\r\n      if (!value) continue;\r\n      if (isPlain(value) && isPlain(result[key])) result[key] = mergeLayers(result[key], value);\r\n      else result[key] = value;\r\n    }\r\n  }\r\n  return result;\r\n}\r\n",
+      "after": "function isPlainObject(value) {\n  if (value === null || typeof value !== 'object') return false;\n  const prototype = Object.getPrototypeOf(value);\n  return prototype === Object.prototype || prototype === null;\n}\n\nfunction setOwn(target, key, value) {\n  Object.defineProperty(target, key, {\n    configurable: true,\n    enumerable: true,\n    writable: true,\n    value,\n  });\n}\n\nfunction cloneProperties(source, copy, seen) {\n  for (const key of Reflect.ownKeys(source)) {\n    if (Object.getOwnPropertyDescriptor(source, key).enumerable) {\n      setOwn(copy, key, cloneValue(source[key], seen));\n    }\n  }\n}\n\nfunction cloneValue(value, seen = new WeakMap()) {\n  if (value === null || typeof value !== 'object') return value;\n  if (seen.has(value)) return seen.get(value);\n\n  if (Array.isArray(value)) {\n    const copy = new Array(value.length);\n    seen.set(value, copy);\n    cloneProperties(value, copy, seen);\n    return copy;\n  }\n\n  let copy;\n  if (value instanceof Date) {\n    copy = new Date(value.getTime());\n  } else if (value instanceof RegExp) {\n    copy = new RegExp(value.source, value.flags);\n    copy.lastIndex = value.lastIndex;\n  } else if (value instanceof Map) {\n    copy = new Map();\n    seen.set(value, copy);\n    for (const [key, entry] of value) {\n      copy.set(cloneValue(key, seen), cloneValue(entry, seen));\n    }\n  } else if (value instanceof Set) {\n    copy = new Set();\n    seen.set(value, copy);\n    for (const entry of value) copy.add(cloneValue(entry, seen));\n  } else if (value instanceof ArrayBuffer) {\n    copy = value.slice(0);\n  } else if (typeof SharedArrayBuffer !== 'undefined' && value instanceof SharedArrayBuffer) {\n    copy = new SharedArrayBuffer(value.byteLength);\n    new Uint8Array(copy).set(new Uint8Array(value));\n  } else if (ArrayBuffer.isView(value)) {\n    if (value instanceof DataView) {\n      copy = new DataView(cloneValue(value.buffer, seen), value.byteOffset, value.byteLength);\n    } else if (typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) {\n      copy = Buffer.from(value);\n    } else {\n      copy = new value.constructor(value);\n    }\n  } else {\n    copy = Object.create(Object.getPrototypeOf(value));\n  }\n\n  seen.set(value, copy);\n  cloneProperties(value, copy, seen);\n  return copy;\n}\n\nexport function mergeLayers(...layers) {\n  const result = {};\n\n  for (const layer of layers) {\n    for (const [key, value] of Object.entries(layer)) {\n      if (value === undefined) continue;\n\n      let mergedValue = value;\n      if (isPlainObject(value) && isPlainObject(result[key])) {\n        mergedValue = mergeLayers(result[key], value);\n      } else {\n        mergedValue = cloneValue(value);\n      }\n\n      setOwn(result, key, mergedValue);\n    }\n  }\n\n  return result;\n}\n"
+    }
+  ],
+  "final": "Updated `src/merge.mjs` so layers recursively merge plain objects, skip `undefined` overrides, and replace other values—including arrays—without sharing mutable values with the inputs. Explicit `false`, `0`, empty strings, and `null` are preserved as overrides.\n\nVerification: `node --test tests/visible.test.mjs` passed (1 test). Additional inline checks covered overrides, cloning, and config validation.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\007-layered-config-A-r1\\home\\events\\1794201962529-546c3ead-8367-42ba-93e5-623a6efa79a4.jsonl"
+}
