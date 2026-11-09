@@ -43,12 +43,15 @@ try{
   const events=(await readFile(resolve(published,id+'.events.jsonl'),'utf8')).trim().split('\n').map(JSON.parse),requests=events.filter(event=>event.type==='provider_request');
   const receipts=events.filter(event=>event.type==='provider_usage'&&['response.completed','response.incomplete','response.failed','response.cancelled'].includes(event.eventType)),receiptIds=new Set(receipts.map(event=>event.responseId));
   result.receiptAudit={requests:requests.length,finalUsageResponses:receiptIds.size,missingUsage:requests.length!==receiptIds.size,configurationMismatches:receipts.filter(event=>event.model!==REAL_CONFIG.model||event.reasoning?.effort!==REAL_CONFIG.effort||event.serviceTier!==REAL_CONFIG.serviceTier).length};
+  const startup=events.find(event=>event.type==='startup'),preflightLimit=events.some(event=>event.type==='provider_request_blocked'&&['allowance','input_payload_limit'].includes(event.reason));
+  result.configurationVerified=result.modelValid||requests.length===0&&preflightLimit&&startup?.model===REAL_CONFIG.model&&startup?.effort===REAL_CONFIG.effort;
   if(result.receiptAudit.missingUsage){result.usage.costUnknown=true;result.totalEstimatedUsd=null;}
   result.sourceStable=JSON.stringify(await realSourceInputs(root))===JSON.stringify(protocol.inputs);
   if(!result.sourceStable){result.originalSuccess=result.success;result.success=false;result.status='source_drift';}
   if(result.receiptAudit.configurationMismatches){result.originalSuccess=result.success;result.success=false;result.sourceStable=false;result.status='source_drift';}
   result.runtimeTargets={required:record.evaluation.runtimeTargets.length,passed:['passed','failed'].includes(result.acceptance.status)?record.evaluation.runtimeTargets.filter(title=>!result.acceptance.unpassed.includes(title)&&!result.acceptance.missing.includes(title)).length:null};
   result.classification=providerUnavailable(result)?'provider_interruption':providerFailure(result)?'provider_failure':result.status==='source_drift'?'experimental_invalidation':result.status==='completed'?'completed':result.status==='budget_or_incomplete'?'budget_or_incomplete':'agent_error';
+  if(result.status==='agent_error'&&requests.length===0&&!preflightLimit)result.classification='model_start_failure';
 }catch(error){
   // Preserve usage and raw receipts even if independent grading itself throws.
   let events=[];
@@ -66,10 +69,10 @@ try{
   clearInterval(timer);await sampling;resources.push(await resource());await writeFile(resolve(published,id+'.resources.json'),JSON.stringify(resources,null,2));
 }
 result.attempt=attempt;result.cellId=cellId(item);
-result.engineeringAccepted=result.patchAccepted===true&&result.modelValid===true&&result.sourceStable===true;
+result.engineeringAccepted=result.patchAccepted===true&&result.configurationVerified===true&&result.sourceStable===true;
 result.normalTaskCompletion=result.status==='completed';
 await writeFile(resolve(published,id+'.json'),JSON.stringify(result,null,2));
-await writeFile(resolve(published,id+'.summary.json'),JSON.stringify({task:result.task,arm:result.arm,repetition:result.repetition,attempt,cellId:result.cellId,status:result.status,classification:result.classification,error:result.error,success:result.success,engineeringAccepted:result.engineeringAccepted,patchAccepted:result.patchAccepted,modelValid:result.modelValid,sourceStable:result.sourceStable,receiptAudit:result.receiptAudit,usage:result.usage,totalEstimatedUsd:result.totalEstimatedUsd},null,2));
+await writeFile(resolve(published,id+'.summary.json'),JSON.stringify({task:result.task,arm:result.arm,repetition:result.repetition,attempt,cellId:result.cellId,status:result.status,classification:result.classification,error:result.error,success:result.success,engineeringAccepted:result.engineeringAccepted,patchAccepted:result.patchAccepted,modelValid:result.modelValid,configurationVerified:result.configurationVerified,sourceStable:result.sourceStable,receiptAudit:result.receiptAudit,usage:result.usage,totalEstimatedUsd:result.totalEstimatedUsd},null,2));
 entry.known=result.usage.estimatedApiUsd;entry.unknown=result.totalEstimatedUsd===null;entry.reserved=entry.unknown?Math.max(REAL_CONFIG.maxCost,entry.known):result.totalEstimatedUsd;entry.state='finished';await writeLedger(ledgerPath,ledger);
 // Archive exact production bytes before reclaiming generated workspace copies.
 let archived=false;

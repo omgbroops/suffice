@@ -65,7 +65,7 @@ try{
         const result=await readAttempt(item,item.attempt);
         await writeFile(resolve(published,runId(item,item.attempt)+'.execution.json'),JSON.stringify({startedAt,finishedAt:new Date().toISOString(),workerWallMs:performance.now()-workerStarted},null,2));
         if(!result)throw new Error('Worker did not persist a result');
-        if(result.classification==='experimental_invalidation'||result.classification==='infrastructure_or_evaluator_error'){status='evaluator_or_source_failure';break outer;}
+        if(['experimental_invalidation','infrastructure_or_evaluator_error','model_start_failure'].includes(result.classification)){status='evaluator_or_source_failure';break outer;}
         if(result.classification==='provider_failure'){status='provider_failure';providerStop=true;break outer;}
         if(providerUnavailable(result)||result.classification==='resource_stop'){
           await releasePending();

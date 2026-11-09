@@ -75,7 +75,7 @@ the Nightmare suite and, when no official label requires it, the known incompati
 runtime `binding-select` sample. That old jsdom/Node assertion can exhaust the heap
 even in isolation; the raw diagnostics are retained. Its SSR counterpart still
 runs. Omitted cases are never called passes or pending. Every official target and
-regression title must remain discovered. Original unscored CLI SourceMap failures
+regression title must remain discovered. Any remaining original unscored failures
 and existing pending tests are recorded separately.
 
 Legacy console methods are rebound for Node's detached warning callbacks. A
