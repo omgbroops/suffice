@@ -15,7 +15,7 @@ export function intelligenceTools(engine,workspace,log=()=>{}){
     }});
   return [
     make('get_symbol_context','Resolve lexical symbols, explicit ESM imports, references and calls with file-versioned provenance. Calls identify bindings, not runtime function values. Unsupported/dynamic references are unresolved. Use existing symbols/read/search tools as fallback.',Type.Object({name:Type.Optional(Type.String()),path:Type.Optional(Type.String()),limit})),
-    make('get_impact_analysis','Compare symbols and files with the task-start snapshot; conservatively traverse reverse module dependencies, including pre-edit edges for deletions. Potential impact does not prove behavior. Omit paths to use changed files.',Type.Object({paths,limit})),
+    make('get_impact_analysis','Compare symbols and files with the task-start snapshot; conservatively traverse reverse module dependencies, including pre-edit edges for deletions. Arrays are paginated: inspect total/omitted counts and use offset for further pages at the same revision. Potential impact does not prove behavior. Omit paths to use changed files.',Type.Object({paths,limit,offset:Type.Optional(Type.Integer({minimum:0}))})),
     make('get_relevant_tests','Recommend test files by reverse static module reachability. Return evidence chains; no runtime coverage claim or guaranteed test runner. Omit paths to use changed files; fall back to project suite.',Type.Object({paths,limit}))
   ];
 }

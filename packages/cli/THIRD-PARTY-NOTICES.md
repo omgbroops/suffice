@@ -1,5 +1,10 @@
 # Third-party notices
 
+Experimental repository intelligence also uses TypeScript 5.9.3 (Microsoft,
+Apache-2.0) for configured module-path resolution. The compiler is loaded lazily
+when TypeScript files are indexed; project plugins are not executed. Its package
+license is installed with the dependency.
+
 Suffice uses the unmodified `@earendil-works/pi-coding-agent` 1.2.0 agent engine and its dependencies. Pi is a separate project, created by Mario Zechner: https://github.com/earendil-works/pi
 
 Pi is MIT licensed. Its license notice follows (source: https://github.com/earendil-works/pi/blob/main/LICENSE). Other dependencies retain their own package licenses; npm installs those dependencies separately.

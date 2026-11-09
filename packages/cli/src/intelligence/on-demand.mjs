@@ -1,5 +1,6 @@
-import {filesIn,readText,hash,repositoryPath} from '../workspace.mjs';
+import {readText,hash,repositoryPath} from '../workspace.mjs';
 import {relative} from 'node:path';
+import {listIntelligenceSources,isIntelligenceConfiguration} from './source-files.mjs';
 
 // Rules see only tool actions and repository source, never benchmark labels.
 export function onDemandExtension(engine,{workspace,log=()=>{}}){
@@ -9,7 +10,9 @@ export function onDemandExtension(engine,{workspace,log=()=>{}}){
     const query=(operation,reason,args)=>{log({type:'graph_query',operation,reason,args});return engine[operation](args);};
     const exported=source=>/\bexport\b|\bmodule\s*\.\s*exports\b|\bexports\s*\./.test(source);
     async function versions(){
-      const map=new Map();for(const path of (await filesIn(workspace)).filter(p=>/\.[cm]?[jt]sx?$/.test(p))){try{const text=await readText(workspace,path);map.set(path,{version:hash(text),exported:exported(text)});}catch{}}
+      const started=performance.now(),sources=await listIntelligenceSources(workspace);
+      const map=new Map();for(const path of [...sources.paths,...sources.configurationPaths]){try{const text=await readText(workspace,path);map.set(path,{version:hash(text),exported:!isIntelligenceConfiguration(path)&&exported(text),configuration:isIntelligenceConfiguration(path)});}catch{}}
+      log({type:'graph_version_scan',latencyMs:performance.now()-started,readFiles:map.size,fileSelection:sources.selection});
       return map;
     }
     async function activate(reason){reasons.add(reason);if(active)return;if(!activation)activation=query('begin',reason).then(()=>{active=true;});await activation;}
@@ -20,7 +23,8 @@ export function onDemandExtension(engine,{workspace,log=()=>{}}){
       if(!['edit','write'].includes(e.toolName))return;
       const path=relative(workspace,await repositoryPath(workspace,e.input.path)).replaceAll('\\','/');
       dirty.add(path);
-      if(baseline.get(path)?.exported)await activate('editing-exported-module');
+      if(isIntelligenceConfiguration(path))await activate('editing-module-configuration');
+      else if(baseline.get(path)?.exported)await activate('editing-exported-module');
       else if(dirty.size>=2)await activate('coordinated-file-edits');
     });
     pi.on('tool_result',async e=>{
@@ -32,7 +36,8 @@ export function onDemandExtension(engine,{workspace,log=()=>{}}){
         const now=await versions();
         for(const p of new Set([...baseline.keys(),...now.keys()]))if(baseline.get(p)?.version!==now.get(p)?.version)dirty.add(p);
         if(!active){
-          if(dirty.size>=2)await activate('coordinated-file-edits');
+          if([...dirty].some(isIntelligenceConfiguration))await activate('editing-module-configuration');
+          else if(dirty.size>=2)await activate('coordinated-file-edits');
           else if([...dirty].some(p=>baseline.get(p)?.exported||now.get(p)?.exported))await activate('editing-exported-module');
           else if(failed)await activate('failed-verification');
         }
