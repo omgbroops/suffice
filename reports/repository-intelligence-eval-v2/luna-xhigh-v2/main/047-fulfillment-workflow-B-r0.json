@@ -1,0 +1,500 @@
+{
+  "task": "fulfillment-workflow",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 46,
+  "runId": "047-fulfillment-workflow-B-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "compound",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 209844.1392000001,
+  "usage": {
+    "input": 51931,
+    "cacheRead": 106112,
+    "cacheWrite": 0,
+    "output": 9468,
+    "estimatedApiUsd": 0.010988220000000002,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.010988220000000002,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 10,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: request ids are tenant scoped and delimiter safe\nok 1 - request ids are tenant scoped and delimiter safe\n  ---\n  duration_ms: 1.4014\n  type: 'test'\n  ...\n# Subtest: duplicate totals and reordered retries share one identity\nok 2 - duplicate totals and reordered retries share one identity\n  ---\n  duration_ms: 9.2742\n  type: 'test'\n  ...\n# Subtest: later errors roll back stock and allow corrected retries\nok 3 - later errors roll back stock and allow corrected retries\n  ---\n  duration_ms: 0.4048\n  type: 'test'\n  ...\n# Subtest: validation and snapshots preserve ownership\nok 4 - validation and snapshots preserve ownership\n  ---\n  duration_ms: 0.3496\n  type: 'test'\n  ...\n# Subtest: POST keys survive retries and separate logical calls\nok 5 - POST keys survive retries and separate logical calls\n  ---\n  duration_ms: 0.7252\n  type: 'test'\n  ...\n# Subtest: retry budget and ordinary errors are respected\nok 6 - retry budget and ordinary errors are respected\n  ---\n  duration_ms: 0.8838\n  type: 'test'\n  ...\n# Subtest: explicit caller identity is preserved without generating another key\nok 7 - explicit caller identity is preserved without generating another key\n  ---\n  duration_ms: 1.6144\n  type: 'test'\n  ...\n# Subtest: a later failure rolls back earlier balances and ids\nok 8 - a later failure rolls back earlier balances and ids\n  ---\n  duration_ms: 0.6117\n  type: 'test'\n  ...\n# Subtest: same-batch ids deduplicate and conflict rolls back\nok 9 - same-batch ids deduplicate and conflict rolls back\n  ---\n  duration_ms: 0.2298\n  type: 'test'\n  ...\n# Subtest: ordered staged transfers, validation, self-transfer, snapshot ownership\nok 10 - ordered staged transfers, validation, self-transfer, snapshot ownership\n  ---\n  duration_ms: 0.3144\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 10\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 27.2934\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 110
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a successful request consumes stock once\nok 1 - a successful request consumes stock once\n  ---\n  duration_ms: 1.8743\n  type: 'test'\n  ...\n# Subtest: GET retries a server error and returns success\nok 2 - GET retries a server error and returns success\n  ---\n  duration_ms: 0.5668\n  type: 'test'\n  ...\n# Subtest: a valid transfer conserves funds\nok 3 - a valid transfer conserves funds\n  ---\n  duration_ms: 0.314\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 15.9606\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 110
+  },
+  "changed": [
+    "src/atomic-ledger/ledger.mjs",
+    "src/atomic-ledger/transfer.mjs",
+    "src/inventory-reservations/item-plan.mjs",
+    "src/inventory-reservations/request-key.mjs",
+    "src/inventory-reservations/stock-transaction.mjs",
+    "src/retry-idempotency/client.mjs",
+    "src/retry-idempotency/policy.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/atomic-ledger/transfer.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 8,
+  "verificationCalls": 3,
+  "toolCalls": 27,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:18:53.799Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T06:18:53.985Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T06:19:03.247Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:19:09.159Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:20:25.855Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:20:25.954Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:20:41.929Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:20:58.003Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:21:27.591Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:21:27.690Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:21:50.297Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:22:09.899Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:18:53.984Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1ff8a2c970b7285725dde42621a7e9e1c57c55461f498292824bc1a276d56295"
+      },
+      "latencyMs": 188.4584000003524,
+      "parsedFiles": 20,
+      "fileCount": 20,
+      "cacheBytes": 167782,
+      "heapDeltaBytes": -4783168,
+      "graphBytes": 277937
+    },
+    {
+      "at": "2026-11-09T06:18:54.093Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1ff8a2c970b7285725dde42621a7e9e1c57c55461f498292824bc1a276d56295"
+      },
+      "latencyMs": 106.80869999993593,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 167782,
+      "heapDeltaBytes": 3234936,
+      "graphBytes": 277937
+    },
+    {
+      "at": "2026-11-09T06:19:03.362Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1ff8a2c970b7285725dde42621a7e9e1c57c55461f498292824bc1a276d56295"
+      },
+      "latencyMs": 115.6148000000976,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 167782,
+      "heapDeltaBytes": -9338800,
+      "graphBytes": 277937
+    },
+    {
+      "at": "2026-11-09T06:19:09.237Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "1ff8a2c970b7285725dde42621a7e9e1c57c55461f498292824bc1a276d56295"
+      },
+      "latencyMs": 78.37449999991804,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 167782,
+      "heapDeltaBytes": 1226312,
+      "graphBytes": 277937
+    },
+    {
+      "at": "2026-11-09T06:20:25.954Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bb567994d88929a2cbbaeac06c53f8137eecfc5f58267fec5f30b71ae9b43574"
+      },
+      "latencyMs": 100.32150000007823,
+      "parsedFiles": 7,
+      "fileCount": 20,
+      "cacheBytes": 180828,
+      "heapDeltaBytes": 4550392,
+      "graphBytes": 295909
+    },
+    {
+      "at": "2026-11-09T06:20:26.044Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bb567994d88929a2cbbaeac06c53f8137eecfc5f58267fec5f30b71ae9b43574"
+      },
+      "latencyMs": 89.68260000040755,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 180828,
+      "heapDeltaBytes": 1555688,
+      "graphBytes": 295909
+    },
+    {
+      "at": "2026-11-09T06:20:42.033Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bb567994d88929a2cbbaeac06c53f8137eecfc5f58267fec5f30b71ae9b43574"
+      },
+      "latencyMs": 104.89950000029057,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 180828,
+      "heapDeltaBytes": -30110952,
+      "graphBytes": 295909
+    },
+    {
+      "at": "2026-11-09T06:20:58.098Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "bb567994d88929a2cbbaeac06c53f8137eecfc5f58267fec5f30b71ae9b43574"
+      },
+      "latencyMs": 94.87609999999404,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 180828,
+      "heapDeltaBytes": 2574904,
+      "graphBytes": 295909
+    },
+    {
+      "at": "2026-11-09T06:21:27.689Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c343b734bad527acbf30985dc3b0a9f95c8bc5e492bf4bc0cdaec3d075875c5f"
+      },
+      "latencyMs": 98.08319999976084,
+      "parsedFiles": 1,
+      "fileCount": 20,
+      "cacheBytes": 183191,
+      "heapDeltaBytes": 2597120,
+      "graphBytes": 299075
+    },
+    {
+      "at": "2026-11-09T06:21:27.783Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c343b734bad527acbf30985dc3b0a9f95c8bc5e492bf4bc0cdaec3d075875c5f"
+      },
+      "latencyMs": 93.97690000012517,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 183191,
+      "heapDeltaBytes": 1398168,
+      "graphBytes": 299075
+    },
+    {
+      "at": "2026-11-09T06:21:50.381Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c343b734bad527acbf30985dc3b0a9f95c8bc5e492bf4bc0cdaec3d075875c5f"
+      },
+      "latencyMs": 84.96460000006482,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 183191,
+      "heapDeltaBytes": 1228640,
+      "graphBytes": 299075
+    },
+    {
+      "at": "2026-11-09T06:22:09.979Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c343b734bad527acbf30985dc3b0a9f95c8bc5e492bf4bc0cdaec3d075875c5f"
+      },
+      "latencyMs": 80.89220000011846,
+      "parsedFiles": 0,
+      "fileCount": 20,
+      "cacheBytes": 183191,
+      "heapDeltaBytes": 1367016,
+      "graphBytes": 299075
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/inventory-reservations/item-plan.mjs",
+        "src/inventory-reservations/request-normalizer.mjs",
+        "src/retry-idempotency/client.mjs",
+        "src/inventory-reservations/request-key.mjs",
+        "src/inventory-reservations/receipt.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/inventory-reservations/item-plan.mjs",
+          "callId": "call_feb1c48bc93f4137b6df83bacbd27b07|ctc_07ddb8855a0acd3d016af166161b6c87d1aff106b684ed74b6/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/inventory-reservations/request-key.mjs",
+          "callId": "call_feb1c48bc93f4137b6df83bacbd27b07|ctc_07ddb8855a0acd3d016af166161b6c87d1aff106b684ed74b6/2"
+        },
+        {
+          "tool": "edit",
+          "path": "src/retry-idempotency/client.mjs",
+          "callId": "call_feb1c48bc93f4137b6df83bacbd27b07|ctc_07ddb8855a0acd3d016af166161b6c87d1aff106b684ed74b6/4"
+        }
+      ],
+      "subsequentTestCommands": [
+        "cat src/inventory-reservations/item-plan.mjs src/inventory-reservations/stock-transaction.mjs src/retry-idempotency/client.mjs src/retry-idempotency/policy.mjs src/atomic-ledger/ledger.mjs src/atomic-ledger/transfer.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createShop } from './src/inventory-reservations/index.mjs';\nimport { createClient } from './src/retry-idempotency/client.mjs';\nimport { Ledger } from './src/atomic-ledger/ledger.mjs';\n\nconst shop = createShop({ t: { x: 10, y: 1 }, u: { x: 5 } });\nconst original = { tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 2 }, { sku: 'x', quantity: 3 }] };\nconst receipt = shop.reserve(original);\nassert.deepEqual(receipt.items, [{ sku: 'x', quantity: 5 }]);\nreceipt.items[0].quantity = 99;\noriginal.items[0].quantity = 99;\nassert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 5 }] }).items, [{ sku: 'x', quantity: 5 }]);\nshop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'x', quantity: 1 }] });\nassert.equal(shop.stock('t', 'x'), 5);\nassert.equal(shop.stock('u', 'x'), 4);\nassert.throws(() => shop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 2 }, { sku: 'y', quantity: 1 }] }));\nassert.equal(shop.stock('t', 'x'), 5);\nshop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 1 }] });\n\nconst seen = []; const sleeps = []; let n = 0, generated = 0;\nconst request = createClient({ transport: async req => { seen.push(req); return { status: ++n < 3 ? 503 : 200, headers: n === 1 ? { 'Retry-After': '2' } : {} }; }, sleep: async ms => sleeps.push(ms), keyFactory: () => `k${++generated}`, baseMs: 25 });\nassert.equal((await request({ method: 'POST', url: '/', headers: { Accept: 'application/json' } })).status, 200);\nassert.deepEqual(seen.map(req => req.headers['idempotency-key']), ['k1', 'k1', 'k1']);\nassert.deepEqual(sleeps, [2000, 50]);\nawait request({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'provided' } });\nassert.equal(seen.at(-1).headers['Idempotency-Key'], 'provided');\nassert.equal(generated, 1);\n\nconst ledger = new Ledger({ a: 50, b: 0 });\nassert.deepEqual(ledger.applyBatch([{ id: 'x', from: 'a', to: 'b', amount: 10 }, { id: 'x', from: 'a', to: 'b', amount: 10 }]), { a: 40, b: 10 });\nassert.throws(() => ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }, { id: 'z', from: 'a', to: 'b', amount: 100 }]));\nassert.deepEqual(ledger.snapshot(), { a: 40, b: 10 });\nassert.deepEqual(ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }]), { a: 35, b: 15 });\nconsole.log('Contract smoke checks passed.');\nEOF",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createShop } from './src/inventory-reservations/index.mjs';\nimport { createClient } from './src/retry-idempotency/client.mjs';\nimport { Ledger } from './src/atomic-ledger/ledger.mjs';\n\nconst shop = createShop({ t: { x: 10, y: 1 }, u: { x: 5 } });\nconst original = { tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 2 }, { sku: 'x', quantity: 3 }] };\nconst receipt = shop.reserve(original);\nassert.deepEqual(receipt.items, [{ sku: 'x', quantity: 5 }]);\nreceipt.items[0].quantity = 99;\noriginal.items[0].quantity = 99;\nassert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 5 }] }).items, [{ sku: 'x', quantity: 5 }]);\nshop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'x', quantity: 1 }] });\nassert.equal(shop.stock('t', 'x'), 5);\nassert.equal(shop.stock('u', 'x'), 4);\nassert.throws(() => shop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 2 }, { sku: 'y', quantity: 2 }] }));\nassert.equal(shop.stock('t', 'x'), 5);\nshop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 1 }] });\n\nconst seen = []; const sleeps = []; let n = 0, generated = 0;\nconst request = createClient({ transport: async req => { seen.push(req); return { status: ++n < 3 ? 503 : 200, headers: n === 1 ? { 'Retry-After': '2' } : {} }; }, sleep: async ms => sleeps.push(ms), keyFactory: () => `k${++generated}`, baseMs: 25 });\nassert.equal((await request({ method: 'POST', url: '/', headers: { Accept: 'application/json' } })).status, 200);\nassert.deepEqual(seen.map(req => req.headers['idempotency-key']), ['k1', 'k1', 'k1']);\nassert.deepEqual(sleeps, [2000, 50]);\nawait request({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'provided' } });\nassert.equal(seen.at(-1).headers['Idempotency-Key'], 'provided');\nassert.equal(generated, 1);\n\nconst ledger = new Ledger({ a: 50, b: 0 });\nassert.deepEqual(ledger.applyBatch([{ id: 'x', from: 'a', to: 'b', amount: 10 }, { id: 'x', from: 'a', to: 'b', amount: 10 }]), { a: 40, b: 10 });\nassert.throws(() => ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }, { id: 'z', from: 'a', to: 'b', amount: 100 }]));\nassert.deepEqual(ledger.snapshot(), { a: 40, b: 10 });\nassert.deepEqual(ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }]), { a: 35, b: 15 });\nconsole.log('Contract smoke checks passed.');\nEOF"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/atomic-ledger/ledger.mjs",
+        "src/atomic-ledger/transfer.mjs",
+        "src/inventory-reservations/item-plan.mjs",
+        "src/inventory-reservations/request-key.mjs",
+        "src/inventory-reservations/stock-transaction.mjs",
+        "src/retry-idempotency/client.mjs",
+        "src/retry-idempotency/policy.mjs",
+        "src/inventory-reservations/request-normalizer.mjs",
+        "src/inventory-reservations/reservation-store.mjs",
+        "src/inventory-reservations/checkout.mjs",
+        "src/inventory-reservations/shop.mjs",
+        "src/inventory-reservations/index.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/retry-idempotency/policy.mjs",
+          "callId": "call_04c0c74d76414cd5b111c4466eb969a3|ctc_07ddb8855a0acd3d016af166607aac87d19bade6b6aff0026f/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "cat src/inventory-reservations/item-plan.mjs src/inventory-reservations/stock-transaction.mjs src/retry-idempotency/client.mjs src/retry-idempotency/policy.mjs src/atomic-ledger/ledger.mjs src/atomic-ledger/transfer.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createShop } from './src/inventory-reservations/index.mjs';\nimport { createClient } from './src/retry-idempotency/client.mjs';\nimport { Ledger } from './src/atomic-ledger/ledger.mjs';\n\nconst shop = createShop({ t: { x: 10, y: 1 }, u: { x: 5 } });\nconst original = { tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 2 }, { sku: 'x', quantity: 3 }] };\nconst receipt = shop.reserve(original);\nassert.deepEqual(receipt.items, [{ sku: 'x', quantity: 5 }]);\nreceipt.items[0].quantity = 99;\noriginal.items[0].quantity = 99;\nassert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 5 }] }).items, [{ sku: 'x', quantity: 5 }]);\nshop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'x', quantity: 1 }] });\nassert.equal(shop.stock('t', 'x'), 5);\nassert.equal(shop.stock('u', 'x'), 4);\nassert.throws(() => shop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 2 }, { sku: 'y', quantity: 1 }] }));\nassert.equal(shop.stock('t', 'x'), 5);\nshop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 1 }] });\n\nconst seen = []; const sleeps = []; let n = 0, generated = 0;\nconst request = createClient({ transport: async req => { seen.push(req); return { status: ++n < 3 ? 503 : 200, headers: n === 1 ? { 'Retry-After': '2' } : {} }; }, sleep: async ms => sleeps.push(ms), keyFactory: () => `k${++generated}`, baseMs: 25 });\nassert.equal((await request({ method: 'POST', url: '/', headers: { Accept: 'application/json' } })).status, 200);\nassert.deepEqual(seen.map(req => req.headers['idempotency-key']), ['k1', 'k1', 'k1']);\nassert.deepEqual(sleeps, [2000, 50]);\nawait request({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'provided' } });\nassert.equal(seen.at(-1).headers['Idempotency-Key'], 'provided');\nassert.equal(generated, 1);\n\nconst ledger = new Ledger({ a: 50, b: 0 });\nassert.deepEqual(ledger.applyBatch([{ id: 'x', from: 'a', to: 'b', amount: 10 }, { id: 'x', from: 'a', to: 'b', amount: 10 }]), { a: 40, b: 10 });\nassert.throws(() => ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }, { id: 'z', from: 'a', to: 'b', amount: 100 }]));\nassert.deepEqual(ledger.snapshot(), { a: 40, b: 10 });\nassert.deepEqual(ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }]), { a: 35, b: 15 });\nconsole.log('Contract smoke checks passed.');\nEOF",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createShop } from './src/inventory-reservations/index.mjs';\nimport { createClient } from './src/retry-idempotency/client.mjs';\nimport { Ledger } from './src/atomic-ledger/ledger.mjs';\n\nconst shop = createShop({ t: { x: 10, y: 1 }, u: { x: 5 } });\nconst original = { tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 2 }, { sku: 'x', quantity: 3 }] };\nconst receipt = shop.reserve(original);\nassert.deepEqual(receipt.items, [{ sku: 'x', quantity: 5 }]);\nreceipt.items[0].quantity = 99;\noriginal.items[0].quantity = 99;\nassert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 5 }] }).items, [{ sku: 'x', quantity: 5 }]);\nshop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'x', quantity: 1 }] });\nassert.equal(shop.stock('t', 'x'), 5);\nassert.equal(shop.stock('u', 'x'), 4);\nassert.throws(() => shop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 2 }, { sku: 'y', quantity: 2 }] }));\nassert.equal(shop.stock('t', 'x'), 5);\nshop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 1 }] });\n\nconst seen = []; const sleeps = []; let n = 0, generated = 0;\nconst request = createClient({ transport: async req => { seen.push(req); return { status: ++n < 3 ? 503 : 200, headers: n === 1 ? { 'Retry-After': '2' } : {} }; }, sleep: async ms => sleeps.push(ms), keyFactory: () => `k${++generated}`, baseMs: 25 });\nassert.equal((await request({ method: 'POST', url: '/', headers: { Accept: 'application/json' } })).status, 200);\nassert.deepEqual(seen.map(req => req.headers['idempotency-key']), ['k1', 'k1', 'k1']);\nassert.deepEqual(sleeps, [2000, 50]);\nawait request({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'provided' } });\nassert.equal(seen.at(-1).headers['Idempotency-Key'], 'provided');\nassert.equal(generated, 1);\n\nconst ledger = new Ledger({ a: 50, b: 0 });\nassert.deepEqual(ledger.applyBatch([{ id: 'x', from: 'a', to: 'b', amount: 10 }, { id: 'x', from: 'a', to: 'b', amount: 10 }]), { a: 40, b: 10 });\nassert.throws(() => ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }, { id: 'z', from: 'a', to: 'b', amount: 100 }]));\nassert.deepEqual(ledger.snapshot(), { a: 40, b: 10 });\nassert.deepEqual(ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }]), { a: 35, b: 15 });\nconsole.log('Contract smoke checks passed.');\nEOF"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/atomic-ledger/ledger.mjs",
+        "src/atomic-ledger/transfer.mjs",
+        "src/inventory-reservations/item-plan.mjs",
+        "src/inventory-reservations/request-key.mjs",
+        "src/inventory-reservations/stock-transaction.mjs",
+        "src/retry-idempotency/client.mjs",
+        "src/retry-idempotency/policy.mjs",
+        "src/inventory-reservations/request-normalizer.mjs",
+        "src/inventory-reservations/reservation-store.mjs",
+        "src/inventory-reservations/checkout.mjs",
+        "src/inventory-reservations/shop.mjs",
+        "src/inventory-reservations/index.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createShop } from './src/inventory-reservations/index.mjs';\nimport { createClient } from './src/retry-idempotency/client.mjs';\nimport { Ledger } from './src/atomic-ledger/ledger.mjs';\n\nconst shop = createShop({ t: { x: 10, y: 1 }, u: { x: 5 } });\nconst original = { tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 2 }, { sku: 'x', quantity: 3 }] };\nconst receipt = shop.reserve(original);\nassert.deepEqual(receipt.items, [{ sku: 'x', quantity: 5 }]);\nreceipt.items[0].quantity = 99;\noriginal.items[0].quantity = 99;\nassert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 5 }] }).items, [{ sku: 'x', quantity: 5 }]);\nshop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'x', quantity: 1 }] });\nassert.equal(shop.stock('t', 'x'), 5);\nassert.equal(shop.stock('u', 'x'), 4);\nassert.throws(() => shop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 2 }, { sku: 'y', quantity: 1 }] }));\nassert.equal(shop.stock('t', 'x'), 5);\nshop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 1 }] });\n\nconst seen = []; const sleeps = []; let n = 0, generated = 0;\nconst request = createClient({ transport: async req => { seen.push(req); return { status: ++n < 3 ? 503 : 200, headers: n === 1 ? { 'Retry-After': '2' } : {} }; }, sleep: async ms => sleeps.push(ms), keyFactory: () => `k${++generated}`, baseMs: 25 });\nassert.equal((await request({ method: 'POST', url: '/', headers: { Accept: 'application/json' } })).status, 200);\nassert.deepEqual(seen.map(req => req.headers['idempotency-key']), ['k1', 'k1', 'k1']);\nassert.deepEqual(sleeps, [2000, 50]);\nawait request({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'provided' } });\nassert.equal(seen.at(-1).headers['Idempotency-Key'], 'provided');\nassert.equal(generated, 1);\n\nconst ledger = new Ledger({ a: 50, b: 0 });\nassert.deepEqual(ledger.applyBatch([{ id: 'x', from: 'a', to: 'b', amount: 10 }, { id: 'x', from: 'a', to: 'b', amount: 10 }]), { a: 40, b: 10 });\nassert.throws(() => ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }, { id: 'z', from: 'a', to: 'b', amount: 100 }]));\nassert.deepEqual(ledger.snapshot(), { a: 40, b: 10 });\nassert.deepEqual(ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }]), { a: 35, b: 15 });\nconsole.log('Contract smoke checks passed.');\nEOF",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createShop } from './src/inventory-reservations/index.mjs';\nimport { createClient } from './src/retry-idempotency/client.mjs';\nimport { Ledger } from './src/atomic-ledger/ledger.mjs';\n\nconst shop = createShop({ t: { x: 10, y: 1 }, u: { x: 5 } });\nconst original = { tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 2 }, { sku: 'x', quantity: 3 }] };\nconst receipt = shop.reserve(original);\nassert.deepEqual(receipt.items, [{ sku: 'x', quantity: 5 }]);\nreceipt.items[0].quantity = 99;\noriginal.items[0].quantity = 99;\nassert.deepEqual(shop.reserve({ tenant: 't', requestId: 'same', items: [{ sku: 'x', quantity: 5 }] }).items, [{ sku: 'x', quantity: 5 }]);\nshop.reserve({ tenant: 'u', requestId: 'same', items: [{ sku: 'x', quantity: 1 }] });\nassert.equal(shop.stock('t', 'x'), 5);\nassert.equal(shop.stock('u', 'x'), 4);\nassert.throws(() => shop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 2 }, { sku: 'y', quantity: 2 }] }));\nassert.equal(shop.stock('t', 'x'), 5);\nshop.reserve({ tenant: 't', requestId: 'bad', items: [{ sku: 'x', quantity: 1 }] });\n\nconst seen = []; const sleeps = []; let n = 0, generated = 0;\nconst request = createClient({ transport: async req => { seen.push(req); return { status: ++n < 3 ? 503 : 200, headers: n === 1 ? { 'Retry-After': '2' } : {} }; }, sleep: async ms => sleeps.push(ms), keyFactory: () => `k${++generated}`, baseMs: 25 });\nassert.equal((await request({ method: 'POST', url: '/', headers: { Accept: 'application/json' } })).status, 200);\nassert.deepEqual(seen.map(req => req.headers['idempotency-key']), ['k1', 'k1', 'k1']);\nassert.deepEqual(sleeps, [2000, 50]);\nawait request({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'provided' } });\nassert.equal(seen.at(-1).headers['Idempotency-Key'], 'provided');\nassert.equal(generated, 1);\n\nconst ledger = new Ledger({ a: 50, b: 0 });\nassert.deepEqual(ledger.applyBatch([{ id: 'x', from: 'a', to: 'b', amount: 10 }, { id: 'x', from: 'a', to: 'b', amount: 10 }]), { a: 40, b: 10 });\nassert.throws(() => ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }, { id: 'z', from: 'a', to: 'b', amount: 100 }]));\nassert.deepEqual(ledger.snapshot(), { a: 40, b: 10 });\nassert.deepEqual(ledger.applyBatch([{ id: 'y', from: 'a', to: 'b', amount: 5 }]), { a: 35, b: 15 });\nconsole.log('Contract smoke checks passed.');\nEOF"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/atomic-ledger/ledger.mjs",
+      "before": "import { applyTransfer, sameTransfer } from './transfer.mjs';\r\nexport class Ledger {\r\n  constructor(balances) { this.balances = { ...balances }; this.committed = new Map(); }\r\n  snapshot() { return { ...this.balances }; }\r\n  applyBatch(transfers) {\r\n    const balances = this.balances;\r\n    const committed = new Map(this.committed);\r\n    for (const transfer of transfers) {\r\n      const previous = this.committed.get(transfer.id);\r\n      if (previous) {\r\n        if (!sameTransfer(previous, transfer)) throw new Error('Conflicting transfer id');\r\n        continue;\r\n      }\r\n      applyTransfer(balances, transfer); committed.set(transfer.id, { ...transfer });\r\n    }\r\n    this.balances = balances; this.committed = committed;\r\n    return this.snapshot();\r\n  }\r\n}\r\n",
+      "after": "import { applyTransfer, sameTransfer } from './transfer.mjs';\r\nexport class Ledger {\r\n  constructor(balances) { this.balances = { ...balances }; this.committed = new Map(); }\r\n  snapshot() { return { ...this.balances }; }\r\n  applyBatch(transfers) {\r\n    const balances = { ...this.balances };\r\n    const committed = new Map(this.committed);\r\n    for (const transfer of transfers) {\r\n      if (committed.has(transfer.id)) {\r\n        const previous = committed.get(transfer.id);\r\n        if (!sameTransfer(previous, transfer)) throw new Error('Conflicting transfer id');\r\n        continue;\r\n      }\r\n      applyTransfer(balances, transfer); committed.set(transfer.id, { ...transfer });\r\n    }\r\n    this.balances = balances; this.committed = committed;\r\n    return this.snapshot();\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/atomic-ledger/transfer.mjs",
+      "before": "export function applyTransfer(balances, transfer) {\r\n  const { from, to, amount } = transfer;\r\n  if (!Object.hasOwn(balances, from) || !Object.hasOwn(balances, to)) throw new Error('Unknown account');\r\n  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Invalid amount');\r\n  if (balances[from] < amount) throw new Error('Insufficient funds');\r\n  if (from === to) return;\r\n  balances[from] -= amount; balances[to] += amount;\r\n}\r\nexport function sameTransfer(a, b) { return a.from === b.from && a.to === b.to && a.amount === b.amount; }\r\n",
+      "after": "export function applyTransfer(balances, transfer) {\r\n  const { from, to, amount } = transfer;\r\n  if (typeof from !== 'string' || typeof to !== 'string') throw new Error('Invalid account');\r\n  if (!Object.hasOwn(balances, from) || !Object.hasOwn(balances, to)) throw new Error('Unknown account');\r\n  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Invalid amount');\r\n  if (balances[from] < amount) throw new Error('Insufficient funds');\r\n  if (from === to) return;\r\n  balances[from] -= amount; balances[to] += amount;\r\n}\r\nexport function sameTransfer(a, b) { return a.from === b.from && a.to === b.to && a.amount === b.amount; }\r\n"
+    },
+    {
+      "path": "src/inventory-reservations/item-plan.mjs",
+      "before": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n",
+      "after": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, (quantities.get(item.sku) ?? 0) + item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n"
+    },
+    {
+      "path": "src/inventory-reservations/request-key.mjs",
+      "before": "export function requestKey(tenant, id) {\r\n  return id;\r\n}\r\n",
+      "after": "export function requestKey(tenant, id) {\r\n  return JSON.stringify([tenant, id]);\r\n}\r\n"
+    },
+    {
+      "path": "src/inventory-reservations/stock-transaction.mjs",
+      "before": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = repository.current();\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n",
+      "after": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = structuredClone(repository.current());\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n"
+    },
+    {
+      "path": "src/retry-idempotency/client.mjs",
+      "before": "import { delayFor, shouldRetry } from './policy.mjs';\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      const outgoing = { ...headers };\r\n      if (method === 'POST') outgoing['idempotency-key'] = keyFactory();\r\n      response = await transport({ method, url, headers: outgoing, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n",
+      "after": "import { delayFor, shouldRetry } from './policy.mjs';\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    const hasIdempotencyKey = Object.keys(headers).some(name => name.toLowerCase() === 'idempotency-key');\r\n    const idempotencyKey = method === 'POST' && !hasIdempotencyKey ? keyFactory() : undefined;\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      const outgoing = { ...headers };\r\n      if (idempotencyKey !== undefined) outgoing['idempotency-key'] = idempotencyKey;\r\n      response = await transport({ method, url, headers: outgoing, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/retry-idempotency/policy.mjs",
+      "before": "export function delayFor(response, attempt, baseMs) {\r\n  const retryAfter = response.headers?.['retry-after'];\r\n  if (retryAfter !== undefined && Number.isFinite(Number(retryAfter))) return Number(retryAfter);\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\nexport function shouldRetry(response) {\r\n  return response.status === 429 || response.status >= 500;\r\n}\r\n",
+      "after": "export function delayFor(response, attempt, baseMs) {\r\n  const retryAfter = response.headers?.get?.('retry-after')\r\n    ?? Object.entries(response.headers ?? {}).find(([name]) => name.toLowerCase() === 'retry-after')?.[1];\r\n  const seconds = typeof retryAfter === 'number'\r\n    ? retryAfter\r\n    : typeof retryAfter === 'string' && retryAfter.trim() !== '' ? Number(retryAfter) : NaN;\r\n  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\nexport function shouldRetry(response) {\r\n  return response.status === 429 || (response.status >= 500 && response.status < 600);\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the production repairs across all three components:\n\n- Inventory reservations now combine duplicate SKU quantities, isolate requests by tenant and request ID, and stage stock changes so failed reservations do not partially publish.\n- Retry requests reuse one generated idempotency key across attempts, preserve caller-provided keys, convert numeric `Retry-After` seconds to milliseconds, and retry only 429 and 5xx responses.\n- Ledger batches now stage balances and committed IDs atomically, including correct handling of repeated IDs within a batch; account IDs are validated as strings.\n\nVerification passed: `node --test tests/visible.test.mjs` (3 tests), plus inline contract smoke checks.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\047-fulfillment-workflow-B-r0\\home\\events\\1794205133788-c2e8410f-e6d4-4b45-94e0-968f65714827.jsonl"
+}
