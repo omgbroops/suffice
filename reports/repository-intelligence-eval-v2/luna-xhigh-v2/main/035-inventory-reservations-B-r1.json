@@ -1,0 +1,406 @@
+{
+  "task": "inventory-reservations",
+  "repetition": 1,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 35,
+  "runId": "035-inventory-reservations-B-r1",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 122266.6409,
+  "usage": {
+    "input": 27553,
+    "cacheRead": 48384,
+    "cacheWrite": 0,
+    "output": 4878,
+    "estimatedApiUsd": 0.00567814,
+    "modelCalls": 8,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00567814,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: request ids are tenant scoped and delimiter safe\nok 1 - request ids are tenant scoped and delimiter safe\n  ---\n  duration_ms: 1.2956\n  type: 'test'\n  ...\n# Subtest: duplicate totals and reordered retries share one identity\nok 2 - duplicate totals and reordered retries share one identity\n  ---\n  duration_ms: 9.4327\n  type: 'test'\n  ...\n# Subtest: later errors roll back stock and allow corrected retries\nok 3 - later errors roll back stock and allow corrected retries\n  ---\n  duration_ms: 0.3084\n  type: 'test'\n  ...\n# Subtest: validation and snapshots preserve ownership\nok 4 - validation and snapshots preserve ownership\n  ---\n  duration_ms: 0.3164\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 19.4492\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 106
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a successful request consumes stock once\nok 1 - a successful request consumes stock once\n  ---\n  duration_ms: 1.6129\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.2097\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 94
+  },
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 8,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 32,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:00:14.228Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T06:00:14.479Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T06:00:21.129Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:32.832Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:39.685Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:57.476Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:13.758Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:13.865Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:31.287Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:50.293Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:00:14.478Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 262.3367999999318,
+      "parsedFiles": 16,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": -32041168,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:14.672Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 191.08920000004582,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 15924808,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:21.225Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 96.64159999997355,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 1370376,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:32.910Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 86.27740000002086,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 1140824,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:39.766Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 81.39550000010058,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 964096,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:57.562Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 86.0164999999106,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 1082064,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:01:13.865Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 106.88179999985732,
+      "parsedFiles": 3,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 3578104,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:13.977Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 112.52700000000186,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 2257320,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:31.378Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 91.76959999999963,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 1131848,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:50.399Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 106.56259999983013,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 962736,
+      "graphBytes": 154240
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-normalizer.mjs",
+        "tests/visible.test.mjs",
+        "src/receipt.mjs",
+        "src/reservation-store.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/request-normalizer.mjs",
+          "callId": "call_35c36d4bdc0b4e6aa4404a325228506d|ctc_0be8361957322adb016af16179ca5887d18f20c180fba27298/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/item-plan.mjs",
+          "callId": "call_35c36d4bdc0b4e6aa4404a325228506d|ctc_0be8361957322adb016af16179ca5887d18f20c180fba27298/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/reservation-store.mjs",
+          "callId": "call_35c36d4bdc0b4e6aa4404a325228506d|ctc_0be8361957322adb016af16179ca5887d18f20c180fba27298/6"
+        },
+        {
+          "tool": "read",
+          "path": "src/receipt.mjs",
+          "callId": "call_35c36d4bdc0b4e6aa4404a325228506d|ctc_0be8361957322adb016af16179ca5887d18f20c180fba27298/10"
+        },
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_35c36d4bdc0b4e6aa4404a325228506d|ctc_0be8361957322adb016af16179ca5887d18f20c180fba27298/12"
+        },
+        {
+          "tool": "edit",
+          "path": "src/item-plan.mjs",
+          "callId": "call_fe74f7c4c64445cd84ab5524ddf74d49|ctc_0be8361957322adb016af161a2c0d887d1b2f80b89c0a10d06/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --test tests/visible.test.mjs",
+        "git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-transaction.mjs",
+        "src/request-normalizer.mjs",
+        "src/reservation-store.mjs",
+        "src/checkout.mjs",
+        "src/shop.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e \"import assert from 'node:assert/strict'; import { createShop } from './src/index.mjs'; const initial={red:{a:5,b:1},blue:{a:3}}; const shop=createShop(initial); initial.red.a=0; const first=shop.reserve({tenant:'red',requestId:'same',items:[{sku:'b',quantity:1},{sku:'a',quantity:1},{sku:'a',quantity:1}]}); assert.deepEqual(first.items,[{sku:'a',quantity:2},{sku:'b',quantity:1}]); first.items[0].quantity=100; const replay=shop.reserve({tenant:'red',requestId:'same',items:[{sku:'a',quantity:1},{sku:'b',quantity:1},{sku:'a',quantity:1}]}); assert.deepEqual(replay.items,[{sku:'a',quantity:2},{sku:'b',quantity:1}]); assert.equal(shop.stock('red','a'),3); shop.reserve({tenant:'blue',requestId:'same',items:[{sku:'a',quantity:2}]}); assert.equal(shop.stock('blue','a'),1); assert.throws(()=>shop.reserve({tenant:'red',requestId:'same',items:[{sku:'a',quantity:1}]}),/Conflicting request/); const rollback=createShop({t:{a:4,b:0}}); assert.throws(()=>rollback.reserve({tenant:'t',requestId:'retry',items:[{sku:'a',quantity:2},{sku:'b',quantity:1}]}),/Insufficient stock/); assert.equal(rollback.stock('t','a'),4); assert.equal(rollback.stock('t','b'),0); const corrected=rollback.reserve({tenant:'t',requestId:'retry',items:[{sku:'a',quantity:1}]}); assert.deepEqual(corrected.items,[{sku:'a',quantity:1}]); assert.equal(rollback.stock('t','a'),3); console.log('contract smoke checks passed');\"",
+        "git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs && git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/item-plan.mjs",
+      "before": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n",
+      "after": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, (quantities.get(item.sku) ?? 0) + item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n"
+    },
+    {
+      "path": "src/request-key.mjs",
+      "before": "export function requestKey(tenant, id) {\r\n  return id;\r\n}\r\n",
+      "after": "export function requestKey(tenant, id) {\r\n  return JSON.stringify([tenant, id]);\r\n}\r\n"
+    },
+    {
+      "path": "src/stock-transaction.mjs",
+      "before": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = repository.current();\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n",
+      "after": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = structuredClone(repository.current());\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the reservation fixes in `src/`:\n\n- Duplicate SKU quantities are now summed before the receipt is sorted.\n- Request keys include both tenant and request ID, so tenants can reuse IDs independently.\n- Stock changes are staged on a clone, leaving published stock unchanged if a reservation fails.\n\nVerification: `node --test tests/visible.test.mjs` passed. Additional contract smoke checks passed for duplicate items, tenant isolation, receipt ownership, conflicting retries, and rollback after insufficient stock.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\035-inventory-reservations-B-r1\\home\\events\\1794204014207-55392fc9-0618-4c17-bcc1-ab795d160ffb.jsonl"
+}

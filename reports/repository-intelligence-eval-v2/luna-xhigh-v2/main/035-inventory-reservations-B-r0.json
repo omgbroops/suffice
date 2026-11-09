@@ -1,0 +1,486 @@
+{
+  "task": "inventory-reservations",
+  "repetition": 0,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 34,
+  "runId": "035-inventory-reservations-B-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 124142.57239999995,
+  "usage": {
+    "input": 44363,
+    "cacheRead": 50048,
+    "cacheWrite": 0,
+    "output": 5431,
+    "estimatedApiUsd": 0.007652280000000001,
+    "modelCalls": 8,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.007652280000000001,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: request ids are tenant scoped and delimiter safe\nok 1 - request ids are tenant scoped and delimiter safe\n  ---\n  duration_ms: 1.2923\n  type: 'test'\n  ...\n# Subtest: duplicate totals and reordered retries share one identity\nok 2 - duplicate totals and reordered retries share one identity\n  ---\n  duration_ms: 1.2087\n  type: 'test'\n  ...\n# Subtest: later errors roll back stock and allow corrected retries\nok 3 - later errors roll back stock and allow corrected retries\n  ---\n  duration_ms: 0.2707\n  type: 'test'\n  ...\n# Subtest: validation and snapshots preserve ownership\nok 4 - validation and snapshots preserve ownership\n  ---\n  duration_ms: 0.2961\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.1979\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 94
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: a successful request consumes stock once\nok 1 - a successful request consumes stock once\n  ---\n  duration_ms: 1.6705\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.4096\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 96
+  },
+  "changed": [
+    "src/item-plan.mjs",
+    "src/request-key.mjs",
+    "src/stock-transaction.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 8,
+  "editCalls": 4,
+  "verificationCalls": 2,
+  "toolCalls": 35,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:00:14.206Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T06:00:14.464Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T06:00:21.715Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:00:27.083Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:07.845Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:07.942Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:14.395Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:23.408Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:45.521Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:01:45.615Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:02:07.188Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:00:14.461Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 278.35599999991246,
+      "parsedFiles": 16,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": -29660376,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:14.653Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 187.3212000001222,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 15451976,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:21.852Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 137.22279999987222,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 1517464,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:00:27.162Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "53aca5f06fa0eca2871ffde226ecfce7689c7fd11d6ae1a77c93e9c883cd92ab"
+      },
+      "latencyMs": 86.87189999991097,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 89360,
+      "heapDeltaBytes": 1263024,
+      "graphBytes": 151547
+    },
+    {
+      "at": "2026-11-09T06:01:07.942Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 97.4051000000909,
+      "parsedFiles": 3,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": -45358040,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:08.033Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 91.560899999924,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 4957128,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:14.476Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 81.0050999999512,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 1107320,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:23.487Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "37c2213ced0d401de6b796f59940fe21946ad1388862812a1678bdee8ecec934"
+      },
+      "latencyMs": 79.81510000000708,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91540,
+      "heapDeltaBytes": 963664,
+      "graphBytes": 154240
+    },
+    {
+      "at": "2026-11-09T06:01:45.615Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f08e6ce0cc6de7a55117f7f93b27b1258eff238191c49f89e15aabc0fe23b310"
+      },
+      "latencyMs": 94.39749999996275,
+      "parsedFiles": 1,
+      "fileCount": 16,
+      "cacheBytes": 92118,
+      "heapDeltaBytes": 1818832,
+      "graphBytes": 155112
+    },
+    {
+      "at": "2026-11-09T06:01:45.698Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f08e6ce0cc6de7a55117f7f93b27b1258eff238191c49f89e15aabc0fe23b310"
+      },
+      "latencyMs": 83.46109999995679,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 92118,
+      "heapDeltaBytes": 967512,
+      "graphBytes": 155112
+    },
+    {
+      "at": "2026-11-09T06:02:07.277Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "f08e6ce0cc6de7a55117f7f93b27b1258eff238191c49f89e15aabc0fe23b310"
+      },
+      "latencyMs": 89.3652000001166,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 92118,
+      "heapDeltaBytes": 1194560,
+      "graphBytes": 155112
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-normalizer.mjs",
+        "tests/visible.test.mjs",
+        "src/receipt.mjs",
+        "src/reservation-store.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/request-normalizer.mjs",
+          "callId": "call_47e82a2bd2e04818806685d9af3afd04|ctc_0cd37630ad900b1d016af16174008887d1917bfb44a376a999/4"
+        },
+        {
+          "tool": "read",
+          "path": "src/item-plan.mjs",
+          "callId": "call_47e82a2bd2e04818806685d9af3afd04|ctc_0cd37630ad900b1d016af16174008887d1917bfb44a376a999/5"
+        },
+        {
+          "tool": "read",
+          "path": "src/reservation-store.mjs",
+          "callId": "call_47e82a2bd2e04818806685d9af3afd04|ctc_0cd37630ad900b1d016af16174008887d1917bfb44a376a999/8"
+        },
+        {
+          "tool": "read",
+          "path": "src/receipt.mjs",
+          "callId": "call_47e82a2bd2e04818806685d9af3afd04|ctc_0cd37630ad900b1d016af16174008887d1917bfb44a376a999/12"
+        },
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_47e82a2bd2e04818806685d9af3afd04|ctc_0cd37630ad900b1d016af16174008887d1917bfb44a376a999/14"
+        },
+        {
+          "tool": "edit",
+          "path": "src/item-plan.mjs",
+          "callId": "call_b74c511443b14e629c086f459c19c2f3|ctc_0cd37630ad900b1d016af1619ccce487d1824eecbfd25a8fd3/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/item-plan.mjs",
+          "callId": "call_1ef8012fadfa4296ba0bb255a574f5dc|ctc_0cd37630ad900b1d016af161ac38c487d186a0bb448278b410/2"
+        },
+        {
+          "tool": "edit",
+          "path": "src/item-plan.mjs",
+          "callId": "call_107991580c20441fa9cf7b32943fcabc|ctc_0cd37630ad900b1d016af161c20b3c87d18392e47ae9835d66/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs",
+        "node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-transaction.mjs",
+        "src/request-normalizer.mjs",
+        "src/reservation-store.mjs",
+        "src/checkout.mjs",
+        "src/shop.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/item-plan.mjs",
+          "callId": "call_1ef8012fadfa4296ba0bb255a574f5dc|ctc_0cd37630ad900b1d016af161ac38c487d186a0bb448278b410/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/request-key.mjs",
+          "callId": "call_1ef8012fadfa4296ba0bb255a574f5dc|ctc_0cd37630ad900b1d016af161ac38c487d186a0bb448278b410/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/stock-transaction.mjs",
+          "callId": "call_1ef8012fadfa4296ba0bb255a574f5dc|ctc_0cd37630ad900b1d016af161ac38c487d186a0bb448278b410/4"
+        },
+        {
+          "tool": "edit",
+          "path": "src/item-plan.mjs",
+          "callId": "call_107991580c20441fa9cf7b32943fcabc|ctc_0cd37630ad900b1d016af161c20b3c87d18392e47ae9835d66/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git diff -- src/item-plan.mjs src/request-key.mjs src/stock-transaction.mjs",
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createShop } from \"./src/index.mjs\"; const initial = { red: { a: 5, b: 1 }, blue: { a: 7 } }; const shop = createShop(initial); initial.red.a = 99; assert.equal(shop.stock(\"red\", \"a\"), 5); const failed = { tenant: \"red\", requestId: \"retry\", items: [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 2 }] }; assert.throws(() => shop.reserve(failed), /stock/i); assert.equal(shop.stock(\"red\", \"a\"), 5); assert.equal(shop.stock(\"red\", \"b\"), 1); const request = { tenant: \"red\", requestId: \"retry\", items: [{ sku: \"b\", quantity: 1 }, { sku: \"a\", quantity: 1 }, { sku: \"a\", quantity: 1 }] }; const receipt = shop.reserve(request); assert.deepEqual(receipt.items, [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 1 }]); receipt.items[0].quantity = 200; const repeat = shop.reserve({ tenant: \"red\", requestId: \"retry\", items: [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 1 }] }); assert.deepEqual(repeat.items, [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 1 }]); assert.equal(shop.stock(\"red\", \"a\"), 3); assert.equal(shop.stock(\"red\", \"b\"), 0); const otherTenant = shop.reserve({ tenant: \"blue\", requestId: \"retry\", items: [{ sku: \"a\", quantity: 1 }] }); assert.equal(otherTenant.tenant, \"blue\"); assert.equal(shop.stock(\"blue\", \"a\"), 6); const unicode = createShop({ t: { \"é\": 2, \"é\": 2 } }); const first = unicode.reserve({ tenant: \"t\", requestId: \"u\", items: [{ sku: \"é\", quantity: 1 }, { sku: \"é\", quantity: 1 }] }); const again = unicode.reserve({ tenant: \"t\", requestId: \"u\", items: [{ sku: \"é\", quantity: 1 }, { sku: \"é\", quantity: 1 }] }); assert.deepEqual(first.items, again.items); console.log(\"contract checks passed\");'"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/item-plan.mjs",
+        "src/request-key.mjs",
+        "src/stock-transaction.mjs",
+        "src/request-normalizer.mjs",
+        "src/reservation-store.mjs",
+        "src/checkout.mjs",
+        "src/shop.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createShop } from \"./src/index.mjs\"; const initial = { red: { a: 5, b: 1 }, blue: { a: 7 } }; const shop = createShop(initial); initial.red.a = 99; assert.equal(shop.stock(\"red\", \"a\"), 5); const failed = { tenant: \"red\", requestId: \"retry\", items: [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 2 }] }; assert.throws(() => shop.reserve(failed), /stock/i); assert.equal(shop.stock(\"red\", \"a\"), 5); assert.equal(shop.stock(\"red\", \"b\"), 1); const request = { tenant: \"red\", requestId: \"retry\", items: [{ sku: \"b\", quantity: 1 }, { sku: \"a\", quantity: 1 }, { sku: \"a\", quantity: 1 }] }; const receipt = shop.reserve(request); assert.deepEqual(receipt.items, [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 1 }]); receipt.items[0].quantity = 200; const repeat = shop.reserve({ tenant: \"red\", requestId: \"retry\", items: [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 1 }] }); assert.deepEqual(repeat.items, [{ sku: \"a\", quantity: 2 }, { sku: \"b\", quantity: 1 }]); assert.equal(shop.stock(\"red\", \"a\"), 3); assert.equal(shop.stock(\"red\", \"b\"), 0); const otherTenant = shop.reserve({ tenant: \"blue\", requestId: \"retry\", items: [{ sku: \"a\", quantity: 1 }] }); assert.equal(otherTenant.tenant, \"blue\"); assert.equal(shop.stock(\"blue\", \"a\"), 6); const unicode = createShop({ t: { \"é\": 2, \"é\": 2 } }); const first = unicode.reserve({ tenant: \"t\", requestId: \"u\", items: [{ sku: \"é\", quantity: 1 }, { sku: \"é\", quantity: 1 }] }); const again = unicode.reserve({ tenant: \"t\", requestId: \"u\", items: [{ sku: \"é\", quantity: 1 }, { sku: \"é\", quantity: 1 }] }); assert.deepEqual(first.items, again.items); console.log(\"contract checks passed\");'"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/item-plan.mjs",
+      "before": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a.localeCompare(b)).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n",
+      "after": "export function combineItems(items) {\r\n  const quantities = new Map();\r\n  for (const item of items) quantities.set(item.sku, (quantities.get(item.sku) ?? 0) + item.quantity);\r\n  return [...quantities].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([sku, quantity]) => ({ sku, quantity }));\r\n}\r\n"
+    },
+    {
+      "path": "src/request-key.mjs",
+      "before": "export function requestKey(tenant, id) {\r\n  return id;\r\n}\r\n",
+      "after": "export function requestKey(tenant, id) {\r\n  return JSON.stringify([tenant, id]);\r\n}\r\n"
+    },
+    {
+      "path": "src/stock-transaction.mjs",
+      "before": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = repository.current();\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n",
+      "after": "import { consume } from './stock-rules.mjs';\r\nexport function commitStock(repository, tenant, items) {\r\n  const staged = structuredClone(repository.current());\r\n  for (const item of items) consume(staged, tenant, item);\r\n  repository.publish(staged);\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the reservation fixes while preserving the public API:\n\n- Duplicate SKUs now combine their quantities, with deterministic ordering.\n- Request identity keys now include both tenant and request ID.\n- Stock updates are staged on a clone, so a failed reservation leaves stock unchanged and can be retried.\n\nVerification passed: `node --test tests/visible.test.mjs` (1 test), plus an inline check covering retries after failure, duplicate items, tenant isolation, and receipt snapshots.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\035-inventory-reservations-B-r0\\home\\events\\1794204014172-ad4c1f1e-bdf1-4384-ba17-c84f101c5ff2.jsonl"
+}
