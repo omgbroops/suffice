@@ -1,0 +1,190 @@
+{
+  "task": "tenant-cache",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 45,
+  "runId": "045-tenant-cache-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "cross-file",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 67649.14419999998,
+  "usage": {
+    "input": 13351,
+    "cacheRead": 18688,
+    "cacheWrite": 0,
+    "output": 2220,
+    "estimatedApiUsd": 0.0026319800000000003,
+    "modelCalls": 8,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0026319800000000003,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 2,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: pair identity cannot collide through separators\nok 1 - pair identity cannot collide through separators\n  ---\n  duration_ms: 0.9219\n  type: 'test'\n  ...\n# Subtest: injected clock governs write and exact expiration\nok 2 - injected clock governs write and exact expiration\n  ---\n  duration_ms: 0.231\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 8.1126\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 83
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: cache reuses a value for the same tenant and resource\nok 1 - cache reuses a value for the same tenant and resource\n  ---\n  duration_ms: 0.9253\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.39\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 81
+  },
+  "changed": [
+    "src/cache.mjs",
+    "src/store.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 8,
+  "editCalls": 2,
+  "verificationCalls": 2,
+  "toolCalls": 15,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:19:26.210Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T06:19:26.280Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/cache.mjs",
+          "src/store.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:19:26.343Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/cache.mjs",
+          "src/store.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:19:26.271Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "70b3237122a18608e86ebd7c17fef10a20a6d0c2e1c8c5967b8606e8feddc46d"
+      },
+      "latencyMs": 61.49379999982193,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 24553,
+      "heapDeltaBytes": 1578616,
+      "graphBytes": 40928
+    },
+    {
+      "at": "2026-11-09T06:19:26.342Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "0cba7b123ad0035ff2e3425b338095e45c93634cebca3243093b51806f32e3f8"
+      },
+      "latencyMs": 62.53830000013113,
+      "parsedFiles": 2,
+      "fileCount": 3,
+      "cacheBytes": 24759,
+      "heapDeltaBytes": 1130624,
+      "graphBytes": 41156
+    },
+    {
+      "at": "2026-11-09T06:19:26.404Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "0cba7b123ad0035ff2e3425b338095e45c93634cebca3243093b51806f32e3f8"
+      },
+      "latencyMs": 61.611100000329316,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 24759,
+      "heapDeltaBytes": 790432,
+      "graphBytes": 41156
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/cache.mjs",
+        "src/store.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff -- src/cache.mjs src/store.mjs && printf '\\n--- final files ---\\n' && cat src/cache.mjs && cat src/store.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { ExpiringStore } from \"./src/store.mjs\"; import { TenantCache } from \"./src/cache.mjs\"; let now = 10; const store = new ExpiringStore({ now: () => now }); store.set(\"x\", false, 5); now = 14; assert.deepEqual(store.get(\"x\"), { found: true, value: false }); now = 15; assert.deepEqual(store.get(\"x\"), { found: false }); const cache = new TenantCache(new ExpiringStore()); const calls = []; const load = async () => { calls.push(1); return 0; }; assert.equal(await cache.getOrLoad(\"a:b\", \"c\", load), 0); assert.equal(await cache.getOrLoad(\"a\", \"b:c\", load), 0); assert.equal(calls.length, 2); assert.equal(await cache.getOrLoad(\"a:b\", \"c\", async () => 1), 0); assert.equal(calls.length, 2);' "
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/cache.mjs",
+      "before": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return tenant + ':' + resourceId; }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n",
+      "after": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return JSON.stringify([tenant, resourceId]); }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/store.mjs",
+      "before": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: Date.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n",
+      "after": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: this.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n"
+    }
+  ],
+  "final": "Updated the production files under `src/`:\n\n- `TenantCache.key()` now encodes the tenant/resource pair as JSON, avoiding collisions when either string contains separators.\n- `ExpiringStore.set()` now uses the injected clock to calculate deadlines. Expiration at the deadline remains inclusive.\n\nVerification passed: `node --test tests/visible.test.mjs` (1 test), plus an inline smoke check for injected-clock expiry, separator collisions, and falsy cached values.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\045-tenant-cache-C-r1\\home\\events\\1794205133593-4902cf2a-95fc-4708-aaba-618bd5aa6609.jsonl"
+}
