@@ -1,0 +1,469 @@
+{
+  "task": "numeric-xrange",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 43,
+  "runId": "043-numeric-xrange-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "simple",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 235160.45099999988,
+  "usage": {
+    "input": 60654,
+    "cacheRead": 329856,
+    "cacheWrite": 0,
+    "output": 9269,
+    "estimatedApiUsd": 0.01399846,
+    "modelCalls": 17,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.01399846,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: strict wildcards cannot precede later numeric components\nok 1 - strict wildcards cannot precede later numeric components\n  ---\n  duration_ms: 1.6593\n  type: 'test'\n  ...\n# Subtest: invalid components invalidate strict OR sets and comparators\nok 2 - invalid components invalidate strict OR sets and comparators\n  ---\n  duration_ms: 1.2872\n  type: 'test'\n  ...\n# Subtest: valid trailing wildcard semantics remain intact\nok 3 - valid trailing wildcard semantics remain intact\n  ---\n  duration_ms: 0.971\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.538\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 139
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 8.7322\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 4.2333\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 2.4629\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 3.4749\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 1.4364\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.4606\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 4.0635\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 33.8718\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 163
+  },
+  "changed": [
+    "src/classes/range.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 17,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 44,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:12:27.601Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T06:12:28.218Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/classes/range.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:28.598Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/classes/range.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:39.591Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "tests/visible.test.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:39.918Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/classes/range.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:40.266Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/classes/range.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:13:40.432Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "tests/visible.test.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T06:13:40.807Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/classes/range.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:13:41.160Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/classes/range.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:12:28.073Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a05f7b90ef190bcdd9a8ca4c710b818c2fdc32911363d597b5fcf0c91379af7a"
+      },
+      "latencyMs": 471.9173999996856,
+      "parsedFiles": 124,
+      "fileCount": 124,
+      "cacheBytes": 2586307,
+      "heapDeltaBytes": -28123424,
+      "graphBytes": 3684422
+    },
+    {
+      "at": "2026-11-09T06:12:28.597Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "57fd5447a0993e40c0de2394926c21746d7c6b3c25781bbb11ec5389d98f1c3b"
+      },
+      "latencyMs": 379.4863999998197,
+      "parsedFiles": 1,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": 26411528,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:12:28.958Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "57fd5447a0993e40c0de2394926c21746d7c6b3c25781bbb11ec5389d98f1c3b"
+      },
+      "latencyMs": 359.5663000000641,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": 9486624,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:12:39.916Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "57fd5447a0993e40c0de2394926c21746d7c6b3c25781bbb11ec5389d98f1c3b"
+      },
+      "latencyMs": 325.17109999991953,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": -42943960,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:12:40.265Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "57fd5447a0993e40c0de2394926c21746d7c6b3c25781bbb11ec5389d98f1c3b"
+      },
+      "latencyMs": 347.3275999999605,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": 8058232,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:12:40.585Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "57fd5447a0993e40c0de2394926c21746d7c6b3c25781bbb11ec5389d98f1c3b"
+      },
+      "latencyMs": 319.01359999971464,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": 7994568,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:13:40.806Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c590402e13df93ffdd507e4878e8a1f83acaa551ffc1a3b49fa11745fd297784"
+      },
+      "latencyMs": 374.10470000002533,
+      "parsedFiles": 1,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": 32435704,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:13:41.159Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c590402e13df93ffdd507e4878e8a1f83acaa551ffc1a3b49fa11745fd297784"
+      },
+      "latencyMs": 352.4424000000581,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": -40713176,
+      "graphBytes": 3697082
+    },
+    {
+      "at": "2026-11-09T06:13:41.492Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "c590402e13df93ffdd507e4878e8a1f83acaa551ffc1a3b49fa11745fd297784"
+      },
+      "latencyMs": 331.64440000010654,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2595172,
+      "heapDeltaBytes": 7115304,
+      "graphBytes": 3697082
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/classes/range.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_a8b42bc32b5443c6b12aef260831b87e|ctc_0233a81f591b3016016af1646100dc87d19a3a46e163dab44c/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_65027811e2724adb8792a14754cceb93|ctc_0233a81f591b3016016af164676dd887d1bc7b9abdd166b74d/1"
+        },
+        {
+          "tool": "symbol_read",
+          "path": "src/classes/range.js",
+          "callId": "call_63790799d9594f27b2a8f3e5c59faeea|ctc_0233a81f591b3016016af164696a2487d1bd15a111f534f5a9/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/classes/range.js",
+          "callId": "call_a6e5cb0c15464ea88a4cdaf79b0ff1b0|ctc_0233a81f591b3016016af164757be487d1acf4ffafbe194338/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_ef3db4cb97e54175a249a2e37644f4f6|ctc_0233a81f591b3016016af1647c176c87d18b464c14897b8d4e/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/classes/range.js",
+          "callId": "call_06b454b1fced4c3b9d6cc6e1502b8679|ctc_0233a81f591b3016016af1648d1af887d1899dc077beb5d8af/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_74d0d494c97a40398d0d4512fd6bc4ce|ctc_0233a81f591b3016016af164b7ab7087d1a51d865fb724d336/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_74d0d494c97a40398d0d4512fd6bc4ce|ctc_0233a81f591b3016016af164b7ab7087d1a51d865fb724d336/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node - <<'NODE'\nconst semver = require('./src')\nfor (const range of ['1.x.5', 'x.1', '1.x.5 || 2.x', '1.*.5', 'X.0', '~1.x.5', '^x.1']) {\n  console.log(JSON.stringify(range), 'strict=', semver.validRange(range), 'loose=', semver.validRange(range, { loose: true }))\n}\nfor (const range of ['1.x', '1.x.x', '1.2.x', 'x.x', '*', '1.2.* || 2.x']) {\n  console.log(JSON.stringify(range), 'valid=', semver.validRange(range))\n}\nNODE\n\ngit diff -- src/classes/range.js && git status --short src/classes/range.js",
+        "sed -n '106,112p;288,294p' src/classes/range.js | cat -vet",
+        "node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst semver = require('./src')\nfor (const range of ['1.x.5', 'x.1', '1.x.5 || 2.x', '1.*.5', 'X.0', '~1.x.5', '^x.1']) assert.equal(semver.validRange(range), null, range)\nfor (const range of ['1.x', '1.x.x', '1.2.x', 'x.x', '*', '1.2.* || 2.x']) assert.notEqual(semver.validRange(range), null, range)\nassert.notEqual(semver.validRange('1.x.5', { loose: true }), null)\nassert.equal(semver.validRange('1.x', { loose: true }), semver.validRange('1.x'))\nconsole.log('strict rejection, trailing wildcards, and loose behavior verified')\nNODE\n\ngit diff --check && git diff -- src/classes/range.js && git status --short src/classes/range.js",
+        "git rev-parse --show-toplevel && git status --short | sed -n '1,80p' && git check-ignore -v src/classes/range.js || true"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/classes/range.js",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_a8b42bc32b5443c6b12aef260831b87e|ctc_0233a81f591b3016016af1646100dc87d19a3a46e163dab44c/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_65027811e2724adb8792a14754cceb93|ctc_0233a81f591b3016016af164676dd887d1bc7b9abdd166b74d/1"
+        },
+        {
+          "tool": "symbol_read",
+          "path": "src/classes/range.js",
+          "callId": "call_63790799d9594f27b2a8f3e5c59faeea|ctc_0233a81f591b3016016af164696a2487d1bd15a111f534f5a9/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/classes/range.js",
+          "callId": "call_a6e5cb0c15464ea88a4cdaf79b0ff1b0|ctc_0233a81f591b3016016af164757be487d1acf4ffafbe194338/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_ef3db4cb97e54175a249a2e37644f4f6|ctc_0233a81f591b3016016af1647c176c87d18b464c14897b8d4e/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/classes/range.js",
+          "callId": "call_06b454b1fced4c3b9d6cc6e1502b8679|ctc_0233a81f591b3016016af1648d1af887d1899dc077beb5d8af/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_74d0d494c97a40398d0d4512fd6bc4ce|ctc_0233a81f591b3016016af164b7ab7087d1a51d865fb724d336/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_74d0d494c97a40398d0d4512fd6bc4ce|ctc_0233a81f591b3016016af164b7ab7087d1a51d865fb724d336/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "sed -n '106,112p;288,294p' src/classes/range.js | cat -vet",
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs",
+        "node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst semver = require('./src')\nfor (const range of ['1.x.5', 'x.1', '1.x.5 || 2.x', '1.*.5', 'X.0', '~1.x.5', '^x.1']) assert.equal(semver.validRange(range), null, range)\nfor (const range of ['1.x', '1.x.x', '1.2.x', 'x.x', '*', '1.2.* || 2.x']) assert.notEqual(semver.validRange(range), null, range)\nassert.notEqual(semver.validRange('1.x.5', { loose: true }), null)\nassert.equal(semver.validRange('1.x', { loose: true }), semver.validRange('1.x'))\nconsole.log('strict rejection, trailing wildcards, and loose behavior verified')\nNODE\n\ngit diff --check && git diff -- src/classes/range.js && git status --short src/classes/range.js",
+        "git rev-parse --show-toplevel && git status --short | sed -n '1,80p' && git check-ignore -v src/classes/range.js || true"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/classes/range.js",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_74d0d494c97a40398d0d4512fd6bc4ce|ctc_0233a81f591b3016016af164b7ab7087d1a51d865fb724d336/1"
+        },
+        {
+          "tool": "read",
+          "path": "src/classes/range.js",
+          "callId": "call_74d0d494c97a40398d0d4512fd6bc4ce|ctc_0233a81f591b3016016af164b7ab7087d1a51d865fb724d336/2"
+        }
+      ],
+      "subsequentTestCommands": [
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs",
+        "node - <<'NODE'\nconst assert = require('node:assert/strict')\nconst semver = require('./src')\nfor (const range of ['1.x.5', 'x.1', '1.x.5 || 2.x', '1.*.5', 'X.0', '~1.x.5', '^x.1']) assert.equal(semver.validRange(range), null, range)\nfor (const range of ['1.x', '1.x.x', '1.2.x', 'x.x', '*', '1.2.* || 2.x']) assert.notEqual(semver.validRange(range), null, range)\nassert.notEqual(semver.validRange('1.x.5', { loose: true }), null)\nassert.equal(semver.validRange('1.x', { loose: true }), semver.validRange('1.x'))\nconsole.log('strict rejection, trailing wildcards, and loose behavior verified')\nNODE\n\ngit diff --check && git diff -- src/classes/range.js && git status --short src/classes/range.js",
+        "git rev-parse --show-toplevel && git status --short | sed -n '1,80p' && git check-ignore -v src/classes/range.js || true"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/classes/range.js",
+      "before": "'use strict'\n\nconst SPACE_CHARACTERS = /\\s+/g\n\n// hoisted class for cyclic dependency\nclass Range {\n  constructor (range, options) {\n    options = parseOptions(options)\n\n    if (range instanceof Range) {\n      if (\n        range.loose === !!options.loose &&\n        range.includePrerelease === !!options.includePrerelease\n      ) {\n        return range\n      } else {\n        return new Range(range.raw, options)\n      }\n    }\n\n    if (range instanceof Comparator) {\n      // just put it in the set and return\n      this.raw = range.value\n      this.set = [[range]]\n      this.formatted = undefined\n      return this\n    }\n\n    this.options = options\n    this.loose = !!options.loose\n    this.includePrerelease = !!options.includePrerelease\n\n    // First reduce all whitespace as much as possible so we do not have to rely\n    // on potentially slow regexes like \\s*. This is then stored and used for\n    // future error messages as well.\n    this.raw = range.trim().replace(SPACE_CHARACTERS, ' ')\n\n    // First, split on ||\n    this.set = this.raw\n      .split('||')\n      // map the range to a 2d array of comparators\n      .map(r => this.parseRange(r.trim()))\n      // throw out any comparator lists that are empty\n      // this generally means that it was not a valid range, which is allowed\n      // in loose mode, but will still throw if the WHOLE range is invalid.\n      .filter(c => c.length)\n\n    if (!this.set.length) {\n      throw new TypeError(`Invalid SemVer Range: ${this.raw}`)\n    }\n\n    // if we have any that are not the null set, throw out null sets.\n    if (this.set.length > 1) {\n      // keep the first one, in case they're all null sets\n      const first = this.set[0]\n      this.set = this.set.filter(c => !isNullSet(c[0]))\n      if (this.set.length === 0) {\n        this.set = [first]\n      } else if (this.set.length > 1) {\n        // if we have any that are *, then the range is just *\n        for (const c of this.set) {\n          if (c.length === 1 && isAny(c[0])) {\n            this.set = [c]\n            break\n          }\n        }\n      }\n    }\n\n    this.formatted = undefined\n  }\n\n  get range () {\n    if (this.formatted === undefined) {\n      this.formatted = ''\n      for (let i = 0; i < this.set.length; i++) {\n        if (i > 0) {\n          this.formatted += '||'\n        }\n        const comps = this.set[i]\n        for (let k = 0; k < comps.length; k++) {\n          if (k > 0) {\n            this.formatted += ' '\n          }\n          this.formatted += comps[k].toString().trim()\n        }\n      }\n    }\n    return this.formatted\n  }\n\n  format () {\n    return this.range\n  }\n\n  toString () {\n    return this.range\n  }\n\n  parseRange (range) {\n    // strip build metadata so it can't bleed into the version\n    range = range.replace(BUILDSTRIPRE, '')\n\n    // memoize range parsing for performance.\n    // this is a very hot path, and fully deterministic.\n    const memoOpts =\n      (this.options.includePrerelease && FLAG_INCLUDE_PRERELEASE) |\n      (this.options.loose && FLAG_LOOSE)\n    const memoKey = memoOpts + ':' + range\n    const cached = cache.get(memoKey)\n    if (cached) {\n      return cached\n    }\n\n    const loose = this.options.loose\n    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`\n    const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]\n    range = range.replace(hr, hyphenReplace(this.options.includePrerelease))\n    debug('hyphen replace', range)\n\n    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`\n    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)\n    debug('comparator trim', range)\n\n    // `~ 1.2.3` => `~1.2.3`\n    range = range.replace(re[t.TILDETRIM], tildeTrimReplace)\n    debug('tilde trim', range)\n\n    // `^ 1.2.3` => `^1.2.3`\n    range = range.replace(re[t.CARETTRIM], caretTrimReplace)\n    debug('caret trim', range)\n\n    // At this point, the range is completely trimmed and\n    // ready to be split into comparators.\n\n    let rangeList = range\n      .split(' ')\n      .map(comp => parseComparator(comp, this.options))\n      .join(' ')\n      .split(/\\s+/)\n      // >=0.0.0 is equivalent to *\n      .map(comp => replaceGTE0(comp, this.options))\n\n    if (loose) {\n      // in loose mode, throw out any that are not valid comparators\n      rangeList = rangeList.filter(comp => {\n        debug('loose invalid filter', comp, this.options)\n        return !!comp.match(re[t.COMPARATORLOOSE])\n      })\n    }\n    debug('range list', rangeList)\n\n    // if any comparators are the null set, then replace with JUST null set\n    // if more than one comparator, remove any * comparators\n    // also, don't include the same comparator more than once\n    const rangeMap = new Map()\n    const comparators = rangeList.map(comp => new Comparator(comp, this.options))\n    for (const comp of comparators) {\n      if (isNullSet(comp)) {\n        return [comp]\n      }\n      rangeMap.set(comp.value, comp)\n    }\n    if (rangeMap.size > 1 && rangeMap.has('')) {\n      rangeMap.delete('')\n    }\n\n    const result = [...rangeMap.values()]\n    cache.set(memoKey, result)\n    return result\n  }\n\n  intersects (range, options) {\n    if (!(range instanceof Range)) {\n      throw new TypeError('a Range is required')\n    }\n\n    return this.set.some((thisComparators) => {\n      return (\n        isSatisfiable(thisComparators, options) &&\n        range.set.some((rangeComparators) => {\n          return (\n            isSatisfiable(rangeComparators, options) &&\n            thisComparators.every((thisComparator) => {\n              return rangeComparators.every((rangeComparator) => {\n                return thisComparator.intersects(rangeComparator, options)\n              })\n            })\n          )\n        })\n      )\n    })\n  }\n\n  // if ANY of the sets match ALL of its comparators, then pass\n  test (version) {\n    if (!version) {\n      return false\n    }\n\n    if (typeof version === 'string') {\n      try {\n        version = new SemVer(version, this.options)\n      } catch (er) {\n        return false\n      }\n    }\n\n    for (let i = 0; i < this.set.length; i++) {\n      if (testSet(this.set[i], version, this.options)) {\n        return true\n      }\n    }\n    return false\n  }\n}\n\nmodule.exports = Range\n\nconst LRU = require('../internal/lrucache')\nconst cache = new LRU()\n\nconst parseOptions = require('../internal/parse-options')\nconst Comparator = require('./comparator')\nconst debug = require('../internal/debug')\nconst SemVer = require('./semver')\nconst {\n  safeRe: re,\n  src,\n  t,\n  comparatorTrimReplace,\n  tildeTrimReplace,\n  caretTrimReplace,\n} = require('../internal/re')\nconst { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = require('../internal/constants')\n\n// unbounded global build-metadata stripper used by parseRange\nconst BUILDSTRIPRE = new RegExp(src[t.BUILD], 'g')\n\nconst isNullSet = c => c.value === '<0.0.0-0'\nconst isAny = c => c.value === ''\n\n// take a set of comparators and determine whether there\n// exists a version which can satisfy it\nconst isSatisfiable = (comparators, options) => {\n  let result = true\n  const remainingComparators = comparators.slice()\n  let testComparator = remainingComparators.pop()\n\n  while (result && remainingComparators.length) {\n    result = remainingComparators.every((otherComparator) => {\n      return testComparator.intersects(otherComparator, options)\n    })\n\n    testComparator = remainingComparators.pop()\n  }\n\n  return result\n}\n\n// comprised of xranges, tildes, stars, and gtlt's at this point.\n// already replaced the hyphen ranges\n// turn into a set of JUST comparators.\nconst parseComparator = (comp, options) => {\n  comp = comp.replace(re[t.BUILD], '')\n  debug('comp', comp, options)\n  comp = replaceCarets(comp, options)\n  debug('caret', comp)\n  comp = replaceTildes(comp, options)\n  debug('tildes', comp)\n  comp = replaceXRanges(comp, options)\n  debug('xrange', comp)\n  comp = replaceStars(comp, options)\n  debug('stars', comp)\n  return comp\n}\n\nconst isX = id => !id || id.toLowerCase() === 'x' || id === '*'\n\n// ~, ~> --> * (any, kinda silly)\n// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0\n// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0\n// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0\n// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0\n// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0\n// ~0.0.1 --> >=0.0.1 <0.1.0-0\nconst replaceTildes = (comp, options) => {\n  return comp\n    .trim()\n    .split(/\\s+/)\n    .map((c) => replaceTilde(c, options))\n    .join(' ')\n}\n\nconst replaceTilde = (comp, options) => {\n  const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]\n  return comp.replace(r, (_, M, m, p, pr) => {\n    debug('tilde', comp, _, M, m, p, pr)\n    let ret\n\n    if (isX(M)) {\n      ret = ''\n    } else if (isX(m)) {\n      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`\n    } else if (isX(p)) {\n      // ~1.2 == >=1.2.0 <1.3.0-0\n      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`\n    } else if (pr) {\n      debug('replaceTilde pr', pr)\n      ret = `>=${M}.${m}.${p}-${pr\n      } <${M}.${+m + 1}.0-0`\n    } else {\n      // ~1.2.3 == >=1.2.3 <1.3.0-0\n      ret = `>=${M}.${m}.${p\n      } <${M}.${+m + 1}.0-0`\n    }\n\n    debug('tilde return', ret)\n    return ret\n  })\n}\n\n// ^ --> * (any, kinda silly)\n// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0\n// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0\n// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0\n// ^1.2.3 --> >=1.2.3 <2.0.0-0\n// ^1.2.0 --> >=1.2.0 <2.0.0-0\n// ^0.0.1 --> >=0.0.1 <0.0.2-0\n// ^0.1.0 --> >=0.1.0 <0.2.0-0\nconst replaceCarets = (comp, options) => {\n  return comp\n    .trim()\n    .split(/\\s+/)\n    .map((c) => replaceCaret(c, options))\n    .join(' ')\n}\n\nconst replaceCaret = (comp, options) => {\n  debug('caret', comp, options)\n  const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]\n  const z = options.includePrerelease ? '-0' : ''\n  return comp.replace(r, (_, M, m, p, pr) => {\n    debug('caret', comp, _, M, m, p, pr)\n    let ret\n\n    if (isX(M)) {\n      ret = ''\n    } else if (isX(m)) {\n      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`\n    } else if (isX(p)) {\n      if (M === '0') {\n        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`\n      } else {\n        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`\n      }\n    } else if (pr) {\n      debug('replaceCaret pr', pr)\n      if (M === '0') {\n        if (m === '0') {\n          ret = `>=${M}.${m}.${p}-${pr\n          } <${M}.${m}.${+p + 1}-0`\n        } else {\n          ret = `>=${M}.${m}.${p}-${pr\n          } <${M}.${+m + 1}.0-0`\n        }\n      } else {\n        ret = `>=${M}.${m}.${p}-${pr\n        } <${+M + 1}.0.0-0`\n      }\n    } else {\n      debug('no pr')\n      if (M === '0') {\n        if (m === '0') {\n          ret = `>=${M}.${m}.${p\n          } <${M}.${m}.${+p + 1}-0`\n        } else {\n          ret = `>=${M}.${m}.${p\n          } <${M}.${+m + 1}.0-0`\n        }\n      } else {\n        ret = `>=${M}.${m}.${p\n        } <${+M + 1}.0.0-0`\n      }\n    }\n\n    debug('caret return', ret)\n    return ret\n  })\n}\n\nconst replaceXRanges = (comp, options) => {\n  debug('replaceXRanges', comp, options)\n  return comp\n    .split(/\\s+/)\n    .map((c) => replaceXRange(c, options))\n    .join(' ')\n}\n\nconst replaceXRange = (comp, options) => {\n  comp = comp.trim()\n  const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]\n  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {\n    debug('xRange', comp, ret, gtlt, M, m, p, pr)\n    const xM = isX(M)\n    const xm = xM || isX(m)\n    const xp = xm || isX(p)\n    const anyX = xp\n\n    if (gtlt === '=' && anyX) {\n      gtlt = ''\n    }\n\n    // if we're including prereleases in the match, then we need\n    // to fix this to -0, the lowest possible prerelease value\n    pr = options.includePrerelease ? '-0' : ''\n\n    if (xM) {\n      if (gtlt === '>' || gtlt === '<') {\n        // nothing is allowed\n        ret = '<0.0.0-0'\n      } else {\n        // nothing is forbidden\n        ret = '*'\n      }\n    } else if (gtlt && anyX) {\n      // we know patch is an x, because we have any x at all.\n      // replace X with 0\n      if (xm) {\n        m = 0\n      }\n      p = 0\n\n      if (gtlt === '>') {\n        // >1 => >=2.0.0\n        // >1.2 => >=1.3.0\n        gtlt = '>='\n        if (xm) {\n          M = +M + 1\n          m = 0\n          p = 0\n        } else {\n          m = +m + 1\n          p = 0\n        }\n      } else if (gtlt === '<=') {\n        // <=0.7.x is actually <0.8.0, since any 0.7.x should\n        // pass.  Similarly, <=7.x is actually <8.0.0, etc.\n        gtlt = '<'\n        if (xm) {\n          M = +M + 1\n        } else {\n          m = +m + 1\n        }\n      }\n\n      if (gtlt === '<') {\n        pr = '-0'\n      }\n\n      ret = `${gtlt + M}.${m}.${p}${pr}`\n    } else if (xm) {\n      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`\n    } else if (xp) {\n      ret = `>=${M}.${m}.0${pr\n      } <${M}.${+m + 1}.0-0`\n    }\n\n    debug('xRange return', ret)\n\n    return ret\n  })\n}\n\n// Because * is AND-ed with everything else in the comparator,\n// and '' means \"any version\", just remove the *s entirely.\nconst replaceStars = (comp, options) => {\n  debug('replaceStars', comp, options)\n  // Looseness is ignored here.  star is always as loose as it gets!\n  return comp\n    .trim()\n    .replace(re[t.STAR], '')\n}\n\nconst replaceGTE0 = (comp, options) => {\n  debug('replaceGTE0', comp, options)\n  return comp\n    .trim()\n    .replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '')\n}\n\n// This function is passed to string.replace(re[t.HYPHENRANGE])\n// M, m, patch, prerelease, build\n// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5\n// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do\n// 1.2 - 3.4 => >=1.2.0 <3.5.0-0\n// TODO build?\nconst hyphenReplace = incPr => ($0,\n  from, fM, fm, fp, fpr, fb,\n  to, tM, tm, tp, tpr) => {\n  if (isX(fM)) {\n    from = ''\n  } else if (isX(fm)) {\n    from = `>=${fM}.0.0${incPr ? '-0' : ''}`\n  } else if (isX(fp)) {\n    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`\n  } else if (fpr) {\n    from = `>=${from}`\n  } else {\n    from = `>=${from}${incPr ? '-0' : ''}`\n  }\n\n  if (isX(tM)) {\n    to = ''\n  } else if (isX(tm)) {\n    to = `<${+tM + 1}.0.0-0`\n  } else if (isX(tp)) {\n    to = `<${tM}.${+tm + 1}.0-0`\n  } else if (tpr) {\n    to = `<=${tM}.${tm}.${tp}-${tpr}`\n  } else if (incPr) {\n    to = `<${tM}.${tm}.${+tp + 1}-0`\n  } else {\n    to = `<=${to}`\n  }\n\n  return `${from} ${to}`.trim()\n}\n\nconst testSet = (set, version, options) => {\n  for (let i = 0; i < set.length; i++) {\n    if (!set[i].test(version)) {\n      return false\n    }\n  }\n\n  if (version.prerelease.length && !options.includePrerelease) {\n    // Find the set of versions that are allowed to have prereleases\n    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0\n    // That should allow `1.2.3-pr.2` to pass.\n    // However, `1.2.4-alpha.notready` should NOT be allowed,\n    // even though it's within the range set by the comparators.\n    for (let i = 0; i < set.length; i++) {\n      debug(set[i].semver)\n      if (set[i].semver === Comparator.ANY) {\n        continue\n      }\n\n      if (set[i].semver.prerelease.length > 0) {\n        const allowed = set[i].semver\n        if (allowed.major === version.major &&\n            allowed.minor === version.minor &&\n            allowed.patch === version.patch) {\n          return true\n        }\n      }\n    }\n\n    // Version has a -pre, but it's not one of the ones we like.\n    return false\n  }\n\n  return true\n}\n",
+      "after": "'use strict'\n\nconst SPACE_CHARACTERS = /\\s+/g\n\n// hoisted class for cyclic dependency\nclass Range {\n  constructor (range, options) {\n    options = parseOptions(options)\n\n    if (range instanceof Range) {\n      if (\n        range.loose === !!options.loose &&\n        range.includePrerelease === !!options.includePrerelease\n      ) {\n        return range\n      } else {\n        return new Range(range.raw, options)\n      }\n    }\n\n    if (range instanceof Comparator) {\n      // just put it in the set and return\n      this.raw = range.value\n      this.set = [[range]]\n      this.formatted = undefined\n      return this\n    }\n\n    this.options = options\n    this.loose = !!options.loose\n    this.includePrerelease = !!options.includePrerelease\n\n    // First reduce all whitespace as much as possible so we do not have to rely\n    // on potentially slow regexes like \\s*. This is then stored and used for\n    // future error messages as well.\n    this.raw = range.trim().replace(SPACE_CHARACTERS, ' ')\n\n    // First, split on ||\n    this.set = this.raw\n      .split('||')\n      // map the range to a 2d array of comparators\n      .map(r => this.parseRange(r.trim()))\n      // throw out any comparator lists that are empty\n      // this generally means that it was not a valid range, which is allowed\n      // in loose mode, but will still throw if the WHOLE range is invalid.\n      .filter(c => c.length)\n\n    if (!this.set.length) {\n      throw new TypeError(`Invalid SemVer Range: ${this.raw}`)\n    }\n\n    // if we have any that are not the null set, throw out null sets.\n    if (this.set.length > 1) {\n      // keep the first one, in case they're all null sets\n      const first = this.set[0]\n      this.set = this.set.filter(c => !isNullSet(c[0]))\n      if (this.set.length === 0) {\n        this.set = [first]\n      } else if (this.set.length > 1) {\n        // if we have any that are *, then the range is just *\n        for (const c of this.set) {\n          if (c.length === 1 && isAny(c[0])) {\n            this.set = [c]\n            break\n          }\n        }\n      }\n    }\n\n    this.formatted = undefined\n  }\n\n  get range () {\n    if (this.formatted === undefined) {\n      this.formatted = ''\n      for (let i = 0; i < this.set.length; i++) {\n        if (i > 0) {\n          this.formatted += '||'\n        }\n        const comps = this.set[i]\n        for (let k = 0; k < comps.length; k++) {\n          if (k > 0) {\n            this.formatted += ' '\n          }\n          this.formatted += comps[k].toString().trim()\n        }\n      }\n    }\n    return this.formatted\n  }\n\n  format () {\n    return this.range\n  }\n\n  toString () {\n    return this.range\n  }\n\n  parseRange (range) {\n    // strip build metadata so it can't bleed into the version\n    range = range.replace(BUILDSTRIPRE, '')\n\n    // A wildcard can only be followed by other wildcards in a partial\n    // version. Reject malformed partials before range rewriting can discard\n    // the later components (for example, 1.x.5 or x.1).\n    if (!this.options.loose && range.split(/\\s+/).some(hasNumericAfterWildcard)) {\n      throw new TypeError(`Invalid SemVer Range: ${range}`)\n    }\n\n    // memoize range parsing for performance.\n    // this is a very hot path, and fully deterministic.\n    const memoOpts =\n      (this.options.includePrerelease && FLAG_INCLUDE_PRERELEASE) |\n      (this.options.loose && FLAG_LOOSE)\n    const memoKey = memoOpts + ':' + range\n    const cached = cache.get(memoKey)\n    if (cached) {\n      return cached\n    }\n\n    const loose = this.options.loose\n    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`\n    const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]\n    range = range.replace(hr, hyphenReplace(this.options.includePrerelease))\n    debug('hyphen replace', range)\n\n    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`\n    range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)\n    debug('comparator trim', range)\n\n    // `~ 1.2.3` => `~1.2.3`\n    range = range.replace(re[t.TILDETRIM], tildeTrimReplace)\n    debug('tilde trim', range)\n\n    // `^ 1.2.3` => `^1.2.3`\n    range = range.replace(re[t.CARETTRIM], caretTrimReplace)\n    debug('caret trim', range)\n\n    // At this point, the range is completely trimmed and\n    // ready to be split into comparators.\n\n    let rangeList = range\n      .split(' ')\n      .map(comp => parseComparator(comp, this.options))\n      .join(' ')\n      .split(/\\s+/)\n      // >=0.0.0 is equivalent to *\n      .map(comp => replaceGTE0(comp, this.options))\n\n    if (loose) {\n      // in loose mode, throw out any that are not valid comparators\n      rangeList = rangeList.filter(comp => {\n        debug('loose invalid filter', comp, this.options)\n        return !!comp.match(re[t.COMPARATORLOOSE])\n      })\n    }\n    debug('range list', rangeList)\n\n    // if any comparators are the null set, then replace with JUST null set\n    // if more than one comparator, remove any * comparators\n    // also, don't include the same comparator more than once\n    const rangeMap = new Map()\n    const comparators = rangeList.map(comp => new Comparator(comp, this.options))\n    for (const comp of comparators) {\n      if (isNullSet(comp)) {\n        return [comp]\n      }\n      rangeMap.set(comp.value, comp)\n    }\n    if (rangeMap.size > 1 && rangeMap.has('')) {\n      rangeMap.delete('')\n    }\n\n    const result = [...rangeMap.values()]\n    cache.set(memoKey, result)\n    return result\n  }\n\n  intersects (range, options) {\n    if (!(range instanceof Range)) {\n      throw new TypeError('a Range is required')\n    }\n\n    return this.set.some((thisComparators) => {\n      return (\n        isSatisfiable(thisComparators, options) &&\n        range.set.some((rangeComparators) => {\n          return (\n            isSatisfiable(rangeComparators, options) &&\n            thisComparators.every((thisComparator) => {\n              return rangeComparators.every((rangeComparator) => {\n                return thisComparator.intersects(rangeComparator, options)\n              })\n            })\n          )\n        })\n      )\n    })\n  }\n\n  // if ANY of the sets match ALL of its comparators, then pass\n  test (version) {\n    if (!version) {\n      return false\n    }\n\n    if (typeof version === 'string') {\n      try {\n        version = new SemVer(version, this.options)\n      } catch (er) {\n        return false\n      }\n    }\n\n    for (let i = 0; i < this.set.length; i++) {\n      if (testSet(this.set[i], version, this.options)) {\n        return true\n      }\n    }\n    return false\n  }\n}\n\nmodule.exports = Range\n\nconst LRU = require('../internal/lrucache')\nconst cache = new LRU()\n\nconst parseOptions = require('../internal/parse-options')\nconst Comparator = require('./comparator')\nconst debug = require('../internal/debug')\nconst SemVer = require('./semver')\nconst {\n  safeRe: re,\n  src,\n  t,\n  comparatorTrimReplace,\n  tildeTrimReplace,\n  caretTrimReplace,\n} = require('../internal/re')\nconst { FLAG_INCLUDE_PRERELEASE, FLAG_LOOSE } = require('../internal/constants')\n\n// unbounded global build-metadata stripper used by parseRange\nconst BUILDSTRIPRE = new RegExp(src[t.BUILD], 'g')\n\nconst isNullSet = c => c.value === '<0.0.0-0'\nconst isAny = c => c.value === ''\n\n// take a set of comparators and determine whether there\n// exists a version which can satisfy it\nconst isSatisfiable = (comparators, options) => {\n  let result = true\n  const remainingComparators = comparators.slice()\n  let testComparator = remainingComparators.pop()\n\n  while (result && remainingComparators.length) {\n    result = remainingComparators.every((otherComparator) => {\n      return testComparator.intersects(otherComparator, options)\n    })\n\n    testComparator = remainingComparators.pop()\n  }\n\n  return result\n}\n\n// comprised of xranges, tildes, stars, and gtlt's at this point.\n// already replaced the hyphen ranges\n// turn into a set of JUST comparators.\nconst parseComparator = (comp, options) => {\n  comp = comp.replace(re[t.BUILD], '')\n  debug('comp', comp, options)\n  comp = replaceCarets(comp, options)\n  debug('caret', comp)\n  comp = replaceTildes(comp, options)\n  debug('tildes', comp)\n  comp = replaceXRanges(comp, options)\n  debug('xrange', comp)\n  comp = replaceStars(comp, options)\n  debug('stars', comp)\n  return comp\n}\n\nconst isX = id => !id || id.toLowerCase() === 'x' || id === '*'\n\n// Check a single range token for numeric components after a wildcard.\nconst hasNumericAfterWildcard = (token) => {\n  // Tilde and caret operators are not part of the XRANGE expression.\n  token = token.replace(/^(?:~>?|\\^)/, '')\n  const match = re[t.XRANGE].exec(token)\n  if (!match) {\n    return false\n  }\n\n  let wildcard = false\n  for (const component of match.slice(2, 5)) {\n    if (!component) {\n      continue\n    }\n    if (isX(component)) {\n      wildcard = true\n    } else if (wildcard) {\n      return true\n    }\n  }\n  return false\n}\n\n// ~, ~> --> * (any, kinda silly)\n// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0\n// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0\n// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0\n// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0\n// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0\n// ~0.0.1 --> >=0.0.1 <0.1.0-0\nconst replaceTildes = (comp, options) => {\n  return comp\n    .trim()\n    .split(/\\s+/)\n    .map((c) => replaceTilde(c, options))\n    .join(' ')\n}\n\nconst replaceTilde = (comp, options) => {\n  const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]\n  return comp.replace(r, (_, M, m, p, pr) => {\n    debug('tilde', comp, _, M, m, p, pr)\n    let ret\n\n    if (isX(M)) {\n      ret = ''\n    } else if (isX(m)) {\n      ret = `>=${M}.0.0 <${+M + 1}.0.0-0`\n    } else if (isX(p)) {\n      // ~1.2 == >=1.2.0 <1.3.0-0\n      ret = `>=${M}.${m}.0 <${M}.${+m + 1}.0-0`\n    } else if (pr) {\n      debug('replaceTilde pr', pr)\n      ret = `>=${M}.${m}.${p}-${pr\n      } <${M}.${+m + 1}.0-0`\n    } else {\n      // ~1.2.3 == >=1.2.3 <1.3.0-0\n      ret = `>=${M}.${m}.${p\n      } <${M}.${+m + 1}.0-0`\n    }\n\n    debug('tilde return', ret)\n    return ret\n  })\n}\n\n// ^ --> * (any, kinda silly)\n// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0\n// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0\n// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0\n// ^1.2.3 --> >=1.2.3 <2.0.0-0\n// ^1.2.0 --> >=1.2.0 <2.0.0-0\n// ^0.0.1 --> >=0.0.1 <0.0.2-0\n// ^0.1.0 --> >=0.1.0 <0.2.0-0\nconst replaceCarets = (comp, options) => {\n  return comp\n    .trim()\n    .split(/\\s+/)\n    .map((c) => replaceCaret(c, options))\n    .join(' ')\n}\n\nconst replaceCaret = (comp, options) => {\n  debug('caret', comp, options)\n  const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]\n  const z = options.includePrerelease ? '-0' : ''\n  return comp.replace(r, (_, M, m, p, pr) => {\n    debug('caret', comp, _, M, m, p, pr)\n    let ret\n\n    if (isX(M)) {\n      ret = ''\n    } else if (isX(m)) {\n      ret = `>=${M}.0.0${z} <${+M + 1}.0.0-0`\n    } else if (isX(p)) {\n      if (M === '0') {\n        ret = `>=${M}.${m}.0${z} <${M}.${+m + 1}.0-0`\n      } else {\n        ret = `>=${M}.${m}.0${z} <${+M + 1}.0.0-0`\n      }\n    } else if (pr) {\n      debug('replaceCaret pr', pr)\n      if (M === '0') {\n        if (m === '0') {\n          ret = `>=${M}.${m}.${p}-${pr\n          } <${M}.${m}.${+p + 1}-0`\n        } else {\n          ret = `>=${M}.${m}.${p}-${pr\n          } <${M}.${+m + 1}.0-0`\n        }\n      } else {\n        ret = `>=${M}.${m}.${p}-${pr\n        } <${+M + 1}.0.0-0`\n      }\n    } else {\n      debug('no pr')\n      if (M === '0') {\n        if (m === '0') {\n          ret = `>=${M}.${m}.${p\n          } <${M}.${m}.${+p + 1}-0`\n        } else {\n          ret = `>=${M}.${m}.${p\n          } <${M}.${+m + 1}.0-0`\n        }\n      } else {\n        ret = `>=${M}.${m}.${p\n        } <${+M + 1}.0.0-0`\n      }\n    }\n\n    debug('caret return', ret)\n    return ret\n  })\n}\n\nconst replaceXRanges = (comp, options) => {\n  debug('replaceXRanges', comp, options)\n  return comp\n    .split(/\\s+/)\n    .map((c) => replaceXRange(c, options))\n    .join(' ')\n}\n\nconst replaceXRange = (comp, options) => {\n  comp = comp.trim()\n  const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]\n  return comp.replace(r, (ret, gtlt, M, m, p, pr) => {\n    debug('xRange', comp, ret, gtlt, M, m, p, pr)\n    const xM = isX(M)\n    const xm = xM || isX(m)\n    const xp = xm || isX(p)\n    const anyX = xp\n\n    if (gtlt === '=' && anyX) {\n      gtlt = ''\n    }\n\n    // if we're including prereleases in the match, then we need\n    // to fix this to -0, the lowest possible prerelease value\n    pr = options.includePrerelease ? '-0' : ''\n\n    if (xM) {\n      if (gtlt === '>' || gtlt === '<') {\n        // nothing is allowed\n        ret = '<0.0.0-0'\n      } else {\n        // nothing is forbidden\n        ret = '*'\n      }\n    } else if (gtlt && anyX) {\n      // we know patch is an x, because we have any x at all.\n      // replace X with 0\n      if (xm) {\n        m = 0\n      }\n      p = 0\n\n      if (gtlt === '>') {\n        // >1 => >=2.0.0\n        // >1.2 => >=1.3.0\n        gtlt = '>='\n        if (xm) {\n          M = +M + 1\n          m = 0\n          p = 0\n        } else {\n          m = +m + 1\n          p = 0\n        }\n      } else if (gtlt === '<=') {\n        // <=0.7.x is actually <0.8.0, since any 0.7.x should\n        // pass.  Similarly, <=7.x is actually <8.0.0, etc.\n        gtlt = '<'\n        if (xm) {\n          M = +M + 1\n        } else {\n          m = +m + 1\n        }\n      }\n\n      if (gtlt === '<') {\n        pr = '-0'\n      }\n\n      ret = `${gtlt + M}.${m}.${p}${pr}`\n    } else if (xm) {\n      ret = `>=${M}.0.0${pr} <${+M + 1}.0.0-0`\n    } else if (xp) {\n      ret = `>=${M}.${m}.0${pr\n      } <${M}.${+m + 1}.0-0`\n    }\n\n    debug('xRange return', ret)\n\n    return ret\n  })\n}\n\n// Because * is AND-ed with everything else in the comparator,\n// and '' means \"any version\", just remove the *s entirely.\nconst replaceStars = (comp, options) => {\n  debug('replaceStars', comp, options)\n  // Looseness is ignored here.  star is always as loose as it gets!\n  return comp\n    .trim()\n    .replace(re[t.STAR], '')\n}\n\nconst replaceGTE0 = (comp, options) => {\n  debug('replaceGTE0', comp, options)\n  return comp\n    .trim()\n    .replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '')\n}\n\n// This function is passed to string.replace(re[t.HYPHENRANGE])\n// M, m, patch, prerelease, build\n// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5\n// 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do\n// 1.2 - 3.4 => >=1.2.0 <3.5.0-0\n// TODO build?\nconst hyphenReplace = incPr => ($0,\n  from, fM, fm, fp, fpr, fb,\n  to, tM, tm, tp, tpr) => {\n  if (isX(fM)) {\n    from = ''\n  } else if (isX(fm)) {\n    from = `>=${fM}.0.0${incPr ? '-0' : ''}`\n  } else if (isX(fp)) {\n    from = `>=${fM}.${fm}.0${incPr ? '-0' : ''}`\n  } else if (fpr) {\n    from = `>=${from}`\n  } else {\n    from = `>=${from}${incPr ? '-0' : ''}`\n  }\n\n  if (isX(tM)) {\n    to = ''\n  } else if (isX(tm)) {\n    to = `<${+tM + 1}.0.0-0`\n  } else if (isX(tp)) {\n    to = `<${tM}.${+tm + 1}.0-0`\n  } else if (tpr) {\n    to = `<=${tM}.${tm}.${tp}-${tpr}`\n  } else if (incPr) {\n    to = `<${tM}.${tm}.${+tp + 1}-0`\n  } else {\n    to = `<=${to}`\n  }\n\n  return `${from} ${to}`.trim()\n}\n\nconst testSet = (set, version, options) => {\n  for (let i = 0; i < set.length; i++) {\n    if (!set[i].test(version)) {\n      return false\n    }\n  }\n\n  if (version.prerelease.length && !options.includePrerelease) {\n    // Find the set of versions that are allowed to have prereleases\n    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0\n    // That should allow `1.2.3-pr.2` to pass.\n    // However, `1.2.4-alpha.notready` should NOT be allowed,\n    // even though it's within the range set by the comparators.\n    for (let i = 0; i < set.length; i++) {\n      debug(set[i].semver)\n      if (set[i].semver === Comparator.ANY) {\n        continue\n      }\n\n      if (set[i].semver.prerelease.length > 0) {\n        const allowed = set[i].semver\n        if (allowed.major === version.major &&\n            allowed.minor === version.minor &&\n            allowed.patch === version.patch) {\n          return true\n        }\n      }\n    }\n\n    // Version has a -pre, but it's not one of the ones we like.\n    return false\n  }\n\n  return true\n}\n"
+    }
+  ],
+  "final": "Implemented strict wildcard-position validation in `src/classes/range.js`. Strict ranges with a numeric component after a wildcard are rejected, including when wrapped in range operators; trailing wildcards remain valid, and loose parsing behavior is unchanged.\n\n**Verification:** The visible tests passed (7/7) with `SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs`. The unprefixed command initially failed because the test harness requires `SUFFICE_WORKSPACE` to be set. Manual checks for the requested invalid ranges, valid trailing-wildcard ranges, and loose parsing also passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\043-numeric-xrange-C-r1\\home\\events\\1794204653018-9375aedd-e168-4161-8794-bdd07b5c5f77.jsonl"
+}
