@@ -1,0 +1,312 @@
+{
+  "task": "layered-routing",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 11,
+  "runId": "011-layered-routing-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 154514.2289,
+  "usage": {
+    "input": 33410,
+    "cacheRead": 24576,
+    "cacheWrite": 0,
+    "output": 7200,
+    "estimatedApiUsd": 0.00718676,
+    "modelCalls": 7,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00718676,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: exact and longest boundary prefixes override declaration order\nok 1 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 3.9303\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 2 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 3.1227\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 3 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.8315\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 4 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.5081\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 32.4056\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 351
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: route settings inherit defaults and results are owned\nok 1 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 3.0222\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 21.0271\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 277
+  },
+  "changed": [
+    "src/field-merge.mjs",
+    "src/header-merge.mjs",
+    "src/pattern-score.mjs",
+    "src/resolution-key.mjs",
+    "src/route-matcher.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/pattern-score.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 7,
+  "editCalls": 6,
+  "verificationCalls": 2,
+  "toolCalls": 35,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:36:12.290Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:36:12.570Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/field-merge.mjs",
+          "src/header-merge.mjs",
+          "src/pattern-score.mjs",
+          "src/resolution-key.mjs",
+          "src/route-matcher.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:36:12.799Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/field-merge.mjs",
+          "src/header-merge.mjs",
+          "src/pattern-score.mjs",
+          "src/resolution-key.mjs",
+          "src/route-matcher.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:36:53.223Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/field-merge.mjs",
+          "src/header-merge.mjs",
+          "src/pattern-score.mjs",
+          "src/resolution-key.mjs",
+          "src/route-matcher.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:36:53.427Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/field-merge.mjs",
+          "src/header-merge.mjs",
+          "src/pattern-score.mjs",
+          "src/resolution-key.mjs",
+          "src/route-matcher.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:36:12.506Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d9ed426eea2ca6a8c3575656fa64957de864c0c85423bf5762d7bdb64f6ac522"
+      },
+      "latencyMs": 221.05520000000251,
+      "parsedFiles": 17,
+      "fileCount": 17,
+      "cacheBytes": 88235,
+      "heapDeltaBytes": -6225088,
+      "graphBytes": 154300
+    },
+    {
+      "at": "2026-11-09T05:36:12.798Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d4c6f32d97b2569128f7d50c2a89b5fd2345440b89f61d4b75566dfa13e5bf2c"
+      },
+      "latencyMs": 227.8524999999936,
+      "parsedFiles": 5,
+      "fileCount": 17,
+      "cacheBytes": 98287,
+      "heapDeltaBytes": 8402232,
+      "graphBytes": 169514
+    },
+    {
+      "at": "2026-11-09T05:36:13.084Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d4c6f32d97b2569128f7d50c2a89b5fd2345440b89f61d4b75566dfa13e5bf2c"
+      },
+      "latencyMs": 285.4458000000013,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 98287,
+      "heapDeltaBytes": -7759496,
+      "graphBytes": 169514
+    },
+    {
+      "at": "2026-11-09T05:36:53.425Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6a02ba944ec4472d7eecab88e195ee835d4b15ff23d75d69669ca4a5dc00ff51"
+      },
+      "latencyMs": 201.80909999999858,
+      "parsedFiles": 1,
+      "fileCount": 17,
+      "cacheBytes": 98287,
+      "heapDeltaBytes": 2112104,
+      "graphBytes": 169514
+    },
+    {
+      "at": "2026-11-09T05:36:53.625Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6a02ba944ec4472d7eecab88e195ee835d4b15ff23d75d69669ca4a5dc00ff51"
+      },
+      "latencyMs": 198.69800000000396,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 98287,
+      "heapDeltaBytes": 1054680,
+      "graphBytes": 169514
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/field-merge.mjs",
+        "src/header-merge.mjs",
+        "src/pattern-score.mjs",
+        "src/resolution-key.mjs",
+        "src/route-matcher.mjs",
+        "src/settings-merge.mjs",
+        "src/route-display.mjs",
+        "src/resolver.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/pattern-score.mjs",
+          "callId": "call_d91454846ffb4ebfa8930d145d8aabb8|ctc_06179f02dfabddfa016af15bebfefc87d18a437a758ceacf57/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "git diff --check && git status --short && git diff -- src/field-merge.mjs src/header-merge.mjs src/pattern-score.mjs src/resolution-key.mjs src/route-matcher.mjs",
+        "node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/field-merge.mjs",
+        "src/header-merge.mjs",
+        "src/pattern-score.mjs",
+        "src/resolution-key.mjs",
+        "src/route-matcher.mjs",
+        "src/settings-merge.mjs",
+        "src/route-display.mjs",
+        "src/resolver.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/pattern-score.mjs",
+      "before": "export function patternScore(pattern, path) {\r\n  if (pattern === path) return Number.MAX_SAFE_INTEGER;\r\n  if (pattern === '*') return 0;\r\n  if (pattern.endsWith('/*')) {\r\n    const base = pattern.slice(0, -2);\r\n    if (path === base || path.startsWith(base + '/')) return base.length + 1;\r\n  }\r\n  return -1;\r\n}\r\n",
+      "after": "export function patternScore(pattern, path) {\r\n  if (pattern === '*') return 0;\r\n  if (pattern.endsWith('/*')) {\r\n    const base = pattern.slice(0, -2);\r\n    const isDescendant = base === '/' ? path.startsWith('/') : path.startsWith(base + '/');\r\n    if (path === base || isDescendant) return base.length + 1;\r\n    return -1;\r\n  }\r\n  return pattern === path ? Number.MAX_SAFE_INTEGER : -1;\r\n}\r\n"
+    },
+    {
+      "path": "src/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let bestRoute = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      bestRoute = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return bestRoute;\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the routing fixes in `src/`: falsy settings now override inherited values, `null` header values delete inherited headers, route selection honors exact and longest-prefix specificity, and cache keys include tenant, path, and revision.\n\nVerification passed:\n- `node --test tests/visible.test.mjs`\n- Contract smoke checks for specificity, tenant isolation and updates, header deletion, and snapshot ownership.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\011-layered-routing-C-r1\\home\\events\\1794202504246-e96bfe1d-67f5-4c27-be21-f02f0302daa7.jsonl"
+}

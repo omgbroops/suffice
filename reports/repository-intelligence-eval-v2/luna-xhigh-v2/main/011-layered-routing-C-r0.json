@@ -1,0 +1,222 @@
+{
+  "task": "layered-routing",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 10,
+  "runId": "011-layered-routing-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 175585.2141,
+  "usage": {
+    "input": 15688,
+    "cacheRead": 68352,
+    "cacheWrite": 0,
+    "output": 7588,
+    "estimatedApiUsd": 0.006046319999999999,
+    "modelCalls": 11,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.006046319999999999,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: exact and longest boundary prefixes override declaration order\nok 1 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 2.836\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 2 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 4.4953\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 3 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.6142\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 4 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.542\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 34.4484\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 362
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: route settings inherit defaults and results are owned\nok 1 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 6.3039\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 22.0627\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 407
+  },
+  "changed": [
+    "src/field-merge.mjs",
+    "src/header-merge.mjs",
+    "src/pattern-score.mjs",
+    "src/resolution-key.mjs",
+    "src/route-matcher.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/pattern-score.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 11,
+  "editCalls": 5,
+  "verificationCalls": 2,
+  "toolCalls": 24,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:36:12.729Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:36:13.043Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/field-merge.mjs",
+          "src/header-merge.mjs",
+          "src/pattern-score.mjs",
+          "src/resolution-key.mjs",
+          "src/route-matcher.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:36:13.226Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/field-merge.mjs",
+          "src/header-merge.mjs",
+          "src/pattern-score.mjs",
+          "src/resolution-key.mjs",
+          "src/route-matcher.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:36:12.979Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d9ed426eea2ca6a8c3575656fa64957de864c0c85423bf5762d7bdb64f6ac522"
+      },
+      "latencyMs": 252.95279999999912,
+      "parsedFiles": 17,
+      "fileCount": 17,
+      "cacheBytes": 88235,
+      "heapDeltaBytes": 7690080,
+      "graphBytes": 154300
+    },
+    {
+      "at": "2026-11-09T05:36:13.224Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a4cc5e882b3ee2ae400959d524675f968ae865f4d2888b5027d4f76c758577cb"
+      },
+      "latencyMs": 180.74740000000747,
+      "parsedFiles": 5,
+      "fileCount": 17,
+      "cacheBytes": 96587,
+      "heapDeltaBytes": 4179000,
+      "graphBytes": 166988
+    },
+    {
+      "at": "2026-11-09T05:36:13.408Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a4cc5e882b3ee2ae400959d524675f968ae865f4d2888b5027d4f76c758577cb"
+      },
+      "latencyMs": 183.05979999998817,
+      "parsedFiles": 0,
+      "fileCount": 17,
+      "cacheBytes": 96587,
+      "heapDeltaBytes": 1271080,
+      "graphBytes": 166988
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/field-merge.mjs",
+        "src/header-merge.mjs",
+        "src/pattern-score.mjs",
+        "src/resolution-key.mjs",
+        "src/route-matcher.mjs",
+        "src/settings-merge.mjs",
+        "src/route-display.mjs",
+        "src/resolver.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createRouter } from './src/index.mjs';\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { keep: 'yes', remove: 'old' } };\nconst broad = { id: 'broad', pattern: '/app/*', settings: { target: 'broad', enabled: false, timeout: 0, label: '' } };\nconst deeper = { id: 'deeper', pattern: '/app/admin/*', settings: { target: 'deeper' } };\nconst routes = [\n  broad,\n  { id: 'first-tie', pattern: '/tie/*', settings: { target: 'first' } },\n  { id: 'second-tie', pattern: '/tie/*', settings: { target: 'second' } },\n  { id: 'all', pattern: '*', settings: { target: 'all' } },\n  { id: 'exact', pattern: '/app', settings: { target: 'exact' } },\n  deeper,\n];\nconst router = createRouter({ defaults, routes });\ndefaults.headers.keep = 'mutated';\nbroad.settings.target = 'mutated';\nassert.equal(router.resolve('red', '/app').target, 'exact');\nassert.equal(router.resolve('red', '/app/admin').target, 'deeper');\nassert.equal(router.resolve('red', '/app/admin/x').enabled, false);\nassert.equal(router.resolve('red', '/apple').target, 'all');\nassert.equal(router.resolve('red', '/tie/x').target, 'first');\nconst first = router.resolve('red', '/app/admin/x');\nassert.equal(first.timeout, 0);\nassert.equal(first.label, '');\nassert.equal(first.headers.keep, 'yes');\nfirst.headers.keep = 'changed';\nrouter.setTenant('red', { headers: { remove: null, custom: '', keep: 'tenant' } });\nconst updated = router.resolve('red', '/app/admin/x');\nassert.equal(updated.headers.keep, 'tenant');\nassert.equal(updated.headers.remove, undefined);\nassert.equal(updated.headers.custom, '');\nassert.equal(router.resolve('blue', '/app/admin/x').headers.keep, 'yes');\nconst overrides = { target: 'one' };\nrouter.setTenant('green', overrides);\noverrides.target = 'outside';\nassert.equal(router.resolve('green', '/app/admin/x').target, 'one');\nrouter.setTenant('green', { target: 'two' });\nassert.equal(router.resolve('green', '/app/admin/x').target, 'two');\nassert.equal(router.resolve('red', '/not-found'), null);\nconsole.log('layered-routing assertions passed');\nNODE\n\ngit status --short && git diff -- src/field-merge.mjs src/header-merge.mjs src/pattern-score.mjs src/route-matcher.mjs src/resolution-key.mjs",
+        "git rev-parse --show-toplevel; git status --short -- src/field-merge.mjs src/header-merge.mjs src/pattern-score.mjs src/route-matcher.mjs src/resolution-key.mjs; git check-ignore -v src/field-merge.mjs || true; for f in src/field-merge.mjs src/header-merge.mjs src/pattern-score.mjs src/route-matcher.mjs src/resolution-key.mjs; do echo \"--- $f\"; cat \"$f\"; done"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers') result[key] = value;\r\n  }\r\n}\r\n"
+    },
+    {
+      "path": "src/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\r\n  const result = { ...base };\r\n  for (const [name, value] of Object.entries(overrides)) {\r\n    if (value === null) delete result[name];\r\n    else result[name] = value;\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/pattern-score.mjs",
+      "before": "export function patternScore(pattern, path) {\r\n  if (pattern === path) return Number.MAX_SAFE_INTEGER;\r\n  if (pattern === '*') return 0;\r\n  if (pattern.endsWith('/*')) {\r\n    const base = pattern.slice(0, -2);\r\n    if (path === base || path.startsWith(base + '/')) return base.length + 1;\r\n  }\r\n  return -1;\r\n}\r\n",
+      "after": "export function patternScore(pattern, path) {\r\n  if (pattern === '*') return 0;\r\n  if (pattern.endsWith('/*')) {\r\n    const base = pattern.slice(0, -2);\r\n    if (path === base || path.startsWith(base + '/')) return base.length + 1;\r\n    return -1;\r\n  }\r\n  return pattern === path ? Number.MAX_SAFE_INTEGER : -1;\r\n}\r\n"
+    },
+    {
+      "path": "src/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\r\n  return JSON.stringify([tenant, path, revision]);\r\n}\r\n"
+    },
+    {
+      "path": "src/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  let bestRoute = null;\r\n  let bestScore = -1;\r\n  for (const route of routes) {\r\n    const score = patternScore(route.pattern, path);\r\n    if (score > bestScore) {\r\n      bestRoute = route;\r\n      bestScore = score;\r\n    }\r\n  }\r\n  return bestRoute;\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the routing fixes in `src/`: route matching now prioritizes exact patterns, then the most-specific matching prefix while preserving declaration order for ties; settings retain falsy values; header merges support `null` deletions; and cache keys include tenant and revision.\n\nVerification passed:\n- `node --test tests/visible.test.mjs`\n- Additional assertions for precedence, merging, cache updates, tenant isolation, and input/result ownership.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\011-layered-routing-C-r0\\home\\events\\1794202504324-5caaeaf5-2f8e-44e1-aca4-6d9704cad310.jsonl"
+}
