@@ -1,0 +1,461 @@
+{
+  "task": "event-routing-workflow",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "runId": "005-event-routing-workflow-C-r1",
+  "category": "complex",
+  "kind": "compound",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 207075.9925,
+  "usage": {
+    "input": 24487,
+    "cacheRead": 123520,
+    "cacheWrite": 0,
+    "output": 9712,
+    "estimatedApiUsd": 0.0085399,
+    "modelCalls": 10,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0085399,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 10,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 3.8275\n  type: 'test'\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 1.0602\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.5275\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.3566\n  type: 'test'\n  ...\n# Subtest: exact and longest boundary prefixes override declaration order\nok 5 - exact and longest boundary prefixes override declaration order\n  ---\n  duration_ms: 1.1786\n  type: 'test'\n  ...\n# Subtest: explicit falsy fields and header deletion compose across layers\nok 6 - explicit falsy fields and header deletion compose across layers\n  ---\n  duration_ms: 0.7502\n  type: 'test'\n  ...\n# Subtest: cache is tenant and revision scoped including replaced and absent matches\nok 7 - cache is tenant and revision scoped including replaced and absent matches\n  ---\n  duration_ms: 0.3883\n  type: 'test'\n  ...\n# Subtest: constructor and update inputs plus nested resolve results are snapshots\nok 8 - constructor and update inputs plus nested resolve results are snapshots\n  ---\n  duration_ms: 0.3844\n  type: 'test'\n  ...\n# Subtest: pair identity cannot collide through separators\nok 9 - pair identity cannot collide through separators\n  ---\n  duration_ms: 0.5417\n  type: 'test'\n  ...\n# Subtest: injected clock governs write and exact expiration\nok 10 - injected clock governs write and exact expiration\n  ---\n  duration_ms: 0.2578\n  type: 'test'\n  ...\n1..10\n# tests 10\n# suites 0\n# pass 10\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 39.9303\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 164
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 2.1833\n  type: 'test'\n  ...\n# Subtest: route settings inherit defaults and results are owned\nok 2 - route settings inherit defaults and results are owned\n  ---\n  duration_ms: 0.8963\n  type: 'test'\n  ...\n# Subtest: cache reuses a value for the same tenant and resource\nok 3 - cache reuses a value for the same tenant and resource\n  ---\n  duration_ms: 0.3699\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 27.8473\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 128
+  },
+  "changed": [
+    "src/layered-routing/field-merge.mjs",
+    "src/layered-routing/header-merge.mjs",
+    "src/layered-routing/resolution-key.mjs",
+    "src/layered-routing/route-matcher.mjs",
+    "src/tenant-cache/cache.mjs",
+    "src/tenant-cache/store.mjs",
+    "src/tenant-event-feed/batch-commit.mjs",
+    "src/tenant-event-feed/live-bus.mjs",
+    "src/tenant-event-feed/snapshot.mjs",
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/tenant-event-feed/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 10,
+  "editCalls": 12,
+  "verificationCalls": 2,
+  "toolCalls": 32,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:22:37.383Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:22:37.592Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/layered-routing/field-merge.mjs",
+          "src/layered-routing/header-merge.mjs",
+          "src/layered-routing/resolution-key.mjs",
+          "src/layered-routing/route-matcher.mjs",
+          "src/tenant-cache/cache.mjs",
+          "src/tenant-cache/store.mjs",
+          "src/tenant-event-feed/batch-commit.mjs",
+          "src/tenant-event-feed/live-bus.mjs",
+          "src/tenant-event-feed/snapshot.mjs",
+          "src/tenant-event-feed/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:22:37.746Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/layered-routing/field-merge.mjs",
+          "src/layered-routing/header-merge.mjs",
+          "src/layered-routing/resolution-key.mjs",
+          "src/layered-routing/route-matcher.mjs",
+          "src/tenant-cache/cache.mjs",
+          "src/tenant-cache/store.mjs",
+          "src/tenant-event-feed/batch-commit.mjs",
+          "src/tenant-event-feed/live-bus.mjs",
+          "src/tenant-event-feed/snapshot.mjs",
+          "src/tenant-event-feed/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:22:42.832Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/layered-routing/field-merge.mjs",
+          "src/layered-routing/header-merge.mjs",
+          "src/layered-routing/resolution-key.mjs",
+          "src/layered-routing/route-matcher.mjs",
+          "src/tenant-cache/cache.mjs",
+          "src/tenant-cache/store.mjs",
+          "src/tenant-event-feed/batch-commit.mjs",
+          "src/tenant-event-feed/live-bus.mjs",
+          "src/tenant-event-feed/snapshot.mjs",
+          "src/tenant-event-feed/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:22:43.091Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/layered-routing/field-merge.mjs",
+          "src/layered-routing/header-merge.mjs",
+          "src/layered-routing/resolution-key.mjs",
+          "src/layered-routing/route-matcher.mjs",
+          "src/tenant-cache/cache.mjs",
+          "src/tenant-cache/store.mjs",
+          "src/tenant-event-feed/batch-commit.mjs",
+          "src/tenant-event-feed/live-bus.mjs",
+          "src/tenant-event-feed/snapshot.mjs",
+          "src/tenant-event-feed/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:20.686Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/layered-routing/field-merge.mjs",
+          "src/layered-routing/header-merge.mjs",
+          "src/layered-routing/resolution-key.mjs",
+          "src/layered-routing/route-matcher.mjs",
+          "src/tenant-cache/cache.mjs",
+          "src/tenant-cache/store.mjs",
+          "src/tenant-event-feed/batch-commit.mjs",
+          "src/tenant-event-feed/live-bus.mjs",
+          "src/tenant-event-feed/snapshot.mjs",
+          "src/tenant-event-feed/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:23:20.847Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/layered-routing/field-merge.mjs",
+          "src/layered-routing/header-merge.mjs",
+          "src/layered-routing/resolution-key.mjs",
+          "src/layered-routing/route-matcher.mjs",
+          "src/tenant-cache/cache.mjs",
+          "src/tenant-cache/store.mjs",
+          "src/tenant-event-feed/batch-commit.mjs",
+          "src/tenant-event-feed/live-bus.mjs",
+          "src/tenant-event-feed/snapshot.mjs",
+          "src/tenant-event-feed/validation.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:22:37.543Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "4bb8c981c137b2ec66d524613d39b239028dbbd7e8ae41faad45cc67420cc795"
+      },
+      "latencyMs": 165.2170000000042,
+      "parsedFiles": 34,
+      "fileCount": 34,
+      "cacheBytes": 228126,
+      "heapDeltaBytes": -2533944,
+      "graphBytes": 396966
+    },
+    {
+      "at": "2026-11-09T05:22:37.745Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "5575cbd1506731870f44d346316ccd3c8cf69c4fe0b67d8beebcb84bd760f7eb"
+      },
+      "latencyMs": 152.1347999999998,
+      "parsedFiles": 10,
+      "fileCount": 34,
+      "cacheBytes": 228815,
+      "heapDeltaBytes": 5473240,
+      "graphBytes": 395040
+    },
+    {
+      "at": "2026-11-09T05:22:37.897Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "5575cbd1506731870f44d346316ccd3c8cf69c4fe0b67d8beebcb84bd760f7eb"
+      },
+      "latencyMs": 152.01389999996172,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 228815,
+      "heapDeltaBytes": 2230520,
+      "graphBytes": 395040
+    },
+    {
+      "at": "2026-11-09T05:22:43.090Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "2e19171463e63c7b0ae86a589a2e7b234c922b3cb2d8e3017997b88c6fbc3d7a"
+      },
+      "latencyMs": 257.35860000003595,
+      "parsedFiles": 1,
+      "fileCount": 34,
+      "cacheBytes": 241438,
+      "heapDeltaBytes": 3973088,
+      "graphBytes": 417127
+    },
+    {
+      "at": "2026-11-09T05:22:43.273Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "2e19171463e63c7b0ae86a589a2e7b234c922b3cb2d8e3017997b88c6fbc3d7a"
+      },
+      "latencyMs": 182.09779999998864,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 241438,
+      "heapDeltaBytes": -10481456,
+      "graphBytes": 417127
+    },
+    {
+      "at": "2026-11-09T05:23:20.846Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "9642f226baea469dcf9069ed5a969d73d8c18acfecdfa6589b9469492c6d1b5e"
+      },
+      "latencyMs": 160.09969999996247,
+      "parsedFiles": 1,
+      "fileCount": 34,
+      "cacheBytes": 241862,
+      "heapDeltaBytes": 4074504,
+      "graphBytes": 417695
+    },
+    {
+      "at": "2026-11-09T05:23:21.005Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "9642f226baea469dcf9069ed5a969d73d8c18acfecdfa6589b9469492c6d1b5e"
+      },
+      "latencyMs": 157.89419999998063,
+      "parsedFiles": 0,
+      "fileCount": 34,
+      "cacheBytes": 241862,
+      "heapDeltaBytes": 2250304,
+      "graphBytes": 417695
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/layered-routing/field-merge.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/resolution-key.mjs",
+        "src/layered-routing/route-matcher.mjs",
+        "src/tenant-cache/cache.mjs",
+        "src/tenant-cache/store.mjs",
+        "src/tenant-event-feed/batch-commit.mjs",
+        "src/tenant-event-feed/live-bus.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/tenant-event-feed/batch-commit.mjs",
+          "callId": "call_b32e878862174c54b2388a7f9e9fa048|ctc_0fb39afdac0713bf016af158c1799c87d191cb1e5d162cb3f7/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nconst result = router.resolve('one', '/app/deep/x');\nassert.equal(result.route, 'long');\nassert.equal(result.timeout, 0);\nassert.equal(result.enabled, true);\nassert.deepEqual(result.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/deep/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/deep/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/deep/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/deep/x').label, 'new');\nassert.equal(router.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nassert.equal(router.resolve('one', '/app/deep/x').route, 'long');\nconst prefix = router.resolve('one', '/app/x');\nassert.equal(prefix.timeout, 0);\nassert.equal(prefix.enabled, true);\nassert.deepEqual(prefix.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/x').label, 'new');\nassert.equal(router.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nassert.equal(router.resolve('one', '/app/deep/x').route, 'long');\nconst prefix = router.resolve('one', '/app/x');\nassert.equal(prefix.timeout, 0);\nassert.equal(prefix.enabled, true);\nassert.deepEqual(prefix.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/x').label, 'new');\nconst boundaryRouter = createRouter({ defaults: {}, routes: [{ id: 'app', pattern: '/app/*', settings: {} }] });\nassert.equal(boundaryRouter.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/layered-routing/field-merge.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/resolution-key.mjs",
+        "src/layered-routing/route-matcher.mjs",
+        "src/tenant-cache/cache.mjs",
+        "src/tenant-cache/store.mjs",
+        "src/tenant-event-feed/batch-commit.mjs",
+        "src/tenant-event-feed/live-bus.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/tenant-event-feed/batch-commit.mjs",
+          "callId": "call_b32e878862174c54b2388a7f9e9fa048|ctc_0fb39afdac0713bf016af158c1799c87d191cb1e5d162cb3f7/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nconst result = router.resolve('one', '/app/deep/x');\nassert.equal(result.route, 'long');\nassert.equal(result.timeout, 0);\nassert.equal(result.enabled, true);\nassert.deepEqual(result.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/deep/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/deep/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/deep/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/deep/x').label, 'new');\nassert.equal(router.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nassert.equal(router.resolve('one', '/app/deep/x').route, 'long');\nconst prefix = router.resolve('one', '/app/x');\nassert.equal(prefix.timeout, 0);\nassert.equal(prefix.enabled, true);\nassert.deepEqual(prefix.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/x').label, 'new');\nassert.equal(router.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nassert.equal(router.resolve('one', '/app/deep/x').route, 'long');\nconst prefix = router.resolve('one', '/app/x');\nassert.equal(prefix.timeout, 0);\nassert.equal(prefix.enabled, true);\nassert.deepEqual(prefix.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/x').label, 'new');\nconst boundaryRouter = createRouter({ defaults: {}, routes: [{ id: 'app', pattern: '/app/*', settings: {} }] });\nassert.equal(boundaryRouter.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/layered-routing/field-merge.mjs",
+        "src/layered-routing/header-merge.mjs",
+        "src/layered-routing/resolution-key.mjs",
+        "src/layered-routing/route-matcher.mjs",
+        "src/tenant-cache/cache.mjs",
+        "src/tenant-cache/store.mjs",
+        "src/tenant-event-feed/batch-commit.mjs",
+        "src/tenant-event-feed/live-bus.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nconst result = router.resolve('one', '/app/deep/x');\nassert.equal(result.route, 'long');\nassert.equal(result.timeout, 0);\nassert.equal(result.enabled, true);\nassert.deepEqual(result.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/deep/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/deep/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/deep/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/deep/x').label, 'new');\nassert.equal(router.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nassert.equal(router.resolve('one', '/app/deep/x').route, 'long');\nconst prefix = router.resolve('one', '/app/x');\nassert.equal(prefix.timeout, 0);\nassert.equal(prefix.enabled, true);\nassert.deepEqual(prefix.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/x').label, 'new');\nassert.equal(router.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/tenant-event-feed/index.mjs';\nimport { createRouter } from './src/layered-routing/index.mjs';\nimport { ExpiringStore } from './src/tenant-cache/store.mjs';\nimport { TenantCache } from './src/tenant-cache/cache.mjs';\n\nconst feed = createFeed();\nlet liveA, liveB;\nfeed.subscribe('a', 0, e => { liveA = e; e.payload.nested.value = 'changed'; });\nfeed.subscribe('a', 0, e => { liveB = e; });\nconst source = { nested: { value: 'original' } };\nconst [published] = feed.publishBatch('a', [{ type: 'x', payload: source }]);\nsource.nested.value = 'source changed';\nassert.equal(liveB.payload.nested.value, 'original');\nassert.equal(feed.history('a')[0].payload.nested.value, 'original');\nassert.equal(published.payload.nested.value, 'original');\nassert.notEqual(liveA, liveB);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'ok', payload: {} }, { type: '', payload: {} },\n]));\nassert.deepEqual(feed.history('a').map(record => record.sequence), [1]);\nassert.equal(feed.publishBatch('b', [{ type: 'retry', payload: {} }])[0].sequence, 2);\nassert.deepEqual(feed.history('b').map(record => record.sequence), [2]);\n\nconst defaults = { enabled: true, timeout: 10, label: 'default', headers: { a: 'a', b: 'b' } };\nconst routes = [\n  { id: 'wild', pattern: '*', settings: { timeout: 2 } },\n  { id: 'prefix', pattern: '/app/*', settings: { timeout: 0, headers: { a: null, c: '' } } },\n  { id: 'long', pattern: '/app/deep/*', settings: { target: 'deep' } },\n  { id: 'exact', pattern: '/app/deep', settings: { label: '' } },\n];\nconst router = createRouter({ defaults, routes });\ndefaults.enabled = false; routes[1].settings.timeout = 8;\nassert.equal(router.resolve('one', '/app/deep').route, 'exact');\nassert.equal(router.resolve('one', '/app/deep/x').route, 'long');\nconst prefix = router.resolve('one', '/app/x');\nassert.equal(prefix.timeout, 0);\nassert.equal(prefix.enabled, true);\nassert.deepEqual(prefix.headers, { b: 'b', c: '' });\nrouter.setTenant('one', { enabled: false, headers: { b: null } });\nassert.equal(router.resolve('one', '/app/x').enabled, false);\nassert.deepEqual(router.resolve('one', '/app/x').headers, { c: '' });\nassert.equal(router.resolve('two', '/app/x').enabled, true);\nrouter.setTenant('one', { label: 'new' });\nassert.equal(router.resolve('one', '/app/x').label, 'new');\nconst boundaryRouter = createRouter({ defaults: {}, routes: [{ id: 'app', pattern: '/app/*', settings: {} }] });\nassert.equal(boundaryRouter.resolve('app', '/apple'), null);\n\nlet now = 100;\nconst store = new ExpiringStore({ now: () => now });\nconst cache = new TenantCache(store);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 0, 5), 0);\nassert.equal(await cache.getOrLoad('a', 'b:c', async () => 1, 5), 1);\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 2, 5), 0);\nnow = 105;\nassert.equal(await cache.getOrLoad('a:b', 'c', async () => 3, 5), 3);\nconsole.log('additional contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/layered-routing/field-merge.mjs",
+      "before": "export function mergeFields(result, layer) {\r\n  for (const [key, value] of Object.entries(layer)) {\r\n    if (key !== 'headers' && value) result[key] = value;\r\n  }\r\n}\r\n",
+      "after": "export function mergeFields(result, layer) {\n  for (const [key, value] of Object.entries(layer)) {\n    if (key !== 'headers') result[key] = value;\n  }\n}\n"
+    },
+    {
+      "path": "src/layered-routing/header-merge.mjs",
+      "before": "export function mergeHeaders(base, overrides) {\r\n  return { ...base, ...overrides };\r\n}\r\n",
+      "after": "export function mergeHeaders(base, overrides) {\n  const result = { ...base };\n  for (const [name, value] of Object.entries(overrides)) {\n    if (value === null) delete result[name];\n    else result[name] = value;\n  }\n  return result;\n}\n"
+    },
+    {
+      "path": "src/layered-routing/resolution-key.mjs",
+      "before": "export function resolutionKey(tenant, path, revision) {\r\n  return path;\r\n}\r\n",
+      "after": "export function resolutionKey(tenant, path, revision) {\n  return JSON.stringify([tenant, path, revision]);\n}\n"
+    },
+    {
+      "path": "src/layered-routing/route-matcher.mjs",
+      "before": "import { patternScore } from './pattern-score.mjs';\r\nexport function matchRoute(routes, path) {\r\n  return routes.find(route => patternScore(route.pattern, path) >= 0) ?? null;\r\n}\r\n",
+      "after": "import { patternScore } from './pattern-score.mjs';\nexport function matchRoute(routes, path) {\n  let bestRoute = null;\n  let bestScore = -1;\n  for (const route of routes) {\n    const score = patternScore(route.pattern, path);\n    if (score > bestScore) {\n      bestRoute = route;\n      bestScore = score;\n    }\n  }\n  return bestRoute;\n}\n"
+    },
+    {
+      "path": "src/tenant-cache/cache.mjs",
+      "before": "export class TenantCache {\r\n  constructor(store) { this.store = store; }\r\n  key(tenant, resourceId) { return tenant + ':' + resourceId; }\r\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\r\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\r\n    if (entry.found) return entry.value;\r\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\r\n  }\r\n}\r\n",
+      "after": "export class TenantCache {\n  constructor(store) { this.store = store; }\n  key(tenant, resourceId) { return JSON.stringify([tenant, resourceId]); }\n  async getOrLoad(tenant, resourceId, loader, ttlMs = 1000) {\n    const key = this.key(tenant, resourceId); const entry = this.store.get(key);\n    if (entry.found) return entry.value;\n    const value = await loader(); this.store.set(key, value, ttlMs); return value;\n  }\n}\n"
+    },
+    {
+      "path": "src/tenant-cache/store.mjs",
+      "before": "export class ExpiringStore {\r\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\r\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: Date.now() + ttlMs }); }\r\n  get(key) {\r\n    const entry = this.entries.get(key);\r\n    if (!entry) return { found: false };\r\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\r\n    return { found: true, value: entry.value };\r\n  }\r\n}\r\n",
+      "after": "export class ExpiringStore {\n  constructor({ now = Date.now } = {}) { this.now = now; this.entries = new Map(); }\n  set(key, value, ttlMs) { this.entries.set(key, { value, deadline: this.now() + ttlMs }); }\n  get(key) {\n    const entry = this.entries.get(key);\n    if (!entry) return { found: false };\n    if (this.now() >= entry.deadline) { this.entries.delete(key); return { found: false }; }\n    return { found: true, value: entry.value };\n  }\n}\n"
+    },
+    {
+      "path": "src/tenant-event-feed/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\nimport { makeRecord } from './record.mjs';\nexport function appendBatch(state, tenant, events) {\n  const prepared = [];\n  for (const event of events) {\n    prepared.push({ type: event?.type, payload: validateEvent(event) });\n  }\n  const records = prepared.map((event, index) =>\n    makeRecord(tenant, event, state.sequence + index + 1),\n  );\n\n  state.records = [...state.records, ...records];\n  state.sequence += records.length;\n  return records;\n}\n"
+    },
+    {
+      "path": "src/tenant-event-feed/live-bus.mjs",
+      "before": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) entry.onEvent(snapshot(record));\r\n    },\r\n  };\r\n}\r\n",
+      "after": "import { snapshot } from './snapshot.mjs';\nexport function createBus() {\n  const subscriptions = new Set();\n  return {\n    add(tenant, onEvent) {\n      const entry = { tenant, onEvent };\n      subscriptions.add(entry);\n      return () => subscriptions.delete(entry);\n    },\n    emit(record) {\n      for (const entry of subscriptions) {\n        if (entry.tenant === record.tenant) entry.onEvent(snapshot(record));\n      }\n    },\n  };\n}\n"
+    },
+    {
+      "path": "src/tenant-event-feed/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\n  return structuredClone(record);\n}\n"
+    },
+    {
+      "path": "src/tenant-event-feed/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\n}\nexport function validateEvent(event) {\n  if (!event || typeof event.type !== 'string' || !event.type) throw new Error('Invalid event');\n  const payload = event.payload;\n  if (!payload || typeof payload !== 'object') throw new Error('Invalid event');\n  const prototype = Object.getPrototypeOf(payload);\n  if (prototype !== Object.prototype && prototype !== null) throw new Error('Invalid event');\n  return structuredClone(payload);\n}\nexport function validateCursor(after) {\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\n}\n"
+    }
+  ],
+  "final": "Implemented the contract repairs across the event feed, layered routing, and tenant cache while preserving their public APIs. The visible test suite passed: **3 tests passed**. Additional contract checks for batch atomicity, snapshot ownership, route precedence and tenant isolation, and cache key/expiry behavior also passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\005-event-routing-workflow-C-r1\\home\\events\\1794201690753-ba4834ae-68bf-4f31-b719-7d8d838c0c69.jsonl"
+}
