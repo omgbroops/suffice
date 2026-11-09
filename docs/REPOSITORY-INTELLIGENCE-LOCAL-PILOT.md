@@ -26,8 +26,11 @@ or used to alter hardware. No display or cooling settings were changed.
 
 CAM UI observations before inference: 66°C/14% CPU load, then 69°C/21% after setup.
 These are point-in-time observations, **not continuous thermal enforcement**.
-Keep the pilot serial while no reliable automated sensor is available. The runner
-requires at least 2 GiB free RAM and 6 GiB free disk before dispatch and samples
+Keep the pilot serial while no reliable automated sensor is available. After A
+peaked at 156 MiB worker RSS, the native-only dispatch floor was calibrated from
+2 to 1.75 GiB; model, treatment, input, grading and inference budgets are unchanged.
+Two B preflight checks below 2 GiB made no provider calls or reservations. The runner
+requires at least 1.75 GiB free RAM and 6 GiB free disk before dispatch and samples
 memory/disk every 10 seconds. Only one test/build process runs at a time. Do not
 claim a guaranteed 85°C ceiling from spot checks. Do not start heavy containers
 or high-concurrency campaigns without revisiting memory, disk and temperatures.
