@@ -1,0 +1,445 @@
+{
+  "task": "streaming-catalog-workflow",
+  "repetition": 1,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 23,
+  "runId": "023-streaming-catalog-workflow-B-r1",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "compound",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 192558.38509999996,
+  "usage": {
+    "input": 35757,
+    "cacheRead": 35584,
+    "cacheWrite": 0,
+    "output": 9269,
+    "estimatedApiUsd": 0.00856604,
+    "modelCalls": 6,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00856604,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 12,
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 12,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: every byte split preserves multibyte text and CRLF\nok 1 - every byte split preserves multibyte text and CRLF\n  ---\n  duration_ms: 15.5454\n  type: 'test'\n  ...\n# Subtest: lone final CR is content and trailing LF does not invent a line\nok 2 - lone final CR is content and trailing LF does not invent a line\n  ---\n  duration_ms: 0.2438\n  type: 'test'\n  ...\n# Subtest: unfinished UTF-8 is replaced only when finalized\nok 3 - unfinished UTF-8 is replaced only when finalized\n  ---\n  duration_ms: 0.1394\n  type: 'test'\n  ...\n# Subtest: exclusive cursors and tombstones preserve the full sequence\nok 4 - exclusive cursors and tombstones preserve the full sequence\n  ---\n  duration_ms: 0.32\n  type: 'test'\n  ...\n# Subtest: full live pages do not duplicate boundary rows\nok 5 - full live pages do not duplicate boundary rows\n  ---\n  duration_ms: 0.2093\n  type: 'test'\n  ...\n# Subtest: broken services cannot loop forever\nok 6 - broken services cannot loop forever\n  ---\n  duration_ms: 0.5169\n  type: 'test'\n  ...\n# Subtest: transitive aliases and duplicate identities resolve once\nok 7 - transitive aliases and duplicate identities resolve once\n  ---\n  duration_ms: 0.3074\n  type: 'test'\n  ...\n# Subtest: dependency cycles cannot evade canonical identity\nok 8 - dependency cycles cannot evade canonical identity\n  ---\n  duration_ms: 0.2482\n  type: 'test'\n  ...\n# Subtest: alias cycles and unknown targets reject predictably\nok 9 - alias cycles and unknown targets reject predictably\n  ---\n  duration_ms: 0.2924\n  type: 'test'\n  ...\n# Subtest: falsy values override while undefined inherits\nok 10 - falsy values override while undefined inherits\n  ---\n  duration_ms: 0.5741\n  type: 'test'\n  ...\n# Subtest: recursive branches and replacement arrays are independently owned\nok 11 - recursive branches and replacement arrays are independently owned\n  ---\n  duration_ms: 0.3547\n  type: 'test'\n  ...\n# Subtest: invalid effective configuration is still rejected\nok 12 - invalid effective configuration is still rejected\n  ---\n  duration_ms: 0.1784\n  type: 'test'\n  ...\n1..12\n# tests 12\n# suites 0\n# pass 12\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 29.79\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 110
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: ASCII lines and a final tail\nok 1 - ASCII lines and a final tail\n  ---\n  duration_ms: 3.3503\n  type: 'test'\n  ...\n# Subtest: one page returns live rows\nok 2 - one page returns live rows\n  ---\n  duration_ms: 0.4545\n  type: 'test'\n  ...\n# Subtest: ordinary dependencies are ordered before a root\nok 3 - ordinary dependencies are ordered before a root\n  ---\n  duration_ms: 0.4175\n  type: 'test'\n  ...\n# Subtest: later nonempty values replace defaults\nok 4 - later nonempty values replace defaults\n  ---\n  duration_ms: 0.4381\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 21.2938\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 106
+  },
+  "changed": [
+    "src/cursor-pagination/collect.mjs",
+    "src/cursor-pagination/repository.mjs",
+    "src/dependency-aliases/order.mjs",
+    "src/dependency-aliases/registry.mjs",
+    "src/layered-config/merge.mjs",
+    "src/streaming-utf8/decoder.mjs",
+    "src/streaming-utf8/lines.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 6,
+  "editCalls": 7,
+  "verificationCalls": 1,
+  "toolCalls": 26,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:45:57.742Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T05:45:58.014Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T05:46:06.370Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:46:12.263Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:47:11.724Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:47:11.815Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:47:37.912Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:47:38.104Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:15.092Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:45:58.012Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6563dc34bbd912c2b8eee1175f4cda81ba50bdc08195a7cc4bd1e9b1e1f7c513"
+      },
+      "latencyMs": 285.2919000000693,
+      "parsedFiles": 9,
+      "fileCount": 9,
+      "cacheBytes": 93809,
+      "heapDeltaBytes": 23892944,
+      "graphBytes": 147066
+    },
+    {
+      "at": "2026-11-09T05:45:58.193Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6563dc34bbd912c2b8eee1175f4cda81ba50bdc08195a7cc4bd1e9b1e1f7c513"
+      },
+      "latencyMs": 176.23420000006445,
+      "parsedFiles": 0,
+      "fileCount": 9,
+      "cacheBytes": 93809,
+      "heapDeltaBytes": 13193224,
+      "graphBytes": 147066
+    },
+    {
+      "at": "2026-11-09T05:46:06.816Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6563dc34bbd912c2b8eee1175f4cda81ba50bdc08195a7cc4bd1e9b1e1f7c513"
+      },
+      "latencyMs": 453.70940000005066,
+      "parsedFiles": 0,
+      "fileCount": 9,
+      "cacheBytes": 93809,
+      "heapDeltaBytes": -58163840,
+      "graphBytes": 147066
+    },
+    {
+      "at": "2026-11-09T05:46:12.492Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6563dc34bbd912c2b8eee1175f4cda81ba50bdc08195a7cc4bd1e9b1e1f7c513"
+      },
+      "latencyMs": 250.22259999997914,
+      "parsedFiles": 0,
+      "fileCount": 9,
+      "cacheBytes": 93809,
+      "heapDeltaBytes": 9215696,
+      "graphBytes": 147066
+    },
+    {
+      "at": "2026-11-09T05:47:11.815Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7fae8cd934b70502ee24d411a1e5e7ab65f0d2f75731d2169d1e184b17157c39"
+      },
+      "latencyMs": 90.93009999999776,
+      "parsedFiles": 6,
+      "fileCount": 9,
+      "cacheBytes": 98796,
+      "heapDeltaBytes": 3652952,
+      "graphBytes": 153610
+    },
+    {
+      "at": "2026-11-09T05:47:11.904Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7fae8cd934b70502ee24d411a1e5e7ab65f0d2f75731d2169d1e184b17157c39"
+      },
+      "latencyMs": 88.43880000000354,
+      "parsedFiles": 0,
+      "fileCount": 9,
+      "cacheBytes": 98796,
+      "heapDeltaBytes": 1004784,
+      "graphBytes": 153610
+    },
+    {
+      "at": "2026-11-09T05:47:38.104Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fcaeb20383feaf1980d20bd17bb9e8a8cb4e369bdd56e01c96623b8083cb8cef"
+      },
+      "latencyMs": 192.06180000002496,
+      "parsedFiles": 1,
+      "fileCount": 9,
+      "cacheBytes": 114660,
+      "heapDeltaBytes": 2673872,
+      "graphBytes": 176945
+    },
+    {
+      "at": "2026-11-09T05:47:38.226Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fcaeb20383feaf1980d20bd17bb9e8a8cb4e369bdd56e01c96623b8083cb8cef"
+      },
+      "latencyMs": 122.07019999995828,
+      "parsedFiles": 0,
+      "fileCount": 9,
+      "cacheBytes": 114660,
+      "heapDeltaBytes": 1205440,
+      "graphBytes": 176945
+    },
+    {
+      "at": "2026-11-09T05:48:15.177Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "fcaeb20383feaf1980d20bd17bb9e8a8cb4e369bdd56e01c96623b8083cb8cef"
+      },
+      "latencyMs": 86.16720000002533,
+      "parsedFiles": 0,
+      "fileCount": 9,
+      "cacheBytes": 114660,
+      "heapDeltaBytes": 2263936,
+      "graphBytes": 176945
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/streaming-utf8/lines.mjs",
+        "tests/visible.test.mjs",
+        "src/dependency-aliases/order.mjs",
+        "src/layered-config/merge.mjs",
+        "src/layered-config/config.mjs",
+        "src/cursor-pagination/collect.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "src/streaming-utf8/lines.mjs",
+          "callId": "call_4567455a5e36448997c48dce1c0338ae|ctc_0b43edaa62ca193c016af15e1d04d087d1a841c8f0cb9ce803/2"
+        },
+        {
+          "tool": "read",
+          "path": "src/cursor-pagination/collect.mjs",
+          "callId": "call_4567455a5e36448997c48dce1c0338ae|ctc_0b43edaa62ca193c016af15e1d04d087d1a841c8f0cb9ce803/3"
+        },
+        {
+          "tool": "read",
+          "path": "src/dependency-aliases/order.mjs",
+          "callId": "call_4567455a5e36448997c48dce1c0338ae|ctc_0b43edaa62ca193c016af15e1d04d087d1a841c8f0cb9ce803/5"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-config/merge.mjs",
+          "callId": "call_4567455a5e36448997c48dce1c0338ae|ctc_0b43edaa62ca193c016af15e1d04d087d1a841c8f0cb9ce803/7"
+        },
+        {
+          "tool": "read",
+          "path": "src/layered-config/config.mjs",
+          "callId": "call_4567455a5e36448997c48dce1c0338ae|ctc_0b43edaa62ca193c016af15e1d04d087d1a841c8f0cb9ce803/8"
+        },
+        {
+          "tool": "read",
+          "path": "tests/visible.test.mjs",
+          "callId": "call_4567455a5e36448997c48dce1c0338ae|ctc_0b43edaa62ca193c016af15e1d04d087d1a841c8f0cb9ce803/9"
+        },
+        {
+          "tool": "edit",
+          "path": "src/streaming-utf8/lines.mjs",
+          "callId": "call_5fd3d815b17343799d025bc9aa7bc3c9|ctc_0b43edaa62ca193c016af15e515e0887d18dc6a1fb8db7eeac/2"
+        },
+        {
+          "tool": "edit",
+          "path": "src/cursor-pagination/collect.mjs",
+          "callId": "call_5fd3d815b17343799d025bc9aa7bc3c9|ctc_0b43edaa62ca193c016af15e515e0887d18dc6a1fb8db7eeac/4"
+        },
+        {
+          "tool": "edit",
+          "path": "src/dependency-aliases/order.mjs",
+          "callId": "call_5fd3d815b17343799d025bc9aa7bc3c9|ctc_0b43edaa62ca193c016af15e515e0887d18dc6a1fb8db7eeac/6"
+        },
+        {
+          "tool": "edit",
+          "path": "src/layered-config/merge.mjs",
+          "callId": "call_facb9ea10a38450db4b44d64579ed16a|ctc_0b43edaa62ca193c016af15e6ce5ec87d1a6fb6ebf7041d952/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readLines, LineReader } from './src/streaming-utf8/lines.mjs';\nimport { createRepository } from './src/cursor-pagination/repository.mjs';\nimport { collectAll } from './src/cursor-pagination/collect.mjs';\nimport { resolveName } from './src/dependency-aliases/registry.mjs';\nimport { buildOrder } from './src/dependency-aliases/order.mjs';\nimport { mergeLayers } from './src/layered-config/merge.mjs';\n\nconst encoded = new TextEncoder().encode('A€\\r\\n\\nlast\\r');\nassert.deepEqual(await readLines([...encoded].map(byte => Uint8Array.of(byte))), ['A€', '', 'last\\r']);\nconst lineReader = new LineReader();\nlineReader.feed(new TextEncoder().encode('a\\n'));\nassert.deepEqual(lineReader.end(), []);\n\nconst rows = [{id:1}, {id:2, deleted:true}, {id:3}, {id:4, deleted:true}, {id:5}];\nassert.deepEqual(await collectAll(createRepository(rows), {limit:2}), [{id:1}, {id:3}, {id:5}]);\nlet calls = 0;\nawait assert.rejects(collectAll({page: async () => { calls++; return {items:[],nextCursor:1}; }}, {maxPages:3}), /Repeated cursor/);\nassert.equal(calls, 2);\n\nassert.equal(resolveName('alias1', {real:{}}, {alias1:'alias2', alias2:'real'}), 'real');\nassert.deepEqual(buildOrder({nodes:{app:{dependencies:['aliasCore']}, core:{}}, aliases:{aliasCore:'core', another:'core'}}, ['app','another']), ['core','app']);\nassert.throws(() => resolveName('a', {}, {a:'b', b:'a'}), /Alias cycle/);\nassert.throws(() => buildOrder({nodes:{a:{dependencies:['aliasA']}}, aliases:{aliasA:'a'}}, ['a']), /Dependency cycle/);\n\nconst defaults = { endpoint:'base', retries:4, values:{flag:true, zero:7}, list:[{x:1}], untouched:{nested:{v:1}} };\nconst output = mergeLayers(defaults, {endpoint:'', retries:0, values:{flag:false, zero:null}, list:[{x:2}], untouched:undefined});\nassert.deepEqual(output, {endpoint:'', retries:0, values:{flag:false, zero:null}, list:[{x:2}], untouched:{nested:{v:1}}});\nassert.notEqual(output.values, defaults.values);\nassert.notEqual(output.list, defaults.list);\nassert.notEqual(output.list[0], defaults.list[0]);\nassert.notEqual(output.untouched, defaults.untouched);\nassert.notEqual(output.untouched.nested, defaults.untouched.nested);\nassert.equal(defaults.values.flag, true);\nconsole.log('extended contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/cursor-pagination/collect.mjs",
+        "src/cursor-pagination/repository.mjs",
+        "src/dependency-aliases/order.mjs",
+        "src/dependency-aliases/registry.mjs",
+        "src/streaming-utf8/decoder.mjs",
+        "src/streaming-utf8/lines.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readLines, LineReader } from './src/streaming-utf8/lines.mjs';\nimport { createRepository } from './src/cursor-pagination/repository.mjs';\nimport { collectAll } from './src/cursor-pagination/collect.mjs';\nimport { resolveName } from './src/dependency-aliases/registry.mjs';\nimport { buildOrder } from './src/dependency-aliases/order.mjs';\nimport { mergeLayers } from './src/layered-config/merge.mjs';\n\nconst encoded = new TextEncoder().encode('A€\\r\\n\\nlast\\r');\nassert.deepEqual(await readLines([...encoded].map(byte => Uint8Array.of(byte))), ['A€', '', 'last\\r']);\nconst lineReader = new LineReader();\nlineReader.feed(new TextEncoder().encode('a\\n'));\nassert.deepEqual(lineReader.end(), []);\n\nconst rows = [{id:1}, {id:2, deleted:true}, {id:3}, {id:4, deleted:true}, {id:5}];\nassert.deepEqual(await collectAll(createRepository(rows), {limit:2}), [{id:1}, {id:3}, {id:5}]);\nlet calls = 0;\nawait assert.rejects(collectAll({page: async () => { calls++; return {items:[],nextCursor:1}; }}, {maxPages:3}), /Repeated cursor/);\nassert.equal(calls, 2);\n\nassert.equal(resolveName('alias1', {real:{}}, {alias1:'alias2', alias2:'real'}), 'real');\nassert.deepEqual(buildOrder({nodes:{app:{dependencies:['aliasCore']}, core:{}}, aliases:{aliasCore:'core', another:'core'}}, ['app','another']), ['core','app']);\nassert.throws(() => resolveName('a', {}, {a:'b', b:'a'}), /Alias cycle/);\nassert.throws(() => buildOrder({nodes:{a:{dependencies:['aliasA']}}, aliases:{aliasA:'a'}}, ['a']), /Dependency cycle/);\n\nconst defaults = { endpoint:'base', retries:4, values:{flag:true, zero:7}, list:[{x:1}], untouched:{nested:{v:1}} };\nconst output = mergeLayers(defaults, {endpoint:'', retries:0, values:{flag:false, zero:null}, list:[{x:2}], untouched:undefined});\nassert.deepEqual(output, {endpoint:'', retries:0, values:{flag:false, zero:null}, list:[{x:2}], untouched:{nested:{v:1}}});\nassert.notEqual(output.values, defaults.values);\nassert.notEqual(output.list, defaults.list);\nassert.notEqual(output.list[0], defaults.list[0]);\nassert.notEqual(output.untouched, defaults.untouched);\nassert.notEqual(output.untouched.nested, defaults.untouched.nested);\nassert.equal(defaults.values.flag, true);\nconsole.log('extended contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/cursor-pagination/collect.mjs",
+        "src/cursor-pagination/repository.mjs",
+        "src/dependency-aliases/order.mjs",
+        "src/dependency-aliases/registry.mjs",
+        "src/layered-config/merge.mjs",
+        "src/streaming-utf8/decoder.mjs",
+        "src/streaming-utf8/lines.mjs",
+        "src/layered-config/config.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readLines, LineReader } from './src/streaming-utf8/lines.mjs';\nimport { createRepository } from './src/cursor-pagination/repository.mjs';\nimport { collectAll } from './src/cursor-pagination/collect.mjs';\nimport { resolveName } from './src/dependency-aliases/registry.mjs';\nimport { buildOrder } from './src/dependency-aliases/order.mjs';\nimport { mergeLayers } from './src/layered-config/merge.mjs';\n\nconst encoded = new TextEncoder().encode('A€\\r\\n\\nlast\\r');\nassert.deepEqual(await readLines([...encoded].map(byte => Uint8Array.of(byte))), ['A€', '', 'last\\r']);\nconst lineReader = new LineReader();\nlineReader.feed(new TextEncoder().encode('a\\n'));\nassert.deepEqual(lineReader.end(), []);\n\nconst rows = [{id:1}, {id:2, deleted:true}, {id:3}, {id:4, deleted:true}, {id:5}];\nassert.deepEqual(await collectAll(createRepository(rows), {limit:2}), [{id:1}, {id:3}, {id:5}]);\nlet calls = 0;\nawait assert.rejects(collectAll({page: async () => { calls++; return {items:[],nextCursor:1}; }}, {maxPages:3}), /Repeated cursor/);\nassert.equal(calls, 2);\n\nassert.equal(resolveName('alias1', {real:{}}, {alias1:'alias2', alias2:'real'}), 'real');\nassert.deepEqual(buildOrder({nodes:{app:{dependencies:['aliasCore']}, core:{}}, aliases:{aliasCore:'core', another:'core'}}, ['app','another']), ['core','app']);\nassert.throws(() => resolveName('a', {}, {a:'b', b:'a'}), /Alias cycle/);\nassert.throws(() => buildOrder({nodes:{a:{dependencies:['aliasA']}}, aliases:{aliasA:'a'}}, ['a']), /Dependency cycle/);\n\nconst defaults = { endpoint:'base', retries:4, values:{flag:true, zero:7}, list:[{x:1}], untouched:{nested:{v:1}} };\nconst output = mergeLayers(defaults, {endpoint:'', retries:0, values:{flag:false, zero:null}, list:[{x:2}], untouched:undefined});\nassert.deepEqual(output, {endpoint:'', retries:0, values:{flag:false, zero:null}, list:[{x:2}], untouched:{nested:{v:1}}});\nassert.notEqual(output.values, defaults.values);\nassert.notEqual(output.list, defaults.list);\nassert.notEqual(output.list[0], defaults.list[0]);\nassert.notEqual(output.untouched, defaults.untouched);\nassert.notEqual(output.untouched.nested, defaults.untouched.nested);\nassert.equal(defaults.values.flag, true);\nconsole.log('extended contract checks passed');\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/cursor-pagination/collect.mjs",
+      "before": "export async function collectAll(repository, { limit = 2, maxPages = 100 } = {}) {\r\n  const items = []; const seen = new Set(); let cursor = null;\r\n  for (let n = 0; n < maxPages; n++) {\r\n    const page = await repository.page({ cursor, limit });\r\n    items.push(...page.items);\r\n    if (page.items.length < limit || page.nextCursor === null) return items;\r\n    if (seen.has(page.nextCursor)) throw new Error('Repeated cursor');\r\n    seen.add(page.nextCursor); cursor = page.nextCursor;\r\n  }\r\n  throw new Error('Page budget exhausted');\r\n}\r\n",
+      "after": "export async function collectAll(repository, { limit = 2, maxPages = 100 } = {}) {\r\n  const items = []; const seen = new Set(); let cursor = null;\r\n  for (let n = 0; n < maxPages; n++) {\r\n    const page = await repository.page({ cursor, limit });\r\n    items.push(...page.items);\r\n    if (page.nextCursor === null) return items;\r\n    if (seen.has(page.nextCursor)) throw new Error('Repeated cursor');\r\n    seen.add(page.nextCursor); cursor = page.nextCursor;\r\n  }\r\n  throw new Error('Page budget exhausted');\r\n}\r\n"
+    },
+    {
+      "path": "src/cursor-pagination/repository.mjs",
+      "before": "export function createRepository(rows) {\r\n  return {\r\n    async page({ cursor = null, limit = 2 } = {}) {\r\n      const remaining = rows.filter(row => cursor === null || row.id >= cursor);\r\n      const scanned = remaining.slice(0, limit);\r\n      return { items: scanned.filter(row => !row.deleted), nextCursor: remaining.length > scanned.length ? scanned.at(-1).id : null };\r\n    }\r\n  };\r\n}\r\n",
+      "after": "export function createRepository(rows) {\r\n  return {\r\n    async page({ cursor = null, limit = 2 } = {}) {\r\n      const remaining = rows.filter(row => cursor === null || row.id > cursor);\r\n      const scanned = remaining.slice(0, limit);\r\n      return { items: scanned.filter(row => !row.deleted), nextCursor: remaining.length > scanned.length ? scanned.at(-1).id : null };\r\n    }\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/dependency-aliases/order.mjs",
+      "before": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(name)) return;\r\n    if (active.has(name)) throw new Error('Dependency cycle: ' + name);\r\n    active.add(name);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(name); done.add(name); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n",
+      "after": "import { resolveName } from './registry.mjs';\r\nexport function buildOrder({ nodes, aliases = {} }, roots) {\r\n  const done = new Set(); const active = new Set(); const order = [];\r\n  function visit(name) {\r\n    const target = resolveName(name, nodes, aliases);\r\n    if (done.has(target)) return;\r\n    if (active.has(target)) throw new Error('Dependency cycle: ' + target);\r\n    active.add(target);\r\n    for (const dependency of nodes[target].dependencies ?? []) visit(dependency);\r\n    active.delete(target); done.add(target); order.push(target);\r\n  }\r\n  for (const root of roots) visit(root);\r\n  return order;\r\n}\r\n"
+    },
+    {
+      "path": "src/dependency-aliases/registry.mjs",
+      "before": "export function resolveName(name, nodes, aliases) {\r\n  const target = aliases[name] ?? name;\r\n  if (!(target in nodes)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n",
+      "after": "export function resolveName(name, nodes, aliases = {}) {\r\n  const seen = new Set();\r\n  let target = name;\r\n  while (Object.hasOwn(aliases, target)) {\r\n    if (seen.has(target)) throw new Error('Alias cycle: ' + target);\r\n    seen.add(target);\r\n    target = aliases[target];\r\n  }\r\n  if (!Object.hasOwn(nodes, target)) throw new Error('Unknown node: ' + target);\r\n  return target;\r\n}\r\n"
+    },
+    {
+      "path": "src/layered-config/merge.mjs",
+      "before": "function isPlain(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }\r\nexport function mergeLayers(...layers) {\r\n  const result = {};\r\n  for (const layer of layers) {\r\n    for (const [key, value] of Object.entries(layer)) {\r\n      if (!value) continue;\r\n      if (isPlain(value) && isPlain(result[key])) result[key] = mergeLayers(result[key], value);\r\n      else result[key] = value;\r\n    }\r\n  }\r\n  return result;\r\n}\r\n",
+      "after": "function isPlain(value) {\r\n  if (value === null || typeof value !== 'object') return false;\r\n  const prototype = Object.getPrototypeOf(value);\r\n  return prototype === Object.prototype || prototype === null;\r\n}\r\n\r\nfunction setOwn(target, key, value) {\r\n  Object.defineProperty(target, key, {\r\n    value, enumerable: true, writable: true, configurable: true\r\n  });\r\n}\r\n\r\nfunction cloneValue(value) {\r\n  if (Array.isArray(value)) return value.map(cloneValue);\r\n  if (!isPlain(value)) return value;\r\n\r\n  const copy = {};\r\n  for (const [key, nested] of Object.entries(value)) {\r\n    if (nested !== undefined) setOwn(copy, key, cloneValue(nested));\r\n  }\r\n  return copy;\r\n}\r\n\r\nexport function mergeLayers(...layers) {\r\n  const result = {};\r\n  for (const layer of layers) {\r\n    for (const [key, value] of Object.entries(layer)) {\r\n      if (value === undefined) continue;\r\n      const previous = Object.hasOwn(result, key) ? result[key] : undefined;\r\n      const merged = isPlain(value) && isPlain(previous)\r\n        ? mergeLayers(previous, value)\r\n        : cloneValue(value);\r\n      setOwn(result, key, merged);\r\n    }\r\n  }\r\n  return result;\r\n}\r\n"
+    },
+    {
+      "path": "src/streaming-utf8/decoder.mjs",
+      "before": "export class ChunkDecoder {\r\n  constructor() { this.decoder = new TextDecoder('utf-8'); }\r\n  feed(bytes) { return this.decoder.decode(bytes); }\r\n  end() { return this.decoder.decode(); }\r\n}\r\n",
+      "after": "export class ChunkDecoder {\r\n  constructor() { this.decoder = new TextDecoder('utf-8'); }\r\n  feed(bytes) { return this.decoder.decode(bytes, { stream: true }); }\r\n  end() { return this.decoder.decode(); }\r\n}\r\n"
+    },
+    {
+      "path": "src/streaming-utf8/lines.mjs",
+      "before": "import { ChunkDecoder } from './decoder.mjs';\r\nexport class LineReader {\r\n  constructor() { this.decoder = new ChunkDecoder(); this.pending = ''; }\r\n  feed(bytes) {\r\n    this.pending += this.decoder.feed(bytes);\r\n    const parts = this.pending.split('\\n'); this.pending = parts.pop();\r\n    return parts.map(line => line.replace(/\\r$/, ''));\r\n  }\r\n  end() {\r\n    this.pending += this.decoder.end();\r\n    const last = this.pending.replace(/\\r$/, ''); this.pending = '';\r\n    return last ? [last] : [];\r\n  }\r\n}\r\nexport async function readLines(chunks) {\r\n  const reader = new LineReader(); const lines = [];\r\n  for await (const chunk of chunks) lines.push(...reader.feed(chunk));\r\n  return [...lines, ...reader.end()];\r\n}\r\n",
+      "after": "import { ChunkDecoder } from './decoder.mjs';\r\nexport class LineReader {\r\n  constructor() { this.decoder = new ChunkDecoder(); this.pending = ''; }\r\n  feed(bytes) {\r\n    this.pending += this.decoder.feed(bytes);\r\n    const parts = this.pending.split('\\n'); this.pending = parts.pop();\r\n    return parts.map(line => line.replace(/\\r$/, ''));\r\n  }\r\n  end() {\r\n    this.pending += this.decoder.end();\r\n    const last = this.pending; this.pending = '';\r\n    return last ? [last] : [];\r\n  }\r\n}\r\nexport async function readLines(chunks) {\r\n  const reader = new LineReader(); const lines = [];\r\n  for await (const chunk of chunks) lines.push(...reader.feed(chunk));\r\n  return [...lines, ...reader.end()];\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the repairs across the four components: streaming UTF-8 decoding and line endings, exclusive cursor pagination, transitive alias resolution and dependency ordering, and layered configuration merging with detached nested values.\n\nVerification passed:\n- `node --test tests/visible.test.mjs` — 4 tests passed.\n- Additional inline contract checks covering chunk boundaries, pagination, alias cycles, and deep-copy behavior passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\023-streaming-catalog-workflow-B-r1\\home\\events\\1794203157716-9d03903f-72af-4569-8e01-0e635680392b.jsonl"
+}
