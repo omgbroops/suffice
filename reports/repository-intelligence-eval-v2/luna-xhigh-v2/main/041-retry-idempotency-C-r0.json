@@ -1,0 +1,263 @@
+{
+  "task": "retry-idempotency",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 40,
+  "runId": "041-retry-idempotency-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 153465.38939999975,
+  "usage": {
+    "input": 22658,
+    "cacheRead": 35328,
+    "cacheWrite": 0,
+    "output": 6301,
+    "estimatedApiUsd": 0.00576958,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00576958,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: POST keys survive retries and separate logical calls\nok 1 - POST keys survive retries and separate logical calls\n  ---\n  duration_ms: 1.5476\n  type: 'test'\n  ...\n# Subtest: retry budget and ordinary errors are respected\nok 2 - retry budget and ordinary errors are respected\n  ---\n  duration_ms: 0.257\n  type: 'test'\n  ...\n# Subtest: explicit caller identity is preserved without generating another key\nok 3 - explicit caller identity is preserved without generating another key\n  ---\n  duration_ms: 0.7709\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 9.3432\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 80
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: GET retries a server error and returns success\nok 1 - GET retries a server error and returns success\n  ---\n  duration_ms: 1.4039\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.8312\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 79
+  },
+  "changed": [
+    "src/client.mjs",
+    "src/policy.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 19,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:11:59.225Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T06:11:59.295Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/client.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:11:59.353Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/client.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:20.833Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/client.mjs",
+          "src/policy.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:20.896Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/client.mjs",
+          "src/policy.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:11:59.287Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "805798c6b325c35a08867aff4a4f6270791035526da0d0009cd91f4a4cd82003"
+      },
+      "latencyMs": 62.460100000258535,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 28388,
+      "heapDeltaBytes": 1648664,
+      "graphBytes": 47650
+    },
+    {
+      "at": "2026-11-09T06:11:59.353Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "122b2f1ba6114150addaa0a913adf6330bf5ae379c9e6341aeec29a192e4c659"
+      },
+      "latencyMs": 57.17059999983758,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 32116,
+      "heapDeltaBytes": 1136360,
+      "graphBytes": 53197
+    },
+    {
+      "at": "2026-11-09T06:11:59.407Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "122b2f1ba6114150addaa0a913adf6330bf5ae379c9e6341aeec29a192e4c659"
+      },
+      "latencyMs": 54.08880000002682,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 32116,
+      "heapDeltaBytes": 518416,
+      "graphBytes": 53197
+    },
+    {
+      "at": "2026-11-09T06:12:20.895Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a8c9d8e42e6d3348ee259f8a06ba841036d27879c867959333d146d16a4c18ec"
+      },
+      "latencyMs": 62.622299999929965,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 43091,
+      "heapDeltaBytes": 1037008,
+      "graphBytes": 68884
+    },
+    {
+      "at": "2026-11-09T06:12:20.950Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "a8c9d8e42e6d3348ee259f8a06ba841036d27879c867959333d146d16a4c18ec"
+      },
+      "latencyMs": 54.59170000022277,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 43091,
+      "heapDeltaBytes": 378688,
+      "graphBytes": 68884
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/client.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createClient } from './src/client.mjs';\nimport { delayFor, shouldRetry } from './src/policy.mjs';\n\nlet generated = 0;\nconst seen = [];\nconst delays = [];\nconst request = createClient({\n  transport: async req => {\n    seen.push(req);\n    return { status: seen.length === 1 ? 503 : 200, headers: seen.length === 1 ? { 'Retry-After': '1.25' } : {} };\n  },\n  sleep: async ms => delays.push(ms),\n  keyFactory: () => `key-${++generated}`,\n  maxAttempts: 3,\n});\nassert.equal((await request({ method: 'POST', url: '/x', headers: { authorization: 'token' } })).status, 200);\nassert.deepEqual(delays, [1250]);\nassert.equal(generated, 1);\nassert.equal(seen[0].headers['idempotency-key'], 'key-1');\nassert.equal(seen[1].headers['idempotency-key'], 'key-1');\nassert.equal(seen[0].headers.authorization, 'token');\nawait request({ method: 'POST', url: '/x' });\nassert.equal(seen[2].headers['idempotency-key'], 'key-2');\nlet called = false;\nconst explicit = createClient({ transport: async req => { assert.equal(req.headers['Idempotency-Key'], 'caller'); return { status: 200 }; }, sleep: async () => {}, keyFactory: () => { called = true; } });\nawait explicit({ method: 'POST', url: '/x', headers: { 'Idempotency-Key': 'caller' } });\nassert.equal(called, false);\nassert.equal(delayFor({ headers: { 'retry-after': '2' } }, 2, 100), 2000);\nassert.equal(delayFor({ headers: { 'retry-after': 'invalid' } }, 2, 100), 200);\nassert.equal(shouldRetry({ status: 599 }), true);\nassert.equal(shouldRetry({ status: 600 }), false);\nassert.equal(shouldRetry({ status: 404 }), false);\nconsole.log('additional contract checks passed');\nEOF",
+        "git diff -- src/client.mjs src/policy.mjs && git status --short",
+        "git rev-parse --show-toplevel && git status --short --untracked-files=all -- .suffice/intelligence-eval-v2/runs/luna-xhigh-v2/main/041-retry-idempotency-C-r0/workspace && git check-ignore -v .suffice/intelligence-eval-v2/runs/luna-xhigh-v2/main/041-retry-idempotency-C-r0/workspace/src/client.mjs || true && git diff -- .suffice/intelligence-eval-v2/runs/luna-xhigh-v2/main/041-retry-idempotency-C-r0/workspace/src/client.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/client.mjs",
+        "src/policy.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createClient } from './src/client.mjs';\nimport { delayFor, shouldRetry } from './src/policy.mjs';\n\nlet generated = 0;\nconst seen = [];\nconst delays = [];\nconst request = createClient({\n  transport: async req => {\n    seen.push(req);\n    return { status: seen.length === 1 ? 503 : 200, headers: seen.length === 1 ? { 'Retry-After': '1.25' } : {} };\n  },\n  sleep: async ms => delays.push(ms),\n  keyFactory: () => `key-${++generated}`,\n  maxAttempts: 3,\n});\nassert.equal((await request({ method: 'POST', url: '/x', headers: { authorization: 'token' } })).status, 200);\nassert.deepEqual(delays, [1250]);\nassert.equal(generated, 1);\nassert.equal(seen[0].headers['idempotency-key'], 'key-1');\nassert.equal(seen[1].headers['idempotency-key'], 'key-1');\nassert.equal(seen[0].headers.authorization, 'token');\nawait request({ method: 'POST', url: '/x' });\nassert.equal(seen[2].headers['idempotency-key'], 'key-2');\nlet called = false;\nconst explicit = createClient({ transport: async req => { assert.equal(req.headers['Idempotency-Key'], 'caller'); return { status: 200 }; }, sleep: async () => {}, keyFactory: () => { called = true; } });\nawait explicit({ method: 'POST', url: '/x', headers: { 'Idempotency-Key': 'caller' } });\nassert.equal(called, false);\nassert.equal(delayFor({ headers: { 'retry-after': '2' } }, 2, 100), 2000);\nassert.equal(delayFor({ headers: { 'retry-after': 'invalid' } }, 2, 100), 200);\nassert.equal(shouldRetry({ status: 599 }), true);\nassert.equal(shouldRetry({ status: 600 }), false);\nassert.equal(shouldRetry({ status: 404 }), false);\nconsole.log('additional contract checks passed');\nEOF",
+        "git diff -- src/client.mjs src/policy.mjs && git status --short",
+        "git rev-parse --show-toplevel && git status --short --untracked-files=all -- .suffice/intelligence-eval-v2/runs/luna-xhigh-v2/main/041-retry-idempotency-C-r0/workspace && git check-ignore -v .suffice/intelligence-eval-v2/runs/luna-xhigh-v2/main/041-retry-idempotency-C-r0/workspace/src/client.mjs || true && git diff -- .suffice/intelligence-eval-v2/runs/luna-xhigh-v2/main/041-retry-idempotency-C-r0/workspace/src/client.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/client.mjs",
+      "before": "import { delayFor, shouldRetry } from './policy.mjs';\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      const outgoing = { ...headers };\r\n      if (method === 'POST') outgoing['idempotency-key'] = keyFactory();\r\n      response = await transport({ method, url, headers: outgoing, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n",
+      "after": "import { delayFor, shouldRetry } from './policy.mjs';\r\n\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    const callerHeaders = headers ?? {};\r\n    const hasIdempotencyKey = Object.keys(callerHeaders).some(\r\n      name => name.toLowerCase() === 'idempotency-key',\r\n    );\r\n    const requestHeaders = { ...callerHeaders };\r\n\r\n    if (method === 'POST' && !hasIdempotencyKey) {\r\n      requestHeaders['idempotency-key'] = keyFactory();\r\n    }\r\n\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      response = await transport({ method, url, headers: { ...requestHeaders }, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/policy.mjs",
+      "before": "export function delayFor(response, attempt, baseMs) {\r\n  const retryAfter = response.headers?.['retry-after'];\r\n  if (retryAfter !== undefined && Number.isFinite(Number(retryAfter))) return Number(retryAfter);\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\nexport function shouldRetry(response) {\r\n  return response.status === 429 || response.status >= 500;\r\n}\r\n",
+      "after": "function getHeader(headers, name) {\r\n  if (!headers) return undefined;\r\n  if (typeof headers.get === 'function') return headers.get(name);\r\n\r\n  const key = Object.keys(headers).find(headerName => headerName.toLowerCase() === name);\r\n  return key === undefined ? undefined : headers[key];\r\n}\r\n\r\nexport function delayFor(response, attempt, baseMs) {\r\n  const retryAfter = getHeader(response.headers, 'retry-after');\r\n  const seconds = typeof retryAfter === 'number'\r\n    ? retryAfter\r\n    : typeof retryAfter === 'string' && retryAfter.trim() !== ''\r\n      ? Number(retryAfter)\r\n      : NaN;\r\n\r\n  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\n\r\nexport function shouldRetry(response) {\r\n  const status = response?.status;\r\n  return status === 429 || (Number.isInteger(status) && status >= 500 && status <= 599);\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the retry and idempotency fixes in `src/client.mjs` and `src/policy.mjs`. POST retries now reuse one generated key per request while preserving caller-provided keys; retry delays convert numeric `Retry-After` seconds to milliseconds, and retries are limited to 429 and 5xx responses.\n\nVerification: `node --test tests/visible.test.mjs` passed. Additional inline contract checks also passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\041-retry-idempotency-C-r0\\home\\events\\1794204652216-f3c32b40-2238-405e-9ea9-97c709cb90e1.jsonl"
+}
