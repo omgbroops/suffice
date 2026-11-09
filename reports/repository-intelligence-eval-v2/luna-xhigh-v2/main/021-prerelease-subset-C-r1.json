@@ -1,0 +1,386 @@
+{
+  "task": "prerelease-subset",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 21,
+  "runId": "021-prerelease-subset-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "cross-file",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 212710.40650000004,
+  "usage": {
+    "input": 50572,
+    "cacheRead": 207872,
+    "cacheWrite": 0,
+    "output": 7864,
+    "estimatedApiUsd": 0.01106792,
+    "modelCalls": 15,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.01106792,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: inclusive prerelease lower bounds within caret ranges\nok 1 - inclusive prerelease lower bounds within caret ranges\n  ---\n  duration_ms: 4.4063\n  type: 'test'\n  ...\n# Subtest: inclusive prerelease upper bounds across comparators\nok 2 - inclusive prerelease upper bounds across comparators\n  ---\n  duration_ms: 0.4653\n  type: 'test'\n  ...\n# Subtest: prerelease gating remains distinct from comparator checks\nok 3 - prerelease gating remains distinct from comparator checks\n  ---\n  duration_ms: 0.478\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 12.6427\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 142
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 8.2972\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 3.841\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 2.7391\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 3.3795\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 1.8039\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.3824\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 3.8655\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 33.7247\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 165
+  },
+  "changed": [
+    "src/ranges/subset.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 15,
+  "editCalls": 2,
+  "verificationCalls": 4,
+  "toolCalls": 37,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:47:45.811Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:47:48.987Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ranges/subset.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:47:50.714Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/ranges/subset.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:14.052Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "tests/visible.test.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:14.477Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/ranges/subset.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:14.878Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/ranges/subset.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:55.661Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "tests/visible.test.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:56.112Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/ranges/subset.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:48:56.526Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/ranges/subset.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:47:47.995Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3de0c996adb83bdd30a1128cc6084e337b30b257b047ebea61ee7844d39aed6e"
+      },
+      "latencyMs": 2183.932999999961,
+      "parsedFiles": 124,
+      "fileCount": 124,
+      "cacheBytes": 2574856,
+      "heapDeltaBytes": -16662568,
+      "graphBytes": 3668199
+    },
+    {
+      "at": "2026-11-09T05:47:50.703Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "98dacf26b9d1f1d50977784a073abda3e8696be21c220af370136e925a3986b1"
+      },
+      "latencyMs": 1716.4932000000263,
+      "parsedFiles": 1,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": -17584792,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:47:52.643Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "98dacf26b9d1f1d50977784a073abda3e8696be21c220af370136e925a3986b1"
+      },
+      "latencyMs": 1937.6753000000026,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": 38336312,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:48:14.475Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "98dacf26b9d1f1d50977784a073abda3e8696be21c220af370136e925a3986b1"
+      },
+      "latencyMs": 423.04469999996945,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": -35667040,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:48:14.876Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "98dacf26b9d1f1d50977784a073abda3e8696be21c220af370136e925a3986b1"
+      },
+      "latencyMs": 399.6416999999201,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": 9416496,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:48:15.316Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "98dacf26b9d1f1d50977784a073abda3e8696be21c220af370136e925a3986b1"
+      },
+      "latencyMs": 438.85639999993145,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": 10459656,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:48:56.109Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ada125d443dd47ea4bd64c10a216f6509a0b9f4f01add8a6750aea9dcc535e35"
+      },
+      "latencyMs": 448.17249999998603,
+      "parsedFiles": 1,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": -31037048,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:48:56.525Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ada125d443dd47ea4bd64c10a216f6509a0b9f4f01add8a6750aea9dcc535e35"
+      },
+      "latencyMs": 414.4841000000015,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": 9483592,
+      "graphBytes": 3666111
+    },
+    {
+      "at": "2026-11-09T05:48:56.943Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "ada125d443dd47ea4bd64c10a216f6509a0b9f4f01add8a6750aea9dcc535e35"
+      },
+      "latencyMs": 416.97480000008363,
+      "parsedFiles": 0,
+      "fileCount": 124,
+      "cacheBytes": 2573236,
+      "heapDeltaBytes": 9405416,
+      "graphBytes": 3666111
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/ranges/subset.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/ranges/subset.js",
+          "callId": "call_549494bc33db4b469581545573da5d07|ctc_0a9f7ecb3b8d39c2016af15ec0698087d199cf68416a5dbe0e/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff -- src/ranges/subset.js",
+        "grep -n -A7 -B4 'Prerelease admission\\|c.test' src/ranges/subset.js; git rev-parse --show-toplevel; git status --short --untracked-files=no"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/ranges/subset.js",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/ranges/subset.js",
+          "callId": "call_549494bc33db4b469581545573da5d07|ctc_0a9f7ecb3b8d39c2016af15ec0698087d199cf68416a5dbe0e/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs",
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs",
+        "git diff -- src/ranges/subset.js",
+        "grep -n -A7 -B4 'Prerelease admission\\|c.test' src/ranges/subset.js; git rev-parse --show-toplevel; git status --short --untracked-files=no"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/ranges/subset.js",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs",
+        "git diff -- src/ranges/subset.js",
+        "grep -n -A7 -B4 'Prerelease admission\\|c.test' src/ranges/subset.js; git rev-parse --show-toplevel; git status --short --untracked-files=no"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/ranges/subset.js",
+      "before": "'use strict'\n\nconst Range = require('../classes/range.js')\nconst Comparator = require('../classes/comparator.js')\nconst { ANY } = Comparator\nconst satisfies = require('../functions/satisfies.js')\nconst compare = require('../functions/compare.js')\n\n// Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:\n// - Every simple range `r1, r2, ...` is a null set, OR\n// - Every simple range `r1, r2, ...` which is not a null set is a subset of\n//   some `R1, R2, ...`\n//\n// Simple range `c1 c2 ...` is a subset of simple range `C1 C2 ...` iff:\n// - If c is only the ANY comparator\n//   - If C is only the ANY comparator, return true\n//   - Else if in prerelease mode, return false\n//   - else replace c with `[>=0.0.0]`\n// - If C is only the ANY comparator\n//   - if in prerelease mode, return true\n//   - else replace C with `[>=0.0.0]`\n// - Let EQ be the set of = comparators in c\n// - If EQ is more than one, return true (null set)\n// - Let GT be the highest > or >= comparator in c\n// - Let LT be the lowest < or <= comparator in c\n// - If GT and LT, and GT.semver > LT.semver, return true (null set)\n// - If any C is a = range, and GT or LT are set, return false\n// - If EQ\n//   - If GT, and EQ does not satisfy GT, return true (null set)\n//   - If LT, and EQ does not satisfy LT, return true (null set)\n//   - If EQ satisfies every C, return true\n//   - Else return false\n// - If GT\n//   - If GT.semver is lower than any > or >= comp in C, return false\n//   - If GT is >=, and GT.semver does not satisfy every C, return false\n//   - If GT.semver has a prerelease, and not in prerelease mode\n//     - If no C has a prerelease and the GT.semver tuple, return false\n// - If LT\n//   - If LT.semver is greater than any < or <= comp in C, return false\n//   - If LT is <=, and LT.semver does not satisfy every C, return false\n//   - If LT.semver has a prerelease, and not in prerelease mode\n//     - If no C has a prerelease and the LT.semver tuple, return false\n// - Else return true\n\nconst subset = (sub, dom, options = {}) => {\n  if (sub === dom) {\n    return true\n  }\n\n  sub = new Range(sub, options)\n  dom = new Range(dom, options)\n  let sawNonNull = false\n\n  OUTER: for (const simpleSub of sub.set) {\n    for (const simpleDom of dom.set) {\n      const isSub = simpleSubset(simpleSub, simpleDom, options)\n      sawNonNull = sawNonNull || isSub !== null\n      if (isSub) {\n        continue OUTER\n      }\n    }\n    // the null set is a subset of everything, but null simple ranges in\n    // a complex range should be ignored.  so if we saw a non-null range,\n    // then we know this isn't a subset, but if EVERY simple range was null,\n    // then it is a subset.\n    if (sawNonNull) {\n      return false\n    }\n  }\n  return true\n}\n\nconst minimumVersionWithPreRelease = [new Comparator('>=0.0.0-0')]\nconst minimumVersion = [new Comparator('>=0.0.0')]\n\nconst simpleSubset = (sub, dom, options) => {\n  if (sub === dom) {\n    return true\n  }\n\n  if (sub.length === 1 && sub[0].semver === ANY) {\n    if (dom.length === 1 && dom[0].semver === ANY) {\n      return true\n    } else if (options.includePrerelease) {\n      sub = minimumVersionWithPreRelease\n    } else {\n      sub = minimumVersion\n    }\n  }\n\n  if (dom.length === 1 && dom[0].semver === ANY) {\n    if (options.includePrerelease) {\n      return true\n    } else {\n      dom = minimumVersion\n    }\n  }\n\n  const eqSet = new Set()\n  let gt, lt\n  for (const c of sub) {\n    if (c.operator === '>' || c.operator === '>=') {\n      gt = higherGT(gt, c, options)\n    } else if (c.operator === '<' || c.operator === '<=') {\n      lt = lowerLT(lt, c, options)\n    } else {\n      eqSet.add(c.semver)\n    }\n  }\n\n  if (eqSet.size > 1) {\n    return null\n  }\n\n  let gtltComp\n  if (gt && lt) {\n    gtltComp = compare(gt.semver, lt.semver, options)\n    if (gtltComp > 0) {\n      return null\n    } else if (gtltComp === 0 && (gt.operator !== '>=' || lt.operator !== '<=')) {\n      return null\n    }\n  }\n\n  // will iterate one or zero times\n  for (const eq of eqSet) {\n    if (gt && !satisfies(eq, String(gt), options)) {\n      return null\n    }\n\n    if (lt && !satisfies(eq, String(lt), options)) {\n      return null\n    }\n\n    for (const c of dom) {\n      if (!satisfies(eq, String(c), options)) {\n        return false\n      }\n    }\n\n    return true\n  }\n\n  let higher, lower\n  let hasDomLT, hasDomGT\n  // if the subset has a prerelease, we need a comparator in the superset\n  // with the same tuple and a prerelease, or it's not a subset\n  let needDomLTPre = lt &&\n    !options.includePrerelease &&\n    lt.semver.prerelease.length ? lt.semver : false\n  let needDomGTPre = gt &&\n    !options.includePrerelease &&\n    gt.semver.prerelease.length ? gt.semver : false\n  // exception: <1.2.3-0 is the same as <1.2.3\n  if (needDomLTPre && needDomLTPre.prerelease.length === 1 &&\n      lt.operator === '<' && needDomLTPre.prerelease[0] === 0) {\n    needDomLTPre = false\n  }\n\n  for (const c of dom) {\n    hasDomGT = hasDomGT || c.operator === '>' || c.operator === '>='\n    hasDomLT = hasDomLT || c.operator === '<' || c.operator === '<='\n    if (gt) {\n      if (needDomGTPre) {\n        if (c.semver.prerelease && c.semver.prerelease.length &&\n            c.semver.major === needDomGTPre.major &&\n            c.semver.minor === needDomGTPre.minor &&\n            c.semver.patch === needDomGTPre.patch) {\n          needDomGTPre = false\n        }\n      }\n      if (c.operator === '>' || c.operator === '>=') {\n        higher = higherGT(gt, c, options)\n        if (higher === c && higher !== gt) {\n          return false\n        }\n      } else if (gt.operator === '>=' && !satisfies(gt.semver, String(c), options)) {\n        return false\n      }\n    }\n    if (lt) {\n      if (needDomLTPre) {\n        if (c.semver.prerelease && c.semver.prerelease.length &&\n            c.semver.major === needDomLTPre.major &&\n            c.semver.minor === needDomLTPre.minor &&\n            c.semver.patch === needDomLTPre.patch) {\n          needDomLTPre = false\n        }\n      }\n      if (c.operator === '<' || c.operator === '<=') {\n        lower = lowerLT(lt, c, options)\n        if (lower === c && lower !== lt) {\n          return false\n        }\n      } else if (lt.operator === '<=' && !satisfies(lt.semver, String(c), options)) {\n        return false\n      }\n    }\n    if (!c.operator && (lt || gt) && gtltComp !== 0) {\n      return false\n    }\n  }\n\n  // if there was a < or >, and nothing in the dom, then must be false\n  // UNLESS it was limited by another range in the other direction.\n  // Eg, >1.0.0 <1.0.1 is still a subset of <2.0.0\n  if (gt && hasDomLT && !lt && gtltComp !== 0) {\n    return false\n  }\n\n  if (lt && hasDomGT && !gt && gtltComp !== 0) {\n    return false\n  }\n\n  // we needed a prerelease range in a specific tuple, but didn't get one\n  // then this isn't a subset.  eg >=1.2.3-pre is not a subset of >=1.0.0,\n  // because it includes prereleases in the 1.2.3 tuple\n  if (needDomGTPre || needDomLTPre) {\n    return false\n  }\n\n  return true\n}\n\n// >=1.2.3 is lower than >1.2.3\nconst higherGT = (a, b, options) => {\n  if (!a) {\n    return b\n  }\n  const comp = compare(a.semver, b.semver, options)\n  return comp > 0 ? a\n    : comp < 0 ? b\n    : b.operator === '>' && a.operator === '>=' ? b\n    : a\n}\n\n// <=1.2.3 is higher than <1.2.3\nconst lowerLT = (a, b, options) => {\n  if (!a) {\n    return b\n  }\n  const comp = compare(a.semver, b.semver, options)\n  return comp < 0 ? a\n    : comp > 0 ? b\n    : b.operator === '<' && a.operator === '<=' ? b\n    : a\n}\n\nmodule.exports = subset\n",
+      "after": "'use strict'\n\nconst Range = require('../classes/range.js')\nconst Comparator = require('../classes/comparator.js')\nconst { ANY } = Comparator\nconst satisfies = require('../functions/satisfies.js')\nconst compare = require('../functions/compare.js')\n\n// Complex range `r1 || r2 || ...` is a subset of `R1 || R2 || ...` iff:\n// - Every simple range `r1, r2, ...` is a null set, OR\n// - Every simple range `r1, r2, ...` which is not a null set is a subset of\n//   some `R1, R2, ...`\n//\n// Simple range `c1 c2 ...` is a subset of simple range `C1 C2 ...` iff:\n// - If c is only the ANY comparator\n//   - If C is only the ANY comparator, return true\n//   - Else if in prerelease mode, return false\n//   - else replace c with `[>=0.0.0]`\n// - If C is only the ANY comparator\n//   - if in prerelease mode, return true\n//   - else replace C with `[>=0.0.0]`\n// - Let EQ be the set of = comparators in c\n// - If EQ is more than one, return true (null set)\n// - Let GT be the highest > or >= comparator in c\n// - Let LT be the lowest < or <= comparator in c\n// - If GT and LT, and GT.semver > LT.semver, return true (null set)\n// - If any C is a = range, and GT or LT are set, return false\n// - If EQ\n//   - If GT, and EQ does not satisfy GT, return true (null set)\n//   - If LT, and EQ does not satisfy LT, return true (null set)\n//   - If EQ satisfies every C, return true\n//   - Else return false\n// - If GT\n//   - If GT.semver is lower than any > or >= comp in C, return false\n//   - If GT is >=, and GT.semver does not satisfy every C, return false\n//   - If GT.semver has a prerelease, and not in prerelease mode\n//     - If no C has a prerelease and the GT.semver tuple, return false\n// - If LT\n//   - If LT.semver is greater than any < or <= comp in C, return false\n//   - If LT is <=, and LT.semver does not satisfy every C, return false\n//   - If LT.semver has a prerelease, and not in prerelease mode\n//     - If no C has a prerelease and the LT.semver tuple, return false\n// - Else return true\n\nconst subset = (sub, dom, options = {}) => {\n  if (sub === dom) {\n    return true\n  }\n\n  sub = new Range(sub, options)\n  dom = new Range(dom, options)\n  let sawNonNull = false\n\n  OUTER: for (const simpleSub of sub.set) {\n    for (const simpleDom of dom.set) {\n      const isSub = simpleSubset(simpleSub, simpleDom, options)\n      sawNonNull = sawNonNull || isSub !== null\n      if (isSub) {\n        continue OUTER\n      }\n    }\n    // the null set is a subset of everything, but null simple ranges in\n    // a complex range should be ignored.  so if we saw a non-null range,\n    // then we know this isn't a subset, but if EVERY simple range was null,\n    // then it is a subset.\n    if (sawNonNull) {\n      return false\n    }\n  }\n  return true\n}\n\nconst minimumVersionWithPreRelease = [new Comparator('>=0.0.0-0')]\nconst minimumVersion = [new Comparator('>=0.0.0')]\n\nconst simpleSubset = (sub, dom, options) => {\n  if (sub === dom) {\n    return true\n  }\n\n  if (sub.length === 1 && sub[0].semver === ANY) {\n    if (dom.length === 1 && dom[0].semver === ANY) {\n      return true\n    } else if (options.includePrerelease) {\n      sub = minimumVersionWithPreRelease\n    } else {\n      sub = minimumVersion\n    }\n  }\n\n  if (dom.length === 1 && dom[0].semver === ANY) {\n    if (options.includePrerelease) {\n      return true\n    } else {\n      dom = minimumVersion\n    }\n  }\n\n  const eqSet = new Set()\n  let gt, lt\n  for (const c of sub) {\n    if (c.operator === '>' || c.operator === '>=') {\n      gt = higherGT(gt, c, options)\n    } else if (c.operator === '<' || c.operator === '<=') {\n      lt = lowerLT(lt, c, options)\n    } else {\n      eqSet.add(c.semver)\n    }\n  }\n\n  if (eqSet.size > 1) {\n    return null\n  }\n\n  let gtltComp\n  if (gt && lt) {\n    gtltComp = compare(gt.semver, lt.semver, options)\n    if (gtltComp > 0) {\n      return null\n    } else if (gtltComp === 0 && (gt.operator !== '>=' || lt.operator !== '<=')) {\n      return null\n    }\n  }\n\n  // will iterate one or zero times\n  for (const eq of eqSet) {\n    if (gt && !satisfies(eq, String(gt), options)) {\n      return null\n    }\n\n    if (lt && !satisfies(eq, String(lt), options)) {\n      return null\n    }\n\n    for (const c of dom) {\n      if (!satisfies(eq, String(c), options)) {\n        return false\n      }\n    }\n\n    return true\n  }\n\n  let higher, lower\n  let hasDomLT, hasDomGT\n  // Prerelease admission is checked against the full comparator set below;\n  // test inclusive endpoints here only against each comparator's bound.\n  // if the subset has a prerelease, we need a comparator in the superset\n  // with the same tuple and a prerelease, or it's not a subset\n  let needDomLTPre = lt &&\n    !options.includePrerelease &&\n    lt.semver.prerelease.length ? lt.semver : false\n  let needDomGTPre = gt &&\n    !options.includePrerelease &&\n    gt.semver.prerelease.length ? gt.semver : false\n  // exception: <1.2.3-0 is the same as <1.2.3\n  if (needDomLTPre && needDomLTPre.prerelease.length === 1 &&\n      lt.operator === '<' && needDomLTPre.prerelease[0] === 0) {\n    needDomLTPre = false\n  }\n\n  for (const c of dom) {\n    hasDomGT = hasDomGT || c.operator === '>' || c.operator === '>='\n    hasDomLT = hasDomLT || c.operator === '<' || c.operator === '<='\n    if (gt) {\n      if (needDomGTPre) {\n        if (c.semver.prerelease && c.semver.prerelease.length &&\n            c.semver.major === needDomGTPre.major &&\n            c.semver.minor === needDomGTPre.minor &&\n            c.semver.patch === needDomGTPre.patch) {\n          needDomGTPre = false\n        }\n      }\n      if (c.operator === '>' || c.operator === '>=') {\n        higher = higherGT(gt, c, options)\n        if (higher === c && higher !== gt) {\n          return false\n        }\n      } else if (gt.operator === '>=' && !c.test(gt.semver)) {\n        return false\n      }\n    }\n    if (lt) {\n      if (needDomLTPre) {\n        if (c.semver.prerelease && c.semver.prerelease.length &&\n            c.semver.major === needDomLTPre.major &&\n            c.semver.minor === needDomLTPre.minor &&\n            c.semver.patch === needDomLTPre.patch) {\n          needDomLTPre = false\n        }\n      }\n      if (c.operator === '<' || c.operator === '<=') {\n        lower = lowerLT(lt, c, options)\n        if (lower === c && lower !== lt) {\n          return false\n        }\n      } else if (lt.operator === '<=' && !c.test(lt.semver)) {\n        return false\n      }\n    }\n    if (!c.operator && (lt || gt) && gtltComp !== 0) {\n      return false\n    }\n  }\n\n  // if there was a < or >, and nothing in the dom, then must be false\n  // UNLESS it was limited by another range in the other direction.\n  // Eg, >1.0.0 <1.0.1 is still a subset of <2.0.0\n  if (gt && hasDomLT && !lt && gtltComp !== 0) {\n    return false\n  }\n\n  if (lt && hasDomGT && !gt && gtltComp !== 0) {\n    return false\n  }\n\n  // we needed a prerelease range in a specific tuple, but didn't get one\n  // then this isn't a subset.  eg >=1.2.3-pre is not a subset of >=1.0.0,\n  // because it includes prereleases in the 1.2.3 tuple\n  if (needDomGTPre || needDomLTPre) {\n    return false\n  }\n\n  return true\n}\n\n// >=1.2.3 is lower than >1.2.3\nconst higherGT = (a, b, options) => {\n  if (!a) {\n    return b\n  }\n  const comp = compare(a.semver, b.semver, options)\n  return comp > 0 ? a\n    : comp < 0 ? b\n    : b.operator === '>' && a.operator === '>=' ? b\n    : a\n}\n\n// <=1.2.3 is higher than <1.2.3\nconst lowerLT = (a, b, options) => {\n  if (!a) {\n    return b\n  }\n  const comp = compare(a.semver, b.semver, options)\n  return comp < 0 ? a\n    : comp > 0 ? b\n    : b.operator === '<' && a.operator === '<=' ? b\n    : a\n}\n\nmodule.exports = subset\n"
+    }
+  ],
+  "final": "Updated `src/ranges/subset.js` so inclusive lower and upper endpoints are checked against each comparator’s bound directly. Prerelease eligibility is still enforced for the full comparator set, preserving normal prerelease exclusion.\n\nThe visible tests pass: **7/7** with `SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs`. The bare command failed because the test harness requires `SUFFICE_WORKSPACE`; setting it allowed the suite to run. Custom checks also covered the reported example, lower and upper bounds, bound inclusivity, and prerelease exclusion.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\021-prerelease-subset-C-r1\\home\\events\\1794203158605-cafa82b6-420a-42a7-b459-8916bb0e9c43.jsonl"
+}
