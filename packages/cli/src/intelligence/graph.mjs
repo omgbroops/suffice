@@ -129,6 +129,7 @@ export function createIntelligence({workspace,cacheDir,log=()=>{}}){
     return {...header(g),baselineRevision:baseline.revision,seeds,changedFiles,changedSymbols:changed,impacted:impacted.slice(0,limit),omitted:Math.max(0,impacted.length-limit),warning:'Potential impact, not behavioral correctness. Unresolved dependencies may hide consumers.'};
   }
   return {
+    resetBaseline:()=>{baseline=undefined;},
     snapshot:()=>serialize(refresh),
     begin:()=>serialize(async()=>{baseline=await refresh();return header(baseline);}),
     get_symbol_context:args=>serialize(async()=>context(await refresh(),args)),
