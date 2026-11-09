@@ -63,3 +63,19 @@ test('native console adaptation supports detached process-warning callbacks',asy
   const result=await promisify(execFile)(process.execPath,['-e',"require('./native-loader-base.cjs');const detached=console.error;detached();"],{cwd:dir,windowsHide:true});
   assert.match(result.stderr,/native-warning-probe/);
 });
+
+test('native CLI adaptation enforces pinned execution, exit status and complete output inventories',async t=>{
+  const dir=await mkdtemp(resolve(tmpdir(),'suffice-cli-fixtures-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+  await cp(new URL('../benchmarks/intelligence-real-v3/native-compat.cjs',import.meta.url),resolve(dir,'compat.cjs'));
+  const fixture="function normalize(str){return str\n.trim();}\nconst command='svelte compile src';const cli='host-cli';const { commandErr } = shell.exec(command.replace(/^svelte /, `node ${cli} `));if(commandErr){done(commandErr);}actual.forEach((a, i) => {assert.equal(a.file, expected[i].file);});";
+  const legacy=fixture.replace('const { commandErr } = shell.exec(command.replace(/^svelte /, `node ${cli} `));if(commandErr){done(commandErr);}', '/* alias svelte=original */');
+  const program=`const assert=require('node:assert/strict'),vm=require('node:vm'),compat=require('./compat.cjs');
+const source=${JSON.stringify(fixture)},adapted=compat.adaptCliSource(source,{runtime:'C:/Pinned Runtime/node.exe',compat:'C:/fixture/native-compat.cjs',cli:'C:/fixture/cli/index.ts.js'});
+let command;const execute=(actual,code=0)=>vm.runInNewContext(adapted,{require:()=>compat,assert,actual,expected:[{file:'Main.js'}],done:error=>{throw error;},shell:{exec:value=>{command=value;return {code};}}});
+execute([{file:'Main.js'}]);assert.match(command,/^"C:\\/Pinned Runtime\\/node.exe" --max-old-space-size=384 --require "C:\\/fixture\\/native-compat.cjs" "C:\\/fixture\\/cli\\/index.ts.js" compile src$/);
+assert.throws(()=>execute([]),/CLI output inventory mismatch/);assert.throws(()=>execute([{file:'Main.js'}],1),/CLI command exited 1/);
+assert.throws(()=>compat.adaptCliSource(source.replace('shell.exec(', 'unknown.exec('),{}),/Unaudited native CLI executor/);
+vm.runInNewContext(compat.adaptCliSource(${JSON.stringify(legacy)},{}),{require:()=>compat,assert,actual:[{file:'Main.js'}],expected:[{file:'Main.js'}]});
+`;
+  await writeFile(resolve(dir,'check.cjs'),program);await promisify(execFile)(process.execPath,['check.cjs'],{cwd:dir,windowsHide:true});
+});
