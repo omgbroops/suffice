@@ -15,7 +15,8 @@ export function sandboxArguments({workspace,readableRoots=[],deniedRoots=[],comm
   for(const root of readableRoots)entries[normal(root)]='read';
   for(const root of deniedRoots)entries[normal(root)]='deny';
   const toml='{'+Object.entries(entries).map(([key,value])=>JSON.stringify(key)+'='+(typeof value==='string'?JSON.stringify(value):'{"."="write"}')).join(',')+'}';
-  const invocation="$ErrorActionPreference='Stop'; Set-Location -LiteralPath '"+workspace.replaceAll("'","''")+"'; "+command+"\nif ($null -ne $LASTEXITCODE) { exit $LASTEXITCODE }";
+  const quote=value=>"'"+value.replaceAll("'","''")+"'",scratch=quote(resolve(workspace,'.v4-tmp'));
+  const invocation="$ErrorActionPreference='Stop'; Set-Location -LiteralPath "+quote(workspace)+"; "+['TEMP','TMP','HOME','USERPROFILE','APPDATA','LOCALAPPDATA'].map(name=>'$env:'+name+'='+scratch+'; ').join('')+"$env:NODE_OPTIONS='--max-old-space-size=384'; "+command+"\nif ($null -ne $LASTEXITCODE) { exit $LASTEXITCODE }";
   return ['-c','windows.sandbox="mxc"','-c','permissions.suffice-v4.filesystem='+toml,'-c','permissions.suffice-v4.network.enabled=false','sandbox','-P','suffice-v4','-C',workspace,'--',shellExecutable,'-NoLogo','-NoProfile','-NonInteractive','-Command',invocation];
 }
 export async function sandboxOperations({workspace,readableRoots=[],toolchain}){
@@ -23,7 +24,9 @@ export async function sandboxOperations({workspace,readableRoots=[],toolchain}){
   workspace=await realpath(workspace);readableRoots=await Promise.all(readableRoots.map(root=>realpath(root)));
   const publicRoot=publicWorkspaceRoot(),within=relative(publicRoot,workspace);
   if(isAbsolute(within)||within.startsWith('..')||!within)throw new Error('Agent workspace must be inside the owned Public/SufficeV4 directory');
-  const attempt=within.split(/[\\/]/)[0],deniedRoots=(await readdir(publicRoot,{withFileTypes:true})).filter(entry=>entry.isDirectory()&&entry.name!==attempt).map(entry=>resolve(publicRoot,entry.name));
+  const attempt=within.split(/[\\/]/)[0],allowed=new Set([attempt]);
+  for(const root of readableRoots){const inside=relative(publicRoot,root);if(inside&&!inside.startsWith('..')&&!isAbsolute(inside))allowed.add(inside.split(/[\\/]/)[0]);}
+  const deniedRoots=(await readdir(publicRoot,{withFileTypes:true})).filter(entry=>entry.isDirectory()&&!allowed.has(entry.name)).map(entry=>resolve(publicRoot,entry.name));
   const shellExecutable=process.env.SUFFICE_EVAL_SHELL??(await promisify(execFile)('where.exe',['pwsh'],{windowsHide:true})).stdout.trim().split(/\r?\n/)[0];
   readableRoots.push(await realpath(dirname(shellExecutable)));
   const scratch=resolve(workspace,'.v4-tmp');await mkdir(scratch,{recursive:true});
@@ -43,7 +46,7 @@ export async function sandboxOperations({workspace,readableRoots=[],toolchain}){
   }};
 }
 export async function stageToolchain(root){
-  const path=resolve(root,'.suffice/intelligence-v4/toolchain');await mkdir(path,{recursive:true});
+  const path=resolve(publicWorkspaceRoot(),'toolchain');await mkdir(path,{recursive:true});
   // Use the already installed ripgrep; no package installation or network lookup.
   const rg=process.env.SUFFICE_RG_EXE??(await promisify(execFile)('where.exe',['rg'],{windowsHide:true})).stdout.trim().split(/\r?\n/)[0];
   await copyFile(rg,resolve(path,'rg.exe'));
