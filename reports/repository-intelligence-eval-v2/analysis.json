@@ -1,0 +1,1489 @@
+{
+  "campaign": "luna-xhigh-v2",
+  "primaryScheduled": 144,
+  "primaryAttempted": 144,
+  "diagnosticAttempted": 6,
+  "stopReason": null,
+  "aggregates": {
+    "A": {
+      "attempts": 48,
+      "successes": 47,
+      "rate": 0.9791666666666666,
+      "regressionFailures": 0,
+      "infrastructure": 0,
+      "incomplete": 1,
+      "knownCost": 0.36664244,
+      "cost": null,
+      "unknownCostRuns": 1,
+      "meanSeconds": 167.59796756458329,
+      "input": 6331066,
+      "fresh": 1440442,
+      "cached": 4890624,
+      "output": 347384,
+      "turns": 517,
+      "tools": 1304,
+      "graphCalls": 0,
+      "graphMs": 0,
+      "extraEdits": 10,
+      "unrepairedFiles": 0,
+      "verifiedSuccesses": 48,
+      "verifiedRate": 1,
+      "costUpper": 0.8458201800000001
+    },
+    "B": {
+      "attempts": 48,
+      "successes": 46,
+      "rate": 0.9583333333333334,
+      "regressionFailures": 0,
+      "infrastructure": 0,
+      "incomplete": 0,
+      "knownCost": 0.41350183999999995,
+      "cost": 0.41350183999999995,
+      "unknownCostRuns": 0,
+      "meanSeconds": 169.3061897479167,
+      "input": 8083441,
+      "fresh": 1752177,
+      "cached": 6331264,
+      "output": 349943,
+      "turns": 453,
+      "tools": 1426,
+      "graphCalls": 572,
+      "graphMs": 208042.94609999645,
+      "extraEdits": 9,
+      "unrepairedFiles": 2,
+      "verifiedSuccesses": 46,
+      "verifiedRate": 0.9583333333333334,
+      "costUpper": 0.41350183999999995
+    },
+    "C": {
+      "attempts": 48,
+      "successes": 47,
+      "rate": 0.9791666666666666,
+      "regressionFailures": 0,
+      "infrastructure": 0,
+      "incomplete": 0,
+      "knownCost": 0.36750174,
+      "cost": 0.36750174,
+      "unknownCostRuns": 0,
+      "meanSeconds": 165.39592156458335,
+      "input": 6998160,
+      "fresh": 1428496,
+      "cached": 5569664,
+      "output": 337911,
+      "turns": 494,
+      "tools": 1216,
+      "graphCalls": 291,
+      "graphMs": 95751.08099999878,
+      "extraEdits": 12,
+      "unrepairedFiles": 1,
+      "verifiedSuccesses": 47,
+      "verifiedRate": 0.9791666666666666,
+      "costUpper": 0.36750174
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "B",
+      "category": "all",
+      "pairs": 48,
+      "tasks": 24,
+      "delta": -0.041666666666666664,
+      "interval": [
+        -0.10416666666666667,
+        0
+      ],
+      "intervalNote": "Task-cluster percentile bootstrap",
+      "familyClusters": 6,
+      "familySensitivityInterval": [
+        -0.13333333333333333,
+        0
+      ],
+      "candidateOnly": 0,
+      "baselineOnly": 2,
+      "bothPass": 46,
+      "bothFail": 0
+    },
+    {
+      "candidate": "B",
+      "category": "simple",
+      "pairs": 16,
+      "tasks": 8,
+      "delta": 0,
+      "interval": null,
+      "intervalNote": "No empirical task variation; a degenerate bootstrap cannot establish equivalence.",
+      "familyClusters": 4,
+      "familySensitivityInterval": null,
+      "candidateOnly": 0,
+      "baselineOnly": 0,
+      "bothPass": 16,
+      "bothFail": 0
+    },
+    {
+      "candidate": "B",
+      "category": "cross-file",
+      "pairs": 16,
+      "tasks": 8,
+      "delta": 0,
+      "interval": null,
+      "intervalNote": "No empirical task variation; a degenerate bootstrap cannot establish equivalence.",
+      "familyClusters": 4,
+      "familySensitivityInterval": null,
+      "candidateOnly": 0,
+      "baselineOnly": 0,
+      "bothPass": 16,
+      "bothFail": 0
+    },
+    {
+      "candidate": "B",
+      "category": "complex",
+      "pairs": 16,
+      "tasks": 8,
+      "delta": -0.125,
+      "interval": [
+        -0.3125,
+        0
+      ],
+      "intervalNote": "Task-cluster percentile bootstrap",
+      "familyClusters": 3,
+      "familySensitivityInterval": [
+        -0.3333333333333333,
+        0
+      ],
+      "candidateOnly": 0,
+      "baselineOnly": 2,
+      "bothPass": 14,
+      "bothFail": 0
+    },
+    {
+      "candidate": "C",
+      "category": "all",
+      "pairs": 48,
+      "tasks": 24,
+      "delta": -0.020833333333333332,
+      "interval": [
+        -0.0625,
+        0
+      ],
+      "intervalNote": "Task-cluster percentile bootstrap",
+      "familyClusters": 6,
+      "familySensitivityInterval": [
+        -0.06666666666666667,
+        0
+      ],
+      "candidateOnly": 0,
+      "baselineOnly": 1,
+      "bothPass": 47,
+      "bothFail": 0
+    },
+    {
+      "candidate": "C",
+      "category": "simple",
+      "pairs": 16,
+      "tasks": 8,
+      "delta": 0,
+      "interval": null,
+      "intervalNote": "No empirical task variation; a degenerate bootstrap cannot establish equivalence.",
+      "familyClusters": 4,
+      "familySensitivityInterval": null,
+      "candidateOnly": 0,
+      "baselineOnly": 0,
+      "bothPass": 16,
+      "bothFail": 0
+    },
+    {
+      "candidate": "C",
+      "category": "cross-file",
+      "pairs": 16,
+      "tasks": 8,
+      "delta": 0,
+      "interval": null,
+      "intervalNote": "No empirical task variation; a degenerate bootstrap cannot establish equivalence.",
+      "familyClusters": 4,
+      "familySensitivityInterval": null,
+      "candidateOnly": 0,
+      "baselineOnly": 0,
+      "bothPass": 16,
+      "bothFail": 0
+    },
+    {
+      "candidate": "C",
+      "category": "complex",
+      "pairs": 16,
+      "tasks": 8,
+      "delta": -0.0625,
+      "interval": [
+        -0.1875,
+        0
+      ],
+      "intervalNote": "Task-cluster percentile bootstrap",
+      "familyClusters": 3,
+      "familySensitivityInterval": [
+        -0.16666666666666666,
+        0
+      ],
+      "candidateOnly": 0,
+      "baselineOnly": 1,
+      "bothPass": 15,
+      "bothFail": 0
+    }
+  ],
+  "completionComparisons": [
+    {
+      "candidate": "B",
+      "category": "all",
+      "pairs": 48,
+      "tasks": 24,
+      "delta": -0.020833333333333332,
+      "interval": [
+        -0.08333333333333333,
+        0.041666666666666664
+      ],
+      "intervalNote": "Task-cluster percentile bootstrap",
+      "familyClusters": 6,
+      "familySensitivityInterval": [
+        -0.13043478260869565,
+        0.047619047619047616
+      ],
+      "candidateOnly": 1,
+      "baselineOnly": 2,
+      "bothPass": 45,
+      "bothFail": 0
+    },
+    {
+      "candidate": "C",
+      "category": "all",
+      "pairs": 48,
+      "tasks": 24,
+      "delta": 0,
+      "interval": [
+        -0.0625,
+        0.0625
+      ],
+      "intervalNote": "Task-cluster percentile bootstrap",
+      "familyClusters": 6,
+      "familySensitivityInterval": [
+        -0.06521739130434782,
+        0.047619047619047616
+      ],
+      "candidateOnly": 1,
+      "baselineOnly": 1,
+      "bothPass": 46,
+      "bothFail": 0
+    }
+  ],
+  "endpointNote": "Verified implementation accuracy follows held-out acceptance, regressions, immutable inputs and model validity. The frozen success flag additionally requires normal agent completion; both endpoints are retained without changing raw grades.",
+  "queryReasons": {
+    "task-start-baseline": 48,
+    "initial-context-selection": 48,
+    "post-tool-change-check": 405,
+    "post-edit-test-recommendation": 71,
+    "editing-exported-module": 185,
+    "failed-verification-dependency-context": 33,
+    "editing-exported-module+failed-verification": 64,
+    "failed-verification": 9
+  },
+  "failures": [
+    {
+      "runId": "005-event-routing-workflow-B-r1",
+      "task": "event-routing-workflow",
+      "arm": "B",
+      "repetition": 1,
+      "status": "completed",
+      "error": null,
+      "acceptance": "failed",
+      "regression": "passed",
+      "failedAcceptance": [
+        "tenant filtering applies equally to replay and live delivery"
+      ],
+      "immutableIntact": true,
+      "unrepairedReferenceFiles": [
+        "src/tenant-event-feed/live-bus.mjs"
+      ],
+      "extraChangedFiles": [
+        "src/tenant-event-feed/validation.mjs"
+      ]
+    },
+    {
+      "runId": "029-tenant-event-feed-B-r0",
+      "task": "tenant-event-feed",
+      "arm": "B",
+      "repetition": 0,
+      "status": "completed",
+      "error": null,
+      "acceptance": "failed",
+      "regression": "passed",
+      "failedAcceptance": [
+        "tenant filtering applies equally to replay and live delivery"
+      ],
+      "immutableIntact": true,
+      "unrepairedReferenceFiles": [
+        "src/live-bus.mjs"
+      ],
+      "extraChangedFiles": [
+        "src/record.mjs",
+        "src/validation.mjs"
+      ]
+    },
+    {
+      "runId": "029-tenant-event-feed-C-r0",
+      "task": "tenant-event-feed",
+      "arm": "C",
+      "repetition": 0,
+      "status": "completed",
+      "error": null,
+      "acceptance": "failed",
+      "regression": "passed",
+      "failedAcceptance": [
+        "tenant filtering applies equally to replay and live delivery"
+      ],
+      "immutableIntact": true,
+      "unrepairedReferenceFiles": [
+        "src/live-bus.mjs"
+      ],
+      "extraChangedFiles": []
+    },
+    {
+      "runId": "043-numeric-xrange-A-r0",
+      "task": "numeric-xrange",
+      "arm": "A",
+      "repetition": 0,
+      "status": "budget_or_incomplete",
+      "error": "Task stopped: timeout",
+      "acceptance": "passed",
+      "regression": "passed",
+      "failedAcceptance": [],
+      "immutableIntact": true,
+      "unrepairedReferenceFiles": [],
+      "extraChangedFiles": []
+    }
+  ],
+  "pilot": {
+    "attempts": 3,
+    "successes": 2,
+    "rate": 0.6666666666666666,
+    "regressionFailures": 0,
+    "infrastructure": 0,
+    "incomplete": 0,
+    "knownCost": 0.0070317999999999995,
+    "cost": 0.0070317999999999995,
+    "unknownCostRuns": 0,
+    "meanSeconds": 70.92882376666667,
+    "input": 56968,
+    "fresh": 24968,
+    "cached": 32000,
+    "output": 8430,
+    "turns": 18,
+    "tools": 38,
+    "graphCalls": 0,
+    "graphMs": 0,
+    "extraEdits": 0,
+    "unrepairedFiles": 0
+  },
+  "spending": {
+    "cap": 12,
+    "entries": [
+      {
+        "runId": "fast-preflight",
+        "known": 0.00016,
+        "reserved": 0.00016,
+        "unknown": false
+      },
+      {
+        "runId": "pilot/001-pilot-override-A-r0",
+        "reserved": 0.0006705600000000001,
+        "known": 0.0006705600000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "pilot/002-pilot-interval-union-A-r0",
+        "reserved": 0.0034709199999999997,
+        "known": 0.0034709199999999997,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "pilot/003-pilot-expression-A-r0",
+        "reserved": 0.00289032,
+        "known": 0.00289032,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/001-caret-prerelease-A-r0",
+        "reserved": 0.00731206,
+        "known": 0.00731206,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/001-caret-prerelease-C-r0",
+        "reserved": 0.00495024,
+        "known": 0.00495024,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/001-caret-prerelease-B-r0",
+        "reserved": 0.00557898,
+        "known": 0.00557898,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/001-caret-prerelease-A-r1",
+        "reserved": 0.00436288,
+        "known": 0.00436288,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/001-caret-prerelease-C-r1",
+        "reserved": 0.005807359999999999,
+        "known": 0.005807359999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/001-caret-prerelease-B-r1",
+        "reserved": 0.005783999999999999,
+        "known": 0.005783999999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/003-cursor-pagination-B-r0",
+        "reserved": 0.00462466,
+        "known": 0.00462466,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/003-cursor-pagination-A-r0",
+        "reserved": 0.0029324999999999998,
+        "known": 0.0029324999999999998,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/003-cursor-pagination-C-r0",
+        "reserved": 0.00350416,
+        "known": 0.00350416,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/003-cursor-pagination-B-r1",
+        "reserved": 0.00463462,
+        "known": 0.00463462,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/003-cursor-pagination-C-r1",
+        "reserved": 0.00363156,
+        "known": 0.00363156,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/003-cursor-pagination-A-r1",
+        "reserved": 0.0033702800000000007,
+        "known": 0.0033702800000000007,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/005-event-routing-workflow-B-r0",
+        "reserved": 0.013699580000000001,
+        "known": 0.013699580000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/005-event-routing-workflow-C-r0",
+        "reserved": 0.00971286,
+        "known": 0.00971286,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/005-event-routing-workflow-A-r0",
+        "reserved": 0.006876340000000001,
+        "known": 0.006876340000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/005-event-routing-workflow-C-r1",
+        "reserved": 0.0085399,
+        "known": 0.0085399,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/005-event-routing-workflow-A-r1",
+        "reserved": 0.007359,
+        "known": 0.007359,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/005-event-routing-workflow-B-r1",
+        "reserved": 0.009806880000000002,
+        "known": 0.009806880000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/007-layered-config-A-r0",
+        "reserved": 0.00659304,
+        "known": 0.00659304,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/007-layered-config-C-r0",
+        "reserved": 0.00655062,
+        "known": 0.00655062,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/007-layered-config-B-r0",
+        "reserved": 0.00740096,
+        "known": 0.00740096,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/007-layered-config-C-r1",
+        "reserved": 0.00601582,
+        "known": 0.00601582,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/007-layered-config-B-r1",
+        "reserved": 0.00982076,
+        "known": 0.00982076,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/007-layered-config-A-r1",
+        "reserved": 0.00929028,
+        "known": 0.00929028,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/009-numeric-prerelease-B-r0",
+        "reserved": 0.0116368,
+        "known": 0.0116368,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/009-numeric-prerelease-A-r0",
+        "reserved": 0.00970954,
+        "known": 0.00970954,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/009-numeric-prerelease-C-r0",
+        "reserved": 0.00756268,
+        "known": 0.00756268,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/009-numeric-prerelease-C-r1",
+        "reserved": 0.006567280000000001,
+        "known": 0.006567280000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/009-numeric-prerelease-A-r1",
+        "reserved": 0.00758874,
+        "known": 0.00758874,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/009-numeric-prerelease-B-r1",
+        "reserved": 0.00705144,
+        "known": 0.00705144,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/011-layered-routing-B-r0",
+        "reserved": 0.00684106,
+        "known": 0.00684106,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/011-layered-routing-A-r0",
+        "reserved": 0.00420444,
+        "known": 0.00420444,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/011-layered-routing-C-r0",
+        "reserved": 0.006046319999999999,
+        "known": 0.006046319999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/011-layered-routing-C-r1",
+        "reserved": 0.00718676,
+        "known": 0.00718676,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/011-layered-routing-B-r1",
+        "reserved": 0.00603768,
+        "known": 0.00603768,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/011-layered-routing-A-r1",
+        "reserved": 0.00743062,
+        "known": 0.00743062,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/013-dotted-prerelease-B-r0",
+        "reserved": 0.00784402,
+        "known": 0.00784402,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/013-dotted-prerelease-C-r0",
+        "reserved": 0.01010042,
+        "known": 0.01010042,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/013-dotted-prerelease-A-r0",
+        "reserved": 0.0086938,
+        "known": 0.0086938,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/013-dotted-prerelease-B-r1",
+        "reserved": 0.009187079999999999,
+        "known": 0.009187079999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/013-dotted-prerelease-C-r1",
+        "reserved": 0.009807159999999999,
+        "known": 0.009807159999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/013-dotted-prerelease-A-r1",
+        "reserved": 0.00773986,
+        "known": 0.00773986,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/015-streaming-utf8-A-r0",
+        "reserved": 0.00319138,
+        "known": 0.00319138,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/015-streaming-utf8-C-r0",
+        "reserved": 0.00277706,
+        "known": 0.00277706,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/015-streaming-utf8-B-r0",
+        "reserved": 0.00227908,
+        "known": 0.00227908,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/015-streaming-utf8-A-r1",
+        "reserved": 0.0031169200000000005,
+        "known": 0.0031169200000000005,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/015-streaming-utf8-C-r1",
+        "reserved": 0.00245256,
+        "known": 0.00245256,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/015-streaming-utf8-B-r1",
+        "reserved": 0.004239100000000001,
+        "known": 0.004239100000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/017-atomic-ledger-B-r0",
+        "reserved": 0.008889880000000001,
+        "known": 0.008889880000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/017-atomic-ledger-A-r0",
+        "reserved": 0.005297219999999999,
+        "known": 0.005297219999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/017-atomic-ledger-C-r0",
+        "reserved": 0.00522408,
+        "known": 0.00522408,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/017-atomic-ledger-B-r1",
+        "reserved": 0.006544320000000001,
+        "known": 0.006544320000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/017-atomic-ledger-C-r1",
+        "reserved": 0.00473272,
+        "known": 0.00473272,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/017-atomic-ledger-A-r1",
+        "reserved": 0.0058663000000000005,
+        "known": 0.0058663000000000005,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/019-window-scheduler-C-r0",
+        "reserved": 0.0030693200000000004,
+        "known": 0.0030693200000000004,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/019-window-scheduler-B-r0",
+        "reserved": 0.0030522799999999997,
+        "known": 0.0030522799999999997,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/019-window-scheduler-A-r0",
+        "reserved": 0.00340104,
+        "known": 0.00340104,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/019-window-scheduler-B-r1",
+        "reserved": 0.0030966599999999998,
+        "known": 0.0030966599999999998,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/019-window-scheduler-A-r1",
+        "reserved": 0.00223582,
+        "known": 0.00223582,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/019-window-scheduler-C-r1",
+        "reserved": 0.00255878,
+        "known": 0.00255878,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/021-prerelease-subset-C-r0",
+        "reserved": 0.01255808,
+        "known": 0.01255808,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/021-prerelease-subset-A-r0",
+        "reserved": 0.00887046,
+        "known": 0.00887046,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/021-prerelease-subset-B-r0",
+        "reserved": 0.012438959999999999,
+        "known": 0.012438959999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/021-prerelease-subset-A-r1",
+        "reserved": 0.015161620000000002,
+        "known": 0.015161620000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/021-prerelease-subset-C-r1",
+        "reserved": 0.01106792,
+        "known": 0.01106792,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/021-prerelease-subset-B-r1",
+        "reserved": 0.01561902,
+        "known": 0.01561902,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/023-streaming-catalog-workflow-C-r0",
+        "reserved": 0.00886892,
+        "known": 0.00886892,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/023-streaming-catalog-workflow-A-r0",
+        "reserved": 0.010471379999999999,
+        "known": 0.010471379999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/023-streaming-catalog-workflow-B-r0",
+        "reserved": 0.011599120000000001,
+        "known": 0.011599120000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/023-streaming-catalog-workflow-B-r1",
+        "reserved": 0.00856604,
+        "known": 0.00856604,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/023-streaming-catalog-workflow-A-r1",
+        "reserved": 0.00831668,
+        "known": 0.00831668,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/023-streaming-catalog-workflow-C-r1",
+        "reserved": 0.01143198,
+        "known": 0.01143198,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/025-prerelease-diff-A-r0",
+        "reserved": 0.0043904799999999996,
+        "known": 0.0043904799999999996,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/025-prerelease-diff-B-r0",
+        "reserved": 0.00877046,
+        "known": 0.00877046,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/025-prerelease-diff-C-r0",
+        "reserved": 0.00566316,
+        "known": 0.00566316,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/025-prerelease-diff-C-r1",
+        "reserved": 0.006757440000000001,
+        "known": 0.006757440000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/025-prerelease-diff-A-r1",
+        "reserved": 0.00630316,
+        "known": 0.00630316,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/025-prerelease-diff-B-r1",
+        "reserved": 0.00580426,
+        "known": 0.00580426,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/027-folded-tabs-B-r0",
+        "reserved": 0.013262359999999999,
+        "known": 0.013262359999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/027-folded-tabs-A-r0",
+        "reserved": 0.018482560000000002,
+        "known": 0.018482560000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/027-folded-tabs-C-r0",
+        "reserved": 0.017037880000000002,
+        "known": 0.017037880000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/027-folded-tabs-A-r1",
+        "reserved": 0.014392180000000001,
+        "known": 0.014392180000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/027-folded-tabs-B-r1",
+        "reserved": 0.01506444,
+        "known": 0.01506444,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/027-folded-tabs-C-r1",
+        "reserved": 0.014525040000000001,
+        "known": 0.014525040000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/029-tenant-event-feed-B-r0",
+        "reserved": 0.00743832,
+        "known": 0.00743832,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/029-tenant-event-feed-A-r0",
+        "reserved": 0.0050932,
+        "known": 0.0050932,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/029-tenant-event-feed-C-r0",
+        "reserved": 0.00570002,
+        "known": 0.00570002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/029-tenant-event-feed-A-r1",
+        "reserved": 0.00503468,
+        "known": 0.00503468,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/029-tenant-event-feed-C-r1",
+        "reserved": 0.00990916,
+        "known": 0.00990916,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/029-tenant-event-feed-B-r1",
+        "reserved": 0.010108559999999999,
+        "known": 0.010108559999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/031-exponent-integers-A-r0",
+        "reserved": 0.00865324,
+        "known": 0.00865324,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/031-exponent-integers-C-r0",
+        "reserved": 0.0057645,
+        "known": 0.0057645,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/031-exponent-integers-B-r0",
+        "reserved": 0.014324920000000001,
+        "known": 0.014324920000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/031-exponent-integers-B-r1",
+        "reserved": 0.00959054,
+        "known": 0.00959054,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/031-exponent-integers-C-r1",
+        "reserved": 0.011211200000000001,
+        "known": 0.011211200000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/031-exponent-integers-A-r1",
+        "reserved": 0.0091366,
+        "known": 0.0091366,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/033-mapping-boundaries-A-r0",
+        "reserved": 0.015989200000000002,
+        "known": 0.015989200000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/033-mapping-boundaries-C-r0",
+        "reserved": 0.012627280000000003,
+        "known": 0.012627280000000003,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/033-mapping-boundaries-B-r0",
+        "reserved": 0.01438024,
+        "known": 0.01438024,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/033-mapping-boundaries-B-r1",
+        "reserved": 0.021366800000000002,
+        "known": 0.021366800000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/033-mapping-boundaries-C-r1",
+        "reserved": 0.01676994,
+        "known": 0.01676994,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/033-mapping-boundaries-A-r1",
+        "reserved": 0.019508740000000004,
+        "known": 0.019508740000000004,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/035-inventory-reservations-A-r0",
+        "reserved": 0.0033119400000000006,
+        "known": 0.0033119400000000006,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/035-inventory-reservations-B-r0",
+        "reserved": 0.007652280000000001,
+        "known": 0.007652280000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/035-inventory-reservations-C-r0",
+        "reserved": 0.00418062,
+        "known": 0.00418062,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/035-inventory-reservations-A-r1",
+        "reserved": 0.00571404,
+        "known": 0.00571404,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/035-inventory-reservations-C-r1",
+        "reserved": 0.005379,
+        "known": 0.005379,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/035-inventory-reservations-B-r1",
+        "reserved": 0.00567814,
+        "known": 0.00567814,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/037-build-metadata-B-r0",
+        "reserved": 0.00816838,
+        "known": 0.00816838,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/037-build-metadata-A-r0",
+        "reserved": 0.010361160000000003,
+        "known": 0.010361160000000003,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/037-build-metadata-C-r0",
+        "reserved": 0.0077419,
+        "known": 0.0077419,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/037-build-metadata-C-r1",
+        "reserved": 0.012437859999999997,
+        "known": 0.012437859999999997,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/037-build-metadata-A-r1",
+        "reserved": 0.00938666,
+        "known": 0.00938666,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/037-build-metadata-B-r1",
+        "reserved": 0.00897986,
+        "known": 0.00897986,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/039-dependency-aliases-C-r0",
+        "reserved": 0.0032730199999999997,
+        "known": 0.0032730199999999997,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/039-dependency-aliases-A-r0",
+        "reserved": 0.00311576,
+        "known": 0.00311576,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/039-dependency-aliases-B-r0",
+        "reserved": 0.00432342,
+        "known": 0.00432342,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/039-dependency-aliases-A-r1",
+        "reserved": 0.005204680000000001,
+        "known": 0.005204680000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/039-dependency-aliases-B-r1",
+        "reserved": 0.005527559999999999,
+        "known": 0.005527559999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/039-dependency-aliases-C-r1",
+        "reserved": 0.0031551799999999996,
+        "known": 0.0031551799999999996,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/041-retry-idempotency-C-r0",
+        "reserved": 0.00576958,
+        "known": 0.00576958,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/041-retry-idempotency-A-r0",
+        "reserved": 0.0037326399999999997,
+        "known": 0.0037326399999999997,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/041-retry-idempotency-B-r0",
+        "reserved": 0.0070062200000000005,
+        "known": 0.0070062200000000005,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/041-retry-idempotency-C-r1",
+        "reserved": 0.0061766,
+        "known": 0.0061766,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/041-retry-idempotency-A-r1",
+        "reserved": 0.0057698,
+        "known": 0.0057698,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/041-retry-idempotency-B-r1",
+        "reserved": 0.006779319999999999,
+        "known": 0.006779319999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/043-numeric-xrange-B-r0",
+        "reserved": 0.012856620000000001,
+        "known": 0.012856620000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/043-numeric-xrange-A-r0",
+        "reserved": 0.5,
+        "known": 0.02082226,
+        "unknown": true,
+        "state": "finished"
+      },
+      {
+        "runId": "main/043-numeric-xrange-C-r0",
+        "reserved": 0.017089200000000002,
+        "known": 0.017089200000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/043-numeric-xrange-A-r1",
+        "reserved": 0.00715354,
+        "known": 0.00715354,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/043-numeric-xrange-B-r1",
+        "reserved": 0.012853580000000002,
+        "known": 0.012853580000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/043-numeric-xrange-C-r1",
+        "reserved": 0.01399846,
+        "known": 0.01399846,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/045-tenant-cache-B-r0",
+        "reserved": 0.00226934,
+        "known": 0.00226934,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/045-tenant-cache-C-r0",
+        "reserved": 0.0031685800000000003,
+        "known": 0.0031685800000000003,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/045-tenant-cache-A-r0",
+        "reserved": 0.0023949799999999997,
+        "known": 0.0023949799999999997,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/045-tenant-cache-C-r1",
+        "reserved": 0.0026319800000000003,
+        "known": 0.0026319800000000003,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/045-tenant-cache-B-r1",
+        "reserved": 0.004752279999999999,
+        "known": 0.004752279999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/045-tenant-cache-A-r1",
+        "reserved": 0.00182,
+        "known": 0.00182,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/047-fulfillment-workflow-A-r0",
+        "reserved": 0.00942862,
+        "known": 0.00942862,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/047-fulfillment-workflow-B-r0",
+        "reserved": 0.010988220000000002,
+        "known": 0.010988220000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/047-fulfillment-workflow-C-r0",
+        "reserved": 0.007851720000000001,
+        "known": 0.007851720000000001,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/047-fulfillment-workflow-A-r1",
+        "reserved": 0.01205012,
+        "known": 0.01205012,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/047-fulfillment-workflow-B-r1",
+        "reserved": 0.00928274,
+        "known": 0.00928274,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/047-fulfillment-workflow-C-r1",
+        "reserved": 0.007957859999999999,
+        "known": 0.007957859999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/049-build-metadata-D-r0",
+        "reserved": 0.012251860000000002,
+        "known": 0.012251860000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/049-caret-prerelease-D-r0",
+        "reserved": 0.006589219999999999,
+        "known": 0.006589219999999999,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/051-cursor-pagination-D-r0",
+        "reserved": 0.00339518,
+        "known": 0.00339518,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/051-dependency-aliases-D-r0",
+        "reserved": 0.0028317200000000002,
+        "known": 0.0028317200000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/053-atomic-ledger-D-r0",
+        "reserved": 0.0040617200000000004,
+        "known": 0.0040617200000000004,
+        "unknown": false,
+        "state": "finished"
+      },
+      {
+        "runId": "main/053-event-routing-workflow-D-r0",
+        "reserved": 0.0073913799999999995,
+        "known": 0.0073913799999999995,
+        "unknown": false,
+        "state": "finished"
+      }
+    ]
+  },
+  "providerAudit": {
+    "responses": 1520,
+    "models": {
+      "gpt-6-luna": 1520
+    },
+    "efforts": {
+      "xhigh": 1520
+    },
+    "tiers": {
+      "default": 1520
+    },
+    "violations": []
+  },
+  "operationalAmendment": {
+    "kind": "throughput-only",
+    "reason": "Drain initial six-run batches, then increase concurrent isolated runs without changing any trial, treatment, input, model setting, allowance, or scoring code.",
+    "originalParallelBlocks": 2,
+    "newParallelBlocks": 4,
+    "originalRunnerHash": "84eaeed1f60422f250ee123c6780aeb197899f1dcaf8cdfdb2da123f4cddb59d",
+    "newRunnerHash": "38efa301f08d508129e1dd0a0e40261f10a177f9772f301a56381de54e81a878",
+    "originalManifest": "manifest.json",
+    "unchanged": "All manifest fields other than runner hash and parallelBlocks; canonical run IDs preserve completed attempts."
+  },
+  "status": "preliminary_quarantined_parent_git_metadata",
+  "finalHarderStudyRun": false
+}
