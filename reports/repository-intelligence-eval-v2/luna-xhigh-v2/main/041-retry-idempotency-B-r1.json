@@ -1,0 +1,498 @@
+{
+  "task": "retry-idempotency",
+  "repetition": 1,
+  "arm": "B",
+  "mode": "guided",
+  "scheduleIndex": 41,
+  "runId": "041-retry-idempotency-B-r1",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 127905.39170000004,
+  "usage": {
+    "input": 30351,
+    "cacheRead": 73472,
+    "cacheWrite": 0,
+    "output": 6019,
+    "estimatedApiUsd": 0.006779319999999999,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.006779319999999999,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: POST keys survive retries and separate logical calls\nok 1 - POST keys survive retries and separate logical calls\n  ---\n  duration_ms: 1.9012\n  type: 'test'\n  ...\n# Subtest: retry budget and ordinary errors are respected\nok 2 - retry budget and ordinary errors are respected\n  ---\n  duration_ms: 0.4762\n  type: 'test'\n  ...\n# Subtest: explicit caller identity is preserved without generating another key\nok 3 - explicit caller identity is preserved without generating another key\n  ---\n  duration_ms: 1.235\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.5303\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 97
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: GET retries a server error and returns success\nok 1 - GET retries a server error and returns success\n  ---\n  duration_ms: 1.3885\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.974\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 84
+  },
+  "changed": [
+    "src/client.mjs",
+    "src/policy.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 16,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T06:10:52.272Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-09T06:10:52.401Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Read README.md for the complete task contract. Repair existing production files under src/ and preserve public APIs. Run node --test tests/visible.test.mjs. Tests, fixtures, metadata and docs are immutable. Do not install dependencies or use network access. Acceptance is evaluated separately."
+    },
+    {
+      "at": "2026-11-09T06:10:55.986Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:11:16.585Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:11:45.852Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:11:45.910Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:11:55.743Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:11:55.799Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:11.252Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:11.319Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:28.798Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:33.254Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-09T06:12:46.054Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T06:10:52.400Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "805798c6b325c35a08867aff4a4f6270791035526da0d0009cd91f4a4cd82003"
+      },
+      "latencyMs": 128.89879999961704,
+      "parsedFiles": 3,
+      "fileCount": 3,
+      "cacheBytes": 28388,
+      "heapDeltaBytes": -1028360,
+      "graphBytes": 47650
+    },
+    {
+      "at": "2026-11-09T06:10:52.527Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "805798c6b325c35a08867aff4a4f6270791035526da0d0009cd91f4a4cd82003"
+      },
+      "latencyMs": 124.01500000013039,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28388,
+      "heapDeltaBytes": 1327712,
+      "graphBytes": 47650
+    },
+    {
+      "at": "2026-11-09T06:10:56.039Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "805798c6b325c35a08867aff4a4f6270791035526da0d0009cd91f4a4cd82003"
+      },
+      "latencyMs": 53.5773999998346,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28388,
+      "heapDeltaBytes": 297728,
+      "graphBytes": 47650
+    },
+    {
+      "at": "2026-11-09T06:11:16.641Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "805798c6b325c35a08867aff4a4f6270791035526da0d0009cd91f4a4cd82003"
+      },
+      "latencyMs": 57.10000000009313,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 28388,
+      "heapDeltaBytes": 701704,
+      "graphBytes": 47650
+    },
+    {
+      "at": "2026-11-09T06:11:45.909Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "81067f8969c22ea1809f51c80129de0a009f7ee99dc1db41d97c5e606c0b3f6d"
+      },
+      "latencyMs": 57.702500000130385,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 35045,
+      "heapDeltaBytes": 1305224,
+      "graphBytes": 57300
+    },
+    {
+      "at": "2026-11-09T06:11:45.965Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "81067f8969c22ea1809f51c80129de0a009f7ee99dc1db41d97c5e606c0b3f6d"
+      },
+      "latencyMs": 56.38139999983832,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 35045,
+      "heapDeltaBytes": 516512,
+      "graphBytes": 57300
+    },
+    {
+      "at": "2026-11-09T06:11:55.799Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7622bdbdf0098ae7657d9f8d2b6abb6db56b06b68578698a3d17b6e5d7f8fd8c"
+      },
+      "latencyMs": 56.35550000006333,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 41421,
+      "heapDeltaBytes": 1092152,
+      "graphBytes": 66569
+    },
+    {
+      "at": "2026-11-09T06:11:55.853Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "7622bdbdf0098ae7657d9f8d2b6abb6db56b06b68578698a3d17b6e5d7f8fd8c"
+      },
+      "latencyMs": 54.26979999989271,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 41421,
+      "heapDeltaBytes": 459376,
+      "graphBytes": 66569
+    },
+    {
+      "at": "2026-11-09T06:12:11.318Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6085201ce72f3e62297d6b7658082080836f7c7f59a2bd311e22886f524559f5"
+      },
+      "latencyMs": 66.89119999995455,
+      "parsedFiles": 1,
+      "fileCount": 3,
+      "cacheBytes": 40946,
+      "heapDeltaBytes": 1177392,
+      "graphBytes": 66280
+    },
+    {
+      "at": "2026-11-09T06:12:11.375Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6085201ce72f3e62297d6b7658082080836f7c7f59a2bd311e22886f524559f5"
+      },
+      "latencyMs": 56.81939999992028,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 40946,
+      "heapDeltaBytes": 300928,
+      "graphBytes": 66280
+    },
+    {
+      "at": "2026-11-09T06:12:28.864Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6085201ce72f3e62297d6b7658082080836f7c7f59a2bd311e22886f524559f5"
+      },
+      "latencyMs": 66.25879999995232,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 40946,
+      "heapDeltaBytes": 1600280,
+      "graphBytes": 66280
+    },
+    {
+      "at": "2026-11-09T06:12:33.308Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6085201ce72f3e62297d6b7658082080836f7c7f59a2bd311e22886f524559f5"
+      },
+      "latencyMs": 54.1351999999024,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 40946,
+      "heapDeltaBytes": 401744,
+      "graphBytes": 66280
+    },
+    {
+      "at": "2026-11-09T06:12:46.108Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "6085201ce72f3e62297d6b7658082080836f7c7f59a2bd311e22886f524559f5"
+      },
+      "latencyMs": 54.79989999998361,
+      "parsedFiles": 0,
+      "fileCount": 3,
+      "cacheBytes": 40946,
+      "heapDeltaBytes": 1528952,
+      "graphBytes": 66280
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/client.mjs",
+        "src/policy.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/client.mjs",
+          "callId": "call_136114cd469e429480b57fa27b53f7e5|ctc_0c8062d02d8b18d3016af1641767a887d19fbf26b276fa10a9/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/policy.mjs",
+          "callId": "call_7786c75519fb45bd80da55ea4cd82624|ctc_0c8062d02d8b18d3016af164207ce087d1a54d1c5792d07c13/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/client.mjs",
+          "callId": "call_3cbf1b0541a844e3b7f0f362f7f6b3ba|ctc_0c8062d02d8b18d3016af16434074087d18545d2fdacdcdd20/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "cat README.md && printf '\\n--- src/client.mjs ---\\n' && cat src/client.mjs && printf '\\n--- src/policy.mjs ---\\n' && cat src/policy.mjs && printf '\\n--- tests/visible.test.mjs ---\\n' && cat tests/visible.test.mjs",
+        "node --test tests/visible.test.mjs && node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createClient } from './src/client.mjs';\nimport { delayFor, shouldRetry } from './src/policy.mjs';\n\nconst sent = [];\nconst delays = [];\nlet keyCount = 0;\nconst statuses = [503, 429, 200];\nconst request = createClient({\n  transport: async ({ headers }) => {\n    sent.push(headers);\n    const status = statuses.shift();\n    return { status, headers: status === 503 ? { 'Retry-After': '2' } : {} };\n  },\n  sleep: async ms => delays.push(ms),\n  keyFactory: () => `key-${++keyCount}`,\n  maxAttempts: 3,\n  baseMs: 20\n});\nassert.equal((await request({ method: 'POST', url: '/items', headers: { 'x-test': 'kept' } })).status, 200);\nassert.equal(keyCount, 1);\nassert.deepEqual(sent.map(headers => headers['idempotency-key']), ['key-1', 'key-1', 'key-1']);\nassert.ok(sent.every(headers => headers['x-test'] === 'kept'));\nassert.deepEqual(delays, [2000, 40]);\nconst explicit = createClient({\n  transport: async ({ headers }) => { assert.equal(headers['Idempotency-Key'], 'caller-key'); return { status: 200 }; },\n  sleep: async () => {}, keyFactory: () => { throw new Error('should not generate'); }\n});\nassert.equal((await explicit({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'caller-key' } })).status, 200);\nassert.deepEqual([429, 500, 599, 600, 404].map(status => shouldRetry({ status })), [true, true, true, false, false]);\nassert.equal(delayFor({ headers: { 'retry-after': '1.5' } }, 1, 100), 1500);\nassert.equal(delayFor({ headers: { 'retry-after': 'not numeric' } }, 3, 100), 400);\nconsole.log('additional contract assertions passed');\nEOF",
+        "git diff --check && git diff -- src/client.mjs src/policy.mjs && git status --short",
+        "printf 'workspace: '; pwd; printf 'git root: '; git rev-parse --show-toplevel; printf '\\nsource status: '; git status --short -- src/client.mjs src/policy.mjs; printf '\\nsource files:\\n'; sed -n '1,120p' src/client.mjs; sed -n '1,120p' src/policy.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/client.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/client.mjs",
+          "callId": "call_3cbf1b0541a844e3b7f0f362f7f6b3ba|ctc_0c8062d02d8b18d3016af16434074087d18545d2fdacdcdd20/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createClient } from './src/client.mjs';\nimport { delayFor, shouldRetry } from './src/policy.mjs';\n\nconst sent = [];\nconst delays = [];\nlet keyCount = 0;\nconst statuses = [503, 429, 200];\nconst request = createClient({\n  transport: async ({ headers }) => {\n    sent.push(headers);\n    const status = statuses.shift();\n    return { status, headers: status === 503 ? { 'Retry-After': '2' } : {} };\n  },\n  sleep: async ms => delays.push(ms),\n  keyFactory: () => `key-${++keyCount}`,\n  maxAttempts: 3,\n  baseMs: 20\n});\nassert.equal((await request({ method: 'POST', url: '/items', headers: { 'x-test': 'kept' } })).status, 200);\nassert.equal(keyCount, 1);\nassert.deepEqual(sent.map(headers => headers['idempotency-key']), ['key-1', 'key-1', 'key-1']);\nassert.ok(sent.every(headers => headers['x-test'] === 'kept'));\nassert.deepEqual(delays, [2000, 40]);\nconst explicit = createClient({\n  transport: async ({ headers }) => { assert.equal(headers['Idempotency-Key'], 'caller-key'); return { status: 200 }; },\n  sleep: async () => {}, keyFactory: () => { throw new Error('should not generate'); }\n});\nassert.equal((await explicit({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'caller-key' } })).status, 200);\nassert.deepEqual([429, 500, 599, 600, 404].map(status => shouldRetry({ status })), [true, true, true, false, false]);\nassert.equal(delayFor({ headers: { 'retry-after': '1.5' } }, 1, 100), 1500);\nassert.equal(delayFor({ headers: { 'retry-after': 'not numeric' } }, 3, 100), 400);\nconsole.log('additional contract assertions passed');\nEOF",
+        "git diff --check && git diff -- src/client.mjs src/policy.mjs && git status --short",
+        "printf 'workspace: '; pwd; printf 'git root: '; git rev-parse --show-toplevel; printf '\\nsource status: '; git status --short -- src/client.mjs src/policy.mjs; printf '\\nsource files:\\n'; sed -n '1,120p' src/client.mjs; sed -n '1,120p' src/policy.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/client.mjs",
+        "src/policy.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/client.mjs",
+          "callId": "call_3cbf1b0541a844e3b7f0f362f7f6b3ba|ctc_0c8062d02d8b18d3016af16434074087d18545d2fdacdcdd20/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createClient } from './src/client.mjs';\nimport { delayFor, shouldRetry } from './src/policy.mjs';\n\nconst sent = [];\nconst delays = [];\nlet keyCount = 0;\nconst statuses = [503, 429, 200];\nconst request = createClient({\n  transport: async ({ headers }) => {\n    sent.push(headers);\n    const status = statuses.shift();\n    return { status, headers: status === 503 ? { 'Retry-After': '2' } : {} };\n  },\n  sleep: async ms => delays.push(ms),\n  keyFactory: () => `key-${++keyCount}`,\n  maxAttempts: 3,\n  baseMs: 20\n});\nassert.equal((await request({ method: 'POST', url: '/items', headers: { 'x-test': 'kept' } })).status, 200);\nassert.equal(keyCount, 1);\nassert.deepEqual(sent.map(headers => headers['idempotency-key']), ['key-1', 'key-1', 'key-1']);\nassert.ok(sent.every(headers => headers['x-test'] === 'kept'));\nassert.deepEqual(delays, [2000, 40]);\nconst explicit = createClient({\n  transport: async ({ headers }) => { assert.equal(headers['Idempotency-Key'], 'caller-key'); return { status: 200 }; },\n  sleep: async () => {}, keyFactory: () => { throw new Error('should not generate'); }\n});\nassert.equal((await explicit({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'caller-key' } })).status, 200);\nassert.deepEqual([429, 500, 599, 600, 404].map(status => shouldRetry({ status })), [true, true, true, false, false]);\nassert.equal(delayFor({ headers: { 'retry-after': '1.5' } }, 1, 100), 1500);\nassert.equal(delayFor({ headers: { 'retry-after': 'not numeric' } }, 3, 100), 400);\nconsole.log('additional contract assertions passed');\nEOF",
+        "git diff --check && git diff -- src/client.mjs src/policy.mjs && git status --short",
+        "printf 'workspace: '; pwd; printf 'git root: '; git rev-parse --show-toplevel; printf '\\nsource status: '; git status --short -- src/client.mjs src/policy.mjs; printf '\\nsource files:\\n'; sed -n '1,120p' src/client.mjs; sed -n '1,120p' src/policy.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/client.mjs",
+        "src/policy.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs && node --input-type=module <<'EOF'\nimport assert from 'node:assert/strict';\nimport { createClient } from './src/client.mjs';\nimport { delayFor, shouldRetry } from './src/policy.mjs';\n\nconst sent = [];\nconst delays = [];\nlet keyCount = 0;\nconst statuses = [503, 429, 200];\nconst request = createClient({\n  transport: async ({ headers }) => {\n    sent.push(headers);\n    const status = statuses.shift();\n    return { status, headers: status === 503 ? { 'Retry-After': '2' } : {} };\n  },\n  sleep: async ms => delays.push(ms),\n  keyFactory: () => `key-${++keyCount}`,\n  maxAttempts: 3,\n  baseMs: 20\n});\nassert.equal((await request({ method: 'POST', url: '/items', headers: { 'x-test': 'kept' } })).status, 200);\nassert.equal(keyCount, 1);\nassert.deepEqual(sent.map(headers => headers['idempotency-key']), ['key-1', 'key-1', 'key-1']);\nassert.ok(sent.every(headers => headers['x-test'] === 'kept'));\nassert.deepEqual(delays, [2000, 40]);\nconst explicit = createClient({\n  transport: async ({ headers }) => { assert.equal(headers['Idempotency-Key'], 'caller-key'); return { status: 200 }; },\n  sleep: async () => {}, keyFactory: () => { throw new Error('should not generate'); }\n});\nassert.equal((await explicit({ method: 'POST', url: '/', headers: { 'Idempotency-Key': 'caller-key' } })).status, 200);\nassert.deepEqual([429, 500, 599, 600, 404].map(status => shouldRetry({ status })), [true, true, true, false, false]);\nassert.equal(delayFor({ headers: { 'retry-after': '1.5' } }, 1, 100), 1500);\nassert.equal(delayFor({ headers: { 'retry-after': 'not numeric' } }, 3, 100), 400);\nconsole.log('additional contract assertions passed');\nEOF",
+        "git diff --check && git diff -- src/client.mjs src/policy.mjs && git status --short",
+        "printf 'workspace: '; pwd; printf 'git root: '; git rev-parse --show-toplevel; printf '\\nsource status: '; git status --short -- src/client.mjs src/policy.mjs; printf '\\nsource files:\\n'; sed -n '1,120p' src/client.mjs; sed -n '1,120p' src/policy.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/client.mjs",
+      "before": "import { delayFor, shouldRetry } from './policy.mjs';\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      const outgoing = { ...headers };\r\n      if (method === 'POST') outgoing['idempotency-key'] = keyFactory();\r\n      response = await transport({ method, url, headers: outgoing, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n",
+      "after": "import { delayFor, shouldRetry } from './policy.mjs';\r\nexport function createClient({ transport, sleep, keyFactory, maxAttempts = 3, baseMs = 100 }) {\r\n  return async function request({ method = 'GET', url, headers = {}, body }) {\r\n    const requestHeaders = { ...headers };\r\n    const hasIdempotencyKey = Object.keys(requestHeaders).some(\r\n      name => name.toLowerCase() === 'idempotency-key'\r\n    );\r\n    const needsIdempotencyKey = method === 'POST' && !hasIdempotencyKey;\r\n    const generatedKey = needsIdempotencyKey ? keyFactory() : undefined;\r\n    let response;\r\n    for (let attempt = 1; attempt <= maxAttempts; attempt++) {\r\n      const outgoing = { ...requestHeaders };\r\n      if (needsIdempotencyKey) outgoing['idempotency-key'] = generatedKey;\r\n      response = await transport({ method, url, headers: outgoing, body });\r\n      if (!shouldRetry(response) || attempt === maxAttempts) return response;\r\n      await sleep(delayFor(response, attempt, baseMs));\r\n    }\r\n    return response;\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/policy.mjs",
+      "before": "export function delayFor(response, attempt, baseMs) {\r\n  const retryAfter = response.headers?.['retry-after'];\r\n  if (retryAfter !== undefined && Number.isFinite(Number(retryAfter))) return Number(retryAfter);\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\nexport function shouldRetry(response) {\r\n  return response.status === 429 || response.status >= 500;\r\n}\r\n",
+      "after": "export function delayFor(response, attempt, baseMs) {\r\n  const headers = response?.headers;\r\n  const retryAfter = typeof headers?.get === 'function'\r\n    ? headers.get('retry-after')\r\n    : Object.entries(headers ?? {}).find(([name]) => name.toLowerCase() === 'retry-after')?.[1];\r\n  const seconds = typeof retryAfter === 'number'\r\n    ? retryAfter\r\n    : typeof retryAfter === 'string' && retryAfter.trim() !== ''\r\n      ? Number(retryAfter)\r\n      : NaN;\r\n  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;\r\n  return baseMs * 2 ** (attempt - 1);\r\n}\r\nexport function shouldRetry(response) {\r\n  const status = Number(response?.status);\r\n  return status === 429 || (status >= 500 && status < 600);\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the retry and idempotency fixes in `src/client.mjs` and `src/policy.mjs`: generated POST keys are reused across attempts, caller-provided keys are preserved, retries are limited to 429 and 5xx responses, and numeric `Retry-After` values are converted from seconds to milliseconds.\n\nVerification passed: `node --test tests/visible.test.mjs` (1 test), plus additional inline contract assertions for key reuse, caller headers, retry delays, and status handling.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\041-retry-idempotency-B-r1\\home\\events\\1794204652263-9f538400-2ff7-482d-a43c-325736ef02c6.jsonl"
+}
