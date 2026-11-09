@@ -1,0 +1,277 @@
+{
+  "task": "numeric-prerelease",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "runId": "009-numeric-prerelease-C-r0",
+  "category": "cross-file",
+  "kind": "upstream",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 168402.3491,
+  "usage": {
+    "input": 23788,
+    "cacheRead": 140288,
+    "cacheWrite": 0,
+    "output": 7562,
+    "estimatedApiUsd": 0.00756268,
+    "modelCalls": 11,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00756268,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 3,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: coercion retains complete digit-prefixed identifiers\nok 1 - coercion retains complete digit-prefixed identifiers\n  ---\n  duration_ms: 1.8446\n  type: 'test'\n  ...\n# Subtest: prerelease and build fields remain distinct\nok 2 - prerelease and build fields remain distinct\n  ---\n  duration_ms: 0.2784\n  type: 'test'\n  ...\n# Subtest: increment and validation do not truncate identifiers\nok 3 - increment and validation do not truncate identifiers\n  ---\n  duration_ms: 0.5256\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 10.138\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 144
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 7,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: upstream range parsing fixtures\nok 1 - upstream range parsing fixtures\n  ---\n  duration_ms: 8.3298\n  type: 'test'\n  ...\n# Subtest: upstream range inclusion fixtures\nok 2 - upstream range inclusion fixtures\n  ---\n  duration_ms: 3.597\n  type: 'test'\n  ...\n# Subtest: upstream range exclusion fixtures\nok 3 - upstream range exclusion fixtures\n  ---\n  duration_ms: 2.1529\n  type: 'test'\n  ...\n# Subtest: upstream increment fixtures and object nonmutation\nok 4 - upstream increment fixtures and object nonmutation\n  ---\n  duration_ms: 4.2971\n  type: 'test'\n  ...\n# Subtest: upstream version comparison fixtures\nok 5 - upstream version comparison fixtures\n  ---\n  duration_ms: 1.6324\n  type: 'test'\n  ...\n# Subtest: upstream version equality fixtures\nok 6 - upstream version equality fixtures\n  ---\n  duration_ms: 1.2147\n  type: 'test'\n  ...\n# Subtest: upstream subset fixtures and range object inputs\nok 7 - upstream subset fixtures and range object inputs\n  ---\n  duration_ms: 4.0708\n  type: 'test'\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 33.8746\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 173
+  },
+  "changed": [
+    "src/internal/re.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/classes/semver.js"
+  ],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 11,
+  "editCalls": 1,
+  "verificationCalls": 3,
+  "toolCalls": 27,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:31:18.587Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:31:19.433Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/internal/re.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:31:19.872Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/internal/re.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:31:32.521Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "tests/visible.test.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T05:31:32.993Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/internal/re.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:31:33.426Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/internal/re.js",
+          "tests/visible.test.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:31:19.251Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "03556123ba8b8ffe00258700997c5fa9cf50b2009b2465965b99f1727e803fcd"
+      },
+      "latencyMs": 663.8548999999184,
+      "parsedFiles": 120,
+      "fileCount": 120,
+      "cacheBytes": 2510613,
+      "heapDeltaBytes": -11200872,
+      "graphBytes": 3574540
+    },
+    {
+      "at": "2026-11-09T05:31:19.870Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "984e8f8bf3e4e8d38919841d7b82e6ec3c80f5d361674f4980c239bd5f677015"
+      },
+      "latencyMs": 436.8623999999836,
+      "parsedFiles": 1,
+      "fileCount": 120,
+      "cacheBytes": 2510613,
+      "heapDeltaBytes": 19696400,
+      "graphBytes": 3574540
+    },
+    {
+      "at": "2026-11-09T05:31:20.297Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "984e8f8bf3e4e8d38919841d7b82e6ec3c80f5d361674f4980c239bd5f677015"
+      },
+      "latencyMs": 425.2068000000436,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2510613,
+      "heapDeltaBytes": 7088200,
+      "graphBytes": 3574540
+    },
+    {
+      "at": "2026-11-09T05:31:32.991Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "984e8f8bf3e4e8d38919841d7b82e6ec3c80f5d361674f4980c239bd5f677015"
+      },
+      "latencyMs": 470.0573999999324,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2510613,
+      "heapDeltaBytes": 6911152,
+      "graphBytes": 3574540
+    },
+    {
+      "at": "2026-11-09T05:31:33.424Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "984e8f8bf3e4e8d38919841d7b82e6ec3c80f5d361674f4980c239bd5f677015"
+      },
+      "latencyMs": 431.7926999999909,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2510613,
+      "heapDeltaBytes": 7160800,
+      "graphBytes": 3574540
+    },
+    {
+      "at": "2026-11-09T05:31:33.862Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "984e8f8bf3e4e8d38919841d7b82e6ec3c80f5d361674f4980c239bd5f677015"
+      },
+      "latencyMs": 436.7125000000233,
+      "parsedFiles": 0,
+      "fileCount": 120,
+      "cacheBytes": 2510613,
+      "heapDeltaBytes": 6962496,
+      "graphBytes": 3574540
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/internal/re.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node - <<'NODE'\nconst semver = require('./src')\nfor (const v of ['1.0.0-1a', '1.0.0-1a.2b+3c.04d', '1.0.0-123+456', '1.0.0-alpha.123+build.456']) {\n const c = semver.coerce(v,{includePrerelease:true})\n console.log(v, { version:c?.version, prerelease:c?.prerelease, build:c?.build, raw:c?.raw })\n}\nNODE\nprintf '\\n--- repo diff ---\\n'\ngit diff -- src/internal/re.js && git status --short -- src/internal/re.js",
+        "printf 'workspace git root: '; git rev-parse --show-toplevel; printf 'src git root: '; git -C src rev-parse --show-toplevel; printf '\\ntracked?\\n'; git ls-files --error-unmatch src/internal/re.js 2>&1; printf '\\nstatus root\\n'; git status --short; printf '\\nsource line\\n'; grep -A5 -B2 'PRERELEASEIDENTIFIER' src/internal/re.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/internal/re.js",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs",
+        "node - <<'NODE'\nconst semver = require('./src')\nfor (const v of ['1.0.0-1a', '1.0.0-1a.2b+3c.04d', '1.0.0-123+456', '1.0.0-alpha.123+build.456']) {\n const c = semver.coerce(v,{includePrerelease:true})\n console.log(v, { version:c?.version, prerelease:c?.prerelease, build:c?.build, raw:c?.raw })\n}\nNODE\nprintf '\\n--- repo diff ---\\n'\ngit diff -- src/internal/re.js && git status --short -- src/internal/re.js",
+        "printf 'workspace git root: '; git rev-parse --show-toplevel; printf 'src git root: '; git -C src rev-parse --show-toplevel; printf '\\ntracked?\\n'; git ls-files --error-unmatch src/internal/re.js 2>&1; printf '\\nstatus root\\n'; git status --short; printf '\\nsource line\\n'; grep -A5 -B2 'PRERELEASEIDENTIFIER' src/internal/re.js",
+        "export SUFFICE_WORKSPACE=\"$PWD\"\nnode --test tests/visible.test.mjs\nnode - <<'NODE'\nconst assert = require('node:assert/strict')\nconst semver = require('./src')\nconst mixed = semver.coerce('1.0.0-1a.2b+3c.04d', { includePrerelease: true })\nassert.equal(mixed.version, '1.0.0-1a.2b')\nassert.deepEqual(mixed.prerelease, ['1a', '2b'])\nassert.deepEqual(mixed.build, ['3c', '04d'])\nassert.equal(mixed.raw, '1.0.0-1a.2b+3c.04d')\nassert.equal(semver.coerce('1.0.0-1a', { includePrerelease: true }).version, '1.0.0-1a')\nassert.equal(semver.coerce('1.0.0-1a').version, '1.0.0')\nassert.deepEqual(semver.parse('1.0.0-123').prerelease, [123])\nassert.equal(semver.parse('1.0.0-01'), null)\nassert.equal(semver.inc('1.0.0', 'pre', '1a'), '1.0.0-1a.0')\nassert.equal(semver.inc('1.0.0', 'pre', '01'), null)\nfor (const rtl of [false, true]) {\n  const coerced = semver.coerce('prefix 1.0.0-1a.2b+build.3c suffix', { includePrerelease: true, rtl })\n  assert.deepEqual(coerced.prerelease, ['1a', '2b'])\n  assert.deepEqual(coerced.build, ['build', '3c'])\n}\nconsole.log('targeted prerelease/coercion checks passed')\nNODE"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/internal/re.js",
+      "before": "const {\n  MAX_SAFE_COMPONENT_LENGTH,\n  MAX_SAFE_BUILD_LENGTH,\n  MAX_LENGTH,\n} = require('./constants')\nconst debug = require('./debug')\nexports = module.exports = {}\n\n// The actual regexps go on exports.re\nconst re = exports.re = []\nconst safeRe = exports.safeRe = []\nconst src = exports.src = []\nconst safeSrc = exports.safeSrc = []\nconst t = exports.t = {}\nlet R = 0\n\nconst LETTERDASHNUMBER = '[a-zA-Z0-9-]'\n\n// Replace some greedy regex tokens to prevent regex dos issues. These regex are\n// used internally via the safeRe object since all inputs in this library get\n// normalized first to trim and collapse all extra whitespace. The original\n// regexes are exported for userland consumption and lower level usage. A\n// future breaking change could export the safer regex only with a note that\n// all input should have extra whitespace removed.\nconst safeRegexReplacements = [\n  ['\\\\s', 1],\n  ['\\\\d', MAX_LENGTH],\n  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],\n]\n\nconst makeSafeRegex = (value) => {\n  for (const [token, max] of safeRegexReplacements) {\n    value = value\n      .split(`${token}*`).join(`${token}{0,${max}}`)\n      .split(`${token}+`).join(`${token}{1,${max}}`)\n  }\n  return value\n}\n\nconst createToken = (name, value, isGlobal) => {\n  const safe = makeSafeRegex(value)\n  const index = R++\n  debug(name, index, value)\n  t[name] = index\n  src[index] = value\n  safeSrc[index] = safe\n  re[index] = new RegExp(value, isGlobal ? 'g' : undefined)\n  safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined)\n}\n\n// The following Regular Expressions can be used for tokenizing,\n// validating, and parsing SemVer version strings.\n\n// ## Numeric Identifier\n// A single `0`, or a non-zero digit followed by zero or more digits.\n\ncreateToken('NUMERICIDENTIFIER', '0|[1-9]\\\\d*')\ncreateToken('NUMERICIDENTIFIERLOOSE', '\\\\d+')\n\n// ## Non-numeric Identifier\n// Zero or more digits, followed by a letter or hyphen, and then zero or\n// more letters, digits, or hyphens.\n\ncreateToken('NONNUMERICIDENTIFIER', `\\\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`)\n\n// ## Main Version\n// Three dot-separated numeric identifiers.\n\ncreateToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\\\.` +\n                   `(${src[t.NUMERICIDENTIFIER]})\\\\.` +\n                   `(${src[t.NUMERICIDENTIFIER]})`)\n\ncreateToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\\\.` +\n                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\\\.` +\n                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`)\n\n// ## Pre-release Version Identifier\n// A numeric identifier, or a non-numeric identifier.\n\ncreateToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]\n}|${src[t.NONNUMERICIDENTIFIER]})`)\n\ncreateToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]\n}|${src[t.NONNUMERICIDENTIFIER]})`)\n\n// ## Pre-release Version\n// Hyphen, followed by one or more dot-separated pre-release version\n// identifiers.\n\ncreateToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]\n}(?:\\\\.${src[t.PRERELEASEIDENTIFIER]})*))`)\n\ncreateToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]\n}(?:\\\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)\n\n// ## Build Metadata Identifier\n// Any combination of digits, letters, or hyphens.\n\ncreateToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`)\n\n// ## Build Metadata\n// Plus sign, followed by one or more period-separated build metadata\n// identifiers.\n\ncreateToken('BUILD', `(?:\\\\+(${src[t.BUILDIDENTIFIER]\n}(?:\\\\.${src[t.BUILDIDENTIFIER]})*))`)\n\n// ## Full Version String\n// A main version, followed optionally by a pre-release version and\n// build metadata.\n\n// Note that the only major, minor, patch, and pre-release sections of\n// the version string are capturing groups.  The build metadata is not a\n// capturing group, because it should not ever be used in version\n// comparison.\n\ncreateToken('FULLPLAIN', `v?${src[t.MAINVERSION]\n}${src[t.PRERELEASE]}?${\n  src[t.BUILD]}?`)\n\ncreateToken('FULL', `^${src[t.FULLPLAIN]}$`)\n\n// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.\n// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty\n// common in the npm registry.\ncreateToken('LOOSEPLAIN', `[v=\\\\s]*${src[t.MAINVERSIONLOOSE]\n}${src[t.PRERELEASELOOSE]}?${\n  src[t.BUILD]}?`)\n\ncreateToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)\n\ncreateToken('GTLT', '((?:<|>)?=?)')\n\n// Something like \"2.*\" or \"1.2.x\".\n// Note that \"x.x\" is a valid xRange identifer, meaning \"any version\"\n// Only the first item is strictly required.\ncreateToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\\\*`)\ncreateToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\\\*`)\n\ncreateToken('XRANGEPLAIN', `[v=\\\\s]*(${src[t.XRANGEIDENTIFIER]})` +\n                   `(?:\\\\.(${src[t.XRANGEIDENTIFIER]})` +\n                   `(?:\\\\.(${src[t.XRANGEIDENTIFIER]})` +\n                   `(?:${src[t.PRERELEASE]})?${\n                     src[t.BUILD]}?` +\n                   `)?)?`)\n\ncreateToken('XRANGEPLAINLOOSE', `[v=\\\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +\n                        `(?:\\\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +\n                        `(?:\\\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +\n                        `(?:${src[t.PRERELEASELOOSE]})?${\n                          src[t.BUILD]}?` +\n                        `)?)?`)\n\ncreateToken('XRANGE', `^${src[t.GTLT]}\\\\s*${src[t.XRANGEPLAIN]}$`)\ncreateToken('XRANGELOOSE', `^${src[t.GTLT]}\\\\s*${src[t.XRANGEPLAINLOOSE]}$`)\n\n// Coercion.\n// Extract anything that could conceivably be a part of a valid semver\ncreateToken('COERCEPLAIN', `${'(^|[^\\\\d])' +\n              '(\\\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +\n              `(?:\\\\.(\\\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +\n              `(?:\\\\.(\\\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`)\ncreateToken('COERCE', `${src[t.COERCEPLAIN]}(?:$|[^\\\\d])`)\ncreateToken('COERCEFULL', src[t.COERCEPLAIN] +\n              `(?:${src[t.PRERELEASE]})?` +\n              `(?:${src[t.BUILD]})?` +\n              `(?:$|[^\\\\d])`)\ncreateToken('COERCERTL', src[t.COERCE], true)\ncreateToken('COERCERTLFULL', src[t.COERCEFULL], true)\n\n// Tilde ranges.\n// Meaning is \"reasonably at or greater than\"\ncreateToken('LONETILDE', '(?:~>?)')\n\ncreateToken('TILDETRIM', `(\\\\s*)${src[t.LONETILDE]}\\\\s+`, true)\nexports.tildeTrimReplace = '$1~'\n\ncreateToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)\ncreateToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)\n\n// Caret ranges.\n// Meaning is \"at least and backwards compatible with\"\ncreateToken('LONECARET', '(?:\\\\^)')\n\ncreateToken('CARETTRIM', `(\\\\s*)${src[t.LONECARET]}\\\\s+`, true)\nexports.caretTrimReplace = '$1^'\n\ncreateToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)\ncreateToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)\n\n// A simple gt/lt/eq thing, or just \"\" to indicate \"any version\"\ncreateToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\\\s*(${src[t.LOOSEPLAIN]})$|^$`)\ncreateToken('COMPARATOR', `^${src[t.GTLT]}\\\\s*(${src[t.FULLPLAIN]})$|^$`)\n\n// An expression to strip any whitespace between the gtlt and the thing\n// it modifies, so that `> 1.2.3` ==> `>1.2.3`\ncreateToken('COMPARATORTRIM', `(\\\\s*)${src[t.GTLT]\n}\\\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)\nexports.comparatorTrimReplace = '$1$2$3'\n\n// Something like `1.2.3 - 1.2.4`\n// Note that these all use the loose form, because they'll be\n// checked against either the strict or loose comparator form\n// later.\ncreateToken('HYPHENRANGE', `^\\\\s*(${src[t.XRANGEPLAIN]})` +\n                   `\\\\s+-\\\\s+` +\n                   `(${src[t.XRANGEPLAIN]})` +\n                   `\\\\s*$`)\n\ncreateToken('HYPHENRANGELOOSE', `^\\\\s*(${src[t.XRANGEPLAINLOOSE]})` +\n                        `\\\\s+-\\\\s+` +\n                        `(${src[t.XRANGEPLAINLOOSE]})` +\n                        `\\\\s*$`)\n\n// Star ranges basically just allow anything at all.\ncreateToken('STAR', '(<|>)?=?\\\\s*\\\\*')\n// >=0.0.0 is like a star\ncreateToken('GTE0', '^\\\\s*>=\\\\s*0\\\\.0\\\\.0\\\\s*$')\ncreateToken('GTE0PRE', '^\\\\s*>=\\\\s*0\\\\.0\\\\.0-0\\\\s*$')\n",
+      "after": "const {\n  MAX_SAFE_COMPONENT_LENGTH,\n  MAX_SAFE_BUILD_LENGTH,\n  MAX_LENGTH,\n} = require('./constants')\nconst debug = require('./debug')\nexports = module.exports = {}\n\n// The actual regexps go on exports.re\nconst re = exports.re = []\nconst safeRe = exports.safeRe = []\nconst src = exports.src = []\nconst safeSrc = exports.safeSrc = []\nconst t = exports.t = {}\nlet R = 0\n\nconst LETTERDASHNUMBER = '[a-zA-Z0-9-]'\n\n// Replace some greedy regex tokens to prevent regex dos issues. These regex are\n// used internally via the safeRe object since all inputs in this library get\n// normalized first to trim and collapse all extra whitespace. The original\n// regexes are exported for userland consumption and lower level usage. A\n// future breaking change could export the safer regex only with a note that\n// all input should have extra whitespace removed.\nconst safeRegexReplacements = [\n  ['\\\\s', 1],\n  ['\\\\d', MAX_LENGTH],\n  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],\n]\n\nconst makeSafeRegex = (value) => {\n  for (const [token, max] of safeRegexReplacements) {\n    value = value\n      .split(`${token}*`).join(`${token}{0,${max}}`)\n      .split(`${token}+`).join(`${token}{1,${max}}`)\n  }\n  return value\n}\n\nconst createToken = (name, value, isGlobal) => {\n  const safe = makeSafeRegex(value)\n  const index = R++\n  debug(name, index, value)\n  t[name] = index\n  src[index] = value\n  safeSrc[index] = safe\n  re[index] = new RegExp(value, isGlobal ? 'g' : undefined)\n  safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined)\n}\n\n// The following Regular Expressions can be used for tokenizing,\n// validating, and parsing SemVer version strings.\n\n// ## Numeric Identifier\n// A single `0`, or a non-zero digit followed by zero or more digits.\n\ncreateToken('NUMERICIDENTIFIER', '0|[1-9]\\\\d*')\ncreateToken('NUMERICIDENTIFIERLOOSE', '\\\\d+')\n\n// ## Non-numeric Identifier\n// Zero or more digits, followed by a letter or hyphen, and then zero or\n// more letters, digits, or hyphens.\n\ncreateToken('NONNUMERICIDENTIFIER', `\\\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`)\n\n// ## Main Version\n// Three dot-separated numeric identifiers.\n\ncreateToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\\\.` +\n                   `(${src[t.NUMERICIDENTIFIER]})\\\\.` +\n                   `(${src[t.NUMERICIDENTIFIER]})`)\n\ncreateToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\\\.` +\n                        `(${src[t.NUMERICIDENTIFIERLOOSE]})\\\\.` +\n                        `(${src[t.NUMERICIDENTIFIERLOOSE]})`)\n\n// ## Pre-release Version Identifier\n// A numeric identifier, or a non-numeric identifier.\n\ncreateToken('PRERELEASEIDENTIFIER', `(?:${src[t.NONNUMERICIDENTIFIER]\n}|${src[t.NUMERICIDENTIFIER]})`)\n\ncreateToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NONNUMERICIDENTIFIER]\n}|${src[t.NUMERICIDENTIFIERLOOSE]})`)\n\n// ## Pre-release Version\n// Hyphen, followed by one or more dot-separated pre-release version\n// identifiers.\n\ncreateToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]\n}(?:\\\\.${src[t.PRERELEASEIDENTIFIER]})*))`)\n\ncreateToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]\n}(?:\\\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)\n\n// ## Build Metadata Identifier\n// Any combination of digits, letters, or hyphens.\n\ncreateToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`)\n\n// ## Build Metadata\n// Plus sign, followed by one or more period-separated build metadata\n// identifiers.\n\ncreateToken('BUILD', `(?:\\\\+(${src[t.BUILDIDENTIFIER]\n}(?:\\\\.${src[t.BUILDIDENTIFIER]})*))`)\n\n// ## Full Version String\n// A main version, followed optionally by a pre-release version and\n// build metadata.\n\n// Note that the only major, minor, patch, and pre-release sections of\n// the version string are capturing groups.  The build metadata is not a\n// capturing group, because it should not ever be used in version\n// comparison.\n\ncreateToken('FULLPLAIN', `v?${src[t.MAINVERSION]\n}${src[t.PRERELEASE]}?${\n  src[t.BUILD]}?`)\n\ncreateToken('FULL', `^${src[t.FULLPLAIN]}$`)\n\n// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.\n// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty\n// common in the npm registry.\ncreateToken('LOOSEPLAIN', `[v=\\\\s]*${src[t.MAINVERSIONLOOSE]\n}${src[t.PRERELEASELOOSE]}?${\n  src[t.BUILD]}?`)\n\ncreateToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)\n\ncreateToken('GTLT', '((?:<|>)?=?)')\n\n// Something like \"2.*\" or \"1.2.x\".\n// Note that \"x.x\" is a valid xRange identifer, meaning \"any version\"\n// Only the first item is strictly required.\ncreateToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\\\*`)\ncreateToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\\\*`)\n\ncreateToken('XRANGEPLAIN', `[v=\\\\s]*(${src[t.XRANGEIDENTIFIER]})` +\n                   `(?:\\\\.(${src[t.XRANGEIDENTIFIER]})` +\n                   `(?:\\\\.(${src[t.XRANGEIDENTIFIER]})` +\n                   `(?:${src[t.PRERELEASE]})?${\n                     src[t.BUILD]}?` +\n                   `)?)?`)\n\ncreateToken('XRANGEPLAINLOOSE', `[v=\\\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +\n                        `(?:\\\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +\n                        `(?:\\\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +\n                        `(?:${src[t.PRERELEASELOOSE]})?${\n                          src[t.BUILD]}?` +\n                        `)?)?`)\n\ncreateToken('XRANGE', `^${src[t.GTLT]}\\\\s*${src[t.XRANGEPLAIN]}$`)\ncreateToken('XRANGELOOSE', `^${src[t.GTLT]}\\\\s*${src[t.XRANGEPLAINLOOSE]}$`)\n\n// Coercion.\n// Extract anything that could conceivably be a part of a valid semver\ncreateToken('COERCEPLAIN', `${'(^|[^\\\\d])' +\n              '(\\\\d{1,'}${MAX_SAFE_COMPONENT_LENGTH}})` +\n              `(?:\\\\.(\\\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?` +\n              `(?:\\\\.(\\\\d{1,${MAX_SAFE_COMPONENT_LENGTH}}))?`)\ncreateToken('COERCE', `${src[t.COERCEPLAIN]}(?:$|[^\\\\d])`)\ncreateToken('COERCEFULL', src[t.COERCEPLAIN] +\n              `(?:${src[t.PRERELEASE]})?` +\n              `(?:${src[t.BUILD]})?` +\n              `(?:$|[^\\\\d])`)\ncreateToken('COERCERTL', src[t.COERCE], true)\ncreateToken('COERCERTLFULL', src[t.COERCEFULL], true)\n\n// Tilde ranges.\n// Meaning is \"reasonably at or greater than\"\ncreateToken('LONETILDE', '(?:~>?)')\n\ncreateToken('TILDETRIM', `(\\\\s*)${src[t.LONETILDE]}\\\\s+`, true)\nexports.tildeTrimReplace = '$1~'\n\ncreateToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)\ncreateToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)\n\n// Caret ranges.\n// Meaning is \"at least and backwards compatible with\"\ncreateToken('LONECARET', '(?:\\\\^)')\n\ncreateToken('CARETTRIM', `(\\\\s*)${src[t.LONECARET]}\\\\s+`, true)\nexports.caretTrimReplace = '$1^'\n\ncreateToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)\ncreateToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)\n\n// A simple gt/lt/eq thing, or just \"\" to indicate \"any version\"\ncreateToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\\\s*(${src[t.LOOSEPLAIN]})$|^$`)\ncreateToken('COMPARATOR', `^${src[t.GTLT]}\\\\s*(${src[t.FULLPLAIN]})$|^$`)\n\n// An expression to strip any whitespace between the gtlt and the thing\n// it modifies, so that `> 1.2.3` ==> `>1.2.3`\ncreateToken('COMPARATORTRIM', `(\\\\s*)${src[t.GTLT]\n}\\\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)\nexports.comparatorTrimReplace = '$1$2$3'\n\n// Something like `1.2.3 - 1.2.4`\n// Note that these all use the loose form, because they'll be\n// checked against either the strict or loose comparator form\n// later.\ncreateToken('HYPHENRANGE', `^\\\\s*(${src[t.XRANGEPLAIN]})` +\n                   `\\\\s+-\\\\s+` +\n                   `(${src[t.XRANGEPLAIN]})` +\n                   `\\\\s*$`)\n\ncreateToken('HYPHENRANGELOOSE', `^\\\\s*(${src[t.XRANGEPLAINLOOSE]})` +\n                        `\\\\s+-\\\\s+` +\n                        `(${src[t.XRANGEPLAINLOOSE]})` +\n                        `\\\\s*$`)\n\n// Star ranges basically just allow anything at all.\ncreateToken('STAR', '(<|>)?=?\\\\s*\\\\*')\n// >=0.0.0 is like a star\ncreateToken('GTE0', '^\\\\s*>=\\\\s*0\\\\.0\\\\.0\\\\s*$')\ncreateToken('GTE0PRE', '^\\\\s*>=\\\\s*0\\\\.0\\\\.0-0\\\\s*$')\n"
+    }
+  ],
+  "final": "Updated `src/internal/re.js` to prefer non-numeric prerelease identifiers before numeric ones. This prevents coercion from truncating mixed identifiers such as `1a`, while preserving numeric prereleases and shared parsing behavior.\n\n- Visible tests: 7/7 passed with `SUFFICE_WORKSPACE=\"$PWD\" node --test tests/visible.test.mjs`.\n- Targeted checks passed for mixed prerelease/build metadata, RTL coercion, invalid versions, and increment identifier validation.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\009-numeric-prerelease-C-r0\\home\\events\\1794202234353-a21a0044-0b2a-44ae-bc3c-0fbecb18289d.jsonl"
+}
