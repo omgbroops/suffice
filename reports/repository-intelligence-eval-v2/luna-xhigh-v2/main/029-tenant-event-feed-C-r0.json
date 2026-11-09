@@ -1,0 +1,198 @@
+{
+  "task": "tenant-event-feed",
+  "repetition": 0,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 28,
+  "runId": "029-tenant-event-feed-C-r0",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 133939.11770000006,
+  "usage": {
+    "input": 24112,
+    "cacheRead": 28032,
+    "cacheWrite": 0,
+    "output": 6017,
+    "estimatedApiUsd": 0.00570002,
+    "modelCalls": 8,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00570002,
+  "acceptance": {
+    "status": "failed",
+    "exitCode": 1,
+    "tests": 4,
+    "passed": 3,
+    "failed": 1,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": false,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nnot ok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 2.4511\n  type: 'test'\n  location: 'C:\\\\Users\\\\Mohammed\\\\Documents\\\\GitHub\\\\suffice\\\\.suffice\\\\intelligence-eval-v2\\\\acceptance\\\\tenant-event-feed.test.mjs:11:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly deep-equal:\n    + actual - expected\n    \n      [\n        1,\n        3,\n        4,\n    +   5\n      ]\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    0: 1\n    1: 3\n    2: 4\n  actual:\n    0: 1\n    1: 3\n    2: 4\n    3: 5\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/Mohammed/Documents/GitHub/suffice/.suffice/intelligence-eval-v2/acceptance/tenant-event-feed.test.mjs:17:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1201:25)\n    Test.start (node:internal/test_runner/test:1096:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 0.8452\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.4575\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.3129\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 3\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 12.4128\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 98
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 1.56\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.4089\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 93
+  },
+  "changed": [
+    "src/batch-commit.mjs",
+    "src/snapshot.mjs"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/live-bus.mjs"
+  ],
+  "extraChangedFiles": [],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 8,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 26,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:57:35.007Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:57:35.118Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/snapshot.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:35.208Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/snapshot.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:57:35.097Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 90.39280000003055,
+      "parsedFiles": 16,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": -28956176,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:57:35.208Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "10e5013630b5884b6ceca8a330c94b08cc4f20cc7d9f75516cc7f095f50545de"
+      },
+      "latencyMs": 89.16809999989346,
+      "parsedFiles": 2,
+      "fileCount": 16,
+      "cacheBytes": 90436,
+      "heapDeltaBytes": 1838032,
+      "graphBytes": 161596
+    },
+    {
+      "at": "2026-11-09T05:57:35.292Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "10e5013630b5884b6ceca8a330c94b08cc4f20cc7d9f75516cc7f095f50545de"
+      },
+      "latencyMs": 84.61060000001453,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 90436,
+      "heapDeltaBytes": 1099432,
+      "graphBytes": 161596
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/batch-commit.mjs",
+        "src/snapshot.mjs",
+        "src/publisher.mjs",
+        "src/live-bus.mjs",
+        "src/record.mjs",
+        "src/replay.mjs",
+        "src/feed.mjs",
+        "src/subscription.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --test tests/visible.test.mjs",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/index.mjs';\nconst feed = createFeed();\nconst input = { nested: { values: [1] } };\nconst first = feed.publishBatch('a', [{ type: 'created', payload: input }]);\ninput.nested.values[0] = 8;\nfirst[0].payload.nested.values[0] = 9;\nassert.equal(feed.history('a')[0].payload.nested.values[0], 1);\nconst deliveries1 = [], deliveries2 = [];\nfeed.subscribe('a', 0, r => { deliveries1.push(r); r.payload.nested.values[0] = 10; });\nfeed.subscribe('a', 0, r => deliveries2.push(r));\nassert.equal(deliveries2[0].payload.nested.values[0], 1);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'valid', payload: { ok: true } },\n  { type: 'invalid', payload: { bad: () => {} } },\n]));\nassert.deepEqual(feed.history('a').map(r => r.sequence), [1]);\nassert.equal(deliveries1.length, 1);\nconst second = feed.publishBatch('a', [{ type: 'next', payload: { ok: true } }]);\nassert.equal(second[0].sequence, 2);\nassert.equal(deliveries1[1].sequence, 2);\nassert.equal(deliveries2[1].payload.ok, true);\nfeed.publishBatch('b', [{ type: 'other', payload: {} }]);\nassert.deepEqual(feed.history('a', 1).map(r => r.sequence), [2]);\nassert.equal(feed.publishBatch('a', []).length, 0);\nconsole.log('contract checks passed');\nNODE\n\ngit diff --check && git status --short && git diff -- src/batch-commit.mjs src/snapshot.mjs",
+        "node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { createFeed } from './src/index.mjs';\nconst feed = createFeed();\nconst input = { nested: { values: [1] } };\nconst first = feed.publishBatch('a', [{ type: 'created', payload: input }]);\ninput.nested.values[0] = 8;\nfirst[0].payload.nested.values[0] = 9;\nassert.equal(feed.history('a')[0].payload.nested.values[0], 1);\nconst deliveries1 = [], deliveries2 = [];\nfeed.subscribe('a', 0, r => { deliveries1.push(r); if (r.payload.nested) r.payload.nested.values[0] = 10; });\nfeed.subscribe('a', 0, r => deliveries2.push(r));\nassert.equal(deliveries2[0].payload.nested.values[0], 1);\nassert.throws(() => feed.publishBatch('a', [\n  { type: 'valid', payload: { ok: true } },\n  { type: 'invalid', payload: { bad: () => {} } },\n]));\nassert.deepEqual(feed.history('a').map(r => r.sequence), [1]);\nassert.equal(deliveries1.length, 1);\nconst second = feed.publishBatch('a', [{ type: 'next', payload: { ok: true } }]);\nassert.equal(second[0].sequence, 2);\nassert.equal(deliveries1[1].sequence, 2);\nassert.equal(deliveries2[1].payload.ok, true);\nfeed.publishBatch('b', [{ type: 'other', payload: {} }]);\nassert.deepEqual(feed.history('a', 1).map(r => r.sequence), [2]);\nassert.equal(feed.publishBatch('a', []).length, 0);\nconsole.log('contract checks passed');\nNODE\n\ngit diff --check -- src/batch-commit.mjs src/snapshot.mjs; git status --short -- src/batch-commit.mjs src/snapshot.mjs; git diff -- src/batch-commit.mjs src/snapshot.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  let sequence = state.sequence;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    records.push(makeRecord(tenant, event, ++sequence));\r\n  }\r\n  state.sequence = sequence;\r\n  state.records = state.records.concat(records);\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\r\n  return { ...record, payload: structuredClone(record.payload) };\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the feed repairs without changing its public API:\n\n- Batch records and sequence numbers are staged locally, so an invalid event leaves the committed state unchanged.\n- Record snapshots now deep-clone payloads, keeping stored data, results, history, replay, and live deliveries independently owned.\n\nVerification: `node --test tests/visible.test.mjs` passed (1 test). Additional contract checks for atomic batches and snapshot isolation passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\029-tenant-event-feed-C-r0\\home\\events\\1794203791738-0b785c72-33c6-49e2-b47a-90df52ad9c71.jsonl"
+}

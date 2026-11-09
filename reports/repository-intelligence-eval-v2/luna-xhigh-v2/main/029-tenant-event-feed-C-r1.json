@@ -1,0 +1,497 @@
+{
+  "task": "tenant-event-feed",
+  "repetition": 1,
+  "arm": "C",
+  "mode": "on-demand",
+  "scheduleIndex": 29,
+  "runId": "029-tenant-event-feed-C-r1",
+  "dispatchConcurrency": 12,
+  "category": "complex",
+  "kind": "synthetic",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 200411.68790000002,
+  "usage": {
+    "input": 47300,
+    "cacheRead": 89216,
+    "cacheWrite": 0,
+    "output": 8574,
+    "estimatedApiUsd": 0.00990916,
+    "modelCalls": 13,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.00990916,
+  "acceptance": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 4,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: tenant filtering applies equally to replay and live delivery\nok 1 - tenant filtering applies equally to replay and live delivery\n  ---\n  duration_ms: 1.9233\n  type: 'test'\n  ...\n# Subtest: failed batches publish neither records nor sequence nor notifications\nok 2 - failed batches publish neither records nor sequence nor notifications\n  ---\n  duration_ms: 0.5789\n  type: 'test'\n  ...\n# Subtest: nested snapshots isolate inputs, history, results and subscribers\nok 3 - nested snapshots isolate inputs, history, results and subscribers\n  ---\n  duration_ms: 0.4503\n  type: 'test'\n  ...\n# Subtest: cursors and identities validate before registering subscribers\nok 4 - cursors and identities validate before registering subscribers\n  ---\n  duration_ms: 0.3182\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 11.3007\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 92
+  },
+  "regression": {
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "expectedTests": 1,
+    "namesMatch": true,
+    "stdout": "TAP version 13\n# Subtest: single tenant events replay and unsubscribe\nok 1 - single tenant events replay and unsubscribe\n  ---\n  duration_ms: 1.6841\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 7.7007\n",
+    "stderr": "",
+    "truncated": false,
+    "latencyMs": 88
+  },
+  "changed": [
+    "src/batch-commit.mjs",
+    "src/live-bus.mjs",
+    "src/snapshot.mjs",
+    "src/validation.mjs"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "src/validation.mjs"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 13,
+  "editCalls": 4,
+  "verificationCalls": 6,
+  "toolCalls": 26,
+  "graphQueries": [
+    {
+      "at": "2026-11-09T05:57:31.349Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-09T05:57:31.471Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/live-bus.mjs",
+          "src/snapshot.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:57:31.560Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/live-bus.mjs",
+          "src/snapshot.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:21.952Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/live-bus.mjs",
+          "src/snapshot.mjs",
+          "src/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:22.051Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/live-bus.mjs",
+          "src/snapshot.mjs",
+          "src/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:36.133Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/live-bus.mjs",
+          "src/snapshot.mjs",
+          "src/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:36.254Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/live-bus.mjs",
+          "src/snapshot.mjs",
+          "src/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:48.930Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "src/index.mjs",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:49.005Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/feed.mjs",
+          "src/index.mjs",
+          "src/live-bus.mjs",
+          "src/publisher.mjs",
+          "src/snapshot.mjs",
+          "src/validation.mjs"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-09T05:58:49.075Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/batch-commit.mjs",
+          "src/feed.mjs",
+          "src/index.mjs",
+          "src/live-bus.mjs",
+          "src/publisher.mjs",
+          "src/snapshot.mjs",
+          "src/validation.mjs"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T05:57:31.449Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "d2c761bd45c2b30f920be1b1d8516a02c4b175aceba686021373414227be5da4"
+      },
+      "latencyMs": 101.41269999998622,
+      "parsedFiles": 16,
+      "fileCount": 16,
+      "cacheBytes": 91274,
+      "heapDeltaBytes": 8840888,
+      "graphBytes": 163131
+    },
+    {
+      "at": "2026-11-09T05:57:31.559Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "000d603a630dda648383e0f91d77c79fdf7983778c2272ef4c16ad27803ab0ec"
+      },
+      "latencyMs": 87.93330000014976,
+      "parsedFiles": 3,
+      "fileCount": 16,
+      "cacheBytes": 91258,
+      "heapDeltaBytes": 2242960,
+      "graphBytes": 162767
+    },
+    {
+      "at": "2026-11-09T05:57:31.644Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "000d603a630dda648383e0f91d77c79fdf7983778c2272ef4c16ad27803ab0ec"
+      },
+      "latencyMs": 84.27639999985695,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 91258,
+      "heapDeltaBytes": 1048312,
+      "graphBytes": 162767
+    },
+    {
+      "at": "2026-11-09T05:58:22.051Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 98.81710000010207,
+      "parsedFiles": 1,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 2073344,
+      "graphBytes": 166456
+    },
+    {
+      "at": "2026-11-09T05:58:22.133Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 82.04780000005849,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 1136112,
+      "graphBytes": 166456
+    },
+    {
+      "at": "2026-11-09T05:58:36.253Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 119.37129999999888,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 1689448,
+      "graphBytes": 166456
+    },
+    {
+      "at": "2026-11-09T05:58:36.354Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 100.9336000001058,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 2091152,
+      "graphBytes": 166456
+    },
+    {
+      "at": "2026-11-09T05:58:49.005Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 74.34799999999814,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 973056,
+      "graphBytes": 166456
+    },
+    {
+      "at": "2026-11-09T05:58:49.075Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 69.66830000001937,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 961256,
+      "graphBytes": 166456
+    },
+    {
+      "at": "2026-11-09T05:58:49.146Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "26702669ab876564bc113d30307a2bc5aea8d1ad",
+        "contentVersion": "3bf986a88e9c1383b3d2ae2bbe1820035d751258aac3eefbf60fafec32d670f1"
+      },
+      "latencyMs": 71.15920000011101,
+      "parsedFiles": 0,
+      "fileCount": 16,
+      "cacheBytes": 93666,
+      "heapDeltaBytes": 967944,
+      "graphBytes": 166456
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/batch-commit.mjs",
+        "src/live-bus.mjs",
+        "src/snapshot.mjs",
+        "src/publisher.mjs",
+        "src/feed.mjs",
+        "src/record.mjs",
+        "src/replay.mjs",
+        "src/index.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff -- src && node --test tests/visible.test.mjs",
+        "git status --short && cat src/batch-commit.mjs src/live-bus.mjs src/snapshot.mjs",
+        "git rev-parse --show-toplevel; git check-ignore -v src/batch-commit.mjs; git ls-files --error-unmatch src/batch-commit.mjs; git diff --stat -- src/batch-commit.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 0); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[0].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); if (r.payload.nested) r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "for f in src/batch-commit.mjs src/live-bus.mjs src/snapshot.mjs src/validation.mjs; do echo ==== $f; cat \"$f\"; done; node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/batch-commit.mjs",
+        "src/live-bus.mjs",
+        "src/snapshot.mjs",
+        "src/validation.mjs",
+        "src/publisher.mjs",
+        "src/feed.mjs",
+        "src/record.mjs",
+        "src/replay.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 0); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[0].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); if (r.payload.nested) r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "for f in src/batch-commit.mjs src/live-bus.mjs src/snapshot.mjs src/validation.mjs; do echo ==== $f; cat \"$f\"; done; node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/batch-commit.mjs",
+        "src/live-bus.mjs",
+        "src/snapshot.mjs",
+        "src/validation.mjs",
+        "src/publisher.mjs",
+        "src/feed.mjs",
+        "src/record.mjs",
+        "src/replay.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); if (r.payload.nested) r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "for f in src/batch-commit.mjs src/live-bus.mjs src/snapshot.mjs src/validation.mjs; do echo ==== $f; cat \"$f\"; done; node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/batch-commit.mjs",
+        "src/feed.mjs",
+        "src/index.mjs",
+        "src/live-bus.mjs",
+        "src/publisher.mjs",
+        "src/snapshot.mjs",
+        "src/validation.mjs",
+        "tests/visible.test.mjs"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node --input-type=module -e 'import assert from \"node:assert/strict\"; import { createFeed } from \"./src/index.mjs\"; const feed = createFeed(); const payload = { nested: { value: 1 } }; const first = feed.publishBatch(\"a\", [{ type: \"one\", payload }]); payload.nested.value = 9; first[0].payload.nested.value = 8; assert.equal(feed.history(\"a\")[0].payload.nested.value, 1); const a = [], b = []; feed.subscribe(\"a\", 0, r => { a.push(r); if (r.payload.nested) r.payload.nested.value = 7; }); feed.subscribe(\"b\", 0, r => b.push(r)); assert.equal(a.length, 1); assert.throws(() => feed.publishBatch(\"a\", [{ type: \"valid\", payload: {} }, { type: \"bad\", payload: { nested: () => {} } }])); assert.deepEqual(feed.history(\"a\").map(r => r.sequence), [1]); assert.equal(a.length, 1); const committed = feed.publishBatch(\"a\", [{ type: \"two\", payload: { nested: { value: 2 } } }]); assert.equal(committed[0].sequence, 2); assert.equal(a[1].payload.nested.value, 7); const bRecord = feed.publishBatch(\"b\", [{ type: \"other\", payload: { nested: { value: 3 } } }])[0]; assert.equal(b.length, 1); b[0].payload.nested.value = 0; assert.equal(feed.history(\"b\")[0].payload.nested.value, 3); assert.equal(bRecord.sequence, 3); assert.deepEqual(feed.history(\"a\", 1).map(r => r.sequence), [2]); const nullProto = Object.assign(Object.create(null), { ok: true }); assert.equal(feed.publishBatch(\"a\", [{ type: \"null-proto\", payload: nullProto }])[0].sequence, 4); assert.throws(() => feed.history(\"a\", -1)); assert.throws(() => feed.subscribe(\"\", 0, () => {}));' && node --test tests/visible.test.mjs",
+        "for f in src/batch-commit.mjs src/live-bus.mjs src/snapshot.mjs src/validation.mjs; do echo ==== $f; cat \"$f\"; done; node --test tests/visible.test.mjs"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/batch-commit.mjs",
+      "before": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  const staged = state;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    const record = makeRecord(tenant, event, ++staged.sequence);\r\n    staged.records.push(record);\r\n    records.push(record);\r\n  }\r\n  state.sequence = staged.sequence;\r\n  state.records = staged.records;\r\n  return records;\r\n}\r\n",
+      "after": "import { validateEvent } from './validation.mjs';\r\nimport { makeRecord } from './record.mjs';\r\nexport function appendBatch(state, tenant, events) {\r\n  let sequence = state.sequence;\r\n  const records = [];\r\n  for (const event of events) {\r\n    validateEvent(event);\r\n    records.push(makeRecord(tenant, event, ++sequence));\r\n  }\r\n  state.sequence = sequence;\r\n  state.records = state.records.concat(records);\r\n  return records;\r\n}\r\n"
+    },
+    {
+      "path": "src/live-bus.mjs",
+      "before": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) entry.onEvent(snapshot(record));\r\n    },\r\n  };\r\n}\r\n",
+      "after": "import { snapshot } from './snapshot.mjs';\r\nexport function createBus() {\r\n  const subscriptions = new Set();\r\n  return {\r\n    add(tenant, onEvent) {\r\n      const entry = { tenant, onEvent };\r\n      subscriptions.add(entry);\r\n      return () => subscriptions.delete(entry);\r\n    },\r\n    emit(record) {\r\n      for (const entry of subscriptions) {\r\n        if (entry.tenant === record.tenant) entry.onEvent(snapshot(record));\r\n      }\r\n    },\r\n  };\r\n}\r\n"
+    },
+    {
+      "path": "src/snapshot.mjs",
+      "before": "export function snapshot(record) {\r\n  return { ...record, payload: { ...record.payload } };\r\n}\r\n",
+      "after": "export function snapshot(record) {\r\n  return { ...record, payload: structuredClone(record.payload) };\r\n}\r\n"
+    },
+    {
+      "path": "src/validation.mjs",
+      "before": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  if (!event || typeof event.type !== 'string' || !event.type || !event.payload || Object.getPrototypeOf(event.payload) !== Object.prototype) throw new Error('Invalid event');\r\n  structuredClone(event.payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n",
+      "after": "export function validateTenant(tenant) {\r\n  if (typeof tenant !== 'string' || !tenant) throw new Error('Invalid tenant');\r\n}\r\nexport function validateEvent(event) {\r\n  const payload = event?.payload;\r\n  const prototype = payload !== null && typeof payload === 'object' ? Object.getPrototypeOf(payload) : undefined;\r\n  if (!event || typeof event.type !== 'string' || !event.type || (prototype !== Object.prototype && prototype !== null)) throw new Error('Invalid event');\r\n  structuredClone(payload);\r\n}\r\nexport function validateCursor(after) {\r\n  if (!Number.isInteger(after) || after < 0) throw new Error('Invalid cursor');\r\n}\r\n"
+    }
+  ],
+  "final": "Implemented the feed repairs in `src/`: batches now commit atomically, payload snapshots are deep clones, live events are tenant-filtered, and null-prototype payload objects are accepted.\n\n`node --test tests/visible.test.mjs` passed. Additional inline assertions for atomic retries, snapshot isolation, tenant filtering, and validation also passed.",
+  "eventPath": "C:\\Users\\Mohammed\\Documents\\GitHub\\suffice\\.suffice\\intelligence-eval-v2\\runs\\luna-xhigh-v2\\main\\029-tenant-event-feed-C-r1\\home\\events\\1794203791748-15abba84-6445-45f9-bc8b-3b26e72b4cfa.jsonl"
+}
