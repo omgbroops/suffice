@@ -78,6 +78,12 @@ runs. Omitted cases are never called passes or pending. Every official target an
 regression title must remain discovered. Original unscored CLI SourceMap failures
 and existing pending tests are recorded separately.
 
+Legacy console methods are rebound for Node's detached warning callbacks. A
+targeted SourceMap write shim restores the old string-coercion convention in CLI
+children; source-map path fields are normalized while mappings and source content
+remain unchanged. Original assertions still run. These setup repairs are applied
+before main inference and revalidated across all modes.
+
 Every task must pass an original-code gate (all target labels fail, all required
 regressions pass) and an upstream-fix gate (all target and regression labels pass).
 Frozen full-title multiplicities prevent dropped duplicate cases. A failed gate
@@ -89,9 +95,9 @@ scope remains a contract rather than an OS sandbox.
 
 ## Analysis
 
-The primary outcome is independent acceptance plus required regressions, valid
-scope/configuration, and normal task completion. Accepted partial patches are
-also reported separately. Provider and evaluator failures are distinct from
+The primary outcome is independent patch acceptance plus required regressions
+and valid scope/configuration. A budget-stopped patch can still meet those checks.
+Normal completion and accepted partial patches are reported separately. Provider and evaluator failures are distinct from
 engineering failures; missing cells remain visible. All official targets count
 in strict acceptance; runtime-target counts separately describe snapshot-sensitive
 cases. Passing static dependencies does not prove behavioral correctness.
@@ -118,7 +124,7 @@ For scarce RAM, run it once per `--task=ID`; validated matching receipts are reu
 `--retry-infrastructure` retains old diagnostics and reattempts setup only.
 Run all root tests serially, then inspect
 `node scripts/intelligence-real-v3.mjs --dry-run` before inference.
-`node scripts/intelligence-real-v3.mjs` runs the frozen schedule serially.
+`node --max-old-space-size=256 scripts/intelligence-real-v3.mjs` runs the frozen schedule serially.
 An audited provider recovery can resume with `--resume-provider`.
 `node --max-old-space-size=384 scripts/report-intelligence-real-v3.mjs` regenerates
 the machine-readable results and Markdown report without making model requests.

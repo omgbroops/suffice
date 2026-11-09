@@ -7,6 +7,7 @@ and session handling remain in place. The default mode is `off`.
 ```sh
 node packages/cli/bin/suffice.mjs --intelligence tools --print "repair this issue"
 node packages/cli/bin/suffice.mjs --intelligence guided --print "repair this issue"
+node packages/cli/bin/suffice.mjs --intelligence on-demand --print "repair this issue"
 ```
 
 `tools` adds `get_symbol_context`, `get_impact_analysis`, and
@@ -26,6 +27,12 @@ Implementation is under `packages/cli/src/intelligence/`:
   reverse module reachability, and exposes the three query operations.
 * `tools.mjs` adapts these operations to the existing TypeBox tool interface and
   the existing Pi lifecycle hooks.
+* `source-files.mjs` filters ignored untracked artifacts when the workspace owns
+  its Git root; tracked files remain included. Parent Git metadata cannot hide
+  an entire nested workspace. Configuration metadata is versioned separately.
+* `module-resolution.mjs` lazily uses pinned TypeScript compiler module-path
+  resolution for configured TypeScript sources. It does not replace Acorn or
+  construct a full compiler program.
 
 Schema version 2 consists of:
 
@@ -37,15 +44,22 @@ Schema version 2 consists of:
 | Relationship | `defines`, `module`, `exports`, `imports`, `reference`, or `call`; source and target IDs, resolution status, evidence, optional import/reexport evidence chain. |
 | Evidence | Source path, line/column when available, source content version, syntax kind. Every resolved relationship has source evidence. |
 | Unresolved | Syntax/name/specifier when available, source evidence, explicit reason; no invented target ID. |
-| Repository revision | Git HEAD when available plus SHA-256 of the complete supported-file manifest. HEAD alone is insufficient for dirty files. |
+| Repository revision | Git HEAD, source-content version, configuration version and combined content version. HEAD alone is insufficient for dirty files. |
 | Change record | Stable symbol ID, path/name, added/deleted/modified classification relative to task-start baseline. File changes are also tracked independently. |
 
 References and calls resolve **lexical bindings**, not runtime function values.
 A resolved call cannot prove execution, dispatch, behavior, or a successful edit.
 Explicit named/default imports and named reexports follow export bindings across
 files. Import aliases do not collapse unrelated same-name declarations. Cycles
-terminate with abstention. Module dependencies require explicit existing relative
-paths; package resolution, extension guessing, and configured aliases abstain.
+terminate with abstention. Existing literal implementation paths retain priority.
+Configured TypeScript sources can also resolve extensionless paths and aliases
+using their nearest in-workspace `tsconfig.json`, with compiler/configuration
+provenance. NodeNext import/require mode follows package metadata. Unsupported
+extends/plugins, declaration-only targets and paths outside analyzed files abstain.
+JavaScript implicit paths and unconfigured aliases remain unresolved.
+
+Impact arrays expose totals, omissions and pagination. Relevant-test traversal
+uses the full internal reachability result before limiting returned candidates.
 
 Impact is deliberately conservative at the **module level**. Reverse traversal
 marks consumers as `inferred`, with a dependency witness chain. It includes the
@@ -64,12 +78,13 @@ temporary-file replacement avoids partial JSON writes. Cache read/write failure
 is logged; a missing/corrupt cache can be rebuilt. No credentials are stored in
 the index.
 
-Every query enumerates and hashes current supported source contents, reusing
+Every query enumerates and hashes current supported source and configuration contents, reusing
 unchanged analyses and parsing changed/new files. Deleted files disappear from
 the current graph. A second content scan detects edits during indexing and
 rejects that query rather than returning known-stale results. An unchanged
 manifest/revision reuses linked relationships. Queries serialize within one
-engine instance. Independent processes can safely overwrite a cache snapshot;
+engine instance. Configuration-only changes relink cached source analyses and
+conservatively seed affected TypeScript files. Independent processes can safely overwrite a cache snapshot;
 their next queries still revalidate contents.
 
 Native edits, shell edits, file renames, additions, deletion, and edits preserving
@@ -95,7 +110,18 @@ search remain available. Graph errors are logged and guidance falls back without
 blocking normal implementation. New user tasks reset the change baseline;
 resumed history is not treated as the baseline for earlier edits.
 
+On-demand mode uses the triggers documented in the
+[v2 evaluation](REPOSITORY-INTELLIGENCE-EVAL-V2.md), recording reasons and version
+scan overhead. If first activation follows opaque shell edits, it cannot recover
+every pre-edit symbol relationship that was never indexed. Explicit path seeds
+and fallback investigation remain necessary in that case.
+
 ## Evaluation and reproduction
+
+The following commands describe the original v1 calibration. The newer
+[real-issue protocol](REPOSITORY-INTELLIGENCE-REAL-V3.md) uses A off, B guided and
+C on-demand, with Luna/xhigh. Its raw records and corrected source-binding
+measurement are separate from the original experiment.
 
 ```sh
 node --test tests/*.test.mjs packages/cli/test/*.test.mjs
@@ -132,8 +158,9 @@ the workspace's line-ending style, and never changes acceptance tests.
 Only nonhidden, nonsymlink JavaScript/TypeScript files up to 128 KiB participate;
 the existing traversal excludes node_modules. JSX/TSX, non-strippable TypeScript,
 and parse/read failures are reported through coverage. There is no language
-server, type checker, runtime instrumentation, package/config resolution, or
-dependency installation. Methods are definitions but property calls, prototype
+server, full semantic type checker, runtime instrumentation, or dependency
+installation. Compiler module-path resolution is limited to the configured
+TypeScript subset above. Methods are definitions but property calls, prototype
 dispatch, computed access, CommonJS bindings, wildcard exports, dynamic imports,
 default-parameter initializer uses, and direct eval/with contexts abstain. Globals and external packages are
 unresolved; they may be harmless builtins, not index failures.

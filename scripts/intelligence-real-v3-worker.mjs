@@ -66,7 +66,10 @@ try{
   clearInterval(timer);await sampling;resources.push(await resource());await writeFile(resolve(published,id+'.resources.json'),JSON.stringify(resources,null,2));
 }
 result.attempt=attempt;result.cellId=cellId(item);
+result.engineeringAccepted=result.patchAccepted===true&&result.modelValid===true&&result.sourceStable===true;
+result.normalTaskCompletion=result.status==='completed';
 await writeFile(resolve(published,id+'.json'),JSON.stringify(result,null,2));
+await writeFile(resolve(published,id+'.summary.json'),JSON.stringify({task:result.task,arm:result.arm,repetition:result.repetition,attempt,cellId:result.cellId,status:result.status,classification:result.classification,error:result.error,success:result.success,engineeringAccepted:result.engineeringAccepted,patchAccepted:result.patchAccepted,modelValid:result.modelValid,sourceStable:result.sourceStable,receiptAudit:result.receiptAudit,usage:result.usage,totalEstimatedUsd:result.totalEstimatedUsd},null,2));
 entry.known=result.usage.estimatedApiUsd;entry.unknown=result.totalEstimatedUsd===null;entry.reserved=entry.unknown?Math.max(REAL_CONFIG.maxCost,entry.known):result.totalEstimatedUsd;entry.state='finished';await writeLedger(ledgerPath,ledger);
 // Archive exact production bytes before reclaiming generated workspace copies.
 let archived=false;
