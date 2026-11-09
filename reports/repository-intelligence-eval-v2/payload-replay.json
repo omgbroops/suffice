@@ -1,0 +1,289 @@
+{
+  "kind": "offline-payload-replay-no-inference",
+  "runId": "sveltejs__svelte-1190-B-r0",
+  "inputs": {
+    "packages/cli/src/intelligence/graph.mjs": "323c514cc89801676981141109c19beb7eb42354a0c075729f34ee3363977486",
+    "packages/cli/src/intelligence/source-files.mjs": "6a256c8a25205cba38b1011eaf63278c8320cc0bbe338b2fc6a459a2a0832c15",
+    "packages/cli/src/intelligence/on-demand.mjs": "b22f247bc2c7c181195b30da17cf48e937915a52d749d186ac854dde1a4b7fe1",
+    "packages/cli/src/intelligence/tools.mjs": "0a38d8405f80ca6e4f6d9a287a7cf1504d47edf9e79cef4537625d227e1fe840"
+  },
+  "original": {
+    "bytes": 948408,
+    "changedFiles": 79,
+    "changedSymbols": 4515
+  },
+  "bounded": {
+    "bytes": 6495,
+    "changedFiles": 5,
+    "changedSymbols": 12,
+    "total": {
+      "seeds": 5,
+      "changedFiles": 5,
+      "changedSymbols": 18,
+      "impacted": 5
+    },
+    "page": {
+      "offset": 0,
+      "limit": 12,
+      "nextOffset": 12
+    },
+    "fileSelection": {
+      "method": "git-ignore",
+      "candidates": 755,
+      "ignored": 74
+    }
+  },
+  "baselineMs": 7651.3814999999995,
+  "refresh": {
+    "latencyMs": 3041.007600000001,
+    "parsedFiles": 5,
+    "fileCount": 681,
+    "cacheBytes": 0,
+    "heapDeltaBytes": 29955072,
+    "graphBytes": 22694807
+  },
+  "data": {
+    "impact": {
+      "revision": {
+        "head": "0edecdb6099e5ea5e601b583e961dee4fd19ec9b",
+        "contentVersion": "1a368a0c22180ba0e40be670b33b12a24d0ea52e8dcca0acf261334d58ca5c8a"
+      },
+      "coverage": {
+        "indexedFiles": 681,
+        "unparsed": [
+          {
+            "path": "compiler/svelte.js",
+            "version": null,
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          {
+            "path": "src/css/Stylesheet.ts",
+            "version": "df76ce6817517f7a55a9112952d9ffa592b72c87d23bf48e24c1fe8f9128608c",
+            "error": "parse-failed: The angle-bracket syntax for type assertions, `<T>expr`, is not supported in type strip mode. Instead, use the 'as' syntax: `expr as T`."
+          },
+          {
+            "path": "src/utils/CodeBuilder.ts",
+            "version": "0b4533d8507764da5719e38a0a5006569488539cca4b0f4233bf064129e3199c",
+            "error": "parse-failed: TypeScript enum is not supported in strip-only mode"
+          }
+        ],
+        "omittedUnparsed": 0,
+        "unresolvedCount": 10243,
+        "fileSelection": {
+          "method": "git-ignore",
+          "candidates": 755,
+          "ignored": 74
+        },
+        "scope": "nonhidden nonsymlink JS/TS <=128 KiB; ignored untracked files excluded in independent Git roots; explicit ESM paths; no runtime coverage guarantee"
+      },
+      "metrics": {
+        "latencyMs": 3041.007600000001,
+        "parsedFiles": 5,
+        "fileCount": 681,
+        "cacheBytes": 0,
+        "heapDeltaBytes": 29955072,
+        "graphBytes": 22694807
+      },
+      "baselineRevision": {
+        "head": "0edecdb6099e5ea5e601b583e961dee4fd19ec9b",
+        "contentVersion": "4d36c72fa4611eb2c4ce85d5ef17d0c09c47253b6c3c05fb74c5e5ebd0d9f3da"
+      },
+      "seeds": [
+        "src/css/Stylesheet.ts",
+        "src/generators/dom/index.ts",
+        "src/generators/nodes/Attribute.ts",
+        "src/generators/nodes/Element.ts",
+        "src/generators/server-side-rendering/visitors/Element.ts"
+      ],
+      "changedFiles": [
+        "src/css/Stylesheet.ts",
+        "src/generators/dom/index.ts",
+        "src/generators/nodes/Attribute.ts",
+        "src/generators/nodes/Element.ts",
+        "src/generators/server-side-rendering/visitors/Element.ts"
+      ],
+      "changedSymbols": [
+        {
+          "id": "src/generators/dom/index.ts#module/function:dom:0",
+          "path": "src/generators/dom/index.ts",
+          "name": "dom",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/nodes/Attribute.ts#module/class:Attribute:0",
+          "path": "src/generators/nodes/Attribute.ts",
+          "name": "Attribute",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/nodes/Attribute.ts#module/ClassDeclaration:Attribute:0/method:method:render",
+          "path": "src/generators/nodes/Attribute.ts",
+          "name": "render",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/nodes/Element.ts#module/class:Element:0",
+          "path": "src/generators/nodes/Element.ts",
+          "name": "Element",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/nodes/Element.ts#module/ClassDeclaration:Element:0/method:method:build",
+          "path": "src/generators/nodes/Element.ts",
+          "name": "build",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/nodes/Element.ts#module/ClassDeclaration:Element:0/function:build:0/BlockStatement:0/function:toHTML:0",
+          "path": "src/generators/nodes/Element.ts",
+          "name": "toHTML",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/server-side-rendering/visitors/Element.ts#module/function:visitElement:0",
+          "path": "src/generators/server-side-rendering/visitors/Element.ts",
+          "name": "visitElement",
+          "change": "modified"
+        },
+        {
+          "id": "src/generators/server-side-rendering/visitors/Element.ts#module/function:visitElement:0/BlockStatement:0/BlockStatement:4/function:anonymous:0/parameter:child:0",
+          "path": "src/generators/server-side-rendering/visitors/Element.ts",
+          "name": "child",
+          "change": "deleted"
+        },
+        {
+          "id": "src/generators/nodes/Attribute.ts#module/ClassDeclaration:Attribute:0/function:render:0/BlockStatement:0/binding:scopedClass:0",
+          "path": "src/generators/nodes/Attribute.ts",
+          "name": "scopedClass",
+          "change": "added"
+        },
+        {
+          "id": "src/generators/nodes/Attribute.ts#module/ClassDeclaration:Attribute:0/function:render:0/BlockStatement:0/BlockStatement:2/BlockStatement:0/binding:staticValue:0",
+          "path": "src/generators/nodes/Attribute.ts",
+          "name": "staticValue",
+          "change": "added"
+        },
+        {
+          "id": "src/generators/nodes/Element.ts#module/ClassDeclaration:Element:0/function:build:0/BlockStatement:0/function:toHTML:0/BlockStatement:0/binding:needsCssClass:0",
+          "path": "src/generators/nodes/Element.ts",
+          "name": "needsCssClass",
+          "change": "added"
+        },
+        {
+          "id": "src/generators/nodes/Element.ts#module/ClassDeclaration:Element:0/function:build:0/BlockStatement:0/function:toHTML:0/BlockStatement:0/binding:hasClassAttribute:0",
+          "path": "src/generators/nodes/Element.ts",
+          "name": "hasClassAttribute",
+          "change": "added"
+        }
+      ],
+      "impacted": [
+        {
+          "path": "src/css/Stylesheet.ts",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        },
+        {
+          "path": "src/generators/dom/index.ts",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        },
+        {
+          "path": "src/generators/nodes/Attribute.ts",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        },
+        {
+          "path": "src/generators/nodes/Element.ts",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        },
+        {
+          "path": "src/generators/server-side-rendering/visitors/Element.ts",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        }
+      ],
+      "total": {
+        "seeds": 5,
+        "changedFiles": 5,
+        "changedSymbols": 18,
+        "impacted": 5
+      },
+      "omitted": 0,
+      "omittedSeeds": 0,
+      "omittedChangedFiles": 0,
+      "omittedChangedSymbols": 6,
+      "page": {
+        "offset": 0,
+        "limit": 12,
+        "nextOffset": 12
+      },
+      "warning": "Potential impact, not behavioral correctness. Unresolved dependencies may hide consumers. Arrays are paginated; check totals and omitted counts."
+    },
+    "tests": {
+      "revision": {
+        "head": "0edecdb6099e5ea5e601b583e961dee4fd19ec9b",
+        "contentVersion": "1a368a0c22180ba0e40be670b33b12a24d0ea52e8dcca0acf261334d58ca5c8a"
+      },
+      "coverage": {
+        "indexedFiles": 681,
+        "unparsed": [
+          {
+            "path": "compiler/svelte.js",
+            "version": null,
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          {
+            "path": "src/css/Stylesheet.ts",
+            "version": "df76ce6817517f7a55a9112952d9ffa592b72c87d23bf48e24c1fe8f9128608c",
+            "error": "parse-failed: The angle-bracket syntax for type assertions, `<T>expr`, is not supported in type strip mode. Instead, use the 'as' syntax: `expr as T`."
+          },
+          {
+            "path": "src/utils/CodeBuilder.ts",
+            "version": "0b4533d8507764da5719e38a0a5006569488539cca4b0f4233bf064129e3199c",
+            "error": "parse-failed: TypeScript enum is not supported in strip-only mode"
+          }
+        ],
+        "omittedUnparsed": 0,
+        "unresolvedCount": 10243,
+        "fileSelection": {
+          "method": "git-ignore",
+          "candidates": 755,
+          "ignored": 74
+        },
+        "scope": "nonhidden nonsymlink JS/TS <=128 KiB; ignored untracked files excluded in independent Git roots; explicit ESM paths; no runtime coverage guarantee"
+      },
+      "metrics": {
+        "latencyMs": 4887.709200000001,
+        "parsedFiles": 0,
+        "fileCount": 681,
+        "cacheBytes": 0,
+        "heapDeltaBytes": 13892960,
+        "graphBytes": 22694807
+      },
+      "seeds": [
+        "src/css/Stylesheet.ts",
+        "src/generators/dom/index.ts",
+        "src/generators/nodes/Attribute.ts",
+        "src/generators/nodes/Element.ts",
+        "src/generators/server-side-rendering/visitors/Element.ts"
+      ],
+      "omittedSeeds": 0,
+      "tests": [],
+      "omitted": 0,
+      "fallback": "No statically reachable tests. Use search and the project test suite.",
+      "commands": []
+    }
+  },
+  "limitations": [
+    "Same recorded final edits/artifacts replayed from pristine input; no new model attempt or acceptance score.",
+    "Original last guidance and replay are views at different graph scopes: ignored untracked outputs are now excluded.",
+    "Bytes are measured serialized evidence, not tokens or a measured reduction in model cost.",
+    "Single replay timings do not establish a performance effect."
+  ]
+}

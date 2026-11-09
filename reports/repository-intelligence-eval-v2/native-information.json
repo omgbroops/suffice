@@ -1,0 +1,2242 @@
+{
+  "kind": "compiler-resolved-runtime-binding-line-retrieval",
+  "oracleSelfCheck": {
+    "expectedLines": [
+      1,
+      2,
+      8,
+      9
+    ],
+    "observedLines": [
+      1,
+      2,
+      8,
+      9
+    ]
+  },
+  "reports": [
+    {
+      "corpus": "axios",
+      "repository": "axios/axios",
+      "baselineManifestSha256": "1111ec8d0e5ec135435db6f32e1b0b93fde6d602c74275752193b9917c1e832e",
+      "compilerVersion": "2.7.2",
+      "compilerOptions": {
+        "allowJs": true,
+        "checkJs": false,
+        "noEmit": true,
+        "target": 4,
+        "module": 5,
+        "moduleResolution": 2,
+        "skipLibCheck": true
+      },
+      "selection": "Hash-ordered first eight exported named definitions with cross-file runtime references and first four with none, selected by oracle before retrieving either candidate tool. Not a random repository population sample.",
+      "candidateCount": 34,
+      "selectedCount": 11,
+      "oracleMs": 1178.2705999999998,
+      "graphMetrics": {
+        "latencyMs": 1456.0049,
+        "parsedFiles": 145,
+        "fileCount": 145,
+        "cacheBytes": 13373829,
+        "heapDeltaBytes": 73805560,
+        "graphBytes": 19706514
+      },
+      "coverage": {
+        "productionFiles": 51,
+        "relativeResolved": 113,
+        "relativeUnresolved": 0,
+        "reasons": {},
+        "unparsedProductionFiles": []
+      },
+      "totals": {
+        "baseline": {
+          "tp": 13,
+          "fp": 0,
+          "fn": 12,
+          "precision": 1,
+          "recall": 0.52
+        },
+        "literal": {
+          "tp": 25,
+          "fp": 22,
+          "fn": 0,
+          "precision": 0.5319148936170213,
+          "recall": 1
+        },
+        "graph": {
+          "tp": 25,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1
+        }
+      },
+      "cases": [
+        {
+          "id": "lib/core/InterceptorManager.js:57:InterceptorManager",
+          "name": "InterceptorManager",
+          "path": "lib/core/InterceptorManager.js",
+          "line": 5,
+          "offset": 57,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/core/Axios.js",
+              "line": 5,
+              "offset": 104,
+              "length": 18,
+              "syntax": "ImportClause",
+              "fileVersion": "50adf4cacb7810e1e9d2df470999869bb5ab4e37a0627f8e3235e325b385f899"
+            },
+            {
+              "path": "lib/core/Axios.js",
+              "line": 25,
+              "offset": 725,
+              "length": 18,
+              "syntax": "NewExpression",
+              "fileVersion": "50adf4cacb7810e1e9d2df470999869bb5ab4e37a0627f8e3235e325b385f899"
+            },
+            {
+              "path": "lib/core/Axios.js",
+              "line": 26,
+              "offset": 767,
+              "length": 18,
+              "syntax": "NewExpression",
+              "fileVersion": "50adf4cacb7810e1e9d2df470999869bb5ab4e37a0627f8e3235e325b385f899"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/core/Axios.js:25",
+              "lib/core/Axios.js:26"
+            ],
+            "gold": [
+              "lib/core/Axios.js:25",
+              "lib/core/Axios.js:26",
+              "lib/core/Axios.js:5"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1,
+            "recall": 0.6666666666666666
+          },
+          "literal": {
+            "predicted": [
+              "lib/core/Axios.js:25",
+              "lib/core/Axios.js:26",
+              "lib/core/Axios.js:5"
+            ],
+            "gold": [
+              "lib/core/Axios.js:25",
+              "lib/core/Axios.js:26",
+              "lib/core/Axios.js:5"
+            ],
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/core/Axios.js:25",
+              "lib/core/Axios.js:26",
+              "lib/core/Axios.js:5"
+            ],
+            "gold": [
+              "lib/core/Axios.js:25",
+              "lib/core/Axios.js:26",
+              "lib/core/Axios.js:5"
+            ],
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 73.4979000000003,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 10,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/helpers/isAxiosError.js:278:isAxiosError",
+          "name": "isAxiosError",
+          "path": "lib/helpers/isAxiosError.js",
+          "line": 12,
+          "offset": 278,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/axios.js",
+              "line": 16,
+              "offset": 609,
+              "length": 12,
+              "syntax": "ImportClause",
+              "fileVersion": "177763c9ab0fa3c4b3ec3abdfd6af89443c48fca2c659318e1e3d21e9ed1f052"
+            },
+            {
+              "path": "lib/axios.js",
+              "line": 72,
+              "offset": 2120,
+              "length": 12,
+              "syntax": "BinaryExpression",
+              "fileVersion": "177763c9ab0fa3c4b3ec3abdfd6af89443c48fca2c659318e1e3d21e9ed1f052"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/axios.js:72"
+            ],
+            "gold": [
+              "lib/axios.js:16",
+              "lib/axios.js:72"
+            ],
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/axios.js:16",
+              "lib/axios.js:71",
+              "lib/axios.js:72",
+              "lib/core/AxiosError.js:77",
+              "lib/core/AxiosError.js:86"
+            ],
+            "gold": [
+              "lib/axios.js:16",
+              "lib/axios.js:72"
+            ],
+            "tp": 2,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0.4,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/axios.js:16",
+              "lib/axios.js:72"
+            ],
+            "gold": [
+              "lib/axios.js:16",
+              "lib/axios.js:72"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 77.25820000000022,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 20,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/cancel/CancelToken.js:253:CancelToken",
+          "name": "CancelToken",
+          "path": "lib/cancel/CancelToken.js",
+          "line": 12,
+          "offset": 253,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/axios.js",
+              "line": 10,
+              "offset": 335,
+              "length": 11,
+              "syntax": "ImportClause",
+              "fileVersion": "177763c9ab0fa3c4b3ec3abdfd6af89443c48fca2c659318e1e3d21e9ed1f052"
+            },
+            {
+              "path": "lib/axios.js",
+              "line": 53,
+              "offset": 1711,
+              "length": 11,
+              "syntax": "BinaryExpression",
+              "fileVersion": "177763c9ab0fa3c4b3ec3abdfd6af89443c48fca2c659318e1e3d21e9ed1f052"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/axios.js:53"
+            ],
+            "gold": [
+              "lib/axios.js:10",
+              "lib/axios.js:53"
+            ],
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/axios.js:10",
+              "lib/axios.js:51",
+              "lib/axios.js:53"
+            ],
+            "gold": [
+              "lib/axios.js:10",
+              "lib/axios.js:53"
+            ],
+            "tp": 2,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.6666666666666666,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/axios.js:10",
+              "lib/axios.js:53"
+            ],
+            "gold": [
+              "lib/axios.js:10",
+              "lib/axios.js:53"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 73.41079999999965,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 27,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/helpers/ZlibHeaderTransformStream.js:51:ZlibHeaderTransformStream",
+          "name": "ZlibHeaderTransformStream",
+          "path": "lib/helpers/ZlibHeaderTransformStream.js",
+          "line": 5,
+          "offset": 51,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/adapters/http.js",
+              "line": 22,
+              "offset": 867,
+              "length": 25,
+              "syntax": "ImportClause",
+              "fileVersion": "560df2964f5a8b6eabbbeaf643d051566752e9e2a2500e2f18746717cae50f6d"
+            },
+            {
+              "path": "lib/adapters/http.js",
+              "line": 436,
+              "offset": 13542,
+              "length": 25,
+              "syntax": "NewExpression",
+              "fileVersion": "560df2964f5a8b6eabbbeaf643d051566752e9e2a2500e2f18746717cae50f6d"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/adapters/http.js:436"
+            ],
+            "gold": [
+              "lib/adapters/http.js:22",
+              "lib/adapters/http.js:436"
+            ],
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/adapters/http.js:22",
+              "lib/adapters/http.js:436"
+            ],
+            "gold": [
+              "lib/adapters/http.js:22",
+              "lib/adapters/http.js:436"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/adapters/http.js:22",
+              "lib/adapters/http.js:436"
+            ],
+            "gold": [
+              "lib/adapters/http.js:22",
+              "lib/adapters/http.js:436"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 76.83340000000135,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 2,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/core/buildFullPath.js:531:buildFullPath",
+          "name": "buildFullPath",
+          "path": "lib/core/buildFullPath.js",
+          "line": 16,
+          "offset": 531,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/adapters/http.js",
+              "line": 5,
+              "offset": 99,
+              "length": 13,
+              "syntax": "ImportClause",
+              "fileVersion": "560df2964f5a8b6eabbbeaf643d051566752e9e2a2500e2f18746717cae50f6d"
+            },
+            {
+              "path": "lib/adapters/http.js",
+              "line": 181,
+              "offset": 5556,
+              "length": 13,
+              "syntax": "CallExpression",
+              "fileVersion": "560df2964f5a8b6eabbbeaf643d051566752e9e2a2500e2f18746717cae50f6d"
+            },
+            {
+              "path": "lib/adapters/xhr.js",
+              "line": 7,
+              "offset": 195,
+              "length": 13,
+              "syntax": "ImportClause",
+              "fileVersion": "34fc4499584b2ca5db9837b602bc0b51ac52bb4365786a22433fd9454bbf8eac"
+            },
+            {
+              "path": "lib/adapters/xhr.js",
+              "line": 77,
+              "offset": 2592,
+              "length": 13,
+              "syntax": "CallExpression",
+              "fileVersion": "34fc4499584b2ca5db9837b602bc0b51ac52bb4365786a22433fd9454bbf8eac"
+            },
+            {
+              "path": "lib/core/Axios.js",
+              "line": 8,
+              "offset": 258,
+              "length": 13,
+              "syntax": "ImportClause",
+              "fileVersion": "50adf4cacb7810e1e9d2df470999869bb5ab4e37a0627f8e3235e325b385f899"
+            },
+            {
+              "path": "lib/core/Axios.js",
+              "line": 159,
+              "offset": 4438,
+              "length": 13,
+              "syntax": "CallExpression",
+              "fileVersion": "50adf4cacb7810e1e9d2df470999869bb5ab4e37a0627f8e3235e325b385f899"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/adapters/http.js:181",
+              "lib/adapters/xhr.js:77",
+              "lib/core/Axios.js:159"
+            ],
+            "gold": [
+              "lib/adapters/http.js:181",
+              "lib/adapters/http.js:5",
+              "lib/adapters/xhr.js:7",
+              "lib/adapters/xhr.js:77",
+              "lib/core/Axios.js:159",
+              "lib/core/Axios.js:8"
+            ],
+            "tp": 3,
+            "fp": 0,
+            "fn": 3,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/adapters/http.js:181",
+              "lib/adapters/http.js:5",
+              "lib/adapters/xhr.js:7",
+              "lib/adapters/xhr.js:77",
+              "lib/core/Axios.js:159",
+              "lib/core/Axios.js:8"
+            ],
+            "gold": [
+              "lib/adapters/http.js:181",
+              "lib/adapters/http.js:5",
+              "lib/adapters/xhr.js:7",
+              "lib/adapters/xhr.js:77",
+              "lib/core/Axios.js:159",
+              "lib/core/Axios.js:8"
+            ],
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/adapters/http.js:181",
+              "lib/adapters/http.js:5",
+              "lib/adapters/xhr.js:7",
+              "lib/adapters/xhr.js:77",
+              "lib/core/Axios.js:159",
+              "lib/core/Axios.js:8"
+            ],
+            "gold": [
+              "lib/adapters/http.js:181",
+              "lib/adapters/http.js:5",
+              "lib/adapters/xhr.js:7",
+              "lib/adapters/xhr.js:77",
+              "lib/core/Axios.js:159",
+              "lib/core/Axios.js:8"
+            ],
+            "tp": 6,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 75.27069999999912,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 16,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/helpers/throttle.js:124:throttle",
+          "name": "throttle",
+          "path": "lib/helpers/throttle.js",
+          "line": 9,
+          "offset": 124,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/helpers/AxiosTransformStream.js",
+              "line": 5,
+              "offset": 84,
+              "length": 8,
+              "syntax": "ImportClause",
+              "fileVersion": "892643f19e5d4eebbf2706a0c190639614f30ce9352bdc811b2f4c0c4d6c51b2"
+            },
+            {
+              "path": "lib/helpers/AxiosTransformStream.js",
+              "line": 56,
+              "offset": 1385,
+              "length": 8,
+              "syntax": "CallExpression",
+              "fileVersion": "892643f19e5d4eebbf2706a0c190639614f30ce9352bdc811b2f4c0c4d6c51b2"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/helpers/AxiosTransformStream.js:56"
+            ],
+            "gold": [
+              "lib/helpers/AxiosTransformStream.js:5",
+              "lib/helpers/AxiosTransformStream.js:56"
+            ],
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/helpers/AxiosTransformStream.js:5",
+              "lib/helpers/AxiosTransformStream.js:56"
+            ],
+            "gold": [
+              "lib/helpers/AxiosTransformStream.js:5",
+              "lib/helpers/AxiosTransformStream.js:56"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/helpers/AxiosTransformStream.js:5",
+              "lib/helpers/AxiosTransformStream.js:56"
+            ],
+            "gold": [
+              "lib/helpers/AxiosTransformStream.js:5",
+              "lib/helpers/AxiosTransformStream.js:56"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 96.9307000000008,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 3,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/helpers/speedometer.js:150:speedometer",
+          "name": "speedometer",
+          "path": "lib/helpers/speedometer.js",
+          "line": 9,
+          "offset": 150,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/helpers/AxiosTransformStream.js",
+              "line": 6,
+              "offset": 122,
+              "length": 11,
+              "syntax": "ImportClause",
+              "fileVersion": "892643f19e5d4eebbf2706a0c190639614f30ce9352bdc811b2f4c0c4d6c51b2"
+            },
+            {
+              "path": "lib/helpers/AxiosTransformStream.js",
+              "line": 44,
+              "offset": 1071,
+              "length": 11,
+              "syntax": "CallExpression",
+              "fileVersion": "892643f19e5d4eebbf2706a0c190639614f30ce9352bdc811b2f4c0c4d6c51b2"
+            },
+            {
+              "path": "lib/adapters/xhr.js",
+              "line": 15,
+              "offset": 634,
+              "length": 11,
+              "syntax": "ImportClause",
+              "fileVersion": "34fc4499584b2ca5db9837b602bc0b51ac52bb4365786a22433fd9454bbf8eac"
+            },
+            {
+              "path": "lib/adapters/xhr.js",
+              "line": 19,
+              "offset": 789,
+              "length": 11,
+              "syntax": "CallExpression",
+              "fileVersion": "34fc4499584b2ca5db9837b602bc0b51ac52bb4365786a22433fd9454bbf8eac"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/adapters/xhr.js:19",
+              "lib/helpers/AxiosTransformStream.js:44"
+            ],
+            "gold": [
+              "lib/adapters/xhr.js:15",
+              "lib/adapters/xhr.js:19",
+              "lib/helpers/AxiosTransformStream.js:44",
+              "lib/helpers/AxiosTransformStream.js:6"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/adapters/xhr.js:15",
+              "lib/adapters/xhr.js:19",
+              "lib/adapters/xhr.js:25",
+              "lib/helpers/AxiosTransformStream.js:44",
+              "lib/helpers/AxiosTransformStream.js:6",
+              "lib/helpers/AxiosTransformStream.js:62"
+            ],
+            "gold": [
+              "lib/adapters/xhr.js:15",
+              "lib/adapters/xhr.js:19",
+              "lib/helpers/AxiosTransformStream.js:44",
+              "lib/helpers/AxiosTransformStream.js:6"
+            ],
+            "tp": 4,
+            "fp": 2,
+            "fn": 0,
+            "precision": 0.6666666666666666,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/adapters/xhr.js:15",
+              "lib/adapters/xhr.js:19",
+              "lib/helpers/AxiosTransformStream.js:44",
+              "lib/helpers/AxiosTransformStream.js:6"
+            ],
+            "gold": [
+              "lib/adapters/xhr.js:15",
+              "lib/adapters/xhr.js:19",
+              "lib/helpers/AxiosTransformStream.js:44",
+              "lib/helpers/AxiosTransformStream.js:6"
+            ],
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 85.13280000000123,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 8,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/helpers/formDataToJSON.js:1086:formDataToJSON",
+          "name": "formDataToJSON",
+          "path": "lib/helpers/formDataToJSON.js",
+          "line": 49,
+          "offset": 1086,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "lib/defaults/index.js",
+              "line": 9,
+              "offset": 316,
+              "length": 14,
+              "syntax": "ImportClause",
+              "fileVersion": "a24681e813562462d6b40ecac124ac208985dc96638a66af27df9119eaac97e2"
+            },
+            {
+              "path": "lib/defaults/index.js",
+              "line": 61,
+              "offset": 1768,
+              "length": 14,
+              "syntax": "CallExpression",
+              "fileVersion": "a24681e813562462d6b40ecac124ac208985dc96638a66af27df9119eaac97e2"
+            },
+            {
+              "path": "lib/axios.js",
+              "line": 8,
+              "offset": 222,
+              "length": 14,
+              "syntax": "ImportClause",
+              "fileVersion": "177763c9ab0fa3c4b3ec3abdfd6af89443c48fca2c659318e1e3d21e9ed1f052"
+            },
+            {
+              "path": "lib/axios.js",
+              "line": 79,
+              "offset": 2255,
+              "length": 14,
+              "syntax": "CallExpression",
+              "fileVersion": "177763c9ab0fa3c4b3ec3abdfd6af89443c48fca2c659318e1e3d21e9ed1f052"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "lib/axios.js:79",
+              "lib/defaults/index.js:61"
+            ],
+            "gold": [
+              "lib/axios.js:79",
+              "lib/axios.js:8",
+              "lib/defaults/index.js:61",
+              "lib/defaults/index.js:9"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "lib/axios.js:79",
+              "lib/axios.js:8",
+              "lib/defaults/index.js:61",
+              "lib/defaults/index.js:9"
+            ],
+            "gold": [
+              "lib/axios.js:79",
+              "lib/axios.js:8",
+              "lib/defaults/index.js:61",
+              "lib/defaults/index.js:9"
+            ],
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [
+              "lib/axios.js:79",
+              "lib/axios.js:8",
+              "lib/defaults/index.js:61",
+              "lib/defaults/index.js:9"
+            ],
+            "gold": [
+              "lib/axios.js:79",
+              "lib/axios.js:8",
+              "lib/defaults/index.js:61",
+              "lib/defaults/index.js:9"
+            ],
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 93.37229999999909,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 15,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/adapters/http.js:19666:__setProxy",
+          "name": "__setProxy",
+          "path": "lib/adapters/http.js",
+          "line": 617,
+          "offset": 19666,
+          "kind": "VariableDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "unparsed-or-missing",
+          "astMs": 173.952299999999,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 1,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/helpers/deprecatedMethod.js:389:deprecatedMethod",
+          "name": "deprecatedMethod",
+          "path": "lib/helpers/deprecatedMethod.js",
+          "line": 15,
+          "offset": 389,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 69.69959999999992,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 0,
+            "omitted": 0
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "lib/axios.js:1517:axios",
+          "name": "axios",
+          "path": "lib/axios.js",
+          "line": 46,
+          "offset": 1517,
+          "kind": "VariableDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [
+              "lib/adapters/http.js:109",
+              "lib/adapters/http.js:235",
+              "lib/adapters/http.js:238",
+              "lib/adapters/http.js:378",
+              "lib/core/Axios.js:40",
+              "lib/core/AxiosError.js:81",
+              "lib/core/AxiosError.js:83",
+              "lib/core/AxiosError.js:89",
+              "lib/core/AxiosError.js:91",
+              "lib/core/AxiosError.js:93",
+              "lib/core/AxiosError.js:95",
+              "lib/core/AxiosError.js:97",
+              "lib/platform/browser/index.js:38",
+              "lib/platform/browser/index.js:41",
+              "lib/platform/browser/index.js:7",
+              "lib/utils.js:5"
+            ],
+            "gold": [],
+            "tp": 0,
+            "fp": 16,
+            "fn": 0,
+            "precision": 0,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "unparsed-or-missing",
+          "astMs": 58.454399999998714,
+          "baselineGlobal": {
+            "status": "returned",
+            "total": 553,
+            "omitted": 473
+          },
+          "baselineScopedQueries": 51,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [],
+            "omitted": 0
+          }
+        }
+      ]
+    },
+    {
+      "corpus": "svelte",
+      "repository": "sveltejs/svelte",
+      "baselineManifestSha256": "e69e810be07d1009d9df1cdf2f399fc191a39608df7b01f02242b85489031cbf",
+      "compilerVersion": "2.7.2",
+      "compilerOptions": {
+        "allowJs": true,
+        "checkJs": false,
+        "noEmit": true,
+        "target": 4,
+        "module": 5,
+        "moduleResolution": 2,
+        "skipLibCheck": true
+      },
+      "selection": "Hash-ordered first eight exported named definitions with cross-file runtime references and first four with none, selected by oracle before retrieving either candidate tool. Not a random repository population sample.",
+      "candidateCount": 215,
+      "selectedCount": 12,
+      "oracleMs": 1889.8166999999994,
+      "graphMetrics": {
+        "latencyMs": 3954.0511000000006,
+        "parsedFiles": 680,
+        "fileCount": 681,
+        "cacheBytes": 15133913,
+        "heapDeltaBytes": 29285488,
+        "graphBytes": 22657940
+      },
+      "coverage": {
+        "productionFiles": 138,
+        "relativeResolved": 9,
+        "relativeUnresolved": 480,
+        "reasons": {
+          "missing-or-implicit-module-path": 480
+        },
+        "unparsedProductionFiles": [
+          {
+            "path": "src/css/Stylesheet.ts",
+            "version": "9b3c4708e6b4d14700ccf266b2d083c86ea5e49b3edaec9e0a823393642aaf5e",
+            "error": "parse-failed: The angle-bracket syntax for type assertions, `<T>expr`, is not supported in type strip mode. Instead, use the 'as' syntax: `expr as T`."
+          },
+          {
+            "path": "src/utils/CodeBuilder.ts",
+            "version": "0b4533d8507764da5719e38a0a5006569488539cca4b0f4233bf064129e3199c",
+            "error": "parse-failed: TypeScript enum is not supported in strip-only mode"
+          }
+        ]
+      },
+      "totals": {
+        "baseline": {
+          "tp": 7,
+          "fp": 5,
+          "fn": 20,
+          "precision": 0.5833333333333334,
+          "recall": 0.25925925925925924
+        },
+        "literal": {
+          "tp": 27,
+          "fp": 128,
+          "fn": 0,
+          "precision": 0.17419354838709677,
+          "recall": 1
+        },
+        "graph": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 27,
+          "precision": null,
+          "recall": 0
+        }
+      },
+      "cases": [
+        {
+          "id": "src/utils/CompileError.ts:115:CompileError",
+          "name": "CompileError",
+          "path": "src/utils/CompileError.ts",
+          "line": 4,
+          "offset": 115,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/validate/index.ts",
+              "line": 5,
+              "offset": 192,
+              "length": 12,
+              "syntax": "ImportClause",
+              "fileVersion": "82cb0e0227c9c390785f9b33a92ce377d16df0e4b4023b7453c6f33ede11a7c3"
+            },
+            {
+              "path": "src/validate/index.ts",
+              "line": 9,
+              "offset": 381,
+              "length": 12,
+              "syntax": "ExpressionWithTypeArguments",
+              "fileVersion": "82cb0e0227c9c390785f9b33a92ce377d16df0e4b4023b7453c6f33ede11a7c3"
+            },
+            {
+              "path": "src/parse/index.ts",
+              "line": 11,
+              "offset": 498,
+              "length": 12,
+              "syntax": "ImportClause",
+              "fileVersion": "ed628fd4dc22368777ad8ec023ecb380aad80114ae5423dbb8689c6a4d99c855"
+            },
+            {
+              "path": "src/parse/index.ts",
+              "line": 13,
+              "offset": 567,
+              "length": 12,
+              "syntax": "ExpressionWithTypeArguments",
+              "fileVersion": "ed628fd4dc22368777ad8ec023ecb380aad80114ae5423dbb8689c6a4d99c855"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/parse/index.ts:13",
+              "src/validate/index.ts:9"
+            ],
+            "gold": [
+              "src/parse/index.ts:11",
+              "src/parse/index.ts:13",
+              "src/validate/index.ts:5",
+              "src/validate/index.ts:9"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "src/parse/index.ts:11",
+              "src/parse/index.ts:13",
+              "src/validate/index.ts:5",
+              "src/validate/index.ts:9"
+            ],
+            "gold": [
+              "src/parse/index.ts:11",
+              "src/parse/index.ts:13",
+              "src/validate/index.ts:5",
+              "src/validate/index.ts:9"
+            ],
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/parse/index.ts:11",
+              "src/parse/index.ts:13",
+              "src/validate/index.ts:5",
+              "src/validate/index.ts:9"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 296.60619999999835,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/generators/dom/index.ts:756:DomGenerator",
+          "name": "DomGenerator",
+          "path": "src/generators/dom/index.ts",
+          "line": 18,
+          "offset": 756,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/generators/dom/Block.ts",
+              "line": 4,
+              "offset": 153,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "b1e4b40fb7e93b2ad14b8dd81b10f41ec1a9c3ef371db7a436cebca3cfe60161"
+            },
+            {
+              "path": "src/generators/nodes/Attribute.ts",
+              "line": 5,
+              "offset": 245,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "122ca31d3b57ea5986c54f8d678e7062a580e3c3abeaaaf606fcfec8da851eab"
+            },
+            {
+              "path": "src/utils/createDebuggingComment.ts",
+              "line": 1,
+              "offset": 9,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "6192d0fcbfdd1abbbcaa1f50f140979b09b18efb63a98895cc7a95264255f99d"
+            },
+            {
+              "path": "src/generators/nodes/AwaitBlock.ts",
+              "line": 3,
+              "offset": 88,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "49067dc0fcff8b783b12c3bcadde9dba72f07b335cb0db94a0c91e2c3ba243c1"
+            },
+            {
+              "path": "src/generators/nodes/Binding.ts",
+              "line": 6,
+              "offset": 241,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "8187019598be0bab60883626a99c6bab7ca1164e1dc425ec383694e07ea5855d"
+            },
+            {
+              "path": "src/generators/nodes/EachBlock.ts",
+              "line": 4,
+              "offset": 125,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "e448fa5ed75face6c7cfd39742510f92e35104d249923ab7290c5ba4b928d746"
+            },
+            {
+              "path": "src/generators/nodes/Fragment.ts",
+              "line": 2,
+              "offset": 43,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "d7a64928274bd264d9a24b297bcc220a6792b0aa28a12779439749693ff0216f"
+            },
+            {
+              "path": "src/generators/nodes/IfBlock.ts",
+              "line": 4,
+              "offset": 125,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "0ca019f56dcd5a46190566d4c3fe56eb8db473aef1383a61e84c0e5f81708249"
+            },
+            {
+              "path": "src/generators/nodes/shared/Node.ts",
+              "line": 1,
+              "offset": 9,
+              "length": 12,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "3c53aff27adda0aa0b78323962f215a74e5cde453d131ef8092b9f49b51d350f"
+            }
+          ],
+          "baseline": {
+            "predicted": [],
+            "gold": [
+              "src/generators/dom/Block.ts:4",
+              "src/generators/nodes/Attribute.ts:5",
+              "src/generators/nodes/AwaitBlock.ts:3",
+              "src/generators/nodes/Binding.ts:6",
+              "src/generators/nodes/EachBlock.ts:4",
+              "src/generators/nodes/Fragment.ts:2",
+              "src/generators/nodes/IfBlock.ts:4",
+              "src/generators/nodes/shared/Node.ts:1",
+              "src/utils/createDebuggingComment.ts:1"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": null,
+            "recall": 0
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/dom/Block.ts:10",
+              "src/generators/dom/Block.ts:28",
+              "src/generators/dom/Block.ts:4",
+              "src/generators/nodes/Attribute.ts:20",
+              "src/generators/nodes/Attribute.ts:32",
+              "src/generators/nodes/Attribute.ts:5",
+              "src/generators/nodes/AwaitBlock.ts:3",
+              "src/generators/nodes/Binding.ts:138",
+              "src/generators/nodes/Binding.ts:154",
+              "src/generators/nodes/Binding.ts:229",
+              "src/generators/nodes/Binding.ts:6",
+              "src/generators/nodes/Component.ts:513",
+              "src/generators/nodes/EachBlock.ts:4",
+              "src/generators/nodes/Element.ts:686",
+              "src/generators/nodes/Element.ts:702",
+              "src/generators/nodes/Fragment.ts:2",
+              "src/generators/nodes/IfBlock.ts:4",
+              "src/generators/nodes/shared/Node.ts:1",
+              "src/generators/nodes/shared/Node.ts:19",
+              "src/utils/createDebuggingComment.ts:1",
+              "src/utils/createDebuggingComment.ts:4"
+            ],
+            "gold": [
+              "src/generators/dom/Block.ts:4",
+              "src/generators/nodes/Attribute.ts:5",
+              "src/generators/nodes/AwaitBlock.ts:3",
+              "src/generators/nodes/Binding.ts:6",
+              "src/generators/nodes/EachBlock.ts:4",
+              "src/generators/nodes/Fragment.ts:2",
+              "src/generators/nodes/IfBlock.ts:4",
+              "src/generators/nodes/shared/Node.ts:1",
+              "src/utils/createDebuggingComment.ts:1"
+            ],
+            "tp": 9,
+            "fp": 12,
+            "fn": 0,
+            "precision": 0.42857142857142855,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/generators/dom/Block.ts:4",
+              "src/generators/nodes/Attribute.ts:5",
+              "src/generators/nodes/AwaitBlock.ts:3",
+              "src/generators/nodes/Binding.ts:6",
+              "src/generators/nodes/EachBlock.ts:4",
+              "src/generators/nodes/Fragment.ts:2",
+              "src/generators/nodes/IfBlock.ts:4",
+              "src/generators/nodes/shared/Node.ts:1",
+              "src/utils/createDebuggingComment.ts:1"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 157.56459999999788,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/parse/read/directives.ts:928:readEventHandlerDirective",
+          "name": "readEventHandlerDirective",
+          "path": "src/parse/read/directives.ts",
+          "line": 45,
+          "offset": 928,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/parse/state/tag.ts",
+              "line": 5,
+              "offset": 139,
+              "length": 25,
+              "syntax": "ImportSpecifier",
+              "fileVersion": "6da2a323b5d6ec0666502ec90f6c288d692d8f56919b67e9a6f21e57cc114092"
+            },
+            {
+              "path": "src/parse/state/tag.ts",
+              "line": 307,
+              "offset": 7059,
+              "length": 25,
+              "syntax": "CallExpression",
+              "fileVersion": "6da2a323b5d6ec0666502ec90f6c288d692d8f56919b67e9a6f21e57cc114092"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/parse/state/tag.ts:307"
+            ],
+            "gold": [
+              "src/parse/state/tag.ts:307",
+              "src/parse/state/tag.ts:5"
+            ],
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "src/parse/state/tag.ts:307",
+              "src/parse/state/tag.ts:5"
+            ],
+            "gold": [
+              "src/parse/state/tag.ts:307",
+              "src/parse/state/tag.ts:5"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/parse/state/tag.ts:307",
+              "src/parse/state/tag.ts:5"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 156.15840000000026,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/generators/nodes/shared/Tag.ts:86:Tag",
+          "name": "Tag",
+          "path": "src/generators/nodes/shared/Tag.ts",
+          "line": 4,
+          "offset": 86,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/generators/nodes/MustacheTag.ts",
+              "line": 2,
+              "offset": 41,
+              "length": 3,
+              "syntax": "ImportClause",
+              "fileVersion": "bde7f372829118a9c208c6e1316b5deff1ce3fcca6c424685fc9ebdb88512848"
+            },
+            {
+              "path": "src/generators/nodes/MustacheTag.ts",
+              "line": 5,
+              "offset": 142,
+              "length": 3,
+              "syntax": "ExpressionWithTypeArguments",
+              "fileVersion": "bde7f372829118a9c208c6e1316b5deff1ce3fcca6c424685fc9ebdb88512848"
+            },
+            {
+              "path": "src/generators/nodes/RawMustacheTag.ts",
+              "line": 3,
+              "offset": 86,
+              "length": 3,
+              "syntax": "ImportClause",
+              "fileVersion": "f0faf206c20c7501518381e5cb4137cac2dcd7c95b1f716725f2acdd289017f2"
+            },
+            {
+              "path": "src/generators/nodes/RawMustacheTag.ts",
+              "line": 6,
+              "offset": 190,
+              "length": 3,
+              "syntax": "ExpressionWithTypeArguments",
+              "fileVersion": "f0faf206c20c7501518381e5cb4137cac2dcd7c95b1f716725f2acdd289017f2"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/generators/nodes/MustacheTag.ts:5",
+              "src/generators/nodes/RawMustacheTag.ts:6"
+            ],
+            "gold": [
+              "src/generators/nodes/MustacheTag.ts:2",
+              "src/generators/nodes/MustacheTag.ts:5",
+              "src/generators/nodes/RawMustacheTag.ts:3",
+              "src/generators/nodes/RawMustacheTag.ts:6"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "precision": 1,
+            "recall": 0.5
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/Generator.ts:804",
+              "src/generators/nodes/Attribute.ts:96",
+              "src/generators/nodes/MustacheTag.ts:2",
+              "src/generators/nodes/MustacheTag.ts:5",
+              "src/generators/nodes/RawMustacheTag.ts:3",
+              "src/generators/nodes/RawMustacheTag.ts:6",
+              "src/generators/nodes/Title.ts:20",
+              "src/generators/nodes/index.ts:15",
+              "src/generators/nodes/index.ts:17",
+              "src/generators/nodes/index.ts:40",
+              "src/generators/nodes/index.ts:42",
+              "src/generators/nodes/shared/Node.ts:127",
+              "src/generators/server-side-rendering/visitors/Component.ts:20",
+              "src/generators/server-side-rendering/visitors/Element.ts:25",
+              "src/generators/server-side-rendering/visitors/Element.ts:43",
+              "src/generators/server-side-rendering/visitors/Element.ts:51",
+              "src/generators/server-side-rendering/visitors/Element.ts:53",
+              "src/generators/server-side-rendering/visitors/Element.ts:58",
+              "src/generators/server-side-rendering/visitors/Element.ts:61",
+              "src/generators/server-side-rendering/visitors/Element.ts:65",
+              "src/generators/server-side-rendering/visitors/Element.ts:67",
+              "src/generators/server-side-rendering/visitors/MustacheTag.ts:5",
+              "src/generators/server-side-rendering/visitors/RawMustacheTag.ts:5",
+              "src/generators/server-side-rendering/visitors/index.ts:23",
+              "src/generators/server-side-rendering/visitors/index.ts:24",
+              "src/generators/server-side-rendering/visitors/index.ts:8",
+              "src/generators/server-side-rendering/visitors/index.ts:9",
+              "src/index.ts:53",
+              "src/index.ts:89",
+              "src/index.ts:93",
+              "src/interfaces.ts:20",
+              "src/parse/index.ts:42",
+              "src/parse/index.ts:58",
+              "src/parse/read/script.ts:13",
+              "src/parse/read/script.ts:19",
+              "src/parse/read/script.ts:7",
+              "src/parse/state/mustache.ts:325",
+              "src/parse/state/mustache.ts:337",
+              "src/parse/state/tag.ts:108",
+              "src/parse/state/tag.ts:112",
+              "src/parse/state/tag.ts:127",
+              "src/parse/state/tag.ts:15",
+              "src/parse/state/tag.ts:20",
+              "src/parse/state/tag.ts:253",
+              "src/parse/state/tag.ts:284",
+              "src/parse/state/tag.ts:286",
+              "src/parse/state/tag.ts:424",
+              "src/parse/state/tag.ts:86",
+              "src/parse/state/tag.ts:88",
+              "src/parse/state/tag.ts:90",
+              "src/parse/state/tag.ts:91",
+              "src/parse/state/tag.ts:99",
+              "src/validate/html/validateElement.ts:71"
+            ],
+            "gold": [
+              "src/generators/nodes/MustacheTag.ts:2",
+              "src/generators/nodes/MustacheTag.ts:5",
+              "src/generators/nodes/RawMustacheTag.ts:3",
+              "src/generators/nodes/RawMustacheTag.ts:6"
+            ],
+            "tp": 4,
+            "fp": 49,
+            "fn": 0,
+            "precision": 0.07547169811320754,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/generators/nodes/MustacheTag.ts:2",
+              "src/generators/nodes/MustacheTag.ts:5",
+              "src/generators/nodes/RawMustacheTag.ts:3",
+              "src/generators/nodes/RawMustacheTag.ts:6"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 4,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 159.0784000000058,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/validate/js/propValidators/transitions.ts:223:transitions",
+          "name": "transitions",
+          "path": "src/validate/js/propValidators/transitions.ts",
+          "line": 6,
+          "offset": 223,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/validate/js/propValidators/index.ts",
+              "line": 15,
+              "offset": 475,
+              "length": 11,
+              "syntax": "ImportClause",
+              "fileVersion": "22e27a7f7acd3cc170da27c0b313222d677b265d62d0b3ef9e1e71cd2bf2573e"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/validate/js/propValidators/index.ts:35"
+            ],
+            "gold": [
+              "src/validate/js/propValidators/index.ts:15"
+            ],
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "precision": 0,
+            "recall": 0
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/Generator.ts:136",
+              "src/generators/Generator.ts:454",
+              "src/generators/Generator.ts:633",
+              "src/generators/Generator.ts:634",
+              "src/generators/Generator.ts:635",
+              "src/generators/Generator.ts:93",
+              "src/generators/dom/Block.ts:111",
+              "src/generators/dom/shared.ts:65",
+              "src/generators/dom/shared.ts:66",
+              "src/generators/nodes/Element.ts:582",
+              "src/generators/nodes/Element.ts:612",
+              "src/generators/nodes/Element.ts:639",
+              "src/generators/nodes/IfBlock.ts:215",
+              "src/shared/index.js:4",
+              "src/shared/transitions.js:144",
+              "src/shared/transitions.js:150",
+              "src/shared/transitions.js:169",
+              "src/shared/transitions.js:172",
+              "src/shared/transitions.js:186",
+              "src/shared/transitions.js:41",
+              "src/validate/html/validateElement.ts:165",
+              "src/validate/html/validateElement.ts:201",
+              "src/validate/index.ts:140",
+              "src/validate/index.ts:35",
+              "src/validate/index.ts:42",
+              "src/validate/index.ts:58",
+              "src/validate/index.ts:65",
+              "src/validate/js/index.ts:88",
+              "src/validate/js/propValidators/index.ts:15",
+              "src/validate/js/propValidators/index.ts:35"
+            ],
+            "gold": [
+              "src/validate/js/propValidators/index.ts:15"
+            ],
+            "tp": 1,
+            "fp": 29,
+            "fn": 0,
+            "precision": 0.03333333333333333,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/validate/js/propValidators/index.ts:15"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 166.45479999999952,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/utils/validCalleeObjects.ts:6:validCalleeObjects",
+          "name": "validCalleeObjects",
+          "path": "src/utils/validCalleeObjects.ts",
+          "line": 1,
+          "offset": 6,
+          "kind": "VariableDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/validate/html/validateEventHandler.ts",
+              "line": 4,
+              "offset": 153,
+              "length": 18,
+              "syntax": "ImportClause",
+              "fileVersion": "57e7873782c5af78340a0dd8d999107c515c4574d4819ed1e0bc74f40a0508cc"
+            },
+            {
+              "path": "src/validate/html/validateEventHandler.ts",
+              "line": 24,
+              "offset": 667,
+              "length": 18,
+              "syntax": "PropertyAccessExpression",
+              "fileVersion": "57e7873782c5af78340a0dd8d999107c515c4574d4819ed1e0bc74f40a0508cc"
+            },
+            {
+              "path": "src/generators/nodes/Window.ts",
+              "line": 6,
+              "offset": 278,
+              "length": 18,
+              "syntax": "ImportClause",
+              "fileVersion": "f2a0df09b3bf809d77211881f9aeef1b470bed63023e2c4786614f92511a8b56"
+            },
+            {
+              "path": "src/generators/nodes/Element.ts",
+              "line": 5,
+              "offset": 239,
+              "length": 18,
+              "syntax": "ImportClause",
+              "fileVersion": "51e692d3b647be2451fd9fc1d0d23a36d83b7340a66f775d4553f40b3f11f016"
+            },
+            {
+              "path": "src/generators/nodes/Element.ts",
+              "line": 266,
+              "offset": 8656,
+              "length": 18,
+              "syntax": "PropertyAccessExpression",
+              "fileVersion": "51e692d3b647be2451fd9fc1d0d23a36d83b7340a66f775d4553f40b3f11f016"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/generators/nodes/Element.ts:266",
+              "src/validate/html/validateEventHandler.ts:24"
+            ],
+            "gold": [
+              "src/generators/nodes/Element.ts:266",
+              "src/generators/nodes/Element.ts:5",
+              "src/generators/nodes/Window.ts:6",
+              "src/validate/html/validateEventHandler.ts:24",
+              "src/validate/html/validateEventHandler.ts:4"
+            ],
+            "tp": 2,
+            "fp": 0,
+            "fn": 3,
+            "precision": 1,
+            "recall": 0.4
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/nodes/Element.ts:266",
+              "src/generators/nodes/Element.ts:5",
+              "src/generators/nodes/Window.ts:6",
+              "src/validate/html/validateEventHandler.ts:24",
+              "src/validate/html/validateEventHandler.ts:4"
+            ],
+            "gold": [
+              "src/generators/nodes/Element.ts:266",
+              "src/generators/nodes/Element.ts:5",
+              "src/generators/nodes/Window.ts:6",
+              "src/validate/html/validateEventHandler.ts:24",
+              "src/validate/html/validateEventHandler.ts:4"
+            ],
+            "tp": 5,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/generators/nodes/Element.ts:266",
+              "src/generators/nodes/Element.ts:5",
+              "src/generators/nodes/Window.ts:6",
+              "src/validate/html/validateEventHandler.ts:24",
+              "src/validate/html/validateEventHandler.ts:4"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 5,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "unparsed-or-missing",
+          "astMs": 161.94429999999556,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/generators/nodes/Slot.ts:323:Slot",
+          "name": "Slot",
+          "path": "src/generators/nodes/Slot.ts",
+          "line": 9,
+          "offset": 323,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/generators/nodes/index.ts",
+              "line": 19,
+              "offset": 660,
+              "length": 4,
+              "syntax": "ImportClause",
+              "fileVersion": "d21baeba87c91aa7c512ab6d34b271164b97ce7e6e313ebb615fc43b483dd46f"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/generators/nodes/index.ts:44",
+              "src/generators/server-side-rendering/visitors/index.ts:25"
+            ],
+            "gold": [
+              "src/generators/nodes/index.ts:19"
+            ],
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0,
+            "recall": 0
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/Generator.ts:759",
+              "src/generators/Generator.ts:760",
+              "src/generators/nodes/index.ts:19",
+              "src/generators/nodes/index.ts:44",
+              "src/generators/server-side-rendering/visitors/Element.ts:2",
+              "src/generators/server-side-rendering/visitors/Element.ts:21",
+              "src/generators/server-side-rendering/visitors/Slot.ts:6",
+              "src/generators/server-side-rendering/visitors/index.ts:10",
+              "src/generators/server-side-rendering/visitors/index.ts:25",
+              "src/validate/html/validateElement.ts:218",
+              "src/validate/html/validateElement.ts:244"
+            ],
+            "gold": [
+              "src/generators/nodes/index.ts:19"
+            ],
+            "tp": 1,
+            "fp": 10,
+            "fn": 0,
+            "precision": 0.09090909090909091,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/generators/nodes/index.ts:19"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 169.83060000000114,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/generators/nodes/Title.ts:216:Title",
+          "name": "Title",
+          "path": "src/generators/nodes/Title.ts",
+          "line": 6,
+          "offset": 216,
+          "kind": "ClassDeclaration",
+          "oracleEvidence": [
+            {
+              "path": "src/generators/nodes/index.ts",
+              "line": 22,
+              "offset": 751,
+              "length": 5,
+              "syntax": "ImportClause",
+              "fileVersion": "d21baeba87c91aa7c512ab6d34b271164b97ce7e6e313ebb615fc43b483dd46f"
+            }
+          ],
+          "baseline": {
+            "predicted": [
+              "src/generators/nodes/index.ts:47",
+              "src/generators/server-side-rendering/visitors/index.ts:27"
+            ],
+            "gold": [
+              "src/generators/nodes/index.ts:22"
+            ],
+            "tp": 0,
+            "fp": 2,
+            "fn": 1,
+            "precision": 0,
+            "recall": 0
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/Generator.ts:756",
+              "src/generators/Generator.ts:757",
+              "src/generators/nodes/index.ts:22",
+              "src/generators/nodes/index.ts:47",
+              "src/generators/server-side-rendering/visitors/Title.ts:7",
+              "src/generators/server-side-rendering/visitors/index.ts:12",
+              "src/generators/server-side-rendering/visitors/index.ts:27"
+            ],
+            "gold": [
+              "src/generators/nodes/index.ts:22"
+            ],
+            "tp": 1,
+            "fp": 6,
+            "fn": 0,
+            "precision": 0.14285714285714285,
+            "recall": 1
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [
+              "src/generators/nodes/index.ts:22"
+            ],
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "precision": null,
+            "recall": 0
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 169.2650999999969,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/shared/dom.js:2279:getBindingGroupValue",
+          "name": "getBindingGroupValue",
+          "path": "src/shared/dom.js",
+          "line": 92,
+          "offset": 2279,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/dom/shared.ts:23",
+              "src/generators/nodes/Binding.ts:246"
+            ],
+            "gold": [],
+            "tp": 0,
+            "fp": 2,
+            "fn": 0,
+            "precision": 0,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 164.2780999999959,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/shared/index.js:1957:observe",
+          "name": "observe",
+          "path": "src/shared/index.js",
+          "line": 81,
+          "offset": 1957,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/dom/index.ts:177",
+              "src/generators/dom/index.ts:306",
+              "src/generators/dom/shared.ts:43",
+              "src/generators/dom/shared.ts:44",
+              "src/generators/dom/shared.ts:45",
+              "src/generators/dom/shared.ts:50",
+              "src/generators/dom/shared.ts:60",
+              "src/generators/dom/shared.ts:61",
+              "src/generators/nodes/Window.ts:159",
+              "src/generators/nodes/Window.ts:162",
+              "src/generators/nodes/Window.ts:178",
+              "src/generators/nodes/Window.ts:182",
+              "src/generators/nodes/Window.ts:188",
+              "src/validate/js/propValidators/methods.ts:9"
+            ],
+            "gold": [],
+            "tp": 0,
+            "fp": 14,
+            "fn": 0,
+            "precision": 0,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 165.91219999999885,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/shared/dom.js:1940:removeListener",
+          "name": "removeListener",
+          "path": "src/shared/dom.js",
+          "line": 80,
+          "offset": 1940,
+          "kind": "FunctionDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/dom/shared.ts:20",
+              "src/generators/nodes/Element.ts:351",
+              "src/generators/nodes/Element.ts:544"
+            ],
+            "gold": [],
+            "tp": 0,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "indexed",
+          "astMs": 177.21949999999924,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        },
+        {
+          "id": "src/utils/namespaces.ts:227:xml",
+          "name": "xml",
+          "path": "src/utils/namespaces.ts",
+          "line": 5,
+          "offset": 227,
+          "kind": "VariableDeclaration",
+          "oracleEvidence": [],
+          "baseline": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "literal": {
+            "predicted": [
+              "src/generators/nodes/Element.ts:40",
+              "src/generators/nodes/Element.ts:41",
+              "src/utils/fixAttributeCasing.ts:1"
+            ],
+            "gold": [],
+            "tp": 0,
+            "fp": 3,
+            "fn": 0,
+            "precision": 0,
+            "recall": null
+          },
+          "graph": {
+            "predicted": [],
+            "gold": [],
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": null,
+            "recall": null
+          },
+          "graphSymbolStatus": "unparsed-or-missing",
+          "astMs": 162.47090000000026,
+          "baselineGlobal": {
+            "status": "error",
+            "error": "Navigation file exceeds 128 KiB; use read with a range instead."
+          },
+          "baselineScopedQueries": 138,
+          "baselineMetadata": {
+            "errors": [],
+            "unparsed": [
+              "src/css/Stylesheet.ts",
+              "src/utils/CodeBuilder.ts"
+            ],
+            "omitted": 0
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Compiler symbol identity is an independent static-analysis oracle, not runtime behavioral proof.",
+    "Scopes cover named exported definitions in two pinned production trees; anonymous exports and dynamic dispatch are not covered.",
+    "Oracle labels omit type-only occurrences; import/reexport binding occurrences count as runtime linkage evidence.",
+    "The AST tool returns syntactic candidates, which an LLM can inspect; false-positive candidates are not false exactness claims.",
+    "Baseline requests use its existing 80-result cap; truncation metadata is retained. Graph predictions use stored resolved edges. This is information retrieval analysis, not a resource-matched agent tool-call comparison.",
+    "An empty graph prediction is not a proof of no dependencies; missing/unparsed definitions are explicitly reported.",
+    "No foundation model is used to construct or score these labels."
+  ]
+}
