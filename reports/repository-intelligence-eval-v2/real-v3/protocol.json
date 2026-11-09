@@ -1,0 +1,1822 @@
+{
+  "version": 2,
+  "taskGatePolicy": "Immutable per-task validation manifest saved before its first inference; later balanced waves may be prepared after earlier waves run.",
+  "campaign": "luna-xhigh-real-v3",
+  "phase": "main-prospective-real-cohort",
+  "createdAt": "2026-11-09T14:10:33.933Z",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "config": {
+    "model": "gpt-6-luna",
+    "effort": "xhigh",
+    "serviceTier": "default",
+    "maxOutputTokens": 16384,
+    "maxCost": 0.5,
+    "timeout": 1200,
+    "maxTurns": 90,
+    "maxToolCalls": 400,
+    "requestReserveUsd": 0.25,
+    "retryCount": 0,
+    "maxProviderPayloadBytes": 1048576,
+    "workspaceIsolation": "own-git-repository"
+  },
+  "catalog": {
+    "id": "gpt-6-luna",
+    "api": "openai-responses",
+    "contextWindow": 272000,
+    "maxTokens": 128000,
+    "cost": {
+      "input": 0.1,
+      "output": 0.5,
+      "cacheRead": 0.01,
+      "cacheWrite": 0.125,
+      "tiers": [
+        {
+          "inputTokensAbove": 272000,
+          "input": 0.2,
+          "output": 0.75,
+          "cacheRead": 0.02,
+          "cacheWrite": 0.25
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "package.json": "c11229cca1cb10ebda2381b1d3863cff82ab3b1350fbed705f174b6223a5c719",
+    "package-lock.json": "4f08c90a9db1397aab8987a5c7715dee791d6261ece1509877a790e88ecbd0ff",
+    ".gitattributes": "73cb3f57167c8a53f31e5b5f7d45a5aef65920424ced09f699a8b1906fc1aa31",
+    "src/runtime.mjs": "5fd1624af9df49edd0b92cd33ec1090bbf9224d757f2284c924ed73c6fb21e01",
+    "src/workspace.mjs": "cdb1adc5aafea45ea4d1a9023422d984de82a19ccc03774ea6a439294fde5039",
+    "src/intelligence-eval.mjs": "ff2b44c4aade70f81dbe17340470cbbbefa2c44e854374cb0a83aa9fb18e0c38",
+    "src/native-intelligence-eval.mjs": "83de51bce86f739d308d6f62f1df54d87af8720ea99f7fa7fbb23f35fd52c12c",
+    "src/svelte-intelligence-pilot.mjs": "c287ca447571f90199862714becff9c48c3b09fa9efa9429a4caa0ed0828bb40",
+    "src/classic-svelte-eval.mjs": "5ebda1dbc37c83b8a48972b17a83d4a0d64e550d7078cadf05bd6b495159a229",
+    "src/real-intelligence-eval.mjs": "76728581f94adb2e4ab7ed949a572a524a064b1013afa5d2eb2d1c2b6a6c409d",
+    "scripts/intelligence-real-v3.mjs": "1f0a9b98899d7e3ae45df362f4a4d0fec3a8c5a46431f79d539c59b622054b14",
+    "scripts/intelligence-real-v3-worker.mjs": "3e470b1822b4b60385067a81b9c1fb117004cbcc005938062fcd57cebee4dbaa",
+    "scripts/prepare-intelligence-real-v3.mjs": "744a5f668b13872d6edc54f398d6977eb2b3d101d791a5713fd02483b0fea087",
+    "scripts/report-intelligence-real-v3.mjs": "dc7044cdeffe517d43bc8d93bd96443313e27427da6861f2fac847732f44bf92",
+    "benchmarks/intelligence-svelte-outro-pilot/native-tests.cjs": "5a3dac40207cb3b1aab611c99aa3febe520263e01f9cb1bba45b9ca92a812b15",
+    "benchmarks/intelligence-svelte-pilot/reporter.cjs": "ab6c1e6bcfd4acd10125615c6ef561d6443b1649ac6869ae25e10c8ac72688be",
+    "packages/cli/src/intelligence/graph.mjs": "66acdaacb6a7ac644f744892819154e7416614b086cb81031798958b5b43100a",
+    "packages/cli/src/intelligence/module-resolution.mjs": "32bcdfb4535fb7ec40092859a5aedfe3da08cddd92544da1d04503421cbf47d1",
+    "packages/cli/src/intelligence/on-demand.mjs": "1da1e4cdefdbedd4280228a1c91a14b18e3959d36c2b9f40ffbe248c4e06aeba",
+    "packages/cli/src/intelligence/parse.mjs": "6796bca1f9e265be0072ebddee379dc5141188a303f8560fb128405d428c8824",
+    "packages/cli/src/intelligence/source-files.mjs": "61b10c87363943f88cd1ee797646611a0172d9e1c261990306707169b0840abe",
+    "packages/cli/src/intelligence/tools.mjs": "0a38d8405f80ca6e4f6d9a287a7cf1504d47edf9e79cef4537625d227e1fe840",
+    "packages/cli/src/interactive.mjs": "e395edcc50b5520edb60c7d88171e893fab0b186d3d6f6a5a73186c74b62bd26",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/navigation.mjs": "fda7c7f0b7c058772fd66b3fb56b66cdeff12787082f2518ebf136f8d43873c9",
+    "packages/cli/src/options.mjs": "ffcc4a00f9b1038b54f4e5a68349b2cc7b4bb57355bf1f2c0865573d636d850c",
+    "packages/cli/src/projects.mjs": "920dffed714fe56c5040e826615f332df346da01c443ece463a49c76c9dc4b10",
+    "packages/cli/src/session.mjs": "6c0217c8e18456c9aadfece46b4c589575a5b2aace4da4afe8d54c0cb6495b5c",
+    "packages/cli/src/tools.mjs": "520d56e0eb54a0112305ca5dd6540f701abcd80cb30ebcc301856f0ba400ca81",
+    "packages/cli/src/workspace.mjs": "f0b8300e39bde271ef92f62af35aebe05531834130d67e71dcbdb4011e80955f",
+    "benchmarks/intelligence-real-v3/cohort.json": "65aa064dfa87f3660452e3c4835bcf8768c7d17bd43649f094251506e9c9d2cb",
+    "benchmarks/intelligence-real-v3/native-compat.cjs": "5cdbcb5b37c0933385a31b9d6f82e9efc3204a9056ee10722d646353e7b9ae3a",
+    "benchmarks/intelligence-real-v3/native-loader-base.cjs": "dac006969c9c11ecb9e950e85ea61810763146e98838c842c22a46ac84517aca",
+    "benchmarks/intelligence-real-v3/native-tests.cjs": "1f6ef57298a9622ca28f8b03a85e9db15280eb6bc5fc5e374fd6b649e99b37fb",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1047.json": "56e0803b0950a7d42660217db6eb2d169e95d0e595e1bc74127faba99a6e16d3",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1048.json": "afcf623c94914f99f654d5cb09f3a68d0504eeb290f175a091903cab1137c48d",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1185.json": "3c41cf1bc3fdcc71c781e950c2aca48ae76ee3c665452ca4717514d1d86fe457",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1243.json": "2d0ca533d33bccede345e5da9f84c6f9bc52cc97102d0be830989d7068c5eae4",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1292.json": "50f5c75467a0140f1beb0d2d8571499ce0818eef6c4a3ed082e3a0511dfac2cf",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1294.json": "969c8db4d6e2b490e4d86cf2c40612d46c52f91213870a05d49202089dc5cc89",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1309.json": "771ebacf64a632ba19ce3c8ef634d3077b3323f541960d872261b7ce9d003730",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1312.json": "1be0c7466096eaa117f89184a8cd625b867ccb1b3f55cf8cf9303eee59f8728c",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1315.json": "7ea4a89a3e852d6f9b65afc50d48930eede2cb3b582b9ad29e1a140360215281",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1345.json": "8698988bf5ab8eb2ce7551df0459334a85697dca43bbb8b621810b0fb10df08c",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1364.json": "54c2287949fb3c907440b4f560b357564ce3b20ac811acbd237c7e1d7d03de78",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1365.json": "642c3c2035d3a8afca9b005978b1fbd9c69afbb0ef9139744f6bb9a7b137eb65",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1420.json": "3bb79049c696499c52d7a5652be697b1d3ff9e84b57bf7c702d47275be03046b",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1493.json": "f069ccd29d6dcbc9c18a5d502ae8c35362d44a4ed9aeb04dbf3c7acee8a66e72",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1516.json": "5ca4cb63b3d90e6a5c6d7b85fb359f46f731f58de1409cc65be2d8799fe3cd43",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-1529.json": "f0114167f0f8cce5fdf759cd0c5b9df095f695fd2990e0aea0aa62681d8b40c1",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-599.json": "bf6fd66095187ef8b3b25cf826e20ac3902c5994d100da35122b02b67c52907a",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-605.json": "4deabfa0b567b5f62c31cfae4cb281e12fdec987ae2259cb762e7616550bf18c",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-709.json": "5916412e8987ab90eb54a519a781ce9f8034ab623f3b9fca6ef48d9c9f5ddb19",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-835.json": "8f2a7e81f727ee50ef7285c9cb26a809b0ed2371be502b98091b4255bc0e74e9",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-851.json": "f90b72efb294bcb98f87ba2fc07af1f3adb501eaaef38eb106fa70904deb1326",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-889.json": "df358e30efd23c74aaefdc53ef029501782c8c5db06b54f674ce3520effa047f",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-931.json": "6baae790b651035009d64cfead29ce1ff61b65d2ac3a6d2e46451e4355d22917",
+    "benchmarks/intelligence-real-v3/sveltejs__svelte-980.json": "fad30d1f19dbc4e41fe19a522b4cee0bdad392ff252eae0a8b95f73c85a8d32a"
+  },
+  "tasks": [
+    {
+      "id": "sveltejs__svelte-1294",
+      "category": "simple",
+      "record": "sveltejs__svelte-1294.json",
+      "recordSha256": "969c8db4d6e2b490e4d86cf2c40612d46c52f91213870a05d49202089dc5cc89",
+      "productionFiles": [
+        "src/generators/nodes/Element.ts"
+      ],
+      "patchDiffLines": 21,
+      "runtimeTargets": [
+        "runtime dev-warning-custom-event-destroy-not-teardown (shared helpers , hydration)",
+        "runtime dev-warning-custom-event-destroy-not-teardown (inline helpers)",
+        "runtime dev-warning-custom-event-destroy-not-teardown (shared helpers)"
+      ],
+      "otherTargets": [
+        "js event-handlers-custom"
+      ],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-980",
+      "category": "simple",
+      "record": "sveltejs__svelte-980.json",
+      "recordSha256": "fad30d1f19dbc4e41fe19a522b4cee0bdad392ff252eae0a8b95f73c85a8d32a",
+      "productionFiles": [
+        "src/generators/dom/visitors/AwaitBlock.ts"
+      ],
+      "patchDiffLines": 23,
+      "runtimeTargets": [
+        "runtime await-then-catch-anchor (shared helpers)",
+        "runtime await-then-catch-if (shared helpers)",
+        "runtime await-then-catch-if (inline helpers)",
+        "runtime await-then-catch-anchor (inline helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1292",
+      "category": "simple",
+      "record": "sveltejs__svelte-1292.json",
+      "recordSha256": "50f5c75467a0140f1beb0d2d8571499ce0818eef6c4a3ed082e3a0511dfac2cf",
+      "productionFiles": [
+        "src/generators/nodes/EachBlock.ts"
+      ],
+      "patchDiffLines": 12,
+      "runtimeTargets": [
+        "runtime each-block-keyed-static (inline helpers)",
+        "runtime each-block-keyed-static (shared helpers)",
+        "runtime each-block-keyed-static (shared helpers , hydration)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-851",
+      "category": "simple",
+      "record": "sveltejs__svelte-851.json",
+      "recordSha256": "f90b72efb294bcb98f87ba2fc07af1f3adb501eaaef38eb106fa70904deb1326",
+      "productionFiles": [
+        "src/generators/dom/visitors/IfBlock.ts"
+      ],
+      "patchDiffLines": 21,
+      "runtimeTargets": [
+        "runtime component-slot-if-else-block-before-node (inline helpers)",
+        "runtime component-slot-if-block-before-node (inline helpers)",
+        "runtime component-slot-if-block-before-node (shared helpers)",
+        "runtime component-slot-if-else-block-before-node (shared helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1047",
+      "category": "simple",
+      "record": "sveltejs__svelte-1047.json",
+      "recordSha256": "56e0803b0950a7d42660217db6eb2d169e95d0e595e1bc74127faba99a6e16d3",
+      "productionFiles": [
+        "src/generators/nodes/Component.ts"
+      ],
+      "patchDiffLines": 18,
+      "runtimeTargets": [
+        "runtime dynamic-component-bindings-recreated (shared helpers , hydration)",
+        "runtime dynamic-component-bindings-recreated (inline helpers)",
+        "runtime dynamic-component-bindings-recreated (shared helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1048",
+      "category": "simple",
+      "record": "sveltejs__svelte-1048.json",
+      "recordSha256": "afcf623c94914f99f654d5cb09f3a68d0504eeb290f175a091903cab1137c48d",
+      "productionFiles": [
+        "src/generators/nodes/Element.ts"
+      ],
+      "patchDiffLines": 12,
+      "runtimeTargets": [
+        "runtime option-without-select (inline helpers)",
+        "runtime option-without-select (shared helpers)",
+        "runtime option-without-select (shared helpers , hydration)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1365",
+      "category": "simple",
+      "record": "sveltejs__svelte-1365.json",
+      "recordSha256": "642c3c2035d3a8afca9b005978b1fbd9c69afbb0ef9139744f6bb9a7b137eb65",
+      "productionFiles": [
+        "src/shared/index.js"
+      ],
+      "patchDiffLines": 18,
+      "runtimeTargets": [
+        "runtime get-after-destroy (shared helpers, hydration)",
+        "runtime get-after-destroy (inline helpers)",
+        "runtime get-after-destroy (shared helpers)"
+      ],
+      "otherTargets": [
+        "js window-binding-scroll",
+        "js inline-style-optimized-multiple",
+        "js event-handlers-custom",
+        "js inline-style-optimized-url",
+        "js setup-method",
+        "js legacy-input-type",
+        "js css-media-query",
+        "js title",
+        "js use-elements-as-anchors",
+        "js collapses-text-around-comments",
+        "js svg-title",
+        "js input-without-blowback-guard",
+        "js action",
+        "js component-static",
+        "js dont-use-dataset-in-legacy",
+        "js if-block-simple",
+        "js dont-use-dataset-in-svg",
+        "js component-static-immutable",
+        "js deconflict-builtins",
+        "js css-shadow-dom-keyframes",
+        "js deconflict-globals",
+        "js non-imported-component",
+        "js inline-style-optimized",
+        "js head-no-whitespace",
+        "js inline-style-unoptimized",
+        "js component-static-immutable2",
+        "js if-block-no-update",
+        "js do-use-dataset",
+        "js each-block-changed-check",
+        "js media-bindings",
+        "js computed-collapsed-if",
+        "js dev-warning-missing-data-computed"
+      ],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1185",
+      "category": "simple",
+      "record": "sveltejs__svelte-1185.json",
+      "recordSha256": "3c41cf1bc3fdcc71c781e950c2aca48ae76ee3c665452ca4717514d1d86fe457",
+      "productionFiles": [
+        "src/generators/nodes/Slot.ts"
+      ],
+      "patchDiffLines": 19,
+      "runtimeTargets": [
+        "runtime component-slot-dynamic (shared helpers , hydration)",
+        "runtime component-slot-dynamic (shared helpers)",
+        "runtime component-slot-dynamic (inline helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Local production change in one file; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1516",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1516.json",
+      "recordSha256": "5ca4cb63b3d90e6a5c6d7b85fb359f46f731f58de1409cc65be2d8799fe3cd43",
+      "productionFiles": [
+        "src/compile/nodes/Component.ts",
+        "src/compile/nodes/Element.ts"
+      ],
+      "patchDiffLines": 24,
+      "runtimeTargets": [
+        "runtime spread-component-multiple-dependencies (shared helpers, hydration)",
+        "runtime spread-element-multiple-dependencies (inline helpers)",
+        "runtime spread-element-multiple-dependencies (shared helpers)",
+        "runtime spread-component-multiple-dependencies (shared helpers)",
+        "runtime spread-element-multiple-dependencies (shared helpers, hydration)",
+        "runtime spread-component-multiple-dependencies (inline helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1315",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1315.json",
+      "recordSha256": "7ea4a89a3e852d6f9b65afc50d48930eede2cb3b582b9ad29e1a140360215281",
+      "productionFiles": [
+        "src/generators/nodes/Window.ts",
+        "src/validate/html/validateWindow.ts"
+      ],
+      "patchDiffLines": 71,
+      "runtimeTargets": [
+        "runtime window-event-custom (inline helpers)",
+        "runtime window-event-custom (shared helpers , hydration)",
+        "runtime window-event-custom (shared helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1312",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1312.json",
+      "recordSha256": "1be0c7466096eaa117f89184a8cd625b867ccb1b3f55cf8cf9303eee59f8728c",
+      "productionFiles": [
+        "src/generators/Generator.ts",
+        "src/generators/dom/Block.ts",
+        "src/generators/dom/index.ts"
+      ],
+      "patchDiffLines": 69,
+      "runtimeTargets": [
+        "runtime component-name-deconflicted (shared helpers , hydration)",
+        "runtime component-name-deconflicted (shared helpers)",
+        "runtime component-name-deconflicted (inline helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1364",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1364.json",
+      "recordSha256": "54c2287949fb3c907440b4f560b357564ce3b20ac811acbd237c7e1d7d03de78",
+      "productionFiles": [
+        "src/generators/dom/index.ts",
+        "src/shared/utils.js"
+      ],
+      "patchDiffLines": 46,
+      "runtimeTargets": [
+        "runtime onstate-no-template (shared helpers, hydration)",
+        "runtime onstate-no-template (shared helpers)",
+        "runtime onstate-no-template (inline helpers)"
+      ],
+      "otherTargets": [
+        "js deconflict-globals"
+      ],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1243",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1243.json",
+      "recordSha256": "2d0ca533d33bccede345e5da9f84c6f9bc52cc97102d0be830989d7068c5eae4",
+      "productionFiles": [
+        "src/generators/dom/Block.ts",
+        "src/generators/nodes/Component.ts",
+        "src/generators/nodes/EachBlock.ts"
+      ],
+      "patchDiffLines": 163,
+      "runtimeTargets": [
+        "runtime each-block-deconflict-name-context (shared helpers)",
+        "runtime each-block-deconflict-name-context (inline helpers)",
+        "runtime each-block-deconflict-name-context (shared helpers , hydration)"
+      ],
+      "otherTargets": [
+        "js deconflict-builtins",
+        "js each-block-changed-check"
+      ],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1420",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1420.json",
+      "recordSha256": "3bb79049c696499c52d7a5652be697b1d3ff9e84b57bf7c702d47275be03046b",
+      "productionFiles": [
+        "src/compile/nodes/AwaitBlock.ts",
+        "src/shared/await-block.js"
+      ],
+      "patchDiffLines": 130,
+      "runtimeTargets": [
+        "runtime transition-js-await-block (inline helpers)",
+        "runtime transition-js-await-block (shared helpers)",
+        "runtime transition-js-await-block (shared helpers, hydration)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-931",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-931.json",
+      "recordSha256": "6baae790b651035009d64cfead29ce1ff61b65d2ac3a6d2e46451e4355d22917",
+      "productionFiles": [
+        "src/generators/dom/preprocess.ts",
+        "src/generators/dom/visitors/Element/Element.ts",
+        "src/generators/server-side-rendering/preprocess.ts"
+      ],
+      "patchDiffLines": 95,
+      "runtimeTargets": [
+        "runtime binding-select-late (shared helpers)",
+        "runtime binding-select-initial-value (inline helpers)",
+        "runtime binding-select-initial-value (shared helpers)",
+        "runtime binding-select-initial-value-undefined (shared helpers)",
+        "runtime binding-select-implicit-option-value (shared helpers)",
+        "runtime binding-select-implicit-option-value (inline helpers)",
+        "runtime binding-select-late (inline helpers)",
+        "runtime binding-select-initial-value-undefined (inline helpers)"
+      ],
+      "otherTargets": [
+        "ssr binding-select-initial-value",
+        "ssr binding-select-implicit-option-value",
+        "ssr binding-select"
+      ],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1309",
+      "category": "cross-file",
+      "record": "sveltejs__svelte-1309.json",
+      "recordSha256": "771ebacf64a632ba19ce3c8ef634d3077b3323f541960d872261b7ce9d003730",
+      "productionFiles": [
+        "src/generators/nodes/EachBlock.ts",
+        "src/shared/keyed-each.js"
+      ],
+      "patchDiffLines": 53,
+      "runtimeTargets": [
+        "runtime each-block-keyed-siblings (shared helpers , hydration)",
+        "runtime each-block-keyed-siblings (shared helpers)",
+        "runtime each-block-keyed-siblings (inline helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Coordinated production changes in two or three files; semantic difficulty is not inferred from patch size.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-709",
+      "category": "complex",
+      "record": "sveltejs__svelte-709.json",
+      "recordSha256": "5916412e8987ab90eb54a519a781ce9f8034ab623f3b9fca6ef48d9c9f5ddb19",
+      "productionFiles": [
+        "src/generators/dom/index.ts",
+        "src/generators/dom/visitors/Component/Binding.ts",
+        "src/generators/dom/visitors/Element/Binding.ts",
+        "src/generators/dom/visitors/Element/addTransitions.ts",
+        "src/generators/dom/visitors/shared/binding/getSetter.ts",
+        "src/shared/index.js"
+      ],
+      "patchDiffLines": 192,
+      "runtimeTargets": [
+        "runtime component-binding-blowback-b (shared helpers)",
+        "runtime component-binding-blowback-b (inline helpers)"
+      ],
+      "otherTargets": [
+        "js if-block-simple",
+        "js if-block-no-update",
+        "js onrender-onteardown-rewritten",
+        "js event-handlers-custom",
+        "js each-block-changed-check",
+        "js non-imported-component",
+        "js use-elements-as-anchors",
+        "js collapses-text-around-comments",
+        "js computed-collapsed-if"
+      ],
+      "difficultyRationale": "Repair binding observer initialization and component lifecycle ordering across generators.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-599",
+      "category": "complex",
+      "record": "sveltejs__svelte-599.json",
+      "recordSha256": "bf6fd66095187ef8b3b25cf826e20ac3902c5994d100da35122b02b67c52907a",
+      "productionFiles": [
+        "src/generators/dom/visitors/Element/Element.ts",
+        "src/generators/dom/visitors/Element/lookup.ts",
+        "src/generators/server-side-rendering/visitors/Element.ts",
+        "src/parse/state/tag.ts",
+        "src/validate/html/validateElement.ts"
+      ],
+      "patchDiffLines": 272,
+      "runtimeTargets": [
+        "runtime shared helpers textarea-value",
+        "runtime inline helpers textarea-children",
+        "runtime inline helpers textarea-value",
+        "runtime shared helpers textarea-children"
+      ],
+      "otherTargets": [
+        "validate textarea-value-children",
+        "parse textarea-children",
+        "ssr textarea-value"
+      ],
+      "difficultyRationale": "Coordinate textarea value handling across DOM bindings, code generation and rendering.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1345",
+      "category": "complex",
+      "record": "sveltejs__svelte-1345.json",
+      "recordSha256": "8698988bf5ab8eb2ce7551df0459334a85697dca43bbb8b621810b0fb10df08c",
+      "productionFiles": [
+        "src/generators/Generator.ts",
+        "src/generators/dom/index.ts",
+        "src/validate/index.ts",
+        "src/validate/js/propValidators/computed.ts"
+      ],
+      "patchDiffLines": 151,
+      "runtimeTargets": [
+        "runtime computed-values-deconflicted (shared helpers, v2)",
+        "runtime computed-values-function-dependency (shared helpers, v2)",
+        "runtime computed-values (shared helpers, v2)",
+        "runtime computed-values-default (shared helpers, v2)",
+        "runtime computed-function (shared helpers, v2)"
+      ],
+      "otherTargets": [
+        "js dev-warning-missing-data-computed"
+      ],
+      "difficultyRationale": "Implement destructured computed-property parameters and dependency handling across compiler stages.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-605",
+      "category": "complex",
+      "record": "sveltejs__svelte-605.json",
+      "recordSha256": "4deabfa0b567b5f62c31cfae4cb281e12fdec987ae2259cb762e7616550bf18c",
+      "productionFiles": [
+        "src/generators/dom/visitors/Component/Binding.ts",
+        "src/generators/dom/visitors/Element/Binding.ts",
+        "src/generators/dom/visitors/shared/binding/getSetter.ts",
+        "src/parse/read/directives.ts"
+      ],
+      "patchDiffLines": 119,
+      "runtimeTargets": [
+        "runtime inline helpers binding-input-text-deep-computed",
+        "runtime inline helpers binding-input-text-deep-contextual-computed-dynamic",
+        "runtime shared helpers binding-input-text-deep-computed",
+        "runtime shared helpers binding-input-text-deep-computed-dynamic",
+        "runtime shared helpers binding-input-text-deep-contextual-computed-dynamic",
+        "runtime inline helpers binding-input-text-deep-computed-dynamic"
+      ],
+      "otherTargets": [
+        "parse error-binding-rvalue"
+      ],
+      "difficultyRationale": "Support computed property expressions in two-way bindings across compiler stages.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1493",
+      "category": "complex",
+      "record": "sveltejs__svelte-1493.json",
+      "recordSha256": "f069ccd29d6dcbc9c18a5d502ae8c35362d44a4ed9aeb04dbf3c7acee8a66e72",
+      "productionFiles": [
+        "src/compile/dom/Block.ts",
+        "src/compile/nodes/Attribute.ts",
+        "src/compile/nodes/AwaitBlock.ts",
+        "src/compile/nodes/EachBlock.ts",
+        "src/compile/nodes/IfBlock.ts",
+        "src/compile/nodes/Title.ts",
+        "src/compile/nodes/shared/Tag.ts",
+        "src/parse/read/directives.ts"
+      ],
+      "patchDiffLines": 191,
+      "runtimeTargets": [
+        "runtime if-block-else-partial-outro (inline helpers)",
+        "runtime if-block-else-partial-outro (shared helpers)",
+        "runtime if-block-else-partial-outro (shared helpers, hydration)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Repair nested transition state across conditional branches and generated block lifecycles.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-1529",
+      "category": "complex",
+      "record": "sveltejs__svelte-1529.json",
+      "recordSha256": "f0114167f0f8cce5fdf759cd0c5b9df095f695fd2990e0aea0aa62681d8b40c1",
+      "productionFiles": [
+        "src/compile/dom/Block.ts",
+        "src/compile/nodes/Attribute.ts",
+        "src/compile/nodes/Title.ts",
+        "src/compile/nodes/shared/Tag.ts"
+      ],
+      "patchDiffLines": 142,
+      "runtimeTargets": [
+        "runtime nested-transition-if-block-not-remounted (shared helpers, hydration)",
+        "runtime nested-transition-if-block-not-remounted (inline helpers)",
+        "runtime nested-transition-if-block-not-remounted (shared helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Preserve input focus when nested transition lifecycles revisit existing DOM blocks.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-835",
+      "category": "complex",
+      "record": "sveltejs__svelte-835.json",
+      "recordSha256": "8f2a7e81f727ee50ef7285c9cb26a809b0ed2371be502b98091b4255bc0e74e9",
+      "productionFiles": [
+        "src/generators/dom/preprocess.ts",
+        "src/generators/dom/visitors/EachBlock.ts",
+        "src/generators/dom/visitors/IfBlock.ts",
+        "src/generators/dom/visitors/shared/isDomNode.ts"
+      ],
+      "patchDiffLines": 113,
+      "runtimeTargets": [
+        "runtime component-slot-if-block (inline helpers)",
+        "runtime component-slot-if-block (shared helpers)"
+      ],
+      "otherTargets": [],
+      "difficultyRationale": "Handle conditional default slots and empty-fragment mounting across block generators.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    },
+    {
+      "id": "sveltejs__svelte-889",
+      "category": "complex",
+      "record": "sveltejs__svelte-889.json",
+      "recordSha256": "df358e30efd23c74aaefdc53ef029501782c8c5db06b54f674ce3520effa047f",
+      "productionFiles": [
+        "src/generators/dom/Block.ts",
+        "src/generators/dom/preprocess.ts",
+        "src/generators/server-side-rendering/visitors/EachBlock.ts",
+        "src/parse/state/mustache.ts"
+      ],
+      "patchDiffLines": 86,
+      "runtimeTargets": [
+        "runtime each-block-destructured-array (inline helpers)",
+        "runtime each-block-destructured-array (shared helpers)"
+      ],
+      "otherTargets": [
+        "ssr each-block-destructured-array",
+        "parse each-block-destructured"
+      ],
+      "difficultyRationale": "Implement destructured each-block bindings across parsing, validation and generation.",
+      "provenance": {
+        "dataset": "AmazonScience/SWE-PolyBench",
+        "revision": "d56445f9940eae4e9d2974ec66820c2f1d7754e6",
+        "csvSha256": "17ad661b20e9af1e2067fbbc2e2658a21137d56693570d1d07f966d8bc0408b7"
+      }
+    }
+  ],
+  "schedule": [
+    [
+      {
+        "task": "sveltejs__svelte-1048",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1048",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1048",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-835",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-835",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-835",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1516",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1516",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1516",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1516",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1516",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1516",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-835",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-835",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-835",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1048",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1048",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1048",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1420",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1420",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1420",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-980",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-980",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-980",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1493",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1493",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1493",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1420",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1420",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1420",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1493",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1493",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1493",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-980",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-980",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-980",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1312",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1312",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1312",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-851",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-851",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-851",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-599",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-599",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-599",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-599",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-599",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-599",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-851",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-851",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-851",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1312",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1312",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1312",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1294",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1294",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1294",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1243",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1243",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1243",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-889",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-889",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-889",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1243",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1243",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1243",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1294",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1294",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1294",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-889",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-889",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-889",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1365",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1365",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1365",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-605",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-605",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-605",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1309",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1309",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1309",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1309",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1309",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1309",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1365",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1365",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1365",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-605",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-605",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-605",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1345",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1345",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1345",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1185",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1185",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1185",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-931",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-931",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-931",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-931",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-931",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-931",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1345",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1345",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1345",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1185",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1185",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1185",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1292",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1292",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1292",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-709",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-709",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-709",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1364",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1364",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1364",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1292",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1292",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1292",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1364",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1364",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1364",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-709",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-709",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-709",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1315",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1315",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1315",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1047",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1047",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1047",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1529",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1529",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 0
+      },
+      {
+        "task": "sveltejs__svelte-1529",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 0
+      }
+    ],
+    [
+      {
+        "task": "sveltejs__svelte-1315",
+        "category": "cross-file",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1315",
+        "category": "cross-file",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1315",
+        "category": "cross-file",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1047",
+        "category": "simple",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1047",
+        "category": "simple",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1047",
+        "category": "simple",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1529",
+        "category": "complex",
+        "arm": "B",
+        "mode": "guided",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1529",
+        "category": "complex",
+        "arm": "C",
+        "mode": "on-demand",
+        "repetition": 1
+      },
+      {
+        "task": "sveltejs__svelte-1529",
+        "category": "complex",
+        "arm": "A",
+        "mode": "off",
+        "repetition": 1
+      }
+    ]
+  ],
+  "sourceArchiveSha256": "5a071648277aea0b6c49fdc851a511949466064d00a78e0989c4ecf41fdf34eb",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "arch": "x64",
+  "resourcePolicy": {
+    "maxConcurrent": 1,
+    "temperatureC": null,
+    "temperaturePolicy": "No reliable automatic telemetry: concurrency always one",
+    "minWorkerFreeRAMGiB": 1.75,
+    "parentStartupFreeRAMGiB": 2,
+    "minFreeDiskGiB": 6,
+    "projectHeapMiB": 384
+  },
+  "replacementPolicy": {
+    "maxInfrastructureReplacements": 1,
+    "providerCooldownSeconds": 900,
+    "eligible": "Explicit provider unavailability or a no-model resource preflight. Never coding failure, test failure, or a spent model budget.",
+    "preserveOriginals": true
+  },
+  "limits": [
+    "One repository family and correlated issues; no population-wide model ranking.",
+    "All target/regression labels retained, including non-runtime snapshots.",
+    "Native adaptation and known unscored failures remain explicit in task receipts.",
+    "Whole category-balanced waves are reserved before dispatch; a cap may stop a balanced subset.",
+    "All costs are API-equivalent estimates; unknown usage remains reserved."
+  ]
+}
