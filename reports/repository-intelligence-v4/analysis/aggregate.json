@@ -1,17 +1,18 @@
 {
-  "at": "2026-11-10T03:05:22.840Z",
+  "at": "2026-11-10T03:53:32.035Z",
   "target": 192,
-  "operationalLaunchReceipts": 15,
+  "operationalLaunchReceipts": 20,
   "zeroRequestOperationalLaunches": 1,
-  "attempted": 14,
-  "modelExecuted": 14,
+  "attempted": 19,
+  "modelExecuted": 19,
   "zeroRequestLaunchStops": 0,
-  "scorable": 14,
-  "missing": 178,
+  "scorable": 19,
+  "missing": 173,
   "completeTasks": [
-    "serverless__serverless-5926"
+    "serverless__serverless-5926",
+    "mrdoob__three.js-23796"
   ],
-  "completeFourArmRounds": 3,
+  "completeFourArmRounds": 4,
   "servicePhases": {
     "default": [
       {
@@ -20,24 +21,24 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "off",
-        "n": 3,
+        "n": 4,
         "accepted": 0,
         "rate": 0,
-        "normalCompleted": 3,
-        "cost": 0.04539416,
+        "normalCompleted": 4,
+        "cost": 0.056837080000000005,
         "costPerAccepted": null,
         "tokens": {
-          "input": 155567,
-          "cacheRead": 1716096,
+          "input": 201660,
+          "cacheRead": 2161408,
           "cacheWrite": 0,
-          "output": 25353
+          "output": 30114
         },
-        "agentMs": 853114.2147,
-        "workerMs": 1041935.1603999999,
+        "agentMs": 1041002.721,
+        "workerMs": 1345956.5247999998,
         "graphRefreshMs": 0,
         "bindingGuardAttempts": 0,
-        "iterations": 71,
-        "toolCalls": 158,
+        "iterations": 90,
+        "toolCalls": 199,
         "graphQueries": 0
       },
       {
@@ -46,25 +47,25 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "guided",
-        "n": 3,
+        "n": 4,
         "accepted": 0,
         "rate": 0,
-        "normalCompleted": 3,
-        "cost": 0.05130968,
+        "normalCompleted": 4,
+        "cost": 0.07156776000000001,
         "costPerAccepted": null,
         "tokens": {
-          "input": 253939,
-          "cacheRead": 1446528,
+          "input": 358921,
+          "cacheRead": 2066816,
           "cacheWrite": 0,
-          "output": 22901
+          "output": 30015
         },
-        "agentMs": 783423.502,
-        "workerMs": 977903.1771,
-        "graphRefreshMs": 147121.2028000001,
+        "agentMs": 1144299.5119,
+        "workerMs": 1435887.7219,
+        "graphRefreshMs": 272136.24320000026,
         "bindingGuardAttempts": 0,
-        "iterations": 43,
-        "toolCalls": 120,
-        "graphQueries": 52
+        "iterations": 61,
+        "toolCalls": 174,
+        "graphQueries": 72
       },
       {
         "id": "C",
@@ -72,25 +73,25 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "on-demand",
-        "n": 3,
+        "n": 4,
         "accepted": 0,
         "rate": 0,
-        "normalCompleted": 3,
-        "cost": 0.05553284,
+        "normalCompleted": 4,
+        "cost": 0.07681106,
         "costPerAccepted": null,
         "tokens": {
-          "input": 261422,
-          "cacheRead": 1569664,
+          "input": 366533,
+          "cacheRead": 2389376,
           "cacheWrite": 0,
-          "output": 27388
+          "output": 32528
         },
-        "agentMs": 1050456.9757,
-        "workerMs": 1240102.6437000004,
-        "graphRefreshMs": 58316.194200000115,
+        "agentMs": 1371396.9152000002,
+        "workerMs": 1657445.6805000002,
+        "graphRefreshMs": 144888.16680000018,
         "bindingGuardAttempts": 0,
-        "iterations": 61,
-        "toolCalls": 129,
-        "graphQueries": 23
+        "iterations": 79,
+        "toolCalls": 172,
+        "graphQueries": 36
       },
       {
         "id": "D",
@@ -98,24 +99,130 @@
         "model": "gpt-6.1-sol",
         "effort": "medium",
         "mode": "off",
-        "n": 3,
-        "accepted": 1,
-        "rate": 0.3333333333333333,
-        "normalCompleted": 3,
-        "cost": 0.19751799999999997,
-        "costPerAccepted": 0.19751799999999997,
+        "n": 4,
+        "accepted": 2,
+        "rate": 0.5,
+        "normalCompleted": 4,
+        "cost": 0.24502559999999998,
+        "costPerAccepted": 0.12251279999999999,
         "tokens": {
-          "input": 64984,
-          "cacheRead": 147200,
+          "input": 79627,
+          "cacheRead": 194816,
           "cacheWrite": 0,
-          "output": 5283
+          "output": 6629
         },
-        "agentMs": 222121.8007,
-        "workerMs": 398821.9508000003,
+        "agentMs": 279125.3823,
+        "workerMs": 544302.4516000003,
         "graphRefreshMs": 0,
         "bindingGuardAttempts": 0,
-        "iterations": 24,
-        "toolCalls": 74,
+        "iterations": 30,
+        "toolCalls": 93,
+        "graphQueries": 0
+      }
+    ],
+    "priority": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
         "graphQueries": 0
       }
     ]
@@ -234,24 +341,24 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "off",
-        "n": 2,
+        "n": 3,
         "accepted": 0,
         "rate": 0,
-        "normalCompleted": 2,
-        "cost": 0.027711580000000006,
+        "normalCompleted": 3,
+        "cost": 0.03915450000000001,
         "costPerAccepted": null,
         "tokens": {
-          "input": 112713,
-          "cacheRead": 912128,
+          "input": 158806,
+          "cacheRead": 1357440,
           "cacheWrite": 0,
-          "output": 14638
+          "output": 19399
         },
-        "agentMs": 499646.879,
-        "workerMs": 627679.7054999999,
+        "agentMs": 687535.3853,
+        "workerMs": 931701.0698999998,
         "graphRefreshMs": 0,
         "bindingGuardAttempts": 0,
-        "iterations": 37,
-        "toolCalls": 92,
+        "iterations": 56,
+        "toolCalls": 133,
         "graphQueries": 0
       },
       {
@@ -260,25 +367,25 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "guided",
-        "n": 2,
+        "n": 3,
         "accepted": 0,
         "rate": 0,
-        "normalCompleted": 2,
-        "cost": 0.0331677,
+        "normalCompleted": 3,
+        "cost": 0.053425780000000006,
         "costPerAccepted": null,
         "tokens": {
-          "input": 185884,
-          "cacheRead": 849280,
+          "input": 290866,
+          "cacheRead": 1469568,
           "cacheWrite": 0,
-          "output": 12173
+          "output": 19287
         },
-        "agentMs": 503734.4504999999,
-        "workerMs": 666587.4543,
-        "graphRefreshMs": 118056.71220000017,
+        "agentMs": 864610.4604,
+        "workerMs": 1124571.9991000001,
+        "graphRefreshMs": 243071.7526000003,
         "bindingGuardAttempts": 0,
-        "iterations": 29,
-        "toolCalls": 80,
-        "graphQueries": 34
+        "iterations": 47,
+        "toolCalls": 134,
+        "graphQueries": 54
       },
       {
         "id": "C",
@@ -286,25 +393,25 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "on-demand",
-        "n": 2,
+        "n": 3,
         "accepted": 0,
         "rate": 0,
-        "normalCompleted": 2,
-        "cost": 0.030245320000000006,
+        "normalCompleted": 3,
+        "cost": 0.05152354000000001,
         "costPerAccepted": null,
         "tokens": {
-          "input": 162039,
-          "cacheRead": 676992,
+          "input": 267150,
+          "cacheRead": 1496704,
           "cacheWrite": 0,
-          "output": 14543
+          "output": 19683
         },
-        "agentMs": 646131.1255000001,
-        "workerMs": 803148.3261,
-        "graphRefreshMs": 38459.93300000005,
+        "agentMs": 967071.0650000001,
+        "workerMs": 1220491.3628999998,
+        "graphRefreshMs": 125031.90560000011,
         "bindingGuardAttempts": 0,
-        "iterations": 37,
-        "toolCalls": 81,
-        "graphQueries": 10
+        "iterations": 55,
+        "toolCalls": 124,
+        "graphQueries": 23
       },
       {
         "id": "D",
@@ -312,241 +419,29 @@
         "model": "gpt-6.1-sol",
         "effort": "medium",
         "mode": "off",
-        "n": 2,
-        "accepted": 1,
-        "rate": 0.5,
-        "normalCompleted": 2,
-        "cost": 0.135924,
-        "costPerAccepted": 0.135924,
+        "n": 3,
+        "accepted": 2,
+        "rate": 0.6666666666666666,
+        "normalCompleted": 3,
+        "cost": 0.1834316,
+        "costPerAccepted": 0.0917158,
         "tokens": {
-          "input": 48599,
-          "cacheRead": 72960,
+          "input": 63242,
+          "cacheRead": 120576,
           "cacheWrite": 0,
-          "output": 3143
+          "output": 4489
         },
-        "agentMs": 137836.35460000002,
-        "workerMs": 276135.0776,
+        "agentMs": 194839.93620000003,
+        "workerMs": 421615.57839999994,
         "graphRefreshMs": 0,
         "bindingGuardAttempts": 0,
-        "iterations": 15,
-        "toolCalls": 46,
+        "iterations": 21,
+        "toolCalls": 65,
         "graphQueries": 0
       }
     ]
   },
   "primary": [
-    {
-      "id": "A",
-      "name": "Luna baseline",
-      "model": "gpt-6-luna",
-      "effort": "xhigh",
-      "mode": "off",
-      "n": 2,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 2,
-      "cost": 0.029754580000000003,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 90975,
-        "cacheRead": 1156608,
-        "cacheWrite": 0,
-        "output": 18182
-      },
-      "agentMs": 621059.2718,
-      "workerMs": 717941.581,
-      "graphRefreshMs": 0,
-      "bindingGuardAttempts": 0,
-      "iterations": 52,
-      "toolCalls": 105,
-      "graphQueries": 0
-    },
-    {
-      "id": "B",
-      "name": "Luna always-guided",
-      "model": "gpt-6-luna",
-      "effort": "xhigh",
-      "mode": "guided",
-      "n": 2,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 2,
-      "cost": 0.03282572,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 119297,
-        "cacheRead": 1149952,
-        "cacheWrite": 0,
-        "output": 18793
-      },
-      "agentMs": 560066.8151,
-      "workerMs": 655424.8372,
-      "graphRefreshMs": 62849.53300000004,
-      "bindingGuardAttempts": 0,
-      "iterations": 32,
-      "toolCalls": 79,
-      "graphQueries": 39
-    },
-    {
-      "id": "C",
-      "name": "Luna on-demand",
-      "model": "gpt-6-luna",
-      "effort": "xhigh",
-      "mode": "on-demand",
-      "n": 2,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 2,
-      "cost": 0.04433866,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 202625,
-        "cacheRead": 1359616,
-        "cacheWrite": 0,
-        "output": 20960
-      },
-      "agentMs": 755421.0316000001,
-      "workerMs": 823605.5233000002,
-      "graphRefreshMs": 31720.206600000092,
-      "bindingGuardAttempts": 0,
-      "iterations": 44,
-      "toolCalls": 89,
-      "graphQueries": 20
-    },
-    {
-      "id": "D",
-      "name": "Sol Medium baseline",
-      "model": "gpt-6.1-sol",
-      "effort": "medium",
-      "mode": "off",
-      "n": 2,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 2,
-      "cost": 0.1269108,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 35826,
-        "cacheRead": 130688,
-        "cacheWrite": 0,
-        "output": 4219
-      },
-      "agentMs": 170771.9801,
-      "workerMs": 249040.09840000025,
-      "graphRefreshMs": 0,
-      "bindingGuardAttempts": 0,
-      "iterations": 19,
-      "toolCalls": 57,
-      "graphQueries": 0
-    }
-  ],
-  "completeRoundSensitivity": [
-    {
-      "id": "A",
-      "name": "Luna baseline",
-      "model": "gpt-6-luna",
-      "effort": "xhigh",
-      "mode": "off",
-      "n": 3,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 3,
-      "cost": 0.04539416,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 155567,
-        "cacheRead": 1716096,
-        "cacheWrite": 0,
-        "output": 25353
-      },
-      "agentMs": 853114.2147,
-      "workerMs": 1041935.1603999999,
-      "graphRefreshMs": 0,
-      "bindingGuardAttempts": 0,
-      "iterations": 71,
-      "toolCalls": 158,
-      "graphQueries": 0
-    },
-    {
-      "id": "B",
-      "name": "Luna always-guided",
-      "model": "gpt-6-luna",
-      "effort": "xhigh",
-      "mode": "guided",
-      "n": 3,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 3,
-      "cost": 0.05130968,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 253939,
-        "cacheRead": 1446528,
-        "cacheWrite": 0,
-        "output": 22901
-      },
-      "agentMs": 783423.502,
-      "workerMs": 977903.1771,
-      "graphRefreshMs": 147121.2028000001,
-      "bindingGuardAttempts": 0,
-      "iterations": 43,
-      "toolCalls": 120,
-      "graphQueries": 52
-    },
-    {
-      "id": "C",
-      "name": "Luna on-demand",
-      "model": "gpt-6-luna",
-      "effort": "xhigh",
-      "mode": "on-demand",
-      "n": 3,
-      "accepted": 0,
-      "rate": 0,
-      "normalCompleted": 3,
-      "cost": 0.05553284,
-      "costPerAccepted": null,
-      "tokens": {
-        "input": 261422,
-        "cacheRead": 1569664,
-        "cacheWrite": 0,
-        "output": 27388
-      },
-      "agentMs": 1050456.9757,
-      "workerMs": 1240102.6437000004,
-      "graphRefreshMs": 58316.194200000115,
-      "bindingGuardAttempts": 0,
-      "iterations": 61,
-      "toolCalls": 129,
-      "graphQueries": 23
-    },
-    {
-      "id": "D",
-      "name": "Sol Medium baseline",
-      "model": "gpt-6.1-sol",
-      "effort": "medium",
-      "mode": "off",
-      "n": 3,
-      "accepted": 1,
-      "rate": 0.3333333333333333,
-      "normalCompleted": 3,
-      "cost": 0.19751799999999997,
-      "costPerAccepted": 0.19751799999999997,
-      "tokens": {
-        "input": 64984,
-        "cacheRead": 147200,
-        "cacheWrite": 0,
-        "output": 5283
-      },
-      "agentMs": 222121.8007,
-      "workerMs": 398821.9508000003,
-      "graphRefreshMs": 0,
-      "bindingGuardAttempts": 0,
-      "iterations": 24,
-      "toolCalls": 74,
-      "graphQueries": 0
-    }
-  ],
-  "availableCases": [
     {
       "id": "A",
       "name": "Luna baseline",
@@ -579,25 +474,25 @@
       "model": "gpt-6-luna",
       "effort": "xhigh",
       "mode": "guided",
-      "n": 3,
+      "n": 4,
       "accepted": 0,
       "rate": 0,
-      "normalCompleted": 3,
-      "cost": 0.05130968,
+      "normalCompleted": 4,
+      "cost": 0.07156776000000001,
       "costPerAccepted": null,
       "tokens": {
-        "input": 253939,
-        "cacheRead": 1446528,
+        "input": 358921,
+        "cacheRead": 2066816,
         "cacheWrite": 0,
-        "output": 22901
+        "output": 30015
       },
-      "agentMs": 783423.502,
-      "workerMs": 977903.1771,
-      "graphRefreshMs": 147121.2028000001,
+      "agentMs": 1144299.5119,
+      "workerMs": 1435887.7219,
+      "graphRefreshMs": 272136.24320000026,
       "bindingGuardAttempts": 0,
-      "iterations": 43,
-      "toolCalls": 120,
-      "graphQueries": 52
+      "iterations": 61,
+      "toolCalls": 174,
+      "graphQueries": 72
     },
     {
       "id": "C",
@@ -605,25 +500,25 @@
       "model": "gpt-6-luna",
       "effort": "xhigh",
       "mode": "on-demand",
-      "n": 3,
+      "n": 4,
       "accepted": 0,
       "rate": 0,
-      "normalCompleted": 3,
-      "cost": 0.05553284,
+      "normalCompleted": 4,
+      "cost": 0.07681106,
       "costPerAccepted": null,
       "tokens": {
-        "input": 261422,
-        "cacheRead": 1569664,
+        "input": 366533,
+        "cacheRead": 2389376,
         "cacheWrite": 0,
-        "output": 27388
+        "output": 32528
       },
-      "agentMs": 1050456.9757,
-      "workerMs": 1240102.6437000004,
-      "graphRefreshMs": 58316.194200000115,
+      "agentMs": 1371396.9152000002,
+      "workerMs": 1657445.6805000002,
+      "graphRefreshMs": 144888.16680000018,
       "bindingGuardAttempts": 0,
-      "iterations": 61,
-      "toolCalls": 129,
-      "graphQueries": 23
+      "iterations": 79,
+      "toolCalls": 172,
+      "graphQueries": 36
     },
     {
       "id": "D",
@@ -649,6 +544,218 @@
       "bindingGuardAttempts": 0,
       "iterations": 30,
       "toolCalls": 93,
+      "graphQueries": 0
+    }
+  ],
+  "completeRoundSensitivity": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off",
+      "n": 4,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 4,
+      "cost": 0.056837080000000005,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 201660,
+        "cacheRead": 2161408,
+        "cacheWrite": 0,
+        "output": 30114
+      },
+      "agentMs": 1041002.721,
+      "workerMs": 1345956.5247999998,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 90,
+      "toolCalls": 199,
+      "graphQueries": 0
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided",
+      "n": 4,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 4,
+      "cost": 0.07156776000000001,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 358921,
+        "cacheRead": 2066816,
+        "cacheWrite": 0,
+        "output": 30015
+      },
+      "agentMs": 1144299.5119,
+      "workerMs": 1435887.7219,
+      "graphRefreshMs": 272136.24320000026,
+      "bindingGuardAttempts": 0,
+      "iterations": 61,
+      "toolCalls": 174,
+      "graphQueries": 72
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand",
+      "n": 4,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 4,
+      "cost": 0.07681106,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 366533,
+        "cacheRead": 2389376,
+        "cacheWrite": 0,
+        "output": 32528
+      },
+      "agentMs": 1371396.9152000002,
+      "workerMs": 1657445.6805000002,
+      "graphRefreshMs": 144888.16680000018,
+      "bindingGuardAttempts": 0,
+      "iterations": 79,
+      "toolCalls": 172,
+      "graphQueries": 36
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off",
+      "n": 4,
+      "accepted": 2,
+      "rate": 0.5,
+      "normalCompleted": 4,
+      "cost": 0.24502559999999998,
+      "costPerAccepted": 0.12251279999999999,
+      "tokens": {
+        "input": 79627,
+        "cacheRead": 194816,
+        "cacheWrite": 0,
+        "output": 6629
+      },
+      "agentMs": 279125.3823,
+      "workerMs": 544302.4516000003,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 30,
+      "toolCalls": 93,
+      "graphQueries": 0
+    }
+  ],
+  "availableCases": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off",
+      "n": 5,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 5,
+      "cost": 0.09126200000000001,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 325762,
+        "cacheRead": 3662080,
+        "cacheWrite": 0,
+        "output": 44130
+      },
+      "agentMs": 1525997.1192,
+      "workerMs": 2031127.3065,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 135,
+      "toolCalls": 300,
+      "graphQueries": 0
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided",
+      "n": 5,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 5,
+      "cost": 0.10223762,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 441115,
+        "cacheRead": 3462912,
+        "cacheWrite": 0,
+        "output": 46994
+      },
+      "agentMs": 2030132.7423,
+      "workerMs": 2527976.2803999996,
+      "graphRefreshMs": 703869.4858000005,
+      "bindingGuardAttempts": 0,
+      "iterations": 91,
+      "toolCalls": 253,
+      "graphQueries": 106
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand",
+      "n": 4,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 4,
+      "cost": 0.07681106,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 366533,
+        "cacheRead": 2389376,
+        "cacheWrite": 0,
+        "output": 32528
+      },
+      "agentMs": 1371396.9152000002,
+      "workerMs": 1657445.6805000002,
+      "graphRefreshMs": 144888.16680000018,
+      "bindingGuardAttempts": 0,
+      "iterations": 79,
+      "toolCalls": 172,
+      "graphQueries": 36
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off",
+      "n": 5,
+      "accepted": 3,
+      "rate": 0.6,
+      "normalCompleted": 5,
+      "cost": 0.3550716,
+      "costPerAccepted": 0.1183572,
+      "tokens": {
+        "input": 104886,
+        "cacheRead": 391296,
+        "cacheWrite": 0,
+        "output": 10617
+      },
+      "agentMs": 488887.7695,
+      "workerMs": 955504.3611000003,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 42,
+      "toolCalls": 131,
       "graphQueries": 0
     }
   ],
@@ -766,24 +873,24 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "off",
-        "n": 0,
+        "n": 2,
         "accepted": 0,
-        "rate": null,
-        "normalCompleted": 0,
-        "cost": 0,
+        "rate": 0,
+        "normalCompleted": 2,
+        "cost": 0.027082500000000002,
         "costPerAccepted": null,
         "tokens": {
-          "input": 0,
-          "cacheRead": 0,
+          "input": 110685,
+          "cacheRead": 1004800,
           "cacheWrite": 0,
-          "output": 0
+          "output": 11932
         },
-        "agentMs": 0,
-        "workerMs": 0,
+        "agentMs": 419943.44920000003,
+        "workerMs": 628014.9437999998,
         "graphRefreshMs": 0,
         "bindingGuardAttempts": 0,
-        "iterations": 0,
-        "toolCalls": 0,
+        "iterations": 38,
+        "toolCalls": 94,
         "graphQueries": 0
       },
       {
@@ -792,25 +899,25 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "guided",
-        "n": 0,
+        "n": 2,
         "accepted": 0,
-        "rate": null,
-        "normalCompleted": 0,
-        "cost": 0,
+        "rate": 0,
+        "normalCompleted": 2,
+        "cost": 0.038742040000000005,
         "costPerAccepted": null,
         "tokens": {
-          "input": 0,
-          "cacheRead": 0,
+          "input": 239624,
+          "cacheRead": 916864,
           "cacheWrite": 0,
-          "output": 0
+          "output": 11222
         },
-        "agentMs": 0,
-        "workerMs": 0,
-        "graphRefreshMs": 0,
+        "agentMs": 584232.6968,
+        "workerMs": 780462.8847,
+        "graphRefreshMs": 209286.7102000002,
         "bindingGuardAttempts": 0,
-        "iterations": 0,
-        "toolCalls": 0,
-        "graphQueries": 0
+        "iterations": 29,
+        "toolCalls": 95,
+        "graphQueries": 33
       },
       {
         "id": "C",
@@ -818,25 +925,25 @@
         "model": "gpt-6-luna",
         "effort": "xhigh",
         "mode": "on-demand",
-        "n": 0,
+        "n": 2,
         "accepted": 0,
-        "rate": null,
-        "normalCompleted": 0,
-        "cost": 0,
+        "rate": 0,
+        "normalCompleted": 2,
+        "cost": 0.0324724,
         "costPerAccepted": null,
         "tokens": {
-          "input": 0,
-          "cacheRead": 0,
+          "input": 163908,
+          "cacheRead": 1029760,
           "cacheWrite": 0,
-          "output": 0
+          "output": 11568
         },
-        "agentMs": 0,
-        "workerMs": 0,
-        "graphRefreshMs": 0,
+        "agentMs": 615975.8836000001,
+        "workerMs": 833840.1571999999,
+        "graphRefreshMs": 113167.96020000009,
         "bindingGuardAttempts": 0,
-        "iterations": 0,
-        "toolCalls": 0,
-        "graphQueries": 0
+        "iterations": 35,
+        "toolCalls": 83,
+        "graphQueries": 16
       },
       {
         "id": "D",
@@ -844,24 +951,24 @@
         "model": "gpt-6.1-sol",
         "effort": "medium",
         "mode": "off",
-        "n": 0,
-        "accepted": 0,
-        "rate": null,
-        "normalCompleted": 0,
-        "cost": 0,
-        "costPerAccepted": null,
+        "n": 2,
+        "accepted": 2,
+        "rate": 1,
+        "normalCompleted": 2,
+        "cost": 0.11811479999999999,
+        "costPerAccepted": 0.059057399999999996,
         "tokens": {
-          "input": 0,
-          "cacheRead": 0,
+          "input": 43801,
+          "cacheRead": 64128,
           "cacheWrite": 0,
-          "output": 0
+          "output": 2410
         },
-        "agentMs": 0,
-        "workerMs": 0,
+        "agentMs": 108353.40220000001,
+        "workerMs": 295262.35319999995,
         "graphRefreshMs": 0,
         "bindingGuardAttempts": 0,
-        "iterations": 0,
-        "toolCalls": 0,
+        "iterations": 11,
+        "toolCalls": 36,
         "graphQueries": 0
       }
     ],
@@ -976,13 +1083,13 @@
     {
       "left": "B",
       "right": "A",
-      "nTasks": 1,
+      "nTasks": 2,
       "absoluteDifference": 0,
       "taskClusterBootstrap95": null,
       "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
       "discordantTaskMeans": 0,
       "discordantRepetitions": 0,
-      "zeroDiscordanceUpper95": 0.95,
+      "zeroDiscordanceUpper95": 0.7763932022500211,
       "warning": "Observed ties cannot establish equivalence. The one-sided exact bound applies only to probability of an unseen task-level mean discordance under independent task sampling, an assumption weakened by family clustering.",
       "perTask": [
         {
@@ -996,6 +1103,29 @@
               "difference": 0,
               "leftPhase": "original-policy-v1",
               "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
             },
             {
               "repetition": 1,
@@ -1013,13 +1143,13 @@
     {
       "left": "C",
       "right": "A",
-      "nTasks": 1,
+      "nTasks": 2,
       "absoluteDifference": 0,
       "taskClusterBootstrap95": null,
       "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
       "discordantTaskMeans": 0,
       "discordantRepetitions": 0,
-      "zeroDiscordanceUpper95": 0.95,
+      "zeroDiscordanceUpper95": 0.7763932022500211,
       "warning": "Observed ties cannot establish equivalence. The one-sided exact bound applies only to probability of an unseen task-level mean discordance under independent task sampling, an assumption weakened by family clustering.",
       "perTask": [
         {
@@ -1033,6 +1163,29 @@
               "difference": 0,
               "leftPhase": "original-policy-v1",
               "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
             },
             {
               "repetition": 1,
@@ -1050,13 +1203,13 @@
     {
       "left": "C",
       "right": "B",
-      "nTasks": 1,
+      "nTasks": 2,
       "absoluteDifference": 0,
       "taskClusterBootstrap95": null,
       "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
       "discordantTaskMeans": 0,
       "discordantRepetitions": 0,
-      "zeroDiscordanceUpper95": 0.95,
+      "zeroDiscordanceUpper95": 0.7763932022500211,
       "warning": "Observed ties cannot establish equivalence. The one-sided exact bound applies only to probability of an unseen task-level mean discordance under independent task sampling, an assumption weakened by family clustering.",
       "perTask": [
         {
@@ -1070,6 +1223,29 @@
               "difference": 0,
               "leftPhase": "original-policy-v1",
               "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
             },
             {
               "repetition": 1,
@@ -1087,14 +1263,17 @@
     {
       "left": "C",
       "right": "D",
-      "nTasks": 1,
-      "absoluteDifference": 0,
-      "taskClusterBootstrap95": null,
+      "nTasks": 2,
+      "absoluteDifference": -0.5,
+      "taskClusterBootstrap95": [
+        -1,
+        0
+      ],
       "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
-      "discordantTaskMeans": 0,
-      "discordantRepetitions": 0,
-      "zeroDiscordanceUpper95": 0.95,
-      "warning": "Observed ties cannot establish equivalence. The one-sided exact bound applies only to probability of an unseen task-level mean discordance under independent task sampling, an assumption weakened by family clustering.",
+      "discordantTaskMeans": 1,
+      "discordantRepetitions": 2,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
       "perTask": [
         {
           "task": "serverless__serverless-5926",
@@ -1118,21 +1297,44 @@
             }
           ],
           "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": -1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 2
         }
       ]
     }
   ],
   "statusCounts": {
-    "completed": 14,
-    "missing": 178
+    "completed": 19,
+    "missing": 173
   },
   "spending": {
     "cap": 25,
-    "known": 0.45873492,
-    "reserved": 1.35522562,
+    "known": 0.675412,
+    "reserved": 1.5719026999999999,
     "unknownEntries": 2,
     "inFlightEntries": 1,
-    "pendingReservedSlots": 1,
+    "pendingReservedSlots": 0,
     "includesPreflight": true,
     "estimatedNotInvoice": true
   }
