@@ -1,0 +1,244 @@
+{
+  "task": "serverless__serverless-5926",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 1,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5926-C-r1-a0/workspace",
+    "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+    "tree": "412e2650d4ea1d4ff09ab27ec7a956a3e31c5ff7"
+  },
+  "runId": "serverless__serverless-5926-C-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 351095.1814,
+  "usage": {
+    "input": 103242,
+    "cacheRead": 466944,
+    "cacheWrite": 0,
+    "output": 8115,
+    "estimatedApiUsd": 0.019051140000000005,
+    "modelCalls": 20,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.019051140000000005,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #getValueFromSource() \"before each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 1,
+          "error": {
+            "message": "Attempted to wrap undefined property getValueFromSls as function",
+            "stack": "TypeError: Attempted to wrap undefined property getValueFromSls as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1342:35)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #getValueFromSource() \"after each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1361:44)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 259,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/Serverless.js",
+    "lib/classes/Variables.js",
+    "lib/plugins/aws/lib/naming.js",
+    "lib/plugins/aws/package/compile/events/websockets/lib/deployment.js"
+  ],
+  "extraChangedFiles": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 20,
+  "editCalls": 3,
+  "verificationCalls": 6,
+  "toolCalls": 41,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T02:10:57.847Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 3066.9859999999753,
+      "parsedFiles": 400,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 91224680,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:11:00.184Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "4b650018538be7073a5f823611095412680bd5122a0cbb485a4fbc1cc543828c",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "7b744e95260c823958a1fa0ea1d75a83586054516dc417c9d1e4aa3c86df8323"
+      },
+      "latencyMs": 1592.767599999992,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21970679,
+      "heapDeltaBytes": 51963120,
+      "graphBytes": 30868703
+    },
+    {
+      "at": "2026-11-10T02:11:01.651Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "4b650018538be7073a5f823611095412680bd5122a0cbb485a4fbc1cc543828c",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "7b744e95260c823958a1fa0ea1d75a83586054516dc417c9d1e4aa3c86df8323"
+      },
+      "latencyMs": 1454.7951999999932,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21970679,
+      "heapDeltaBytes": -36097072,
+      "graphBytes": 30868703
+    },
+    {
+      "at": "2026-11-10T02:11:17.226Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "7dd45f52c6e86e7bde1b48dee29ab1a633335592832325457280aa188b88d663",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "620f13a20890fadea9c519c92a82a7e114bb2be39b680e85fb272710814ccfe4"
+      },
+      "latencyMs": 1578.0970000000088,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21979954,
+      "heapDeltaBytes": 46948264,
+      "graphBytes": 30881897
+    },
+    {
+      "at": "2026-11-10T02:11:18.557Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "7dd45f52c6e86e7bde1b48dee29ab1a633335592832325457280aa188b88d663",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "620f13a20890fadea9c519c92a82a7e114bb2be39b680e85fb272710814ccfe4"
+      },
+      "latencyMs": 1322.1695999999938,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979954,
+      "heapDeltaBytes": 31214600,
+      "graphBytes": 30881897
+    },
+    {
+      "at": "2026-11-10T02:12:50.811Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "6bdb71244aa36954fda92ba0eccfd808dff2eb54b5222a6458d781bd8af6d098",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "9c947b6c80f39b23a658148100609bb70d3e3a309fe4a767343ba4cbba5ea3ce"
+      },
+      "latencyMs": 1540.5194000000483,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21979954,
+      "heapDeltaBytes": 50321128,
+      "graphBytes": 30881897
+    },
+    {
+      "at": "2026-11-10T02:12:52.133Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "6bdb71244aa36954fda92ba0eccfd808dff2eb54b5222a6458d781bd8af6d098",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "9c947b6c80f39b23a658148100609bb70d3e3a309fe4a767343ba4cbba5ea3ce"
+      },
+      "latencyMs": 1308.6106000000145,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979954,
+      "heapDeltaBytes": 7687456,
+      "graphBytes": 30881897
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5926-C-r1-a0\\home\\events\\1794276448908-29474122-79bc-4ba5-930d-101dc348a99b.jsonl",
+  "receiptAudit": {
+    "requests": 20,
+    "finalUsageResponses": 20,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 20,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "resourcePolicySha256": "fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6",
+  "cellId": "serverless__serverless-5926-C-r1",
+  "attempt": 0
+}

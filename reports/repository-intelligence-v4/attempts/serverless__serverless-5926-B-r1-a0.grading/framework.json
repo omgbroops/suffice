@@ -1,0 +1,1847 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 106,
+    "tests": 300,
+    "passes": 296,
+    "pending": 0,
+    "failures": 6,
+    "start": "2026-11-10T02:07:03.210Z",
+    "end": "2026-11-10T02:07:04.889Z",
+    "duration": 1679
+  },
+  "tests": [
+    {
+      "title": "Serverless #constructor() should set the correct config if a config object is passed",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set an empty config object if no config object passed",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set an empty providers object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the Serverless version",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the YamlParser class instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the PluginManager class instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the Utils class instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the Service class instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the servicePath property if it was set in the config object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should set the servicePath property if no config object is given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should have a config object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should have a classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should store the CLI class inside the classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should store the YamlParser class inside the classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should store the PluginManager class inside the classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should store the Utils class inside the classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should store the Service class inside the classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #constructor() should store the Error class inside the classes object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #init() should set an instanceId",
+      "status": "failed",
+      "durationMs": 18,
+      "error": {
+        "message": "expected undefined to match /\\d/",
+        "stack": "AssertionError: expected undefined to match /\\d/\n    at C:\\Users\\Public\\SufficeV4\\grade-serverless__serverless-5926-B-r1-a0\\independent-grade\\lib\\Serverless.test.js:129:40\nFrom previous event:\n    at Context.<anonymous> (lib\\Serverless.test.js:128:60)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Serverless #init() should create a new CLI instance",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Serverless #init() should allow a custom CLI instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #init() should receive the processed input form the CLI instance",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Serverless #init() should resolve after loading the service",
+      "status": "passed",
+      "durationMs": 21,
+      "error": null
+    },
+    {
+      "title": "Serverless #run() should resolve if the stats logging call throws an error / is rejected",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Serverless #run() should resolve if help is displayed or no commands are entered",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #run() should run all the needed functions",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Serverless #setProvider() should set the provider object in the provider object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #getProvider() should return the provider object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Serverless #getVersion() should get the correct Serverless version",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #constructor() should attach serverless instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #constructor() should not set variableSyntax in constructor",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #loadVariableSyntax() should set variableSyntax",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateService() should remove problematic attributes bofore calling populateObjectImpl with the service",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateService() should clear caches and remaining state *before* [pre]populating service",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateService() should clear caches and remaining *after* [pre]populating service",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables fallback should fallback if ${self} syntax fail to populate but fallback is provided",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables fallback should fallback if ${opt} syntax fail to populate but fallback is provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables fallback should fallback if ${env} syntax fail to populate but fallback is provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables fallback file syntax should fallback if file does not exist but fallback is provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables fallback file syntax should fallback if file exists but given key not found and fallback is provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables fallback aws-specific syntax should fallback if ${s3} syntax fail to populate but fallback is provided",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables fallback aws-specific syntax should fallback if ${cf} syntax fail to populate but fallback is provided",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables fallback aws-specific syntax should fallback if ${ssm} syntax fail to populate but fallback is provided",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables fallback aws-specific syntax should throw an error if fallback fails too",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in region values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in stage values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in profile values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in credentials values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in credentials.accessKeyId values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in credentials.secretAccessKey values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService basic population tests should populate variables in credentials.sessionToken values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in region values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in region values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in region values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in stage values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in stage values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in stage values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in profile values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in profile values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in profile values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in credentials values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in credentials values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in credentials values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in credentials.accessKeyId values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in credentials.accessKeyId values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in credentials.accessKeyId values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in credentials.secretAccessKey values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in credentials.secretAccessKey values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in credentials.secretAccessKey values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject CloudFormation variables in credentials.sessionToken values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent CloudFormation service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject S3 variables in credentials.sessionToken values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent S3 service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject SSM variables in credentials.sessionToken values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service rejections should reject recursively dependent SSM service dependencies",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service non-interference must leave the dependent services in their original state",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service non-interference must leave the dependent services in their original state",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service non-interference must leave the dependent services in their original state",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #prepopulateService dependent service non-interference must leave the dependent services in their original state",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getProperties extracts all terminal properties of an object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getProperties ignores self references",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() should populate object and return it",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() should persist keys with dot notation",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly replace self-references",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate embedded variables",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate an overwrite with a default value that is a string",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites where the first value is valid",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites where the middle value is valid",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites where the last value is valid",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites with nested variables in the first value",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites with nested variables in the middle value",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites with nested variables in the last value",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly replace duplicate variable declarations",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should recursively populate, regardless of order and duplication",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep references into deep variables",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables that reference overrides",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep references into deep variables",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables that reference overrides",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle referenced deep variables that reference overrides",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle partial referenced deep variables that reference overrides",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle referenced contained deep variables that reference overrides",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle multiple referenced contained deep variables referencing overrides",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle overrides that are populated by unresolvable deep variables",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle embedded deep variable replacements in overrides",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should deal with overwites that reference embedded deep references",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should preserve whitespace in double-quote literal fallback",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should preserve whitespace in single-quote literal fallback",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should accept whitespace in variables",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables regardless of custom variableSyntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variable continuations regardless of custom variableSyntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables regardless of recursion into custom variableSyntax",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables in complex recursions of custom variableSyntax",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate any given variable only once",
+      "status": "passed",
+      "durationMs": 228,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should still work with a default file name in double or single quotes",
+      "status": "passed",
+      "durationMs": 212,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate any given variable only once regardless of ordering or reference count",
+      "status": "passed",
+      "durationMs": 220,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate async objects with contained variables",
+      "status": "passed",
+      "durationMs": 215,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate variables from filesnames including '@',  e.g scoped npm packages",
+      "status": "passed",
+      "durationMs": 215,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate a \"cyclic\" reference across an unresolved dependency (issue #4687)",
+      "status": "passed",
+      "durationMs": 8,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should reject population of an attribute not exported from a file",
+      "status": "passed",
+      "durationMs": 14,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should call overwrite if overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should allow a single-quoted string if overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should allow a double-quoted string if overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should call getValueFromSource if no overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should warn if an SSM parameter does not exist",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should throw an Error if the SSM request fails",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should run recursively if nested variables provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should run recursively through many nested variables",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should populate string variables as sub string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should populate number variables as sub string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should populate non string variables",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should throw error if populating non string or non number variable as sub string",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should return a given empty string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should return a undelimited string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should split basic comma delimited strings",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should remove leading and following white space",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should remove white space surrounding commas",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should ignore quoted commas",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should deal with a combination of these cases",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should overwrite undefined and null values",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should overwrite empty object values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should not overwrite 0 values",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should not overwrite false values",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should skip getting values once a value has been found",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should properly handle string values containing commas",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSls() should get variable from Serverless Framework provided variables",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "serverless.variables.getValueFromSls is not a function",
+        "stack": "TypeError: serverless.variables.getValueFromSls is not a function\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1473:35)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getValueFromEnv() should get variable from environment variables",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromEnv() should allow top-level references to the environment variables hive",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromOptions() should get variable from options",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromOptions() should allow top-level references to the options hive",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should get variable from self serverless.yml file",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should redirect ${self:service.name} to ${self:service}",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should redirect ${self:provider} to ${self:provider.name}",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should redirect ${self:service.awsKmsKeyArn} to ${self:serviceObject.awsKmsKeyArn}",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should handle self-references to the root of the serverless.yml file",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should work for absolute paths with ~ ",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate an entire variable file",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should get undefined if non existing file and the second argument is true",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate non json/yml files",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate symlinks",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should trim trailing whitespace and new line character",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate from another file when variable is of any type",
+      "status": "passed",
+      "durationMs": 9,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate from a javascript file",
+      "status": "passed",
+      "durationMs": 11,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate an entire variable exported by a javascript file",
+      "status": "passed",
+      "durationMs": 18,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should throw if property exported by a javascript file is not a function",
+      "status": "passed",
+      "durationMs": 13,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate deep object from a javascript file",
+      "status": "passed",
+      "durationMs": 15,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should preserve the exported function context when executing",
+      "status": "passed",
+      "durationMs": 14,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should file variable not using \":\" syntax",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromCf() should get variable from CloudFormation",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromCf() should get variable from CloudFormation of different region",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromCf() should reject CloudFormation variables that do not exist",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromS3() should get variable from S3",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromS3() should throw error if error getting value from S3",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get variable from Ssm using regular-style param",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get variable from Ssm using path-style param",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get encrypted variable from Ssm using extended syntax",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get unencrypted variable from Ssm using extended syntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should ignore bad values for extended syntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should return undefined if SSM parameter does not exist",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should reject if SSM request returns unexpected error",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() Referencing to AWS SecretsManager should NOT parse value as json if not referencing to AWS SecretsManager",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() Referencing to AWS SecretsManager should parse value as json if returned value is json-like",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() Referencing to AWS SecretsManager should get value as text if returned value is NOT json-like",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #getDeeperValue() should get deep values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getDeeperValue() should not throw error if referencing invalid properties",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getDeeperValue() should return a simple deep variable when final deep value is variable",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #getDeeperValue() should return a deep continuation when middle deep value is variable",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should do nothing if variable has valid value.",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should log if variable has null value.",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should log if variable has undefined value.",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should log if variable has empty object value.",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"environment variable\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"option\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"service attribute\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"file\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() when variable string does not match any of syntax should do nothing if variable has null value.",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() when variable string does not match any of syntax should do nothing if variable has undefined value.",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() when variable string does not match any of syntax should do nothing if variable has empty object value.",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeName() should capitalize the first letter",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeName() should have no effect on caps",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeName() should have no effect on the rest of the name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeNameToAlphaNumericOnly() should strip non-alpha-numeric characters",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeNameToAlphaNumericOnly() should apply normalizeName to the remaining characters",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizePathPart() converts `-` to `Dash`",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizePathPart() converts variable declarations (`${var}`) to `VariableVar`",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizePathPart() converts variable declarations prefixes to `VariableVarpath`",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizePathPart() converts variable declarations suffixes to `PathvariableVar`",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizePathPart() converts variable declarations in center to `PathvariableVardir`",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getServiceEndpointRegex() should match the prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getServiceEndpointRegex() should not match a name without the prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getServiceEndpointRegex() should match a name with the prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getStackName() should use the service name & stage if custom stack name not provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getStackName() should use the custom stack name if provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getRolePath() should return `/`",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getRoleName() uses the service name, stage, and region to generate a role name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getRoleLogicalId() should return the expected role name (IamRoleLambdaExecution)",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getPolicyName() should use the stage and service name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLogicalLogGroupName() should prefix the normalized function name to \"LogGroup\"",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLogGroupName() should add the function name to the log group name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getNormalizedFunctionName() should normalize the given functionName",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getNormalizedFunctionName() should normalize the given functionName with an underscore",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #getNormalizedFunctionName() should normalize the given functionName with a dash",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #extractAuthorizerNameFromArn() should extract everything after the last colon and dash",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #extractLambdaNameFromArn() should extract everything after the last colon",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaLogicalId() should normalize the function name and add the logical suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaLogicalIdRegex() should match the suffix",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaLogicalIdRegex() should not match a name without the suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaLogicalIdRegex() should match a name with the suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsApiName() should return the composition of stage & service name if custom name not provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsApiName() should return the custom api name if provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsApiLogicalId() should return the websocket API logical id",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsIntegrationLogicalId() should return the integrations logical id",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaWebsocketsPermissionLogicalId() should return the lambda websocket permission logical id",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getNormalizedWebsocketsRouteKey() should return a normalized version of the route key",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsRouteLogicalId() should return the websockets route logical id",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsDeploymentLogicalId() should return the websockets deployment logical id",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "expected 'WebsocketsDeployment1794276424869' to equal 'WebsocketsDeployment1234'",
+        "stack": "AssertionError: expected 'WebsocketsDeployment1794276424869' to equal 'WebsocketsDeployment1234'\n    at Context.<anonymous> (lib\\plugins\\aws\\lib\\naming.test.js:287:13)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#naming() #getWebsocketsStageLogicalId() should return the websockets stage logical id",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getWebsocketsAuthorizerLogicalId() should return the websockets authorizer logical id",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getApiGatewayName() should return the composition of stage & service name if custom name not provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getApiGatewayName() should return the custom api name if provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #generateApiGatewayDeploymentLogicalId() should return ApiGatewayDeployment with a suffix",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "expected 'ApiGatewayDeployment1794276424872' to equal 'ApiGatewayDeployment1234'",
+        "stack": "AssertionError: expected 'ApiGatewayDeployment1794276424872' to equal 'ApiGatewayDeployment1234'\n    at Context.<anonymous> (lib\\plugins\\aws\\lib\\naming.test.js:323:13)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#naming() #getRestApiLogicalId() should return ApiGatewayRestApi",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getNormalizedAuthorizerName() normalize the authorizer name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getAuthorizerLogicalId() should normalize the authorizer name and add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #extractAuthorizerNameFromArn() should extract the authorizer name from an ARN",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizePath() should normalize each part of the resource path and remove non-alpha-numeric characters",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getResourceLogicalId() should normalize the resource and add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #extractResourceId() should extract the normalized resource name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeMethodName() should capitalize the first letter and lowercase any other characters",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #getMethodLogicalId() ",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getApiKeyLogicalId(keyIndex) should produce the given index with ApiGatewayApiKey as a prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getApiKeyLogicalIdRegex() should match the prefix",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #getApiKeyLogicalIdRegex() should not match a name without the prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getApiKeyLogicalIdRegex() should match a name with the prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getUsagePlanLogicalId() should return ApiGateway usage plan logical id",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #getUsagePlanKeyLogicalId(keyIndex) should produce the given index with ApiGatewayUsagePlanKey as a prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getDeploymentBucketLogicalId() should return \"ServerlessDeploymentBucket\"",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getDeploymentBucketOutputLogicalId() should return \"ServerlessDeploymentBucketName\"",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeBucketName() should remove all non-alpha-numeric characters and capitalize the first letter",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getBucketLogicalId() should normalize the bucket name and add the standard prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #normalizeTopicName() should remove all non-alpha-numeric characters and capitalize the first letter",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getTopicLogicalId() should remove all non-alpha-numeric characters and capitalize the first letter",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getScheduleId() should add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getScheduleLogicalId() should normalize the function name and add the standard suffix including the index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getCloudWatchEventId() should add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getCloudWatchEventLogicalId() should normalize the function name and add the standard suffix including the index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getCloudWatchLogLogicalId() should normalize the function name and add the standard suffix including the index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getCognitoUserPoolLogicalId() should normalize the user pool name and add the standard prefix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaS3PermissionLogicalId() should normalize the function name and add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaSnsPermissionLogicalId() should normalize the function and topic names and add them as prefix and suffix to the standard permission center",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaSchedulePermissionLogicalId() should normalize the function name and add the standard suffix including event index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaCloudWatchEventPermissionLogicalId() should normalize the function name and add the standard suffix including event index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaApiGatewayPermissionLogicalId() should normalize the function name and append the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getIotLogicalId() should normalize the function name and add the standard suffix including the index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaIotPermissionLogicalId() should normalize the function name and add the standard suffix including event index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaAlexaSkillPermissionLogicalId() should normalize the function name and append the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaAlexaSkillPermissionLogicalId() should normalize the function name and append a default suffix if not defined",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaAlexaSmartHomePermissionLogicalId() should normalize the function name and append the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaSnsSubscriptionLogicalId() should normalize the function name and append the standard suffix",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaCloudWatchLogPermissionLogicalId() should normalize the function name and add the standard suffix including event index",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getLambdaCognitoUserPoolPermissionLogicalId() should normalize the function name and add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#naming() #getQueueLogicalId() should normalize the function name and add the standard suffix",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#compileStage() should create a stage resource",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    }
+  ],
+  "hooks": [
+    {
+      "title": "Variables #getValueFromSource() \"before each\" hook for \"should call getValueFromSls if referencing sls var\"",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Attempted to wrap undefined property getValueFromSls as function",
+        "stack": "TypeError: Attempted to wrap undefined property getValueFromSls as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1342:35)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getValueFromSource() \"after each\" hook for \"should call getValueFromSls if referencing sls var\"",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Cannot read properties of undefined (reading 'restore')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1361:44)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    }
+  ]
+}

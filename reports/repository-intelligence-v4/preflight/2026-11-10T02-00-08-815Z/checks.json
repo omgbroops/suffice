@@ -1,0 +1,1092 @@
+{
+  "phase": "preflight-only",
+  "at": "2026-11-10T02:00:08.816Z",
+  "sourceHead": null,
+  "models": [
+    {
+      "id": "gpt-6-luna",
+      "api": "openai-responses",
+      "contextWindow": 272000,
+      "maxTokens": 128000,
+      "cost": {
+        "input": 0.1,
+        "output": 0.5,
+        "cacheRead": 0.01,
+        "cacheWrite": 0.125,
+        "tiers": [
+          {
+            "inputTokensAbove": 272000,
+            "input": 0.2,
+            "output": 0.75,
+            "cacheRead": 0.02,
+            "cacheWrite": 0.25
+          }
+        ]
+      }
+    },
+    {
+      "id": "gpt-6.1-sol",
+      "api": "openai-responses",
+      "contextWindow": 272000,
+      "maxTokens": 128000,
+      "cost": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 0.1,
+        "cacheWrite": 2.5,
+        "tiers": [
+          {
+            "inputTokensAbove": 272000,
+            "input": 4,
+            "output": 15,
+            "cacheRead": 0.2,
+            "cacheWrite": 5
+          }
+        ]
+      }
+    }
+  ],
+  "sourceInputs": {
+    "scripts/preflight-intelligence-v4.mjs": "59e1542d9736bfbbb4d3f1ce406a2390bda6a57aba8753516331cf2e99a93c68",
+    "src/eval-v4/sandbox.mjs": "044d0a1ee78484695baf7e80ea3b26f2495942364174effa3ff696d3dc4a5397",
+    "src/eval-v4/design.mjs": "2c4851231d3565571fd4fa64d19668a1a23cb33e24e3ed8f2452e1f10c94094c",
+    "packages/cli/src/intelligence/graph.mjs": "66acdaacb6a7ac644f744892819154e7416614b086cb81031798958b5b43100a",
+    "packages/cli/src/intelligence/module-resolution.mjs": "32bcdfb4535fb7ec40092859a5aedfe3da08cddd92544da1d04503421cbf47d1",
+    "packages/cli/src/intelligence/on-demand.mjs": "1da1e4cdefdbedd4280228a1c91a14b18e3959d36c2b9f40ffbe248c4e06aeba",
+    "packages/cli/src/intelligence/parse.mjs": "6796bca1f9e265be0072ebddee379dc5141188a303f8560fb128405d428c8824",
+    "packages/cli/src/intelligence/source-files.mjs": "61b10c87363943f88cd1ee797646611a0172d9e1c261990306707169b0840abe",
+    "packages/cli/src/intelligence/tools.mjs": "0a38d8405f80ca6e4f6d9a287a7cf1504d47edf9e79cef4537625d227e1fe840",
+    "packages/cli/src/interactive.mjs": "e395edcc50b5520edb60c7d88171e893fab0b186d3d6f6a5a73186c74b62bd26",
+    "packages/cli/src/main.mjs": "74f40a640017a56dd7d0758eda8236131ce0c86e927cabaef7a94cc99db50389",
+    "packages/cli/src/navigation.mjs": "fda7c7f0b7c058772fd66b3fb56b66cdeff12787082f2518ebf136f8d43873c9",
+    "packages/cli/src/options.mjs": "ffcc4a00f9b1038b54f4e5a68349b2cc7b4bb57355bf1f2c0865573d636d850c",
+    "packages/cli/src/projects.mjs": "920dffed714fe56c5040e826615f332df346da01c443ece463a49c76c9dc4b10",
+    "packages/cli/src/session.mjs": "6a848d3aab147e1e9caecdb6e66e3a2763490a5360a022930fdc4bc57b237da0",
+    "packages/cli/src/tools.mjs": "4c81ad839a19eec88bf93b1e4a1125c42e82214233603d0186401b7b89d74d3d",
+    "packages/cli/src/workspace.mjs": "f0b8300e39bde271ef92f62af35aebe05531834130d67e71dcbdb4011e80955f"
+  },
+  "maxConcurrent": 1,
+  "temperatureC": null,
+  "initialFreeRAM": 892592128,
+  "sandbox": {
+    "exitCode": 0,
+    "output": "{\"absoluteDenied\":true,\"linkDenied\":true,\"childDenied\":true,\"workspaceWritable\":true,\"networkDenied\":true}\n",
+    "executableSha256": "dd13bdb162a184fa04039488b234a8258ef9b76f84e926c505d5742b19249a6a",
+    "backend": "native Windows MXC",
+    "documentation": "https://learn.chatgpt.com/docs/windows/windows-sandbox#mxc-compatibility"
+  },
+  "graph": {
+    "first": {
+      "revision": {
+        "head": null,
+        "sourceContentVersion": "85b2e5ad9e2819936ae3f8674c1346c1887f5d569f6470fc8ba52cf1967660fc",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "affdd0f6640669f8f407a7663aa2d8abea1f30e6e51242224788e9ee6da08df2"
+      },
+      "coverage": {
+        "indexedFiles": 4,
+        "unparsed": [],
+        "omittedUnparsed": 0,
+        "unresolvedCount": 14,
+        "fileSelection": {
+          "method": "filesystem",
+          "reason": "git-ignore-unavailable",
+          "candidates": 4,
+          "ignored": 0
+        },
+        "moduleResolution": "explicit existing paths",
+        "configurationFiles": [],
+        "omittedConfigurationFiles": 0,
+        "scope": "nonhidden nonsymlink JS/TS <=128 KiB; ignored untracked files excluded in independent Git roots; configured TS compiler paths or explicit ESM paths; no runtime coverage guarantee"
+      },
+      "metrics": {
+        "latencyMs": 184.55459999999948,
+        "parsedFiles": 4,
+        "fileCount": 4,
+        "cacheBytes": 7797,
+        "heapDeltaBytes": 1682728,
+        "graphBytes": 14110
+      },
+      "symbols": [
+        {
+          "id": "src/account.mjs#module/import:normalizeName:0",
+          "name": "normalizeName",
+          "kind": "import",
+          "path": "src/account.mjs",
+          "start": 1,
+          "end": 1,
+          "hash": "813eda7feeb12582491d5fc86013d82bbf6b65eaeaed6475d85e3ff244980558",
+          "import": {
+            "module": "./names.mjs",
+            "name": "normalizeName"
+          }
+        },
+        {
+          "id": "src/names.mjs#module/function:normalizeName:0",
+          "name": "normalizeName",
+          "kind": "function",
+          "path": "src/names.mjs",
+          "start": 1,
+          "end": 1,
+          "hash": "b960d6e7be77e233430118301bd9837fc696cb29544cfc79326aca2ccd57e9fb"
+        }
+      ],
+      "total": 2,
+      "omitted": 0,
+      "relationships": [
+        {
+          "kind": "defines",
+          "from": "module:src/account.mjs",
+          "to": "src/account.mjs#module/import:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/account.mjs",
+            "line": 1,
+            "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+            "syntax": "declaration"
+          }
+        },
+        {
+          "kind": "imports",
+          "from": "src/account.mjs#module/import:normalizeName:0",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/account.mjs",
+            "line": 1,
+            "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+            "syntax": "ImportBinding"
+          },
+          "via": [
+            {
+              "path": "src/account.mjs",
+              "line": 1,
+              "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+              "syntax": "ImportBinding"
+            },
+            {
+              "path": "src/names.mjs",
+              "line": 1,
+              "column": 0,
+              "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+              "syntax": "ExportNamedDeclaration"
+            }
+          ]
+        },
+        {
+          "kind": "call",
+          "from": "src/account.mjs#module/function:accountKey:0",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "binding": "src/account.mjs#module/import:normalizeName:0",
+          "name": "normalizeName",
+          "status": "resolved",
+          "semantics": "lexical-binding-not-runtime-value",
+          "evidence": {
+            "path": "src/account.mjs",
+            "line": 2,
+            "column": 42,
+            "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+            "syntax": "Identifier"
+          },
+          "via": [
+            {
+              "path": "src/account.mjs",
+              "line": 1,
+              "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+              "syntax": "ImportBinding"
+            },
+            {
+              "path": "src/names.mjs",
+              "line": 1,
+              "column": 0,
+              "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+              "syntax": "ExportNamedDeclaration"
+            }
+          ]
+        },
+        {
+          "kind": "defines",
+          "from": "module:src/names.mjs",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+            "syntax": "declaration"
+          }
+        },
+        {
+          "kind": "exports",
+          "name": "normalizeName",
+          "from": "module:src/names.mjs",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+            "syntax": "ExportNamedDeclaration"
+          },
+          "via": [
+            {
+              "path": "src/names.mjs",
+              "line": 1,
+              "column": 0,
+              "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+              "syntax": "ExportNamedDeclaration"
+            }
+          ]
+        },
+        {
+          "kind": "reference",
+          "from": "src/names.mjs#module/function:normalizeName:0",
+          "to": "src/names.mjs#module/function:normalizeName:0/parameter:value:0",
+          "binding": "src/names.mjs#module/function:normalizeName:0/parameter:value:0",
+          "name": "value",
+          "status": "resolved",
+          "semantics": "lexical-binding-not-runtime-value",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 41,
+            "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+            "syntax": "Identifier"
+          },
+          "via": []
+        }
+      ],
+      "omittedRelationships": 0,
+      "unresolved": [
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "module",
+          "reason": "commonjs",
+          "specifier": "child_process",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "require",
+          "from": "module:native-verify.cjs",
+          "kind": "call",
+          "binding": null,
+          "reason": "unbound",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "process",
+          "from": "module:native-verify.cjs",
+          "kind": "reference",
+          "binding": null,
+          "reason": "unbound",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 38,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "String",
+          "from": "src/names.mjs#module/function:normalizeName:0",
+          "kind": "call",
+          "binding": null,
+          "reason": "unbound",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "4feb13e06ca84e31e1769a9ec1ceed3efaf3a15277806dffbabc6ccf4c560486",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "column": 156,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "module",
+          "specifier": "node:test",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "import"
+          }
+        },
+        {
+          "kind": "module",
+          "specifier": "node:assert/strict",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "import"
+          }
+        },
+        {
+          "kind": "import",
+          "name": "test",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "ImportBinding"
+          }
+        },
+        {
+          "kind": "import",
+          "name": "assert",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "ImportBinding"
+          }
+        },
+        {
+          "name": "test",
+          "from": "module:test/public.test.mjs",
+          "kind": "call",
+          "binding": "test/public.test.mjs#module/import:test:0",
+          "reason": "external-or-configured-alias",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "column": 117,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "assert",
+          "from": "module:test/public.test.mjs",
+          "kind": "reference",
+          "binding": "test/public.test.mjs#module/import:assert:0",
+          "reason": "external-or-configured-alias",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "column": 156,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        }
+      ]
+    },
+    "before": {
+      "revision": {
+        "head": null,
+        "sourceContentVersion": "85b2e5ad9e2819936ae3f8674c1346c1887f5d569f6470fc8ba52cf1967660fc",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "affdd0f6640669f8f407a7663aa2d8abea1f30e6e51242224788e9ee6da08df2"
+      },
+      "coverage": {
+        "indexedFiles": 4,
+        "unparsed": [],
+        "omittedUnparsed": 0,
+        "unresolvedCount": 14,
+        "fileSelection": {
+          "method": "filesystem",
+          "reason": "git-ignore-unavailable",
+          "candidates": 4,
+          "ignored": 0
+        },
+        "moduleResolution": "explicit existing paths",
+        "configurationFiles": [],
+        "omittedConfigurationFiles": 0,
+        "scope": "nonhidden nonsymlink JS/TS <=128 KiB; ignored untracked files excluded in independent Git roots; configured TS compiler paths or explicit ESM paths; no runtime coverage guarantee"
+      },
+      "metrics": {
+        "latencyMs": 143.85289999999986,
+        "parsedFiles": 0,
+        "fileCount": 4,
+        "cacheBytes": 7797,
+        "heapDeltaBytes": 635320,
+        "graphBytes": 14110
+      },
+      "baselineRevision": {
+        "head": null,
+        "sourceContentVersion": "85b2e5ad9e2819936ae3f8674c1346c1887f5d569f6470fc8ba52cf1967660fc",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "affdd0f6640669f8f407a7663aa2d8abea1f30e6e51242224788e9ee6da08df2"
+      },
+      "configurationChanged": false,
+      "configurationFilesChanged": [],
+      "seedReason": "explicit-paths",
+      "seeds": [
+        "src/names.mjs"
+      ],
+      "changedFiles": [],
+      "changedSymbols": [],
+      "impacted": [
+        {
+          "path": "src/names.mjs",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        },
+        {
+          "path": "src/account.mjs",
+          "depth": 1,
+          "status": "inferred",
+          "reason": "reverse-static-module-reachability",
+          "evidence": [
+            {
+              "kind": "module",
+              "from": "module:src/account.mjs",
+              "to": "module:src/names.mjs",
+              "status": "resolved",
+              "evidence": {
+                "path": "src/account.mjs",
+                "line": 1,
+                "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+                "syntax": "import"
+              },
+              "specifier": "./names.mjs"
+            }
+          ]
+        },
+        {
+          "path": "test/public.test.mjs",
+          "depth": 2,
+          "status": "inferred",
+          "reason": "reverse-static-module-reachability",
+          "evidence": [
+            {
+              "kind": "module",
+              "from": "module:test/public.test.mjs",
+              "to": "module:src/account.mjs",
+              "status": "resolved",
+              "evidence": {
+                "path": "test/public.test.mjs",
+                "line": 1,
+                "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+                "syntax": "import"
+              },
+              "specifier": "../src/account.mjs"
+            },
+            {
+              "kind": "module",
+              "from": "module:src/account.mjs",
+              "to": "module:src/names.mjs",
+              "status": "resolved",
+              "evidence": {
+                "path": "src/account.mjs",
+                "line": 1,
+                "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+                "syntax": "import"
+              },
+              "specifier": "./names.mjs"
+            }
+          ]
+        }
+      ],
+      "total": {
+        "seeds": 1,
+        "changedFiles": 0,
+        "changedSymbols": 0,
+        "impacted": 3,
+        "configurationFilesChanged": 0
+      },
+      "omitted": 0,
+      "omittedSeeds": 0,
+      "omittedChangedFiles": 0,
+      "omittedChangedSymbols": 0,
+      "page": {
+        "offset": 0,
+        "limit": 40,
+        "nextOffset": null
+      },
+      "warning": "Potential impact, not behavioral correctness. Unresolved dependencies may hide consumers. Configuration changes conservatively seed TS files. Arrays are paginated; check totals and omitted counts."
+    },
+    "changed": {
+      "revision": {
+        "head": null,
+        "sourceContentVersion": "056dc158705cf33886fee7c071d213c6162b4faaea621e4506dcf895801cbb29",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "d18bed48a301af63002ed5b6e1a893f8733d9000cbf2b33ca532c524ad7abdbb"
+      },
+      "coverage": {
+        "indexedFiles": 4,
+        "unparsed": [],
+        "omittedUnparsed": 0,
+        "unresolvedCount": 15,
+        "fileSelection": {
+          "method": "filesystem",
+          "reason": "git-ignore-unavailable",
+          "candidates": 4,
+          "ignored": 0
+        },
+        "moduleResolution": "explicit existing paths",
+        "configurationFiles": [],
+        "omittedConfigurationFiles": 0,
+        "scope": "nonhidden nonsymlink JS/TS <=128 KiB; ignored untracked files excluded in independent Git roots; configured TS compiler paths or explicit ESM paths; no runtime coverage guarantee"
+      },
+      "metrics": {
+        "latencyMs": 149.00580000000082,
+        "parsedFiles": 1,
+        "fileCount": 4,
+        "cacheBytes": 8005,
+        "heapDeltaBytes": 863808,
+        "graphBytes": 14340
+      },
+      "baselineRevision": {
+        "head": null,
+        "sourceContentVersion": "85b2e5ad9e2819936ae3f8674c1346c1887f5d569f6470fc8ba52cf1967660fc",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "affdd0f6640669f8f407a7663aa2d8abea1f30e6e51242224788e9ee6da08df2"
+      },
+      "configurationChanged": false,
+      "configurationFilesChanged": [],
+      "seedReason": "explicit-paths",
+      "seeds": [
+        "src/names.mjs"
+      ],
+      "changedFiles": [
+        "src/names.mjs"
+      ],
+      "changedSymbols": [
+        {
+          "id": "src/names.mjs#module/function:normalizeName:0",
+          "path": "src/names.mjs",
+          "name": "normalizeName",
+          "change": "modified"
+        }
+      ],
+      "impacted": [
+        {
+          "path": "src/names.mjs",
+          "depth": 0,
+          "status": "seed",
+          "evidence": []
+        },
+        {
+          "path": "src/account.mjs",
+          "depth": 1,
+          "status": "inferred",
+          "reason": "reverse-static-module-reachability",
+          "evidence": [
+            {
+              "kind": "module",
+              "from": "module:src/account.mjs",
+              "to": "module:src/names.mjs",
+              "status": "resolved",
+              "evidence": {
+                "path": "src/account.mjs",
+                "line": 1,
+                "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+                "syntax": "import"
+              },
+              "specifier": "./names.mjs"
+            }
+          ]
+        },
+        {
+          "path": "test/public.test.mjs",
+          "depth": 2,
+          "status": "inferred",
+          "reason": "reverse-static-module-reachability",
+          "evidence": [
+            {
+              "kind": "module",
+              "from": "module:test/public.test.mjs",
+              "to": "module:src/account.mjs",
+              "status": "resolved",
+              "evidence": {
+                "path": "test/public.test.mjs",
+                "line": 1,
+                "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+                "syntax": "import"
+              },
+              "specifier": "../src/account.mjs"
+            },
+            {
+              "kind": "module",
+              "from": "module:src/account.mjs",
+              "to": "module:src/names.mjs",
+              "status": "resolved",
+              "evidence": {
+                "path": "src/account.mjs",
+                "line": 1,
+                "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+                "syntax": "import"
+              },
+              "specifier": "./names.mjs"
+            }
+          ]
+        }
+      ],
+      "total": {
+        "seeds": 1,
+        "changedFiles": 1,
+        "changedSymbols": 1,
+        "impacted": 3,
+        "configurationFilesChanged": 0
+      },
+      "omitted": 0,
+      "omittedSeeds": 0,
+      "omittedChangedFiles": 0,
+      "omittedChangedSymbols": 0,
+      "page": {
+        "offset": 0,
+        "limit": 40,
+        "nextOffset": null
+      },
+      "warning": "Potential impact, not behavioral correctness. Unresolved dependencies may hide consumers. Configuration changes conservatively seed TS files. Arrays are paginated; check totals and omitted counts."
+    },
+    "cached": {
+      "revision": {
+        "head": null,
+        "sourceContentVersion": "056dc158705cf33886fee7c071d213c6162b4faaea621e4506dcf895801cbb29",
+        "configurationVersion": "d2291070f629645ba928b6a91135e62dfba2abfd815ade4058b02abd90889f93",
+        "contentVersion": "d18bed48a301af63002ed5b6e1a893f8733d9000cbf2b33ca532c524ad7abdbb"
+      },
+      "coverage": {
+        "indexedFiles": 4,
+        "unparsed": [],
+        "omittedUnparsed": 0,
+        "unresolvedCount": 15,
+        "fileSelection": {
+          "method": "filesystem",
+          "reason": "git-ignore-unavailable",
+          "candidates": 4,
+          "ignored": 0
+        },
+        "moduleResolution": "explicit existing paths",
+        "configurationFiles": [],
+        "omittedConfigurationFiles": 0,
+        "scope": "nonhidden nonsymlink JS/TS <=128 KiB; ignored untracked files excluded in independent Git roots; configured TS compiler paths or explicit ESM paths; no runtime coverage guarantee"
+      },
+      "metrics": {
+        "latencyMs": 155.07409999999982,
+        "parsedFiles": 0,
+        "fileCount": 4,
+        "cacheBytes": 8005,
+        "heapDeltaBytes": 562592,
+        "graphBytes": 14340
+      },
+      "symbols": [
+        {
+          "id": "src/account.mjs#module/import:normalizeName:0",
+          "name": "normalizeName",
+          "kind": "import",
+          "path": "src/account.mjs",
+          "start": 1,
+          "end": 1,
+          "hash": "813eda7feeb12582491d5fc86013d82bbf6b65eaeaed6475d85e3ff244980558",
+          "import": {
+            "module": "./names.mjs",
+            "name": "normalizeName"
+          }
+        },
+        {
+          "id": "src/names.mjs#module/function:normalizeName:0",
+          "name": "normalizeName",
+          "kind": "function",
+          "path": "src/names.mjs",
+          "start": 1,
+          "end": 1,
+          "hash": "fb9a6ce49f15b1bc2ba30434835799906e74846f4ab986a2d2676b913d28aa43"
+        }
+      ],
+      "total": 2,
+      "omitted": 0,
+      "relationships": [
+        {
+          "kind": "defines",
+          "from": "module:src/account.mjs",
+          "to": "src/account.mjs#module/import:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/account.mjs",
+            "line": 1,
+            "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+            "syntax": "declaration"
+          }
+        },
+        {
+          "kind": "imports",
+          "from": "src/account.mjs#module/import:normalizeName:0",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/account.mjs",
+            "line": 1,
+            "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+            "syntax": "ImportBinding"
+          },
+          "via": [
+            {
+              "path": "src/account.mjs",
+              "line": 1,
+              "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+              "syntax": "ImportBinding"
+            },
+            {
+              "path": "src/names.mjs",
+              "line": 1,
+              "column": 0,
+              "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+              "syntax": "ExportNamedDeclaration"
+            }
+          ]
+        },
+        {
+          "kind": "call",
+          "from": "src/account.mjs#module/function:accountKey:0",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "binding": "src/account.mjs#module/import:normalizeName:0",
+          "name": "normalizeName",
+          "status": "resolved",
+          "semantics": "lexical-binding-not-runtime-value",
+          "evidence": {
+            "path": "src/account.mjs",
+            "line": 2,
+            "column": 42,
+            "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+            "syntax": "Identifier"
+          },
+          "via": [
+            {
+              "path": "src/account.mjs",
+              "line": 1,
+              "fileVersion": "8f9b2935d65ea62f838a74fa4cf18d715b7e8b48d2deff4b33f79a19f519ab01",
+              "syntax": "ImportBinding"
+            },
+            {
+              "path": "src/names.mjs",
+              "line": 1,
+              "column": 0,
+              "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+              "syntax": "ExportNamedDeclaration"
+            }
+          ]
+        },
+        {
+          "kind": "defines",
+          "from": "module:src/names.mjs",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "declaration"
+          }
+        },
+        {
+          "kind": "exports",
+          "name": "normalizeName",
+          "from": "module:src/names.mjs",
+          "to": "src/names.mjs#module/function:normalizeName:0",
+          "status": "resolved",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "ExportNamedDeclaration"
+          },
+          "via": [
+            {
+              "path": "src/names.mjs",
+              "line": 1,
+              "column": 0,
+              "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+              "syntax": "ExportNamedDeclaration"
+            }
+          ]
+        },
+        {
+          "kind": "reference",
+          "from": "src/names.mjs#module/function:normalizeName:0",
+          "to": "src/names.mjs#module/function:normalizeName:0/parameter:value:0",
+          "binding": "src/names.mjs#module/function:normalizeName:0/parameter:value:0",
+          "name": "value",
+          "status": "resolved",
+          "semantics": "lexical-binding-not-runtime-value",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 41,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "Identifier"
+          },
+          "via": []
+        }
+      ],
+      "omittedRelationships": 0,
+      "unresolved": [
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "module",
+          "reason": "commonjs",
+          "specifier": "child_process",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "require",
+          "from": "module:native-verify.cjs",
+          "kind": "call",
+          "binding": null,
+          "reason": "unbound",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 0,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "process",
+          "from": "module:native-verify.cjs",
+          "kind": "reference",
+          "binding": null,
+          "reason": "unbound",
+          "evidence": {
+            "path": "native-verify.cjs",
+            "line": 1,
+            "column": 38,
+            "fileVersion": "5273880a20d0a9c84bed9864b5140d2ef80cc8cd597d9e76ce35ed41ec2e03f9",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "String",
+          "from": "src/names.mjs#module/function:normalizeName:0",
+          "kind": "call",
+          "binding": null,
+          "reason": "unbound",
+          "evidence": {
+            "path": "src/names.mjs",
+            "line": 1,
+            "column": 34,
+            "fileVersion": "5775fc2a0e153cf1a0e4c2d351ce4de82c3d58293af87dffe921a2ffc9a3510c",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "call",
+          "reason": "dynamic-dispatch",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "column": 156,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "CallExpression"
+          },
+          "status": "unresolved"
+        },
+        {
+          "kind": "module",
+          "specifier": "node:test",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "import"
+          }
+        },
+        {
+          "kind": "module",
+          "specifier": "node:assert/strict",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "import"
+          }
+        },
+        {
+          "kind": "import",
+          "name": "test",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "ImportBinding"
+          }
+        },
+        {
+          "kind": "import",
+          "name": "assert",
+          "reason": "external-or-configured-alias",
+          "status": "unresolved",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "ImportBinding"
+          }
+        },
+        {
+          "name": "test",
+          "from": "module:test/public.test.mjs",
+          "kind": "call",
+          "binding": "test/public.test.mjs#module/import:test:0",
+          "reason": "external-or-configured-alias",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "column": 117,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        },
+        {
+          "name": "assert",
+          "from": "module:test/public.test.mjs",
+          "kind": "reference",
+          "binding": "test/public.test.mjs#module/import:assert:0",
+          "reason": "external-or-configured-alias",
+          "evidence": {
+            "path": "test/public.test.mjs",
+            "line": 1,
+            "column": 156,
+            "fileVersion": "f99bb0bb62adfabe4ab046143b99844b6e2bd5f1c150089af998ed242b317ec4",
+            "syntax": "Identifier"
+          },
+          "status": "unresolved"
+        }
+      ]
+    }
+  },
+  "valid": true
+}

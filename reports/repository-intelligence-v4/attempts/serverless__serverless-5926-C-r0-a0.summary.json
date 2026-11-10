@@ -1,0 +1,354 @@
+{
+  "task": "serverless__serverless-5926",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5926-C-r0-a0/workspace",
+    "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+    "tree": "412e2650d4ea1d4ff09ab27ec7a956a3e31c5ff7"
+  },
+  "runId": "serverless__serverless-5926-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 404325.85020000004,
+  "usage": {
+    "input": 99383,
+    "cacheRead": 892672,
+    "cacheWrite": 0,
+    "output": 12845,
+    "estimatedApiUsd": 0.02528752,
+    "modelCalls": 24,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.02528752,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #getValueFromSource() \"before each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 1,
+          "error": {
+            "message": "Attempted to wrap undefined property getValueFromSls as function",
+            "stack": "TypeError: Attempted to wrap undefined property getValueFromSls as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1342:35)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #getValueFromSource() \"after each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1361:44)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 259,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "docs/providers/aws/guide/resources.md",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/Serverless.js",
+    "lib/classes/Variables.js",
+    "lib/plugins/aws/lib/naming.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/websockets/lib/deployment.js"
+  ],
+  "extraChangedFiles": [
+    "docs/providers/aws/guide/resources.md",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 24,
+  "editCalls": 6,
+  "verificationCalls": 10,
+  "toolCalls": 48,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-09T23:59:52.887Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 2891.7962000000116,
+      "parsedFiles": 400,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 93668904,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-09T23:59:55.178Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "e4c4b616627de3ae6cf7e0c3e884ba26518c4ce24a435a74a279735cf6d1d4d1",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "6cf48665972c495340987c023e384d2fdf312cca28cff4f6946699d8a4466452"
+      },
+      "latencyMs": 1591.143700000015,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21981668,
+      "heapDeltaBytes": 51904664,
+      "graphBytes": 30885428
+    },
+    {
+      "at": "2026-11-09T23:59:56.539Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "e4c4b616627de3ae6cf7e0c3e884ba26518c4ce24a435a74a279735cf6d1d4d1",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "6cf48665972c495340987c023e384d2fdf312cca28cff4f6946699d8a4466452"
+      },
+      "latencyMs": 1349.6753999999783,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21981668,
+      "heapDeltaBytes": -35942072,
+      "graphBytes": 30885428
+    },
+    {
+      "at": "2026-11-10T00:00:12.619Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "063e170803550492e337742b2bd19d7e5475fc8eca5a65f6bf41a00c3b8ac3f1",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e7ace3630710336741f9ba328c25c1069793a9b26ed118fa1f4650f8735986ee"
+      },
+      "latencyMs": 1570.84169999999,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21982176,
+      "heapDeltaBytes": 106699984,
+      "graphBytes": 30886140
+    },
+    {
+      "at": "2026-11-10T00:00:13.986Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "063e170803550492e337742b2bd19d7e5475fc8eca5a65f6bf41a00c3b8ac3f1",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e7ace3630710336741f9ba328c25c1069793a9b26ed118fa1f4650f8735986ee"
+      },
+      "latencyMs": 1356.3435999999929,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21982176,
+      "heapDeltaBytes": -89171920,
+      "graphBytes": 30886140
+    },
+    {
+      "at": "2026-11-10T00:00:33.110Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "063e170803550492e337742b2bd19d7e5475fc8eca5a65f6bf41a00c3b8ac3f1",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e7ace3630710336741f9ba328c25c1069793a9b26ed118fa1f4650f8735986ee"
+      },
+      "latencyMs": 1344.4431999999797,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21982176,
+      "heapDeltaBytes": -12441216,
+      "graphBytes": 30886140
+    },
+    {
+      "at": "2026-11-10T00:00:34.442Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "063e170803550492e337742b2bd19d7e5475fc8eca5a65f6bf41a00c3b8ac3f1",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e7ace3630710336741f9ba328c25c1069793a9b26ed118fa1f4650f8735986ee"
+      },
+      "latencyMs": 1322.9794999999867,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21982176,
+      "heapDeltaBytes": 30857096,
+      "graphBytes": 30886140
+    },
+    {
+      "at": "2026-11-10T00:00:57.240Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "fbe3830b423ce8ba6f7db7a31cc3c7ebcad5fd03f2b6c9929aed02070abe5562",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "84048ea37ae9e754e904a810551ca76b62071cf2bc955757c0a81a0cc13d9370"
+      },
+      "latencyMs": 1613.8944999999949,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21995859,
+      "heapDeltaBytes": 49714296,
+      "graphBytes": 30905561
+    },
+    {
+      "at": "2026-11-10T00:00:58.584Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "fbe3830b423ce8ba6f7db7a31cc3c7ebcad5fd03f2b6c9929aed02070abe5562",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "84048ea37ae9e754e904a810551ca76b62071cf2bc955757c0a81a0cc13d9370"
+      },
+      "latencyMs": 1335.0976000000373,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21995859,
+      "heapDeltaBytes": -71472280,
+      "graphBytes": 30905561
+    },
+    {
+      "at": "2026-11-10T00:01:08.538Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "fbe3830b423ce8ba6f7db7a31cc3c7ebcad5fd03f2b6c9929aed02070abe5562",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "84048ea37ae9e754e904a810551ca76b62071cf2bc955757c0a81a0cc13d9370"
+      },
+      "latencyMs": 1351.4115999999922,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21995859,
+      "heapDeltaBytes": 30904528,
+      "graphBytes": 30905561
+    },
+    {
+      "at": "2026-11-10T00:01:09.864Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "fbe3830b423ce8ba6f7db7a31cc3c7ebcad5fd03f2b6c9929aed02070abe5562",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "84048ea37ae9e754e904a810551ca76b62071cf2bc955757c0a81a0cc13d9370"
+      },
+      "latencyMs": 1317.8199000000022,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21995859,
+      "heapDeltaBytes": -19936080,
+      "graphBytes": 30905561
+    },
+    {
+      "at": "2026-11-10T00:02:40.689Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "6af09fd55d382e60d77bfc5c55265511881ed5b23a067c63f7e7d84dfaf7287e",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e189cfc95efea58bb5e64495af3facd8ffa72c8a29efc969857dafba0b4f0820"
+      },
+      "latencyMs": 1518.2324000000372,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21995859,
+      "heapDeltaBytes": 28516656,
+      "graphBytes": 30905561
+    },
+    {
+      "at": "2026-11-10T00:02:41.994Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "6af09fd55d382e60d77bfc5c55265511881ed5b23a067c63f7e7d84dfaf7287e",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e189cfc95efea58bb5e64495af3facd8ffa72c8a29efc969857dafba0b4f0820"
+      },
+      "latencyMs": 1292.5819000000483,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21995859,
+      "heapDeltaBytes": 5674872,
+      "graphBytes": 30905561
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5926-C-r0-a0\\home\\events\\1794268605241-5f1f2a7b-ec38-4433-b0b8-2a260f9d1f15.jsonl",
+  "receiptAudit": {
+    "requests": 24,
+    "finalUsageResponses": 24,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 24,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "cellId": "serverless__serverless-5926-C-r0",
+  "attempt": 0
+}

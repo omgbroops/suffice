@@ -1,0 +1,63 @@
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
+index 57e16cc..bd9d14d 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
+@@ -20,6 +20,19 @@ module.exports = {
+       },
+     });
+ 
++    const customResources = this.serverless.service.resources &&
++      this.serverless.service.resources.Resources;
++    _.forEach(customResources, (resource) => {
++      if (resource.Type !== 'AWS::ApiGateway::BasePathMapping') {
++        return;
++      }
++
++      resource.DependsOn = _.union(
++        [this.apiGatewayDeploymentLogicalId],
++        [].concat(resource.DependsOn || [])
++      );
++    });
++
+     // create CLF Output for endpoint
+     _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Outputs, {
+       ServiceEndpoint: {
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
+index a3354e0..a3f7103 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
+@@ -51,6 +51,34 @@ describe('#compileDeployment()', () => {
+     })
+   );
+ 
++  it('should make custom base path mappings depend on the deployment', () => {
++    serverless.service.resources = {
++      Resources: {
++        BasePathMapping: {
++          Type: 'AWS::ApiGateway::BasePathMapping',
++          DependsOn: 'CustomDomain',
++        },
++        AnotherBasePathMapping: {
++          Type: 'AWS::ApiGateway::BasePathMapping',
++        },
++        UnrelatedResource: {
++          Type: 'AWS::ApiGateway::DomainName',
++        },
++      },
++    };
++
++    return awsCompileApigEvents.compileDeployment().then(() => {
++      const deploymentLogicalId = awsCompileApigEvents.apiGatewayDeploymentLogicalId;
++      const resources = serverless.service.resources.Resources;
++
++      expect(resources.BasePathMapping.DependsOn)
++        .to.deep.equal([deploymentLogicalId, 'CustomDomain']);
++      expect(resources.AnotherBasePathMapping.DependsOn)
++        .to.deep.equal([deploymentLogicalId]);
++      expect(resources.UnrelatedResource.DependsOn).to.equal(undefined);
++    });
++  });
++
+   it('should create a deployment resource with description', () => {
+     awsCompileApigEvents.serverless.service.provider.apiGateway = {
+       description: 'Some Description',

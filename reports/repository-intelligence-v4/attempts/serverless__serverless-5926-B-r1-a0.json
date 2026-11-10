@@ -1,0 +1,730 @@
+{
+  "task": "serverless__serverless-5926",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 1,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5926-B-r1-a0/workspace",
+    "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+    "tree": "412e2650d4ea1d4ff09ab27ec7a956a3e31c5ff7"
+  },
+  "runId": "serverless__serverless-5926-B-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 280377.76359999995,
+  "usage": {
+    "input": 51242,
+    "cacheRead": 552704,
+    "cacheWrite": 0,
+    "output": 8065,
+    "estimatedApiUsd": 0.01468374,
+    "modelCalls": 18,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.01468374,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #getValueFromSource() \"before each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Attempted to wrap undefined property getValueFromSls as function",
+            "stack": "TypeError: Attempted to wrap undefined property getValueFromSls as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1342:35)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #getValueFromSource() \"after each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1361:44)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 259,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/Serverless.js",
+    "lib/classes/Variables.js",
+    "lib/plugins/aws/lib/naming.js",
+    "lib/plugins/aws/package/compile/events/websockets/lib/deployment.js"
+  ],
+  "extraChangedFiles": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 18,
+  "editCalls": 2,
+  "verificationCalls": 6,
+  "toolCalls": 39,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T02:02:13.243Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-10T02:02:16.668Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Resolve the upstream engineering issue below. Work in this checkout using the preprovisioned dependencies. The bash tool executes PowerShell 7 with no profile inside an isolated Windows filesystem; external networking is disabled. You may change production code, public tests and documentation. Preserve package metadata, dependency locks, configuration, native-verify.cjs, verification.json and .v4-* verification helpers. Do not install packages or attempt to access other workspaces. Run node native-verify.cjs for the repository-derived public smoke suite; you may run it with --tests-json PATH to test other existing public unit files. Independent grading reconstructs production changes in a pristine checkout and applies held-out upstream tests. Existing public snapshots may predate the requested behavior; do not undo that behavior merely to satisfy old snapshots.\n\nNot possible to create resources that depend on the ApiGateway::Deployment\n<!--\n1. If you have a question and not a bug/feature request please ask it at http://forum.serverless.com\n2. Please check if an issue already exists so there are no duplicates\n3. Check out and follow our Guidelines: https://github.com/serverless/serverless/blob/master/CONTRIBUTING.md\n4. Fill out the whole template so we have a good overview on the issue\n5. Do not remove any section of the template. If something is not applicable leave it empty but leave it in the Issue\n6. Please follow the template, otherwise we'll have to ask you to update it\n-->\n# This is a Bug Report\n## Description\n\nFor bug reports:\n- What went wrong?\n\nI am creating a custom resource `AWS::ApiGateway::BasePathMapping` like this:\n\n```\npathmapping:\n    Type: AWS::ApiGateway::BasePathMapping\n    Properties:\n        BasePath: oauth2\n        DomainName: ${self:custom.domainName}\n        RestApiId: \n          Ref: ApiGatewayRestApi\n        Stage: ${self:custom.stage}\n```\n\nBut the Cloudformation stack fails. It fails because the BasePathMapping requires the API to be deployed but it does not depend on the `AWS::ApiGateway::Deployment`\n- What did you expect should have happened?\n\nThe cloudformation stack should not fail. The BasePathMapping should be able to depend on the Deployment.\n- What was the config you used?\n\nServerless RC2\n- What stacktrace or error message from your provider did you see?\n\n> Invalid stage identifier specified\n## Additional Data\n- **_Serverless Framework Version you're using**_: RC2\n- **_Operating System**_: Mac OS X\n- **_Stack Trace**_: None. The cloudformation stack is fine but fails to update.\n- **_Provider Error messages**_:\n\nThis is the error from CloudFormation when creating the BasePathMapping\n\n> Invalid stage identifier specified\n## Workaround\n\nIt is not possible to DependsOn the deployment because the logical name of the deployment contains a random number (based on the time in ms).\n\nI just tried to copy the entire cloudformation stack json and change the logical name of the deployment to ApiGatewayDeployment and then make my BasePathMapping DependsOn that and now it works.\n\nThis is not a good workaround because it defeats the purpose of sls.\n\nThe way I got around it to depend on an ApiKey since they are named with a sequental number.\nSo I create an ApiKey in the provider section:\n\n```\nprovider:\n    apiKeys:\n        - workaroundkey\n```\n\nAnd then I can make my BasePathMapping depend on this:\n\n```\npathmapping:\n    Type: AWS::ApiGateway::BasePathMapping\n    DependsOn: ApiGatewayApiKey1\n    Properties:\n        BasePath: oauth2\n        DomainName: ${self:custom.domainName}\n        RestApiId: \n          Ref: ApiGatewayRestApi\n        Stage: ${self:custom.stage}\n```\n### Regression\n\nThe unique number was introduced in https://github.com/serverless/serverless/pull/1761\n\nBefore that it was possible to DependsOn the logical name of the Deployment.\n\n"
+    },
+    {
+      "at": "2026-11-10T02:02:31.054Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:02:38.249Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:02:45.807Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:02:54.074Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:02:59.510Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:03:11.759Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:03:18.073Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:03:49.213Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:04:06.402Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:04:38.339Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:04:40.022Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:04:53.229Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:04:54.926Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:05:06.892Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:05:31.301Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:05:44.171Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:05:54.715Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:06:16.912Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T02:06:31.062Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T02:02:16.667Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 3425.4876000000004,
+      "parsedFiles": 400,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 97036904,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:02:18.179Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1509.299699999996,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 32252928,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:02:32.707Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1654.1601999999984,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 7202976,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:02:39.651Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1403.6425000000017,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": -6569808,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:02:47.172Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1364.8813000000082,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 11180088,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:02:56.093Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 2020.0724000000046,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 2346472,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:03:00.907Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1397.0194000000047,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 5014608,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:03:13.465Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1706.2771999999968,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 296424,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:03:20.294Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 2221.7209000000003,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": 4298432,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:03:50.817Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1604.3747000000149,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": -664608,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:04:08.021Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "ca4a4a1f818f70de741d34a1a8ae4194c9b1a60aebe8167a27077bdba4d109b8",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "c4fa9dc69884fa8a7e07ee124e4c4f2851e36d9651b211e233f272b9c85abe1f"
+      },
+      "latencyMs": 1619.3859999999986,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21965014,
+      "heapDeltaBytes": -21896792,
+      "graphBytes": 30860430
+    },
+    {
+      "at": "2026-11-10T02:04:40.010Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "e04db1b8090f1b3a9e7c7c52b526b05eea0db1abed585ecce327ca52a0ee2d1d",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e426542e13cf7e7aa152e96551310ac0cd1e8d1e26504679b1411b44a85c8de5"
+      },
+      "latencyMs": 1671.222299999994,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21969565,
+      "heapDeltaBytes": 36184368,
+      "graphBytes": 30867129
+    },
+    {
+      "at": "2026-11-10T02:04:41.408Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "e04db1b8090f1b3a9e7c7c52b526b05eea0db1abed585ecce327ca52a0ee2d1d",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "e426542e13cf7e7aa152e96551310ac0cd1e8d1e26504679b1411b44a85c8de5"
+      },
+      "latencyMs": 1386.7388999999966,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21969565,
+      "heapDeltaBytes": 31094296,
+      "graphBytes": 30867129
+    },
+    {
+      "at": "2026-11-10T02:04:54.898Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1669.8959000000032,
+      "parsedFiles": 1,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": 22065448,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:04:56.224Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1313.4131000000052,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": -108249200,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:05:08.206Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1314.7804000000178,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": -25861168,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:05:32.586Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1285.3942000000097,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": 30757864,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:05:45.443Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1271.6468999999925,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": 30875000,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:05:56.033Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1318.138200000045,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": -26618832,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:06:18.224Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1313.0071999999927,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": -25661592,
+      "graphBytes": 30880668
+    },
+    {
+      "at": "2026-11-10T02:06:32.376Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+        "sourceContentVersion": "115915a6283d8733f6686b294802227c46d626a88c82ba1ec7482185ede78735",
+        "configurationVersion": "f68d5a6fcf5c7871b50698d766e7b0d7643f99ef70f660cf8eea9f1b44e7e3a9",
+        "contentVersion": "2ef23a5f08cd0112a99b1c44d95222f30eb426f58c7d0e277875bf4c46a8920b"
+      },
+      "latencyMs": 1314.4834000000264,
+      "parsedFiles": 0,
+      "fileCount": 400,
+      "cacheBytes": 21979183,
+      "heapDeltaBytes": 31021088,
+      "graphBytes": 30880668
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+        "lib/plugins/aws/provider/awsProvider.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/resources.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/restApi.test.js",
+        "lib/plugins/aws/package/compile/events/cloudWatchLog/index.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/resources.test.js",
+          "callId": "call_ad0809a3daab489fb4441c5ba32b6214|ctc_07609378f0dd5f08016af27b3e125087d19dce56cb2663bd61/4"
+        },
+        {
+          "tool": "read",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+          "callId": "call_ad0809a3daab489fb4441c5ba32b6214|ctc_07609378f0dd5f08016af27b3e125087d19dce56cb2663bd61/5"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+          "callId": "call_b94e139ff6464a99811188d6ed8d0bb7|ctc_07609378f0dd5f08016af27bc1464487d1b501b59585e8e105/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "Get-Content lib/plugins/aws/package/compile/events/apiGateway/lib/restApi.js | Select-Object -First 110; Get-Content lib/plugins/aws/package/compile/events/apiGateway/lib/restApi.test.js | Select-Object -First 65; Get-Content lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js | Select-Object -First 200",
+        "Set-Content -Path .v4-tmp/deployment-tests.json -Value '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js\"]' -NoNewline; node native-verify.cjs --tests-json .v4-tmp/deployment-tests.json --report .v4-tmp/deployment-test-report.json; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node node_modules/eslint/bin/eslint.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+        "git status --short; git diff -- lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js; Get-ChildItem node_modules -Name | Select-Object -First 20; Test-Path node_modules\\.bin\\eslint.cmd; Get-Content .v4-tmp/deployment-test-report.json"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "Set-Content -Path .v4-tmp/deployment-tests.json -Value '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js\"]' -NoNewline; node native-verify.cjs --tests-json .v4-tmp/deployment-tests.json --report .v4-tmp/deployment-test-report.json; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node node_modules/eslint/bin/eslint.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+        "git status --short; git diff -- lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js; Get-ChildItem node_modules -Name | Select-Object -First 20; Test-Path node_modules\\.bin\\eslint.cmd; Get-Content .v4-tmp/deployment-test-report.json"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "Set-Content -Path .v4-tmp/deployment-tests.json -Value '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js\"]' -NoNewline; node native-verify.cjs --tests-json .v4-tmp/deployment-tests.json --report .v4-tmp/deployment-test-report.json; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node node_modules/eslint/bin/eslint.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+        "git status --short; git diff -- lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js; Get-ChildItem node_modules -Name | Select-Object -First 20; Test-Path node_modules\\.bin\\eslint.cmd; Get-Content .v4-tmp/deployment-test-report.json"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+      "before": "'use strict';\n\nconst _ = require('lodash');\nconst BbPromise = require('bluebird');\n\nmodule.exports = {\n  compileDeployment() {\n    this.apiGatewayDeploymentLogicalId = this.provider.naming\n      .generateApiGatewayDeploymentLogicalId();\n\n    _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {\n      [this.apiGatewayDeploymentLogicalId]: {\n        Type: 'AWS::ApiGateway::Deployment',\n        Properties: {\n          RestApiId: this.provider.getApiGatewayRestApiId(),\n          StageName: this.provider.getStage(),\n          Description: this.provider.getApiGatewayDescription(),\n        },\n        DependsOn: this.apiGatewayMethodLogicalIds,\n      },\n    });\n\n    // create CLF Output for endpoint\n    _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Outputs, {\n      ServiceEndpoint: {\n        Description: 'URL of the service endpoint',\n        Value: {\n          'Fn::Join': ['',\n            [\n              'https://',\n              this.provider.getApiGatewayRestApiId(),\n              `.execute-api.${this.provider.getRegion()}.`,\n              { Ref: 'AWS::URLSuffix' },\n              `/${this.provider.getStage()}`,\n            ],\n          ],\n        },\n      },\n    });\n    return BbPromise.resolve();\n  },\n};\n",
+      "after": "'use strict';\n\nconst _ = require('lodash');\nconst BbPromise = require('bluebird');\n\nmodule.exports = {\n  compileDeployment() {\n    this.apiGatewayDeploymentLogicalId = this.provider.naming\n      .generateApiGatewayDeploymentLogicalId();\n\n    _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {\n      [this.apiGatewayDeploymentLogicalId]: {\n        Type: 'AWS::ApiGateway::Deployment',\n        Properties: {\n          RestApiId: this.provider.getApiGatewayRestApiId(),\n          StageName: this.provider.getStage(),\n          Description: this.provider.getApiGatewayDescription(),\n        },\n        DependsOn: this.apiGatewayMethodLogicalIds,\n      },\n    });\n\n    const customResources = this.serverless.service.resources &&\n      this.serverless.service.resources.Resources;\n    _.forEach(customResources, (resource) => {\n      if (resource.Type !== 'AWS::ApiGateway::BasePathMapping') {\n        return;\n      }\n\n      resource.DependsOn = _.union(\n        [this.apiGatewayDeploymentLogicalId],\n        [].concat(resource.DependsOn || [])\n      );\n    });\n\n    // create CLF Output for endpoint\n    _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Outputs, {\n      ServiceEndpoint: {\n        Description: 'URL of the service endpoint',\n        Value: {\n          'Fn::Join': ['',\n            [\n              'https://',\n              this.provider.getApiGatewayRestApiId(),\n              `.execute-api.${this.provider.getRegion()}.`,\n              { Ref: 'AWS::URLSuffix' },\n              `/${this.provider.getStage()}`,\n            ],\n          ],\n        },\n      },\n    });\n    return BbPromise.resolve();\n  },\n};\n"
+    },
+    {
+      "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+      "before": "'use strict';\n\nconst expect = require('chai').expect;\nconst AwsCompileApigEvents = require('../index');\nconst Serverless = require('../../../../../../../Serverless');\nconst AwsProvider = require('../../../../../provider/awsProvider');\n\ndescribe('#compileDeployment()', () => {\n  let serverless;\n  let provider;\n  let awsCompileApigEvents;\n\n  beforeEach(() => {\n    const options = {\n      stage: 'dev',\n      region: 'us-east-1',\n    };\n    serverless = new Serverless();\n    provider = new AwsProvider(serverless, options);\n    serverless.setProvider('aws', provider);\n    serverless.service.provider.compiledCloudFormationTemplate = {\n      Resources: {},\n      Outputs: {},\n    };\n    awsCompileApigEvents = new AwsCompileApigEvents(serverless, options);\n    awsCompileApigEvents.apiGatewayRestApiLogicalId = 'ApiGatewayRestApi';\n    awsCompileApigEvents.apiGatewayMethodLogicalIds = ['method-dependency1', 'method-dependency2'];\n    awsCompileApigEvents.provider = provider;\n  });\n\n  it('should create a deployment resource', () => awsCompileApigEvents\n    .compileDeployment().then(() => {\n      const apiGatewayDeploymentLogicalId = Object\n        .keys(awsCompileApigEvents.serverless.service.provider\n          .compiledCloudFormationTemplate.Resources)[0];\n\n      expect(\n        awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources[apiGatewayDeploymentLogicalId]\n      ).to.deep.equal({\n        Type: 'AWS::ApiGateway::Deployment',\n        DependsOn: ['method-dependency1', 'method-dependency2'],\n        Properties: {\n          RestApiId: {\n            Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId,\n          },\n          Description: undefined,\n          StageName: 'dev',\n        },\n      });\n    })\n  );\n\n  it('should create a deployment resource with description', () => {\n    awsCompileApigEvents.serverless.service.provider.apiGateway = {\n      description: 'Some Description',\n    };\n\n    return awsCompileApigEvents\n      .compileDeployment().then(() => {\n        const apiGatewayDeploymentLogicalId = Object\n          .keys(awsCompileApigEvents.serverless.service.provider\n              .compiledCloudFormationTemplate.Resources)[0];\n\n        expect(\n            awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate\n              .Resources[apiGatewayDeploymentLogicalId]\n          ).to.deep.equal({\n            Type: 'AWS::ApiGateway::Deployment',\n            DependsOn: ['method-dependency1', 'method-dependency2'],\n            Properties: {\n              RestApiId: {\n                Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId,\n              },\n              Description: 'Some Description',\n              StageName: 'dev',\n            },\n          });\n      });\n  }\n  );\n\n  it('should add service endpoint output', () =>\n    awsCompileApigEvents.compileDeployment().then(() => {\n      expect(\n        awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate\n          .Outputs.ServiceEndpoint\n      ).to.deep.equal({\n        Description: 'URL of the service endpoint',\n        Value: {\n          'Fn::Join': [\n            '',\n            [\n              'https://',\n              { Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId },\n              '.execute-api.us-east-1.',\n              { Ref: 'AWS::URLSuffix' },\n              '/dev',\n            ],\n          ],\n        },\n      });\n    })\n  );\n});\n",
+      "after": "'use strict';\n\nconst expect = require('chai').expect;\nconst AwsCompileApigEvents = require('../index');\nconst Serverless = require('../../../../../../../Serverless');\nconst AwsProvider = require('../../../../../provider/awsProvider');\n\ndescribe('#compileDeployment()', () => {\n  let serverless;\n  let provider;\n  let awsCompileApigEvents;\n\n  beforeEach(() => {\n    const options = {\n      stage: 'dev',\n      region: 'us-east-1',\n    };\n    serverless = new Serverless();\n    provider = new AwsProvider(serverless, options);\n    serverless.setProvider('aws', provider);\n    serverless.service.provider.compiledCloudFormationTemplate = {\n      Resources: {},\n      Outputs: {},\n    };\n    awsCompileApigEvents = new AwsCompileApigEvents(serverless, options);\n    awsCompileApigEvents.apiGatewayRestApiLogicalId = 'ApiGatewayRestApi';\n    awsCompileApigEvents.apiGatewayMethodLogicalIds = ['method-dependency1', 'method-dependency2'];\n    awsCompileApigEvents.provider = provider;\n  });\n\n  it('should create a deployment resource', () => awsCompileApigEvents\n    .compileDeployment().then(() => {\n      const apiGatewayDeploymentLogicalId = Object\n        .keys(awsCompileApigEvents.serverless.service.provider\n          .compiledCloudFormationTemplate.Resources)[0];\n\n      expect(\n        awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources[apiGatewayDeploymentLogicalId]\n      ).to.deep.equal({\n        Type: 'AWS::ApiGateway::Deployment',\n        DependsOn: ['method-dependency1', 'method-dependency2'],\n        Properties: {\n          RestApiId: {\n            Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId,\n          },\n          Description: undefined,\n          StageName: 'dev',\n        },\n      });\n    })\n  );\n\n  it('should make custom base path mappings depend on the deployment', () => {\n    serverless.service.resources = {\n      Resources: {\n        BasePathMapping: {\n          Type: 'AWS::ApiGateway::BasePathMapping',\n          DependsOn: 'CustomDomain',\n        },\n        AnotherBasePathMapping: {\n          Type: 'AWS::ApiGateway::BasePathMapping',\n        },\n        UnrelatedResource: {\n          Type: 'AWS::ApiGateway::DomainName',\n        },\n      },\n    };\n\n    return awsCompileApigEvents.compileDeployment().then(() => {\n      const deploymentLogicalId = awsCompileApigEvents.apiGatewayDeploymentLogicalId;\n      const resources = serverless.service.resources.Resources;\n\n      expect(resources.BasePathMapping.DependsOn)\n        .to.deep.equal([deploymentLogicalId, 'CustomDomain']);\n      expect(resources.AnotherBasePathMapping.DependsOn)\n        .to.deep.equal([deploymentLogicalId]);\n      expect(resources.UnrelatedResource.DependsOn).to.equal(undefined);\n    });\n  });\n\n  it('should create a deployment resource with description', () => {\n    awsCompileApigEvents.serverless.service.provider.apiGateway = {\n      description: 'Some Description',\n    };\n\n    return awsCompileApigEvents\n      .compileDeployment().then(() => {\n        const apiGatewayDeploymentLogicalId = Object\n          .keys(awsCompileApigEvents.serverless.service.provider\n              .compiledCloudFormationTemplate.Resources)[0];\n\n        expect(\n            awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate\n              .Resources[apiGatewayDeploymentLogicalId]\n          ).to.deep.equal({\n            Type: 'AWS::ApiGateway::Deployment',\n            DependsOn: ['method-dependency1', 'method-dependency2'],\n            Properties: {\n              RestApiId: {\n                Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId,\n              },\n              Description: 'Some Description',\n              StageName: 'dev',\n            },\n          });\n      });\n  }\n  );\n\n  it('should add service endpoint output', () =>\n    awsCompileApigEvents.compileDeployment().then(() => {\n      expect(\n        awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate\n          .Outputs.ServiceEndpoint\n      ).to.deep.equal({\n        Description: 'URL of the service endpoint',\n        Value: {\n          'Fn::Join': [\n            '',\n            [\n              'https://',\n              { Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId },\n              '.execute-api.us-east-1.',\n              { Ref: 'AWS::URLSuffix' },\n              '/dev',\n            ],\n          ],\n        },\n      });\n    })\n  );\n});\n"
+    }
+  ],
+  "final": "**Implemented:** Custom `AWS::ApiGateway::BasePathMapping` resources now depend on the generated API Gateway deployment. Existing `DependsOn` entries are preserved, and the deployment’s timestamp-based logical ID remains unchanged.\n\n**Verification:** `node native-verify.cjs` passed. The focused deployment tests also passed (4/4). ESLint could not be run because ESLint is not available in the preprovisioned dependencies.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5926-B-r1-a0\\home\\events\\1794276133207-fb58fe6b-9c7b-4de8-9aca-2aabb437aca9.jsonl",
+  "receiptAudit": {
+    "requests": 18,
+    "finalUsageResponses": 18,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 18,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "resourcePolicySha256": "fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6",
+  "cellId": "serverless__serverless-5926-B-r1",
+  "attempt": 0
+}

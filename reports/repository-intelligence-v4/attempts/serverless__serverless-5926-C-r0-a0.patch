@@ -1,0 +1,124 @@
+diff --git a/docs/providers/aws/guide/resources.md b/docs/providers/aws/guide/resources.md
+index 4384818..3fce063 100644
+--- a/docs/providers/aws/guide/resources.md
++++ b/docs/providers/aws/guide/resources.md
+@@ -90,6 +90,22 @@ If you are unsure how a resource is named, that you want to reference from your
+ |AWS::Lambda::EventSourceMapping | <ul><li>**DynamoDB:** {normalizedFunctionName}EventSourceMappingDynamodb{tableName}</li><li>**Kinesis:** {normalizedFunctionName}EventSourceMappingKinesis{streamName}</li></ul> | <ul><li>**DynamoDB:** HelloLambdaEventSourceMappingDynamodbUsers</li><li>**Kinesis:** HelloLambdaEventSourceMappingKinesisMystream</li></ul> |
+ |Cognito::UserPool      | CognitoUserPool{normalizedPoolId}                       | CognitoUserPoolPoolId         |
+ 
++The API Gateway deployment has a generated logical ID suffix that changes between deployments. To make a custom resource depend on it, use `ApiGatewayDeployment` as the dependency name; Serverless replaces it with the current generated logical ID when packaging the template. For example:
++
++```yml
++resources:
++  Resources:
++    pathmapping:
++      Type: AWS::ApiGateway::BasePathMapping
++      DependsOn: ApiGatewayDeployment
++      Properties:
++        BasePath: oauth2
++        DomainName: example.com
++        RestApiId:
++          Ref: ApiGatewayRestApi
++        Stage: dev
++```
++
+ ## Override AWS CloudFormation Resource
+ 
+ You can override the specific CloudFormation resource to apply your own options. For example, if you want to set `AWS::Logs::LogGroup` retention time to 30 days, override it with above table's `Name Template`.
+diff --git a/lib/plugins/aws/package/lib/mergeCustomProviderResources.js b/lib/plugins/aws/package/lib/mergeCustomProviderResources.js
+index 414b098..e40611d 100644
+--- a/lib/plugins/aws/package/lib/mergeCustomProviderResources.js
++++ b/lib/plugins/aws/package/lib/mergeCustomProviderResources.js
+@@ -12,11 +12,29 @@ module.exports = {
+       this.serverless.service.resources.Outputs = {};
+     }
+ 
+-    _.merge(
+-      this.serverless.service.provider.compiledCloudFormationTemplate,
+-      this.serverless.service.resources
++    const compiledTemplate = this.serverless.service.provider.compiledCloudFormationTemplate;
++    const resources = _.cloneDeep(this.serverless.service.resources);
++    const apiGatewayDeploymentLogicalId = _.findKey(
++      compiledTemplate.Resources || {},
++      (resource, logicalId) => logicalId.startsWith('ApiGatewayDeployment') && resource &&
++        resource.Type === 'AWS::ApiGateway::Deployment'
+     );
+ 
++    if (apiGatewayDeploymentLogicalId && resources && resources.Resources) {
++      _.forEach(resources.Resources, (resource) => {
++        if (!resource || !resource.DependsOn) return;
++
++        if (resource.DependsOn === 'ApiGatewayDeployment') {
++          resource.DependsOn = apiGatewayDeploymentLogicalId;
++        } else if (_.isArray(resource.DependsOn)) {
++          resource.DependsOn = _.map(resource.DependsOn, dependency =>
++            dependency === 'ApiGatewayDeployment' ? apiGatewayDeploymentLogicalId : dependency);
++        }
++      });
++    }
++
++    _.merge(compiledTemplate, resources);
++
+     return BbPromise.resolve();
+   },
+ };
+diff --git a/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js b/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js
+index 885cf5b..86423a8 100644
+--- a/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js
++++ b/lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js
+@@ -175,5 +175,55 @@ describe('mergeCustomProviderResources', () => {
+         );
+       });
+     });
++
++    it('should resolve dependencies on the API Gateway deployment logical ID', () => {
++      const deploymentLogicalId = 'ApiGatewayDeployment12345';
++      const customResources = {
++        Resources: {
++          PathMapping: {
++            Type: 'AWS::ApiGateway::BasePathMapping',
++            DependsOn: 'ApiGatewayDeployment',
++          },
++          OtherResource: {
++            Type: 'AWS::SomeService::Resource',
++            DependsOn: ['AnotherResource', 'ApiGatewayDeployment'],
++          },
++        },
++      };
++
++      awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Resources[
++        deploymentLogicalId
++      ] = { Type: 'AWS::ApiGateway::Deployment' };
++      awsPackage.serverless.service.resources = customResources;
++
++      return awsPackage.mergeCustomProviderResources().then(() => {
++        const resources = awsPackage.serverless.service.provider.compiledCloudFormationTemplate
++          .Resources;
++
++        expect(resources.PathMapping.DependsOn).to.equal(deploymentLogicalId);
++        expect(resources.OtherResource.DependsOn).to.deep.equal([
++          'AnotherResource', deploymentLogicalId,
++        ]);
++        expect(customResources.Resources.PathMapping.DependsOn)
++          .to.equal('ApiGatewayDeployment');
++      });
++    });
++
++    it('should leave the API Gateway deployment dependency unchanged without a deployment',
++      () => {
++      awsPackage.serverless.service.resources = {
++        Resources: {
++          PathMapping: {
++            Type: 'AWS::ApiGateway::BasePathMapping',
++            DependsOn: 'ApiGatewayDeployment',
++          },
++        },
++      };
++
++      return awsPackage.mergeCustomProviderResources().then(() => {
++        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate
++          .Resources.PathMapping.DependsOn).to.equal('ApiGatewayDeployment');
++      });
++    });
+   });
+ });
