@@ -1,0 +1,217 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 9,
+    "tests": 32,
+    "passes": 29,
+    "pending": 0,
+    "failures": 3,
+    "start": "2026-11-10T04:58:22.122Z",
+    "end": "2026-11-10T04:58:23.823Z",
+    "duration": 1701
+  },
+  "tests": [
+    {
+      "title": "CLI #constructor() should set the serverless instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #constructor() should set an empty loadedPlugins array",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #constructor() should set a null inputArray when none is provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #constructor() should set the inputObject when provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #setLoadedPlugins() should set the loadedPlugins array with the given plugin instances",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #processedInput() should not parse numeric string as number, but as string",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "CLI #suppressLogIfPrintCommand() should do nothing when no command is given",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #suppressLogIfPrintCommand() should do nothing when \"print\" is given with \"-h\"",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #suppressLogIfPrintCommand() should do nothing when \"print\" is given with \"-help\"",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #suppressLogIfPrintCommand() should do nothing when \"print\" is combined with other command.",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #suppressLogIfPrintCommand() should suppress log when \"print\" is given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when no command is given",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"help\" parameter is given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"--help\" parameter is given",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"-h\" parameter is given",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"version\" parameter is given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"--version\" parameter is given",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"-v\" parameter is given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"-h\" parameter is given with a command",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return true when the \"-h\" parameter is given with a deep command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #displayHelp() should return false if no \"help\" or \"version\" related command / option is given",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #generateCommandsHelp() should gather and generate the commands help info if the command can be found",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #generateCommandsHelp() should throw an error if the command could not be found",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "CLI #processInput() should only return the commands when only commands are given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #processInput() should only return the options when only options are given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #processInput() should only return numbers like strings when numbers are given on options",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI #processInput() should not pass base64 values as options",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #processInput() should return commands and options when both are given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "CLI #processInput() should be able to parse --verbose --stage foobar",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "CLI Integration tests should print general --help to stdout",
+      "status": "failed",
+      "durationMs": 33,
+      "error": {
+        "message": "Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless --help\nThe filename, directory name, or volume label syntax is incorrect.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless --help.\r\n",
+        "stack": "Error: Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless --help\nThe filename, directory name, or volume label syntax is incorrect.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless --help.\r\n\n    at ChildProcess.exithandler (node:child_process:402:12)\n    at ChildProcess.emit (node:events:513:28)\n    at ChildProcess.emit (node:domain:489:12)\n    at maybeClose (node:internal/child_process:1100:16)\n    at Socket.<anonymous> (node:internal/child_process:458:11)\n    at Socket.emit (node:events:513:28)\n    at Socket.emit (node:domain:489:12)\n    at Pipe.<anonymous> (node:net:301:12)"
+      }
+    },
+    {
+      "title": "CLI Integration tests should print command --help to stdout",
+      "status": "failed",
+      "durationMs": 30,
+      "error": {
+        "message": "Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless deploy --help\nA subdirectory or file .exe already exists.\r\nError occurred while processing: .exe.\r\nA subdirectory or file -c already exists.\r\nError occurred while processing: -c.\r\nThe filename or extension is too long.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless deploy --help.\r\n",
+        "stack": "Error: Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless deploy --help\nA subdirectory or file .exe already exists.\r\nError occurred while processing: .exe.\r\nA subdirectory or file -c already exists.\r\nError occurred while processing: -c.\r\nThe filename or extension is too long.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless deploy --help.\r\n\n    at ChildProcess.exithandler (node:child_process:402:12)\n    at ChildProcess.emit (node:events:513:28)\n    at ChildProcess.emit (node:domain:489:12)\n    at maybeClose (node:internal/child_process:1100:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)"
+      }
+    },
+    {
+      "title": "CLI Integration tests should print help --verbose to stdout",
+      "status": "failed",
+      "durationMs": 26,
+      "error": {
+        "message": "Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless help --verbose\nA subdirectory or file .exe already exists.\r\nError occurred while processing: .exe.\r\nA subdirectory or file -c already exists.\r\nError occurred while processing: -c.\r\nThe filename or extension is too long.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless help --verbose.\r\n",
+        "stack": "Error: Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless help --verbose\nA subdirectory or file .exe already exists.\r\nError occurred while processing: .exe.\r\nA subdirectory or file -c already exists.\r\nError occurred while processing: -c.\r\nThe filename or extension is too long.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5728-1794286578012\\reference\\bin\\serverless help --verbose.\r\n\n    at ChildProcess.exithandler (node:child_process:402:12)\n    at ChildProcess.emit (node:events:513:28)\n    at ChildProcess.emit (node:domain:489:12)\n    at maybeClose (node:internal/child_process:1100:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)"
+      }
+    }
+  ],
+  "hooks": []
+}
