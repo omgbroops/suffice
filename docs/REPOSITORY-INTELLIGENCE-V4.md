@@ -454,3 +454,33 @@ optimizing them after observing these tasks would require a new evaluation phase
 
 The effective protocol separates common inference limits from the task-dependent
 service policy. It does not label all attempts as requesting default service.
+
+
+## Zero-request resource continuation and thermal check
+
+At 01:03 Chicago time on November 10, the serial campaign stopped before any
+provider request on Serverless 6977 D repetition 0. Its worker sampled about
+358 MiB free RAM, below the unchanged 0.5 GiB launch floor. The original a0
+receipt and zero cost are retained; this was not a model failure.
+
+After the user reported improved host conditions, live checks found about
+3.74 GiB free RAM and CAM visually showed 67 degrees C. CAM's accessibility tree
+did not expose sensor values. This single visual observation does not provide
+an unattended 85-degree guard. Concurrency remains one under the user's earlier
+condition; no parallel inference phase has been collected.
+
+`node scripts/continue-intelligence-v4-resources.mjs --check-only` validates the
+Priority-derived worker and identifies only resource-stopped cells with exactly
+zero requests and zero cost and no existing a1 result. Without `--check-only`,
+it acquires the existing exclusive lease, checks cap headroom for the remaining
+balanced round, reserves the recovery slot, records the recovery derivation,
+and executes the cell's first model attempt as
+a1. The derivative changes only the storage suffix and attempt number. It then
+continues the existing serial Priority campaign. It never retries a coding
+outcome or a request with unknown usage, and it preserves all original files.
+
+The two complete default-tier availability-probe ledger entries were reconciled
+while no worker was active and the exclusive lease was held. The Prettier 8381 B
+repetition 0 timeout has 49 requests and 48 final usage responses; its unresolved
+request remains conservatively reserved and its cost is unknown. Its known usage
+is a lower bound, not a fabricated complete cost or a zero-cost failure.
