@@ -1,0 +1,150 @@
+{
+  "numFailedTestSuites": 3,
+  "numFailedTests": 3,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 5,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 3,
+  "numTotalTests": 8,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": true,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 3,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 3,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 3,
+    "updated": 0
+  },
+  "startTime": 1794287051158,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "custom-parser.css"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `custom-parser.css format 1`\n\n- Snapshot  - 1\n+ Received  + 0\n\n@@ -14,11 +14,10 @@\n  =====================================output=====================================\n  ---mycustomparser\n  title: Title\n  description: Description\n  ---\n-\n  /* comment */\n  .something {\n  }\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-8381-1794286749045\\empty\\tests_config\\run_spec.js:187:13)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:100:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:47:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:30:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:77:41"
+          ],
+          "fullName": "custom-parser.css format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "custom-parser.css"
+          ],
+          "failureMessages": [],
+          "fullName": "custom-parser.css verify (scss)",
+          "location": null,
+          "status": "passed",
+          "title": "verify (scss)"
+        },
+        {
+          "ancestorTitles": [
+            "custom-parser.css"
+          ],
+          "failureMessages": [],
+          "fullName": "custom-parser.css verify (less)",
+          "location": null,
+          "status": "passed",
+          "title": "verify (less)"
+        },
+        {
+          "ancestorTitles": [
+            "custom-parser.css"
+          ],
+          "failureMessages": [],
+          "fullName": "custom-parser.css compare AST",
+          "location": null,
+          "status": "passed",
+          "title": "compare AST"
+        }
+      ],
+      "endTime": 1794287055259,
+      "message": "  ● custom-parser.css › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `custom-parser.css format 1`\n\n    - Snapshot  - 1\n    + Received  + 0\n\n    @@ -14,11 +14,10 @@\n      =====================================output=====================================\n      ---mycustomparser\n      title: Title\n      description: Description\n      ---\n    -\n      /* comment */\n      .something {\n      }\n\n      ================================================================================\n\n      185 |               )\n      186 |             )\n    > 187 |           ).toMatchSnapshot();\n          |             ^\n      188 |         }\n      189 |       });\n      190 | \n\n      at Object.<anonymous> (tests_config/run_spec.js:187:13)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-8381-1794286749045\\empty\\tests\\css\\front-matter\\jsfmt.spec.js",
+      "startTime": 1794287051385,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "custom-parser.md"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `custom-parser.md format 1`\n\n- Snapshot  - 1\n+ Received  + 3\n\n@@ -11,12 +11,14 @@\n  __123__\n  **456**\n\n  =====================================output=====================================\n  ---mycustomparser\n- - hello:    world\n+\n+ - hello: world\n  -         123\n+\n  ---\n\n  **123**\n  **456**\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-8381-1794286749045\\empty\\tests_config\\run_spec.js:187:13)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:100:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:47:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:30:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:77:41"
+          ],
+          "fullName": "custom-parser.md format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "custom-parser.md"
+          ],
+          "failureMessages": [],
+          "fullName": "custom-parser.md compare AST",
+          "location": null,
+          "status": "passed",
+          "title": "compare AST"
+        }
+      ],
+      "endTime": 1794287056969,
+      "message": "  ● custom-parser.md › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `custom-parser.md format 1`\n\n    - Snapshot  - 1\n    + Received  + 3\n\n    @@ -11,12 +11,14 @@\n      __123__\n      **456**\n\n      =====================================output=====================================\n      ---mycustomparser\n    - - hello:    world\n    +\n    + - hello: world\n      -         123\n    +\n      ---\n\n      **123**\n      **456**\n      ↵\n\n      185 |               )\n      186 |             )\n    > 187 |           ).toMatchSnapshot();\n          |             ^\n      188 |         }\n      189 |       });\n      190 | \n\n      at Object.<anonymous> (tests_config/run_spec.js:187:13)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-8381-1794286749045\\empty\\tests\\markdown\\front-matter\\jsfmt.spec.js",
+      "startTime": 1794287055281,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "custom-parser.html"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `custom-parser.html format 1`\n\n- Snapshot  - 6\n+ Received  + 1\n\n@@ -12,16 +12,11 @@\n\n  <h1>\n    Hello world!</h1>\n\n  =====================================output=====================================\n- ---mycustomparser\n-   \n- title: Hello\n- slug: home\n-\n- ---\n+ ---mycustomparser title: Hello slug: home ---\n\n  <h1>\n    Hello world!\n  </h1>\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-8381-1794286749045\\empty\\tests_config\\run_spec.js:187:13)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:100:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:47:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:30:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-d0961116ab0fdedd703c\\node_modules\\jest-jasmine2\\build\\queueRunner.js:77:41"
+          ],
+          "fullName": "custom-parser.html format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "custom-parser.html"
+          ],
+          "failureMessages": [],
+          "fullName": "custom-parser.html compare AST",
+          "location": null,
+          "status": "passed",
+          "title": "compare AST"
+        }
+      ],
+      "endTime": 1794287057883,
+      "message": "  ● custom-parser.html › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `custom-parser.html format 1`\n\n    - Snapshot  - 6\n    + Received  + 1\n\n    @@ -12,16 +12,11 @@\n\n      <h1>\n        Hello world!</h1>\n\n      =====================================output=====================================\n    - ---mycustomparser\n    -   \n    - title: Hello\n    - slug: home\n    -\n    - ---\n    + ---mycustomparser title: Hello slug: home ---\n\n      <h1>\n        Hello world!\n      </h1>\n      ↵\n\n      185 |               )\n      186 |             )\n    > 187 |           ).toMatchSnapshot();\n          |             ^\n      188 |         }\n      189 |       });\n      190 | \n\n      at Object.<anonymous> (tests_config/run_spec.js:187:13)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-8381-1794286749045\\empty\\tests\\html\\front-matter\\jsfmt.spec.js",
+      "startTime": 1794287056975,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}
