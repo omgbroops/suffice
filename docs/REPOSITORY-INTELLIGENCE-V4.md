@@ -358,3 +358,40 @@ not be described as having identical host starting conditions to later runs.
 Lower launch floors can increase paging and runtime variability; they do not
 raise the fixed heaps or prove sufficient physical headroom. Actual per-attempt
 resources and infrastructure failures remain part of the reported outcome.
+
+## User-requested Priority probe and prospective tier phase
+
+The user chose to keep Luna xhigh and try Fast/Priority for speed. Two disjoint
+one-request availability probes succeeded, one per model, requesting Priority.
+Both raw responses reported `default`; server-confirmed Priority is therefore
+unproven. These are not engineering attempts or a controlled speed comparison.
+Their complete receipts and conservative spending reservations remain separate.
+
+The installed Codex provider explicitly resolves a default response to the
+requested Priority option and applies a 2x catalog pricing estimate for these
+model IDs. Initial probes injected the payload field; the prospective executor
+also forwards the actual provider stream option, so the SDK's fallback and cost
+accounting see the request. Requested and raw reported tiers are both retained.
+No claim of faster serving follows merely from request acceptance.
+
+`infrastructure/priority-amendment.json` hashes the derived executors and policy.
+Serverless 5926 and Three.js 23796 had already started and finish both repetitions
+on default tier across all four configurations. All later tasks request Priority
+across all four configurations. Models, effort, prompts, graph/controller, tools,
+grader and common token/wall/tool budgets stay frozen. Priority emergency dollar
+ceilings and request reserves scale by two to preserve the original inference
+allowance under the SDK's price estimate; the total cap remains $25. Complete
+round reservations can conservatively stop a balanced subset below $25 actual
+estimated use. A tier-dependent budget stop stays explicit.
+
+The serial controller now supports an evaluator-only `control.json` pause flag
+and audited continuation of never-dispatched slots. The first hold used the
+serial-admission lease: the active attempt finished; the next launch rejected
+the held lease before any provider request or workspace creation. That launcher
+error is an operational pause, not a model failure. Existing coding outcomes
+are never repeated. All prior trajectories and the pause receipt are preserved.
+
+Run `node scripts/run-intelligence-v4-priority.mjs --check-only` to verify the
+derivation without inference, and omit `--check-only` for serial continuation.
+The report separates requested-tier and resource-policy phases; it does not
+describe the mixed collection as identical serving conditions.

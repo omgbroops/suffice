@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "at": "2026-11-10T02:38:43.964Z",
+  "policy": {
+    "phase": "priority-request-v1",
+    "authorization": "User selected keep xhigh and try Fast/Priority first.",
+    "legacyTasks": [
+      "serverless__serverless-5926",
+      "mrdoob__three.js-23796"
+    ],
+    "requestedTier": "priority",
+    "rawTierCaveat": "Both availability probes accepted Priority but reported default. Server-confirmed Priority is false unless raw receipts say priority. Installed Codex provider resolves a default response to requested Priority for pricing; this is not a measured speed guarantee.",
+    "pricing": "Installed SDK Priority estimate is 2x default catalog rates for these models. Emergency price ceilings and request reserves double on Priority tasks, preserving the default-tier inference allowance; total campaign cap stays $25.",
+    "memoryPolicySha256": "fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6",
+    "unchanged": "Models, effort, task cohort/order, prompts, graph/controller, tools, grading, token/wall/tool budgets, heap limits and serial execution.",
+    "partialRoundRecovery": "Only never-dispatched slots may resume. Existing coding outcomes are never retried."
+  },
+  "policySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "files": {
+    "worker": {
+      "path": ".suffice/intelligence-v4/priority/worker.mjs",
+      "sha256": "5ce64945c0f87ddc5491587b79d911b68f975cae8a4cf7ca81f7472e21dcca4e"
+    },
+    "coordinator": {
+      "path": ".suffice/intelligence-v4/priority/coordinator.mjs",
+      "sha256": "ed27a9d55b180a705973c32a26b1c00c8a3fc70f1a681deb117431e56e526f4b"
+    },
+    "campaign": {
+      "path": ".suffice/intelligence-v4/priority/campaign.mjs",
+      "sha256": "7d9929995c8881e35f97006e0fa60da54e14444785f383b4b5cc623adb9cff4b"
+    }
+  },
+  "baseProtocolSha256": "363d302b4b5c67535a2ad4c8b9b537c00fda6cc7f68d02d011ff65a38511617f"
+}

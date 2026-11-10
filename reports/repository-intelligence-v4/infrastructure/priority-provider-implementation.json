@@ -1,0 +1,18 @@
+{
+  "at": "2026-11-10T03:05:22.561550+00:00",
+  "packageVersions": {
+    "pi-ai": "1.2.0",
+    "pi-coding-agent": "1.2.0"
+  },
+  "sha256": {
+    "node_modules/@earendil-works/pi-ai/dist/api/openai-codex-responses.js": "4d90da82aaac68f9f0e1fd7daec39f1aa285c111bf04c7ddefa52e920b41b2cc",
+    "node_modules/@earendil-works/pi-coding-agent/dist/core/model-runtime.js": "578b742bea061fed029b8e139c6c0bcfe31e60665e9c0c6a08769761ef169dfd",
+    "node_modules/@earendil-works/pi-coding-agent/dist/core/sdk.js": "8155c0b7d819d2248a1bbf0fa4b8e40d15552ff7fa6a772154cbbccb6ae59235"
+  },
+  "clientBehavior": "The Codex provider resolves a raw default response to a requested Priority option and applies a 2x catalog cost multiplier for both evaluated model IDs. This is client-side pricing behavior, not server confirmation of faster processing.",
+  "implementationFunctions": [
+    "getServiceTierCostMultiplier",
+    "resolveCodexServiceTier",
+    "ModelRuntime.streamSimple"
+  ]
+}
