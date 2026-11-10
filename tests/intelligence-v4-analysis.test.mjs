@@ -17,3 +17,11 @@ test('paired accuracy refuses missing, duplicate or unverified outcomes instead 
   assert.throws(()=>pairedTaskDifferences(rows.map((r,i)=>i? r:{...r,accepted:null}),[{id:'case'}],'B','A'));
   assert.throws(()=>pairedTaskDifferences(rows.map((r,i)=>i? r:{...r,scorable:false}),[{id:'case'}],'B','A'));
 });
+
+test('single-run analysis uses the prespecified first run and ignores retained repeat outcomes',()=>{
+  const rows=[row('A',0,false),row('B',0,true),row('A',1,true),row('B',1,false)];
+  const result=pairedTaskDifferences(rows,[{id:'case'}],'B','A',[0])[0];
+  assert.equal(result.delta,1);assert.equal(result.pairs.length,1);assert.equal(result.discordantRepetitions,1);
+  assert.throws(()=>pairedTaskDifferences(rows,[{id:'case'}],'B','A',[]));
+  assert.throws(()=>pairedTaskDifferences(rows,[{id:'case'}],'B','A',[0,0]));
+});

@@ -8,6 +8,7 @@ import {sourceInputs} from '../src/eval-v4/protocol.mjs';
 import {writeLedger} from '../src/real-intelligence-eval.mjs';
 import {hash} from '../src/workspace.mjs';
 const root=process.cwd(),out=resolve(root,'reports/repository-intelligence-v4'),load=async p=>JSON.parse(await readFile(p,'utf8'));
+let single=false;try{await load(resolve(out,'infrastructure/single-repetition-amendment.json'));single=true;}catch(e){if(e.code!=='ENOENT')throw e;}
 const protocol=await load(resolve(out,'protocol.json')),amendment=await load(resolve(out,'infrastructure/priority-amendment.json'));
 if(JSON.stringify(await sourceInputs(root))!==JSON.stringify(protocol.inputs))throw new Error('Frozen source drift');
 const original=await readFile(resolve(root,amendment.files.worker.path),'utf8');
@@ -19,7 +20,7 @@ await writeFile(workerPath,worker);
 const run=(file,args=[])=>new Promise((done,reject)=>{const child=spawn(process.execPath,['--max-old-space-size=768',file,...args],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe']});child.stdout.on('data',b=>process.stdout.write(b));child.stderr.on('data',b=>process.stderr.write(b));child.on('error',reject);child.on('close',code=>done(code));});
 const recoverable=async()=>{
  const pending=[];
- for(const item of protocol.schedule.flat()){
+ for(const item of protocol.schedule.flat().filter(item=>!single||item.repetition===0)){
   const cell=`${item.task}-${item.arm}-r${item.repetition}`;let prior;
   try{prior=await load(resolve(out,'attempts',cell+'-a0.summary.json'));}catch(e){if(e.code!=='ENOENT')throw e;continue;}
   if(prior.classification!=='resource_stop'||prior.providerRequests!==0||prior.totalEstimatedUsd!==0)continue;
@@ -52,7 +53,7 @@ for(let cycle=0;cycle<48;cycle++){
     const receipt={at:new Date().toISOString(),cell,attempt:1,priorClassification:prior.classification,priorProviderRequests:prior.providerRequests,priorCost:prior.totalEstimatedUsd,originalWorkerSha256:hash(original),derivedWorkerSha256:hash(worker),changes:['storage suffix a0 -> a1','attempt metadata 0 -> 1'],unchanged:'Existing Priority/low-memory policies; exact models, efforts, prompts, graph, tools, grading and limits. One concurrent attempt.'};
     const receiptPath=resolve(out,'infrastructure',id+'-resource-recovery.json');await writeFile(receiptPath,JSON.stringify(receipt,null,2),{flag:'wx'});
     current.entries.push(entry);await writeLedger(ledgerPath,current);
-    await writeFile(resolve(out,'execution-status.json'),JSON.stringify({status:'running',cell,attempt:1,recovery:true,target:192,at:new Date().toISOString()},null,2));
+    await writeFile(resolve(out,'execution-status.json'),JSON.stringify({status:'running',cell,attempt:1,recovery:true,target:single?96:192,at:new Date().toISOString()},null,2));
     const start=performance.now(),code=await run(workerPath,['--cell='+cell]);
     await writeFile(resolve(out,'attempts',id+'.execution.json'),JSON.stringify({workerWallMs:performance.now()-start,finishedAt:new Date().toISOString(),recoveryReceiptSha256:hash(await readFile(receiptPath))},null,2));
     const result=await load(resolve(out,'attempts',id+'.summary.json'));
@@ -60,7 +61,7 @@ for(let cycle=0;cycle<48;cycle++){
    }
   }finally{await lock.close();await unlink(lockPath);}
  }
- const code=await run(resolve(root,'scripts/run-intelligence-v4-priority.mjs'));
+ const code=await run(resolve(root,single?'scripts/run-intelligence-v4-single.mjs':'scripts/run-intelligence-v4-priority.mjs'));
  const state=await load(resolve(out,'execution-status.json'));
  if(code!==0||state.status!=='resource_stop'||!(await recoverable()).length)break;
 }

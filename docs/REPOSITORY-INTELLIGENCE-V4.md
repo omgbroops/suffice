@@ -484,3 +484,36 @@ while no worker was active and the exclusive lease was held. The Prettier 8381 B
 repetition 0 timeout has 49 requests and 48 final usage responses; its unresolved
 request remains conservatively reserved and its cost is unknown. Its known usage
 is a lower bound, not a fabricated complete cost or a zero-cost failure.
+
+
+## User-requested removal of further repetitions
+
+On November 10 the user requested one run per configuration per task. At that
+boundary 16 second runs had already been executed, covering four tasks. The
+active first run finished; a pause flag prevented any additional second run.
+The amended primary target is 96 (24 tasks x four configurations x one first
+run). Existing repeats and all spending remain preserved, with repeats reported
+separately rather than selected or pooled based on outcome. Two unsupported
+environments currently account for eight blocked first-run cells.
+
+`infrastructure/single-repetition-amendment.json` and `effective-protocol.json`
+record the change. `scripts/run-intelligence-v4-single.mjs` derives the existing
+Priority coordinator by filtering its dispatch loop to repetition zero and
+changing its displayed target to 96. Its worker, models, efforts, task inputs,
+first-run arm order, grading, graph/controller, limits and serial execution stay
+unchanged. The original 192-cell protocol and pre-amendment report snapshot in
+`analysis/pre-single-repetition/` remain intact.
+
+Continue with `node scripts/continue-intelligence-v4-resources.mjs`; it selects
+the amended controller whenever this amendment exists. For an offline derivation
+check use `node scripts/run-intelligence-v4-single.mjs --check-only`. Updated
+paired-analysis tests verify that favorable later repetitions cannot alter a
+first-run primary result. Unexecuted second-run rows carry `removed_by_user`
+and are not missing primary attempts.
+
+The reduced design weakens reproducibility assessment. Retaining the original
+first-run order also removes two of the four Williams-order rows, so the earlier
+full position/carryover balancing claim no longer applies. The size and timing
+of this user-driven amendment follow observation of partial outcomes and must
+remain visible; results are exploratory, with no claim of unchanged prospective
+conditions or proof of equivalence.
