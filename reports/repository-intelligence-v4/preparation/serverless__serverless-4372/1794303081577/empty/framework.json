@@ -1,0 +1,412 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 2,
+    "tests": 65,
+    "passes": 63,
+    "pending": 0,
+    "failures": 2,
+    "start": "2026-11-10T09:32:37.630Z",
+    "end": "2026-11-10T09:32:43.295Z",
+    "duration": 5665
+  },
+  "tests": [
+    {
+      "title": "#compileAuthorizers() should create an authorizer with minimal configuration",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "#compileAuthorizers() should create an authorizer with provided configuration",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "#compileAuthorizers() should apply optional provided type value to Authorizer Type",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "expected 'TOKEN' to equal 'REQUEST'",
+        "stack": "AssertionError: expected 'TOKEN' to equal 'REQUEST'\n    at lib\\plugins\\aws\\package\\compile\\events\\apiGateway\\lib\\authorizers.test.js:119:43\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromiseCtx (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\promise.js:606:10)\n    at Async._drainQueue (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\async.js:138:12)\n    at Async._drainQueues (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\async.js:143:10)\n    at Immediate.Async.drainQueues [as _onImmediate] (C:\\Users\\Public\\SufficeV4\\deps-c8f3782feb5040dbe19b\\node_modules\\bluebird\\js\\release\\async.js:17:14)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#compileAuthorizers() should apply TOKEN as authorizer Type when not given a type value",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#compileAuthorizers() should create a valid cognito user pool authorizer",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should ignore non-http events",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should reject an invalid http event",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if http event type is not a string or an object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw a helpful error if http event type object doesn't have a path property",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should validate the http events \"path\" property",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should validate the http events \"method\" property",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should validate the http events object syntax method is case insensitive",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should validate the http events string syntax method is case insensitive",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if the method is invalid",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should filter non-http events",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should discard a starting slash from paths",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if an authorizer is an invalid value",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if an authorizer is an empty object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if an cognito claims are being with a lambda proxy",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should accept AWS_IAM as authorizer",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should accept an authorizer as a string",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should set authorizer defaults",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should accept authorizer config",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should accept authorizer config with a type",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "expected undefined to equal 'request'",
+        "stack": "AssertionError: expected undefined to equal 'request'\n    at Context.<anonymous> (lib\\plugins\\aws\\package\\compile\\events\\apiGateway\\lib\\validate.test.js:433:32)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#validate() should accept authorizer config when resultTtlInSeconds is 0",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if \"origin\" and \"origins\" CORS config is used",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should process cors defaults",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if request is malformed",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if request.passThrough is invalid",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if request.template is malformed",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if response is malformed",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if response.headers are malformed",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if cors headers are not an array",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should process cors options",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should merge all preflight origins, method, headers and allowCredentials for a path",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should add default statusCode to custom statusCodes",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should allow custom statusCode with default pattern",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should handle expicit methods",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if the method is invalid",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should set authorizer.arn when provided a name string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should set authorizer.arn when provided an ARN string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should handle authorizer.name object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should handle an authorizer.arn object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if the provided config is not an object",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if the template config is not an object",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should process request parameters for lambda integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should process request parameters for lambda-proxy integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if the provided response config is not an object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error if the response headers are not objects",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() throw error if authorizer property is not a string or object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() throw error if authorizer property is an object but no name or arn provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should set \"AWS_PROXY\" as the default integration type",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should support LAMBDA integration",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate() should support HTTP integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if no uri is set in HTTP integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should support HTTP_PROXY integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw if no uri is set in HTTP_PROXY integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should support MOCK integration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should show a warning message when using request / response config with LAMBDA-PROXY",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "#validate() should not show a warning message when using request.parameter with LAMBDA-PROXY",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should remove non-parameter request/response config with LAMBDA-PROXY",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "#validate() should throw an error when an invalid integration type was provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should accept a valid passThrough",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should default pass through to NEVER for lambda",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate() should not set default pass through http",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    }
+  ],
+  "hooks": []
+}

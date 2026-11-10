@@ -1,0 +1,697 @@
+{
+  "task": "serverless__serverless-4372",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-4372-B-r0-a0/workspace",
+    "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+    "tree": "acfdb89a2e41531b8c2fc5ccb8652e39674c38fa"
+  },
+  "runId": "serverless__serverless-4372-B-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 156623.6748,
+  "usage": {
+    "input": 76707,
+    "cacheRead": 260480,
+    "cacheWrite": 0,
+    "output": 3937,
+    "estimatedApiUsd": 0.012243999999999998,
+    "modelCalls": 14,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.012243999999999998,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 1,
+    "unpassed": [
+      "#compileAuthorizers() should create an authorizer with minimal configuration",
+      "#compileAuthorizers() should create an authorizer with provided configuration",
+      "#compileAuthorizers() should apply TOKEN as authorizer Type when not given a type value",
+      "#validate() should accept authorizer config with a type"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 1,
+      "regressions": 62,
+      "regressionsPassed": 59,
+      "missing": [],
+      "failures": [
+        "#compileAuthorizers() should create an authorizer with minimal configuration",
+        "#compileAuthorizers() should create an authorizer with provided configuration",
+        "#compileAuthorizers() should apply TOKEN as authorizer Type when not given a type value",
+        "#validate() should accept authorizer config with a type"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#compileAuthorizers() should apply TOKEN as authorizer Type when not given a type value": 1,
+        "#compileAuthorizers() should apply optional provided type value to Authorizer Type": 1,
+        "#compileAuthorizers() should create a valid cognito user pool authorizer": 1,
+        "#compileAuthorizers() should create an authorizer with minimal configuration": 1,
+        "#compileAuthorizers() should create an authorizer with provided configuration": 1,
+        "#validate() should accept AWS_IAM as authorizer": 1,
+        "#validate() should accept a valid passThrough": 1,
+        "#validate() should accept an authorizer as a string": 1,
+        "#validate() should accept authorizer config": 1,
+        "#validate() should accept authorizer config when resultTtlInSeconds is 0": 1,
+        "#validate() should accept authorizer config with a type": 1,
+        "#validate() should add default statusCode to custom statusCodes": 1,
+        "#validate() should allow custom statusCode with default pattern": 1,
+        "#validate() should default pass through to NEVER for lambda": 1,
+        "#validate() should discard a starting slash from paths": 1,
+        "#validate() should filter non-http events": 1,
+        "#validate() should handle an authorizer.arn object": 1,
+        "#validate() should handle authorizer.name object": 1,
+        "#validate() should handle expicit methods": 1,
+        "#validate() should ignore non-http events": 1,
+        "#validate() should merge all preflight origins, method, headers and allowCredentials for a path": 1,
+        "#validate() should not set default pass through http": 1,
+        "#validate() should not show a warning message when using request.parameter with LAMBDA-PROXY": 1,
+        "#validate() should process cors defaults": 1,
+        "#validate() should process cors options": 1,
+        "#validate() should process request parameters for lambda integration": 1,
+        "#validate() should process request parameters for lambda-proxy integration": 1,
+        "#validate() should reject an invalid http event": 1,
+        "#validate() should remove non-parameter request/response config with LAMBDA-PROXY": 1,
+        "#validate() should set \"AWS_PROXY\" as the default integration type": 1,
+        "#validate() should set authorizer defaults": 1,
+        "#validate() should set authorizer.arn when provided a name string": 1,
+        "#validate() should set authorizer.arn when provided an ARN string": 1,
+        "#validate() should show a warning message when using request / response config with LAMBDA-PROXY": 1,
+        "#validate() should support HTTP integration": 1,
+        "#validate() should support HTTP_PROXY integration": 1,
+        "#validate() should support LAMBDA integration": 1,
+        "#validate() should support MOCK integration": 1,
+        "#validate() should throw a helpful error if http event type object doesn't have a path property": 1,
+        "#validate() should throw an error if \"origin\" and \"origins\" CORS config is used": 1,
+        "#validate() should throw an error if http event type is not a string or an object": 1,
+        "#validate() should throw an error if the method is invalid": 2,
+        "#validate() should throw an error if the provided config is not an object": 1,
+        "#validate() should throw an error if the provided response config is not an object": 1,
+        "#validate() should throw an error if the response headers are not objects": 1,
+        "#validate() should throw an error if the template config is not an object": 1,
+        "#validate() should throw an error when an invalid integration type was provided": 1,
+        "#validate() should throw if an authorizer is an empty object": 1,
+        "#validate() should throw if an authorizer is an invalid value": 1,
+        "#validate() should throw if an cognito claims are being with a lambda proxy": 1,
+        "#validate() should throw if cors headers are not an array": 1,
+        "#validate() should throw if no uri is set in HTTP integration": 1,
+        "#validate() should throw if no uri is set in HTTP_PROXY integration": 1,
+        "#validate() should throw if request is malformed": 1,
+        "#validate() should throw if request.passThrough is invalid": 1,
+        "#validate() should throw if request.template is malformed": 1,
+        "#validate() should throw if response is malformed": 1,
+        "#validate() should throw if response.headers are malformed": 1,
+        "#validate() should validate the http events \"method\" property": 1,
+        "#validate() should validate the http events \"path\" property": 1,
+        "#validate() should validate the http events object syntax method is case insensitive": 1,
+        "#validate() should validate the http events string syntax method is case insensitive": 1,
+        "#validate() throw error if authorizer property is an object but no name or arn provided": 1,
+        "#validate() throw error if authorizer property is not a string or object": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 62,
+    "requiredPassed": 59
+  },
+  "changed": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/validate.js"
+  ],
+  "extraChangedFiles": [
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 14,
+  "editCalls": 4,
+  "verificationCalls": 3,
+  "toolCalls": 30,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T09:35:26.344Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-10T09:35:30.333Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Resolve the upstream engineering issue below. Work in this checkout using the preprovisioned dependencies. The bash tool executes PowerShell 7 with no profile inside an isolated Windows filesystem; external networking is disabled. You may change production code, public tests and documentation. Preserve package metadata, dependency locks, configuration, native-verify.cjs, verification.json and .v4-* verification helpers. Do not install packages or attempt to access other workspaces. Run node native-verify.cjs for the repository-derived public smoke suite; you may run it with --tests-json PATH to test other existing public unit files. Independent grading reconstructs production changes in a pristine checkout and applies held-out upstream tests. Existing public snapshots may predate the requested behavior; do not undo that behavior merely to satisfy old snapshots.\n\nChange Authorizer type to \"REQUEST\" (instead of \"TOKEN\")\n# This is a Feature Proposal\r\n## Description\r\nChange Authorizer type to \"REQUEST\" (instead of \"TOKEN\") so that the Authorizer function receives all of the parameters passed to the main function (through lamba-proxy).\r\n\r\nAs-is, it is not possible to use any parameters in the Authorizer function (other than a single authorization header) which greatly restricts what is possible in the Authorizer.\r\n\r\nSee https://forum.serverless.com/t/set-custom-authorizer-type-to-request-not-token/2760/3\r\n\r\n## Additional Data\r\n\r\n* ***Serverless Framework Version you're using***:\r\n* ***Operating System***:\r\n* ***Stack Trace***:\r\n* ***Provider Error messages***:\r\n\n"
+    },
+    {
+      "at": "2026-11-10T09:35:43.179Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:35:57.402Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:35:58.961Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:07.613Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:16.976Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:25.305Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:26.946Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:36.725Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:43.803Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:36:56.283Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:37:09.668Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:37:20.100Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:37:32.041Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:37:45.243Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T09:37:52.520Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T09:35:30.332Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "b93e8b942a3435602d314a01ff52aac5af254a13ec8d4b96474e44237b9b03bb",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "ccfaaa79e4441976e94f992b3130d7091a23ea4f8068ee50c0ab058f416ef2ee"
+      },
+      "latencyMs": 3989.101300000002,
+      "parsedFiles": 397,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 81949912,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:35:31.611Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "b93e8b942a3435602d314a01ff52aac5af254a13ec8d4b96474e44237b9b03bb",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "ccfaaa79e4441976e94f992b3130d7091a23ea4f8068ee50c0ab058f416ef2ee"
+      },
+      "latencyMs": 1277.0674,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 29071392,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:35:44.622Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "b93e8b942a3435602d314a01ff52aac5af254a13ec8d4b96474e44237b9b03bb",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "ccfaaa79e4441976e94f992b3130d7091a23ea4f8068ee50c0ab058f416ef2ee"
+      },
+      "latencyMs": 1443.5820999999996,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 2570552,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:35:58.945Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "20cd61f16a8382572ff7f9467a66cc20cd482a7c8fe3a700d9c866cd9be157c6",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "3052616f0e65504d2de51e1156cb38d79438cb18aa53f754adadfa14db01a4a0"
+      },
+      "latencyMs": 1543.2564999999959,
+      "parsedFiles": 1,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 41419376,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:00.392Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "20cd61f16a8382572ff7f9467a66cc20cd482a7c8fe3a700d9c866cd9be157c6",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "3052616f0e65504d2de51e1156cb38d79438cb18aa53f754adadfa14db01a4a0"
+      },
+      "latencyMs": 1432.1078999999954,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": -1218144,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:09.106Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "20cd61f16a8382572ff7f9467a66cc20cd482a7c8fe3a700d9c866cd9be157c6",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "3052616f0e65504d2de51e1156cb38d79438cb18aa53f754adadfa14db01a4a0"
+      },
+      "latencyMs": 1493.095899999993,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 5533936,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:18.404Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "20cd61f16a8382572ff7f9467a66cc20cd482a7c8fe3a700d9c866cd9be157c6",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "3052616f0e65504d2de51e1156cb38d79438cb18aa53f754adadfa14db01a4a0"
+      },
+      "latencyMs": 1428.0023999999976,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 5405400,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:26.927Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1623.1785999999993,
+      "parsedFiles": 1,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 46942896,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:28.276Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1331.261799999993,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 4222848,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:38.133Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1408.452999999994,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 5392768,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:45.198Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1395.3850999999995,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": -6039640,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:36:57.738Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1455.0296999999991,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 8150880,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:37:11.099Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1432.136799999993,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": -3933672,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:37:21.828Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1728.5213999999978,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 2853784,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:37:33.401Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1361.200600000011,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": 28334296,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:37:46.772Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1529.9204000000027,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": -23747344,
+      "graphBytes": 24528257
+    },
+    {
+      "at": "2026-11-10T09:37:53.902Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "4683fe549b5d2c296a6a51a6d8752a4f9c7c7198",
+        "sourceContentVersion": "cc6375a10d08fdaba0001b4a7ddca3b54cbd8c6c41e98df73e36d6aa6681a554",
+        "configurationVersion": "1fa6bf92fe9b355e9f78b98bafbe0aee0b05796005f76231ad7711370614bd96",
+        "contentVersion": "f49e5c21c810804f4db766f3ee504f79421bd51bd9f48812cdf2b8b6286b7629"
+      },
+      "latencyMs": 1381.9701999999816,
+      "parsedFiles": 0,
+      "fileCount": 397,
+      "cacheBytes": 17496264,
+      "heapDeltaBytes": -29286136,
+      "graphBytes": 24528257
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/resources.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/apiKeys.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+          "callId": "call_106e37dfb038436d92025c86c1aef6f1|ctc_04803b338cc5a5b0016af2e56c8f7887d1962af8db1a102dbc/2"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+          "callId": "call_1a45d54d0acf46eb8eb4fa2184ae141d|ctc_04803b338cc5a5b0016af2e5865b2c87d1a91bb50c62fd626f/1"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+          "callId": "call_cf309d3a636f4a3dbdeaa908a2d33ff9|ctc_04803b338cc5a5b0016af2e58e62f487d1a1332321e4397150/1"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+          "callId": "call_0c21611223844c3082cad6417a31999d|ctc_04803b338cc5a5b0016af2e596c45487d1b540dc5c84d043b7/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "$testFile = Join-Path $env:TEMP 'serverless-authorizers-tests.json'; [System.IO.File]::WriteAllText($testFile, '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js\"]', [System.Text.UTF8Encoding]::new($false)); node native-verify.cjs --tests-json $testFile --report .v4-tmp/authorizers-report.json; $result = $LASTEXITCODE; Remove-Item $testFile -ErrorAction SilentlyContinue; exit $result",
+        "$testFile = Join-Path $env:TEMP 'serverless-authorizers-tests.json'; Set-Content -Path $testFile -Value '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js\"]' -NoNewline -Encoding utf8NoBOM; node native-verify.cjs --tests-json $testFile --report .v4-tmp/authorizers-report.json; $result = $LASTEXITCODE; Remove-Item $testFile -ErrorAction SilentlyContinue; exit $result",
+        "git diff --check; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; git diff -- lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js; git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff --check; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; git diff -- lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js; git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "$testFile = Join-Path $env:TEMP 'serverless-authorizers-tests.json'; [System.IO.File]::WriteAllText($testFile, '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js\"]', [System.Text.UTF8Encoding]::new($false)); node native-verify.cjs --tests-json $testFile --report .v4-tmp/authorizers-report.json; $result = $LASTEXITCODE; Remove-Item $testFile -ErrorAction SilentlyContinue; exit $result",
+        "$testFile = Join-Path $env:TEMP 'serverless-authorizers-tests.json'; Set-Content -Path $testFile -Value '[\"lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js\"]' -NoNewline -Encoding utf8NoBOM; node native-verify.cjs --tests-json $testFile --report .v4-tmp/authorizers-report.json; $result = $LASTEXITCODE; Remove-Item $testFile -ErrorAction SilentlyContinue; exit $result",
+        "git diff --check; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; git diff -- lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js; git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js",
+      "before": "'use strict';\n\nconst BbPromise = require('bluebird');\nconst _ = require('lodash');\n\nmodule.exports = {\n  compileAuthorizers() {\n    this.validated.events.forEach((event) => {\n      if (event.http.authorizer && event.http.authorizer.arn) {\n        const authorizer = event.http.authorizer;\n        const authorizerProperties = {\n          AuthorizerResultTtlInSeconds: authorizer.resultTtlInSeconds,\n          IdentitySource: authorizer.identitySource,\n          Name: authorizer.name,\n          RestApiId: { Ref: this.apiGatewayRestApiLogicalId },\n        };\n\n        if (typeof authorizer.identityValidationExpression === 'string') {\n          _.assign(authorizerProperties, {\n            IdentityValidationExpression: authorizer.identityValidationExpression,\n          });\n        }\n\n        const authorizerLogicalId = this.provider.naming.getAuthorizerLogicalId(authorizer.name);\n\n        if (typeof authorizer.arn === 'string' && authorizer.arn.match(/^arn:aws:cognito-idp/)) {\n          authorizerProperties.Type = 'COGNITO_USER_POOLS';\n          authorizerProperties.ProviderARNs = [authorizer.arn];\n        } else {\n          authorizerProperties.AuthorizerUri =\n          { 'Fn::Join': ['',\n            [\n              'arn:aws:apigateway:',\n              { Ref: 'AWS::Region' },\n              ':lambda:path/2015-03-31/functions/',\n              authorizer.arn,\n              '/invocations',\n            ],\n          ] };\n          authorizerProperties.Type = 'TOKEN';\n        }\n\n        _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {\n          [authorizerLogicalId]: {\n            Type: 'AWS::ApiGateway::Authorizer',\n            Properties: authorizerProperties,\n          },\n        });\n      }\n    });\n    return BbPromise.resolve();\n  },\n};\n",
+      "after": "'use strict';\n\nconst BbPromise = require('bluebird');\nconst _ = require('lodash');\n\nmodule.exports = {\n  compileAuthorizers() {\n    this.validated.events.forEach((event) => {\n      if (event.http.authorizer && event.http.authorizer.arn) {\n        const authorizer = event.http.authorizer;\n        const authorizerProperties = {\n          AuthorizerResultTtlInSeconds: authorizer.resultTtlInSeconds,\n          IdentitySource: authorizer.identitySource,\n          Name: authorizer.name,\n          RestApiId: { Ref: this.apiGatewayRestApiLogicalId },\n        };\n\n        if (typeof authorizer.identityValidationExpression === 'string') {\n          _.assign(authorizerProperties, {\n            IdentityValidationExpression: authorizer.identityValidationExpression,\n          });\n        }\n\n        const authorizerLogicalId = this.provider.naming.getAuthorizerLogicalId(authorizer.name);\n\n        if (typeof authorizer.arn === 'string' && authorizer.arn.match(/^arn:aws:cognito-idp/)) {\n          authorizerProperties.Type = 'COGNITO_USER_POOLS';\n          authorizerProperties.ProviderARNs = [authorizer.arn];\n        } else {\n          authorizerProperties.AuthorizerUri =\n          { 'Fn::Join': ['',\n            [\n              'arn:aws:apigateway:',\n              { Ref: 'AWS::Region' },\n              ':lambda:path/2015-03-31/functions/',\n              authorizer.arn,\n              '/invocations',\n            ],\n          ] };\n          authorizerProperties.Type = 'REQUEST';\n        }\n\n        _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {\n          [authorizerLogicalId]: {\n            Type: 'AWS::ApiGateway::Authorizer',\n            Properties: authorizerProperties,\n          },\n        });\n      }\n    });\n    return BbPromise.resolve();\n  },\n};\n"
+    },
+    {
+      "path": "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+      "before": "'use strict';\n\nconst expect = require('chai').expect;\nconst AwsCompileApigEvents = require('../index');\nconst Serverless = require('../../../../../../../Serverless');\nconst AwsProvider = require('../../../../../provider/awsProvider');\n\n\ndescribe('#compileAuthorizers()', () => {\n  let awsCompileApigEvents;\n\n  beforeEach(() => {\n    const serverless = new Serverless();\n    serverless.setProvider('aws', new AwsProvider(serverless));\n    serverless.service.service = 'first-service';\n    serverless.service.provider.compiledCloudFormationTemplate = { Resources: {} };\n    awsCompileApigEvents = new AwsCompileApigEvents(serverless);\n    awsCompileApigEvents.apiGatewayRestApiLogicalId = 'ApiGatewayRestApi';\n    awsCompileApigEvents.validated = {};\n  });\n\n  it('should create an authorizer with minimal configuration', () => {\n    awsCompileApigEvents.validated.events = [{\n      http: {\n        path: 'users/create',\n        method: 'POST',\n        authorizer: {\n          name: 'authorizer',\n          arn: { 'Fn::GetAtt': ['SomeLambdaFunction', 'Arn'] },\n          resultTtlInSeconds: 300,\n          identitySource: 'method.request.header.Authorization',\n        },\n      },\n    }];\n\n    return awsCompileApigEvents.compileAuthorizers().then(() => {\n      const resource = awsCompileApigEvents.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources.AuthorizerApiGatewayAuthorizer;\n\n      expect(resource.Type).to.equal('AWS::ApiGateway::Authorizer');\n      expect(resource.Properties.AuthorizerResultTtlInSeconds).to.equal(300);\n      expect(resource.Properties.AuthorizerUri).to.deep.equal({ 'Fn::Join': ['',\n        [\n          'arn:aws:apigateway:',\n          { Ref: 'AWS::Region' },\n          ':lambda:path/2015-03-31/functions/',\n          { 'Fn::GetAtt': ['SomeLambdaFunction', 'Arn'] },\n          '/invocations',\n        ],\n      ],\n      });\n      expect(resource.Properties.IdentitySource).to.equal('method.request.header.Authorization');\n      expect(resource.Properties.IdentityValidationExpression).to.equal(undefined);\n      expect(resource.Properties.Name).to.equal('authorizer');\n      expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');\n      expect(resource.Properties.Type).to.equal('TOKEN');\n    });\n  });\n\n  it('should create an authorizer with provided configuration', () => {\n    awsCompileApigEvents.validated.events = [{\n      http: {\n        path: 'users/create',\n        method: 'POST',\n        authorizer: {\n          name: 'authorizer',\n          arn: 'foo',\n          resultTtlInSeconds: 500,\n          identitySource: 'method.request.header.Custom',\n          identityValidationExpression: 'regex',\n        },\n      },\n    }];\n\n    return awsCompileApigEvents.compileAuthorizers().then(() => {\n      const resource = awsCompileApigEvents.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources.AuthorizerApiGatewayAuthorizer;\n\n      expect(resource.Type).to.equal('AWS::ApiGateway::Authorizer');\n      expect(resource.Properties.AuthorizerUri).to.deep.equal({ 'Fn::Join': ['',\n        [\n          'arn:aws:apigateway:',\n          { Ref: 'AWS::Region' },\n          ':lambda:path/2015-03-31/functions/',\n          'foo',\n          '/invocations',\n        ],\n      ],\n      });\n      expect(resource.Properties.AuthorizerResultTtlInSeconds).to.equal(500);\n      expect(resource.Properties.IdentitySource).to.equal('method.request.header.Custom');\n      expect(resource.Properties.IdentityValidationExpression).to.equal('regex');\n      expect(resource.Properties.Name).to.equal('authorizer');\n      expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');\n      expect(resource.Properties.Type).to.equal('TOKEN');\n    });\n  });\n\n  it('should create a valid cognito user pool authorizer', () => {\n    awsCompileApigEvents.validated.events = [{\n      http: {\n        path: 'users/create',\n        method: 'POST',\n        authorizer: {\n          name: 'authorizer',\n          arn: 'arn:aws:cognito-idp:us-east-1:xxx:userpool/us-east-1_ZZZ',\n        },\n      },\n    }];\n\n    return awsCompileApigEvents.compileAuthorizers().then(() => {\n      const resource = awsCompileApigEvents.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources.AuthorizerApiGatewayAuthorizer;\n\n      expect(resource.Properties.Name).to.equal('authorizer');\n\n      expect(resource.Properties.ProviderARNs[0]\n      ).to.equal('arn:aws:cognito-idp:us-east-1:xxx:userpool/us-east-1_ZZZ');\n\n      expect(resource.Properties.Type).to.equal('COGNITO_USER_POOLS');\n    });\n  });\n});\n",
+      "after": "'use strict';\n\nconst expect = require('chai').expect;\nconst AwsCompileApigEvents = require('../index');\nconst Serverless = require('../../../../../../../Serverless');\nconst AwsProvider = require('../../../../../provider/awsProvider');\n\n\ndescribe('#compileAuthorizers()', () => {\n  let awsCompileApigEvents;\n\n  beforeEach(() => {\n    const serverless = new Serverless();\n    serverless.setProvider('aws', new AwsProvider(serverless));\n    serverless.service.service = 'first-service';\n    serverless.service.provider.compiledCloudFormationTemplate = { Resources: {} };\n    awsCompileApigEvents = new AwsCompileApigEvents(serverless);\n    awsCompileApigEvents.apiGatewayRestApiLogicalId = 'ApiGatewayRestApi';\n    awsCompileApigEvents.validated = {};\n  });\n\n  it('should create an authorizer with minimal configuration', () => {\n    awsCompileApigEvents.validated.events = [{\n      http: {\n        path: 'users/create',\n        method: 'POST',\n        authorizer: {\n          name: 'authorizer',\n          arn: { 'Fn::GetAtt': ['SomeLambdaFunction', 'Arn'] },\n          resultTtlInSeconds: 300,\n          identitySource: 'method.request.header.Authorization',\n        },\n      },\n    }];\n\n    return awsCompileApigEvents.compileAuthorizers().then(() => {\n      const resource = awsCompileApigEvents.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources.AuthorizerApiGatewayAuthorizer;\n\n      expect(resource.Type).to.equal('AWS::ApiGateway::Authorizer');\n      expect(resource.Properties.AuthorizerResultTtlInSeconds).to.equal(300);\n      expect(resource.Properties.AuthorizerUri).to.deep.equal({ 'Fn::Join': ['',\n        [\n          'arn:aws:apigateway:',\n          { Ref: 'AWS::Region' },\n          ':lambda:path/2015-03-31/functions/',\n          { 'Fn::GetAtt': ['SomeLambdaFunction', 'Arn'] },\n          '/invocations',\n        ],\n      ],\n      });\n      expect(resource.Properties.IdentitySource).to.equal('method.request.header.Authorization');\n      expect(resource.Properties.IdentityValidationExpression).to.equal(undefined);\n      expect(resource.Properties.Name).to.equal('authorizer');\n      expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');\n      expect(resource.Properties.Type).to.equal('REQUEST');\n    });\n  });\n\n  it('should create an authorizer with provided configuration', () => {\n    awsCompileApigEvents.validated.events = [{\n      http: {\n        path: 'users/create',\n        method: 'POST',\n        authorizer: {\n          name: 'authorizer',\n          arn: 'foo',\n          resultTtlInSeconds: 500,\n          identitySource: 'method.request.header.Custom',\n          identityValidationExpression: 'regex',\n        },\n      },\n    }];\n\n    return awsCompileApigEvents.compileAuthorizers().then(() => {\n      const resource = awsCompileApigEvents.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources.AuthorizerApiGatewayAuthorizer;\n\n      expect(resource.Type).to.equal('AWS::ApiGateway::Authorizer');\n      expect(resource.Properties.AuthorizerUri).to.deep.equal({ 'Fn::Join': ['',\n        [\n          'arn:aws:apigateway:',\n          { Ref: 'AWS::Region' },\n          ':lambda:path/2015-03-31/functions/',\n          'foo',\n          '/invocations',\n        ],\n      ],\n      });\n      expect(resource.Properties.AuthorizerResultTtlInSeconds).to.equal(500);\n      expect(resource.Properties.IdentitySource).to.equal('method.request.header.Custom');\n      expect(resource.Properties.IdentityValidationExpression).to.equal('regex');\n      expect(resource.Properties.Name).to.equal('authorizer');\n      expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');\n      expect(resource.Properties.Type).to.equal('REQUEST');\n    });\n  });\n\n  it('should create a valid cognito user pool authorizer', () => {\n    awsCompileApigEvents.validated.events = [{\n      http: {\n        path: 'users/create',\n        method: 'POST',\n        authorizer: {\n          name: 'authorizer',\n          arn: 'arn:aws:cognito-idp:us-east-1:xxx:userpool/us-east-1_ZZZ',\n        },\n      },\n    }];\n\n    return awsCompileApigEvents.compileAuthorizers().then(() => {\n      const resource = awsCompileApigEvents.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources.AuthorizerApiGatewayAuthorizer;\n\n      expect(resource.Properties.Name).to.equal('authorizer');\n\n      expect(resource.Properties.ProviderARNs[0]\n      ).to.equal('arn:aws:cognito-idp:us-east-1:xxx:userpool/us-east-1_ZZZ');\n\n      expect(resource.Properties.Type).to.equal('COGNITO_USER_POOLS');\n    });\n  });\n});\n"
+    }
+  ],
+  "final": "Updated custom Lambda API Gateway authorizers to generate `Type: REQUEST`; Cognito authorizers remain unchanged. Updated the authorizer tests to expect the new type.\n\nVerification passed: `node native-verify.cjs`, the targeted authorizer test via `--tests-json`, and `git diff --check`.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-4372-B-r0-a0\\home\\events\\1794303326302-b91370ea-dab7-453c-ad73-72aa872ac7f4.jsonl",
+  "receiptAudit": {
+    "requests": 14,
+    "finalUsageResponses": 14,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 14,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-4372-B-r0",
+  "attempt": 0
+}

@@ -1,0 +1,35 @@
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js
+index 84b8616..450558b 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js
+@@ -37,7 +37,7 @@ module.exports = {
+               '/invocations',
+             ],
+           ] };
+-          authorizerProperties.Type = 'TOKEN';
++          authorizerProperties.Type = 'REQUEST';
+         }
+ 
+         _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js
+index aa32f06..1df01b1 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js
+@@ -53,7 +53,7 @@ describe('#compileAuthorizers()', () => {
+       expect(resource.Properties.IdentityValidationExpression).to.equal(undefined);
+       expect(resource.Properties.Name).to.equal('authorizer');
+       expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');
+-      expect(resource.Properties.Type).to.equal('TOKEN');
++      expect(resource.Properties.Type).to.equal('REQUEST');
+     });
+   });
+ 
+@@ -92,7 +92,7 @@ describe('#compileAuthorizers()', () => {
+       expect(resource.Properties.IdentityValidationExpression).to.equal('regex');
+       expect(resource.Properties.Name).to.equal('authorizer');
+       expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');
+-      expect(resource.Properties.Type).to.equal('TOKEN');
++      expect(resource.Properties.Type).to.equal('REQUEST');
+     });
+   });
+ 

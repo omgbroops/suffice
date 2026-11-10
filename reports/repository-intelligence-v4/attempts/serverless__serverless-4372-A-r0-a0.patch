@@ -1,0 +1,48 @@
+diff --git a/docs/providers/aws/events/apigateway.md b/docs/providers/aws/events/apigateway.md
+index ff68cfb..06072c0 100644
+--- a/docs/providers/aws/events/apigateway.md
++++ b/docs/providers/aws/events/apigateway.md
+@@ -244,7 +244,7 @@ functions:
+ 
+ ### HTTP Endpoints with Custom Authorizers
+ 
+-Custom Authorizers allow you to run an AWS Lambda Function before your targeted AWS Lambda Function.  This is useful for Microservice Architectures or when you simply want to do some Authorization before running your business logic.
++Custom Authorizers allow you to run an AWS Lambda Function before your targeted AWS Lambda Function.  This is useful for Microservice Architectures or when you simply want to do some Authorization before running your business logic. Lambda custom authorizers use the `REQUEST` type, so the authorizer function receives the full API Gateway request rather than only the authorization token.
+ 
+ You can enable Custom Authorizers for your HTTP endpoint by setting the Authorizer in your `http` event to another function
+ in the same service, as shown in the following example:
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js
+index 84b8616..450558b 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.js
+@@ -37,7 +37,7 @@ module.exports = {
+               '/invocations',
+             ],
+           ] };
+-          authorizerProperties.Type = 'TOKEN';
++          authorizerProperties.Type = 'REQUEST';
+         }
+ 
+         _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js
+index aa32f06..1df01b1 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js
+@@ -53,7 +53,7 @@ describe('#compileAuthorizers()', () => {
+       expect(resource.Properties.IdentityValidationExpression).to.equal(undefined);
+       expect(resource.Properties.Name).to.equal('authorizer');
+       expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');
+-      expect(resource.Properties.Type).to.equal('TOKEN');
++      expect(resource.Properties.Type).to.equal('REQUEST');
+     });
+   });
+ 
+@@ -92,7 +92,7 @@ describe('#compileAuthorizers()', () => {
+       expect(resource.Properties.IdentityValidationExpression).to.equal('regex');
+       expect(resource.Properties.Name).to.equal('authorizer');
+       expect(resource.Properties.RestApiId.Ref).to.equal('ApiGatewayRestApi');
+-      expect(resource.Properties.Type).to.equal('TOKEN');
++      expect(resource.Properties.Type).to.equal('REQUEST');
+     });
+   });
+ 
