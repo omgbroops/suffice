@@ -1,0 +1,39 @@
+diff --git a/lib/plugins/aws/lib/validate.js b/lib/plugins/aws/lib/validate.js
+index 77dad1a..adcee66 100644
+--- a/lib/plugins/aws/lib/validate.js
++++ b/lib/plugins/aws/lib/validate.js
+@@ -36,7 +36,7 @@ module.exports = {
+     ) {
+       // first check if the EC2 Metadata Service has creds before throwing error
+       const metadataService = new this.provider.sdk.MetadataService({
+-        httpOptions: { timeout: 100, connectTimeout: 100 }, // .1 second timeout
++        httpOptions: { timeout: 1000, connectTimeout: 1000 }, // 1 second timeout
+         maxRetries: 0, // retry 0 times
+       });
+       return new BbPromise((resolve, reject) =>
+diff --git a/lib/plugins/aws/lib/validate.test.js b/lib/plugins/aws/lib/validate.test.js
+index 0a0a5e2..f59dc20 100644
+--- a/lib/plugins/aws/lib/validate.test.js
++++ b/lib/plugins/aws/lib/validate.test.js
+@@ -10,6 +10,10 @@ chai.use(require('chai-as-promised'));
+ const expect = chai.expect;
+ 
+ class MetadataService {
++  constructor(options) {
++    MetadataService.lastOptions = options;
++  }
++
+   request(error) {
+     error('error');
+   }
+@@ -94,6 +98,10 @@ describe('#validate', () => {
+ 
+       return expect(awsPlugin.validate()).to.be.rejected.then(() => {
+         expect(awsPlugin.options.region).to.equal('some-region');
++        expect(MetadataService.lastOptions).to.deep.equal({
++          httpOptions: { timeout: 1000, connectTimeout: 1000 },
++          maxRetries: 0,
++        });
+       });
+     });
+ 
