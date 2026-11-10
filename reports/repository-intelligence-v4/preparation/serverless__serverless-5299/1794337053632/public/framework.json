@@ -1,0 +1,106 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 7,
+    "tests": 15,
+    "passes": 15,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-11-10T18:58:45.855Z",
+    "end": "2026-11-10T18:58:45.908Z",
+    "duration": 53
+  },
+  "tests": [
+    {
+      "title": "AwsRollback #constructor() should have hooks",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #constructor() should set the provider variable to an instance of AwsProvider",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"before:rollback:initialize\" hook promise chain in order",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"rollback:rollback\" promise chain in order",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsRollback hooks should run \"deploy:list\" if timestamp is not specified",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should reject in case no deployments are available",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should reject in case this specific deployments is not available",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsRollback #setStackToUpdate() should resolve set the artifactDirectoryName and resolve",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format invocation report",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format invocation failures",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format lambda console.log lines",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should format lambda python logger lines",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should pass through log lines with no tabs",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#formatLambdaLogEvent() should pass through log lines with tabs but no date",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Logout #constructor() should have commands",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    }
+  ],
+  "hooks": []
+}

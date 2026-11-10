@@ -1,0 +1,563 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 35,
+    "tests": 83,
+    "passes": 76,
+    "pending": 0,
+    "failures": 10,
+    "start": "2026-11-10T18:58:56.127Z",
+    "end": "2026-11-10T18:58:56.893Z",
+    "duration": 766
+  },
+  "tests": [
+    {
+      "title": "AwsProvider #getProviderName() should return the provider name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() should set Serverless instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() should set AWS instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() should set the provider property",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() should set AWS proxy",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() should set AWS timeout",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() certificate authority - environment variable should set AWS ca single",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() certificate authority - environment variable should set AWS ca multiple",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() certificate authority - file should set AWS cafile single",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() certificate authority - file should set AWS cafile multiple",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() certificate authority - file should set AWS ca and cafile",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() deploymentBucket configuration should do nothing if not defined",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() deploymentBucket configuration should do nothing if the value is a string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() deploymentBucket configuration should save a given object and use name from it",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #constructor() deploymentBucket configuration should save a given object and nullify the name if one is not provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should call correct aws method",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should retry if error code is 429",
+      "status": "passed",
+      "durationMs": 12,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should retry if error code is 429 and retryable is set to false",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should reject errors",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should return ref to docs for missing credentials",
+      "status": "passed",
+      "durationMs": 113,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should not retry for missing credentials",
+      "status": "passed",
+      "durationMs": 9,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() should enable S3 acceleration if CLI option is provided",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() using the request cache should call correct aws method",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #request() using the request cache should resolve to the same response with mutiple parallel requests",
+      "status": "passed",
+      "durationMs": 396,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should set region for credentials",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should not set credentials if credentials is an empty object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should not set credentials if credentials has undefined values",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should not set credentials if credentials has empty string values",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials from provider declared credentials",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should load profile credentials from AWS_SHARED_CREDENTIALS_FILE",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should load async profiles properly",
+      "status": "passed",
+      "durationMs": 23,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should throw an error if a non-existent profile is set",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should not set credentials if empty profile is set",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should not set credentials if profile is not set",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should not set credentials if empty profile is set",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials from provider declared temporary profile",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials from environment declared for-all-stages credentials",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials from environment declared stage specific credentials",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials from environment declared for-all-stages profile",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials from environment declared stage-specific profile",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should get credentials when profile is provied via --aws-profile option",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getCredentials() should set the signatureVersion to v4 if the serverSideEncryption is aws:kms",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #getValues should return an array of values given paths to them",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #firstValue should ignore entries without a 'value' attribute",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #firstValue should ignore entries with an undefined 'value' attribute",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #firstValue should return the first value",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #firstValue should return the middle value",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #firstValue should return the last value",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider values #firstValue should return the last object if none have valid values",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getRegion() should prefer options over config or provider",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getRegion() should prefer config over provider in lieu of options",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getRegion() should use provider in lieu of options and config",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getRegion() should use the default us-east-1 in lieu of options, config, and provider",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getServerlessDeploymentBucketName() should return the name of the serverless deployment bucket",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getServerlessDeploymentBucketName() should return the name of the custom deployment bucket",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getDeploymentPrefix() should return custom deployment prefix if defined",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "awsProvider.getDeploymentPrefix is not a function",
+        "stack": "TypeError: awsProvider.getDeploymentPrefix is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\provider\\awsProvider.test.js:918:26)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsProvider #getDeploymentPrefix() should use the default serverless if not defined",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "awsProvider.getDeploymentPrefix is not a function",
+        "stack": "TypeError: awsProvider.getDeploymentPrefix is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\provider\\awsProvider.test.js:925:26)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsProvider #getStage() should prefer options over config or provider",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getStage() should prefer config over provider in lieu of options",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getStage() should use provider in lieu of options and config",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getStage() should use the default dev in lieu of options, config, and provider",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getAccountInfo() should return the AWS account id and partition",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #getAccountId() should return the AWS account id",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #isS3TransferAccelerationEnabled() should return false by default",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #isS3TransferAccelerationEnabled() should return true when CLI option is provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #canUseS3TransferAcceleration() should return false by default with any input",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #canUseS3TransferAcceleration() should return false by default with S3.upload too",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #canUseS3TransferAcceleration() should return false by default with S3.putObject too",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #canUseS3TransferAcceleration() should return false when CLI option is provided but not an S3 upload",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #canUseS3TransferAcceleration() should return true when CLI option is provided for S3.upload",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #canUseS3TransferAcceleration() should return true when CLI option is provided for S3.putObject",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #enableS3TransferAcceleration() should update the given credentials object to enable S3 acceleration",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "AwsProvider #disableTransferAccelerationForCurrentDeploy() should remove the corresponding option for the current deploy",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "emptyS3Bucket #setServerlessDeploymentBucketName() should store the name of the Serverless deployment bucket in the \"this\" variable",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "emptyS3Bucket #listObjects() should resolve if no objects are present",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "awsRemove.provider.getDeploymentPrefix is not a function",
+        "stack": "TypeError: awsRemove.provider.getDeploymentPrefix is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\remove\\lib\\bucket.test.js:46:41)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "emptyS3Bucket #listObjects() should push objects to the array if present",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Attempted to wrap request which is already wrapped",
+        "stack": "TypeError: Attempted to wrap request which is already wrapped\n    at checkWrappedMethod (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:81:29)\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:129:21)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\plugins\\aws\\remove\\lib\\bucket.test.js:64:37)\n    at processImmediate (node:internal/timers:466:21)\n--------------\nError: Stack Trace for original\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:154:34)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\plugins\\aws\\remove\\lib\\bucket.test.js:42:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "emptyS3Bucket #deleteObjects() should delete all objects in the S3 bucket",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Attempted to wrap request which is already wrapped",
+        "stack": "TypeError: Attempted to wrap request which is already wrapped\n    at checkWrappedMethod (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:81:29)\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:129:21)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\plugins\\aws\\remove\\lib\\bucket.test.js:96:39)\n    at processImmediate (node:internal/timers:466:21)\n--------------\nError: Stack Trace for original\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:154:34)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\plugins\\aws\\remove\\lib\\bucket.test.js:42:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "emptyS3Bucket #deleteObjects() should resolve if objectsInBucket is empty",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "emptyS3Bucket #emptyS3Bucket() should run promise chain in order",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#findAndGroupDeployments() should return an empty result in case no S3 objects are provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#findAndGroupDeployments() should group stacks",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "expected [] to deeply equal [ Array(3) ]",
+        "stack": "AssertionError: expected [] to deeply equal [ Array(3) ]\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Context.<anonymous> (lib\\plugins\\aws\\utils\\findAndGroupDeployments.test.js:77:16)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#getS3ObjectsFromStacks() should return an empty result in case no stacks are provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#getS3ObjectsFromStacks() should return an empty result in case no stacks are provided",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "expected [ Array(4) ] to deeply equal [ Array(4) ]",
+        "stack": "AssertionError: expected [ Array(4) ] to deeply equal [ Array(4) ]\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-0e141e538cd5d73f0be5\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Context.<anonymous> (lib\\plugins\\aws\\utils\\getS3ObjectsFromStacks.test.js:44:81)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    }
+  ],
+  "hooks": [
+    {
+      "title": "cleanupS3Bucket \"before each\" hook for \"should resolve if no objects are found\"",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "provider.getDeploymentPrefix is not a function",
+        "stack": "TypeError: provider.getDeploymentPrefix is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\deploy\\lib\\cleanupS3Bucket.test.js:32:29)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsDeployList \"before each\" hook for \"should print no deployments in case there are none\"",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "provider.getDeploymentPrefix is not a function",
+        "stack": "TypeError: provider.getDeploymentPrefix is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\deployList\\index.test.js:24:29)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "AwsRollback \"before each\" hook for \"should have hooks\"",
+      "status": "failed",
+      "durationMs": 3,
+      "error": {
+        "message": "provider.getDeploymentPrefix is not a function",
+        "stack": "TypeError: provider.getDeploymentPrefix is not a function\n    at Context.<anonymous> (lib\\plugins\\aws\\rollback\\index.test.js:30:29)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    }
+  ]
+}
