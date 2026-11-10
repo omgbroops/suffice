@@ -1,0 +1,111 @@
+diff --git a/src/language-js/print/typescript.js b/src/language-js/print/typescript.js
+index 32942f2..1884c3a 100644
+--- a/src/language-js/print/typescript.js
++++ b/src/language-js/print/typescript.js
+@@ -414,7 +414,7 @@ function printTypescript(path, options, print) {
+ 
+       return parts;
+     case "TSEnumMember":
+-      parts.push(print("id"));
++      parts.push(node.computed ? ["[", print("id"), "]"] : print("id"));
+       if (node.initializer) {
+         parts.push(" = ", print("initializer"));
+       }
+diff --git a/tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap b/tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap
+index 82de64f..55fdf8e 100644
+--- a/tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap
+@@ -1,5 +1,61 @@
+ // Jest Snapshot v1, https://goo.gl/fbAQLP
+ 
++exports[`computed.ts [babel-ts] format 1`] = `
++"Unexpected token (2:3)
++  1 | enum A {
++> 2 |   [i++]
++    |   ^
++  3 | }
++  4 |
++  5 | const a = "b""
++`;
++
++exports[`computed.ts format 1`] = `
++====================================options=====================================
++parsers: ["typescript"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++enum A {
++  [i++]
++}
++
++const a = "b"
++enum B {
++  [a] = 2
++}
++
++enum Mixed {
++  Plain,
++  "quoted" = 1,
++  ["computed"] = 2,
++  [getKey()] = 3,
++  [a + "suffix"] = 4,
++  [/* key */ a] = 5
++}
++
++=====================================output=====================================
++enum A {
++  [i++],
++}
++
++const a = "b";
++enum B {
++  [a] = 2,
++}
++
++enum Mixed {
++  Plain,
++  "quoted" = 1,
++  ["computed"] = 2,
++  [getKey()] = 3,
++  [a + "suffix"] = 4,
++  [/* key */ a] = 5,
++}
++
++================================================================================
++`;
++
+ exports[`enum.ts format 1`] = `
+ ====================================options=====================================
+ parsers: ["typescript"]
+diff --git a/tests/format/typescript/enum/computed.ts b/tests/format/typescript/enum/computed.ts
+new file mode 100644
+index 0000000..aaa8c58
+--- /dev/null
++++ b/tests/format/typescript/enum/computed.ts
+@@ -0,0 +1,17 @@
++enum A {
++  [i++]
++}
++
++const a = "b"
++enum B {
++  [a] = 2
++}
++
++enum Mixed {
++  Plain,
++  "quoted" = 1,
++  ["computed"] = 2,
++  [getKey()] = 3,
++  [a + "suffix"] = 4,
++  [/* key */ a] = 5
++}
+diff --git a/tests/format/typescript/enum/jsfmt.spec.js b/tests/format/typescript/enum/jsfmt.spec.js
+index 2ea3bb6..14b8c25 100644
+--- a/tests/format/typescript/enum/jsfmt.spec.js
++++ b/tests/format/typescript/enum/jsfmt.spec.js
+@@ -1 +1,3 @@
+-run_spec(__dirname, ["typescript"]);
++run_spec(__dirname, ["typescript"], {
++  errors: { "babel-ts": ["computed.ts"] },
++});

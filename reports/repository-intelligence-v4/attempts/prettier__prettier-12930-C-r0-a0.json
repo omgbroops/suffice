@@ -1,0 +1,568 @@
+{
+  "task": "prettier__prettier-12930",
+  "repo": "prettier/prettier",
+  "category": "simple",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12930-C-r0-a0/workspace",
+    "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+    "tree": "4c053dae9f82edfd122bf6ef50a3364ea756466b"
+  },
+  "runId": "prettier__prettier-12930-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 498953.47320000007,
+  "usage": {
+    "input": 70759,
+    "cacheRead": 633856,
+    "cacheWrite": 0,
+    "output": 6667,
+    "estimatedApiUsd": 0.016747960000000003,
+    "modelCalls": 25,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.016747960000000003,
+  "acceptance": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": true,
+      "classification": "passed",
+      "targets": 1,
+      "targetsPassed": 1,
+      "regressions": 5,
+      "regressionsPassed": 5,
+      "missing": [],
+      "failures": [],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/typescript/enum/jsfmt.spec.js->computed-members.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->computed-members.ts format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->enum.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->enum.ts format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->multiline.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->multiline.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 5,
+    "requiredPassed": 5
+  },
+  "changed": [
+    "src/language-js/print/typescript.js",
+    "tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/misc/typescript-only/computed-enum.ts"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/misc/typescript-only/computed-enum.ts"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 25,
+  "editCalls": 3,
+  "verificationCalls": 3,
+  "toolCalls": 52,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T18:49:51.113Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-10T18:50:11.099Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          "src/language-js/print/typescript.js",
+          "tests/format/typescript/enum/computed.ts"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:50:23.636Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          "src/language-js/print/typescript.js",
+          "tests/format/typescript/enum/computed.ts"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:50:49.352Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/print/typescript.js",
+          "tests/format/typescript/enum/computed.ts"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:51:02.063Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/print/typescript.js",
+          "tests/format/typescript/enum/computed.ts"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:52:45.115Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "src/common/parser-create-error.js",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-10T18:52:53.360Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/common/parser-create-error.js",
+          "src/index.js",
+          "src/language-js/parse/babel.js",
+          "src/language-js/parse/utils/create-babel-parse-error.js",
+          "src/language-js/print/typescript.js",
+          "src/main/core.js",
+          "src/main/parser.js",
+          "tests/config/format-test.js",
+          "tests/format/typescript/enum/computed.ts",
+          "tests/format/typescript/enum/jsfmt.spec.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:53:02.355Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/common/parser-create-error.js",
+          "src/index.js",
+          "src/language-js/parse/babel.js",
+          "src/language-js/parse/utils/create-babel-parse-error.js",
+          "src/language-js/print/typescript.js",
+          "src/main/core.js",
+          "src/main/parser.js",
+          "tests/config/format-test.js",
+          "tests/format/typescript/enum/computed.ts",
+          "tests/format/typescript/enum/jsfmt.spec.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:54:37.421Z",
+      "type": "graph_query",
+      "operation": "get_symbol_context",
+      "reason": "failed-verification-dependency-context",
+      "args": {
+        "path": "src/common/parser-create-error.js",
+        "limit": 4
+      }
+    },
+    {
+      "at": "2026-11-10T18:54:46.573Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/common/parser-create-error.js",
+          "src/index.js",
+          "src/language-js/parse/babel.js",
+          "src/language-js/parse/utils/create-babel-parse-error.js",
+          "src/language-js/print/typescript.js",
+          "src/main/core.js",
+          "src/main/parser.js",
+          "tests/config/format-test.js",
+          "tests/format/misc/typescript-only/computed-enum.ts",
+          "tests/format/typescript/enum/computed.ts",
+          "tests/format/typescript/enum/jsfmt.spec.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T18:54:54.802Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/common/parser-create-error.js",
+          "src/index.js",
+          "src/language-js/parse/babel.js",
+          "src/language-js/parse/utils/create-babel-parse-error.js",
+          "src/language-js/print/typescript.js",
+          "src/main/core.js",
+          "src/main/parser.js",
+          "tests/config/format-test.js",
+          "tests/format/misc/typescript-only/computed-enum.ts",
+          "tests/format/typescript/enum/computed.ts",
+          "tests/format/typescript/enum/jsfmt.spec.js"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T18:50:04.585Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 13471.839100000012,
+      "parsedFiles": 4254,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 163722128,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:50:23.519Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 12420.228700000007,
+      "parsedFiles": 2,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 120229504,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:50:36.042Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 12406.651600000012,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 87924704,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:51:01.950Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 12598.276299999998,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 87170520,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:51:13.743Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 11680.67749999999,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": -19557928,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:52:53.352Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 8237.677200000035,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 50413720,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:53:02.230Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 8871.410700000008,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": -5792,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:53:10.923Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 8567.973599999968,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 53504464,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:54:46.556Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "12c2fd78d6d71653ff0f63a270024f89f3b95116c80dff237b4dac98e5015455",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "c0290d2c25caef060fbf8f98a73183f31d52de92b6c47ddeb29444f9b0d81fe3"
+      },
+      "latencyMs": 9136.127600000007,
+      "parsedFiles": 1,
+      "fileCount": 4256,
+      "cacheBytes": 24394797,
+      "heapDeltaBytes": 105517424,
+      "graphBytes": 34146074
+    },
+    {
+      "at": "2026-11-10T18:54:54.719Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "12c2fd78d6d71653ff0f63a270024f89f3b95116c80dff237b4dac98e5015455",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "c0290d2c25caef060fbf8f98a73183f31d52de92b6c47ddeb29444f9b0d81fe3"
+      },
+      "latencyMs": 8155.0386999999755,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394797,
+      "heapDeltaBytes": -46084120,
+      "graphBytes": 34146074
+    },
+    {
+      "at": "2026-11-10T18:55:03.563Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "12c2fd78d6d71653ff0f63a270024f89f3b95116c80dff237b4dac98e5015455",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "c0290d2c25caef060fbf8f98a73183f31d52de92b6c47ddeb29444f9b0d81fe3"
+      },
+      "latencyMs": 8761.266200000013,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394797,
+      "heapDeltaBytes": -18950240,
+      "graphBytes": 34146074
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "candidatePaths": [
+        "src/language-js/print/typescript.js",
+        "tests/format/typescript/enum/computed.ts"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "Remove-Item tests/format/typescript/enum/computed.ts; git status --short",
+        "git status --short; git diff -- src/language-js/print/typescript.js tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap; git diff --stat; Get-Content tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap | Select-String -Pattern 'computed-enum' -Context 0,24"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/language-js/print/typescript.js",
+        "tests/format/typescript/enum/computed.ts"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "Remove-Item tests/format/typescript/enum/computed.ts; git status --short",
+        "git status --short; git diff -- src/language-js/print/typescript.js tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap; git diff --stat; Get-Content tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap | Select-String -Pattern 'computed-enum' -Context 0,24"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/common/parser-create-error.js",
+        "src/index.js",
+        "src/language-js/parse/babel.js",
+        "src/language-js/parse/utils/create-babel-parse-error.js",
+        "src/language-js/print/typescript.js",
+        "src/main/core.js",
+        "src/main/parser.js",
+        "tests/config/format-test.js",
+        "tests/format/typescript/enum/computed.ts",
+        "tests/format/typescript/enum/jsfmt.spec.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "rg -n 'run_spec' tests/format/typescript tests/config/format-test.js | Select-Object -First 70",
+        "rg -n 'function run_spec|run_spec\\s*=|errors\\[' tests/config/format-test.js; $p='tests/config/format-test.js'; (Get-Content $p)[1..120]; (Get-Content $p)[250..340]; Get-Content tests/format/typescript/conformance/parser/ecmascript5/Statements/jsfmt.spec.js",
+        "$p='tests/config/format-test.js'; (Get-Content $p)[130..255]; Get-Content tests/format/typescript/conformance/parser/ecmascript5/Statements/jsfmt.spec.js; Get-Content tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap | Select-Object -First 100",
+        "Remove-Item tests/format/typescript/enum/computed.ts; git status --short",
+        "git status --short; git diff -- src/language-js/print/typescript.js tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap; git diff --stat; Get-Content tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap | Select-String -Pattern 'computed-enum' -Context 0,24"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/common/parser-create-error.js",
+        "src/index.js",
+        "src/language-js/parse/babel.js",
+        "src/language-js/parse/utils/create-babel-parse-error.js",
+        "src/language-js/print/typescript.js",
+        "src/main/core.js",
+        "src/main/parser.js",
+        "tests/config/format-test.js",
+        "tests/format/misc/typescript-only/computed-enum.ts",
+        "tests/format/typescript/enum/computed.ts",
+        "tests/format/typescript/enum/jsfmt.spec.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git status --short; git diff -- src/language-js/print/typescript.js tests/format/typescript/enum/__snapshots__/jsfmt.spec.js.snap; git diff --stat; Get-Content tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap | Select-String -Pattern 'computed-enum' -Context 0,24"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/language-js/print/typescript.js",
+      "before": "\"use strict\";\n\nconst { printDanglingComments } = require(\"../../main/comments.js\");\nconst { hasNewlineInRange } = require(\"../../common/util.js\");\nconst {\n  builders: {\n    join,\n    line,\n    hardline,\n    softline,\n    group,\n    indent,\n    conditionalGroup,\n    ifBreak,\n  },\n} = require(\"../../document/index.js\");\nconst {\n  isLiteral,\n  getTypeScriptMappedTypeModifier,\n  shouldPrintComma,\n  isCallExpression,\n  isMemberExpression,\n} = require(\"../utils/index.js\");\nconst isTsKeywordType = require(\"../utils/is-ts-keyword-type.js\");\nconst { locStart, locEnd } = require(\"../loc.js\");\n\nconst { printOptionalToken, printTypeScriptModifiers } = require(\"./misc.js\");\nconst { printTernary } = require(\"./ternary.js\");\nconst {\n  printFunctionParameters,\n  shouldGroupFunctionParameters,\n} = require(\"./function-parameters.js\");\nconst { printTemplateLiteral } = require(\"./template-literal.js\");\nconst { printArrayItems } = require(\"./array.js\");\nconst { printObject } = require(\"./object.js\");\nconst { printClassProperty, printClassMethod } = require(\"./class.js\");\nconst {\n  printTypeParameter,\n  printTypeParameters,\n} = require(\"./type-parameters.js\");\nconst { printPropertyKey } = require(\"./property.js\");\nconst { printFunction, printMethodInternal } = require(\"./function.js\");\nconst { printInterface } = require(\"./interface.js\");\nconst { printBlock } = require(\"./block.js\");\nconst {\n  printTypeAlias,\n  printIntersectionType,\n  printUnionType,\n  printFunctionType,\n  printTupleType,\n  printIndexedAccessType,\n  printJSDocType,\n} = require(\"./type-annotation.js\");\n\nfunction printTypescript(path, options, print) {\n  const node = path.getValue();\n\n  // TypeScript nodes always starts with `TS`\n  if (!node.type.startsWith(\"TS\")) {\n    return;\n  }\n\n  if (isTsKeywordType(node)) {\n    return node.type.slice(2, -7).toLowerCase();\n  }\n\n  const semi = options.semi ? \";\" : \"\";\n  const parts = [];\n\n  switch (node.type) {\n    case \"TSThisType\":\n      return \"this\";\n    case \"TSTypeAssertion\": {\n      const shouldBreakAfterCast = !(\n        node.expression.type === \"ArrayExpression\" ||\n        node.expression.type === \"ObjectExpression\"\n      );\n\n      const castGroup = group([\n        \"<\",\n        indent([softline, print(\"typeAnnotation\")]),\n        softline,\n        \">\",\n      ]);\n\n      const exprContents = [\n        ifBreak(\"(\"),\n        indent([softline, print(\"expression\")]),\n        softline,\n        ifBreak(\")\"),\n      ];\n\n      if (shouldBreakAfterCast) {\n        return conditionalGroup([\n          [castGroup, print(\"expression\")],\n          [castGroup, group(exprContents, { shouldBreak: true })],\n          [castGroup, print(\"expression\")],\n        ]);\n      }\n      return group([castGroup, print(\"expression\")]);\n    }\n    case \"TSDeclareFunction\":\n      return printFunction(path, print, options);\n    case \"TSExportAssignment\":\n      return [\"export = \", print(\"expression\"), semi];\n    case \"TSModuleBlock\":\n      return printBlock(path, options, print);\n    case \"TSInterfaceBody\":\n    case \"TSTypeLiteral\":\n      return printObject(path, options, print);\n    case \"TSTypeAliasDeclaration\":\n      return printTypeAlias(path, options, print);\n    case \"TSQualifiedName\":\n      return join(\".\", [print(\"left\"), print(\"right\")]);\n    case \"TSAbstractMethodDefinition\":\n    case \"TSDeclareMethod\":\n      return printClassMethod(path, options, print);\n    case \"TSAbstractPropertyDefinition\":\n      return printClassProperty(path, options, print);\n    case \"TSInterfaceHeritage\":\n    case \"TSExpressionWithTypeArguments\": // Babel AST\n      parts.push(print(\"expression\"));\n\n      if (node.typeParameters) {\n        parts.push(print(\"typeParameters\"));\n      }\n\n      return parts;\n    case \"TSTemplateLiteralType\":\n      return printTemplateLiteral(path, print, options);\n    case \"TSNamedTupleMember\":\n      return [\n        print(\"label\"),\n        node.optional ? \"?\" : \"\",\n        \": \",\n        print(\"elementType\"),\n      ];\n    case \"TSRestType\":\n      return [\"...\", print(\"typeAnnotation\")];\n    case \"TSOptionalType\":\n      return [print(\"typeAnnotation\"), \"?\"];\n    case \"TSInterfaceDeclaration\":\n      return printInterface(path, options, print);\n    case \"TSClassImplements\":\n      return [print(\"expression\"), print(\"typeParameters\")];\n    case \"TSTypeParameterDeclaration\":\n    case \"TSTypeParameterInstantiation\":\n      return printTypeParameters(path, options, print, \"params\");\n    case \"TSTypeParameter\":\n      return printTypeParameter(path, options, print);\n    case \"TSAsExpression\": {\n      parts.push(print(\"expression\"), \" as \", print(\"typeAnnotation\"));\n      const parent = path.getParentNode();\n      if (\n        (isCallExpression(parent) && parent.callee === node) ||\n        (isMemberExpression(parent) && parent.object === node)\n      ) {\n        return group([indent([softline, ...parts]), softline]);\n      }\n      return parts;\n    }\n    case \"TSArrayType\":\n      return [print(\"elementType\"), \"[]\"];\n    case \"TSPropertySignature\": {\n      if (node.readonly) {\n        parts.push(\"readonly \");\n      }\n\n      parts.push(\n        printPropertyKey(path, options, print),\n        printOptionalToken(path)\n      );\n\n      if (node.typeAnnotation) {\n        parts.push(\": \", print(\"typeAnnotation\"));\n      }\n\n      // This isn't valid semantically, but it's in the AST so we can print it.\n      if (node.initializer) {\n        parts.push(\" = \", print(\"initializer\"));\n      }\n\n      return parts;\n    }\n    case \"TSParameterProperty\":\n      if (node.accessibility) {\n        parts.push(node.accessibility + \" \");\n      }\n      if (node.export) {\n        parts.push(\"export \");\n      }\n      if (node.static) {\n        parts.push(\"static \");\n      }\n      if (node.override) {\n        parts.push(\"override \");\n      }\n      if (node.readonly) {\n        parts.push(\"readonly \");\n      }\n\n      parts.push(print(\"parameter\"));\n\n      return parts;\n    case \"TSTypeQuery\":\n      return [\"typeof \", print(\"exprName\"), print(\"typeParameters\")];\n    case \"TSIndexSignature\": {\n      const parent = path.getParentNode();\n\n      // The typescript parser accepts multiple parameters here. If you're\n      // using them, it makes sense to have a trailing comma. But if you\n      // aren't, this is more like a computed property name than an array.\n      // So we leave off the trailing comma when there's just one parameter.\n      const trailingComma =\n        node.parameters.length > 1\n          ? ifBreak(shouldPrintComma(options) ? \",\" : \"\")\n          : \"\";\n\n      const parametersGroup = group([\n        indent([\n          softline,\n          join([\", \", softline], path.map(print, \"parameters\")),\n        ]),\n        trailingComma,\n        softline,\n      ]);\n\n      return [\n        node.export ? \"export \" : \"\",\n        node.accessibility ? [node.accessibility, \" \"] : \"\",\n        node.static ? \"static \" : \"\",\n        node.readonly ? \"readonly \" : \"\",\n        node.declare ? \"declare \" : \"\",\n        \"[\",\n        node.parameters ? parametersGroup : \"\",\n        node.typeAnnotation ? \"]: \" : \"]\",\n        node.typeAnnotation ? print(\"typeAnnotation\") : \"\",\n        parent.type === \"ClassBody\" ? semi : \"\",\n      ];\n    }\n    case \"TSTypePredicate\":\n      return [\n        node.asserts ? \"asserts \" : \"\",\n        print(\"parameterName\"),\n        node.typeAnnotation ? [\" is \", print(\"typeAnnotation\")] : \"\",\n      ];\n    case \"TSNonNullExpression\":\n      return [print(\"expression\"), \"!\"];\n    case \"TSImportType\":\n      return [\n        !node.isTypeOf ? \"\" : \"typeof \",\n        \"import(\",\n        print(node.parameter ? \"parameter\" : \"argument\"),\n        \")\",\n        !node.qualifier ? \"\" : [\".\", print(\"qualifier\")],\n        printTypeParameters(path, options, print, \"typeParameters\"),\n      ];\n    case \"TSLiteralType\":\n      return print(\"literal\");\n    case \"TSIndexedAccessType\":\n      return printIndexedAccessType(path, options, print);\n    case \"TSConstructSignatureDeclaration\":\n    case \"TSCallSignatureDeclaration\":\n    case \"TSConstructorType\": {\n      if (node.type === \"TSConstructorType\" && node.abstract) {\n        parts.push(\"abstract \");\n      }\n      if (node.type !== \"TSCallSignatureDeclaration\") {\n        parts.push(\"new \");\n      }\n\n      parts.push(\n        group(\n          printFunctionParameters(\n            path,\n            print,\n            options,\n            /* expandArg */ false,\n            /* printTypeParams */ true\n          )\n        )\n      );\n\n      if (node.returnType || node.typeAnnotation) {\n        const isType = node.type === \"TSConstructorType\";\n        parts.push(\n          isType ? \" => \" : \": \",\n          print(\"returnType\"),\n          print(\"typeAnnotation\")\n        );\n      }\n      return parts;\n    }\n    case \"TSTypeOperator\":\n      return [node.operator, \" \", print(\"typeAnnotation\")];\n    case \"TSMappedType\": {\n      const shouldBreak = hasNewlineInRange(\n        options.originalText,\n        locStart(node),\n        locEnd(node)\n      );\n      return group(\n        [\n          \"{\",\n          indent([\n            options.bracketSpacing ? line : softline,\n            node.readonly\n              ? [\n                  getTypeScriptMappedTypeModifier(node.readonly, \"readonly\"),\n                  \" \",\n                ]\n              : \"\",\n            printTypeScriptModifiers(path, options, print),\n            print(\"typeParameter\"),\n            node.optional\n              ? getTypeScriptMappedTypeModifier(node.optional, \"?\")\n              : \"\",\n            node.typeAnnotation ? \": \" : \"\",\n            print(\"typeAnnotation\"),\n            ifBreak(semi),\n          ]),\n          printDanglingComments(path, options, /* sameIndent */ true),\n          options.bracketSpacing ? line : softline,\n          \"}\",\n        ],\n        { shouldBreak }\n      );\n    }\n    case \"TSMethodSignature\": {\n      const kind = node.kind && node.kind !== \"method\" ? `${node.kind} ` : \"\";\n      parts.push(\n        node.accessibility ? [node.accessibility, \" \"] : \"\",\n        kind,\n        node.export ? \"export \" : \"\",\n        node.static ? \"static \" : \"\",\n        node.readonly ? \"readonly \" : \"\",\n        // \"abstract\" and \"declare\" are supported by only \"babel-ts\"\n        // https://github.com/prettier/prettier/issues/9760\n        node.abstract ? \"abstract \" : \"\",\n        node.declare ? \"declare \" : \"\",\n        node.computed ? \"[\" : \"\",\n        print(\"key\"),\n        node.computed ? \"]\" : \"\",\n        printOptionalToken(path)\n      );\n\n      const parametersDoc = printFunctionParameters(\n        path,\n        print,\n        options,\n        /* expandArg */ false,\n        /* printTypeParams */ true\n      );\n\n      const returnTypePropertyName = node.returnType\n        ? \"returnType\"\n        : \"typeAnnotation\";\n      const returnTypeNode = node[returnTypePropertyName];\n      const returnTypeDoc = returnTypeNode ? print(returnTypePropertyName) : \"\";\n      const shouldGroupParameters = shouldGroupFunctionParameters(\n        node,\n        returnTypeDoc\n      );\n\n      parts.push(shouldGroupParameters ? group(parametersDoc) : parametersDoc);\n\n      if (returnTypeNode) {\n        parts.push(\": \", group(returnTypeDoc));\n      }\n\n      return group(parts);\n    }\n    case \"TSNamespaceExportDeclaration\":\n      parts.push(\"export as namespace \", print(\"id\"));\n\n      if (options.semi) {\n        parts.push(\";\");\n      }\n\n      return group(parts);\n    case \"TSEnumDeclaration\":\n      if (node.declare) {\n        parts.push(\"declare \");\n      }\n\n      if (node.modifiers) {\n        parts.push(printTypeScriptModifiers(path, options, print));\n      }\n      if (node.const) {\n        parts.push(\"const \");\n      }\n\n      parts.push(\"enum \", print(\"id\"), \" \");\n\n      if (node.members.length === 0) {\n        parts.push(\n          group([\"{\", printDanglingComments(path, options), softline, \"}\"])\n        );\n      } else {\n        parts.push(\n          group([\n            \"{\",\n            indent([\n              hardline,\n              printArrayItems(path, options, \"members\", print),\n              shouldPrintComma(options, \"es5\") ? \",\" : \"\",\n            ]),\n            printDanglingComments(path, options, /* sameIndent */ true),\n            hardline,\n            \"}\",\n          ])\n        );\n      }\n\n      return parts;\n    case \"TSEnumMember\":\n      parts.push(print(\"id\"));\n      if (node.initializer) {\n        parts.push(\" = \", print(\"initializer\"));\n      }\n      return parts;\n    case \"TSImportEqualsDeclaration\":\n      if (node.isExport) {\n        parts.push(\"export \");\n      }\n\n      parts.push(\"import \");\n\n      if (node.importKind && node.importKind !== \"value\") {\n        parts.push(node.importKind, \" \");\n      }\n\n      parts.push(print(\"id\"), \" = \", print(\"moduleReference\"));\n\n      if (options.semi) {\n        parts.push(\";\");\n      }\n\n      return group(parts);\n    case \"TSExternalModuleReference\":\n      return [\"require(\", print(\"expression\"), \")\"];\n    case \"TSModuleDeclaration\": {\n      const parent = path.getParentNode();\n      const isExternalModule = isLiteral(node.id);\n      const parentIsDeclaration = parent.type === \"TSModuleDeclaration\";\n      const bodyIsDeclaration =\n        node.body && node.body.type === \"TSModuleDeclaration\";\n\n      if (parentIsDeclaration) {\n        parts.push(\".\");\n      } else {\n        if (node.declare) {\n          parts.push(\"declare \");\n        }\n        parts.push(printTypeScriptModifiers(path, options, print));\n\n        const textBetweenNodeAndItsId = options.originalText.slice(\n          locStart(node),\n          locStart(node.id)\n        );\n\n        // Global declaration looks like this:\n        // (declare)? global { ... }\n        const isGlobalDeclaration =\n          node.id.type === \"Identifier\" &&\n          node.id.name === \"global\" &&\n          !/namespace|module/.test(textBetweenNodeAndItsId);\n\n        if (!isGlobalDeclaration) {\n          parts.push(\n            isExternalModule ||\n              /(?:^|\\s)module(?:\\s|$)/.test(textBetweenNodeAndItsId)\n              ? \"module \"\n              : \"namespace \"\n          );\n        }\n      }\n\n      parts.push(print(\"id\"));\n\n      if (bodyIsDeclaration) {\n        parts.push(print(\"body\"));\n      } else if (node.body) {\n        parts.push(\" \", group(print(\"body\")));\n      } else {\n        parts.push(semi);\n      }\n\n      return parts;\n    }\n\n    case \"TSConditionalType\":\n      return printTernary(path, options, print);\n\n    case \"TSInferType\":\n      return [\"infer\", \" \", print(\"typeParameter\")];\n    case \"TSIntersectionType\":\n      return printIntersectionType(path, options, print);\n    case \"TSUnionType\":\n      return printUnionType(path, options, print);\n    case \"TSFunctionType\":\n      return printFunctionType(path, options, print);\n    case \"TSTupleType\":\n      return printTupleType(path, options, print);\n    case \"TSTypeReference\":\n      return [\n        print(\"typeName\"),\n        printTypeParameters(path, options, print, \"typeParameters\"),\n      ];\n    case \"TSTypeAnnotation\":\n      return print(\"typeAnnotation\");\n    case \"TSEmptyBodyFunctionExpression\":\n      return printMethodInternal(path, options, print);\n\n    // These are not valid TypeScript. Printing them just for the sake of error recovery.\n    case \"TSJSDocAllType\":\n      return \"*\";\n    case \"TSJSDocUnknownType\":\n      return \"?\";\n    case \"TSJSDocNullableType\":\n      return printJSDocType(path, print, /* token */ \"?\");\n    case \"TSJSDocNonNullableType\":\n      return printJSDocType(path, print, /* token */ \"!\");\n    case \"TSInstantiationExpression\":\n      return [print(\"expression\"), print(\"typeParameters\")];\n    default:\n      /* istanbul ignore next */\n      throw new Error(\n        `Unknown TypeScript node type: ${JSON.stringify(node.type)}.`\n      );\n  }\n}\n\nmodule.exports = { printTypescript };\n",
+      "after": "\"use strict\";\n\nconst { printDanglingComments } = require(\"../../main/comments.js\");\nconst { hasNewlineInRange } = require(\"../../common/util.js\");\nconst {\n  builders: {\n    join,\n    line,\n    hardline,\n    softline,\n    group,\n    indent,\n    conditionalGroup,\n    ifBreak,\n  },\n} = require(\"../../document/index.js\");\nconst {\n  isLiteral,\n  getTypeScriptMappedTypeModifier,\n  shouldPrintComma,\n  isCallExpression,\n  isMemberExpression,\n} = require(\"../utils/index.js\");\nconst isTsKeywordType = require(\"../utils/is-ts-keyword-type.js\");\nconst { locStart, locEnd } = require(\"../loc.js\");\n\nconst { printOptionalToken, printTypeScriptModifiers } = require(\"./misc.js\");\nconst { printTernary } = require(\"./ternary.js\");\nconst {\n  printFunctionParameters,\n  shouldGroupFunctionParameters,\n} = require(\"./function-parameters.js\");\nconst { printTemplateLiteral } = require(\"./template-literal.js\");\nconst { printArrayItems } = require(\"./array.js\");\nconst { printObject } = require(\"./object.js\");\nconst { printClassProperty, printClassMethod } = require(\"./class.js\");\nconst {\n  printTypeParameter,\n  printTypeParameters,\n} = require(\"./type-parameters.js\");\nconst { printPropertyKey } = require(\"./property.js\");\nconst { printFunction, printMethodInternal } = require(\"./function.js\");\nconst { printInterface } = require(\"./interface.js\");\nconst { printBlock } = require(\"./block.js\");\nconst {\n  printTypeAlias,\n  printIntersectionType,\n  printUnionType,\n  printFunctionType,\n  printTupleType,\n  printIndexedAccessType,\n  printJSDocType,\n} = require(\"./type-annotation.js\");\n\nfunction printTypescript(path, options, print) {\n  const node = path.getValue();\n\n  // TypeScript nodes always starts with `TS`\n  if (!node.type.startsWith(\"TS\")) {\n    return;\n  }\n\n  if (isTsKeywordType(node)) {\n    return node.type.slice(2, -7).toLowerCase();\n  }\n\n  const semi = options.semi ? \";\" : \"\";\n  const parts = [];\n\n  switch (node.type) {\n    case \"TSThisType\":\n      return \"this\";\n    case \"TSTypeAssertion\": {\n      const shouldBreakAfterCast = !(\n        node.expression.type === \"ArrayExpression\" ||\n        node.expression.type === \"ObjectExpression\"\n      );\n\n      const castGroup = group([\n        \"<\",\n        indent([softline, print(\"typeAnnotation\")]),\n        softline,\n        \">\",\n      ]);\n\n      const exprContents = [\n        ifBreak(\"(\"),\n        indent([softline, print(\"expression\")]),\n        softline,\n        ifBreak(\")\"),\n      ];\n\n      if (shouldBreakAfterCast) {\n        return conditionalGroup([\n          [castGroup, print(\"expression\")],\n          [castGroup, group(exprContents, { shouldBreak: true })],\n          [castGroup, print(\"expression\")],\n        ]);\n      }\n      return group([castGroup, print(\"expression\")]);\n    }\n    case \"TSDeclareFunction\":\n      return printFunction(path, print, options);\n    case \"TSExportAssignment\":\n      return [\"export = \", print(\"expression\"), semi];\n    case \"TSModuleBlock\":\n      return printBlock(path, options, print);\n    case \"TSInterfaceBody\":\n    case \"TSTypeLiteral\":\n      return printObject(path, options, print);\n    case \"TSTypeAliasDeclaration\":\n      return printTypeAlias(path, options, print);\n    case \"TSQualifiedName\":\n      return join(\".\", [print(\"left\"), print(\"right\")]);\n    case \"TSAbstractMethodDefinition\":\n    case \"TSDeclareMethod\":\n      return printClassMethod(path, options, print);\n    case \"TSAbstractPropertyDefinition\":\n      return printClassProperty(path, options, print);\n    case \"TSInterfaceHeritage\":\n    case \"TSExpressionWithTypeArguments\": // Babel AST\n      parts.push(print(\"expression\"));\n\n      if (node.typeParameters) {\n        parts.push(print(\"typeParameters\"));\n      }\n\n      return parts;\n    case \"TSTemplateLiteralType\":\n      return printTemplateLiteral(path, print, options);\n    case \"TSNamedTupleMember\":\n      return [\n        print(\"label\"),\n        node.optional ? \"?\" : \"\",\n        \": \",\n        print(\"elementType\"),\n      ];\n    case \"TSRestType\":\n      return [\"...\", print(\"typeAnnotation\")];\n    case \"TSOptionalType\":\n      return [print(\"typeAnnotation\"), \"?\"];\n    case \"TSInterfaceDeclaration\":\n      return printInterface(path, options, print);\n    case \"TSClassImplements\":\n      return [print(\"expression\"), print(\"typeParameters\")];\n    case \"TSTypeParameterDeclaration\":\n    case \"TSTypeParameterInstantiation\":\n      return printTypeParameters(path, options, print, \"params\");\n    case \"TSTypeParameter\":\n      return printTypeParameter(path, options, print);\n    case \"TSAsExpression\": {\n      parts.push(print(\"expression\"), \" as \", print(\"typeAnnotation\"));\n      const parent = path.getParentNode();\n      if (\n        (isCallExpression(parent) && parent.callee === node) ||\n        (isMemberExpression(parent) && parent.object === node)\n      ) {\n        return group([indent([softline, ...parts]), softline]);\n      }\n      return parts;\n    }\n    case \"TSArrayType\":\n      return [print(\"elementType\"), \"[]\"];\n    case \"TSPropertySignature\": {\n      if (node.readonly) {\n        parts.push(\"readonly \");\n      }\n\n      parts.push(\n        printPropertyKey(path, options, print),\n        printOptionalToken(path)\n      );\n\n      if (node.typeAnnotation) {\n        parts.push(\": \", print(\"typeAnnotation\"));\n      }\n\n      // This isn't valid semantically, but it's in the AST so we can print it.\n      if (node.initializer) {\n        parts.push(\" = \", print(\"initializer\"));\n      }\n\n      return parts;\n    }\n    case \"TSParameterProperty\":\n      if (node.accessibility) {\n        parts.push(node.accessibility + \" \");\n      }\n      if (node.export) {\n        parts.push(\"export \");\n      }\n      if (node.static) {\n        parts.push(\"static \");\n      }\n      if (node.override) {\n        parts.push(\"override \");\n      }\n      if (node.readonly) {\n        parts.push(\"readonly \");\n      }\n\n      parts.push(print(\"parameter\"));\n\n      return parts;\n    case \"TSTypeQuery\":\n      return [\"typeof \", print(\"exprName\"), print(\"typeParameters\")];\n    case \"TSIndexSignature\": {\n      const parent = path.getParentNode();\n\n      // The typescript parser accepts multiple parameters here. If you're\n      // using them, it makes sense to have a trailing comma. But if you\n      // aren't, this is more like a computed property name than an array.\n      // So we leave off the trailing comma when there's just one parameter.\n      const trailingComma =\n        node.parameters.length > 1\n          ? ifBreak(shouldPrintComma(options) ? \",\" : \"\")\n          : \"\";\n\n      const parametersGroup = group([\n        indent([\n          softline,\n          join([\", \", softline], path.map(print, \"parameters\")),\n        ]),\n        trailingComma,\n        softline,\n      ]);\n\n      return [\n        node.export ? \"export \" : \"\",\n        node.accessibility ? [node.accessibility, \" \"] : \"\",\n        node.static ? \"static \" : \"\",\n        node.readonly ? \"readonly \" : \"\",\n        node.declare ? \"declare \" : \"\",\n        \"[\",\n        node.parameters ? parametersGroup : \"\",\n        node.typeAnnotation ? \"]: \" : \"]\",\n        node.typeAnnotation ? print(\"typeAnnotation\") : \"\",\n        parent.type === \"ClassBody\" ? semi : \"\",\n      ];\n    }\n    case \"TSTypePredicate\":\n      return [\n        node.asserts ? \"asserts \" : \"\",\n        print(\"parameterName\"),\n        node.typeAnnotation ? [\" is \", print(\"typeAnnotation\")] : \"\",\n      ];\n    case \"TSNonNullExpression\":\n      return [print(\"expression\"), \"!\"];\n    case \"TSImportType\":\n      return [\n        !node.isTypeOf ? \"\" : \"typeof \",\n        \"import(\",\n        print(node.parameter ? \"parameter\" : \"argument\"),\n        \")\",\n        !node.qualifier ? \"\" : [\".\", print(\"qualifier\")],\n        printTypeParameters(path, options, print, \"typeParameters\"),\n      ];\n    case \"TSLiteralType\":\n      return print(\"literal\");\n    case \"TSIndexedAccessType\":\n      return printIndexedAccessType(path, options, print);\n    case \"TSConstructSignatureDeclaration\":\n    case \"TSCallSignatureDeclaration\":\n    case \"TSConstructorType\": {\n      if (node.type === \"TSConstructorType\" && node.abstract) {\n        parts.push(\"abstract \");\n      }\n      if (node.type !== \"TSCallSignatureDeclaration\") {\n        parts.push(\"new \");\n      }\n\n      parts.push(\n        group(\n          printFunctionParameters(\n            path,\n            print,\n            options,\n            /* expandArg */ false,\n            /* printTypeParams */ true\n          )\n        )\n      );\n\n      if (node.returnType || node.typeAnnotation) {\n        const isType = node.type === \"TSConstructorType\";\n        parts.push(\n          isType ? \" => \" : \": \",\n          print(\"returnType\"),\n          print(\"typeAnnotation\")\n        );\n      }\n      return parts;\n    }\n    case \"TSTypeOperator\":\n      return [node.operator, \" \", print(\"typeAnnotation\")];\n    case \"TSMappedType\": {\n      const shouldBreak = hasNewlineInRange(\n        options.originalText,\n        locStart(node),\n        locEnd(node)\n      );\n      return group(\n        [\n          \"{\",\n          indent([\n            options.bracketSpacing ? line : softline,\n            node.readonly\n              ? [\n                  getTypeScriptMappedTypeModifier(node.readonly, \"readonly\"),\n                  \" \",\n                ]\n              : \"\",\n            printTypeScriptModifiers(path, options, print),\n            print(\"typeParameter\"),\n            node.optional\n              ? getTypeScriptMappedTypeModifier(node.optional, \"?\")\n              : \"\",\n            node.typeAnnotation ? \": \" : \"\",\n            print(\"typeAnnotation\"),\n            ifBreak(semi),\n          ]),\n          printDanglingComments(path, options, /* sameIndent */ true),\n          options.bracketSpacing ? line : softline,\n          \"}\",\n        ],\n        { shouldBreak }\n      );\n    }\n    case \"TSMethodSignature\": {\n      const kind = node.kind && node.kind !== \"method\" ? `${node.kind} ` : \"\";\n      parts.push(\n        node.accessibility ? [node.accessibility, \" \"] : \"\",\n        kind,\n        node.export ? \"export \" : \"\",\n        node.static ? \"static \" : \"\",\n        node.readonly ? \"readonly \" : \"\",\n        // \"abstract\" and \"declare\" are supported by only \"babel-ts\"\n        // https://github.com/prettier/prettier/issues/9760\n        node.abstract ? \"abstract \" : \"\",\n        node.declare ? \"declare \" : \"\",\n        node.computed ? \"[\" : \"\",\n        print(\"key\"),\n        node.computed ? \"]\" : \"\",\n        printOptionalToken(path)\n      );\n\n      const parametersDoc = printFunctionParameters(\n        path,\n        print,\n        options,\n        /* expandArg */ false,\n        /* printTypeParams */ true\n      );\n\n      const returnTypePropertyName = node.returnType\n        ? \"returnType\"\n        : \"typeAnnotation\";\n      const returnTypeNode = node[returnTypePropertyName];\n      const returnTypeDoc = returnTypeNode ? print(returnTypePropertyName) : \"\";\n      const shouldGroupParameters = shouldGroupFunctionParameters(\n        node,\n        returnTypeDoc\n      );\n\n      parts.push(shouldGroupParameters ? group(parametersDoc) : parametersDoc);\n\n      if (returnTypeNode) {\n        parts.push(\": \", group(returnTypeDoc));\n      }\n\n      return group(parts);\n    }\n    case \"TSNamespaceExportDeclaration\":\n      parts.push(\"export as namespace \", print(\"id\"));\n\n      if (options.semi) {\n        parts.push(\";\");\n      }\n\n      return group(parts);\n    case \"TSEnumDeclaration\":\n      if (node.declare) {\n        parts.push(\"declare \");\n      }\n\n      if (node.modifiers) {\n        parts.push(printTypeScriptModifiers(path, options, print));\n      }\n      if (node.const) {\n        parts.push(\"const \");\n      }\n\n      parts.push(\"enum \", print(\"id\"), \" \");\n\n      if (node.members.length === 0) {\n        parts.push(\n          group([\"{\", printDanglingComments(path, options), softline, \"}\"])\n        );\n      } else {\n        parts.push(\n          group([\n            \"{\",\n            indent([\n              hardline,\n              printArrayItems(path, options, \"members\", print),\n              shouldPrintComma(options, \"es5\") ? \",\" : \"\",\n            ]),\n            printDanglingComments(path, options, /* sameIndent */ true),\n            hardline,\n            \"}\",\n          ])\n        );\n      }\n\n      return parts;\n    case \"TSEnumMember\":\n      parts.push(\n        node.computed ? \"[\" : \"\",\n        print(\"id\"),\n        node.computed ? \"]\" : \"\"\n      );\n      if (node.initializer) {\n        parts.push(\" = \", print(\"initializer\"));\n      }\n      return parts;\n    case \"TSImportEqualsDeclaration\":\n      if (node.isExport) {\n        parts.push(\"export \");\n      }\n\n      parts.push(\"import \");\n\n      if (node.importKind && node.importKind !== \"value\") {\n        parts.push(node.importKind, \" \");\n      }\n\n      parts.push(print(\"id\"), \" = \", print(\"moduleReference\"));\n\n      if (options.semi) {\n        parts.push(\";\");\n      }\n\n      return group(parts);\n    case \"TSExternalModuleReference\":\n      return [\"require(\", print(\"expression\"), \")\"];\n    case \"TSModuleDeclaration\": {\n      const parent = path.getParentNode();\n      const isExternalModule = isLiteral(node.id);\n      const parentIsDeclaration = parent.type === \"TSModuleDeclaration\";\n      const bodyIsDeclaration =\n        node.body && node.body.type === \"TSModuleDeclaration\";\n\n      if (parentIsDeclaration) {\n        parts.push(\".\");\n      } else {\n        if (node.declare) {\n          parts.push(\"declare \");\n        }\n        parts.push(printTypeScriptModifiers(path, options, print));\n\n        const textBetweenNodeAndItsId = options.originalText.slice(\n          locStart(node),\n          locStart(node.id)\n        );\n\n        // Global declaration looks like this:\n        // (declare)? global { ... }\n        const isGlobalDeclaration =\n          node.id.type === \"Identifier\" &&\n          node.id.name === \"global\" &&\n          !/namespace|module/.test(textBetweenNodeAndItsId);\n\n        if (!isGlobalDeclaration) {\n          parts.push(\n            isExternalModule ||\n              /(?:^|\\s)module(?:\\s|$)/.test(textBetweenNodeAndItsId)\n              ? \"module \"\n              : \"namespace \"\n          );\n        }\n      }\n\n      parts.push(print(\"id\"));\n\n      if (bodyIsDeclaration) {\n        parts.push(print(\"body\"));\n      } else if (node.body) {\n        parts.push(\" \", group(print(\"body\")));\n      } else {\n        parts.push(semi);\n      }\n\n      return parts;\n    }\n\n    case \"TSConditionalType\":\n      return printTernary(path, options, print);\n\n    case \"TSInferType\":\n      return [\"infer\", \" \", print(\"typeParameter\")];\n    case \"TSIntersectionType\":\n      return printIntersectionType(path, options, print);\n    case \"TSUnionType\":\n      return printUnionType(path, options, print);\n    case \"TSFunctionType\":\n      return printFunctionType(path, options, print);\n    case \"TSTupleType\":\n      return printTupleType(path, options, print);\n    case \"TSTypeReference\":\n      return [\n        print(\"typeName\"),\n        printTypeParameters(path, options, print, \"typeParameters\"),\n      ];\n    case \"TSTypeAnnotation\":\n      return print(\"typeAnnotation\");\n    case \"TSEmptyBodyFunctionExpression\":\n      return printMethodInternal(path, options, print);\n\n    // These are not valid TypeScript. Printing them just for the sake of error recovery.\n    case \"TSJSDocAllType\":\n      return \"*\";\n    case \"TSJSDocUnknownType\":\n      return \"?\";\n    case \"TSJSDocNullableType\":\n      return printJSDocType(path, print, /* token */ \"?\");\n    case \"TSJSDocNonNullableType\":\n      return printJSDocType(path, print, /* token */ \"!\");\n    case \"TSInstantiationExpression\":\n      return [print(\"expression\"), print(\"typeParameters\")];\n    default:\n      /* istanbul ignore next */\n      throw new Error(\n        `Unknown TypeScript node type: ${JSON.stringify(node.type)}.`\n      );\n  }\n}\n\nmodule.exports = { printTypescript };\n"
+    },
+    {
+      "path": "tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap",
+      "before": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`await-with-parens.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\nfunction foo(promise) { await (promise); }\n\nfunction a() {\n  return await (1)\n}\n\n() => { await (x) };\n\nfunction foo() {\n  await\n  (foo);\n}\n\nexport class C {\n  p = await (0);\n}\n\nawait (0);\n\n=====================================output=====================================\nfunction foo(promise) {\n  await(promise);\n}\n\nfunction a() {\n  return await(1);\n}\n\n() => {\n  await(x);\n};\n\nfunction foo() {\n  await(foo);\n}\n\nexport class C {\n  p = await(0);\n}\n\nawait 0;\n\n================================================================================\n`;\n\nexports[`invalid-modifiers.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\ninterface Foo {\n  private a();\n  public b();\n  protected c();\n  static d();\n  declare e();\n  abstract f();\n  readonly g();\n}\n\nclass Bar {\n  declare e() {};\n  abstract f() {};\n  readonly g() {};\n}\n\n=====================================output=====================================\ninterface Foo {\n  private a();\n  public b();\n  protected c();\n  static d();\n  e();\n  f();\n  readonly g();\n}\n\nclass Bar {\n  e() {}\n  abstract f() {}\n  g() {}\n}\n\n================================================================================\n`;\n\nexports[`parenthesized-decorators-call-expression.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n@(test().x(\"global\").y())\nclass X {}\n\n=====================================output=====================================\n@test().x(\"global\").y()\nclass X {}\n\n================================================================================\n`;\n\nexports[`parenthesized-decorators-tagged-template.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\nclass Test {\n  @foo\\`bar\\`\n  text: string = \"text\"\n}\n\n=====================================output=====================================\nclass Test {\n  @foo\\`bar\\`\n  text: string = \"text\";\n}\n\n================================================================================\n`;\n\nexports[`prettier-ignore-parenthesized-type.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\ntype Foo =\n  // prettier-ignore\n  (\n    aa\n  );\n\n=====================================output=====================================\ntype Foo =\n  // prettier-ignore\n  aa;\n\n================================================================================\n`;\n",
+      "after": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`await-with-parens.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\nfunction foo(promise) { await (promise); }\n\nfunction a() {\n  return await (1)\n}\n\n() => { await (x) };\n\nfunction foo() {\n  await\n  (foo);\n}\n\nexport class C {\n  p = await (0);\n}\n\nawait (0);\n\n=====================================output=====================================\nfunction foo(promise) {\n  await(promise);\n}\n\nfunction a() {\n  return await(1);\n}\n\n() => {\n  await(x);\n};\n\nfunction foo() {\n  await(foo);\n}\n\nexport class C {\n  p = await(0);\n}\n\nawait 0;\n\n================================================================================\n`;\n\nexports[`computed-enum.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\nconst a = \"b\";\nenum A {\n  [i++],\n  [a] = 2,\n  [\"c\"] = 3,\n}\n\n=====================================output=====================================\nconst a = \"b\";\nenum A {\n  [i++],\n  [a] = 2,\n  [\"c\"] = 3,\n}\n\n================================================================================\n`;\n\nexports[`invalid-modifiers.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\ninterface Foo {\n  private a();\n  public b();\n  protected c();\n  static d();\n  declare e();\n  abstract f();\n  readonly g();\n}\n\nclass Bar {\n  declare e() {};\n  abstract f() {};\n  readonly g() {};\n}\n\n=====================================output=====================================\ninterface Foo {\n  private a();\n  public b();\n  protected c();\n  static d();\n  e();\n  f();\n  readonly g();\n}\n\nclass Bar {\n  e() {}\n  abstract f() {}\n  g() {}\n}\n\n================================================================================\n`;\n\nexports[`parenthesized-decorators-call-expression.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n@(test().x(\"global\").y())\nclass X {}\n\n=====================================output=====================================\n@test().x(\"global\").y()\nclass X {}\n\n================================================================================\n`;\n\nexports[`parenthesized-decorators-tagged-template.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\nclass Test {\n  @foo\\`bar\\`\n  text: string = \"text\"\n}\n\n=====================================output=====================================\nclass Test {\n  @foo\\`bar\\`\n  text: string = \"text\";\n}\n\n================================================================================\n`;\n\nexports[`prettier-ignore-parenthesized-type.ts format 1`] = `\n====================================options=====================================\nparsers: [\"typescript\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\ntype Foo =\n  // prettier-ignore\n  (\n    aa\n  );\n\n=====================================output=====================================\ntype Foo =\n  // prettier-ignore\n  aa;\n\n================================================================================\n`;\n"
+    },
+    {
+      "path": "tests/format/misc/typescript-only/computed-enum.ts",
+      "before": null,
+      "after": "const a = \"b\";\nenum A {\n  [i++],\n  [a] = 2,\n  [\"c\"] = 3,\n}\n"
+    }
+  ],
+  "final": "Updated TypeScript enum-member printing to preserve `[...]` around computed keys, preventing syntax errors and changes in runtime behavior. Added a regression fixture covering update-expression, identifier, and string-literal keys.\n\n**Verification passed:**\n- Targeted Jest tests: 2 suites, 10 tests, 8 snapshots.\n- `node native-verify.cjs`: 3 suites, 20 tests, 18 snapshots.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12930-C-r0-a0\\home\\events\\1794336463932-4da396c8-7876-4fad-9b59-9db099fb5252.jsonl",
+  "receiptAudit": {
+    "requests": 25,
+    "finalUsageResponses": 25,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 25,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": true,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12930-C-r0",
+  "attempt": 0
+}

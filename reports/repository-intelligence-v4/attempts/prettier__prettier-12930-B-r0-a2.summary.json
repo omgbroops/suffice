@@ -1,0 +1,581 @@
+{
+  "task": "prettier__prettier-12930",
+  "repo": "prettier/prettier",
+  "category": "simple",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12930-B-r0-a2/workspace",
+    "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+    "tree": "4c053dae9f82edfd122bf6ef50a3364ea756466b"
+  },
+  "runId": "prettier__prettier-12930-B-r0-a2",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 623839.2699,
+  "usage": {
+    "input": 93230,
+    "cacheRead": 601984,
+    "cacheWrite": 0,
+    "output": 7541,
+    "estimatedApiUsd": 0.01911334,
+    "modelCalls": 24,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.01911334,
+  "acceptance": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": true,
+      "classification": "passed",
+      "targets": 1,
+      "targetsPassed": 1,
+      "regressions": 5,
+      "regressionsPassed": 5,
+      "missing": [],
+      "failures": [],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/typescript/enum/jsfmt.spec.js->computed-members.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->computed-members.ts format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->enum.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->enum.ts format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->multiline.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->multiline.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 5,
+    "requiredPassed": 5
+  },
+  "changed": [
+    "src/language-js/print/typescript.js",
+    "tests/format/typescript/computed-enum/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/typescript/computed-enum/computed.ts",
+    "tests/format/typescript/computed-enum/jsfmt.spec.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "tests/format/typescript/computed-enum/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/typescript/computed-enum/computed.ts",
+    "tests/format/typescript/computed-enum/jsfmt.spec.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 24,
+  "editCalls": 6,
+  "verificationCalls": 0,
+  "toolCalls": 67,
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T18:30:04.828Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 14085.699500000002,
+      "parsedFiles": 4254,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 162921544,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:30:18.192Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 13362.020100000009,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 4501624,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:30:40.629Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 12885.752200000003,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 25923408,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:30:59.273Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 11715.59149999998,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": -19493928,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:31:16.617Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 12079.91829999999,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": -21236832,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:31:37.641Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 11987.604099999997,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 89469840,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:31:58.499Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 12832.527700000006,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 84761608,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:32:20.422Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 12767.087900000013,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": -21534832,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:32:39.923Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 12633.8566,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": -103280704,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:32:59.910Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 11767.556899999967,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 81026752,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:33:21.207Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 11860.132899999968,
+      "parsedFiles": 2,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": 129203072,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:33:33.912Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 12593.754200000025,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": 81545880,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:33:56.817Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 12789.746199999994,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": 87402864,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:34:16.556Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 12621.444599999988,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": -30535792,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:34:37.729Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 11872.042599999986,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": -92317328,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:35:01.944Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 11707.460100000026,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": 84356504,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:35:23.752Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "691188725f1b4d34d5f90c20d467a328c1a38373860c75932d42a3ca4d19d274",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "4385be7073af698920c65d6477daf0b53b509ee2ea8ed70c634dc1ef0f10de5d"
+      },
+      "latencyMs": 11919.286299999978,
+      "parsedFiles": 0,
+      "fileCount": 4255,
+      "cacheBytes": 24394447,
+      "heapDeltaBytes": 88312064,
+      "graphBytes": 34145862
+    },
+    {
+      "at": "2026-11-10T18:35:46.706Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 12000.893199999991,
+      "parsedFiles": 3,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": 24412696,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:36:00.082Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 13249.488300000026,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": 8903864,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:36:23.299Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 13151.713099999994,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": -31785984,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:36:49.733Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 12617.917400000035,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": 27957832,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:37:09.822Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 12674.822900000028,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": 70886152,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:37:31.911Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 12491.326000000001,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": -30367968,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:38:42.141Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 8359.074199999915,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": -37570384,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:39:04.439Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "1058e231152e37f0f62fb1a9469a83376af5ee5e5e4563725d63e4df80fd0a47",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "a8fa7b0319a7095c02e0f0cfd4ff7cab9fe548663514b60d8648fcda6ad89874"
+      },
+      "latencyMs": 8339.040099999984,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395748,
+      "heapDeltaBytes": 33086704,
+      "graphBytes": 34146932
+    },
+    {
+      "at": "2026-11-10T18:39:26.085Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "4482680baa31e97907573f1431c532088f51a36c97602753daf4a660fe365ef8",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "2f4ab4d10c6660453aa2b5e237084cda87f7e522dc73d6479705518bf2304c0a"
+      },
+      "latencyMs": 8583.069600000046,
+      "parsedFiles": 1,
+      "fileCount": 4257,
+      "cacheBytes": 24395745,
+      "heapDeltaBytes": 47372136,
+      "graphBytes": 34146929
+    },
+    {
+      "at": "2026-11-10T18:39:35.338Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "4482680baa31e97907573f1431c532088f51a36c97602753daf4a660fe365ef8",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "2f4ab4d10c6660453aa2b5e237084cda87f7e522dc73d6479705518bf2304c0a"
+      },
+      "latencyMs": 9157.009499999927,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395745,
+      "heapDeltaBytes": 85204384,
+      "graphBytes": 34146929
+    },
+    {
+      "at": "2026-11-10T18:39:57.614Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "4482680baa31e97907573f1431c532088f51a36c97602753daf4a660fe365ef8",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "2f4ab4d10c6660453aa2b5e237084cda87f7e522dc73d6479705518bf2304c0a"
+      },
+      "latencyMs": 9002.3554,
+      "parsedFiles": 0,
+      "fileCount": 4257,
+      "cacheBytes": 24395745,
+      "heapDeltaBytes": -28995216,
+      "graphBytes": 34146929
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12930-B-r0-a2\\home\\events\\1794335390712-d0587f52-b5fe-4ce1-9f0a-b9214ce51f5a.jsonl",
+  "receiptAudit": {
+    "requests": 24,
+    "finalUsageResponses": 24,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 24,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": true,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12930-B-r0",
+  "attempt": 2
+}

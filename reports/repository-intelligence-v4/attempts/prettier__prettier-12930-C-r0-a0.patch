@@ -1,0 +1,64 @@
+diff --git a/src/language-js/print/typescript.js b/src/language-js/print/typescript.js
+index 32942f2..7aec420 100644
+--- a/src/language-js/print/typescript.js
++++ b/src/language-js/print/typescript.js
+@@ -414,7 +414,11 @@ function printTypescript(path, options, print) {
+ 
+       return parts;
+     case "TSEnumMember":
+-      parts.push(print("id"));
++      parts.push(
++        node.computed ? "[" : "",
++        print("id"),
++        node.computed ? "]" : ""
++      );
+       if (node.initializer) {
+         parts.push(" = ", print("initializer"));
+       }
+diff --git a/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap b/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap
+index 17d4458..1c2519c 100644
+--- a/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap
+@@ -51,6 +51,30 @@ await 0;
+ ================================================================================
+ `;
+ 
++exports[`computed-enum.ts format 1`] = `
++====================================options=====================================
++parsers: ["typescript"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++const a = "b";
++enum A {
++  [i++],
++  [a] = 2,
++  ["c"] = 3,
++}
++
++=====================================output=====================================
++const a = "b";
++enum A {
++  [i++],
++  [a] = 2,
++  ["c"] = 3,
++}
++
++================================================================================
++`;
++
+ exports[`invalid-modifiers.ts format 1`] = `
+ ====================================options=====================================
+ parsers: ["typescript"]
+diff --git a/tests/format/misc/typescript-only/computed-enum.ts b/tests/format/misc/typescript-only/computed-enum.ts
+new file mode 100644
+index 0000000..3e311c2
+--- /dev/null
++++ b/tests/format/misc/typescript-only/computed-enum.ts
+@@ -0,0 +1,6 @@
++const a = "b";
++enum A {
++  [i++],
++  [a] = 2,
++  ["c"] = 3,
++}

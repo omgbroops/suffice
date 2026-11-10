@@ -1,0 +1,307 @@
+{
+  "task": "prettier__prettier-12930",
+  "repo": "prettier/prettier",
+  "category": "simple",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12930-C-r0-a0/workspace",
+    "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+    "tree": "4c053dae9f82edfd122bf6ef50a3364ea756466b"
+  },
+  "runId": "prettier__prettier-12930-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 498953.47320000007,
+  "usage": {
+    "input": 70759,
+    "cacheRead": 633856,
+    "cacheWrite": 0,
+    "output": 6667,
+    "estimatedApiUsd": 0.016747960000000003,
+    "modelCalls": 25,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.016747960000000003,
+  "acceptance": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": true,
+      "classification": "passed",
+      "targets": 1,
+      "targetsPassed": 1,
+      "regressions": 5,
+      "regressionsPassed": 5,
+      "missing": [],
+      "failures": [],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/typescript/enum/jsfmt.spec.js->computed-members.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->computed-members.ts format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->enum.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->enum.ts format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->multiline.ts [babel-ts] format": 1,
+        "tests/format/typescript/enum/jsfmt.spec.js->multiline.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 5,
+    "requiredPassed": 5
+  },
+  "changed": [
+    "src/language-js/print/typescript.js",
+    "tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/misc/typescript-only/computed-enum.ts"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/misc/typescript-only/computed-enum.ts"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 25,
+  "editCalls": 3,
+  "verificationCalls": 3,
+  "toolCalls": 52,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T18:50:04.585Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "783aa99d9eda0922548cef8f6082f2e368010d63d46ae7571c61d1cf303fc1b6",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "f844b57d7029b7f5c4d94a3ccb968202844c8ceb25d6ea6e655f8406bbcadbbf"
+      },
+      "latencyMs": 13471.839100000012,
+      "parsedFiles": 4254,
+      "fileCount": 4255,
+      "cacheBytes": 24393572,
+      "heapDeltaBytes": 163722128,
+      "graphBytes": 34144669
+    },
+    {
+      "at": "2026-11-10T18:50:23.519Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 12420.228700000007,
+      "parsedFiles": 2,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 120229504,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:50:36.042Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 12406.651600000012,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 87924704,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:51:01.950Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 12598.276299999998,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 87170520,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:51:13.743Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 11680.67749999999,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": -19557928,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:52:53.352Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 8237.677200000035,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 50413720,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:53:02.230Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 8871.410700000008,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": -5792,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:53:10.923Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "f72818ea4e77d65b73762c55ef532b73feb28ff6bfdd10fa29876bef7af1b62e",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "d4a2147e64066c9e97302dc119e5eee93f68a17d8af2140b214204824972beb5"
+      },
+      "latencyMs": 8567.973599999968,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394777,
+      "heapDeltaBytes": 53504464,
+      "graphBytes": 34146064
+    },
+    {
+      "at": "2026-11-10T18:54:46.556Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "12c2fd78d6d71653ff0f63a270024f89f3b95116c80dff237b4dac98e5015455",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "c0290d2c25caef060fbf8f98a73183f31d52de92b6c47ddeb29444f9b0d81fe3"
+      },
+      "latencyMs": 9136.127600000007,
+      "parsedFiles": 1,
+      "fileCount": 4256,
+      "cacheBytes": 24394797,
+      "heapDeltaBytes": 105517424,
+      "graphBytes": 34146074
+    },
+    {
+      "at": "2026-11-10T18:54:54.719Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "12c2fd78d6d71653ff0f63a270024f89f3b95116c80dff237b4dac98e5015455",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "c0290d2c25caef060fbf8f98a73183f31d52de92b6c47ddeb29444f9b0d81fe3"
+      },
+      "latencyMs": 8155.0386999999755,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394797,
+      "heapDeltaBytes": -46084120,
+      "graphBytes": 34146074
+    },
+    {
+      "at": "2026-11-10T18:55:03.563Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a9daa7f6611ecf554e7ba8b464e08b6b7e080e29",
+        "sourceContentVersion": "12c2fd78d6d71653ff0f63a270024f89f3b95116c80dff237b4dac98e5015455",
+        "configurationVersion": "ede3a78c747070eccba3fd9fa6ba510a3b3ec006bc741b91a7c7a7f7f3dda08b",
+        "contentVersion": "c0290d2c25caef060fbf8f98a73183f31d52de92b6c47ddeb29444f9b0d81fe3"
+      },
+      "latencyMs": 8761.266200000013,
+      "parsedFiles": 0,
+      "fileCount": 4256,
+      "cacheBytes": 24394797,
+      "heapDeltaBytes": -18950240,
+      "graphBytes": 34146074
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12930-C-r0-a0\\home\\events\\1794336463932-4da396c8-7876-4fad-9b59-9db099fb5252.jsonl",
+  "receiptAudit": {
+    "requests": 25,
+    "finalUsageResponses": 25,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 25,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": true,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12930-C-r0",
+  "attempt": 0
+}

@@ -1,0 +1,66 @@
+diff --git a/src/language-js/print/typescript.js b/src/language-js/print/typescript.js
+index 32942f2..1884c3a 100644
+--- a/src/language-js/print/typescript.js
++++ b/src/language-js/print/typescript.js
+@@ -414,7 +414,7 @@ function printTypescript(path, options, print) {
+ 
+       return parts;
+     case "TSEnumMember":
+-      parts.push(print("id"));
++      parts.push(node.computed ? ["[", print("id"), "]"] : print("id"));
+       if (node.initializer) {
+         parts.push(" = ", print("initializer"));
+       }
+diff --git a/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap b/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap
+index 17d4458..6ab86f7 100644
+--- a/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/misc/typescript-only/__snapshots__/jsfmt.spec.js.snap
+@@ -51,6 +51,34 @@ await 0;
+ ================================================================================
+ `;
+ 
++exports[`computed-enum.ts format 1`] = `
++====================================options=====================================
++parsers: ["typescript"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++enum A {
++  [i++]
++}
++
++const a = "b"
++enum B {
++  [a] = 2
++}
++
++=====================================output=====================================
++enum A {
++  [i++],
++}
++
++const a = "b";
++enum B {
++  [a] = 2,
++}
++
++================================================================================
++`;
++
+ exports[`invalid-modifiers.ts format 1`] = `
+ ====================================options=====================================
+ parsers: ["typescript"]
+diff --git a/tests/format/misc/typescript-only/computed-enum.ts b/tests/format/misc/typescript-only/computed-enum.ts
+new file mode 100644
+index 0000000..31b269e
+--- /dev/null
++++ b/tests/format/misc/typescript-only/computed-enum.ts
+@@ -0,0 +1,8 @@
++enum A {
++  [i++]
++}
++
++const a = "b"
++enum B {
++  [a] = 2
++}
