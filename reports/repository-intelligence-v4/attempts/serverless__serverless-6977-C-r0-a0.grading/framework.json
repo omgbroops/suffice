@@ -1,0 +1,76 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 2,
+    "tests": 9,
+    "passes": 7,
+    "pending": 0,
+    "failures": 2,
+    "start": "2026-11-10T07:44:36.361Z",
+    "end": "2026-11-10T07:44:36.377Z",
+    "duration": 16
+  },
+  "tests": [
+    {
+      "title": "#validate #validate() should succeed if inside service (servicePath defined)",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should throw error if not inside service (servicePath not defined)",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should default to \"dev\" if stage is not provided",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should use the service.provider stage if present",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should default to \"us-east-1\" region if region is not provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should use the service.provider region if present",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#validate #validate() should check the metadata service and throw an error if no creds and no metadata response",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "this.provider.sdk.MetadataService is not a constructor",
+        "stack": "TypeError: this.provider.sdk.MetadataService is not a constructor\n    at Object.validate (lib\\plugins\\aws\\lib\\validate.js:38:31)\n    at Context.<anonymous> (lib\\plugins\\aws\\lib\\validate.test.js:99:31)\n    at processTicksAndRejections (node:internal/process/task_queues:78:11)"
+      }
+    },
+    {
+      "title": "#validate #validate() should check the metadata service and pass if return credentials",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "this.provider.sdk.MetadataService is not a constructor",
+        "stack": "TypeError: this.provider.sdk.MetadataService is not a constructor\n    at Object.validate (lib\\plugins\\aws\\lib\\validate.js:38:31)\n    at Context.<anonymous> (lib\\plugins\\aws\\lib\\validate.test.js:113:31)\n    at processTicksAndRejections (node:internal/process/task_queues:78:11)"
+      }
+    },
+    {
+      "title": "#validate #validate() should not check the metadata service if not using a command that needs creds",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    }
+  ],
+  "hooks": []
+}

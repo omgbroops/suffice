@@ -1,0 +1,501 @@
+{
+  "task": "serverless__serverless-6977",
+  "repo": "serverless/serverless",
+  "category": "simple",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-6977-C-r0-a0/workspace",
+    "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+    "tree": "7d83fc2c6628381b3fc2edec263058be56c84665"
+  },
+  "runId": "serverless__serverless-6977-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 284463.94899999996,
+  "usage": {
+    "input": 74791,
+    "cacheRead": 595968,
+    "cacheWrite": 0,
+    "output": 8016,
+    "estimatedApiUsd": 0.017446780000000002,
+    "modelCalls": 23,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.017446780000000002,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 0,
+    "unpassed": [
+      "#validate #validate() should check the metadata service and throw an error if no creds and no metadata response",
+      "#validate #validate() should check the metadata service and pass if return credentials"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 0,
+      "regressions": 7,
+      "regressionsPassed": 7,
+      "missing": [],
+      "failures": [
+        "#validate #validate() should check the metadata service and throw an error if no creds and no metadata response",
+        "#validate #validate() should check the metadata service and pass if return credentials"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#validate #validate() should check the metadata service and pass if return credentials": 1,
+        "#validate #validate() should check the metadata service and throw an error if no creds and no metadata response": 1,
+        "#validate #validate() should default to \"dev\" if stage is not provided": 1,
+        "#validate #validate() should default to \"us-east-1\" region if region is not provided": 1,
+        "#validate #validate() should not check the metadata service if not using a command that needs creds": 1,
+        "#validate #validate() should succeed if inside service (servicePath defined)": 1,
+        "#validate #validate() should throw error if not inside service (servicePath not defined)": 1,
+        "#validate #validate() should use the service.provider region if present": 1,
+        "#validate #validate() should use the service.provider stage if present": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 7,
+    "requiredPassed": 7
+  },
+  "changed": [
+    "lib/plugins/aws/lib/validate.js",
+    "lib/plugins/aws/lib/validate.test.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "lib/plugins/aws/lib/validate.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 23,
+  "editCalls": 5,
+  "verificationCalls": 12,
+  "toolCalls": 64,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T07:42:18.495Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-10T07:42:21.937Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "lib/plugins/aws/lib/validate.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:42:23.465Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "lib/plugins/aws/lib/validate.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:42:44.436Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          "lib/plugins/aws/lib/validate.js",
+          "lib/plugins/aws/lib/validate.test.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:42:45.988Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          "lib/plugins/aws/lib/validate.js",
+          "lib/plugins/aws/lib/validate.test.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:42:53.267Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          ".v4-tmp/validate-tests.json",
+          "lib/plugins/aws/lib/validate.js",
+          "lib/plugins/aws/lib/validate.test.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:42:54.504Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          ".v4-tmp/validate-tests.json",
+          "lib/plugins/aws/lib/validate.js",
+          "lib/plugins/aws/lib/validate.test.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:43:52.611Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          ".v4-tmp/validate-tests.json",
+          "lib/plugins/aws/lib/validate.js",
+          "lib/plugins/aws/lib/validate.test.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T07:43:54.467Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          ".v4-tmp/validate-tests.json",
+          "lib/plugins/aws/lib/validate.js",
+          "lib/plugins/aws/lib/validate.test.js"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T07:42:21.327Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "2724d7934f3a82e7a61d567f83d81b00c8e7dd1f9da2fc1fefb5d27d4ed0720f",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "5160779ae94fbee84b5d7d110727adbc56ccf84f675f8a417ecd602dd8d5b33f"
+      },
+      "latencyMs": 2832.337200000009,
+      "parsedFiles": 444,
+      "fileCount": 444,
+      "cacheBytes": 27401371,
+      "heapDeltaBytes": 113014280,
+      "graphBytes": 38701741
+    },
+    {
+      "at": "2026-11-10T07:42:23.453Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "800801b23c840040cd2fd975e01564b1b0ae3914ca7e43c78302bc936b095320",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "46e21f8396d4b28157af59c42bccc0b4d201e62c6a4b455f3b15dda1f0d40cf4"
+      },
+      "latencyMs": 1515.9227000000246,
+      "parsedFiles": 1,
+      "fileCount": 444,
+      "cacheBytes": 27401371,
+      "heapDeltaBytes": -7952056,
+      "graphBytes": 38701741
+    },
+    {
+      "at": "2026-11-10T07:42:24.686Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "800801b23c840040cd2fd975e01564b1b0ae3914ca7e43c78302bc936b095320",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "46e21f8396d4b28157af59c42bccc0b4d201e62c6a4b455f3b15dda1f0d40cf4"
+      },
+      "latencyMs": 1220.4425000000047,
+      "parsedFiles": 0,
+      "fileCount": 444,
+      "cacheBytes": 27401371,
+      "heapDeltaBytes": 35194352,
+      "graphBytes": 38701741
+    },
+    {
+      "at": "2026-11-10T07:42:45.974Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "dc90aee697193a480f9d7588bbfed0aec067c88b1c016421c6c66f9bb3be8f45",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "63b64570984e9bd9a068945a4164c2a42cc5b86ea111fedb4eee082100e68f8c"
+      },
+      "latencyMs": 1538.2056999999913,
+      "parsedFiles": 1,
+      "fileCount": 444,
+      "cacheBytes": 27406571,
+      "heapDeltaBytes": 36468712,
+      "graphBytes": 38709202
+    },
+    {
+      "at": "2026-11-10T07:42:47.245Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "dc90aee697193a480f9d7588bbfed0aec067c88b1c016421c6c66f9bb3be8f45",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "63b64570984e9bd9a068945a4164c2a42cc5b86ea111fedb4eee082100e68f8c"
+      },
+      "latencyMs": 1258.1869000000006,
+      "parsedFiles": 0,
+      "fileCount": 444,
+      "cacheBytes": 27406571,
+      "heapDeltaBytes": -60924768,
+      "graphBytes": 38709202
+    },
+    {
+      "at": "2026-11-10T07:42:54.492Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "dc90aee697193a480f9d7588bbfed0aec067c88b1c016421c6c66f9bb3be8f45",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "63b64570984e9bd9a068945a4164c2a42cc5b86ea111fedb4eee082100e68f8c"
+      },
+      "latencyMs": 1225.086500000005,
+      "parsedFiles": 0,
+      "fileCount": 444,
+      "cacheBytes": 27406571,
+      "heapDeltaBytes": 34926760,
+      "graphBytes": 38709202
+    },
+    {
+      "at": "2026-11-10T07:42:55.753Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "dc90aee697193a480f9d7588bbfed0aec067c88b1c016421c6c66f9bb3be8f45",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "63b64570984e9bd9a068945a4164c2a42cc5b86ea111fedb4eee082100e68f8c"
+      },
+      "latencyMs": 1250.127999999997,
+      "parsedFiles": 0,
+      "fileCount": 444,
+      "cacheBytes": 27406571,
+      "heapDeltaBytes": -22073544,
+      "graphBytes": 38709202
+    },
+    {
+      "at": "2026-11-10T07:43:54.453Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "fa5a48d54f57d492c6206d529b3d26f3f538b96dd8b92c7f1b4953883e76a6ea",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "b8bf7878b4ddaffe304116e74e8ae0022dc1ffb13a9d6c65f5cafaad00d4c06b"
+      },
+      "latencyMs": 1842.6661999999778,
+      "parsedFiles": 1,
+      "fileCount": 444,
+      "cacheBytes": 27406569,
+      "heapDeltaBytes": 75847664,
+      "graphBytes": 38709200
+    },
+    {
+      "at": "2026-11-10T07:43:55.692Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "01be3b45f7c17198ec54d697f99dd3a689f9c53b",
+        "sourceContentVersion": "fa5a48d54f57d492c6206d529b3d26f3f538b96dd8b92c7f1b4953883e76a6ea",
+        "configurationVersion": "b7aeb3deb8c36e087e7220857571ddff387c4262ffd7ff326f7e863985b08c08",
+        "contentVersion": "b8bf7878b4ddaffe304116e74e8ae0022dc1ffb13a9d6c65f5cafaad00d4c06b"
+      },
+      "latencyMs": 1225.5358000000124,
+      "parsedFiles": 0,
+      "fileCount": 444,
+      "cacheBytes": 27406569,
+      "heapDeltaBytes": -57297248,
+      "graphBytes": 38709200
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "lib/plugins/aws/lib/validate.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff -- lib/plugins/aws/lib/validate.js; git status --short",
+        "git diff --check; git status --short; git diff -- lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "node_modules/.bin/eslint --no-cache lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "node_modules/.bin/prettier --check lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "candidatePaths": [
+        "lib/plugins/aws/lib/validate.js",
+        "lib/plugins/aws/lib/validate.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "lib/plugins/aws/lib/validate.test.js",
+          "callId": "call_47951beca76047ff97713cdbf57bdc80|ctc_0efa43271e14acbe016af2cb36a20887d1a0a114f0f2c4e460/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff --check; git status --short; git diff -- lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "node_modules/.bin/eslint --no-cache lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "node_modules/.bin/prettier --check lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "Get-Content lib/plugins/aws/lib/validate.test.js | Select-Object -Skip 95 -First 26"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "candidatePaths": [
+        ".v4-tmp/validate-tests.json",
+        "lib/plugins/aws/lib/validate.js",
+        "lib/plugins/aws/lib/validate.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "lib/plugins/aws/lib/validate.test.js",
+          "callId": "call_47951beca76047ff97713cdbf57bdc80|ctc_0efa43271e14acbe016af2cb36a20887d1a0a114f0f2c4e460/1"
+        },
+        {
+          "tool": "write",
+          "path": ".v4-tmp/validate-tests.json",
+          "callId": "call_92754a6798d340d98fed6b4bcdb31488|ctc_0efa43271e14acbe016af2cb41680887d1b5a30e53d7958c62/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node native-verify.cjs --tests-json .v4-tmp/validate-tests.json --report .v4-tmp/validate-report.json",
+        "git diff --check; git status --short; git diff -- lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "Remove-Item -LiteralPath .v4-tmp/validate-tests.json,.v4-tmp/validate-report.json,.v4-tmp/public-report.json -ErrorAction SilentlyContinue; git status --short; git diff --check",
+        "node_modules/.bin/eslint --no-cache lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "node_modules/.bin/prettier --check lib/plugins/aws/lib/validate.js lib/plugins/aws/lib/validate.test.js",
+        "Get-Content lib/plugins/aws/lib/validate.test.js | Select-Object -Skip 95 -First 26",
+        "node native-verify.cjs --tests-json .v4-tmp/validate-tests.json --report .v4-tmp/validate-report.json",
+        "Remove-Item -LiteralPath .v4-tmp/validate-tests.json,.v4-tmp/validate-report.json,.v4-tmp/public-report.json -ErrorAction SilentlyContinue; git diff --check; git status --short; git diff --stat"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "candidatePaths": [
+        ".v4-tmp/validate-tests.json",
+        "lib/plugins/aws/lib/validate.js",
+        "lib/plugins/aws/lib/validate.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "write",
+          "path": ".v4-tmp/validate-tests.json",
+          "callId": "call_92754a6798d340d98fed6b4bcdb31488|ctc_0efa43271e14acbe016af2cb41680887d1b5a30e53d7958c62/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node native-verify.cjs --tests-json .v4-tmp/validate-tests.json --report .v4-tmp/validate-report.json",
+        "Remove-Item -LiteralPath .v4-tmp/validate-tests.json,.v4-tmp/validate-report.json,.v4-tmp/public-report.json -ErrorAction SilentlyContinue; git diff --check; git status --short; git diff --stat"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "lib/plugins/aws/lib/validate.js",
+      "before": "'use strict';\n\nconst BbPromise = require('bluebird');\nconst chalk = require('chalk');\nconst userStats = require('../../../utils/userStats');\n\nmodule.exports = {\n  validate() {\n    if (!this.serverless.config.servicePath) {\n      const error = new this.serverless.classes.Error(\n        'This command can only be run inside a service directory'\n      );\n      return BbPromise.reject(error);\n    }\n\n    this.options.stage = this.provider.getStage();\n    this.options.region = this.provider.getRegion();\n\n    if (\n      !['logs', 'info', 'deploy', 'remove', 'rollback', 'metrics', 'invoke'].includes(\n        this.serverless.processedInput.commands[0]\n      ) ||\n      this.serverless.processedInput.commands[1] === 'local'\n    ) {\n      return BbPromise.resolve();\n    }\n    const creds = Object.assign({}, this.provider.getCredentials());\n    delete creds.region;\n    delete creds.signatureVersion;\n\n    if (\n      Object.keys(creds).length === 0 &&\n      !process.env.ECS_CONTAINER_METADATA_FILE &&\n      !process.env.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI &&\n      !process.env.AWS_CONTAINER_CREDENTIALS_FULL_URI\n    ) {\n      // first check if the EC2 Metadata Service has creds before throwing error\n      const metadataService = new this.provider.sdk.MetadataService({\n        httpOptions: { timeout: 100, connectTimeout: 100 }, // .1 second timeout\n        maxRetries: 0, // retry 0 times\n      });\n      return new BbPromise((resolve, reject) =>\n        metadataService.request('/', (err, data) => {\n          return err ? reject(err) : resolve(data);\n        })\n      )\n        .catch(() => null)\n        .then(identity => {\n          if (!identity) {\n            const message = [\n              'AWS provider credentials not found.',\n              ' Learn how to set up AWS provider credentials',\n              ` in our docs here: <${chalk.green('http://slss.io/aws-creds-setup')}>.`,\n            ].join('');\n            userStats.track('user_awsCredentialsNotFound');\n            throw new this.serverless.classes.Error(message);\n          }\n        });\n    }\n    return BbPromise.resolve();\n  },\n};\n",
+      "after": "'use strict';\n\nconst BbPromise = require('bluebird');\nconst chalk = require('chalk');\nconst userStats = require('../../../utils/userStats');\n\nmodule.exports = {\n  validate() {\n    if (!this.serverless.config.servicePath) {\n      const error = new this.serverless.classes.Error(\n        'This command can only be run inside a service directory'\n      );\n      return BbPromise.reject(error);\n    }\n\n    this.options.stage = this.provider.getStage();\n    this.options.region = this.provider.getRegion();\n\n    if (\n      !['logs', 'info', 'deploy', 'remove', 'rollback', 'metrics', 'invoke'].includes(\n        this.serverless.processedInput.commands[0]\n      ) ||\n      this.serverless.processedInput.commands[1] === 'local'\n    ) {\n      return BbPromise.resolve();\n    }\n    const creds = Object.assign({}, this.provider.getCredentials());\n    delete creds.region;\n    delete creds.signatureVersion;\n\n    if (\n      Object.keys(creds).length === 0 &&\n      !process.env.ECS_CONTAINER_METADATA_FILE &&\n      !process.env.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI &&\n      !process.env.AWS_CONTAINER_CREDENTIALS_FULL_URI\n    ) {\n      // first check if the EC2 Metadata Service has creds before throwing error\n      const metadataService = new this.provider.sdk.MetadataService({\n        httpOptions: { timeout: 1000, connectTimeout: 1000 }, // one second timeout\n        maxRetries: 0, // retry 0 times\n      });\n      return new BbPromise((resolve, reject) =>\n        metadataService.request('/', (err, data) => {\n          return err ? reject(err) : resolve(data);\n        })\n      )\n        .catch(() => null)\n        .then(identity => {\n          if (!identity) {\n            const message = [\n              'AWS provider credentials not found.',\n              ' Learn how to set up AWS provider credentials',\n              ` in our docs here: <${chalk.green('http://slss.io/aws-creds-setup')}>.`,\n            ].join('');\n            userStats.track('user_awsCredentialsNotFound');\n            throw new this.serverless.classes.Error(message);\n          }\n        });\n    }\n    return BbPromise.resolve();\n  },\n};\n"
+    },
+    {
+      "path": "lib/plugins/aws/lib/validate.test.js",
+      "before": "'use strict';\n\nconst chai = require('chai');\nconst AwsProvider = require('../provider/awsProvider');\nconst validate = require('../lib/validate');\nconst Serverless = require('../../../Serverless');\n\nchai.use(require('chai-as-promised'));\n\nconst expect = chai.expect;\n\nclass MetadataService {\n  request(error) {\n    error('error');\n  }\n}\n\ndescribe('#validate', () => {\n  const serverless = new Serverless();\n  let provider;\n  const awsPlugin = {};\n\n  beforeEach(() => {\n    awsPlugin.options = {\n      stage: 'dev',\n      region: 'us-east-1',\n    };\n    provider = new AwsProvider(serverless, awsPlugin.options);\n    provider.cachedCredentials = { accessKeyId: 'foo', secretAccessKey: 'bar' };\n    awsPlugin.provider = provider;\n    awsPlugin.provider.sdk = { MetadataService };\n    awsPlugin.serverless = serverless;\n    awsPlugin.serverless.setProvider('aws', provider);\n\n    awsPlugin.serverless.config.servicePath = true;\n    serverless.processedInput = { commands: ['deploy'] };\n\n    Object.assign(awsPlugin, validate);\n  });\n\n  describe('#validate()', () => {\n    it('should succeed if inside service (servicePath defined)', () =>\n      expect(awsPlugin.validate()).to.be.fulfilled);\n\n    it('should throw error if not inside service (servicePath not defined)', () => {\n      awsPlugin.serverless.config.servicePath = false;\n      return expect(awsPlugin.validate()).to.be.rejected;\n    });\n\n    // NOTE: starting here, test order is important\n\n    it('should default to \"dev\" if stage is not provided', () => {\n      awsPlugin.options.stage = false;\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.provider.getStage()).to.equal('dev');\n      });\n    });\n\n    it('should use the service.provider stage if present', () => {\n      awsPlugin.options.stage = false;\n      awsPlugin.serverless.service.provider = {\n        stage: 'some-stage',\n      };\n\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.provider.getStage()).to.equal('some-stage');\n      });\n    });\n\n    it('should default to \"us-east-1\" region if region is not provided', () => {\n      awsPlugin.options.region = false;\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.options.region).to.equal('us-east-1');\n      });\n    });\n\n    it('should use the service.provider region if present', () => {\n      awsPlugin.options.region = false;\n      awsPlugin.serverless.service.provider = {\n        region: 'some-region',\n      };\n\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.options.region).to.equal('some-region');\n      });\n    });\n\n    it('should check the metadata service and throw an error if no creds and no metadata response', () => {\n      awsPlugin.options.region = false;\n      awsPlugin.serverless.service.provider = {\n        region: 'some-region',\n      };\n      provider.cachedCredentials = {};\n\n      return expect(awsPlugin.validate()).to.be.rejected.then(() => {\n        expect(awsPlugin.options.region).to.equal('some-region');\n      });\n    });\n\n    it('should not check the metadata service if not using a command that needs creds', () => {\n      awsPlugin.options.region = false;\n      awsPlugin.serverless.service.provider = {\n        region: 'some-region',\n      };\n      provider.cachedCredentials = {};\n      serverless.processedInput = { commands: ['print'] };\n\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.options.region).to.equal('some-region');\n      });\n    });\n  });\n});\n",
+      "after": "'use strict';\n\nconst chai = require('chai');\nconst AwsProvider = require('../provider/awsProvider');\nconst validate = require('../lib/validate');\nconst Serverless = require('../../../Serverless');\n\nchai.use(require('chai-as-promised'));\n\nconst expect = chai.expect;\n\nclass MetadataService {\n  constructor(options) {\n    MetadataService.options = options;\n  }\n\n  request(path, callback) {\n    callback(new Error('error'));\n  }\n}\n\ndescribe('#validate', () => {\n  const serverless = new Serverless();\n  let provider;\n  const awsPlugin = {};\n\n  beforeEach(() => {\n    awsPlugin.options = {\n      stage: 'dev',\n      region: 'us-east-1',\n    };\n    provider = new AwsProvider(serverless, awsPlugin.options);\n    provider.cachedCredentials = { accessKeyId: 'foo', secretAccessKey: 'bar' };\n    awsPlugin.provider = provider;\n    awsPlugin.provider.sdk = { MetadataService };\n    awsPlugin.serverless = serverless;\n    awsPlugin.serverless.setProvider('aws', provider);\n\n    awsPlugin.serverless.config.servicePath = true;\n    serverless.processedInput = { commands: ['deploy'] };\n\n    Object.assign(awsPlugin, validate);\n  });\n\n  describe('#validate()', () => {\n    it('should succeed if inside service (servicePath defined)', () =>\n      expect(awsPlugin.validate()).to.be.fulfilled);\n\n    it('should throw error if not inside service (servicePath not defined)', () => {\n      awsPlugin.serverless.config.servicePath = false;\n      return expect(awsPlugin.validate()).to.be.rejected;\n    });\n\n    // NOTE: starting here, test order is important\n\n    it('should default to \"dev\" if stage is not provided', () => {\n      awsPlugin.options.stage = false;\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.provider.getStage()).to.equal('dev');\n      });\n    });\n\n    it('should use the service.provider stage if present', () => {\n      awsPlugin.options.stage = false;\n      awsPlugin.serverless.service.provider = {\n        stage: 'some-stage',\n      };\n\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.provider.getStage()).to.equal('some-stage');\n      });\n    });\n\n    it('should default to \"us-east-1\" region if region is not provided', () => {\n      awsPlugin.options.region = false;\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.options.region).to.equal('us-east-1');\n      });\n    });\n\n    it('should use the service.provider region if present', () => {\n      awsPlugin.options.region = false;\n      awsPlugin.serverless.service.provider = {\n        region: 'some-region',\n      };\n\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.options.region).to.equal('some-region');\n      });\n    });\n\n    it('should check the metadata service and throw an error if no creds and no metadata response', () => {\n      awsPlugin.options.region = false;\n      awsPlugin.serverless.service.provider = {\n        region: 'some-region',\n      };\n      provider.cachedCredentials = {};\n\n      return expect(awsPlugin.validate()).to.be.rejected.then(() => {\n        expect(awsPlugin.options.region).to.equal('some-region');\n      });\n    });\n\n    it('should use a one-second timeout when checking the metadata service', () => {\n      provider.cachedCredentials = {};\n\n      return expect(awsPlugin.validate()).to.be.rejected.then(() => {\n        expect(MetadataService.options.httpOptions).to.deep.equal({\n          timeout: 1000,\n          connectTimeout: 1000,\n        });\n      });\n    });\n\n    it('should not check the metadata service if not using a command that needs creds', () => {\n      awsPlugin.options.region = false;\n      awsPlugin.serverless.service.provider = {\n        region: 'some-region',\n      };\n      provider.cachedCredentials = {};\n      serverless.processedInput = { commands: ['print'] };\n\n      return expect(awsPlugin.validate()).to.be.fulfilled.then(() => {\n        expect(awsPlugin.options.region).to.equal('some-region');\n      });\n    });\n  });\n});\n"
+    }
+  ],
+  "final": "Increased the EC2 metadata-service request and connection timeouts from 100 ms to 1 second, matching the AWS SDK’s default and reducing false “credentials not found” errors when metadata responds slowly. Added a unit test for the timeout values.\n\n**Verification:** `node native-verify.cjs` passed (25/25); the targeted validation tests passed (9/9); `git diff --check` passed. ESLint and Prettier could not be run because their local executables are unavailable.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-6977-C-r0-a0\\home\\events\\1794296381603-56010e96-40bd-4633-ae69-75997c050aee.jsonl",
+  "receiptAudit": {
+    "requests": 23,
+    "finalUsageResponses": 23,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 23,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-6977-C-r0",
+  "attempt": 0
+}

@@ -1,0 +1,50 @@
+diff --git a/lib/plugins/aws/lib/validate.js b/lib/plugins/aws/lib/validate.js
+index 77dad1a..d16d266 100644
+--- a/lib/plugins/aws/lib/validate.js
++++ b/lib/plugins/aws/lib/validate.js
+@@ -36,7 +36,7 @@ module.exports = {
+     ) {
+       // first check if the EC2 Metadata Service has creds before throwing error
+       const metadataService = new this.provider.sdk.MetadataService({
+-        httpOptions: { timeout: 100, connectTimeout: 100 }, // .1 second timeout
++        httpOptions: { timeout: 1000, connectTimeout: 1000 }, // one second timeout
+         maxRetries: 0, // retry 0 times
+       });
+       return new BbPromise((resolve, reject) =>
+diff --git a/lib/plugins/aws/lib/validate.test.js b/lib/plugins/aws/lib/validate.test.js
+index 0a0a5e2..1198557 100644
+--- a/lib/plugins/aws/lib/validate.test.js
++++ b/lib/plugins/aws/lib/validate.test.js
+@@ -10,8 +10,12 @@ chai.use(require('chai-as-promised'));
+ const expect = chai.expect;
+ 
+ class MetadataService {
+-  request(error) {
+-    error('error');
++  constructor(options) {
++    MetadataService.options = options;
++  }
++
++  request(path, callback) {
++    callback(new Error('error'));
+   }
+ }
+ 
+@@ -97,6 +101,17 @@ describe('#validate', () => {
+       });
+     });
+ 
++    it('should use a one-second timeout when checking the metadata service', () => {
++      provider.cachedCredentials = {};
++
++      return expect(awsPlugin.validate()).to.be.rejected.then(() => {
++        expect(MetadataService.options.httpOptions).to.deep.equal({
++          timeout: 1000,
++          connectTimeout: 1000,
++        });
++      });
++    });
++
+     it('should not check the metadata service if not using a command that needs creds', () => {
+       awsPlugin.options.region = false;
+       awsPlugin.serverless.service.provider = {
