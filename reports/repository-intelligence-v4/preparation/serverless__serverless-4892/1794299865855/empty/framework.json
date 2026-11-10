@@ -1,0 +1,1052 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 61,
+    "tests": 162,
+    "passes": 144,
+    "pending": 0,
+    "failures": 19,
+    "start": "2026-11-10T08:39:09.779Z",
+    "end": "2026-11-10T08:39:15.677Z",
+    "duration": 5898
+  },
+  "tests": [
+    {
+      "title": "PluginManager #constructor() should set the serverless instance",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #constructor() should create an empty cliOptions object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #constructor() should create an empty cliCommands array",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #constructor() should create an empty plugins array",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #constructor() should create an empty commands object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #setCliOptions() should set the cliOptions object",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #setCliCommands() should set the cliCommands array",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #updateAutocompleteCacheFile() should update autocomplete cache file",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "PluginManager #convertShortcutsIntoOptions() should convert shortcuts into options when a one level deep command matches",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #convertShortcutsIntoOptions() should not convert shortcuts into options when the shortcut is not given",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should add a plugin instance to the plugins array",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should not load plugins twice",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should load two plugins that happen to have the same class name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should load the plugin commands",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should skip service related plugins which not match the services provider",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should add service related plugins when provider property is the providers name",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #addPlugin() should add service related plugins when provider propery is provider plugin",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadPlugins() should throw an error when trying to load unknown plugin",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadPlugins() should log a warning when trying to load unknown plugin with help flag",
+      "status": "passed",
+      "durationMs": 9,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadPlugins() should throw an error when trying to load a broken plugin (without SLS_DEBUG)",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadPlugins() should forward any errors when trying to load a broken plugin (with SLS_DEBUG)",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadPlugins() should not throw error when running the plugin commands and given plugins does not exist",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadAllPlugins() should load only core plugins when no service plugins are given",
+      "status": "passed",
+      "durationMs": 4458,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadAllPlugins() should load all plugins when service plugins are given",
+      "status": "passed",
+      "durationMs": 10,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadAllPlugins() should load all plugins in the correct order",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadCorePlugins() should load the Serverless core plugins",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadServicePlugins() should load the service plugins",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadServicePlugins() should not error if plugins = null",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadServicePlugins() should not error if plugins = undefined",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #parsePluginsObject() should parse array object",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "pluginManager.parsePluginsObject is not a function",
+        "stack": "TypeError: pluginManager.parsePluginsObject is not a function\n    at parsePluginsObjectAndVerifyResult (lib\\classes\\PluginManager.test.js:784:36)\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:791:7)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "PluginManager #parsePluginsObject() should parse plugins object",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "pluginManager.parsePluginsObject is not a function",
+        "stack": "TypeError: pluginManager.parsePluginsObject is not a function\n    at parsePluginsObjectAndVerifyResult (lib\\classes\\PluginManager.test.js:784:36)\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:803:7)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "PluginManager #parsePluginsObject() should parse plugins object if format is not correct",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "pluginManager.parsePluginsObject is not a function",
+        "stack": "TypeError: pluginManager.parsePluginsObject is not a function\n    at parsePluginsObjectAndVerifyResult (lib\\classes\\PluginManager.test.js:784:36)\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:812:7)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "PluginManager #parsePluginsObject() should parse plugins object if modules property is not an array",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "pluginManager.parsePluginsObject is not a function",
+        "stack": "TypeError: pluginManager.parsePluginsObject is not a function\n    at parsePluginsObjectAndVerifyResult (lib\\classes\\PluginManager.test.js:784:36)\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:821:7)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "PluginManager #parsePluginsObject() should parse plugins object if localPath is not correct",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "pluginManager.parsePluginsObject is not a function",
+        "stack": "TypeError: pluginManager.parsePluginsObject is not a function\n    at parsePluginsObjectAndVerifyResult (lib\\classes\\PluginManager.test.js:784:36)\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:833:7)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "PluginManager command aliases #getAliasCommandTarget should return an alias target",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager command aliases #getAliasCommandTarget should return undefined if alias does not exist",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager command aliases #createCommandAlias should create an alias for a command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager command aliases #createCommandAlias should fail if the alias already exists",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager command aliases #createCommandAlias should fail if the alias overwrites a command",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager command aliases #createCommandAlias should fail if the alias overwrites the very own command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadCommands() should load the plugin commands",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadCommands() should merge plugin commands",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadCommands() should fail if there is already an alias for a command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadCommands() should log the alias when SLS_DEBUG is set",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadHooks() should replace deprecated events with the new ones",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #loadHooks() should log a debug message about deprecated when using SLS_DEBUG",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getEvents() should get all the matching events for a root level command in the correct order",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getEvents() should get all the matching events for a nested level command in the correct order",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getHooks() should get hooks for an event with some registered",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getHooks() should have the plugin name and function on the hook",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getHooks() should not get hooks for an event that does not have any",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getHooks() should accept a single event in place of an array",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getPlugins() should return all loaded plugins",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "PluginManager #validateCommand() should find commands",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #validateCommand() should throw on entrypoints",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #assignDefaultOptions() should assign default values to empty options",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #assignDefaultOptions() should not assign default values to non-empty options",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #validateOptions() should throw an error if a required option is not set",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #validateOptions() should throw an error if a customValidation is not met",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #validateOptions() should succeeds if a custom regex matches in a plain commands object",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() should throw an error when the given command is not available",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() should throw an error when the given command is an entrypoint",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() should throw an error when the given command is a child of an entrypoint",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() should show warning if in debug mode and the given command has no hooks",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() should run the hooks in the correct order",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() should run commands with internal lifecycles",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() when using a synchronous hook function when running a simple command should run a simple command",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() when using a synchronous hook function when running a nested command should run the nested command",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() when using a promise based hook function when running a simple command should run the simple command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() when using a promise based hook function when running a nested command should run the nested command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #run() when using provider specific plugins should load only the providers plugins (if the provider is specified)",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getCommands() should hide entrypoints on any level and only return commands",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #getCommands() should return aliases",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() should throw an error when the given command is not available",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() should show warning in debug mode and when the given command has no hooks",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() should spawn entrypoints with internal lifecycles",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking a command should succeed",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking a command should spawn nested commands",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking a command should terminate the hook chain if requested",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking an entrypoint should succeed",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking an entrypoint should spawn nested entrypoints",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking an entrypoint with string formatted syntax should succeed",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginManager #spawn() when invoking an entrypoint with string formatted syntax should spawn nested entrypoints",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginManager Plugin / Load local plugins should load plugins from .serverless_plugins",
+      "status": "passed",
+      "durationMs": 27,
+      "error": null
+    },
+    {
+      "title": "PluginManager Plugin / Load local plugins should load plugins from custom folder",
+      "status": "failed",
+      "durationMs": 4,
+      "error": {
+        "message": "expected [] to satisfy [Function]",
+        "stack": "AssertionError: expected [] to satisfy [Function]\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:1603:40)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "PluginManager Plugin / Load local plugins should load plugins from custom folder outside of serviceDir",
+      "status": "failed",
+      "durationMs": 4,
+      "error": {
+        "message": "expected [] to satisfy [Function]",
+        "stack": "AssertionError: expected [] to satisfy [Function]\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:1618:40)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#packageService() #getIncludes() should return an empty array if no includes are provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #getIncludes() should merge package includes",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #getIncludes() should merge package and func includes",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #getExcludes() should exclude defaults",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #getExcludes() should exclude plugins localPath defaults",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "expected [ Array(10) ] to deeply equal [ Array(11) ]",
+        "stack": "AssertionError: expected [ Array(10) ] to deeply equal [ Array(11) ]\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Context.<anonymous> (lib\\plugins\\package\\lib\\packageService.test.js:80:31)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#packageService() #getExcludes() should not exclude plugins localPath if it is empty",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #getExcludes() should not exclude plugins localPath if it is not a string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #getExcludes() should merge defaults with plugin localPath and excludes",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "expected [ Array(12) ] to deeply equal [ Array(13) ]",
+        "stack": "AssertionError: expected [ Array(12) ] to deeply equal [ Array(13) ]\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Context.<anonymous> (lib\\plugins\\package\\lib\\packageService.test.js:110:31)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#packageService() #getExcludes() should merge defaults with plugin localPath package and func excludes",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "expected [ Array(14) ] to deeply equal [ Array(15) ]",
+        "stack": "AssertionError: expected [ Array(14) ] to deeply equal [ Array(15) ]\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Context.<anonymous> (lib\\plugins\\package\\lib\\packageService.test.js:128:31)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#packageService() #packageService() should package all functions",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageService() should package functions individually",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageService() should package single function individually",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageService() should not package functions if package artifact specified",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageService() should package functions individually if package artifact specified",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageService() should package single functions individually if package artifact specified",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageAll() should call zipService with settings",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageFunction() should call zipService with settings",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageFunction() should return function artifact file path",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#packageService() #packageFunction() should return service artifact file path",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #constructor() should have the sub-command \"install\"",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #constructor() should have the lifecycle event \"install\" for the \"install\" sub-command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #constructor() should have a required option \"name\" for the \"install\" sub-command",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #constructor() should have a \"plugin:install:install\" hook",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #constructor() should run promise chain in order for \"plugin:install:install\" hook",
+      "status": "passed",
+      "durationMs": 107,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #install() should install the plugin if it can be found in the registry",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #install() should not install the plugin if it can not be found in the registry",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #install() should apply the latest version if you can not get the version from name option",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #install() should apply the specified version if you can get the version from name option",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #pluginInstall() should install the plugin if it has not been installed yet",
+      "status": "passed",
+      "durationMs": 13,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #pluginInstall() should generate a package.json file in the service directory if not present",
+      "status": "passed",
+      "durationMs": 16,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() should add the plugin to the service file if plugins array is not present",
+      "status": "passed",
+      "durationMs": 24,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() should push the plugin to the service files plugin array if present",
+      "status": "passed",
+      "durationMs": 19,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() should add the plugin to serverless file path for a .yaml file",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() should add the plugin to serverless file path for a .json file",
+      "status": "passed",
+      "durationMs": 30,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() should not modify serverless .js file",
+      "status": "passed",
+      "durationMs": 14,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() if plugins object is not array should add the plugin to the service file",
+      "status": "failed",
+      "durationMs": 20,
+      "error": {
+        "message": "duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\abce7a44cb4da0a3\\serverless.yml\" at line 7, column -32:\n    plugins:\n    ^",
+        "stack": "YAMLException: duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\abce7a44cb4da0a3\\serverless.yml\" at line 7, column -32:\n    plugins:\n    ^\n    at generateError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:165:10)\n    at throwError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:171:9)\n    at storeMappingPair (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:308:7)\n    at readBlockMapping (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1071:9)\n    at composeNode (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1332:12)\n    at readDocument (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1492:3)\n    at loadDocuments (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1548:5)\n    at Object.load (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1569:19)\n    at parse (lib\\utils\\fs\\parse.js:11:17)\n    at readFileSync (lib\\utils\\fs\\readFileSync.js:8:10)\n    at Utils.readFileSync (lib\\classes\\Utils.js:72:12)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\plugins\\plugin\\install\\install.test.js:405:35\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\graceful-fs\\graceful-fs.js:43:10\n    at FSReqCallback.oncomplete (node:fs:192:23)"
+      }
+    },
+    {
+      "title": "PluginInstall #addPluginToServerlessFile() if plugins object is not array should add the plugin to serverless file path for a .json file",
+      "status": "failed",
+      "durationMs": 12,
+      "error": {
+        "message": "expected promise to be fulfilled but it was rejected with 'TypeError: newServerlessFileObj.plugins.push is not a function'",
+        "stack": "AssertionError: expected promise to be fulfilled but it was rejected with 'TypeError: newServerlessFileObj.plugins.push is not a function'"
+      }
+    },
+    {
+      "title": "PluginInstall #installPeerDependencies() should install peerDependencies if an installed plugin has ones",
+      "status": "passed",
+      "durationMs": 13,
+      "error": null
+    },
+    {
+      "title": "PluginInstall #installPeerDependencies() should not install peerDependencies if an installed plugin does not have ones",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #constructor() should have the sub-command \"uninstall\"",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #constructor() should have the lifecycle event \"uninstall\" for the \"uninstall\" sub-command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #constructor() should have a required option \"name\" for the \"uninstall\" sub-command",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #constructor() should have a \"plugin:uninstall:uninstall\" hook",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #constructor() should run promise chain in order for \"plugin:uninstall:uninstall\" hook",
+      "status": "passed",
+      "durationMs": 10,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #uninstall() should uninstall the plugin if it can be found in the registry",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #uninstall() should not uninstall the plugin if it can not be found in the registry",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #uninstall() should drop the version if specify",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #pluginUninstall() should uninstall the plugin if it has not been uninstalled yet",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() should only remove the given plugin from the service",
+      "status": "passed",
+      "durationMs": 8,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() should remove the plugin from the service if it is the only one",
+      "status": "passed",
+      "durationMs": 18,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() should remove the plugin from serverless file path for a .yaml file",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() should remove the plugin from serverless file path for a .json file",
+      "status": "passed",
+      "durationMs": 41,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() should not modify serverless .js file",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() if plugins object is not array should only remove the given plugin from the service",
+      "status": "failed",
+      "durationMs": 15,
+      "error": {
+        "message": "expected { Object (localPath, modules) } to deeply equal { Object (localPath, modules) }",
+        "stack": "AssertionError: expected { Object (localPath, modules) } to deeply equal { Object (localPath, modules) }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\plugins\\plugin\\uninstall\\uninstall.test.js:390:24\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:454:14)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at FSReqCallback.readFileAfterClose [as oncomplete] (node:internal/fs/read_file_context:68:3)"
+      }
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() if plugins object is not array should remove the plugin from the service if it is the only one",
+      "status": "failed",
+      "durationMs": 14,
+      "error": {
+        "message": "expected { Object (localPath, modules) } to deeply equal { localPath: 'test' }",
+        "stack": "AssertionError: expected { Object (localPath, modules) } to deeply equal { localPath: 'test' }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\plugins\\plugin\\uninstall\\uninstall.test.js:416:22\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:454:14)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at FSReqCallback.readFileAfterClose [as oncomplete] (node:internal/fs/read_file_context:68:3)"
+      }
+    },
+    {
+      "title": "PluginUninstall #removePluginFromServerlessFile() if plugins object is not array should remove the plugin from serverless file path for a .json file",
+      "status": "failed",
+      "durationMs": 23,
+      "error": {
+        "message": "expected { Object (localPath, modules) } to deeply equal { Object (localPath, modules) }",
+        "stack": "AssertionError: expected { Object (localPath, modules) } to deeply equal { Object (localPath, modules) }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:293:29)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\plugins\\plugin\\uninstall\\uninstall.test.js:440:22\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\graceful-fs\\graceful-fs.js:99:16\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\graceful-fs\\graceful-fs.js:43:10\n    at FSReqCallback.oncomplete (node:fs:192:23)"
+      }
+    },
+    {
+      "title": "PluginUninstall #uninstallPeerDependencies() should uninstall peerDependencies if an installed plugin has ones",
+      "status": "passed",
+      "durationMs": 12,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #uninstallPeerDependencies() should not uninstall peerDependencies if an installed plugin does not have ones",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "PluginUninstall #uninstallPeerDependencies() should do nothing if an uninstalled plugin does not have package.json",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add a top level object and item into the yaml file",
+      "status": "passed",
+      "durationMs": 23,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add an item under the existing object which you specify",
+      "status": "passed",
+      "durationMs": 21,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add a multiple level object and item into the yaml file",
+      "status": "passed",
+      "durationMs": 15,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add an item under the existing multiple level object which you specify",
+      "status": "passed",
+      "durationMs": 20,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add an item under partially existing multiple level object",
+      "status": "failed",
+      "durationMs": 20,
+      "error": {
+        "message": "duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\d9470245436a8f62\\test.yaml\" at line 5, column -42:\n    toplevel:\n    ^",
+        "stack": "YAMLException: duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\d9470245436a8f62\\test.yaml\" at line 5, column -42:\n    toplevel:\n    ^\n    at generateError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:165:10)\n    at throwError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:171:9)\n    at storeMappingPair (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:308:7)\n    at readBlockMapping (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1071:9)\n    at composeNode (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1332:12)\n    at readDocument (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1492:3)\n    at loadDocuments (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1548:5)\n    at Object.load (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1569:19)\n    at parse (lib\\utils\\fs\\parse.js:11:17)\n    at readFileSync (lib\\utils\\fs\\readFileSync.js:8:10)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\utils\\yamlAstParser.test.js:28:24\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\graceful-fs\\graceful-fs.js:43:10\n    at FSReqCallback.oncomplete (node:fs:192:23)"
+      }
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add an item in the middle branch",
+      "status": "failed",
+      "durationMs": 20,
+      "error": {
+        "message": "duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\15c401c2a1231256\\test.yaml\" at line 6, column -29:\n    toplevel:\n    ^",
+        "stack": "YAMLException: duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\15c401c2a1231256\\test.yaml\" at line 6, column -29:\n    toplevel:\n    ^\n    at generateError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:165:10)\n    at throwError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:171:9)\n    at storeMappingPair (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:308:7)\n    at readBlockMapping (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1071:9)\n    at composeNode (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1332:12)\n    at readDocument (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1492:3)\n    at loadDocuments (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1548:5)\n    at Object.load (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1569:19)\n    at parse (lib\\utils\\fs\\parse.js:11:17)\n    at readFileSync (lib\\utils\\fs\\readFileSync.js:8:10)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\utils\\yamlAstParser.test.js:28:24\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\graceful-fs\\graceful-fs.js:43:10\n    at FSReqCallback.oncomplete (node:fs:192:23)"
+      }
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should add an item with multiple top level entries",
+      "status": "failed",
+      "durationMs": 25,
+      "error": {
+        "message": "duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\1340f08650a727e2\\test.yaml\" at line 7, column -42:\n    toplevel:\n    ^",
+        "stack": "YAMLException: duplicated mapping key in \"C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\.v4-tmp\\tmpdirs-serverless\\serverless\\1340f08650a727e2\\test.yaml\" at line 7, column -42:\n    toplevel:\n    ^\n    at generateError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:165:10)\n    at throwError (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:171:9)\n    at storeMappingPair (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:308:7)\n    at readBlockMapping (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1071:9)\n    at composeNode (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1332:12)\n    at readDocument (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1492:3)\n    at loadDocuments (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1548:5)\n    at Object.load (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\js-yaml\\lib\\js-yaml\\loader.js:1569:19)\n    at parse (lib\\utils\\fs\\parse.js:11:17)\n    at readFileSync (lib\\utils\\fs\\readFileSync.js:8:10)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\lib\\utils\\yamlAstParser.test.js:28:24\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at Promise._resolveCallback (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:432:57)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:524:17)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromise0 (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:614:10)\n    at Promise._settlePromises (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:693:18)\n    at Promise._fulfill (C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\promise.js:638:18)\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\bluebird\\js\\release\\nodeback.js:42:21\n    at C:\\Users\\Public\\SufficeV4\\deps-264454ddb647089bc8d1\\node_modules\\graceful-fs\\graceful-fs.js:43:10\n    at FSReqCallback.oncomplete (node:fs:192:23)"
+      }
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should do nothing when adding the existing item",
+      "status": "passed",
+      "durationMs": 7,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #addNewArrayItem() should survive with invalid yaml",
+      "status": "passed",
+      "durationMs": 24,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove the existing top level object and item from the yaml file",
+      "status": "passed",
+      "durationMs": 16,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove the existing item under the object which you specify",
+      "status": "passed",
+      "durationMs": 29,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove the multiple level object and item from the yaml file",
+      "status": "passed",
+      "durationMs": 16,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove the existing item under the multiple level object which you specify",
+      "status": "passed",
+      "durationMs": 16,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove multilevel object from the middle branch",
+      "status": "passed",
+      "durationMs": 27,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove item from multilevel object from the middle branch",
+      "status": "passed",
+      "durationMs": 25,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should do nothing when you can not find the object which you specify",
+      "status": "passed",
+      "durationMs": 18,
+      "error": null
+    },
+    {
+      "title": "#yamlAstParser #removeExistingArrayItem() should remove when with inline declaration of the array",
+      "status": "passed",
+      "durationMs": 26,
+      "error": null
+    }
+  ],
+  "hooks": [
+    {
+      "title": "PluginManager Plugin / CLI integration \"before each\" hook for \"should expose a working integration between the CLI and the plugin system\"",
+      "status": "failed",
+      "durationMs": 56,
+      "error": {
+        "message": "Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\bin\\serverless create --template aws-nodejs\nThe directory or file cannot be created.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\bin\\serverless create --template aws-nodejs.\r\n",
+        "stack": "Error: Command failed: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\bin\\serverless create --template aws-nodejs\nThe directory or file cannot be created.\r\nError occurred while processing: node C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-4892-1794299865855\\empty\\bin\\serverless create --template aws-nodejs.\r\n\n    at checkExecSyncError (node:child_process:861:11)\n    at execSync (node:child_process:932:15)\n    at Context.<anonymous> (lib\\classes\\PluginManager.test.js:1653:7)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    }
+  ]
+}
