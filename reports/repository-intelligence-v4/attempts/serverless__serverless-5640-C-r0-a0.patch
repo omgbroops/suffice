@@ -1,0 +1,93 @@
+diff --git a/lib/classes/Service.js b/lib/classes/Service.js
+index f508aa0..993b387 100644
+--- a/lib/classes/Service.js
++++ b/lib/classes/Service.js
+@@ -21,7 +21,7 @@ class Service {
+     this.provider = {
+       stage: 'dev',
+       region: 'us-east-1',
+-      variableSyntax: '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}',
++      variableSyntax: '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}',
+     };
+     this.custom = {};
+     this.plugins = [];
+diff --git a/lib/classes/Service.test.js b/lib/classes/Service.test.js
+index 877e266..3586669 100644
+--- a/lib/classes/Service.test.js
++++ b/lib/classes/Service.test.js
+@@ -31,7 +31,7 @@ describe('Service', () => {
+       expect(serviceInstance.provider).to.deep.equal({
+         stage: 'dev',
+         region: 'us-east-1',
+-        variableSyntax: '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}',
++        variableSyntax: '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}',
+       });
+       expect(serviceInstance.custom).to.deep.equal({});
+       expect(serviceInstance.plugins).to.deep.equal([]);
+diff --git a/lib/classes/Utils.js b/lib/classes/Utils.js
+index 029eecf..79f6e4d 100644
+--- a/lib/classes/Utils.js
++++ b/lib/classes/Utils.js
+@@ -252,7 +252,7 @@ class Utils {
+       }
+ 
+       let hasCustomVariableSyntaxDefined = false;
+-      const defaultVariableSyntax = '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}';
++      const defaultVariableSyntax = '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}';
+ 
+       // check if the variableSyntax in the provider section is defined
+       if (provider && provider.variableSyntax
+diff --git a/lib/classes/Variables.test.js b/lib/classes/Variables.test.js
+index e0df938..ec39cf8 100644
+--- a/lib/classes/Variables.test.js
++++ b/lib/classes/Variables.test.js
+@@ -447,7 +447,7 @@ describe('Variables', () => {
+       beforeEach(() => {
+         service = makeDefault();
+         // eslint-disable-next-line no-template-curly-in-string
+-        service.provider.variableSyntax = '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}'; // default
++        service.provider.variableSyntax = '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}'; // default
+         serverless.variables.service = service;
+         serverless.variables.loadVariableSyntax();
+         delete service.provider.variableSyntax;
+@@ -1096,6 +1096,14 @@ module.exports = {
+         .should.eventually.eql('my stage is prod');
+     });
+ 
++    it('should allow an asterisk in a fallback string', () => {
++      // eslint-disable-next-line no-template-curly-in-string
++      const property = "my allowed origin is ${opt:allowedOrigin, '*.blabla.net'}";
++      serverless.variables.options = {};
++      return serverless.variables.populateProperty(property)
++        .should.eventually.eql('my allowed origin is *.blabla.net');
++    });
++
+     it('should call getValueFromSource if no overwrite syntax provided', () => {
+       // eslint-disable-next-line no-template-curly-in-string
+       const property = 'my stage is ${opt:stage}';
+diff --git a/lib/plugins/print/print.js b/lib/plugins/print/print.js
+index 65b1379..8393f4c 100644
+--- a/lib/plugins/print/print.js
++++ b/lib/plugins/print/print.js
+@@ -56,7 +56,7 @@ class Print {
+     service.provider = _.merge({
+       stage: 'dev',
+       region: 'us-east-1',
+-      variableSyntax: '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}',
++      variableSyntax: '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}',
+     }, service.provider);
+   }
+   strip(svc) {
+diff --git a/lib/plugins/print/print.test.js b/lib/plugins/print/print.test.js
+index 72741f6..b4f59e5 100644
+--- a/lib/plugins/print/print.test.js
++++ b/lib/plugins/print/print.test.js
+@@ -34,7 +34,7 @@ describe('Print', () => {
+   });
+ 
+   afterEach(() => {
+-    serverless.service.provider.variableSyntax = '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}';
++    serverless.service.provider.variableSyntax = '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}';
+   });
+ 
+   it('should print standard config', () => {

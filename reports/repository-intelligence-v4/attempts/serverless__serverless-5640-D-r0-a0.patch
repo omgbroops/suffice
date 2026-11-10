@@ -1,0 +1,90 @@
+diff --git a/lib/classes/Service.js b/lib/classes/Service.js
+index f508aa0..993b387 100644
+--- a/lib/classes/Service.js
++++ b/lib/classes/Service.js
+@@ -21,7 +21,7 @@ class Service {
+     this.provider = {
+       stage: 'dev',
+       region: 'us-east-1',
+-      variableSyntax: '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}',
++      variableSyntax: '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}',
+     };
+     this.custom = {};
+     this.plugins = [];
+diff --git a/lib/classes/Service.test.js b/lib/classes/Service.test.js
+index 877e266..3586669 100644
+--- a/lib/classes/Service.test.js
++++ b/lib/classes/Service.test.js
+@@ -31,7 +31,7 @@ describe('Service', () => {
+       expect(serviceInstance.provider).to.deep.equal({
+         stage: 'dev',
+         region: 'us-east-1',
+-        variableSyntax: '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}',
++        variableSyntax: '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}',
+       });
+       expect(serviceInstance.custom).to.deep.equal({});
+       expect(serviceInstance.plugins).to.deep.equal([]);
+diff --git a/lib/classes/Utils.js b/lib/classes/Utils.js
+index 029eecf..79f6e4d 100644
+--- a/lib/classes/Utils.js
++++ b/lib/classes/Utils.js
+@@ -252,7 +252,7 @@ class Utils {
+       }
+ 
+       let hasCustomVariableSyntaxDefined = false;
+-      const defaultVariableSyntax = '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}';
++      const defaultVariableSyntax = '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}';
+ 
+       // check if the variableSyntax in the provider section is defined
+       if (provider && provider.variableSyntax
+diff --git a/lib/classes/Variables.test.js b/lib/classes/Variables.test.js
+index e0df938..1d54e03 100644
+--- a/lib/classes/Variables.test.js
++++ b/lib/classes/Variables.test.js
+@@ -127,6 +127,33 @@ describe('Variables', () => {
+   });
+ 
+   describe('fallback', () => {
++    ['\'', '"'].forEach((quote) => {
++      it(`should resolve a wildcard default enclosed in ${quote} quotes`, () => {
++        serverless.variables.service.custom = {
++          allowedOrigin: '${opt:allowedOrigin, ' + quote + '*.blabla.net' + quote + '}',
++          wildcard: '${opt:allowedOrigin, ' + quote + '*' + quote + '}',
++          embedded: 'https://${opt:allowedOrigin, ' + quote + '*.blabla.net' + quote + '}',
++        };
++        return serverless.variables.populateService().then((result) => {
++          expect(result.custom).to.deep.equal({
++            allowedOrigin: '*.blabla.net',
++            wildcard: '*',
++            embedded: 'https://*.blabla.net',
++          });
++        });
++      });
++
++      it(`should prefer an option over a wildcard default enclosed in ${quote} quotes`, () => {
++        serverless.variables.service.custom = {
++          allowedOrigin: '${opt:allowedOrigin, ' + quote + '*.blabla.net' + quote + '}',
++        };
++        return serverless.variables.populateService({ allowedOrigin: 'beta.blabla.net' })
++          .then((result) => {
++            expect(result.custom.allowedOrigin).to.equal('beta.blabla.net');
++          });
++      });
++    });
++
+     it('should fallback if ${self} syntax fail to populate but fallback is provided', () => {
+       serverless.variables.service.custom = {
+         settings: '${self:nonExistent, "fallback"}',
+diff --git a/lib/plugins/print/print.js b/lib/plugins/print/print.js
+index 65b1379..8393f4c 100644
+--- a/lib/plugins/print/print.js
++++ b/lib/plugins/print/print.js
+@@ -56,7 +56,7 @@ class Print {
+     service.provider = _.merge({
+       stage: 'dev',
+       region: 'us-east-1',
+-      variableSyntax: '\\${([ ~:a-zA-Z0-9._@\'",\\-\\/\\(\\)]+?)}',
++      variableSyntax: '\\${([ ~:a-zA-Z0-9._@*\'",\\-\\/\\(\\)]+?)}',
+     }, service.provider);
+   }
+   strip(svc) {
