@@ -1,0 +1,52 @@
+diff --git a/src/language-js/printer-estree.js b/src/language-js/printer-estree.js
+index 4decdd7..e70059b 100644
+--- a/src/language-js/printer-estree.js
++++ b/src/language-js/printer-estree.js
+@@ -107,9 +107,12 @@ function genericPrint(path, options, print, args) {
+   }
+ 
+   const printedDecorators = printDecorators(path, options, print);
+-  // Nodes with decorators can't have parentheses and don't need leading semicolons
++  // Decorated class expressions may need parentheses in expression statements.
+   if (printedDecorators) {
+-    return group([...printedDecorators, printed]);
++    const doc = group([...printedDecorators, printed]);
++    return type === "ClassExpression" && pathNeedsParens(path, options)
++      ? ["(", doc, ")"]
++      : doc;
+   }
+ 
+   const needsParens = pathNeedsParens(path, options);
+diff --git a/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap b/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap
+index 473c24d..ebcb055 100644
+--- a/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap
+@@ -40,6 +40,8 @@ const bar =
+     //
+   };
+ 
++(@f() class {});
++
+ =====================================output=====================================
+ @deco
+ class Foo {}
+@@ -62,6 +64,9 @@ const bar =
+     //
+   };
+ 
++(@f()
++class {});
++
+ ================================================================================
+ `;
+ 
+diff --git a/tests/format/js/decorators/classes.js b/tests/format/js/decorators/classes.js
+index ff49fd7..9386c0f 100644
+--- a/tests/format/js/decorators/classes.js
++++ b/tests/format/js/decorators/classes.js
+@@ -13,3 +13,5 @@ const bar =
+   class {
+     //
+   };
++
++(@f() class {});

@@ -1,0 +1,78 @@
+diff --git a/src/language-js/needs-parens.js b/src/language-js/needs-parens.js
+index 970ebd7..5b1cf91 100644
+--- a/src/language-js/needs-parens.js
++++ b/src/language-js/needs-parens.js
+@@ -668,6 +668,8 @@ function needsParens(path, options) {
+ 
+     case "ClassExpression":
+       switch (parent.type) {
++        case "ExpressionStatement":
++          return true;
+         case "NewExpression":
+           return name === "callee";
+         default:
+diff --git a/src/language-js/print/statement.js b/src/language-js/print/statement.js
+index b857574..bf6a246 100644
+--- a/src/language-js/print/statement.js
++++ b/src/language-js/print/statement.js
+@@ -104,6 +104,7 @@ function expressionNeedsASIProtection(path, options) {
+   switch (node.type) {
+     case "ParenthesizedExpression":
+     case "TypeCastExpression":
++    case "ClassExpression":
+     case "ArrayExpression":
+     case "ArrayPattern":
+     case "TemplateLiteral":
+diff --git a/src/language-js/printer-estree.js b/src/language-js/printer-estree.js
+index 4decdd7..8f7a766 100644
+--- a/src/language-js/printer-estree.js
++++ b/src/language-js/printer-estree.js
+@@ -107,9 +107,13 @@ function genericPrint(path, options, print, args) {
+   }
+ 
+   const printedDecorators = printDecorators(path, options, print);
+-  // Nodes with decorators can't have parentheses and don't need leading semicolons
++  // Decorators are printed before nodes and normally need no leading semicolon.
+   if (printedDecorators) {
+-    return group([...printedDecorators, printed]);
++    const doc = group([...printedDecorators, printed]);
++    if (type === "ClassExpression" && pathNeedsParens(path, options)) {
++      return [args && args.needsSemi ? ";(" : "(", doc, ")"];
++    }
++    return doc;
+   }
+ 
+   const needsParens = pathNeedsParens(path, options);
+diff --git a/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap b/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap
+index 473c24d..ebcb055 100644
+--- a/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap
+@@ -40,6 +40,8 @@ const bar =
+     //
+   };
+ 
++(@f() class {});
++
+ =====================================output=====================================
+ @deco
+ class Foo {}
+@@ -62,6 +64,9 @@ const bar =
+     //
+   };
+ 
++(@f()
++class {});
++
+ ================================================================================
+ `;
+ 
+diff --git a/tests/format/js/decorators/classes.js b/tests/format/js/decorators/classes.js
+index ff49fd7..9386c0f 100644
+--- a/tests/format/js/decorators/classes.js
++++ b/tests/format/js/decorators/classes.js
+@@ -13,3 +13,5 @@ const bar =
+   class {
+     //
+   };
++
++(@f() class {});

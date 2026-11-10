@@ -1,0 +1,832 @@
+{
+  "numFailedTestSuites": 2,
+  "numFailedTests": 9,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 67,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 2,
+  "numTotalTests": 76,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": true,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 2,
+    "filesUpdated": 0,
+    "matched": 40,
+    "total": 49,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 9,
+    "updated": 0
+  },
+  "startTime": 1794313570994,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `arguments.js format 1`\n\n- Snapshot  - 8\n+ Received  + 4\n\n@@ -6,18 +6,14 @@\n  console.log(@deco class Foo {})\n  console.log(@deco class {})\n\n  =====================================output=====================================\n  console.log(\n-   (\n-     @deco\n-     class Foo {}\n-   )\n+   @deco\n+   class Foo {}\n  );\n  console.log(\n-   (\n-     @deco\n-     class {}\n-   )\n+   @deco\n+   class {}\n  );\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "arguments.js format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `class-expression.js format 1`\n\n- Snapshot  - 24\n+ Received  + 12\n\n@@ -18,40 +18,28 @@\n  // This is not a `ClassExpression` but `ClassDeclaration`\n  @deco class Foo {}\n\n  =====================================output=====================================\n  const a1 =\n-   (\n-     @deco\n-     class Foo {}\n-   );\n+   @deco\n+   class Foo {};\n  const a2 =\n-   (\n-     @deco\n-     class {}\n-   );\n+   @deco\n+   class {};\n\n- (\n-   @deco\n-   class Foo {}\n- );\n- (\n-   @deco\n-   class {}\n- );\n+ (@deco\n+ class Foo {});\n+ (@deco\n+ class {});\n\n  const b1 = [];\n- (\n-   @deco\n-   class Foo {}\n- );\n+ (@deco\n+ class Foo {});\n\n  const b2 = [];\n- (\n-   @deco\n-   class {}\n- );\n+ (@deco\n+ class {});\n\n  // This is not a `ClassExpression` but `ClassDeclaration`\n  @deco\n  class Foo {}\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "class-expression.js format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `member-expression.js format 1`\n\n- Snapshot  - 8\n+ Received  + 4\n\n@@ -5,15 +5,11 @@\n  =====================================input======================================\n  (@deco class Foo {}).name;\n  (@deco class {}).name;\n\n  =====================================output=====================================\n- ((\n-   @deco\n-   class Foo {}\n- ).name);\n- ((\n-   @deco\n-   class {}\n- ).name);\n+ (@deco\n+ class Foo {}.name);\n+ (@deco\n+ class {}.name);\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "member-expression.js format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `super-class.js format 1`\n\n- Snapshot  - 8\n+ Received  + 4\n\n@@ -6,16 +6,12 @@\n  class Foo extends (@deco class Foo {}){}\n\n  class Foo extends (@deco class {}){}\n\n  =====================================output=====================================\n- class Foo extends (\n-   @deco\n-   class Foo {}\n- ) {}\n+ class Foo extends @deco\n+ class Foo {} {}\n\n- class Foo extends (\n-   @deco\n-   class {}\n- ) {}\n+ class Foo extends @deco\n+ class {} {}\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "super-class.js format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `arguments.js - {\"semi\":false} format 1`\n\n- Snapshot  - 8\n+ Received  + 4\n\n@@ -7,18 +7,14 @@\n  console.log(@deco class Foo {})\n  console.log(@deco class {})\n\n  =====================================output=====================================\n  console.log(\n-   (\n-     @deco\n-     class Foo {}\n-   )\n+   @deco\n+   class Foo {}\n  )\n  console.log(\n-   (\n-     @deco\n-     class {}\n-   )\n+   @deco\n+   class {}\n  )\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "arguments.js - {\"semi\":false} format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "arguments.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "arguments.js - {\"semi\":false} [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `class-expression.js - {\"semi\":false} format 1`\n\n- Snapshot  - 22\n+ Received  + 10\n\n@@ -19,40 +19,28 @@\n  // This is not a `ClassExpression` but `ClassDeclaration`\n  @deco class Foo {}\n\n  =====================================output=====================================\n  const a1 =\n-   (\n-     @deco\n-     class Foo {}\n-   )\n- const a2 =\n-   (\n-     @deco\n-     class {}\n-   )\n-\n- ;(\n    @deco\n    class Foo {}\n- )\n- ;(\n+ const a2 =\n    @deco\n    class {}\n- )\n+\n+ ;(@deco\n+ class Foo {})\n+ ;(@deco\n+ class {})\n\n  const b1 = []\n- ;(\n-   @deco\n-   class Foo {}\n- )\n+ ;(@deco\n+ class Foo {})\n\n  const b2 = []\n- ;(\n-   @deco\n-   class {}\n- )\n+ ;(@deco\n+ class {})\n\n  // This is not a `ClassExpression` but `ClassDeclaration`\n  @deco\n  class Foo {}\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "class-expression.js - {\"semi\":false} format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "class-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "class-expression.js - {\"semi\":false} [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `member-expression.js - {\"semi\":false} format 1`\n\n- Snapshot  - 8\n+ Received  + 4\n\n@@ -6,15 +6,11 @@\n  =====================================input======================================\n  (@deco class Foo {}).name;\n  (@deco class {}).name;\n\n  =====================================output=====================================\n- ;((\n-   @deco\n-   class Foo {}\n- ).name)\n- ;((\n-   @deco\n-   class {}\n- ).name)\n+ ;(@deco\n+ class Foo {}.name)\n+ ;(@deco\n+ class {}.name)\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "member-expression.js - {\"semi\":false} format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "member-expression.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "member-expression.js - {\"semi\":false} [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `super-class.js - {\"semi\":false} format 1`\n\n- Snapshot  - 8\n+ Received  + 4\n\n@@ -7,16 +7,12 @@\n  class Foo extends (@deco class Foo {}){}\n\n  class Foo extends (@deco class {}){}\n\n  =====================================output=====================================\n- class Foo extends (\n-   @deco\n-   class Foo {}\n- ) {}\n+ class Foo extends @deco\n+ class Foo {} {}\n\n- class Foo extends (\n-   @deco\n-   class {}\n- ) {}\n+ class Foo extends @deco\n+ class {} {}\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "super-class.js - {\"semi\":false} format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [espree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[espree] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [meriyah] format",
+          "location": null,
+          "status": "passed",
+          "title": "[meriyah] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [acorn] format",
+          "location": null,
+          "status": "passed",
+          "title": "[acorn] format"
+        },
+        {
+          "ancestorTitles": [
+            "super-class.js - {\"semi\":false}"
+          ],
+          "failureMessages": [],
+          "fullName": "super-class.js - {\"semi\":false} [__babel_estree] format",
+          "location": null,
+          "status": "passed",
+          "title": "[__babel_estree] format"
+        }
+      ],
+      "endTime": 1794313573366,
+      "message": "  ● arguments.js › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `arguments.js format 1`\n\n    - Snapshot  - 8\n    + Received  + 4\n\n    @@ -6,18 +6,14 @@\n      console.log(@deco class Foo {})\n      console.log(@deco class {})\n\n      =====================================output=====================================\n      console.log(\n    -   (\n    -     @deco\n    -     class Foo {}\n    -   )\n    +   @deco\n    +   class Foo {}\n      );\n      console.log(\n    -   (\n    -     @deco\n    -     class {}\n    -   )\n    +   @deco\n    +   class {}\n      );\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● class-expression.js › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `class-expression.js format 1`\n\n    - Snapshot  - 24\n    + Received  + 12\n\n    @@ -18,40 +18,28 @@\n      // This is not a `ClassExpression` but `ClassDeclaration`\n      @deco class Foo {}\n\n      =====================================output=====================================\n      const a1 =\n    -   (\n    -     @deco\n    -     class Foo {}\n    -   );\n    +   @deco\n    +   class Foo {};\n      const a2 =\n    -   (\n    -     @deco\n    -     class {}\n    -   );\n    +   @deco\n    +   class {};\n\n    - (\n    -   @deco\n    -   class Foo {}\n    - );\n    - (\n    -   @deco\n    -   class {}\n    - );\n    + (@deco\n    + class Foo {});\n    + (@deco\n    + class {});\n\n      const b1 = [];\n    - (\n    -   @deco\n    -   class Foo {}\n    - );\n    + (@deco\n    + class Foo {});\n\n      const b2 = [];\n    - (\n    -   @deco\n    -   class {}\n    - );\n    + (@deco\n    + class {});\n\n      // This is not a `ClassExpression` but `ClassDeclaration`\n      @deco\n      class Foo {}\n      ↵\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● member-expression.js › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `member-expression.js format 1`\n\n    - Snapshot  - 8\n    + Received  + 4\n\n    @@ -5,15 +5,11 @@\n      =====================================input======================================\n      (@deco class Foo {}).name;\n      (@deco class {}).name;\n\n      =====================================output=====================================\n    - ((\n    -   @deco\n    -   class Foo {}\n    - ).name);\n    - ((\n    -   @deco\n    -   class {}\n    - ).name);\n    + (@deco\n    + class Foo {}.name);\n    + (@deco\n    + class {}.name);\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● super-class.js › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `super-class.js format 1`\n\n    - Snapshot  - 8\n    + Received  + 4\n\n    @@ -6,16 +6,12 @@\n      class Foo extends (@deco class Foo {}){}\n\n      class Foo extends (@deco class {}){}\n\n      =====================================output=====================================\n    - class Foo extends (\n    -   @deco\n    -   class Foo {}\n    - ) {}\n    + class Foo extends @deco\n    + class Foo {} {}\n\n    - class Foo extends (\n    -   @deco\n    -   class {}\n    - ) {}\n    + class Foo extends @deco\n    + class {} {}\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● arguments.js - {\"semi\":false} › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `arguments.js - {\"semi\":false} format 1`\n\n    - Snapshot  - 8\n    + Received  + 4\n\n    @@ -7,18 +7,14 @@\n      console.log(@deco class Foo {})\n      console.log(@deco class {})\n\n      =====================================output=====================================\n      console.log(\n    -   (\n    -     @deco\n    -     class Foo {}\n    -   )\n    +   @deco\n    +   class Foo {}\n      )\n      console.log(\n    -   (\n    -     @deco\n    -     class {}\n    -   )\n    +   @deco\n    +   class {}\n      )\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● class-expression.js - {\"semi\":false} › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `class-expression.js - {\"semi\":false} format 1`\n\n    - Snapshot  - 22\n    + Received  + 10\n\n    @@ -19,40 +19,28 @@\n      // This is not a `ClassExpression` but `ClassDeclaration`\n      @deco class Foo {}\n\n      =====================================output=====================================\n      const a1 =\n    -   (\n    -     @deco\n    -     class Foo {}\n    -   )\n    - const a2 =\n    -   (\n    -     @deco\n    -     class {}\n    -   )\n    -\n    - ;(\n        @deco\n        class Foo {}\n    - )\n    - ;(\n    + const a2 =\n        @deco\n        class {}\n    - )\n    +\n    + ;(@deco\n    + class Foo {})\n    + ;(@deco\n    + class {})\n\n      const b1 = []\n    - ;(\n    -   @deco\n    -   class Foo {}\n    - )\n    + ;(@deco\n    + class Foo {})\n\n      const b2 = []\n    - ;(\n    -   @deco\n    -   class {}\n    - )\n    + ;(@deco\n    + class {})\n\n      // This is not a `ClassExpression` but `ClassDeclaration`\n      @deco\n      class Foo {}\n      ↵\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● member-expression.js - {\"semi\":false} › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `member-expression.js - {\"semi\":false} format 1`\n\n    - Snapshot  - 8\n    + Received  + 4\n\n    @@ -6,15 +6,11 @@\n      =====================================input======================================\n      (@deco class Foo {}).name;\n      (@deco class {}).name;\n\n      =====================================output=====================================\n    - ;((\n    -   @deco\n    -   class Foo {}\n    - ).name)\n    - ;((\n    -   @deco\n    -   class {}\n    - ).name)\n    + ;(@deco\n    + class Foo {}.name)\n    + ;(@deco\n    + class {}.name)\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n\n  ● super-class.js - {\"semi\":false} › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `super-class.js - {\"semi\":false} format 1`\n\n    - Snapshot  - 8\n    + Received  + 4\n\n    @@ -7,16 +7,12 @@\n      class Foo extends (@deco class Foo {}){}\n\n      class Foo extends (@deco class {}){}\n\n      =====================================output=====================================\n    - class Foo extends (\n    -   @deco\n    -   class Foo {}\n    - ) {}\n    + class Foo extends @deco\n    + class Foo {} {}\n\n    - class Foo extends (\n    -   @deco\n    -   class {}\n    - ) {}\n    + class Foo extends @deco\n    + class {} {}\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\format\\js\\decorators\\class-expression\\jsfmt.spec.js",
+      "startTime": 1794313571069,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "1.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "1.ts format",
+          "location": null,
+          "status": "passed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "1.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "1.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "2.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "2.ts format",
+          "location": null,
+          "status": "passed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "2.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "2.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "3.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "3.ts [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "3.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "3.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "4.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "4.ts [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "4.ts"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `4.ts [babel-ts] format 1`\n\n- Snapshot  - 4\n+ Received  + 2\n\n@@ -4,11 +4,9 @@\n                                                                                  | printWidth\n  =====================================input======================================\n  (@f<<T>(v: T) => void>() class {});\n\n  =====================================output=====================================\n- (\n-   @f<<T>(v: T) => void>()\n-   class {}\n- );\n+ (@f<<T>(v: T) => void>()\n+ class {});\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\config\\format-test.js:290:7)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-6ceb7954309f832357cd\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:170:21)"
+          ],
+          "fullName": "4.ts [babel-ts] format",
+          "location": null,
+          "status": "failed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "5.tsx"
+          ],
+          "failureMessages": [],
+          "fullName": "5.tsx [typescript] format",
+          "location": null,
+          "status": "passed",
+          "title": "[typescript] format"
+        },
+        {
+          "ancestorTitles": [
+            "5.tsx"
+          ],
+          "failureMessages": [],
+          "fullName": "5.tsx [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "6.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "6.ts format",
+          "location": null,
+          "status": "passed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "6.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "6.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        }
+      ],
+      "endTime": 1794313573954,
+      "message": "  ● 4.ts › [babel-ts] format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `4.ts [babel-ts] format 1`\n\n    - Snapshot  - 4\n    + Received  + 2\n\n    @@ -4,11 +4,9 @@\n                                                                                      | printWidth\n      =====================================input======================================\n      (@f<<T>(v: T) => void>() class {});\n\n      =====================================output=====================================\n    - (\n    -   @f<<T>(v: T) => void>()\n    -   class {}\n    - );\n    + (@f<<T>(v: T) => void>()\n    + class {});\n\n      ================================================================================\n\n      288 |         CURSOR_PLACEHOLDER,\n      289 |       })\n    > 290 |     ).toMatchSnapshot();\n          |       ^\n      291 |   });\n      292 |\n      293 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests/config/format-test.js:290:7)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12260-A-r0-a0\\independent-grade\\tests\\format\\typescript\\type-arguments-bit-shift-left-like\\jsfmt.spec.js",
+      "startTime": 1794313573384,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

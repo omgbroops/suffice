@@ -1,0 +1,503 @@
+{
+  "task": "prettier__prettier-12260",
+  "repo": "prettier/prettier",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12260-B-r0-a0/workspace",
+    "head": "0ce6a8827a5e15239006954838a336cb37950870",
+    "tree": "a5e271494afe10f4f1945b904e864fce6fa87e8b"
+  },
+  "runId": "prettier__prettier-12260-B-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 449398.5431,
+  "usage": {
+    "input": 70842,
+    "cacheRead": 443776,
+    "cacheWrite": 0,
+    "output": 8639,
+    "estimatedApiUsd": 0.015841459999999998,
+    "modelCalls": 16,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.015841459999999998,
+  "acceptance": {
+    "status": "failed",
+    "required": 9,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} format",
+      "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} format",
+      "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->4.ts [babel-ts] format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 9,
+      "targetsPassed": 0,
+      "regressions": 67,
+      "regressionsPassed": 67,
+      "missing": [],
+      "failures": [
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} format",
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} format",
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->4.ts [babel-ts] format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js - {\"semi\":false} format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->arguments.js format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js - {\"semi\":false} format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->class-expression.js format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js - {\"semi\":false} format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->member-expression.js format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js - {\"semi\":false} format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [__babel_estree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [acorn] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [babel-ts] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [espree] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [flow] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [meriyah] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js [typescript] format": 1,
+        "tests/format/js/decorators/class-expression/jsfmt.spec.js->super-class.js format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->1.ts [babel-ts] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->1.ts format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->2.ts [babel-ts] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->2.ts format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->3.ts [babel-ts] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->3.ts [typescript] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->4.ts [babel-ts] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->4.ts [typescript] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->5.tsx [babel-ts] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->5.tsx [typescript] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->6.ts [babel-ts] format": 1,
+        "tests/format/typescript/type-arguments-bit-shift-left-like/jsfmt.spec.js->6.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 67,
+    "requiredPassed": 67
+  },
+  "changed": [
+    "src/language-js/printer-estree.js",
+    "tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/js/decorators/classes.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-js/needs-parens.js"
+  ],
+  "extraChangedFiles": [
+    "tests/format/js/decorators/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/js/decorators/classes.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 16,
+  "editCalls": 2,
+  "verificationCalls": 1,
+  "toolCalls": 45,
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T12:27:32.246Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 13538.174599999998,
+      "parsedFiles": 4176,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": 149368088,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:27:44.717Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12468.284400000004,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": -22943296,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:28:05.732Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12369.4764,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": 20565664,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:28:26.449Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12344.098599999998,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": 14893440,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:28:56.074Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12328.86009999999,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": 4766584,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:29:18.229Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12343.363099999988,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": -12173368,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:29:42.045Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12137.483699999982,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": -38330688,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:30:11.267Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 12172.799500000023,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": 19987216,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:30:44.051Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 11229.6299,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": -32591664,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:31:02.336Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "c928b09bb55f5700da0fe11fe1425e956547995104d69894f3971092cf901009",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "aa6d0f521de37c7ee86cdda030a060282ed1ff20f07b34f13cb8d69fa9d0feb7"
+      },
+      "latencyMs": 11468.988399999973,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22670848,
+      "heapDeltaBytes": -38481800,
+      "graphBytes": 31609426
+    },
+    {
+      "at": "2026-11-10T12:31:25.596Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 11803.531600000046,
+      "parsedFiles": 2,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": 94147496,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:31:36.849Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 11161.621199999994,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": -23008824,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:32:34.129Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 9069.825499999977,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": -38053792,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:32:59.635Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 8267.598700000031,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": 19918800,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:33:15.428Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 8450.957200000004,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": -34795576,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:33:45.532Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 8564.36540000001,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": -40915168,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:34:10.448Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 8691.709199999983,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": 31512808,
+      "graphBytes": 31613539
+    },
+    {
+      "at": "2026-11-10T12:34:35.008Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "0ce6a8827a5e15239006954838a336cb37950870",
+        "sourceContentVersion": "05657b5372c12fe55dd2cc92a730add2b8f1e517239f9755f810f17f0694fc5e",
+        "configurationVersion": "539361ee37cb05b7be1d5761c9dfe03e518ef45366ef696855ccb77d504a504e",
+        "contentVersion": "4d1c3aee943e1af44812acab7d7d08778732f48a0d7cc7e8313419a8f6a041d8"
+      },
+      "latencyMs": 8764.034400000004,
+      "parsedFiles": 0,
+      "fileCount": 4176,
+      "cacheBytes": 22673682,
+      "heapDeltaBytes": -44574360,
+      "graphBytes": 31613539
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12260-B-r0-a0\\home\\events\\1794313638683-3c3d0d64-b22e-4900-9c06-83ac7c967dbc.jsonl",
+  "receiptAudit": {
+    "requests": 16,
+    "finalUsageResponses": 16,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 16,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12260-B-r0",
+  "attempt": 0
+}
