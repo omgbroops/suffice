@@ -1,0 +1,205 @@
+{
+  "task": "prettier__prettier-10187",
+  "repo": "prettier/prettier",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-10187-C-r0-a0/workspace",
+    "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+    "tree": "3bcfbb1207903f45c3820f5b866094c47d7929f6"
+  },
+  "runId": "prettier__prettier-10187-C-r0-a0",
+  "status": "agent_error",
+  "error": "OpenAI Responses stream ended before a terminal response event",
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 561531.7159000001,
+  "usage": {
+    "input": 69033,
+    "cacheRead": 810624,
+    "cacheWrite": 0,
+    "output": 9350,
+    "estimatedApiUsd": 0.019684540000000004,
+    "modelCalls": 30,
+    "costUnknown": true
+  },
+  "totalEstimatedUsd": null,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/typescript/ternaries/jsfmt.spec.js->indent.ts format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [
+        "tests/typescript/ternaries/jsfmt.spec.js->indent.ts format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/typescript/ternaries/jsfmt.spec.js->indent.ts [babel-ts] format": 1,
+        "tests/typescript/ternaries/jsfmt.spec.js->indent.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "src/language-js/print/ternary.js",
+    "tests/js/method-chain/__snapshots__/jsfmt.spec.js.snap",
+    "tests/js/method-chain/conditional.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-js/utils.js"
+  ],
+  "extraChangedFiles": [
+    "tests/js/method-chain/__snapshots__/jsfmt.spec.js.snap",
+    "tests/js/method-chain/conditional.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 30,
+  "editCalls": 2,
+  "verificationCalls": 0,
+  "toolCalls": 60,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T08:54:23.772Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+        "sourceContentVersion": "f2f284fa0d4b67bfd27352b4b2971c6272a8854d1b77e73935db11c844fc0ca1",
+        "configurationVersion": "b67231b6ea4456a20a89d4b2a588de1bd6b149b330b38471c388c3abdbbd7e3f",
+        "contentVersion": "07e103f0dd44df95f9315bf55f42d946907ef150f57a02c9c7ceb1b8160be5d6"
+      },
+      "latencyMs": 12078.689500000037,
+      "parsedFiles": 3837,
+      "fileCount": 3837,
+      "cacheBytes": 20293238,
+      "heapDeltaBytes": 138622280,
+      "graphBytes": 27996135
+    },
+    {
+      "at": "2026-11-10T08:54:39.982Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+        "sourceContentVersion": "3302be3b73fdaf435daffed75790196f33a215cfecf8baa3ed08a5e0b594a9c2",
+        "configurationVersion": "b67231b6ea4456a20a89d4b2a588de1bd6b149b330b38471c388c3abdbbd7e3f",
+        "contentVersion": "3a24668166cc91be2cc628f5fc0c92f240403635bffdf934002c03c40ec7fdf8"
+      },
+      "latencyMs": 11062.88149999996,
+      "parsedFiles": 1,
+      "fileCount": 3837,
+      "cacheBytes": 20294494,
+      "heapDeltaBytes": 58782568,
+      "graphBytes": 27997826
+    },
+    {
+      "at": "2026-11-10T08:54:50.112Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+        "sourceContentVersion": "3302be3b73fdaf435daffed75790196f33a215cfecf8baa3ed08a5e0b594a9c2",
+        "configurationVersion": "b67231b6ea4456a20a89d4b2a588de1bd6b149b330b38471c388c3abdbbd7e3f",
+        "contentVersion": "3a24668166cc91be2cc628f5fc0c92f240403635bffdf934002c03c40ec7fdf8"
+      },
+      "latencyMs": 10046.426299999992,
+      "parsedFiles": 0,
+      "fileCount": 3837,
+      "cacheBytes": 20294494,
+      "heapDeltaBytes": -51842488,
+      "graphBytes": 27997826
+    },
+    {
+      "at": "2026-11-10T08:56:08.380Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+        "sourceContentVersion": "fd86da517b78a5ec57dd5c4189d46a607827975db1c1af60bb9b6f92ede091e2",
+        "configurationVersion": "b67231b6ea4456a20a89d4b2a588de1bd6b149b330b38471c388c3abdbbd7e3f",
+        "contentVersion": "11cb9ce92b1d51469ca379fa3ca7d17189fe70884debfd26d1f15e01aa89884c"
+      },
+      "latencyMs": 10258.001200000057,
+      "parsedFiles": 1,
+      "fileCount": 3837,
+      "cacheBytes": 20299860,
+      "heapDeltaBytes": 58122544,
+      "graphBytes": 28005393
+    },
+    {
+      "at": "2026-11-10T08:56:19.479Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+        "sourceContentVersion": "fd86da517b78a5ec57dd5c4189d46a607827975db1c1af60bb9b6f92ede091e2",
+        "configurationVersion": "b67231b6ea4456a20a89d4b2a588de1bd6b149b330b38471c388c3abdbbd7e3f",
+        "contentVersion": "11cb9ce92b1d51469ca379fa3ca7d17189fe70884debfd26d1f15e01aa89884c"
+      },
+      "latencyMs": 11019.949400000041,
+      "parsedFiles": 0,
+      "fileCount": 3837,
+      "cacheBytes": 20299860,
+      "heapDeltaBytes": -61074208,
+      "graphBytes": 28005393
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-10187-C-r0-a0\\home\\events\\1794300499563-708eabd2-0bb6-4c52-b1c1-d524af4c9d58.jsonl",
+  "receiptAudit": {
+    "requests": 30,
+    "finalUsageResponses": 29,
+    "missingUsage": true,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "agent_error",
+  "providerRequests": 30,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": false,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-10187-C-r0",
+  "attempt": 0
+}

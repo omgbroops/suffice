@@ -1,0 +1,66 @@
+{
+  "numFailedTestSuites": 1,
+  "numFailedTests": 1,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 1,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 1,
+  "numTotalTests": 2,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": true,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 1,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 1,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 1,
+    "updated": 0
+  },
+  "startTime": 1794301458313,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "indent.ts"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `indent.ts format 1`\n\n- Snapshot  - 13\n+ Received  + 10\n\n@@ -97,23 +97,20 @@\n    .annularCooeedSplicesWalksWayWay(annularCooeedSplicesWalksWayWay)!\n    .annularCooeedSplicesWalksWayWay()!;\n\n  bifornCringerMoshedPerplexSawder =\n    askTrovenaBeenaDependsRowans +\n-   (glimseGlyphsHazardNoopsTieTie === 0\n-     ? averredBathersBoxroomBuggyNurl\n-     : anodyneCondosMalateOverateRetinol\n+   (\n+     glimseGlyphsHazardNoopsTieTie === 0\n+       ? averredBathersBoxroomBuggyNurl\n+       : anodyneCondosMalateOverateRetinol\n    ).Foo!.foo;\n\n- foo = (\n-   coooooooooooooooooooooooooooooooooooooooooooooooooooond\n-     ? baaaaaaaaaaaaaaaaaaaaar\n-     : baaaaaaaaaaaaaaaaaaaaaz\n- )!;\n+ foo = (coooooooooooooooooooooooooooooooooooooooooooooooooooond\n+   ? baaaaaaaaaaaaaaaaaaaaar\n+   : baaaaaaaaaaaaaaaaaaaaaz)!;\n\n- foo = (\n-   coooooooooooooooooooooooooooooooooooooooooooooooooooond\n-     ? baaaaaaaaaaaaaaaaaaaaar\n-     : baaaaaaaaaaaaaaaaaaaaaz\n- )!!!!!;\n+ foo = (coooooooooooooooooooooooooooooooooooooooooooooooooooond\n+   ? baaaaaaaaaaaaaaaaaaaaar\n+   : baaaaaaaaaaaaaaaaaaaaaz)!!!!!;\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-10187-D-r0-a0\\independent-grade\\tests_config\\run_spec.js:298:7)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-dd58acf39350e6195ff8\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-dd58acf39350e6195ff8\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-dd58acf39350e6195ff8\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-dd58acf39350e6195ff8\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41"
+          ],
+          "fullName": "indent.ts format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "indent.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "indent.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        }
+      ],
+      "endTime": 1794301465383,
+      "message": "  ● indent.ts › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `indent.ts format 1`\n\n    - Snapshot  - 13\n    + Received  + 10\n\n    @@ -97,23 +97,20 @@\n        .annularCooeedSplicesWalksWayWay(annularCooeedSplicesWalksWayWay)!\n        .annularCooeedSplicesWalksWayWay()!;\n\n      bifornCringerMoshedPerplexSawder =\n        askTrovenaBeenaDependsRowans +\n    -   (glimseGlyphsHazardNoopsTieTie === 0\n    -     ? averredBathersBoxroomBuggyNurl\n    -     : anodyneCondosMalateOverateRetinol\n    +   (\n    +     glimseGlyphsHazardNoopsTieTie === 0\n    +       ? averredBathersBoxroomBuggyNurl\n    +       : anodyneCondosMalateOverateRetinol\n        ).Foo!.foo;\n\n    - foo = (\n    -   coooooooooooooooooooooooooooooooooooooooooooooooooooond\n    -     ? baaaaaaaaaaaaaaaaaaaaar\n    -     : baaaaaaaaaaaaaaaaaaaaaz\n    - )!;\n    + foo = (coooooooooooooooooooooooooooooooooooooooooooooooooooond\n    +   ? baaaaaaaaaaaaaaaaaaaaar\n    +   : baaaaaaaaaaaaaaaaaaaaaz)!;\n\n    - foo = (\n    -   coooooooooooooooooooooooooooooooooooooooooooooooooooond\n    -     ? baaaaaaaaaaaaaaaaaaaaar\n    -     : baaaaaaaaaaaaaaaaaaaaaz\n    - )!!!!!;\n    + foo = (coooooooooooooooooooooooooooooooooooooooooooooooooooond\n    +   ? baaaaaaaaaaaaaaaaaaaaar\n    +   : baaaaaaaaaaaaaaaaaaaaaz)!!!!!;\n\n      ================================================================================\n\n      296 |         { codeOffset }\n      297 |       )\n    > 298 |     ).toMatchSnapshot();\n          |       ^\n      299 |   });\n      300 |\n      301 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests_config/run_spec.js:298:7)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-10187-D-r0-a0\\independent-grade\\tests\\typescript\\ternaries\\jsfmt.spec.js",
+      "startTime": 1794301458410,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

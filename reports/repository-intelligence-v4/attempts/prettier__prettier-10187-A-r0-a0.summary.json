@@ -1,0 +1,117 @@
+{
+  "task": "prettier__prettier-10187",
+  "repo": "prettier/prettier",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-10187-A-r0-a0/workspace",
+    "head": "c6b8c0c854d1e8d92afd9a42aff12da7a66e0179",
+    "tree": "3bcfbb1207903f45c3820f5b866094c47d7929f6"
+  },
+  "runId": "prettier__prettier-10187-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 418547.6092,
+  "usage": {
+    "input": 134267,
+    "cacheRead": 967040,
+    "cacheWrite": 0,
+    "output": 12895,
+    "estimatedApiUsd": 0.0295446,
+    "modelCalls": 35,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0295446,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/typescript/ternaries/jsfmt.spec.js->indent.ts format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [
+        "tests/typescript/ternaries/jsfmt.spec.js->indent.ts format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/typescript/ternaries/jsfmt.spec.js->indent.ts [babel-ts] format": 1,
+        "tests/typescript/ternaries/jsfmt.spec.js->indent.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "src/language-js/print/binaryish.js",
+    "tests/js/ternaries/__snapshots__/jsfmt.spec.js.snap",
+    "tests/js/ternaries/return-member.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-js/print/ternary.js",
+    "src/language-js/utils.js"
+  ],
+  "extraChangedFiles": [
+    "src/language-js/print/binaryish.js",
+    "tests/js/ternaries/__snapshots__/jsfmt.spec.js.snap",
+    "tests/js/ternaries/return-member.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 35,
+  "editCalls": 2,
+  "verificationCalls": 4,
+  "toolCalls": 68,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-10187-A-r0-a0\\home\\events\\1794302579597-be38609d-5f48-4e34-9289-511df6b67ec6.jsonl",
+  "receiptAudit": {
+    "requests": 35,
+    "finalUsageResponses": 35,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 35,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-10187-A-r0",
+  "attempt": 0
+}

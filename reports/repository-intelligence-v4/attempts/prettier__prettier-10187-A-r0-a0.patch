@@ -1,0 +1,151 @@
+diff --git a/src/language-js/print/binaryish.js b/src/language-js/print/binaryish.js
+index 338432c..dcea194 100644
+--- a/src/language-js/print/binaryish.js
++++ b/src/language-js/print/binaryish.js
+@@ -96,7 +96,8 @@ function printBinaryishExpression(path, options, print) {
+     (parent.type === "ConditionalExpression" &&
+       parentParent.type !== "ReturnStatement" &&
+       parentParent.type !== "ThrowStatement" &&
+-      !isCallExpression(parentParent)) ||
++      !isCallExpression(parentParent) &&
++      !isMemberExpression(parentParent)) ||
+     parent.type === "TemplateLiteral";
+ 
+   const shouldIndentIfInlining =
+diff --git a/tests/js/ternaries/__snapshots__/jsfmt.spec.js.snap b/tests/js/ternaries/__snapshots__/jsfmt.spec.js.snap
+index b8fd647..8b1c64e 100644
+--- a/tests/js/ternaries/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/js/ternaries/__snapshots__/jsfmt.spec.js.snap
+@@ -2928,6 +2928,118 @@ debug
+ ================================================================================
+ `;
+ 
++exports[`return-member.js - {"tabWidth":4} format 1`] = `
++====================================options=====================================
++parsers: ["babel", "flow", "typescript"]
++printWidth: 80
++tabWidth: 4
++                                                                                | printWidth
++=====================================input======================================
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});
++
++=====================================output=====================================
++const decorated = (arg, ignoreRequestError) => {
++    return (typeof arg === "string" ||
++        (arg && arg.valueOf && typeof arg.valueOf() === "string")
++        ? $delegate(arg, ignoreRequestError)
++        : handleAsyncOperations(arg, ignoreRequestError)
++    ).foo();
++};
++
++================================================================================
++`;
++
++exports[`return-member.js - {"useTabs":true,"tabWidth":4} format 1`] = `
++====================================options=====================================
++parsers: ["babel", "flow", "typescript"]
++printWidth: 80
++tabWidth: 4
++useTabs: true
++                                                                                | printWidth
++=====================================input======================================
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});
++
++=====================================output=====================================
++const decorated = (arg, ignoreRequestError) => {
++	return (typeof arg === "string" ||
++		(arg && arg.valueOf && typeof arg.valueOf() === "string")
++		? $delegate(arg, ignoreRequestError)
++		: handleAsyncOperations(arg, ignoreRequestError)
++	).foo();
++};
++
++================================================================================
++`;
++
++exports[`return-member.js - {"useTabs":true} format 1`] = `
++====================================options=====================================
++parsers: ["babel", "flow", "typescript"]
++printWidth: 80
++useTabs: true
++                                                                                | printWidth
++=====================================input======================================
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});
++
++=====================================output=====================================
++const decorated = (arg, ignoreRequestError) => {
++	return (typeof arg === "string" ||
++		(arg && arg.valueOf && typeof arg.valueOf() === "string")
++		? $delegate(arg, ignoreRequestError)
++		: handleAsyncOperations(arg, ignoreRequestError)
++	).foo();
++};
++
++================================================================================
++`;
++
++exports[`return-member.js format 1`] = `
++====================================options=====================================
++parsers: ["babel", "flow", "typescript"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});
++
++=====================================output=====================================
++const decorated = (arg, ignoreRequestError) => {
++  return (typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++    ? $delegate(arg, ignoreRequestError)
++    : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++};
++
++================================================================================
++`;
++
+ exports[`test.js - {"tabWidth":4} format 1`] = `
+ ====================================options=====================================
+ parsers: ["babel", "flow", "typescript"]
+diff --git a/tests/js/ternaries/return-member.js b/tests/js/ternaries/return-member.js
+new file mode 100644
+index 0000000..c726d36
+--- /dev/null
++++ b/tests/js/ternaries/return-member.js
+@@ -0,0 +1,8 @@
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});

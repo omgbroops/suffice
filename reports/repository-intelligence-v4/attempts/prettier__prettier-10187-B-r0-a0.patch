@@ -1,0 +1,63 @@
+diff --git a/src/language-js/print/binaryish.js b/src/language-js/print/binaryish.js
+index 338432c..dcea194 100644
+--- a/src/language-js/print/binaryish.js
++++ b/src/language-js/print/binaryish.js
+@@ -96,7 +96,8 @@ function printBinaryishExpression(path, options, print) {
+     (parent.type === "ConditionalExpression" &&
+       parentParent.type !== "ReturnStatement" &&
+       parentParent.type !== "ThrowStatement" &&
+-      !isCallExpression(parentParent)) ||
++      !isCallExpression(parentParent) &&
++      !isMemberExpression(parentParent)) ||
+     parent.type === "TemplateLiteral";
+ 
+   const shouldIndentIfInlining =
+diff --git a/tests/js/conditional/__snapshots__/jsfmt.spec.js.snap b/tests/js/conditional/__snapshots__/jsfmt.spec.js.snap
+index 52296ec..0718609 100644
+--- a/tests/js/conditional/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/js/conditional/__snapshots__/jsfmt.spec.js.snap
+@@ -256,3 +256,30 @@ var x = a <= 1 ? 2 : 3;
+ 
+ ================================================================================
+ `;
++
++exports[`return-member.js format 1`] = `
++====================================options=====================================
++parsers: ["babel", "flow", "typescript"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++const decorated = ((arg, ignoreRequestError) => {
++    return (
++        typeof arg === "string" ||
++        (arg && arg.valueOf && typeof arg.valueOf() === "string")
++            ? $delegate(arg, ignoreRequestError)
++            : handleAsyncOperations(arg, ignoreRequestError)
++    ).foo();
++});
++
++=====================================output=====================================
++const decorated = (arg, ignoreRequestError) => {
++  return (typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++    ? $delegate(arg, ignoreRequestError)
++    : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++};
++
++================================================================================
++`;
+diff --git a/tests/js/conditional/return-member.js b/tests/js/conditional/return-member.js
+new file mode 100644
+index 0000000..b321a52
+--- /dev/null
++++ b/tests/js/conditional/return-member.js
+@@ -0,0 +1,8 @@
++const decorated = ((arg, ignoreRequestError) => {
++    return (
++        typeof arg === "string" ||
++        (arg && arg.valueOf && typeof arg.valueOf() === "string")
++            ? $delegate(arg, ignoreRequestError)
++            : handleAsyncOperations(arg, ignoreRequestError)
++    ).foo();
++});

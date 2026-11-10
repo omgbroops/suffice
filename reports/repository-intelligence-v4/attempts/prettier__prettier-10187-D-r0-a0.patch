@@ -1,0 +1,88 @@
+diff --git a/src/language-js/print/ternary.js b/src/language-js/print/ternary.js
+index 61d47d6..45a3db1 100644
+--- a/src/language-js/print/ternary.js
++++ b/src/language-js/print/ternary.js
+@@ -303,9 +303,10 @@ function printTernary(path, options, print) {
+       : doc;
+ 
+   // Break the closing paren to keep the chain right after it:
+-  // (a
+-  //   ? b
+-  //   : c
++  // (
++  //   a
++  //     ? b
++  //     : c
+   // ).call()
+   const breakClosingParen =
+     !jsxMode &&
+@@ -316,10 +317,11 @@ function printTernary(path, options, print) {
+   const result = maybeGroup([
+     printTernaryTest(path, options, print),
+     forceNoIndent ? parts : indent(parts),
+-    isConditionalExpression && breakClosingParen ? softline : "",
+   ]);
+ 
+-  return isParentTest ? group([indent([softline, result]), softline]) : result;
++  return isParentTest || (isConditionalExpression && breakClosingParen)
++    ? group([indent([softline, result]), softline])
++    : result;
+ }
+ 
+ module.exports = { printTernary };
+diff --git a/tests_integration/__tests__/format.js b/tests_integration/__tests__/format.js
+index 6a83e86..f4610f0 100644
+--- a/tests_integration/__tests__/format.js
++++ b/tests_integration/__tests__/format.js
+@@ -66,3 +66,51 @@ test("'Adjacent JSX' error should not be swallowed by Babel's error recovery", (
+     prettier.format(input, { parser: "babel" })
+   ).toThrowErrorMatchingSnapshot();
+ });
++
++describe("parenthesized conditional member expressions after return", () => {
++  const input = `const decorated = ((arg, ignoreRequestError) => {
++    return (
++      typeof arg === "string" ||
++      (arg && arg.valueOf && typeof arg.valueOf() === "string")
++        ? $delegate(arg, ignoreRequestError)
++        : handleAsyncOperations(arg, ignoreRequestError)
++    ).foo();
++  });`;
++  const expected = `const decorated = (arg, ignoreRequestError) => {
++    return (
++        typeof arg === "string" ||
++        (arg && arg.valueOf && typeof arg.valueOf() === "string")
++            ? $delegate(arg, ignoreRequestError)
++            : handleAsyncOperations(arg, ignoreRequestError)
++    ).foo();
++};
++`;
++
++  for (const parser of ["babel", "flow", "typescript"]) {
++    for (const options of [
++      { tabWidth: 2 },
++      { tabWidth: 4 },
++      { tabWidth: 4, useTabs: true },
++    ]) {
++      test(`${parser} ${JSON.stringify(options)}`, () => {
++        const formatOptions = { parser, ...options };
++        const indentation = options.useTabs
++          ? "\t"
++          : " ".repeat(options.tabWidth);
++        const output = prettier.format(input, formatOptions);
++        expect(output).toBe(
++          expected.replace(/^(?: {4})+/gm, (spaces) =>
++            indentation.repeat(spaces.length / 4)
++          )
++        );
++        expect(prettier.format(output, formatOptions)).toBe(output);
++        expect(
++          prettier.format(
++            "function f(){return (a ? b : c).foo();}",
++            formatOptions
++          )
++        ).toBe(`function f() {\n${indentation}return (a ? b : c).foo();\n}\n`);
++      });
++    }
++  }
++});

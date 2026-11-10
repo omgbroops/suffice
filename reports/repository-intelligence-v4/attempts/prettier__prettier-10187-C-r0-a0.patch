@@ -1,0 +1,100 @@
+diff --git a/src/language-js/print/ternary.js b/src/language-js/print/ternary.js
+index 61d47d6..a687cea 100644
+--- a/src/language-js/print/ternary.js
++++ b/src/language-js/print/ternary.js
+@@ -319,7 +319,11 @@ function printTernary(path, options, print) {
+     isConditionalExpression && breakClosingParen ? softline : "",
+   ]);
+ 
+-  return isParentTest ? group([indent([softline, result]), softline]) : result;
++  return isParentTest
++    ? group([indent([softline, result]), softline])
++    : breakClosingParen
++    ? indent(result)
++    : result;
+ }
+ 
+ module.exports = { printTernary };
+diff --git a/tests/js/method-chain/__snapshots__/jsfmt.spec.js.snap b/tests/js/method-chain/__snapshots__/jsfmt.spec.js.snap
+index a684d38..b3513d9 100644
+--- a/tests/js/method-chain/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/js/method-chain/__snapshots__/jsfmt.spec.js.snap
+@@ -495,6 +495,15 @@ object[valid
+   : helper.responseBody(defaultUser)]
+ .map();
+ 
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});
++
+ =====================================output=====================================
+ (a ? b : c).d();
+ 
+@@ -503,21 +512,21 @@ object[valid
+ (a ? b : c).d().e().f();
+ 
+ (valid
+-  ? helper.responseBody(this.currentUser)
+-  : helper.responseBody(this.defaultUser)
+-).map();
++    ? helper.responseBody(this.currentUser)
++    : helper.responseBody(this.defaultUser)
++  ).map();
+ 
+ (valid
+-  ? helper.responseBody(this.currentUser)
+-  : helper.responseBody(this.defaultUser)
+-)
++    ? helper.responseBody(this.currentUser)
++    : helper.responseBody(this.defaultUser)
++  )
+   .map()
+   .filter();
+ 
+ (valid
+-  ? helper.responseBody(this.currentUser)
+-  : helper.responseBody(defaultUser)
+-).map();
++    ? helper.responseBody(this.currentUser)
++    : helper.responseBody(defaultUser)
++  ).map();
+ 
+ object[
+   valid
+@@ -525,6 +534,14 @@ object[
+     : helper.responseBody(defaultUser)
+ ].map();
+ 
++const decorated = (arg, ignoreRequestError) => {
++  return (typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++    ).foo();
++};
++
+ ================================================================================
+ `;
+ 
+diff --git a/tests/js/method-chain/conditional.js b/tests/js/method-chain/conditional.js
+index d7e61de..1c3a7d9 100644
+--- a/tests/js/method-chain/conditional.js
++++ b/tests/js/method-chain/conditional.js
+@@ -23,3 +23,12 @@ object[valid
+   ? helper.responseBody(this.currentUser)
+   : helper.responseBody(defaultUser)]
+ .map();
++
++const decorated = ((arg, ignoreRequestError) => {
++  return (
++    typeof arg === "string" ||
++    (arg && arg.valueOf && typeof arg.valueOf() === "string")
++      ? $delegate(arg, ignoreRequestError)
++      : handleAsyncOperations(arg, ignoreRequestError)
++  ).foo();
++});
