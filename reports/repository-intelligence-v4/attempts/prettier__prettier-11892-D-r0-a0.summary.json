@@ -1,0 +1,123 @@
+{
+  "task": "prettier__prettier-11892",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-11892-D-r0-a0/workspace",
+    "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+    "tree": "af39f755684223a728b49aea11e9f9d7c03ea900"
+  },
+  "runId": "prettier__prettier-11892-D-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 94560.5454,
+  "usage": {
+    "input": 11639,
+    "cacheRead": 57984,
+    "cacheWrite": 0,
+    "output": 1183,
+    "estimatedApiUsd": 0.0409064,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0409064,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 7,
+      "regressionsPassed": 7,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/parser-api.js->allows add empty `trailingComments` array": 1,
+        "tests/integration/__tests__/parser-api.js->allows custom parser provided as object": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (status)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stderr)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stdout)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (write)": 1,
+        "tests/integration/__tests__/parser-api.js->allows usage of prettier's supported parsers": 1,
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 7,
+    "requiredPassed": 7
+  },
+  "changed": [
+    "src/language-js/parse/typescript.js",
+    "tests/integration/__tests__/parser-api.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-css/parser-postcss.js",
+    "src/language-html/parser-html.js",
+    "src/language-js/parse/espree.js",
+    "src/language-js/parse/flow.js",
+    "src/language-js/parse/meriyah.js"
+  ],
+  "extraChangedFiles": [
+    "tests/integration/__tests__/parser-api.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 4,
+  "verificationCalls": 1,
+  "toolCalls": 28,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-11892-D-r0-a0\\home\\events\\1794310521897-61d68e5a-e0af-4746-a508-0bd047bd9e73.jsonl",
+  "receiptAudit": {
+    "requests": 9,
+    "finalUsageResponses": 9,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 9,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-11892-D-r0",
+  "attempt": 0
+}

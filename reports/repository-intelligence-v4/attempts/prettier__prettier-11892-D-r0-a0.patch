@@ -1,0 +1,41 @@
+diff --git a/src/language-js/parse/typescript.js b/src/language-js/parse/typescript.js
+index b324091..8b09d02 100644
+--- a/src/language-js/parse/typescript.js
++++ b/src/language-js/parse/typescript.js
+@@ -32,7 +32,7 @@ function createParseError(error) {
+   });
+ }
+ 
+-function parse(text, parsers, opts) {
++function parse(text, parsers, opts = {}) {
+   const textToParse = replaceHashbang(text);
+   const jsx = isProbablyJsx(text);
+ 
+diff --git a/tests/integration/__tests__/parser-api.js b/tests/integration/__tests__/parser-api.js
+index 3d6920c..27192b8 100644
+--- a/tests/integration/__tests__/parser-api.js
++++ b/tests/integration/__tests__/parser-api.js
+@@ -29,6 +29,23 @@ test("allows usage of prettier's supported parsers", () => {
+   expect(output).toBe("bar();\n");
+ });
+ 
++test("allows calling the TypeScript parser without options", () => {
++  const { parse } = require("../../../src/language-js/parse/typescript.js").parsers.typescript;
++  const ast = parse("const value: number = 1;");
++  expect(ast.type).toBe("Program");
++  expect(ast.body[0].declarations[0].id.name).toBe("value");
++  expect(ast.body[0].loc.start).toEqual({ line: 1, column: 0 });
++});
++
++test("allows using the TypeScript parser in a custom parser", () => {
++  const output = prettier.format("const value:number=1", {
++    parser(text, parsers) {
++      return parsers.typescript(text);
++    },
++  });
++  expect(output).toBe("const value: number = 1;\n");
++});
++
+ test("allows add empty `trailingComments` array", () => {
+   const output = prettier.format("(foo /* comment */)( )", {
+     parser(text, parsers) {

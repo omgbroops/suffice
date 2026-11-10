@@ -1,0 +1,462 @@
+{
+  "task": "prettier__prettier-11892",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-11892-C-r0-a0/workspace",
+    "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+    "tree": "af39f755684223a728b49aea11e9f9d7c03ea900"
+  },
+  "runId": "prettier__prettier-11892-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 699667.3999,
+  "usage": {
+    "input": 74110,
+    "cacheRead": 1513216,
+    "cacheWrite": 0,
+    "output": 11430,
+    "estimatedApiUsd": 0.028258160000000008,
+    "modelCalls": 41,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.028258160000000008,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 7,
+      "regressionsPassed": 7,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/parser-api.js->allows add empty `trailingComments` array": 1,
+        "tests/integration/__tests__/parser-api.js->allows custom parser provided as object": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (status)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stderr)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stdout)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (write)": 1,
+        "tests/integration/__tests__/parser-api.js->allows usage of prettier's supported parsers": 1,
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 7,
+    "requiredPassed": 7
+  },
+  "changed": [
+    "src/language-js/parse/typescript.js",
+    "tests/integration/__tests__/parser-api.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-css/parser-postcss.js",
+    "src/language-html/parser-html.js",
+    "src/language-js/parse/espree.js",
+    "src/language-js/parse/flow.js",
+    "src/language-js/parse/meriyah.js"
+  ],
+  "extraChangedFiles": [
+    "tests/integration/__tests__/parser-api.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 41,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 80,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T11:40:41.078Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "failed-verification"
+    },
+    {
+      "at": "2026-11-10T11:40:54.685Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "failed-verification",
+      "args": {
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:41:05.624Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "failed-verification",
+      "args": {
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:45:53.271Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/typescript.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:46:05.474Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/typescript.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:46:32.182Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/typescript.js",
+          "tests/integration/__tests__/parser-api.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:46:43.426Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/typescript.js",
+          "tests/integration/__tests__/parser-api.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:50:06.552Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/typescript.js",
+          "tests/integration/__tests__/parser-api.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T11:50:14.607Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/typescript.js",
+          "tests/integration/__tests__/parser-api.js"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T11:40:54.667Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "3c24fdfb90d52c1ffa8772be864cec3dab658b371b53400b4dd614cc9bd9a541",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a016d4a928fda2a1abc3d4fe14ffb3db43bc8ace46820c0628eae2c4b292beea"
+      },
+      "latencyMs": 13588.430600000022,
+      "parsedFiles": 4098,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": 154103552,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:41:05.549Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "3c24fdfb90d52c1ffa8772be864cec3dab658b371b53400b4dd614cc9bd9a541",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a016d4a928fda2a1abc3d4fe14ffb3db43bc8ace46820c0628eae2c4b292beea"
+      },
+      "latencyMs": 10877.159400000004,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": -85300232,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:41:17.534Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "3c24fdfb90d52c1ffa8772be864cec3dab658b371b53400b4dd614cc9bd9a541",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a016d4a928fda2a1abc3d4fe14ffb3db43bc8ace46820c0628eae2c4b292beea"
+      },
+      "latencyMs": 11910.671800000011,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": 8155328,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:46:05.401Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "b13bbdeb5dbc217903b34db9ad8bc636a13e4b0d6990748f52298eb639dace2d",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "8447e17fd81e9cac41d2f32f8c47412bb5b376e7feb92bcdb08e87ba07b72f22"
+      },
+      "latencyMs": 12130.622299999988,
+      "parsedFiles": 1,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": 100435064,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:46:16.282Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "b13bbdeb5dbc217903b34db9ad8bc636a13e4b0d6990748f52298eb639dace2d",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "8447e17fd81e9cac41d2f32f8c47412bb5b376e7feb92bcdb08e87ba07b72f22"
+      },
+      "latencyMs": 10808.701300000015,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": -34905400,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:46:43.342Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "24b3b5f0b07baf795529ff579a4a5ac574103765881b23e0e1d519af9f6a6ea3",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a6fe9c6c12792920ffa75c6f9e43aa8b1dfb50eddbbc8ab44987a5d7f9677698"
+      },
+      "latencyMs": 11160.889600000053,
+      "parsedFiles": 1,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": 73620216,
+      "graphBytes": 30561791
+    },
+    {
+      "at": "2026-11-10T11:46:55.133Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "24b3b5f0b07baf795529ff579a4a5ac574103765881b23e0e1d519af9f6a6ea3",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a6fe9c6c12792920ffa75c6f9e43aa8b1dfb50eddbbc8ab44987a5d7f9677698"
+      },
+      "latencyMs": 11706.868900000001,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": -31140064,
+      "graphBytes": 30561791
+    },
+    {
+      "at": "2026-11-10T11:50:14.528Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "1a20b150d00f123be70f54efcdd0beda9944913150f4933ca61aac5624e08d3c",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "450dbe1e4f7ad11754745b04b070f865ec1e91ae2795bd8609eeec78c4498227"
+      },
+      "latencyMs": 7977.376799999969,
+      "parsedFiles": 1,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": 53203160,
+      "graphBytes": 30561791
+    },
+    {
+      "at": "2026-11-10T11:50:22.417Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "1a20b150d00f123be70f54efcdd0beda9944913150f4933ca61aac5624e08d3c",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "450dbe1e4f7ad11754745b04b070f865ec1e91ae2795bd8609eeec78c4498227"
+      },
+      "latencyMs": 7809.893799999962,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": 29770384,
+      "graphBytes": 30561791
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "failed-verification",
+      "candidatePaths": [],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/language-js/parse/typescript.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff -- src/language-js/parse/typescript.js tests/integration/__tests__/parser-api.js; git status --short",
+        "git diff --check; git diff -- src/language-js/parse/typescript.js tests/integration/__tests__/parser-api.js; git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/language-js/parse/typescript.js",
+        "tests/integration/__tests__/parser-api.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "tests/integration/__tests__/parser-api.js",
+          "callId": "call_b9a90cb707b54e779602858a05ae8d54|ctc_01fa0946e6e78a38016af304e8f9d487d1a0cd74c36db70989/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "yarn jest tests/integration/__tests__/parser-api.js --runInBand",
+        "node ./node_modules/jest/bin/jest.js tests/integration/__tests__/parser-api.js --runInBand",
+        "node ./node_modules/jest/bin/jest.js tests/integration/__tests__/parser-api.js --runInBand --watchman=false",
+        "$path = '.v4-tmp\\parser-api-tests.json'; Set-Content -Path $path -Value '[\"tests/integration/__tests__/parser-api.js\"]' -NoNewline; node native-verify.cjs --tests-json $path; $result = $LASTEXITCODE; Remove-Item -Force $path; exit $result",
+        "git diff -- src/language-js/parse/typescript.js tests/integration/__tests__/parser-api.js; git status --short",
+        "node native-verify.cjs; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; $path = '.v4-tmp\\parser-api-tests.json'; Set-Content -Path $path -Value '[\"tests/integration/__tests__/parser-api.js\"]' -NoNewline; node native-verify.cjs --tests-json $path; $result = $LASTEXITCODE; Remove-Item -Force $path; Remove-Item -Force .v4-tmp\\public-report.json -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .v4-tmp\\jest -ErrorAction SilentlyContinue; exit $result",
+        "git diff --check; git diff -- src/language-js/parse/typescript.js tests/integration/__tests__/parser-api.js; git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/language-js/parse/typescript.js",
+        "tests/integration/__tests__/parser-api.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node native-verify.cjs; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; $path = '.v4-tmp\\parser-api-tests.json'; Set-Content -Path $path -Value '[\"tests/integration/__tests__/parser-api.js\"]' -NoNewline; node native-verify.cjs --tests-json $path; $result = $LASTEXITCODE; Remove-Item -Force $path; Remove-Item -Force .v4-tmp\\public-report.json -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .v4-tmp\\jest -ErrorAction SilentlyContinue; exit $result",
+        "git diff --check; git diff -- src/language-js/parse/typescript.js tests/integration/__tests__/parser-api.js; git status --short"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/language-js/parse/typescript.js",
+      "before": "\"use strict\";\n\nconst createError = require(\"../../common/parser-create-error.js\");\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst replaceHashbang = require(\"./utils/replace-hashbang.js\");\nconst postprocess = require(\"./postprocess/index.js\");\n\n/** @type {import(\"@typescript-eslint/typescript-estree\").TSESTreeOptions} */\nconst parseOptions = {\n  // `jest@<=26.4.2` rely on `loc`\n  // https://github.com/facebook/jest/issues/10444\n  loc: true,\n  range: true,\n  comment: true,\n  jsx: true,\n  tokens: true,\n  loggerFn: false,\n  project: [],\n};\n\nfunction createParseError(error) {\n  const { message, lineNumber, column } = error;\n\n  /* istanbul ignore next */\n  if (typeof lineNumber !== \"number\") {\n    return error;\n  }\n\n  return createError(message, {\n    start: { line: lineNumber, column: column + 1 },\n  });\n}\n\nfunction parse(text, parsers, opts) {\n  const textToParse = replaceHashbang(text);\n  const jsx = isProbablyJsx(text);\n\n  const { parseWithNodeMaps } = require(\"@typescript-eslint/typescript-estree\");\n  const { result, error: firstError } = tryCombinations(\n    // Try passing with our best guess first.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx }),\n    // But if we get it wrong, try the opposite.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx: !jsx })\n  );\n\n  if (!result) {\n    // Suppose our guess is correct, throw the first error\n    throw createParseError(firstError);\n  }\n\n  opts.originalText = text;\n  opts.tsParseResult = result;\n  return postprocess(result.ast, opts);\n}\n\n/**\n * Use a naive regular expression to detect JSX\n */\nfunction isProbablyJsx(text) {\n  return new RegExp(\n    [\n      \"(?:^[^\\\"'`]*</)\", // Contains \"</\" when probably not in a string\n      \"|\",\n      \"(?:^[^/]{2}.*/>)\", // Contains \"/>\" on line not starting with \"//\"\n    ].join(\"\"),\n    \"m\"\n  ).test(text);\n}\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    typescript: createParser(parse),\n  },\n};\n",
+      "after": "\"use strict\";\n\nconst createError = require(\"../../common/parser-create-error.js\");\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst replaceHashbang = require(\"./utils/replace-hashbang.js\");\nconst postprocess = require(\"./postprocess/index.js\");\n\n/** @type {import(\"@typescript-eslint/typescript-estree\").TSESTreeOptions} */\nconst parseOptions = {\n  // `jest@<=26.4.2` rely on `loc`\n  // https://github.com/facebook/jest/issues/10444\n  loc: true,\n  range: true,\n  comment: true,\n  jsx: true,\n  tokens: true,\n  loggerFn: false,\n  project: [],\n};\n\nfunction createParseError(error) {\n  const { message, lineNumber, column } = error;\n\n  /* istanbul ignore next */\n  if (typeof lineNumber !== \"number\") {\n    return error;\n  }\n\n  return createError(message, {\n    start: { line: lineNumber, column: column + 1 },\n  });\n}\n\nfunction parse(text, parsers, opts = {}) {\n  const textToParse = replaceHashbang(text);\n  const jsx = isProbablyJsx(text);\n\n  const { parseWithNodeMaps } = require(\"@typescript-eslint/typescript-estree\");\n  const { result, error: firstError } = tryCombinations(\n    // Try passing with our best guess first.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx }),\n    // But if we get it wrong, try the opposite.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx: !jsx })\n  );\n\n  if (!result) {\n    // Suppose our guess is correct, throw the first error\n    throw createParseError(firstError);\n  }\n\n  opts.originalText = text;\n  opts.tsParseResult = result;\n  return postprocess(result.ast, opts);\n}\n\n/**\n * Use a naive regular expression to detect JSX\n */\nfunction isProbablyJsx(text) {\n  return new RegExp(\n    [\n      \"(?:^[^\\\"'`]*</)\", // Contains \"</\" when probably not in a string\n      \"|\",\n      \"(?:^[^/]{2}.*/>)\", // Contains \"/>\" on line not starting with \"//\"\n    ].join(\"\"),\n    \"m\"\n  ).test(text);\n}\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    typescript: createParser(parse),\n  },\n};\n"
+    },
+    {
+      "path": "tests/integration/__tests__/parser-api.js",
+      "before": "\"use strict\";\n\nconst prettier = require(\"prettier-local\");\nconst runPrettier = require(\"../runPrettier.js\");\n\ntest(\"allows custom parser provided as object\", () => {\n  const output = prettier.format(\"1\", {\n    parser(text) {\n      expect(text).toBe(\"1\");\n      return {\n        type: \"Literal\",\n        value: 2,\n        raw: \"2\",\n      };\n    },\n  });\n  expect(output).toBe(\"2\");\n});\n\ntest(\"allows usage of prettier's supported parsers\", () => {\n  const output = prettier.format(\"foo ( )\", {\n    parser(text, parsers) {\n      expect(typeof parsers.babel).toBe(\"function\");\n      const ast = parsers.babel(text);\n      ast.program.body[0].expression.callee.name = \"bar\";\n      return ast;\n    },\n  });\n  expect(output).toBe(\"bar();\\n\");\n});\n\ntest(\"allows add empty `trailingComments` array\", () => {\n  const output = prettier.format(\"(foo /* comment */)( )\", {\n    parser(text, parsers) {\n      const ast = parsers.babel(text);\n\n      // This may happens in this use case https://github.com/prettier/prettier/pull/5497#issuecomment-439841965\n      // Simply simulate it\n      const callExpression = ast.program.body[0].expression;\n      callExpression.extra = { parenthesized: true };\n      callExpression.trailingComments = [];\n\n      return ast;\n    },\n  });\n  expect(output).toBe(\"foo(/* comment */);\\n\");\n});\n\ndescribe(\"allows passing a string to resolve a parser\", () => {\n  runPrettier(\"./custom-parsers/\", [\n    \"--end-of-line\",\n    \"lf\",\n    \"./custom-rename-input.js\",\n    \"--parser\",\n    \"./custom-rename-parser\",\n  ]).test({\n    status: 0,\n  });\n});\n",
+      "after": "\"use strict\";\n\nconst prettier = require(\"prettier-local\");\nconst runPrettier = require(\"../runPrettier.js\");\n\ntest(\"allows custom parser provided as object\", () => {\n  const output = prettier.format(\"1\", {\n    parser(text) {\n      expect(text).toBe(\"1\");\n      return {\n        type: \"Literal\",\n        value: 2,\n        raw: \"2\",\n      };\n    },\n  });\n  expect(output).toBe(\"2\");\n});\n\ntest(\"allows usage of prettier's supported parsers\", () => {\n  const output = prettier.format(\"foo ( )\", {\n    parser(text, parsers) {\n      expect(typeof parsers.babel).toBe(\"function\");\n      const ast = parsers.babel(text);\n      ast.program.body[0].expression.callee.name = \"bar\";\n      return ast;\n    },\n  });\n  expect(output).toBe(\"bar();\\n\");\n});\n\ntest(\"allows invoking the TypeScript parser from a custom parser\", () => {\n  const output = prettier.format(\"expect(foo).toMatchInlineSnapshot();\", {\n    parser(text, parsers, options) {\n      options.parser = \"typescript\";\n      // Jest's inline snapshot parser passes options as the second argument.\n      return parsers.typescript(text, options);\n    },\n  });\n  expect(output).toBe(\"expect(foo).toMatchInlineSnapshot();\\n\");\n});\n\ntest(\"allows add empty `trailingComments` array\", () => {\n  const output = prettier.format(\"(foo /* comment */)( )\", {\n    parser(text, parsers) {\n      const ast = parsers.babel(text);\n\n      // This may happens in this use case https://github.com/prettier/prettier/pull/5497#issuecomment-439841965\n      // Simply simulate it\n      const callExpression = ast.program.body[0].expression;\n      callExpression.extra = { parenthesized: true };\n      callExpression.trailingComments = [];\n\n      return ast;\n    },\n  });\n  expect(output).toBe(\"foo(/* comment */);\\n\");\n});\n\ndescribe(\"allows passing a string to resolve a parser\", () => {\n  runPrettier(\"./custom-parsers/\", [\n    \"--end-of-line\",\n    \"lf\",\n    \"./custom-rename-input.js\",\n    \"--parser\",\n    \"./custom-rename-parser\",\n  ]).test({\n    status: 0,\n  });\n});\n"
+    }
+  ],
+  "final": "Updated the TypeScript parser to default missing parser options to `{}`. Jest’s inline-snapshot formatter can call the parser with options as its second argument, leaving the third argument undefined; the parser then failed when setting `opts.originalText`.\n\nAdded an integration regression test covering that calling pattern.\n\n**Verification passed:**\n- `node native-verify.cjs` — 3 suites, 16 tests.\n- `node native-verify.cjs --tests-json ...` with `tests/integration/__tests__/parser-api.js` — 1 suite, 8 tests.\n- `git diff --check`.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-11892-C-r0-a0\\home\\events\\1794310774817-8080d5b6-749f-4021-bd81-c61569fb217b.jsonl",
+  "receiptAudit": {
+    "requests": 41,
+    "finalUsageResponses": 41,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 41,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-11892-C-r0",
+  "attempt": 0
+}

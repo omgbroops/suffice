@@ -1,0 +1,285 @@
+{
+  "task": "prettier__prettier-11892",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-11892-C-r0-a0/workspace",
+    "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+    "tree": "af39f755684223a728b49aea11e9f9d7c03ea900"
+  },
+  "runId": "prettier__prettier-11892-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 699667.3999,
+  "usage": {
+    "input": 74110,
+    "cacheRead": 1513216,
+    "cacheWrite": 0,
+    "output": 11430,
+    "estimatedApiUsd": 0.028258160000000008,
+    "modelCalls": 41,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.028258160000000008,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 7,
+      "regressionsPassed": 7,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/parser-api.js->allows add empty `trailingComments` array": 1,
+        "tests/integration/__tests__/parser-api.js->allows custom parser provided as object": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (status)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stderr)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stdout)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (write)": 1,
+        "tests/integration/__tests__/parser-api.js->allows usage of prettier's supported parsers": 1,
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 7,
+    "requiredPassed": 7
+  },
+  "changed": [
+    "src/language-js/parse/typescript.js",
+    "tests/integration/__tests__/parser-api.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-css/parser-postcss.js",
+    "src/language-html/parser-html.js",
+    "src/language-js/parse/espree.js",
+    "src/language-js/parse/flow.js",
+    "src/language-js/parse/meriyah.js"
+  ],
+  "extraChangedFiles": [
+    "tests/integration/__tests__/parser-api.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 41,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 80,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T11:40:54.667Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "3c24fdfb90d52c1ffa8772be864cec3dab658b371b53400b4dd614cc9bd9a541",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a016d4a928fda2a1abc3d4fe14ffb3db43bc8ace46820c0628eae2c4b292beea"
+      },
+      "latencyMs": 13588.430600000022,
+      "parsedFiles": 4098,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": 154103552,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:41:05.549Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "3c24fdfb90d52c1ffa8772be864cec3dab658b371b53400b4dd614cc9bd9a541",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a016d4a928fda2a1abc3d4fe14ffb3db43bc8ace46820c0628eae2c4b292beea"
+      },
+      "latencyMs": 10877.159400000004,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": -85300232,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:41:17.534Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "3c24fdfb90d52c1ffa8772be864cec3dab658b371b53400b4dd614cc9bd9a541",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a016d4a928fda2a1abc3d4fe14ffb3db43bc8ace46820c0628eae2c4b292beea"
+      },
+      "latencyMs": 11910.671800000011,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": 8155328,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:46:05.401Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "b13bbdeb5dbc217903b34db9ad8bc636a13e4b0d6990748f52298eb639dace2d",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "8447e17fd81e9cac41d2f32f8c47412bb5b376e7feb92bcdb08e87ba07b72f22"
+      },
+      "latencyMs": 12130.622299999988,
+      "parsedFiles": 1,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": 100435064,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:46:16.282Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "b13bbdeb5dbc217903b34db9ad8bc636a13e4b0d6990748f52298eb639dace2d",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "8447e17fd81e9cac41d2f32f8c47412bb5b376e7feb92bcdb08e87ba07b72f22"
+      },
+      "latencyMs": 10808.701300000015,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21939749,
+      "heapDeltaBytes": -34905400,
+      "graphBytes": 30553854
+    },
+    {
+      "at": "2026-11-10T11:46:43.342Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "24b3b5f0b07baf795529ff579a4a5ac574103765881b23e0e1d519af9f6a6ea3",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a6fe9c6c12792920ffa75c6f9e43aa8b1dfb50eddbbc8ab44987a5d7f9677698"
+      },
+      "latencyMs": 11160.889600000053,
+      "parsedFiles": 1,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": 73620216,
+      "graphBytes": 30561791
+    },
+    {
+      "at": "2026-11-10T11:46:55.133Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "24b3b5f0b07baf795529ff579a4a5ac574103765881b23e0e1d519af9f6a6ea3",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "a6fe9c6c12792920ffa75c6f9e43aa8b1dfb50eddbbc8ab44987a5d7f9677698"
+      },
+      "latencyMs": 11706.868900000001,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": -31140064,
+      "graphBytes": 30561791
+    },
+    {
+      "at": "2026-11-10T11:50:14.528Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "1a20b150d00f123be70f54efcdd0beda9944913150f4933ca61aac5624e08d3c",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "450dbe1e4f7ad11754745b04b070f865ec1e91ae2795bd8609eeec78c4498227"
+      },
+      "latencyMs": 7977.376799999969,
+      "parsedFiles": 1,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": 53203160,
+      "graphBytes": 30561791
+    },
+    {
+      "at": "2026-11-10T11:50:22.417Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+        "sourceContentVersion": "1a20b150d00f123be70f54efcdd0beda9944913150f4933ca61aac5624e08d3c",
+        "configurationVersion": "5d2c5e73a57bd85127b9266eb1e95450489d4cf179d9b65f46c5ac9ac2e18a46",
+        "contentVersion": "450dbe1e4f7ad11754745b04b070f865ec1e91ae2795bd8609eeec78c4498227"
+      },
+      "latencyMs": 7809.893799999962,
+      "parsedFiles": 0,
+      "fileCount": 4098,
+      "cacheBytes": 21944940,
+      "heapDeltaBytes": 29770384,
+      "graphBytes": 30561791
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-11892-C-r0-a0\\home\\events\\1794310774817-8080d5b6-749f-4021-bd81-c61569fb217b.jsonl",
+  "receiptAudit": {
+    "requests": 41,
+    "finalUsageResponses": 41,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 41,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-11892-C-r0",
+  "attempt": 0
+}

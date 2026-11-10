@@ -1,0 +1,40 @@
+diff --git a/src/language-js/parse/typescript.js b/src/language-js/parse/typescript.js
+index b324091..8b09d02 100644
+--- a/src/language-js/parse/typescript.js
++++ b/src/language-js/parse/typescript.js
+@@ -32,7 +32,7 @@ function createParseError(error) {
+   });
+ }
+ 
+-function parse(text, parsers, opts) {
++function parse(text, parsers, opts = {}) {
+   const textToParse = replaceHashbang(text);
+   const jsx = isProbablyJsx(text);
+ 
+diff --git a/tests/integration/__tests__/format.js b/tests/integration/__tests__/format.js
+index 50578fa..2089426 100644
+--- a/tests/integration/__tests__/format.js
++++ b/tests/integration/__tests__/format.js
+@@ -3,6 +3,22 @@
+ const prettier = require("prettier-local");
+ const fooPlugin = require("../plugins/defaultOptions/plugin.js");
+ 
++test("typescript parser should format Jest inline snapshots", () => {
++  const input = `expect(value).toMatchInlineSnapshot(\`snapshot\`);`;
++  expect(prettier.format(input, { parser: "typescript" })).toBe(
++    "expect(value).toMatchInlineSnapshot(`snapshot`);\n"
++  );
++});
++
++test("typescript parser can be called without options", () => {
++  const typescriptParser =
++    require("../../../src/language-js/parse/typescript.js").parsers.typescript;
++  const ast = typescriptParser.parse(
++    "expect(value).toMatchInlineSnapshot(`snapshot`);"
++  );
++  expect(ast.type).toBe("Program");
++});
++
+ test("yaml parser should handle CRLF correctly", () => {
+   const input = "a:\r\n  123\r\n";
+   expect(

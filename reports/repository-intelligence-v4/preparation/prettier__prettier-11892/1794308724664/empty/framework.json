@@ -1,0 +1,118 @@
+{
+  "numFailedTestSuites": 1,
+  "numFailedTests": 1,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 7,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 1,
+  "numTotalTests": 8,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 3,
+    "total": 3,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0
+  },
+  "startTime": 1794308999635,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "allows custom parser provided as object",
+          "location": null,
+          "status": "passed",
+          "title": "allows custom parser provided as object"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "allows usage of prettier's supported parsers",
+          "location": null,
+          "status": "passed",
+          "title": "allows usage of prettier's supported parsers"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [
+            "Error: expect(received).not.toThrow()\n\nError name:    \"TypeError\"\nError message: \"Cannot set properties of undefined (setting 'originalText')\"\n\n      55 |   }\n      56 |\n    > 57 |   opts.originalText = text;\n         |                     ^\n      58 |   return postprocess(ast, opts);\n      59 | }\n      60 |\n\n      at parse (src/language-js/parse/flow.js:57:21)\n      at tests/integration/__tests__/parser-api.js:55:18\n      at Object.<anonymous> (../../deps-89890087da309c1dc95d/node_modules/expect/build/toThrowMatchers.js:83:11)\n      at Object.throwingMatcher [as toThrow] (../../deps-89890087da309c1dc95d/node_modules/expect/build/index.js:382:21)\n      at Object.<anonymous> (tests/integration/__tests__/parser-api.js:55:57)\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-11892-1794308724664\\empty\\tests\\integration\\__tests__\\parser-api.js:55:57)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\utils.js:390:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\utils.js:315:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\run.js:25:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:167:21)\n    at jestAdapter (C:\\Users\\Public\\SufficeV4\\deps-89890087da309c1dc95d\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:82:19)"
+          ],
+          "fullName": "parsers should allow omit optional arguments",
+          "location": null,
+          "status": "failed",
+          "title": "parsers should allow omit optional arguments"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "allows add empty `trailingComments` array",
+          "location": null,
+          "status": "passed",
+          "title": "allows add empty `trailingComments` array"
+        },
+        {
+          "ancestorTitles": [
+            "allows passing a string to resolve a parser"
+          ],
+          "failureMessages": [],
+          "fullName": "allows passing a string to resolve a parser (status)",
+          "location": null,
+          "status": "passed",
+          "title": "(status)"
+        },
+        {
+          "ancestorTitles": [
+            "allows passing a string to resolve a parser"
+          ],
+          "failureMessages": [],
+          "fullName": "allows passing a string to resolve a parser (stdout)",
+          "location": null,
+          "status": "passed",
+          "title": "(stdout)"
+        },
+        {
+          "ancestorTitles": [
+            "allows passing a string to resolve a parser"
+          ],
+          "failureMessages": [],
+          "fullName": "allows passing a string to resolve a parser (stderr)",
+          "location": null,
+          "status": "passed",
+          "title": "(stderr)"
+        },
+        {
+          "ancestorTitles": [
+            "allows passing a string to resolve a parser"
+          ],
+          "failureMessages": [],
+          "fullName": "allows passing a string to resolve a parser (write)",
+          "location": null,
+          "status": "passed",
+          "title": "(write)"
+        }
+      ],
+      "endTime": 1794309003263,
+      "message": "  ● parsers should allow omit optional arguments\n\n    expect(received).not.toThrow()\n\n    Error name:    \"TypeError\"\n    Error message: \"Cannot set properties of undefined (setting 'originalText')\"\n\n          55 |   }\n          56 |\n        > 57 |   opts.originalText = text;\n             |                     ^\n          58 |   return postprocess(ast, opts);\n          59 | }\n          60 |\n\n      at parse (src/language-js/parse/flow.js:57:21)\n      at tests/integration/__tests__/parser-api.js:55:18\n      at Object.<anonymous> (../../deps-89890087da309c1dc95d/node_modules/expect/build/toThrowMatchers.js:83:11)\n      at Object.throwingMatcher [as toThrow] (../../deps-89890087da309c1dc95d/node_modules/expect/build/index.js:382:21)\n      at Object.<anonymous> (tests/integration/__tests__/parser-api.js:55:57)\n      at Object.<anonymous> (tests/integration/__tests__/parser-api.js:55:57)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-11892-1794308724664\\empty\\tests\\integration\\__tests__\\parser-api.js",
+      "startTime": 1794308999734,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

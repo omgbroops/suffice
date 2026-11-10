@@ -1,0 +1,138 @@
+{
+  "task": "prettier__prettier-11892",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-11892-A-r0-a0/workspace",
+    "head": "92a237e9c06f85f311426a18cfefdd277e1462a8",
+    "tree": "af39f755684223a728b49aea11e9f9d7c03ea900"
+  },
+  "runId": "prettier__prettier-11892-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 486090.07699999993,
+  "usage": {
+    "input": 166552,
+    "cacheRead": 1249920,
+    "cacheWrite": 0,
+    "output": 19338,
+    "estimatedApiUsd": 0.0388234,
+    "modelCalls": 43,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0388234,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 7,
+      "regressionsPassed": 7,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/parser-api.js->allows add empty `trailingComments` array": 1,
+        "tests/integration/__tests__/parser-api.js->allows custom parser provided as object": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (status)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stderr)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (stdout)": 1,
+        "tests/integration/__tests__/parser-api.js->allows passing a string to resolve a parser (write)": 1,
+        "tests/integration/__tests__/parser-api.js->allows usage of prettier's supported parsers": 1,
+        "tests/integration/__tests__/parser-api.js->parsers should allow omit optional arguments": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 7,
+    "requiredPassed": 7
+  },
+  "changed": [
+    "src/language-js/parse/typescript.js",
+    "tests/integration/__tests__/format.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-css/parser-postcss.js",
+    "src/language-html/parser-html.js",
+    "src/language-js/parse/espree.js",
+    "src/language-js/parse/flow.js",
+    "src/language-js/parse/meriyah.js"
+  ],
+  "extraChangedFiles": [
+    "tests/integration/__tests__/format.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 43,
+  "editCalls": 5,
+  "verificationCalls": 3,
+  "toolCalls": 91,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/language-js/parse/typescript.js",
+      "before": "\"use strict\";\n\nconst createError = require(\"../../common/parser-create-error.js\");\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst replaceHashbang = require(\"./utils/replace-hashbang.js\");\nconst postprocess = require(\"./postprocess/index.js\");\n\n/** @type {import(\"@typescript-eslint/typescript-estree\").TSESTreeOptions} */\nconst parseOptions = {\n  // `jest@<=26.4.2` rely on `loc`\n  // https://github.com/facebook/jest/issues/10444\n  loc: true,\n  range: true,\n  comment: true,\n  jsx: true,\n  tokens: true,\n  loggerFn: false,\n  project: [],\n};\n\nfunction createParseError(error) {\n  const { message, lineNumber, column } = error;\n\n  /* istanbul ignore next */\n  if (typeof lineNumber !== \"number\") {\n    return error;\n  }\n\n  return createError(message, {\n    start: { line: lineNumber, column: column + 1 },\n  });\n}\n\nfunction parse(text, parsers, opts) {\n  const textToParse = replaceHashbang(text);\n  const jsx = isProbablyJsx(text);\n\n  const { parseWithNodeMaps } = require(\"@typescript-eslint/typescript-estree\");\n  const { result, error: firstError } = tryCombinations(\n    // Try passing with our best guess first.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx }),\n    // But if we get it wrong, try the opposite.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx: !jsx })\n  );\n\n  if (!result) {\n    // Suppose our guess is correct, throw the first error\n    throw createParseError(firstError);\n  }\n\n  opts.originalText = text;\n  opts.tsParseResult = result;\n  return postprocess(result.ast, opts);\n}\n\n/**\n * Use a naive regular expression to detect JSX\n */\nfunction isProbablyJsx(text) {\n  return new RegExp(\n    [\n      \"(?:^[^\\\"'`]*</)\", // Contains \"</\" when probably not in a string\n      \"|\",\n      \"(?:^[^/]{2}.*/>)\", // Contains \"/>\" on line not starting with \"//\"\n    ].join(\"\"),\n    \"m\"\n  ).test(text);\n}\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    typescript: createParser(parse),\n  },\n};\n",
+      "after": "\"use strict\";\n\nconst createError = require(\"../../common/parser-create-error.js\");\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst replaceHashbang = require(\"./utils/replace-hashbang.js\");\nconst postprocess = require(\"./postprocess/index.js\");\n\n/** @type {import(\"@typescript-eslint/typescript-estree\").TSESTreeOptions} */\nconst parseOptions = {\n  // `jest@<=26.4.2` rely on `loc`\n  // https://github.com/facebook/jest/issues/10444\n  loc: true,\n  range: true,\n  comment: true,\n  jsx: true,\n  tokens: true,\n  loggerFn: false,\n  project: [],\n};\n\nfunction createParseError(error) {\n  const { message, lineNumber, column } = error;\n\n  /* istanbul ignore next */\n  if (typeof lineNumber !== \"number\") {\n    return error;\n  }\n\n  return createError(message, {\n    start: { line: lineNumber, column: column + 1 },\n  });\n}\n\nfunction parse(text, parsers, opts = {}) {\n  const textToParse = replaceHashbang(text);\n  const jsx = isProbablyJsx(text);\n\n  const { parseWithNodeMaps } = require(\"@typescript-eslint/typescript-estree\");\n  const { result, error: firstError } = tryCombinations(\n    // Try passing with our best guess first.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx }),\n    // But if we get it wrong, try the opposite.\n    () => parseWithNodeMaps(textToParse, { ...parseOptions, jsx: !jsx })\n  );\n\n  if (!result) {\n    // Suppose our guess is correct, throw the first error\n    throw createParseError(firstError);\n  }\n\n  opts.originalText = text;\n  opts.tsParseResult = result;\n  return postprocess(result.ast, opts);\n}\n\n/**\n * Use a naive regular expression to detect JSX\n */\nfunction isProbablyJsx(text) {\n  return new RegExp(\n    [\n      \"(?:^[^\\\"'`]*</)\", // Contains \"</\" when probably not in a string\n      \"|\",\n      \"(?:^[^/]{2}.*/>)\", // Contains \"/>\" on line not starting with \"//\"\n    ].join(\"\"),\n    \"m\"\n  ).test(text);\n}\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    typescript: createParser(parse),\n  },\n};\n"
+    },
+    {
+      "path": "tests/integration/__tests__/format.js",
+      "before": "\"use strict\";\n\nconst prettier = require(\"prettier-local\");\nconst fooPlugin = require(\"../plugins/defaultOptions/plugin.js\");\n\ntest(\"yaml parser should handle CRLF correctly\", () => {\n  const input = \"a:\\r\\n  123\\r\\n\";\n  expect(\n    // use JSON.stringify to observe CRLF\n    JSON.stringify(\n      prettier.format(input, { parser: \"yaml\", endOfLine: \"auto\" })\n    )\n  ).toMatchSnapshot();\n});\n\ntest(\"typescript parser should throw the first error when both JSX and non-JSX mode failed\", () => {\n  const input = `\nimport React from \"react\";\n\nconst App = () => (\n  <div className=\"App\">\n  </div>\n);\n\nlabel:\n  `;\n  expect(() =>\n    prettier.format(input, { parser: \"typescript\" })\n  ).toThrowErrorMatchingSnapshot();\n});\n\ntest(\"html parser should handle CRLF correctly\", () => {\n  const input = \"<!--\\r\\n  test\\r\\n  test\\r\\n-->\";\n  expect(\n    // use JSON.stringify to observe CRLF\n    JSON.stringify(\n      prettier.format(input, { parser: \"html\", endOfLine: \"auto\" })\n    )\n  ).toMatchSnapshot();\n});\n\ntest(\"markdown parser should handle CRLF correctly\", () => {\n  const input = \"```\\r\\n\\r\\n\\r\\n```\";\n  expect(\n    // use JSON.stringify to observe CRLF\n    JSON.stringify(\n      prettier.format(input, { parser: \"markdown\", endOfLine: \"auto\" })\n    )\n  ).toMatchSnapshot();\n});\n\ntest(\"should work with foo plugin instance\", () => {\n  const input = \"a:\\r\\n  123\\r\\n\";\n  expect(\n    JSON.stringify(\n      prettier.format(input, { parser: \"foo-parser\", plugins: [fooPlugin] })\n    )\n  ).toMatchInlineSnapshot(\n    '\"\\\\\"{\\\\\\\\\\\\\"tabWidth\\\\\\\\\\\\\":8,\\\\\\\\\\\\\"bracketSpacing\\\\\\\\\\\\\":false}\\\\\"\"'\n  );\n});\n\ntest(\"'Adjacent JSX' error should not be swallowed by Babel's error recovery\", () => {\n  const input = \"<a></a>\\n<b></b>\";\n  expect(() =>\n    prettier.format(input, { parser: \"babel\" })\n  ).toThrowErrorMatchingSnapshot();\n});\n",
+      "after": "\"use strict\";\n\nconst prettier = require(\"prettier-local\");\nconst fooPlugin = require(\"../plugins/defaultOptions/plugin.js\");\n\ntest(\"typescript parser should format Jest inline snapshots\", () => {\n  const input = `expect(value).toMatchInlineSnapshot(\\`snapshot\\`);`;\n  expect(prettier.format(input, { parser: \"typescript\" })).toBe(\n    \"expect(value).toMatchInlineSnapshot(`snapshot`);\\n\"\n  );\n});\n\ntest(\"typescript parser can be called without options\", () => {\n  const typescriptParser =\n    require(\"../../../src/language-js/parse/typescript.js\").parsers.typescript;\n  const ast = typescriptParser.parse(\n    \"expect(value).toMatchInlineSnapshot(`snapshot`);\"\n  );\n  expect(ast.type).toBe(\"Program\");\n});\n\ntest(\"yaml parser should handle CRLF correctly\", () => {\n  const input = \"a:\\r\\n  123\\r\\n\";\n  expect(\n    // use JSON.stringify to observe CRLF\n    JSON.stringify(\n      prettier.format(input, { parser: \"yaml\", endOfLine: \"auto\" })\n    )\n  ).toMatchSnapshot();\n});\n\ntest(\"typescript parser should throw the first error when both JSX and non-JSX mode failed\", () => {\n  const input = `\nimport React from \"react\";\n\nconst App = () => (\n  <div className=\"App\">\n  </div>\n);\n\nlabel:\n  `;\n  expect(() =>\n    prettier.format(input, { parser: \"typescript\" })\n  ).toThrowErrorMatchingSnapshot();\n});\n\ntest(\"html parser should handle CRLF correctly\", () => {\n  const input = \"<!--\\r\\n  test\\r\\n  test\\r\\n-->\";\n  expect(\n    // use JSON.stringify to observe CRLF\n    JSON.stringify(\n      prettier.format(input, { parser: \"html\", endOfLine: \"auto\" })\n    )\n  ).toMatchSnapshot();\n});\n\ntest(\"markdown parser should handle CRLF correctly\", () => {\n  const input = \"```\\r\\n\\r\\n\\r\\n```\";\n  expect(\n    // use JSON.stringify to observe CRLF\n    JSON.stringify(\n      prettier.format(input, { parser: \"markdown\", endOfLine: \"auto\" })\n    )\n  ).toMatchSnapshot();\n});\n\ntest(\"should work with foo plugin instance\", () => {\n  const input = \"a:\\r\\n  123\\r\\n\";\n  expect(\n    JSON.stringify(\n      prettier.format(input, { parser: \"foo-parser\", plugins: [fooPlugin] })\n    )\n  ).toMatchInlineSnapshot(\n    '\"\\\\\"{\\\\\\\\\\\\\"tabWidth\\\\\\\\\\\\\":8,\\\\\\\\\\\\\"bracketSpacing\\\\\\\\\\\\\":false}\\\\\"\"'\n  );\n});\n\ntest(\"'Adjacent JSX' error should not be swallowed by Babel's error recovery\", () => {\n  const input = \"<a></a>\\n<b></b>\";\n  expect(() =>\n    prettier.format(input, { parser: \"babel\" })\n  ).toThrowErrorMatchingSnapshot();\n});\n"
+    }
+  ],
+  "final": "Added a default options object to the TypeScript parser so it can safely set `originalText` when called without options. Added regression coverage for parsing and formatting a Jest inline snapshot.\n\nVerified:\n- `node native-verify.cjs` — passed\n- Targeted integration Jest suite — passed (8 tests)\n- Prettier formatting check and `git diff --check` — passed",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-11892-A-r0-a0\\home\\events\\1794309144303-476fb281-b4c2-441c-b7a7-8ee3ae637be3.jsonl",
+  "receiptAudit": {
+    "requests": 43,
+    "finalUsageResponses": 43,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 43,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-11892-A-r0",
+  "attempt": 0
+}

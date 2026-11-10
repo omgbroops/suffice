@@ -1,0 +1,35 @@
+diff --git a/src/language-js/parse/typescript.js b/src/language-js/parse/typescript.js
+index b324091..8b09d02 100644
+--- a/src/language-js/parse/typescript.js
++++ b/src/language-js/parse/typescript.js
+@@ -32,7 +32,7 @@ function createParseError(error) {
+   });
+ }
+ 
+-function parse(text, parsers, opts) {
++function parse(text, parsers, opts = {}) {
+   const textToParse = replaceHashbang(text);
+   const jsx = isProbablyJsx(text);
+ 
+diff --git a/tests/integration/__tests__/parser-api.js b/tests/integration/__tests__/parser-api.js
+index 3d6920c..ea30e03 100644
+--- a/tests/integration/__tests__/parser-api.js
++++ b/tests/integration/__tests__/parser-api.js
+@@ -29,6 +29,17 @@ test("allows usage of prettier's supported parsers", () => {
+   expect(output).toBe("bar();\n");
+ });
+ 
++test("allows invoking the TypeScript parser from a custom parser", () => {
++  const output = prettier.format("expect(foo).toMatchInlineSnapshot();", {
++    parser(text, parsers, options) {
++      options.parser = "typescript";
++      // Jest's inline snapshot parser passes options as the second argument.
++      return parsers.typescript(text, options);
++    },
++  });
++  expect(output).toBe("expect(foo).toMatchInlineSnapshot();\n");
++});
++
+ test("allows add empty `trailingComments` array", () => {
+   const output = prettier.format("(foo /* comment */)( )", {
+     parser(text, parsers) {

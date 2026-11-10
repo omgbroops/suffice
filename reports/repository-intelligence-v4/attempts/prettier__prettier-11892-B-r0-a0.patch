@@ -1,0 +1,35 @@
+diff --git a/src/language-js/parse/typescript.js b/src/language-js/parse/typescript.js
+index b324091..8b09d02 100644
+--- a/src/language-js/parse/typescript.js
++++ b/src/language-js/parse/typescript.js
+@@ -32,7 +32,7 @@ function createParseError(error) {
+   });
+ }
+ 
+-function parse(text, parsers, opts) {
++function parse(text, parsers, opts = {}) {
+   const textToParse = replaceHashbang(text);
+   const jsx = isProbablyJsx(text);
+ 
+diff --git a/tests/integration/__tests__/parser-api.js b/tests/integration/__tests__/parser-api.js
+index 3d6920c..34e5967 100644
+--- a/tests/integration/__tests__/parser-api.js
++++ b/tests/integration/__tests__/parser-api.js
+@@ -17,6 +17,17 @@ test("allows custom parser provided as object", () => {
+   expect(output).toBe("2");
+ });
+ 
++test("allows using the TypeScript parser without options", () => {
++  const output = prettier.format("expect(value).toMatchInlineSnapshot();", {
++    parser(text, parsers, options) {
++      options.parser = "typescript";
++      return parsers.typescript(text, options);
++    },
++  });
++
++  expect(output).toBe("expect(value).toMatchInlineSnapshot();\n");
++});
++
+ test("allows usage of prettier's supported parsers", () => {
+   const output = prettier.format("foo ( )", {
+     parser(text, parsers) {
