@@ -1,0 +1,53 @@
+diff --git a/src/language-js/print/jsx.js b/src/language-js/print/jsx.js
+index c2a6215..5b6f4b9 100644
+--- a/src/language-js/print/jsx.js
++++ b/src/language-js/print/jsx.js
+@@ -403,6 +403,17 @@ function separatorNoWhitespace(
+     return "";
+   }
+ 
++  // Non-ASCII whitespace is meaningful JSX text, so it is not handled by
++  // printJSXChildren as jsxWhitespace. Don't add a line separator before it:
++  // the character itself already separates the preceding child.
++  if (
++    nextNode &&
++    nextNode.type === "JSXText" &&
++    /^[^\S \t\r\n]/.test(rawText(nextNode))
++  ) {
++    return "";
++  }
++
+   if (
+     (childNode.type === "JSXElement" && !childNode.closingElement) ||
+     (nextNode && nextNode.type === "JSXElement" && !nextNode.closingElement)
+diff --git a/tests/jsx/whitespace/jsfmt.spec.js b/tests/jsx/whitespace/jsfmt.spec.js
+index 9d5fc32..7622656 100644
+--- a/tests/jsx/whitespace/jsfmt.spec.js
++++ b/tests/jsx/whitespace/jsfmt.spec.js
+@@ -45,6 +45,26 @@ run_spec(
+         code: "zero_width_space = <div>]\u200b\u200b[</div>",
+         output: "zero_width_space = <div>]\u200b\u200b[</div>;",
+       },
++      {
++        code: outdent`
++          const test = () => {
++            return (
++              <p>
++                <span />\u3000{this.props.data.title}\u3000<span />
++              </p>
++            );
++          };
++        `,
++        output: outdent`
++          const test = () => {
++            return (
++              <p>
++                <span />\u3000{this.props.data.title}\u3000<span />
++              </p>
++            );
++          };
++        `,
++      },
+       {
+         code: outdent`
+           real_world_non_breaking_spaces = <p>

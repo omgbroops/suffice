@@ -1,0 +1,155 @@
+diff --git a/src/language-js/print/jsx.js b/src/language-js/print/jsx.js
+index c2a6215..f314ac3 100644
+--- a/src/language-js/print/jsx.js
++++ b/src/language-js/print/jsx.js
+@@ -373,8 +373,9 @@ function printJSXChildren(
+       const directlyFollowedByMeaningfulText =
+         next && isMeaningfulJSXText(next);
+       if (directlyFollowedByMeaningfulText) {
++        // Only trim JSX whitespace; String#trim() also strips ideographic spaces.
+         const firstWord = rawText(next)
+-          .trim()
++          .replace(/^[ \n\r\t]+/, "")
+           .split(matchJsxWhitespaceRegex)[0];
+         children.push(
+           separatorNoWhitespace(
+diff --git a/tests/jsx/jsx/__snapshots__/jsfmt.spec.js.snap b/tests/jsx/jsx/__snapshots__/jsfmt.spec.js.snap
+index aab7a97..085f045 100644
+--- a/tests/jsx/jsx/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/jsx/jsx/__snapshots__/jsfmt.spec.js.snap
+@@ -5240,6 +5240,14 @@ const Labels = {
+   ),
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ =====================================output=====================================
+ const Labels = {
+   label1: <fbt>Label 1</fbt>,
+@@ -5249,6 +5257,14 @@ const Labels = {
+   label3: <fbt>Label 3</fbt>,
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ ================================================================================
+ `;
+ 
+@@ -5280,6 +5296,14 @@ const Labels = {
+   ),
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ =====================================output=====================================
+ const Labels = {
+   label1: <fbt>Label 1</fbt>,
+@@ -5289,6 +5313,14 @@ const Labels = {
+   label3: <fbt>Label 3</fbt>,
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ ================================================================================
+ `;
+ 
+@@ -5320,6 +5352,14 @@ const Labels = {
+   ),
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ =====================================output=====================================
+ const Labels = {
+   label1: <fbt>Label 1</fbt>,
+@@ -5329,6 +5369,14 @@ const Labels = {
+   label3: <fbt>Label 3</fbt>,
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ ================================================================================
+ `;
+ 
+@@ -5360,6 +5408,14 @@ const Labels = {
+   ),
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ =====================================output=====================================
+ const Labels = {
+   label1: <fbt>Label 1</fbt>,
+@@ -5369,6 +5425,14 @@ const Labels = {
+   label3: <fbt>Label 3</fbt>,
+ };
+ 
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};
++
+ ================================================================================
+ `;
+ 
+diff --git a/tests/jsx/jsx/spacing.js b/tests/jsx/jsx/spacing.js
+index 4409ae7..d6907d7 100644
+--- a/tests/jsx/jsx/spacing.js
++++ b/tests/jsx/jsx/spacing.js
+@@ -17,3 +17,11 @@ const Labels = {
+     </fbt>
+   ),
+ };
++
++const test = () => {
++  return (
++    <p>
++      <span />　{this.props.data.title}　<span />
++    </p>
++  );
++};

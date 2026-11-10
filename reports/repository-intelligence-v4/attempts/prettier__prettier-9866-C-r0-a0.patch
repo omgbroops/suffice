@@ -1,0 +1,46 @@
+diff --git a/src/language-js/print/jsx.js b/src/language-js/print/jsx.js
+index c2a6215..76ad510 100644
+--- a/src/language-js/print/jsx.js
++++ b/src/language-js/print/jsx.js
+@@ -373,8 +373,9 @@ function printJSXChildren(
+       const directlyFollowedByMeaningfulText =
+         next && isMeaningfulJSXText(next);
+       if (directlyFollowedByMeaningfulText) {
++        // Only trim JSX whitespace; Unicode spaces are meaningful JSX text.
+         const firstWord = rawText(next)
+-          .trim()
++          .replace(/^[ \n\r\t]+/, "")
+           .split(matchJsxWhitespaceRegex)[0];
+         children.push(
+           separatorNoWhitespace(
+diff --git a/tests/jsx/whitespace/jsfmt.spec.js b/tests/jsx/whitespace/jsfmt.spec.js
+index 9d5fc32..242f580 100644
+--- a/tests/jsx/whitespace/jsfmt.spec.js
++++ b/tests/jsx/whitespace/jsfmt.spec.js
+@@ -45,6 +45,26 @@ run_spec(
+         code: "zero_width_space = <div>]\u200b\u200b[</div>",
+         output: "zero_width_space = <div>]\u200b\u200b[</div>;",
+       },
++      {
++        code: outdent`
++          const test = () => {
++            return (
++              <p>
++                <span />　{this.props.data.title}　<span />
++              </p>
++            );
++          };
++        `,
++        output: outdent`
++          const test = () => {
++            return (
++              <p>
++                <span />　{this.props.data.title}　<span />
++              </p>
++            );
++          };
++        `,
++      },
+       {
+         code: outdent`
+           real_world_non_breaking_spaces = <p>

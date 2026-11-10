@@ -1,0 +1,52 @@
+diff --git a/src/language-js/print/jsx.js b/src/language-js/print/jsx.js
+index c2a6215..0cb2b59 100644
+--- a/src/language-js/print/jsx.js
++++ b/src/language-js/print/jsx.js
+@@ -374,7 +374,7 @@ function printJSXChildren(
+         next && isMeaningfulJSXText(next);
+       if (directlyFollowedByMeaningfulText) {
+         const firstWord = rawText(next)
+-          .trim()
++          .replace(/^[ \n\r\t]+/, "")
+           .split(matchJsxWhitespaceRegex)[0];
+         children.push(
+           separatorNoWhitespace(
+diff --git a/tests/jsx/whitespace/jsfmt.spec.js b/tests/jsx/whitespace/jsfmt.spec.js
+index 9d5fc32..0fed1cb 100644
+--- a/tests/jsx/whitespace/jsfmt.spec.js
++++ b/tests/jsx/whitespace/jsfmt.spec.js
+@@ -1,5 +1,34 @@
+ /* eslint-disable no-irregular-whitespace */
+ const { outdent } = require("outdent");
++const prettier = require("prettier-local");
++
++for (const parser of ["babel", "flow", "typescript"]) {
++  for (const whitespace of ["\u3000", "\u00a0", "\u2003", "\u200a"]) {
++    test(`${parser}: stable JSX formatting with ${JSON.stringify(
++      whitespace
++    )}`, () => {
++      const expected =
++        outdent`
++        const test = () => {
++          return (
++            <p>
++              <span />${whitespace}{this.props.data.title}${whitespace}<span />
++            </p>
++          );
++        };
++      ` + "\n";
++      const options = { parser };
++      expect(prettier.format(expected, options)).toBe(expected);
++
++      // Indentation before meaningful Unicode whitespace must not affect
++      // the separator chosen after the self-closing element.
++      const split = expected.replace("<span />", "<span />\n      ");
++      const output = prettier.format(split, options);
++      expect(output).toContain(whitespace);
++      expect(prettier.format(output, options)).toBe(output);
++    });
++  }
++}
+ 
+ run_spec(
+   {
