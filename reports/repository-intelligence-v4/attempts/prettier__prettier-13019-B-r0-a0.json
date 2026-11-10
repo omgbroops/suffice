@@ -1,0 +1,1214 @@
+{
+  "task": "prettier__prettier-13019",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-13019-B-r0-a0/workspace",
+    "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+    "tree": "7cddbd0fbbb749040d5c70347a8651b483fe5e13"
+  },
+  "runId": "prettier__prettier-13019-B-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 826163.3123999999,
+  "usage": {
+    "input": 78605,
+    "cacheRead": 1221248,
+    "cacheWrite": 0,
+    "output": 11033,
+    "estimatedApiUsd": 0.025589479999999998,
+    "modelCalls": 32,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.025589479999999998,
+  "acceptance": {
+    "status": "failed",
+    "required": 4,
+    "requiredPassed": 2,
+    "unpassed": [
+      "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.",
+      "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 4,
+      "targetsPassed": 2,
+      "regressions": 16,
+      "regressionsPassed": 16,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.",
+        "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/cache.js->--cache option --cache-location doesn't create default cache file when `--cache-location` exists": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location file creates the cache file at location specified by `--cache-location`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location file does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content creates default cache file named `node_modules/.cache/prettier/.prettier-cache`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content does'nt re-format when timestamp has been updated": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content re-formats when a file has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content re-formats when options has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content removes cache file when run Prettier without `--cache` option": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata creates default cache file named `node_modules/.cache/prettier/.prettier-cache`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when a file has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when options has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when timestamp has been updated": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata removes cache file when run Prettier without `--cache` option": 1,
+        "tests/integration/__tests__/cache.js->--cache option throw error when cache-strategy is invalid": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when use `--cache-strategy` without `--cache`.": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when use with --stdin-filepath": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 16,
+    "requiredPassed": 16
+  },
+  "changed": [
+    "docs/cli.md",
+    "src/cli/constant.js",
+    "src/cli/find-cache-file.js",
+    "src/cli/format.js",
+    "tests/integration/__tests__/cache.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/cli/utils.js"
+  ],
+  "extraChangedFiles": [
+    "docs/cli.md",
+    "tests/integration/__tests__/cache.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 32,
+  "editCalls": 6,
+  "verificationCalls": 1,
+  "toolCalls": 66,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T08:02:34.215Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-10T08:02:48.503Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Resolve the upstream engineering issue below. Work in this checkout using the preprovisioned dependencies. The bash tool executes PowerShell 7 with no profile inside an isolated Windows filesystem; external networking is disabled. You may change production code, public tests and documentation. Preserve package metadata, dependency locks, configuration, native-verify.cjs, verification.json and .v4-* verification helpers. Do not install packages or attempt to access other workspaces. Run node native-verify.cjs for the repository-derived public smoke suite; you may run it with --tests-json PATH to test other existing public unit files. Independent grading reconstructs production changes in a pristine checkout and applies held-out upstream tests. Existing public snapshots may predate the requested behavior; do not undo that behavior merely to satisfy old snapshots.\n\nBetter cache handling of multiple (but different) prettier calls\n**Environments:**\r\n- Prettier Version: 2.7.0\r\n- Running Prettier via: CLI\r\n- Operating System: Windows\r\n\r\nAfter discussion https://github.com/prettier/prettier/pull/12800#discussion_r867309015 you moved from default cache location `.prettiercache` (eslint style) to `node_modules/.cache/prettier` (ava style).\r\n\r\nIn https://github.com/prettier/prettier/pull/12800#discussion_r878056060 you needed a use case for a `--cache-location` CLI param.\r\n\r\nI have a script which formats and compiles many Visual Studio projects which shares one `node_modules` dir.\r\nCompiling one project boosts the prettier call from 15s to 2s. 🎉\r\n\r\nBut every project has different files (surprise :-) so every prettier call finds new files and rebuilds (!) `node_modules/.cache/prettier` from scratch (which renders the cache useless in many situations).\r\n\r\nIt would be better if prettier would\r\n* expand the cached cache file with new found files (but when do we cleanup?) or\r\n* default to `.prettiercache` to be able to have a cache file per vs project or\r\n* readd  `--cache-location` CLI param so I can configure the cache in my build script\r\n\r\n\r\ncc @sosukesuzuki @fisker @7rulnik\n"
+    },
+    {
+      "at": "2026-11-10T08:03:11.336Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:03:31.150Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:03:52.114Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:04:16.927Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:04:37.278Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:05:00.469Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:05:21.969Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:05:41.342Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:06:02.215Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:06:25.897Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:06:43.924Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:07:11.850Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:07:33.550Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:08:01.936Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:08:26.734Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:09:00.193Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:09:18.279Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:09:29.801Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:09:54.053Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:10:06.904Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:10:35.816Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:10:47.531Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:11:14.518Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:11:43.275Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:12:38.686Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:12:58.924Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:13:21.403Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:13:41.048Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:13:57.773Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:14:14.002Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:14:39.113Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:14:58.847Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:15:07.463Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:15:41.480Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T08:16:00.298Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T08:02:48.502Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 14287.402300000002,
+      "parsedFiles": 4276,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 167333744,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:03:00.444Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11938.689699999988,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": -72118104,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:03:23.488Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12153.289000000004,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 56306320,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:03:43.734Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12584.204800000007,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 34557464,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:04:04.838Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12725.254399999976,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 55618272,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:04:29.461Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12534.080600000016,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 78053168,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:04:49.485Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12207.059600000008,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 91222464,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:05:12.418Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11949.565900000016,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 90782232,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:05:33.482Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11514.118000000017,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 91188328,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:05:52.823Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11481.38519999999,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 94799536,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:06:13.885Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11670.994400000025,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 82051496,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:06:37.626Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11730.292200000025,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": -16885528,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:06:56.367Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12444.013399999996,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": -37463544,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:07:24.172Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12322.907599999977,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 19039352,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:07:45.928Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 12378.8321,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 93746656,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:08:13.752Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11816.875800000038,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 93995624,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:08:38.390Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11655.79250000004,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 92454624,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:09:11.649Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 11456.672300000035,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": -31889648,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:09:29.715Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "fe23fe6ea4025bbb8024ecd742bff5eb60295443cfffe618e6930f03af699c05",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "1f7eb4ce275c4c00b83de9c3314f841cedc1fd23f5060495c87d2040245907aa"
+      },
+      "latencyMs": 11436.587299999956,
+      "parsedFiles": 1,
+      "fileCount": 4277,
+      "cacheBytes": 24707222,
+      "heapDeltaBytes": -2982720,
+      "graphBytes": 34581844
+    },
+    {
+      "at": "2026-11-10T08:09:42.254Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "fe23fe6ea4025bbb8024ecd742bff5eb60295443cfffe618e6930f03af699c05",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "1f7eb4ce275c4c00b83de9c3314f841cedc1fd23f5060495c87d2040245907aa"
+      },
+      "latencyMs": 12454.365699999966,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24707222,
+      "heapDeltaBytes": 86036096,
+      "graphBytes": 34581844
+    },
+    {
+      "at": "2026-11-10T08:10:06.768Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "194c9ae9528bf364b62e33d5d4fa02027dee33df98cafa52d16cced1031c8667",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "1b87e7cbfe8940cfed9a0ccda30209b0409dd31e7b3bfbcd97d56748a55e8361"
+      },
+      "latencyMs": 12714.964199999988,
+      "parsedFiles": 2,
+      "fileCount": 4277,
+      "cacheBytes": 24709262,
+      "heapDeltaBytes": 75050888,
+      "graphBytes": 34584758
+    },
+    {
+      "at": "2026-11-10T08:10:18.243Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "194c9ae9528bf364b62e33d5d4fa02027dee33df98cafa52d16cced1031c8667",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "1b87e7cbfe8940cfed9a0ccda30209b0409dd31e7b3bfbcd97d56748a55e8361"
+      },
+      "latencyMs": 11340.366500000004,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24709262,
+      "heapDeltaBytes": 61934808,
+      "graphBytes": 34584758
+    },
+    {
+      "at": "2026-11-10T08:10:47.427Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 11611.7999000001,
+      "parsedFiles": 1,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -51839272,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:10:59.859Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 12328.275600000052,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 87583416,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:11:26.517Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 12000.111599999946,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -29500376,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:11:54.510Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 11235.315300000017,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -19176976,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:12:46.945Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8259.290299999993,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -20700976,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:13:07.164Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8239.917799999937,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 4664552,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:13:29.704Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8301.802300000098,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 92715208,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:13:49.689Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8641.358499999973,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -27861544,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:14:06.755Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8982.079499999993,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -30715416,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:14:22.421Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8419.741099999985,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 21079200,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:14:47.505Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "02e6154b7b84464a7031d6f1c98e8e0b36ab5e44ff7f7af618268cac20cfc2ca",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "39f3b7a03a34ec8826878813372de6822fa43848303027f486242a27ef0fb4cc"
+      },
+      "latencyMs": 8392.173300000024,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 93102752,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:15:07.390Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "d0987a435d6fbf0cf7098dd88ea84fc40f8f490ae43578b6b7fd85db17590b6c",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "cd165945db6c76ed5c1c4f8a3c17cd7720938d932bc978f3fce6f414a42f5017"
+      },
+      "latencyMs": 8543.606899999897,
+      "parsedFiles": 1,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -59062008,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:15:15.921Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "d0987a435d6fbf0cf7098dd88ea84fc40f8f490ae43578b6b7fd85db17590b6c",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "cd165945db6c76ed5c1c4f8a3c17cd7720938d932bc978f3fce6f414a42f5017"
+      },
+      "latencyMs": 8458.307600000058,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 84832432,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:15:50.094Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "d0987a435d6fbf0cf7098dd88ea84fc40f8f490ae43578b6b7fd85db17590b6c",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "cd165945db6c76ed5c1c4f8a3c17cd7720938d932bc978f3fce6f414a42f5017"
+      },
+      "latencyMs": 8614.360100000049,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": -59615264,
+      "graphBytes": 34605254
+    },
+    {
+      "at": "2026-11-10T08:16:09.352Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "d0987a435d6fbf0cf7098dd88ea84fc40f8f490ae43578b6b7fd85db17590b6c",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "cd165945db6c76ed5c1c4f8a3c17cd7720938d932bc978f3fce6f414a42f5017"
+      },
+      "latencyMs": 9054.47530000005,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24724017,
+      "heapDeltaBytes": 33481936,
+      "graphBytes": 34605254
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-js/comments.js",
+        "src/language-js/printer-estree.js",
+        "src/language-js/utils/index.js",
+        "src/language-markdown/printer-markdown.js",
+        "tests/format/js/ignore/ignore.js",
+        "src/language-html/print/tag.js",
+        "src/language-js/needs-parens.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/cli/constant.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff --check; git diff -- src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js docs/cli.md; git status --short",
+        "node bin/prettier.js --check src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js",
+        "Get-Content package.json | Select-String -Pattern '\"lint|\"test|eslint|format' | Select-Object -First 45; Get-Content src/cli/find-cache-file.js; Get-Content src/cli/constant.js | Select-Object -Skip 66 -First 30; git status --short",
+        "$env:EFF_NO_LINK_RULES='true'; node node_modules/eslint/bin/eslint.js src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js --format friendly",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/cli/constant.js",
+        "src/cli/find-cache-file.js",
+        "src/cli/format.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/cli/find-cache-file.js",
+          "callId": "call_f450575175964c4db65e8a76e7e24b8c|ctc_037fee005e7e55d2016af2d281c90487d1b69f3a9f9e2c8efc/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff --check; git diff -- src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js docs/cli.md; git status --short",
+        "node bin/prettier.js --check src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js",
+        "Get-Content package.json | Select-String -Pattern '\"lint|\"test|eslint|format' | Select-Object -First 45; Get-Content src/cli/find-cache-file.js; Get-Content src/cli/constant.js | Select-Object -Skip 66 -First 30; git status --short",
+        "$env:EFF_NO_LINK_RULES='true'; node node_modules/eslint/bin/eslint.js src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js --format friendly",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/cli/constant.js",
+        "src/cli/find-cache-file.js",
+        "src/cli/format.js",
+        "tests/integration/__tests__/cache.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/cli/find-cache-file.js",
+          "callId": "call_f450575175964c4db65e8a76e7e24b8c|ctc_037fee005e7e55d2016af2d281c90487d1b69f3a9f9e2c8efc/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node node_modules/jest/bin/jest.js tests/integration/__tests__/cache.js --runInBand",
+        "node node_modules/jest/bin/jest.js tests/integration/__tests__/cache.js --runInBand --watchman=false",
+        "git diff --check; git diff -- src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js docs/cli.md; git status --short",
+        "node bin/prettier.js --check src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js",
+        "Get-Content package.json | Select-String -Pattern '\"lint|\"test|eslint|format' | Select-Object -First 45; Get-Content src/cli/find-cache-file.js; Get-Content src/cli/constant.js | Select-Object -Skip 66 -First 30; git status --short",
+        "$env:EFF_NO_LINK_RULES='true'; node node_modules/eslint/bin/eslint.js src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js --format friendly",
+        "node node_modules/jest/bin/jest.js tests/integration/__tests__/cache.js --runInBand --watchman=false",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/cli/constant.js",
+        "src/cli/find-cache-file.js",
+        "src/cli/format.js",
+        "tests/integration/__tests__/cache.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node node_modules/jest/bin/jest.js tests/integration/__tests__/cache.js --runInBand --watchman=false",
+        "node bin/prettier.js --check --cache-location \"$env:TEMP/prettier-cache-file\" src/cli/constant.js src/cli/find-cache-file.js src/cli/format.js tests/integration/__tests__/cache.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "docs/cli.md",
+      "before": "---\nid: cli\ntitle: CLI\n---\n\nUse the `prettier` command to run Prettier from the command line.\n\n```bash\nprettier [options] [file/dir/glob ...]\n```\n\n> To run your locally installed version of Prettier, prefix the command with `npx` or `yarn` (if you use Yarn), i.e. `npx prettier --help`, or `yarn prettier --help`.\n\nTo format a file in-place, use `--write`. (Note: This overwrites your files!)\n\nIn practice, this may look something like:\n\n```bash\nprettier --write .\n```\n\nThis command formats all files supported by Prettier in the current directory and its subdirectories.\n\nIt’s recommended to always make sure that `prettier --write .` only formats what you want in your project. Use a [`.prettierignore`](ignore.md) file to ignore things that should not be formatted.\n\nA more complicated example:\n\n```bash\nprettier --single-quote --trailing-comma all --write docs package.json \"{app,__{tests,mocks}__}/**/*.js\"\n```\n\n> Don’t forget the **quotes** around the globs! The quotes make sure that Prettier CLI expands the globs rather than your shell, which is important for cross-platform usage.\n\n> It’s better to use a [configuration file](configuration.md) for formatting options like `--single-quote` and `--trailing-comma` instead of passing them as CLI flags. This way the Prettier CLI, [editor integrations](editors.md), and other tooling can all know what options you use.\n\n## File patterns\n\nGiven a list of paths/patterns, the Prettier CLI first treats every entry in it as a literal path.\n\n- If the path points to an existing file, Prettier CLI proceeds with that file and doesn’t resolve the path as a glob pattern.\n\n- If the path points to an existing directory, Prettier CLI recursively finds supported files in that directory. This resolution process is based on file extensions and well-known file names that Prettier and its [plugins](plugins.md) associate with supported languages.\n\n- Otherwise, the entry is resolved as a glob pattern using the [glob syntax from the `fast-glob` module](https://github.com/mrmlnc/fast-glob#pattern-syntax).\n\nPrettier CLI will ignore files located in `node_modules` directory. To opt out from this behavior, use `--with-node-modules` flag.\n\nTo escape special characters in globs, one of the two escaping syntaxes can be used: `prettier \"\\[my-dir]/*.js\"` or `prettier \"[[]my-dir]/*.js\"`. Both match all JS files in a directory named `[my-dir]`, however the latter syntax is preferable as the former doesn’t work on Windows, where backslashes are treated as path separators.\n\n## `--check`\n\nWhen you want to check if your files are formatted, you can run Prettier with the `--check` flag (or `-c`).\nThis will output a human-friendly message and a list of unformatted files, if any.\n\n```bash\nprettier --check \"src/**/*.js\"\n```\n\nConsole output if all files are formatted:\n\n```console\nChecking formatting...\nAll matched files use Prettier code style!\n```\n\nConsole output if some of the files require re-formatting:\n\n```console\nChecking formatting...\n[warn] src/fileA.js\n[warn] src/fileB.js\n[warn] Code style issues found in 2 files. Forgot to run Prettier?\n```\n\nThe command will return exit code `1` in the second case, which is helpful inside the CI pipelines.\nHuman-friendly status messages help project contributors react on possible problems.\nTo minimise the number of times `prettier --check` finds unformatted files, you may be interested in configuring a [pre-commit hook](precommit.md) in your repo.\nApplying this practice will minimise the number of times the CI fails because of code formatting problems.\n\nIf you need to pipe the list of unformatted files to another command, you can use [`--list-different`](cli.md#--list-different) flag instead of `--check`.\n\n### Exit codes\n\n| Code | Information                         |\n| ---- | ----------------------------------- |\n| `0`  | Everything formatted properly       |\n| `1`  | Something wasn’t formatted properly |\n| `2`  | Something’s wrong with Prettier     |\n\n## `--debug-check`\n\nIf you're worried that Prettier will change the correctness of your code, add `--debug-check` to the command. This will cause Prettier to print an error message if it detects that code correctness might have changed. Note that `--write` cannot be used with `--debug-check`.\n\n## `--find-config-path` and `--config`\n\nIf you are repeatedly formatting individual files with `prettier`, you will incur a small performance cost when Prettier attempts to look up a [configuration file](configuration.md). In order to skip this, you may ask Prettier to find the config file once, and re-use it later on.\n\n```bash\nprettier --find-config-path ./my/file.js\n./my/.prettierrc\n```\n\nThis will provide you with a path to the configuration file, which you can pass to `--config`:\n\n```bash\nprettier --config ./my/.prettierrc --write ./my/file.js\n```\n\nYou can also use `--config` if your configuration file lives somewhere where Prettier cannot find it, such as a `config/` directory.\n\nIf you don’t have a configuration file, or want to ignore it if it does exist, you can pass `--no-config` instead.\n\n## `--ignore-path`\n\nPath to a file containing patterns that describe files to ignore. By default, Prettier looks for `./.prettierignore`.\n\n## `--list-different`\n\nAnother useful flag is `--list-different` (or `-l`) which prints the filenames of files that are different from Prettier formatting. If there are differences the script errors out, which is useful in a CI scenario.\n\n```bash\nprettier --single-quote --list-different \"src/**/*.js\"\n```\n\nYou can also use [`--check`](cli.md#--check) flag, which works the same way as `--list-different`, but also prints a human-friendly summary message to stdout.\n\n## `--no-config`\n\nDo not look for a configuration file. The default settings will be used.\n\n## `--config-precedence`\n\nDefines how config file should be evaluated in combination of CLI options.\n\n**cli-override (default)**\n\nCLI options take precedence over config file\n\n**file-override**\n\nConfig file take precedence over CLI options\n\n**prefer-file**\n\nIf a config file is found will evaluate it and ignore other CLI options. If no config file is found, CLI options will evaluate as normal.\n\nThis option adds support to editor integrations where users define their default configuration but want to respect project specific configuration.\n\n## `--no-editorconfig`\n\nDon’t take `.editorconfig` into account when parsing configuration. See the [`prettier.resolveConfig` docs](api.md) for details.\n\n## `--with-node-modules`\n\nPrettier CLI will ignore files located in `node_modules` directory. To opt out from this behavior, use `--with-node-modules` flag.\n\n## `--write`\n\nThis rewrites all processed files in place. This is comparable to the `eslint --fix` workflow. You can also use `-w` alias.\n\n## `--loglevel`\n\nChange the level of logging for the CLI. Valid options are:\n\n- `error`\n- `warn`\n- `log` (default)\n- `debug`\n- `silent`\n\n## `--stdin-filepath`\n\nA path to the file that the Prettier CLI will treat like stdin. For example:\n\n_abc.css_\n\n```css\n.name {\n  display: none;\n}\n```\n\n_shell_\n\n```console\n$ cat abc.css | prettier --stdin-filepath abc.css\n.name {\n  display: none;\n}\n```\n\n## `--ignore-unknown`\n\nWith `--ignore-unknown` (or `-u`), prettier will ignore unknown files matched by patterns.\n\n```console\n$ prettier \"**/*\" --write --ignore-unknown\n```\n\n## `--no-error-on-unmatched-pattern`\n\nPrevent errors when pattern is unmatched.\n\n## `--no-plugin-search`\n\nDisable plugin autoloading.\n\n## `--cache`\n\nIf this option is enabled, the following values are used as cache keys and the file is formatted only if one of them is changed.\n\n- Prettier version\n- Options\n- Node.js version\n- (if `--cache-strategy` is `metadata`) file metadata, such as timestamps\n- (if `--cache-strategy` is `content`) content of the file\n\n```bash\nprettier --write --cache src\n```\n\nRunning Prettier without `--cache` will delete the cache.\n\nAlso, since the cache file is stored in `./node_modules/.cache/prettier/.prettier-cache`, so you can use `rm ./node_modules/.cache/prettier/.prettier-cache` to remove it manually.\n\n> Plugins version and implementation are not used as cache keys. We recommend that you delete the cache when updating plugins.\n\n## `--cache-strategy`\n\nStrategy for the cache to use for detecting changed files. Can be either `metadata` or `content`.\n\nIn general, `metadata` is faster. However, `content` is useful for updating the timestamp without changing the file content. This can happen, for example, during git operations such as `git clone`, because it does not track file modification times.\n\nIf no strategy is specified, `content` will be used.\n\n```bash\nprettier --write --cache --cache-strategy metadata src\n```\n",
+      "after": "---\nid: cli\ntitle: CLI\n---\n\nUse the `prettier` command to run Prettier from the command line.\n\n```bash\nprettier [options] [file/dir/glob ...]\n```\n\n> To run your locally installed version of Prettier, prefix the command with `npx` or `yarn` (if you use Yarn), i.e. `npx prettier --help`, or `yarn prettier --help`.\n\nTo format a file in-place, use `--write`. (Note: This overwrites your files!)\n\nIn practice, this may look something like:\n\n```bash\nprettier --write .\n```\n\nThis command formats all files supported by Prettier in the current directory and its subdirectories.\n\nIt’s recommended to always make sure that `prettier --write .` only formats what you want in your project. Use a [`.prettierignore`](ignore.md) file to ignore things that should not be formatted.\n\nA more complicated example:\n\n```bash\nprettier --single-quote --trailing-comma all --write docs package.json \"{app,__{tests,mocks}__}/**/*.js\"\n```\n\n> Don’t forget the **quotes** around the globs! The quotes make sure that Prettier CLI expands the globs rather than your shell, which is important for cross-platform usage.\n\n> It’s better to use a [configuration file](configuration.md) for formatting options like `--single-quote` and `--trailing-comma` instead of passing them as CLI flags. This way the Prettier CLI, [editor integrations](editors.md), and other tooling can all know what options you use.\n\n## File patterns\n\nGiven a list of paths/patterns, the Prettier CLI first treats every entry in it as a literal path.\n\n- If the path points to an existing file, Prettier CLI proceeds with that file and doesn’t resolve the path as a glob pattern.\n\n- If the path points to an existing directory, Prettier CLI recursively finds supported files in that directory. This resolution process is based on file extensions and well-known file names that Prettier and its [plugins](plugins.md) associate with supported languages.\n\n- Otherwise, the entry is resolved as a glob pattern using the [glob syntax from the `fast-glob` module](https://github.com/mrmlnc/fast-glob#pattern-syntax).\n\nPrettier CLI will ignore files located in `node_modules` directory. To opt out from this behavior, use `--with-node-modules` flag.\n\nTo escape special characters in globs, one of the two escaping syntaxes can be used: `prettier \"\\[my-dir]/*.js\"` or `prettier \"[[]my-dir]/*.js\"`. Both match all JS files in a directory named `[my-dir]`, however the latter syntax is preferable as the former doesn’t work on Windows, where backslashes are treated as path separators.\n\n## `--check`\n\nWhen you want to check if your files are formatted, you can run Prettier with the `--check` flag (or `-c`).\nThis will output a human-friendly message and a list of unformatted files, if any.\n\n```bash\nprettier --check \"src/**/*.js\"\n```\n\nConsole output if all files are formatted:\n\n```console\nChecking formatting...\nAll matched files use Prettier code style!\n```\n\nConsole output if some of the files require re-formatting:\n\n```console\nChecking formatting...\n[warn] src/fileA.js\n[warn] src/fileB.js\n[warn] Code style issues found in 2 files. Forgot to run Prettier?\n```\n\nThe command will return exit code `1` in the second case, which is helpful inside the CI pipelines.\nHuman-friendly status messages help project contributors react on possible problems.\nTo minimise the number of times `prettier --check` finds unformatted files, you may be interested in configuring a [pre-commit hook](precommit.md) in your repo.\nApplying this practice will minimise the number of times the CI fails because of code formatting problems.\n\nIf you need to pipe the list of unformatted files to another command, you can use [`--list-different`](cli.md#--list-different) flag instead of `--check`.\n\n### Exit codes\n\n| Code | Information                         |\n| ---- | ----------------------------------- |\n| `0`  | Everything formatted properly       |\n| `1`  | Something wasn’t formatted properly |\n| `2`  | Something’s wrong with Prettier     |\n\n## `--debug-check`\n\nIf you're worried that Prettier will change the correctness of your code, add `--debug-check` to the command. This will cause Prettier to print an error message if it detects that code correctness might have changed. Note that `--write` cannot be used with `--debug-check`.\n\n## `--find-config-path` and `--config`\n\nIf you are repeatedly formatting individual files with `prettier`, you will incur a small performance cost when Prettier attempts to look up a [configuration file](configuration.md). In order to skip this, you may ask Prettier to find the config file once, and re-use it later on.\n\n```bash\nprettier --find-config-path ./my/file.js\n./my/.prettierrc\n```\n\nThis will provide you with a path to the configuration file, which you can pass to `--config`:\n\n```bash\nprettier --config ./my/.prettierrc --write ./my/file.js\n```\n\nYou can also use `--config` if your configuration file lives somewhere where Prettier cannot find it, such as a `config/` directory.\n\nIf you don’t have a configuration file, or want to ignore it if it does exist, you can pass `--no-config` instead.\n\n## `--ignore-path`\n\nPath to a file containing patterns that describe files to ignore. By default, Prettier looks for `./.prettierignore`.\n\n## `--list-different`\n\nAnother useful flag is `--list-different` (or `-l`) which prints the filenames of files that are different from Prettier formatting. If there are differences the script errors out, which is useful in a CI scenario.\n\n```bash\nprettier --single-quote --list-different \"src/**/*.js\"\n```\n\nYou can also use [`--check`](cli.md#--check) flag, which works the same way as `--list-different`, but also prints a human-friendly summary message to stdout.\n\n## `--no-config`\n\nDo not look for a configuration file. The default settings will be used.\n\n## `--config-precedence`\n\nDefines how config file should be evaluated in combination of CLI options.\n\n**cli-override (default)**\n\nCLI options take precedence over config file\n\n**file-override**\n\nConfig file take precedence over CLI options\n\n**prefer-file**\n\nIf a config file is found will evaluate it and ignore other CLI options. If no config file is found, CLI options will evaluate as normal.\n\nThis option adds support to editor integrations where users define their default configuration but want to respect project specific configuration.\n\n## `--no-editorconfig`\n\nDon’t take `.editorconfig` into account when parsing configuration. See the [`prettier.resolveConfig` docs](api.md) for details.\n\n## `--with-node-modules`\n\nPrettier CLI will ignore files located in `node_modules` directory. To opt out from this behavior, use `--with-node-modules` flag.\n\n## `--write`\n\nThis rewrites all processed files in place. This is comparable to the `eslint --fix` workflow. You can also use `-w` alias.\n\n## `--loglevel`\n\nChange the level of logging for the CLI. Valid options are:\n\n- `error`\n- `warn`\n- `log` (default)\n- `debug`\n- `silent`\n\n## `--stdin-filepath`\n\nA path to the file that the Prettier CLI will treat like stdin. For example:\n\n_abc.css_\n\n```css\n.name {\n  display: none;\n}\n```\n\n_shell_\n\n```console\n$ cat abc.css | prettier --stdin-filepath abc.css\n.name {\n  display: none;\n}\n```\n\n## `--ignore-unknown`\n\nWith `--ignore-unknown` (or `-u`), prettier will ignore unknown files matched by patterns.\n\n```console\n$ prettier \"**/*\" --write --ignore-unknown\n```\n\n## `--no-error-on-unmatched-pattern`\n\nPrevent errors when pattern is unmatched.\n\n## `--no-plugin-search`\n\nDisable plugin autoloading.\n\n## `--cache`\n\nIf this option is enabled, the following values are used as cache keys and the file is formatted only if one of them is changed.\n\n- Prettier version\n- Options\n- Node.js version\n- (if `--cache-strategy` is `metadata`) file metadata, such as timestamps\n- (if `--cache-strategy` is `content`) content of the file\n\n```bash\nprettier --write --cache src\n```\n\nRunning Prettier without `--cache` will delete the cache.\n\nBy default, the cache file is stored in `./node_modules/.cache/prettier/.prettier-cache`.\nUse `--cache-location` to specify a different cache file, for example to keep\nseparate caches for different projects that share a `node_modules` directory.\nRelative paths are resolved from the current working directory.\n\n```bash\nprettier --write --cache --cache-location ./.prettiercache src\n```\n\nYou can remove the cache manually by deleting the configured cache file.\n\n> Plugins version and implementation are not used as cache keys. We recommend that you delete the cache when updating plugins.\n\n## `--cache-strategy`\n\nStrategy for the cache to use for detecting changed files. Can be either `metadata` or `content`.\n\nIn general, `metadata` is faster. However, `content` is useful for updating the timestamp without changing the file content. This can happen, for example, during git operations such as `git clone`, because it does not track file modification times.\n\nIf no strategy is specified, `content` will be used.\n\n```bash\nprettier --write --cache --cache-strategy metadata src\n```\n"
+    },
+    {
+      "path": "src/cli/constant.js",
+      "before": "\"use strict\";\n\nconst { outdent } = require(\"outdent\");\nconst { coreOptions } = require(\"./prettier-internal.js\");\n\nconst categoryOrder = [\n  coreOptions.CATEGORY_OUTPUT,\n  coreOptions.CATEGORY_FORMAT,\n  coreOptions.CATEGORY_CONFIG,\n  coreOptions.CATEGORY_EDITOR,\n  coreOptions.CATEGORY_OTHER,\n];\n\n/**\n * {\n *   [optionName]: {\n *     // The type of the option. For 'choice', see also `choices` below.\n *     // When passing a type other than the ones listed below, the option is\n *     // treated as taking any string as argument, and `--option <${type}>` will\n *     // be displayed in --help.\n *     type: \"boolean\" | \"choice\" | \"int\" | string;\n *\n *     // Default value to be passed to the minimist option `default`.\n *     default?: any;\n *\n *     // Alias name to be passed to the minimist option `alias`.\n *     alias?: string;\n *\n *     // For grouping options by category in --help.\n *     category?: string;\n *\n *     // Description to be displayed in --help. If omitted, the option won't be\n *     // shown at all in --help (but see also `oppositeDescription` below).\n *     description?: string;\n *\n *     // Description for `--no-${name}` to be displayed in --help. If omitted,\n *     // `--no-${name}` won't be shown.\n *     oppositeDescription?: string;\n *\n *     // Indicate if this option is simply passed to the API.\n *     // true: use camelified name as the API option name.\n *     // string: use this value as the API option name.\n *     forwardToApi?: boolean | string;\n *\n *     // Indicate that a CLI flag should be an array when forwarded to the API.\n *     array?: boolean;\n *\n *     // Specify available choices for validation. They will also be displayed\n *     // in --help as <a|b|c>.\n *     // Use an object instead of a string if a choice is deprecated and should\n *     // be treated as `redirect` instead, or if you'd like to add description for\n *     // the choice.\n *     choices?: Array<\n *       | string\n *       | { value: string, description?: string, deprecated?: boolean, redirect?: string }\n *     >;\n *\n *     // If the option has a value that is an exception to the regular value\n *     // constraints, indicate that value here (or use a function for more\n *     // flexibility).\n *     exception?: ((value: any) => boolean);\n *\n *     // Indicate that the option is deprecated. Use a string to add an extra\n *     // message to --help for the option, for example to suggest a replacement\n *     // option.\n *     deprecated?: true | string;\n *   }\n * }\n *\n * Note: The options below are sorted alphabetically.\n */\n/* eslint sort-keys: \"error\" */\nconst options = {\n  cache: {\n    default: false,\n    description: \"Only format changed files. Cannot use with --stdin-filepath.\",\n    type: \"boolean\",\n  },\n  \"cache-strategy\": {\n    choices: [\n      {\n        description: \"Use the file metadata such as timestamps as cache keys\",\n        value: \"metadata\",\n      },\n      {\n        description: \"Use the file content as cache keys\",\n        value: \"content\",\n      },\n    ],\n    description: \"Strategy for the cache to use for detecting changed files.\",\n    type: \"choice\",\n  },\n  check: {\n    alias: \"c\",\n    category: coreOptions.CATEGORY_OUTPUT,\n    description: outdent`\n      Check if the given files are formatted, print a human-friendly summary\n      message and paths to unformatted files (see also --list-different).\n    `,\n    type: \"boolean\",\n  },\n  color: {\n    // The supports-color package (a sub sub dependency) looks directly at\n    // `process.argv` for `--no-color` and such-like options. The reason it is\n    // listed here is to avoid \"Ignored unknown option: --no-color\" warnings.\n    // See https://github.com/chalk/supports-color/#info for more information.\n    default: true,\n    description: \"Colorize error messages.\",\n    oppositeDescription: \"Do not colorize error messages.\",\n    type: \"boolean\",\n  },\n  config: {\n    category: coreOptions.CATEGORY_CONFIG,\n    description:\n      \"Path to a Prettier configuration file (.prettierrc, package.json, prettier.config.js).\",\n    exception: (value) => value === false,\n    oppositeDescription: \"Do not look for a configuration file.\",\n    type: \"path\",\n  },\n  \"config-precedence\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    choices: [\n      {\n        description: \"CLI options take precedence over config file\",\n        value: \"cli-override\",\n      },\n      {\n        description: \"Config file take precedence over CLI options\",\n        value: \"file-override\",\n      },\n      {\n        description: outdent`\n          If a config file is found will evaluate it and ignore other CLI options.\n          If no config file is found CLI options will evaluate as normal.\n        `,\n        value: \"prefer-file\",\n      },\n    ],\n    default: \"cli-override\",\n    description:\n      \"Define in which order config files and CLI options should be evaluated.\",\n    type: \"choice\",\n  },\n  \"debug-benchmark\": {\n    // Run the formatting benchmarks. Requires 'benchmark' module to be installed.\n    type: \"boolean\",\n  },\n  \"debug-check\": {\n    // Run the formatting once again on the formatted output, throw if different.\n    type: \"boolean\",\n  },\n  \"debug-print-ast\": {\n    type: \"boolean\",\n  },\n  \"debug-print-comments\": {\n    type: \"boolean\",\n  },\n  \"debug-print-doc\": {\n    type: \"boolean\",\n  },\n  \"debug-repeat\": {\n    // Repeat the formatting a few times and measure the average duration.\n    default: 0,\n    type: \"int\",\n  },\n  editorconfig: {\n    category: coreOptions.CATEGORY_CONFIG,\n    default: true,\n    description: \"Take .editorconfig into account when parsing configuration.\",\n    oppositeDescription:\n      \"Don't take .editorconfig into account when parsing configuration.\",\n    type: \"boolean\",\n  },\n  \"error-on-unmatched-pattern\": {\n    oppositeDescription: \"Prevent errors when pattern is unmatched.\",\n    type: \"boolean\",\n  },\n  \"file-info\": {\n    description: outdent`\n      Extract the following info (as JSON) for a given file path. Reported fields:\n      * ignored (boolean) - true if file path is filtered by --ignore-path\n      * inferredParser (string | null) - name of parser inferred from file path\n    `,\n    type: \"path\",\n  },\n  \"find-config-path\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    description:\n      \"Find and print the path to a configuration file for the given input file.\",\n    type: \"path\",\n  },\n  help: {\n    alias: \"h\",\n    description: outdent`\n      Show CLI usage, or details about the given flag.\n      Example: --help write\n    `,\n    exception: (value) => value === \"\",\n    type: \"flag\",\n  },\n  \"ignore-path\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    default: \".prettierignore\",\n    description: \"Path to a file with patterns describing files to ignore.\",\n    type: \"path\",\n  },\n  \"ignore-unknown\": {\n    alias: \"u\",\n    description: \"Ignore unknown files.\",\n    type: \"boolean\",\n  },\n  \"list-different\": {\n    alias: \"l\",\n    category: coreOptions.CATEGORY_OUTPUT,\n    description:\n      \"Print the names of files that are different from Prettier's formatting (see also --check).\",\n    type: \"boolean\",\n  },\n  loglevel: {\n    choices: [\"silent\", \"error\", \"warn\", \"log\", \"debug\"],\n    default: \"log\",\n    description: \"What level of logs to report.\",\n    type: \"choice\",\n  },\n  \"plugin-search\": {\n    oppositeDescription: \"Disable plugin autoloading.\",\n    type: \"boolean\",\n  },\n  \"support-info\": {\n    description: \"Print support information as JSON.\",\n    type: \"boolean\",\n  },\n  version: {\n    alias: \"v\",\n    description: \"Print Prettier version.\",\n    type: \"boolean\",\n  },\n  \"with-node-modules\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    description: \"Process files inside 'node_modules' directory.\",\n    type: \"boolean\",\n  },\n  write: {\n    alias: \"w\",\n    category: coreOptions.CATEGORY_OUTPUT,\n    description: \"Edit files in-place. (Beware!)\",\n    type: \"boolean\",\n  },\n};\n\nconst usageSummary = outdent`\n  Usage: prettier [options] [file/dir/glob ...]\n\n  By default, output is written to stdout.\n  Stdin is read if it is piped to Prettier and no files are given.\n`;\n\nmodule.exports = {\n  categoryOrder,\n  options,\n  usageSummary,\n};\n",
+      "after": "\"use strict\";\n\nconst { outdent } = require(\"outdent\");\nconst { coreOptions } = require(\"./prettier-internal.js\");\n\nconst categoryOrder = [\n  coreOptions.CATEGORY_OUTPUT,\n  coreOptions.CATEGORY_FORMAT,\n  coreOptions.CATEGORY_CONFIG,\n  coreOptions.CATEGORY_EDITOR,\n  coreOptions.CATEGORY_OTHER,\n];\n\n/**\n * {\n *   [optionName]: {\n *     // The type of the option. For 'choice', see also `choices` below.\n *     // When passing a type other than the ones listed below, the option is\n *     // treated as taking any string as argument, and `--option <${type}>` will\n *     // be displayed in --help.\n *     type: \"boolean\" | \"choice\" | \"int\" | string;\n *\n *     // Default value to be passed to the minimist option `default`.\n *     default?: any;\n *\n *     // Alias name to be passed to the minimist option `alias`.\n *     alias?: string;\n *\n *     // For grouping options by category in --help.\n *     category?: string;\n *\n *     // Description to be displayed in --help. If omitted, the option won't be\n *     // shown at all in --help (but see also `oppositeDescription` below).\n *     description?: string;\n *\n *     // Description for `--no-${name}` to be displayed in --help. If omitted,\n *     // `--no-${name}` won't be shown.\n *     oppositeDescription?: string;\n *\n *     // Indicate if this option is simply passed to the API.\n *     // true: use camelified name as the API option name.\n *     // string: use this value as the API option name.\n *     forwardToApi?: boolean | string;\n *\n *     // Indicate that a CLI flag should be an array when forwarded to the API.\n *     array?: boolean;\n *\n *     // Specify available choices for validation. They will also be displayed\n *     // in --help as <a|b|c>.\n *     // Use an object instead of a string if a choice is deprecated and should\n *     // be treated as `redirect` instead, or if you'd like to add description for\n *     // the choice.\n *     choices?: Array<\n *       | string\n *       | { value: string, description?: string, deprecated?: boolean, redirect?: string }\n *     >;\n *\n *     // If the option has a value that is an exception to the regular value\n *     // constraints, indicate that value here (or use a function for more\n *     // flexibility).\n *     exception?: ((value: any) => boolean);\n *\n *     // Indicate that the option is deprecated. Use a string to add an extra\n *     // message to --help for the option, for example to suggest a replacement\n *     // option.\n *     deprecated?: true | string;\n *   }\n * }\n *\n * Note: The options below are sorted alphabetically.\n */\n/* eslint sort-keys: \"error\" */\nconst options = {\n  cache: {\n    default: false,\n    description: \"Only format changed files. Cannot use with --stdin-filepath.\",\n    type: \"boolean\",\n  },\n  \"cache-location\": {\n    description:\n      \"Path to the cache file (default: node_modules/.cache/prettier/.prettier-cache).\",\n    type: \"path\",\n  },\n  \"cache-strategy\": {\n    choices: [\n      {\n        description: \"Use the file metadata such as timestamps as cache keys\",\n        value: \"metadata\",\n      },\n      {\n        description: \"Use the file content as cache keys\",\n        value: \"content\",\n      },\n    ],\n    description: \"Strategy for the cache to use for detecting changed files.\",\n    type: \"choice\",\n  },\n  check: {\n    alias: \"c\",\n    category: coreOptions.CATEGORY_OUTPUT,\n    description: outdent`\n      Check if the given files are formatted, print a human-friendly summary\n      message and paths to unformatted files (see also --list-different).\n    `,\n    type: \"boolean\",\n  },\n  color: {\n    // The supports-color package (a sub sub dependency) looks directly at\n    // `process.argv` for `--no-color` and such-like options. The reason it is\n    // listed here is to avoid \"Ignored unknown option: --no-color\" warnings.\n    // See https://github.com/chalk/supports-color/#info for more information.\n    default: true,\n    description: \"Colorize error messages.\",\n    oppositeDescription: \"Do not colorize error messages.\",\n    type: \"boolean\",\n  },\n  config: {\n    category: coreOptions.CATEGORY_CONFIG,\n    description:\n      \"Path to a Prettier configuration file (.prettierrc, package.json, prettier.config.js).\",\n    exception: (value) => value === false,\n    oppositeDescription: \"Do not look for a configuration file.\",\n    type: \"path\",\n  },\n  \"config-precedence\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    choices: [\n      {\n        description: \"CLI options take precedence over config file\",\n        value: \"cli-override\",\n      },\n      {\n        description: \"Config file take precedence over CLI options\",\n        value: \"file-override\",\n      },\n      {\n        description: outdent`\n          If a config file is found will evaluate it and ignore other CLI options.\n          If no config file is found CLI options will evaluate as normal.\n        `,\n        value: \"prefer-file\",\n      },\n    ],\n    default: \"cli-override\",\n    description:\n      \"Define in which order config files and CLI options should be evaluated.\",\n    type: \"choice\",\n  },\n  \"debug-benchmark\": {\n    // Run the formatting benchmarks. Requires 'benchmark' module to be installed.\n    type: \"boolean\",\n  },\n  \"debug-check\": {\n    // Run the formatting once again on the formatted output, throw if different.\n    type: \"boolean\",\n  },\n  \"debug-print-ast\": {\n    type: \"boolean\",\n  },\n  \"debug-print-comments\": {\n    type: \"boolean\",\n  },\n  \"debug-print-doc\": {\n    type: \"boolean\",\n  },\n  \"debug-repeat\": {\n    // Repeat the formatting a few times and measure the average duration.\n    default: 0,\n    type: \"int\",\n  },\n  editorconfig: {\n    category: coreOptions.CATEGORY_CONFIG,\n    default: true,\n    description: \"Take .editorconfig into account when parsing configuration.\",\n    oppositeDescription:\n      \"Don't take .editorconfig into account when parsing configuration.\",\n    type: \"boolean\",\n  },\n  \"error-on-unmatched-pattern\": {\n    oppositeDescription: \"Prevent errors when pattern is unmatched.\",\n    type: \"boolean\",\n  },\n  \"file-info\": {\n    description: outdent`\n      Extract the following info (as JSON) for a given file path. Reported fields:\n      * ignored (boolean) - true if file path is filtered by --ignore-path\n      * inferredParser (string | null) - name of parser inferred from file path\n    `,\n    type: \"path\",\n  },\n  \"find-config-path\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    description:\n      \"Find and print the path to a configuration file for the given input file.\",\n    type: \"path\",\n  },\n  help: {\n    alias: \"h\",\n    description: outdent`\n      Show CLI usage, or details about the given flag.\n      Example: --help write\n    `,\n    exception: (value) => value === \"\",\n    type: \"flag\",\n  },\n  \"ignore-path\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    default: \".prettierignore\",\n    description: \"Path to a file with patterns describing files to ignore.\",\n    type: \"path\",\n  },\n  \"ignore-unknown\": {\n    alias: \"u\",\n    description: \"Ignore unknown files.\",\n    type: \"boolean\",\n  },\n  \"list-different\": {\n    alias: \"l\",\n    category: coreOptions.CATEGORY_OUTPUT,\n    description:\n      \"Print the names of files that are different from Prettier's formatting (see also --check).\",\n    type: \"boolean\",\n  },\n  loglevel: {\n    choices: [\"silent\", \"error\", \"warn\", \"log\", \"debug\"],\n    default: \"log\",\n    description: \"What level of logs to report.\",\n    type: \"choice\",\n  },\n  \"plugin-search\": {\n    oppositeDescription: \"Disable plugin autoloading.\",\n    type: \"boolean\",\n  },\n  \"support-info\": {\n    description: \"Print support information as JSON.\",\n    type: \"boolean\",\n  },\n  version: {\n    alias: \"v\",\n    description: \"Print Prettier version.\",\n    type: \"boolean\",\n  },\n  \"with-node-modules\": {\n    category: coreOptions.CATEGORY_CONFIG,\n    description: \"Process files inside 'node_modules' directory.\",\n    type: \"boolean\",\n  },\n  write: {\n    alias: \"w\",\n    category: coreOptions.CATEGORY_OUTPUT,\n    description: \"Edit files in-place. (Beware!)\",\n    type: \"boolean\",\n  },\n};\n\nconst usageSummary = outdent`\n  Usage: prettier [options] [file/dir/glob ...]\n\n  By default, output is written to stdout.\n  Stdin is read if it is piped to Prettier and no files are given.\n`;\n\nmodule.exports = {\n  categoryOrder,\n  options,\n  usageSummary,\n};\n"
+    },
+    {
+      "path": "src/cli/find-cache-file.js",
+      "before": "\"use strict\";\n\nconst os = require(\"os\");\nconst path = require(\"path\");\nconst findCacheDir = require(\"find-cache-dir\");\n\n/**\n * Find default cache file (`./node_modules/.cache/prettier/.prettier-cache`) using https://github.com/avajs/find-cache-dir\n *\n * @returns {string}\n */\nfunction findCacheFile() {\n  const cacheDir =\n    findCacheDir({ name: \"prettier\", create: true }) || os.tmpdir();\n  const cacheFilePath = path.join(cacheDir, \".prettier-cache\");\n  return cacheFilePath;\n}\n\nmodule.exports = findCacheFile;\n",
+      "after": "\"use strict\";\n\nconst os = require(\"os\");\nconst path = require(\"path\");\nconst findCacheDir = require(\"find-cache-dir\");\n\n/**\n * Find the cache file, defaulting to `./node_modules/.cache/prettier/.prettier-cache`\n * using https://github.com/avajs/find-cache-dir.\n *\n * @param {string=} cacheLocation\n * @returns {string}\n */\nfunction findCacheFile(cacheLocation) {\n  if (cacheLocation) {\n    return path.resolve(cacheLocation);\n  }\n\n  const cacheDir =\n    findCacheDir({ name: \"prettier\", create: true }) || os.tmpdir();\n  const cacheFilePath = path.join(cacheDir, \".prettier-cache\");\n  return cacheFilePath;\n}\n\nmodule.exports = findCacheFile;\n"
+    },
+    {
+      "path": "src/cli/format.js",
+      "before": "\"use strict\";\n\nconst { promises: fs } = require(\"fs\");\nconst path = require(\"path\");\n\n// eslint-disable-next-line no-restricted-modules\nconst { default: chalk } = require(\"../../vendors/chalk.js\");\n\n// eslint-disable-next-line no-restricted-modules\nconst prettier = require(\"../index.js\");\n// eslint-disable-next-line no-restricted-modules\nconst { getStdin } = require(\"../common/third-party.js\");\n\nconst { createIgnorer, errors } = require(\"./prettier-internal.js\");\nconst { expandPatterns, fixWindowsSlashes } = require(\"./expand-patterns.js\");\nconst getOptionsForFile = require(\"./options/get-options-for-file.js\");\nconst isTTY = require(\"./is-tty.js\");\nconst findCacheFile = require(\"./find-cache-file.js\");\nconst FormatResultsCache = require(\"./format-results-cache.js\");\nconst { statSafe } = require(\"./utils.js\");\n\nfunction diff(a, b) {\n  return require(\"diff\").createTwoFilesPatch(\"\", \"\", a, b, \"\", \"\", {\n    context: 2,\n  });\n}\n\nfunction handleError(context, filename, error, printedFilename) {\n  if (error instanceof errors.UndefinedParserError) {\n    // Can't test on CI, `isTTY()` is always false, see ./is-tty.js\n    /* istanbul ignore next */\n    if ((context.argv.write || context.argv.ignoreUnknown) && printedFilename) {\n      printedFilename.clear();\n    }\n    if (context.argv.ignoreUnknown) {\n      return;\n    }\n    if (!context.argv.check && !context.argv.listDifferent) {\n      process.exitCode = 2;\n    }\n    context.logger.error(error.message);\n    return;\n  }\n\n  if (context.argv.write) {\n    // Add newline to split errors from filename line.\n    process.stdout.write(\"\\n\");\n  }\n\n  const isParseError = Boolean(error && error.loc);\n  const isValidationError = /^Invalid \\S+ value\\./.test(error && error.message);\n\n  if (isParseError) {\n    // `invalid.js: SyntaxError: Unexpected token (1:1)`.\n    context.logger.error(`${filename}: ${String(error)}`);\n  } else if (isValidationError || error instanceof errors.ConfigError) {\n    // `Invalid printWidth value. Expected an integer, but received 0.5.`\n    context.logger.error(error.message);\n    // If validation fails for one file, it will fail for all of them.\n    process.exit(1);\n  } else if (error instanceof errors.DebugError) {\n    // `invalid.js: Some debug error message`\n    context.logger.error(`${filename}: ${error.message}`);\n  } else {\n    // `invalid.js: Error: Some unexpected error\\n[stack trace]`\n    /* istanbul ignore next */\n    context.logger.error(filename + \": \" + (error.stack || error));\n  }\n\n  // Don't exit the process if one file failed\n  process.exitCode = 2;\n}\n\nfunction writeOutput(context, result, options) {\n  // Don't use `console.log` here since it adds an extra newline at the end.\n  process.stdout.write(\n    context.argv.debugCheck ? result.filepath : result.formatted\n  );\n\n  if (options && options.cursorOffset >= 0) {\n    process.stderr.write(result.cursorOffset + \"\\n\");\n  }\n}\n\nfunction listDifferent(context, input, options, filename) {\n  if (!context.argv.check && !context.argv.listDifferent) {\n    return;\n  }\n\n  try {\n    if (!options.filepath && !options.parser) {\n      throw new errors.UndefinedParserError(\n        \"No parser and no file path given, couldn't infer a parser.\"\n      );\n    }\n    if (!prettier.check(input, options)) {\n      if (!context.argv.write) {\n        context.logger.log(filename);\n        process.exitCode = 1;\n      }\n    }\n  } catch (error) {\n    context.logger.error(error.message);\n  }\n\n  return true;\n}\n\nfunction format(context, input, opt) {\n  if (!opt.parser && !opt.filepath) {\n    throw new errors.UndefinedParserError(\n      \"No parser and no file path given, couldn't infer a parser.\"\n    );\n  }\n\n  if (context.argv.debugPrintDoc) {\n    const doc = prettier.__debug.printToDoc(input, opt);\n    return { formatted: prettier.__debug.formatDoc(doc) + \"\\n\" };\n  }\n\n  if (context.argv.debugPrintComments) {\n    return {\n      formatted: prettier.format(\n        JSON.stringify(prettier.formatWithCursor(input, opt).comments || []),\n        { parser: \"json\" }\n      ),\n    };\n  }\n\n  if (context.argv.debugPrintAst) {\n    const { ast } = prettier.__debug.parse(input, opt);\n    return {\n      formatted: JSON.stringify(ast),\n    };\n  }\n\n  if (context.argv.debugCheck) {\n    const pp = prettier.format(input, opt);\n    const pppp = prettier.format(pp, opt);\n    if (pp !== pppp) {\n      throw new errors.DebugError(\n        \"prettier(input) !== prettier(prettier(input))\\n\" + diff(pp, pppp)\n      );\n    } else {\n      const stringify = (obj) => JSON.stringify(obj, null, 2);\n      const ast = stringify(\n        prettier.__debug.parse(input, opt, /* massage */ true).ast\n      );\n      const past = stringify(\n        prettier.__debug.parse(pp, opt, /* massage */ true).ast\n      );\n\n      /* istanbul ignore next */\n      if (ast !== past) {\n        const MAX_AST_SIZE = 2097152; // 2MB\n        const astDiff =\n          ast.length > MAX_AST_SIZE || past.length > MAX_AST_SIZE\n            ? \"AST diff too large to render\"\n            : diff(ast, past);\n        throw new errors.DebugError(\n          \"ast(input) !== ast(prettier(input))\\n\" +\n            astDiff +\n            \"\\n\" +\n            diff(input, pp)\n        );\n      }\n    }\n    return { formatted: pp, filepath: opt.filepath || \"(stdin)\\n\" };\n  }\n\n  const { performanceTestFlag } = context;\n  if (performanceTestFlag?.debugBenchmark) {\n    let benchmark;\n    try {\n      // eslint-disable-next-line import/no-extraneous-dependencies\n      benchmark = require(\"benchmark\");\n    } catch {\n      context.logger.debug(\n        \"'--debug-benchmark' requires the 'benchmark' package to be installed.\"\n      );\n      process.exit(2);\n    }\n    context.logger.debug(\n      \"'--debug-benchmark' option found, measuring formatWithCursor with 'benchmark' module.\"\n    );\n    const suite = new benchmark.Suite();\n    suite\n      .add(\"format\", () => {\n        prettier.formatWithCursor(input, opt);\n      })\n      .on(\"cycle\", (event) => {\n        const results = {\n          benchmark: String(event.target),\n          hz: event.target.hz,\n          ms: event.target.times.cycle * 1000,\n        };\n        context.logger.debug(\n          \"'--debug-benchmark' measurements for formatWithCursor: \" +\n            JSON.stringify(results, null, 2)\n        );\n      })\n      .run({ async: false });\n  } else if (performanceTestFlag?.debugRepeat) {\n    const repeat = context.argv.debugRepeat;\n    context.logger.debug(\n      \"'--debug-repeat' option found, running formatWithCursor \" +\n        repeat +\n        \" times.\"\n    );\n    let totalMs = 0;\n    for (let i = 0; i < repeat; ++i) {\n      // should be using `performance.now()`, but only `Date` is cross-platform enough\n      const startMs = Date.now();\n      prettier.formatWithCursor(input, opt);\n      totalMs += Date.now() - startMs;\n    }\n    const averageMs = totalMs / repeat;\n    const results = {\n      repeat,\n      hz: 1000 / averageMs,\n      ms: averageMs,\n    };\n    context.logger.debug(\n      \"'--debug-repeat' measurements for formatWithCursor: \" +\n        JSON.stringify(results, null, 2)\n    );\n  }\n\n  return prettier.formatWithCursor(input, opt);\n}\n\nasync function createIgnorerFromContextOrDie(context) {\n  try {\n    return await createIgnorer(\n      context.argv.ignorePath,\n      context.argv.withNodeModules\n    );\n  } catch (e) {\n    context.logger.error(e.message);\n    process.exit(2);\n  }\n}\n\nasync function formatStdin(context) {\n  const filepath = context.argv.filepath\n    ? path.resolve(process.cwd(), context.argv.filepath)\n    : process.cwd();\n\n  const ignorer = await createIgnorerFromContextOrDie(context);\n  // If there's an ignore-path set, the filename must be relative to the\n  // ignore path, not the current working directory.\n  const relativeFilepath = context.argv.ignorePath\n    ? path.relative(path.dirname(context.argv.ignorePath), filepath)\n    : path.relative(process.cwd(), filepath);\n\n  try {\n    const input = await getStdin();\n\n    if (\n      relativeFilepath &&\n      ignorer.ignores(fixWindowsSlashes(relativeFilepath))\n    ) {\n      writeOutput(context, { formatted: input });\n      return;\n    }\n\n    const options = await getOptionsForFile(context, filepath);\n\n    if (listDifferent(context, input, options, \"(stdin)\")) {\n      return;\n    }\n\n    const formatted = format(context, input, options);\n\n    const { performanceTestFlag } = context;\n    if (performanceTestFlag) {\n      context.logger.log(\n        `'${performanceTestFlag.name}' option found, skipped print code to screen.`\n      );\n      return;\n    }\n\n    writeOutput(context, formatted, options);\n  } catch (error) {\n    handleError(context, relativeFilepath || \"stdin\", error);\n  }\n}\n\nasync function formatFiles(context) {\n  // The ignorer will be used to filter file paths after the glob is checked,\n  // before any files are actually written\n  const ignorer = await createIgnorerFromContextOrDie(context);\n\n  let numberOfUnformattedFilesFound = 0;\n  const { performanceTestFlag } = context;\n\n  if (context.argv.check && !performanceTestFlag) {\n    context.logger.log(\"Checking formatting...\");\n  }\n\n  let formatResultsCache;\n  const cacheFilePath = findCacheFile();\n  if (context.argv.cache) {\n    formatResultsCache = new FormatResultsCache(\n      cacheFilePath,\n      context.argv.cacheStrategy || \"content\"\n    );\n  } else {\n    if (context.argv.cacheStrategy) {\n      context.logger.error(\n        \"`--cache-strategy` cannot be used without `--cache`.\"\n      );\n      process.exit(2);\n    }\n    const stat = await statSafe(cacheFilePath);\n    if (stat) {\n      await fs.unlink(cacheFilePath);\n    }\n  }\n\n  for await (const pathOrError of expandPatterns(context)) {\n    if (typeof pathOrError === \"object\") {\n      context.logger.error(pathOrError.error);\n      // Don't exit, but set the exit code to 2\n      process.exitCode = 2;\n      continue;\n    }\n\n    const filename = pathOrError;\n    // If there's an ignore-path set, the filename must be relative to the\n    // ignore path, not the current working directory.\n    const ignoreFilename = context.argv.ignorePath\n      ? path.relative(path.dirname(context.argv.ignorePath), filename)\n      : filename;\n\n    const fileIgnored = ignorer.ignores(fixWindowsSlashes(ignoreFilename));\n    if (\n      fileIgnored &&\n      (context.argv.debugCheck ||\n        context.argv.write ||\n        context.argv.check ||\n        context.argv.listDifferent)\n    ) {\n      continue;\n    }\n\n    const options = {\n      ...(await getOptionsForFile(context, filename)),\n      filepath: filename,\n    };\n\n    let printedFilename;\n    if (isTTY()) {\n      printedFilename = context.logger.log(filename, {\n        newline: false,\n        clearable: true,\n      });\n    }\n\n    let input;\n    try {\n      input = await fs.readFile(filename, \"utf8\");\n    } catch (error) {\n      // Add newline to split errors from filename line.\n      /* istanbul ignore next */\n      context.logger.log(\"\");\n\n      /* istanbul ignore next */\n      context.logger.error(\n        `Unable to read file: ${filename}\\n${error.message}`\n      );\n\n      // Don't exit the process if one file failed\n      /* istanbul ignore next */\n      process.exitCode = 2;\n\n      /* istanbul ignore next */\n      continue;\n    }\n\n    if (fileIgnored) {\n      writeOutput(context, { formatted: input }, options);\n      continue;\n    }\n\n    const start = Date.now();\n\n    const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(\n      filename,\n      options\n    );\n\n    let result;\n    let output;\n\n    try {\n      if (isCacheExists) {\n        result = { formatted: input };\n      } else {\n        result = format(context, input, options);\n      }\n      output = result.formatted;\n    } catch (error) {\n      handleError(context, filename, error, printedFilename);\n      continue;\n    }\n\n    formatResultsCache?.setFormatResultsCache(filename, options);\n\n    const isDifferent = output !== input;\n\n    if (printedFilename) {\n      // Remove previously printed filename to log it with duration.\n      printedFilename.clear();\n    }\n\n    if (performanceTestFlag) {\n      context.logger.log(\n        `'${performanceTestFlag.name}' option found, skipped print code or write files.`\n      );\n      return;\n    }\n\n    if (context.argv.write) {\n      // Don't write the file if it won't change in order not to invalidate\n      // mtime based caches.\n      if (isDifferent) {\n        if (!context.argv.check && !context.argv.listDifferent) {\n          context.logger.log(`${filename} ${Date.now() - start}ms`);\n        }\n\n        try {\n          await fs.writeFile(filename, output, \"utf8\");\n        } catch (error) {\n          /* istanbul ignore next */\n          context.logger.error(\n            `Unable to write file: ${filename}\\n${error.message}`\n          );\n\n          // Don't exit the process if one file failed\n          /* istanbul ignore next */\n          process.exitCode = 2;\n        }\n      } else if (!context.argv.check && !context.argv.listDifferent) {\n        const message = `${chalk.grey(filename)} ${Date.now() - start}ms`;\n        if (isCacheExists) {\n          context.logger.log(`${message} (cached)`);\n        } else {\n          context.logger.log(message);\n        }\n      }\n    } else if (context.argv.debugCheck) {\n      /* istanbul ignore else */\n      if (result.filepath) {\n        context.logger.log(result.filepath);\n      } else {\n        process.exitCode = 2;\n      }\n    } else if (!context.argv.check && !context.argv.listDifferent) {\n      writeOutput(context, result, options);\n    }\n\n    if (isDifferent) {\n      if (context.argv.check) {\n        context.logger.warn(filename);\n      } else if (context.argv.listDifferent) {\n        context.logger.log(filename);\n      }\n      numberOfUnformattedFilesFound += 1;\n    }\n  }\n\n  formatResultsCache?.reconcile();\n\n  // Print check summary based on expected exit code\n  if (context.argv.check) {\n    if (numberOfUnformattedFilesFound === 0) {\n      context.logger.log(\"All matched files use Prettier code style!\");\n    } else if (numberOfUnformattedFilesFound === 1) {\n      context.logger.warn(\n        context.argv.write\n          ? \"Code style issues fixed in the above file.\"\n          : \"Code style issues found in the above file. Forgot to run Prettier?\"\n      );\n    } else {\n      context.logger.warn(\n        context.argv.write\n          ? \"Code style issues found in \" +\n              numberOfUnformattedFilesFound +\n              \" files.\"\n          : \"Code style issues found in \" +\n              numberOfUnformattedFilesFound +\n              \" files. Forgot to run Prettier?\"\n      );\n    }\n  }\n\n  // Ensure non-zero exitCode when using --check/list-different is not combined with --write\n  if (\n    (context.argv.check || context.argv.listDifferent) &&\n    numberOfUnformattedFilesFound > 0 &&\n    !process.exitCode &&\n    !context.argv.write\n  ) {\n    process.exitCode = 1;\n  }\n}\n\nmodule.exports = { formatStdin, formatFiles };\n",
+      "after": "\"use strict\";\n\nconst { promises: fs } = require(\"fs\");\nconst path = require(\"path\");\n\n// eslint-disable-next-line no-restricted-modules\nconst { default: chalk } = require(\"../../vendors/chalk.js\");\n\n// eslint-disable-next-line no-restricted-modules\nconst prettier = require(\"../index.js\");\n// eslint-disable-next-line no-restricted-modules\nconst { getStdin } = require(\"../common/third-party.js\");\n\nconst { createIgnorer, errors } = require(\"./prettier-internal.js\");\nconst { expandPatterns, fixWindowsSlashes } = require(\"./expand-patterns.js\");\nconst getOptionsForFile = require(\"./options/get-options-for-file.js\");\nconst isTTY = require(\"./is-tty.js\");\nconst findCacheFile = require(\"./find-cache-file.js\");\nconst FormatResultsCache = require(\"./format-results-cache.js\");\nconst { statSafe } = require(\"./utils.js\");\n\nfunction diff(a, b) {\n  return require(\"diff\").createTwoFilesPatch(\"\", \"\", a, b, \"\", \"\", {\n    context: 2,\n  });\n}\n\nfunction handleError(context, filename, error, printedFilename) {\n  if (error instanceof errors.UndefinedParserError) {\n    // Can't test on CI, `isTTY()` is always false, see ./is-tty.js\n    /* istanbul ignore next */\n    if ((context.argv.write || context.argv.ignoreUnknown) && printedFilename) {\n      printedFilename.clear();\n    }\n    if (context.argv.ignoreUnknown) {\n      return;\n    }\n    if (!context.argv.check && !context.argv.listDifferent) {\n      process.exitCode = 2;\n    }\n    context.logger.error(error.message);\n    return;\n  }\n\n  if (context.argv.write) {\n    // Add newline to split errors from filename line.\n    process.stdout.write(\"\\n\");\n  }\n\n  const isParseError = Boolean(error && error.loc);\n  const isValidationError = /^Invalid \\S+ value\\./.test(error && error.message);\n\n  if (isParseError) {\n    // `invalid.js: SyntaxError: Unexpected token (1:1)`.\n    context.logger.error(`${filename}: ${String(error)}`);\n  } else if (isValidationError || error instanceof errors.ConfigError) {\n    // `Invalid printWidth value. Expected an integer, but received 0.5.`\n    context.logger.error(error.message);\n    // If validation fails for one file, it will fail for all of them.\n    process.exit(1);\n  } else if (error instanceof errors.DebugError) {\n    // `invalid.js: Some debug error message`\n    context.logger.error(`${filename}: ${error.message}`);\n  } else {\n    // `invalid.js: Error: Some unexpected error\\n[stack trace]`\n    /* istanbul ignore next */\n    context.logger.error(filename + \": \" + (error.stack || error));\n  }\n\n  // Don't exit the process if one file failed\n  process.exitCode = 2;\n}\n\nfunction writeOutput(context, result, options) {\n  // Don't use `console.log` here since it adds an extra newline at the end.\n  process.stdout.write(\n    context.argv.debugCheck ? result.filepath : result.formatted\n  );\n\n  if (options && options.cursorOffset >= 0) {\n    process.stderr.write(result.cursorOffset + \"\\n\");\n  }\n}\n\nfunction listDifferent(context, input, options, filename) {\n  if (!context.argv.check && !context.argv.listDifferent) {\n    return;\n  }\n\n  try {\n    if (!options.filepath && !options.parser) {\n      throw new errors.UndefinedParserError(\n        \"No parser and no file path given, couldn't infer a parser.\"\n      );\n    }\n    if (!prettier.check(input, options)) {\n      if (!context.argv.write) {\n        context.logger.log(filename);\n        process.exitCode = 1;\n      }\n    }\n  } catch (error) {\n    context.logger.error(error.message);\n  }\n\n  return true;\n}\n\nfunction format(context, input, opt) {\n  if (!opt.parser && !opt.filepath) {\n    throw new errors.UndefinedParserError(\n      \"No parser and no file path given, couldn't infer a parser.\"\n    );\n  }\n\n  if (context.argv.debugPrintDoc) {\n    const doc = prettier.__debug.printToDoc(input, opt);\n    return { formatted: prettier.__debug.formatDoc(doc) + \"\\n\" };\n  }\n\n  if (context.argv.debugPrintComments) {\n    return {\n      formatted: prettier.format(\n        JSON.stringify(prettier.formatWithCursor(input, opt).comments || []),\n        { parser: \"json\" }\n      ),\n    };\n  }\n\n  if (context.argv.debugPrintAst) {\n    const { ast } = prettier.__debug.parse(input, opt);\n    return {\n      formatted: JSON.stringify(ast),\n    };\n  }\n\n  if (context.argv.debugCheck) {\n    const pp = prettier.format(input, opt);\n    const pppp = prettier.format(pp, opt);\n    if (pp !== pppp) {\n      throw new errors.DebugError(\n        \"prettier(input) !== prettier(prettier(input))\\n\" + diff(pp, pppp)\n      );\n    } else {\n      const stringify = (obj) => JSON.stringify(obj, null, 2);\n      const ast = stringify(\n        prettier.__debug.parse(input, opt, /* massage */ true).ast\n      );\n      const past = stringify(\n        prettier.__debug.parse(pp, opt, /* massage */ true).ast\n      );\n\n      /* istanbul ignore next */\n      if (ast !== past) {\n        const MAX_AST_SIZE = 2097152; // 2MB\n        const astDiff =\n          ast.length > MAX_AST_SIZE || past.length > MAX_AST_SIZE\n            ? \"AST diff too large to render\"\n            : diff(ast, past);\n        throw new errors.DebugError(\n          \"ast(input) !== ast(prettier(input))\\n\" +\n            astDiff +\n            \"\\n\" +\n            diff(input, pp)\n        );\n      }\n    }\n    return { formatted: pp, filepath: opt.filepath || \"(stdin)\\n\" };\n  }\n\n  const { performanceTestFlag } = context;\n  if (performanceTestFlag?.debugBenchmark) {\n    let benchmark;\n    try {\n      // eslint-disable-next-line import/no-extraneous-dependencies\n      benchmark = require(\"benchmark\");\n    } catch {\n      context.logger.debug(\n        \"'--debug-benchmark' requires the 'benchmark' package to be installed.\"\n      );\n      process.exit(2);\n    }\n    context.logger.debug(\n      \"'--debug-benchmark' option found, measuring formatWithCursor with 'benchmark' module.\"\n    );\n    const suite = new benchmark.Suite();\n    suite\n      .add(\"format\", () => {\n        prettier.formatWithCursor(input, opt);\n      })\n      .on(\"cycle\", (event) => {\n        const results = {\n          benchmark: String(event.target),\n          hz: event.target.hz,\n          ms: event.target.times.cycle * 1000,\n        };\n        context.logger.debug(\n          \"'--debug-benchmark' measurements for formatWithCursor: \" +\n            JSON.stringify(results, null, 2)\n        );\n      })\n      .run({ async: false });\n  } else if (performanceTestFlag?.debugRepeat) {\n    const repeat = context.argv.debugRepeat;\n    context.logger.debug(\n      \"'--debug-repeat' option found, running formatWithCursor \" +\n        repeat +\n        \" times.\"\n    );\n    let totalMs = 0;\n    for (let i = 0; i < repeat; ++i) {\n      // should be using `performance.now()`, but only `Date` is cross-platform enough\n      const startMs = Date.now();\n      prettier.formatWithCursor(input, opt);\n      totalMs += Date.now() - startMs;\n    }\n    const averageMs = totalMs / repeat;\n    const results = {\n      repeat,\n      hz: 1000 / averageMs,\n      ms: averageMs,\n    };\n    context.logger.debug(\n      \"'--debug-repeat' measurements for formatWithCursor: \" +\n        JSON.stringify(results, null, 2)\n    );\n  }\n\n  return prettier.formatWithCursor(input, opt);\n}\n\nasync function createIgnorerFromContextOrDie(context) {\n  try {\n    return await createIgnorer(\n      context.argv.ignorePath,\n      context.argv.withNodeModules\n    );\n  } catch (e) {\n    context.logger.error(e.message);\n    process.exit(2);\n  }\n}\n\nasync function formatStdin(context) {\n  const filepath = context.argv.filepath\n    ? path.resolve(process.cwd(), context.argv.filepath)\n    : process.cwd();\n\n  const ignorer = await createIgnorerFromContextOrDie(context);\n  // If there's an ignore-path set, the filename must be relative to the\n  // ignore path, not the current working directory.\n  const relativeFilepath = context.argv.ignorePath\n    ? path.relative(path.dirname(context.argv.ignorePath), filepath)\n    : path.relative(process.cwd(), filepath);\n\n  try {\n    const input = await getStdin();\n\n    if (\n      relativeFilepath &&\n      ignorer.ignores(fixWindowsSlashes(relativeFilepath))\n    ) {\n      writeOutput(context, { formatted: input });\n      return;\n    }\n\n    const options = await getOptionsForFile(context, filepath);\n\n    if (listDifferent(context, input, options, \"(stdin)\")) {\n      return;\n    }\n\n    const formatted = format(context, input, options);\n\n    const { performanceTestFlag } = context;\n    if (performanceTestFlag) {\n      context.logger.log(\n        `'${performanceTestFlag.name}' option found, skipped print code to screen.`\n      );\n      return;\n    }\n\n    writeOutput(context, formatted, options);\n  } catch (error) {\n    handleError(context, relativeFilepath || \"stdin\", error);\n  }\n}\n\nasync function formatFiles(context) {\n  // The ignorer will be used to filter file paths after the glob is checked,\n  // before any files are actually written\n  const ignorer = await createIgnorerFromContextOrDie(context);\n\n  let numberOfUnformattedFilesFound = 0;\n  const { performanceTestFlag } = context;\n\n  if (context.argv.check && !performanceTestFlag) {\n    context.logger.log(\"Checking formatting...\");\n  }\n\n  let formatResultsCache;\n  const cacheFilePath = findCacheFile(context.argv.cacheLocation);\n  if (context.argv.cache) {\n    formatResultsCache = new FormatResultsCache(\n      cacheFilePath,\n      context.argv.cacheStrategy || \"content\"\n    );\n  } else {\n    if (context.argv.cacheStrategy) {\n      context.logger.error(\n        \"`--cache-strategy` cannot be used without `--cache`.\"\n      );\n      process.exit(2);\n    }\n    const stat = await statSafe(cacheFilePath);\n    if (stat) {\n      await fs.unlink(cacheFilePath);\n    }\n  }\n\n  for await (const pathOrError of expandPatterns(context)) {\n    if (typeof pathOrError === \"object\") {\n      context.logger.error(pathOrError.error);\n      // Don't exit, but set the exit code to 2\n      process.exitCode = 2;\n      continue;\n    }\n\n    const filename = pathOrError;\n    // If there's an ignore-path set, the filename must be relative to the\n    // ignore path, not the current working directory.\n    const ignoreFilename = context.argv.ignorePath\n      ? path.relative(path.dirname(context.argv.ignorePath), filename)\n      : filename;\n\n    const fileIgnored = ignorer.ignores(fixWindowsSlashes(ignoreFilename));\n    if (\n      fileIgnored &&\n      (context.argv.debugCheck ||\n        context.argv.write ||\n        context.argv.check ||\n        context.argv.listDifferent)\n    ) {\n      continue;\n    }\n\n    const options = {\n      ...(await getOptionsForFile(context, filename)),\n      filepath: filename,\n    };\n\n    let printedFilename;\n    if (isTTY()) {\n      printedFilename = context.logger.log(filename, {\n        newline: false,\n        clearable: true,\n      });\n    }\n\n    let input;\n    try {\n      input = await fs.readFile(filename, \"utf8\");\n    } catch (error) {\n      // Add newline to split errors from filename line.\n      /* istanbul ignore next */\n      context.logger.log(\"\");\n\n      /* istanbul ignore next */\n      context.logger.error(\n        `Unable to read file: ${filename}\\n${error.message}`\n      );\n\n      // Don't exit the process if one file failed\n      /* istanbul ignore next */\n      process.exitCode = 2;\n\n      /* istanbul ignore next */\n      continue;\n    }\n\n    if (fileIgnored) {\n      writeOutput(context, { formatted: input }, options);\n      continue;\n    }\n\n    const start = Date.now();\n\n    const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(\n      filename,\n      options\n    );\n\n    let result;\n    let output;\n\n    try {\n      if (isCacheExists) {\n        result = { formatted: input };\n      } else {\n        result = format(context, input, options);\n      }\n      output = result.formatted;\n    } catch (error) {\n      handleError(context, filename, error, printedFilename);\n      continue;\n    }\n\n    formatResultsCache?.setFormatResultsCache(filename, options);\n\n    const isDifferent = output !== input;\n\n    if (printedFilename) {\n      // Remove previously printed filename to log it with duration.\n      printedFilename.clear();\n    }\n\n    if (performanceTestFlag) {\n      context.logger.log(\n        `'${performanceTestFlag.name}' option found, skipped print code or write files.`\n      );\n      return;\n    }\n\n    if (context.argv.write) {\n      // Don't write the file if it won't change in order not to invalidate\n      // mtime based caches.\n      if (isDifferent) {\n        if (!context.argv.check && !context.argv.listDifferent) {\n          context.logger.log(`${filename} ${Date.now() - start}ms`);\n        }\n\n        try {\n          await fs.writeFile(filename, output, \"utf8\");\n        } catch (error) {\n          /* istanbul ignore next */\n          context.logger.error(\n            `Unable to write file: ${filename}\\n${error.message}`\n          );\n\n          // Don't exit the process if one file failed\n          /* istanbul ignore next */\n          process.exitCode = 2;\n        }\n      } else if (!context.argv.check && !context.argv.listDifferent) {\n        const message = `${chalk.grey(filename)} ${Date.now() - start}ms`;\n        if (isCacheExists) {\n          context.logger.log(`${message} (cached)`);\n        } else {\n          context.logger.log(message);\n        }\n      }\n    } else if (context.argv.debugCheck) {\n      /* istanbul ignore else */\n      if (result.filepath) {\n        context.logger.log(result.filepath);\n      } else {\n        process.exitCode = 2;\n      }\n    } else if (!context.argv.check && !context.argv.listDifferent) {\n      writeOutput(context, result, options);\n    }\n\n    if (isDifferent) {\n      if (context.argv.check) {\n        context.logger.warn(filename);\n      } else if (context.argv.listDifferent) {\n        context.logger.log(filename);\n      }\n      numberOfUnformattedFilesFound += 1;\n    }\n  }\n\n  formatResultsCache?.reconcile();\n\n  // Print check summary based on expected exit code\n  if (context.argv.check) {\n    if (numberOfUnformattedFilesFound === 0) {\n      context.logger.log(\"All matched files use Prettier code style!\");\n    } else if (numberOfUnformattedFilesFound === 1) {\n      context.logger.warn(\n        context.argv.write\n          ? \"Code style issues fixed in the above file.\"\n          : \"Code style issues found in the above file. Forgot to run Prettier?\"\n      );\n    } else {\n      context.logger.warn(\n        context.argv.write\n          ? \"Code style issues found in \" +\n              numberOfUnformattedFilesFound +\n              \" files.\"\n          : \"Code style issues found in \" +\n              numberOfUnformattedFilesFound +\n              \" files. Forgot to run Prettier?\"\n      );\n    }\n  }\n\n  // Ensure non-zero exitCode when using --check/list-different is not combined with --write\n  if (\n    (context.argv.check || context.argv.listDifferent) &&\n    numberOfUnformattedFilesFound > 0 &&\n    !process.exitCode &&\n    !context.argv.write\n  ) {\n    process.exitCode = 1;\n  }\n}\n\nmodule.exports = { formatStdin, formatFiles };\n"
+    },
+    {
+      "path": "tests/integration/__tests__/cache.js",
+      "before": "\"use strict\";\n\nconst path = require(\"path\");\nconst { promises: fs } = require(\"fs\");\nconst rimraf = require(\"rimraf\");\nconst { default: stripAnsi } = require(\"../../../vendors/strip-ansi.js\");\n\nconst runPrettier = require(\"../run-prettier.js\");\n\nfunction resolveDir(dir) {\n  return path.join(__dirname, \"..\", dir);\n}\n\ndescribe(\"--cache option\", () => {\n  const dir = resolveDir(\"cli/cache\");\n  const defaultCacheFile = path.join(\n    dir,\n    \"node_modules/.cache/prettier/.prettier-cache\"\n  );\n\n  let contentA;\n  let contentB;\n\n  beforeAll(async () => {\n    contentA = await fs.readFile(path.join(dir, \"a.js\"), \"utf8\");\n    contentB = await fs.readFile(path.join(dir, \"b.js\"), \"utf8\");\n  });\n\n  afterEach(async () => {\n    rimraf.sync(path.join(dir, \"node_modules\"));\n    await fs.writeFile(path.join(dir, \"a.js\"), contentA);\n    await fs.writeFile(path.join(dir, \"b.js\"), contentB);\n  });\n\n  it(\"throw error when cache-strategy is invalid\", async () => {\n    const { stderr } = await runPrettier(dir, [\n      \"--cache\",\n      \"--cache-strategy\",\n      \"invalid\",\n      \".\",\n    ]);\n    expect(stripAnsi(stderr.trim())).toBe(\n      '[error] Invalid --cache-strategy value. Expected \"content\" or \"metadata\", but received \"invalid\".'\n    );\n  });\n\n  it(\"throws error when use with --stdin-filepath\", async () => {\n    const { stderr } = await runPrettier(\n      dir,\n      [\"--cache\", \"--stdin-filepath\", \"foo.js\"],\n      { input: \"const a = a;\" }\n    );\n    expect(stripAnsi(stderr.trim())).toBe(\n      \"[error] `--cache` cannot be used with stdin.\"\n    );\n  });\n\n  it(\"throws error when use `--cache-strategy` without `--cache`.\", async () => {\n    const { stderr } = await runPrettier(\n      dir,\n      [\"foo.js\", \"--cache-strategy\", \"content\"],\n      {\n        input: \"const a = a;\",\n      }\n    );\n    expect(stripAnsi(stderr.trim())).toBe(\n      \"[error] `--cache-strategy` cannot be used without `--cache`.\"\n    );\n  });\n\n  describe(\"--cache-strategy metadata\", () => {\n    it(\"creates default cache file named `node_modules/.cache/prettier/.prettier-cache`\", async () => {\n      await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(\n        \"code\",\n        \"ENOENT\"\n      );\n      await runPrettier(dir, [\"--cache\", \"--cache-strategy\", \"metadata\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n    });\n\n    it(\"does'nt format when cache is available\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms \\(cached\\)$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when a file has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // Update `a.js`\n      await fs.writeFile(path.join(dir, \"a.js\"), \"const a = `a`;\");\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        // the cache of `b.js` is only available.\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when timestamp has been updated\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // update timestamp\n      const time = new Date();\n      await fs.utimes(path.join(dir, \"a.js\"), time, time);\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        // the cache of `b.js` is only available.\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when options has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \"--write\",\n        \"--trailing-comma\",\n        \"all\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n    });\n\n    it(\"removes cache file when run Prettier without `--cache` option\", async () => {\n      await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n      await runPrettier(dir, [\"--write\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).rejects.toThrowError();\n    });\n  });\n\n  describe(\"--cache-strategy content\", () => {\n    it(\"creates default cache file named `node_modules/.cache/prettier/.prettier-cache`\", async () => {\n      await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(\n        \"code\",\n        \"ENOENT\"\n      );\n      await runPrettier(dir, [\"--cache\", \"--cache-strategy\", \"content\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n    });\n\n    it(\"does'nt format when cache is available\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms \\(cached\\)$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when a file has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // Update `a.js`\n      await fs.writeFile(path.join(dir, \"a.js\"), \"const a = `a`;\");\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        // the cache of `b.js` is only available.\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"does'nt re-format when timestamp has been updated\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // update timestamp\n      const time = new Date();\n      await fs.utimes(path.join(dir, \"a.js\"), time, time);\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms \\(cached\\)$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when options has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--trailing-comma\",\n        \"all\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n    });\n\n    it(\"removes cache file when run Prettier without `--cache` option\", async () => {\n      await runPrettier(dir, [\"--cache\", \"--write\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n      await runPrettier(dir, [\"--write\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).rejects.toThrowError();\n    });\n  });\n});\n",
+      "after": "\"use strict\";\n\nconst path = require(\"path\");\nconst { promises: fs } = require(\"fs\");\nconst rimraf = require(\"rimraf\");\nconst { default: stripAnsi } = require(\"../../../vendors/strip-ansi.js\");\n\nconst runPrettier = require(\"../run-prettier.js\");\n\nfunction resolveDir(dir) {\n  return path.join(__dirname, \"..\", dir);\n}\n\ndescribe(\"--cache option\", () => {\n  const dir = resolveDir(\"cli/cache\");\n  const defaultCacheFile = path.join(\n    dir,\n    \"node_modules/.cache/prettier/.prettier-cache\"\n  );\n  const customCacheFile = path.join(dir, \"custom-cache\", \"prettier-cache\");\n\n  let contentA;\n  let contentB;\n\n  beforeAll(async () => {\n    contentA = await fs.readFile(path.join(dir, \"a.js\"), \"utf8\");\n    contentB = await fs.readFile(path.join(dir, \"b.js\"), \"utf8\");\n  });\n\n  afterEach(async () => {\n    rimraf.sync(path.join(dir, \"node_modules\"));\n    rimraf.sync(path.dirname(customCacheFile));\n    await fs.writeFile(path.join(dir, \"a.js\"), contentA);\n    await fs.writeFile(path.join(dir, \"b.js\"), contentB);\n  });\n\n  it(\"throw error when cache-strategy is invalid\", async () => {\n    const { stderr } = await runPrettier(dir, [\n      \"--cache\",\n      \"--cache-strategy\",\n      \"invalid\",\n      \".\",\n    ]);\n    expect(stripAnsi(stderr.trim())).toBe(\n      '[error] Invalid --cache-strategy value. Expected \"content\" or \"metadata\", but received \"invalid\".'\n    );\n  });\n\n  it(\"throws error when use with --stdin-filepath\", async () => {\n    const { stderr } = await runPrettier(\n      dir,\n      [\"--cache\", \"--stdin-filepath\", \"foo.js\"],\n      { input: \"const a = a;\" }\n    );\n    expect(stripAnsi(stderr.trim())).toBe(\n      \"[error] `--cache` cannot be used with stdin.\"\n    );\n  });\n\n  it(\"throws error when use `--cache-strategy` without `--cache`.\", async () => {\n    const { stderr } = await runPrettier(\n      dir,\n      [\"foo.js\", \"--cache-strategy\", \"content\"],\n      {\n        input: \"const a = a;\",\n      }\n    );\n    expect(stripAnsi(stderr.trim())).toBe(\n      \"[error] `--cache-strategy` cannot be used without `--cache`.\"\n    );\n  });\n\n  it(\"uses --cache-location relative to the current working directory\", async () => {\n    const cacheLocation = path.join(\"custom-cache\", \"prettier-cache\");\n    const { stdout: firstStdout } = await runPrettier(dir, [\n      \"--cache\",\n      \"--cache-location\",\n      cacheLocation,\n      \"--write\",\n      \"a.js\",\n    ]);\n    expect(stripAnsi(firstStdout)).not.toMatch(/\\(cached\\)/);\n    await expect(fs.stat(customCacheFile)).resolves.not.toThrowError();\n\n    const { stdout: secondStdout } = await runPrettier(dir, [\n      \"--cache\",\n      \"--cache-location\",\n      cacheLocation,\n      \"--write\",\n      \"a.js\",\n    ]);\n    expect(stripAnsi(secondStdout)).toMatch(/a\\.js .+ms \\(cached\\)/);\n\n    const { stdout: thirdStdout } = await runPrettier(dir, [\n      \"--cache\",\n      \"--cache-location\",\n      path.join(\"custom-cache\", \"another-cache\"),\n      \"--write\",\n      \"a.js\",\n    ]);\n    expect(stripAnsi(thirdStdout)).not.toMatch(/\\(cached\\)/);\n  });\n\n  describe(\"--cache-strategy metadata\", () => {\n    it(\"creates default cache file named `node_modules/.cache/prettier/.prettier-cache`\", async () => {\n      await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(\n        \"code\",\n        \"ENOENT\"\n      );\n      await runPrettier(dir, [\"--cache\", \"--cache-strategy\", \"metadata\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n    });\n\n    it(\"does'nt format when cache is available\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms \\(cached\\)$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when a file has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // Update `a.js`\n      await fs.writeFile(path.join(dir, \"a.js\"), \"const a = `a`;\");\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        // the cache of `b.js` is only available.\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when timestamp has been updated\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // update timestamp\n      const time = new Date();\n      await fs.utimes(path.join(dir, \"a.js\"), time, time);\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        // the cache of `b.js` is only available.\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when options has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \"--write\",\n        \"--trailing-comma\",\n        \"all\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n    });\n\n    it(\"removes cache file when run Prettier without `--cache` option\", async () => {\n      await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"metadata\",\n        \".\",\n      ]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n      await runPrettier(dir, [\"--write\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).rejects.toThrowError();\n    });\n  });\n\n  describe(\"--cache-strategy content\", () => {\n    it(\"creates default cache file named `node_modules/.cache/prettier/.prettier-cache`\", async () => {\n      await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(\n        \"code\",\n        \"ENOENT\"\n      );\n      await runPrettier(dir, [\"--cache\", \"--cache-strategy\", \"content\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n    });\n\n    it(\"does'nt format when cache is available\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms \\(cached\\)$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when a file has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // Update `a.js`\n      await fs.writeFile(path.join(dir, \"a.js\"), \"const a = `a`;\");\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        // the cache of `b.js` is only available.\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"does'nt re-format when timestamp has been updated\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      // update timestamp\n      const time = new Date();\n      await fs.utimes(path.join(dir, \"a.js\"), time, time);\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms \\(cached\\)$/),\n          expect.stringMatching(/^b\\.js .+ms \\(cached\\)$/),\n        ])\n      );\n    });\n\n    it(\"re-formats when options has been updated.\", async () => {\n      const { stdout: firstStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--write\",\n        \".\",\n      ]);\n      expect(stripAnsi(firstStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n\n      const { stdout: secondStdout } = await runPrettier(dir, [\n        \"--cache\",\n        \"--write\",\n        \"--cache-strategy\",\n        \"content\",\n        \"--trailing-comma\",\n        \"all\",\n        \".\",\n      ]);\n      expect(stripAnsi(secondStdout).split(\"\\n\").filter(Boolean)).toEqual(\n        expect.arrayContaining([\n          expect.stringMatching(/^a\\.js .+ms$/),\n          expect.stringMatching(/^b\\.js .+ms$/),\n        ])\n      );\n    });\n\n    it(\"removes cache file when run Prettier without `--cache` option\", async () => {\n      await runPrettier(dir, [\"--cache\", \"--write\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).resolves.not.toThrowError();\n      await runPrettier(dir, [\"--write\", \".\"]);\n      await expect(fs.stat(defaultCacheFile)).rejects.toThrowError();\n    });\n  });\n});\n"
+    }
+  ],
+  "final": "Implemented `--cache-location <path>` for the CLI. Custom paths are resolved relative to the current working directory, allowing separate cache files for projects sharing a `node_modules` directory. Documented the option and added an integration test covering cache reuse and independent locations.\n\n**Verification:** the cache integration suite passed (16 tests), `node native-verify.cjs` passed (20 tests), Prettier formatting check passed, and `git diff --check` passed. ESLint could not run because its executable was unavailable in this checkout.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-13019-B-r0-a0\\home\\events\\1794297754189-6c3fe0ee-be1f-4041-9977-174fa5553110.jsonl",
+  "receiptAudit": {
+    "requests": 32,
+    "finalUsageResponses": 32,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 32,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-13019-B-r0",
+  "attempt": 0
+}

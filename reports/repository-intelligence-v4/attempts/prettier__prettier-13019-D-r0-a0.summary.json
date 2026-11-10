@@ -1,0 +1,137 @@
+{
+  "task": "prettier__prettier-13019",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-13019-D-r0-a0/workspace",
+    "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+    "tree": "7cddbd0fbbb749040d5c70347a8651b483fe5e13"
+  },
+  "runId": "prettier__prettier-13019-D-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 123023.3238,
+  "usage": {
+    "input": 18623,
+    "cacheRead": 128640,
+    "cacheWrite": 0,
+    "output": 2202,
+    "estimatedApiUsd": 0.07213000000000001,
+    "modelCalls": 11,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.07213000000000001,
+  "acceptance": {
+    "status": "failed",
+    "required": 4,
+    "requiredPassed": 2,
+    "unpassed": [
+      "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.",
+      "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 4,
+      "targetsPassed": 2,
+      "regressions": 16,
+      "regressionsPassed": 16,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.",
+        "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/cache.js->--cache option --cache-location doesn't create default cache file when `--cache-location` exists": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location file creates the cache file at location specified by `--cache-location`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location file does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content creates default cache file named `node_modules/.cache/prettier/.prettier-cache`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content does'nt re-format when timestamp has been updated": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content re-formats when a file has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content re-formats when options has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content removes cache file when run Prettier without `--cache` option": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata creates default cache file named `node_modules/.cache/prettier/.prettier-cache`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when a file has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when options has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when timestamp has been updated": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata removes cache file when run Prettier without `--cache` option": 1,
+        "tests/integration/__tests__/cache.js->--cache option throw error when cache-strategy is invalid": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when use `--cache-strategy` without `--cache`.": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when use with --stdin-filepath": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 16,
+    "requiredPassed": 16
+  },
+  "changed": [
+    "docs/cli.md",
+    "src/cli/constant.js",
+    "src/cli/find-cache-file.js",
+    "src/cli/format.js",
+    "tests/integration/__tests__/cache.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/cli/utils.js"
+  ],
+  "extraChangedFiles": [
+    "docs/cli.md",
+    "tests/integration/__tests__/cache.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 11,
+  "editCalls": 7,
+  "verificationCalls": 2,
+  "toolCalls": 28,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-13019-D-r0-a0\\home\\events\\1794298740112-cd46c999-52bd-4da5-8c2f-9caf154d60db.jsonl",
+  "receiptAudit": {
+    "requests": 11,
+    "finalUsageResponses": 11,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 11,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-13019-D-r0",
+  "attempt": 0
+}

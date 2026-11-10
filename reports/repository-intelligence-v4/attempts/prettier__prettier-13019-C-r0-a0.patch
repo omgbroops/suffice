@@ -1,0 +1,185 @@
+diff --git a/docs/cli.md b/docs/cli.md
+index af3afef..a3c98fc 100644
+--- a/docs/cli.md
++++ b/docs/cli.md
+@@ -225,6 +225,14 @@ Also, since the cache file is stored in `./node_modules/.cache/prettier/.prettie
+ 
+ > Plugins version and implementation are not used as cache keys. We recommend that you delete the cache when updating plugins.
+ 
++## `--cache-location`
++
++Path to the cache file. Relative paths are resolved from the current working directory. If not specified, Prettier uses `node_modules/.cache/prettier/.prettier-cache`.
++
++```bash
++prettier --write --cache --cache-location .cache/prettier-cache src
++```
++
+ ## `--cache-strategy`
+ 
+ Strategy for the cache to use for detecting changed files. Can be either `metadata` or `content`.
+diff --git a/src/cli/constant.js b/src/cli/constant.js
+index c7cc895..33a64f3 100644
+--- a/src/cli/constant.js
++++ b/src/cli/constant.js
+@@ -76,6 +76,10 @@ const options = {
+     description: "Only format changed files. Cannot use with --stdin-filepath.",
+     type: "boolean",
+   },
++  "cache-location": {
++    description: "Path to the cache file.",
++    type: "path",
++  },
+   "cache-strategy": {
+     choices: [
+       {
+diff --git a/src/cli/format-results-cache.js b/src/cli/format-results-cache.js
+index 3dfb79d..500733a 100644
+--- a/src/cli/format-results-cache.js
++++ b/src/cli/format-results-cache.js
+@@ -40,7 +40,7 @@ function getMetadataFromFileDescriptor(fileDescriptor) {
+ 
+ class FormatResultsCache {
+   /**
+-   * @param {string} cacheFileLocation The path of cache file location. (default: `node_modules/.cache/prettier/prettier-cache`)
++   * @param {string} cacheFileLocation The path of cache file location. (default: `node_modules/.cache/prettier/.prettier-cache`)
+    * @param {string} cacheStrategy
+    */
+   constructor(cacheFileLocation, cacheStrategy) {
+diff --git a/src/cli/format.js b/src/cli/format.js
+index 8f5e486..764e951 100644
+--- a/src/cli/format.js
++++ b/src/cli/format.js
+@@ -299,7 +299,9 @@ async function formatFiles(context) {
+   }
+ 
+   let formatResultsCache;
+-  const cacheFilePath = findCacheFile();
++  const cacheFilePath = context.argv.cacheLocation
++    ? path.resolve(context.argv.cacheLocation)
++    : findCacheFile();
+   if (context.argv.cache) {
+     formatResultsCache = new FormatResultsCache(
+       cacheFilePath,
+diff --git a/tests/integration/__tests__/__snapshots__/early-exit.js.snap b/tests/integration/__tests__/__snapshots__/early-exit.js.snap
+index 63f00b0..d788619 100644
+--- a/tests/integration/__tests__/__snapshots__/early-exit.js.snap
++++ b/tests/integration/__tests__/__snapshots__/early-exit.js.snap
+@@ -141,6 +141,7 @@ Other options:
+ 
+   --cache                  Only format changed files. Cannot use with --stdin-filepath.
+                            Defaults to false.
++  --cache-location <path>  Path to the cache file.
+   --cache-strategy <metadata|content>
+                            Strategy for the cache to use for detecting changed files.
+   --no-color               Do not colorize error messages.
+@@ -315,6 +316,7 @@ Other options:
+ 
+   --cache                  Only format changed files. Cannot use with --stdin-filepath.
+                            Defaults to false.
++  --cache-location <path>  Path to the cache file.
+   --cache-strategy <metadata|content>
+                            Strategy for the cache to use for detecting changed files.
+   --no-color               Do not colorize error messages.
+diff --git a/tests/integration/__tests__/__snapshots__/help-options.js.snap b/tests/integration/__tests__/__snapshots__/help-options.js.snap
+index 009f516..5574c32 100644
+--- a/tests/integration/__tests__/__snapshots__/help-options.js.snap
++++ b/tests/integration/__tests__/__snapshots__/help-options.js.snap
+@@ -57,6 +57,17 @@ Default: false
+ 
+ exports[`show detailed usage with --help cache (write) 1`] = `[]`;
+ 
++exports[`show detailed usage with --help cache-location (stderr) 1`] = `""`;
++
++exports[`show detailed usage with --help cache-location (stdout) 1`] = `
++"--cache-location <path>
++
++  Path to the cache file.
++"
++`;
++
++exports[`show detailed usage with --help cache-location (write) 1`] = `[]`;
++
+ exports[`show detailed usage with --help cache-strategy (stderr) 1`] = `""`;
+ 
+ exports[`show detailed usage with --help cache-strategy (stdout) 1`] = `
+diff --git a/tests/integration/__tests__/cache.js b/tests/integration/__tests__/cache.js
+index 863cd29..548c7d4 100644
+--- a/tests/integration/__tests__/cache.js
++++ b/tests/integration/__tests__/cache.js
+@@ -17,6 +17,7 @@ describe("--cache option", () => {
+     dir,
+     "node_modules/.cache/prettier/.prettier-cache"
+   );
++  const customCacheFile = path.join(dir, "custom-prettier-cache");
+ 
+   let contentA;
+   let contentB;
+@@ -28,6 +29,7 @@ describe("--cache option", () => {
+ 
+   afterEach(async () => {
+     rimraf.sync(path.join(dir, "node_modules"));
++    rimraf.sync(customCacheFile);
+     await fs.writeFile(path.join(dir, "a.js"), contentA);
+     await fs.writeFile(path.join(dir, "b.js"), contentB);
+   });
+@@ -68,6 +70,41 @@ describe("--cache option", () => {
+     );
+   });
+ 
++  it("uses the cache file specified by --cache-location", async () => {
++    const args = [
++      "--cache",
++      "--cache-location",
++      "custom-prettier-cache",
++      "--write",
++      ".",
++    ];
++
++    const { stdout: firstStdout } = await runPrettier(dir, args);
++    expect(stripAnsi(firstStdout).split("\n").filter(Boolean)).toEqual(
++      expect.arrayContaining([
++        expect.stringMatching(/^a\.js .+ms$/),
++        expect.stringMatching(/^b\.js .+ms$/),
++      ])
++    );
++    await expect(fs.stat(customCacheFile)).resolves.not.toThrowError();
++
++    const { stdout: secondStdout } = await runPrettier(dir, args);
++    expect(stripAnsi(secondStdout).split("\n").filter(Boolean)).toEqual(
++      expect.arrayContaining([
++        expect.stringMatching(/^a\.js .+ms \(cached\)$/),
++        expect.stringMatching(/^b\.js .+ms \(cached\)$/),
++      ])
++    );
++
++    await runPrettier(dir, [
++      "--cache-location",
++      "custom-prettier-cache",
++      "--write",
++      ".",
++    ]);
++    await expect(fs.stat(customCacheFile)).rejects.toThrowError();
++  });
++
+   describe("--cache-strategy metadata", () => {
+     it("creates default cache file named `node_modules/.cache/prettier/.prettier-cache`", async () => {
+       await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(
+diff --git a/website/versioned_docs/version-stable/cli.md b/website/versioned_docs/version-stable/cli.md
+index d9bb666..4253d6c 100644
+--- a/website/versioned_docs/version-stable/cli.md
++++ b/website/versioned_docs/version-stable/cli.md
+@@ -226,6 +226,14 @@ Also, since the cache file is stored in `./node_modules/.cache/prettier/.prettie
+ 
+ > Plugins version and implementation are not used as cache keys. We recommend that you delete the cache when updating plugins.
+ 
++## `--cache-location`
++
++Path to the cache file. Relative paths are resolved from the current working directory. If not specified, Prettier uses `node_modules/.cache/prettier/.prettier-cache`.
++
++```bash
++prettier --write --cache --cache-location .cache/prettier-cache src
++```
++
+ ## `--cache-strategy`
+ 
+ Strategy for the cache to use for detecting changed files. Can be either `metadata` or `content`.

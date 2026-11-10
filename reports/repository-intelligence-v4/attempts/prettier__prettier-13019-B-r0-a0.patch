@@ -1,0 +1,133 @@
+diff --git a/docs/cli.md b/docs/cli.md
+index af3afef..c327051 100644
+--- a/docs/cli.md
++++ b/docs/cli.md
+@@ -221,7 +221,16 @@ prettier --write --cache src
+ 
+ Running Prettier without `--cache` will delete the cache.
+ 
+-Also, since the cache file is stored in `./node_modules/.cache/prettier/.prettier-cache`, so you can use `rm ./node_modules/.cache/prettier/.prettier-cache` to remove it manually.
++By default, the cache file is stored in `./node_modules/.cache/prettier/.prettier-cache`.
++Use `--cache-location` to specify a different cache file, for example to keep
++separate caches for different projects that share a `node_modules` directory.
++Relative paths are resolved from the current working directory.
++
++```bash
++prettier --write --cache --cache-location ./.prettiercache src
++```
++
++You can remove the cache manually by deleting the configured cache file.
+ 
+ > Plugins version and implementation are not used as cache keys. We recommend that you delete the cache when updating plugins.
+ 
+diff --git a/src/cli/constant.js b/src/cli/constant.js
+index c7cc895..2c14ab0 100644
+--- a/src/cli/constant.js
++++ b/src/cli/constant.js
+@@ -76,6 +76,11 @@ const options = {
+     description: "Only format changed files. Cannot use with --stdin-filepath.",
+     type: "boolean",
+   },
++  "cache-location": {
++    description:
++      "Path to the cache file (default: node_modules/.cache/prettier/.prettier-cache).",
++    type: "path",
++  },
+   "cache-strategy": {
+     choices: [
+       {
+diff --git a/src/cli/find-cache-file.js b/src/cli/find-cache-file.js
+index c8960ea..9912200 100644
+--- a/src/cli/find-cache-file.js
++++ b/src/cli/find-cache-file.js
+@@ -5,11 +5,17 @@ const path = require("path");
+ const findCacheDir = require("find-cache-dir");
+ 
+ /**
+- * Find default cache file (`./node_modules/.cache/prettier/.prettier-cache`) using https://github.com/avajs/find-cache-dir
++ * Find the cache file, defaulting to `./node_modules/.cache/prettier/.prettier-cache`
++ * using https://github.com/avajs/find-cache-dir.
+  *
++ * @param {string=} cacheLocation
+  * @returns {string}
+  */
+-function findCacheFile() {
++function findCacheFile(cacheLocation) {
++  if (cacheLocation) {
++    return path.resolve(cacheLocation);
++  }
++
+   const cacheDir =
+     findCacheDir({ name: "prettier", create: true }) || os.tmpdir();
+   const cacheFilePath = path.join(cacheDir, ".prettier-cache");
+diff --git a/src/cli/format.js b/src/cli/format.js
+index 8f5e486..a69b7f1 100644
+--- a/src/cli/format.js
++++ b/src/cli/format.js
+@@ -299,7 +299,7 @@ async function formatFiles(context) {
+   }
+ 
+   let formatResultsCache;
+-  const cacheFilePath = findCacheFile();
++  const cacheFilePath = findCacheFile(context.argv.cacheLocation);
+   if (context.argv.cache) {
+     formatResultsCache = new FormatResultsCache(
+       cacheFilePath,
+diff --git a/tests/integration/__tests__/cache.js b/tests/integration/__tests__/cache.js
+index 863cd29..27975a8 100644
+--- a/tests/integration/__tests__/cache.js
++++ b/tests/integration/__tests__/cache.js
+@@ -17,6 +17,7 @@ describe("--cache option", () => {
+     dir,
+     "node_modules/.cache/prettier/.prettier-cache"
+   );
++  const customCacheFile = path.join(dir, "custom-cache", "prettier-cache");
+ 
+   let contentA;
+   let contentB;
+@@ -28,6 +29,7 @@ describe("--cache option", () => {
+ 
+   afterEach(async () => {
+     rimraf.sync(path.join(dir, "node_modules"));
++    rimraf.sync(path.dirname(customCacheFile));
+     await fs.writeFile(path.join(dir, "a.js"), contentA);
+     await fs.writeFile(path.join(dir, "b.js"), contentB);
+   });
+@@ -68,6 +70,37 @@ describe("--cache option", () => {
+     );
+   });
+ 
++  it("uses --cache-location relative to the current working directory", async () => {
++    const cacheLocation = path.join("custom-cache", "prettier-cache");
++    const { stdout: firstStdout } = await runPrettier(dir, [
++      "--cache",
++      "--cache-location",
++      cacheLocation,
++      "--write",
++      "a.js",
++    ]);
++    expect(stripAnsi(firstStdout)).not.toMatch(/\(cached\)/);
++    await expect(fs.stat(customCacheFile)).resolves.not.toThrowError();
++
++    const { stdout: secondStdout } = await runPrettier(dir, [
++      "--cache",
++      "--cache-location",
++      cacheLocation,
++      "--write",
++      "a.js",
++    ]);
++    expect(stripAnsi(secondStdout)).toMatch(/a\.js .+ms \(cached\)/);
++
++    const { stdout: thirdStdout } = await runPrettier(dir, [
++      "--cache",
++      "--cache-location",
++      path.join("custom-cache", "another-cache"),
++      "--write",
++      "a.js",
++    ]);
++    expect(stripAnsi(thirdStdout)).not.toMatch(/\(cached\)/);
++  });
++
+   describe("--cache-strategy metadata", () => {
+     it("creates default cache file named `node_modules/.cache/prettier/.prettier-cache`", async () => {
+       await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(

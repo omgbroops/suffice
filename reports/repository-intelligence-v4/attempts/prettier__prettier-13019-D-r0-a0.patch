@@ -1,0 +1,153 @@
+diff --git a/docs/cli.md b/docs/cli.md
+index af3afef..34bb83b 100644
+--- a/docs/cli.md
++++ b/docs/cli.md
+@@ -225,6 +225,17 @@ Also, since the cache file is stored in `./node_modules/.cache/prettier/.prettie
+ 
+ > Plugins version and implementation are not used as cache keys. We recommend that you delete the cache when updating plugins.
+ 
++## `--cache-location`
++
++Path to the cache file. Defaults to `./node_modules/.cache/prettier/.prettier-cache`.
++Relative paths are resolved from the current working directory. Requires `--cache`.
++
++Use separate cache files for independent formatting runs that share a `node_modules` directory:
++
++```bash
++prettier --write --cache --cache-location .prettiercache src
++```
++
+ ## `--cache-strategy`
+ 
+ Strategy for the cache to use for detecting changed files. Can be either `metadata` or `content`.
+diff --git a/src/cli/constant.js b/src/cli/constant.js
+index c7cc895..33a64f3 100644
+--- a/src/cli/constant.js
++++ b/src/cli/constant.js
+@@ -76,6 +76,10 @@ const options = {
+     description: "Only format changed files. Cannot use with --stdin-filepath.",
+     type: "boolean",
+   },
++  "cache-location": {
++    description: "Path to the cache file.",
++    type: "path",
++  },
+   "cache-strategy": {
+     choices: [
+       {
+diff --git a/src/cli/find-cache-file.js b/src/cli/find-cache-file.js
+index c8960ea..00bfc17 100644
+--- a/src/cli/find-cache-file.js
++++ b/src/cli/find-cache-file.js
+@@ -7,9 +7,14 @@ const findCacheDir = require("find-cache-dir");
+ /**
+  * Find default cache file (`./node_modules/.cache/prettier/.prettier-cache`) using https://github.com/avajs/find-cache-dir
+  *
++ * @param {string} [cacheLocation]
+  * @returns {string}
+  */
+-function findCacheFile() {
++function findCacheFile(cacheLocation) {
++  if (cacheLocation) {
++    return path.resolve(cacheLocation);
++  }
++
+   const cacheDir =
+     findCacheDir({ name: "prettier", create: true }) || os.tmpdir();
+   const cacheFilePath = path.join(cacheDir, ".prettier-cache");
+diff --git a/src/cli/format.js b/src/cli/format.js
+index 8f5e486..300322f 100644
+--- a/src/cli/format.js
++++ b/src/cli/format.js
+@@ -299,18 +299,23 @@ async function formatFiles(context) {
+   }
+ 
+   let formatResultsCache;
+-  const cacheFilePath = findCacheFile();
++  const cacheFilePath = findCacheFile(context.argv.cacheLocation);
+   if (context.argv.cache) {
+     formatResultsCache = new FormatResultsCache(
+       cacheFilePath,
+       context.argv.cacheStrategy || "content"
+     );
+   } else {
+-    if (context.argv.cacheStrategy) {
+-      context.logger.error(
+-        "`--cache-strategy` cannot be used without `--cache`."
+-      );
+-      process.exit(2);
++    for (const [option, value] of [
++      ["cache-strategy", context.argv.cacheStrategy],
++      ["cache-location", context.argv.cacheLocation],
++    ]) {
++      if (value) {
++        context.logger.error(
++          `\`--${option}\` cannot be used without \`--cache\`.`
++        );
++        process.exit(2);
++      }
+     }
+     const stat = await statSafe(cacheFilePath);
+     if (stat) {
+diff --git a/tests/integration/__tests__/cache.js b/tests/integration/__tests__/cache.js
+index 863cd29..49951af 100644
+--- a/tests/integration/__tests__/cache.js
++++ b/tests/integration/__tests__/cache.js
+@@ -68,6 +68,57 @@ describe("--cache option", () => {
+     );
+   });
+ 
++  describe("--cache-location", () => {
++    it("requires --cache", async () => {
++      const { stderr } = await runPrettier(dir, [
++        "a.js",
++        "--cache-location",
++        "node_modules/custom-cache",
++      ]);
++      expect(stripAnsi(stderr.trim())).toBe(
++        "[error] `--cache-location` cannot be used without `--cache`."
++      );
++    });
++
++    it.each(["content", "metadata"])(
++      "keeps separate %s caches for different file sets",
++      async (strategy) => {
++        const locationA = "node_modules/custom/a-cache";
++        const locationB = path.join(dir, "node_modules/custom/b-cache");
++        const run = (file, location) =>
++          runPrettier(dir, [
++            "--cache",
++            "--write",
++            "--cache-strategy",
++            strategy,
++            "--cache-location",
++            location,
++            file,
++          ]);
++
++        await run("a.js", locationA);
++        await run("b.js", locationB);
++        await expect(
++          fs.stat(path.join(dir, locationA))
++        ).resolves.not.toThrowError();
++        await expect(fs.stat(locationB)).resolves.not.toThrowError();
++        await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(
++          "code",
++          "ENOENT"
++        );
++
++        for (const [file, location] of [
++          ["a.js", locationA],
++          ["b.js", locationB],
++        ]) {
++          const { stdout, stderr } = await run(file, location);
++          expect(stderr).toBe("");
++          expect(stripAnsi(stdout)).toContain("(cached)");
++        }
++      }
++    );
++  });
++
+   describe("--cache-strategy metadata", () => {
+     it("creates default cache file named `node_modules/.cache/prettier/.prettier-cache`", async () => {
+       await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(

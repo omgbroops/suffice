@@ -1,0 +1,270 @@
+{
+  "numFailedTestSuites": 1,
+  "numFailedTests": 4,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 16,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 1,
+  "numTotalTests": 20,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0
+  },
+  "startTime": 1794297099792,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "--cache option"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option throw error when cache-strategy is invalid",
+          "location": null,
+          "status": "passed",
+          "title": "throw error when cache-strategy is invalid"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option throws error when use with --stdin-filepath",
+          "location": null,
+          "status": "passed",
+          "title": "throws error when use with --stdin-filepath"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option throws error when use `--cache-strategy` without `--cache`.",
+          "location": null,
+          "status": "passed",
+          "title": "throws error when use `--cache-strategy` without `--cache`."
+        },
+        {
+          "ancestorTitles": [
+            "--cache option"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\nExpected: StringMatching /\\[error] Resolved --cache-location '.+' is a directory/\nReceived: \"[warn] Ignored unknown option --cache-location=dir.\n[error] No files matching the pattern were found: \\\"foo.js\\\".\"\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\__tests__\\cache.js:82:38)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)"
+          ],
+          "fullName": "--cache option throws error when `--cache-location` is a directory.",
+          "location": null,
+          "status": "failed",
+          "title": "throws error when `--cache-location` is a directory."
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy metadata"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy metadata creates default cache file named `node_modules/.cache/prettier/.prettier-cache`",
+          "location": null,
+          "status": "passed",
+          "title": "creates default cache file named `node_modules/.cache/prettier/.prettier-cache`"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy metadata"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy metadata does'nt format when cache is available",
+          "location": null,
+          "status": "passed",
+          "title": "does'nt format when cache is available"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy metadata"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy metadata re-formats when a file has been updated.",
+          "location": null,
+          "status": "passed",
+          "title": "re-formats when a file has been updated."
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy metadata"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy metadata re-formats when timestamp has been updated",
+          "location": null,
+          "status": "passed",
+          "title": "re-formats when timestamp has been updated"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy metadata"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy metadata re-formats when options has been updated.",
+          "location": null,
+          "status": "passed",
+          "title": "re-formats when options has been updated."
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy metadata"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy metadata removes cache file when run Prettier without `--cache` option",
+          "location": null,
+          "status": "passed",
+          "title": "removes cache file when run Prettier without `--cache` option"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy content"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy content creates default cache file named `node_modules/.cache/prettier/.prettier-cache`",
+          "location": null,
+          "status": "passed",
+          "title": "creates default cache file named `node_modules/.cache/prettier/.prettier-cache`"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy content"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy content does'nt format when cache is available",
+          "location": null,
+          "status": "passed",
+          "title": "does'nt format when cache is available"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy content"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy content re-formats when a file has been updated.",
+          "location": null,
+          "status": "passed",
+          "title": "re-formats when a file has been updated."
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy content"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy content does'nt re-format when timestamp has been updated",
+          "location": null,
+          "status": "passed",
+          "title": "does'nt re-format when timestamp has been updated"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy content"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy content re-formats when options has been updated.",
+          "location": null,
+          "status": "passed",
+          "title": "re-formats when options has been updated."
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-strategy content"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-strategy content removes cache file when run Prettier without `--cache` option",
+          "location": null,
+          "status": "passed",
+          "title": "removes cache file when run Prettier without `--cache` option"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-location"
+          ],
+          "failureMessages": [
+            "Error: expect(received).rejects.toHaveProperty()\n\nReceived promise resolved instead of rejected\nResolved to value: {\"atime\": 2026-11-10T07:51:45.165Z, \"atimeMs\": 1794297105165.3103, \"birthtime\": 2026-11-10T07:51:45.165Z, \"birthtimeMs\": 1794297105164.8008, \"blksize\": 4096, \"blocks\": 0, \"ctime\": 2026-11-10T07:51:45.165Z, \"ctimeMs\": 1794297105165.3103, \"dev\": 348620203, \"gid\": 0, \"ino\": 3940649679011099, \"mode\": 33206, \"mtime\": 2026-11-10T07:51:45.165Z, \"mtimeMs\": 1794297105165.3103, \"nlink\": 1, \"rdev\": 0, \"size\": 286, \"uid\": 0}\n    at expect (C:\\Users\\Public\\SufficeV4\\deps-b435a0cb3cbbc9c8b986\\node_modules\\expect\\build\\index.js:178:15)\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\__tests__\\cache.js:404:13)"
+          ],
+          "fullName": "--cache option --cache-location doesn't create default cache file when `--cache-location` exists",
+          "location": null,
+          "status": "failed",
+          "title": "doesn't create default cache file when `--cache-location` exists"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-location"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\nExpected: StringMatching /\\[error] '.+' isn't a valid JSON file/\nReceived: \"[warn] Ignored unknown option --cache-location=a.js.\"\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\__tests__\\cache.js:417:40)"
+          ],
+          "fullName": "--cache option --cache-location throws error for invalid JSON file",
+          "location": null,
+          "status": "failed",
+          "title": "throws error for invalid JSON file"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-location",
+            "file"
+          ],
+          "failureMessages": [
+            "Error: expect(received).resolves.not.toThrowError()\n\nReceived promise rejected instead of resolved\nRejected to value: [Error: ENOENT: no such file or directory, stat 'C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\cli\\cache\\.non-default-cache-file']\n    at expect (C:\\Users\\Public\\SufficeV4\\deps-b435a0cb3cbbc9c8b986\\node_modules\\expect\\build\\index.js:178:15)\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\__tests__\\cache.js:434:15)"
+          ],
+          "fullName": "--cache option --cache-location file creates the cache file at location specified by `--cache-location`",
+          "location": null,
+          "status": "failed",
+          "title": "creates the cache file at location specified by `--cache-location`"
+        },
+        {
+          "ancestorTitles": [
+            "--cache option",
+            "--cache-location",
+            "file"
+          ],
+          "failureMessages": [],
+          "fullName": "--cache option --cache-location file does'nt format when cache is available",
+          "location": null,
+          "status": "passed",
+          "title": "does'nt format when cache is available"
+        }
+      ],
+      "endTime": 1794297105646,
+      "message": "  ● --cache option › throws error when `--cache-location` is a directory.\n\n    expect(received).toEqual(expected) // deep equality\n\n    Expected: StringMatching /\\[error] Resolved --cache-location '.+' is a directory/\n    Received: \"[warn] Ignored unknown option --cache-location=dir.\n    [error] No files matching the pattern were found: \\\"foo.js\\\".\"\n\n      80 |       \"dir\",\n      81 |     ]);\n    > 82 |     expect(stripAnsi(stderr.trim())).toEqual(\n         |                                      ^\n      83 |       expect.stringMatching(\n      84 |         /\\[error] Resolved --cache-location '.+' is a directory/\n      85 |       )\n\n      at Object.<anonymous> (tests/integration/__tests__/cache.js:82:38)\n\n  ● --cache option › --cache-location › doesn't create default cache file when `--cache-location` exists\n\n    expect(received).rejects.toHaveProperty()\n\n    Received promise resolved instead of rejected\n    Resolved to value: {\"atime\": 2026-11-10T07:51:45.165Z, \"atimeMs\": 1794297105165.3103, \"birthtime\": 2026-11-10T07:51:45.165Z, \"birthtimeMs\": 1794297105164.8008, \"blksize\": 4096, \"blocks\": 0, \"ctime\": 2026-11-10T07:51:45.165Z, \"ctimeMs\": 1794297105165.3103, \"dev\": 348620203, \"gid\": 0, \"ino\": 3940649679011099, \"mode\": 33206, \"mtime\": 2026-11-10T07:51:45.165Z, \"mtimeMs\": 1794297105165.3103, \"nlink\": 1, \"rdev\": 0, \"size\": 286, \"uid\": 0}\n\n      402 |         \".\",\n      403 |       ]);\n    > 404 |       await expect(fs.stat(defaultCacheFile)).rejects.toHaveProperty(\n          |             ^\n      405 |         \"code\",\n      406 |         \"ENOENT\"\n      407 |       );\n\n      at expect (../../deps-b435a0cb3cbbc9c8b986/node_modules/expect/build/index.js:178:15)\n      at Object.<anonymous> (tests/integration/__tests__/cache.js:404:13)\n\n  ● --cache option › --cache-location › throws error for invalid JSON file\n\n    expect(received).toEqual(expected) // deep equality\n\n    Expected: StringMatching /\\[error] '.+' isn't a valid JSON file/\n    Received: \"[warn] Ignored unknown option --cache-location=a.js.\"\n\n      415 |         \".\",\n      416 |       ]);\n    > 417 |       expect(stripAnsi(stderr).trim()).toEqual(\n          |                                        ^\n      418 |         expect.stringMatching(/\\[error] '.+' isn't a valid JSON file/)\n      419 |       );\n      420 |     });\n\n      at Object.<anonymous> (tests/integration/__tests__/cache.js:417:40)\n\n  ● --cache option › --cache-location › file › creates the cache file at location specified by `--cache-location`\n\n    expect(received).resolves.not.toThrowError()\n\n    Received promise rejected instead of resolved\n    Rejected to value: [Error: ENOENT: no such file or directory, stat 'C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\cli\\cache\\.non-default-cache-file']\n\n      432 |           \".\",\n      433 |         ]);\n    > 434 |         await expect(\n          |               ^\n      435 |           fs.stat(nonDefaultCacheFilePath)\n      436 |         ).resolves.not.toThrowError();\n      437 |       });\n\n      at expect (../../deps-b435a0cb3cbbc9c8b986/node_modules/expect/build/index.js:178:15)\n      at Object.<anonymous> (tests/integration/__tests__/cache.js:434:15)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\gate-prettier__prettier-13019-1794296788351\\empty\\tests\\integration\\__tests__\\cache.js",
+      "startTime": 1794297099903,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

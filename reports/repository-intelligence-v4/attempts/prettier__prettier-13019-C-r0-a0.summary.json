@@ -1,0 +1,343 @@
+{
+  "task": "prettier__prettier-13019",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-13019-C-r0-a0/workspace",
+    "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+    "tree": "7cddbd0fbbb749040d5c70347a8651b483fe5e13"
+  },
+  "runId": "prettier__prettier-13019-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 754264.1076,
+  "usage": {
+    "input": 128325,
+    "cacheRead": 1497728,
+    "cacheWrite": 0,
+    "output": 15094,
+    "estimatedApiUsd": 0.03535678,
+    "modelCalls": 32,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.03535678,
+  "acceptance": {
+    "status": "failed",
+    "required": 4,
+    "requiredPassed": 2,
+    "unpassed": [
+      "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.",
+      "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 4,
+      "targetsPassed": 2,
+      "regressions": 16,
+      "regressionsPassed": 16,
+      "missing": [],
+      "failures": [
+        "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.",
+        "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/integration/__tests__/cache.js->--cache option --cache-location doesn't create default cache file when `--cache-location` exists": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location file creates the cache file at location specified by `--cache-location`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location file does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-location throws error for invalid JSON file": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content creates default cache file named `node_modules/.cache/prettier/.prettier-cache`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content does'nt re-format when timestamp has been updated": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content re-formats when a file has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content re-formats when options has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy content removes cache file when run Prettier without `--cache` option": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata creates default cache file named `node_modules/.cache/prettier/.prettier-cache`": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata does'nt format when cache is available": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when a file has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when options has been updated.": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata re-formats when timestamp has been updated": 1,
+        "tests/integration/__tests__/cache.js->--cache option --cache-strategy metadata removes cache file when run Prettier without `--cache` option": 1,
+        "tests/integration/__tests__/cache.js->--cache option throw error when cache-strategy is invalid": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when `--cache-location` is a directory.": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when use `--cache-strategy` without `--cache`.": 1,
+        "tests/integration/__tests__/cache.js->--cache option throws error when use with --stdin-filepath": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 16,
+    "requiredPassed": 16
+  },
+  "changed": [
+    "docs/cli.md",
+    "src/cli/constant.js",
+    "src/cli/format-results-cache.js",
+    "src/cli/format.js",
+    "tests/integration/__tests__/__snapshots__/early-exit.js.snap",
+    "tests/integration/__tests__/__snapshots__/help-options.js.snap",
+    "tests/integration/__tests__/cache.js",
+    "website/versioned_docs/version-stable/cli.md"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/cli/find-cache-file.js",
+    "src/cli/utils.js"
+  ],
+  "extraChangedFiles": [
+    "docs/cli.md",
+    "src/cli/format-results-cache.js",
+    "tests/integration/__tests__/__snapshots__/early-exit.js.snap",
+    "tests/integration/__tests__/__snapshots__/help-options.js.snap",
+    "tests/integration/__tests__/cache.js",
+    "website/versioned_docs/version-stable/cli.md"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 32,
+  "editCalls": 9,
+  "verificationCalls": 2,
+  "toolCalls": 68,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T08:27:04.681Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "ee0ee397ffbeb89bba31c070e3d889ca681e5b3f435370ffb497e6579156d599",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "14ed9e23bb3b26e22ea96fcac4cf252e219acd0f3dd90205ae5ffdbf8f031c80"
+      },
+      "latencyMs": 13933.910599999974,
+      "parsedFiles": 4276,
+      "fileCount": 4277,
+      "cacheBytes": 24707220,
+      "heapDeltaBytes": 170278592,
+      "graphBytes": 34581842
+    },
+    {
+      "at": "2026-11-10T08:27:22.514Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "b8b9c4d725d1507a15dd1884679aeb974c5e1d785ba552fde07a6019d124038e",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "fa901856e1ede90562bd98b5cef8f13ac92d58f851a5b644564949a8c897961b"
+      },
+      "latencyMs": 11740.856300000043,
+      "parsedFiles": 3,
+      "fileCount": 4277,
+      "cacheBytes": 24723691,
+      "heapDeltaBytes": 120128880,
+      "graphBytes": 34603324
+    },
+    {
+      "at": "2026-11-10T08:27:35.147Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "b8b9c4d725d1507a15dd1884679aeb974c5e1d785ba552fde07a6019d124038e",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "fa901856e1ede90562bd98b5cef8f13ac92d58f851a5b644564949a8c897961b"
+      },
+      "latencyMs": 12527.423099999956,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24723691,
+      "heapDeltaBytes": 89296304,
+      "graphBytes": 34603324
+    },
+    {
+      "at": "2026-11-10T08:28:04.703Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "b8b9c4d725d1507a15dd1884679aeb974c5e1d785ba552fde07a6019d124038e",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "fa901856e1ede90562bd98b5cef8f13ac92d58f851a5b644564949a8c897961b"
+      },
+      "latencyMs": 12096.0233,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24723691,
+      "heapDeltaBytes": -26835480,
+      "graphBytes": 34603324
+    },
+    {
+      "at": "2026-11-10T08:28:16.982Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "b8b9c4d725d1507a15dd1884679aeb974c5e1d785ba552fde07a6019d124038e",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "fa901856e1ede90562bd98b5cef8f13ac92d58f851a5b644564949a8c897961b"
+      },
+      "latencyMs": 12170.42200000002,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24723691,
+      "heapDeltaBytes": 85042472,
+      "graphBytes": 34603324
+    },
+    {
+      "at": "2026-11-10T08:29:09.153Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "b8b9c4d725d1507a15dd1884679aeb974c5e1d785ba552fde07a6019d124038e",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "fa901856e1ede90562bd98b5cef8f13ac92d58f851a5b644564949a8c897961b"
+      },
+      "latencyMs": 12547.859899999981,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24723691,
+      "heapDeltaBytes": 83721544,
+      "graphBytes": 34603324
+    },
+    {
+      "at": "2026-11-10T08:29:20.714Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "b8b9c4d725d1507a15dd1884679aeb974c5e1d785ba552fde07a6019d124038e",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "fa901856e1ede90562bd98b5cef8f13ac92d58f851a5b644564949a8c897961b"
+      },
+      "latencyMs": 11478.09659999999,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24723691,
+      "heapDeltaBytes": -20570576,
+      "graphBytes": 34603324
+    },
+    {
+      "at": "2026-11-10T08:33:15.268Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "4720da847ec4b52ae6034521a9592f5c857c0a1a4a6576eefc36fba2cfe7cbe3",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "bd1eecde2546021479a93fb8d3aa0e1299a64a501716818607926e861e384978"
+      },
+      "latencyMs": 9142.124199999962,
+      "parsedFiles": 1,
+      "fileCount": 4277,
+      "cacheBytes": 24726044,
+      "heapDeltaBytes": 58789880,
+      "graphBytes": 34606298
+    },
+    {
+      "at": "2026-11-10T08:33:23.646Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "4720da847ec4b52ae6034521a9592f5c857c0a1a4a6576eefc36fba2cfe7cbe3",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "bd1eecde2546021479a93fb8d3aa0e1299a64a501716818607926e861e384978"
+      },
+      "latencyMs": 8294.055799999973,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24726044,
+      "heapDeltaBytes": 62158768,
+      "graphBytes": 34606298
+    },
+    {
+      "at": "2026-11-10T08:35:37.317Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "aeb4fe497f72cc6f305a48db9f25ea6867011d6e2b2d1a5da32a9430c0381159",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "92de51dcadbee1279d6b6aac01d37449d5b4360e735ff6d3b4d20be8888a058c"
+      },
+      "latencyMs": 9265.928599999985,
+      "parsedFiles": 1,
+      "fileCount": 4277,
+      "cacheBytes": 24726044,
+      "heapDeltaBytes": 31824352,
+      "graphBytes": 34606298
+    },
+    {
+      "at": "2026-11-10T08:35:45.726Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "dac19d635536ede61587f63df0d952dc0e15afd4",
+        "sourceContentVersion": "aeb4fe497f72cc6f305a48db9f25ea6867011d6e2b2d1a5da32a9430c0381159",
+        "configurationVersion": "5e3a5fa127282d05405e985e9dfe00da2e20ca331b0ff8b293c31f8dfaab880e",
+        "contentVersion": "92de51dcadbee1279d6b6aac01d37449d5b4360e735ff6d3b4d20be8888a058c"
+      },
+      "latencyMs": 8312.546899999958,
+      "parsedFiles": 0,
+      "fileCount": 4277,
+      "cacheBytes": 24726044,
+      "heapDeltaBytes": 86586040,
+      "graphBytes": 34606298
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-13019-C-r0-a0\\home\\events\\1794299019337-28c826b1-4348-4a07-97aa-f0cf822f01c3.jsonl",
+  "receiptAudit": {
+    "requests": 32,
+    "finalUsageResponses": 32,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 32,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-13019-C-r0",
+  "attempt": 0
+}
