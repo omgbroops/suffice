@@ -1,0 +1,149 @@
+diff --git a/src/language-css/embed.js b/src/language-css/embed.js
+index 626d71f..a5d4402 100644
+--- a/src/language-css/embed.js
++++ b/src/language-css/embed.js
+@@ -8,10 +8,10 @@ const {
+ function embed(path, print, textToDoc /*, options */) {
+   const node = path.getValue();
+ 
+-  if (node.type === "yaml") {
++  if (node.type === "yaml" && node.lang === "yaml") {
+     return markAsRoot(
+       concat([
+-        "---",
++        node.raw.split("\n", 1)[0].trimEnd(),
+         hardline,
+         node.value.trim()
+           ? replaceNewlinesWithLiterallines(
+diff --git a/src/language-html/printer-html.js b/src/language-html/printer-html.js
+index 4d30371..3f42678 100644
+--- a/src/language-html/printer-html.js
++++ b/src/language-html/printer-html.js
+@@ -191,9 +191,12 @@ function embed(path, print, textToDoc, options) {
+       break;
+     }
+     case "yaml":
++      if (node.lang !== "yaml") {
++        return;
++      }
+       return markAsRoot(
+         concat([
+-          "---",
++          node.raw.split("\n", 1)[0].trimEnd(),
+           hardline,
+           node.value.trim().length === 0
+             ? ""
+diff --git a/src/language-markdown/embed.js b/src/language-markdown/embed.js
+index b8fda01..7306479 100644
+--- a/src/language-markdown/embed.js
++++ b/src/language-markdown/embed.js
+@@ -36,10 +36,10 @@ function embed(path, print, textToDoc, options) {
+     }
+   }
+ 
+-  if (node.type === "yaml") {
++  if (node.type === "yaml" && node.lang === "yaml") {
+     return markAsRoot(
+       concat([
+-        "---",
++        node.raw.split("\n", 1)[0].trimEnd(),
+         hardline,
+         node.value && node.value.trim()
+           ? replaceNewlinesWithLiterallines(
+diff --git a/src/utils/front-matter.js b/src/utils/front-matter.js
+index 1fd8446..2849dfd 100644
+--- a/src/utils/front-matter.js
++++ b/src/utils/front-matter.js
+@@ -11,9 +11,10 @@ function parse(text) {
+   const delimiterRegex = Object.keys(DELIMITER_MAP).map(escape).join("|");
+ 
+   const match = text.match(
+-    // trailing spaces after delimiters are allowed
++    // An opening delimiter may specify a language; closing delimiters may
++    // only be followed by whitespace.
+     new RegExp(
+-      `^(${delimiterRegex})[^\\n\\S]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
++      `^(${delimiterRegex})([^\\n]*)\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
+     )
+   );
+ 
+@@ -21,11 +22,12 @@ function parse(text) {
+     return { frontMatter: null, content: text };
+   }
+ 
+-  const [raw, delimiter, value] = match;
++  const [raw, delimiter, language, value] = match;
+ 
+   return {
+     frontMatter: {
+       type: DELIMITER_MAP[delimiter],
++      lang: language.trim() || DELIMITER_MAP[delimiter],
+       value,
+       raw: raw.replace(/\n$/, ""),
+     },
+diff --git a/tests/misc/front-matter/jsfmt.spec.js b/tests/misc/front-matter/jsfmt.spec.js
+new file mode 100644
+index 0000000..c35a2c3
+--- /dev/null
++++ b/tests/misc/front-matter/jsfmt.spec.js
+@@ -0,0 +1,60 @@
++"use strict";
++
++const prettier = require("prettier/local");
++const parseFrontMatter = require("../../../src/utils/front-matter");
++
++describe("front matter with a language designation", () => {
++  for (const [parser, body, formattedBody] of [
++    ["html", "<h1>\n  Hello world!</h1>", "<h1>\n  Hello world!\n</h1>\n"],
++    ["markdown", "#   Hello", "# Hello\n"],
++    ["css", "a{color:red}", "a {\n  color: red;\n}\n"],
++  ]) {
++    for (const marker of [
++      "---mycustomparser",
++      "--- custom-parser",
++      "+++custom",
++    ]) {
++      test(`${parser}: ${marker}`, () => {
++        const frontMatter = `${marker}\n  \ntitle:   Hello\nslug: home\n\n${marker.slice(
++          0,
++          3
++        )}`;
++        const input = `${frontMatter}\n\n${body}`;
++        const output = prettier.format(input, { parser });
++        expect(output).toBe(`${frontMatter}\n\n${formattedBody}`);
++        expect(prettier.format(output, { parser })).toBe(output);
++      });
++    }
++
++    test(`${parser}: explicit YAML language`, () => {
++      expect(
++        prettier.format(`---yaml\ntitle:   Hello\n---\n\n${body}`, {
++          parser,
++        })
++      ).toBe(`---yaml\ntitle: Hello\n---\n\n${formattedBody}`);
++    });
++  }
++
++  test("preserves source offsets and raw text", () => {
++    const raw = "---custom\r\nvalue\r\n---\r\n";
++    const { frontMatter, content } = parseFrontMatter(raw + "body");
++    expect(frontMatter.lang).toBe("custom");
++    expect(frontMatter.value).toBe("value\r");
++    expect(content.length).toBe(raw.length + 4);
++    expect(content.slice(raw.length)).toBe("body");
++  });
++
++  test("requires a complete front matter block at the start", () => {
++    for (const text of [
++      "---custom\nvalue",
++      "---custom\nvalue\n---custom\n",
++      "\n---custom\nvalue\n---\n",
++      "---custom\nvalue\n+++\n",
++    ]) {
++      expect(parseFrontMatter(text)).toEqual({
++        frontMatter: null,
++        content: text,
++      });
++    }
++  });
++});

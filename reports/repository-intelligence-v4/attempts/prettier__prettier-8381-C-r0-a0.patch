@@ -1,0 +1,225 @@
+diff --git a/src/language-css/embed.js b/src/language-css/embed.js
+index 626d71f..ce5f90a 100644
+--- a/src/language-css/embed.js
++++ b/src/language-css/embed.js
+@@ -8,7 +8,7 @@ const {
+ function embed(path, print, textToDoc /*, options */) {
+   const node = path.getValue();
+ 
+-  if (node.type === "yaml") {
++  if (node.type === "yaml" && !/^---\S/.test(node.raw)) {
+     return markAsRoot(
+       concat([
+         "---",
+diff --git a/src/language-html/printer-html.js b/src/language-html/printer-html.js
+index 4d30371..5460b90 100644
+--- a/src/language-html/printer-html.js
++++ b/src/language-html/printer-html.js
+@@ -191,6 +191,9 @@ function embed(path, print, textToDoc, options) {
+       break;
+     }
+     case "yaml":
++      if (/^---\S/.test(node.raw)) {
++        break;
++      }
+       return markAsRoot(
+         concat([
+           "---",
+diff --git a/src/language-markdown/embed.js b/src/language-markdown/embed.js
+index b8fda01..9801ff0 100644
+--- a/src/language-markdown/embed.js
++++ b/src/language-markdown/embed.js
+@@ -36,7 +36,7 @@ function embed(path, print, textToDoc, options) {
+     }
+   }
+ 
+-  if (node.type === "yaml") {
++  if (node.type === "yaml" && !/^---\S/.test(node.raw)) {
+     return markAsRoot(
+       concat([
+         "---",
+diff --git a/src/utils/front-matter.js b/src/utils/front-matter.js
+index 1fd8446..205bf15 100644
+--- a/src/utils/front-matter.js
++++ b/src/utils/front-matter.js
+@@ -13,7 +13,7 @@ function parse(text) {
+   const match = text.match(
+     // trailing spaces after delimiters are allowed
+     new RegExp(
+-      `^(${delimiterRegex})[^\\n\\S]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
++      `^(${delimiterRegex})[^\\n]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
+     )
+   );
+ 
+diff --git a/tests/css/yaml/__snapshots__/jsfmt.spec.js.snap b/tests/css/yaml/__snapshots__/jsfmt.spec.js.snap
+index 73eedb4..1fc9b53 100644
+--- a/tests/css/yaml/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/css/yaml/__snapshots__/jsfmt.spec.js.snap
+@@ -27,6 +27,38 @@ description: Description
+ ================================================================================
+ `;
+ 
++exports[`custom-parser.css format 1`] = `
++====================================options=====================================
++parsers: ["css"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++a {
++  color: red;
++}
++
++=====================================output=====================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++a {
++  color: red;
++}
++
++================================================================================
++`;
++
+ exports[`dirty.css format 1`] = `
+ ====================================options=====================================
+ parsers: ["css"]
+diff --git a/tests/css/yaml/custom-parser.css b/tests/css/yaml/custom-parser.css
+new file mode 100644
+index 0000000..7e93ab4
+--- /dev/null
++++ b/tests/css/yaml/custom-parser.css
+@@ -0,0 +1,10 @@
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++a {
++  color: red;
++}
+diff --git a/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap b/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap
+index 8e3f432..260c458 100644
+--- a/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap
+@@ -1,5 +1,36 @@
+ // Jest Snapshot v1, https://goo.gl/fbAQLP
+ 
++exports[`custom-parser.html format 1`] = `
++====================================options=====================================
++parsers: ["html"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>
++
++=====================================output=====================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!
++</h1>
++
++================================================================================
++`;
++
+ exports[`invalid.html format 1`] = `
+ ====================================options=====================================
+ parsers: ["html"]
+diff --git a/tests/html/yaml/custom-parser.html b/tests/html/yaml/custom-parser.html
+new file mode 100644
+index 0000000..6fae36f
+--- /dev/null
++++ b/tests/html/yaml/custom-parser.html
+@@ -0,0 +1,9 @@
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>
+diff --git a/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap b/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap
+index b949c67..941698f 100644
+--- a/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap
+@@ -25,6 +25,37 @@ proseWrap: "always"
+ ================================================================================
+ `;
+ 
++exports[`custom-parser.md - {"proseWrap":"always"} format 1`] = `
++====================================options=====================================
++parsers: ["markdown"]
++printWidth: 80
++proseWrap: "always"
++                                                                                | printWidth
++=====================================input======================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>
++
++=====================================output=====================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>
++
++================================================================================
++`;
++
+ exports[`empty.md - {"proseWrap":"always"} format 1`] = `
+ ====================================options=====================================
+ parsers: ["markdown"]
+diff --git a/tests/markdown/yaml/custom-parser.md b/tests/markdown/yaml/custom-parser.md
+new file mode 100644
+index 0000000..6fae36f
+--- /dev/null
++++ b/tests/markdown/yaml/custom-parser.md
+@@ -0,0 +1,9 @@
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>

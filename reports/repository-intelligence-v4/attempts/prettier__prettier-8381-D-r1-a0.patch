@@ -1,0 +1,113 @@
+diff --git a/src/language-css/embed.js b/src/language-css/embed.js
+index 626d71f..18eec0d 100644
+--- a/src/language-css/embed.js
++++ b/src/language-css/embed.js
+@@ -8,7 +8,7 @@ const {
+ function embed(path, print, textToDoc /*, options */) {
+   const node = path.getValue();
+ 
+-  if (node.type === "yaml") {
++  if (node.type === "yaml" && !node.language) {
+     return markAsRoot(
+       concat([
+         "---",
+diff --git a/src/language-html/printer-html.js b/src/language-html/printer-html.js
+index 4d30371..9152928 100644
+--- a/src/language-html/printer-html.js
++++ b/src/language-html/printer-html.js
+@@ -191,6 +191,9 @@ function embed(path, print, textToDoc, options) {
+       break;
+     }
+     case "yaml":
++      if (node.language) {
++        return;
++      }
+       return markAsRoot(
+         concat([
+           "---",
+diff --git a/src/language-markdown/embed.js b/src/language-markdown/embed.js
+index b8fda01..7748bd7 100644
+--- a/src/language-markdown/embed.js
++++ b/src/language-markdown/embed.js
+@@ -36,7 +36,7 @@ function embed(path, print, textToDoc, options) {
+     }
+   }
+ 
+-  if (node.type === "yaml") {
++  if (node.type === "yaml" && !node.language) {
+     return markAsRoot(
+       concat([
+         "---",
+diff --git a/src/utils/front-matter.js b/src/utils/front-matter.js
+index 1fd8446..68ed9ec 100644
+--- a/src/utils/front-matter.js
++++ b/src/utils/front-matter.js
+@@ -11,9 +11,10 @@ function parse(text) {
+   const delimiterRegex = Object.keys(DELIMITER_MAP).map(escape).join("|");
+ 
+   const match = text.match(
+-    // trailing spaces after delimiters are allowed
++    // The opening delimiter may be followed by a custom language label.
++    // Trailing spaces after the closing delimiter are allowed.
+     new RegExp(
+-      `^(${delimiterRegex})[^\\n\\S]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
++      `^(${delimiterRegex})([^\\n]*)\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
+     )
+   );
+ 
+@@ -21,11 +22,12 @@ function parse(text) {
+     return { frontMatter: null, content: text };
+   }
+ 
+-  const [raw, delimiter, value] = match;
++  const [raw, delimiter, language, value] = match;
+ 
+   return {
+     frontMatter: {
+       type: DELIMITER_MAP[delimiter],
++      language: language.trim(),
+       value,
+       raw: raw.replace(/\n$/, ""),
+     },
+diff --git a/tests/unit/__tests__/front-matter.js b/tests/unit/__tests__/front-matter.js
+new file mode 100644
+index 0000000..7aed17c
+--- /dev/null
++++ b/tests/unit/__tests__/front-matter.js
+@@ -0,0 +1,36 @@
++"use strict";
++
++const prettier = require("prettier/local");
++const parseFrontMatter = require("../../../src/utils/front-matter");
++
++describe("front matter with a language label", () => {
++  test.each(["html", "markdown", "css"])("%s preserves custom content", (parser) => {
++    const frontMatter = "---mycustomparser\n  \ntitle: Hello\nslug: home\n\n---";
++    const body = parser === "css" ? "a{color:red}" : "<h1>\n  Hello world!</h1>";
++    const input = frontMatter + "\n\n" + body;
++    const output = prettier.format(input, { parser });
++
++    expect(output).toBe(
++      frontMatter + "\n\n" + prettier.format(body, { parser })
++    );
++    expect(prettier.format(output, { parser })).toBe(output);
++  });
++
++  test.each(["---", "+++"])("recognizes labels after %s", (delimiter) => {
++    const raw = delimiter + "custom-engine \t\nnot: necessarily: yaml\n" + delimiter;
++    const text = raw + "\nbody";
++    const result = parseFrontMatter(text);
++
++    expect(result.frontMatter.raw).toBe(raw);
++    expect(result.frontMatter.language).toBe("custom-engine");
++    expect(result.frontMatter.value).toBe("not: necessarily: yaml");
++    expect(result.content.length).toBe(text.length);
++    expect(result.content.split("\n").length).toBe(text.split("\n").length);
++    expect(result.content.endsWith("body")).toBe(true);
++  });
++
++  test("requires a matching closing delimiter", () => {
++    const text = "---custom\ntitle: Hello\n+++\n";
++    expect(parseFrontMatter(text)).toEqual({ frontMatter: null, content: text });
++  });
++});

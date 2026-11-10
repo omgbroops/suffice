@@ -1,0 +1,123 @@
+{
+  "task": "prettier__prettier-8381",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-8381-D-r0-a0/workspace",
+    "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+    "tree": "484237f512ce4fa9f8a6e27e51fc03520f6d072a"
+  },
+  "runId": "prettier__prettier-8381-D-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 169081.63820000002,
+  "usage": {
+    "input": 15385,
+    "cacheRead": 104576,
+    "cacheWrite": 0,
+    "output": 3261,
+    "estimatedApiUsd": 0.0738376,
+    "modelCalls": 12,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0738376,
+  "acceptance": {
+    "status": "passed",
+    "required": 3,
+    "requiredPassed": 3,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": true,
+      "classification": "passed",
+      "targets": 3,
+      "targetsPassed": 3,
+      "regressions": 2,
+      "regressionsPassed": 2,
+      "missing": [],
+      "failures": [],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css compare AST": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (less)": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (scss)": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html compare AST": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md compare AST": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2
+  },
+  "changed": [
+    "src/language-css/embed.js",
+    "src/language-html/printer-html.js",
+    "src/language-markdown/embed.js",
+    "src/utils/front-matter.js",
+    "tests/misc/front-matter/jsfmt.spec.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/common/util.js",
+    "src/language-css/clean.js",
+    "src/language-css/printer-postcss.js",
+    "src/language-html/clean.js",
+    "src/language-html/utils.js",
+    "src/language-markdown/printer-markdown.js"
+  ],
+  "extraChangedFiles": [
+    "tests/misc/front-matter/jsfmt.spec.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 12,
+  "editCalls": 10,
+  "verificationCalls": 2,
+  "toolCalls": 34,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-8381-D-r0-a0\\home\\events\\1794288484847-9c085d1b-9bc6-4870-b7b5-8122bd6a7c79.jsonl",
+  "receiptAudit": {
+    "requests": 12,
+    "finalUsageResponses": 12,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 12,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": true,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-8381-D-r0",
+  "attempt": 0
+}

@@ -1,0 +1,133 @@
+{
+  "task": "prettier__prettier-8381",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-8381-A-r0-a0/workspace",
+    "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+    "tree": "484237f512ce4fa9f8a6e27e51fc03520f6d072a"
+  },
+  "runId": "prettier__prettier-8381-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 276629.111,
+  "usage": {
+    "input": 104944,
+    "cacheRead": 573312,
+    "cacheWrite": 0,
+    "output": 9732,
+    "estimatedApiUsd": 0.02109352,
+    "modelCalls": 24,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.02109352,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format",
+      "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format",
+      "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 3,
+      "targetsPassed": 0,
+      "regressions": 2,
+      "regressionsPassed": 2,
+      "missing": [],
+      "failures": [
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format",
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format",
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css compare AST": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (less)": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (scss)": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html compare AST": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md compare AST": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2
+  },
+  "changed": [
+    "src/language-html/printer-html.js",
+    "src/utils/front-matter.js",
+    "tests/html/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/html/yaml/custom-engine.html"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/common/util.js",
+    "src/language-css/clean.js",
+    "src/language-css/embed.js",
+    "src/language-css/printer-postcss.js",
+    "src/language-html/clean.js",
+    "src/language-html/utils.js",
+    "src/language-markdown/embed.js",
+    "src/language-markdown/printer-markdown.js"
+  ],
+  "extraChangedFiles": [
+    "tests/html/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/html/yaml/custom-engine.html"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 24,
+  "editCalls": 5,
+  "verificationCalls": 0,
+  "toolCalls": 62,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-8381-A-r0-a0\\home\\events\\1794290180774-117367b2-1538-427d-8d4a-5d81ea18ca8c.jsonl",
+  "receiptAudit": {
+    "requests": 24,
+    "finalUsageResponses": 24,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 24,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-8381-A-r0",
+  "attempt": 0
+}

@@ -1,0 +1,87 @@
+diff --git a/src/language-markdown/embed.js b/src/language-markdown/embed.js
+index b8fda01..f2255b1 100644
+--- a/src/language-markdown/embed.js
++++ b/src/language-markdown/embed.js
+@@ -37,9 +37,10 @@ function embed(path, print, textToDoc, options) {
+   }
+ 
+   if (node.type === "yaml") {
++    const openingDelimiter = node.raw.match(/^[^\n]*/)[0].trimEnd();
+     return markAsRoot(
+       concat([
+-        "---",
++        openingDelimiter,
+         hardline,
+         node.value && node.value.trim()
+           ? replaceNewlinesWithLiterallines(
+diff --git a/src/utils/front-matter.js b/src/utils/front-matter.js
+index 1fd8446..d2972aa 100644
+--- a/src/utils/front-matter.js
++++ b/src/utils/front-matter.js
+@@ -11,9 +11,9 @@ function parse(text) {
+   const delimiterRegex = Object.keys(DELIMITER_MAP).map(escape).join("|");
+ 
+   const match = text.match(
+-    // trailing spaces after delimiters are allowed
++    // Text after the opening delimiter is allowed for dynamic front matter.
+     new RegExp(
+-      `^(${delimiterRegex})[^\\n\\S]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
++      `^(${delimiterRegex})[^\\n]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
+     )
+   );
+ 
+diff --git a/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap b/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap
+index b949c67..cb0fc3f 100644
+--- a/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap
+@@ -25,6 +25,35 @@ proseWrap: "always"
+ ================================================================================
+ `;
+ 
++exports[`custom-parser.md - {"proseWrap":"always"} format 1`] = `
++====================================options=====================================
++parsers: ["markdown"]
++printWidth: 80
++proseWrap: "always"
++                                                                                | printWidth
++=====================================input======================================
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>
++
++=====================================output=====================================
++---mycustomparser
++title: Hello
++slug: home
++---
++
++<h1>
++  Hello world!</h1>
++
++================================================================================
++`;
++
+ exports[`empty.md - {"proseWrap":"always"} format 1`] = `
+ ====================================options=====================================
+ parsers: ["markdown"]
+diff --git a/tests/markdown/yaml/custom-parser.md b/tests/markdown/yaml/custom-parser.md
+new file mode 100644
+index 0000000..6fae36f
+--- /dev/null
++++ b/tests/markdown/yaml/custom-parser.md
+@@ -0,0 +1,9 @@
++---mycustomparser
++
++title: Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>

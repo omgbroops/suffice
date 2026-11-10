@@ -1,0 +1,95 @@
+diff --git a/src/language-html/printer-html.js b/src/language-html/printer-html.js
+index 4d30371..9151bd7 100644
+--- a/src/language-html/printer-html.js
++++ b/src/language-html/printer-html.js
+@@ -190,10 +190,12 @@ function embed(path, print, textToDoc, options) {
+       }
+       break;
+     }
+-    case "yaml":
++    case "yaml": {
++      const match = node.raw && node.raw.match(/^---\S[^\n]*/);
++      const openingDelimiter = match ? match[0] : "---";
+       return markAsRoot(
+         concat([
+-          "---",
++          openingDelimiter,
+           hardline,
+           node.value.trim().length === 0
+             ? ""
+@@ -201,6 +203,7 @@ function embed(path, print, textToDoc, options) {
+           "---",
+         ])
+       );
++    }
+   }
+ }
+ 
+diff --git a/src/utils/front-matter.js b/src/utils/front-matter.js
+index 1fd8446..ea3bd91 100644
+--- a/src/utils/front-matter.js
++++ b/src/utils/front-matter.js
+@@ -11,9 +11,9 @@ function parse(text) {
+   const delimiterRegex = Object.keys(DELIMITER_MAP).map(escape).join("|");
+ 
+   const match = text.match(
+-    // trailing spaces after delimiters are allowed
++    // Text after the opening delimiter is allowed for language identifiers.
+     new RegExp(
+-      `^(${delimiterRegex})[^\\n\\S]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
++      `^(${delimiterRegex})[^\\n]*\\n(?:([\\s\\S]*?)\\n)?\\1[^\\n\\S]*(\\n|$)`
+     )
+   );
+ 
+diff --git a/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap b/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap
+index 8e3f432..ef5f352 100644
+--- a/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/html/yaml/__snapshots__/jsfmt.spec.js.snap
+@@ -1,5 +1,33 @@
+ // Jest Snapshot v1, https://goo.gl/fbAQLP
+ 
++exports[`custom-parser.html format 1`] = `
++====================================options=====================================
++parsers: ["html"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++---mycustomparser
++title:    Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>
++
++=====================================output=====================================
++---mycustomparser
++title: Hello
++slug: home
++---
++
++<h1>
++  Hello world!
++</h1>
++
++================================================================================
++`;
++
+ exports[`invalid.html format 1`] = `
+ ====================================options=====================================
+ parsers: ["html"]
+diff --git a/tests/html/yaml/custom-parser.html b/tests/html/yaml/custom-parser.html
+new file mode 100644
+index 0000000..2c3e17b
+--- /dev/null
++++ b/tests/html/yaml/custom-parser.html
+@@ -0,0 +1,8 @@
++---mycustomparser
++title:    Hello
++slug: home
++
++---
++
++<h1>
++  Hello world!</h1>

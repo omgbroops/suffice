@@ -1,0 +1,1654 @@
+{
+  "task": "prettier__prettier-8381",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-8381-B-r0-a0/workspace",
+    "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+    "tree": "484237f512ce4fa9f8a6e27e51fc03520f6d072a"
+  },
+  "runId": "prettier__prettier-8381-B-r0-a0",
+  "status": "budget_or_incomplete",
+  "error": "Task stopped: timeout",
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 1200053.673,
+  "usage": {
+    "input": 103078,
+    "cacheRead": 2371840,
+    "cacheWrite": 0,
+    "output": 21393,
+    "estimatedApiUsd": 0.04472269999999999,
+    "modelCalls": 49,
+    "costUnknown": true
+  },
+  "totalEstimatedUsd": null,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format",
+      "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format",
+      "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 3,
+      "targetsPassed": 0,
+      "regressions": 2,
+      "regressionsPassed": 2,
+      "missing": [],
+      "failures": [
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format",
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format",
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css compare AST": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (less)": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (scss)": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html compare AST": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md compare AST": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2
+  },
+  "changed": [
+    "src/language-markdown/embed.js",
+    "src/utils/front-matter.js",
+    "tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/markdown/yaml/custom-parser.md"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/common/util.js",
+    "src/language-css/clean.js",
+    "src/language-css/embed.js",
+    "src/language-css/printer-postcss.js",
+    "src/language-html/clean.js",
+    "src/language-html/printer-html.js",
+    "src/language-html/utils.js",
+    "src/language-markdown/printer-markdown.js"
+  ],
+  "extraChangedFiles": [
+    "tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/markdown/yaml/custom-parser.md"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 49,
+  "editCalls": 8,
+  "verificationCalls": 1,
+  "toolCalls": 101,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T05:33:33.342Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-10T05:33:44.856Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Resolve the upstream engineering issue below. Work in this checkout using the preprovisioned dependencies. The bash tool executes PowerShell 7 with no profile inside an isolated Windows filesystem; external networking is disabled. You may change production code, public tests and documentation. Preserve package metadata, dependency locks, configuration, native-verify.cjs, verification.json and .v4-* verification helpers. Do not install packages or attempt to access other workspaces. Run node native-verify.cjs for the repository-derived public smoke suite; you may run it with --tests-json PATH to test other existing public unit files. Independent grading reconstructs production changes in a pristine checkout and applies held-out upstream tests. Existing public snapshots may predate the requested behavior; do not undo that behavior merely to satisfy old snapshots.\n\nInitial front matter signal (---) with extra text appended breaks formatting\n<!--\r\n\r\nBEFORE SUBMITTING AN ISSUE:\r\n\r\n1.  Search for your issue on GitHub: https://github.com/prettier/prettier/issues\r\n    A large number of opened issues are duplicates of existing issues.\r\n    If someone has already opened an issue for what you are experiencing,\r\n    you do not need to open a new issue — please add a 👍 reaction to the\r\n    existing issue instead.\r\n\r\n2.  We get a lot of requests for adding options, but Prettier is\r\n    built on the principle of being opinionated about code formatting.\r\n    This means we have a very high bar for adding new options.\r\n    Find out more: https://prettier.io/docs/en/option-philosophy.html\r\n\r\nTip! Don't write this stuff manually.\r\n\r\n1. Go to https://prettier.io/playground\r\n2. Paste your code and set options\r\n3. Press the \"Report issue\" button in the lower right\r\n\r\n-->\r\n\r\nHello! With the popular Node.js front matter library [gray-matter](https://github.com/jonschlinkert/gray-matter) it's possible to provide custom engines or parsers that can process the front matter content differently from what's built-in. It does this by using an additional designation that's appended to the initial `---`. It refers to this as [dynamic language detection](https://github.com/jonschlinkert/gray-matter#optionslanguage).\r\n\r\nWhen Prettier sees that extra text after the `---` however it no longer knows what do with it and smashes all the front matter together.\r\n\r\nIs this something Prettier could potentially account for?\r\n\r\nThank you!\r\n\r\n**Prettier 2.0.5**\r\n[Playground link](https://prettier.io/playground/#N4Igxg9gdgLgprEAuEBadBbAnmArgZxggwAcBDAJ3zgoB0oACB+mASxgBs4kGAJODhwj18HXAHMeAC2Jx69dKnlQAPFICMAPnpN+giAwDuEChwAmAQhUB6DdqggANCAgk20fMlCUKEQwAVKBE8UMg5DMixPZwAjCjIwAGs4GABlcjBWKHFkGApcOGcpGAwOAHUpdjh8DLhU4PZWADd2LGRwfGiQLOoKGH948QwyZAAzMOpnACt8AA8AIXiklNSyDDgAGSy4MYnCkBnZ1KzxLgBFXAh4XY5JkHIqGnbi0qd7iiyYMtYzGClkAAcAAZnCRfNQyvESO0wdUaE0ds4AI6XeADVwhEBkfCoKBwOBmAlvChwFGsEkDMhDEZIca3fbUDCsXL5Bknc6ona0vbOGBkGLfX7-JAAJl58VYHBOAGFiMN2tUAKxvAhwAAq-JCdLuTQKAEkoITYKkwB83ABBQ2pGBYLg3agAXwdQA)\r\n\r\n**Input:**\r\n\r\n```html\r\n---mycustomparser\r\n  \r\ntitle: Hello\r\nslug: home\r\n\r\n---\r\n\r\n<h1>\r\n  Hello world!</h1>\r\n\r\n```\r\n\r\n**Output:**\r\n\r\n```html\r\n---mycustomparser title: Hello slug: home ---\r\n\r\n<h1>\r\n  Hello world!\r\n</h1>\r\n\r\n```\r\n\r\n**Expected behavior:**\r\n\r\n```html\r\n---mycustomparser\r\ntitle: Hello\r\nslug: home\r\n---\r\n\r\n<h1>\r\n  Hello world!\r\n</h1>\r\n\r\n```\r\n\n"
+    },
+    {
+      "at": "2026-11-10T05:34:04.989Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:34:23.959Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:34:41.905Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:35:02.597Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:35:22.479Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:35:51.580Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:36:14.004Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:36:26.806Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:37:08.839Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:37:31.272Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:37:49.823Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:38:06.579Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:38:41.140Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:38:59.814Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:39:31.621Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:39:53.094Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:40:11.049Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:40:28.186Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:40:51.125Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:41:15.530Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:41:33.946Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:41:59.143Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:42:16.392Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:42:35.362Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:43:10.645Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:43:21.078Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:43:43.276Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:44:02.611Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:44:21.548Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:44:36.476Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:44:57.729Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:45:15.875Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:45:35.649Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:46:02.851Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:46:21.681Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:46:37.315Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:46:58.096Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:47:18.788Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:47:33.612Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:47:52.969Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:48:16.159Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:48:58.748Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:49:15.534Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:49:26.167Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:49:49.297Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:51:02.434Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:51:19.050Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:51:31.841Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:51:38.995Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:52:18.490Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:52:35.342Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T05:52:58.066Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T05:33:44.854Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 11513.666899999997,
+      "parsedFiles": 3372,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 100040248,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:33:56.577Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 11719.002299999993,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 30135688,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:34:16.252Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 11263.613700000002,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 74223720,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:34:34.214Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 10255.77800000002,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 16773368,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:34:55.115Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 13210.279200000019,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -25362968,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:35:16.408Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 13811.482600000018,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -18961896,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:35:34.933Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 12453.847799999989,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 15703032,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:36:04.540Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 12960.254599999986,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 67705080,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:36:26.725Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 12722.04250000001,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -22947576,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:37:00.731Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 33925.35030000002,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 10926160,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:37:20.365Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 11526.606900000013,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 66057512,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:37:41.809Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10537.91140000004,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -28841800,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:38:00.375Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10552.459799999953,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -24754864,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:38:18.399Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 11821.191399999952,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 66443496,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:38:53.710Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 12571.072599999956,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -29579504,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:39:10.735Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10922.259900000005,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 22091352,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:39:42.521Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10900.701699999976,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 66370720,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:40:05.198Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 12104.350299999991,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -20498880,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:40:23.342Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 12293.378000000026,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -38317472,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:40:38.980Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10795.402999999991,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 32217712,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:41:01.927Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10802.080499999982,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -63925744,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:41:26.251Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10721.624000000069,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 14839176,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:41:44.445Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10499.792499999981,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 17799936,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:42:09.132Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 9990.067099999986,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 65838128,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:42:26.756Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10365.007300000056,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 77440208,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:42:45.433Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 10073.121299999999,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 78075328,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T05:43:21.003Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10358.442900000024,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 49048024,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:43:31.374Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10298.210199999972,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 13718448,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:43:52.881Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 9604.342300000018,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 65844264,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:44:12.580Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 9969.667300000088,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -28654032,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:44:32.211Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10663.133799999952,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 67192136,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:44:47.642Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 11166.510899999994,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 65758872,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:45:07.751Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10022.692599999951,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -28645088,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:45:26.054Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10179.8848,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 65722600,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:45:46.017Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10369.120400000014,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -28767768,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:46:13.758Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10907.545099999988,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 65360200,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:46:31.720Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10040.04469999997,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -20671680,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:46:47.533Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10218.639399999985,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -20180704,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:47:10.336Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 12239.914800000028,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 6155920,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:47:29.282Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10494.195599999977,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 68128896,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:47:44.344Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10732.01509999996,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -20043656,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:48:03.468Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10500.000399999903,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": -47898048,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:48:26.738Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10579.274700000067,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 31849800,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:49:09.384Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "f0c4abdeb18f4627d44e22de894cdaaa00c4059b77cde0bb992f373352cadc2d",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "46d794fc66509ff321ce2ea26f98bfc811c2368b2e5e7d577a0fb007e73618d5"
+      },
+      "latencyMs": 10636.631799999974,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15071228,
+      "heapDeltaBytes": 68147568,
+      "graphBytes": 20592078
+    },
+    {
+      "at": "2026-11-10T05:49:26.116Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "79b9b9e482979d6942bc2db8ce0e8fd627f0216fecd8eb579e673cd74d48998f",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "745843b0ff13d3bcb849ff9765a4ecfae235485bb673c90f2302806c8acc79c3"
+      },
+      "latencyMs": 10582.154699999955,
+      "parsedFiles": 2,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": -52552352,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:49:36.847Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "79b9b9e482979d6942bc2db8ce0e8fd627f0216fecd8eb579e673cd74d48998f",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "745843b0ff13d3bcb849ff9765a4ecfae235485bb673c90f2302806c8acc79c3"
+      },
+      "latencyMs": 10680.31799999997,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 22728816,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:49:58.992Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "79b9b9e482979d6942bc2db8ce0e8fd627f0216fecd8eb579e673cd74d48998f",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "745843b0ff13d3bcb849ff9765a4ecfae235485bb673c90f2302806c8acc79c3"
+      },
+      "latencyMs": 9695.628200000152,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": -28954728,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:51:09.344Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "79b9b9e482979d6942bc2db8ce0e8fd627f0216fecd8eb579e673cd74d48998f",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "745843b0ff13d3bcb849ff9765a4ecfae235485bb673c90f2302806c8acc79c3"
+      },
+      "latencyMs": 6911.186499999836,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": -35930096,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:51:26.324Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "79b9b9e482979d6942bc2db8ce0e8fd627f0216fecd8eb579e673cd74d48998f",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "745843b0ff13d3bcb849ff9765a4ecfae235485bb673c90f2302806c8acc79c3"
+      },
+      "latencyMs": 7275.409900000086,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 23574680,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:51:38.940Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "8e33e1d210afdbc30e08390f929eb23ed81ddf8aee590161762993f4a67d90ff",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "d8ab50c18a4c077ee04cbb26d71dc0cb314d691de2be58090bdc879836effc69"
+      },
+      "latencyMs": 7099.528999999864,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 55498256,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:51:45.854Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "8e33e1d210afdbc30e08390f929eb23ed81ddf8aee590161762993f4a67d90ff",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "d8ab50c18a4c077ee04cbb26d71dc0cb314d691de2be58090bdc879836effc69"
+      },
+      "latencyMs": 6859.387499999953,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 30567688,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:52:25.542Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "8e33e1d210afdbc30e08390f929eb23ed81ddf8aee590161762993f4a67d90ff",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "d8ab50c18a4c077ee04cbb26d71dc0cb314d691de2be58090bdc879836effc69"
+      },
+      "latencyMs": 7053.5158999999985,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 49884736,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:52:42.917Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "8e33e1d210afdbc30e08390f929eb23ed81ddf8aee590161762993f4a67d90ff",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "d8ab50c18a4c077ee04cbb26d71dc0cb314d691de2be58090bdc879836effc69"
+      },
+      "latencyMs": 7574.44169999985,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 33801552,
+      "graphBytes": 20595878
+    },
+    {
+      "at": "2026-11-10T05:53:05.226Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "8e33e1d210afdbc30e08390f929eb23ed81ddf8aee590161762993f4a67d90ff",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "d8ab50c18a4c077ee04cbb26d71dc0cb314d691de2be58090bdc879836effc69"
+      },
+      "latencyMs": 7161.193399999989,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15073957,
+      "heapDeltaBytes": 19894112,
+      "graphBytes": 20595878
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-html/printer-html.js",
+        "src/language-html/utils.js",
+        "src/language-markdown/preprocess.js",
+        "src/language-js/comments.js",
+        "src/language-js/needs-parens.js",
+        "src/language-markdown/printer-markdown.js",
+        "src/main/comments.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/language-markdown/printer-markdown.js",
+          "callId": "call_73369649776849d6953a025910a4a416|ctc_0302e2407617635c016af2aeede51887d193f8dd3094e5f5c2/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/language-markdown/printer-markdown.js",
+          "callId": "call_23f4d9915c8f435c80ef86cd2791ee30|ctc_0302e2407617635c016af2b05933e887d1826d3fdfcb0c212e/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "Get-Content src/utils/front-matter.js; Get-Content src/language-markdown/parser-markdown.js; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 870 -First 100; Get-Content tests/markdown/yaml/simple.md; Get-Content tests/markdown/yaml/jsfmt.spec.js",
+        "rg -n \"frontMatter|type === \\\"yaml\\\"|yaml\" src/language-markdown/printer-markdown.js tests/markdown/yaml",
+        "rg -n \"frontMatter|yaml\" src/language-markdown/printer-markdown.js tests/markdown/yaml",
+        "Get-Content src/language-markdown/printer-markdown.js | Select-Object -First 270; Get-Content tests/markdown/yaml/trailing-spaces.md; Get-Content tests/markdown/yaml/complex.md; Get-Content tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap | Select-Object -First 145",
+        "Get-Content src/language-markdown/preprocess.js | Select-Object -First 110; Get-Content src/language-markdown/index.js",
+        "rg -n \"function mapAst|const mapAst\" src/language-markdown/utils.js; Get-Content src/language-markdown/utils.js | Select-Object -Skip 80 -First 100; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 205 -First 28",
+        "Get-Content src/common/internal-plugins.js | Select-Object -First 150; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Last 50",
+        "rg -n \"function printRoot|printRoot\\(\" src/language-markdown/printer-markdown.js; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 590 -First 150",
+        "rg -n 'yaml|toml|children.*filter|filter\\(' src/language-markdown/preprocess.js src/language-markdown/printer-markdown.js",
+        "rg -n 'function shouldRemainTheSameContent|shouldRemainSameContent' src/language-markdown/printer-markdown.js",
+        "Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 810 -First 55",
+        "rg -n 'function printComments|function printComment' src/main/comments.js; Get-Content src/main/comments.js | Select-Object -Skip 420 -First 95",
+        "git diff --check; git diff -- src/utils/front-matter.js src/language-markdown/embed.js src/language-markdown/printer-markdown.js tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; Get-Content tests/markdown/yaml/custom-parser.md"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/utils/front-matter.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/utils/front-matter.js",
+          "callId": "call_e6d07c86431f40a887f9f9035b41a984|ctc_0302e2407617635c016af2b0e3279087d1ae00ecb4ad51440a/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git status --short; git diff -- src/utils/front-matter.js tests/markdown/yaml/custom-parser.md tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; rg -n 'custom-parser' tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+        "git status --short; rg -n 'custom-parser' tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; git diff --stat; git diff -- src/utils/front-matter.js tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+        "Get-Content bin/prettier.js; Get-Content src/utils/front-matter.js; node -e 'const p=require(\"./src/index\"); console.log(p.format(\"---\\nhello: world\\n---\\n\",{parser:\"markdown\"}))'",
+        "Get-Content src/utils/front-matter.js; Get-Content src/language-markdown/embed.js | Select-Object -First 80; git status --short; git diff --stat; git diff -- tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+        "git diff --check; git diff -- src/utils/front-matter.js src/language-markdown/embed.js src/language-markdown/printer-markdown.js tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; Get-Content tests/markdown/yaml/custom-parser.md"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-markdown/printer-markdown.js",
+        "src/utils/front-matter.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/language-markdown/printer-markdown.js",
+          "callId": "call_23f4d9915c8f435c80ef86cd2791ee30|ctc_0302e2407617635c016af2b05933e887d1826d3fdfcb0c212e/1"
+        },
+        {
+          "tool": "edit",
+          "path": "src/utils/front-matter.js",
+          "callId": "call_e6d07c86431f40a887f9f9035b41a984|ctc_0302e2407617635c016af2b0e3279087d1ae00ecb4ad51440a/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "rg -n \"function mapAst|const mapAst\" src/language-markdown/utils.js; Get-Content src/language-markdown/utils.js | Select-Object -Skip 80 -First 100; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 205 -First 28",
+        "Get-Content src/common/internal-plugins.js | Select-Object -First 150; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Last 50",
+        "rg -n \"function printRoot|printRoot\\(\" src/language-markdown/printer-markdown.js; Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 590 -First 150",
+        "rg -n 'yaml|toml|children.*filter|filter\\(' src/language-markdown/preprocess.js src/language-markdown/printer-markdown.js",
+        "rg -n 'function shouldRemainTheSameContent|shouldRemainSameContent' src/language-markdown/printer-markdown.js",
+        "Get-Content src/language-markdown/printer-markdown.js | Select-Object -Skip 810 -First 55",
+        "Get-Content src/utils/front-matter.js; Get-Content src/language-markdown/embed.js | Select-Object -First 80; git status --short; git diff --stat; git diff -- tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+        "git diff --check; git diff -- src/utils/front-matter.js src/language-markdown/embed.js src/language-markdown/printer-markdown.js tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; Get-Content tests/markdown/yaml/custom-parser.md"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-markdown/embed.js",
+        "src/utils/front-matter.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "src/utils/front-matter.js",
+          "callId": "call_e6d07c86431f40a887f9f9035b41a984|ctc_0302e2407617635c016af2b0e3279087d1ae00ecb4ad51440a/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "Get-Content src/utils/front-matter.js; Get-Content src/language-markdown/embed.js | Select-Object -First 80; git status --short; git diff --stat; git diff -- tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+        "git diff --check; git diff -- src/utils/front-matter.js src/language-markdown/embed.js src/language-markdown/printer-markdown.js tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; Get-Content tests/markdown/yaml/custom-parser.md"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-markdown/embed.js",
+        "src/utils/front-matter.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff --check; git diff -- src/utils/front-matter.js src/language-markdown/embed.js src/language-markdown/printer-markdown.js tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap; Get-Content tests/markdown/yaml/custom-parser.md"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/language-markdown/embed.js",
+      "before": "\"use strict\";\n\nconst util = require(\"../common/util\");\nconst {\n  builders: { hardline, literalline, concat, markAsRoot },\n  utils: { mapDoc },\n} = require(\"../document\");\nconst { getFencedCodeBlockValue } = require(\"./utils\");\n\nfunction embed(path, print, textToDoc, options) {\n  const node = path.getValue();\n\n  if (node.type === \"code\" && node.lang !== null) {\n    // only look for the first string so as to support [markdown-preview-enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/code-chunk)\n    const langMatch = node.lang.match(/^[\\w-]+/);\n    const lang = langMatch ? langMatch[0] : \"\";\n    const parser = util.getParserName(lang, options);\n    if (parser) {\n      const styleUnit = options.__inJsTemplate ? \"~\" : \"`\";\n      const style = styleUnit.repeat(\n        Math.max(3, util.getMaxContinuousCount(node.value, styleUnit) + 1)\n      );\n      const doc = textToDoc(\n        getFencedCodeBlockValue(node, options.originalText),\n        { parser }\n      );\n      return markAsRoot(\n        concat([\n          style,\n          node.lang,\n          hardline,\n          replaceNewlinesWithLiterallines(doc),\n          style,\n        ])\n      );\n    }\n  }\n\n  if (node.type === \"yaml\") {\n    return markAsRoot(\n      concat([\n        \"---\",\n        hardline,\n        node.value && node.value.trim()\n          ? replaceNewlinesWithLiterallines(\n              textToDoc(node.value, { parser: \"yaml\" })\n            )\n          : \"\",\n        \"---\",\n      ])\n    );\n  }\n\n  // MDX\n  switch (node.type) {\n    case \"importExport\":\n      return textToDoc(node.value, { parser: \"babel\" });\n    case \"jsx\":\n      return textToDoc(`<$>${node.value}</$>`, {\n        parser: \"__js_expression\",\n        rootMarker: \"mdx\",\n      });\n  }\n\n  return null;\n\n  function replaceNewlinesWithLiterallines(doc) {\n    return mapDoc(doc, (currentDoc) =>\n      typeof currentDoc === \"string\" && currentDoc.includes(\"\\n\")\n        ? concat(\n            currentDoc\n              .split(/(\\n)/g)\n              .map((v, i) => (i % 2 === 0 ? v : literalline))\n          )\n        : currentDoc\n    );\n  }\n}\n\nmodule.exports = embed;\n",
+      "after": "\"use strict\";\n\nconst util = require(\"../common/util\");\nconst {\n  builders: { hardline, literalline, concat, markAsRoot },\n  utils: { mapDoc },\n} = require(\"../document\");\nconst { getFencedCodeBlockValue } = require(\"./utils\");\n\nfunction embed(path, print, textToDoc, options) {\n  const node = path.getValue();\n\n  if (node.type === \"code\" && node.lang !== null) {\n    // only look for the first string so as to support [markdown-preview-enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/code-chunk)\n    const langMatch = node.lang.match(/^[\\w-]+/);\n    const lang = langMatch ? langMatch[0] : \"\";\n    const parser = util.getParserName(lang, options);\n    if (parser) {\n      const styleUnit = options.__inJsTemplate ? \"~\" : \"`\";\n      const style = styleUnit.repeat(\n        Math.max(3, util.getMaxContinuousCount(node.value, styleUnit) + 1)\n      );\n      const doc = textToDoc(\n        getFencedCodeBlockValue(node, options.originalText),\n        { parser }\n      );\n      return markAsRoot(\n        concat([\n          style,\n          node.lang,\n          hardline,\n          replaceNewlinesWithLiterallines(doc),\n          style,\n        ])\n      );\n    }\n  }\n\n  if (node.type === \"yaml\") {\n    const openingDelimiter = node.raw.match(/^[^\\n]*/)[0].trimEnd();\n    return markAsRoot(\n      concat([\n        openingDelimiter,\n        hardline,\n        node.value && node.value.trim()\n          ? replaceNewlinesWithLiterallines(\n              textToDoc(node.value, { parser: \"yaml\" })\n            )\n          : \"\",\n        \"---\",\n      ])\n    );\n  }\n\n  // MDX\n  switch (node.type) {\n    case \"importExport\":\n      return textToDoc(node.value, { parser: \"babel\" });\n    case \"jsx\":\n      return textToDoc(`<$>${node.value}</$>`, {\n        parser: \"__js_expression\",\n        rootMarker: \"mdx\",\n      });\n  }\n\n  return null;\n\n  function replaceNewlinesWithLiterallines(doc) {\n    return mapDoc(doc, (currentDoc) =>\n      typeof currentDoc === \"string\" && currentDoc.includes(\"\\n\")\n        ? concat(\n            currentDoc\n              .split(/(\\n)/g)\n              .map((v, i) => (i % 2 === 0 ? v : literalline))\n          )\n        : currentDoc\n    );\n  }\n}\n\nmodule.exports = embed;\n"
+    },
+    {
+      "path": "src/utils/front-matter.js",
+      "before": "\"use strict\";\n\nconst escape = require(\"escape-string-regexp\");\n\nconst DELIMITER_MAP = {\n  \"---\": \"yaml\",\n  \"+++\": \"toml\",\n};\n\nfunction parse(text) {\n  const delimiterRegex = Object.keys(DELIMITER_MAP).map(escape).join(\"|\");\n\n  const match = text.match(\n    // trailing spaces after delimiters are allowed\n    new RegExp(\n      `^(${delimiterRegex})[^\\\\n\\\\S]*\\\\n(?:([\\\\s\\\\S]*?)\\\\n)?\\\\1[^\\\\n\\\\S]*(\\\\n|$)`\n    )\n  );\n\n  if (match === null) {\n    return { frontMatter: null, content: text };\n  }\n\n  const [raw, delimiter, value] = match;\n\n  return {\n    frontMatter: {\n      type: DELIMITER_MAP[delimiter],\n      value,\n      raw: raw.replace(/\\n$/, \"\"),\n    },\n    content: raw.replace(/[^\\n]/g, \" \") + text.slice(raw.length),\n  };\n}\n\nmodule.exports = parse;\n",
+      "after": "\"use strict\";\n\nconst escape = require(\"escape-string-regexp\");\n\nconst DELIMITER_MAP = {\n  \"---\": \"yaml\",\n  \"+++\": \"toml\",\n};\n\nfunction parse(text) {\n  const delimiterRegex = Object.keys(DELIMITER_MAP).map(escape).join(\"|\");\n\n  const match = text.match(\n    // Text after the opening delimiter is allowed for dynamic front matter.\n    new RegExp(\n      `^(${delimiterRegex})[^\\\\n]*\\\\n(?:([\\\\s\\\\S]*?)\\\\n)?\\\\1[^\\\\n\\\\S]*(\\\\n|$)`\n    )\n  );\n\n  if (match === null) {\n    return { frontMatter: null, content: text };\n  }\n\n  const [raw, delimiter, value] = match;\n\n  return {\n    frontMatter: {\n      type: DELIMITER_MAP[delimiter],\n      value,\n      raw: raw.replace(/\\n$/, \"\"),\n    },\n    content: raw.replace(/[^\\n]/g, \" \") + text.slice(raw.length),\n  };\n}\n\nmodule.exports = parse;\n"
+    },
+    {
+      "path": "tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+      "before": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`complex.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n- hello:    world\n-         123\n---\n\n# something\n\n=====================================output=====================================\n---\n- hello: world\n- 123\n---\n\n# something\n\n================================================================================\n`;\n\nexports[`empty.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n---\n\n=====================================output=====================================\n---\n---\n\n================================================================================\n`;\n\nexports[`empty-2.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n---\n\nContent\n\n=====================================output=====================================\n---\n---\n\nContent\n\n================================================================================\n`;\n\nexports[`simple.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\nhello: world\n---\n\n=====================================output=====================================\n---\nhello: world\n---\n\n================================================================================\n`;\n\nexports[`simple-2.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\nhello: world\n---\n\nContent\n\n=====================================output=====================================\n---\nhello: world\n---\n\nContent\n\n================================================================================\n`;\n\nexports[`trailing-spaces.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n           v spaces\n---         \n\nThis paragraph should be considered part of the _markdown_ instead of *yaml*.\n\n---\n\n=====================================output=====================================\n---\nv spaces\n---\n\nThis paragraph should be considered part of the _markdown_ instead of _yaml_.\n\n---\n\n================================================================================\n`;\n",
+      "after": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`complex.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n- hello:    world\n-         123\n---\n\n# something\n\n=====================================output=====================================\n---\n- hello: world\n- 123\n---\n\n# something\n\n================================================================================\n`;\n\nexports[`custom-parser.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---mycustomparser\n\ntitle: Hello\nslug: home\n\n---\n\n<h1>\n  Hello world!</h1>\n\n=====================================output=====================================\n---mycustomparser\ntitle: Hello\nslug: home\n---\n\n<h1>\n  Hello world!</h1>\n\n================================================================================\n`;\n\nexports[`empty.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n---\n\n=====================================output=====================================\n---\n---\n\n================================================================================\n`;\n\nexports[`empty-2.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n---\n\nContent\n\n=====================================output=====================================\n---\n---\n\nContent\n\n================================================================================\n`;\n\nexports[`simple.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\nhello: world\n---\n\n=====================================output=====================================\n---\nhello: world\n---\n\n================================================================================\n`;\n\nexports[`simple-2.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\nhello: world\n---\n\nContent\n\n=====================================output=====================================\n---\nhello: world\n---\n\nContent\n\n================================================================================\n`;\n\nexports[`trailing-spaces.md - {\"proseWrap\":\"always\"} format 1`] = `\n====================================options=====================================\nparsers: [\"markdown\"]\nprintWidth: 80\nproseWrap: \"always\"\n                                                                                | printWidth\n=====================================input======================================\n---\n           v spaces\n---         \n\nThis paragraph should be considered part of the _markdown_ instead of *yaml*.\n\n---\n\n=====================================output=====================================\n---\nv spaces\n---\n\nThis paragraph should be considered part of the _markdown_ instead of _yaml_.\n\n---\n\n================================================================================\n`;\n"
+    },
+    {
+      "path": "tests/markdown/yaml/custom-parser.md",
+      "before": null,
+      "after": "---mycustomparser\n\ntitle: Hello\nslug: home\n\n---\n\n<h1>\n  Hello world!</h1>\n"
+    }
+  ],
+  "final": "",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-8381-B-r0-a0\\home\\events\\1794288813312-fc4d9908-3f5f-4a77-a788-cfa5e7fd71ab.jsonl",
+  "receiptAudit": {
+    "requests": 49,
+    "finalUsageResponses": 48,
+    "missingUsage": true,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "budget_or_incomplete",
+  "providerRequests": 49,
+  "completionReason": "timeout",
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": false,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-8381-B-r0",
+  "attempt": 0
+}

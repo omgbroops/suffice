@@ -1,0 +1,335 @@
+{
+  "task": "prettier__prettier-8381",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 1,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-8381-C-r1-a0/workspace",
+    "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+    "tree": "484237f512ce4fa9f8a6e27e51fc03520f6d072a"
+  },
+  "runId": "prettier__prettier-8381-C-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 724114.2103,
+  "usage": {
+    "input": 92263,
+    "cacheRead": 1604352,
+    "cacheWrite": 0,
+    "output": 13692,
+    "estimatedApiUsd": 0.03211582000000001,
+    "modelCalls": 45,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.03211582000000001,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [
+      "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format",
+      "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format",
+      "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 3,
+      "targetsPassed": 0,
+      "regressions": 2,
+      "regressionsPassed": 2,
+      "missing": [],
+      "failures": [
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format",
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format",
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css compare AST": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css format": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (less)": 1,
+        "tests/css/front-matter/jsfmt.spec.js->custom-parser.css verify (scss)": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html compare AST": 1,
+        "tests/html/front-matter/jsfmt.spec.js->custom-parser.html format": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md compare AST": 1,
+        "tests/markdown/front-matter/jsfmt.spec.js->custom-parser.md format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2
+  },
+  "changed": [
+    "src/language-html/printer-html.js",
+    "src/language-markdown/embed.js",
+    "src/utils/front-matter.js",
+    "tests/html/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/html/yaml/dynamic-language.html",
+    "tests/markdown/yaml/dynamic-language.md"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/common/util.js",
+    "src/language-css/clean.js",
+    "src/language-css/embed.js",
+    "src/language-css/printer-postcss.js",
+    "src/language-html/clean.js",
+    "src/language-html/utils.js",
+    "src/language-markdown/printer-markdown.js"
+  ],
+  "extraChangedFiles": [
+    "tests/html/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/markdown/yaml/__snapshots__/jsfmt.spec.js.snap",
+    "tests/html/yaml/dynamic-language.html",
+    "tests/markdown/yaml/dynamic-language.md"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 45,
+  "editCalls": 7,
+  "verificationCalls": 0,
+  "toolCalls": 99,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T06:27:53.568Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "47510b8f226ffc933b109363af8a928f1109c9d7135963275e240b009172cc37",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "3266c0ccb80ef2c97f0916ede0fad3160cf0402716425d7f7ab8c9c04ec2f404"
+      },
+      "latencyMs": 8426.75959999999,
+      "parsedFiles": 3372,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 108824152,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T06:28:04.773Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 7515.3378000000375,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": 43959096,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T06:28:12.048Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "fd96977242775939025e2c5122e780368033fb898e63bdb6586d9552f407a70e",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "521723df038504dcbb20ef91d26f188c3346956d98f6e49c79f4bcc538db9f47"
+      },
+      "latencyMs": 7198.083600000013,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15072357,
+      "heapDeltaBytes": -46827056,
+      "graphBytes": 20593541
+    },
+    {
+      "at": "2026-11-10T06:29:28.464Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "58eaceb768771a2fda1ce46eb1418296ce96ab1c9deda01ce3c984bd983c3eba",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "5a63e592bd242bed7fd266f0dff46651b4178404e4914f74509b006d3deaaf15"
+      },
+      "latencyMs": 8763.765699999989,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15074036,
+      "heapDeltaBytes": 31549680,
+      "graphBytes": 20596012
+    },
+    {
+      "at": "2026-11-10T06:29:37.431Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "58eaceb768771a2fda1ce46eb1418296ce96ab1c9deda01ce3c984bd983c3eba",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "5a63e592bd242bed7fd266f0dff46651b4178404e4914f74509b006d3deaaf15"
+      },
+      "latencyMs": 8886.142400000012,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15074036,
+      "heapDeltaBytes": 28049480,
+      "graphBytes": 20596012
+    },
+    {
+      "at": "2026-11-10T06:31:00.448Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "b0034f17189310a774c0090e9118f49c0e9f95e97bd928d32a9bda92307314f2",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "f124cd4d34d70dcfe6940f2d028ffa96772e1a8562e14baf7b124a1db5cea951"
+      },
+      "latencyMs": 7041.068900000013,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15075636,
+      "heapDeltaBytes": 806920,
+      "graphBytes": 20598349
+    },
+    {
+      "at": "2026-11-10T06:31:07.340Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "b0034f17189310a774c0090e9118f49c0e9f95e97bd928d32a9bda92307314f2",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "f124cd4d34d70dcfe6940f2d028ffa96772e1a8562e14baf7b124a1db5cea951"
+      },
+      "latencyMs": 6845.92300000001,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15075636,
+      "heapDeltaBytes": 25461200,
+      "graphBytes": 20598349
+    },
+    {
+      "at": "2026-11-10T06:31:36.270Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "b0034f17189310a774c0090e9118f49c0e9f95e97bd928d32a9bda92307314f2",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "f124cd4d34d70dcfe6940f2d028ffa96772e1a8562e14baf7b124a1db5cea951"
+      },
+      "latencyMs": 6693.017400000012,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15075636,
+      "heapDeltaBytes": 9908984,
+      "graphBytes": 20598349
+    },
+    {
+      "at": "2026-11-10T06:31:42.999Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "b0034f17189310a774c0090e9118f49c0e9f95e97bd928d32a9bda92307314f2",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "f124cd4d34d70dcfe6940f2d028ffa96772e1a8562e14baf7b124a1db5cea951"
+      },
+      "latencyMs": 6666.76090000011,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15075636,
+      "heapDeltaBytes": 67317688,
+      "graphBytes": 20598349
+    },
+    {
+      "at": "2026-11-10T06:33:12.650Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "6e1db9526d581d711023d4c3e62a7304869e988b3ccd0e1fa37010b20d69e03b",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "2a7cebb3b19e42cf2b0a4bfe52dbf4ba6ce303a243932630460be7e34cedc22c"
+      },
+      "latencyMs": 6769.0143999999855,
+      "parsedFiles": 1,
+      "fileCount": 3373,
+      "cacheBytes": 15075636,
+      "heapDeltaBytes": 49756600,
+      "graphBytes": 20598349
+    },
+    {
+      "at": "2026-11-10T06:33:19.318Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "86609dd370990d619152c874e67b0af0f1b60bb5",
+        "sourceContentVersion": "6e1db9526d581d711023d4c3e62a7304869e988b3ccd0e1fa37010b20d69e03b",
+        "configurationVersion": "502169d1108faf177c8fc37cad43c959fe112afb099eed3c8d5c707b33e7f0ea",
+        "contentVersion": "2a7cebb3b19e42cf2b0a4bfe52dbf4ba6ce303a243932630460be7e34cedc22c"
+      },
+      "latencyMs": 6603.890799999936,
+      "parsedFiles": 0,
+      "fileCount": 3373,
+      "cacheBytes": 15075636,
+      "heapDeltaBytes": 28195672,
+      "graphBytes": 20598349
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-8381-C-r1-a0\\home\\events\\1794291832991-c7640b41-0da7-4082-b6af-fc53d6cd417e.jsonl",
+  "receiptAudit": {
+    "requests": 45,
+    "finalUsageResponses": 45,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 45,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-8381-C-r1",
+  "attempt": 0
+}
