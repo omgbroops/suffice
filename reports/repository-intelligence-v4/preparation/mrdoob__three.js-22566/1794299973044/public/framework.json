@@ -1,0 +1,29 @@
+{
+  "framework": "qunit",
+  "stats": {
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "todo": 0,
+    "total": 1
+  },
+  "tests": [
+    {
+      "title": "global failure",
+      "status": "failed",
+      "durationMs": 0,
+      "error": [
+        {
+          "passed": false,
+          "message": "No tests matched the filter \"!-webonly\".",
+          "stack": "Error: No tests matched the filter \"!-webonly\".\n    at ProcessingQueue.done (C:\\Users\\Public\\SufficeV4\\deps-91f9a9422690b5551c7d\\node_modules\\qunit\\qunit\\qunit.js:4373:21)\n    at ProcessingQueue.advanceTestQueue (C:\\Users\\Public\\SufficeV4\\deps-91f9a9422690b5551c7d\\node_modules\\qunit\\qunit\\qunit.js:4305:16)\n    at ProcessingQueue.advance (C:\\Users\\Public\\SufficeV4\\deps-91f9a9422690b5551c7d\\node_modules\\qunit\\qunit\\qunit.js:4255:16)\n    at unblockAndAdvanceQueue (C:\\Users\\Public\\SufficeV4\\deps-91f9a9422690b5551c7d\\node_modules\\qunit\\qunit\\qunit.js:5647:15)",
+          "todo": false
+        }
+      ]
+    }
+  ],
+  "loadError": {
+    "message": "Cannot use import statement outside a module",
+    "stack": "C:\\Users\\Public\\SufficeV4\\gate-mrdoob__three.js-22566-1794299973044\\public\\test\\unit\\three.source.unit.js:1\nimport './utils/console-wrapper.js';\n^^^^^^\n\nSyntaxError: Cannot use import statement outside a module\n    at Object.compileFunction (node:vm:360:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1126:15)\n    at Module._compile (node:internal/modules/cjs/loader:1162:27)\n    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1252:10)\n    at Module.load (node:internal/modules/cjs/loader:1076:32)\n    at Function.Module._load (node:internal/modules/cjs/loader:911:12)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:169:29)\n    at ModuleJob.run (node:internal/modules/esm/module_job:193:25)\n    at async Promise.all (index 0)\n    at async ESMLoader.import (node:internal/modules/esm/loader:530:24)"
+  }
+}
