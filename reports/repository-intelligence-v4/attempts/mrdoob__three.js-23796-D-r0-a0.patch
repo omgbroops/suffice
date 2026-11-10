@@ -1,0 +1,125 @@
+diff --git a/src/math/Color.js b/src/math/Color.js
+index 2b682b9..1f61b01 100644
+--- a/src/math/Color.js
++++ b/src/math/Color.js
+@@ -594,6 +594,14 @@ class Color {
+ 
+ 	}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this.r;
++		yield this.g;
++		yield this.b;
++
++	}
++
+ }
+ 
+ Color.NAMES = _colorKeywords;
+diff --git a/src/math/Euler.js b/src/math/Euler.js
+index 2ee33a0..c6f7d16 100644
+--- a/src/math/Euler.js
++++ b/src/math/Euler.js
+@@ -297,6 +297,15 @@ class Euler {
+ 
+ 	_onChangeCallback() {}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this._x;
++		yield this._y;
++		yield this._z;
++		yield this._order;
++
++	}
++
+ }
+ 
+ Euler.prototype.isEuler = true;
+diff --git a/src/math/Quaternion.js b/src/math/Quaternion.js
+index 08724e7..2e99885 100644
+--- a/src/math/Quaternion.js
++++ b/src/math/Quaternion.js
+@@ -682,6 +682,15 @@ class Quaternion {
+ 
+ 	_onChangeCallback() {}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this._x;
++		yield this._y;
++		yield this._z;
++		yield this._w;
++
++	}
++
+ }
+ 
+ Quaternion.prototype.isQuaternion = true;
+diff --git a/test/unit/src/math/Color.tests.js b/test/unit/src/math/Color.tests.js
+index 52e8f1b..3f94671 100644
+--- a/test/unit/src/math/Color.tests.js
++++ b/test/unit/src/math/Color.tests.js
+@@ -396,6 +396,17 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterable', ( assert ) => {
++
++			const object = new Color( 0.25, 0.5, 0.75 );
++			const expected = [ 0.25, 0.5, 0.75 ];
++
++			assert.deepEqual( [ ...object ], expected, 'Spreads components in toArray order' );
++			assert.deepEqual( [ ...object ], expected, 'Can be iterated repeatedly' );
++			assert.deepEqual( [ ...new Color() ], new Color().toArray(), 'Default values match toArray' );
++
++		} );
++
+ 		QUnit.test( 'fromArray', ( assert ) => {
+ 
+ 			var a = new Color();
+diff --git a/test/unit/src/math/Euler.tests.js b/test/unit/src/math/Euler.tests.js
+index bf92662..517cd60 100644
+--- a/test/unit/src/math/Euler.tests.js
++++ b/test/unit/src/math/Euler.tests.js
+@@ -350,6 +350,17 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterable', ( assert ) => {
++
++			const object = new Euler( 1, 2, 3, 'ZYX' );
++			const expected = [ 1, 2, 3, 'ZYX' ];
++
++			assert.deepEqual( [ ...object ], expected, 'Spreads components in toArray order' );
++			assert.deepEqual( [ ...object ], expected, 'Can be iterated repeatedly' );
++			assert.deepEqual( [ ...new Euler() ], new Euler().toArray(), 'Default values match toArray' );
++
++		} );
++
+ 		QUnit.test( 'fromArray', ( assert ) => {
+ 
+ 			var a = new Euler();
+diff --git a/test/unit/src/math/Quaternion.tests.js b/test/unit/src/math/Quaternion.tests.js
+index fe8bd2c..ea33ae7 100644
+--- a/test/unit/src/math/Quaternion.tests.js
++++ b/test/unit/src/math/Quaternion.tests.js
+@@ -710,6 +710,17 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterable', ( assert ) => {
++
++			const object = new Quaternion( 1, 2, 3, 4 );
++			const expected = [ 1, 2, 3, 4 ];
++
++			assert.deepEqual( [ ...object ], expected, 'Spreads components in toArray order' );
++			assert.deepEqual( [ ...object ], expected, 'Can be iterated repeatedly' );
++			assert.deepEqual( [ ...new Quaternion() ], new Quaternion().toArray(), 'Default values match toArray' );
++
++		} );
++
+ 		QUnit.test( 'fromArray', ( assert ) => {
+ 
+ 			var a = new Quaternion();

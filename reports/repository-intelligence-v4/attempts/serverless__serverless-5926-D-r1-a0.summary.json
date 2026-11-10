@@ -1,0 +1,122 @@
+{
+  "task": "serverless__serverless-5926",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 1,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5926-D-r1-a0/workspace",
+    "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+    "tree": "412e2650d4ea1d4ff09ab27ec7a956a3e31c5ff7"
+  },
+  "runId": "serverless__serverless-5926-D-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 86486.534,
+  "usage": {
+    "input": 19441,
+    "cacheRead": 56448,
+    "cacheWrite": 0,
+    "output": 2079,
+    "estimatedApiUsd": 0.06531680000000001,
+    "modelCalls": 10,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.06531680000000001,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #getValueFromSource() \"before each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Attempted to wrap undefined property getValueFromSls as function",
+            "stack": "TypeError: Attempted to wrap undefined property getValueFromSls as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1342:35)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #getValueFromSource() \"after each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1361:44)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 259,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "docs/providers/aws/guide/resources.md",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/Serverless.js",
+    "lib/classes/Variables.js",
+    "lib/plugins/aws/lib/naming.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/websockets/lib/deployment.js"
+  ],
+  "extraChangedFiles": [
+    "docs/providers/aws/guide/resources.md",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 10,
+  "editCalls": 4,
+  "verificationCalls": 3,
+  "toolCalls": 29,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5926-D-r1-a0\\home\\events\\1794277140347-6f3010a6-583b-487f-9877-ce6b578ab29c.jsonl",
+  "receiptAudit": {
+    "requests": 10,
+    "finalUsageResponses": 10,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 10,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "resourcePolicySha256": "fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6",
+  "cellId": "serverless__serverless-5926-D-r1",
+  "attempt": 0
+}

@@ -1,0 +1,135 @@
+{
+  "task": "serverless__serverless-5926",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 1,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5926-A-r1-a0/workspace",
+    "head": "f7c6620bffc7dda8a0dc5638ce6cf17dece2fed0",
+    "tree": "412e2650d4ea1d4ff09ab27ec7a956a3e31c5ff7"
+  },
+  "runId": "serverless__serverless-5926-A-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 267591.9361,
+  "usage": {
+    "input": 48121,
+    "cacheRead": 352640,
+    "cacheWrite": 0,
+    "output": 7467,
+    "estimatedApiUsd": 0.012072000000000003,
+    "modelCalls": 18,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.012072000000000003,
+  "acceptance": {
+    "status": "failed",
+    "required": 3,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #getValueFromSource() \"before each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Attempted to wrap undefined property getValueFromSls as function",
+            "stack": "TypeError: Attempted to wrap undefined property getValueFromSls as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-1d9e51b9e7f4d60e90f5\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1342:35)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #getValueFromSource() \"after each\" hook for \"should call getValueFromSls if referencing sls var\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1361:44)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 259,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/Serverless.js",
+    "lib/classes/Variables.js",
+    "lib/plugins/aws/lib/naming.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/websockets/lib/deployment.js"
+  ],
+  "extraChangedFiles": [
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+    "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 18,
+  "editCalls": 4,
+  "verificationCalls": 7,
+  "toolCalls": 39,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "lib/plugins/aws/package/lib/mergeCustomProviderResources.js",
+      "before": "'use strict';\n\nconst _ = require('lodash');\nconst BbPromise = require('bluebird');\n\nmodule.exports = {\n  mergeCustomProviderResources() {\n    if (this.serverless.service.resources && !this.serverless.service.resources.Resources) {\n      this.serverless.service.resources.Resources = {};\n    }\n    if (this.serverless.service.resources && !this.serverless.service.resources.Outputs) {\n      this.serverless.service.resources.Outputs = {};\n    }\n\n    _.merge(\n      this.serverless.service.provider.compiledCloudFormationTemplate,\n      this.serverless.service.resources\n    );\n\n    return BbPromise.resolve();\n  },\n};\n",
+      "after": "'use strict';\n\nconst _ = require('lodash');\nconst BbPromise = require('bluebird');\n\nmodule.exports = {\n  mergeCustomProviderResources() {\n    if (this.serverless.service.resources && !this.serverless.service.resources.Resources) {\n      this.serverless.service.resources.Resources = {};\n    }\n    if (this.serverless.service.resources && !this.serverless.service.resources.Outputs) {\n      this.serverless.service.resources.Outputs = {};\n    }\n\n    _.merge(\n      this.serverless.service.provider.compiledCloudFormationTemplate,\n      this.serverless.service.resources\n    );\n\n    const resources = this.serverless.service.provider.compiledCloudFormationTemplate.Resources;\n    const deploymentLogicalId = Object.keys(resources).find((logicalId) =>\n      logicalId.startsWith('ApiGatewayDeployment')\n      && resources[logicalId].Type === 'AWS::ApiGateway::Deployment');\n\n    if (deploymentLogicalId) {\n      const customResources = (this.serverless.service.resources || {}).Resources || {};\n      _.forEach(customResources, (resource, logicalId) => {\n        if (resource.Type !== 'AWS::ApiGateway::BasePathMapping') return;\n\n        const mergedResource = resources[logicalId];\n        const dependencies = mergedResource.DependsOn;\n        if (!dependencies) {\n          mergedResource.DependsOn = deploymentLogicalId;\n        } else if (Array.isArray(dependencies)) {\n          if (!_.includes(dependencies, deploymentLogicalId)) dependencies.push(deploymentLogicalId);\n        } else if (dependencies !== deploymentLogicalId) {\n          mergedResource.DependsOn = [dependencies, deploymentLogicalId];\n        }\n      });\n    }\n\n    return BbPromise.resolve();\n  },\n};\n"
+    },
+    {
+      "path": "lib/plugins/aws/package/lib/mergeCustomProviderResources.test.js",
+      "before": "'use strict';\n\nconst path = require('path');\nconst expect = require('chai').expect;\nconst AwsPackage = require('../index');\nconst Serverless = require('../../../../Serverless');\n\ndescribe('mergeCustomProviderResources', () => {\n  let serverless;\n  let awsPackage;\n  let coreCloudFormationTemplate;\n\n  beforeEach(() => {\n    serverless = new Serverless();\n    awsPackage = new AwsPackage(serverless, {});\n\n    coreCloudFormationTemplate = awsPackage\n      .serverless.utils.readFileSync(\n        path.join(\n          __dirname,\n          '..',\n          'lib',\n          'core-cloudformation-template.json'\n        )\n      );\n\n    awsPackage.serverless.service.provider\n      .compiledCloudFormationTemplate = coreCloudFormationTemplate;\n  });\n\n  describe('#mergeCustomProviderResources()', () => {\n    it('should set an empty resources.Resources object if it is not present', () => {\n      awsPackage.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources = {}; // reset the core CloudFormation template\n      awsPackage.serverless.service.resources.Resources = null;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Resources)\n          .to.deep.equal({});\n      });\n    });\n\n    it('should set an empty resources.Outputs object if it is not present', () => {\n      awsPackage.serverless.service.provider\n        .compiledCloudFormationTemplate.Outputs = {}; // reset the core CloudFormation template\n      awsPackage.serverless.service.resources.Outputs = null;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Outputs)\n          .to.deep.equal({});\n      });\n    });\n\n    it('should be able to overwrite existing string properties', () => {\n      const customResourcesMock = {\n        Description: 'Some shiny new description',\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Description)\n          .to.equal(customResourcesMock.Description);\n      });\n    });\n\n    it('should be able to overwrite existing object properties', () => {\n      const customResourcesMock = {\n        Resources: {\n          ServerlessDeploymentBucket: {\n            Type: 'Some::New::Type',\n            FakeResource1: 'FakePropValue',\n            FakeResource2: {\n              FakePropKey: 'FakePropValue',\n            },\n            Properties: {\n              BucketEncryption: {\n                ServerSideEncryptionConfiguration: [\n                  {\n                    ServerSideEncryptionByDefault: {\n                      SSEAlgorithm: 'AES256',\n                    },\n                  },\n                ],\n              },\n            },\n          },\n        },\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.ServerlessDeploymentBucket\n        ).to.deep.equal(customResourcesMock.Resources.ServerlessDeploymentBucket);\n      });\n    });\n\n    it('should be able to merge in new object property definitions', () => {\n      // make sure that the promise will resolve\n      const customResourcesMock = {\n        Resources: {\n          FakeResource1: {\n            FakePropKey: 'FakePropValue',\n          },\n          FakeResource2: {\n            FakePropKey: 'FakePropValue',\n          },\n        },\n        Outputs: {\n          FakeOutput1: {\n            Value: 'FakeValue',\n          },\n          FakeOutput2: {\n            Value: 'FakeValue',\n          },\n        },\n        CustomDefinition: {\n          Foo: 'Bar',\n        },\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.FakeResource1).to.deep.equal(customResourcesMock.Resources.FakeResource1);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.FakeResource2).to.deep.equal(customResourcesMock.Resources.FakeResource2);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Outputs.FakeOutput1).to.deep.equal(customResourcesMock.Outputs.FakeOutput1);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Outputs.FakeOutput2).to.deep.equal(customResourcesMock.Outputs.FakeOutput2);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .CustomDefinition).to.deep.equal(customResourcesMock.CustomDefinition);\n      });\n    });\n\n    it('should keep the core template definitions when merging custom resources', () => {\n      const customResourcesMock = {\n        NewStringProp: 'New string prop',\n        NewObjectProp: {\n          newObjectPropKey: 'New object prop value',\n        },\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(\n          awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n            .AWSTemplateFormatVersion\n        ).to.equal(\n          coreCloudFormationTemplate.AWSTemplateFormatVersion\n        );\n\n        expect(\n          awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Description\n        ).to.equal(\n          coreCloudFormationTemplate.Description\n        );\n\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.ServerlessDeploymentBucket\n        ).to.deep.equal(\n          coreCloudFormationTemplate.Resources.ServerlessDeploymentBucket\n        );\n\n        expect(\n          awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n            .Outputs.ServerlessDeploymentBucketName\n        ).to.deep.equal(\n          coreCloudFormationTemplate.Outputs.ServerlessDeploymentBucketName\n        );\n      });\n    });\n  });\n});\n",
+      "after": "'use strict';\n\nconst path = require('path');\nconst expect = require('chai').expect;\nconst AwsPackage = require('../index');\nconst Serverless = require('../../../../Serverless');\n\ndescribe('mergeCustomProviderResources', () => {\n  let serverless;\n  let awsPackage;\n  let coreCloudFormationTemplate;\n\n  beforeEach(() => {\n    serverless = new Serverless();\n    awsPackage = new AwsPackage(serverless, {});\n\n    coreCloudFormationTemplate = awsPackage\n      .serverless.utils.readFileSync(\n        path.join(\n          __dirname,\n          '..',\n          'lib',\n          'core-cloudformation-template.json'\n        )\n      );\n\n    awsPackage.serverless.service.provider\n      .compiledCloudFormationTemplate = coreCloudFormationTemplate;\n  });\n\n  describe('#mergeCustomProviderResources()', () => {\n    it('should set an empty resources.Resources object if it is not present', () => {\n      awsPackage.serverless.service.provider\n        .compiledCloudFormationTemplate.Resources = {}; // reset the core CloudFormation template\n      awsPackage.serverless.service.resources.Resources = null;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Resources)\n          .to.deep.equal({});\n      });\n    });\n\n    it('should set an empty resources.Outputs object if it is not present', () => {\n      awsPackage.serverless.service.provider\n        .compiledCloudFormationTemplate.Outputs = {}; // reset the core CloudFormation template\n      awsPackage.serverless.service.resources.Outputs = null;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Outputs)\n          .to.deep.equal({});\n      });\n    });\n\n    it('should be able to overwrite existing string properties', () => {\n      const customResourcesMock = {\n        Description: 'Some shiny new description',\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Description)\n          .to.equal(customResourcesMock.Description);\n      });\n    });\n\n    it('should be able to overwrite existing object properties', () => {\n      const customResourcesMock = {\n        Resources: {\n          ServerlessDeploymentBucket: {\n            Type: 'Some::New::Type',\n            FakeResource1: 'FakePropValue',\n            FakeResource2: {\n              FakePropKey: 'FakePropValue',\n            },\n            Properties: {\n              BucketEncryption: {\n                ServerSideEncryptionConfiguration: [\n                  {\n                    ServerSideEncryptionByDefault: {\n                      SSEAlgorithm: 'AES256',\n                    },\n                  },\n                ],\n              },\n            },\n          },\n        },\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.ServerlessDeploymentBucket\n        ).to.deep.equal(customResourcesMock.Resources.ServerlessDeploymentBucket);\n      });\n    });\n\n    it('should be able to merge in new object property definitions', () => {\n      // make sure that the promise will resolve\n      const customResourcesMock = {\n        Resources: {\n          FakeResource1: {\n            FakePropKey: 'FakePropValue',\n          },\n          FakeResource2: {\n            FakePropKey: 'FakePropValue',\n          },\n        },\n        Outputs: {\n          FakeOutput1: {\n            Value: 'FakeValue',\n          },\n          FakeOutput2: {\n            Value: 'FakeValue',\n          },\n        },\n        CustomDefinition: {\n          Foo: 'Bar',\n        },\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.FakeResource1).to.deep.equal(customResourcesMock.Resources.FakeResource1);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.FakeResource2).to.deep.equal(customResourcesMock.Resources.FakeResource2);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Outputs.FakeOutput1).to.deep.equal(customResourcesMock.Outputs.FakeOutput1);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Outputs.FakeOutput2).to.deep.equal(customResourcesMock.Outputs.FakeOutput2);\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .CustomDefinition).to.deep.equal(customResourcesMock.CustomDefinition);\n      });\n    });\n\n    it('should make custom API Gateway base path mappings depend on the generated deployment', () => {\n      awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Resources\n        .ApiGatewayDeployment123 = {\n          Type: 'AWS::ApiGateway::Deployment',\n        };\n      awsPackage.serverless.service.resources = {\n        Resources: {\n          BasePathMapping: {\n            Type: 'AWS::ApiGateway::BasePathMapping',\n            Properties: {},\n          },\n          AnotherBasePathMapping: {\n            Type: 'AWS::ApiGateway::BasePathMapping',\n            DependsOn: 'ApiGatewayApiKey1',\n            Properties: {},\n          },\n          OtherResource: {\n            Type: 'AWS::ApiGateway::DomainName',\n          },\n        },\n      };\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        const resources = awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources;\n        expect(resources.BasePathMapping.DependsOn).to.equal('ApiGatewayDeployment123');\n        expect(resources.AnotherBasePathMapping.DependsOn)\n          .to.deep.equal(['ApiGatewayApiKey1', 'ApiGatewayDeployment123']);\n        expect(resources.OtherResource.DependsOn).to.equal(undefined);\n      });\n    });\n\n    it('should keep the core template definitions when merging custom resources', () => {\n      const customResourcesMock = {\n        NewStringProp: 'New string prop',\n        NewObjectProp: {\n          newObjectPropKey: 'New object prop value',\n        },\n      };\n\n      awsPackage.serverless.service.resources = customResourcesMock;\n\n      return awsPackage.mergeCustomProviderResources().then(() => {\n        expect(\n          awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n            .AWSTemplateFormatVersion\n        ).to.equal(\n          coreCloudFormationTemplate.AWSTemplateFormatVersion\n        );\n\n        expect(\n          awsPackage.serverless.service.provider.compiledCloudFormationTemplate.Description\n        ).to.equal(\n          coreCloudFormationTemplate.Description\n        );\n\n        expect(awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n          .Resources.ServerlessDeploymentBucket\n        ).to.deep.equal(\n          coreCloudFormationTemplate.Resources.ServerlessDeploymentBucket\n        );\n\n        expect(\n          awsPackage.serverless.service.provider.compiledCloudFormationTemplate\n            .Outputs.ServerlessDeploymentBucketName\n        ).to.deep.equal(\n          coreCloudFormationTemplate.Outputs.ServerlessDeploymentBucketName\n        );\n      });\n    });\n  });\n});\n"
+    }
+  ],
+  "final": "Implemented automatic deployment ordering for custom `AWS::ApiGateway::BasePathMapping` resources. The generated API Gateway deployment is added to `DependsOn`, while any existing dependencies are preserved.\n\n**Verification**\n- `node native-verify.cjs` — passed.\n- Targeted `mergeCustomProviderResources` tests — 7 passed.\n- `git diff --check` — passed.\n- ESLint could not run because its binary is not present in the preprovisioned `node_modules`.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5926-A-r1-a0\\home\\events\\1794276836905-0da605ae-9798-423d-b82d-0a5da82b8f3a.jsonl",
+  "receiptAudit": {
+    "requests": 18,
+    "finalUsageResponses": 18,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 18,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "resourcePolicySha256": "fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6",
+  "cellId": "serverless__serverless-5926-A-r1",
+  "attempt": 0
+}

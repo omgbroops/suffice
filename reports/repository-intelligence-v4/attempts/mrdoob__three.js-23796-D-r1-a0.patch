@@ -1,0 +1,152 @@
+diff --git a/src/math/Color.js b/src/math/Color.js
+index 2b682b9..1f61b01 100644
+--- a/src/math/Color.js
++++ b/src/math/Color.js
+@@ -594,6 +594,14 @@ class Color {
+ 
+ 	}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this.r;
++		yield this.g;
++		yield this.b;
++
++	}
++
+ }
+ 
+ Color.NAMES = _colorKeywords;
+diff --git a/src/math/Euler.js b/src/math/Euler.js
+index 2ee33a0..c6f7d16 100644
+--- a/src/math/Euler.js
++++ b/src/math/Euler.js
+@@ -297,6 +297,15 @@ class Euler {
+ 
+ 	_onChangeCallback() {}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this._x;
++		yield this._y;
++		yield this._z;
++		yield this._order;
++
++	}
++
+ }
+ 
+ Euler.prototype.isEuler = true;
+diff --git a/src/math/Quaternion.js b/src/math/Quaternion.js
+index 08724e7..2e99885 100644
+--- a/src/math/Quaternion.js
++++ b/src/math/Quaternion.js
+@@ -682,6 +682,15 @@ class Quaternion {
+ 
+ 	_onChangeCallback() {}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this._x;
++		yield this._y;
++		yield this._z;
++		yield this._w;
++
++	}
++
+ }
+ 
+ Quaternion.prototype.isQuaternion = true;
+diff --git a/test/unit/src/math/Color.tests.js b/test/unit/src/math/Color.tests.js
+index 52e8f1b..2fe77b8 100644
+--- a/test/unit/src/math/Color.tests.js
++++ b/test/unit/src/math/Color.tests.js
+@@ -413,6 +413,26 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterable', ( assert ) => {
++
++			const a = new Color( 0.25, 0.5, 0.75 );
++			const expected = [ 0.25, 0.5, 0.75 ];
++
++			assert.deepEqual( [ ...new Color() ], [ 1, 1, 1 ], 'Default components' );
++			assert.deepEqual( [ ...a ], expected, 'Spread components in toArray order' );
++			assert.deepEqual( [ ...a ], a.toArray(), 'Iteration can be repeated' );
++
++			const values = [];
++			for ( const value of a ) {
++
++				values.push( value );
++
++			}
++			assert.deepEqual( values, expected, 'for...of components' );
++			assert.ok( new Color( ...a ).equals( a ), 'Constructor spread round trip' );
++
++		} );
++
+ 		QUnit.test( 'toArray', ( assert ) => {
+ 
+ 			var r = 0.5, g = 1.0, b = 0.0;
+diff --git a/test/unit/src/math/Euler.tests.js b/test/unit/src/math/Euler.tests.js
+index bf92662..94407f6 100644
+--- a/test/unit/src/math/Euler.tests.js
++++ b/test/unit/src/math/Euler.tests.js
+@@ -322,6 +322,26 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterable', ( assert ) => {
++
++			const a = new Euler( 1, - 2, 3, 'ZYX' );
++			const expected = [ 1, - 2, 3, 'ZYX' ];
++
++			assert.deepEqual( [ ...new Euler() ], [ 0, 0, 0, 'XYZ' ], 'Default components' );
++			assert.deepEqual( [ ...a ], expected, 'Spread components in toArray order' );
++			assert.deepEqual( [ ...a ], a.toArray(), 'Iteration can be repeated' );
++
++			const values = [];
++			for ( const value of a ) {
++
++				values.push( value );
++
++			}
++			assert.deepEqual( values, expected, 'for...of components' );
++			assert.ok( new Euler( ...a ).equals( a ), 'Constructor spread round trip' );
++
++		} );
++
+ 		QUnit.test( 'toArray', ( assert ) => {
+ 
+ 			var order = 'YXZ';
+diff --git a/test/unit/src/math/Quaternion.tests.js b/test/unit/src/math/Quaternion.tests.js
+index fe8bd2c..e9a072f 100644
+--- a/test/unit/src/math/Quaternion.tests.js
++++ b/test/unit/src/math/Quaternion.tests.js
+@@ -727,6 +727,26 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterable', ( assert ) => {
++
++			const a = new Quaternion( 1, - 2, 3, - 4 );
++			const expected = [ 1, - 2, 3, - 4 ];
++
++			assert.deepEqual( [ ...new Quaternion() ], [ 0, 0, 0, 1 ], 'Default components' );
++			assert.deepEqual( [ ...a ], expected, 'Spread components in toArray order' );
++			assert.deepEqual( [ ...a ], a.toArray(), 'Iteration can be repeated' );
++
++			const values = [];
++			for ( const value of a ) {
++
++				values.push( value );
++
++			}
++			assert.deepEqual( values, expected, 'for...of components' );
++			assert.ok( new Quaternion( ...a ).equals( a ), 'Constructor spread round trip' );
++
++		} );
++
+ 		QUnit.test( 'toArray', ( assert ) => {
+ 
+ 			var a = new Quaternion( x, y, z, w );
