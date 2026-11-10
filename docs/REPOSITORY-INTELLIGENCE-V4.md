@@ -517,3 +517,27 @@ full position/carryover balancing claim no longer applies. The size and timing
 of this user-driven amendment follow observation of partial outcomes and must
 remain visible; results are exploratory, with no claim of unchanged prospective
 conditions or proof of equivalence.
+
+
+## Disk-floor stop and continuation
+
+The main campaign reached 69 model attempts before the Prettier 12930 guided
+launch stopped twice with zero provider requests and zero cost. RAM was above
+the floor; free disk was about 5.98 GiB, below the unchanged 6 GiB minimum. The
+recovery wrapper stopped and its running label was stale; raw a0/a1 receipts
+remain preserved. By the next check free disk had fallen to about 3.15 GiB.
+
+Only reproducible generated scratch was reclaimed after verification: the
+completed Three.js 24461 gate group and extracted upstream source copies for
+Three.js 24461 and 23796. Pinned source tar hashes and preserved baseline hashes
+were checked first; all model patches, raw reports, sealed records, dependencies
+and validated baselines remain. Exact resolved paths and the free-space change
+are recorded in `infrastructure/reclaimed-completed-v4-scratch-2026-11-10.json`.
+Free disk returned above 6.5 GiB; no model or grading limit was lowered.
+
+The resource continuation wrapper now handles consecutive zero-request,
+zero-cost launch stops using increasing storage suffixes, with an explicit
+CLI attempt number. It checks RAM and disk before attempting recovery, records
+the derived worker hash, and does not retry any coding outcome or dispatched
+request. Analysis follows only this consecutive zero-request chain; a2 is the
+first actual model attempt when a0 and a1 both stopped before inference.

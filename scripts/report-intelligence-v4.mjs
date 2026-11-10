@@ -10,7 +10,7 @@ const repetitions=executionPolicy?.repetitions??[0,1],target=24*CONFIGURATIONS.l
 const cohort=await load(resolve(root,'benchmarks/intelligence-v4/cohort.json')),cells=scheduleV4(cohort.tasks).flat(),rows=[];
 const invalid=new Set(['infrastructure_or_evaluator_error','experimental_invalidation','evaluator_failure','provider_interruption','provider_failure','resource_stop','model_start_failure']);
 for(const cell of cells){let result;try{result=await load(resolve(out,'attempts',v4CellId(cell)+'-a0.json'));}catch(e){if(e.code!=='ENOENT')throw e;}
-  let selectedAttempt=0;if(result?.classification==='resource_stop'&&result.providerRequests===0&&result.totalEstimatedUsd===0){try{result=await load(resolve(out,'attempts',v4CellId(cell)+'-a1.json'));selectedAttempt=1;}catch(e){if(e.code!=='ENOENT')throw e;}}
+  let selectedAttempt=0;while(result?.classification==='resource_stop'&&result.providerRequests===0&&result.totalEstimatedUsd===0){try{result=await load(resolve(out,'attempts',v4CellId(cell)+'-a'+(selectedAttempt+1)+'.json'));selectedAttempt++;}catch(e){if(e.code!=='ENOENT')throw e;break;}}
   const prefix=v4CellId(cell)+'-a'+selectedAttempt;
   let execution=null,resources=[],events=[];if(result){try{execution=await load(resolve(out,'attempts',prefix+'.execution.json'));}catch(e){if(e.code!=='ENOENT')throw e;}try{resources=await load(resolve(out,'attempts',prefix+'.resources.json'));}catch(e){if(e.code!=='ENOENT')throw e;}try{events=(await readFile(resolve(out,'attempts',prefix+'.events.jsonl'),'utf8')).trim().split('\n').filter(Boolean).map(JSON.parse);}catch(e){if(e.code!=='ENOENT')throw e;}}
   const calls=events.filter(e=>e.type==='tool_call'),overhead=result?.graphOverhead??[];
