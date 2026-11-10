@@ -1,0 +1,152 @@
+{
+  "numFailedTestSuites": 1,
+  "numFailedTests": 4,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 6,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 1,
+  "numTotalTests": 10,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": true,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 1,
+    "filesUpdated": 0,
+    "matched": 1,
+    "total": 2,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 1,
+    "updated": 0
+  },
+  "startTime": 1794318796068,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "issue-9501.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "issue-9501.ts format",
+          "location": null,
+          "status": "passed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "issue-9501.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "issue-9501.ts [flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "issue-9501.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "issue-9501.ts [babel-flow] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "issue-9501.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "issue-9501.ts [babel] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel] format"
+        },
+        {
+          "ancestorTitles": [
+            "issue-9501.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "issue-9501.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        },
+        {
+          "ancestorTitles": [
+            "simple-types.ts"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `simple-types.ts format 1`\n\n- Snapshot  - 3\n+ Received  + 1\n\n@@ -16,10 +16,8 @@\n  const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;\n  const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;\n  const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;\n  const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;\n  const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;\n- const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<\n-   symbol\n- > = a;\n+ const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;\n\n  ================================================================================\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-9521-B-r0-a0\\independent-grade\\tests_config\\run_spec.js:289:7)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41"
+          ],
+          "fullName": "simple-types.ts format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "simple-types.ts"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n@@ -2,7 +2,9 @@\n  const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;<LF>\n  const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;<LF>\n  const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;<LF>\n  const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;<LF>\n  const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;<LF>\n- const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;<LF>\n+ const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<<LF>\n+   symbol<LF>\n+ > = a;<LF>\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-9521-B-r0-a0\\independent-grade\\tests_config\\run_spec.js:239:48)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41"
+          ],
+          "fullName": "simple-types.ts [flow] format",
+          "location": null,
+          "status": "failed",
+          "title": "[flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "simple-types.ts"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n@@ -2,7 +2,9 @@\n  const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;<LF>\n  const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;<LF>\n  const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;<LF>\n  const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;<LF>\n  const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;<LF>\n- const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;<LF>\n+ const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<<LF>\n+   symbol<LF>\n+ > = a;<LF>\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-9521-B-r0-a0\\independent-grade\\tests_config\\run_spec.js:239:48)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41"
+          ],
+          "fullName": "simple-types.ts [babel-flow] format",
+          "location": null,
+          "status": "failed",
+          "title": "[babel-flow] format"
+        },
+        {
+          "ancestorTitles": [
+            "simple-types.ts"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n@@ -2,7 +2,9 @@\n  const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;<LF>\n  const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;<LF>\n  const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;<LF>\n  const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;<LF>\n  const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;<LF>\n- const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;<LF>\n+ const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<<LF>\n+   symbol<LF>\n+ > = a;<LF>\n  ↵\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-9521-B-r0-a0\\independent-grade\\tests_config\\run_spec.js:239:48)\n    at Object.asyncJestTest (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\jasmineAsyncInstall.js:106:37)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:45:12\n    at new Promise (<anonymous>)\n    at mapper (C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:28:19)\n    at C:\\Users\\Public\\SufficeV4\\deps-22f7e0c5cf8e1f030c8d\\node_modules\\jest-jasmine2\\build\\queueRunner.js:75:41"
+          ],
+          "fullName": "simple-types.ts [babel] format",
+          "location": null,
+          "status": "failed",
+          "title": "[babel] format"
+        },
+        {
+          "ancestorTitles": [
+            "simple-types.ts"
+          ],
+          "failureMessages": [],
+          "fullName": "simple-types.ts [babel-ts] format",
+          "location": null,
+          "status": "passed",
+          "title": "[babel-ts] format"
+        }
+      ],
+      "endTime": 1794318802584,
+      "message": "  ● simple-types.ts › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `simple-types.ts format 1`\n\n    - Snapshot  - 3\n    + Received  + 1\n\n    @@ -16,10 +16,8 @@\n      const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;\n      const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;\n      const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;\n      const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;\n      const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;\n    - const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<\n    -   symbol\n    - > = a;\n    + const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;\n\n      ================================================================================\n\n      287 |         { codeOffset }\n      288 |       )\n    > 289 |     ).toMatchSnapshot();\n          |       ^\n      290 |   });\n      291 | \n      292 |   if (!FULL_TEST) {\n\n      at Object.<anonymous> (tests_config/run_spec.js:289:7)\n\n  ● simple-types.ts › [flow] format\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 1\n    + Received  + 3\n\n    @@ -2,7 +2,9 @@\n      const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;<LF>\n      const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;<LF>\n      const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;<LF>\n      const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;<LF>\n      const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;<LF>\n    - const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;<LF>\n    + const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<<LF>\n    +   symbol<LF>\n    + > = a;<LF>\n      ↵\n\n      237 |     // The result is assert to equals to `output`\n      238 |     if (typeof output === \"string\") {\n    > 239 |       expect(formatResult.eolVisualizedOutput).toEqual(\n          |                                                ^\n      240 |         visualizeEndOfLine(output)\n      241 |       );\n      242 |       return;\n\n      at Object.<anonymous> (tests_config/run_spec.js:239:48)\n\n  ● simple-types.ts › [babel-flow] format\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 1\n    + Received  + 3\n\n    @@ -2,7 +2,9 @@\n      const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;<LF>\n      const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;<LF>\n      const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;<LF>\n      const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;<LF>\n      const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;<LF>\n    - const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;<LF>\n    + const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<<LF>\n    +   symbol<LF>\n    + > = a;<LF>\n      ↵\n\n      237 |     // The result is assert to equals to `output`\n      238 |     if (typeof output === \"string\") {\n    > 239 |       expect(formatResult.eolVisualizedOutput).toEqual(\n          |                                                ^\n      240 |         visualizeEndOfLine(output)\n      241 |       );\n      242 |       return;\n\n      at Object.<anonymous> (tests_config/run_spec.js:239:48)\n\n  ● simple-types.ts › [babel] format\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 1\n    + Received  + 3\n\n    @@ -2,7 +2,9 @@\n      const foo2: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<null> = a;<LF>\n      const foo3: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<this> = a;<LF>\n      const foo4: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<void> = a;<LF>\n      const foo5: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<true> = a;<LF>\n      const foo6: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<false> = a;<LF>\n    - const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<symbol> = a;<LF>\n    + const foo7: Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo<<LF>\n    +   symbol<LF>\n    + > = a;<LF>\n      ↵\n\n      237 |     // The result is assert to equals to `output`\n      238 |     if (typeof output === \"string\") {\n    > 239 |       expect(formatResult.eolVisualizedOutput).toEqual(\n          |                                                ^\n      240 |         visualizeEndOfLine(output)\n      241 |       );\n      242 |       return;\n\n      at Object.<anonymous> (tests_config/run_spec.js:239:48)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-9521-B-r0-a0\\independent-grade\\tests\\typescript\\typeparams\\consistent\\jsfmt.spec.js",
+      "startTime": 1794318796168,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

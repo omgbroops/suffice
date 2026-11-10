@@ -1,0 +1,127 @@
+{
+  "task": "prettier__prettier-9521",
+  "repo": "prettier/prettier",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-9521-D-r0-a0/workspace",
+    "head": "67e8a6670329fdc79d2eb5fa27eaa2334a70a4d8",
+    "tree": "9d6b90d271046268ea50eb0a98725ed834f90fbb"
+  },
+  "runId": "prettier__prettier-9521-D-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 113234.80109999998,
+  "usage": {
+    "input": 19254,
+    "cacheRead": 43776,
+    "cacheWrite": 0,
+    "output": 1491,
+    "estimatedApiUsd": 0.057795599999999996,
+    "modelCalls": 9,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.057795599999999996,
+  "acceptance": {
+    "status": "failed",
+    "required": 8,
+    "requiredPassed": 4,
+    "unpassed": [
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts format",
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [flow] format",
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-flow] format",
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel] format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 8,
+      "targetsPassed": 4,
+      "regressions": 2,
+      "regressionsPassed": 2,
+      "missing": [],
+      "failures": [
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts format",
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [flow] format",
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-flow] format",
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel] format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [babel-flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [babel-ts] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [babel] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-ts] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2
+  },
+  "changed": [
+    "src/language-js/printer-estree.js",
+    "tests/typescript/generic/jsfmt.spec.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-js/utils.js"
+  ],
+  "extraChangedFiles": [
+    "tests/typescript/generic/jsfmt.spec.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 9,
+  "editCalls": 3,
+  "verificationCalls": 1,
+  "toolCalls": 21,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-9521-D-r0-a0\\home\\events\\1794318864489-1029de82-16b2-449f-8a3f-e2564776a49b.jsonl",
+  "receiptAudit": {
+    "requests": 9,
+    "finalUsageResponses": 9,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 9,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-9521-D-r0",
+  "attempt": 0
+}

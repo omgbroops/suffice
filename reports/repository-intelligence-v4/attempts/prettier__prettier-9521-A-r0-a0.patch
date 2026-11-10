@@ -1,0 +1,52 @@
+diff --git a/src/language-js/printer-estree.js b/src/language-js/printer-estree.js
+index 2f8af23..59802ce 100644
+--- a/src/language-js/printer-estree.js
++++ b/src/language-js/printer-estree.js
+@@ -4243,6 +4243,9 @@ function printTypeParameters(path, options, print, paramsKey) {
+           n[paramsKey][0].type !== "IntersectionTypeAnnotation" &&
+           n[paramsKey][0].type !== "TSConditionalType" &&
+           n[paramsKey][0].type !== "TSMappedType" &&
++          // A nested generic type may need to break on its own.
++          (n[paramsKey][0].type !== "TSTypeReference" ||
++            !n[paramsKey][0].typeParameters) &&
+           n[paramsKey][0].type !== "TSTypeOperator" &&
+           n[paramsKey][0].type !== "TSIndexedAccessType" &&
+           n[paramsKey][0].type !== "TSArrayType")));
+diff --git a/tests/typescript/generic/__snapshots__/jsfmt.spec.js.snap b/tests/typescript/generic/__snapshots__/jsfmt.spec.js.snap
+index 470b1ec..80de6b2 100644
+--- a/tests/typescript/generic/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/typescript/generic/__snapshots__/jsfmt.spec.js.snap
+@@ -162,6 +162,24 @@ export const SUPPORTED_VEHICLE_TYPES: Array<
+ ================================================================================
+ `;
+ 
++exports[`issue-9521.ts format 1`] = `
++====================================options=====================================
++parsers: ["typescript"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++const name: SomeGeneric<
++  Pick<Config, "ONE_LONG_PROP" | "ANOTHER_LONG_PROP">
++> = null;
++
++=====================================output=====================================
++const name: SomeGeneric<
++  Pick<Config, "ONE_LONG_PROP" | "ANOTHER_LONG_PROP">
++> = null;
++
++================================================================================
++`;
++
+ exports[`object-method.ts format 1`] = `
+ ====================================options=====================================
+ parsers: ["typescript"]
+diff --git a/tests/typescript/generic/issue-9521.ts b/tests/typescript/generic/issue-9521.ts
+new file mode 100644
+index 0000000..c5cbe73
+--- /dev/null
++++ b/tests/typescript/generic/issue-9521.ts
+@@ -0,0 +1,3 @@
++const name: SomeGeneric<
++  Pick<Config, "ONE_LONG_PROP" | "ANOTHER_LONG_PROP">
++> = null;

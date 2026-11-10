@@ -1,0 +1,42 @@
+diff --git a/src/language-js/printer-estree.js b/src/language-js/printer-estree.js
+index 2f8af23..163587f 100644
+--- a/src/language-js/printer-estree.js
++++ b/src/language-js/printer-estree.js
+@@ -4237,6 +4237,7 @@ function printTypeParameters(path, options, print, paramsKey) {
+           greatGreatGrandParent.type === "VariableDeclarator" &&
+           grandparent.type === "TSTypeAnnotation" &&
+           greatGrandParent.type !== "ArrowFunctionExpression" &&
++          n[paramsKey][0].type !== "TSTypeReference" &&
+           n[paramsKey][0].type !== "TSUnionType" &&
+           n[paramsKey][0].type !== "UnionTypeAnnotation" &&
+           n[paramsKey][0].type !== "TSIntersectionType" &&
+diff --git a/tests/typescript/generic/jsfmt.spec.js b/tests/typescript/generic/jsfmt.spec.js
+index 2ea3bb6..84143ec 100644
+--- a/tests/typescript/generic/jsfmt.spec.js
++++ b/tests/typescript/generic/jsfmt.spec.js
+@@ -1 +1,25 @@
+ run_spec(__dirname, ["typescript"]);
++
++const prettier = require("prettier-local");
++
++test.each(["babel", "babel-flow", "flow", "babel-ts", "typescript"])(
++  "nested generic type arguments (%s)",
++  (parser) => {
++    const input =
++      'const name: SomeGeneric<Pick<Config, "ONE_LONG_PROP" | "ANOTHER_LONG_PROP">> = null;';
++    const expected = [
++      "const name: SomeGeneric<",
++      '  Pick<Config, "ONE_LONG_PROP" | "ANOTHER_LONG_PROP">',
++      "> = null;",
++      "",
++    ].join("\n");
++
++    expect(prettier.format(input, { parser })).toBe(expected);
++    expect(prettier.format(expected, { parser })).toBe(expected);
++    expect(
++      prettier.format("const name: SomeGeneric<Pick<Config, Key>> = null;", {
++        parser,
++      })
++    ).toBe("const name: SomeGeneric<Pick<Config, Key>> = null;\n");
++  }
++);

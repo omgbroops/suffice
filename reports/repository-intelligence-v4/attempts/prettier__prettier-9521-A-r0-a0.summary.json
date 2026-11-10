@@ -1,0 +1,129 @@
+{
+  "task": "prettier__prettier-9521",
+  "repo": "prettier/prettier",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-9521-A-r0-a0/workspace",
+    "head": "67e8a6670329fdc79d2eb5fa27eaa2334a70a4d8",
+    "tree": "9d6b90d271046268ea50eb0a98725ed834f90fbb"
+  },
+  "runId": "prettier__prettier-9521-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 469574.8871,
+  "usage": {
+    "input": 104154,
+    "cacheRead": 974976,
+    "cacheWrite": 0,
+    "output": 15017,
+    "estimatedApiUsd": 0.027673659999999996,
+    "modelCalls": 38,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.027673659999999996,
+  "acceptance": {
+    "status": "failed",
+    "required": 8,
+    "requiredPassed": 4,
+    "unpassed": [
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts format",
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [flow] format",
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-flow] format",
+      "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel] format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 8,
+      "targetsPassed": 4,
+      "regressions": 2,
+      "regressionsPassed": 2,
+      "missing": [],
+      "failures": [
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts format",
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [flow] format",
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-flow] format",
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel] format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [babel-flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [babel-ts] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [babel] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts [flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->issue-9501.ts format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel-ts] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [babel] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts [flow] format": 1,
+        "tests/typescript/typeparams/consistent/jsfmt.spec.js->simple-types.ts format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2
+  },
+  "changed": [
+    "src/language-js/printer-estree.js",
+    "tests/typescript/generic/__snapshots__/jsfmt.spec.js.snap",
+    "tests/typescript/generic/issue-9521.ts"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-js/utils.js"
+  ],
+  "extraChangedFiles": [
+    "tests/typescript/generic/__snapshots__/jsfmt.spec.js.snap",
+    "tests/typescript/generic/issue-9521.ts"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 38,
+  "editCalls": 4,
+  "verificationCalls": 0,
+  "toolCalls": 78,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-9521-A-r0-a0\\home\\events\\1794317112254-7856e787-e513-40df-b9af-7ef961b5c79b.jsonl",
+  "receiptAudit": {
+    "requests": 38,
+    "finalUsageResponses": 38,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 38,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-9521-A-r0",
+  "attempt": 0
+}
