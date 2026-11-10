@@ -1,0 +1,38 @@
+diff --git a/src/math/Color.js b/src/math/Color.js
+index e2c45f9..b913958 100644
+--- a/src/math/Color.js
++++ b/src/math/Color.js
+@@ -222,12 +222,12 @@ class Color {
+ 				case 'hsl':
+ 				case 'hsla':
+ 
+-					if ( color = /^\s*(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec( components ) ) {
++					if ( color = /^\s*(\d*\.?\d+)\s*,\s*(\d*\.?\d+)\%\s*,\s*(\d*\.?\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec( components ) ) {
+ 
+ 						// hsl(120,50%,50%) hsla(120,50%,50%,0.5)
+ 						const h = parseFloat( color[ 1 ] ) / 360;
+-						const s = parseInt( color[ 2 ], 10 ) / 100;
+-						const l = parseInt( color[ 3 ], 10 ) / 100;
++						const s = parseFloat( color[ 2 ] ) / 100;
++						const l = parseFloat( color[ 3 ] ) / 100;
+ 
+ 						handleAlpha( color[ 4 ] );
+ 
+diff --git a/test/unit/src/math/Color.tests.js b/test/unit/src/math/Color.tests.js
+index fb13900..5c6fd00 100644
+--- a/test/unit/src/math/Color.tests.js
++++ b/test/unit/src/math/Color.tests.js
+@@ -131,6 +131,13 @@ export default QUnit.module( 'Maths', () => {
+ 			assert.ok( hsl.s == 0.5, 'saturation: ' + hsl.s );
+ 			assert.ok( hsl.l == 0.75, 'lightness: ' + hsl.l );
+ 
++			hsl = { h: 0, s: 0, l: 0 };
++			a.setStyle( 'hsl(209,95.0%,90.1%)' );
++			a.getHSL( hsl );
++			assert.numEqual( hsl.h, 209 / 360, 'hue: ' + hsl.h );
++			assert.numEqual( hsl.s, 0.95, 'saturation: ' + hsl.s );
++			assert.numEqual( hsl.l, 0.901, 'lightness: ' + hsl.l );
++
+ 			a.setStyle( '#F8A' );
+ 			assert.ok( a.r == 0xFF / 255, 'Red: ' + a.r );
+ 			assert.ok( a.g == 0x88 / 255, 'Green: ' + a.g );

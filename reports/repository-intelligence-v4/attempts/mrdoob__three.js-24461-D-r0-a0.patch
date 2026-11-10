@@ -1,0 +1,59 @@
+diff --git a/src/math/Color.js b/src/math/Color.js
+index e2c45f9..b913958 100644
+--- a/src/math/Color.js
++++ b/src/math/Color.js
+@@ -222,12 +222,12 @@ class Color {
+ 				case 'hsl':
+ 				case 'hsla':
+ 
+-					if ( color = /^\s*(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec( components ) ) {
++					if ( color = /^\s*(\d*\.?\d+)\s*,\s*(\d*\.?\d+)\%\s*,\s*(\d*\.?\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec( components ) ) {
+ 
+ 						// hsl(120,50%,50%) hsla(120,50%,50%,0.5)
+ 						const h = parseFloat( color[ 1 ] ) / 360;
+-						const s = parseInt( color[ 2 ], 10 ) / 100;
+-						const l = parseInt( color[ 3 ], 10 ) / 100;
++						const s = parseFloat( color[ 2 ] ) / 100;
++						const l = parseFloat( color[ 3 ] ) / 100;
+ 
+ 						handleAlpha( color[ 4 ] );
+ 
+diff --git a/test/unit/src/math/Color.tests.js b/test/unit/src/math/Color.tests.js
+index fb13900..b2db805 100644
+--- a/test/unit/src/math/Color.tests.js
++++ b/test/unit/src/math/Color.tests.js
+@@ -1,6 +1,7 @@
+ /* global QUnit */
+ 
+ import { Color } from '../../../../src/math/Color.js';
++import { SRGBColorSpace } from '../../../../src/constants.js';
+ import { eps } from './Constants.tests.js';
+ import { CONSOLE_LEVEL } from '../../utils/console-wrapper.js';
+ 
+@@ -563,6 +564,26 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'setStyle HSL decimal percentages', ( assert ) => {
++
++			const cases = [
++				[ 'hsl(209, 95.0%, 90.1%)', 209, 95.0, 90.1 ],
++				[ 'hsl(120,50.5%,50%)', 120, 50.5, 50 ],
++				[ 'hsl(120,50%,50.5%)', 120, 50, 50.5 ],
++				[ 'hsla( 209.5, 95.5%, 90.1%, 1 )', 209.5, 95.5, 90.1 ],
++				[ 'hsl(120,.5%,.25%)', 120, 0.5, 0.25 ]
++			];
++
++			for ( const [ style, h, s, l ] of cases ) {
++
++				const expected = new Color().setHSL( h / 360, s / 100, l / 100, SRGBColorSpace );
++				const actual = new Color( style );
++				assert.ok( actual.equals( expected ), style + ' preserves fractional percentages' );
++
++			}
++
++		} );
++
+ 		QUnit.test( 'setStyleHSLRed', ( assert ) => {
+ 
+ 			var c = new Color();
