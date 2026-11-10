@@ -1,0 +1,123 @@
+{
+  "task": "serverless__serverless-5509",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5509-A-r0-a0/workspace",
+    "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+    "tree": "a90d565fe6496e724a401bfa92fa1bfa00501c6d"
+  },
+  "runId": "serverless__serverless-5509-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 562898.8383,
+  "usage": {
+    "input": 88704,
+    "cacheRead": 1173632,
+    "cacheWrite": 0,
+    "output": 16561,
+    "estimatedApiUsd": 0.028887219999999998,
+    "modelCalls": 41,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.028887219999999998,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 0,
+    "unpassed": [
+      "#compileDeployment() should create a deployment resource",
+      "#compileDeployment() should create a deployment resource with description"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 0,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [
+        "#compileDeployment() should create a deployment resource",
+        "#compileDeployment() should create a deployment resource with description"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#compileDeployment() should add service endpoint output": 1,
+        "#compileDeployment() should create a deployment resource": 1,
+        "#compileDeployment() should create a deployment resource with description": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "docs/providers/aws/guide/deploying.md",
+    "lib/classes/Service.js",
+    "lib/classes/Service.test.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+    "lib/plugins/aws/provider/awsProvider.js",
+    "lib/plugins/aws/provider/awsProvider.test.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "docs/providers/aws/guide/deploying.md",
+    "lib/classes/Service.js",
+    "lib/classes/Service.test.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+    "lib/plugins/aws/provider/awsProvider.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 41,
+  "editCalls": 13,
+  "verificationCalls": 15,
+  "toolCalls": 91,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5509-A-r0-a0\\home\\events\\1794316104098-76ea99a5-5f1e-4097-85a4-e5cd3591bffe.jsonl",
+  "receiptAudit": {
+    "requests": 41,
+    "finalUsageResponses": 41,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 41,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-5509-A-r0",
+  "attempt": 0
+}

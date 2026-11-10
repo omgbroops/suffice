@@ -1,0 +1,40 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 1,
+    "tests": 3,
+    "passes": 1,
+    "pending": 0,
+    "failures": 2,
+    "start": "2026-11-10T12:55:10.334Z",
+    "end": "2026-11-10T12:55:10.352Z",
+    "duration": 18
+  },
+  "tests": [
+    {
+      "title": "#compileDeployment() should create a deployment resource",
+      "status": "failed",
+      "durationMs": 5,
+      "error": {
+        "message": "expected { Object (Type, Properties, ...) } to deeply equal { Object (Type, DependsOn, ...) }",
+        "stack": "AssertionError: expected { Object (Type, Properties, ...) } to deeply equal { Object (Type, DependsOn, ...) }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5509-1794315273151\\empty\\lib\\plugins\\aws\\package\\compile\\events\\apiGateway\\lib\\deployment.test.js:40:17\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromiseCtx (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\promise.js:606:10)\n    at _drainQueueStep (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:142:12)\n    at _drainQueue (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:131:9)\n    at Async._drainQueues (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:147:5)\n    at Immediate.Async.drainQueues [as _onImmediate] (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:17:14)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#compileDeployment() should create a deployment resource with description",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "expected { Object (Type, Properties, ...) } to deeply equal { Object (Type, DependsOn, ...) }",
+        "stack": "AssertionError: expected { Object (Type, Properties, ...) } to deeply equal { Object (Type, DependsOn, ...) }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at C:\\Users\\Public\\SufficeV4\\gate-serverless__serverless-5509-1794315273151\\empty\\lib\\plugins\\aws\\package\\compile\\events\\apiGateway\\lib\\deployment.test.js:68:21\n    at tryCatcher (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\util.js:16:23)\n    at Promise._settlePromiseFromHandler (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\promise.js:512:31)\n    at Promise._settlePromise (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\promise.js:569:18)\n    at Promise._settlePromiseCtx (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\promise.js:606:10)\n    at _drainQueueStep (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:142:12)\n    at _drainQueue (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:131:9)\n    at Async._drainQueues (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:147:5)\n    at Immediate.Async.drainQueues [as _onImmediate] (C:\\Users\\Public\\SufficeV4\\deps-41dbf36747ec7ccca9bd\\node_modules\\bluebird\\js\\release\\async.js:17:14)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "#compileDeployment() should add service endpoint output",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    }
+  ],
+  "hooks": []
+}

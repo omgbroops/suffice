@@ -1,0 +1,116 @@
+diff --git a/docs/providers/aws/guide/serverless.yml.md b/docs/providers/aws/guide/serverless.yml.md
+index a735bfb..819c17c 100644
+--- a/docs/providers/aws/guide/serverless.yml.md
++++ b/docs/providers/aws/guide/serverless.yml.md
+@@ -26,7 +26,9 @@ frameworkVersion: ">=1.0.0 <2.0.0"
+ provider:
+   name: aws
+   runtime: nodejs8.10
+-  stage: ${opt:stage, 'dev'} # Set the default stage used. Default is dev
++  stage: # Set the stage name and optional API Gateway deployment description
++    name: ${opt:stage, 'dev'} # Default is dev
++    description: API Gateway stage deployment description
+   region: ${opt:region, 'us-east-1'} # Overwrite the default region used. Default is us-east-1
+   stackName: custom-stack-name # Use a custom name for the CloudFormation stack
+   apiName: custom-api-name # Use a custom name for the API Gateway API
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
+index 9eb923b..4e11b72 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js
+@@ -8,13 +8,19 @@ module.exports = {
+     this.apiGatewayDeploymentLogicalId = this.provider.naming
+       .generateApiGatewayDeploymentLogicalId();
+ 
++    const properties = {
++      RestApiId: this.provider.getApiGatewayRestApiId(),
++      StageName: this.provider.getStage(),
++    };
++    const stageDescription = _.get(this.serverless.service.provider, 'stage.description');
++    if (!_.isUndefined(stageDescription)) {
++      properties.Description = stageDescription;
++    }
++
+     _.merge(this.serverless.service.provider.compiledCloudFormationTemplate.Resources, {
+       [this.apiGatewayDeploymentLogicalId]: {
+         Type: 'AWS::ApiGateway::Deployment',
+-        Properties: {
+-          RestApiId: this.provider.getApiGatewayRestApiId(),
+-          StageName: this.provider.getStage(),
+-        },
++        Properties: properties,
+         DependsOn: this.apiGatewayMethodLogicalIds,
+       },
+     });
+diff --git a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
+index 98be9ee..f552542 100644
+--- a/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
++++ b/lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js
+@@ -50,6 +50,30 @@ describe('#compileDeployment()', () => {
+     })
+   );
+ 
++  it('should add a deployment description from the stage configuration', () => {
++    awsCompileApigEvents.serverless.service.provider.stage = {
++      name: 'dev',
++      description: 'My stage deployment description',
++    };
++
++    return awsCompileApigEvents.compileDeployment().then(() => {
++      const apiGatewayDeploymentLogicalId = Object
++        .keys(awsCompileApigEvents.serverless.service.provider
++          .compiledCloudFormationTemplate.Resources)[0];
++
++      expect(
++        awsCompileApigEvents.serverless.service.provider.compiledCloudFormationTemplate
++          .Resources[apiGatewayDeploymentLogicalId].Properties
++      ).to.deep.equal({
++        RestApiId: {
++          Ref: awsCompileApigEvents.apiGatewayRestApiLogicalId,
++        },
++        StageName: 'dev',
++        Description: 'My stage deployment description',
++      });
++    });
++  });
++
+   it('should add service endpoint output', () =>
+     awsCompileApigEvents.compileDeployment().then(() => {
+       expect(
+diff --git a/lib/plugins/aws/provider/awsProvider.js b/lib/plugins/aws/provider/awsProvider.js
+index fec6d92..d13ef2e 100644
+--- a/lib/plugins/aws/provider/awsProvider.js
++++ b/lib/plugins/aws/provider/awsProvider.js
+@@ -450,7 +450,8 @@ class AwsProvider {
+   getStage() {
+     const defaultStage = 'dev';
+     const stageSourceValue = this.getStageSourceValue();
+-    return stageSourceValue.value || defaultStage;
++    const stage = stageSourceValue.value;
++    return (_.isObject(stage) ? stage.name : stage) || defaultStage;
+   }
+ 
+   getAccountId() {
+diff --git a/lib/plugins/aws/provider/awsProvider.test.js b/lib/plugins/aws/provider/awsProvider.test.js
+index fa297e4..c40287e 100644
+--- a/lib/plugins/aws/provider/awsProvider.test.js
++++ b/lib/plugins/aws/provider/awsProvider.test.js
+@@ -1325,6 +1325,19 @@ describe('AwsProvider', () => {
+       expect(awsProvider.getStage()).to.equal(serverless.service.provider.stage);
+     });
+ 
++    it('should use the stage name from provider stage configuration objects', () => {
++      const newOptions = {};
++      const config = {};
++      serverless = new Serverless(config);
++      serverless.service.provider.stage = {
++        name: 'providerStage',
++        description: 'A stage description',
++      };
++      awsProvider = new AwsProvider(serverless, newOptions);
++
++      expect(awsProvider.getStage()).to.equal('providerStage');
++    });
++
+     it('should use the default dev in lieu of options, config, and provider', () => {
+       const newOptions = {};
+       const config = {};

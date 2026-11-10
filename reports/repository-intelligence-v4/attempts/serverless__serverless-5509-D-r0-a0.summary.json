@@ -1,0 +1,116 @@
+{
+  "task": "serverless__serverless-5509",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5509-D-r0-a0/workspace",
+    "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+    "tree": "a90d565fe6496e724a401bfa92fa1bfa00501c6d"
+  },
+  "runId": "serverless__serverless-5509-D-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 43161.2029,
+  "usage": {
+    "input": 21517,
+    "cacheRead": 31104,
+    "cacheWrite": 0,
+    "output": 1225,
+    "estimatedApiUsd": 0.0583944,
+    "modelCalls": 6,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0583944,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 1,
+    "unpassed": [
+      "#compileDeployment() should create a deployment resource"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 1,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [
+        "#compileDeployment() should create a deployment resource"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#compileDeployment() should add service endpoint output": 1,
+        "#compileDeployment() should create a deployment resource": 1,
+        "#compileDeployment() should create a deployment resource with description": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "docs/providers/aws/guide/serverless.yml.md",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/plugins/aws/provider/awsProvider.js"
+  ],
+  "extraChangedFiles": [
+    "docs/providers/aws/guide/serverless.yml.md",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 6,
+  "editCalls": 4,
+  "verificationCalls": 4,
+  "toolCalls": 15,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5509-D-r0-a0\\home\\events\\1794315839338-fad7d88e-58b3-4629-8a1e-67925d0c850a.jsonl",
+  "receiptAudit": {
+    "requests": 6,
+    "finalUsageResponses": 6,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 6,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-5509-D-r0",
+  "attempt": 0
+}

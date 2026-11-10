@@ -1,0 +1,341 @@
+{
+  "task": "serverless__serverless-5509",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5509-B-r0-a0/workspace",
+    "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+    "tree": "a90d565fe6496e724a401bfa92fa1bfa00501c6d"
+  },
+  "runId": "serverless__serverless-5509-B-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 163918.851,
+  "usage": {
+    "input": 57595,
+    "cacheRead": 302208,
+    "cacheWrite": 0,
+    "output": 8447,
+    "estimatedApiUsd": 0.01300508,
+    "modelCalls": 10,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.01300508,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 0,
+    "unpassed": [
+      "#compileDeployment() should create a deployment resource",
+      "#compileDeployment() should create a deployment resource with description"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 0,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [
+        "#compileDeployment() should create a deployment resource",
+        "#compileDeployment() should create a deployment resource with description"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#compileDeployment() should add service endpoint output": 1,
+        "#compileDeployment() should create a deployment resource": 1,
+        "#compileDeployment() should create a deployment resource with description": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "docs/providers/aws/guide/serverless.yml.md",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+    "lib/plugins/aws/provider/awsProvider.js",
+    "lib/plugins/aws/provider/awsProvider.test.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "docs/providers/aws/guide/serverless.yml.md",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+    "lib/plugins/aws/provider/awsProvider.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 10,
+  "editCalls": 6,
+  "verificationCalls": 7,
+  "toolCalls": 43,
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T13:05:13.936Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 2813.2985999999983,
+      "parsedFiles": 402,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": 92245536,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T13:05:15.322Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 1383.130799999999,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": 32291400,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T13:05:24.604Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 1356.7100999999966,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": 10103936,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T13:05:32.485Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 1373.0518999999986,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": 1192744,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T13:05:41.995Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 1384.6330000000016,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": -7114248,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T13:05:58.457Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 1339.983699999997,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": 14971760,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T13:06:29.127Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "0ba93add408d05a5c476d45d43ce8d614926555be6f0ffe1b6aff5c530fbe375",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "dce7a89d3fc61a7a6f50af0100f06d95494ca075d4b8b6a817821170c461c440"
+      },
+      "latencyMs": 1733.1322000000073,
+      "parsedFiles": 4,
+      "fileCount": 402,
+      "cacheBytes": 21744499,
+      "heapDeltaBytes": 54641912,
+      "graphBytes": 30541000
+    },
+    {
+      "at": "2026-11-10T13:06:30.455Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "0ba93add408d05a5c476d45d43ce8d614926555be6f0ffe1b6aff5c530fbe375",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "dce7a89d3fc61a7a6f50af0100f06d95494ca075d4b8b6a817821170c461c440"
+      },
+      "latencyMs": 1315.8684999999969,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21744499,
+      "heapDeltaBytes": 31399248,
+      "graphBytes": 30541000
+    },
+    {
+      "at": "2026-11-10T13:06:46.799Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "dfbd977d7cc6a991aef6eaab3ec82554ca8b0b7c47ea25d68a72fe2131599166",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "30b23db9c11dad562d46d9d86adec1703699a3e2deabccc74e2a77a5c35993aa"
+      },
+      "latencyMs": 1546.0206000000035,
+      "parsedFiles": 1,
+      "fileCount": 402,
+      "cacheBytes": 21744498,
+      "heapDeltaBytes": 64421168,
+      "graphBytes": 30540999
+    },
+    {
+      "at": "2026-11-10T13:06:48.173Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "dfbd977d7cc6a991aef6eaab3ec82554ca8b0b7c47ea25d68a72fe2131599166",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "30b23db9c11dad562d46d9d86adec1703699a3e2deabccc74e2a77a5c35993aa"
+      },
+      "latencyMs": 1357.150099999999,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21744498,
+      "heapDeltaBytes": 6715512,
+      "graphBytes": 30540999
+    },
+    {
+      "at": "2026-11-10T13:06:59.858Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "dfbd977d7cc6a991aef6eaab3ec82554ca8b0b7c47ea25d68a72fe2131599166",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "30b23db9c11dad562d46d9d86adec1703699a3e2deabccc74e2a77a5c35993aa"
+      },
+      "latencyMs": 1504.598199999993,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21744498,
+      "heapDeltaBytes": -8768632,
+      "graphBytes": 30540999
+    },
+    {
+      "at": "2026-11-10T13:07:18.500Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "dfbd977d7cc6a991aef6eaab3ec82554ca8b0b7c47ea25d68a72fe2131599166",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "30b23db9c11dad562d46d9d86adec1703699a3e2deabccc74e2a77a5c35993aa"
+      },
+      "latencyMs": 1298.8364999999758,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21744498,
+      "heapDeltaBytes": 10580296,
+      "graphBytes": 30540999
+    },
+    {
+      "at": "2026-11-10T13:07:37.691Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "dfbd977d7cc6a991aef6eaab3ec82554ca8b0b7c47ea25d68a72fe2131599166",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "30b23db9c11dad562d46d9d86adec1703699a3e2deabccc74e2a77a5c35993aa"
+      },
+      "latencyMs": 1301.6089999999967,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21744498,
+      "heapDeltaBytes": 7771120,
+      "graphBytes": 30540999
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5509-B-r0-a0\\home\\events\\1794315911102-75c4cc8e-978c-43e8-8af5-76fa6a027bf0.jsonl",
+  "receiptAudit": {
+    "requests": 10,
+    "finalUsageResponses": 10,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 10,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-5509-B-r0",
+  "attempt": 0
+}

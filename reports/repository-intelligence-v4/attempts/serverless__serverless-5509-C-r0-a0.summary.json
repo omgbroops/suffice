@@ -1,0 +1,287 @@
+{
+  "task": "serverless__serverless-5509",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-5509-C-r0-a0/workspace",
+    "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+    "tree": "a90d565fe6496e724a401bfa92fa1bfa00501c6d"
+  },
+  "runId": "serverless__serverless-5509-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 448161.6043,
+  "usage": {
+    "input": 99959,
+    "cacheRead": 1530240,
+    "cacheWrite": 0,
+    "output": 17104,
+    "estimatedApiUsd": 0.0338503,
+    "modelCalls": 32,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0338503,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 0,
+    "unpassed": [
+      "#compileDeployment() should create a deployment resource",
+      "#compileDeployment() should create a deployment resource with description"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 0,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [
+        "#compileDeployment() should create a deployment resource",
+        "#compileDeployment() should create a deployment resource with description"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#compileDeployment() should add service endpoint output": 1,
+        "#compileDeployment() should create a deployment resource": 1,
+        "#compileDeployment() should create a deployment resource with description": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "docs/providers/aws/guide/serverless.yml.md",
+    "lib/classes/Service.js",
+    "lib/classes/Service.test.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+    "lib/plugins/aws/provider/awsProvider.js",
+    "lib/plugins/aws/provider/awsProvider.test.js",
+    "lib/utils/functionInfoUtils.js"
+  ],
+  "unrepairedReferenceFiles": [],
+  "extraChangedFiles": [
+    "docs/providers/aws/guide/serverless.yml.md",
+    "lib/classes/Service.js",
+    "lib/classes/Service.test.js",
+    "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+    "lib/plugins/aws/provider/awsProvider.test.js",
+    "lib/utils/functionInfoUtils.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 32,
+  "editCalls": 14,
+  "verificationCalls": 7,
+  "toolCalls": 71,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T12:58:58.253Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "e0c7799b562fc7068c8c76fb88f27f28e27f4ec8cccf314e93be2aebb8a201fb",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "ef5e61abbc77fbd60a22f0642ba3d8c594dfd9748a02a3c24dc951f50b4b1f5f"
+      },
+      "latencyMs": 2882.179600000003,
+      "parsedFiles": 402,
+      "fileCount": 402,
+      "cacheBytes": 21725582,
+      "heapDeltaBytes": 105309024,
+      "graphBytes": 30514003
+    },
+    {
+      "at": "2026-11-10T12:59:00.490Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "cc52ef031a46c18895e93e11d63b3b7eee719b0aa4bf0e92782026f55cab83b6",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "2a5cac7138275bae4f5cab6ce20a30c1aaf0b357e507e3a294fded674087a954"
+      },
+      "latencyMs": 1589.1622999999963,
+      "parsedFiles": 4,
+      "fileCount": 402,
+      "cacheBytes": 21735527,
+      "heapDeltaBytes": -22830744,
+      "graphBytes": 30529084
+    },
+    {
+      "at": "2026-11-10T12:59:01.788Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "cc52ef031a46c18895e93e11d63b3b7eee719b0aa4bf0e92782026f55cab83b6",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "2a5cac7138275bae4f5cab6ce20a30c1aaf0b357e507e3a294fded674087a954"
+      },
+      "latencyMs": 1287.581200000015,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21735527,
+      "heapDeltaBytes": 31588808,
+      "graphBytes": 30529084
+    },
+    {
+      "at": "2026-11-10T12:59:32.884Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "fab53374aee98eddb6e1eaaf102fd2b89710254904ac34a47d4fd52d89fec820",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "2bcea94cdbca9e448d403bb7c0fa08a963a6b1c4026d57bae8d864db0fbdbdf9"
+      },
+      "latencyMs": 1661.445699999982,
+      "parsedFiles": 3,
+      "fileCount": 402,
+      "cacheBytes": 21753295,
+      "heapDeltaBytes": 59999400,
+      "graphBytes": 30553952
+    },
+    {
+      "at": "2026-11-10T12:59:34.205Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "fab53374aee98eddb6e1eaaf102fd2b89710254904ac34a47d4fd52d89fec820",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "2bcea94cdbca9e448d403bb7c0fa08a963a6b1c4026d57bae8d864db0fbdbdf9"
+      },
+      "latencyMs": 1302.6454000000085,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21753295,
+      "heapDeltaBytes": -61310112,
+      "graphBytes": 30553952
+    },
+    {
+      "at": "2026-11-10T12:59:49.928Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "fc87a5440e66f2762de403bca08cec2ee3b51879aa358cec39bf5e9843abd071",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "d6dc5011c065ae4047f796a7670f1b5bc5341fa2b06382e66c49e960d784c933"
+      },
+      "latencyMs": 1514.6793999999645,
+      "parsedFiles": 2,
+      "fileCount": 402,
+      "cacheBytes": 21755805,
+      "heapDeltaBytes": 42152384,
+      "graphBytes": 30557676
+    },
+    {
+      "at": "2026-11-10T12:59:51.210Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "fc87a5440e66f2762de403bca08cec2ee3b51879aa358cec39bf5e9843abd071",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "d6dc5011c065ae4047f796a7670f1b5bc5341fa2b06382e66c49e960d784c933"
+      },
+      "latencyMs": 1269.6647999999695,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21755805,
+      "heapDeltaBytes": -42676624,
+      "graphBytes": 30557676
+    },
+    {
+      "at": "2026-11-10T13:00:29.168Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "4210aadc938e812e9833430d0f4ecf3240cc26a30caff53fe40d8383319a1b0a",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "b0d1049de2791c0c2629d766dea29391b7e16213adf85406783cc4520516f7c2"
+      },
+      "latencyMs": 1749.1529999999912,
+      "parsedFiles": 2,
+      "fileCount": 402,
+      "cacheBytes": 21755804,
+      "heapDeltaBytes": 54101480,
+      "graphBytes": 30557675
+    },
+    {
+      "at": "2026-11-10T13:00:30.806Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "bbc0d8f895f1402cc00f93041b119459968a53de",
+        "sourceContentVersion": "4210aadc938e812e9833430d0f4ecf3240cc26a30caff53fe40d8383319a1b0a",
+        "configurationVersion": "674830b8a669d23e64979947a293e5035a60ef6cfd7f37b56cc6a8cbbe3d5df7",
+        "contentVersion": "b0d1049de2791c0c2629d766dea29391b7e16213adf85406783cc4520516f7c2"
+      },
+      "latencyMs": 1618.8304999999818,
+      "parsedFiles": 0,
+      "fileCount": 402,
+      "cacheBytes": 21755804,
+      "heapDeltaBytes": -79610464,
+      "graphBytes": 30557675
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-5509-C-r0-a0\\home\\events\\1794315361853-9bb005a2-e201-45f6-8cfb-a1dde5f19a58.jsonl",
+  "receiptAudit": {
+    "requests": 32,
+    "finalUsageResponses": 32,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 32,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-5509-C-r0",
+  "attempt": 0
+}
