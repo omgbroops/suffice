@@ -1,5 +1,10 @@
 # Repository intelligence v4 research protocol
 
+Collection is ongoing. The original design below is preserved; the appended
+resource and Priority amendments describe actual execution changes. See
+`reports/repository-intelligence-v4/effective-protocol.json` for the combined
+policy and `analysis/RESULTS.md` for the latest completed-attempt snapshot.
+
 This branch studies the existing architecture. The graph parser, resolver,
 index, guidance policy and on-demand triggers are unchanged from v3. Evaluation
 instrumentation is separate from feature development. No result from v3 is a
@@ -395,3 +400,57 @@ Run `node scripts/run-intelligence-v4-priority.mjs --check-only` to verify the
 derivation without inference, and omit `--check-only` for serial continuation.
 The report separates requested-tier and resource-policy phases; it does not
 describe the mixed collection as identical serving conditions.
+
+## Correction to the Priority provider interpretation
+
+Live inspection found that both catalog entries use `openai-responses`, not
+`openai-codex-responses`. The earlier explanation invoking the Codex-only
+pricing fallback was incorrect. It remains in the original amendment as a
+historical assumption and is superseded by
+`infrastructure/priority-provider-correction.json`. No raw trajectory is edited.
+
+The regular provider uses the server-reported tier. Its simple-options builder
+omits the provider-specific `serviceTier` option, although Suffice's existing
+payload hook still sends `service_tier: priority`. Both availability probes and
+the first live Priority-requested trajectory report `default`. Fast processing
+is therefore not confirmed active. Successful request acceptance is not treated
+as proof of higher-speed serving. Actual SDK costs remain default-tier estimates
+when the response reports default; they are not manually doubled.
+
+The correction resolves only the two probes' earlier pricing-only unknown flags
+from complete receipts and actual provider metadata. Original probe JSON and the
+old/new ledger values remain preserved. No historical missing-usage reservation
+is erased. The conservative doubled emergency ceilings and request reservations
+remain explicit limits protecting the $25 cap if Priority is later served; they
+are not claims of actual charges. All four configurations on each subsequent
+task still receive the same requested tier and common token/wall/tool limits.
+
+The active serial worker subsequently restored its earlier whole-ledger snapshot,
+including the two conservative probe reservations. The correction resolves the
+pricing interpretation; final ledger reconciliation is deferred until no writer
+is active. Main attempt charges remain intact. The ledger's conservative flags
+should not be described as missing token receipts for these two probes.
+
+
+## Interim overhead interpretation
+
+The frozen intelligence implementation serializes public graph queries through one
+promise queue (`packages/cli/src/intelligence/graph.mjs`). Refresh latency begins
+inside that queue and ends after validation, relinking and any cache write. The
+report sums completed refresh durations, including zero-reparse validation scans.
+This is measured graph activity, not a causal estimate of exclusive wall time: it
+may overlap other asynchronous tool execution, and no missing completion event is
+assigned zero work. Per-attempt agent and worker wall time remain separate.
+
+Three.js B repetition 0 recorded 13 completed refreshes totaling 84.272 seconds
+during a 223.357-second agent phase. Its cold graph serialized to 278,683,125 bytes
+and the recorded cold heap delta was 649,970,312 bytes. Prettier B repetition 0
+recorded 34 completed refreshes totaling about 432 seconds during an approximately
+886-second agent phase; its cold graph was 34,080,498 bytes across 4,239 files.
+These examples show repository-density-dependent overhead and the cost of repeated
+freshness validation. Serialized graph size and a single heap delta are not peak
+process memory. The current graph and controller remain frozen for the experiment;
+optimizing them after observing these tasks would require a new evaluation phase.
+
+The effective protocol separates common inference limits from the task-dependent
+service policy. It does not label all attempts as requesting default service.

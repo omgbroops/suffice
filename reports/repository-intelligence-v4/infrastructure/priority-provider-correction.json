@@ -1,0 +1,50 @@
+{
+  "at": "2026-11-10T03:22:43.512560+00:00",
+  "catalogApis": {
+    "gpt-6-luna": "openai-responses",
+    "gpt-6.1-sol": "openai-responses"
+  },
+  "correction": "The Codex-only default-to-requested-Priority pricing fallback does not apply. These models use regular openai-responses. Its streamSimple buildBaseOptions also omits serviceTier; the existing payload hook still transmits the Priority field. Raw responses report default, and the SDK correctly prices these as default. Fast serving is not confirmed.",
+  "actualData": "Raw requests, responses, usage and SDK cost estimates remain unchanged. The earlier 2x emergency ceilings/reservations are conservative admission limits, not measured Priority charges or proof of faster service.",
+  "sourceHashes": {
+    "node_modules/@earendil-works/pi-ai/dist/api/openai-responses.js": "8de25051531f131c4ae3d730f371fa0e15559ed7f865765a744c64d5edd2e067",
+    "node_modules/@earendil-works/pi-ai/dist/api/simple-options.js": "9b3cc0ae6daa86fdc050bc0cb0f3f986401e64ccddbde6757183c9f8ad411be2"
+  },
+  "probeLedgerReconciliation": [
+    {
+      "before": {
+        "runId": "repository-intelligence-v4/priority-probe/2026-11-10T02-31-25-597Z/gpt-6-luna",
+        "reserved": 0.1,
+        "known": 0.00016130000000000002,
+        "unknown": true,
+        "state": "finished"
+      },
+      "after": {
+        "runId": "repository-intelligence-v4/priority-probe/2026-11-10T02-31-25-597Z/gpt-6-luna",
+        "reserved": 0.00016130000000000002,
+        "known": 0.00016130000000000002,
+        "unknown": false,
+        "state": "finished"
+      },
+      "reason": "Complete usage; regular Responses provider and explicitly reported default tier resolve the earlier pricing-only ambiguity. No missing usage is inferred as zero."
+    },
+    {
+      "before": {
+        "runId": "repository-intelligence-v4/priority-probe/2026-11-10T02-31-25-597Z/gpt-6.1-sol",
+        "reserved": 0.3,
+        "known": 0.003348,
+        "unknown": true,
+        "state": "finished"
+      },
+      "after": {
+        "runId": "repository-intelligence-v4/priority-probe/2026-11-10T02-31-25-597Z/gpt-6.1-sol",
+        "reserved": 0.003348,
+        "known": 0.003348,
+        "unknown": false,
+        "state": "finished"
+      },
+      "reason": "Complete usage; regular Responses provider and explicitly reported default tier resolve the earlier pricing-only ambiguity. No missing usage is inferred as zero."
+    }
+  ],
+  "ledgerOperationalNote": "The active worker retained an earlier whole-ledger snapshot and restored the conservative probe reservations. The pricing evidence remains resolved, but repeat the operational ledger reconciliation only after all active writers have stopped. Main attempt charges were not changed or discarded."
+}

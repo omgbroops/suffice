@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "at": "2026-11-10T03:38:34.488472+00:00",
+  "baseProtocolSha256": "363d302b4b5c67535a2ad4c8b9b537c00fda6cc7f68d02d011ff65a38511617f",
+  "executionEntryPoint": "scripts/run-intelligence-v4-priority.mjs",
+  "models": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off"
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided"
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand"
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off"
+    }
+  ],
+  "commonLimits": {
+    "timeout": 1200,
+    "maxTurns": 90,
+    "maxToolCalls": 400,
+    "maxOutputTokens": 16384,
+    "maxProviderPayloadBytes": 1048576,
+    "maxTaskTokens": 4000000,
+    "retryCount": 0
+  },
+  "capUSD": 25,
+  "concurrency": 1,
+  "resourcePolicy": {
+    "phase": "post-restart-low-memory-v2",
+    "authorization": "User explicitly asked to try continuing while studying after restarting the PC.",
+    "originalProtocolSha256": "363d302b4b5c67535a2ad4c8b9b537c00fda6cc7f68d02d011ff65a38511617f",
+    "parentMinimumFreeRAMGiB": 0.75,
+    "workerMinimumFreeRAMGiB": 0.5,
+    "preparationMinimumFreeRAMGiB": 0.75,
+    "minimumFreeDiskGiB": 6,
+    "workerHeapMiB": 768,
+    "projectHeapMiB": 384,
+    "maxConcurrent": 1,
+    "temperatureC": null,
+    "unchanged": "Exact models/efforts, prompts, graph, controller, tools, grading, token/wall/tool budgets and total $25 cap.",
+    "analysis": "Preserve and identify the first four model attempts under the original launch floors. Report phase-stratified results; do not describe host starting conditions as identical."
+  },
+  "servicePolicy": {
+    "legacyTasks": [
+      "serverless__serverless-5926",
+      "mrdoob__three.js-23796"
+    ],
+    "legacyRequestedTier": "default",
+    "otherRequestedTier": "priority",
+    "actualServingMode": "Use raw per-attempt receipts; currently observed Priority-requested replies report default. Do not infer confirmed Fast.",
+    "apiByModel": {
+      "gpt-6-luna": "openai-responses",
+      "gpt-6.1-sol": "openai-responses"
+    },
+    "pricing": "Actual SDK estimates follow the raw reported tier on this regular Responses route. The Codex-only fallback explanation is superseded. Doubled emergency ceilings/reservations remain conservative bounds, not actual charges.",
+    "correction": "infrastructure/priority-provider-correction.json"
+  },
+  "originalDataPreserved": true,
+  "comparisonRule": "All four configurations of a task receive the same requested tier. Report service and resource phases separately; no assumption of identical host or serving conditions across phases.",
+  "generatedExecutors": {
+    "worker": {
+      "path": ".suffice/intelligence-v4/priority/worker.mjs",
+      "sha256": "5ce64945c0f87ddc5491587b79d911b68f975cae8a4cf7ca81f7472e21dcca4e"
+    },
+    "coordinator": {
+      "path": ".suffice/intelligence-v4/priority/coordinator.mjs",
+      "sha256": "ed27a9d55b180a705973c32a26b1c00c8a3fc70f1a681deb117431e56e526f4b"
+    },
+    "campaign": {
+      "path": ".suffice/intelligence-v4/priority/campaign.mjs",
+      "sha256": "7d9929995c8881e35f97006e0fa60da54e14444785f383b4b5cc623adb9cff4b"
+    }
+  }
+}
