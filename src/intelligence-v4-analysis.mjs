@@ -1,4 +1,11 @@
 /** Preserve repetition-level discordance even when opposite outcomes cancel. */
+export function classifyAnalysisOutcome(result){
+  // The frozen worker's provider detector missed this SDK stream termination.
+  // Preserve the raw label; apply the protocol's provider-failure exclusion.
+  if(result?.classification==='agent_error'&&result.error==='OpenAI Responses stream ended before a terminal response event')return 'provider_interruption';
+  return result?.classification??'missing';
+}
+
 export function pairedTaskDifferences(rows,tasks,left,right,repetitions=[0,1]){
   if(!repetitions.length||new Set(repetitions).size!==repetitions.length||repetitions.some(rep=>!Number.isInteger(rep)||rep<0))throw new Error('Distinct nonnegative repetitions required');
   return tasks.map(task=>{

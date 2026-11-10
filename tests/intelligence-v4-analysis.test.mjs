@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {pairedTaskDifferences} from '../src/intelligence-v4-analysis.mjs';
+import {pairedTaskDifferences,classifyAnalysisOutcome} from '../src/intelligence-v4-analysis.mjs';
 const row=(arm,repetition,accepted)=>({task:'case',arm,repetition,accepted,scorable:true,resourcePolicyPhase:'phase'});
 
 test('opposite repetition outcomes remain visible under a zero task-mean difference',()=>{
@@ -24,4 +24,12 @@ test('single-run analysis uses the prespecified first run and ignores retained r
   assert.equal(result.delta,1);assert.equal(result.pairs.length,1);assert.equal(result.discordantRepetitions,1);
   assert.throws(()=>pairedTaskDifferences(rows,[{id:'case'}],'B','A',[]));
   assert.throws(()=>pairedTaskDifferences(rows,[{id:'case'}],'B','A',[0,0]));
+});
+
+test('an explicitly interrupted provider stream is excluded without relabeling time-budget failures',()=>{
+  const raw={classification:'agent_error',error:'OpenAI Responses stream ended before a terminal response event'};
+  assert.equal(classifyAnalysisOutcome(raw),'provider_interruption');
+  assert.equal(raw.classification,'agent_error');
+  assert.equal(classifyAnalysisOutcome({classification:'budget_or_incomplete',error:'Task stopped: timeout'}),'budget_or_incomplete');
+  assert.equal(classifyAnalysisOutcome({classification:'agent_error',error:'Another error'}),'agent_error');
 });
