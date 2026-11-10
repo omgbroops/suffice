@@ -1,0 +1,66 @@
+diff --git a/src/language-js/parse/babel.js b/src/language-js/parse/babel.js
+index b6a290d..0b61aea 100644
+--- a/src/language-js/parse/babel.js
++++ b/src/language-js/parse/babel.js
+@@ -169,6 +169,11 @@ const parseEstree = createParse(
+   appendPlugins(["jsx", "flow", "estree"])
+ );
+ const parseExpression = createParse("parseExpression", appendPlugins(["jsx"]));
++const parseVueExpression = createParse(
++  "parseExpression",
++  appendPlugins(["jsx", "typescript"]),
++  appendPlugins(["jsx"])
++);
+ 
+ // Error codes are defined in
+ //  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js
+@@ -240,7 +245,7 @@ module.exports = {
+     /** @internal */
+     __js_expression: babelExpression,
+     /** for vue filter */
+-    __vue_expression: babelExpression,
++    __vue_expression: createParser(parseVueExpression),
+     /** for vue event binding to handle semicolon */
+     __vue_event_binding: babel,
+     /** verify that we can print this AST */
+diff --git a/tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap b/tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap
+index 91b44d2..3a42b58 100644
+--- a/tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap
+@@ -45,3 +45,25 @@ printWidth: 80
+ 
+ ================================================================================
+ `;
++
++exports[`typescript-as.vue format 1`] = `
++====================================options=====================================
++parsers: ["vue"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++<template>
++  <p v-if="isFolder(file)">{{(file as mymodule.Folder).deadline+1}}</p>
++  <p :value="(file as mymodule.Folder).deadline+1"></p>
++  <p>{{ message | capitalize }}</p>
++</template>
++
++=====================================output=====================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline + 1 }}</p>
++  <p :value="(file as mymodule.Folder).deadline + 1"></p>
++  <p>{{ message | capitalize }}</p>
++</template>
++
++================================================================================
++`;
+diff --git a/tests/format/vue/interpolation/typescript-as.vue b/tests/format/vue/interpolation/typescript-as.vue
+new file mode 100644
+index 0000000..846bc3d
+--- /dev/null
++++ b/tests/format/vue/interpolation/typescript-as.vue
+@@ -0,0 +1,5 @@
++<template>
++  <p v-if="isFolder(file)">{{(file as mymodule.Folder).deadline+1}}</p>
++  <p :value="(file as mymodule.Folder).deadline+1"></p>
++  <p>{{ message | capitalize }}</p>
++</template>

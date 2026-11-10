@@ -1,0 +1,412 @@
+{
+  "task": "prettier__prettier-12584",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 1,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12584-C-r1-a0/workspace",
+    "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+    "tree": "9f877430ff04b3196c2084e07c714b6bf2867f4e"
+  },
+  "runId": "prettier__prettier-12584-C-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 690931.9057,
+  "usage": {
+    "input": 65026,
+    "cacheRead": 1045120,
+    "cacheWrite": 0,
+    "output": 12337,
+    "estimatedApiUsd": 0.023122300000000005,
+    "modelCalls": 34,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.023122300000000005,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 1,
+    "unpassed": [
+      "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+      "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 1,
+      "regressions": 1,
+      "regressionsPassed": 0,
+      "missing": [],
+      "failures": [
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "src/language-js/parse/babel.js",
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript-as.vue"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-html/embed.js",
+    "src/language-html/print-preprocess.js",
+    "src/language-html/utils/index.js",
+    "src/language-js/parse/parsers.js",
+    "src/language-js/print-preprocess.js",
+    "src/language-js/printer-estree.js",
+    "src/main/comments.js"
+  ],
+  "extraChangedFiles": [
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript-as.vue"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 34,
+  "editCalls": 3,
+  "verificationCalls": 1,
+  "toolCalls": 72,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T04:29:53.348Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "editing-exported-module"
+    },
+    {
+      "at": "2026-11-10T04:30:13.765Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/language-js/parse/babel.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T04:30:26.808Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "editing-exported-module",
+      "args": {
+        "paths": [
+          "src/language-js/parse/babel.js"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T04:30:50.634Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          "src/language-js/parse/babel.js",
+          "tests/format/vue/interpolation/typescript-as.vue"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T04:31:02.540Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "args": {
+        "paths": [
+          "src/language-js/parse/babel.js",
+          "tests/format/vue/interpolation/typescript-as.vue"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T04:31:32.161Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/babel.js",
+          "tests/format/vue/interpolation/typescript-as.vue"
+        ],
+        "limit": 8
+      }
+    },
+    {
+      "at": "2026-11-10T04:31:46.211Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "args": {
+        "paths": [
+          "src/language-js/parse/babel.js",
+          "tests/format/vue/interpolation/typescript-as.vue"
+        ],
+        "limit": 8
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T04:30:07.942Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 14593.92710000003,
+      "parsedFiles": 4238,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 163316120,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:30:26.688Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "e22db814525b9014040b055e18db4f66cfcaba31217faa20a173c0afa243be73",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "92335fd7a7c2e4fee83b1ee554e37d211791e2ccddcb2b068579a28db1207461"
+      },
+      "latencyMs": 12923.353399999964,
+      "parsedFiles": 1,
+      "fileCount": 4239,
+      "cacheBytes": 24351031,
+      "heapDeltaBytes": 90519432,
+      "graphBytes": 34084087
+    },
+    {
+      "at": "2026-11-10T04:30:38.607Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "e22db814525b9014040b055e18db4f66cfcaba31217faa20a173c0afa243be73",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "92335fd7a7c2e4fee83b1ee554e37d211791e2ccddcb2b068579a28db1207461"
+      },
+      "latencyMs": 11799.073100000038,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24351031,
+      "heapDeltaBytes": -27846624,
+      "graphBytes": 34084087
+    },
+    {
+      "at": "2026-11-10T04:31:02.461Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "e22db814525b9014040b055e18db4f66cfcaba31217faa20a173c0afa243be73",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "92335fd7a7c2e4fee83b1ee554e37d211791e2ccddcb2b068579a28db1207461"
+      },
+      "latencyMs": 11827.888800000015,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24351031,
+      "heapDeltaBytes": 81011440,
+      "graphBytes": 34084087
+    },
+    {
+      "at": "2026-11-10T04:31:16.259Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "e22db814525b9014040b055e18db4f66cfcaba31217faa20a173c0afa243be73",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "92335fd7a7c2e4fee83b1ee554e37d211791e2ccddcb2b068579a28db1207461"
+      },
+      "latencyMs": 13718.777799999982,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24351031,
+      "heapDeltaBytes": -24099432,
+      "graphBytes": 34084087
+    },
+    {
+      "at": "2026-11-10T04:31:46.131Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "e22db814525b9014040b055e18db4f66cfcaba31217faa20a173c0afa243be73",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "92335fd7a7c2e4fee83b1ee554e37d211791e2ccddcb2b068579a28db1207461"
+      },
+      "latencyMs": 13970.729899999977,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24351031,
+      "heapDeltaBytes": 34314392,
+      "graphBytes": 34084087
+    },
+    {
+      "at": "2026-11-10T04:31:58.009Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "e22db814525b9014040b055e18db4f66cfcaba31217faa20a173c0afa243be73",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "92335fd7a7c2e4fee83b1ee554e37d211791e2ccddcb2b068579a28db1207461"
+      },
+      "latencyMs": 11798.767500000016,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24351031,
+      "heapDeltaBytes": 27349264,
+      "graphBytes": 34084087
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module",
+      "candidatePaths": [
+        "src/language-js/parse/babel.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation; Get-Content tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap | Select-Object -Last 30; '<template><p v-if=\"isFolder(file)\">{{ (file as   mymodule.Folder).deadline }}</p></template>' | node ./bin/prettier.js --parser vue --embedded-language-formatting auto",
+        "node node_modules/eslint/bin/eslint.js src/language-js/parse/babel.js",
+        "git diff --check; git diff --stat; git status --short; git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module",
+      "candidatePaths": [
+        "src/language-js/parse/babel.js",
+        "tests/format/vue/interpolation/typescript-as.vue"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "tests/format/vue/interpolation/typescript-as.vue",
+          "callId": "call_788b5307e2f34a42a62ea68b0c403979|ctc_0b02f87aee69e4d3016af29f07b71c87d1a4cacf435acbd878/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation; Get-Content tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap | Select-Object -Last 30; '<template><p v-if=\"isFolder(file)\">{{ (file as   mymodule.Folder).deadline }}</p></template>' | node ./bin/prettier.js --parser vue --embedded-language-formatting auto",
+        "node node_modules/eslint/bin/eslint.js src/language-js/parse/babel.js",
+        "git diff --check; git diff --stat; git status --short; git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+        "Remove-Item -LiteralPath .v4-tmp/public-report.json -Force -ErrorAction SilentlyContinue; Remove-Item -LiteralPath .v4-tmp/jest -Recurse -Force -ErrorAction SilentlyContinue; git status --short; git diff --check; git diff --stat; Get-Content tests/format/vue/interpolation/typescript-as.vue; Get-Content tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap | Select-Object -Last 25"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification",
+      "candidatePaths": [
+        "src/language-js/parse/babel.js",
+        "tests/format/vue/interpolation/typescript-as.vue"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "tests/format/vue/interpolation/typescript-as.vue",
+          "callId": "call_788b5307e2f34a42a62ea68b0c403979|ctc_0b02f87aee69e4d3016af29f07b71c87d1a4cacf435acbd878/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation; Get-Content tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap | Select-Object -Last 30; '<template><p v-if=\"isFolder(file)\">{{ (file as   mymodule.Folder).deadline }}</p></template>' | node ./bin/prettier.js --parser vue --embedded-language-formatting auto",
+        "node node_modules/eslint/bin/eslint.js src/language-js/parse/babel.js",
+        "git diff --check; git diff --stat; git status --short; git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+        "Remove-Item -LiteralPath .v4-tmp/public-report.json -Force -ErrorAction SilentlyContinue; Remove-Item -LiteralPath .v4-tmp/jest -Recurse -Force -ErrorAction SilentlyContinue; git status --short; git diff --check; git diff --stat; Get-Content tests/format/vue/interpolation/typescript-as.vue; Get-Content tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap | Select-Object -Last 25"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/language-js/parse/babel.js",
+      "before": "\"use strict\";\n\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst getShebang = require(\"../utils/get-shebang.js\");\nconst getNextNonSpaceNonCommentCharacterIndexWithStartIndex = require(\"../../utils/text/get-next-non-space-non-comment-character-index-with-start-index.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst createBabelParseError = require(\"./utils/create-babel-parse-error.js\");\nconst postprocess = require(\"./postprocess/index.js\");\nconst jsonParsers = require(\"./json.js\");\n\n/**\n * @typedef {import(\"@babel/parser\").parse | import(\"@babel/parser\").parseExpression} Parse\n * @typedef {import(\"@babel/parser\").ParserOptions} ParserOptions\n * @typedef {import(\"@babel/parser\").ParserPlugin} ParserPlugin\n */\n\n/** @type {ParserOptions} */\nconst parseOptions = {\n  sourceType: \"module\",\n  allowImportExportEverywhere: true,\n  allowReturnOutsideFunction: true,\n  allowSuperOutsideMethod: true,\n  allowUndeclaredExports: true,\n  errorRecovery: true,\n  createParenthesizedExpressions: true,\n  plugins: [\n    // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,\n    // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify\n    \"doExpressions\",\n    \"exportDefaultFrom\",\n    \"functionBind\",\n    \"functionSent\",\n    \"throwExpressions\",\n    \"partialApplication\",\n    [\"decorators\", { decoratorsBeforeExport: false }],\n    \"importAssertions\",\n    \"decimal\",\n    \"moduleBlocks\",\n    \"asyncDoExpressions\",\n    \"regexpUnicodeSets\",\n    \"destructuringPrivate\",\n    \"decoratorAutoAccessors\",\n  ],\n  tokens: true,\n  ranges: true,\n};\n\n/** @type {ParserPlugin} */\nconst recordAndTuplePlugin = [\"recordAndTuple\", { syntaxType: \"hash\" }];\n\n/** @type {ParserPlugin} */\nconst v8intrinsicPlugin = \"v8intrinsic\";\n\n/** @type {Array<ParserPlugin>} */\nconst pipelineOperatorPlugins = [\n  [\"pipelineOperator\", { proposal: \"hack\", topicToken: \"%\" }],\n  [\"pipelineOperator\", { proposal: \"minimal\" }],\n  [\"pipelineOperator\", { proposal: \"fsharp\" }],\n];\nconst appendPlugins = (plugins, options = parseOptions) => ({\n  ...options,\n  plugins: [...options.plugins, ...plugins],\n});\n\n// Similar to babel\n// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67\nconst FLOW_PRAGMA_REGEX = /@(?:no)?flow\\b/;\nfunction isFlowFile(text, options) {\n  if (options.filepath && options.filepath.endsWith(\".js.flow\")) {\n    return true;\n  }\n\n  const shebang = getShebang(text);\n  if (shebang) {\n    text = text.slice(shebang.length);\n  }\n\n  const firstNonSpaceNonCommentCharacterIndex =\n    getNextNonSpaceNonCommentCharacterIndexWithStartIndex(text, 0);\n\n  if (firstNonSpaceNonCommentCharacterIndex !== false) {\n    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);\n  }\n\n  return FLOW_PRAGMA_REGEX.test(text);\n}\n\nfunction parseWithOptions(parseMethod, text, options) {\n  // Inline the require to avoid loading all the JS if we don't use it\n  /** @type {Parse} */\n  const parse = require(\"@babel/parser\")[parseMethod];\n  const ast = parse(text, options);\n  const error = ast.errors.find(\n    (error) => !allowedMessageCodes.has(error.reasonCode)\n  );\n  if (error) {\n    throw error;\n  }\n  return ast;\n}\n\nfunction createParse(parseMethod, ...optionsCombinations) {\n  return (text, parsers, opts = {}) => {\n    if (\n      (opts.parser === \"babel\" || opts.parser === \"__babel_estree\") &&\n      isFlowFile(text, opts)\n    ) {\n      opts.parser = \"babel-flow\";\n      return parseFlow(text, parsers, opts);\n    }\n\n    let combinations = optionsCombinations;\n    if (opts.__babelSourceType === \"script\") {\n      combinations = combinations.map((options) => ({\n        ...options,\n        sourceType: \"script\",\n      }));\n    }\n\n    if (/#[[{]/.test(text)) {\n      combinations = combinations.map((options) =>\n        appendPlugins([recordAndTuplePlugin], options)\n      );\n    }\n\n    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);\n    if (text.includes(\"|>\")) {\n      const conflictsPlugins = shouldEnableV8intrinsicPlugin\n        ? [...pipelineOperatorPlugins, v8intrinsicPlugin]\n        : pipelineOperatorPlugins;\n      combinations = conflictsPlugins.flatMap((pipelineOperatorPlugin) =>\n        combinations.map((options) =>\n          appendPlugins([pipelineOperatorPlugin], options)\n        )\n      );\n    } else if (shouldEnableV8intrinsicPlugin) {\n      combinations = combinations.map((options) =>\n        appendPlugins([v8intrinsicPlugin], options)\n      );\n    }\n\n    const { result: ast, error } = tryCombinations(\n      ...combinations.map(\n        (options) => () => parseWithOptions(parseMethod, text, options)\n      )\n    );\n\n    if (!ast) {\n      throw createBabelParseError(error);\n    }\n\n    opts.originalText = text;\n    return postprocess(ast, opts);\n  };\n}\n\nconst parse = createParse(\"parse\", appendPlugins([\"jsx\", \"flow\"]));\nconst parseFlow = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", [\"flow\", { all: true, enums: true }]])\n);\nconst parseTypeScript = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"typescript\"])\n);\nconst parseEstree = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"flow\", \"estree\"])\n);\nconst parseExpression = createParse(\"parseExpression\", appendPlugins([\"jsx\"]));\n\n// Error codes are defined in\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/typescript/index.js#L69-L153\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/flow/index.js#L51-L140\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/jsx/index.js#L23-L39\nconst allowedMessageCodes = new Set([\n  \"StrictNumericEscape\",\n  \"StrictWith\",\n  \"StrictOctalLiteral\",\n  \"StrictDelete\",\n  \"StrictEvalArguments\",\n  \"StrictEvalArgumentsBinding\",\n  \"StrictFunction\",\n\n  \"EmptyTypeArguments\",\n  \"EmptyTypeParameters\",\n  \"ConstructorHasTypeParameters\",\n\n  \"UnsupportedParameterPropertyKind\",\n  \"UnexpectedParameterModifier\",\n\n  \"MixedLabeledAndUnlabeledElements\",\n  \"InvalidTupleMemberLabel\",\n\n  \"NonClassMethodPropertyHasAbstractModifer\",\n  \"ReadonlyForMethodSignature\",\n  \"ClassMethodHasDeclare\",\n  \"ClassMethodHasReadonly\",\n  \"InvalidModifierOnTypeMember\",\n  \"DuplicateAccessibilityModifier\",\n  \"IndexSignatureHasDeclare\",\n\n  \"DecoratorExportClass\",\n  \"ParamDupe\",\n  \"InvalidDecimal\",\n  \"RestTrailingComma\",\n  \"UnsupportedParameterDecorator\",\n  \"UnterminatedJsxContent\",\n  \"UnexpectedReservedWord\",\n  \"ModuleAttributesWithDuplicateKeys\",\n  \"LineTerminatorBeforeArrow\",\n  \"InvalidEscapeSequenceTemplate\",\n  \"NonAbstractClassHasAbstractMethod\",\n  \"UnsupportedPropertyDecorator\",\n  \"OptionalTypeBeforeRequired\",\n  \"PatternIsOptional\",\n  \"OptionalBindingPattern\",\n  \"DeclareClassFieldHasInitializer\",\n  \"TypeImportCannotSpecifyDefaultAndNamed\",\n  \"DeclareFunctionHasImplementation\",\n  \"ConstructorClassField\",\n\n  \"VarRedeclaration\",\n  \"InvalidPrivateFieldResolution\",\n  \"DuplicateExport\",\n]);\n\nconst babel = createParser(parse);\nconst babelExpression = createParser(parseExpression);\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    babel,\n    \"babel-flow\": createParser(parseFlow),\n    \"babel-ts\": createParser(parseTypeScript),\n    ...jsonParsers,\n    /** @internal */\n    __js_expression: babelExpression,\n    /** for vue filter */\n    __vue_expression: babelExpression,\n    /** for vue event binding to handle semicolon */\n    __vue_event_binding: babel,\n    /** verify that we can print this AST */\n    __babel_estree: createParser(parseEstree),\n  },\n};\n",
+      "after": "\"use strict\";\n\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst getShebang = require(\"../utils/get-shebang.js\");\nconst getNextNonSpaceNonCommentCharacterIndexWithStartIndex = require(\"../../utils/text/get-next-non-space-non-comment-character-index-with-start-index.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst createBabelParseError = require(\"./utils/create-babel-parse-error.js\");\nconst postprocess = require(\"./postprocess/index.js\");\nconst jsonParsers = require(\"./json.js\");\n\n/**\n * @typedef {import(\"@babel/parser\").parse | import(\"@babel/parser\").parseExpression} Parse\n * @typedef {import(\"@babel/parser\").ParserOptions} ParserOptions\n * @typedef {import(\"@babel/parser\").ParserPlugin} ParserPlugin\n */\n\n/** @type {ParserOptions} */\nconst parseOptions = {\n  sourceType: \"module\",\n  allowImportExportEverywhere: true,\n  allowReturnOutsideFunction: true,\n  allowSuperOutsideMethod: true,\n  allowUndeclaredExports: true,\n  errorRecovery: true,\n  createParenthesizedExpressions: true,\n  plugins: [\n    // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,\n    // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify\n    \"doExpressions\",\n    \"exportDefaultFrom\",\n    \"functionBind\",\n    \"functionSent\",\n    \"throwExpressions\",\n    \"partialApplication\",\n    [\"decorators\", { decoratorsBeforeExport: false }],\n    \"importAssertions\",\n    \"decimal\",\n    \"moduleBlocks\",\n    \"asyncDoExpressions\",\n    \"regexpUnicodeSets\",\n    \"destructuringPrivate\",\n    \"decoratorAutoAccessors\",\n  ],\n  tokens: true,\n  ranges: true,\n};\n\n/** @type {ParserPlugin} */\nconst recordAndTuplePlugin = [\"recordAndTuple\", { syntaxType: \"hash\" }];\n\n/** @type {ParserPlugin} */\nconst v8intrinsicPlugin = \"v8intrinsic\";\n\n/** @type {Array<ParserPlugin>} */\nconst pipelineOperatorPlugins = [\n  [\"pipelineOperator\", { proposal: \"hack\", topicToken: \"%\" }],\n  [\"pipelineOperator\", { proposal: \"minimal\" }],\n  [\"pipelineOperator\", { proposal: \"fsharp\" }],\n];\nconst appendPlugins = (plugins, options = parseOptions) => ({\n  ...options,\n  plugins: [...options.plugins, ...plugins],\n});\n\n// Similar to babel\n// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67\nconst FLOW_PRAGMA_REGEX = /@(?:no)?flow\\b/;\nfunction isFlowFile(text, options) {\n  if (options.filepath && options.filepath.endsWith(\".js.flow\")) {\n    return true;\n  }\n\n  const shebang = getShebang(text);\n  if (shebang) {\n    text = text.slice(shebang.length);\n  }\n\n  const firstNonSpaceNonCommentCharacterIndex =\n    getNextNonSpaceNonCommentCharacterIndexWithStartIndex(text, 0);\n\n  if (firstNonSpaceNonCommentCharacterIndex !== false) {\n    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);\n  }\n\n  return FLOW_PRAGMA_REGEX.test(text);\n}\n\nfunction parseWithOptions(parseMethod, text, options) {\n  // Inline the require to avoid loading all the JS if we don't use it\n  /** @type {Parse} */\n  const parse = require(\"@babel/parser\")[parseMethod];\n  const ast = parse(text, options);\n  const error = ast.errors.find(\n    (error) => !allowedMessageCodes.has(error.reasonCode)\n  );\n  if (error) {\n    throw error;\n  }\n  return ast;\n}\n\nfunction createParse(parseMethod, ...optionsCombinations) {\n  return (text, parsers, opts = {}) => {\n    if (\n      (opts.parser === \"babel\" || opts.parser === \"__babel_estree\") &&\n      isFlowFile(text, opts)\n    ) {\n      opts.parser = \"babel-flow\";\n      return parseFlow(text, parsers, opts);\n    }\n\n    let combinations = optionsCombinations;\n    if (opts.__babelSourceType === \"script\") {\n      combinations = combinations.map((options) => ({\n        ...options,\n        sourceType: \"script\",\n      }));\n    }\n\n    if (/#[[{]/.test(text)) {\n      combinations = combinations.map((options) =>\n        appendPlugins([recordAndTuplePlugin], options)\n      );\n    }\n\n    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);\n    if (text.includes(\"|>\")) {\n      const conflictsPlugins = shouldEnableV8intrinsicPlugin\n        ? [...pipelineOperatorPlugins, v8intrinsicPlugin]\n        : pipelineOperatorPlugins;\n      combinations = conflictsPlugins.flatMap((pipelineOperatorPlugin) =>\n        combinations.map((options) =>\n          appendPlugins([pipelineOperatorPlugin], options)\n        )\n      );\n    } else if (shouldEnableV8intrinsicPlugin) {\n      combinations = combinations.map((options) =>\n        appendPlugins([v8intrinsicPlugin], options)\n      );\n    }\n\n    const { result: ast, error } = tryCombinations(\n      ...combinations.map(\n        (options) => () => parseWithOptions(parseMethod, text, options)\n      )\n    );\n\n    if (!ast) {\n      throw createBabelParseError(error);\n    }\n\n    opts.originalText = text;\n    return postprocess(ast, opts);\n  };\n}\n\nconst parse = createParse(\"parse\", appendPlugins([\"jsx\", \"flow\"]));\nconst parseFlow = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", [\"flow\", { all: true, enums: true }]])\n);\nconst parseTypeScript = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"typescript\"])\n);\nconst parseEstree = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"flow\", \"estree\"])\n);\nconst parseExpression = createParse(\"parseExpression\", appendPlugins([\"jsx\"]));\nconst parseVueExpression = createParse(\n  \"parseExpression\",\n  appendPlugins([\"jsx\"]),\n  appendPlugins([\"jsx\", \"typescript\"])\n);\n\n// Error codes are defined in\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/typescript/index.js#L69-L153\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/flow/index.js#L51-L140\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/jsx/index.js#L23-L39\nconst allowedMessageCodes = new Set([\n  \"StrictNumericEscape\",\n  \"StrictWith\",\n  \"StrictOctalLiteral\",\n  \"StrictDelete\",\n  \"StrictEvalArguments\",\n  \"StrictEvalArgumentsBinding\",\n  \"StrictFunction\",\n\n  \"EmptyTypeArguments\",\n  \"EmptyTypeParameters\",\n  \"ConstructorHasTypeParameters\",\n\n  \"UnsupportedParameterPropertyKind\",\n  \"UnexpectedParameterModifier\",\n\n  \"MixedLabeledAndUnlabeledElements\",\n  \"InvalidTupleMemberLabel\",\n\n  \"NonClassMethodPropertyHasAbstractModifer\",\n  \"ReadonlyForMethodSignature\",\n  \"ClassMethodHasDeclare\",\n  \"ClassMethodHasReadonly\",\n  \"InvalidModifierOnTypeMember\",\n  \"DuplicateAccessibilityModifier\",\n  \"IndexSignatureHasDeclare\",\n\n  \"DecoratorExportClass\",\n  \"ParamDupe\",\n  \"InvalidDecimal\",\n  \"RestTrailingComma\",\n  \"UnsupportedParameterDecorator\",\n  \"UnterminatedJsxContent\",\n  \"UnexpectedReservedWord\",\n  \"ModuleAttributesWithDuplicateKeys\",\n  \"LineTerminatorBeforeArrow\",\n  \"InvalidEscapeSequenceTemplate\",\n  \"NonAbstractClassHasAbstractMethod\",\n  \"UnsupportedPropertyDecorator\",\n  \"OptionalTypeBeforeRequired\",\n  \"PatternIsOptional\",\n  \"OptionalBindingPattern\",\n  \"DeclareClassFieldHasInitializer\",\n  \"TypeImportCannotSpecifyDefaultAndNamed\",\n  \"DeclareFunctionHasImplementation\",\n  \"ConstructorClassField\",\n\n  \"VarRedeclaration\",\n  \"InvalidPrivateFieldResolution\",\n  \"DuplicateExport\",\n]);\n\nconst babel = createParser(parse);\nconst babelExpression = createParser(parseExpression);\nconst vueExpression = createParser(parseVueExpression);\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    babel,\n    \"babel-flow\": createParser(parseFlow),\n    \"babel-ts\": createParser(parseTypeScript),\n    ...jsonParsers,\n    /** @internal */\n    __js_expression: babelExpression,\n    /** for vue filter */\n    __vue_expression: vueExpression,\n    /** for vue event binding to handle semicolon */\n    __vue_event_binding: babel,\n    /** verify that we can print this AST */\n    __babel_estree: createParser(parseEstree),\n  },\n};\n"
+    },
+    {
+      "path": "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+      "before": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`parenthesized.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<span>{{(a||          b)}} {{z&&(a&&b)}}</span>\n</template>\n\n=====================================output=====================================\n<template>\n  <span>{{ a || b }} {{ z && a && b }}</span>\n</template>\n\n================================================================================\n`;\n\nexports[`template.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <root>\n<div class=\"red\">\n    We are going to add this simple card here\n  </div>\n  <div class=\"red\">\n    What is going on {{ prop1 }} and {{ prop2 }}\n  </div>\n  </root>\n</template>\n\n=====================================output=====================================\n<template>\n  <root>\n    <div class=\"red\">We are going to add this simple card here</div>\n    <div class=\"red\">What is going on {{ prop1 }} and {{ prop2 }}</div>\n  </root>\n</template>\n\n================================================================================\n`;\n",
+      "after": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`parenthesized.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<span>{{(a||          b)}} {{z&&(a&&b)}}</span>\n</template>\n\n=====================================output=====================================\n<template>\n  <span>{{ a || b }} {{ z && a && b }}</span>\n</template>\n\n================================================================================\n`;\n\nexports[`template.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <root>\n<div class=\"red\">\n    We are going to add this simple card here\n  </div>\n  <div class=\"red\">\n    What is going on {{ prop1 }} and {{ prop2 }}\n  </div>\n  </root>\n</template>\n\n=====================================output=====================================\n<template>\n  <root>\n    <div class=\"red\">We are going to add this simple card here</div>\n    <div class=\"red\">What is going on {{ prop1 }} and {{ prop2 }}</div>\n  </root>\n</template>\n\n================================================================================\n`;\n\nexports[`typescript-as.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <p v-if=\"isFolder(file)\">{{ (file as   mymodule.Folder).deadline }}</p>\n  <p :value=\"file as   mymodule.Folder\" />\n</template>\n\n=====================================output=====================================\n<template>\n  <p v-if=\"isFolder(file)\">{{ (file as mymodule.Folder).deadline }}</p>\n  <p :value=\"file as mymodule.Folder\" />\n</template>\n\n================================================================================\n`;\n"
+    },
+    {
+      "path": "tests/format/vue/interpolation/typescript-as.vue",
+      "before": null,
+      "after": "<template>\n  <p v-if=\"isFolder(file)\">{{ (file as   mymodule.Folder).deadline }}</p>\n  <p :value=\"file as   mymodule.Folder\" />\n</template>\n"
+    }
+  ],
+  "final": "Implemented Vue-specific expression parsing that first preserves the existing JavaScript/JSX behavior, then retries with TypeScript enabled. Added a regression fixture covering `as` casts in interpolations and bindings.\n\n**Verification:** Vue interpolation tests passed (3 tests), `node native-verify.cjs` passed (20 tests), and `git diff --check` passed. ESLint could not run because its local executable was unavailable.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12584-C-r1-a0\\home\\events\\1794284702993-acbd710c-f3fc-4b10-b5a8-8361ce1195eb.jsonl",
+  "receiptAudit": {
+    "requests": 34,
+    "finalUsageResponses": 34,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 34,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12584-C-r1",
+  "attempt": 0
+}

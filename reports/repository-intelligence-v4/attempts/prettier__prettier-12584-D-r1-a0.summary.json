@@ -1,0 +1,116 @@
+{
+  "task": "prettier__prettier-12584",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 1,
+  "id": "D",
+  "name": "Sol Medium baseline",
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "mode": "off",
+  "arm": "D",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12584-D-r1-a0/workspace",
+    "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+    "tree": "9f877430ff04b3196c2084e07c714b6bf2867f4e"
+  },
+  "runId": "prettier__prettier-12584-D-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": true,
+  "patchAccepted": true,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 204019.85080000001,
+  "usage": {
+    "input": 21484,
+    "cacheRead": 180480,
+    "cacheWrite": 0,
+    "output": 2875,
+    "estimatedApiUsd": 0.08976599999999998,
+    "modelCalls": 12,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.08976599999999998,
+  "acceptance": {
+    "status": "passed",
+    "required": 2,
+    "requiredPassed": 2,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": true,
+      "classification": "passed",
+      "targets": 2,
+      "targetsPassed": 2,
+      "regressions": 1,
+      "regressionsPassed": 1,
+      "missing": [],
+      "failures": [],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 1,
+    "requiredPassed": 1
+  },
+  "changed": [
+    "src/language-html/embed.js",
+    "src/language-html/print-preprocess.js",
+    "src/language-js/parse/babel.js",
+    "tests/format/vue/typescript/jsfmt.spec.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-html/utils/index.js",
+    "src/language-js/parse/parsers.js",
+    "src/language-js/print-preprocess.js",
+    "src/language-js/printer-estree.js",
+    "src/main/comments.js"
+  ],
+  "extraChangedFiles": [
+    "tests/format/vue/typescript/jsfmt.spec.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 12,
+  "editCalls": 6,
+  "verificationCalls": 3,
+  "toolCalls": 36,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12584-D-r1-a0\\home\\events\\1794286254424-4ba1a140-656b-4f73-ac7e-3a191e975d6f.jsonl",
+  "receiptAudit": {
+    "requests": 12,
+    "finalUsageResponses": 12,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 12,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": true,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12584-D-r1",
+  "attempt": 0
+}

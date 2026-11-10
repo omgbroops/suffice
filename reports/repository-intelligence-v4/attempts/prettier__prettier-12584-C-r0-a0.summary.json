@@ -1,0 +1,214 @@
+{
+  "task": "prettier__prettier-12584",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12584-C-r0-a0/workspace",
+    "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+    "tree": "9f877430ff04b3196c2084e07c714b6bf2867f4e"
+  },
+  "runId": "prettier__prettier-12584-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 723557.5090000001,
+  "usage": {
+    "input": 82854,
+    "cacheRead": 1345152,
+    "cacheWrite": 0,
+    "output": 13035,
+    "estimatedApiUsd": 0.028254420000000002,
+    "modelCalls": 36,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.028254420000000002,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 1,
+    "unpassed": [
+      "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+      "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 1,
+      "regressions": 1,
+      "regressionsPassed": 0,
+      "missing": [],
+      "failures": [
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "src/language-js/parse/babel.js",
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript.vue"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-html/embed.js",
+    "src/language-html/print-preprocess.js",
+    "src/language-html/utils/index.js",
+    "src/language-js/parse/parsers.js",
+    "src/language-js/print-preprocess.js",
+    "src/language-js/printer-estree.js",
+    "src/main/comments.js"
+  ],
+  "extraChangedFiles": [
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript.vue"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 36,
+  "editCalls": 3,
+  "verificationCalls": 0,
+  "toolCalls": 77,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module+failed-verification"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T03:57:36.027Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 14704.111100000038,
+      "parsedFiles": 4238,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 151629480,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T03:57:56.314Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "b72d0ec3880c5042625a4ee6af7b882a17ed2e30ae8292b0b8c02b12a41da4d8",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "56471465f48ee00eeed15e66884324d645979c82ea7091b77df05c82688fa686"
+      },
+      "latencyMs": 13836.234899999981,
+      "parsedFiles": 1,
+      "fileCount": 4239,
+      "cacheBytes": 24349965,
+      "heapDeltaBytes": 121438592,
+      "graphBytes": 34082541
+    },
+    {
+      "at": "2026-11-10T03:58:09.706Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "b72d0ec3880c5042625a4ee6af7b882a17ed2e30ae8292b0b8c02b12a41da4d8",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "56471465f48ee00eeed15e66884324d645979c82ea7091b77df05c82688fa686"
+      },
+      "latencyMs": 13273.757099999988,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24349965,
+      "heapDeltaBytes": 84767128,
+      "graphBytes": 34082541
+    },
+    {
+      "at": "2026-11-10T03:59:04.491Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "b72d0ec3880c5042625a4ee6af7b882a17ed2e30ae8292b0b8c02b12a41da4d8",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "56471465f48ee00eeed15e66884324d645979c82ea7091b77df05c82688fa686"
+      },
+      "latencyMs": 13747.006099999999,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24349965,
+      "heapDeltaBytes": 33920640,
+      "graphBytes": 34082541
+    },
+    {
+      "at": "2026-11-10T03:59:17.325Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "b72d0ec3880c5042625a4ee6af7b882a17ed2e30ae8292b0b8c02b12a41da4d8",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "56471465f48ee00eeed15e66884324d645979c82ea7091b77df05c82688fa686"
+      },
+      "latencyMs": 12740.023899999913,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24349965,
+      "heapDeltaBytes": -2521768,
+      "graphBytes": 34082541
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12584-C-r0-a0\\home\\events\\1794282678331-5cce51bd-a8f2-4fba-be7e-1af2f23ecadf.jsonl",
+  "receiptAudit": {
+    "requests": 36,
+    "finalUsageResponses": 36,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 36,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12584-C-r0",
+  "attempt": 0
+}

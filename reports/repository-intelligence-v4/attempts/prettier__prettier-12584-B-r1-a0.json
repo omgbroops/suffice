@@ -1,0 +1,1105 @@
+{
+  "task": "prettier__prettier-12584",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 1,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12584-B-r1-a0/workspace",
+    "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+    "tree": "9f877430ff04b3196c2084e07c714b6bf2867f4e"
+  },
+  "runId": "prettier__prettier-12584-B-r1-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 892921.1525,
+  "usage": {
+    "input": 95158,
+    "cacheRead": 967680,
+    "cacheWrite": 0,
+    "output": 12369,
+    "estimatedApiUsd": 0.0253771,
+    "modelCalls": 35,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.0253771,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 1,
+    "unpassed": [
+      "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+      "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 1,
+      "regressions": 1,
+      "regressionsPassed": 0,
+      "missing": [],
+      "failures": [
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "src/language-js/parse/babel.js",
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript-as.vue"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-html/embed.js",
+    "src/language-html/print-preprocess.js",
+    "src/language-html/utils/index.js",
+    "src/language-js/parse/parsers.js",
+    "src/language-js/print-preprocess.js",
+    "src/language-js/printer-estree.js",
+    "src/main/comments.js"
+  ],
+  "extraChangedFiles": [
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript-as.vue"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 35,
+  "editCalls": 4,
+  "verificationCalls": 1,
+  "toolCalls": 69,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T04:06:38.794Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-10T04:06:54.289Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Resolve the upstream engineering issue below. Work in this checkout using the preprovisioned dependencies. The bash tool executes PowerShell 7 with no profile inside an isolated Windows filesystem; external networking is disabled. You may change production code, public tests and documentation. Preserve package metadata, dependency locks, configuration, native-verify.cjs, verification.json and .v4-* verification helpers. Do not install packages or attempt to access other workspaces. Run node native-verify.cjs for the repository-derived public smoke suite; you may run it with --tests-json PATH to test other existing public unit files. Independent grading reconstructs production changes in a pristine checkout and applies held-out upstream tests. Existing public snapshots may predate the requested behavior; do not undo that behavior merely to satisfy old snapshots.\n\n\"as\" TypeScript keyword yields error within Vue template\n<!--\r\n\r\nBEFORE SUBMITTING AN ISSUE:\r\n\r\n1.  Search for your issue on GitHub: https://github.com/prettier/prettier/issues\r\n    A large number of opened issues are duplicates of existing issues.\r\n    If someone has already opened an issue for what you are experiencing,\r\n    you do not need to open a new issue — please add a 👍 reaction to the\r\n    existing issue instead.\r\n\r\n2.  We get a lot of requests for adding options, but Prettier is\r\n    built on the principle of being opinionated about code formatting.\r\n    This means we add options only in the case of strict technical necessity.\r\n    Find out more: https://prettier.io/docs/en/option-philosophy.html\r\n\r\nDon't fill the form below manually! Let a program create a report for you:\r\n\r\n1. Go to https://prettier.io/playground\r\n2. Paste your code and set options\r\n3. Press the \"Report issue\" button in the lower right\r\n\r\n-->\r\n\r\n**Prettier 2.5.1**\r\n[Playground link](https://prettier.io/playground/#N4Igxg9gdgLgprEAuEAeeBbADgGwIbwB8AOlKlgAQBuAtAJYBmAvMSHQM4BiEOAJnACcAFAzo44ASlaFgwCiLFwKedhQwBPDBF4BXcQDpufQRP388vHHShKAvrdQB6LIQpv3pJ5lwE4JKJ7sYAJ0WDAU+FAA5iwgMOzSno5BIWH+gcGh4exwMDqUkTGs8YlkyZlppIEw6uIUQRBYcLwReNGxQewJIP5O7DXihCAANCCNMHTQ7MigeAICEADuAApzCNMoeDiLeOrTowBGAnhgANa5AMp4GHAAMtZwyAxbOYfHZ5dYJ9ZRyDACOjgozgGAOzX4vFubSiOjwUTg3AEGAIE2iyBAeB0MAgIxAAAsYBgcAB1PF0eDsL5gOAXdbkuhUcnqdFgLq46w5AQwZbHKLIp4vIEgABW7AAHhcfuIAIo6CDwAU4V4gL4CTnoqiA3FYEKwYl0XgwPHIACMACYAAyjHUQHLE45YdE6uCcqiPUYARzl8B5jQ2GPYNBszWauIEcC9dHDPLh-KQzyVQpyGDofwBSalcFl8seSH+gNGMDwB31huNSAALIXjmIfgBhCAYOMgF0AVlxOhyABVixsE8rNXAAJJQfiwC4VGAAQVHFwGuf7cHsQA)\r\n\r\n```sh\r\n# Options:\r\n--parser vue\r\n--embedded-language-formatting auto\r\n--single-quote\r\n--tab-width 4\r\n--print-width 120\r\n```\r\n\r\n**Input:**\r\n\r\n```vue\r\n<template>\r\n<p v-if=\"isFolder(file)\">{{ (file as mymodule.Folder).deadline }}</p>      \r\n</template>\r\n\r\n<script lang=\"ts\">\r\n</script>\r\n\r\n<script setup lang=\"ts\">\r\n</script>\r\n\r\n<style scoped lang=\"scss\">\r\n</style>\r\n```\r\n\r\n**Output:**\r\n\r\n```vue\r\nSyntaxError: Unexpected token, expected \",\" (1:8)\r\n> 1 |  (file as mymodule.Folder).deadline \r\n    |        ^\r\n```\r\n\r\n**Expected behavior:**\r\n`prettier` should recognise TypeScript patterns such as the `as` keyword within Vue templates. I believe this issue has to do with the `--embedded-language-formatting` system not being able to parse the keyword, as when this option is set off the error is not given; however, setting this option off is not a suitable solution as it is quite useful.\n"
+    },
+    {
+      "at": "2026-11-10T04:07:14.796Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:07:33.446Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:07:52.619Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:08:11.903Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:08:29.784Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:08:52.387Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:09:30.632Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:09:51.353Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:10:13.264Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:10:34.669Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:10:58.855Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:11:22.650Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:11:48.706Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:12:12.028Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:12:40.988Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:13:00.685Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:13:34.506Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:13:48.114Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:14:09.774Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:14:28.798Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:14:55.873Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:15:16.661Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:15:35.532Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:16:02.257Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:16:30.359Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:16:49.519Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:17:19.934Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:17:39.990Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:18:57.052Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:19:22.956Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:19:40.707Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:20:00.689Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:20:24.836Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:20:42.872Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T04:21:09.479Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T04:06:54.288Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 15494.954600000012,
+      "parsedFiles": 4238,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 162593432,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:07:06.394Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 12103.5619,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -38953112,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:07:27.284Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 12487.810899999982,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 87326976,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:07:47.079Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13633.737299999979,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -32627272,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:08:06.387Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13768.296299999987,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -33449072,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:08:24.706Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 12804.105099999986,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 22011584,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:08:43.271Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13487.679200000013,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -29541096,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:09:25.425Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 33040.24739999999,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -30387848,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:09:43.429Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 12797.198499999999,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 30163320,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:10:05.093Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13740.537000000011,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 88276864,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:10:27.819Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 14555.287499999977,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -29273832,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:10:49.099Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 14430.57189999998,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -24731808,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:11:13.835Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 14980.661499999987,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 56615168,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:11:38.539Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 15889.1495,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 43093216,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:12:05.070Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 16364.225399999996,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 44522760,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:12:26.002Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13975.310100000002,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 86733144,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:12:54.776Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13789.352200000023,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": -34278088,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:13:14.042Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "484f3c1b89ece0bb063162939bee3a09c9acbd8ef5ce6194453c98b0139c70ad",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "bc09783e3eb91be98b82c3268b4dec24bc837faedfa761cc8bbd509b05148b58"
+      },
+      "latencyMs": 13358.051099999982,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24348517,
+      "heapDeltaBytes": 28045680,
+      "graphBytes": 34080498
+    },
+    {
+      "at": "2026-11-10T04:13:48.020Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13513.9657,
+      "parsedFiles": 1,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 69968120,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:14:01.584Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13470.481800000009,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 82923424,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:14:23.075Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13302.732599999988,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -33360488,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:14:42.394Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13596.723200000008,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -94670336,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:15:09.180Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13308.042499999981,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 81151704,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:15:29.193Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 12531.831300000078,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -33569296,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:15:48.704Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13172.623900000006,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -30474312,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:16:15.811Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13554.130000000005,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 13288592,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:16:41.288Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 10929.741800000076,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -30771544,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:17:02.853Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13333.432699999888,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -31219000,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:17:33.180Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 13245.540999999968,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -94950552,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:17:51.964Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 11973.843499999959,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 82759632,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:19:05.587Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 8535.847300000023,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 86100968,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:19:31.309Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 8353.24609999999,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -31837616,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:19:49.267Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 8560.360799999908,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 88258816,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:20:10.883Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 10194.570499999914,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 85924016,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:20:34.648Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 9812.417000000016,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": -31720728,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:20:52.701Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 9829.342599999974,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 88288952,
+      "graphBytes": 34083027
+    },
+    {
+      "at": "2026-11-10T04:21:19.198Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+        "sourceContentVersion": "66dc0e1834d7aae9c9a01911c95a5b36170276e26b6bc63dcb02dc108e0f1e9e",
+        "configurationVersion": "ea1ee182e3ff92788351ca64120ca5f4fe72df868385b58f90d4e92cc255ce84",
+        "contentVersion": "777eee072a49561cc8319a3f13740d77c062fcf00b6284c98e9d989fd4f7fa34"
+      },
+      "latencyMs": 9718.790799999959,
+      "parsedFiles": 0,
+      "fileCount": 4239,
+      "cacheBytes": 24350331,
+      "heapDeltaBytes": 85832944,
+      "graphBytes": 34083027
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-js/comments.js",
+        "src/language-js/printer-estree.js",
+        "src/language-js/utils/index.js",
+        "src/language-markdown/print-preprocess.js",
+        "src/language-html/print/tag.js",
+        "src/language-css/printer-postcss.js",
+        "src/language-markdown/printer-markdown.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "src/language-js/parse/babel.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "git diff --check; git status --short; git diff -- src/language-js/parse/babel.js tests/format/vue/interpolation/typescript-as.vue tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+        "node node_modules/eslint/bin/eslint.js src/language-js/parse/babel.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "src/language-js/parse/babel.js",
+      "before": "\"use strict\";\n\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst getShebang = require(\"../utils/get-shebang.js\");\nconst getNextNonSpaceNonCommentCharacterIndexWithStartIndex = require(\"../../utils/text/get-next-non-space-non-comment-character-index-with-start-index.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst createBabelParseError = require(\"./utils/create-babel-parse-error.js\");\nconst postprocess = require(\"./postprocess/index.js\");\nconst jsonParsers = require(\"./json.js\");\n\n/**\n * @typedef {import(\"@babel/parser\").parse | import(\"@babel/parser\").parseExpression} Parse\n * @typedef {import(\"@babel/parser\").ParserOptions} ParserOptions\n * @typedef {import(\"@babel/parser\").ParserPlugin} ParserPlugin\n */\n\n/** @type {ParserOptions} */\nconst parseOptions = {\n  sourceType: \"module\",\n  allowImportExportEverywhere: true,\n  allowReturnOutsideFunction: true,\n  allowSuperOutsideMethod: true,\n  allowUndeclaredExports: true,\n  errorRecovery: true,\n  createParenthesizedExpressions: true,\n  plugins: [\n    // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,\n    // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify\n    \"doExpressions\",\n    \"exportDefaultFrom\",\n    \"functionBind\",\n    \"functionSent\",\n    \"throwExpressions\",\n    \"partialApplication\",\n    [\"decorators\", { decoratorsBeforeExport: false }],\n    \"importAssertions\",\n    \"decimal\",\n    \"moduleBlocks\",\n    \"asyncDoExpressions\",\n    \"regexpUnicodeSets\",\n    \"destructuringPrivate\",\n    \"decoratorAutoAccessors\",\n  ],\n  tokens: true,\n  ranges: true,\n};\n\n/** @type {ParserPlugin} */\nconst recordAndTuplePlugin = [\"recordAndTuple\", { syntaxType: \"hash\" }];\n\n/** @type {ParserPlugin} */\nconst v8intrinsicPlugin = \"v8intrinsic\";\n\n/** @type {Array<ParserPlugin>} */\nconst pipelineOperatorPlugins = [\n  [\"pipelineOperator\", { proposal: \"hack\", topicToken: \"%\" }],\n  [\"pipelineOperator\", { proposal: \"minimal\" }],\n  [\"pipelineOperator\", { proposal: \"fsharp\" }],\n];\nconst appendPlugins = (plugins, options = parseOptions) => ({\n  ...options,\n  plugins: [...options.plugins, ...plugins],\n});\n\n// Similar to babel\n// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67\nconst FLOW_PRAGMA_REGEX = /@(?:no)?flow\\b/;\nfunction isFlowFile(text, options) {\n  if (options.filepath && options.filepath.endsWith(\".js.flow\")) {\n    return true;\n  }\n\n  const shebang = getShebang(text);\n  if (shebang) {\n    text = text.slice(shebang.length);\n  }\n\n  const firstNonSpaceNonCommentCharacterIndex =\n    getNextNonSpaceNonCommentCharacterIndexWithStartIndex(text, 0);\n\n  if (firstNonSpaceNonCommentCharacterIndex !== false) {\n    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);\n  }\n\n  return FLOW_PRAGMA_REGEX.test(text);\n}\n\nfunction parseWithOptions(parseMethod, text, options) {\n  // Inline the require to avoid loading all the JS if we don't use it\n  /** @type {Parse} */\n  const parse = require(\"@babel/parser\")[parseMethod];\n  const ast = parse(text, options);\n  const error = ast.errors.find(\n    (error) => !allowedMessageCodes.has(error.reasonCode)\n  );\n  if (error) {\n    throw error;\n  }\n  return ast;\n}\n\nfunction createParse(parseMethod, ...optionsCombinations) {\n  return (text, parsers, opts = {}) => {\n    if (\n      (opts.parser === \"babel\" || opts.parser === \"__babel_estree\") &&\n      isFlowFile(text, opts)\n    ) {\n      opts.parser = \"babel-flow\";\n      return parseFlow(text, parsers, opts);\n    }\n\n    let combinations = optionsCombinations;\n    if (opts.__babelSourceType === \"script\") {\n      combinations = combinations.map((options) => ({\n        ...options,\n        sourceType: \"script\",\n      }));\n    }\n\n    if (/#[[{]/.test(text)) {\n      combinations = combinations.map((options) =>\n        appendPlugins([recordAndTuplePlugin], options)\n      );\n    }\n\n    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);\n    if (text.includes(\"|>\")) {\n      const conflictsPlugins = shouldEnableV8intrinsicPlugin\n        ? [...pipelineOperatorPlugins, v8intrinsicPlugin]\n        : pipelineOperatorPlugins;\n      combinations = conflictsPlugins.flatMap((pipelineOperatorPlugin) =>\n        combinations.map((options) =>\n          appendPlugins([pipelineOperatorPlugin], options)\n        )\n      );\n    } else if (shouldEnableV8intrinsicPlugin) {\n      combinations = combinations.map((options) =>\n        appendPlugins([v8intrinsicPlugin], options)\n      );\n    }\n\n    const { result: ast, error } = tryCombinations(\n      ...combinations.map(\n        (options) => () => parseWithOptions(parseMethod, text, options)\n      )\n    );\n\n    if (!ast) {\n      throw createBabelParseError(error);\n    }\n\n    opts.originalText = text;\n    return postprocess(ast, opts);\n  };\n}\n\nconst parse = createParse(\"parse\", appendPlugins([\"jsx\", \"flow\"]));\nconst parseFlow = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", [\"flow\", { all: true, enums: true }]])\n);\nconst parseTypeScript = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"typescript\"])\n);\nconst parseEstree = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"flow\", \"estree\"])\n);\nconst parseExpression = createParse(\"parseExpression\", appendPlugins([\"jsx\"]));\n\n// Error codes are defined in\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/typescript/index.js#L69-L153\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/flow/index.js#L51-L140\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/jsx/index.js#L23-L39\nconst allowedMessageCodes = new Set([\n  \"StrictNumericEscape\",\n  \"StrictWith\",\n  \"StrictOctalLiteral\",\n  \"StrictDelete\",\n  \"StrictEvalArguments\",\n  \"StrictEvalArgumentsBinding\",\n  \"StrictFunction\",\n\n  \"EmptyTypeArguments\",\n  \"EmptyTypeParameters\",\n  \"ConstructorHasTypeParameters\",\n\n  \"UnsupportedParameterPropertyKind\",\n  \"UnexpectedParameterModifier\",\n\n  \"MixedLabeledAndUnlabeledElements\",\n  \"InvalidTupleMemberLabel\",\n\n  \"NonClassMethodPropertyHasAbstractModifer\",\n  \"ReadonlyForMethodSignature\",\n  \"ClassMethodHasDeclare\",\n  \"ClassMethodHasReadonly\",\n  \"InvalidModifierOnTypeMember\",\n  \"DuplicateAccessibilityModifier\",\n  \"IndexSignatureHasDeclare\",\n\n  \"DecoratorExportClass\",\n  \"ParamDupe\",\n  \"InvalidDecimal\",\n  \"RestTrailingComma\",\n  \"UnsupportedParameterDecorator\",\n  \"UnterminatedJsxContent\",\n  \"UnexpectedReservedWord\",\n  \"ModuleAttributesWithDuplicateKeys\",\n  \"LineTerminatorBeforeArrow\",\n  \"InvalidEscapeSequenceTemplate\",\n  \"NonAbstractClassHasAbstractMethod\",\n  \"UnsupportedPropertyDecorator\",\n  \"OptionalTypeBeforeRequired\",\n  \"PatternIsOptional\",\n  \"OptionalBindingPattern\",\n  \"DeclareClassFieldHasInitializer\",\n  \"TypeImportCannotSpecifyDefaultAndNamed\",\n  \"DeclareFunctionHasImplementation\",\n  \"ConstructorClassField\",\n\n  \"VarRedeclaration\",\n  \"InvalidPrivateFieldResolution\",\n  \"DuplicateExport\",\n]);\n\nconst babel = createParser(parse);\nconst babelExpression = createParser(parseExpression);\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    babel,\n    \"babel-flow\": createParser(parseFlow),\n    \"babel-ts\": createParser(parseTypeScript),\n    ...jsonParsers,\n    /** @internal */\n    __js_expression: babelExpression,\n    /** for vue filter */\n    __vue_expression: babelExpression,\n    /** for vue event binding to handle semicolon */\n    __vue_event_binding: babel,\n    /** verify that we can print this AST */\n    __babel_estree: createParser(parseEstree),\n  },\n};\n",
+      "after": "\"use strict\";\n\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst getShebang = require(\"../utils/get-shebang.js\");\nconst getNextNonSpaceNonCommentCharacterIndexWithStartIndex = require(\"../../utils/text/get-next-non-space-non-comment-character-index-with-start-index.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst createBabelParseError = require(\"./utils/create-babel-parse-error.js\");\nconst postprocess = require(\"./postprocess/index.js\");\nconst jsonParsers = require(\"./json.js\");\n\n/**\n * @typedef {import(\"@babel/parser\").parse | import(\"@babel/parser\").parseExpression} Parse\n * @typedef {import(\"@babel/parser\").ParserOptions} ParserOptions\n * @typedef {import(\"@babel/parser\").ParserPlugin} ParserPlugin\n */\n\n/** @type {ParserOptions} */\nconst parseOptions = {\n  sourceType: \"module\",\n  allowImportExportEverywhere: true,\n  allowReturnOutsideFunction: true,\n  allowSuperOutsideMethod: true,\n  allowUndeclaredExports: true,\n  errorRecovery: true,\n  createParenthesizedExpressions: true,\n  plugins: [\n    // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,\n    // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify\n    \"doExpressions\",\n    \"exportDefaultFrom\",\n    \"functionBind\",\n    \"functionSent\",\n    \"throwExpressions\",\n    \"partialApplication\",\n    [\"decorators\", { decoratorsBeforeExport: false }],\n    \"importAssertions\",\n    \"decimal\",\n    \"moduleBlocks\",\n    \"asyncDoExpressions\",\n    \"regexpUnicodeSets\",\n    \"destructuringPrivate\",\n    \"decoratorAutoAccessors\",\n  ],\n  tokens: true,\n  ranges: true,\n};\n\n/** @type {ParserPlugin} */\nconst recordAndTuplePlugin = [\"recordAndTuple\", { syntaxType: \"hash\" }];\n\n/** @type {ParserPlugin} */\nconst v8intrinsicPlugin = \"v8intrinsic\";\n\n/** @type {Array<ParserPlugin>} */\nconst pipelineOperatorPlugins = [\n  [\"pipelineOperator\", { proposal: \"hack\", topicToken: \"%\" }],\n  [\"pipelineOperator\", { proposal: \"minimal\" }],\n  [\"pipelineOperator\", { proposal: \"fsharp\" }],\n];\nconst appendPlugins = (plugins, options = parseOptions) => ({\n  ...options,\n  plugins: [...options.plugins, ...plugins],\n});\n\n// Similar to babel\n// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67\nconst FLOW_PRAGMA_REGEX = /@(?:no)?flow\\b/;\nfunction isFlowFile(text, options) {\n  if (options.filepath && options.filepath.endsWith(\".js.flow\")) {\n    return true;\n  }\n\n  const shebang = getShebang(text);\n  if (shebang) {\n    text = text.slice(shebang.length);\n  }\n\n  const firstNonSpaceNonCommentCharacterIndex =\n    getNextNonSpaceNonCommentCharacterIndexWithStartIndex(text, 0);\n\n  if (firstNonSpaceNonCommentCharacterIndex !== false) {\n    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);\n  }\n\n  return FLOW_PRAGMA_REGEX.test(text);\n}\n\nfunction parseWithOptions(parseMethod, text, options) {\n  // Inline the require to avoid loading all the JS if we don't use it\n  /** @type {Parse} */\n  const parse = require(\"@babel/parser\")[parseMethod];\n  const ast = parse(text, options);\n  const error = ast.errors.find(\n    (error) => !allowedMessageCodes.has(error.reasonCode)\n  );\n  if (error) {\n    throw error;\n  }\n  return ast;\n}\n\nfunction createParse(parseMethod, ...optionsCombinations) {\n  return (text, parsers, opts = {}) => {\n    if (\n      (opts.parser === \"babel\" || opts.parser === \"__babel_estree\") &&\n      isFlowFile(text, opts)\n    ) {\n      opts.parser = \"babel-flow\";\n      return parseFlow(text, parsers, opts);\n    }\n\n    let combinations = optionsCombinations;\n    if (opts.__babelSourceType === \"script\") {\n      combinations = combinations.map((options) => ({\n        ...options,\n        sourceType: \"script\",\n      }));\n    }\n\n    if (/#[[{]/.test(text)) {\n      combinations = combinations.map((options) =>\n        appendPlugins([recordAndTuplePlugin], options)\n      );\n    }\n\n    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);\n    if (text.includes(\"|>\")) {\n      const conflictsPlugins = shouldEnableV8intrinsicPlugin\n        ? [...pipelineOperatorPlugins, v8intrinsicPlugin]\n        : pipelineOperatorPlugins;\n      combinations = conflictsPlugins.flatMap((pipelineOperatorPlugin) =>\n        combinations.map((options) =>\n          appendPlugins([pipelineOperatorPlugin], options)\n        )\n      );\n    } else if (shouldEnableV8intrinsicPlugin) {\n      combinations = combinations.map((options) =>\n        appendPlugins([v8intrinsicPlugin], options)\n      );\n    }\n\n    const { result: ast, error } = tryCombinations(\n      ...combinations.map(\n        (options) => () => parseWithOptions(parseMethod, text, options)\n      )\n    );\n\n    if (!ast) {\n      throw createBabelParseError(error);\n    }\n\n    opts.originalText = text;\n    return postprocess(ast, opts);\n  };\n}\n\nconst parse = createParse(\"parse\", appendPlugins([\"jsx\", \"flow\"]));\nconst parseFlow = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", [\"flow\", { all: true, enums: true }]])\n);\nconst parseTypeScript = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"typescript\"])\n);\nconst parseEstree = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"flow\", \"estree\"])\n);\nconst parseExpression = createParse(\"parseExpression\", appendPlugins([\"jsx\"]));\nconst parseVueExpression = createParse(\n  \"parseExpression\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"jsx\"])\n);\n\n// Error codes are defined in\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/typescript/index.js#L69-L153\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/flow/index.js#L51-L140\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/jsx/index.js#L23-L39\nconst allowedMessageCodes = new Set([\n  \"StrictNumericEscape\",\n  \"StrictWith\",\n  \"StrictOctalLiteral\",\n  \"StrictDelete\",\n  \"StrictEvalArguments\",\n  \"StrictEvalArgumentsBinding\",\n  \"StrictFunction\",\n\n  \"EmptyTypeArguments\",\n  \"EmptyTypeParameters\",\n  \"ConstructorHasTypeParameters\",\n\n  \"UnsupportedParameterPropertyKind\",\n  \"UnexpectedParameterModifier\",\n\n  \"MixedLabeledAndUnlabeledElements\",\n  \"InvalidTupleMemberLabel\",\n\n  \"NonClassMethodPropertyHasAbstractModifer\",\n  \"ReadonlyForMethodSignature\",\n  \"ClassMethodHasDeclare\",\n  \"ClassMethodHasReadonly\",\n  \"InvalidModifierOnTypeMember\",\n  \"DuplicateAccessibilityModifier\",\n  \"IndexSignatureHasDeclare\",\n\n  \"DecoratorExportClass\",\n  \"ParamDupe\",\n  \"InvalidDecimal\",\n  \"RestTrailingComma\",\n  \"UnsupportedParameterDecorator\",\n  \"UnterminatedJsxContent\",\n  \"UnexpectedReservedWord\",\n  \"ModuleAttributesWithDuplicateKeys\",\n  \"LineTerminatorBeforeArrow\",\n  \"InvalidEscapeSequenceTemplate\",\n  \"NonAbstractClassHasAbstractMethod\",\n  \"UnsupportedPropertyDecorator\",\n  \"OptionalTypeBeforeRequired\",\n  \"PatternIsOptional\",\n  \"OptionalBindingPattern\",\n  \"DeclareClassFieldHasInitializer\",\n  \"TypeImportCannotSpecifyDefaultAndNamed\",\n  \"DeclareFunctionHasImplementation\",\n  \"ConstructorClassField\",\n\n  \"VarRedeclaration\",\n  \"InvalidPrivateFieldResolution\",\n  \"DuplicateExport\",\n]);\n\nconst babel = createParser(parse);\nconst babelExpression = createParser(parseExpression);\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    babel,\n    \"babel-flow\": createParser(parseFlow),\n    \"babel-ts\": createParser(parseTypeScript),\n    ...jsonParsers,\n    /** @internal */\n    __js_expression: babelExpression,\n    /** for vue filter */\n    __vue_expression: createParser(parseVueExpression),\n    /** for vue event binding to handle semicolon */\n    __vue_event_binding: babel,\n    /** verify that we can print this AST */\n    __babel_estree: createParser(parseEstree),\n  },\n};\n"
+    },
+    {
+      "path": "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+      "before": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`parenthesized.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<span>{{(a||          b)}} {{z&&(a&&b)}}</span>\n</template>\n\n=====================================output=====================================\n<template>\n  <span>{{ a || b }} {{ z && a && b }}</span>\n</template>\n\n================================================================================\n`;\n\nexports[`template.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <root>\n<div class=\"red\">\n    We are going to add this simple card here\n  </div>\n  <div class=\"red\">\n    What is going on {{ prop1 }} and {{ prop2 }}\n  </div>\n  </root>\n</template>\n\n=====================================output=====================================\n<template>\n  <root>\n    <div class=\"red\">We are going to add this simple card here</div>\n    <div class=\"red\">What is going on {{ prop1 }} and {{ prop2 }}</div>\n  </root>\n</template>\n\n================================================================================\n`;\n",
+      "after": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`parenthesized.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<span>{{(a||          b)}} {{z&&(a&&b)}}</span>\n</template>\n\n=====================================output=====================================\n<template>\n  <span>{{ a || b }} {{ z && a && b }}</span>\n</template>\n\n================================================================================\n`;\n\nexports[`template.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <root>\n<div class=\"red\">\n    We are going to add this simple card here\n  </div>\n  <div class=\"red\">\n    What is going on {{ prop1 }} and {{ prop2 }}\n  </div>\n  </root>\n</template>\n\n=====================================output=====================================\n<template>\n  <root>\n    <div class=\"red\">We are going to add this simple card here</div>\n    <div class=\"red\">What is going on {{ prop1 }} and {{ prop2 }}</div>\n  </root>\n</template>\n\n================================================================================\n`;\n\nexports[`typescript-as.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <p v-if=\"isFolder(file)\">{{(file as mymodule.Folder).deadline+1}}</p>\n  <p :value=\"(file as mymodule.Folder).deadline+1\"></p>\n  <p>{{ message | capitalize }}</p>\n</template>\n\n=====================================output=====================================\n<template>\n  <p v-if=\"isFolder(file)\">{{ (file as mymodule.Folder).deadline + 1 }}</p>\n  <p :value=\"(file as mymodule.Folder).deadline + 1\"></p>\n  <p>{{ message | capitalize }}</p>\n</template>\n\n================================================================================\n`;\n"
+    },
+    {
+      "path": "tests/format/vue/interpolation/typescript-as.vue",
+      "before": null,
+      "after": "<template>\n  <p v-if=\"isFolder(file)\">{{(file as mymodule.Folder).deadline+1}}</p>\n  <p :value=\"(file as mymodule.Folder).deadline+1\"></p>\n  <p>{{ message | capitalize }}</p>\n</template>\n"
+    }
+  ],
+  "final": "Implemented Vue template support for TypeScript `as` assertions by adding a Vue-specific expression parser that tries Babel’s JSX+TypeScript mode, then falls back to the existing JSX parser. Added a regression fixture covering interpolations, bindings, and Vue filters.\n\n**Verification passed:**\n- `node native-verify.cjs` — 3 suites, 20 tests.\n- Vue format tests — 15 suites, 168 tests.\n- `git diff --check`.\n\nESLint could not run because the workspace has no `node_modules/eslint/bin/eslint.js`.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12584-B-r1-a0\\home\\events\\1794283598769-ec8148ff-b1e8-4a20-9b26-d81ad6fbb24f.jsonl",
+  "receiptAudit": {
+    "requests": 35,
+    "finalUsageResponses": 35,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 35,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12584-B-r1",
+  "attempt": 0
+}

@@ -1,0 +1,128 @@
+diff --git a/src/language-html/embed.js b/src/language-html/embed.js
+index ef83e63..9472245 100644
+--- a/src/language-html/embed.js
++++ b/src/language-html/embed.js
+@@ -241,6 +241,21 @@ function printEmbeddedAttributeValue(node, htmlTextToDoc, options) {
+ function embed(path, print, textToDoc, options) {
+   const node = path.getValue();
+ 
++  // Only template expressions should inherit the component's script language.
++  if (
++    options.parser === "vue" &&
++    options.__isVueTs &&
++    (node.type === "attribute" || node.parent?.type === "interpolation")
++  ) {
++    const originalTextToDoc = textToDoc;
++    textToDoc = (text, opts, textToDocOptions) =>
++      originalTextToDoc(
++        text,
++        { ...opts, __isVueTsExpression: true },
++        textToDocOptions
++      );
++  }
++
+   switch (node.type) {
+     case "element": {
+       if (isScriptLikeTag(node) || node.type === "interpolation") {
+diff --git a/src/language-html/print-preprocess.js b/src/language-html/print-preprocess.js
+index 0add77b..863c303 100644
+--- a/src/language-html/print-preprocess.js
++++ b/src/language-html/print-preprocess.js
+@@ -30,6 +30,15 @@ const PREPROCESS_PIPELINE = [
+ ];
+ 
+ function preprocess(ast, options) {
++  if (options.parser === "vue") {
++    options.__isVueTs = ast.children.some(
++      (node) =>
++        node.type === "element" &&
++        node.fullName === "script" &&
++        (node.attrMap.lang === "ts" || node.attrMap.lang === "tsx")
++    );
++  }
++
+   for (const fn of PREPROCESS_PIPELINE) {
+     fn(ast, options);
+   }
+diff --git a/src/language-js/parse/babel.js b/src/language-js/parse/babel.js
+index b6a290d..7a4082d 100644
+--- a/src/language-js/parse/babel.js
++++ b/src/language-js/parse/babel.js
+@@ -110,6 +110,21 @@ function createParse(parseMethod, ...optionsCombinations) {
+     }
+ 
+     let combinations = optionsCombinations;
++    if (opts.__isVueTsExpression) {
++      combinations = combinations.flatMap((options) => {
++        const tsOptions = appendPlugins(["typescript"], {
++          ...options,
++          plugins: options.plugins.filter((plugin) => plugin !== "flow"),
++        });
++        return [
++          tsOptions,
++          {
++            ...tsOptions,
++            plugins: tsOptions.plugins.filter((plugin) => plugin !== "jsx"),
++          },
++        ];
++      });
++    }
+     if (opts.__babelSourceType === "script") {
+       combinations = combinations.map((options) => ({
+         ...options,
+diff --git a/tests/format/vue/typescript/jsfmt.spec.js b/tests/format/vue/typescript/jsfmt.spec.js
+new file mode 100644
+index 0000000..ae79d08
+--- /dev/null
++++ b/tests/format/vue/typescript/jsfmt.spec.js
+@@ -0,0 +1,50 @@
++"use strict";
++
++const prettier = require("prettier-local");
++
++const format = (source) => prettier.format(source, { parser: "vue" });
++
++test.each(['lang="ts"', 'setup lang="ts"', 'lang="tsx"'])(
++  "formats TypeScript template expressions with %s",
++  (attributes) => {
++    const source = `<template>
++<p v-if="isFolder(file)">{{(file   as mymodule.Folder).deadline}}</p>
++</template>
++<script ${attributes}></script>`;
++    const output = format(source);
++    expect(output).toContain(
++      '<p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>'
++    );
++    expect(format(output)).toBe(output);
++  }
++);
++
++test("formats TypeScript in directives, event handlers, and bindings", () => {
++  const source = `<script setup lang="ts"></script>
++<template>
++<div
++  v-if="(file   as Folder).ok"
++  v-for="file in files   as Folder[]"
++  :value="file! .name"
++  @click="foo($event   as Event);bar()"
++  @change="(event:Event)=>foo(event)"
++/>
++<Comp v-slot="{item}:{item:Folder}">{{item! .name}}</Comp>
++</template>`;
++  const output = format(source);
++  expect(output).toContain('v-if="(file as Folder).ok"');
++  expect(output).toContain('v-for="file in files as Folder[]"');
++  expect(output).toContain(':value="file!.name"');
++  expect(output).toContain("foo($event as Event);");
++  expect(output).toContain('@change="(event: Event) => foo(event)"');
++  expect(output).toContain('v-slot="{ item }: { item: Folder }"');
++  expect(format(output)).toBe(output);
++});
++
++test("preserves JavaScript Vue filters", () => {
++  const source =
++    "<template>{{message|capitalize}}</template><script>const value = 1;</script>";
++  const output = format(source);
++  expect(output).toContain("{{ message | capitalize }}");
++  expect(format(output)).toBe(output);
++});
