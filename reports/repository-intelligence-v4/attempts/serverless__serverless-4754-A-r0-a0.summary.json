@@ -1,0 +1,123 @@
+{
+  "task": "serverless__serverless-4754",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-4754-A-r0-a0/workspace",
+    "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+    "tree": "da6b7e157046f631421f6c0a9b076e60015d582a"
+  },
+  "runId": "serverless__serverless-4754-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 273481.6643,
+  "usage": {
+    "input": 66802,
+    "cacheRead": 1004544,
+    "cacheWrite": 0,
+    "output": 9455,
+    "estimatedApiUsd": 0.02145314,
+    "modelCalls": 25,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.02145314,
+  "acceptance": {
+    "status": "failed",
+    "required": 15,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #prepopulateService \"before each\" hook for \"should populate variables in region values\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Attempted to wrap undefined property populateObjectImpl as function",
+            "stack": "TypeError: Attempted to wrap undefined property populateObjectImpl as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:138:38)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #prepopulateService \"after each\" hook for \"should populate variables in region values\"",
+          "status": "failed",
+          "durationMs": 1,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:144:30)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 79,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "lib/classes/Variables.js",
+    "lib/classes/Variables.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/classes/PromiseTracker.js",
+    "lib/classes/Service.js",
+    "lib/plugins/print/print.js"
+  ],
+  "extraChangedFiles": [
+    "lib/classes/Variables.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 25,
+  "editCalls": 3,
+  "verificationCalls": 10,
+  "toolCalls": 49,
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-4754-A-r0-a0\\home\\events\\1794312319828-66f35447-e556-4ccb-8e5b-335929079b71.jsonl",
+  "receiptAudit": {
+    "requests": 25,
+    "finalUsageResponses": 25,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 25,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-4754-A-r0",
+  "attempt": 0
+}

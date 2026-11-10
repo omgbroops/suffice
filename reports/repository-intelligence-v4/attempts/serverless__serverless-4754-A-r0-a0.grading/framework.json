@@ -1,0 +1,827 @@
+{
+  "framework": "mocha",
+  "stats": {
+    "suites": 26,
+    "tests": 123,
+    "passes": 105,
+    "pending": 0,
+    "failures": 20,
+    "start": "2026-11-10T12:10:02.030Z",
+    "end": "2026-11-10T12:10:03.727Z",
+    "duration": 1697
+  },
+  "tests": [
+    {
+      "title": "Variables #constructor() should attach serverless instance",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #constructor() should not set variableSyntax in constructor",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #loadVariableSyntax() should set variableSyntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateService() should remove problematic attributes bofore calling populateObjectImpl with the service",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "Attempted to wrap undefined property populateObjectImpl as function",
+        "stack": "TypeError: Attempted to wrap undefined property populateObjectImpl as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:62:42)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateService() should clear caches and remaining state *before* [pre]populating service",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "Attempted to wrap undefined property populateObjectImpl as function",
+        "stack": "TypeError: Attempted to wrap undefined property populateObjectImpl as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:82:42)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateService() should clear caches and remaining *after* [pre]populating service",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Attempted to wrap undefined property populateObjectImpl as function",
+        "stack": "TypeError: Attempted to wrap undefined property populateObjectImpl as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:108:42)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getProperties extracts all terminal properties of an object",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getProperties ignores self references",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() should populate object and return it",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() should persist keys with dot notation",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly replace self-references",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate embedded variables",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate an overwrite with a default value that is a string",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites where the first value is valid",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites where the middle value is valid",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites where the last value is valid",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites with nested variables in the first value",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites with nested variables in the middle value",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly populate overwrites with nested variables in the last value",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should properly replace duplicate variable declarations",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should recursively populate, regardless of order and duplication",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep references into deep variables",
+      "status": "failed",
+      "durationMs": 5,
+      "error": {
+        "message": "Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.",
+        "stack": "ServerlessError: Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.\n    at Variables.populateVariable (lib\\classes\\Variables.js:361:13)\n    at Variables.renderMatches (lib\\classes\\Variables.js:302:21)\n    at lib\\classes\\Variables.js:322:29\nFrom previous event:\n    at Variables.populateValue (lib\\classes\\Variables.js:322:8)\n    at lib\\classes\\Variables.js:206:24\n    at arrayMap (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:660:23)\n    at Function.map (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:9571:14)\n    at Variables.populateVariables (lib\\classes\\Variables.js:205:14)\n    at Variables.populateObject (lib\\classes\\Variables.js:231:30)\n    at lib\\classes\\Variables.js:234:14\nFrom previous event:\n    at Variables.populateObject (lib\\classes\\Variables.js:233:8)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:459:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables that reference overrides",
+      "status": "failed",
+      "durationMs": 3,
+      "error": {
+        "message": "expected { val1: 'bar', val2: undefined } to deeply equal { val1: 'bar', val2: 'bar' }",
+        "stack": "AssertionError: expected { val1: 'bar', val2: undefined } to deeply equal { val1: 'bar', val2: 'bar' }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:305:22\nFrom previous event:\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:304:12)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:238:37)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:41:29)\n    at Assertion.ctx.<computed> [as become] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:472:19)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep references into deep variables",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "expected { Object (val0, val1, ...) } to deeply equal { Object (val0, val1, ...) }",
+        "stack": "AssertionError: expected { Object (val0, val1, ...) } to deeply equal { Object (val0, val1, ...) }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:305:22\nFrom previous event:\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:304:12)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:238:37)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:41:29)\n    at Assertion.ctx.<computed> [as become] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:492:19)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle deep variables that reference overrides",
+      "status": "failed",
+      "durationMs": 2,
+      "error": {
+        "message": "Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.",
+        "stack": "ServerlessError: Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.\n    at Variables.populateVariable (lib\\classes\\Variables.js:361:13)\n    at Variables.renderMatches (lib\\classes\\Variables.js:302:21)\n    at lib\\classes\\Variables.js:322:29\nFrom previous event:\n    at Variables.populateValue (lib\\classes\\Variables.js:322:8)\n    at lib\\classes\\Variables.js:206:24\n    at arrayMap (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:660:23)\n    at Function.map (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:9571:14)\n    at Variables.populateVariables (lib\\classes\\Variables.js:205:14)\n    at Variables.populateObject (lib\\classes\\Variables.js:231:30)\n    at lib\\classes\\Variables.js:234:14\nFrom previous event:\n    at Variables.populateObject (lib\\classes\\Variables.js:233:8)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:503:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle referenced deep variables that reference overrides",
+      "status": "failed",
+      "durationMs": 3,
+      "error": {
+        "message": "expected { Object (val1, val2, ...) } to deeply equal { Object (val1, val2, ...) }",
+        "stack": "AssertionError: expected { Object (val1, val2, ...) } to deeply equal { Object (val1, val2, ...) }\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:305:22\nFrom previous event:\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:304:12)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:238:37)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:41:29)\n    at Assertion.ctx.<computed> [as become] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:518:19)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle partial referenced deep variables that reference overrides",
+      "status": "failed",
+      "durationMs": 3,
+      "error": {
+        "message": "Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.",
+        "stack": "ServerlessError: Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.\n    at Variables.populateVariable (lib\\classes\\Variables.js:361:13)\n    at Variables.renderMatches (lib\\classes\\Variables.js:302:21)\n    at lib\\classes\\Variables.js:322:29\nFrom previous event:\n    at Variables.populateValue (lib\\classes\\Variables.js:322:8)\n    at lib\\classes\\Variables.js:206:24\n    at arrayMap (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:660:23)\n    at Function.map (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:9571:14)\n    at Variables.populateVariables (lib\\classes\\Variables.js:205:14)\n    at Variables.populateObject (lib\\classes\\Variables.js:231:30)\nFrom previous event:\n    at Variables.populateObject (lib\\classes\\Variables.js:233:8)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:531:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle referenced contained deep variables that reference overrides",
+      "status": "failed",
+      "durationMs": 3,
+      "error": {
+        "message": "Invalid variable reference syntax for variable fooself:custom.val1. You can only reference env vars, options, & files. You can check our docs for more info.",
+        "stack": "ServerlessError: Invalid variable reference syntax for variable fooself:custom.val1. You can only reference env vars, options, & files. You can check our docs for more info.\n    at Variables.getValueFromSource (lib\\classes\\Variables.js:463:32)\n    at Variables.getValueFromDeep (lib\\classes\\Variables.js:679:17)\n    at Variables.getValueFromSource (lib\\classes\\Variables.js:456:20)\n    at lib\\classes\\Variables.js:288:19\n    at arrayMap (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:660:23)\n    at Function.map (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:9571:14)\n    at Variables.populateMatches (lib\\classes\\Variables.js:283:14)\n    at Variables.populateValue (lib\\classes\\Variables.js:320:30)\n    at lib\\classes\\Variables.js:206:24\n    at arrayMap (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:660:23)\n    at Function.map (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:9571:14)\n    at Variables.populateVariables (lib\\classes\\Variables.js:205:14)\n    at Variables.populateObject (lib\\classes\\Variables.js:231:30)\n    at lib\\classes\\Variables.js:234:14\nFrom previous event:\n    at Variables.populateObject (lib\\classes\\Variables.js:233:8)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:545:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases should handle multiple referenced contained deep variables referencing overrides",
+      "status": "failed",
+      "durationMs": 3,
+      "error": {
+        "message": "Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.",
+        "stack": "ServerlessError: Trying to populate non string value into a string for variable ${deep:0}. Please make sure the value of the property is a string.\n    at Variables.populateVariable (lib\\classes\\Variables.js:361:13)\n    at Variables.renderMatches (lib\\classes\\Variables.js:302:21)\n    at lib\\classes\\Variables.js:322:29\nFrom previous event:\n    at Variables.populateValue (lib\\classes\\Variables.js:322:8)\n    at lib\\classes\\Variables.js:206:24\n    at arrayMap (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:660:23)\n    at Function.map (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\lodash\\lodash.js:9571:14)\n    at Variables.populateVariables (lib\\classes\\Variables.js:205:14)\n    at Variables.populateObject (lib\\classes\\Variables.js:231:30)\n    at lib\\classes\\Variables.js:234:14\nFrom previous event:\n    at Variables.populateObject (lib\\classes\\Variables.js:233:8)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:561:37)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate any given variable only once",
+      "status": "passed",
+      "durationMs": 220,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate any given variable only once regardless of ordering or reference count",
+      "status": "passed",
+      "durationMs": 212,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate async objects with contained variables",
+      "status": "passed",
+      "durationMs": 210,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should populate a \"cyclic\" reference across an unresolved dependency (issue #4687)",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "Variables #populateObject() significant variable usage corner cases file reading cases should reject population of an attribute not exported from a file",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should call overwrite if overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should allow a single-quoted string if overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should allow a double-quoted string if overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should call getValueFromSource if no overwrite syntax provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should warn if an SSM parameter does not exist",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should throw an Error if the SSM request fails",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #populateProperty() should run recursively if nested variables provided",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should populate string variables as sub string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should populate number variables as sub string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should populate non string variables",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #populateVariable() should throw error if populating non string or non number variable as sub string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should return a given empty string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should return a undelimited string",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should split basic comma delimited strings",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should remove leading and following white space",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should remove white space surrounding commas",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should ignore quoted commas",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #splitByComma should deal with a combination of these cases",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should overwrite undefined and null values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should overwrite empty object values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should not overwrite 0 values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should not overwrite false values",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should skip getting values once a value has been found",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #overwrite() should properly handle string values containing commas",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromEnv if referencing env var",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromOptions if referencing an option",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromSelf if referencing from self",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromFile if referencing from another file",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromCf if referencing CloudFormation Outputs",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromS3 if referencing variable in S3",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should call getValueFromSsm if referencing variable in SSM",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() should reject invalid sources",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromEnv once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 115,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromOptions once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 107,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromSelf once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 106,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromFile once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 107,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromCf once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 108,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromS3 once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 106,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSource() caching should only call getValueFromSsm once, returning the cached value otherwise",
+      "status": "passed",
+      "durationMs": 105,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromEnv() should get variable from environment variables",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromEnv() should allow top-level references to the environment variables hive",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromOptions() should get variable from options",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromOptions() should allow top-level references to the options hive",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should get variable from self serverless.yml file",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should redirect ${self:service.name} to ${self:service}",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSelf() should redirect ${self:provider} to ${self:provider.name}",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "expected { name: 'aws' } to deeply equal 'aws'",
+        "stack": "AssertionError: expected { name: 'aws' } to deeply equal 'aws'\n    at Assertion.assertEqual (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\core\\assertions.js:485:19)\n    at Assertion.ctx.<computed> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:305:22\nFrom previous event:\n    at doAsserterAsyncAndAddThen (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:304:12)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:252:17)\n    at Assertion.ctx.<computed> [as equal] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\overwriteMethod.js:49:33)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:238:37)\n    at Assertion.<anonymous> (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai-as-promised\\lib\\chai-as-promised.js:41:29)\n    at Assertion.ctx.<computed> [as become] (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\chai\\lib\\chai\\utils\\addMethod.js:41:25)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1114:76)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getValueFromSelf() should handle self-references to the root of the serverless.yml file",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should work for absolute paths with ~ ",
+      "status": "passed",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate an entire variable file",
+      "status": "passed",
+      "durationMs": 6,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should get undefined if non existing file and the second argument is true",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate non json/yml files",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate symlinks",
+      "status": "passed",
+      "durationMs": 9,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should trim trailing whitespace and new line character",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate from another file when variable is of any type",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate from a javascript file",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate an entire variable exported by a javascript file",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should throw if property exported by a javascript file is not a function",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should populate deep object from a javascript file",
+      "status": "passed",
+      "durationMs": 5,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should preserve the exported function context when executing",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromFile() should file variable not using \":\" syntax",
+      "status": "passed",
+      "durationMs": 3,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromCf() should get variable from CloudFormation",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromCf() should reject CloudFormation variables that do not exist",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromS3() should get variable from S3",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromS3() should throw error if error getting value from S3",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get variable from Ssm using regular-style param",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get variable from Ssm using path-style param",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get encrypted variable from Ssm using extended syntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should get unencrypted variable from Ssm using extended syntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should ignore bad values for extended syntax",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should return undefined if SSM parameter does not exist",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getValueFromSsm() should reject if SSM request returns unexpected error",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #getDeeperValue() should get deep values",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "serverless.variables.getDeeperValue is not a function",
+        "stack": "TypeError: serverless.variables.getDeeperValue is not a function\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1555:35)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getDeeperValue() should not throw error if referencing invalid properties",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "serverless.variables.getDeeperValue is not a function",
+        "stack": "TypeError: serverless.variables.getDeeperValue is not a function\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1566:35)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getDeeperValue() should return a simple deep variable when final deep value is variable",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "serverless.variables.getDeeperValue is not a function",
+        "stack": "TypeError: serverless.variables.getDeeperValue is not a function\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1581:35)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #getDeeperValue() should return a deep continuation when middle deep value is variable",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "serverless.variables.getDeeperValue is not a function",
+        "stack": "TypeError: serverless.variables.getDeeperValue is not a function\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:1595:35)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #warnIfNotFound() should do nothing if variable has valid value.",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should log if variable has null value.",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should log if variable has undefined value.",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should log if variable has empty object value.",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"environment variable\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"option\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"service attribute\" variable type",
+      "status": "passed",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "title": "Variables #warnIfNotFound() should detect the \"file\" variable type",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Print should print standard config",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Cannot read properties of undefined (reading 'options')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'options')\n    at Print.print (lib\\plugins\\print\\print.js:28:72)\n    at Context.<anonymous> (lib\\plugins\\print\\print.test.js:46:18)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Print should print special service object and provider string configs",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Cannot read properties of undefined (reading 'options')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'options')\n    at Print.print (lib\\plugins\\print\\print.js:28:72)\n    at Context.<anonymous> (lib\\plugins\\print\\print.test.js:64:18)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Print should resolve command line variables",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Print should resolve using custom variable syntax",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Print should resolve custom variables",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "title": "Print should resolve self references",
+      "status": "passed",
+      "durationMs": 1,
+      "error": null
+    }
+  ],
+  "hooks": [
+    {
+      "title": "Variables #prepopulateService \"before each\" hook for \"should populate variables in region values\"",
+      "status": "failed",
+      "durationMs": 0,
+      "error": {
+        "message": "Attempted to wrap undefined property populateObjectImpl as function",
+        "stack": "TypeError: Attempted to wrap undefined property populateObjectImpl as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:138:38)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    },
+    {
+      "title": "Variables #prepopulateService \"after each\" hook for \"should populate variables in region values\"",
+      "status": "failed",
+      "durationMs": 1,
+      "error": {
+        "message": "Cannot read properties of undefined (reading 'restore')",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:144:30)\n    at processImmediate (node:internal/timers:466:21)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+diff --git a/lib/classes/Variables.js b/lib/classes/Variables.js
+index 4c19f43..be6a234 100644
+--- a/lib/classes/Variables.js
++++ b/lib/classes/Variables.js
+@@ -497,6 +497,10 @@ class Variables {
+   getValueFromSelf(variableString) {
+     const valueToPopulate = this.service;
+     const deepProperties = variableString.split(':')[1].split('.');
++    // The service declaration is normalized into a name and a separate object on load.
++    if (deepProperties[0] === 'service' && deepProperties.length > 1) {
++      deepProperties[0] = 'serviceObject';
++    }
+     return this.getDeepValue(deepProperties, valueToPopulate);
+   }
+ 
+diff --git a/lib/classes/Variables.test.js b/lib/classes/Variables.test.js
+index 6520f7c..fb52248 100644
+--- a/lib/classes/Variables.test.js
++++ b/lib/classes/Variables.test.js
+@@ -55,6 +55,50 @@ describe('Variables', () => {
+   });
+ 
+   describe('#populateService()', () => {
++    ['testService', { name: 'testService', metadata: { label: 'testLabel' } }]
++      .forEach((service) => {
++        it(`should resolve service name references for a ${typeof service} declaration`, () => {
++          serverless.service.loadServiceFileParam('serverless.yml', {
++            service,
++            provider: {
++              name: 'aws',
++              environment: {
++                SERVICE_NAME: '${self:service.name}',
++                DYNAMODB_TABLE: '${self:service.name}-test',
++                LEGACY_NAME: '${self:service}',
++              },
++            },
++          });
++          return serverless.variables.populateService().then(() => {
++            expect(serverless.service.provider.environment).to.deep.equal({
++              SERVICE_NAME: 'testService',
++              DYNAMODB_TABLE: 'testService-test',
++              LEGACY_NAME: 'testService',
++            });
++            expect(serverless.service.service).to.equal('testService');
++          });
++        });
++      });
++
++    it('should resolve nested service attributes and variable-based service names', () => {
++      serverless.service.loadServiceFileParam('serverless.yml', {
++        service: { name: '${opt:name}', metadata: { label: 'testLabel' } },
++        provider: {
++          name: 'aws',
++          environment: {
++            TABLE: '${self:service.name}-test',
++            LABEL: '${self:service.metadata.label}',
++          },
++        },
++      });
++      return serverless.variables.populateService({ name: 'testService' }).then(() => {
++        expect(serverless.service.provider.environment).to.deep.equal({
++          TABLE: 'testService-test',
++          LABEL: 'testLabel',
++        });
++      });
++    });
++
+     it('should call loadVariableSyntax and then populateProperty', () => {
+       const loadVariableSyntaxStub = sinon.stub(serverless.variables, 'loadVariableSyntax')
+         .returns();

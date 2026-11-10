@@ -1,0 +1,46 @@
+diff --git a/lib/classes/Variables.js b/lib/classes/Variables.js
+index 4c19f43..ccb5db7 100644
+--- a/lib/classes/Variables.js
++++ b/lib/classes/Variables.js
+@@ -497,6 +497,15 @@ class Variables {
+   getValueFromSelf(variableString) {
+     const valueToPopulate = this.service;
+     const deepProperties = variableString.split(':')[1].split('.');
++    // The service declaration name is normalized to a string in the service model.
++    if (
++      deepProperties.length === 2 &&
++      deepProperties[0] === 'service' &&
++      deepProperties[1] === 'name' &&
++      _.isString(valueToPopulate.service)
++    ) {
++      return BbPromise.resolve(valueToPopulate.service);
++    }
+     return this.getDeepValue(deepProperties, valueToPopulate);
+   }
+ 
+diff --git a/lib/classes/Variables.test.js b/lib/classes/Variables.test.js
+index 6520f7c..6041a3c 100644
+--- a/lib/classes/Variables.test.js
++++ b/lib/classes/Variables.test.js
+@@ -261,6 +261,21 @@ describe('Variables', () => {
+           expect(result).to.eql(expected);
+         })).to.be.fulfilled;
+       });
++      it('should populate the service name when appended to a string', () => {
++        service.custom = {
++          // eslint-disable-next-line no-template-curly-in-string
++          name: '${self:service.name}',
++          // eslint-disable-next-line no-template-curly-in-string
++          table: '${self:service.name}-test',
++        };
++        const expected = {
++          name: 'my-service',
++          table: 'my-service-test',
++        };
++        return expect(serverless.variables.populateObject(service).then((result) => {
++          expect(result.custom).to.eql(expected);
++        })).to.be.fulfilled;
++      });
+       it('should properly populate an overwrite with a default value that is a string', () => {
+         service.custom = {
+           val0: 'my value', // eslint-disable-next-line no-template-curly-in-string

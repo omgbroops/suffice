@@ -1,0 +1,49 @@
+diff --git a/lib/classes/Variables.js b/lib/classes/Variables.js
+index 4c19f43..1aa31fc 100644
+--- a/lib/classes/Variables.js
++++ b/lib/classes/Variables.js
+@@ -497,6 +497,13 @@ class Variables {
+   getValueFromSelf(variableString) {
+     const valueToPopulate = this.service;
+     const deepProperties = variableString.split(':')[1].split('.');
++    if (
++      deepProperties[0] === 'service' &&
++      deepProperties.length > 1 &&
++      _.isObject(valueToPopulate.serviceObject)
++    ) {
++      return this.getDeepValue(deepProperties.slice(1), valueToPopulate.serviceObject);
++    }
+     return this.getDeepValue(deepProperties, valueToPopulate);
+   }
+ 
+diff --git a/lib/classes/Variables.test.js b/lib/classes/Variables.test.js
+index 6520f7c..a3e58b5 100644
+--- a/lib/classes/Variables.test.js
++++ b/lib/classes/Variables.test.js
+@@ -71,6 +71,26 @@ describe('Variables', () => {
+           loadVariableSyntaxStub.restore();
+         });
+     });
++
++    it('should resolve the service name when used in an interpolated value', () => {
++      serverless.service.loadServiceFileParam('serverless.yml', {
++        service: { name: 'my-service' },
++        provider: {
++          name: 'aws',
++          environment: {
++            SERVICE_NAME: '${self:service.name}', // eslint-disable-line no-template-curly-in-string
++            DYNAMODB_TABLE: '${self:service.name}-test', // eslint-disable-line no-template-curly-in-string
++          },
++        },
++      });
++
++      return serverless.variables.populateService().then(() => {
++        expect(serverless.service.provider.environment).to.eql({
++          SERVICE_NAME: 'my-service',
++          DYNAMODB_TABLE: 'my-service-test',
++        });
++      });
++    });
+     it('should remove problematic attributes bofore calling populateObject with the service',
+       () => {
+         const populateObjectStub = sinon.stub(serverless.variables, 'populateObject', (val) => {

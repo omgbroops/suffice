@@ -1,0 +1,213 @@
+{
+  "task": "serverless__serverless-4754",
+  "repo": "serverless/serverless",
+  "category": "complex",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-4754-C-r0-a0/workspace",
+    "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+    "tree": "da6b7e157046f631421f6c0a9b076e60015d582a"
+  },
+  "runId": "serverless__serverless-4754-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 266710.44299999997,
+  "usage": {
+    "input": 64252,
+    "cacheRead": 730240,
+    "cacheWrite": 0,
+    "output": 9890,
+    "estimatedApiUsd": 0.018672599999999998,
+    "modelCalls": 22,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.018672599999999998,
+  "acceptance": {
+    "status": "failed",
+    "required": 15,
+    "requiredPassed": 0,
+    "unpassed": [],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "candidate_load_or_hook_failure",
+      "loadErrors": [],
+      "hooks": [
+        {
+          "title": "Variables #prepopulateService \"before each\" hook for \"should populate variables in region values\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Attempted to wrap undefined property populateObjectImpl as function",
+            "stack": "TypeError: Attempted to wrap undefined property populateObjectImpl as function\n    at Object.wrapMethod (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\util\\core.js:114:29)\n    at Object.stub (C:\\Users\\Public\\SufficeV4\\deps-fdcced6f0d2938965a09\\node_modules\\sinon\\lib\\sinon\\stub.js:67:26)\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:138:38)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        },
+        {
+          "title": "Variables #prepopulateService \"after each\" hook for \"should populate variables in region values\"",
+          "status": "failed",
+          "durationMs": 0,
+          "error": {
+            "message": "Cannot read properties of undefined (reading 'restore')",
+            "stack": "TypeError: Cannot read properties of undefined (reading 'restore')\n    at Context.<anonymous> (lib\\classes\\Variables.test.js:144:30)\n    at processImmediate (node:internal/timers:466:21)"
+          }
+        }
+      ],
+      "targetsPassed": 0,
+      "regressionsPassed": 0
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 79,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "lib/classes/Variables.js",
+    "lib/classes/Variables.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/classes/PromiseTracker.js",
+    "lib/classes/Service.js",
+    "lib/plugins/print/print.js"
+  ],
+  "extraChangedFiles": [
+    "lib/classes/Variables.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 22,
+  "editCalls": 2,
+  "verificationCalls": 10,
+  "toolCalls": 45,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T11:56:35.173Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+        "sourceContentVersion": "d181cdd5e1d3140c93fed5f32b4536309a9f16fa7ba07e26667dabfd8ea50e1b",
+        "configurationVersion": "a97d299b32b2932a5d2fbee149cbc005b25254e32e5c4bba668639c851b2cd94",
+        "contentVersion": "699c857f4381f7041164a836591fd1a326c9fb754d1151dfcb1b064d6c2b2f93"
+      },
+      "latencyMs": 2737.4761,
+      "parsedFiles": 405,
+      "fileCount": 405,
+      "cacheBytes": 19255679,
+      "heapDeltaBytes": 76606120,
+      "graphBytes": 27004414
+    },
+    {
+      "at": "2026-11-10T11:56:38.174Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+        "sourceContentVersion": "eab41f0f679c6e8793dc6a34db4592a3bb0be8311e3d697cf85016db4a3cd753",
+        "configurationVersion": "a97d299b32b2932a5d2fbee149cbc005b25254e32e5c4bba668639c851b2cd94",
+        "contentVersion": "98437d77fa3a1d0b48b5fd8af2cdb599cb65c64adf33ddc24c9958c505a65af3"
+      },
+      "latencyMs": 2133.2007999999914,
+      "parsedFiles": 1,
+      "fileCount": 405,
+      "cacheBytes": 19259176,
+      "heapDeltaBytes": 57240240,
+      "graphBytes": 27009020
+    },
+    {
+      "at": "2026-11-10T11:56:39.672Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+        "sourceContentVersion": "eab41f0f679c6e8793dc6a34db4592a3bb0be8311e3d697cf85016db4a3cd753",
+        "configurationVersion": "a97d299b32b2932a5d2fbee149cbc005b25254e32e5c4bba668639c851b2cd94",
+        "contentVersion": "98437d77fa3a1d0b48b5fd8af2cdb599cb65c64adf33ddc24c9958c505a65af3"
+      },
+      "latencyMs": 1487.7465000000084,
+      "parsedFiles": 0,
+      "fileCount": 405,
+      "cacheBytes": 19259176,
+      "heapDeltaBytes": -62381264,
+      "graphBytes": 27009020
+    },
+    {
+      "at": "2026-11-10T11:56:58.708Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+        "sourceContentVersion": "1ecf1ef26152208ea75f1033182b5891b6c61b42f0261351b01cf623b5219604",
+        "configurationVersion": "a97d299b32b2932a5d2fbee149cbc005b25254e32e5c4bba668639c851b2cd94",
+        "contentVersion": "3421dbd143458debac3ba49878e0ed6d89df8c3123c25bee5c418e6d8dd9a616"
+      },
+      "latencyMs": 1729.1812999999966,
+      "parsedFiles": 1,
+      "fileCount": 405,
+      "cacheBytes": 19261970,
+      "heapDeltaBytes": 10273944,
+      "graphBytes": 27012501
+    },
+    {
+      "at": "2026-11-10T11:57:00.174Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "fd4a678f2c2f9f8dae736b94ad25eedaf97c076f",
+        "sourceContentVersion": "1ecf1ef26152208ea75f1033182b5891b6c61b42f0261351b01cf623b5219604",
+        "configurationVersion": "a97d299b32b2932a5d2fbee149cbc005b25254e32e5c4bba668639c851b2cd94",
+        "contentVersion": "3421dbd143458debac3ba49878e0ed6d89df8c3123c25bee5c418e6d8dd9a616"
+      },
+      "latencyMs": 1454.343899999978,
+      "parsedFiles": 0,
+      "fileCount": 405,
+      "cacheBytes": 19261970,
+      "heapDeltaBytes": -45376592,
+      "graphBytes": 27012501
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-4754-C-r0-a0\\home\\events\\1794311660185-e59f3533-592b-497c-999f-2cd5b18cf04e.jsonl",
+  "receiptAudit": {
+    "requests": 22,
+    "finalUsageResponses": 22,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 22,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-4754-C-r0",
+  "attempt": 0
+}

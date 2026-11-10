@@ -1,0 +1,45 @@
+diff --git a/lib/classes/Variables.js b/lib/classes/Variables.js
+index 4c19f43..115e055 100644
+--- a/lib/classes/Variables.js
++++ b/lib/classes/Variables.js
+@@ -497,6 +497,13 @@ class Variables {
+   getValueFromSelf(variableString) {
+     const valueToPopulate = this.service;
+     const deepProperties = variableString.split(':')[1].split('.');
++    if (
++      deepProperties[0] === 'service' &&
++      deepProperties[1] === 'name' &&
++      valueToPopulate.serviceObject
++    ) {
++      deepProperties[0] = 'serviceObject';
++    }
+     return this.getDeepValue(deepProperties, valueToPopulate);
+   }
+ 
+diff --git a/lib/classes/Variables.test.js b/lib/classes/Variables.test.js
+index 6520f7c..9af2046 100644
+--- a/lib/classes/Variables.test.js
++++ b/lib/classes/Variables.test.js
+@@ -566,6 +566,22 @@ module.exports = {
+         .should.eventually.eql('my stage is prod');
+     });
+ 
++    it('should resolve the service name with and without a string suffix', () => {
++      serverless.service.service = 'test-service';
++      serverless.service.serviceObject = { name: 'test-service' };
++      const environment = {
++        // eslint-disable-next-line no-template-curly-in-string
++        SERVICE_NAME: '${self:service.name}',
++        // eslint-disable-next-line no-template-curly-in-string
++        DYNAMODB_TABLE: '${self:service.name}-test',
++      };
++      return serverless.variables.populateObject(environment)
++        .should.eventually.eql({
++          SERVICE_NAME: 'test-service',
++          DYNAMODB_TABLE: 'test-service-test',
++        });
++    });
++
+     it('should warn if an SSM parameter does not exist', () => {
+       const options = {
+         stage: 'prod',
