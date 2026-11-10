@@ -541,3 +541,24 @@ CLI attempt number. It checks RAM and disk before attempting recovery, records
 the derived worker hash, and does not retry any coding outcome or dispatched
 request. Analysis follows only this consecutive zero-request chain; a2 is the
 first actual model attempt when a0 and a1 both stopped before inference.
+
+
+## Final execution and analysis
+
+Execution ended on November 10: 72 first-run attempts, 24 environment-blocked
+cells, and 16 retained earlier repeats. One raw agent_error was an explicitly
+interrupted provider stream; derived analysis excludes it without altering the
+receipt, leaving 71 valid cells and 17 complete four-arm tasks. Primary accepted
+counts are A 3/17, B 4/17, C 4/17 and Sol Medium 6/17. Known all-v4 estimated
+spending is $3.14960236, with two unresolved final usage receipts and conservative
+reservations retained. No further model runs are active.
+
+The completed research report is
+`reports/repository-intelligence-v4/analysis/FINAL-REPORT.md`, with machine-readable
+`final-summary.json`, `per-task-comparison.csv`, `failure-analysis.json`,
+`mechanism-analysis.json` and `regex-oracle-audit.json`. Strict results remain
+unchanged by the post-hoc oracle audit. The guided-only gain depends on literal
+regex-string equality; the on-demand-only gain was not reproduced by its one
+earlier repeat. Evidence does not demonstrate stronger-model substitution. Keep
+the architecture optional and test causal retrieval benefits and cheaper evidence
+controls on fresh behaviorally specified tasks before expanding it.

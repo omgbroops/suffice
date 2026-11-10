@@ -1,0 +1,1534 @@
+{
+  "at": "2026-11-10T07:44:37.996Z",
+  "target": 192,
+  "operationalLaunchReceipts": 38,
+  "zeroRequestOperationalLaunches": 2,
+  "attempted": 36,
+  "modelExecuted": 36,
+  "zeroRequestLaunchStops": 0,
+  "scorable": 36,
+  "missing": 156,
+  "completeTasks": [
+    "prettier__prettier-12584",
+    "prettier__prettier-8381",
+    "serverless__serverless-5926",
+    "mrdoob__three.js-23796"
+  ],
+  "completeFourArmRounds": 9,
+  "servicePhases": {
+    "default": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 4,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 4,
+        "cost": 0.056837080000000005,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 201660,
+          "cacheRead": 2161408,
+          "cacheWrite": 0,
+          "output": 30114
+        },
+        "agentMs": 1041002.721,
+        "workerMs": 1345956.5247999998,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 90,
+        "toolCalls": 199,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 4,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 4,
+        "cost": 0.07156776000000001,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 358921,
+          "cacheRead": 2066816,
+          "cacheWrite": 0,
+          "output": 30015
+        },
+        "agentMs": 1144299.5119,
+        "workerMs": 1435887.7219,
+        "graphRefreshMs": 272136.24320000026,
+        "bindingGuardAttempts": 0,
+        "iterations": 61,
+        "toolCalls": 174,
+        "graphQueries": 72
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 4,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 4,
+        "cost": 0.07681106,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 366533,
+          "cacheRead": 2389376,
+          "cacheWrite": 0,
+          "output": 32528
+        },
+        "agentMs": 1371396.9152000002,
+        "workerMs": 1657445.6805000002,
+        "graphRefreshMs": 144888.16680000018,
+        "bindingGuardAttempts": 0,
+        "iterations": 79,
+        "toolCalls": 172,
+        "graphQueries": 36
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 4,
+        "accepted": 2,
+        "rate": 0.5,
+        "normalCompleted": 4,
+        "cost": 0.24502559999999998,
+        "costPerAccepted": 0.12251279999999999,
+        "tokens": {
+          "input": 79627,
+          "cacheRead": 194816,
+          "cacheWrite": 0,
+          "output": 6629
+        },
+        "agentMs": 279125.3823,
+        "workerMs": 544302.4516000003,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 30,
+        "toolCalls": 93,
+        "graphQueries": 0
+      }
+    ],
+    "priority": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 5,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 5,
+        "cost": 0.15383294000000003,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 439064,
+          "cacheRead": 7154304,
+          "cacheWrite": 0,
+          "output": 76767
+        },
+        "agentMs": 2092383.0159,
+        "workerMs": 2885278.5035999995,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 187,
+        "toolCalls": 475,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 5,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 4,
+        "cost": null,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 427092,
+          "cacheRead": 6908800,
+          "cacheWrite": 0,
+          "output": 75921
+        },
+        "agentMs": 4042865.1675,
+        "workerMs": 4797719.7873,
+        "graphRefreshMs": 1932767.1126999992,
+        "bindingGuardAttempts": 1,
+        "iterations": 164,
+        "toolCalls": 375,
+        "graphQueries": 184
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 5,
+        "accepted": 1,
+        "rate": 0.2,
+        "normalCompleted": 5,
+        "cost": 0.14562084000000003,
+        "costPerAccepted": 0.14562084000000003,
+        "tokens": {
+          "input": 422359,
+          "cacheRead": 7135744,
+          "cacheWrite": 0,
+          "output": 64055
+        },
+        "agentMs": 3507740.6964000002,
+        "workerMs": 4294999.3560999995,
+        "graphRefreshMs": 443745.5014999999,
+        "bindingGuardAttempts": 0,
+        "iterations": 193,
+        "toolCalls": 428,
+        "graphQueries": 49
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 5,
+        "accepted": 4,
+        "rate": 0.8,
+        "normalCompleted": 5,
+        "cost": 0.3958688,
+        "costPerAccepted": 0.0989672,
+        "tokens": {
+          "input": 98716,
+          "cacheRead": 608768,
+          "cacheWrite": 0,
+          "output": 13756
+        },
+        "agentMs": 770978.2105,
+        "workerMs": 1592217.0816000004,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 52,
+        "toolCalls": 150,
+        "graphQueries": 0
+      }
+    ]
+  },
+  "resourcePhases": {
+    "original-policy-v1": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 1,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 1,
+        "cost": 0.01768258,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 42854,
+          "cacheRead": 803968,
+          "cacheWrite": 0,
+          "output": 10715
+        },
+        "agentMs": 353467.3357,
+        "workerMs": 414255.4549,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 34,
+        "toolCalls": 66,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 1,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 1,
+        "cost": 0.01814198,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 68055,
+          "cacheRead": 597248,
+          "cacheWrite": 0,
+          "output": 10728
+        },
+        "agentMs": 279689.0515,
+        "workerMs": 311315.7228,
+        "graphRefreshMs": 29064.490599999932,
+        "bindingGuardAttempts": 0,
+        "iterations": 14,
+        "toolCalls": 40,
+        "graphQueries": 18
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 1,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 1,
+        "cost": 0.02528752,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 99383,
+          "cacheRead": 892672,
+          "cacheWrite": 0,
+          "output": 12845
+        },
+        "agentMs": 404325.85020000004,
+        "workerMs": 436954.3176000002,
+        "graphRefreshMs": 19856.261200000066,
+        "bindingGuardAttempts": 0,
+        "iterations": 24,
+        "toolCalls": 48,
+        "graphQueries": 13
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 1,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 1,
+        "cost": 0.061593999999999996,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 16385,
+          "cacheRead": 74240,
+          "cacheWrite": 0,
+          "output": 2140
+        },
+        "agentMs": 84285.4461,
+        "workerMs": 122686.87320000026,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 9,
+        "toolCalls": 28,
+        "graphQueries": 0
+      }
+    ],
+    "post-restart-low-memory-v2": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 8,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 8,
+        "cost": 0.19298744,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 597870,
+          "cacheRead": 8511744,
+          "cacheWrite": 0,
+          "output": 96166
+        },
+        "agentMs": 2779918.4011999997,
+        "workerMs": 3816979.573499999,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 243,
+        "toolCalls": 608,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 8,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 7,
+        "cost": null,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 717958,
+          "cacheRead": 8378368,
+          "cacheWrite": 0,
+          "output": 95208
+        },
+        "agentMs": 4907475.6279,
+        "workerMs": 5922291.7864,
+        "graphRefreshMs": 2175838.8652999997,
+        "bindingGuardAttempts": 1,
+        "iterations": 211,
+        "toolCalls": 509,
+        "graphQueries": 238
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 8,
+        "accepted": 1,
+        "rate": 0.125,
+        "normalCompleted": 8,
+        "cost": 0.19714438000000004,
+        "costPerAccepted": 0.19714438000000004,
+        "tokens": {
+          "input": 689509,
+          "cacheRead": 8632448,
+          "cacheWrite": 0,
+          "output": 83738
+        },
+        "agentMs": 4474811.761399999,
+        "workerMs": 5515490.719,
+        "graphRefreshMs": 568777.4071,
+        "bindingGuardAttempts": 0,
+        "iterations": 248,
+        "toolCalls": 552,
+        "graphQueries": 72
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 8,
+        "accepted": 6,
+        "rate": 0.75,
+        "normalCompleted": 8,
+        "cost": 0.5793004,
+        "costPerAccepted": 0.09655006666666667,
+        "tokens": {
+          "input": 161958,
+          "cacheRead": 729344,
+          "cacheWrite": 0,
+          "output": 18245
+        },
+        "agentMs": 965818.1467,
+        "workerMs": 2013832.6600000004,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 73,
+        "toolCalls": 215,
+        "graphQueries": 0
+      }
+    ]
+  },
+  "primary": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off",
+      "n": 8,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 8,
+      "cost": 0.19640318,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 576277,
+        "cacheRead": 8914048,
+        "cacheWrite": 0,
+        "output": 99270
+      },
+      "agentMs": 2968983.818,
+      "workerMs": 4003618.6688999995,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 263,
+      "toolCalls": 643,
+      "graphQueries": 0
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided",
+      "n": 8,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 7,
+      "cost": null,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 732573,
+        "cacheRead": 8634112,
+        "cacheWrite": 0,
+        "output": 97969
+      },
+      "agentMs": 4965199.075,
+      "workerMs": 5964797.128799999,
+      "graphRefreshMs": 2173450.1465999996,
+      "bindingGuardAttempts": 1,
+      "iterations": 211,
+      "toolCalls": 517,
+      "graphQueries": 239
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand",
+      "n": 8,
+      "accepted": 1,
+      "rate": 0.125,
+      "normalCompleted": 8,
+      "cost": 0.20498512000000002,
+      "costPerAccepted": 0.20498512000000002,
+      "tokens": {
+        "input": 714101,
+        "cacheRead": 8929152,
+        "cacheWrite": 0,
+        "output": 88567
+      },
+      "agentMs": 4594673.6626,
+      "workerMs": 5626777.1396,
+      "graphRefreshMs": 574725.1568,
+      "bindingGuardAttempts": 0,
+      "iterations": 249,
+      "toolCalls": 536,
+      "graphQueries": 76
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off",
+      "n": 8,
+      "accepted": 6,
+      "rate": 0.75,
+      "normalCompleted": 8,
+      "cost": 0.5790663999999999,
+      "costPerAccepted": 0.09651106666666665,
+      "tokens": {
+        "input": 155474,
+        "cacheRead": 768384,
+        "cacheWrite": 0,
+        "output": 19128
+      },
+      "agentMs": 1003527.4045000001,
+      "workerMs": 2039920.6329000005,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 77,
+      "toolCalls": 230,
+      "graphQueries": 0
+    }
+  ],
+  "completeRoundSensitivity": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off",
+      "n": 9,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 9,
+      "cost": 0.21067002,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 640724,
+        "cacheRead": 9315712,
+        "cacheWrite": 0,
+        "output": 106881
+      },
+      "agentMs": 3133385.7369,
+      "workerMs": 4231235.028399999,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 277,
+      "toolCalls": 674,
+      "graphQueries": 0
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided",
+      "n": 9,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 8,
+      "cost": null,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 786013,
+        "cacheRead": 8975616,
+        "cacheWrite": 0,
+        "output": 105936
+      },
+      "agentMs": 5187164.6794,
+      "workerMs": 6233607.509199999,
+      "graphRefreshMs": 2204903.3559,
+      "bindingGuardAttempts": 1,
+      "iterations": 225,
+      "toolCalls": 549,
+      "graphQueries": 256
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand",
+      "n": 9,
+      "accepted": 1,
+      "rate": 0.1111111111111111,
+      "normalCompleted": 9,
+      "cost": 0.22243190000000002,
+      "costPerAccepted": 0.22243190000000002,
+      "tokens": {
+        "input": 788892,
+        "cacheRead": 9525120,
+        "cacheWrite": 0,
+        "output": 96583
+      },
+      "agentMs": 4879137.6116,
+      "workerMs": 5952445.0366,
+      "graphRefreshMs": 588633.6683,
+      "bindingGuardAttempts": 0,
+      "iterations": 272,
+      "toolCalls": 600,
+      "graphQueries": 85
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off",
+      "n": 9,
+      "accepted": 6,
+      "rate": 0.6666666666666666,
+      "normalCompleted": 9,
+      "cost": 0.6408943999999999,
+      "costPerAccepted": 0.10681573333333332,
+      "tokens": {
+        "input": 178343,
+        "cacheRead": 803584,
+        "cacheWrite": 0,
+        "output": 20385
+      },
+      "agentMs": 1050103.5928,
+      "workerMs": 2136519.5332000004,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 82,
+      "toolCalls": 243,
+      "graphQueries": 0
+    }
+  ],
+  "availableCases": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off",
+      "n": 9,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 9,
+      "cost": 0.21067002,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 640724,
+        "cacheRead": 9315712,
+        "cacheWrite": 0,
+        "output": 106881
+      },
+      "agentMs": 3133385.7369,
+      "workerMs": 4231235.028399999,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 277,
+      "toolCalls": 674,
+      "graphQueries": 0
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided",
+      "n": 9,
+      "accepted": 0,
+      "rate": 0,
+      "normalCompleted": 8,
+      "cost": null,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 786013,
+        "cacheRead": 8975616,
+        "cacheWrite": 0,
+        "output": 105936
+      },
+      "agentMs": 5187164.6794,
+      "workerMs": 6233607.509199999,
+      "graphRefreshMs": 2204903.3559,
+      "bindingGuardAttempts": 1,
+      "iterations": 225,
+      "toolCalls": 549,
+      "graphQueries": 256
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand",
+      "n": 9,
+      "accepted": 1,
+      "rate": 0.1111111111111111,
+      "normalCompleted": 9,
+      "cost": 0.22243190000000002,
+      "costPerAccepted": 0.22243190000000002,
+      "tokens": {
+        "input": 788892,
+        "cacheRead": 9525120,
+        "cacheWrite": 0,
+        "output": 96583
+      },
+      "agentMs": 4879137.6116,
+      "workerMs": 5952445.0366,
+      "graphRefreshMs": 588633.6683,
+      "bindingGuardAttempts": 0,
+      "iterations": 272,
+      "toolCalls": 600,
+      "graphQueries": 85
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off",
+      "n": 9,
+      "accepted": 6,
+      "rate": 0.6666666666666666,
+      "normalCompleted": 9,
+      "cost": 0.6408943999999999,
+      "costPerAccepted": 0.10681573333333332,
+      "tokens": {
+        "input": 178343,
+        "cacheRead": 803584,
+        "cacheWrite": 0,
+        "output": 20385
+      },
+      "agentMs": 1050103.5928,
+      "workerMs": 2136519.5332000004,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 82,
+      "toolCalls": 243,
+      "graphQueries": 0
+    }
+  ],
+  "categories": {
+    "simple": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 0,
+        "accepted": 0,
+        "rate": null,
+        "normalCompleted": 0,
+        "cost": 0,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "output": 0
+        },
+        "agentMs": 0,
+        "workerMs": 0,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 0,
+        "toolCalls": 0,
+        "graphQueries": 0
+      }
+    ],
+    "cross-file": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 2,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 2,
+        "cost": 0.027082500000000002,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 110685,
+          "cacheRead": 1004800,
+          "cacheWrite": 0,
+          "output": 11932
+        },
+        "agentMs": 419943.44920000003,
+        "workerMs": 628014.9437999998,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 38,
+        "toolCalls": 94,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 2,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 2,
+        "cost": 0.038742040000000005,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 239624,
+          "cacheRead": 916864,
+          "cacheWrite": 0,
+          "output": 11222
+        },
+        "agentMs": 584232.6968,
+        "workerMs": 780462.8847,
+        "graphRefreshMs": 209286.7102000002,
+        "bindingGuardAttempts": 0,
+        "iterations": 29,
+        "toolCalls": 95,
+        "graphQueries": 33
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 2,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 2,
+        "cost": 0.0324724,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 163908,
+          "cacheRead": 1029760,
+          "cacheWrite": 0,
+          "output": 11568
+        },
+        "agentMs": 615975.8836000001,
+        "workerMs": 833840.1571999999,
+        "graphRefreshMs": 113167.96020000009,
+        "bindingGuardAttempts": 0,
+        "iterations": 35,
+        "toolCalls": 83,
+        "graphQueries": 16
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 2,
+        "accepted": 2,
+        "rate": 1,
+        "normalCompleted": 2,
+        "cost": 0.11811479999999999,
+        "costPerAccepted": 0.059057399999999996,
+        "tokens": {
+          "input": 43801,
+          "cacheRead": 64128,
+          "cacheWrite": 0,
+          "output": 2410
+        },
+        "agentMs": 108353.40220000001,
+        "workerMs": 295262.35319999995,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 11,
+        "toolCalls": 36,
+        "graphQueries": 0
+      }
+    ],
+    "complex": [
+      {
+        "id": "A",
+        "name": "Luna baseline",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "off",
+        "n": 6,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 6,
+        "cost": 0.16932068,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 465592,
+          "cacheRead": 7909248,
+          "cacheWrite": 0,
+          "output": 87338
+        },
+        "agentMs": 2549040.3688,
+        "workerMs": 3375603.7251,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 225,
+        "toolCalls": 549,
+        "graphQueries": 0
+      },
+      {
+        "id": "B",
+        "name": "Luna always-guided",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "guided",
+        "n": 6,
+        "accepted": 0,
+        "rate": 0,
+        "normalCompleted": 5,
+        "cost": null,
+        "costPerAccepted": null,
+        "tokens": {
+          "input": 492949,
+          "cacheRead": 7717248,
+          "cacheWrite": 0,
+          "output": 86747
+        },
+        "agentMs": 4380966.3782,
+        "workerMs": 5184334.2441,
+        "graphRefreshMs": 1964163.4363999995,
+        "bindingGuardAttempts": 1,
+        "iterations": 182,
+        "toolCalls": 422,
+        "graphQueries": 206
+      },
+      {
+        "id": "C",
+        "name": "Luna on-demand",
+        "model": "gpt-6-luna",
+        "effort": "xhigh",
+        "mode": "on-demand",
+        "n": 6,
+        "accepted": 1,
+        "rate": 0.16666666666666666,
+        "normalCompleted": 6,
+        "cost": 0.17251272000000004,
+        "costPerAccepted": 0.17251272000000004,
+        "tokens": {
+          "input": 550193,
+          "cacheRead": 7899392,
+          "cacheWrite": 0,
+          "output": 76999
+        },
+        "agentMs": 3978697.7789999996,
+        "workerMs": 4792936.9824,
+        "graphRefreshMs": 461557.19659999997,
+        "bindingGuardAttempts": 0,
+        "iterations": 214,
+        "toolCalls": 453,
+        "graphQueries": 60
+      },
+      {
+        "id": "D",
+        "name": "Sol Medium baseline",
+        "model": "gpt-6.1-sol",
+        "effort": "medium",
+        "mode": "off",
+        "n": 6,
+        "accepted": 4,
+        "rate": 0.6666666666666666,
+        "normalCompleted": 6,
+        "cost": 0.4609516,
+        "costPerAccepted": 0.1152379,
+        "tokens": {
+          "input": 111673,
+          "cacheRead": 704256,
+          "cacheWrite": 0,
+          "output": 16718
+        },
+        "agentMs": 895174.0022999999,
+        "workerMs": 1744658.2797000005,
+        "graphRefreshMs": 0,
+        "bindingGuardAttempts": 0,
+        "iterations": 66,
+        "toolCalls": 194,
+        "graphQueries": 0
+      }
+    ]
+  },
+  "comparisons": [
+    {
+      "left": "B",
+      "right": "A",
+      "nTasks": 4,
+      "absoluteDifference": 0,
+      "taskClusterBootstrap95": null,
+      "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
+      "discordantTaskMeans": 0,
+      "discordantRepetitions": 0,
+      "zeroDiscordanceUpper95": 0.5271291954984121,
+      "warning": "Observed ties cannot establish equivalence. The one-sided exact bound applies only to probability of an unseen task-level mean discordance under independent task sampling, an assumption weakened by family clustering.",
+      "perTask": [
+        {
+          "task": "prettier__prettier-12584",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        }
+      ]
+    },
+    {
+      "left": "C",
+      "right": "A",
+      "nTasks": 4,
+      "absoluteDifference": 0.125,
+      "taskClusterBootstrap95": [
+        0,
+        0.375
+      ],
+      "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
+      "discordantTaskMeans": 1,
+      "discordantRepetitions": 1,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12584",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 0.5,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": false,
+              "difference": 1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        }
+      ]
+    },
+    {
+      "left": "C",
+      "right": "B",
+      "nTasks": 4,
+      "absoluteDifference": 0.125,
+      "taskClusterBootstrap95": [
+        0,
+        0.375
+      ],
+      "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
+      "discordantTaskMeans": 1,
+      "discordantRepetitions": 1,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12584",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 0.5,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": false,
+              "difference": 1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        }
+      ]
+    },
+    {
+      "left": "C",
+      "right": "D",
+      "nTasks": 4,
+      "absoluteDifference": -0.625,
+      "taskClusterBootstrap95": [
+        -1,
+        -0.25
+      ],
+      "method": "10,000 task-cluster percentile resamples; both repetitions stay together; conditional on these observed families",
+      "discordantTaskMeans": 3,
+      "discordantRepetitions": 5,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12584",
+          "delta": -1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 2
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": -0.5,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": -1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            },
+            {
+              "repetition": 1,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 2
+        }
+      ]
+    }
+  ],
+  "statusCounts": {
+    "completed": 35,
+    "missing": 156,
+    "budget_or_incomplete": 1
+  },
+  "spending": {
+    "cap": 25,
+    "known": 1.3453515,
+    "reserved": 1.8006288000000001,
+    "unknownEntries": 1,
+    "inFlightEntries": 0,
+    "pendingReservedSlots": 0,
+    "includesPreflight": true,
+    "estimatedNotInvoice": true
+  }
+}

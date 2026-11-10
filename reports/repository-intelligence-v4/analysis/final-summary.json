@@ -1,0 +1,1210 @@
+{
+  "status": "execution_finished_with_environment_missingness",
+  "target": 96,
+  "modelExecuted": 72,
+  "environmentBlocked": 24,
+  "legacyRepeatedAttempts": 16,
+  "validFirstRunCells": 71,
+  "fullyPairedTasks": 17,
+  "knownAllV4EstimatedUSD": 3.149602360000001,
+  "allV4ReservedUSD": 4.08519512,
+  "unknownReceipts": 2,
+  "primary": [
+    {
+      "id": "A",
+      "name": "Luna baseline",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "off",
+      "n": 17,
+      "accepted": 3,
+      "rate": 0.17647058823529413,
+      "normalCompleted": 17,
+      "cost": 0.38699772,
+      "costPerAccepted": 0.12899924,
+      "tokens": {
+        "input": 1465868,
+        "cacheRead": 14068992,
+        "cacheWrite": 0,
+        "output": 199442
+      },
+      "agentMs": 5899656.0045,
+      "workerMs": 7628693.600400001,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 509,
+      "toolCalls": 1120,
+      "graphQueries": 0
+    },
+    {
+      "id": "B",
+      "name": "Luna always-guided",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "guided",
+      "n": 17,
+      "accepted": 4,
+      "rate": 0.23529411764705882,
+      "normalCompleted": 16,
+      "cost": null,
+      "costPerAccepted": null,
+      "tokens": {
+        "input": 1360198,
+        "cacheRead": 14401280,
+        "cacheWrite": 0,
+        "output": 183271
+      },
+      "agentMs": 8388115.679299999,
+      "workerMs": 10103738.1443,
+      "graphRefreshMs": 3263624.0141999996,
+      "bindingGuardAttempts": 1,
+      "iterations": 370,
+      "toolCalls": 953,
+      "graphQueries": 431
+    },
+    {
+      "id": "C",
+      "name": "Luna on-demand",
+      "model": "gpt-6-luna",
+      "effort": "xhigh",
+      "mode": "on-demand",
+      "n": 17,
+      "accepted": 4,
+      "rate": 0.23529411764705882,
+      "normalCompleted": 17,
+      "cost": 0.4170536,
+      "costPerAccepted": 0.1042634,
+      "tokens": {
+        "input": 1451894,
+        "cacheRead": 17342720,
+        "cacheWrite": 0,
+        "output": 196874
+      },
+      "agentMs": 8570659.476799998,
+      "workerMs": 10386335.8344,
+      "graphRefreshMs": 1032369.1069999995,
+      "bindingGuardAttempts": 0,
+      "iterations": 484,
+      "toolCalls": 1045,
+      "graphQueries": 147
+    },
+    {
+      "id": "D",
+      "name": "Sol Medium baseline",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "mode": "off",
+      "n": 17,
+      "accepted": 6,
+      "rate": 0.35294117647058826,
+      "normalCompleted": 17,
+      "cost": 1.1893875999999999,
+      "costPerAccepted": 0.19823126666666666,
+      "tokens": {
+        "input": 366135,
+        "cacheRead": 1416576,
+        "cacheWrite": 0,
+        "output": 31546
+      },
+      "agentMs": 1590739.1746,
+      "workerMs": 3313182.655100001,
+      "graphRefreshMs": 0,
+      "bindingGuardAttempts": 0,
+      "iterations": 147,
+      "toolCalls": 417,
+      "graphQueries": 0
+    }
+  ],
+  "comparisons": [
+    {
+      "left": "B",
+      "right": "A",
+      "nTasks": 17,
+      "absoluteDifference": 0.058823529411764705,
+      "taskClusterBootstrap95": [
+        0,
+        0.17647058823529413
+      ],
+      "method": "10,000 task-cluster percentile resamples; selected repetitions 0 stay together; conditional on these observed families",
+      "discordantTaskMeans": 1,
+      "discordantRepetitions": 1,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12930",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9521",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9866",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12260",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-11892",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12584",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-13019",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-6977",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4372",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5509",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5640",
+          "delta": 1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": false,
+              "difference": 1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-4576",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4754",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-24461",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        }
+      ]
+    },
+    {
+      "left": "C",
+      "right": "A",
+      "nTasks": 17,
+      "absoluteDifference": 0.058823529411764705,
+      "taskClusterBootstrap95": [
+        0,
+        0.17647058823529413
+      ],
+      "method": "10,000 task-cluster percentile resamples; selected repetitions 0 stay together; conditional on these observed families",
+      "discordantTaskMeans": 1,
+      "discordantRepetitions": 1,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12930",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9521",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9866",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12260",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-11892",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12584",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-13019",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": false,
+              "difference": 1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-6977",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4372",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5509",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5640",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4576",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4754",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-24461",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        }
+      ]
+    },
+    {
+      "left": "C",
+      "right": "B",
+      "nTasks": 17,
+      "absoluteDifference": 0,
+      "taskClusterBootstrap95": [
+        -0.17647058823529413,
+        0.17647058823529413
+      ],
+      "method": "10,000 task-cluster percentile resamples; selected repetitions 0 stay together; conditional on these observed families",
+      "discordantTaskMeans": 2,
+      "discordantRepetitions": 2,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12930",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9521",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9866",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12260",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-11892",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12584",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-13019",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": false,
+              "difference": 1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-6977",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4372",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5509",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5640",
+          "delta": -1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "serverless__serverless-4576",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4754",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-24461",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        }
+      ]
+    },
+    {
+      "left": "C",
+      "right": "D",
+      "nTasks": 17,
+      "absoluteDifference": -0.11764705882352941,
+      "taskClusterBootstrap95": [
+        -0.29411764705882354,
+        0
+      ],
+      "method": "10,000 task-cluster percentile resamples; selected repetitions 0 stay together; conditional on these observed families",
+      "discordantTaskMeans": 2,
+      "discordantRepetitions": 2,
+      "zeroDiscordanceUpper95": null,
+      "warning": null,
+      "perTask": [
+        {
+          "task": "prettier__prettier-12930",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9521",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-9866",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12260",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-11892",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-12584",
+          "delta": -1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        },
+        {
+          "task": "prettier__prettier-13019",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "prettier__prettier-8381",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-6977",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4372",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5509",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5640",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4576",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-5926",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "original-policy-v1",
+              "rightPhase": "original-policy-v1"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "serverless__serverless-4754",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": false,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-24461",
+          "delta": 0,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": true,
+              "rightAccepted": true,
+              "difference": 0,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 0
+        },
+        {
+          "task": "mrdoob__three.js-23796",
+          "delta": -1,
+          "pairs": [
+            {
+              "repetition": 0,
+              "leftAccepted": false,
+              "rightAccepted": true,
+              "difference": -1,
+              "leftPhase": "post-restart-low-memory-v2",
+              "rightPhase": "post-restart-low-memory-v2"
+            }
+          ],
+          "discordantRepetitions": 1
+        }
+      ]
+    }
+  ],
+  "adoptionRecommendation": "Keep optional; no demonstrated substitution for the stronger model. Repair evaluation validity and isolate retrieval from controller overhead before expanding architecture.",
+  "repositoryInformationAccuracy": "No independent real-repository fact-accuracy comparison was collected. Unit/invalidation tests and qualitative evidence audits do not establish a graph-versus-search accuracy advantage."
+}
