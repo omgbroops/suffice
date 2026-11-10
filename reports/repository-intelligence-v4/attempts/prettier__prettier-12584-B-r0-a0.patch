@@ -1,0 +1,234 @@
+diff --git a/src/language-html/embed.js b/src/language-html/embed.js
+index ef83e63..29c1fb1 100644
+--- a/src/language-html/embed.js
++++ b/src/language-html/embed.js
+@@ -130,7 +130,7 @@ function printEmbeddedAttributeValue(node, htmlTextToDoc, options) {
+       return printMaybeHug(
+         attributeTextToDoc(value, {
+           parser: isVueEventBindingExpression(value)
+-            ? "__js_expression"
++            ? "__vue_js_expression"
+             : "__vue_event_binding",
+         })
+       );
+@@ -144,7 +144,7 @@ function printEmbeddedAttributeValue(node, htmlTextToDoc, options) {
+ 
+     if (isKeyMatched(jsExpressionBindingPatterns)) {
+       return printMaybeHug(
+-        attributeTextToDoc(getValue(), { parser: "__js_expression" })
++        attributeTextToDoc(getValue(), { parser: "__vue_js_expression" })
+       );
+     }
+   }
+diff --git a/src/language-html/syntax-vue.js b/src/language-html/syntax-vue.js
+index d26e89c..13b96a4 100644
+--- a/src/language-html/syntax-vue.js
++++ b/src/language-html/syntax-vue.js
+@@ -24,7 +24,7 @@ function printVueFor(value, textToDoc) {
+     " ",
+     textToDoc(
+       right,
+-      { parser: "__js_expression" },
++      { parser: "__vue_js_expression" },
+       { stripTrailingHardline: true }
+     ),
+   ];
+diff --git a/src/language-js/parse/babel.js b/src/language-js/parse/babel.js
+index b6a290d..e6ee1d0 100644
+--- a/src/language-js/parse/babel.js
++++ b/src/language-js/parse/babel.js
+@@ -169,6 +169,11 @@ const parseEstree = createParse(
+   appendPlugins(["jsx", "flow", "estree"])
+ );
+ const parseExpression = createParse("parseExpression", appendPlugins(["jsx"]));
++const parseVueExpression = createParse(
++  "parseExpression",
++  appendPlugins(["jsx", "typescript"]),
++  appendPlugins(["typescript"])
++);
+ 
+ // Error codes are defined in
+ //  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js
+@@ -239,10 +244,12 @@ module.exports = {
+     ...jsonParsers,
+     /** @internal */
+     __js_expression: babelExpression,
++    /** for vue expressions without filters */
++    __vue_js_expression: createParser(parseVueExpression),
+     /** for vue filter */
+-    __vue_expression: babelExpression,
++    __vue_expression: createParser(parseVueExpression),
+     /** for vue event binding to handle semicolon */
+-    __vue_event_binding: babel,
++    __vue_event_binding: createParser(parseTypeScript),
+     /** verify that we can print this AST */
+     __babel_estree: createParser(parseEstree),
+   },
+diff --git a/src/language-js/parse/parsers.js b/src/language-js/parse/parsers.js
+index eef5cdd..44bc405 100644
+--- a/src/language-js/parse/parsers.js
++++ b/src/language-js/parse/parsers.js
+@@ -26,6 +26,9 @@ module.exports = {
+   get __vue_expression() {
+     return require("./babel.js").parsers.__vue_expression;
+   },
++  get __vue_js_expression() {
++    return require("./babel.js").parsers.__vue_js_expression;
++  },
+   get __vue_event_binding() {
+     return require("./babel.js").parsers.__vue_event_binding;
+   },
+diff --git a/src/language-js/print-preprocess.js b/src/language-js/print-preprocess.js
+index b776cab..49033ff 100644
+--- a/src/language-js/print-preprocess.js
++++ b/src/language-js/print-preprocess.js
+@@ -7,6 +7,7 @@ function preprocess(ast, options) {
+     case "json-stringify":
+     case "__js_expression":
+     case "__vue_expression":
++    case "__vue_js_expression":
+       return {
+         ...ast,
+         type: options.parser.startsWith("__") ? "JsExpressionRoot" : "JsonRoot",
+diff --git a/src/main/comments.js b/src/main/comments.js
+index 77d9615..f286ad1 100644
+--- a/src/main/comments.js
++++ b/src/main/comments.js
+@@ -200,7 +200,8 @@ function attach(comments, ast, text, options) {
+       options.parser === "json" ||
+       options.parser === "json5" ||
+       options.parser === "__js_expression" ||
+-      options.parser === "__vue_expression"
++      options.parser === "__vue_expression" ||
++      options.parser === "__vue_js_expression"
+     ) {
+       if (locStart(comment) - locStart(ast) <= 0) {
+         addLeadingComment(ast, comment);
+diff --git a/tests/format/vue/vue/__snapshots__/jsfmt.spec.js.snap b/tests/format/vue/vue/__snapshots__/jsfmt.spec.js.snap
+index 5724057..1678086 100644
+--- a/tests/format/vue/vue/__snapshots__/jsfmt.spec.js.snap
++++ b/tests/format/vue/vue/__snapshots__/jsfmt.spec.js.snap
+@@ -4463,6 +4463,107 @@ printWidth: 80
+ ================================================================================
+ `;
+ 
++exports[`typescript-in-template.vue - {"semi":false} format 1`] = `
++====================================options=====================================
++parsers: ["vue"]
++printWidth: 80
++semi: false
++                                                                                | printWidth
++=====================================input======================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in (items as mymodule.Item[])" :key="item.id">{{ item.id }}</span>
++</template>
++
++<script setup lang="ts">
++</script>
++
++=====================================output=====================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in items as mymodule.Item[]" :key="item.id">{{
++    item.id
++  }}</span>
++</template>
++
++<script setup lang="ts"></script>
++
++================================================================================
++`;
++
++exports[`typescript-in-template.vue - {"trailingComma":"none"} format 1`] = `
++====================================options=====================================
++parsers: ["vue"]
++printWidth: 80
++trailingComma: "none"
++                                                                                | printWidth
++=====================================input======================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in (items as mymodule.Item[])" :key="item.id">{{ item.id }}</span>
++</template>
++
++<script setup lang="ts">
++</script>
++
++=====================================output=====================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in items as mymodule.Item[]" :key="item.id">{{
++    item.id
++  }}</span>
++</template>
++
++<script setup lang="ts"></script>
++
++================================================================================
++`;
++
++exports[`typescript-in-template.vue format 1`] = `
++====================================options=====================================
++parsers: ["vue"]
++printWidth: 80
++                                                                                | printWidth
++=====================================input======================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in (items as mymodule.Item[])" :key="item.id">{{ item.id }}</span>
++</template>
++
++<script setup lang="ts">
++</script>
++
++=====================================output=====================================
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in items as mymodule.Item[]" :key="item.id">{{
++    item.id
++  }}</span>
++</template>
++
++<script setup lang="ts"></script>
++
++================================================================================
++`;
++
+ exports[`v-if.vue - {"semi":false} format 1`] = `
+ ====================================options=====================================
+ parsers: ["vue"]
+diff --git a/tests/format/vue/vue/typescript-in-template.vue b/tests/format/vue/vue/typescript-in-template.vue
+new file mode 100644
+index 0000000..3480e73
+--- /dev/null
++++ b/tests/format/vue/vue/typescript-in-template.vue
+@@ -0,0 +1,10 @@
++<template>
++  <p v-if="isFolder(file)">{{ (file as mymodule.Folder).deadline }}</p>
++  <div :value="(file as mymodule.Folder).deadline" />
++  <p>{{ (file as mymodule.Folder).deadline }}</p>
++  <button @click="handle((file as mymodule.Folder).deadline)" />
++  <span v-for="item in (items as mymodule.Item[])" :key="item.id">{{ item.id }}</span>
++</template>
++
++<script setup lang="ts">
++</script>

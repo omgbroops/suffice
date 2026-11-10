@@ -1,0 +1,227 @@
+diff --git a/src/language-html/embed.js b/src/language-html/embed.js
+index ef83e63..aab1b1b 100644
+--- a/src/language-html/embed.js
++++ b/src/language-html/embed.js
+@@ -53,7 +53,8 @@ function printEmbeddedAttributeValue(node, htmlTextToDoc, options) {
+       rootNode &&
+       (rootNode.type === "ObjectExpression" ||
+         rootNode.type === "ArrayExpression" ||
+-        (options.parser === "__vue_expression" &&
++        ((options.parser === "__vue_expression" ||
++          options.parser === "__vue_ts_expression") &&
+           (rootNode.type === "TemplateLiteral" ||
+             rootNode.type === "StringLiteral")))
+     ) {
+@@ -71,6 +72,14 @@ function printEmbeddedAttributeValue(node, htmlTextToDoc, options) {
+       __onHtmlBindingRoot,
+       __embeddedInHtml: true,
+       ...opts,
++      parser: options.__isVueTs
++        ? {
++            babel: "babel-ts",
++            __js_expression: "__ts_expression",
++            __vue_expression: "__vue_ts_expression",
++            __vue_event_binding: "__vue_ts_event_binding",
++          }[opts.parser] || opts.parser
++        : opts.parser,
+     });
+ 
+   if (
+@@ -318,7 +327,9 @@ function embed(path, print, textToDoc, options) {
+           textToDocOptions.parser = "__ng_interpolation";
+           textToDocOptions.trailingComma = "none";
+         } else if (options.parser === "vue") {
+-          textToDocOptions.parser = "__vue_expression";
++          textToDocOptions.parser = options.__isVueTs
++            ? "__vue_ts_expression"
++            : "__vue_expression";
+         } else {
+           textToDocOptions.parser = "__js_expression";
+         }
+diff --git a/src/language-html/print-preprocess.js b/src/language-html/print-preprocess.js
+index 0add77b..3d6a095 100644
+--- a/src/language-html/print-preprocess.js
++++ b/src/language-html/print-preprocess.js
+@@ -30,6 +30,15 @@ const PREPROCESS_PIPELINE = [
+ ];
+ 
+ function preprocess(ast, options) {
++  options.__isVueTs =
++    options.parser === "vue" &&
++    ast.children.some(
++      (node) =>
++        node.type === "element" &&
++        node.name === "script" &&
++        (node.attrMap.lang === "ts" || node.attrMap.lang === "tsx")
++    );
++
+   for (const fn of PREPROCESS_PIPELINE) {
+     fn(ast, options);
+   }
+diff --git a/src/language-js/parse/babel.js b/src/language-js/parse/babel.js
+index b6a290d..5916bb3 100644
+--- a/src/language-js/parse/babel.js
++++ b/src/language-js/parse/babel.js
+@@ -169,6 +169,10 @@ const parseEstree = createParse(
+   appendPlugins(["jsx", "flow", "estree"])
+ );
+ const parseExpression = createParse("parseExpression", appendPlugins(["jsx"]));
++const parseTypeScriptExpression = createParse(
++  "parseExpression",
++  appendPlugins(["typescript"])
++);
+ 
+ // Error codes are defined in
+ //  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js
+@@ -243,6 +247,10 @@ module.exports = {
+     __vue_expression: babelExpression,
+     /** for vue event binding to handle semicolon */
+     __vue_event_binding: babel,
++    /** @internal */
++    __ts_expression: createParser(parseTypeScriptExpression),
++    __vue_ts_expression: createParser(parseTypeScriptExpression),
++    __vue_ts_event_binding: createParser(parseTypeScript),
+     /** verify that we can print this AST */
+     __babel_estree: createParser(parseEstree),
+   },
+diff --git a/src/language-js/parse/parsers.js b/src/language-js/parse/parsers.js
+index eef5cdd..93f23f3 100644
+--- a/src/language-js/parse/parsers.js
++++ b/src/language-js/parse/parsers.js
+@@ -29,6 +29,15 @@ module.exports = {
+   get __vue_event_binding() {
+     return require("./babel.js").parsers.__vue_event_binding;
+   },
++  get __ts_expression() {
++    return require("./babel.js").parsers.__ts_expression;
++  },
++  get __vue_ts_expression() {
++    return require("./babel.js").parsers.__vue_ts_expression;
++  },
++  get __vue_ts_event_binding() {
++    return require("./babel.js").parsers.__vue_ts_event_binding;
++  },
+   // JS - Flow
+   get flow() {
+     return require("./flow.js").parsers.flow;
+diff --git a/src/language-js/print-preprocess.js b/src/language-js/print-preprocess.js
+index b776cab..a188aef 100644
+--- a/src/language-js/print-preprocess.js
++++ b/src/language-js/print-preprocess.js
+@@ -7,6 +7,8 @@ function preprocess(ast, options) {
+     case "json-stringify":
+     case "__js_expression":
+     case "__vue_expression":
++    case "__ts_expression":
++    case "__vue_ts_expression":
+       return {
+         ...ast,
+         type: options.parser.startsWith("__") ? "JsExpressionRoot" : "JsonRoot",
+diff --git a/src/language-js/printer-estree.js b/src/language-js/printer-estree.js
+index e4fcc92..c01338f 100644
+--- a/src/language-js/printer-estree.js
++++ b/src/language-js/printer-estree.js
+@@ -218,7 +218,10 @@ function printPathNoParens(path, options, print, args) {
+         return [printDirective(node.expression, options), semi];
+       }
+ 
+-      if (options.parser === "__vue_event_binding") {
++      if (
++        options.parser === "__vue_event_binding" ||
++        options.parser === "__vue_ts_event_binding"
++      ) {
+         const parent = path.getParentNode();
+         if (
+           parent.type === "Program" &&
+diff --git a/src/main/comments.js b/src/main/comments.js
+index 77d9615..b1dbaa1 100644
+--- a/src/main/comments.js
++++ b/src/main/comments.js
+@@ -200,7 +200,9 @@ function attach(comments, ast, text, options) {
+       options.parser === "json" ||
+       options.parser === "json5" ||
+       options.parser === "__js_expression" ||
+-      options.parser === "__vue_expression"
++      options.parser === "__vue_expression" ||
++      options.parser === "__ts_expression" ||
++      options.parser === "__vue_ts_expression"
+     ) {
+       if (locStart(comment) - locStart(ast) <= 0) {
+         addLeadingComment(ast, comment);
+diff --git a/tests/format/vue/typescript-expressions/jsfmt.spec.js b/tests/format/vue/typescript-expressions/jsfmt.spec.js
+new file mode 100644
+index 0000000..f40f37c
+--- /dev/null
++++ b/tests/format/vue/typescript-expressions/jsfmt.spec.js
+@@ -0,0 +1,71 @@
++const prettier = require("prettier-local");
++
++const format = (source) => prettier.format(source, { parser: "vue" });
++
++describe("TypeScript in Vue templates", () => {
++  test.each([
++    '<script lang="ts"></script>',
++    '<script setup lang="ts"></script>',
++    '<script lang="tsx"></script>',
++    '<script></script>\n<script setup lang="ts"></script>',
++  ])("interpolation with %s", (script) => {
++    const source =
++      "<template><p>{{ (file  as  mymodule.Folder).deadline }}</p></template>\n" +
++      script;
++    const output = format(source);
++    expect(output).toContain("{{ (file as mymodule.Folder).deadline }}");
++    expect(format(output)).toBe(output);
++  });
++
++  test.each([
++    [':value="file  as  Folder"', ':value="file as Folder"'],
++    ['v-if="(file  as  Folder).deadline"', 'v-if="(file as Folder).deadline"'],
++    ['@click="file = value  as  Folder"', '@click="file = value as Folder"'],
++    [
++      '@click="file = value  as  Folder; save(file!)"',
++      "file = value as Folder; save(file!);",
++    ],
++    [
++      '@click="(event: Event) => save(event)"',
++      '@click="(event: Event) => save(event)"',
++    ],
++    [
++      'v-for="file in files  as  Folder[]"',
++      'v-for="file in files as Folder[]"',
++    ],
++    [
++      'v-slot="{ file }: { file: Folder }"',
++      'v-slot="{ file }: { file: Folder }"',
++    ],
++  ])("directive %s", (attribute, expected) => {
++    const output = format(
++      "<template><p " +
++        attribute +
++        ' /></template>\n<script setup lang="ts"></script>'
++    );
++    expect(output.replace(/\s+/g, " ")).toContain(expected);
++    expect(format(output)).toBe(output);
++  });
++
++  test("script can precede template", () => {
++    expect(
++      format(
++        '<script lang="ts"></script>\n<template>{{ value  as  string }}</template>'
++      )
++    ).toContain("{{ value as string }}");
++  });
++
++  test("comments and non-null assertions", () => {
++    const output = format(
++      '<template>{{ /* comment */ value!  as  string }}</template>\n<script lang="ts"></script>'
++    );
++    expect(output).toContain("{{ /* comment */ value! as string }}");
++    expect(format(output)).toBe(output);
++  });
++
++  test("ordinary JavaScript templates still support Vue filters", () => {
++    expect(format("<template>{{ value|filter }}</template>")).toBe(
++      "<template>{{ value | filter }}</template>\n"
++    );
++  });
++});

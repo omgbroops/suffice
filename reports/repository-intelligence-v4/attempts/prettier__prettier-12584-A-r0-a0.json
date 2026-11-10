@@ -1,0 +1,144 @@
+{
+  "task": "prettier__prettier-12584",
+  "repo": "prettier/prettier",
+  "category": "complex",
+  "repetition": 0,
+  "id": "A",
+  "name": "Luna baseline",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "off",
+  "arm": "A",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/prettier__prettier-12584-A-r0-a0/workspace",
+    "head": "a2d9830f2256a347cfba6a1ad705246b2f11ad52",
+    "tree": "9f877430ff04b3196c2084e07c714b6bf2867f4e"
+  },
+  "runId": "prettier__prettier-12584-A-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 484994.3982,
+  "usage": {
+    "input": 124102,
+    "cacheRead": 1500672,
+    "cacheWrite": 0,
+    "output": 14016,
+    "estimatedApiUsd": 0.03442492000000001,
+    "modelCalls": 45,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.03442492000000001,
+  "acceptance": {
+    "status": "failed",
+    "required": 2,
+    "requiredPassed": 1,
+    "unpassed": [
+      "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+      "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 2,
+      "targetsPassed": 1,
+      "regressions": 1,
+      "regressionsPassed": 0,
+      "missing": [],
+      "failures": [
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format",
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "tests/format/vue/ts-event-binding/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->basic.vue format": 1,
+        "tests/format/vue/ts-expression/jsfmt.spec.js->not-working-with-non-ts-script.vue format": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0
+  },
+  "changed": [
+    "src/language-js/parse/babel.js",
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript.vue"
+  ],
+  "unrepairedReferenceFiles": [
+    "src/language-html/embed.js",
+    "src/language-html/print-preprocess.js",
+    "src/language-html/utils/index.js",
+    "src/language-js/parse/parsers.js",
+    "src/language-js/print-preprocess.js",
+    "src/language-js/printer-estree.js",
+    "src/main/comments.js"
+  ],
+  "extraChangedFiles": [
+    "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+    "tests/format/vue/interpolation/typescript.vue"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 45,
+  "editCalls": 3,
+  "verificationCalls": 2,
+  "toolCalls": 101,
+  "graphQueries": [],
+  "graphGuidance": [],
+  "graphOverhead": [],
+  "evidenceUptake": [],
+  "patches": [
+    {
+      "path": "src/language-js/parse/babel.js",
+      "before": "\"use strict\";\n\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst getShebang = require(\"../utils/get-shebang.js\");\nconst getNextNonSpaceNonCommentCharacterIndexWithStartIndex = require(\"../../utils/text/get-next-non-space-non-comment-character-index-with-start-index.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst createBabelParseError = require(\"./utils/create-babel-parse-error.js\");\nconst postprocess = require(\"./postprocess/index.js\");\nconst jsonParsers = require(\"./json.js\");\n\n/**\n * @typedef {import(\"@babel/parser\").parse | import(\"@babel/parser\").parseExpression} Parse\n * @typedef {import(\"@babel/parser\").ParserOptions} ParserOptions\n * @typedef {import(\"@babel/parser\").ParserPlugin} ParserPlugin\n */\n\n/** @type {ParserOptions} */\nconst parseOptions = {\n  sourceType: \"module\",\n  allowImportExportEverywhere: true,\n  allowReturnOutsideFunction: true,\n  allowSuperOutsideMethod: true,\n  allowUndeclaredExports: true,\n  errorRecovery: true,\n  createParenthesizedExpressions: true,\n  plugins: [\n    // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,\n    // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify\n    \"doExpressions\",\n    \"exportDefaultFrom\",\n    \"functionBind\",\n    \"functionSent\",\n    \"throwExpressions\",\n    \"partialApplication\",\n    [\"decorators\", { decoratorsBeforeExport: false }],\n    \"importAssertions\",\n    \"decimal\",\n    \"moduleBlocks\",\n    \"asyncDoExpressions\",\n    \"regexpUnicodeSets\",\n    \"destructuringPrivate\",\n    \"decoratorAutoAccessors\",\n  ],\n  tokens: true,\n  ranges: true,\n};\n\n/** @type {ParserPlugin} */\nconst recordAndTuplePlugin = [\"recordAndTuple\", { syntaxType: \"hash\" }];\n\n/** @type {ParserPlugin} */\nconst v8intrinsicPlugin = \"v8intrinsic\";\n\n/** @type {Array<ParserPlugin>} */\nconst pipelineOperatorPlugins = [\n  [\"pipelineOperator\", { proposal: \"hack\", topicToken: \"%\" }],\n  [\"pipelineOperator\", { proposal: \"minimal\" }],\n  [\"pipelineOperator\", { proposal: \"fsharp\" }],\n];\nconst appendPlugins = (plugins, options = parseOptions) => ({\n  ...options,\n  plugins: [...options.plugins, ...plugins],\n});\n\n// Similar to babel\n// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67\nconst FLOW_PRAGMA_REGEX = /@(?:no)?flow\\b/;\nfunction isFlowFile(text, options) {\n  if (options.filepath && options.filepath.endsWith(\".js.flow\")) {\n    return true;\n  }\n\n  const shebang = getShebang(text);\n  if (shebang) {\n    text = text.slice(shebang.length);\n  }\n\n  const firstNonSpaceNonCommentCharacterIndex =\n    getNextNonSpaceNonCommentCharacterIndexWithStartIndex(text, 0);\n\n  if (firstNonSpaceNonCommentCharacterIndex !== false) {\n    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);\n  }\n\n  return FLOW_PRAGMA_REGEX.test(text);\n}\n\nfunction parseWithOptions(parseMethod, text, options) {\n  // Inline the require to avoid loading all the JS if we don't use it\n  /** @type {Parse} */\n  const parse = require(\"@babel/parser\")[parseMethod];\n  const ast = parse(text, options);\n  const error = ast.errors.find(\n    (error) => !allowedMessageCodes.has(error.reasonCode)\n  );\n  if (error) {\n    throw error;\n  }\n  return ast;\n}\n\nfunction createParse(parseMethod, ...optionsCombinations) {\n  return (text, parsers, opts = {}) => {\n    if (\n      (opts.parser === \"babel\" || opts.parser === \"__babel_estree\") &&\n      isFlowFile(text, opts)\n    ) {\n      opts.parser = \"babel-flow\";\n      return parseFlow(text, parsers, opts);\n    }\n\n    let combinations = optionsCombinations;\n    if (opts.__babelSourceType === \"script\") {\n      combinations = combinations.map((options) => ({\n        ...options,\n        sourceType: \"script\",\n      }));\n    }\n\n    if (/#[[{]/.test(text)) {\n      combinations = combinations.map((options) =>\n        appendPlugins([recordAndTuplePlugin], options)\n      );\n    }\n\n    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);\n    if (text.includes(\"|>\")) {\n      const conflictsPlugins = shouldEnableV8intrinsicPlugin\n        ? [...pipelineOperatorPlugins, v8intrinsicPlugin]\n        : pipelineOperatorPlugins;\n      combinations = conflictsPlugins.flatMap((pipelineOperatorPlugin) =>\n        combinations.map((options) =>\n          appendPlugins([pipelineOperatorPlugin], options)\n        )\n      );\n    } else if (shouldEnableV8intrinsicPlugin) {\n      combinations = combinations.map((options) =>\n        appendPlugins([v8intrinsicPlugin], options)\n      );\n    }\n\n    const { result: ast, error } = tryCombinations(\n      ...combinations.map(\n        (options) => () => parseWithOptions(parseMethod, text, options)\n      )\n    );\n\n    if (!ast) {\n      throw createBabelParseError(error);\n    }\n\n    opts.originalText = text;\n    return postprocess(ast, opts);\n  };\n}\n\nconst parse = createParse(\"parse\", appendPlugins([\"jsx\", \"flow\"]));\nconst parseFlow = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", [\"flow\", { all: true, enums: true }]])\n);\nconst parseTypeScript = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"typescript\"])\n);\nconst parseEstree = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"flow\", \"estree\"])\n);\nconst parseExpression = createParse(\"parseExpression\", appendPlugins([\"jsx\"]));\n\n// Error codes are defined in\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/typescript/index.js#L69-L153\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/flow/index.js#L51-L140\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/jsx/index.js#L23-L39\nconst allowedMessageCodes = new Set([\n  \"StrictNumericEscape\",\n  \"StrictWith\",\n  \"StrictOctalLiteral\",\n  \"StrictDelete\",\n  \"StrictEvalArguments\",\n  \"StrictEvalArgumentsBinding\",\n  \"StrictFunction\",\n\n  \"EmptyTypeArguments\",\n  \"EmptyTypeParameters\",\n  \"ConstructorHasTypeParameters\",\n\n  \"UnsupportedParameterPropertyKind\",\n  \"UnexpectedParameterModifier\",\n\n  \"MixedLabeledAndUnlabeledElements\",\n  \"InvalidTupleMemberLabel\",\n\n  \"NonClassMethodPropertyHasAbstractModifer\",\n  \"ReadonlyForMethodSignature\",\n  \"ClassMethodHasDeclare\",\n  \"ClassMethodHasReadonly\",\n  \"InvalidModifierOnTypeMember\",\n  \"DuplicateAccessibilityModifier\",\n  \"IndexSignatureHasDeclare\",\n\n  \"DecoratorExportClass\",\n  \"ParamDupe\",\n  \"InvalidDecimal\",\n  \"RestTrailingComma\",\n  \"UnsupportedParameterDecorator\",\n  \"UnterminatedJsxContent\",\n  \"UnexpectedReservedWord\",\n  \"ModuleAttributesWithDuplicateKeys\",\n  \"LineTerminatorBeforeArrow\",\n  \"InvalidEscapeSequenceTemplate\",\n  \"NonAbstractClassHasAbstractMethod\",\n  \"UnsupportedPropertyDecorator\",\n  \"OptionalTypeBeforeRequired\",\n  \"PatternIsOptional\",\n  \"OptionalBindingPattern\",\n  \"DeclareClassFieldHasInitializer\",\n  \"TypeImportCannotSpecifyDefaultAndNamed\",\n  \"DeclareFunctionHasImplementation\",\n  \"ConstructorClassField\",\n\n  \"VarRedeclaration\",\n  \"InvalidPrivateFieldResolution\",\n  \"DuplicateExport\",\n]);\n\nconst babel = createParser(parse);\nconst babelExpression = createParser(parseExpression);\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    babel,\n    \"babel-flow\": createParser(parseFlow),\n    \"babel-ts\": createParser(parseTypeScript),\n    ...jsonParsers,\n    /** @internal */\n    __js_expression: babelExpression,\n    /** for vue filter */\n    __vue_expression: babelExpression,\n    /** for vue event binding to handle semicolon */\n    __vue_event_binding: babel,\n    /** verify that we can print this AST */\n    __babel_estree: createParser(parseEstree),\n  },\n};\n",
+      "after": "\"use strict\";\n\nconst tryCombinations = require(\"../../utils/try-combinations.js\");\nconst getShebang = require(\"../utils/get-shebang.js\");\nconst getNextNonSpaceNonCommentCharacterIndexWithStartIndex = require(\"../../utils/text/get-next-non-space-non-comment-character-index-with-start-index.js\");\nconst createParser = require(\"./utils/create-parser.js\");\nconst createBabelParseError = require(\"./utils/create-babel-parse-error.js\");\nconst postprocess = require(\"./postprocess/index.js\");\nconst jsonParsers = require(\"./json.js\");\n\n/**\n * @typedef {import(\"@babel/parser\").parse | import(\"@babel/parser\").parseExpression} Parse\n * @typedef {import(\"@babel/parser\").ParserOptions} ParserOptions\n * @typedef {import(\"@babel/parser\").ParserPlugin} ParserPlugin\n */\n\n/** @type {ParserOptions} */\nconst parseOptions = {\n  sourceType: \"module\",\n  allowImportExportEverywhere: true,\n  allowReturnOutsideFunction: true,\n  allowSuperOutsideMethod: true,\n  allowUndeclaredExports: true,\n  errorRecovery: true,\n  createParenthesizedExpressions: true,\n  plugins: [\n    // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,\n    // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify\n    \"doExpressions\",\n    \"exportDefaultFrom\",\n    \"functionBind\",\n    \"functionSent\",\n    \"throwExpressions\",\n    \"partialApplication\",\n    [\"decorators\", { decoratorsBeforeExport: false }],\n    \"importAssertions\",\n    \"decimal\",\n    \"moduleBlocks\",\n    \"asyncDoExpressions\",\n    \"regexpUnicodeSets\",\n    \"destructuringPrivate\",\n    \"decoratorAutoAccessors\",\n  ],\n  tokens: true,\n  ranges: true,\n};\n\n/** @type {ParserPlugin} */\nconst recordAndTuplePlugin = [\"recordAndTuple\", { syntaxType: \"hash\" }];\n\n/** @type {ParserPlugin} */\nconst v8intrinsicPlugin = \"v8intrinsic\";\n\n/** @type {Array<ParserPlugin>} */\nconst pipelineOperatorPlugins = [\n  [\"pipelineOperator\", { proposal: \"hack\", topicToken: \"%\" }],\n  [\"pipelineOperator\", { proposal: \"minimal\" }],\n  [\"pipelineOperator\", { proposal: \"fsharp\" }],\n];\nconst appendPlugins = (plugins, options = parseOptions) => ({\n  ...options,\n  plugins: [...options.plugins, ...plugins],\n});\n\n// Similar to babel\n// https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67\nconst FLOW_PRAGMA_REGEX = /@(?:no)?flow\\b/;\nfunction isFlowFile(text, options) {\n  if (options.filepath && options.filepath.endsWith(\".js.flow\")) {\n    return true;\n  }\n\n  const shebang = getShebang(text);\n  if (shebang) {\n    text = text.slice(shebang.length);\n  }\n\n  const firstNonSpaceNonCommentCharacterIndex =\n    getNextNonSpaceNonCommentCharacterIndexWithStartIndex(text, 0);\n\n  if (firstNonSpaceNonCommentCharacterIndex !== false) {\n    text = text.slice(0, firstNonSpaceNonCommentCharacterIndex);\n  }\n\n  return FLOW_PRAGMA_REGEX.test(text);\n}\n\nfunction parseWithOptions(parseMethod, text, options) {\n  // Inline the require to avoid loading all the JS if we don't use it\n  /** @type {Parse} */\n  const parse = require(\"@babel/parser\")[parseMethod];\n  const ast = parse(text, options);\n  const error = ast.errors.find(\n    (error) => !allowedMessageCodes.has(error.reasonCode)\n  );\n  if (error) {\n    throw error;\n  }\n  return ast;\n}\n\nfunction createParse(parseMethod, ...optionsCombinations) {\n  return (text, parsers, opts = {}) => {\n    if (\n      (opts.parser === \"babel\" || opts.parser === \"__babel_estree\") &&\n      isFlowFile(text, opts)\n    ) {\n      opts.parser = \"babel-flow\";\n      return parseFlow(text, parsers, opts);\n    }\n\n    let combinations = optionsCombinations;\n    if (opts.__babelSourceType === \"script\") {\n      combinations = combinations.map((options) => ({\n        ...options,\n        sourceType: \"script\",\n      }));\n    }\n\n    if (/#[[{]/.test(text)) {\n      combinations = combinations.map((options) =>\n        appendPlugins([recordAndTuplePlugin], options)\n      );\n    }\n\n    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);\n    if (text.includes(\"|>\")) {\n      const conflictsPlugins = shouldEnableV8intrinsicPlugin\n        ? [...pipelineOperatorPlugins, v8intrinsicPlugin]\n        : pipelineOperatorPlugins;\n      combinations = conflictsPlugins.flatMap((pipelineOperatorPlugin) =>\n        combinations.map((options) =>\n          appendPlugins([pipelineOperatorPlugin], options)\n        )\n      );\n    } else if (shouldEnableV8intrinsicPlugin) {\n      combinations = combinations.map((options) =>\n        appendPlugins([v8intrinsicPlugin], options)\n      );\n    }\n\n    const { result: ast, error } = tryCombinations(\n      ...combinations.map(\n        (options) => () => parseWithOptions(parseMethod, text, options)\n      )\n    );\n\n    if (!ast) {\n      throw createBabelParseError(error);\n    }\n\n    opts.originalText = text;\n    return postprocess(ast, opts);\n  };\n}\n\nconst parse = createParse(\"parse\", appendPlugins([\"jsx\", \"flow\"]));\nconst parseFlow = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", [\"flow\", { all: true, enums: true }]])\n);\nconst parseTypeScript = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"typescript\"]),\n  appendPlugins([\"typescript\"])\n);\nconst parseEstree = createParse(\n  \"parse\",\n  appendPlugins([\"jsx\", \"flow\", \"estree\"])\n);\nconst parseExpression = createParse(\"parseExpression\", appendPlugins([\"jsx\"]));\nconst parseVueExpression = createParse(\n  \"parseExpression\",\n  appendPlugins([\"jsx\", \"typescript\"])\n);\n\n// Error codes are defined in\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/parser/error-message.js\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/typescript/index.js#L69-L153\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/flow/index.js#L51-L140\n//  - https://github.com/babel/babel/blob/v7.14.0/packages/babel-parser/src/plugins/jsx/index.js#L23-L39\nconst allowedMessageCodes = new Set([\n  \"StrictNumericEscape\",\n  \"StrictWith\",\n  \"StrictOctalLiteral\",\n  \"StrictDelete\",\n  \"StrictEvalArguments\",\n  \"StrictEvalArgumentsBinding\",\n  \"StrictFunction\",\n\n  \"EmptyTypeArguments\",\n  \"EmptyTypeParameters\",\n  \"ConstructorHasTypeParameters\",\n\n  \"UnsupportedParameterPropertyKind\",\n  \"UnexpectedParameterModifier\",\n\n  \"MixedLabeledAndUnlabeledElements\",\n  \"InvalidTupleMemberLabel\",\n\n  \"NonClassMethodPropertyHasAbstractModifer\",\n  \"ReadonlyForMethodSignature\",\n  \"ClassMethodHasDeclare\",\n  \"ClassMethodHasReadonly\",\n  \"InvalidModifierOnTypeMember\",\n  \"DuplicateAccessibilityModifier\",\n  \"IndexSignatureHasDeclare\",\n\n  \"DecoratorExportClass\",\n  \"ParamDupe\",\n  \"InvalidDecimal\",\n  \"RestTrailingComma\",\n  \"UnsupportedParameterDecorator\",\n  \"UnterminatedJsxContent\",\n  \"UnexpectedReservedWord\",\n  \"ModuleAttributesWithDuplicateKeys\",\n  \"LineTerminatorBeforeArrow\",\n  \"InvalidEscapeSequenceTemplate\",\n  \"NonAbstractClassHasAbstractMethod\",\n  \"UnsupportedPropertyDecorator\",\n  \"OptionalTypeBeforeRequired\",\n  \"PatternIsOptional\",\n  \"OptionalBindingPattern\",\n  \"DeclareClassFieldHasInitializer\",\n  \"TypeImportCannotSpecifyDefaultAndNamed\",\n  \"DeclareFunctionHasImplementation\",\n  \"ConstructorClassField\",\n\n  \"VarRedeclaration\",\n  \"InvalidPrivateFieldResolution\",\n  \"DuplicateExport\",\n]);\n\nconst babel = createParser(parse);\nconst babelExpression = createParser(parseExpression);\n\n// Export as a plugin so we can reuse the same bundle for UMD loading\nmodule.exports = {\n  parsers: {\n    babel,\n    \"babel-flow\": createParser(parseFlow),\n    \"babel-ts\": createParser(parseTypeScript),\n    ...jsonParsers,\n    /** @internal */\n    __js_expression: babelExpression,\n    /** for vue filters and TypeScript expressions */\n    __vue_expression: createParser(parseVueExpression),\n    /** for vue event binding to handle semicolon */\n    __vue_event_binding: babel,\n    /** verify that we can print this AST */\n    __babel_estree: createParser(parseEstree),\n  },\n};\n"
+    },
+    {
+      "path": "tests/format/vue/interpolation/__snapshots__/jsfmt.spec.js.snap",
+      "before": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`parenthesized.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<span>{{(a||          b)}} {{z&&(a&&b)}}</span>\n</template>\n\n=====================================output=====================================\n<template>\n  <span>{{ a || b }} {{ z && a && b }}</span>\n</template>\n\n================================================================================\n`;\n\nexports[`template.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <root>\n<div class=\"red\">\n    We are going to add this simple card here\n  </div>\n  <div class=\"red\">\n    What is going on {{ prop1 }} and {{ prop2 }}\n  </div>\n  </root>\n</template>\n\n=====================================output=====================================\n<template>\n  <root>\n    <div class=\"red\">We are going to add this simple card here</div>\n    <div class=\"red\">What is going on {{ prop1 }} and {{ prop2 }}</div>\n  </root>\n</template>\n\n================================================================================\n`;\n",
+      "after": "// Jest Snapshot v1, https://goo.gl/fbAQLP\n\nexports[`parenthesized.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<span>{{(a||          b)}} {{z&&(a&&b)}}</span>\n</template>\n\n=====================================output=====================================\n<template>\n  <span>{{ a || b }} {{ z && a && b }}</span>\n</template>\n\n================================================================================\n`;\n\nexports[`template.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n  <root>\n<div class=\"red\">\n    We are going to add this simple card here\n  </div>\n  <div class=\"red\">\n    What is going on {{ prop1 }} and {{ prop2 }}\n  </div>\n  </root>\n</template>\n\n=====================================output=====================================\n<template>\n  <root>\n    <div class=\"red\">We are going to add this simple card here</div>\n    <div class=\"red\">What is going on {{ prop1 }} and {{ prop2 }}</div>\n  </root>\n</template>\n\n================================================================================\n`;\n\nexports[`typescript.vue format 1`] = `\n====================================options=====================================\nparsers: [\"vue\"]\nprintWidth: 80\n                                                                                | printWidth\n=====================================input======================================\n<template>\n<p>{{(file as mymodule.Folder).deadline}}</p>\n<p :value=\"(file as mymodule.Folder).deadline\"/>\n</template>\n\n<script lang=\"ts\">\n</script>\n\n=====================================output=====================================\n<template>\n  <p>{{ (file as mymodule.Folder).deadline }}</p>\n  <p :value=\"(file as mymodule.Folder).deadline\" />\n</template>\n\n<script lang=\"ts\"></script>\n\n================================================================================\n`;\n"
+    },
+    {
+      "path": "tests/format/vue/interpolation/typescript.vue",
+      "before": null,
+      "after": "<template>\n<p>{{(file as mymodule.Folder).deadline}}</p>\n<p :value=\"(file as mymodule.Folder).deadline\"/>\n</template>\n\n<script lang=\"ts\">\n</script>\n"
+    }
+  ],
+  "final": "Implemented a Vue-specific expression parser using Babel’s JSX and TypeScript plugins, leaving the regular JavaScript expression parser unchanged. Added a regression fixture covering `as` assertions in both interpolations and bound attributes.\n\n**Verification passed:**\n- `node native-verify.cjs` — 3 suites, 20 tests\n- Vue interpolation Jest suite — 3 tests, 3 snapshots\n- Vue CLI reproduction and `git diff --check`\n\nESLint was not verified; its expected binary was unavailable in `node_modules`.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\prettier__prettier-12584-A-r0-a0\\home\\events\\1794280490263-beb3fb19-5cbc-4fa1-b8fe-c8ce85321086.jsonl",
+  "receiptAudit": {
+    "requests": 45,
+    "finalUsageResponses": 45,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 45,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "prettier__prettier-12584-A-r0",
+  "attempt": 0
+}

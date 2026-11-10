@@ -1,0 +1,115 @@
+diff --git a/src/math/Color.js b/src/math/Color.js
+index 2b682b9..461671e 100644
+--- a/src/math/Color.js
++++ b/src/math/Color.js
+@@ -568,6 +568,14 @@ class Color {
+ 
+ 	}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this.r;
++		yield this.g;
++		yield this.b;
++
++	}
++
+ 	fromBufferAttribute( attribute, index ) {
+ 
+ 		this.r = attribute.getX( index );
+diff --git a/src/math/Euler.js b/src/math/Euler.js
+index 2ee33a0..3fec284 100644
+--- a/src/math/Euler.js
++++ b/src/math/Euler.js
+@@ -287,6 +287,14 @@ class Euler {
+ 
+ 	}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this.x;
++		yield this.y;
++		yield this.z;
++
++	}
++
+ 	_onChange( callback ) {
+ 
+ 		this._onChangeCallback = callback;
+diff --git a/src/math/Quaternion.js b/src/math/Quaternion.js
+index 08724e7..154fc1d 100644
+--- a/src/math/Quaternion.js
++++ b/src/math/Quaternion.js
+@@ -661,6 +661,15 @@ class Quaternion {
+ 
+ 	}
+ 
++	*[ Symbol.iterator ]() {
++
++		yield this.x;
++		yield this.y;
++		yield this.z;
++		yield this.w;
++
++	}
++
+ 	fromBufferAttribute( attribute, index ) {
+ 
+ 		this._x = attribute.getX( index );
+diff --git a/test/unit/src/math/Color.tests.js b/test/unit/src/math/Color.tests.js
+index 52e8f1b..220adb4 100644
+--- a/test/unit/src/math/Color.tests.js
++++ b/test/unit/src/math/Color.tests.js
+@@ -438,6 +438,14 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterator', ( assert ) => {
++
++			var a = new Color( 0.5, 1.0, 0.0 );
++
++			assert.deepEqual( [ ...a ], [ 0.5, 1.0, 0.0 ], 'iteration yields r, g, b' );
++
++		} );
++
+ 		QUnit.test( 'toJSON', ( assert ) => {
+ 
+ 			var a = new Color( 0.0, 0.0, 0.0 );
+diff --git a/test/unit/src/math/Euler.tests.js b/test/unit/src/math/Euler.tests.js
+index bf92662..6483feb 100644
+--- a/test/unit/src/math/Euler.tests.js
++++ b/test/unit/src/math/Euler.tests.js
+@@ -350,6 +350,14 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterator', ( assert ) => {
++
++			var a = new Euler( x, y, z, 'YXZ' );
++
++			assert.deepEqual( [ ...a ], [ x, y, z ], 'iteration yields x, y, z without order' );
++
++		} );
++
+ 		QUnit.test( 'fromArray', ( assert ) => {
+ 
+ 			var a = new Euler();
+diff --git a/test/unit/src/math/Quaternion.tests.js b/test/unit/src/math/Quaternion.tests.js
+index fe8bd2c..122c292 100644
+--- a/test/unit/src/math/Quaternion.tests.js
++++ b/test/unit/src/math/Quaternion.tests.js
+@@ -754,6 +754,14 @@ export default QUnit.module( 'Maths', () => {
+ 
+ 		} );
+ 
++		QUnit.test( 'iterator', ( assert ) => {
++
++			var a = new Quaternion( x, y, z, w );
++
++			assert.deepEqual( [ ...a ], [ x, y, z, w ], 'iteration yields x, y, z, w' );
++
++		} );
++
+ 		QUnit.test( 'fromBufferAttribute', ( assert ) => {
+ 
+ 			var a = new Quaternion();

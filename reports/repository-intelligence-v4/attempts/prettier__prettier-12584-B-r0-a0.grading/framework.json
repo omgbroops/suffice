@@ -1,0 +1,86 @@
+{
+  "numFailedTestSuites": 1,
+  "numFailedTests": 1,
+  "numPassedTestSuites": 1,
+  "numPassedTests": 2,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 2,
+  "numTotalTests": 3,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": true,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 1,
+    "filesUpdated": 0,
+    "matched": 2,
+    "total": 3,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 1,
+    "updated": 0
+  },
+  "startTime": 1794282159986,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "basic.vue"
+          ],
+          "failureMessages": [],
+          "fullName": "basic.vue format",
+          "location": null,
+          "status": "passed",
+          "title": "format"
+        },
+        {
+          "ancestorTitles": [
+            "not-working-with-non-ts-script.vue"
+          ],
+          "failureMessages": [
+            "Error: expect(received).toMatchSnapshot()\n\nSnapshot name: `not-working-with-non-ts-script.vue format 1`\n\n- Snapshot  - 1\n+ Received  + 1\n\n@@ -9,11 +9,11 @@\n\n  <script></script>\n\n  =====================================output=====================================\n  <template>\n-   <p v-if=\"isFolder(file)\">{{ (   file as   mymodule.Folder    ).deadline }}</p>\n+   <p v-if=\"isFolder(file)\">{{ (file as mymodule.Folder).deadline }}</p>\n  </template>\n\n  <script></script>\n\n  ================================================================================\n    at runTest (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12584-B-r0-a0\\independent-grade\\tests\\config\\format-test.js:334:5)\n    at Object.<anonymous> (C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12584-B-r0-a0\\independent-grade\\tests\\config\\format-test.js:267:17)\n    at Promise.then.completed (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\utils.js:391:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\utils.js:316:10)\n    at _callCircusTest (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\run.js:218:40)\n    at _runTest (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\run.js:155:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\run.js:66:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\run.js:60:9)\n    at run (C:\\Users\\Public\\SufficeV4\\deps-fe8d0d9ab1801ddf6af5\\node_modules\\jest-circus\\build\\run.js:25:3)"
+          ],
+          "fullName": "not-working-with-non-ts-script.vue format",
+          "location": null,
+          "status": "failed",
+          "title": "format"
+        }
+      ],
+      "endTime": 1794282161955,
+      "message": "  ● not-working-with-non-ts-script.vue › format\n\n    expect(received).toMatchSnapshot()\n\n    Snapshot name: `not-working-with-non-ts-script.vue format 1`\n\n    - Snapshot  - 1\n    + Received  + 1\n\n    @@ -9,11 +9,11 @@\n\n      <script></script>\n\n      =====================================output=====================================\n      <template>\n    -   <p v-if=\"isFolder(file)\">{{ (   file as   mymodule.Folder    ).deadline }}</p>\n    +   <p v-if=\"isFolder(file)\">{{ (file as mymodule.Folder).deadline }}</p>\n      </template>\n\n      <script></script>\n\n      ================================================================================\n\n      332 |       CURSOR_PLACEHOLDER,\n      333 |     })\n    > 334 |   ).toMatchSnapshot();\n          |     ^\n      335 |\n      336 |   if (!FULL_TEST) {\n      337 |     return;\n\n      at runTest (tests/config/format-test.js:334:5)\n      at Object.<anonymous> (tests/config/format-test.js:267:17)\n",
+      "name": "C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12584-B-r0-a0\\independent-grade\\tests\\format\\vue\\ts-expression\\jsfmt.spec.js",
+      "startTime": 1794282160119,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "basic.vue"
+          ],
+          "failureMessages": [],
+          "fullName": "basic.vue format",
+          "location": null,
+          "status": "passed",
+          "title": "format"
+        }
+      ],
+      "endTime": 1794282162881,
+      "message": "",
+      "name": "C:\\Users\\Public\\SufficeV4\\grade-prettier__prettier-12584-B-r0-a0\\independent-grade\\tests\\format\\vue\\ts-event-binding\\jsfmt.spec.js",
+      "startTime": 1794282161984,
+      "status": "passed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}
