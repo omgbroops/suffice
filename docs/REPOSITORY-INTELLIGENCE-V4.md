@@ -324,3 +324,37 @@ All tasks are public historical changes and may be training-contaminated. The fu
 | [mrdoob/three.js #18648](https://github.com/mrdoob/three.js/pull/18648) | cross-file | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
 | [mrdoob/three.js #23796](https://github.com/mrdoob/three.js/pull/23796) | cross-file | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
 | [mrdoob/three.js #22566](https://github.com/mrdoob/three.js/pull/22566) | cross-file | Historical API expectations and external linked repros; QUnit TODOs remain distinct from passed cases. |
+
+## Post-restart resource-policy amendment
+
+The resource-wait recovery completed C and Sol Medium before the user's restart.
+There are four executed, fully receipted primary attempts on Serverless 5926: all
+four completed normally and failed the frozen acceptance criteria. Estimated
+cost including five smoke attempts is $0.16922650 at this checkpoint. No paired
+task has both repetitions yet. The zero-request Sol launch remains separate.
+
+On November 9 (Chicago time), the user explicitly authorized trying the serial
+experiment while studying after restarting the PC. Available physical RAM was
+still about 1.1 GiB, with about 21.2 GiB disk available. An offline sandbox,
+graph-invalidation/cache and catalog preflight passed again after reboot,
+without further model calls. Its UTC artifact timestamp is November 10.
+
+The immutable original protocol and source archive remain intact. The explicit
+`infrastructure/low-memory-amendment.json` records derived admission executors:
+parent/preparation minimum free RAM 0.75 GiB, worker minimum 0.5 GiB. The minimum
+disk remains 6 GiB, worker heap remains 768 MiB, test-child heap remains 384 MiB,
+and concurrency remains one. Models, efforts, prompts, tools, graph/controller,
+grading and per-attempt token/wall/tool limits remain unchanged. The $25 ledger
+continues to include all earlier v4 cost. No coding outcome is retried.
+
+`node scripts/run-intelligence-v4-low-memory.mjs` verifies all frozen originals,
+reproduces the declared changes, hashes the generated executors, and starts the
+remaining schedule. Import paths are rebased to the same original modules.
+`--check-only` verifies the derivation without requesting a model. New manifests
+and results carry the resource-policy phase and policy hash. Aggregate results
+include phase-stratified four-condition rounds, and the initial four runs must
+not be described as having identical host starting conditions to later runs.
+
+Lower launch floors can increase paging and runtime variability; they do not
+raise the fixed heaps or prove sufficient physical headroom. Actual per-attempt
+resources and infrastructure failures remain part of the reported outcome.

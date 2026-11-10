@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "createdAt": "2026-11-10T02:00:52.607Z",
+  "policy": {
+    "phase": "post-restart-low-memory-v2",
+    "authorization": "User explicitly asked to try continuing while studying after restarting the PC.",
+    "originalProtocolSha256": "363d302b4b5c67535a2ad4c8b9b537c00fda6cc7f68d02d011ff65a38511617f",
+    "parentMinimumFreeRAMGiB": 0.75,
+    "workerMinimumFreeRAMGiB": 0.5,
+    "preparationMinimumFreeRAMGiB": 0.75,
+    "minimumFreeDiskGiB": 6,
+    "workerHeapMiB": 768,
+    "projectHeapMiB": 384,
+    "maxConcurrent": 1,
+    "temperatureC": null,
+    "unchanged": "Exact models/efforts, prompts, graph, controller, tools, grading, token/wall/tool budgets and total $25 cap.",
+    "analysis": "Preserve and identify the first four model attempts under the original launch floors. Report phase-stratified results; do not describe host starting conditions as identical."
+  },
+  "policySha256": "fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6",
+  "files": {
+    "worker": {
+      "originalPath": "scripts/intelligence-v4-worker.mjs",
+      "originalSha256": "2727565d408b2e96c258dd775daa2660c4cb76f396b9bef20cf224605e7d01b5",
+      "derivedPath": ".suffice/intelligence-v4/low-memory/worker.mjs",
+      "derivedSha256": "fcd8f8d16345c21380ba51df62e1f4078a2483a5bd0afd05dfe4ea4f6c2eb02e",
+      "changes": [
+        [
+          "resources[0].freeRAM<1.75*1024**3",
+          "resources[0].freeRAM<0.5*1024**3"
+        ],
+        [
+          "version:1,item,limits:LIMITS",
+          "version:1,resourcePolicyPhase:\"post-restart-low-memory-v2\",resourcePolicySha256:\"fac70458b8e63ba178fbcca40989ded25ba14fb73d2502a42f90601f1cc6f8d6\",item,limits:LIMITS"
+        ]
+      ],
+      "importRebase": "Relative imports become absolute file URLs to the exact same original modules."
+    },
+    "coordinator": {
+      "originalPath": "scripts/intelligence-v4.mjs",
+      "originalSha256": "254e6883212a36a63791e46315a3c79ad130b5b4992690e0d5a1ff9890167065",
+      "derivedPath": ".suffice/intelligence-v4/low-memory/coordinator.mjs",
+      "derivedSha256": "c0448b634775767ed946cf1d4c094ef9191936bf07c953402b61caf3b9fa2bfd",
+      "changes": [
+        [
+          "freemem()<2*1024**3",
+          "freemem()<0.75*1024**3"
+        ],
+        [
+          "scripts/intelligence-v4-worker.mjs",
+          ".suffice/intelligence-v4/low-memory/worker.mjs"
+        ]
+      ],
+      "importRebase": "Relative imports become absolute file URLs to the exact same original modules."
+    },
+    "prepare": {
+      "originalPath": "scripts/prepare-intelligence-v4.mjs",
+      "originalSha256": "3d7479dadb720fe0640a486ec23eef097ee5fbdfa1eb66ac4c4966c89b75aae9",
+      "derivedPath": ".suffice/intelligence-v4/low-memory/prepare.mjs",
+      "derivedSha256": "1aadf84d554aadd3329f9c7fc43b478d5216bec47180a7b68f9e98b63ed39c24",
+      "changes": [
+        [
+          "freemem()<1.75*1024**3",
+          "freemem()<0.75*1024**3"
+        ],
+        [
+          "need 1.75 GiB RAM",
+          "need 0.75 GiB RAM"
+        ]
+      ],
+      "importRebase": "Relative imports become absolute file URLs to the exact same original modules."
+    },
+    "campaign": {
+      "originalPath": "scripts/campaign-intelligence-v4.mjs",
+      "originalSha256": "f985d8a7c77f76268fe3d51a8a5e5f4b51d262e77f77f672b81138607079feec",
+      "derivedPath": ".suffice/intelligence-v4/low-memory/campaign.mjs",
+      "derivedSha256": "4612b707eb4163386a7bcd3bdb21dfc8b80bd1dc33d8e6e3d99f6c629cdf1bf1",
+      "changes": [
+        [
+          "scripts/intelligence-v4.mjs",
+          ".suffice/intelligence-v4/low-memory/coordinator.mjs"
+        ],
+        [
+          "scripts/prepare-intelligence-v4.mjs",
+          ".suffice/intelligence-v4/low-memory/prepare.mjs"
+        ]
+      ],
+      "importRebase": "Relative imports become absolute file URLs to the exact same original modules."
+    }
+  }
+}
