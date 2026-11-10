@@ -1,0 +1,1085 @@
+{
+  "task": "serverless__serverless-4576",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-4576-B-r0-a0/workspace",
+    "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+    "tree": "9245ece1bf181953bde6b05125c010626b307941"
+  },
+  "runId": "serverless__serverless-4576-B-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 394127.2754,
+  "usage": {
+    "input": 105057,
+    "cacheRead": 1515264,
+    "cacheWrite": 0,
+    "output": 17042,
+    "estimatedApiUsd": 0.03417933999999999,
+    "modelCalls": 25,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.03417933999999999,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "Create #create() should copy \"aws-nodejs\" template from local path",
+      "Create #create() should copy \"aws-nodejs\" template from local path with a custom name",
+      "#walkDirSync() should check noLinks option"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 3,
+      "regressionsPassed": 3,
+      "missing": [],
+      "failures": [
+        "Create #create() should copy \"aws-nodejs\" template from local path",
+        "Create #create() should copy \"aws-nodejs\" template from local path with a custom name",
+        "#walkDirSync() should check noLinks option"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#walkDirSync() should check noLinks option": 1,
+        "#walkDirSync() should return an array with corresponding paths to the found files": 1,
+        "Create #constructor() should have commands": 1,
+        "Create #constructor() should have hooks": 1,
+        "Create #constructor() should run promise chain in order for \"create:create\" hook": 1,
+        "Create #create() should copy \"aws-nodejs\" template from local path": 1,
+        "Create #create() should copy \"aws-nodejs\" template from local path with a custom name": 1,
+        "Create #create() should create a custom renamed service in the directory if using the \"path\" and \"name\" option": 1,
+        "Create #create() should create a plugin in the current directory": 1,
+        "Create #create() should create a renamed service in the directory if using the \"path\" option": 1,
+        "Create #create() should create a service in the directory if using the \"path\" option with digits": 1,
+        "Create #create() should display ascii greeting": 1,
+        "Create #create() should generate scaffolding for \"aws-csharp\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-fsharp\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-groovy-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-java-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-java-maven\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-jvm-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-jvm-maven\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-nodejs-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs-ecma-script\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs-typescript\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-python\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-python3\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-scala-sbt\" template": 1,
+        "Create #create() should generate scaffolding for \"azure-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"google-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"hello-world\" template": 1,
+        "Create #create() should generate scaffolding for \"kubeless-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"kubeless-python\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-php\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-python\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-swift\" template": 1,
+        "Create #create() should generate scaffolding for \"plugin\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-python\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-ruby\" template": 1,
+        "Create #create() should generate scaffolding for \"webtasks-nodejs\" template": 1,
+        "Create #create() should overwrite the name for the service if user passed name": 1,
+        "Create #create() should reject if download fails": 1,
+        "Create #create() should resolve if download succeeds": 1,
+        "Create #create() should set servicePath based on cwd": 1,
+        "Create #create() should throw error if the directory for the service already exists in cwd": 1,
+        "Create #create() should throw error if there are existing template files in cwd": 1,
+        "Create #create() should throw error if user passed unsupported template": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 3,
+    "requiredPassed": 3
+  },
+  "changed": [
+    "docs/providers/aws/cli-reference/create.md",
+    "lib/plugins/create/create.js",
+    "lib/plugins/create/create.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/utils/fs/copyDirContentsSync.js",
+    "lib/utils/fs/walkDirSync.js"
+  ],
+  "extraChangedFiles": [
+    "docs/providers/aws/cli-reference/create.md",
+    "lib/plugins/create/create.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 25,
+  "editCalls": 8,
+  "verificationCalls": 11,
+  "toolCalls": 69,
+  "graphQueries": [
+    {
+      "at": "2026-11-10T14:26:41.437Z",
+      "type": "graph_query",
+      "operation": "begin",
+      "reason": "task-start-baseline"
+    },
+    {
+      "at": "2026-11-10T14:26:44.769Z",
+      "type": "graph_query",
+      "operation": "initial",
+      "reason": "initial-context-selection",
+      "args": "Resolve the upstream engineering issue below. Work in this checkout using the preprovisioned dependencies. The bash tool executes PowerShell 7 with no profile inside an isolated Windows filesystem; external networking is disabled. You may change production code, public tests and documentation. Preserve package metadata, dependency locks, configuration, native-verify.cjs, verification.json and .v4-* verification helpers. Do not install packages or attempt to access other workspaces. Run node native-verify.cjs for the repository-derived public smoke suite; you may run it with --tests-json PATH to test other existing public unit files. Independent grading reconstructs production changes in a pristine checkout and applies held-out upstream tests. Existing public snapshots may predate the requested behavior; do not undo that behavior merely to satisfy old snapshots.\n\nUnable to download template from a private repo or an internal path\n# This is a Feature Proposal\r\n\r\n## Description\r\n\r\n* When doing a `serverless create`, we can specify a `template-url` to fetch the template from a git repo. However this does not works with private repositories because it only use HTTPS and not SSH. There is no option to specify a local path for the template.\r\n* We could add a new option `--template-path` that would avoid downloading the template from a repo by copying files from the local path. Let me know if that makes sense, I could create a PR to add this feature.\r\n\r\n## Additional Data\r\n\r\n* ***Serverless Framework Version you're using***: 8.8.0\r\n* ***Operating System***: darwin\r\n* ***Stack Trace***: `HTTPError: Response code 404 (Not Found)`\n"
+    },
+    {
+      "at": "2026-11-10T14:26:53.043Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:26:57.466Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:27:09.064Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:27:16.889Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:27:41.160Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:28:51.058Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:28:52.665Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:29:02.031Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:29:15.535Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:29:28.040Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:29:39.704Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:29:58.708Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:30:28.688Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:30:35.861Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:30:45.442Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:30:53.825Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:30:55.334Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:31:10.942Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:31:12.650Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:31:26.804Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:31:37.113Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:31:47.372Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:32:03.079Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:32:24.205Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:32:25.840Z",
+      "type": "graph_query",
+      "operation": "get_relevant_tests",
+      "reason": "post-edit-test-recommendation",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:32:39.212Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:32:48.746Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    },
+    {
+      "at": "2026-11-10T14:32:57.728Z",
+      "type": "graph_query",
+      "operation": "get_impact_analysis",
+      "reason": "post-tool-change-check",
+      "args": {
+        "limit": 12
+      }
+    }
+  ],
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T14:26:44.768Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 3331.7198000000026,
+      "parsedFiles": 401,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 70369912,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:26:46.428Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1656.3158000000003,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -49687520,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:26:54.334Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1291.0132000000012,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -25610968,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:26:58.776Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1311.2561999999962,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -24912528,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:27:10.610Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1546.1578999999983,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 4587784,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:27:18.221Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1333.4328999999998,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 2894992,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:27:42.486Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1326.1373000000021,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -3296272,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:28:52.650Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1592.5043000000005,
+      "parsedFiles": 2,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 54788096,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:28:53.938Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1272.8570000000182,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 4629496,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:03.416Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1385.7719999999972,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 2825688,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:16.769Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1234.27429999999,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 6045016,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:29.313Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1273.4881000000169,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": -4194952,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:40.935Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1231.4133999999904,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 7829176,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:00.091Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1383.910199999984,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": -25501528,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:29.930Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1242.397100000002,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": -3885440,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:37.180Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1319.6811999999918,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 28749808,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:47.000Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1558.3252000000211,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 28645496,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:55.325Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "89e488ad4e0d886628a62e406280c4157286c03fa0454b570284ac31550f6a7a",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "e5140a35694f01dd668130b38f49554552f5a6db2f3853a9c12cb3b8ef94087e"
+      },
+      "latencyMs": 1500.0020999999833,
+      "parsedFiles": 2,
+      "fileCount": 401,
+      "cacheBytes": 18446800,
+      "heapDeltaBytes": -28771128,
+      "graphBytes": 25875714
+    },
+    {
+      "at": "2026-11-10T14:30:56.556Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "89e488ad4e0d886628a62e406280c4157286c03fa0454b570284ac31550f6a7a",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "e5140a35694f01dd668130b38f49554552f5a6db2f3853a9c12cb3b8ef94087e"
+      },
+      "latencyMs": 1223.1089000000502,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446800,
+      "heapDeltaBytes": 28781080,
+      "graphBytes": 25875714
+    },
+    {
+      "at": "2026-11-10T14:31:12.634Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1692.2900999999838,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 23123048,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:13.897Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1255.520599999989,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -67682496,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:28.165Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1361.1143999999622,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -18793432,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:38.407Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1294.9250000000466,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -37043512,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:48.660Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1288.220399999991,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 28745000,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:04.342Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1263.3359000000055,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -36762656,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:25.833Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1629.6107000000193,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 37082448,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:27.082Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1242.5672999999952,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -74697920,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:40.456Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1244.0395000000135,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 28460744,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:50.142Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1396.4737000000314,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -37772776,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:58.981Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1252.462499999965,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -27737336,
+      "graphBytes": 25893508
+    }
+  ],
+  "evidenceUptake": [
+    {
+      "phase": "initial",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/authorizers.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/resources.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/deployment.test.js",
+        "lib/plugins/aws/package/compile/events/apiGateway/lib/apiKeys.test.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/create/create.js",
+        "lib/plugins/create/create.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "read",
+          "path": "lib/plugins/create/create.js",
+          "callId": "call_2b31a61f559a493bb888d21ed5cb596a|ctc_0890a0f62026118f016af32a2c203887d1bef6e9ef4b2f1c49/1"
+        },
+        {
+          "tool": "read",
+          "path": "lib/plugins/create/create.test.js",
+          "callId": "call_2b31a61f559a493bb888d21ed5cb596a|ctc_0890a0f62026118f016af32a2c203887d1bef6e9ef4b2f1c49/2"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.js",
+          "callId": "call_61cbf88fa7c34451ae4c360180d0bad8|ctc_0890a0f62026118f016af32a9929c887d1886b14adcbce2db9/1"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.test.js",
+          "callId": "call_61cbf88fa7c34451ae4c360180d0bad8|ctc_0890a0f62026118f016af32a9929c887d1886b14adcbce2db9/2"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.test.js",
+          "callId": "call_fde0c8bb1e6f4feab1df4d4960240c5f|ctc_0890a0f62026118f016af32aace6bc87d1aab8b04a9a218b9d/1"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.js",
+          "callId": "call_9871d4106b594a678b27933c58f8ce5a|ctc_0890a0f62026118f016af32af632c487d1866ed2fde175d7ca/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node node_modules/mocha/bin/_mocha lib/plugins/create/create.test.js",
+        "node node_modules/eslint/bin/eslint.js lib/plugins/create/create.js lib/plugins/create/create.test.js",
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "git diff -- lib/plugins/create/create.js lib/plugins/create/create.test.js docs/providers/aws/cli-reference/create.md",
+        "node --check lib/plugins/create/create.js",
+        "$files = @('lib/plugins/create/create.js','lib/plugins/create/create.test.js'); foreach ($file in $files) { $n=0; Get-Content $file | ForEach-Object { $n++; if ($_.Length -gt 100) { Write-Output \"$file:$n:$($_.Length):$_\" } } }",
+        "$files = @('lib/plugins/create/create.js','lib/plugins/create/create.test.js'); foreach ($file in $files) { $n=0; Get-Content $file | ForEach-Object { $n++; if ($_.Length -gt 100) { Write-Output \"${file}:$n:$($_.Length):$_\" } } }",
+        "$files = @('lib/plugins/create/create.js','lib/plugins/create/create.test.js'); foreach ($file in $files) { $n=0; Get-Content $file | ForEach-Object { $n++; if ($_.Length -gt 100) { Write-Output ($file + ':' + $n + ':' + $_.Length + ':' + $_) } } }",
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js",
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/create/create.js",
+        "lib/plugins/create/create.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.test.js",
+          "callId": "call_fde0c8bb1e6f4feab1df4d4960240c5f|ctc_0890a0f62026118f016af32aace6bc87d1aab8b04a9a218b9d/1"
+        },
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.js",
+          "callId": "call_9871d4106b594a678b27933c58f8ce5a|ctc_0890a0f62026118f016af32af632c487d1866ed2fde175d7ca/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js",
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/create/create.js",
+        "lib/plugins/create/create.test.js"
+      ],
+      "subsequentTouches": [
+        {
+          "tool": "edit",
+          "path": "lib/plugins/create/create.js",
+          "callId": "call_9871d4106b594a678b27933c58f8ce5a|ctc_0890a0f62026118f016af32af632c487d1866ed2fde175d7ca/1"
+        }
+      ],
+      "subsequentTestCommands": [
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js",
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    },
+    {
+      "phase": "after-edit",
+      "reason": null,
+      "candidatePaths": [
+        "lib/plugins/create/create.js",
+        "lib/plugins/create/create.test.js"
+      ],
+      "subsequentTouches": [],
+      "subsequentTestCommands": [
+        "node bin/test --require=sinon-bluebird lib/plugins/create/create.test.js",
+        "node --check lib/plugins/create/create.js"
+      ],
+      "causalInfluence": "unestablished; temporal path overlap only"
+    }
+  ],
+  "patches": [
+    {
+      "path": "docs/providers/aws/cli-reference/create.md",
+      "before": "<!--\ntitle: Serverless Framework Commands - AWS Lambda - Create\nmenuText: create\nmenuOrder: 2\ndescription: Creates a new Service in your current working directory\nlayout: Doc\n-->\n\n<!-- DOCS-SITE-LINK:START automatically generated  -->\n### [Read this on the main serverless docs site](https://www.serverless.com/framework/docs/providers/aws/cli-reference/create)\n<!-- DOCS-SITE-LINK:END -->\n\n# AWS - Create\n\nCreates a new service in the current working directory based on the provided template.\n\n**Create service in current working directory:**\n\n```bash\nserverless create --template aws-nodejs\n```\n\n**Create service in new folder:**\n\n```bash\nserverless create --template aws-nodejs --path myService\n```\n\n**Create service in new folder using a custom template:**\n\n```bash\nserverless create --template-url https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs --path myService\n```\n\n## Options\n- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.\n- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.\n- `--path` or `-p` The path where the service should be created.\n- `--name` or `-n` the name of the service in `serverless.yml`.\n\n## Provided lifecycle events\n- `create:create`\n\n## Available Templates\n\nTo see a list of available templates run `serverless create --help`\n\nMost commonly used templates:\n\n- aws-nodejs\n- aws-nodejs-typescript\n- aws-nodejs-ecma-script\n- aws-python\n- aws-python3\n- aws-kotlin-jvm-maven\n- aws-kotlin-jvm-gradle\n- aws-kotlin-nodejs-gradle\n- aws-groovy-gradle\n- aws-java-maven\n- aws-java-gradle\n- aws-scala-sbt\n- aws-csharp\n- aws-fsharp\n- plugin\n\n## Examples\n\n### Creating a new service\n\n```bash\nserverless create --template aws-nodejs --name my-special-service\n```\n\nThis example will generate scaffolding for a service with `AWS` as a provider and `nodejs` as runtime. The scaffolding\nwill be generated in the current working directory.\n\nYour new service will have a default stage called `dev` and a default region inside that stage called `us-east-1`.\nThe provider which is used for deployment later on is AWS (Amazon Web Services).\n\n### Creating a named service in a (new) directory\n\n```bash\nserverless create --template aws-nodejs --path my-new-service\n```\n\nThis example will generate scaffolding for a service with `AWS` as a provider and `nodejs` as runtime. The scaffolding\nwill be generated in the `my-new-service` directory. This directory will be created if not present. Otherwise Serverless\nwill use the already present directory.\n\nAdditionally Serverless will rename the service according to the path you provide. In this example the service will be\nrenamed to `my-new-service`.\n\n### Creating a new plugin\n\n```\nserverless create --template plugin\n```\n\nThis example will generate scaffolding for a hello world plugin that demonstrates how to create a new command and how to listen to the various events available.\n",
+      "after": "<!--\ntitle: Serverless Framework Commands - AWS Lambda - Create\nmenuText: create\nmenuOrder: 2\ndescription: Creates a new Service in your current working directory\nlayout: Doc\n-->\n\n<!-- DOCS-SITE-LINK:START automatically generated  -->\n### [Read this on the main serverless docs site](https://www.serverless.com/framework/docs/providers/aws/cli-reference/create)\n<!-- DOCS-SITE-LINK:END -->\n\n# AWS - Create\n\nCreates a new service in the current working directory based on the provided template.\n\n**Create service in current working directory:**\n\n```bash\nserverless create --template aws-nodejs\n```\n\n**Create service in new folder:**\n\n```bash\nserverless create --template aws-nodejs --path myService\n```\n\n**Create service in new folder using a custom template:**\n\n```bash\nserverless create --template-url https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs --path myService\n```\n\n**Create service from a local template directory:**\n\n```bash\nserverless create --template-path ../my-template --path myService\n```\n\n## Options\n- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.\n- `--template-url` or `-u` A URL to a custom template. **Required if --template and --template-path are not present**.\n- `--template-path` A local directory containing the template files. **Required if --template and --template-url are not present**.\n- `--path` or `-p` The path where the service should be created.\n- `--name` or `-n` the name of the service in `serverless.yml`.\n\n## Provided lifecycle events\n- `create:create`\n\n## Available Templates\n\nTo see a list of available templates run `serverless create --help`\n\nMost commonly used templates:\n\n- aws-nodejs\n- aws-nodejs-typescript\n- aws-nodejs-ecma-script\n- aws-python\n- aws-python3\n- aws-kotlin-jvm-maven\n- aws-kotlin-jvm-gradle\n- aws-kotlin-nodejs-gradle\n- aws-groovy-gradle\n- aws-java-maven\n- aws-java-gradle\n- aws-scala-sbt\n- aws-csharp\n- aws-fsharp\n- plugin\n\n## Examples\n\n### Creating a new service\n\n```bash\nserverless create --template aws-nodejs --name my-special-service\n```\n\nThis example will generate scaffolding for a service with `AWS` as a provider and `nodejs` as runtime. The scaffolding\nwill be generated in the current working directory.\n\nYour new service will have a default stage called `dev` and a default region inside that stage called `us-east-1`.\nThe provider which is used for deployment later on is AWS (Amazon Web Services).\n\n### Creating a named service in a (new) directory\n\n```bash\nserverless create --template aws-nodejs --path my-new-service\n```\n\nThis example will generate scaffolding for a service with `AWS` as a provider and `nodejs` as runtime. The scaffolding\nwill be generated in the `my-new-service` directory. This directory will be created if not present. Otherwise Serverless\nwill use the already present directory.\n\nAdditionally Serverless will rename the service according to the path you provide. In this example the service will be\nrenamed to `my-new-service`.\n\n### Creating a new plugin\n\n```\nserverless create --template plugin\n```\n\nThis example will generate scaffolding for a hello world plugin that demonstrates how to create a new command and how to listen to the various events available.\n"
+    },
+    {
+      "path": "lib/plugins/create/create.js",
+      "before": "'use strict';\n\nconst BbPromise = require('bluebird');\nconst path = require('path');\nconst fse = require('fs-extra');\nconst _ = require('lodash');\n\nconst userStats = require('../../utils/userStats');\nconst download = require('../../utils/downloadTemplateFromRepo');\n\n// class wide constants\nconst validTemplates = [\n  'aws-nodejs',\n  'aws-nodejs-typescript',\n  'aws-nodejs-ecma-script',\n  'aws-python',\n  'aws-python3',\n  'aws-groovy-gradle',\n  'aws-java-maven',\n  'aws-java-gradle',\n  'aws-kotlin-jvm-maven',\n  'aws-kotlin-jvm-gradle',\n  'aws-kotlin-nodejs-gradle',\n  'aws-scala-sbt',\n  'aws-csharp',\n  'aws-fsharp',\n  'azure-nodejs',\n  'google-nodejs',\n  'kubeless-python',\n  'kubeless-nodejs',\n  'openwhisk-nodejs',\n  'openwhisk-php',\n  'openwhisk-python',\n  'openwhisk-swift',\n  'spotinst-nodejs',\n  'spotinst-python',\n  'spotinst-ruby',\n  'webtasks-nodejs',\n  'plugin',\n\n  // this template is used to streamline the onboarding process\n  // it uses the Node.js runtime and AWS provider\n  'hello-world',\n];\n\nconst humanReadableTemplateList = `${validTemplates.slice(0, -1)\n  .map((template) => `\"${template}\"`).join(', ')} and \"${validTemplates.slice(-1)}\"`;\n\nclass Create {\n  constructor(serverless, options) {\n    this.serverless = serverless;\n    this.options = options;\n\n    this.commands = {\n      create: {\n        usage: 'Create new Serverless service',\n        lifecycleEvents: [\n          'create',\n        ],\n        options: {\n          template: {\n            usage: `Template for the service. Available templates: ${humanReadableTemplateList}`,\n            shortcut: 't',\n          },\n          'template-url': {\n            usage: 'Template URL for the service. Supports: GitHub, BitBucket',\n            shortcut: 'u',\n          },\n          path: {\n            usage: 'The path where the service should be created (e.g. --path my-service)',\n            shortcut: 'p',\n          },\n          name: {\n            usage: 'Name for the service. Overwrites the default name of the created service.',\n            shortcut: 'n',\n          },\n        },\n      },\n    };\n\n    this.hooks = {\n      'create:create': () => BbPromise.bind(this)\n        .then(this.create),\n    };\n  }\n\n  create() {\n    this.serverless.cli.log('Generating boilerplate...');\n\n    if ('template' in this.options) {\n      this.createFromTemplate();\n    } else if ('template-url' in this.options) {\n      return download.downloadTemplateFromRepo(\n        this.options['template-url'],\n        this.options.name,\n        this.options.path\n      )\n        .then(dirName => {\n          const message = [\n            `Successfully installed \"${dirName}\" `,\n            `${this.options.name && this.options.name !== dirName ? `as \"${dirName}\"` : ''}`,\n          ].join('');\n\n          this.serverless.cli.log(message);\n\n          userStats.track('service_created', {\n            template: this.options.template,\n            serviceName: this.options.name,\n          });\n        })\n        .catch(err => {\n          throw new this.serverless.classes.Error(err);\n        });\n    } else {\n      const errorMessage = [\n        'You must either pass a template name (--template) or a ',\n        'a URL (--template-url).',\n      ].join('');\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n    return BbPromise.resolve();\n  }\n\n  createFromTemplate() {\n    const notPlugin = this.options.template !== 'plugin';\n\n    if (validTemplates.indexOf(this.options.template) === -1) {\n      const errorMessage = [\n        `Template \"${this.options.template}\" is not supported.`,\n        ` Supported templates are: ${humanReadableTemplateList}.`,\n      ].join('');\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    // store the custom options for the service if given\n    const boilerplatePath = _.toString(this.options.path);\n    const serviceName = _.toString(this.options.name);\n    const templateSrcDir = path.join(this.serverless.config.serverlessPath,\n      'plugins', 'create', 'templates', this.options.template);\n\n    // create (if not yet present) and chdir into the directory for the service\n    if (boilerplatePath) {\n      const newPath = path.join(process.cwd(), boilerplatePath);\n\n      if (this.serverless.utils.dirExistsSync(newPath)) {\n        const errorMessage = [\n          `The directory \"${newPath}\" already exists, and serverless will not overwrite it. `,\n          'Rename or move the directory and try again if you want serverless to create it\"',\n        ].join('');\n\n        throw new this.serverless.classes.Error(errorMessage);\n      }\n\n      this.serverless.cli.log(`Generating boilerplate in \"${newPath}\"`);\n\n      fse.mkdirsSync(newPath);\n      process.chdir(newPath);\n    } else {\n      // ensure no template file already exists in cwd that we may overwrite\n      const templateFullFilePaths = this.serverless.utils.walkDirSync(templateSrcDir);\n\n      templateFullFilePaths.forEach(ffp => {\n        const filename = path.basename(ffp);\n        if (this.serverless.utils.fileExistsSync(path.join(process.cwd(), filename))) {\n          const errorMessage = [\n            `The file \"${filename}\" already exists, and serverless will not overwrite it. `,\n            `Move the file and try again if you want serverless to write a new \"${filename}\"`,\n          ].join('');\n\n          throw new this.serverless.classes.Error(errorMessage);\n        }\n      });\n    }\n\n    if (notPlugin) {\n      this.serverless.config.update({ servicePath: process.cwd() });\n    }\n\n    // copy template files recursively to cwd\n    // while keeping template file tree\n    try {\n      this.serverless.utils.copyDirContentsSync(templateSrcDir, process.cwd());\n\n      // NPM renames .gitignore to .npmignore on publish so we have to rename it.\n      if (fse.existsSync(path.join(process.cwd(), 'gitignore'))) {\n        fse.renameSync(path.join(process.cwd(), 'gitignore'),\n          path.join(process.cwd(), '.gitignore'));\n      }\n    } catch (err) {\n      const errorMessage = [\n        'Error unable to create a service in this directory. ',\n        'Please check that you have the required permissions to write to the directory',\n      ].join('');\n\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    // rename the service if the user has provided a path via options and is creating a service\n    if ((boilerplatePath || serviceName) && notPlugin) {\n      const newServiceName = serviceName || boilerplatePath.split(path.sep).pop();\n      const serverlessYmlFilePath = path\n        .join(this.serverless.config.servicePath, 'serverless.yml');\n\n      let serverlessYmlFileContent = fse\n        .readFileSync(serverlessYmlFilePath).toString();\n\n      serverlessYmlFileContent = serverlessYmlFileContent\n        .replace(/service: .+/, `service: ${newServiceName}`);\n\n      fse.writeFileSync(serverlessYmlFilePath, serverlessYmlFileContent);\n    }\n\n    userStats.track('service_created', {\n      template: this.options.template,\n      serviceName,\n    });\n\n    this.serverless.cli.asciiGreeting();\n    this.serverless.cli\n      .log(`Successfully generated boilerplate for template: \"${this.options.template}\"`);\n\n    if (!(boilerplatePath || serviceName) && notPlugin) {\n      this.serverless.cli\n        .log('NOTE: Please update the \"service\" property in serverless.yml with your service name');\n    }\n  }\n\n}\n\nmodule.exports = Create;\n",
+      "after": "'use strict';\n\nconst BbPromise = require('bluebird');\nconst path = require('path');\nconst fse = require('fs-extra');\nconst _ = require('lodash');\n\nconst userStats = require('../../utils/userStats');\nconst download = require('../../utils/downloadTemplateFromRepo');\nconst renameService = require('../../utils/renameService').renameService;\n\n// class wide constants\nconst validTemplates = [\n  'aws-nodejs',\n  'aws-nodejs-typescript',\n  'aws-nodejs-ecma-script',\n  'aws-python',\n  'aws-python3',\n  'aws-groovy-gradle',\n  'aws-java-maven',\n  'aws-java-gradle',\n  'aws-kotlin-jvm-maven',\n  'aws-kotlin-jvm-gradle',\n  'aws-kotlin-nodejs-gradle',\n  'aws-scala-sbt',\n  'aws-csharp',\n  'aws-fsharp',\n  'azure-nodejs',\n  'google-nodejs',\n  'kubeless-python',\n  'kubeless-nodejs',\n  'openwhisk-nodejs',\n  'openwhisk-php',\n  'openwhisk-python',\n  'openwhisk-swift',\n  'spotinst-nodejs',\n  'spotinst-python',\n  'spotinst-ruby',\n  'webtasks-nodejs',\n  'plugin',\n\n  // this template is used to streamline the onboarding process\n  // it uses the Node.js runtime and AWS provider\n  'hello-world',\n];\n\nconst humanReadableTemplateList = `${validTemplates.slice(0, -1)\n  .map((template) => `\"${template}\"`).join(', ')} and \"${validTemplates.slice(-1)}\"`;\n\nclass Create {\n  constructor(serverless, options) {\n    this.serverless = serverless;\n    this.options = options;\n\n    this.commands = {\n      create: {\n        usage: 'Create new Serverless service',\n        lifecycleEvents: [\n          'create',\n        ],\n        options: {\n          template: {\n            usage: `Template for the service. Available templates: ${humanReadableTemplateList}`,\n            shortcut: 't',\n          },\n          'template-url': {\n            usage: 'Template URL for the service. Supports: GitHub, BitBucket',\n            shortcut: 'u',\n          },\n          'template-path': {\n            usage: 'Path to a local template directory for the service',\n          },\n          path: {\n            usage: 'The path where the service should be created (e.g. --path my-service)',\n            shortcut: 'p',\n          },\n          name: {\n            usage: 'Name for the service. Overwrites the default name of the created service.',\n            shortcut: 'n',\n          },\n        },\n      },\n    };\n\n    this.hooks = {\n      'create:create': () => BbPromise.bind(this)\n        .then(this.create),\n    };\n  }\n\n  create() {\n    this.serverless.cli.log('Generating boilerplate...');\n\n    if ('template' in this.options) {\n      this.createFromTemplate();\n    } else if ('template-path' in this.options) {\n      this.createFromPath();\n    } else if ('template-url' in this.options) {\n      return download.downloadTemplateFromRepo(\n        this.options['template-url'],\n        this.options.name,\n        this.options.path\n      )\n        .then(dirName => {\n          const message = [\n            `Successfully installed \"${dirName}\" `,\n            `${this.options.name && this.options.name !== dirName ? `as \"${dirName}\"` : ''}`,\n          ].join('');\n\n          this.serverless.cli.log(message);\n\n          userStats.track('service_created', {\n            template: this.options.template,\n            serviceName: this.options.name,\n          });\n        })\n        .catch(err => {\n          throw new this.serverless.classes.Error(err);\n        });\n    } else {\n      const errorMessage = [\n        'You must either pass a template name (--template), a URL (--template-url) ',\n        'or a local path (--template-path).',\n      ].join('');\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n    return BbPromise.resolve();\n  }\n\n  createFromPath() {\n    const templatePath = _.toString(this.options['template-path']);\n    if (!templatePath || !this.serverless.utils.dirExistsSync(path.resolve(templatePath))) {\n      const errorMessage = [\n        `The template path \"${templatePath}\" does not exist or is not a directory.`,\n      ].join('');\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    const templateSrcDir = path.resolve(templatePath);\n    const boilerplatePath = _.toString(this.options.path);\n    const serviceName = _.toString(this.options.name);\n    const servicePath = boilerplatePath ? path.resolve(boilerplatePath) : process.cwd();\n\n    if (boilerplatePath && fse.existsSync(servicePath)) {\n      const errorMessage = [\n        `The directory \"${servicePath}\" already exists, and serverless will not overwrite it.`,\n      ].join('');\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    const templateFullFilePaths = this.serverless.utils.walkDirSync(templateSrcDir);\n    if (!boilerplatePath) {\n      templateFullFilePaths.forEach((filePath) => {\n        const relativeFilePath = path.relative(templateSrcDir, filePath);\n        const targetPath = path.join(servicePath, relativeFilePath);\n        if (fse.existsSync(targetPath)) {\n          const errorMessage = [\n            `The file \"${relativeFilePath}\" already exists, and serverless will not overwrite it. `,\n            'Move the file and try again if you want serverless to write a new file',\n          ].join('');\n\n          throw new this.serverless.classes.Error(errorMessage);\n        }\n      });\n    } else {\n      fse.mkdirsSync(servicePath);\n    }\n\n    try {\n      this.serverless.utils.copyDirContentsSync(templateSrcDir, servicePath);\n    } catch (err) {\n      const errorMessage = [\n        'Error unable to create a service in this directory. ',\n        'Please check that you have the required permissions to write to the directory',\n      ].join('');\n\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    const newServiceName = serviceName || (boilerplatePath && path.basename(servicePath));\n    if (newServiceName) renameService(newServiceName, servicePath);\n\n    userStats.track('service_created', {\n      template: templatePath,\n      serviceName,\n    });\n\n    this.serverless.cli.asciiGreeting();\n    this.serverless.cli\n      .log(`Successfully generated boilerplate from local template: \"${templatePath}\"`);\n  }\n\n  createFromTemplate() {\n    const notPlugin = this.options.template !== 'plugin';\n\n    if (validTemplates.indexOf(this.options.template) === -1) {\n      const errorMessage = [\n        `Template \"${this.options.template}\" is not supported.`,\n        ` Supported templates are: ${humanReadableTemplateList}.`,\n      ].join('');\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    // store the custom options for the service if given\n    const boilerplatePath = _.toString(this.options.path);\n    const serviceName = _.toString(this.options.name);\n    const templateSrcDir = path.join(this.serverless.config.serverlessPath,\n      'plugins', 'create', 'templates', this.options.template);\n\n    // create (if not yet present) and chdir into the directory for the service\n    if (boilerplatePath) {\n      const newPath = path.join(process.cwd(), boilerplatePath);\n\n      if (this.serverless.utils.dirExistsSync(newPath)) {\n        const errorMessage = [\n          `The directory \"${newPath}\" already exists, and serverless will not overwrite it. `,\n          'Rename or move the directory and try again if you want serverless to create it\"',\n        ].join('');\n\n        throw new this.serverless.classes.Error(errorMessage);\n      }\n\n      this.serverless.cli.log(`Generating boilerplate in \"${newPath}\"`);\n\n      fse.mkdirsSync(newPath);\n      process.chdir(newPath);\n    } else {\n      // ensure no template file already exists in cwd that we may overwrite\n      const templateFullFilePaths = this.serverless.utils.walkDirSync(templateSrcDir);\n\n      templateFullFilePaths.forEach(ffp => {\n        const filename = path.basename(ffp);\n        if (this.serverless.utils.fileExistsSync(path.join(process.cwd(), filename))) {\n          const errorMessage = [\n            `The file \"${filename}\" already exists, and serverless will not overwrite it. `,\n            `Move the file and try again if you want serverless to write a new \"${filename}\"`,\n          ].join('');\n\n          throw new this.serverless.classes.Error(errorMessage);\n        }\n      });\n    }\n\n    if (notPlugin) {\n      this.serverless.config.update({ servicePath: process.cwd() });\n    }\n\n    // copy template files recursively to cwd\n    // while keeping template file tree\n    try {\n      this.serverless.utils.copyDirContentsSync(templateSrcDir, process.cwd());\n\n      // NPM renames .gitignore to .npmignore on publish so we have to rename it.\n      if (fse.existsSync(path.join(process.cwd(), 'gitignore'))) {\n        fse.renameSync(path.join(process.cwd(), 'gitignore'),\n          path.join(process.cwd(), '.gitignore'));\n      }\n    } catch (err) {\n      const errorMessage = [\n        'Error unable to create a service in this directory. ',\n        'Please check that you have the required permissions to write to the directory',\n      ].join('');\n\n      throw new this.serverless.classes.Error(errorMessage);\n    }\n\n    // rename the service if the user has provided a path via options and is creating a service\n    if ((boilerplatePath || serviceName) && notPlugin) {\n      const newServiceName = serviceName || boilerplatePath.split(path.sep).pop();\n      const serverlessYmlFilePath = path\n        .join(this.serverless.config.servicePath, 'serverless.yml');\n\n      let serverlessYmlFileContent = fse\n        .readFileSync(serverlessYmlFilePath).toString();\n\n      serverlessYmlFileContent = serverlessYmlFileContent\n        .replace(/service: .+/, `service: ${newServiceName}`);\n\n      fse.writeFileSync(serverlessYmlFilePath, serverlessYmlFileContent);\n    }\n\n    userStats.track('service_created', {\n      template: this.options.template,\n      serviceName,\n    });\n\n    this.serverless.cli.asciiGreeting();\n    this.serverless.cli\n      .log(`Successfully generated boilerplate for template: \"${this.options.template}\"`);\n\n    if (!(boilerplatePath || serviceName) && notPlugin) {\n      this.serverless.cli\n        .log('NOTE: Please update the \"service\" property in serverless.yml with your service name');\n    }\n  }\n\n}\n\nmodule.exports = Create;\n"
+    },
+    {
+      "path": "lib/plugins/create/create.test.js",
+      "before": "'use strict';\n\nconst expect = require('chai').expect;\nconst fs = require('fs');\nconst path = require('path');\nconst fse = require('fs-extra');\nconst Create = require('./create');\nconst Serverless = require('../../Serverless');\nconst sinon = require('sinon');\nconst testUtils = require('../../../tests/utils');\nconst walkDirSync = require('../../utils/fs/walkDirSync');\nconst download = require('./../../utils/downloadTemplateFromRepo');\n\ndescribe('Create', () => {\n  let create;\n\n  before(() => {\n    const serverless = new Serverless();\n    const options = {};\n    create = new Create(serverless, options);\n    create.serverless.cli = new serverless.classes.CLI();\n  });\n\n  describe('#constructor()', () => {\n    it('should have commands', () => expect(create.commands).to.be.not.empty);\n\n    it('should have hooks', () => expect(create.hooks).to.be.not.empty);\n\n    it('should run promise chain in order for \"create:create\" hook', () => {\n      const createStub = sinon\n        .stub(create, 'create').resolves();\n\n      return create.hooks['create:create']().then(() => {\n        expect(createStub.calledOnce).to.be.equal(true);\n\n        create.create.restore();\n      });\n    });\n  });\n\n  describe('#create()', () => {\n    let tmpDir;\n    let cwd;\n\n    beforeEach(() => {\n      tmpDir = testUtils.getTmpDirPath();\n      fse.mkdirsSync(tmpDir);\n      cwd = process.cwd();\n    });\n\n    afterEach(() => {\n      process.chdir(cwd);\n    });\n\n    it('should throw error if user passed unsupported template', () => {\n      create.options.template = 'invalid-template';\n      expect(() => create.create()).to.throw(Error);\n    });\n\n    it('should overwrite the name for the service if user passed name', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs';\n      create.options.name = 'my_service';\n\n      return create.create().then(() =>\n        create.serverless.yamlParser.parse(\n          path.join(tmpDir, 'serverless.yml')\n        ).then((obj) => {\n          expect(obj.service).to.equal('my_service');\n        })\n      );\n    });\n\n    it('should set servicePath based on cwd', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs';\n      return create.create().then(() => {\n        expect(create.serverless.config.servicePath).to.be.equal(process.cwd());\n      });\n    });\n\n    it('should display ascii greeting', () => {\n      process.chdir(tmpDir);\n\n      const greetingStub = sinon.stub(create.serverless.cli, 'asciiGreeting');\n      return create.create().then(() => {\n        expect(greetingStub.callCount).to.be.equal(1);\n      });\n    });\n\n    it('should generate scaffolding for \"aws-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-nodejs-typescript\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs-typescript';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.ts');\n        expect(dirContent).to.include('tsconfig.json');\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('webpack.config.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-nodejs-ecma-script\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs-ecma-script';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('first.js');\n        expect(dirContent).to.include('second.js');\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('webpack.config.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-csharp\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-csharp';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('Handler.cs');\n        expect(dirContent).to.include('.gitignore');\n        expect(dirContent).to.include('aws-csharp.csproj');\n        expect(dirContent).to.include('build.cmd');\n        expect(dirContent).to.include('build.sh');\n        expect(dirContent).to.include('global.json');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-fsharp\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-fsharp';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('Handler.fs');\n        expect(dirContent).to.include('.gitignore');\n        expect(dirContent).to.include('build.sh');\n        expect(dirContent).to.include('build.cmd');\n        expect(dirContent).to.include('aws-fsharp.fsproj');\n        expect(dirContent).to.include('global.json');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-python3\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-python3';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-java-maven\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-java-maven';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('pom.xml');\n        expect(dirContent).to.include(path.join('src', 'main', 'resources', 'log4j.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java', 'com', 'serverless',\n          'Handler.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java', 'com', 'serverless',\n          'ApiGatewayResponse.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java', 'com', 'serverless',\n          'Response.java'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-kotlin-jvm-maven\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-kotlin-jvm-maven';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('pom.xml');\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Handler.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'ApiGatewayResponse.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Response.kt'));\n        expect(dirContent).to.include(path.join('src', 'test', 'kotlin', '.gitkeep'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-kotlin-jvm-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-kotlin-jvm-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Handler.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'ApiGatewayResponse.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Response.kt'));\n        expect(dirContent).to.include(path.join('src', 'test', 'kotlin', '.gitkeep'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-kotlin-nodejs-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-kotlin-nodejs-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include('gradlew');\n        expect(dirContent).to.include('gradlew.bat');\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.jar'));\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Handler.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'ApiGatewayResponse.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Response.kt'));\n        expect(dirContent).to.include(path.join('src', 'test', 'kotlin', '.gitkeep'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-java-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-java-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include('gradlew');\n        expect(dirContent).to.include('gradlew.bat');\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.jar'));\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'resources',\n            'log4j.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java',\n            'com', 'serverless', 'Handler.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java',\n            'com', 'serverless', 'ApiGatewayResponse.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java',\n            'com', 'serverless', 'Response.java'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-groovy-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-groovy-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include('gradlew');\n        expect(dirContent).to.include('gradlew.bat');\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.jar'));\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'resources',\n            'log4j.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'groovy',\n            'com', 'serverless', 'Handler.groovy'));\n        expect(dirContent).to.include(path.join('src', 'main', 'groovy',\n            'com', 'serverless', 'ApiGatewayResponse.groovy'));\n        expect(dirContent).to.include(path.join('src', 'main', 'groovy',\n            'com', 'serverless', 'Response.groovy'));\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-scala-sbt\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-scala-sbt';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.sbt');\n        expect(dirContent).to.include(path.join('src', 'main', 'scala',\n          'hello', 'Handler.scala'));\n        expect(dirContent).to.include(path.join('src', 'main', 'scala',\n          'hello', 'Request.scala'));\n        expect(dirContent).to.include(path.join('src', 'main', 'scala',\n          'hello', 'Response.scala'));\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-php\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-php';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.php');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-swift\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-swift';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('ping.swift');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"azure-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'azure-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"google-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'google-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('index.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"kubeless-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'kubeless-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"kubeless-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'kubeless-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"spotinst-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'spotinst-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"spotinst-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'spotinst-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"spotinst-ruby\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'spotinst-ruby';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.rb');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"webtasks-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'webtasks-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"plugin\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'plugin';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('index.js');\n      });\n    });\n\n    it('should generate scaffolding for \"hello-world\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'hello-world';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    // this test should live here because of process.cwd() which might cause trouble when using\n    // nested dirs like its done here\n    it('should create a plugin in the current directory', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'plugin';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('index.js');\n      });\n    });\n\n    // this test should live here because of process.cwd() which might cause trouble when using\n    // nested dirs like its done here\n    it('should create a renamed service in the directory if using the \"path\" option', () => {\n      process.chdir(tmpDir);\n\n      create.options.path = 'my-new-service';\n      create.options.name = null;\n\n      // using the nodejs template (this test is completely be independent from the template)\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, create.options.path);\n        const dirContent = fs.readdirSync(serviceDir);\n\n        // check if files are created in the correct directory\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n\n        // check if the service was renamed\n        const serverlessYmlfileContent = fse\n          .readFileSync(path.join(serviceDir, 'serverless.yml')).toString();\n\n        expect((/service: my-new-service/).test(serverlessYmlfileContent)).to.equal(true);\n      });\n    });\n\n    it('should create a service in the directory if using the \"path\" option with digits', () => {\n      process.chdir(tmpDir);\n\n      create.options.path = 123;\n      create.options.name = null;\n\n      // using the nodejs template (this test is completely be independent from the template)\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, String(create.options.path));\n        const dirContent = fs.readdirSync(serviceDir);\n\n        // check if files are created in the correct directory\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n      });\n    });\n\n    it('should create a custom renamed service in the directory if using ' +\n       'the \"path\" and \"name\" option', () => {\n      process.chdir(tmpDir);\n\n      create.options.path = 'my-new-service';\n      create.options.name = 'my-custom-new-service';\n\n      // using the nodejs template (this test is completely be independent from the template)\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, create.options.path);\n        const dirContent = fs.readdirSync(serviceDir);\n\n        // check if files are created in the correct directory\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n\n        // check if the service was renamed\n        const serverlessYmlfileContent = fse\n          .readFileSync(path.join(serviceDir, 'serverless.yml')).toString();\n\n        expect((/service: my-custom-new-service/).test(serverlessYmlfileContent)).to.equal(true);\n      });\n    });\n\n    it('should throw error if there are existing template files in cwd', () => {\n      process.chdir(tmpDir);\n\n      // create existing files from nodejs template\n      create.options.template = 'aws-nodejs';\n      create.options.path = '';\n      create.serverless.utils.copyDirContentsSync(path.join(create.serverless.config.serverlessPath,\n       'plugins', 'create', 'templates', create.options.template), tmpDir);\n\n      const dirContent = fs.readdirSync(tmpDir);\n\n      expect(dirContent).to.include('serverless.yml');\n      expect(() => create.create()).to.throw(Error);\n    });\n\n    it('should throw error if the directory for the service already exists in cwd', () => {\n      create.options.path = 'my-service';\n      create.options.template = 'aws-nodejs';\n\n      // create a directory with the pathname\n      fse.mkdirsSync(path.join(tmpDir, create.options.path));\n      process.chdir(tmpDir);\n\n      expect(() => create.create()).to.throw(Error);\n    });\n\n    it('should reject if download fails', (done) => {\n      sinon.stub(download, 'downloadTemplateFromRepo');\n\n      create.options = {};\n      create.options['template-url'] = 'https://github.com/serverless/serverless';\n\n      download.downloadTemplateFromRepo.rejects(new Error('Wrong'));\n\n      create\n        .create()\n        .catch(() => download.downloadTemplateFromRepo.restore())\n        .then(() => done());\n    });\n\n    it('should resolve if download succeeds', () => {\n      sinon.stub(download, 'downloadTemplateFromRepo');\n\n      create.options = {};\n      create.options['template-url'] = 'https://github.com/serverless/serverless';\n\n      download.downloadTemplateFromRepo.resolves();\n\n      return create.create().catch(() => download.downloadTemplateFromRepo.restore());\n    });\n  });\n});\n",
+      "after": "'use strict';\n\nconst expect = require('chai').expect;\nconst fs = require('fs');\nconst path = require('path');\nconst fse = require('fs-extra');\nconst Create = require('./create');\nconst Serverless = require('../../Serverless');\nconst sinon = require('sinon');\nconst testUtils = require('../../../tests/utils');\nconst walkDirSync = require('../../utils/fs/walkDirSync');\nconst download = require('./../../utils/downloadTemplateFromRepo');\n\ndescribe('Create', () => {\n  let create;\n\n  before(() => {\n    const serverless = new Serverless();\n    const options = {};\n    create = new Create(serverless, options);\n    create.serverless.cli = new serverless.classes.CLI();\n  });\n\n  describe('#constructor()', () => {\n    it('should have commands', () => expect(create.commands).to.be.not.empty);\n\n    it('should have hooks', () => expect(create.hooks).to.be.not.empty);\n\n    it('should run promise chain in order for \"create:create\" hook', () => {\n      const createStub = sinon\n        .stub(create, 'create').resolves();\n\n      return create.hooks['create:create']().then(() => {\n        expect(createStub.calledOnce).to.be.equal(true);\n\n        create.create.restore();\n      });\n    });\n  });\n\n  describe('#create()', () => {\n    let tmpDir;\n    let cwd;\n\n    beforeEach(() => {\n      tmpDir = testUtils.getTmpDirPath();\n      fse.mkdirsSync(tmpDir);\n      cwd = process.cwd();\n    });\n\n    afterEach(() => {\n      process.chdir(cwd);\n    });\n\n    it('should throw error if user passed unsupported template', () => {\n      create.options.template = 'invalid-template';\n      expect(() => create.create()).to.throw(Error);\n    });\n\n    it('should overwrite the name for the service if user passed name', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs';\n      create.options.name = 'my_service';\n\n      return create.create().then(() =>\n        create.serverless.yamlParser.parse(\n          path.join(tmpDir, 'serverless.yml')\n        ).then((obj) => {\n          expect(obj.service).to.equal('my_service');\n        })\n      );\n    });\n\n    it('should set servicePath based on cwd', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs';\n      return create.create().then(() => {\n        expect(create.serverless.config.servicePath).to.be.equal(process.cwd());\n      });\n    });\n\n    it('should display ascii greeting', () => {\n      process.chdir(tmpDir);\n\n      const greetingStub = sinon.stub(create.serverless.cli, 'asciiGreeting');\n      return create.create().then(() => {\n        expect(greetingStub.callCount).to.be.equal(1);\n      });\n    });\n\n    it('should generate scaffolding for \"aws-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-nodejs-typescript\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs-typescript';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.ts');\n        expect(dirContent).to.include('tsconfig.json');\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('webpack.config.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-nodejs-ecma-script\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-nodejs-ecma-script';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('first.js');\n        expect(dirContent).to.include('second.js');\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('webpack.config.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-csharp\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-csharp';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('Handler.cs');\n        expect(dirContent).to.include('.gitignore');\n        expect(dirContent).to.include('aws-csharp.csproj');\n        expect(dirContent).to.include('build.cmd');\n        expect(dirContent).to.include('build.sh');\n        expect(dirContent).to.include('global.json');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-fsharp\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-fsharp';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('Handler.fs');\n        expect(dirContent).to.include('.gitignore');\n        expect(dirContent).to.include('build.sh');\n        expect(dirContent).to.include('build.cmd');\n        expect(dirContent).to.include('aws-fsharp.fsproj');\n        expect(dirContent).to.include('global.json');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-python3\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-python3';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-java-maven\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-java-maven';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('pom.xml');\n        expect(dirContent).to.include(path.join('src', 'main', 'resources', 'log4j.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java', 'com', 'serverless',\n          'Handler.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java', 'com', 'serverless',\n          'ApiGatewayResponse.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java', 'com', 'serverless',\n          'Response.java'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-kotlin-jvm-maven\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-kotlin-jvm-maven';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('pom.xml');\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Handler.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'ApiGatewayResponse.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Response.kt'));\n        expect(dirContent).to.include(path.join('src', 'test', 'kotlin', '.gitkeep'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-kotlin-jvm-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-kotlin-jvm-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Handler.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'ApiGatewayResponse.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Response.kt'));\n        expect(dirContent).to.include(path.join('src', 'test', 'kotlin', '.gitkeep'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-kotlin-nodejs-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-kotlin-nodejs-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include('gradlew');\n        expect(dirContent).to.include('gradlew.bat');\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.jar'));\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Handler.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'ApiGatewayResponse.kt'));\n        expect(dirContent).to.include(path.join('src', 'main', 'kotlin', 'com', 'serverless',\n          'Response.kt'));\n        expect(dirContent).to.include(path.join('src', 'test', 'kotlin', '.gitkeep'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-java-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-java-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include('gradlew');\n        expect(dirContent).to.include('gradlew.bat');\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.jar'));\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'resources',\n            'log4j.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java',\n            'com', 'serverless', 'Handler.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java',\n            'com', 'serverless', 'ApiGatewayResponse.java'));\n        expect(dirContent).to.include(path.join('src', 'main', 'java',\n            'com', 'serverless', 'Response.java'));\n        expect(dirContent).to.include(path.join('.gitignore'));\n      });\n    });\n\n    it('should generate scaffolding for \"aws-groovy-gradle\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-groovy-gradle';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.gradle');\n        expect(dirContent).to.include('gradlew');\n        expect(dirContent).to.include('gradlew.bat');\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.jar'));\n        expect(dirContent).to.include(path.join('gradle', 'wrapper',\n            'gradle-wrapper.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'resources',\n            'log4j.properties'));\n        expect(dirContent).to.include(path.join('src', 'main', 'groovy',\n            'com', 'serverless', 'Handler.groovy'));\n        expect(dirContent).to.include(path.join('src', 'main', 'groovy',\n            'com', 'serverless', 'ApiGatewayResponse.groovy'));\n        expect(dirContent).to.include(path.join('src', 'main', 'groovy',\n            'com', 'serverless', 'Response.groovy'));\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"aws-scala-sbt\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'aws-scala-sbt';\n\n      return create.create().then(() => {\n        const dirContent = walkDirSync(tmpDir)\n          .map(elem => elem.replace(path.join(tmpDir, path.sep), ''));\n\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('build.sbt');\n        expect(dirContent).to.include(path.join('src', 'main', 'scala',\n          'hello', 'Handler.scala'));\n        expect(dirContent).to.include(path.join('src', 'main', 'scala',\n          'hello', 'Request.scala'));\n        expect(dirContent).to.include(path.join('src', 'main', 'scala',\n          'hello', 'Response.scala'));\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-php\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-php';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.php');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"openwhisk-swift\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'openwhisk-swift';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('ping.swift');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"azure-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'azure-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"google-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'google-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('index.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"kubeless-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'kubeless-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"kubeless-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'kubeless-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"spotinst-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'spotinst-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"spotinst-python\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'spotinst-python';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.py');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"spotinst-ruby\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'spotinst-ruby';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.rb');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"webtasks-nodejs\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'webtasks-nodejs';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('package.json');\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    it('should generate scaffolding for \"plugin\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'plugin';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('index.js');\n      });\n    });\n\n    it('should generate scaffolding for \"hello-world\" template', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'hello-world';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n        expect(dirContent).to.include('.gitignore');\n      });\n    });\n\n    // this test should live here because of process.cwd() which might cause trouble when using\n    // nested dirs like its done here\n    it('should create a plugin in the current directory', () => {\n      process.chdir(tmpDir);\n      create.options.template = 'plugin';\n\n      return create.create().then(() => {\n        const dirContent = fs.readdirSync(tmpDir);\n        expect(dirContent).to.include('index.js');\n      });\n    });\n\n    // this test should live here because of process.cwd() which might cause trouble when using\n    // nested dirs like its done here\n    it('should create a renamed service in the directory if using the \"path\" option', () => {\n      process.chdir(tmpDir);\n\n      create.options.path = 'my-new-service';\n      create.options.name = null;\n\n      // using the nodejs template (this test is completely be independent from the template)\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, create.options.path);\n        const dirContent = fs.readdirSync(serviceDir);\n\n        // check if files are created in the correct directory\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n\n        // check if the service was renamed\n        const serverlessYmlfileContent = fse\n          .readFileSync(path.join(serviceDir, 'serverless.yml')).toString();\n\n        expect((/service: my-new-service/).test(serverlessYmlfileContent)).to.equal(true);\n      });\n    });\n\n    it('should create a service in the directory if using the \"path\" option with digits', () => {\n      process.chdir(tmpDir);\n\n      create.options.path = 123;\n      create.options.name = null;\n\n      // using the nodejs template (this test is completely be independent from the template)\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, String(create.options.path));\n        const dirContent = fs.readdirSync(serviceDir);\n\n        // check if files are created in the correct directory\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n      });\n    });\n\n    it('should create a custom renamed service in the directory if using ' +\n       'the \"path\" and \"name\" option', () => {\n      process.chdir(tmpDir);\n\n      create.options.path = 'my-new-service';\n      create.options.name = 'my-custom-new-service';\n\n      // using the nodejs template (this test is completely be independent from the template)\n      create.options.template = 'aws-nodejs';\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, create.options.path);\n        const dirContent = fs.readdirSync(serviceDir);\n\n        // check if files are created in the correct directory\n        expect(dirContent).to.include('serverless.yml');\n        expect(dirContent).to.include('handler.js');\n\n        // check if the service was renamed\n        const serverlessYmlfileContent = fse\n          .readFileSync(path.join(serviceDir, 'serverless.yml')).toString();\n\n        expect((/service: my-custom-new-service/).test(serverlessYmlfileContent)).to.equal(true);\n      });\n    });\n\n    it('should throw error if there are existing template files in cwd', () => {\n      process.chdir(tmpDir);\n\n      // create existing files from nodejs template\n      create.options.template = 'aws-nodejs';\n      create.options.path = '';\n      create.serverless.utils.copyDirContentsSync(path.join(create.serverless.config.serverlessPath,\n       'plugins', 'create', 'templates', create.options.template), tmpDir);\n\n      const dirContent = fs.readdirSync(tmpDir);\n\n      expect(dirContent).to.include('serverless.yml');\n      expect(() => create.create()).to.throw(Error);\n    });\n\n    it('should throw error if the directory for the service already exists in cwd', () => {\n      create.options.path = 'my-service';\n      create.options.template = 'aws-nodejs';\n\n      // create a directory with the pathname\n      fse.mkdirsSync(path.join(tmpDir, create.options.path));\n      process.chdir(tmpDir);\n\n      expect(() => create.create()).to.throw(Error);\n    });\n\n    it('should reject if download fails', (done) => {\n      sinon.stub(download, 'downloadTemplateFromRepo');\n\n      create.options = {};\n      create.options['template-url'] = 'https://github.com/serverless/serverless';\n\n      download.downloadTemplateFromRepo.rejects(new Error('Wrong'));\n\n      create\n        .create()\n        .catch(() => download.downloadTemplateFromRepo.restore())\n        .then(() => done());\n    });\n\n    it('should copy a local template to the requested path and rename the service', () => {\n      const templatePath = testUtils.getTmpDirPath();\n      fse.mkdirsSync(templatePath);\n      fse.writeFileSync(path.join(templatePath, 'serverless.yml'), 'service: template-name\\n');\n      fse.writeFileSync(path.join(templatePath, 'package.json'),\n        JSON.stringify({ name: 'template-name' }));\n      fse.mkdirsSync(path.join(templatePath, 'nested'));\n      fse.writeFileSync(path.join(templatePath, 'nested', 'file.txt'), 'template content');\n\n      process.chdir(tmpDir);\n      create.options = {\n        'template-path': templatePath,\n        path: 'new-service',\n        name: 'custom-service',\n      };\n\n      return create.create().then(() => {\n        const serviceDir = path.join(tmpDir, 'new-service');\n        expect(fs.readFileSync(path.join(serviceDir, 'nested', 'file.txt'), 'utf8'))\n          .to.equal('template content');\n        expect(fs.readFileSync(path.join(serviceDir, 'serverless.yml'), 'utf8'))\n          .to.equal('service: custom-service\\n');\n        expect(JSON.parse(fs.readFileSync(path.join(serviceDir, 'package.json'), 'utf8')).name)\n          .to.equal('custom-service');\n      });\n    });\n\n    it('should copy a local template into the current directory', () => {\n      const templatePath = path.join(tmpDir, 'template');\n      const destinationPath = path.join(tmpDir, 'destination');\n      fse.mkdirsSync(templatePath);\n      fse.mkdirsSync(destinationPath);\n      fse.writeFileSync(path.join(templatePath, 'handler.js'), 'module.exports = true;');\n\n      process.chdir(destinationPath);\n      create.options = { 'template-path': path.relative(destinationPath, templatePath) };\n\n      return create.create().then(() => {\n        expect(fs.readFileSync(path.join(destinationPath, 'handler.js'), 'utf8'))\n          .to.equal('module.exports = true;');\n      });\n    });\n\n    it('should reject an invalid local template path', () => {\n      create.options = { 'template-path': path.join(tmpDir, 'missing-template') };\n\n      expect(() => create.create()).to.throw(/template path/i);\n    });\n\n    it('should resolve if download succeeds', () => {\n      sinon.stub(download, 'downloadTemplateFromRepo');\n\n      create.options = {};\n      create.options['template-url'] = 'https://github.com/serverless/serverless';\n\n      download.downloadTemplateFromRepo.resolves();\n\n      return create.create().catch(() => download.downloadTemplateFromRepo.restore());\n    });\n  });\n});\n"
+    }
+  ],
+  "final": "Implemented `--template-path` for `serverless create`. It copies a local template directory into the current directory or the requested `--path`, rejects invalid source paths and existing destinations, and applies `--name`/`--path` renaming. Added tests and AWS CLI documentation.\n\n**Verification:** the Create tests passed (46 passing), `node native-verify.cjs` passed, and syntax and diff checks passed. ESLint could not run because its module is not present in this checkout.",
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-4576-B-r0-a0\\home\\events\\1794320801409-d18c3912-0718-44d7-a3af-0102fd026901.jsonl",
+  "receiptAudit": {
+    "requests": 25,
+    "finalUsageResponses": 25,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 25,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-4576-B-r0",
+  "attempt": 0
+}

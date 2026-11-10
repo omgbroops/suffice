@@ -1,0 +1,289 @@
+{
+  "task": "serverless__serverless-4576",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "C",
+  "name": "Luna on-demand",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "on-demand",
+  "arm": "C",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-4576-C-r0-a0/workspace",
+    "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+    "tree": "9245ece1bf181953bde6b05125c010626b307941"
+  },
+  "runId": "serverless__serverless-4576-C-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 383252.70029999997,
+  "usage": {
+    "input": 85938,
+    "cacheRead": 1055872,
+    "cacheWrite": 0,
+    "output": 15703,
+    "estimatedApiUsd": 0.02700402,
+    "modelCalls": 24,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.02700402,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "Create #create() should copy \"aws-nodejs\" template from local path",
+      "Create #create() should copy \"aws-nodejs\" template from local path with a custom name",
+      "#walkDirSync() should check noLinks option"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 3,
+      "regressionsPassed": 3,
+      "missing": [],
+      "failures": [
+        "Create #create() should copy \"aws-nodejs\" template from local path",
+        "Create #create() should copy \"aws-nodejs\" template from local path with a custom name",
+        "#walkDirSync() should check noLinks option"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#walkDirSync() should check noLinks option": 1,
+        "#walkDirSync() should return an array with corresponding paths to the found files": 1,
+        "Create #constructor() should have commands": 1,
+        "Create #constructor() should have hooks": 1,
+        "Create #constructor() should run promise chain in order for \"create:create\" hook": 1,
+        "Create #create() should copy \"aws-nodejs\" template from local path": 1,
+        "Create #create() should copy \"aws-nodejs\" template from local path with a custom name": 1,
+        "Create #create() should create a custom renamed service in the directory if using the \"path\" and \"name\" option": 1,
+        "Create #create() should create a plugin in the current directory": 1,
+        "Create #create() should create a renamed service in the directory if using the \"path\" option": 1,
+        "Create #create() should create a service in the directory if using the \"path\" option with digits": 1,
+        "Create #create() should display ascii greeting": 1,
+        "Create #create() should generate scaffolding for \"aws-csharp\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-fsharp\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-groovy-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-java-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-java-maven\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-jvm-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-jvm-maven\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-nodejs-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs-ecma-script\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs-typescript\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-python\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-python3\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-scala-sbt\" template": 1,
+        "Create #create() should generate scaffolding for \"azure-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"google-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"hello-world\" template": 1,
+        "Create #create() should generate scaffolding for \"kubeless-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"kubeless-python\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-php\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-python\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-swift\" template": 1,
+        "Create #create() should generate scaffolding for \"plugin\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-python\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-ruby\" template": 1,
+        "Create #create() should generate scaffolding for \"webtasks-nodejs\" template": 1,
+        "Create #create() should overwrite the name for the service if user passed name": 1,
+        "Create #create() should reject if download fails": 1,
+        "Create #create() should resolve if download succeeds": 1,
+        "Create #create() should set servicePath based on cwd": 1,
+        "Create #create() should throw error if the directory for the service already exists in cwd": 1,
+        "Create #create() should throw error if there are existing template files in cwd": 1,
+        "Create #create() should throw error if user passed unsupported template": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 3,
+    "requiredPassed": 3
+  },
+  "changed": [
+    "lib/plugins/create/create.js",
+    "lib/plugins/create/create.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/utils/fs/copyDirContentsSync.js",
+    "lib/utils/fs/walkDirSync.js"
+  ],
+  "extraChangedFiles": [
+    "lib/plugins/create/create.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 24,
+  "editCalls": 3,
+  "verificationCalls": 8,
+  "toolCalls": 57,
+  "graphGuidance": [
+    {
+      "phase": "on-demand",
+      "reason": "editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    },
+    {
+      "phase": "on-demand",
+      "reason": "coordinated-file-edits+editing-exported-module"
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T14:20:38.846Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 3321.1228999999876,
+      "parsedFiles": 401,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 79009328,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:20:41.192Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "fadffe3c1bb2e974210e9b2c1d9581db15527df703fed616539ded7750c385d7",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "f806c9ac84851c77027f44537e943f29d564a2ea1787a02b92f4a5be8641f801"
+      },
+      "latencyMs": 1601.4930000000168,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18432341,
+      "heapDeltaBytes": 41578512,
+      "graphBytes": 25856358
+    },
+    {
+      "at": "2026-11-10T14:20:42.641Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "fadffe3c1bb2e974210e9b2c1d9581db15527df703fed616539ded7750c385d7",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "f806c9ac84851c77027f44537e943f29d564a2ea1787a02b92f4a5be8641f801"
+      },
+      "latencyMs": 1438.5252000000037,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18432341,
+      "heapDeltaBytes": -27576672,
+      "graphBytes": 25856358
+    },
+    {
+      "at": "2026-11-10T14:21:10.760Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "3c212703b65351094d9a2ccb6ad529d5c0da2fc3e52814da8c1c53e29715363c",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "94f017e99cbb6b6084c231013c340c61752132cc2a47892454eeb5e10b8ead5f"
+      },
+      "latencyMs": 1678.9328000000096,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18471868,
+      "heapDeltaBytes": 54722352,
+      "graphBytes": 25908793
+    },
+    {
+      "at": "2026-11-10T14:21:12.157Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "3c212703b65351094d9a2ccb6ad529d5c0da2fc3e52814da8c1c53e29715363c",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "94f017e99cbb6b6084c231013c340c61752132cc2a47892454eeb5e10b8ead5f"
+      },
+      "latencyMs": 1388.497000000003,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18471868,
+      "heapDeltaBytes": -62388184,
+      "graphBytes": 25908793
+    },
+    {
+      "at": "2026-11-10T14:22:44.421Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "a633970233adde115ccf1205d4640df1011bb5b6e554e9c53fcfb8fa4f5d6d52",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "6512fd4b3b96dbecedaf6103afd60e01be60833a6267fc6373353487f0911d6b"
+      },
+      "latencyMs": 1568.0817000000388,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18471369,
+      "heapDeltaBytes": 45733824,
+      "graphBytes": 25908103
+    },
+    {
+      "at": "2026-11-10T14:22:45.765Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "a633970233adde115ccf1205d4640df1011bb5b6e554e9c53fcfb8fa4f5d6d52",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "6512fd4b3b96dbecedaf6103afd60e01be60833a6267fc6373353487f0911d6b"
+      },
+      "latencyMs": 1331.4811999999802,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18471369,
+      "heapDeltaBytes": 28825296,
+      "graphBytes": 25908103
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-4576-C-r0-a0\\home\\events\\1794320271235-d3622e78-c49a-4975-9b6c-de625b399ac7.jsonl",
+  "receiptAudit": {
+    "requests": 24,
+    "finalUsageResponses": 24,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 24,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-4576-C-r0",
+  "attempt": 0
+}

@@ -1,0 +1,274 @@
+diff --git a/docs/providers/aws/cli-reference/create.md b/docs/providers/aws/cli-reference/create.md
+index fc38bf9..abdb462 100644
+--- a/docs/providers/aws/cli-reference/create.md
++++ b/docs/providers/aws/cli-reference/create.md
+@@ -32,9 +32,16 @@ serverless create --template aws-nodejs --path myService
+ serverless create --template-url https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs --path myService
+ ```
+ 
++**Create service from a local template directory:**
++
++```bash
++serverless create --template-path ../my-template --path myService
++```
++
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/docs/providers/azure/cli-reference/create.md b/docs/providers/azure/cli-reference/create.md
+index 998a09c..c6c1bb6 100644
+--- a/docs/providers/azure/cli-reference/create.md
++++ b/docs/providers/azure/cli-reference/create.md
+@@ -28,8 +28,9 @@ serverless create --template azure-nodejs --path myService
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/docs/providers/google/cli-reference/create.md b/docs/providers/google/cli-reference/create.md
+index 232c84b..3b5cf06 100644
+--- a/docs/providers/google/cli-reference/create.md
++++ b/docs/providers/google/cli-reference/create.md
+@@ -28,8 +28,9 @@ serverless create --template google-nodejs --path my-service
+ 
+ ## Options
+ 
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/docs/providers/kubeless/cli-reference/create.md b/docs/providers/kubeless/cli-reference/create.md
+index 7911ef2..52bf501 100644
+--- a/docs/providers/kubeless/cli-reference/create.md
++++ b/docs/providers/kubeless/cli-reference/create.md
+@@ -35,8 +35,9 @@ serverless create --template kubeless-nodejs --path my-service
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/docs/providers/openwhisk/cli-reference/create.md b/docs/providers/openwhisk/cli-reference/create.md
+index 5c5201e..8e0e0bd 100644
+--- a/docs/providers/openwhisk/cli-reference/create.md
++++ b/docs/providers/openwhisk/cli-reference/create.md
+@@ -27,8 +27,9 @@ serverless create --template openwhisk-nodejs --path myService
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/docs/providers/spotinst/cli-reference/create.md b/docs/providers/spotinst/cli-reference/create.md
+index 0009dea..b7cb7c3 100644
+--- a/docs/providers/spotinst/cli-reference/create.md
++++ b/docs/providers/spotinst/cli-reference/create.md
+@@ -27,8 +27,9 @@ serverless create -t spotinst-nodejs -p myService
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/docs/providers/webtasks/cli-reference/create.md b/docs/providers/webtasks/cli-reference/create.md
+index 56da107..495c26e 100644
+--- a/docs/providers/webtasks/cli-reference/create.md
++++ b/docs/providers/webtasks/cli-reference/create.md
+@@ -28,8 +28,9 @@ serverless create --template webtasks-nodejs --path my-service
+ 
+ ## Options
+ 
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` The URL of a GitHub or BitBucket template. **Required if --template and --template-path are not present**.
++- `--template-path` The path to a local template directory. Its contents are copied to the new service. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/lib/plugins/create/create.js b/lib/plugins/create/create.js
+index eaa3a67..74d2a10 100644
+--- a/lib/plugins/create/create.js
++++ b/lib/plugins/create/create.js
+@@ -66,6 +66,9 @@ class Create {
+             usage: 'Template URL for the service. Supports: GitHub, BitBucket',
+             shortcut: 'u',
+           },
++          'template-path': {
++            usage: 'Path to a local template directory for the service',
++          },
+           path: {
+             usage: 'The path where the service should be created (e.g. --path my-service)',
+             shortcut: 'p',
+@@ -111,16 +114,99 @@ class Create {
+         .catch(err => {
+           throw new this.serverless.classes.Error(err);
+         });
++    } else if ('template-path' in this.options) {
++      this.createFromPath();
+     } else {
+       const errorMessage = [
+-        'You must either pass a template name (--template) or a ',
+-        'a URL (--template-url).',
++        'You must either pass a template name (--template), a ',
++        'URL (--template-url) or a local path (--template-path).',
+       ].join('');
+       throw new this.serverless.classes.Error(errorMessage);
+     }
+     return BbPromise.resolve();
+   }
+ 
++  createFromPath() {
++    const templatePath = _.toString(this.options['template-path']);
++    if (!templatePath) {
++      throw new this.serverless.classes.Error('A local template path is required.');
++    }
++
++    const templateSrcDir = path.resolve(templatePath);
++    if (!this.serverless.utils.dirExistsSync(templateSrcDir)) {
++      throw new this.serverless.classes.Error(
++        `The template path "${templatePath}" does not exist or is not a directory.`
++      );
++    }
++
++    const boilerplatePath = _.toString(this.options.path);
++    const serviceName = _.toString(this.options.name);
++    const currentPath = process.cwd();
++    const templateFilePaths = this.serverless.utils.walkDirSync(templateSrcDir);
++    let targetPath = currentPath;
++
++    if (boilerplatePath) {
++      targetPath = path.join(currentPath, boilerplatePath);
++
++      if (this.serverless.utils.dirExistsSync(targetPath)) {
++        throw new this.serverless.classes.Error(
++          `The directory "${targetPath}" already exists, and serverless will not overwrite it.`
++        );
++      }
++
++      const relativeTargetPath = path.relative(templateSrcDir, targetPath);
++      if (relativeTargetPath === '' ||
++          (!path.isAbsolute(relativeTargetPath) &&
++            relativeTargetPath !== '..' &&
++            relativeTargetPath.split(path.sep)[0] !== '..')) {
++        throw new this.serverless.classes.Error(
++          'The destination directory cannot be inside the template directory.'
++        );
++      }
++
++      this.serverless.cli.log(`Generating boilerplate in "${targetPath}"`);
++      fse.mkdirsSync(targetPath);
++      process.chdir(targetPath);
++      targetPath = process.cwd();
++    } else {
++      templateFilePaths.forEach(filePath => {
++        const relativeFilePath = path.relative(templateSrcDir, filePath);
++        if (this.serverless.utils.fileExistsSync(path.join(targetPath, relativeFilePath))) {
++          throw new this.serverless.classes.Error(
++            `The file "${relativeFilePath}" already exists, and serverless will not overwrite it.`
++          );
++        }
++      });
++    }
++
++    try {
++      this.serverless.utils.copyDirContentsSync(templateSrcDir, targetPath);
++    } catch (err) {
++      throw new this.serverless.classes.Error([
++        'Error unable to create a service in this directory. ',
++        'Please check that you have the required permissions to write to the directory',
++      ].join(''));
++    }
++
++    this.serverless.config.update({ servicePath: targetPath });
++
++    const newServiceName = serviceName || (boilerplatePath && path.basename(boilerplatePath));
++    const serverlessYmlFilePath = path.join(targetPath, 'serverless.yml');
++    if (newServiceName && this.serverless.utils.fileExistsSync(serverlessYmlFilePath)) {
++      const serverlessYmlFileContent = fse.readFileSync(serverlessYmlFilePath).toString()
++        .replace(/service: .+/, `service: ${newServiceName}`);
++      fse.writeFileSync(serverlessYmlFilePath, serverlessYmlFileContent);
++    }
++
++    userStats.track('service_created', {
++      template: templatePath,
++      serviceName,
++    });
++
++    this.serverless.cli.asciiGreeting();
++    this.serverless.cli.log(`Successfully generated boilerplate from: "${templatePath}"`);
++  }
++
+   createFromTemplate() {
+     const notPlugin = this.options.template !== 'plugin';
+ 
+diff --git a/lib/plugins/create/create.test.js b/lib/plugins/create/create.test.js
+index df578b4..ad4b8dd 100644
+--- a/lib/plugins/create/create.test.js
++++ b/lib/plugins/create/create.test.js
+@@ -642,6 +642,34 @@ describe('Create', () => {
+       expect(() => create.create()).to.throw(Error);
+     });
+ 
++    it('should copy a local template into the requested path and rename the service', () => {
++      process.chdir(tmpDir);
++      const templatePath = path.join(tmpDir, 'template');
++      fse.mkdirsSync(path.join(templatePath, 'nested'));
++      fse.writeFileSync(path.join(templatePath, 'serverless.yml'), 'service: template-name\n');
++      fse.writeFileSync(path.join(templatePath, 'nested', 'handler.js'), 'module.exports = {};\n');
++
++      create.options = {
++        'template-path': templatePath,
++        path: 'generated-service',
++        name: 'custom-service',
++      };
++
++      return create.create().then(() => {
++        const servicePath = path.join(tmpDir, 'generated-service');
++        expect(fs.readFileSync(path.join(servicePath, 'nested', 'handler.js'), 'utf8'))
++          .to.equal('module.exports = {};\n');
++        expect(fs.readFileSync(path.join(servicePath, 'serverless.yml'), 'utf8'))
++          .to.equal('service: custom-service\n');
++        expect(create.serverless.config.servicePath).to.equal(servicePath);
++      });
++    });
++
++    it('should reject a local template path that does not exist', () => {
++      create.options = { 'template-path': path.join(tmpDir, 'missing-template') };
++      expect(() => create.create()).to.throw(Error);
++    });
++
+     it('should reject if download fails', (done) => {
+       sinon.stub(download, 'downloadTemplateFromRepo');
+ 

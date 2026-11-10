@@ -1,0 +1,194 @@
+diff --git a/docs/providers/aws/cli-reference/create.md b/docs/providers/aws/cli-reference/create.md
+index fc38bf9..6d3fe6d 100644
+--- a/docs/providers/aws/cli-reference/create.md
++++ b/docs/providers/aws/cli-reference/create.md
+@@ -32,9 +32,16 @@ serverless create --template aws-nodejs --path myService
+ serverless create --template-url https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/aws-nodejs --path myService
+ ```
+ 
++**Create service from a local template directory:**
++
++```bash
++serverless create --template-path ../my-template --path myService
++```
++
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required if --template-url and --template-path are not present**.
++- `--template-url` or `-u` A URL to a custom template. **Required if --template and --template-path are not present**.
++- `--template-path` A local directory containing the template files. **Required if --template and --template-url are not present**.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+diff --git a/lib/plugins/create/create.js b/lib/plugins/create/create.js
+index eaa3a67..6fdd267 100644
+--- a/lib/plugins/create/create.js
++++ b/lib/plugins/create/create.js
+@@ -7,6 +7,7 @@ const _ = require('lodash');
+ 
+ const userStats = require('../../utils/userStats');
+ const download = require('../../utils/downloadTemplateFromRepo');
++const renameService = require('../../utils/renameService').renameService;
+ 
+ // class wide constants
+ const validTemplates = [
+@@ -66,6 +67,9 @@ class Create {
+             usage: 'Template URL for the service. Supports: GitHub, BitBucket',
+             shortcut: 'u',
+           },
++          'template-path': {
++            usage: 'Path to a local template directory for the service',
++          },
+           path: {
+             usage: 'The path where the service should be created (e.g. --path my-service)',
+             shortcut: 'p',
+@@ -89,6 +93,8 @@ class Create {
+ 
+     if ('template' in this.options) {
+       this.createFromTemplate();
++    } else if ('template-path' in this.options) {
++      this.createFromPath();
+     } else if ('template-url' in this.options) {
+       return download.downloadTemplateFromRepo(
+         this.options['template-url'],
+@@ -113,14 +119,77 @@ class Create {
+         });
+     } else {
+       const errorMessage = [
+-        'You must either pass a template name (--template) or a ',
+-        'a URL (--template-url).',
++        'You must either pass a template name (--template), a URL (--template-url) ',
++        'or a local path (--template-path).',
+       ].join('');
+       throw new this.serverless.classes.Error(errorMessage);
+     }
+     return BbPromise.resolve();
+   }
+ 
++  createFromPath() {
++    const templatePath = _.toString(this.options['template-path']);
++    if (!templatePath || !this.serverless.utils.dirExistsSync(path.resolve(templatePath))) {
++      const errorMessage = [
++        `The template path "${templatePath}" does not exist or is not a directory.`,
++      ].join('');
++      throw new this.serverless.classes.Error(errorMessage);
++    }
++
++    const templateSrcDir = path.resolve(templatePath);
++    const boilerplatePath = _.toString(this.options.path);
++    const serviceName = _.toString(this.options.name);
++    const servicePath = boilerplatePath ? path.resolve(boilerplatePath) : process.cwd();
++
++    if (boilerplatePath && fse.existsSync(servicePath)) {
++      const errorMessage = [
++        `The directory "${servicePath}" already exists, and serverless will not overwrite it.`,
++      ].join('');
++      throw new this.serverless.classes.Error(errorMessage);
++    }
++
++    const templateFullFilePaths = this.serverless.utils.walkDirSync(templateSrcDir);
++    if (!boilerplatePath) {
++      templateFullFilePaths.forEach((filePath) => {
++        const relativeFilePath = path.relative(templateSrcDir, filePath);
++        const targetPath = path.join(servicePath, relativeFilePath);
++        if (fse.existsSync(targetPath)) {
++          const errorMessage = [
++            `The file "${relativeFilePath}" already exists, and serverless will not overwrite it. `,
++            'Move the file and try again if you want serverless to write a new file',
++          ].join('');
++
++          throw new this.serverless.classes.Error(errorMessage);
++        }
++      });
++    } else {
++      fse.mkdirsSync(servicePath);
++    }
++
++    try {
++      this.serverless.utils.copyDirContentsSync(templateSrcDir, servicePath);
++    } catch (err) {
++      const errorMessage = [
++        'Error unable to create a service in this directory. ',
++        'Please check that you have the required permissions to write to the directory',
++      ].join('');
++
++      throw new this.serverless.classes.Error(errorMessage);
++    }
++
++    const newServiceName = serviceName || (boilerplatePath && path.basename(servicePath));
++    if (newServiceName) renameService(newServiceName, servicePath);
++
++    userStats.track('service_created', {
++      template: templatePath,
++      serviceName,
++    });
++
++    this.serverless.cli.asciiGreeting();
++    this.serverless.cli
++      .log(`Successfully generated boilerplate from local template: "${templatePath}"`);
++  }
++
+   createFromTemplate() {
+     const notPlugin = this.options.template !== 'plugin';
+ 
+diff --git a/lib/plugins/create/create.test.js b/lib/plugins/create/create.test.js
+index df578b4..1038226 100644
+--- a/lib/plugins/create/create.test.js
++++ b/lib/plugins/create/create.test.js
+@@ -656,6 +656,55 @@ describe('Create', () => {
+         .then(() => done());
+     });
+ 
++    it('should copy a local template to the requested path and rename the service', () => {
++      const templatePath = testUtils.getTmpDirPath();
++      fse.mkdirsSync(templatePath);
++      fse.writeFileSync(path.join(templatePath, 'serverless.yml'), 'service: template-name\n');
++      fse.writeFileSync(path.join(templatePath, 'package.json'),
++        JSON.stringify({ name: 'template-name' }));
++      fse.mkdirsSync(path.join(templatePath, 'nested'));
++      fse.writeFileSync(path.join(templatePath, 'nested', 'file.txt'), 'template content');
++
++      process.chdir(tmpDir);
++      create.options = {
++        'template-path': templatePath,
++        path: 'new-service',
++        name: 'custom-service',
++      };
++
++      return create.create().then(() => {
++        const serviceDir = path.join(tmpDir, 'new-service');
++        expect(fs.readFileSync(path.join(serviceDir, 'nested', 'file.txt'), 'utf8'))
++          .to.equal('template content');
++        expect(fs.readFileSync(path.join(serviceDir, 'serverless.yml'), 'utf8'))
++          .to.equal('service: custom-service\n');
++        expect(JSON.parse(fs.readFileSync(path.join(serviceDir, 'package.json'), 'utf8')).name)
++          .to.equal('custom-service');
++      });
++    });
++
++    it('should copy a local template into the current directory', () => {
++      const templatePath = path.join(tmpDir, 'template');
++      const destinationPath = path.join(tmpDir, 'destination');
++      fse.mkdirsSync(templatePath);
++      fse.mkdirsSync(destinationPath);
++      fse.writeFileSync(path.join(templatePath, 'handler.js'), 'module.exports = true;');
++
++      process.chdir(destinationPath);
++      create.options = { 'template-path': path.relative(destinationPath, templatePath) };
++
++      return create.create().then(() => {
++        expect(fs.readFileSync(path.join(destinationPath, 'handler.js'), 'utf8'))
++          .to.equal('module.exports = true;');
++      });
++    });
++
++    it('should reject an invalid local template path', () => {
++      create.options = { 'template-path': path.join(tmpDir, 'missing-template') };
++
++      expect(() => create.create()).to.throw(/template path/i);
++    });
++
+     it('should resolve if download succeeds', () => {
+       sinon.stub(download, 'downloadTemplateFromRepo');
+ 

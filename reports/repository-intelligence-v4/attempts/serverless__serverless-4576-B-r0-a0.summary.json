@@ -1,0 +1,667 @@
+{
+  "task": "serverless__serverless-4576",
+  "repo": "serverless/serverless",
+  "category": "cross-file",
+  "repetition": 0,
+  "id": "B",
+  "name": "Luna always-guided",
+  "model": "gpt-6-luna",
+  "effort": "xhigh",
+  "mode": "guided",
+  "arm": "B",
+  "kind": "v4-real-heldout",
+  "workspaceGit": {
+    "root": "C:/Users/Public/SufficeV4/serverless__serverless-4576-B-r0-a0/workspace",
+    "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+    "tree": "9245ece1bf181953bde6b05125c010626b307941"
+  },
+  "runId": "serverless__serverless-4576-B-r0-a0",
+  "status": "completed",
+  "error": null,
+  "success": false,
+  "patchAccepted": false,
+  "immutableIntact": true,
+  "modelValid": true,
+  "observedTiers": [
+    "default"
+  ],
+  "latencyMs": 394127.2754,
+  "usage": {
+    "input": 105057,
+    "cacheRead": 1515264,
+    "cacheWrite": 0,
+    "output": 17042,
+    "estimatedApiUsd": 0.03417933999999999,
+    "modelCalls": 25,
+    "costUnknown": false
+  },
+  "totalEstimatedUsd": 0.03417933999999999,
+  "acceptance": {
+    "status": "failed",
+    "required": 1,
+    "requiredPassed": 0,
+    "unpassed": [
+      "Create #create() should copy \"aws-nodejs\" template from local path",
+      "Create #create() should copy \"aws-nodejs\" template from local path with a custom name",
+      "#walkDirSync() should check noLinks option"
+    ],
+    "missing": [],
+    "v4Grade": {
+      "valid": true,
+      "accepted": false,
+      "classification": "failed_tests",
+      "targets": 1,
+      "targetsPassed": 0,
+      "regressions": 3,
+      "regressionsPassed": 3,
+      "missing": [],
+      "failures": [
+        "Create #create() should copy \"aws-nodejs\" template from local path",
+        "Create #create() should copy \"aws-nodejs\" template from local path with a custom name",
+        "#walkDirSync() should check noLinks option"
+      ],
+      "unexpectedPending": [],
+      "inventory": {
+        "#walkDirSync() should check noLinks option": 1,
+        "#walkDirSync() should return an array with corresponding paths to the found files": 1,
+        "Create #constructor() should have commands": 1,
+        "Create #constructor() should have hooks": 1,
+        "Create #constructor() should run promise chain in order for \"create:create\" hook": 1,
+        "Create #create() should copy \"aws-nodejs\" template from local path": 1,
+        "Create #create() should copy \"aws-nodejs\" template from local path with a custom name": 1,
+        "Create #create() should create a custom renamed service in the directory if using the \"path\" and \"name\" option": 1,
+        "Create #create() should create a plugin in the current directory": 1,
+        "Create #create() should create a renamed service in the directory if using the \"path\" option": 1,
+        "Create #create() should create a service in the directory if using the \"path\" option with digits": 1,
+        "Create #create() should display ascii greeting": 1,
+        "Create #create() should generate scaffolding for \"aws-csharp\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-fsharp\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-groovy-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-java-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-java-maven\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-jvm-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-jvm-maven\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-kotlin-nodejs-gradle\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs-ecma-script\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-nodejs-typescript\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-python\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-python3\" template": 1,
+        "Create #create() should generate scaffolding for \"aws-scala-sbt\" template": 1,
+        "Create #create() should generate scaffolding for \"azure-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"google-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"hello-world\" template": 1,
+        "Create #create() should generate scaffolding for \"kubeless-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"kubeless-python\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-php\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-python\" template": 1,
+        "Create #create() should generate scaffolding for \"openwhisk-swift\" template": 1,
+        "Create #create() should generate scaffolding for \"plugin\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-nodejs\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-python\" template": 1,
+        "Create #create() should generate scaffolding for \"spotinst-ruby\" template": 1,
+        "Create #create() should generate scaffolding for \"webtasks-nodejs\" template": 1,
+        "Create #create() should overwrite the name for the service if user passed name": 1,
+        "Create #create() should reject if download fails": 1,
+        "Create #create() should resolve if download succeeds": 1,
+        "Create #create() should set servicePath based on cwd": 1,
+        "Create #create() should throw error if the directory for the service already exists in cwd": 1,
+        "Create #create() should throw error if there are existing template files in cwd": 1,
+        "Create #create() should throw error if user passed unsupported template": 1
+      }
+    }
+  },
+  "regression": {
+    "status": "passed",
+    "required": 3,
+    "requiredPassed": 3
+  },
+  "changed": [
+    "docs/providers/aws/cli-reference/create.md",
+    "lib/plugins/create/create.js",
+    "lib/plugins/create/create.test.js"
+  ],
+  "unrepairedReferenceFiles": [
+    "lib/utils/fs/copyDirContentsSync.js",
+    "lib/utils/fs/walkDirSync.js"
+  ],
+  "extraChangedFiles": [
+    "docs/providers/aws/cli-reference/create.md",
+    "lib/plugins/create/create.test.js"
+  ],
+  "proxyWarning": "Reference-path deviations are not proof of missed dependencies or unnecessary edits.",
+  "iterations": 25,
+  "editCalls": 8,
+  "verificationCalls": 11,
+  "toolCalls": 69,
+  "graphGuidance": [
+    {
+      "phase": "initial",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    },
+    {
+      "phase": "after-edit",
+      "reason": null
+    }
+  ],
+  "graphOverhead": [
+    {
+      "at": "2026-11-10T14:26:44.768Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 3331.7198000000026,
+      "parsedFiles": 401,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 70369912,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:26:46.428Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1656.3158000000003,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -49687520,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:26:54.334Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1291.0132000000012,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -25610968,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:26:58.776Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1311.2561999999962,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -24912528,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:27:10.610Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1546.1578999999983,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 4587784,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:27:18.221Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1333.4328999999998,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": 2894992,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:27:42.486Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "5ded37bf7aafd0e48547c2168d0ef0852614ed716d9c0243360a0db681a821c5",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "09bb6b4442e8dcfa88daceea84c49c514ea5893d8039f440add4f3547b031fcd"
+      },
+      "latencyMs": 1326.1373000000021,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18388050,
+      "heapDeltaBytes": -3296272,
+      "graphBytes": 25793949
+    },
+    {
+      "at": "2026-11-10T14:28:52.650Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1592.5043000000005,
+      "parsedFiles": 2,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 54788096,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:28:53.938Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1272.8570000000182,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 4629496,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:03.416Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1385.7719999999972,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 2825688,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:16.769Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1234.27429999999,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 6045016,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:29.313Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1273.4881000000169,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": -4194952,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:29:40.935Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1231.4133999999904,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 7829176,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:00.091Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1383.910199999984,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": -25501528,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:29.930Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1242.397100000002,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": -3885440,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:37.180Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1319.6811999999918,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 28749808,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:47.000Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "1c141c63c26767e601fc7ab5194ab8690ba3dba4b91b2a4e366e989ed0c80388",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "20a7f89b16a58305a9cc900282071f7198ccc0b381224381eb7dec94598f8e66"
+      },
+      "latencyMs": 1558.3252000000211,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446352,
+      "heapDeltaBytes": 28645496,
+      "graphBytes": 25875222
+    },
+    {
+      "at": "2026-11-10T14:30:55.325Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "89e488ad4e0d886628a62e406280c4157286c03fa0454b570284ac31550f6a7a",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "e5140a35694f01dd668130b38f49554552f5a6db2f3853a9c12cb3b8ef94087e"
+      },
+      "latencyMs": 1500.0020999999833,
+      "parsedFiles": 2,
+      "fileCount": 401,
+      "cacheBytes": 18446800,
+      "heapDeltaBytes": -28771128,
+      "graphBytes": 25875714
+    },
+    {
+      "at": "2026-11-10T14:30:56.556Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "89e488ad4e0d886628a62e406280c4157286c03fa0454b570284ac31550f6a7a",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "e5140a35694f01dd668130b38f49554552f5a6db2f3853a9c12cb3b8ef94087e"
+      },
+      "latencyMs": 1223.1089000000502,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18446800,
+      "heapDeltaBytes": 28781080,
+      "graphBytes": 25875714
+    },
+    {
+      "at": "2026-11-10T14:31:12.634Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1692.2900999999838,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 23123048,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:13.897Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1255.520599999989,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -67682496,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:28.165Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1361.1143999999622,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -18793432,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:38.407Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1294.9250000000466,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -37043512,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:31:48.660Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1288.220399999991,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 28745000,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:04.342Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "02b374383a1e34e0ac8ad983b5044af4a2e3da1027c887269056e2a2a0460207",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "bba767edd542ef6b752b6cd5e5825c6e781e51c331eff02f3e385a535dacb3a2"
+      },
+      "latencyMs": 1263.3359000000055,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -36762656,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:25.833Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1629.6107000000193,
+      "parsedFiles": 1,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 37082448,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:27.082Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1242.5672999999952,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -74697920,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:40.456Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1244.0395000000135,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": 28460744,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:50.142Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1396.4737000000314,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -37772776,
+      "graphBytes": 25893508
+    },
+    {
+      "at": "2026-11-10T14:32:58.981Z",
+      "type": "graph_refresh",
+      "revision": {
+        "head": "78c5be743732d2546993c6b39b44ccac64dcb5e7",
+        "sourceContentVersion": "caa3156ccc821dc8d64a1fc8eabeefd7ebe6c2a46882a1940e2541fb58608977",
+        "configurationVersion": "9018b850abc77e48069b234f61b5036fd0c5a85ccd5fbc636b344ed2ed474044",
+        "contentVersion": "fce3fa4cd463d8deab9bf14767aabb61ca8b0563769fd70006d003bd4a2e7e7c"
+      },
+      "latencyMs": 1252.462499999965,
+      "parsedFiles": 0,
+      "fileCount": 401,
+      "cacheBytes": 18459890,
+      "heapDeltaBytes": -27737336,
+      "graphBytes": 25893508
+    }
+  ],
+  "eventPath": "C:\\Users\\Public\\SufficeV4\\serverless__serverless-4576-B-r0-a0\\home\\events\\1794320801409-d18c3912-0718-44d7-a3af-0102fd026901.jsonl",
+  "receiptAudit": {
+    "requests": 25,
+    "finalUsageResponses": 25,
+    "missingUsage": false,
+    "configurationMismatches": 0
+  },
+  "requestedServiceTier": "priority",
+  "reportedServiceTiers": [
+    "default"
+  ],
+  "serverConfirmedPriority": false,
+  "priorityPricingBasis": "Installed SDK requested-Priority fallback; raw reported tier retained",
+  "configurationVerified": true,
+  "sourceStable": true,
+  "classification": "completed",
+  "providerRequests": 25,
+  "completionReason": null,
+  "bindingGuards": [],
+  "engineeringAccepted": false,
+  "normalTaskCompletion": true,
+  "resourcePolicyPhase": "post-restart-low-memory-v2",
+  "servicePolicySha256": "ccaf2f92a4496c46129536f48bc162ac4af5f3730161d85375b9fab20028c886",
+  "cellId": "serverless__serverless-4576-B-r0",
+  "attempt": 0
+}

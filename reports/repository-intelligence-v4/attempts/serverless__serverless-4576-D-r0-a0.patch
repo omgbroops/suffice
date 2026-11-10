@@ -1,0 +1,437 @@
+diff --git a/docs/providers/aws/cli-reference/create.md b/docs/providers/aws/cli-reference/create.md
+index fc38bf9..91cc4ba 100644
+--- a/docs/providers/aws/cli-reference/create.md
++++ b/docs/providers/aws/cli-reference/create.md
+@@ -33,8 +33,9 @@ serverless create --template-url https://github.com/serverless/serverless/tree/m
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -97,3 +98,16 @@ serverless create --template plugin
+ ```
+ 
+ This example will generate scaffolding for a hello world plugin that demonstrates how to create a new command and how to listen to the various events available.
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/docs/providers/azure/cli-reference/create.md b/docs/providers/azure/cli-reference/create.md
+index 998a09c..83be39f 100644
+--- a/docs/providers/azure/cli-reference/create.md
++++ b/docs/providers/azure/cli-reference/create.md
+@@ -28,8 +28,9 @@ serverless create --template azure-nodejs --path myService
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -75,3 +76,16 @@ provide. In this example the service will be renamed to `my-new-service`.
+ ```bash
+ serverless create --template-url https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/azure-nodejs --path myService
+ ```
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/docs/providers/google/cli-reference/create.md b/docs/providers/google/cli-reference/create.md
+index 232c84b..7fa62f6 100644
+--- a/docs/providers/google/cli-reference/create.md
++++ b/docs/providers/google/cli-reference/create.md
+@@ -28,8 +28,9 @@ serverless create --template google-nodejs --path my-service
+ 
+ ## Options
+ 
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -66,3 +67,16 @@ Additionally Serverless will rename the service according to the path you provid
+ ```bash
+ serverless create --template-url https://github.com/serverless/serverless/tree/master/lib/plugins/create/templates/google-nodejs --path myService
+ ```
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/docs/providers/kubeless/cli-reference/create.md b/docs/providers/kubeless/cli-reference/create.md
+index 7911ef2..ca7ee5b 100644
+--- a/docs/providers/kubeless/cli-reference/create.md
++++ b/docs/providers/kubeless/cli-reference/create.md
+@@ -35,8 +35,9 @@ serverless create --template kubeless-nodejs --path my-service
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -73,3 +74,16 @@ serverless create --template kubeless-python --path my-new-service
+ This example will generate scaffolding for a service with `kubeless` as a provider and `python2.7` as runtime. The scaffolding will be generated in the `my-new-service` directory. This directory will be created if not present. Otherwise Serverless will use the already present directory.
+ 
+ Additionally Serverless will rename the service according to the path you provide. In this example the service will be renamed to `my-new-service`.
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/docs/providers/openwhisk/cli-reference/create.md b/docs/providers/openwhisk/cli-reference/create.md
+index 5c5201e..48229b7 100644
+--- a/docs/providers/openwhisk/cli-reference/create.md
++++ b/docs/providers/openwhisk/cli-reference/create.md
+@@ -27,8 +27,9 @@ serverless create --template openwhisk-nodejs --path myService
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -82,3 +83,16 @@ serverless create --template plugin
+ ```
+ 
+ This example will generate scaffolding for a hello world plugin that demonstrates how to create a new command and how to listen to the various events available.
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/docs/providers/spotinst/cli-reference/create.md b/docs/providers/spotinst/cli-reference/create.md
+index 0009dea..c8ff402 100644
+--- a/docs/providers/spotinst/cli-reference/create.md
++++ b/docs/providers/spotinst/cli-reference/create.md
+@@ -27,8 +27,9 @@ serverless create -t spotinst-nodejs -p myService
+ ```
+ 
+ ## Options
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -70,3 +71,16 @@ serverless create -t spotinst-nodejs -p my-new-service
+ This example will generate scaffolding for a service with `Spotinst` as a provider and `ruby` as runtime. The scaffolding
+ will be generated in the `my-new-service` directory. This directory will be created if not present. Otherwise Serverless
+ will use the already present directory.
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/docs/providers/webtasks/cli-reference/create.md b/docs/providers/webtasks/cli-reference/create.md
+index 56da107..f1a42ee 100644
+--- a/docs/providers/webtasks/cli-reference/create.md
++++ b/docs/providers/webtasks/cli-reference/create.md
+@@ -28,8 +28,9 @@ serverless create --template webtasks-nodejs --path my-service
+ 
+ ## Options
+ 
+-- `--template` or `-t` The name of one of the available templates. **Required if --template-url is not present**.
+-- `--template-url` or `-u` The name of one of the available templates. **Required if --template is not present**.
++- `--template` or `-t` The name of one of the available templates. **Required unless --template-url or --template-path is provided**.
++- `--template-url` or `-u` The name of one of the available templates. **Required unless --template or --template-path is provided**.
++- `--template-path` The local directory to copy as a template. Accepts relative or absolute paths; no download is performed.
+ - `--path` or `-p` The path where the service should be created.
+ - `--name` or `-n` the name of the service in `serverless.yml`.
+ 
+@@ -60,3 +61,16 @@ serverless create --template webtasks-nodejs --path my-new-service
+ This example will generate scaffolding for a service with `webtasks` as a provider. The scaffolding will be generated in the `my-new-service` directory. This directory will be created if not present. Otherwise Serverless will use the already present directory.
+ 
+ Additionally Serverless will rename the service according to the path you provide. In this example the service will be renamed to `my-new-service`.
++
++### Creating a service from a local template
++
++```bash
++serverless create --template-path ../my-template --path my-service
++```
++
++Use a local directory (including a privately cloned repository or an internal path) as the template.
++Files, subdirectories and dotfiles are copied without modifying the source. Without `--path`,
++the template is copied into the current directory. Existing destination files are not overwritten,
++and an explicitly specified destination directory must not already exist.
++When `--path` is supplied, the service is renamed to the destination directory name;
++`--name` overrides that name.
+diff --git a/lib/plugins/create/create.js b/lib/plugins/create/create.js
+index eaa3a67..f5e35dc 100644
+--- a/lib/plugins/create/create.js
++++ b/lib/plugins/create/create.js
+@@ -7,6 +7,7 @@ const _ = require('lodash');
+ 
+ const userStats = require('../../utils/userStats');
+ const download = require('../../utils/downloadTemplateFromRepo');
++const renameService = require('../../utils/renameService').renameService;
+ 
+ // class wide constants
+ const validTemplates = [
+@@ -66,6 +67,9 @@ class Create {
+             usage: 'Template URL for the service. Supports: GitHub, BitBucket',
+             shortcut: 'u',
+           },
++          'template-path': {
++            usage: 'Local path to a template for the service',
++          },
+           path: {
+             usage: 'The path where the service should be created (e.g. --path my-service)',
+             shortcut: 'p',
+@@ -111,16 +115,70 @@ class Create {
+         .catch(err => {
+           throw new this.serverless.classes.Error(err);
+         });
++    } else if ('template-path' in this.options) {
++      this.createFromTemplatePath();
+     } else {
+       const errorMessage = [
+-        'You must either pass a template name (--template) or a ',
+-        'a URL (--template-url).',
++        'You must pass a template name (--template), a URL (--template-url), ',
++        'or a local path (--template-path).',
+       ].join('');
+       throw new this.serverless.classes.Error(errorMessage);
+     }
+     return BbPromise.resolve();
+   }
+ 
++  createFromTemplatePath() {
++    const templatePath = this.options['template-path'];
++    if (typeof templatePath !== 'string' || !templatePath ||
++        !this.serverless.utils.dirExistsSync(path.resolve(templatePath))) {
++      throw new this.serverless.classes.Error('The template path must point to an existing directory.');
++    }
++
++    const source = path.resolve(templatePath);
++    const destination = path.resolve(_.toString(this.options.path) || process.cwd());
++    const relativeDestination = path.relative(source, destination);
++    if (!relativeDestination ||
++        (!path.isAbsolute(relativeDestination) &&
++         relativeDestination !== '..' && !relativeDestination.startsWith(`..${path.sep}`))) {
++      throw new this.serverless.classes.Error('The destination cannot be inside the template directory.');
++    }
++
++    if (this.options.path && fse.existsSync(destination)) {
++      throw new this.serverless.classes.Error(
++        `The directory "${destination}" already exists, and serverless will not overwrite it.`
++      );
++    }
++
++    // Check all top-level entries before copying anything, including directories and dotfiles.
++    fse.readdirSync(source).forEach(filename => {
++      if (fse.existsSync(path.join(destination, filename))) {
++        throw new this.serverless.classes.Error(
++          `The file "${filename}" already exists, and serverless will not overwrite it.`
++        );
++      }
++    });
++
++    try {
++      fse.copySync(source, destination);
++    } catch (err) {
++      throw new this.serverless.classes.Error(
++        `Unable to copy the template from "${source}": ${err.message}`
++      );
++    }
++
++    this.serverless.config.update({ servicePath: destination });
++    if (this.options.name || this.options.path) {
++      renameService(_.toString(this.options.name) || path.basename(destination), destination);
++    }
++
++    userStats.track('service_created', {
++      template: templatePath,
++      serviceName: this.options.name,
++    });
++    this.serverless.cli.asciiGreeting();
++    this.serverless.cli.log(`Successfully generated boilerplate from "${source}"`);
++  }
++
+   createFromTemplate() {
+     const notPlugin = this.options.template !== 'plugin';
+ 
+diff --git a/lib/plugins/create/templatePath.test.js b/lib/plugins/create/templatePath.test.js
+new file mode 100644
+index 0000000..68ac954
+--- /dev/null
++++ b/lib/plugins/create/templatePath.test.js
+@@ -0,0 +1,105 @@
++'use strict';
++
++const expect = require('chai').expect;
++const path = require('path');
++const fse = require('fs-extra');
++const sinon = require('sinon');
++const Create = require('./create');
++const Serverless = require('../../Serverless');
++const testUtils = require('../../../tests/utils');
++
++describe('Create from a local template', () => {
++  let cwd;
++  let tmpDir;
++  let source;
++  let create;
++
++  beforeEach(() => {
++    cwd = process.cwd();
++    tmpDir = testUtils.getTmpDirPath();
++    source = path.join(tmpDir, 'template');
++    fse.mkdirsSync(path.join(source, 'nested'));
++    fse.writeFileSync(path.join(source, 'serverless.yml'), 'service: original\n');
++    fse.writeJsonSync(path.join(source, 'package.json'), { name: 'original' });
++    fse.writeFileSync(path.join(source, 'nested', 'handler.js'), 'handler');
++    fse.writeFileSync(path.join(source, '.gitignore'), 'node_modules');
++    process.chdir(tmpDir);
++    const serverless = new Serverless();
++    serverless.cli = { log: sinon.spy(), asciiGreeting: sinon.spy() };
++    create = new Create(serverless, { 'template-path': 'template' });
++  });
++
++  afterEach(() => {
++    process.chdir(cwd);
++    fse.removeSync(tmpDir);
++  });
++
++  it('registers the local template option', () => {
++    expect(create.commands.create.options).to.have.property('template-path');
++  });
++
++  it('copies a relative template to cwd, preserving nested files and dotfiles', () =>
++    create.create().then(() => {
++      expect(fse.readFileSync(path.join(tmpDir, 'nested', 'handler.js'), 'utf8'))
++        .to.equal('handler');
++      expect(fse.readFileSync(path.join(tmpDir, '.gitignore'), 'utf8')).to.equal('node_modules');
++      expect(fse.readFileSync(path.join(tmpDir, 'serverless.yml'), 'utf8'))
++        .to.equal('service: original\n');
++      expect(create.serverless.config.servicePath).to.equal(tmpDir);
++    })
++  );
++
++  it('supports absolute source and destination paths and renames the service', () => {
++    create.options['template-path'] = source;
++    create.options.path = path.join(tmpDir, 'new-service');
++    return create.create().then(() => {
++      expect(fse.readFileSync(path.join(create.options.path, 'serverless.yml'), 'utf8'))
++        .to.equal('service: new-service\n');
++      expect(fse.readJsonSync(path.join(create.options.path, 'package.json')).name)
++        .to.equal('new-service');
++      expect(fse.readFileSync(path.join(source, 'serverless.yml'), 'utf8'))
++        .to.equal('service: original\n');
++    });
++  });
++
++  it('lets an explicit name override the destination basename', () => {
++    create.options.path = 'destination';
++    create.options.name = 'custom-name';
++    return create.create().then(() => {
++      expect(fse.readFileSync(path.join(tmpDir, 'destination', 'serverless.yml'), 'utf8'))
++        .to.equal('service: custom-name\n');
++    });
++  });
++
++  it('rejects missing paths and files as template sources', () => {
++    [undefined, '', 'missing', path.join(source, 'serverless.yml')].forEach(value => {
++      create.options['template-path'] = value;
++      expect(() => create.create()).to.throw('existing directory');
++    });
++  });
++
++  it('does not overwrite an existing destination directory', () => {
++    create.options.path = 'existing';
++    fse.mkdirsSync(path.join(tmpDir, 'existing'));
++    expect(() => create.create()).to.throw('will not overwrite');
++  });
++
++  it('checks cwd conflicts before copying any template files', () => {
++    fse.writeFileSync(path.join(tmpDir, 'serverless.yml'), 'keep');
++    expect(() => create.create()).to.throw('will not overwrite');
++    expect(fse.readFileSync(path.join(tmpDir, 'serverless.yml'), 'utf8')).to.equal('keep');
++    expect(fse.existsSync(path.join(tmpDir, 'nested'))).to.equal(false);
++  });
++
++  it('rejects copying a template into itself or a descendant', () => {
++    [source, path.join(source, 'child')].forEach(destination => {
++      create.options.path = destination;
++      expect(() => create.create()).to.throw('inside the template');
++    });
++  });
++
++  it('mentions the local option when no template source is supplied', () => {
++    create.options = {};
++    expect(() => create.create()).to.throw('--template-path');
++  });
++});
