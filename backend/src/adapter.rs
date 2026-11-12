@@ -39,7 +39,6 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             ("codex".into(), a)
         }
         AgentKind::OpenCode => {
-            // shortcut: no CLI-level sandbox flag for opencode, gate only; check its permission config when wiring
             let mut a = strs(&["run", "--format", "json"]);
             if let Some(id) = resume {
                 a.extend(strs(&["--session", id]));
