@@ -1020,6 +1020,9 @@ impl Engine {
     fn journal_start(&mut self, task: &str, program: &str, cmd: &mut Cmd) -> bool {
         let Ok(nonce) = new_nonce() else { return false };
         cmd.env.insert("SUFFICE_RUN_NONCE".into(), nonce.clone());
+        // the claude gate hook allows these exact calls, which the user already approved for this task
+        let approved = self.calls.iter().filter(|c| c.0 == task).map(|(_, n, i)| Value::Obj(vec![("name".into(), Value::str(n)), ("input".into(), Value::str(i))])).collect();
+        cmd.env.insert("SUFFICE_APPROVED_CALLS".into(), Value::Arr(approved).to_string());
         self.live.insert(task.to_string(), LiveRun { nonce, pid: None, program: program.to_string(), start: String::new() });
         self.save_runs().is_ok()
     }

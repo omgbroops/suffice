@@ -129,3 +129,6 @@ SSE sends it as "event: trigger".
 
 NOT IN v0: auth beyond a local token, remote access, websockets (SSE covers live), editing a task
 after submit, computer-use/browser endpoints (they show up as tool_call events for now).
+Claude gate hook: claude runs with --settings wiring a PreToolUse command hook to 'suffice-backend gate-hook' (JSON: {"hooks":{"PreToolUse":[{"matcher":"*","hooks":[{"type":"command","command":"<exe> gate-hook"}]}]}}).
+gate-hook reads the tool call on stdin, exits 0 to allow, 2 to block (stderr shows the held reason); unparseable input fails closed.
+Calls the user approved for a task are passed to the hook in SUFFICE_APPROVED_CALLS (JSON [{name,input}]) and allowed on exact match.
