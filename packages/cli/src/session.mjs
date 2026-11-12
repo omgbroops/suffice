@@ -86,10 +86,10 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     session, totals, eventPath, sessionPath:()=>manager.getSessionFile(), created,
     services:{cwd:workspace,agentDir:options.home,modelRuntime:runtime,settingsManager:settings,resourceLoader:loader,diagnostics:[]},
     async flush() {clearTimeout(taskTimer);await tail;if(logError) throw logError;},
-    async run(prompt) {
+    async run(prompt,options={}) {
       managedRun=true;begin();
       try {
-        await session.prompt(prompt);
+        await session.prompt(prompt,options.images?.length?{images:options.images}:undefined);
         const last=[...session.messages].reverse().find(m=>m.role==='assistant');
         if(logError) throw new Error(`Could not save usage receipts: ${logError.message}`);
         if(allowance.reason) throw new Error(`Task stopped: ${allowance.reason}`);
