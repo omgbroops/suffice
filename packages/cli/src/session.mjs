@@ -19,7 +19,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   let tail=Promise.resolve(), logError, session, allowance, taskTimer, managedRun=false;
   const totals={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,costUnknown:false};
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
-  const tools=repositoryTools({workspace,shellPath:options.shellPath});
+  const tools=repositoryTools({workspace,shellPath:options.shellPath,access:options.access});
   const names=tools.map(t=>t.name);
   const settings=SettingsManager.inMemory({compaction:{enabled:false},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
