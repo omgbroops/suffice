@@ -55,13 +55,15 @@ export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15
   const absoluteTest = resolve(testPath);
   const testSource = await readFile(absoluteTest, 'utf8');
   const expectedNames = [...testSource.matchAll(/\btest\(\s*['"]([^'"]+)['"]/g)].map(m => m[1]).filter(n => !n.startsWith('acceptance requires'));
-  const args = ['--permission', `--allow-fs-read=${resolve(workspace)}`, `--allow-fs-read=${absoluteTest}`,
-    '--max-old-space-size=128', '--test-reporter=tap', absoluteTest];
+  // realpath: on macOS /var is a symlink to /private/var; node checks access against the real path.
+  const realTest = await realpath(absoluteTest), realWorkspace = await realpath(resolve(workspace));
+  const args = ['--permission', `--allow-fs-read=${realWorkspace}`, `--allow-fs-read=${realTest}`,
+    '--max-old-space-size=128', '--test-reporter=tap', realTest];
   const started = Date.now();
   return new Promise(resolveResult => {
     const child = spawn(process.execPath, args, { cwd: workspace, windowsHide: true, env: {
       SystemRoot: process.env.SystemRoot ?? '', WINDIR: process.env.WINDIR ?? '',
-      SUFFICE_WORKSPACE: resolve(workspace), NODE_NO_WARNINGS: '1',
+      SUFFICE_WORKSPACE: realWorkspace, NODE_NO_WARNINGS: '1',
     }, stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '', stderr = '', truncated = false, timedOut = false;
     const add = key => chunk => {

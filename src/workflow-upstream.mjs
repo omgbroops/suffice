@@ -1,9 +1,10 @@
-import {spawn} from 'node:child_process';import {pathToFileURL} from 'node:url';import {resolve} from 'node:path';import {filesIn} from './workspace.mjs';import {root} from './runtime.mjs';
+import {spawn} from 'node:child_process';import {pathToFileURL} from 'node:url';import {resolve} from 'node:path';import {realpathSync} from 'node:fs';import {filesIn} from './workspace.mjs';import {root} from './runtime.mjs';
 export async function runUpstream(workspace,{signal}={}){
   const paths=(await filesIn(resolve(workspace,'src/test/core'))).filter(p=>p.endsWith('.test.mjs')&&!['dist.test.mjs','dump-fuzzy.test.mjs','pathological.test.mjs'].includes(p)).map(p=>'src/test/core/'+p);
   const loader=resolve(root,'benchmarks/workflow/upstream-loader.mjs'),start=Date.now();
   return new Promise(done=>{
-    const child=spawn(process.execPath,['--permission',`--allow-fs-read=${workspace}`,`--allow-fs-read=${loader}`,'--max-old-space-size=128','--import',pathToFileURL(loader).href,'--test','--test-isolation=none','--test-reporter=tap',...paths],{cwd:workspace,windowsHide:true,env:{SystemRoot:process.env.SystemRoot??'',WINDIR:process.env.WINDIR??'',SUFFICE_WORKSPACE:workspace,NODE_NO_WARNINGS:'1'},stdio:['ignore','pipe','pipe']});
+    const realWorkspace=realpathSync(workspace),realLoader=realpathSync(loader);
+    const child=spawn(process.execPath,['--permission',`--allow-fs-read=${realWorkspace}`,`--allow-fs-read=${realLoader}`,'--max-old-space-size=128','--import',pathToFileURL(realLoader).href,'--test','--test-isolation=none','--test-reporter=tap',...paths],{cwd:workspace,windowsHide:true,env:{SystemRoot:process.env.SystemRoot??'',WINDIR:process.env.WINDIR??'',SUFFICE_WORKSPACE:realWorkspace,NODE_NO_WARNINGS:'1'},stdio:['ignore','pipe','pipe']});
     let stdout='',stderr='',truncated=false,timedOut=false;child.stdout.on('data',b=>{stdout+=b;if(stdout.length>1024**2){truncated=true;stdout=stdout.slice(0,1024**2);}});child.stderr.on('data',b=>{stderr+=b;if(stderr.length>30000){truncated=true;stderr=stderr.slice(0,30000);}});
     const stop=()=>{timedOut=true;child.kill();},timer=setTimeout(stop,30000);signal?.addEventListener('abort',stop,{once:true});
     child.on('error',e=>{clearTimeout(timer);done({status:'infrastructure_error',errorCode:e.code,stdout,stderr});});
