@@ -1307,22 +1307,24 @@ fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize, u64)> {
 /// Reads approvals_log.jsonl. A torn tail is cut off so the next append starts a clean line.
 fn load_decisions(dir: &Path) -> io::Result<Vec<Value>> {
     let path = dir.join("approvals_log.jsonl");
-    let text = match fs::read(&path) {
-        Ok(t) => String::from_utf8_lossy(&t).into_owned(),
+    let bytes = match fs::read(&path) {
+        Ok(t) => t,
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(vec![]),
         Err(e) => return Err(e),
     };
-    let mut out = vec![];
-    let mut good = 0;
-    for line in text.split_inclusive('\n') {
-        if !line.ends_with('\n') {
-            break;
+    let (mut out, mut good) = (vec![], 0);
+    // count raw bytes: the offset must match the file, even when a line holds invalid UTF-8
+    for raw in bytes.split_inclusive(|&b| b == b'\n') {
+        if !raw.ends_with(b"\n") {
+            break; // torn tail
         }
-        let Ok(v) = json::parse(line.trim_end()) else { break };
+        good += raw.len();
+        // a complete line that doesn't parse is kept on disk and skipped, never truncated
+        let line = String::from_utf8_lossy(raw);
+        let Ok(v) = json::parse(line.trim_end()) else { continue };
         out.push(v);
-        good += line.len();
     }
-    if good < text.len() {
+    if good < bytes.len() {
         OpenOptions::new().write(true).open(&path)?.set_len(good as u64)?;
     }
     Ok(out)

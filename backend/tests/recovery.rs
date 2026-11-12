@@ -285,3 +285,33 @@ fn torn_tail_after_invalid_utf8_line_is_cut_at_the_right_byte() {
     let seqs: Vec<u64> = e.events_since(0).iter().map(|l| l.seq).collect();
     assert_eq!(seqs, vec![1, 2, 3, 4]);
 }
+
+#[test]
+fn garbage_approval_line_is_skipped_not_truncated() {
+    let d = Dir::new("garbage-approval");
+    let log = d.0.join("approvals_log.jsonl");
+    let text = "{\"task\":\"a\",\"status\":\"approved\"}\n{garbage\n{\"task\":\"b\",\"status\":\"denied\"}\n";
+    fs::write(&log, text).unwrap();
+    let e = Engine::open(&d.0, 2).unwrap();
+    let tasks: Vec<&str> = e.decisions().iter().filter_map(|v| v.get("task").and_then(json::Value::as_str)).collect();
+    assert_eq!(tasks, vec!["a", "b"], "later decisions must survive a garbage line");
+    drop(e);
+    assert_eq!(fs::read_to_string(&log).unwrap(), text, "garbage line must stay on disk");
+}
+
+#[test]
+fn invalid_utf8_approval_line_then_torn_tail_is_cut_at_the_right_byte() {
+    let d = Dir::new("invalid-utf8-approval");
+    let log = d.0.join("approvals_log.jsonl");
+    let l1 = b"{\"task\":\"a\",\"status\":\"approved\"}\n".to_vec();
+    let l2 = b"{\"task\":\"x\xFF\",\"status\":\"denied\"}\n".to_vec();
+    let l3 = b"{\"task\":\"b\",\"status\":\"denied\"}\n".to_vec();
+    let good_len = l1.len() + l2.len() + l3.len();
+    let mut bytes = [l1, l2, l3].concat();
+    bytes.extend_from_slice(b"{\"task\":\"c\",\"sta");
+    fs::write(&log, &bytes).unwrap();
+    let e = Engine::open(&d.0, 2).unwrap();
+    assert_eq!(e.decisions().len(), 3, "decisions after the invalid line must take effect");
+    drop(e);
+    assert_eq!(fs::metadata(&log).unwrap().len() as usize, good_len, "torn bytes must be cut exactly");
+}
