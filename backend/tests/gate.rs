@@ -190,6 +190,100 @@ fn task_prompts() {
 }
 
 #[test]
+fn narrow_read_only_allow_rules() {
+    let allow = [
+        "curl -s https://github.com/a/b",
+        "curl -s -L -S https://api.github.com/repos/a/b",
+        "curl -f -L --max-time 10 https://docs.rs/serde",
+        "curl --silent --show-error -I https://pypi.org/simple/x/",
+        "curl -s https://crates.io/api/v1/crates?q=abc",
+        "gh pr view --json number,title",
+        "gh pr list -R owner/repo --state merged -L 5",
+        "gh issue list --state all --limit 20",
+        "gh repo view --repo owner/repo",
+        "python3 check.py",
+        "node build.mjs",
+        "node test.js",
+        "docker build -t app .",
+        "docker build -t app ctx",
+        "docker ps",
+        "docker images",
+    ];
+    for c in allow {
+        assert!(!held(&check_event(&call("Bash", c))), "should allow: {c}");
+    }
+    let hold = [
+        "curl -X POST https://x.com/a",
+        "curl -s -d a=b https://x.com/a",
+        "curl -s -F f=@a https://x.com/a",
+        "curl -s -T f https://x.com/a",
+        "curl -s --data-binary a https://x.com/a",
+        "curl -s --json a https://x.com/a",
+        "curl -s --upload-file f https://x.com/a",
+        "curl -s -o out https://x.com/a",
+        "curl -s -O https://x.com/a",
+        "curl -s -K cfg https://x.com/a",
+        "curl -s --config cfg https://x.com/a",
+        "curl -s -u user:pw https://x.com/a",
+        "curl -s -x http://proxy https://x.com/a",
+        "curl -s file:///etc/passwd",
+        "curl -s -m 5 https://u@x.com/a",
+        "curl -s https://x.com/a https://y.com/b",
+        "curl -s https://github.com.evil.com/a",
+        "curl -s https://github.com:443/a",
+        "curl -s http://github.com/a",
+        "curl -s http://example.com",
+        "curl -s https://localhost/a",
+        "curl -s https://127.0.0.1/a",
+        "curl -s https://0.0.0.0/a",
+        "curl -s https://169.254.169.254/latest",
+        "curl -s https://10.0.0.1/a",
+        "curl -s https://192.168.1.1/a",
+        "curl -s https://172.16.0.1/a",
+        "curl -s https://[::1]/a",
+        "curl -s https://github.com@evil.com/a",
+        "curl -s https://github.com/a?q=[1-3]",
+        "curl -s https://github.com/{a,b}",
+        "curl -s https://github.com/a?q=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "gh pr list -R github.com/owner/repo",
+        "gh pr list --repo a/b/c",
+        "gh pr list -R owner",
+        "docker build -t app https://github.com/x/y.git",
+        "docker build -t app github.com/x/y",
+        "docker build -t app https://x.com/ctx.tar.gz",
+        "docker build -t app ctx:1",
+        "docker build -t app ctx.git",
+        "python3 -evil.py",
+        "node --x.js",
+        "gh pr view --web",
+        "gh pr list --web",
+        "gh pr view 3",
+        "gh issue view 4",
+        "gh run list",
+        "gh api repos/x/y",
+        "python3 -c print(1)",
+        "python3 /abs/check.py",
+        "python3 ../check.py",
+        "python3 scripts/check.py",
+        "python3 check.py --x",
+        "node -e 1",
+        "node /abs/a.js",
+        "node ../a.js",
+        "docker build .",
+        "docker build -t app /abs",
+        "docker build -t app ../ctx",
+        "docker build -f Dockerfile -t app .",
+        "docker push img:1",
+        "docker run img",
+        "docker login",
+        "docker exec -it c sh",
+    ];
+    for c in hold {
+        assert!(held(&check_event(&call("Bash", c))), "should hold: {c}");
+    }
+}
+
+#[test]
 fn full_access_task_is_held_for_approval() {
     let mut t = task("summarize the repo");
     t.access = Access::Full;
