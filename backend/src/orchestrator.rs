@@ -6,10 +6,12 @@ use crate::json::{self, Value};
 use crate::pool::{Pool, PoolMsg};
 use crate::queue::Queue;
 use crate::session::{Session, Sessions};
-use crate::types::{now_ms, AgentKind, Event, Logged, Task, TaskId, TaskState};
+use crate::triggers::{self, next_due, Trigger, When};
+use crate::types::{now_ms, AgentKind, Cmd, Event, Logged, Task, TaskId, TaskState};
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs::{self, File, OpenOptions};
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
+use std::process::Command;
 use std::path::{Path, PathBuf};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::time::{Duration, Instant};
@@ -22,6 +24,19 @@ struct Run {
     agent: AgentKind,
     session: Option<String>,
     error: bool,
+}
+
+/// A run journaled in runs.json before spawn (nonce), then with its pid and start time.
+struct LiveRun {
+    nonce: String,
+    pid: Option<u32>,
+    program: String,
+    /// `ps -o lstart` of the pid; "" until the pid is known.
+    start: String,
+}
+
+extern "C" {
+    fn kill(pid: i32, sig: i32) -> i32;
 }
 
 pub struct Engine {
@@ -44,8 +59,14 @@ pub struct Engine {
     held: HashMap<TaskId, (String, String)>,
     /// Decided approval records, oldest first (mirrors approvals_log.jsonl).
     decisions: Vec<Value>,
+    /// Runs started and not yet exited, by task id (mirrors runs.json).
+    live: BTreeMap<TaskId, LiveRun>,
     /// Program name -> path override, e.g. "claude" -> a custom install path.
     pub programs: BTreeMap<String, PathBuf>,
+    /// Scheduled and event-driven triggers, fired from tick().
+    triggers: Vec<Trigger>,
+    /// Time source for triggers; tests replace it with set_clock.
+    clock: Box<dyn Fn() -> u64 + Send>,
 }
 
 impl Engine {
@@ -53,6 +74,7 @@ impl Engine {
         fs::create_dir_all(dir)?;
         let queue = Queue::open(dir)?;
         let sessions = Sessions::open(dir)?;
+        let sess_note = sessions.corrupt.clone();
         let path = dir.join("events.jsonl");
         let (events, good) = read_log(&path)?;
         let size = fs::metadata(&path).map(|m| m.len() as usize).unwrap_or(0);
@@ -63,8 +85,10 @@ impl Engine {
         let file = OpenOptions::new().create(true).append(true).open(&path)?;
         let (approved, calls, held) = load_approvals(dir)?;
         let decisions = load_decisions(dir)?;
+        let (triggers, trig_note) = triggers::load(dir)?;
+        let orphans = load_runs(dir)?;
         let (tx, rx) = channel();
-        Ok(Engine {
+        let mut engine = Engine {
             dir: dir.to_path_buf(),
             queue,
             sessions,
@@ -81,8 +105,29 @@ impl Engine {
             calls,
             held,
             decisions,
+            live: BTreeMap::new(),
             programs: BTreeMap::new(),
-        })
+            triggers,
+            clock: Box::new(now_ms),
+        };
+        // runs of the crashed server: their agents may still be alive and hold the task's session
+        let (killed, warned) = kill_orphans(&orphans);
+        for task in killed {
+            let note = "orphan run killed after restart";
+            engine.log(&task, Event::Stderr { line: note.into() });
+            engine.log(&task, Event::State { state: "ready".into(), reason: Some(note.into()) });
+        }
+        for (task, w) in warned {
+            engine.log(&task, Event::Stderr { line: format!("orphan not killed: {w}") });
+        }
+        for note in [sess_note, trig_note].into_iter().flatten() {
+            eprintln!("suffice-backend: {note}");
+            engine.log("", Event::Stderr { line: note });
+        }
+        if !orphans.is_empty() {
+            engine.save_runs()?;
+        }
+        Ok(engine)
     }
 
     pub fn set_program(&mut self, name: &str, path: impl Into<PathBuf>) {
@@ -91,6 +136,167 @@ impl Engine {
 
     pub fn submit(&mut self, task: Task) -> Result<(), String> {
         self.queue.submit(task)
+    }
+
+    pub fn set_clock(&mut self, f: impl Fn() -> u64 + Send + 'static) {
+        self.clock = Box::new(f);
+    }
+
+    pub fn triggers(&self) -> &[Trigger] {
+        &self.triggers
+    }
+
+    /// Add a trigger. The template is a task body (POST /tasks shape); its id is set per fire.
+    pub fn add_trigger(&mut self, id: &str, when: When, template: Value) -> Result<(), String> {
+        if id.is_empty() {
+            return Err("trigger id is required".into());
+        }
+        if self.triggers.iter().any(|t| t.id == id) {
+            return Err(format!("trigger '{id}' already exists"));
+        }
+        let own = format!("{id}-");
+        if self.queue.all().iter().any(|t| t.id.starts_with(&own)) {
+            return Err(format!("trigger id '{id}' collides with an existing task id"));
+        }
+        if let When::OnDone { task_prefix } = &when {
+            if triggers::on_done_cycle(&self.triggers, id, task_prefix) {
+                return Err(format!("OnDone cycle through trigger '{id}'"));
+            }
+        }
+        crate::server::parse_task(&template, String::new())?;
+        let now = (self.clock)();
+        let mut t = Trigger::new(id.to_string(), when, template, now);
+        if let When::OnDone { task_prefix } = &t.when {
+            // only tasks that finish after creation should count, so the ones already done are seen
+            t.done_seen = self.queue.all().into_iter().filter(|x| x.state == TaskState::Done && x.id.starts_with(task_prefix.as_str())).map(|x| x.id.clone()).collect();
+        }
+        self.triggers.push(t);
+        self.save_triggers()
+    }
+
+    pub fn remove_trigger(&mut self, id: &str) -> Result<(), String> {
+        let n = self.triggers.len();
+        self.triggers.retain(|t| t.id != id);
+        if self.triggers.len() == n {
+            return Err(format!("no trigger '{id}'"));
+        }
+        self.save_triggers()
+    }
+
+    pub fn set_trigger_enabled(&mut self, id: &str, enabled: bool) -> Result<(), String> {
+        let t = self.triggers.iter_mut().find(|t| t.id == id).ok_or(format!("no trigger '{id}'"))?;
+        t.enabled = enabled;
+        self.save_triggers()
+    }
+
+    /// Fire a trigger now, ignoring its schedule and enabled flag. Returns the outcome.
+    pub fn fire_now(&mut self, id: &str) -> Result<&'static str, String> {
+        let i = self.triggers.iter().position(|t| t.id == id).ok_or(format!("no trigger '{id}'"))?;
+        let now = (self.clock)();
+        let outcome = self.fire_trigger(i, now, None);
+        self.save_triggers()?;
+        Ok(outcome)
+    }
+
+    fn save_triggers(&self) -> Result<(), String> {
+        triggers::save(&self.dir, &self.triggers).map_err(|e| e.to_string())
+    }
+
+    fn trigger_snapshot(&self) -> String {
+        Value::Arr(self.triggers.iter().map(Trigger::to_json).collect()).to_string()
+    }
+
+    /// Fire every enabled trigger that is due, or has a new finished task matching its prefix.
+    fn run_triggers(&mut self) {
+        const DAY_MS: u64 = 86_400_000;
+        let now = (self.clock)();
+        let before = self.trigger_snapshot();
+        let done: Vec<TaskId> =
+            self.queue.all().into_iter().filter(|t| t.state == TaskState::Done).map(|t| t.id.clone()).collect();
+        for t in self.triggers.iter_mut() {
+            // a backward clock jump can leave a Daily due far ahead; reschedule it
+            if matches!(t.when, When::Daily { .. }) && t.next_due_ms > now.saturating_add(2 * DAY_MS) {
+                t.next_due_ms = next_due(&t.when, now);
+            }
+            if matches!(t.when, When::OnDone { .. }) {
+                t.done_seen.retain(|d| done.contains(d));
+                let extra = t.done_seen.len().saturating_sub(1000);
+                t.done_seen.drain(..extra);
+            }
+        }
+        for i in 0..self.triggers.len() {
+            let t = &self.triggers[i];
+            if !t.enabled {
+                continue;
+            }
+            let fresh: Vec<Option<TaskId>> = match &t.when {
+                When::OnDone { task_prefix } => {
+                    let own = format!("{}-", t.id);
+                    done.iter()
+                        .filter(|d| d.starts_with(task_prefix.as_str()) && !d.starts_with(&own) && !t.done_seen.contains(d))
+                        .map(|d| Some(d.clone()))
+                        .collect()
+                }
+                When::Every { .. } | When::Daily { .. } if now >= t.next_due_ms => vec![None],
+                _ => vec![],
+            };
+            for d in fresh {
+                self.fire_trigger(i, now, d);
+            }
+        }
+        if self.trigger_snapshot() != before {
+            let _ = self.save_triggers();
+        }
+    }
+
+    /// Submit the trigger's task unless its previous one is still open. Logs the outcome.
+    fn fire_trigger(&mut self, i: usize, now: u64, done: Option<TaskId>) -> &'static str {
+        let id = self.triggers[i].id.clone();
+        let prev = format!("{id}-{}", self.triggers[i].fires);
+        let busy = self.queue.get(&prev).is_some_and(|t| {
+            matches!(t.state, TaskState::Pending | TaskState::Ready | TaskState::Running { .. } | TaskState::NeedsApproval { .. })
+        });
+        let t = &mut self.triggers[i];
+        if let Some(d) = done {
+            t.done_seen.push(d);
+        }
+        t.next_due_ms = next_due(&t.when, now);
+        let mut reason = None;
+        let (outcome, task_id) = if busy {
+            ("skipped", None)
+        } else if matches!(t.when, When::OnDone { .. }) && !triggers::od_allow(&mut t.od_fires, now) {
+            t.enabled = false;
+            reason = Some("more than 20 OnDone fires in an hour".to_string());
+            ("disabled", None)
+        } else {
+            // skip ids already taken (e.g. by a task the user submitted under this prefix)
+            let mut n = t.fires + 1;
+            while self.queue.get(&format!("{id}-{n}")).is_some() {
+                n += 1;
+            }
+            let fire_id = format!("{id}-{n}");
+            let res = crate::server::parse_task(&t.template, fire_id.clone()).and_then(|task| self.queue.submit(task));
+            match res {
+                Ok(()) => {
+                    t.fires = n;
+                    t.last_fire_ms = Some(now);
+                    t.failures = 0;
+                    ("fired", Some(fire_id))
+                }
+                Err(e) => {
+                    t.failures += 1;
+                    if t.failures >= 3 {
+                        t.enabled = false;
+                        reason = Some(format!("3 consecutive failures: {e}"));
+                        ("disabled", None)
+                    } else {
+                        ("failed", None)
+                    }
+                }
+            }
+        };
+        self.log(&id, Event::Trigger { outcome: outcome.to_string(), task_id, reason });
+        outcome
     }
 
     pub fn approve(&mut self, id: &str) -> Result<(), String> {
@@ -191,6 +397,7 @@ impl Engine {
 
     /// Start every Ready task that fits the pool. Non-blocking.
     pub fn tick(&mut self) {
+        self.run_triggers();
         let pending: Vec<TaskId> =
             self.queue.all().into_iter().filter(|t| t.state == TaskState::Pending).map(|t| t.id.clone()).collect();
         let ready = self.queue.ready();
@@ -231,7 +438,9 @@ impl Engine {
             if let Some(p) = self.programs.get(&cmd.program) {
                 cmd.program = p.to_string_lossy().into_owned();
             }
-            if !self.pool.try_start(&run, cmd, task.timeout_secs) {
+            let program = cmd.program.clone();
+            if !self.journal_start(&id, &program, &mut cmd) || !self.pool.try_start(&run, cmd, task.timeout_secs) {
+                self.forget_run(&id);
                 if let Some(k) = &task.session_key {
                     self.sessions.release(k, &id);
                 }
@@ -271,6 +480,13 @@ impl Engine {
         match msg {
             PoolMsg::Started { run, pid } => {
                 if let Some(task) = self.runs.get(&run).map(|r| r.task.clone()) {
+                    // journal before Running so a crash after this point can find the process
+                    let start = ps_field(pid, "lstart").unwrap_or_default();
+                    if let Some(l) = self.live.get_mut(&task) {
+                        l.pid = Some(pid);
+                        l.start = start;
+                    }
+                    let _ = self.save_runs();
                     let _ = self.set_state(&task, TaskState::Running { pid });
                 }
             }
@@ -288,6 +504,7 @@ impl Engine {
                     if let Some(k) = &r.session {
                         self.sessions.release(k, &r.task);
                     }
+                    self.forget_run(&r.task);
                     self.log(&r.task, Event::Exit { code });
                     return;
                 }
@@ -295,6 +512,7 @@ impl Engine {
                 if let Some(k) = &r.session {
                     self.sessions.release(k, &r.task);
                 }
+                self.forget_run(&r.task);
                 self.log(&r.task, Event::Exit { code });
                 let state = if code == Some(0) && !r.error && !killed && !timed_out {
                     TaskState::Done
@@ -371,6 +589,45 @@ impl Engine {
         self.events.push(l);
     }
 
+    /// Drop a finished run from runs.json.
+    /// Journal a run before spawn: a fresh nonce goes into the child's env and runs.json.
+    fn journal_start(&mut self, task: &str, program: &str, cmd: &mut Cmd) -> bool {
+        let Ok(nonce) = new_nonce() else { return false };
+        cmd.env.insert("SUFFICE_RUN_NONCE".into(), nonce.clone());
+        self.live.insert(task.to_string(), LiveRun { nonce, pid: None, program: program.to_string(), start: String::new() });
+        self.save_runs().is_ok()
+    }
+
+    fn forget_run(&mut self, task: &str) {
+        if self.live.remove(task).is_some() {
+            let _ = self.save_runs();
+        }
+    }
+
+    /// Temp file, fsync, rename, then fsync the directory so the replace survives a crash.
+    fn save_runs(&self) -> io::Result<()> {
+        let v = Value::Obj(
+            self.live
+                .iter()
+                .map(|(t, l)| {
+                    let rec = Value::Obj(vec![
+                        ("nonce".into(), Value::str(&l.nonce)),
+                        ("pid".into(), l.pid.map_or(Value::Null, |p| Value::num(p as f64))),
+                        ("program".into(), Value::str(&l.program)),
+                        ("start".into(), Value::str(&l.start)),
+                    ]);
+                    (t.clone(), rec)
+                })
+                .collect(),
+        );
+        let tmp = self.dir.join("runs.json.tmp");
+        let mut f = File::create(&tmp)?;
+        f.write_all(format!("{v}\n").as_bytes())?;
+        f.sync_all()?;
+        fs::rename(&tmp, self.dir.join("runs.json"))?;
+        File::open(&self.dir)?.sync_all()
+    }
+
     fn save_approvals(&self) -> io::Result<()> {
         let tasks = Value::Arr(self.approved.iter().map(|t| Value::str(t)).collect());
         let calls = Value::Arr(
@@ -400,13 +657,158 @@ fn bad(e: impl std::fmt::Display) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, e.to_string())
 }
 
+/// Output of `ps` with a fixed locale and zone so start times compare across calls.
+fn ps_out(args: &[&str]) -> Option<String> {
+    let out = Command::new("ps").env("LC_ALL", "C").env("TZ", "UTC").args(args).output().ok()?;
+    out.status.success().then(|| String::from_utf8_lossy(&out.stdout).into_owned())
+}
+
+/// `ps -o <field>=` for a live pid; None when the process is gone or ps fails.
+fn ps_field(pid: u32, field: &str) -> Option<String> {
+    let s = ps_out(&["-o", &format!("{field}="), "-p", &pid.to_string()])?;
+    let s = s.trim();
+    (!s.is_empty()).then(|| s.to_string())
+}
+
+/// True when `program` is one argv word (exact path, not a substring).
+fn argv_has(cmdline: &str, program: &str) -> bool {
+    cmdline.split_whitespace().any(|w| w == program)
+}
+
+/// Processes whose environment carries the run nonce: (pid, pgid, ps line).
+fn nonce_procs(nonce: &str) -> Vec<(u32, u32, String)> {
+    let key = format!("SUFFICE_RUN_NONCE={nonce}");
+    let out = ps_out(&["-axE", "-o", "pid=,pgid=,command="]).unwrap_or_default();
+    out.lines()
+        .filter(|l| l.split_whitespace().any(|w| w == key))
+        .filter_map(|l| {
+            let mut f = l.split_whitespace();
+            Some((f.next()?.parse().ok()?, f.next()?.parse().ok()?, l.to_string()))
+        })
+        .collect()
+}
+
+/// The group leader a journaled run still owns; None when the run is gone. Err when a
+/// process is there but cannot be proven to be ours, so it is never killed.
+fn find_target(run: &LiveRun) -> Result<Option<u32>, String> {
+    let (pid, same) = match run.pid {
+        Some(pid) => {
+            let Some(start) = ps_field(pid, "lstart") else { return Ok(None) };
+            // shortcut: lstart has 1 s resolution, not the microseconds of KERN_PROC_PID; the
+            // exact argv word and pgid == pid are also required. Upgrade if reuse within 1 s matters.
+            let cmd = ps_field(pid, "command").unwrap_or_default();
+            let pgid = ps_field(pid, "pgid").unwrap_or_default();
+            (pid, start == run.start && argv_has(&cmd, &run.program) && pgid == pid.to_string())
+        }
+        None if run.nonce.is_empty() => return Ok(None),
+        None => {
+            // a crash between journal and spawn leaves only the nonce; children share it, so take the leader
+            let procs = nonce_procs(&run.nonce);
+            let leaders: Vec<_> = procs.iter().filter(|(p, g, _)| p == g).collect();
+            match leaders.as_slice() {
+                [] if procs.is_empty() => return Ok(None),
+                [] => return Err("nonce found without a group leader".into()),
+                [(pid, _, line)] => (*pid, argv_has(line, &run.program)),
+                _ => return Err("several group leaders carry the run nonce".into()),
+            }
+        }
+    };
+    if same { Ok(Some(pid)) } else { Err(format!("pid {pid} is alive but is not the journaled run")) }
+}
+
+/// True while any non-zombie process is in the group (a zombie leader is already dead).
+fn group_alive(pgid: i32) -> bool {
+    let g = pgid.to_string();
+    ps_out(&["-axo", "pgid=,stat="]).unwrap_or_default().lines().any(|l| {
+        let mut f = l.split_whitespace();
+        f.next() == Some(g.as_str()) && f.next().is_some_and(|s| !s.starts_with('Z'))
+    })
+}
+
+/// Kill the groups of journaled runs whose process is proven to be ours. One shared wait:
+/// SIGTERM all, up to 3 s for every group to empty, then SIGKILL the survivors.
+/// shortcut: setsid escapees leave their group and are not found.
+fn kill_orphans(runs: &BTreeMap<TaskId, LiveRun>) -> (Vec<TaskId>, Vec<(TaskId, String)>) {
+    let (mut targets, mut warnings) = (vec![], vec![]);
+    for (task, run) in runs {
+        match find_target(run) {
+            Ok(Some(pid)) => targets.push((task.clone(), pid as i32)),
+            Ok(None) => {}
+            Err(w) => warnings.push((task.clone(), w)),
+        }
+    }
+    for (_, g) in &targets {
+        unsafe { kill(-g, 15) };
+    }
+    for _ in 0..30 {
+        if targets.iter().all(|(_, g)| !group_alive(*g)) {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    for (_, g) in &targets {
+        if group_alive(*g) {
+            unsafe { kill(-g, 9) };
+        }
+    }
+    (targets.into_iter().map(|(t, _)| t).collect(), warnings)
+}
+
+/// 16 random bytes from the OS, hex encoded.
+fn new_nonce() -> io::Result<String> {
+    let mut b = [0u8; 16];
+    File::open("/dev/urandom")?.read_exact(&mut b)?;
+    Ok(b.iter().map(|x| format!("{x:02x}")).collect())
+}
+
+fn parse_runs(text: &str) -> Option<BTreeMap<TaskId, LiveRun>> {
+    let Value::Obj(kv) = json::parse(text).ok()? else { return None };
+    kv.iter()
+        .map(|(t, r)| {
+            let pid = match r.get("pid")? {
+                Value::Null => None,
+                v => Some(v.as_i64()? as u32),
+            };
+            let run = LiveRun {
+                nonce: r.get("nonce").and_then(Value::as_str).unwrap_or("").to_string(),
+                pid,
+                program: r.get("program")?.as_str()?.to_string(),
+                start: r.get("start")?.as_str()?.to_string(),
+            };
+            Some((t.clone(), run))
+        })
+        .collect()
+}
+
+/// Reads runs.json. Unreadable content is set aside and treated as no runs.
+fn load_runs(dir: &Path) -> io::Result<BTreeMap<TaskId, LiveRun>> {
+    let path = dir.join("runs.json");
+    match fs::read_to_string(&path) {
+        Ok(text) => Ok(parse_runs(&text).unwrap_or_else(|| {
+            crate::types::set_aside(&path);
+            BTreeMap::new()
+        })),
+        Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(BTreeMap::new()),
+        Err(e) => Err(e),
+    }
+}
+
 fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
-    let text = match fs::read_to_string(dir.join("approvals.json")) {
+    let path = dir.join("approvals.json");
+    let text = match fs::read_to_string(&path) {
         Ok(t) => t,
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(Default::default()),
         Err(e) => return Err(e),
     };
-    let v = json::parse(&text).map_err(|e| bad(format!("approvals.json: {e}")))?;
+    // unreadable approvals are set aside and dropped: tasks must be approved again (fails closed)
+    parse_approvals(&text).or_else(|_| {
+        crate::types::set_aside(&path);
+        Ok(Default::default())
+    })
+}
+
+fn parse_approvals(text: &str) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
+    let v = json::parse(text).map_err(|e| bad(format!("approvals.json: {e}")))?;
     let mut approved = BTreeSet::new();
     let mut calls = BTreeSet::new();
     let mut held = HashMap::new();
@@ -434,8 +836,8 @@ fn call_triple(c: &Value) -> io::Result<(String, String, String)> {
 
 /// Replays events.jsonl. Returns the events and the byte length of the valid prefix.
 fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
-    let text = match fs::read_to_string(path) {
-        Ok(t) => t,
+    let text = match fs::read(path) {
+        Ok(t) => String::from_utf8_lossy(&t).into_owned(),
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok((vec![], 0)),
         Err(e) => return Err(e),
     };
@@ -445,9 +847,8 @@ fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
         if !line.ends_with('\n') {
             break; // torn tail
         }
-        let l = json::parse(line.trim_end())
-            .and_then(|v| logged_from(&v))
-            .map_err(|e| bad(format!("events.jsonl: {e}")))?;
+        // a garbage line ends the good prefix; it is truncated like a torn tail
+        let Ok(l) = json::parse(line.trim_end()).and_then(|v| logged_from(&v)) else { break };
         out.push(l);
         good += line.len();
     }
@@ -457,8 +858,8 @@ fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
 /// Reads approvals_log.jsonl. A torn tail is cut off so the next append starts a clean line.
 fn load_decisions(dir: &Path) -> io::Result<Vec<Value>> {
     let path = dir.join("approvals_log.jsonl");
-    let text = match fs::read_to_string(&path) {
-        Ok(t) => t,
+    let text = match fs::read(&path) {
+        Ok(t) => String::from_utf8_lossy(&t).into_owned(),
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(vec![]),
         Err(e) => return Err(e),
     };
@@ -468,7 +869,8 @@ fn load_decisions(dir: &Path) -> io::Result<Vec<Value>> {
         if !line.ends_with('\n') {
             break;
         }
-        out.push(json::parse(line.trim_end()).map_err(|e| bad(format!("approvals_log.jsonl: {e}")))?);
+        let Ok(v) = json::parse(line.trim_end()) else { break };
+        out.push(v);
         good += line.len();
     }
     if good < text.len() {
@@ -517,6 +919,9 @@ pub fn logged_json(l: &Logged) -> Value {
             ("state", vec![("state", Value::str(state)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
         }
         Event::Approval { status } => ("approval", vec![("status", Value::str(status))]),
+        Event::Trigger { outcome, task_id, reason } => {
+            ("trigger", vec![("outcome", Value::str(outcome)), ("task_id", task_id.as_deref().map_or(Value::Null, Value::str)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
+        }
     };
     let mut o = vec![
         ("seq".to_string(), Value::Num(l.seq as f64)),
@@ -552,6 +957,11 @@ fn logged_from(v: &Value) -> Result<Logged, String> {
             reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
         },
         "approval" => Event::Approval { status: sval(v, "status")? },
+        "trigger" => Event::Trigger {
+            outcome: sval(v, "outcome")?,
+            task_id: v.get("task_id").and_then(Value::as_str).map(str::to_string),
+            reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
+        },
         other => return Err(format!("unknown event '{other}'")),
     };
     Ok(Logged {

@@ -2,6 +2,7 @@ SUFFICE LOCAL API  v0 (draft 2026-11-11, shape is fixed; server lands next)
 
 Base: http://127.0.0.1:7878   (port from `suffice-backend serve --port`)
 Auth: header  Authorization: Bearer <token>   token in ~/.suffice/backend/token (0600). Also ?token= on stream URLs
+Env: SUFFICE_PROGRAM_<NAME>=/path/to/bin overrides the CLI binary for agent NAME (e.g. SUFFICE_PROGRAM_CLAUDE); for custom installs and tests.
       (EventSource can't set headers). Every other request without it: 401.
 CORS: Access-Control-Allow-Origin echoed only for http://localhost:7711, http://127.0.0.1:7711 and
       null (file://); Allow-Headers: Authorization, Content-Type, Last-Event-ID; OPTIONS preflight -> 204.
@@ -92,6 +93,26 @@ SSE: event: usage  data: <one row>  whenever it changes
 
 ---------------------------------------------------------------- HEALTH
 GET /health   { "ok": true, "version": "0.1", "running": 3, "max_parallel": 4, "uptime_ms": … }
+
+---------------------------------------------------------------- TRIGGERS (scheduled and chained tasks)
+A trigger submits a saved task template on its own. State is in triggers.json.
+  GET    /triggers                 list triggers
+  POST   /triggers                 create: {"id", "when", "template"}   -> 201 trigger | 400
+  POST   /triggers/:id/fire        fire now, ignoring schedule          -> 200 {"outcome"} | 404
+  POST   /triggers/:id/enable      -> 200 trigger | 404
+  POST   /triggers/:id/disable     -> 200 trigger | 404
+  DELETE /triggers/:id             -> 200 {"removed"} | 404
+"when" kinds:
+  {"kind":"every","secs":N}                 every N seconds (N >= 1)
+  {"kind":"daily","hour":H,"minute":M}      local time, once a day
+  {"kind":"on_done","task_prefix":"build"}  once per finished task whose id starts with the prefix
+  {"kind":"manual"}                         only via /fire
+"template" is a task body (same fields as POST /tasks, id excluded). Each fire submits
+task "<trigger id>-<n>". If that previous task is still pending, ready, running or awaiting
+approval, the fire is skipped. Missed schedule slots fire once, not once per slot.
+Tasks go through the same gate as any other task, so a template that trips it waits for approval.
+Each fire is logged as an event with type "trigger" (outcome fired|skipped|failed, task_id);
+SSE sends it as "event: trigger".
 
 NOT IN v0: auth beyond a local token, remote access, websockets (SSE covers live), editing a task
 after submit, computer-use/browser endpoints (they show up as tool_call events for now).

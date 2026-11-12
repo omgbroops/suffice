@@ -15,4 +15,5 @@ pub mod pool;
 pub mod queue;
 pub mod server;
 pub mod session;
+pub mod triggers;
 pub mod types;

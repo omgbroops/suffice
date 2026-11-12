@@ -33,7 +33,12 @@ fn run() -> Result<(), String> {
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
     let token_path = dir.join("token");
     let token = load_or_create_token(&token_path)?;
-    let engine = Engine::open(&dir, max).map_err(|e| e.to_string())?;
+    let mut engine = Engine::open(&dir, max).map_err(|e| e.to_string())?;
+    for (k, v) in std::env::vars() {
+        if let Some(name) = k.strip_prefix("SUFFICE_PROGRAM_") {
+            engine.set_program(&name.to_lowercase(), v);
+        }
+    }
     let server = serve(engine, &format!("127.0.0.1:{port}"), &token).map_err(|e| e.to_string())?;
     println!("suffice backend on http://127.0.0.1:{}  token: {}", server.port(), token_path.display());
     loop {

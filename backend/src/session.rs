@@ -21,25 +21,26 @@ pub struct Session {
 pub struct Sessions {
     path: PathBuf,
     map: BTreeMap<String, Session>,
+    pub corrupt: Option<String>,
 }
 
 impl Sessions {
     pub fn open(dir: &Path) -> io::Result<Sessions> {
         let path = dir.join("sessions.json");
-        let mut map = BTreeMap::new();
-        match std::fs::read_to_string(&path) {
-            Ok(text) => {
-                let bad = |e: String| io::Error::new(io::ErrorKind::InvalidData, format!("sessions.json: {e}"));
-                let v = json::parse(&text).map_err(bad)?;
-                for item in v.as_arr().ok_or_else(|| bad("not an array".into()))? {
-                    let s = session_from_json(item).map_err(bad)?;
-                    map.insert(s.key.clone(), s);
+        let mut corrupt = None;
+        let map = match std::fs::read_to_string(&path) {
+            Ok(text) => match parse_sessions(&text) {
+                Ok(map) => map,
+                // garbage or torn write: keep the file aside and start empty rather than fail open
+                Err(_) => {
+                    corrupt = Some(crate::types::set_aside(&path));
+                    BTreeMap::new()
                 }
-            }
-            Err(e) if e.kind() == io::ErrorKind::NotFound => {}
+            },
+            Err(e) if e.kind() == io::ErrorKind::NotFound => BTreeMap::new(),
             Err(e) => return Err(e),
-        }
-        Ok(Sessions { path, map })
+        };
+        Ok(Sessions { path, map, corrupt })
     }
     pub fn get(&self, key: &str) -> Option<&Session> {
         self.map.get(key)
@@ -99,6 +100,15 @@ impl Sessions {
         f.sync_all()?;
         std::fs::rename(&tmp, &self.path)
     }
+}
+
+fn parse_sessions(text: &str) -> Result<BTreeMap<String, Session>, String> {
+    let mut map = BTreeMap::new();
+    for item in json::parse(text)?.as_arr().ok_or("sessions.json: not an array")? {
+        let s = session_from_json(item).map_err(|e| format!("sessions.json: {e}"))?;
+        map.insert(s.key.clone(), s);
+    }
+    Ok(map)
 }
 
 fn to_json(s: &Session) -> Value {

@@ -104,6 +104,8 @@ pub enum Event {
     State { state: String, reason: Option<String> },
     /// An approval was decided ("approved" or "denied"); the full record is in approvals_log.jsonl.
     Approval { status: String },
+    /// A trigger fired ("fired", "skipped", "failed" or "disabled"); logged under the trigger id.
+    Trigger { outcome: String, task_id: Option<TaskId>, reason: Option<String> },
 }
 
 impl TaskState {
@@ -128,6 +130,14 @@ pub struct Logged {
     pub task: TaskId,
     pub ms: u64,
     pub event: Event,
+}
+
+/// Move an unreadable state file to `<name>.corrupt` so open can start empty without losing it.
+/// Moves an unreadable state file aside; returns what was lost and where the copy is.
+pub fn set_aside(path: &std::path::Path) -> String {
+    let copy = path.with_extension("corrupt");
+    let _ = std::fs::rename(path, &copy);
+    format!("{} was unreadable and its contents are lost; copy kept at {}", path.display(), copy.display())
 }
 
 pub fn now_ms() -> u64 {
