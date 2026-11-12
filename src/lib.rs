@@ -6,6 +6,7 @@
 //! session store (native session id for resume), the gate (risky tool calls) and subscribers.
 
 pub mod adapter;
+pub mod browser;
 pub mod gate;
 pub mod json;
 pub mod orchestrator;
