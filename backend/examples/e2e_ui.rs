@@ -62,7 +62,7 @@ fn main() {
     ok &= wait_for(&mut b, "task row in task table", &format!("!!document.querySelector('tr[data-task=\"{task}\"]')"), 30);
     ok &= wait_for(&mut b, "task row shows done", &format!("(document.querySelector('tr[data-task=\"{task}\"]')||{{}}).textContent?.includes('done')"), 120);
     b.evaluate("document.querySelector('#agentlist [data-key=\"e2e-bot\"]').click(), true").ok();
-    ok &= wait_for(&mut b, "agent event stream shows the reply", "document.body.innerText.toLowerCase().includes('ready')", 30);
+    ok &= wait_for(&mut b, "agent event stream shows the reply", "[...document.querySelectorAll('[data-kind=\"text\"]')].some(e => e.textContent.toLowerCase().includes('ready'))", 30);
     b.evaluate("document.querySelector('nav.views button[data-v=\"inbox\"]').click(), true").ok();
     ok &= wait_for(&mut b, "held task in approval inbox", &format!("document.body.innerText.includes('{held}') || document.body.innerText.includes('publish the package')"), 30);
     if let Ok(png) = b.screenshot_png() {
