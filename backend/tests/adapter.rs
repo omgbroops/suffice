@@ -135,6 +135,15 @@ fn with_access(agent: AgentKind, access: Access) -> Task {
 }
 
 #[test]
+fn suffice_access_argv() {
+    for (access, name) in [(Access::Read, "read"), (Access::Edit, "edit"), (Access::Full, "full")] {
+        let c = command(&with_access(AgentKind::Suffice, access), None);
+        let i = c.args.iter().position(|a| a == "--access").expect("--access");
+        assert_eq!(c.args[i + 1], name, "{access:?}");
+    }
+}
+
+#[test]
 fn claude_access_argv() {
     let edit_tools = [
         "Read", "Grep", "Glob", "Edit", "Write", "MultiEdit", "Bash(cargo test:*)", "Bash(cargo build:*)",
@@ -187,14 +196,14 @@ fn suffice_command_with_model() {
     std::env::set_var("SUFFICE_REPO", "/repo");
     let c = command(&task(AgentKind::Suffice, "hi", Some("gpt-x")), None);
     assert_eq!(c.program, "node");
-    assert_eq!(args(&c), vec!["/repo/packages/cli/bin/suffice.mjs", "-p", "--cwd", "/tmp/work", "--model", "gpt-x", "hi"]);
+    assert_eq!(args(&c), vec!["/repo/packages/cli/bin/suffice.mjs", "-p", "--cwd", "/tmp/work", "--access", "edit", "--model", "gpt-x", "hi"]);
 }
 
 #[test]
 fn suffice_command_without_model() {
     std::env::set_var("SUFFICE_REPO", "/repo");
     let c = command(&task(AgentKind::Suffice, "hi", None), None);
-    assert_eq!(args(&c), vec!["/repo/packages/cli/bin/suffice.mjs", "-p", "--cwd", "/tmp/work", "hi"]);
+    assert_eq!(args(&c), vec!["/repo/packages/cli/bin/suffice.mjs", "-p", "--cwd", "/tmp/work", "--access", "edit", "hi"]);
 }
 
 #[test]

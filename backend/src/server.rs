@@ -142,7 +142,7 @@ fn reason_text(code: u16) -> &'static str {
 fn cors(origin: Option<&str>) -> String {
     match origin {
         Some(o) if ORIGINS.contains(&o) => format!(
-            "Access-Control-Allow-Origin: {o}\r\nAccess-Control-Allow-Headers: Authorization, Content-Type, Last-Event-ID\r\nAccess-Control-Allow-Methods: GET, POST, DELETE, OPTIONS\r\n"
+            "Access-Control-Allow-Origin: {o}\r\nAccess-Control-Allow-Headers: Authorization, Content-Type, Last-Event-ID\r\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS\r\n"
         ),
         _ => String::new(),
     }
@@ -742,6 +742,11 @@ fn create_task(e: &mut Engine, v: &Value) -> Res {
         Ok(f) => f,
         Err(m) => return err(400, m),
     };
+    if !matches!(task.access, Access::Full) {
+        if let Some(k) = fallback.iter().find(|k| !crate::adapter::enforces_access(k)) {
+            return err(400, format!("{} can't enforce {}", kind_name(k), task.access.name()));
+        }
+    }
     if let Err(m) = e.submit_with(task, fallback) {
         return err(400, m);
     }

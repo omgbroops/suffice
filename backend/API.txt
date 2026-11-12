@@ -42,6 +42,8 @@ POST /tasks                      body: { "id"?: auto, "agent", "prompt", "cwd", 
                                         "model"?, "env"?: {}, "fallback"?: ["claude", …] }  -> 201 Task
                                  fallback: kinds tried in order on an over-cap or rate-limited exit
                                  (session becomes "<key>@<kind>"; codex is never automatic)
+                                 a fallback kind must enforce the access level (claude, codex) unless
+                                 access is "full"; e.g. access "read" + fallback ["opencode"] -> 400
                                  400 on unknown dep / duplicate id / cycle / bad fallback
 POST /tasks/:id/cancel           -> Task (state cancelled; kills the run if running)
 POST /tasks/:id/retry            failed|cancelled -> ready

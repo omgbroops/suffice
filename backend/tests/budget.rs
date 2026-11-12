@@ -132,16 +132,16 @@ fn over_cap_skips_kind_and_fails_over_with_session_suffix() {
     let d = Dir::new("overcap");
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", sample_script(&d.0));
-    e.set_program("gemini", fixture());
+    e.set_program("node", fixture());
     e.submit(task("seed", None)).unwrap();
     e.run_until_idle(Duration::from_secs(20));
     assert!(matches!(state(&e, "seed"), TaskState::Done));
 
     e.set_budgets(caps("claude", "seven_day", 0.5)).unwrap();
-    e.submit_with(task("t2", Some("k")), vec![AgentKind::Gemini]).unwrap();
+    e.submit_with(task("t2", Some("k")), vec![AgentKind::Suffice]).unwrap();
     e.run_until_idle(Duration::from_secs(20));
-    assert!(matches!(agent(&e, "t2"), AgentKind::Gemini));
-    assert_eq!(session(&e, "t2").as_deref(), Some("k@gemini"));
+    assert!(matches!(agent(&e, "t2"), AgentKind::Suffice));
+    assert_eq!(session(&e, "t2").as_deref(), Some("k@suffice"));
     assert!(has_kind(&e, "failover"));
     assert!(matches!(state(&e, "t2"), TaskState::Done));
 }
@@ -151,11 +151,11 @@ fn rate_limited_exit_fails_over_to_fallback() {
     let d = Dir::new("ratelimit");
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", rejected_script(&d.0));
-    e.set_program("gemini", fixture());
-    e.submit_with(task("t1", Some("s")), vec![AgentKind::Gemini]).unwrap();
+    e.set_program("node", fixture());
+    e.submit_with(task("t1", Some("s")), vec![AgentKind::Suffice]).unwrap();
     e.run_until_idle(Duration::from_secs(20));
-    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
-    assert_eq!(session(&e, "t1").as_deref(), Some("s@gemini"));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Suffice));
+    assert_eq!(session(&e, "t1").as_deref(), Some("s@suffice"));
     assert!(has_kind(&e, "failover"));
     assert!(matches!(state(&e, "t1"), TaskState::Done));
 }
@@ -239,8 +239,8 @@ fn cancelled_run_that_is_rate_limited_is_not_revived() {
     let d = Dir::new("cancelled");
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", script(&d.0, "slow.sh", &format!("echo '{}'\nsleep 30", rejected_line())));
-    e.set_program("gemini", fixture());
-    e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+    e.set_program("node", fixture());
+    e.submit_with(task("t1", None), vec![AgentKind::Suffice]).unwrap();
     e.pump(Duration::from_millis(500));
     e.cancel("t1").unwrap();
     e.run_until_idle(Duration::from_secs(20));
@@ -289,14 +289,14 @@ fn rate_limited_run_with_tool_calls_waits_for_approval_then_approve_fails_over()
     let tool = r#"{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"/x"}}]}}"#;
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", script(&d.0, "partial.sh", &format!("echo '{tool}'\necho '{}'\nexit 1", rejected_line())));
-    e.set_program("gemini", fixture());
-    e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+    e.set_program("node", fixture());
+    e.submit_with(task("t1", None), vec![AgentKind::Suffice]).unwrap();
     e.run_until_idle(Duration::from_secs(20));
     assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
     assert!(matches!(agent(&e, "t1"), AgentKind::Claude));
     e.approve("t1").unwrap();
     e.run_until_idle(Duration::from_secs(20));
-    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Suffice));
     assert!(matches!(state(&e, "t1"), TaskState::Done));
 }
 
@@ -306,7 +306,7 @@ fn rerun_approval_deny_marks_failed() {
     let tool = r#"{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"/x"}}]}}"#;
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", script(&d.0, "partial2.sh", &format!("echo '{tool}'\necho '{}'\nexit 1", rejected_line())));
-    e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+    e.submit_with(task("t1", None), vec![AgentKind::Suffice]).unwrap();
     e.run_until_idle(Duration::from_secs(20));
     e.deny("t1").unwrap();
     assert!(matches!(state(&e, "t1"), TaskState::Failed { .. }));
@@ -317,16 +317,16 @@ fn fallbacks_survive_restart_and_drop_primary_and_duplicates() {
     let d = Dir::new("fbpersist");
     {
         let mut e = Engine::open(&d.0, 2).unwrap();
-        e.submit_with(task("t1", None), vec![AgentKind::Claude, AgentKind::Gemini, AgentKind::Gemini]).unwrap();
+        e.submit_with(task("t1", None), vec![AgentKind::Claude, AgentKind::Suffice, AgentKind::Suffice]).unwrap();
     }
     let text = fs::read_to_string(d.0.join("fallbacks.json")).unwrap();
-    assert_eq!(text.matches("gemini").count(), 1, "{text}");
+    assert_eq!(text.matches("suffice").count(), 1, "{text}");
     assert!(!text.contains("claude"), "{text}");
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", rejected_script(&d.0));
-    e.set_program("gemini", fixture());
+    e.set_program("node", fixture());
     e.run_until_idle(Duration::from_secs(20));
-    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Suffice));
 }
 
 #[test]
@@ -347,15 +347,15 @@ fn rerun_approval_survives_restart() {
     {
         let mut e = Engine::open(&d.0, 2).unwrap();
         e.set_program("claude", script(&d.0, "partial3.sh", &format!("echo '{tool}'\necho '{}'\nexit 1", rejected_line())));
-        e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+        e.submit_with(task("t1", None), vec![AgentKind::Suffice]).unwrap();
         e.run_until_idle(Duration::from_secs(20));
         assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
     }
     let mut e = Engine::open(&d.0, 2).unwrap();
-    e.set_program("gemini", fixture());
+    e.set_program("node", fixture());
     e.approve("t1").unwrap();
     e.run_until_idle(Duration::from_secs(20));
-    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Suffice));
     assert!(has_kind(&e, "failover"));
 }
 
@@ -365,8 +365,8 @@ fn cancel_clears_rerun_so_resubmit_and_approve_do_not_fail_over() {
     let tool = r#"{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"/x"}}]}}"#;
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", script(&d.0, "partial4.sh", &format!("echo '{tool}'\necho '{}'\nexit 1", rejected_line())));
-    e.set_program("gemini", fixture());
-    e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+    e.set_program("node", fixture());
+    e.submit_with(task("t1", None), vec![AgentKind::Suffice]).unwrap();
     e.run_until_idle(Duration::from_secs(20));
     assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
     e.cancel("t1").unwrap();
@@ -383,17 +383,17 @@ fn zero_tool_rate_limit_fails_over_and_publish_prompt_still_gates() {
     let marker = d.0.join("gemini_ran");
     let mut e = Engine::open(&d.0, 2).unwrap();
     e.set_program("claude", rejected_script(&d.0));
-    e.set_program("gemini", script(&d.0, "touch.sh", &format!("touch '{}'\necho '{{}}'", marker.display())));
+    e.set_program("node", script(&d.0, "touch.sh", &format!("touch '{}'\necho '{{}}'", marker.display())));
     let mut t = task("t1", None);
     t.prompt = "publish the package to npm".into();
-    e.submit_with(t, vec![AgentKind::Gemini]).unwrap();
+    e.submit_with(t, vec![AgentKind::Suffice]).unwrap();
     e.run_until_idle(Duration::from_secs(20));
     assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
     assert!(!marker.exists());
     e.approve("t1").unwrap();
     e.run_until_idle(Duration::from_secs(20));
     assert!(has_kind(&e, "failover"));
-    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Suffice));
     assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
     assert!(!marker.exists());
 }

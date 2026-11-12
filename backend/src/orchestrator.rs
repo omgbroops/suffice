@@ -332,9 +332,20 @@ impl Engine {
 
     /// Move a task to its next fallback kind; false when none is left.
     fn failover(&mut self, id: &str, task: &Task, reason: &str) -> bool {
-        let next = match self.fallbacks.get_mut(id) {
-            Some((l, _)) if !l.is_empty() => l.remove(0),
-            _ => return false,
+        let next = loop {
+            let next = match self.fallbacks.get_mut(id) {
+                Some((l, _)) if !l.is_empty() => l.remove(0),
+                _ => return false,
+            };
+            // a kind that can't enforce the task's access would run it unsandboxed (old persisted data)
+            if !matches!(task.access, crate::types::Access::Full) && !crate::adapter::enforces_access(&next) {
+                let _ = self.save_fallbacks();
+                let (from, to) = (crate::server::kind_name(&task.agent), crate::server::kind_name(&next));
+                let reason = format!("skipped: {to} can't enforce {}", task.access.name());
+                self.log(id, Event::Failover { from: from.into(), to: to.into(), reason });
+                continue;
+            }
+            break next;
         };
         // the approval covered the old kind's run; the new kind's prompt gate must run again
         self.approved.remove(id);
@@ -571,13 +582,25 @@ impl Engine {
     /// Move a task to `state` and log the change.
     fn set_state(&mut self, id: &str, state: TaskState) -> Result<(), String> {
         self.queue.set_state(id, state)?;
+        self.after_state(id);
+        Ok(())
+    }
+
+    /// Terminal failure that skips retries: a denied or given-up task must not respawn.
+    fn fail_final(&mut self, id: &str, error: &str) -> Result<(), String> {
+        self.approved.remove(id);
+        self.queue.fail_final(id, error)?;
+        self.after_state(id);
+        Ok(())
+    }
+
+    fn after_state(&mut self, id: &str) {
         if self.queue.get(id).is_some_and(|t| matches!(t.state, TaskState::Done | TaskState::Cancelled | TaskState::Failed { .. })) {
             self.fallbacks.remove(id);
             self.rerun.remove(id);
             let _ = self.save_fallbacks();
         }
         self.log_state(id);
-        Ok(())
     }
 
     /// Log the task's current state (after the queue may have turned a Failed into a retry Ready).
@@ -604,7 +627,7 @@ impl Engine {
     /// Refuse a pending approval: a rate-limited rerun is marked Failed, anything else is cancelled.
     pub fn deny(&mut self, id: &str) -> Result<(), String> {
         if self.rerun.remove(id) {
-            return self.set_state(id, TaskState::Failed { error: "rate limited rerun denied".into() });
+            return self.fail_final(id, "rate limited rerun denied");
         }
         self.cancel(id)
     }
@@ -821,7 +844,7 @@ impl Engine {
                     }
                     let entry = self.fallbacks.entry(r.task.clone()).or_insert((vec![], 0));
                     if entry.1 >= 3 {
-                        let _ = self.set_state(&r.task, TaskState::Failed { error: "rate limited, gave up".into() });
+                        let _ = self.fail_final(&r.task, "rate limited, gave up");
                         return;
                     }
                     entry.1 += 1;

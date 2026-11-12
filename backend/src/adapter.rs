@@ -62,13 +62,13 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             ("gemini".into(), a)
         }
         AgentKind::Suffice => {
-            // shortcut: suffice CLI has no sandbox flag yet (doctor reports sandbox:false); gate only
             let repo = std::env::var("SUFFICE_REPO").map(PathBuf::from).unwrap_or_else(|_| {
                 Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap_or(Path::new(".")).to_path_buf()
             });
             let script = repo.join("packages/cli/bin/suffice.mjs").to_string_lossy().into_owned();
             let cwd = task.cwd.to_string_lossy().into_owned();
             let mut a = vec![script, "-p".into(), "--cwd".into(), cwd];
+            a.extend(strs(&["--access", task.access.name()]));
             if let Some(m) = &task.model {
                 a.extend(strs(&["--model", m]));
             }
@@ -114,6 +114,11 @@ pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
 
 fn raw(line: &str) -> Vec<Event> {
     vec![Event::Raw { line: line.to_string() }]
+}
+
+/// Whether the kind's CLI enforces the Access level itself (claude, codex and suffice).
+pub fn enforces_access(kind: &AgentKind) -> bool {
+    matches!(kind, AgentKind::Claude | AgentKind::Codex | AgentKind::Suffice)
 }
 
 fn claude_access(access: Access) -> Vec<String> {

@@ -112,6 +112,18 @@ impl Queue {
         self.record(i, state, attempts).map_err(|e| e.to_string())
     }
 
+    /// Terminal failure: unlike set_state, never turned back into a retry.
+    pub fn fail_final(&mut self, id: &str, error: &str) -> Result<(), String> {
+        let i = *self.index.get(id).ok_or_else(|| format!("unknown task '{id}'"))?;
+        let t = &self.tasks[i];
+        let state = TaskState::Failed { error: error.into() };
+        if !allowed(&t.state, &state) {
+            return Err(format!("invalid transition for '{id}': {:?} -> {:?}", t.state, state));
+        }
+        let attempts = t.attempts;
+        self.record(i, state, attempts).map_err(|e| e.to_string())
+    }
+
     /// Journaled move to another agent kind and session key (failover), with its new state.
     pub fn retarget(&mut self, id: &str, agent: AgentKind, session_key: Option<String>, state: TaskState, attempts: u32) -> Result<(), String> {
         let i = *self.index.get(id).ok_or_else(|| format!("unknown task '{id}'"))?;
