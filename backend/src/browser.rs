@@ -249,9 +249,13 @@ fn connect(port: u16, path: &str) -> Result<Ws, String> {
 
 /// Plain GET with Connection: close; returns the body of a 200 response.
 fn http_get(port: u16, path: &str) -> Result<String, String> {
+    http_req(port, "GET", path)
+}
+
+fn http_req(port: u16, method: &str, path: &str) -> Result<String, String> {
     let mut s = TcpStream::connect(("127.0.0.1", port)).map_err(|e| e.to_string())?;
     s.set_read_timeout(Some(IO_TIMEOUT)).map_err(|e| e.to_string())?;
-    write!(s, "GET {path} HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n").map_err(|e| e.to_string())?;
+    write!(s, "{method} {path} HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").map_err(|e| e.to_string())?;
     // Chrome keeps the socket open after the body, so read exactly Content-Length bytes.
     let head = read_head(&mut s).map_err(|e| e.to_string())?;
     if !head.starts_with("HTTP/1.1 200") {
@@ -335,7 +339,14 @@ impl Browser {
             thread::sleep(POLL);
         };
         let port: u16 = text.lines().next().unwrap_or("").trim().parse().map_err(|_| "bad debug port")?;
+        // headless shell sometimes starts with no page target; ask for a blank one if none shows within 2 s
+        let nudge = Instant::now() + Duration::from_secs(2);
+        let mut nudged = false;
         let url = loop {
+            if !nudged && Instant::now() > nudge {
+                nudged = true;
+                let _ = http_req(port, "PUT", "/json/new?about:blank");
+            }
             if let Ok(Value::Arr(targets)) = http_get(port, "/json/list").and_then(|b| json::parse(&b)) {
                 let page = targets.iter().find(|t| t.get("type").and_then(Value::as_str) == Some("page"));
                 if let Some(u) = page.and_then(|t| t.get("webSocketDebuggerUrl")).and_then(Value::as_str) {
