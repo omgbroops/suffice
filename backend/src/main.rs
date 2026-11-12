@@ -67,7 +67,10 @@ fn gate_hook() -> i32 {
         eprintln!("suffice gate: hook input has no tool_name; ask the user to approve this in Suffice");
         return 2;
     };
-    let input = v.get("tool_input").map(|i| i.to_string()).unwrap_or_default();
+    let Some(input) = v.get("tool_input").filter(|i| matches!(i, Value::Obj(_))).map(|i| i.to_string()) else {
+        eprintln!("suffice gate: hook input has no tool_input object; ask the user to approve this in Suffice");
+        return 2;
+    };
     match gate::check_event(&Event::ToolCall { name: name.to_string(), input: input.clone() }) {
         Verdict::Allow => 0,
         Verdict::Hold { .. } if approved(name, &input) => 0,
