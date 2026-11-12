@@ -254,8 +254,15 @@ fn codex_hook_at_every_access_level() {
         for resume in [None, Some("sess")] {
             let c = command(&with_access(AgentKind::Codex, access), resume);
             let i = c.args.iter().position(|a| a == "-c").expect("-c");
-            assert!(c.args[i + 1].starts_with("hooks.PreToolUse="), "{access:?}");
-            assert!(c.args[i + 1].contains(" gate-hook"), "{access:?}");
+            let v = &c.args[i + 1];
+            assert!(v.starts_with("hooks={PreToolUse="), "{access:?}");
+            assert!(v.contains(" gate-hook"), "{access:?}");
+            assert!(v.contains("trusted_hash=\"sha256:"), "{access:?}");
+            assert!(v.contains("\"/<session-flags>/config.toml:pre_tool_use:0:0\""), "{access:?}");
+            // the trusted hash must be over the exact command inside the value
+            let cmd = v.split("command=\"").nth(1).and_then(|s| s.split("\",timeout").next()).expect("cmd");
+            let hash = v.split("trusted_hash=\"").nth(1).and_then(|s| s.split('"').next()).expect("hash");
+            assert_eq!(hash, suffice::adapter::codex_hook_trust_hash(cmd), "{access:?}");
             let resume_at = c.args.iter().position(|a| a == "resume");
             assert!(resume_at.is_none_or(|r| i < r), "hook must precede resume");
             assert_eq!(c.args.last().map(String::as_str), Some("do it"));
@@ -363,4 +370,19 @@ fn install_opencode_gate_writes_plugin_asset() {
     let want = std::fs::read_to_string(format!("{}/assets/opencode-gate.js", env!("CARGO_MANIFEST_DIR"))).unwrap();
     assert_eq!(got, want);
     std::fs::remove_dir_all(&dir).unwrap();
+}
+
+#[test]
+fn sha256_known_vectors() {
+    use suffice::adapter::sha256_hex;
+    assert_eq!(sha256_hex(b""), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+    assert_eq!(sha256_hex(b"abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+    assert_eq!(sha256_hex(&[b'a'; 1000]), "41edece42d63e8d9bf515a9ba6932e1c20cbc9f5a5d134645adb5db1b9737ea3");
+}
+
+#[test]
+fn codex_hook_trust_hash_fixtures() {
+    use suffice::adapter::codex_hook_trust_hash;
+    assert_eq!(codex_hook_trust_hash("'/x/suffice-backend' gate-hook"), "sha256:9e779c42429215902b150f8213d3f05609a8d24b5ec348e9fcac2e1ba41983b9");
+    assert_eq!(codex_hook_trust_hash(r#"echo \"a\\b\" gate-hook"#), "sha256:184cedd42a286e3fadae1d6f616d9d34ee6be7bccd721aea0db90fce340d3a3a");
 }
