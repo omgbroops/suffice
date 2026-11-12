@@ -216,6 +216,71 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
                 None
             }
         }
+        "curl" => {
+            // Plain GET only: one http(s) URL plus at least one safe flag (bare `curl URL` stays held).
+            let (mut urls, mut bad, mut i) = (0, false, 0);
+            while i < a.len() {
+                let x = a[i];
+                if x.starts_with('-') {
+                    match x {
+                        "-s" | "-S" | "-L" | "-f" | "-I" | "-i" | "-v" | "--silent" | "--show-error" | "--location" | "--fail" | "--head" => {}
+                        "-m" | "--max-time" => {
+                            i += 1;
+                            bad |= !a.get(i).is_some_and(|n| !n.is_empty() && n.chars().all(|c| c.is_ascii_digit() || c == '.'));
+                        }
+                        _ => bad = true,
+                    }
+                } else if (x.starts_with("http://") || x.starts_with("https://")) && !x.contains('@') {
+                    urls += 1;
+                } else {
+                    bad = true;
+                }
+                i += 1;
+            }
+            (bad || urls != 1 || flags.is_empty()).then_some("curl: only plain GET with safe flags")
+        }
+        "gh" => {
+            // Read-only subcommands; no positionals (so `pr view 3` stays held) and no --web.
+            let (mut words, mut bad, mut i) = (Vec::new(), false, 0);
+            while i < a.len() {
+                match a[i] {
+                    "--json" | "-R" | "--repo" => {
+                        i += 1;
+                        bad |= !a.get(i).is_some_and(|v| !v.starts_with('-'));
+                    }
+                    "-L" | "--limit" => {
+                        i += 1;
+                        bad |= !a.get(i).is_some_and(|v| !v.is_empty() && v.chars().all(|c| c.is_ascii_digit()));
+                    }
+                    "--state" => {
+                        i += 1;
+                        bad |= !a.get(i).is_some_and(|v| matches!(*v, "open" | "closed" | "merged" | "all"));
+                    }
+                    x if x.starts_with('-') => bad = true,
+                    x => words.push(x),
+                }
+                i += 1;
+            }
+            let ok = matches!(words.as_slice(), ["pr", "view" | "list" | "diff" | "checks" | "status"] | ["issue", "view" | "list" | "status"] | ["repo", "view"]);
+            (bad || !ok).then_some("gh: only read-only pr/issue/repo subcommands")
+        }
+        // Real containment for code the agent runs is the CLI sandbox (Access level); this rule only avoids pointless holds.
+        "python3" | "node" => {
+            let script = |p: &str| {
+                let ext = if prog == "python3" { p.ends_with(".py") } else { p.ends_with(".js") || p.ends_with(".mjs") };
+                ext && !p.contains('/') && !unsafe_path(p)
+            };
+            let ok = a.len() == 1 && script(a[0]);
+            (!ok).then_some("python3/node: only a plain relative script, no flags")
+        }
+        "docker" => match a {
+            ["ps" | "images"] => None,
+            ["build", "-t", name, path] => {
+                let ok = !name.starts_with('-') && !path.starts_with('-') && !path.starts_with(['/', '~']) && !path.contains("..");
+                (!ok).then_some("docker build: only -t NAME and a relative path")
+            }
+            _ => Some("docker subcommand not on safe list"),
+        },
         p if SHELL_READ_ONLY.contains(&p) => None,
         _ => Some("command not on safe list"),
     }
