@@ -133,3 +133,4 @@ Claude gate hook: claude runs with --settings wiring a PreToolUse command hook t
 gate-hook reads the tool call on stdin, exits 0 to allow, 2 to block (stderr shows the held reason); unparseable input fails closed.
 Calls the user approved for a task are passed to the hook in SUFFICE_APPROVED_CALLS (JSON [{name,input}]) and allowed on exact match.
 Suffice CLI gate: the suffice kind gets SUFFICE_GATE_CMD='<exe> gate-hook', which its bash tool runs (stdin: the Bash tool call JSON) before each command; exit 2 blocks it.
+OpenCode gate: opencode loads backend/assets/opencode-gate.js from OPENCODE_CONFIG_DIR (<data>/backend/opencode/plugins/suffice-gate.js, written at startup, startup fails if not) and runs SUFFICE_GATE_CMD before every tool call; OPENCODE_PURE=0 keeps plugins on.

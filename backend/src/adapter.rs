@@ -85,6 +85,8 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
     let mut env = task.env.clone();
     if matches!(task.agent, AgentKind::OpenCode) {
         env.extend(opencode_env(task.access));
+        // set after task.env so a task cannot override the gate plugin or disable it (OPENCODE_PURE)
+        env.extend(opencode_gate_env(&opencode_config_dir()));
     }
     if matches!(task.agent, AgentKind::Suffice) {
         env.insert("SUFFICE_GATE_CMD".into(), suffice_gate_cmd());
@@ -199,6 +201,50 @@ pub fn gate_hook_command(exe: &Path) -> Option<String> {
 /// Shell command the suffice CLI runs before each bash call; exit 2 blocks it. Fails closed if the exe path is unknown.
 fn suffice_gate_cmd() -> String {
     std::env::current_exe().ok().and_then(|exe| gate_hook_command(&exe)).unwrap_or_else(|| "echo 'suffice gate: hook unavailable' >&2; exit 2".into())
+}
+
+/// Gate plugin source, loaded by opencode from `<opencode_config_dir>/plugins/`.
+const OPENCODE_GATE_JS: &str = include_str!("../assets/opencode-gate.js");
+
+/// Config dir opencode reads the gate plugin from: `<SUFFICE_HOME or ~/.suffice>/backend/opencode`.
+pub fn opencode_config_dir() -> PathBuf {
+    let base = std::env::var("SUFFICE_HOME").map(PathBuf::from).unwrap_or_else(|_| {
+        std::env::var("HOME").map(PathBuf::from).unwrap_or_else(|_| PathBuf::from(".")).join(".suffice")
+    });
+    base.join("backend").join("opencode")
+}
+
+/// Gate env for an opencode run reading plugins from `dir`. Reinstalls the plugin every run, since an
+/// earlier run's agent may have rewritten it; if that fails, opencode's own permission denies every tool.
+pub fn opencode_gate_env(dir: &Path) -> Vec<(String, String)> {
+    let mut env = vec![
+        ("OPENCODE_CONFIG_DIR".into(), dir.to_string_lossy().into_owned()),
+        ("SUFFICE_GATE_CMD".into(), suffice_gate_cmd()),
+        ("OPENCODE_PURE".into(), "0".into()),
+    ];
+    if !dir.is_absolute() || install_opencode_gate(dir).is_err() {
+        env.push(("OPENCODE_PERMISSION".into(), "\"deny\"".into()));
+    }
+    env
+}
+
+/// Writes the gate plugin into `dir/plugins/suffice-gate.js` if its content differs. Caller must fail startup on error.
+pub fn install_opencode_gate(dir: &Path) -> std::io::Result<()> {
+    let plugins = dir.join("plugins");
+    std::fs::create_dir_all(&plugins)?;
+    let file = plugins.join("suffice-gate.js");
+    if std::fs::read_to_string(&file).ok().as_deref() == Some(OPENCODE_GATE_JS) {
+        return Ok(());
+    }
+    // temp + rename: a plain write truncates first, so a starting opencode could load an empty plugin.
+    // The temp name must not end in .js/.ts, or opencode's plugins/*.{js,ts} glob would load it.
+    static N: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+    let n = N.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    let tmp = plugins.join(format!(".suffice-gate.{}.{n}.tmp", std::process::id()));
+    std::fs::write(&tmp, OPENCODE_GATE_JS)?;
+    std::fs::rename(&tmp, file).inspect_err(|_| {
+        let _ = std::fs::remove_file(&tmp);
+    })
 }
 
 fn hook_json(command: &str) -> String {
