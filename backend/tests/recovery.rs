@@ -243,3 +243,21 @@ fn three_orphans_close_in_under_four_seconds() {
         assert!(exits_within(k, 1), "orphan {} still alive", k.id());
     }
 }
+
+#[test]
+fn unreadable_event_line_is_skipped_not_truncated() {
+    let d = Dir::new("unknown-kind");
+    let log = d.0.join("events.jsonl");
+    let lines = [
+        r#"{"seq":1,"task":"a","ms":1,"type":"text","text":"one"}"#,
+        r#"{"seq":2,"task":"a","ms":2,"type":"from_a_newer_build","x":1}"#,
+        r#"{"seq":3,"task":"a","ms":3,"type":"text","text":"three"}"#,
+    ];
+    fs::write(&log, lines.iter().map(|l| format!("{l}\n")).collect::<String>()).unwrap();
+    let e = Engine::open(&d.0, 2).unwrap();
+    let seqs: Vec<u64> = e.events_since(0).iter().map(|l| l.seq).collect();
+    assert_eq!(seqs, vec![1, 3], "later events must survive an unreadable line");
+    drop(e);
+    let text = fs::read_to_string(&log).unwrap();
+    assert!(text.contains("from_a_newer_build") && text.contains("three"), "{text}");
+}

@@ -222,7 +222,7 @@ impl Engine {
         let sessions = Sessions::open(dir)?;
         let sess_note = sessions.corrupt.clone();
         let path = dir.join("events.jsonl");
-        let (events, good) = read_log(&path)?;
+        let (events, good, max_seq) = read_log(&path)?;
         let size = fs::metadata(&path).map(|m| m.len() as usize).unwrap_or(0);
         if good < size {
             // torn tail from a crash mid-write: drop it so the next append starts a clean line
@@ -245,7 +245,7 @@ impl Engine {
             rx,
             max_parallel,
             file,
-            seq: events.last().map_or(0, |l| l.seq),
+            seq: max_seq,
             events,
             subs: vec![],
             runs: HashMap::new(),
@@ -1276,25 +1276,30 @@ fn call_triple(c: &Value) -> io::Result<(String, String, String)> {
     }
 }
 
-/// Replays events.jsonl. Returns the events and the byte length of the valid prefix.
-fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
+/// Replays events.jsonl. Returns the events, the byte length up to the torn tail, and the highest seq seen.
+fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize, u64)> {
     let text = match fs::read(path) {
         Ok(t) => String::from_utf8_lossy(&t).into_owned(),
-        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok((vec![], 0)),
+        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok((vec![], 0, 0)),
         Err(e) => return Err(e),
     };
-    let mut out = vec![];
-    let mut good = 0;
+    let (mut out, mut good, mut max_seq) = (vec![], 0, 0);
     for line in text.split_inclusive('\n') {
         if !line.ends_with('\n') {
             break; // torn tail
         }
-        // a garbage line ends the good prefix; it is truncated like a torn tail
-        let Ok(l) = json::parse(line.trim_end()).and_then(|v| logged_from(&v)) else { break };
-        out.push(l);
         good += line.len();
+        // a complete line this build can't read (newer event kind, garbage) is kept on disk and skipped,
+        // never truncated: cutting there would drop every later event
+        let Ok(v) = json::parse(line.trim_end()) else { continue };
+        if let Some(n) = num(&v, "seq") {
+            max_seq = max_seq.max(n as u64);
+        }
+        if let Ok(l) = logged_from(&v) {
+            out.push(l);
+        }
     }
-    Ok((out, good))
+    Ok((out, good, max_seq))
 }
 
 /// Reads approvals_log.jsonl. A torn tail is cut off so the next append starts a clean line.
