@@ -341,3 +341,82 @@ fn access_full_needs_approval_and_bad_access_is_400() {
     assert_eq!(http(port, "POST", "/tasks", &auth(), bad).0, 400);
     s.stop();
 }
+
+#[test]
+fn denied_approval_is_listed_by_status_filter() {
+    let (_d, s) = start("denied");
+    let port = s.port();
+    http(port, "POST", "/tasks", &auth(), &task_body("q1", "publish one"));
+    http(port, "POST", "/tasks", &auth(), &task_body("q2", "publish two"));
+    let pending = wait_for(10, || {
+        let (_, r) = http(port, "GET", "/approvals?status=pending", &auth(), "");
+        body_of(&r).contains("\"task\":\"q1\"") && body_of(&r).contains("\"task\":\"q2\"")
+    });
+    assert!(pending, "approvals not listed");
+    assert_eq!(http(port, "POST", "/approvals/aq1/deny", &auth(), "").0, 200);
+    let (_, denied) = http(port, "GET", "/approvals?status=denied", &auth(), "");
+    assert!(body_of(&denied).contains("\"task\":\"q1\"") && !body_of(&denied).contains("\"task\":\"q2\""), "{denied}");
+    s.stop();
+}
+
+#[test]
+fn approved_approval_shows_as_approved() {
+    let (_d, s) = start("approved");
+    let port = s.port();
+    http(port, "POST", "/tasks", &auth(), &task_body("r1", "publish it"));
+    let pending = wait_for(10, || {
+        let (_, r) = http(port, "GET", "/approvals?status=pending", &auth(), "");
+        body_of(&r).contains("\"task\":\"r1\"")
+    });
+    assert!(pending, "approval not listed");
+    assert_eq!(http(port, "POST", "/approvals/ar1/approve", &auth(), "").0, 200);
+    let (_, approved) = http(port, "GET", "/approvals?status=approved", &auth(), "");
+    assert!(body_of(&approved).contains("\"task\":\"r1\""), "{approved}");
+    let (_, pending) = http(port, "GET", "/approvals?status=pending", &auth(), "");
+    assert!(!body_of(&pending).contains("\"task\":\"r1\""), "{pending}");
+    s.stop();
+}
+
+#[test]
+fn decided_approvals_survive_reopen() {
+    let dir = Dir::new("reopen");
+    let mut e = Engine::open(&dir.0, 2).unwrap();
+    e.set_program("claude", fixture());
+    let s = serve(e, "127.0.0.1:0", TOKEN).unwrap();
+    let port = s.port();
+    http(port, "POST", "/tasks", &auth(), &task_body("u1", "publish one"));
+    http(port, "POST", "/tasks", &auth(), &task_body("u2", "publish two"));
+    let pending = wait_for(10, || {
+        let (_, r) = http(port, "GET", "/approvals?status=pending", &auth(), "");
+        body_of(&r).contains("\"task\":\"u1\"") && body_of(&r).contains("\"task\":\"u2\"")
+    });
+    assert!(pending, "approvals not listed");
+    assert_eq!(http(port, "POST", "/approvals/au1/deny", &auth(), "").0, 200);
+    assert_eq!(http(port, "POST", "/approvals/au2/approve", &auth(), "").0, 200);
+    s.stop();
+
+    let mut e = Engine::open(&dir.0, 2).unwrap();
+    e.set_program("claude", fixture());
+    let s = serve(e, "127.0.0.1:0", TOKEN).unwrap();
+    let (_, all) = http(s.port(), "GET", "/approvals", &auth(), "");
+    assert!(body_of(&all).contains("\"status\":\"denied\"") && body_of(&all).contains("\"status\":\"approved\""), "{all}");
+    assert!(body_of(&all).contains("\"task\":\"u1\"") && body_of(&all).contains("\"task\":\"u2\""), "{all}");
+    s.stop();
+}
+
+#[test]
+fn held_task_session_shows_in_agents_before_run() {
+    let (_d, s) = start("agentheld");
+    let port = s.port();
+    let body = r#"{"id":"h1","agent":"claude","prompt":"publish it","cwd":"/tmp","session_key":"frontend-bot"}"#;
+    assert_eq!(http(port, "POST", "/tasks", &auth(), body).0, 201);
+    let shown = wait_for(10, || {
+        let (_, r) = http(port, "GET", "/agents", &auth(), "");
+        body_of(&r).contains("\"key\":\"frontend-bot\"") && body_of(&r).contains("\"status\":\"waiting_approval\"")
+    });
+    assert!(shown, "held session not listed as waiting_approval");
+    let (code, one) = http(port, "GET", "/agents/frontend-bot", &auth(), "");
+    assert_eq!(code, 200, "{one}");
+    assert!(body_of(&one).contains("\"status\":\"waiting_approval\"") && body_of(&one).contains("\"recent\":["), "{one}");
+    s.stop();
+}
