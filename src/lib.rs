@@ -7,6 +7,7 @@
 
 pub mod adapter;
 pub mod browser;
+pub mod computer;
 pub mod gate;
 pub mod json;
 pub mod orchestrator;
