@@ -25,6 +25,35 @@ pub enum TaskState {
     Cancelled,
 }
 
+/// What the agent's own sandbox allows. Enforced by each CLI's flags, not by the gate.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Access {
+    Read,
+    #[default]
+    Edit,
+    Full,
+}
+
+impl Access {
+    /// The name used by the API and the journal.
+    pub fn name(&self) -> &'static str {
+        match self {
+            Access::Read => "read",
+            Access::Edit => "edit",
+            Access::Full => "full",
+        }
+    }
+
+    pub fn from_name(s: &str) -> Option<Access> {
+        Some(match s {
+            "read" => Access::Read,
+            "edit" => Access::Edit,
+            "full" => Access::Full,
+            _ => return None,
+        })
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Task {
     pub id: TaskId,
@@ -38,6 +67,7 @@ pub struct Task {
     pub attempts: u32,
     pub timeout_secs: u64,
     pub model: Option<String>,
+    pub access: Access,
     pub env: BTreeMap<String, String>,
     pub state: TaskState,
     pub created_ms: u64,

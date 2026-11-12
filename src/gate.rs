@@ -2,7 +2,7 @@
 //! Two checks: before a task starts (its prompt asks for an outward action) and on each ToolCall
 //! event while it runs (the agent tries one). A hit holds the task as NeedsApproval.
 //! Fail closed: shell commands must be on an allowlist with per-program flag lists; anything unclear holds.
-use crate::types::{Event, Task};
+use crate::types::{Access, Event, Task};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Verdict {
@@ -54,6 +54,9 @@ fn word_hit(t: &str, k: &str) -> bool {
 
 /// Pre-start check on the task itself.
 pub fn check_task(task: &Task) -> Verdict {
+    if task.access == Access::Full {
+        return hold("full access needs OK");
+    }
     let w = tokens(&task.prompt);
     if let Some(k) = TASK_WORDS.iter().find(|k| w.iter().any(|t| word_hit(t, k))) {
         return hold(&format!("prompt asks for outward action: {k}"));

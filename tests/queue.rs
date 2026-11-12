@@ -1,5 +1,5 @@
 use loom::queue::Queue;
-use loom::types::{AgentKind, Task, TaskState};
+use loom::types::{Access, AgentKind, Task, TaskState};
 use std::collections::BTreeMap;
 use std::io::Write;
 use std::path::PathBuf;
@@ -34,6 +34,7 @@ fn task(id: &str, deps: &[&str], max_retries: u32) -> Task {
         attempts: 0,
         timeout_secs: 60,
         model: None,
+        access: Access::Edit,
         env: BTreeMap::new(),
         state: TaskState::Pending,
         created_ms: 1,
@@ -199,4 +200,22 @@ fn thousand_tasks_fast() {
     let q = Queue::open(&d.0).unwrap();
     assert_eq!(q.all().len(), 1000);
     assert!(start.elapsed().as_secs_f64() < 2.0, "took {:?}", start.elapsed());
+}
+
+#[test]
+fn journal_line_without_access_replays_as_edit() {
+    let d = Dir::new();
+    {
+        let mut q = Queue::open(&d.0).unwrap();
+        let mut t = task("a", &[], 0);
+        t.access = Access::Full;
+        q.submit(t).unwrap();
+    }
+    let path = d.0.join("tasks.jsonl");
+    let text = std::fs::read_to_string(&path).unwrap();
+    let old = text.replace("\"access\":\"full\",", "");
+    assert_ne!(old, text, "journal must carry the access field");
+    std::fs::write(&path, old).unwrap();
+    let q = Queue::open(&d.0).unwrap();
+    assert_eq!(q.get("a").unwrap().access, Access::Edit);
 }

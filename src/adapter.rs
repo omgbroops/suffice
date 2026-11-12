@@ -1,6 +1,6 @@
 //! Per-CLI command building and output parsing. Pure: no process spawning here.
 use crate::json::{self, Value};
-use crate::types::{AgentKind, Cmd, Event, Task};
+use crate::types::{Access, AgentKind, Cmd, Event, Task};
 
 /// Build the headless command for a task. `resume` is the CLI's native session id from a
 /// previous run on the same session_key.
@@ -11,6 +11,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             let mut a = strs(&["-p"]);
             a.push(prompt);
             a.extend(strs(&["--output-format", "stream-json", "--verbose"]));
+            a.extend(claude_access(task.access));
             if let Some(id) = resume {
                 a.extend(strs(&["--resume", id]));
             }
@@ -21,7 +22,12 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
         }
         AgentKind::Codex => {
             let cwd = task.cwd.to_string_lossy().into_owned();
-            let mut a = strs(&["exec", "--json", "--skip-git-repo-check", "-C", &cwd]);
+            let sandbox = match task.access {
+                Access::Read => "read-only",
+                Access::Edit => "workspace-write",
+                Access::Full => "danger-full-access",
+            };
+            let mut a = strs(&["exec", "--json", "--skip-git-repo-check", "-C", &cwd, "--sandbox", sandbox]);
             if let Some(id) = resume {
                 a.extend(strs(&["resume", id]));
             }
@@ -32,6 +38,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             ("codex".into(), a)
         }
         AgentKind::OpenCode => {
+            // shortcut: no CLI-level sandbox flag for opencode, gate only; check its permission config when wiring
             let mut a = strs(&["run", "--format", "json"]);
             if let Some(id) = resume {
                 a.extend(strs(&["--session", id]));
@@ -44,6 +51,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
         }
         AgentKind::Gemini => {
             // shortcut: gemini flags unverified (CLI not installed), check gemini --help when installed
+            // shortcut: no CLI-level sandbox flag for gemini, gate only; check its permission config when wiring
             let mut a = strs(&["-p"]);
             a.push(prompt);
             a.extend(strs(&["--output-format", "stream-json"]));
@@ -53,6 +61,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             ("gemini".into(), a)
         }
         AgentKind::Generic { program, args } => {
+            // shortcut: no CLI-level sandbox flag for generic, gate only; check its permission config when wiring
             let mut a = args.clone();
             a.push(prompt);
             (program.clone(), a)
@@ -90,6 +99,23 @@ pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
 
 fn raw(line: &str) -> Vec<Event> {
     vec![Event::Raw { line: line.to_string() }]
+}
+
+fn claude_access(access: Access) -> Vec<String> {
+    const EDIT_TOOLS: &[&str] = &[
+        "Read", "Grep", "Glob", "Edit", "Write", "MultiEdit", "Bash(cargo test:*)", "Bash(cargo build:*)",
+        "Bash(cargo check:*)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(ls:*)",
+        "Bash(npm test:*)",
+    ];
+    match access {
+        Access::Read => strs(&["--permission-mode", "dontAsk", "--allowedTools", "Read", "Grep", "Glob", "WebSearch"]),
+        Access::Edit => {
+            let mut a = strs(&["--permission-mode", "dontAsk", "--allowedTools"]);
+            a.extend(strs(EDIT_TOOLS));
+            a
+        }
+        Access::Full => strs(&["--permission-mode", "bypassPermissions"]),
+    }
 }
 
 fn strs(xs: &[&str]) -> Vec<String> {

@@ -3,7 +3,7 @@
 
 use crate::json::{self, Value};
 use crate::orchestrator::{logged_json, Engine};
-use crate::types::{now_ms, AgentKind, Event, Logged, Task, TaskState};
+use crate::types::{now_ms, Access, AgentKind, Event, Logged, Task, TaskState};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::net::{Shutdown, SocketAddr, TcpListener, TcpStream};
@@ -623,6 +623,7 @@ fn task_json(t: &Task) -> Value {
         ("prompt", Value::str(&t.prompt)),
         ("cwd", Value::Str(t.cwd.to_string_lossy().into_owned())),
         ("model", opt(t.model.as_deref())),
+        ("access", Value::str(t.access.name())),
         ("deps", Value::Arr(t.deps.iter().map(|d| Value::str(d.as_str())).collect())),
         ("state", Value::str(t.state.name())),
         ("reason", opt(reason)),
@@ -717,6 +718,11 @@ fn parse_task(v: &Value, id: String) -> Result<Task, String> {
         attempts: 0,
         timeout_secs: num("timeout_secs", 1800)?.try_into().map_err(|_| "timeout_secs out of range")?,
         model: s("model"),
+        access: match v.get("access") {
+            None => Access::Edit,
+            Some(Value::Str(a)) => Access::from_name(a).ok_or("access must be \"read\", \"edit\" or \"full\"")?,
+            Some(_) => return Err("access must be a string".into()),
+        },
         env,
         state: TaskState::Pending,
         created_ms: now_ms(),
