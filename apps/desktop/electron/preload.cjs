@@ -1,0 +1,22 @@
+const {contextBridge,ipcRenderer}=require('electron');
+contextBridge.exposeInMainWorld('sufficeDesktop',{
+  windowControl:action=>ipcRenderer.invoke('suffice:window',action),
+  usage:()=>ipcRenderer.invoke('suffice:usage'),
+  files:directory=>ipcRenderer.invoke('suffice:files',directory),
+  file:name=>ipcRenderer.invoke('suffice:file',name),
+  changes:()=>ipcRenderer.invoke('suffice:changes'),
+  diff:name=>ipcRenderer.invoke('suffice:diff',name),
+  status:()=>ipcRenderer.invoke('suffice:status'),
+  models:()=>ipcRenderer.invoke('suffice:models'),
+  threads:()=>ipcRenderer.invoke('suffice:threads'),
+  openThread:id=>ipcRenderer.invoke('suffice:thread',id),
+  chooseProject:()=>ipcRenderer.invoke('suffice:project'),
+  projects:()=>ipcRenderer.invoke('suffice:projects'),
+  selectProject:id=>ipcRenderer.invoke('suffice:select-project',id),
+  run:payload=>ipcRenderer.invoke('suffice:run',payload),
+  runBackground:payload=>ipcRenderer.invoke('suffice:run-background',payload),
+  clipboardFiles:()=>ipcRenderer.invoke('suffice:clipboard-files'),
+  abort:()=>ipcRenderer.invoke('suffice:abort'),
+  reset:()=>ipcRenderer.invoke('suffice:reset'),
+  onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
+});
