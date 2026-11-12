@@ -18,13 +18,23 @@ fn hold(reason: &str) -> Verdict {
 const TASK_WORDS: &[&str] = &[
     "publish", "send", "sent", "resend", "email", "mail", "notify", "comment", "share", "tweet", "buy", "purchase",
     "bought", "pay", "paid", "deploy", "delete", "upload", "submit", "push", "forward", "announce",
-    "merge", "wipe", "ship",
+    "merge", "wipe", "ship", "dm",
 ];
 // Words that hold only as a verb: at clause start or right after to/and/then/please.
-const TASK_VERBS: &[&str] = &["text", "order", "post", "drop", "release", "message"];
+const TASK_VERBS: &[&str] = &["text", "order", "post", "drop", "release"];
 const VERB_LEAD: &[&str] = &["to", "and", "then", "please"];
-// "reply" holds unless the next token is one of these (reply with only the number, reply in one word).
+// "message" holds unless a noun context is on either side.
+const MSG_NOUN_PREV: &[&str] = &[
+    "the", "a", "an", "this", "that", "its", "his", "her", "their", "my", "your", "our", "error", "commit", "log", "warning",
+    "status", "exit", "chat", "help", "usage", "debug",
+];
+const MSG_NOUN_NEXT: &[&str] = &["is", "was", "says", "said", "mean", "means", "from", "text", "format", "type", "body", "field", "queue", "bus", "string", "in", "shows"];
+// "reply" holds unless the next token is an allowed adverb and no nearby token names a recipient or channel.
 const REPLY_OK_NEXT: &[&str] = &["with", "only", "just", "briefly", "exactly", "concisely", "in", "using"];
+const REPLY_BLOCK: &[&str] = &[
+    "to", "on", "thread", "slack", "channel", "email", "mail", "customer", "client", "ticket", "account", "chat", "dm", "all",
+    "back", "him", "her", "them", "user", "team",
+];
 const TASK_PHRASES: &[&[&str]] = &[
     &["open", "a", "pr"],
     &["open", "a", "pull"],
@@ -64,8 +74,19 @@ pub fn check_task(task: &Task) -> Verdict {
         return hold(&format!("prompt asks for outward action: {k}"));
     }
     for (i, t) in w.iter().enumerate() {
-        if word_hit(t, "reply") && !w.get(i + 1).is_some_and(|n| REPLY_OK_NEXT.contains(&n.as_str())) {
-            return hold("prompt asks for outward action: reply");
+        if word_hit(t, "message") {
+            let prev = if i > 0 { w[i - 1].as_str() } else { "" };
+            let noun = MSG_NOUN_PREV.contains(&prev) || w.get(i + 1).is_some_and(|n| MSG_NOUN_NEXT.contains(&n.as_str()));
+            if !noun {
+                return hold("prompt asks for outward action: message");
+            }
+        }
+        if word_hit(t, "reply") {
+            let next_ok = w.get(i + 1).is_some_and(|n| REPLY_OK_NEXT.contains(&n.as_str()));
+            let near = &w[i + 1..(i + 7).min(w.len())];
+            if !next_ok || near.iter().any(|n| REPLY_BLOCK.contains(&n.as_str())) {
+                return hold("prompt asks for outward action: reply");
+            }
         }
     }
     let phrase_hit = |p: &&[&str]| w.windows(p.len()).any(|win| win.iter().zip(p.iter()).all(|(t, k)| word_hit(t, k)));

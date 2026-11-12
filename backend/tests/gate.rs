@@ -295,7 +295,12 @@ fn reply_and_message_narrowed() {
     for p in ["Fix the error message in main.rs", "Reply with only the number", "What does this message mean?", "reply in one word"] {
         assert!(!held(&check_task(&task(p))), "should allow: {p}");
     }
-    for p in ["reply to the email from Sam", "Reply all with the update", "message the team on slack", "please message Bob", "then reply on the PR", "send a message to Bob"] {
+    for p in [
+        "reply to the email from Sam", "Reply all with the update", "message the team on slack", "please message Bob",
+        "then reply on the PR", "send a message to Bob", "can you message Sam", "you should message the team",
+        "let's message Sam", "reply in the slack thread", "reply using the support account", "Reply only to the customer",
+        "Reply with a thank-you to Sam", "Reply briefly to the ticket", "DM Sam the link",
+    ] {
         assert!(held(&check_task(&task(p))), "should hold: {p}");
     }
 }
