@@ -1,0 +1,51 @@
+// Shared primitives: every control and surface is assembled from these helpers.
+export { mark } from './brand.js';
+const paths = {
+  download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
+  files: '<path d="M14 2H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6Z"/><path d="M14 2v4h4M8 22h12a2 2 0 0 0 2-2V8"/>',
+  changes: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 9h8M12 5v8M8 17h8"/>',
+  back: '<path d="M19 12H5m6-6-6 6 6 6"/>',
+  refresh: '<path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/>',
+
+  monitor: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  panel: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
+  inbox: '<path d="m4 4-2 9v7h20v-7l-2-9H4Z"/><path d="M2 13h6l2 3h4l2-3h6"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  history: '<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7M12 7v5l3 2"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
+  chevron: '<path d="m7 10 5 5 5-5"/>',
+  arrow: '<path d="M12 19V5m-6 6 6-6 6 6"/>',
+  slash: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="m15 6-6 12"/>',
+  agent: '<path d="M6 3v5m0 4v9m12-18v9m0 4v5"/><circle cx="6" cy="10" r="2"/><circle cx="18" cy="14" r="2"/>',
+  branch: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="6" r="2"/><path d="M6 7v10m0-4h6a6 6 0 0 0 6-5"/>',
+  merge: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M6 7v10m12 0v-4c0-5-7-3-7-8"/>',
+  calendar: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 2v4m10-4v4M3 9h18M7 13h1m3 0h1m3 0h1m-9 4h1m3 0h1"/>',
+  usage: '<path d="M5 5a9 9 0 1 1-2 7M3 3v6h6"/><path d="M12 7v5l3 2"/>',
+  chart: '<rect x="3" y="4" width="18" height="15" rx="2"/><path d="M8 14v-3m4 3V8m4 6v-5M8 22v-3m8 3v-3"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/>',
+  folder: '<path d="M3 7V4h6l3 3h9v13H3V7Z"/>',
+  attach: '<path d="m8 13 7-7a3 3 0 0 1 4 4l-9 9a5 5 0 0 1-7-7l9-9"/>',
+  settings: '<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',
+  bug: '<rect x="7" y="7" width="10" height="14" rx="5"/><path d="m9 7-2-4m8 4 2-4M3 10h4m10 0h4M3 16h4m10 0h4M12 8v12"/>',
+  external: '<path d="M14 3h7v7m-9 2 9-9M10 3H3v18h18v-7"/>',
+  tick: '<path d="m5 12 4 4L19 6"/>',
+  pause: '<path d="M9 5v14M15 5v14"/>',
+  play: '<path d="m8 5 11 7-11 7V5Z"/>',
+  bolt: '<path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z"/>',
+  circle: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+  deep: '<path d="M12 3v18M3 12h18M6 6l12 12M6 18 18 6"/>',
+  plan: '<path d="M9 5h11M9 12h11M9 19h11M3 5h1m-1 7h1m-1 7h1"/>',
+  message: '<path d="M21 4H3v13h5l4 4v-4h9V4Z"/>',
+};
+export const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.plus}</svg>`;
+export function button(label, { icon: glyph, variant = 'ghost', className = '', action = '', content = '', attrs = '' } = {}) {
+  return `<button type="button" class="button button--${variant} ${className}" ${action ? `data-action="${action}"` : ''} ${attrs} aria-label="${label}" title="${label}">${glyph ? icon(glyph) : ''}${content}</button>`;
+}
+export function panel(title, glyph, content, cls = '') {
+  return `<section class="panel ${cls}" aria-label="${title}"><h2 class="panel-title">${icon(glyph)}${title}</h2>${content}</section>`;
+}
