@@ -1,5 +1,8 @@
+use suffice::gate::{self, Verdict};
+use suffice::json::{self, Value};
 use suffice::orchestrator::Engine;
 use suffice::server::serve;
+use suffice::types::Event;
 use std::fs::{self, OpenOptions};
 use std::io::{ErrorKind, Read, Write};
 use std::os::unix::fs::OpenOptionsExt;
@@ -7,6 +10,9 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 fn main() {
+    if std::env::args().nth(1).as_deref() == Some("gate-hook") {
+        std::process::exit(gate_hook());
+    }
     if let Err(e) = run() {
         eprintln!("suffice-backend: {e}");
         std::process::exit(1);
@@ -44,6 +50,40 @@ fn run() -> Result<(), String> {
     loop {
         std::thread::sleep(Duration::from_secs(3600));
     }
+}
+
+/// Claude PreToolUse hook: exit 0 allows the call, exit 2 blocks it (stderr is shown to the model).
+fn gate_hook() -> i32 {
+    let mut raw = String::new();
+    if std::io::stdin().read_to_string(&mut raw).is_err() {
+        eprintln!("suffice gate: cannot read hook input; ask the user to approve this in Suffice");
+        return 2;
+    }
+    let Ok(v) = json::parse(&raw) else {
+        eprintln!("suffice gate: unparseable hook input; ask the user to approve this in Suffice");
+        return 2;
+    };
+    let Some(name) = v.get("tool_name").and_then(Value::as_str) else {
+        eprintln!("suffice gate: hook input has no tool_name; ask the user to approve this in Suffice");
+        return 2;
+    };
+    let input = v.get("tool_input").map(|i| i.to_string()).unwrap_or_default();
+    match gate::check_event(&Event::ToolCall { name: name.to_string(), input: input.clone() }) {
+        Verdict::Allow => 0,
+        Verdict::Hold { .. } if approved(name, &input) => 0,
+        Verdict::Hold { reason } => {
+            eprintln!("suffice gate: {reason}; ask the user to approve this in Suffice");
+            2
+        }
+    }
+}
+
+/// True when the orchestrator passed this exact call as approved for the run.
+fn approved(name: &str, input: &str) -> bool {
+    // shortcut: allows every exact match, not exactly once; the child cannot consume the orchestrator's calls set
+    let Ok(list) = std::env::var("SUFFICE_APPROVED_CALLS") else { return false };
+    let Ok(Value::Arr(calls)) = json::parse(&list) else { return false };
+    calls.iter().any(|c| c.get("name").and_then(Value::as_str) == Some(name) && c.get("input").and_then(Value::as_str) == Some(input))
 }
 
 /// Read the token file, or create it (mode 0600, 32 random hex chars) if missing. Never overwrites.

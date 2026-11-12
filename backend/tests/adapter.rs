@@ -37,7 +37,8 @@ fn args(c: &suffice::types::Cmd) -> Vec<&str> {
 
 #[test]
 fn claude_command_with_resume_and_model() {
-    let c = command(&task(AgentKind::Claude, "hi", Some("sonnet")), Some("sess-1"));
+    let mut c = command(&task(AgentKind::Claude, "hi", Some("sonnet")), Some("sess-1"));
+    take_settings(&mut c.args);
     assert_eq!(c.program, "claude");
     assert_eq!(
         args(&c),
@@ -49,8 +50,28 @@ fn claude_command_with_resume_and_model() {
 
 #[test]
 fn claude_command_plain() {
-    let c = command(&task(AgentKind::Claude, "hi", None), None);
+    let mut c = command(&task(AgentKind::Claude, "hi", None), None);
+    take_settings(&mut c.args);
     assert_eq!(args(&c), ["-p", "hi", "--output-format", "stream-json", "--verbose", "--permission-mode", "dontAsk", "--allowedTools", "Read", "Grep", "Glob", "Edit", "Write", "MultiEdit", "Bash(cargo test:*)", "Bash(cargo build:*)", "Bash(cargo check:*)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(ls:*)", "Bash(npm test:*)"]);
+}
+
+/// Remove the `--settings <json>` pair from a claude argv and return the JSON.
+fn take_settings(a: &mut Vec<String>) -> String {
+    let i = a.iter().position(|x| x == "--settings").expect("--settings");
+    a.remove(i);
+    a.remove(i)
+}
+
+#[test]
+fn claude_command_has_gate_hook() {
+    let mut c = command(&task(AgentKind::Claude, "hi", None), None);
+    let s = take_settings(&mut c.args);
+    let v = suffice::json::parse(&s).expect("settings json");
+    let pre = v.get("hooks").and_then(|h| h.get("PreToolUse")).and_then(|p| p.as_arr()).expect("PreToolUse");
+    let hook = pre[0].get("hooks").and_then(|h| h.as_arr()).expect("hooks")[0].get("command").and_then(|c| c.as_str()).expect("command");
+    assert!(hook.ends_with(" gate-hook"), "{hook}");
+    let q = suffice::adapter::claude_hook_settings(std::path::Path::new("/a'b/x")).expect("utf8");
+    assert!(q.contains(r"'/a'\\''b/x' gate-hook"), "{q}");
 }
 
 #[test]
@@ -185,7 +206,8 @@ fn claude_access_argv() {
     let read = ["--permission-mode", "dontAsk", "--allowedTools", "Read", "Grep", "Glob", "WebSearch"];
     let full = ["--permission-mode", "bypassPermissions"];
     for (access, want) in [(Access::Read, &read[..]), (Access::Edit, &edit[..]), (Access::Full, &full[..])] {
-        let c = command(&with_access(AgentKind::Claude, access), None);
+        let mut c = command(&with_access(AgentKind::Claude, access), None);
+        take_settings(&mut c.args);
         let mut expect = vec!["-p".to_string(), "do it".into(), "--output-format".into(), "stream-json".into(), "--verbose".into()];
         expect.extend(want.iter().map(|s| s.to_string()));
         assert_eq!(c.args, expect, "{access:?}");

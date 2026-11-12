@@ -13,6 +13,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             a.push(prompt);
             a.extend(strs(&["--output-format", "stream-json", "--verbose"]));
             a.extend(claude_access(task.access));
+            a.extend(claude_hook());
             if let Some(id) = resume {
                 a.extend(strs(&["--resume", id]));
             }
@@ -172,6 +173,21 @@ fn claude_access(access: Access) -> Vec<String> {
         }
         Access::Full => strs(&["--permission-mode", "bypassPermissions"]),
     }
+}
+
+/// `--settings` wiring a PreToolUse hook to this binary's `gate-hook`; empty if the exe path is unknown.
+fn claude_hook() -> Vec<String> {
+    std::env::current_exe().ok().and_then(|exe| claude_hook_settings(&exe)).map(|s| vec!["--settings".into(), s]).unwrap_or_default()
+}
+
+/// Settings JSON for a PreToolUse command hook running `exe gate-hook`. None if the path is not UTF-8.
+pub fn claude_hook_settings(exe: &Path) -> Option<String> {
+    let quoted = format!("'{}'", exe.to_str()?.replace('\'', "'\\''"));
+    let cmd = Value::Str(format!("{quoted} gate-hook"));
+    let hook = Value::Obj(vec![("type".into(), Value::str("command")), ("command".into(), cmd)]);
+    let entry = Value::Obj(vec![("matcher".into(), Value::str("*")), ("hooks".into(), Value::Arr(vec![hook]))]);
+    let pre = Value::Obj(vec![("PreToolUse".into(), Value::Arr(vec![entry]))]);
+    Some(Value::Obj(vec![("hooks".into(), pre)]).to_string())
 }
 
 fn strs(xs: &[&str]) -> Vec<String> {
