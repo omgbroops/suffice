@@ -104,8 +104,8 @@ pub enum Event {
     State { state: String, reason: Option<String> },
     /// An approval was decided ("approved" or "denied"); the full record is in approvals_log.jsonl.
     Approval { status: String },
-    /// A trigger fired ("fired", "skipped" or "failed"); logged under the trigger id.
-    Trigger { outcome: String, task_id: Option<TaskId> },
+    /// A trigger fired ("fired", "skipped", "failed" or "disabled"); logged under the trigger id.
+    Trigger { outcome: String, task_id: Option<TaskId>, reason: Option<String> },
 }
 
 impl TaskState {
