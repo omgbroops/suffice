@@ -170,7 +170,7 @@ fn allowed(from: &TaskState, to: &TaskState) -> bool {
             | (Ready, Running { .. } | NeedsApproval { .. } | Cancelled | Failed { .. })
             | (Running { .. }, Done | Failed { .. } | NeedsApproval { .. } | Cancelled)
             | (NeedsApproval { .. }, Ready | Cancelled)
-            | (Failed { .. }, Ready)
+            | (Failed { .. } | Cancelled, Ready)
     )
 }
 

@@ -44,6 +44,10 @@ impl Sessions {
     pub fn get(&self, key: &str) -> Option<&Session> {
         self.map.get(key)
     }
+
+    pub fn all(&self) -> Vec<&Session> {
+        self.map.values().collect()
+    }
     /// Mark the session busy for `task`. False when another task holds it, or when the key is
     /// already bound to a different agent kind.
     pub fn claim(&mut self, key: &str, agent: &AgentKind, task: &str) -> bool {

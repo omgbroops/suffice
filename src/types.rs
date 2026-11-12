@@ -69,6 +69,23 @@ pub enum Event {
     Raw { line: String },
     Stderr { line: String },
     Exit { code: Option<i32> },
+    /// A task state change, logged by the engine for live queue views.
+    State { state: String, reason: Option<String> },
+}
+
+impl TaskState {
+    /// The state name used by the API.
+    pub fn name(&self) -> &'static str {
+        match self {
+            TaskState::Pending => "pending",
+            TaskState::Ready => "ready",
+            TaskState::Running { .. } => "running",
+            TaskState::NeedsApproval { .. } => "needs_approval",
+            TaskState::Done => "done",
+            TaskState::Failed { .. } => "failed",
+            TaskState::Cancelled => "cancelled",
+        }
+    }
 }
 
 /// One event in the log, tagged with its task and a monotonic sequence number.
