@@ -1,0 +1,45 @@
+const fs=require('node:fs/promises');
+const path=require('node:path');
+const {promisify}=require('node:util');
+const exec=promisify(require('node:child_process').execFile);
+const limit=256*1024;
+async function inside(root,name=''){
+ if(!root)throw new Error('No project selected');
+ if(typeof name!=='string'||name.includes('\0')||path.isAbsolute(name))throw new Error('Invalid workspace path');
+ const base=await fs.realpath(root),file=await fs.realpath(path.resolve(base,name));
+ const relative=path.relative(base,file);
+ if(relative==='..'||relative.startsWith('..'+path.sep)||path.isAbsolute(relative))throw new Error('Path is outside this project');
+ return {base,file};
+}
+async function list(root,directory=''){
+ const {base,file}=await inside(root,directory);
+ const entries=await fs.readdir(file,{withFileTypes:true});
+ return {directory,project:path.basename(base),entries:entries.filter(entry=>entry.name!=='.git').map(entry=>({name:entry.name,path:path.relative(base,path.join(file,entry.name)).split(path.sep).join('/'),kind:entry.isSymbolicLink()?'link':entry.isDirectory()?'directory':'file'})).sort((a,b)=>(a.kind==='directory'?0:1)-(b.kind==='directory'?0:1)||a.name.localeCompare(b.name,undefined,{numeric:true}))};
+}
+async function read(root,name){
+ const {file}=await inside(root,name);const handle=await fs.open(file,'r');
+ try{
+  const info=await handle.stat();if(!info.isFile())throw new Error('This is not a file');
+  const buffer=Buffer.alloc(Math.min(info.size,limit));const {bytesRead}=await handle.read(buffer,0,buffer.length,0);
+  if(buffer.subarray(0,Math.min(bytesRead,8000)).includes(0))return {path:name,binary:true,text:'',truncated:false};
+  return {path:name,text:buffer.subarray(0,bytesRead).toString('utf8'),truncated:info.size>limit};
+ }finally{await handle.close();}
+}
+const git=async(root,args)=>{if(!root)throw new Error('No project selected');return (await exec('git',['--no-optional-locks','-c','core.fsmonitor=false','-C',root,...args],{windowsHide:true,timeout:8000,maxBuffer:2*1024*1024})).stdout;};
+async function changes(root){
+ let output;try{output=await git(root,['status','--porcelain=v1','-z','--untracked-files=all']);}catch(error){if(error.stderr?.includes('not a git repository'))return {git:false,entries:[]};throw new Error('Could not read Git changes');}
+ const records=output.split('\0'),entries=[];
+ for(let i=0;i<records.length;i++){if(!records[i])continue;const status=records[i].slice(0,2),name=records[i].slice(3);const from=/[RC]/.test(status)?records[++i]:undefined;entries.push({path:name,status,from});}
+ return {git:true,entries};
+}
+async function diff(root,name){
+ const changed=await changes(root),entry=changed.entries.find(entry=>entry.path===name);
+ if(!entry)throw new Error('This file no longer has changes');
+ if(entry.status==='??')return {...await read(root,name),untracked:true};
+ const args=['diff','--no-ext-diff','--no-textconv','--no-color'];
+ const paths=entry.from?[entry.from,name]:[name];
+ const unstaged=await git(root,[...args,'--',...paths]),staged=await git(root,[...args,'--cached','--',...paths]);
+ const text=[staged,unstaged].filter(Boolean).join('\n');
+ return {path:name,text:text.slice(0,limit),truncated:text.length>limit};
+}
+module.exports={list,read,changes,diff};

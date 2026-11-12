@@ -1,0 +1,26 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,writeFile,mkdir,symlink} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {resolve} from 'node:path';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+import files from '../electron/workspace-files.cjs';
+const exec=promisify(execFile);
+test('workspace browsing rejects escapes and shows real tracked, renamed and untracked changes',async()=>{
+ const root=await mkdtemp(resolve(tmpdir(),'suffice-files-')),outside=await mkdtemp(resolve(tmpdir(),'suffice-outside-'));
+ await writeFile(resolve(root,'hello.txt'),'before\n');await writeFile(resolve(root,'old name.txt'),'rename fixture\n');await mkdir(resolve(root,'folder'));
+ const git=args=>exec('git',['-C',root,...args],{windowsHide:true});
+ await git(['init','-q']);await git(['add','hello.txt','old name.txt']);await git(['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture']);
+ await writeFile(resolve(root,'hello.txt'),'after\n');await writeFile(resolve(root,'new.txt'),'new file\n');await git(['mv','old name.txt','renamed name.txt']);
+ await symlink(outside,resolve(root,'escape'),process.platform==='win32'?'junction':'dir');
+ const entries=(await files.list(root)).entries;assert.equal(entries[0].kind,'directory');assert.ok(!entries.some(entry=>entry.name==='.git'));
+ assert.equal((await files.read(root,'hello.txt')).text,'after\n');
+ await assert.rejects(files.read(root,resolve(outside,'secret.txt')),/Invalid workspace path/);
+ await assert.rejects(files.list(root,'escape'),/outside this project/);
+ const changes=await files.changes(root);assert.ok(changes.entries.some(entry=>entry.path==='new.txt'&&entry.status==='??'));
+ assert.ok(changes.entries.some(entry=>entry.path==='renamed name.txt'&&entry.from==='old name.txt'));
+ assert.match((await files.diff(root,'hello.txt')).text,/\+after/);
+ assert.match((await files.diff(root,'new.txt')).text,/new file/);
+ assert.equal((await files.changes(outside)).git,false);
+});
