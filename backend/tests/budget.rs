@@ -328,3 +328,72 @@ fn fallbacks_survive_restart_and_drop_primary_and_duplicates() {
     e.run_until_idle(Duration::from_secs(20));
     assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
 }
+
+#[test]
+fn rate_limit_matcher_requires_word_boundary_before_rate() {
+    use suffice::orchestrator::rate_limit_text;
+    for s in ["accurate limit exceeded", "generate limits", "integrate limit"] {
+        assert!(!rate_limit_text(s), "{s}");
+    }
+    for s in ["rate limit: HTTP 429", "rate_limit_error status 429", "Rate-limit error 429"] {
+        assert!(rate_limit_text(s), "{s}");
+    }
+}
+
+#[test]
+fn rerun_approval_survives_restart() {
+    let d = Dir::new("rerunrestart");
+    let tool = r#"{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"/x"}}]}}"#;
+    {
+        let mut e = Engine::open(&d.0, 2).unwrap();
+        e.set_program("claude", script(&d.0, "partial3.sh", &format!("echo '{tool}'\necho '{}'\nexit 1", rejected_line())));
+        e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+        e.run_until_idle(Duration::from_secs(20));
+        assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
+    }
+    let mut e = Engine::open(&d.0, 2).unwrap();
+    e.set_program("gemini", fixture());
+    e.approve("t1").unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
+    assert!(has_kind(&e, "failover"));
+}
+
+#[test]
+fn cancel_clears_rerun_so_resubmit_and_approve_do_not_fail_over() {
+    let d = Dir::new("cancelrerun");
+    let tool = r#"{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"/x"}}]}}"#;
+    let mut e = Engine::open(&d.0, 2).unwrap();
+    e.set_program("claude", script(&d.0, "partial4.sh", &format!("echo '{tool}'\necho '{}'\nexit 1", rejected_line())));
+    e.set_program("gemini", fixture());
+    e.submit_with(task("t1", None), vec![AgentKind::Gemini]).unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
+    e.cancel("t1").unwrap();
+    assert!(e.approve("t1").is_err());
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(!has_kind(&e, "failover"));
+    let text = fs::read_to_string(d.0.join("fallbacks.json")).unwrap_or_default();
+    assert!(!text.contains("\"t1\""), "{text}");
+}
+
+#[test]
+fn zero_tool_rate_limit_fails_over_and_publish_prompt_still_gates() {
+    let d = Dir::new("npmgate");
+    let marker = d.0.join("gemini_ran");
+    let mut e = Engine::open(&d.0, 2).unwrap();
+    e.set_program("claude", rejected_script(&d.0));
+    e.set_program("gemini", script(&d.0, "touch.sh", &format!("touch '{}'\necho '{{}}'", marker.display())));
+    let mut t = task("t1", None);
+    t.prompt = "publish the package to npm".into();
+    e.submit_with(t, vec![AgentKind::Gemini]).unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
+    assert!(!marker.exists());
+    e.approve("t1").unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(has_kind(&e, "failover"));
+    assert!(matches!(agent(&e, "t1"), AgentKind::Gemini));
+    assert!(matches!(state(&e, "t1"), TaskState::NeedsApproval { .. }));
+    assert!(!marker.exists());
+}

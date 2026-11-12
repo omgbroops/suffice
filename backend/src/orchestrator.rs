@@ -35,7 +35,7 @@ pub fn rate_limit_text(text: &str) -> bool {
     let b = text.to_ascii_lowercase().into_bytes();
     let bounded = |i: usize, n: usize| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b.get(i + n).is_none_or(|c| !c.is_ascii_alphanumeric());
     let at = |p: &str| (0..b.len()).any(|i| b[i..].starts_with(p.as_bytes()) && bounded(i, p.len()));
-    let rate = (0..b.len()).any(|i| b[i..].starts_with(b"rate") && (b[i + 4..].starts_with(b"limit") || b[i + 4..].get(1..).is_some_and(|s| s.starts_with(b"limit"))));
+    let rate = (0..b.len()).any(|i| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b[i..].starts_with(b"rate") &&(b[i + 4..].starts_with(b"limit") || b[i + 4..].get(1..).is_some_and(|s| s.starts_with(b"limit"))));
     // a bare 429 needs HTTP context ("took 1429ms", "429 ms" are not limits); the phrases stand alone
     rate || b.windows(11).any(|w| w == b"usage limit") || ["429 too many", "status 429", "http 429", "error 429"].iter().any(|p| at(p))
 }
@@ -72,11 +72,17 @@ pub fn parse_caps(text: &str) -> Option<Caps> {
         .collect()
 }
 
-fn parse_fallbacks(text: &str) -> Option<HashMap<TaskId, (Vec<AgentKind>, u32)>> {
+type Fallbacks = (HashMap<TaskId, (Vec<AgentKind>, u32)>, BTreeSet<TaskId>);
+
+fn parse_fallbacks(text: &str) -> Option<Fallbacks> {
     let Value::Obj(tasks) = json::parse(text).ok()? else { return None };
-    tasks
+    let mut rerun = BTreeSet::new();
+    let map = tasks
         .into_iter()
         .map(|(id, v)| {
+            if let Some(Value::Bool(true)) = v.get("rerun") {
+                rerun.insert(id.clone());
+            }
             let Some(Value::Arr(names)) = v.get("kinds") else { return None };
             let kinds = names
                 .iter()
@@ -91,7 +97,8 @@ fn parse_fallbacks(text: &str) -> Option<HashMap<TaskId, (Vec<AgentKind>, u32)>>
             let Some(Value::Num(waits)) = v.get("waits") else { return None };
             Some((id, (kinds, *waits as u32)))
         })
-        .collect()
+        .collect::<Option<HashMap<_, _>>>()?;
+    Some((map, rerun))
 }
 
 fn parse_limits(text: &str) -> Option<Limits> {
@@ -201,7 +208,7 @@ impl Engine {
         let orphans = load_runs(dir)?;
         let (caps, caps_torn) = read_or_set_aside(&dir.join("budgets.json"), parse_caps)?;
         let (limits, limits_torn) = read_or_set_aside(&dir.join("limits.json"), parse_limits)?;
-        let (fallbacks, fallbacks_torn) = read_or_set_aside(&dir.join("fallbacks.json"), parse_fallbacks)?;
+        let ((fallbacks, rerun), fallbacks_torn) = read_or_set_aside(&dir.join("fallbacks.json"), parse_fallbacks)?;
         let (tx, rx) = channel();
         let mut engine = Engine {
             dir: dir.to_path_buf(),
@@ -227,7 +234,7 @@ impl Engine {
             caps,
             limits,
             fallbacks,
-            rerun: BTreeSet::new(),
+            rerun,
         };
         for (torn, file) in [(caps_torn, "budgets.json"), (limits_torn, "limits.json"), (fallbacks_torn, "fallbacks.json")] {
             if torn {
@@ -313,6 +320,9 @@ impl Engine {
             Some((l, _)) if !l.is_empty() => l.remove(0),
             _ => return false,
         };
+        // the approval covered the old kind's run; the new kind's prompt gate must run again
+        self.approved.remove(id);
+        let _ = self.save_approvals();
         let _ = self.save_fallbacks();
         let (from, to) = (crate::server::kind_name(&task.agent), crate::server::kind_name(&next));
         // a new session key keeps the next CLI from resuming the previous agent's conversation
@@ -328,7 +338,8 @@ impl Engine {
     fn save_fallbacks(&self) -> io::Result<()> {
         let tasks = self.fallbacks.iter().map(|(id, (kinds, waits))| {
             let names = kinds.iter().map(|k| Value::str(crate::server::kind_name(k))).collect();
-            (id.clone(), Value::Obj(vec![("kinds".into(), Value::Arr(names)), ("waits".into(), Value::num(*waits as f64))]))
+            let rerun = Value::Bool(self.rerun.contains(id));
+            (id.clone(), Value::Obj(vec![("kinds".into(), Value::Arr(names)), ("waits".into(), Value::num(*waits as f64)), ("rerun".into(), rerun)]))
         });
         write_json(&self.dir, "fallbacks.json", &Value::Obj(tasks.collect()))
     }
@@ -516,6 +527,7 @@ impl Engine {
             None => return Err(format!("no task '{id}'")),
         }
         if self.rerun.remove(id) {
+            let _ = self.save_fallbacks();
             let task = self.queue.get(id).cloned().ok_or(format!("no task '{id}'"))?;
             return if self.failover(id, &task, "rate limited") { Ok(()) } else { Err(format!("task '{id}' has no fallback left")) };
         }
@@ -545,6 +557,7 @@ impl Engine {
         self.queue.set_state(id, state)?;
         if self.queue.get(id).is_some_and(|t| matches!(t.state, TaskState::Done | TaskState::Cancelled | TaskState::Failed { .. })) {
             self.fallbacks.remove(id);
+            self.rerun.remove(id);
             let _ = self.save_fallbacks();
         }
         self.log_state(id);
@@ -778,6 +791,7 @@ impl Engine {
                     if let (Some(next), true) = (next, r.tools > 0) {
                         let reason = format!("rerun on {next} after rate limit (partial run had {} tool calls)", r.tools);
                         self.rerun.insert(r.task.clone());
+                        let _ = self.save_fallbacks();
                         let _ = self.set_state(&r.task, TaskState::NeedsApproval { reason });
                         return;
                     }
