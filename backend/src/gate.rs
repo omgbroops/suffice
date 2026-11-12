@@ -17,12 +17,14 @@ fn hold(reason: &str) -> Verdict {
 // Verbs that hold anywhere in a prompt.
 const TASK_WORDS: &[&str] = &[
     "publish", "send", "sent", "resend", "email", "mail", "notify", "comment", "share", "tweet", "buy", "purchase",
-    "bought", "pay", "paid", "deploy", "delete", "upload", "submit", "push", "message", "reply", "forward", "announce",
+    "bought", "pay", "paid", "deploy", "delete", "upload", "submit", "push", "forward", "announce",
     "merge", "wipe", "ship",
 ];
 // Words that hold only as a verb: at clause start or right after to/and/then/please.
-const TASK_VERBS: &[&str] = &["text", "order", "post", "drop", "release"];
+const TASK_VERBS: &[&str] = &["text", "order", "post", "drop", "release", "message"];
 const VERB_LEAD: &[&str] = &["to", "and", "then", "please"];
+// "reply" holds unless the next token is one of these (reply with only the number, reply in one word).
+const REPLY_OK_NEXT: &[&str] = &["with", "only", "just", "briefly", "exactly", "concisely", "in", "using"];
 const TASK_PHRASES: &[&[&str]] = &[
     &["open", "a", "pr"],
     &["open", "a", "pull"],
@@ -60,6 +62,11 @@ pub fn check_task(task: &Task) -> Verdict {
     let w = tokens(&task.prompt);
     if let Some(k) = TASK_WORDS.iter().find(|k| w.iter().any(|t| word_hit(t, k))) {
         return hold(&format!("prompt asks for outward action: {k}"));
+    }
+    for (i, t) in w.iter().enumerate() {
+        if word_hit(t, "reply") && !w.get(i + 1).is_some_and(|n| REPLY_OK_NEXT.contains(&n.as_str())) {
+            return hold("prompt asks for outward action: reply");
+        }
     }
     let phrase_hit = |p: &&[&str]| w.windows(p.len()).any(|win| win.iter().zip(p.iter()).all(|(t, k)| word_hit(t, k)));
     if let Some(p) = TASK_PHRASES.iter().find(|p| phrase_hit(p)) {

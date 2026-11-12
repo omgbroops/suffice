@@ -289,3 +289,13 @@ fn full_access_task_is_held_for_approval() {
     t.access = Access::Full;
     assert_eq!(check_task(&t), Verdict::Hold { reason: "full access needs OK".into() });
 }
+
+#[test]
+fn reply_and_message_narrowed() {
+    for p in ["Fix the error message in main.rs", "Reply with only the number", "What does this message mean?", "reply in one word"] {
+        assert!(!held(&check_task(&task(p))), "should allow: {p}");
+    }
+    for p in ["reply to the email from Sam", "Reply all with the update", "message the team on slack", "please message Bob", "then reply on the PR", "send a message to Bob"] {
+        assert!(held(&check_task(&task(p))), "should hold: {p}");
+    }
+}
