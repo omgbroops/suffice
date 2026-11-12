@@ -82,13 +82,49 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             (program.clone(), a)
         }
     };
+    let mut env = task.env.clone();
+    if matches!(task.agent, AgentKind::OpenCode) {
+        env.extend(opencode_env(task.access));
+    }
     Cmd {
         program,
         args,
         cwd: task.cwd.clone(),
-        env: task.env.clone(),
+        env,
         stdin: None,
     }
+}
+
+/// opencode reads its permission config from env, so the access level is enforced there.
+fn opencode_env(access: Access) -> Vec<(String, String)> {
+    let edit = match access {
+        Access::Read => "deny",
+        Access::Edit => "allow",
+        Access::Full => return vec![],
+    };
+    let s = Value::str;
+    let read = Value::Obj(vec![("*".into(), s("allow")), ("*.env".into(), s("deny")), ("*.env.*".into(), s("deny"))]);
+    let perm = Value::Obj(vec![
+        ("*".into(), s("deny")),
+        ("read".into(), read),
+        ("glob".into(), s("allow")),
+        ("grep".into(), s("allow")),
+        ("lsp".into(), s("allow")),
+        ("todowrite".into(), s("allow")),
+        ("edit".into(), s(edit)),
+        ("bash".into(), s("deny")),
+        ("task".into(), s("deny")),
+        ("webfetch".into(), s("deny")),
+        ("websearch".into(), s("deny")),
+        ("external_directory".into(), s("deny")),
+        ("doom_loop".into(), s("deny")),
+        ("question".into(), s("deny")),
+    ]);
+    vec![
+        ("OPENCODE_PERMISSION".into(), perm.to_string()),
+        // a repo's opencode.json must not loosen the access level
+        ("OPENCODE_DISABLE_PROJECT_CONFIG".into(), "1".into()),
+    ]
 }
 
 /// Parse one stdout line from this agent kind into zero or more normalized events.
@@ -118,6 +154,7 @@ fn raw(line: &str) -> Vec<Event> {
 
 /// Whether the kind's CLI enforces the Access level itself (claude, codex and suffice).
 pub fn enforces_access(kind: &AgentKind) -> bool {
+    // shortcut: opencode env permission set but unverified, flip after a real run proves it is honored
     matches!(kind, AgentKind::Claude | AgentKind::Codex | AgentKind::Suffice)
 }
 
