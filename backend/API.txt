@@ -1,0 +1,97 @@
+LOOM LOCAL API  v0 (draft 2026-11-11, shape is fixed; server lands next)
+
+Base: http://127.0.0.1:7878   (port from `loom serve --port`)
+Auth: header  Authorization: Bearer <token>   token in ~/.loom/token (0600). Also ?token= on stream URLs
+      (EventSource can't set headers). Every other request without it: 401.
+CORS: Access-Control-Allow-Origin echoed only for http://localhost:7711, http://127.0.0.1:7711 and
+      null (file://); Allow-Headers: Authorization, Content-Type, Last-Event-ID; OPTIONS preflight -> 204.
+Format: JSON, UTF-8. Times = unix ms. Errors: {"error": "text"} with 4xx/5xx.
+Live: SSE (text/event-stream). Each message: `id: <seq>` + `event: <kind>` + `data: <json>`.
+      Reconnect with Last-Event-ID (or ?since=<seq>) and nothing is missed: the log is durable.
+
+---------------------------------------------------------------- AGENTS
+An "agent" = one session_key (one ongoing CLI conversation). Tasks run on agents.
+
+GET /agents
+  [{ "key": "frontend-bot",
+     "kind": "claude" | "codex" | "opencode" | "gemini" | "generic",
+     "subscription": "claude-max" | null,       // which login/plan it bills to
+     "status": "idle" | "running" | "waiting_approval" | "error",
+     "task": "t42" | null,                       // current task id
+     "native_id": "c1f…" | null,                 // CLI's own session id (resume)
+     "runs": 12, "last_ms": 1762900000000 }]
+
+GET /agents/:key            same object + "recent": last 50 events (see EVENTS)
+
+---------------------------------------------------------------- TASKS (queue + graph)
+Task object:
+  { "id": "t42", "agent": "claude", "session_key": "frontend-bot" | null,
+    "prompt": "…", "cwd": "/Users/…/repo", "model": null,
+    "deps": ["t40","t41"],                       // graph edges: dep -> this task
+    "state": "pending" | "ready" | "running" | "needs_approval" | "done" | "failed" | "cancelled",
+    "reason": "git push" | null,                 // set for needs_approval / failed (error text)
+    "pid": 4242 | null,                          // when running
+    "attempts": 0, "max_retries": 1, "timeout_secs": 1800, "created_ms": … }
+
+GET  /tasks                      all tasks, oldest first. ?state=running,ready to filter
+GET  /tasks/:id
+GET  /graph                      { "nodes": [Task…], "edges": [{"from":"t40","to":"t42"}] }
+POST /tasks                      body: { "id"?: auto, "agent", "prompt", "cwd", "session_key"?,
+                                        "deps"?: [], "max_retries"?: 0, "timeout_secs"?: 1800,
+                                        "model"?, "env"?: {} }  -> 201 Task
+                                 400 on unknown dep / duplicate id / cycle
+POST /tasks/:id/cancel           -> Task (state cancelled; kills the run if running)
+POST /tasks/:id/retry            failed|cancelled -> ready
+
+---------------------------------------------------------------- EVENTS
+Event object (one line of the durable log):
+  { "seq": 1093, "task": "t42", "agent_key": "frontend-bot" | null, "ms": …,
+    "kind": "session" | "text" | "tool_call" | "tool_result" | "usage" | "result"
+            | "raw" | "stderr" | "exit" | "state",
+    ...kind fields:
+      session     { "native_id" }
+      text        { "text" }
+      tool_call   { "name", "input" }            // input = JSON text of the tool args
+      tool_result { "name", "output", "is_error" }
+      usage       { "input_tokens", "output_tokens", "cost_usd": null|number }
+      result      { "text", "is_error" }
+      raw|stderr  { "line" }
+      exit        { "code": null|int }
+      state       { "state", "reason" }          // task state changes, for live queue views
+  }
+
+GET /events?since=<seq>&task=<id>&agent=<key>&limit=500     page of the log
+GET /stream?since=<seq>[&task=<id>][&agent=<key>]           SSE, all events (filtered)
+    -> per-agent stream = /stream?agent=frontend-bot
+
+---------------------------------------------------------------- APPROVALS (gate inbox)
+The gate holds anything outward (publish, send, buy, push, delete outside project...).
+Approval object:
+  { "id": "a7", "task": "t42", "agent_key": "frontend-bot" | null,
+    "kind": "task" | "tool_call",                // held before start, or mid-run
+    "reason": "git push",
+    "tool": { "name": "Bash", "input": "{\"command\":\"git push\"}" } | null,
+    "prompt": "…task prompt…",
+    "status": "pending" | "approved" | "denied", "ms": … }
+
+GET  /approvals?status=pending
+POST /approvals/:id/approve      -> task back to ready; that exact call is allowed ONCE
+POST /approvals/:id/deny         body {"note"?} -> task cancelled
+SSE: approvals also arrive on /stream as  event: approval  data: <Approval>
+
+---------------------------------------------------------------- USAGE (per subscription)
+GET /usage
+  [{ "subscription": "claude-max", "kind": "claude",
+     "window": "5h" | "week",                    // plan windows where known
+     "runs": 31, "input_tokens": …, "output_tokens": …,
+     "cost_usd": 4.12 | null,                    // CLI-reported equivalent, null when unknown
+     "percent": 57 | null,                       // plan % used when the CLI exposes it, else null
+     "resets_ms": … | null,
+     "status": "ok" | "near_limit" | "limited" }]
+SSE: event: usage  data: <one row>  whenever it changes
+
+---------------------------------------------------------------- HEALTH
+GET /health   { "ok": true, "version": "0.1", "running": 3, "max_parallel": 4, "uptime_ms": … }
+
+NOT IN v0: auth beyond a local token, remote access, websockets (SSE covers live), editing a task
+after submit, computer-use/browser endpoints (they show up as tool_call events for now).
