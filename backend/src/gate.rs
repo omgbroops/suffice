@@ -47,8 +47,19 @@ const TASK_PHRASES: &[&[&str]] = &[
     &["e", "mail"],
 ];
 
+/// Maps fullwidth ASCII and ideographic space to plain ASCII so lookalike words still match.
+fn fold(s: &str) -> String {
+    s.chars()
+        .map(|c| match c {
+            '\u{FF01}'..='\u{FF5E}' => char::from_u32(c as u32 - 0xFEE0).unwrap_or(c),
+            '\u{3000}' => ' ',
+            _ => c,
+        })
+        .collect()
+}
+
 fn tokens(s: &str) -> Vec<String> {
-    s.to_lowercase().split(|c: char| !c.is_alphanumeric()).filter(|w| !w.is_empty()).map(String::from).collect()
+    fold(s).to_lowercase().split(|c: char| !c.is_alphanumeric()).filter(|w| !w.is_empty()).map(String::from).collect()
 }
 
 /// Whole word `t` is `k` or one of its plain inflections (sends, deleting, posted, replied, paying).
@@ -69,13 +80,16 @@ pub fn check_task(task: &Task) -> Verdict {
     if task.access == Access::Full {
         return hold("full access needs OK");
     }
-    let w = tokens(&task.prompt);
+    let prompt = fold(&task.prompt);
+    let w = tokens(&prompt);
     if let Some(k) = TASK_WORDS.iter().find(|k| w.iter().any(|t| word_hit(t, k))) {
         return hold(&format!("prompt asks for outward action: {k}"));
     }
     // Clauses split on raw punctuation (not hyphen), so "reply-with-thanks" stays in one clause.
-    for clause in task.prompt.split(['.', ';', ',', ':', '!', '?', '\n']) {
+    for clause in prompt.split(['.', ';', ',', ':', '!', '?', '\n', '。', '、']) {
         let ct = tokens(clause);
+        // Same tokens as `ct`, case preserved, for the capitalized-name check.
+        let raw: Vec<&str> = clause.split(|c: char| !c.is_alphanumeric()).filter(|x| !x.is_empty()).collect();
         for (j, t) in ct.iter().enumerate() {
             if word_hit(t, "reply") {
                 let rest = &ct[j + 1..];
@@ -83,18 +97,14 @@ pub fn check_task(task: &Task) -> Verdict {
                     return hold("prompt asks for outward action: reply");
                 }
             }
-        }
-    }
-    // Same tokenization as `w`, but case preserved, for the capitalized-name check.
-    let raw: Vec<&str> = task.prompt.split(|c: char| !c.is_alphanumeric()).filter(|x| !x.is_empty()).collect();
-    for (i, t) in w.iter().enumerate() {
-        if word_hit(t, "message") {
-            let prev = if i > 0 { w[i - 1].as_str() } else { "" };
-            let noun = MSG_NOUN_PREV.contains(&prev) || w.get(i + 1).is_some_and(|n| MSG_NOUN_NEXT.contains(&n.as_str()));
-            let to_near = w[i + 1..(i + 4).min(w.len())].iter().any(|n| n == "to");
-            let name = raw.get(i + 1).is_some_and(|n| n.starts_with(char::is_uppercase));
-            if !noun || to_near || name {
-                return hold("prompt asks for outward action: message");
+            if word_hit(t, "message") {
+                let prev = if j > 0 { ct[j - 1].as_str() } else { "" };
+                let noun = MSG_NOUN_PREV.contains(&prev) || ct.get(j + 1).is_some_and(|n| MSG_NOUN_NEXT.contains(&n.as_str()));
+                let to_near = ct[j + 1..(j + 4).min(ct.len())].iter().any(|n| n == "to");
+                let name = raw.iter().skip(j + 1).any(|n| n.starts_with(|c: char| c.is_uppercase() || !c.is_ascii()));
+                if !noun || to_near || name {
+                    return hold("prompt asks for outward action: message");
+                }
             }
         }
     }
@@ -102,7 +112,7 @@ pub fn check_task(task: &Task) -> Verdict {
     if let Some(p) = TASK_PHRASES.iter().find(|p| phrase_hit(p)) {
         return hold(&format!("prompt asks for outward action: {}", p.join(" ")));
     }
-    for clause in task.prompt.split(['.', ';', ',', '!', '?', '\n']) {
+    for clause in prompt.split(['.', ';', ',', '!', '?', '\n', '。', '、']) {
         let cw: Vec<String> = clause
             .split_whitespace()
             .map(|x| x.trim_matches(|c: char| !c.is_alphanumeric() && c != '-').to_lowercase())

@@ -305,6 +305,8 @@ fn reply_and_message_narrowed() {
         "Reply with a thank-you to Sam", "Reply briefly to the ticket", "DM Sam the link", "reply with ok, then cc the boss",
         "Reply in a few sentences, addressing Sam directly", "reply-with-thanks Sam", "the message Sam",
         "commit message Sam now", "your message to Sam goes out at 5", "REPLY WITH THANKS TO SAM",
+        "ｒｅｐｌｙ to Sam", "ｓｅｎｄ the file", "reply with ok。 message Sam", "the message 日本 Sam",
+        "the message about the launch Sam",
     ] {
         assert!(held(&check_task(&task(p))), "should hold: {p}");
     }
