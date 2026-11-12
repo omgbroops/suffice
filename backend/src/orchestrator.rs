@@ -148,12 +148,19 @@ fn read_or_set_aside<T: Default>(path: &Path, parse: fn(&str) -> Option<T>) -> i
     }
 }
 
+/// Makes a rename durable. Best effort: the data is already synced, and a failed dir sync must not fail the write.
+fn sync_dir(dir: &Path) {
+    let _ = File::open(dir).and_then(|d| d.sync_all());
+}
+
 fn write_json(dir: &Path, name: &str, v: &Value) -> io::Result<()> {
     let tmp = dir.join(format!("{name}.tmp"));
     let mut f = File::create(&tmp)?;
     f.write_all(format!("{v}\n").as_bytes())?;
     f.sync_all()?;
-    fs::rename(tmp, dir.join(name))
+    fs::rename(tmp, dir.join(name))?;
+    sync_dir(dir);
+    Ok(())
 }
 
 
@@ -1044,7 +1051,8 @@ impl Engine {
         f.write_all(format!("{v}\n").as_bytes())?;
         f.sync_all()?;
         fs::rename(&tmp, self.dir.join("runs.json"))?;
-        File::open(&self.dir)?.sync_all()
+        sync_dir(&self.dir);
+        Ok(())
     }
 
     fn save_approvals(&self) -> io::Result<()> {
@@ -1066,7 +1074,9 @@ impl Engine {
         let mut f = File::create(&tmp)?;
         f.write_all(format!("{v}\n").as_bytes())?;
         f.sync_all()?;
-        fs::rename(tmp, self.dir.join("approvals.json"))
+        fs::rename(tmp, self.dir.join("approvals.json"))?;
+        sync_dir(&self.dir);
+        Ok(())
     }
 }
 

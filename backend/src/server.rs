@@ -463,6 +463,44 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 None => err(404, format!("no task '{id}'")),
             })
         }
+        ("GET", ["tasks", id, "thread"]) => {
+            let since = qnum(q, "since", 0).map_err(|m| err(400, m))?;
+            let id = id.to_string();
+            ask_res(ctx, move |e| {
+                let tasks = e.tasks();
+                // a follow-up id resolves to its root, so any turn gives the whole thread
+                let mut root_id = id.clone();
+                while let Some((p, _)) = root_id.rsplit_once(".m") {
+                    if follow_n(p, &root_id).is_some() && tasks.iter().any(|t| t.id == p) {
+                        root_id = p.to_string();
+                    } else {
+                        break;
+                    }
+                }
+                let Some(root) = tasks.iter().find(|t| t.id == root_id) else {
+                    return err(404, format!("no task '{id}'"));
+                };
+                let mut turns: Vec<(u64, &Task)> = tasks.iter().filter_map(|t| Some((follow_n(&root_id, &t.id)?, t))).collect();
+                turns.sort_by_key(|(n, _)| *n);
+                let mut all: Vec<&Task> = vec![root];
+                all.extend(turns.iter().map(|(_, t)| *t));
+                let ids: HashSet<&str> = all.iter().map(|t| t.id.as_str()).collect();
+                let keys = task_keys(&tasks);
+                let events: Vec<Value> = e
+                    .events_since(since)
+                    .iter()
+                    .filter(|l| ids.contains(l.task.as_str()))
+                    .map(|l| event_json(l, keys.get(&l.task).cloned().flatten().as_deref()))
+                    .collect();
+                let turns: Vec<Value> = all.iter().map(|t| task_json(t)).collect();
+                let body = obj(vec![
+                    ("root", task_json(root)),
+                    ("turns", Value::Arr(turns)),
+                    ("events", Value::Arr(events)),
+                ]);
+                (200, body)
+            })
+        }
         ("POST", ["tasks", id, "cancel"]) => {
             let id = id.to_string();
             ask_res(ctx, move |e| {
@@ -762,6 +800,15 @@ fn task_result(e: &Engine, id: &str, r: Result<(), String>) -> Res {
             None => err(404, format!("no task '{id}'")),
         },
     }
+}
+
+/// The n of a follow-up id `<root>.m<n>`, or None for any other id.
+fn follow_n(root: &str, id: &str) -> Option<u64> {
+    let n = id.strip_prefix(root)?.strip_prefix(".m")?;
+    if n.is_empty() || !n.bytes().all(|b| b.is_ascii_digit()) {
+        return None;
+    }
+    n.parse().ok()
 }
 
 fn task_json(t: &Task) -> Value {

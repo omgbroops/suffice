@@ -36,6 +36,8 @@ Task object:
 
 GET  /tasks                      all tasks, oldest first. ?state=running,ready to filter
 GET  /tasks/:id
+GET  /tasks/:id/thread           { "root": Task, "turns": [Task…] (root, then <root>.m<n> by n), "events": [Logged…] }
+                                 a follow-up id resolves to its root; ?since=<seq> keeps events after seq; 404 unknown id
 GET  /graph                      { "nodes": [Task…], "edges": [{"from":"t40","to":"t42"}] }
 POST /tasks                      body: { "id"?: auto, "agent", "prompt", "cwd", "session_key"?,
                                         "deps"?: [], "max_retries"?: 0, "timeout_secs"?: 1800,
