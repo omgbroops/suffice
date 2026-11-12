@@ -10,7 +10,12 @@ function request(action,payload){
   if(!worker)return Promise.reject(new Error('Harness process is not available'));
   return new Promise((resolve,reject)=>{const id=++sequence;requests.set(id,{resolve,reject});worker.postMessage({id,action,payload});});
 }
-app.whenReady().then(async()=>{
+const primary=app.requestSingleInstanceLock();
+if(!primary)app.quit();
+else app.on('second-instance',()=>{
+  if(win&&!win.isDestroyed()){if(win.isMinimized())win.restore();win.show();win.focus();}
+});
+if(primary)app.whenReady().then(async()=>{
   background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:message=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);}});
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));
   worker=utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'});
