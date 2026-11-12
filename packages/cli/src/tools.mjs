@@ -1,9 +1,10 @@
 import {createCodingTools} from '@earendil-works/pi-coding-agent';
 import {repositoryPath} from './workspace.mjs';
 import {createNavigation} from './navigation.mjs';
+import {nativeShellPath} from './shell.mjs';
 
 export function repositoryTools({workspace, commandTimeout=180, shellPath}) {
-  const native=createCodingTools(workspace,{bash:{shellPath,exposeSessionEnvironment:false}});
+  const native=createCodingTools(workspace,{bash:{shellPath:nativeShellPath(shellPath),exposeSessionEnvironment:false}});
   return [
     ...native.map(tool=>({...tool,label:tool.label??tool.name,
       async execute(id,args,signal,onUpdate) {
