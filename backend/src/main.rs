@@ -37,6 +37,8 @@ fn run() -> Result<(), String> {
         }
     }
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    // fail startup rather than run opencode tasks without the gate plugin
+    suffice::adapter::install_opencode_gate(&suffice::adapter::opencode_config_dir()).map_err(|e| format!("opencode gate: {e}"))?;
     let token_path = dir.join("token");
     let token = load_or_create_token(&token_path)?;
     let mut engine = Engine::open(&dir, max).map_err(|e| e.to_string())?;

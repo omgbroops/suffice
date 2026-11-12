@@ -85,6 +85,10 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
     let mut env = task.env.clone();
     if matches!(task.agent, AgentKind::OpenCode) {
         env.extend(opencode_env(task.access));
+        // set after task.env so a task cannot override the gate plugin or disable it (OPENCODE_PURE)
+        env.insert("OPENCODE_CONFIG_DIR".into(), opencode_config_dir().to_string_lossy().into_owned());
+        env.insert("SUFFICE_GATE_CMD".into(), suffice_gate_cmd());
+        env.insert("OPENCODE_PURE".into(), "0".into());
     }
     if matches!(task.agent, AgentKind::Suffice) {
         env.insert("SUFFICE_GATE_CMD".into(), suffice_gate_cmd());
@@ -199,6 +203,28 @@ pub fn gate_hook_command(exe: &Path) -> Option<String> {
 /// Shell command the suffice CLI runs before each bash call; exit 2 blocks it. Fails closed if the exe path is unknown.
 fn suffice_gate_cmd() -> String {
     std::env::current_exe().ok().and_then(|exe| gate_hook_command(&exe)).unwrap_or_else(|| "echo 'suffice gate: hook unavailable' >&2; exit 2".into())
+}
+
+/// Gate plugin source, loaded by opencode from `<opencode_config_dir>/plugins/`.
+const OPENCODE_GATE_JS: &str = include_str!("../assets/opencode-gate.js");
+
+/// Config dir opencode reads the gate plugin from: `<SUFFICE_HOME or ~/.suffice>/backend/opencode`.
+pub fn opencode_config_dir() -> PathBuf {
+    let base = std::env::var("SUFFICE_HOME").map(PathBuf::from).unwrap_or_else(|_| {
+        std::env::var("HOME").map(PathBuf::from).unwrap_or_else(|_| PathBuf::from(".")).join(".suffice")
+    });
+    base.join("backend").join("opencode")
+}
+
+/// Writes the gate plugin into `dir/plugins/suffice-gate.js` if its content differs. Caller must fail startup on error.
+pub fn install_opencode_gate(dir: &Path) -> std::io::Result<()> {
+    let plugins = dir.join("plugins");
+    std::fs::create_dir_all(&plugins)?;
+    let file = plugins.join("suffice-gate.js");
+    if std::fs::read_to_string(&file).ok().as_deref() == Some(OPENCODE_GATE_JS) {
+        return Ok(());
+    }
+    std::fs::write(file, OPENCODE_GATE_JS)
 }
 
 fn hook_json(command: &str) -> String {

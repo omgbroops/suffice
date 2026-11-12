@@ -270,3 +270,29 @@ fn suffice_parse_emits_text_per_line() {
     let ev = parse_line(&AgentKind::Suffice, "final answer");
     assert_eq!(ev, vec![Event::Text { text: "final answer".into() }]);
 }
+
+#[test]
+fn opencode_gate_env_at_every_access_level() {
+    for access in [Access::Read, Access::Edit, Access::Full] {
+        let mut t = task(AgentKind::OpenCode, "p", None);
+        t.access = access;
+        t.env.insert("OPENCODE_PURE".into(), "1".into());
+        t.env.insert("SUFFICE_GATE_CMD".into(), "true".into());
+        let c = command(&t, None);
+        let dir = c.env.get("OPENCODE_CONFIG_DIR").expect("OPENCODE_CONFIG_DIR");
+        assert!(dir.ends_with("backend/opencode"), "{dir}");
+        let g = c.env.get("SUFFICE_GATE_CMD").expect("SUFFICE_GATE_CMD");
+        assert!(g.ends_with(" gate-hook"), "{g}");
+        assert_eq!(c.env.get("OPENCODE_PURE").map(String::as_str), Some("0"));
+    }
+}
+
+#[test]
+fn install_opencode_gate_writes_plugin_asset() {
+    let dir = std::env::temp_dir().join(format!("suffice-gate-test-{}", std::process::id()));
+    suffice::adapter::install_opencode_gate(&dir).expect("install");
+    let got = std::fs::read_to_string(dir.join("plugins/suffice-gate.js")).expect("plugin file");
+    let want = std::fs::read_to_string(format!("{}/assets/opencode-gate.js", env!("CARGO_MANIFEST_DIR"))).unwrap();
+    assert_eq!(got, want);
+    std::fs::remove_dir_all(&dir).unwrap();
+}
