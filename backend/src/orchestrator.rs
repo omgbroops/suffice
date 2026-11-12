@@ -1278,19 +1278,21 @@ fn call_triple(c: &Value) -> io::Result<(String, String, String)> {
 
 /// Replays events.jsonl. Returns the events, the byte length up to the torn tail, and the highest seq seen.
 fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize, u64)> {
-    let text = match fs::read(path) {
-        Ok(t) => String::from_utf8_lossy(&t).into_owned(),
+    let bytes = match fs::read(path) {
+        Ok(t) => t,
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok((vec![], 0, 0)),
         Err(e) => return Err(e),
     };
     let (mut out, mut good, mut max_seq) = (vec![], 0, 0);
-    for line in text.split_inclusive('\n') {
-        if !line.ends_with('\n') {
+    // count raw bytes: the offset must match the file, even when a line holds invalid UTF-8
+    for raw in bytes.split_inclusive(|&b| b == b'\n') {
+        if !raw.ends_with(b"\n") {
             break; // torn tail
         }
-        good += line.len();
+        good += raw.len();
         // a complete line this build can't read (newer event kind, garbage) is kept on disk and skipped,
         // never truncated: cutting there would drop every later event
+        let line = String::from_utf8_lossy(raw);
         let Ok(v) = json::parse(line.trim_end()) else { continue };
         if let Some(n) = num(&v, "seq") {
             max_seq = max_seq.max(n as u64);
