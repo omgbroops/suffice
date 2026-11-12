@@ -133,8 +133,11 @@ pub struct Logged {
 }
 
 /// Move an unreadable state file to `<name>.corrupt` so open can start empty without losing it.
-pub fn set_aside(path: &std::path::Path) {
-    let _ = std::fs::rename(path, path.with_extension("corrupt"));
+/// Moves an unreadable state file aside; returns what was lost and where the copy is.
+pub fn set_aside(path: &std::path::Path) -> String {
+    let copy = path.with_extension("corrupt");
+    let _ = std::fs::rename(path, &copy);
+    format!("{} was unreadable and its contents are lost; copy kept at {}", path.display(), copy.display())
 }
 
 pub fn now_ms() -> u64 {

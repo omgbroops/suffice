@@ -213,21 +213,20 @@ pub fn local_offset_secs(now_ms: u64) -> i64 {
     }
 }
 
-pub fn load(dir: &Path) -> io::Result<Vec<Trigger>> {
+pub fn load(dir: &Path) -> io::Result<(Vec<Trigger>, Option<String>)> {
     let text = match std::fs::read_to_string(dir.join("triggers.json")) {
         Ok(t) => t,
-        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(vec![]),
+        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok((vec![], None)),
         Err(e) => return Err(e),
     };
     let parsed = crate::json::parse(&text).and_then(|v| {
         v.as_arr().unwrap_or(&[]).iter().map(Trigger::from_json).collect::<Result<Vec<_>, String>>()
     });
     match parsed {
-        Ok(triggers) => Ok(triggers),
+        Ok(triggers) => Ok((triggers, None)),
         // garbage or torn write: keep the file aside and start with no triggers rather than fail open
         Err(_) => {
-            crate::types::set_aside(&dir.join("triggers.json"));
-            Ok(vec![])
+            Ok((vec![], Some(crate::types::set_aside(&dir.join("triggers.json")))))
         }
     }
 }

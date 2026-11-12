@@ -7,10 +7,11 @@ use crate::pool::{Pool, PoolMsg};
 use crate::queue::Queue;
 use crate::session::{Session, Sessions};
 use crate::triggers::{self, next_due, Trigger, When};
-use crate::types::{now_ms, AgentKind, Event, Logged, Task, TaskId, TaskState};
+use crate::types::{now_ms, AgentKind, Cmd, Event, Logged, Task, TaskId, TaskState};
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs::{self, File, OpenOptions};
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
+use std::process::Command;
 use std::path::{Path, PathBuf};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::time::{Duration, Instant};
@@ -23,11 +24,16 @@ struct Run {
     agent: AgentKind,
     session: Option<String>,
     error: bool,
-    program: String,
 }
 
-/// A started agent process, journaled in runs.json: (pid = pgid, program, process start time).
-type LiveRun = (u32, String, String);
+/// A run journaled in runs.json before spawn (nonce), then with its pid and start time.
+struct LiveRun {
+    nonce: String,
+    pid: Option<u32>,
+    program: String,
+    /// `ps -o lstart` of the pid; "" until the pid is known.
+    start: String,
+}
 
 extern "C" {
     fn kill(pid: i32, sig: i32) -> i32;
@@ -68,6 +74,7 @@ impl Engine {
         fs::create_dir_all(dir)?;
         let queue = Queue::open(dir)?;
         let sessions = Sessions::open(dir)?;
+        let sess_note = sessions.corrupt.clone();
         let path = dir.join("events.jsonl");
         let (events, good) = read_log(&path)?;
         let size = fs::metadata(&path).map(|m| m.len() as usize).unwrap_or(0);
@@ -78,7 +85,7 @@ impl Engine {
         let file = OpenOptions::new().create(true).append(true).open(&path)?;
         let (approved, calls, held) = load_approvals(dir)?;
         let decisions = load_decisions(dir)?;
-        let triggers = triggers::load(dir)?;
+        let (triggers, trig_note) = triggers::load(dir)?;
         let orphans = load_runs(dir)?;
         let (tx, rx) = channel();
         let mut engine = Engine {
@@ -104,10 +111,18 @@ impl Engine {
             clock: Box::new(now_ms),
         };
         // runs of the crashed server: their agents may still be alive and hold the task's session
-        for task in kill_orphans(&orphans) {
+        let (killed, warned) = kill_orphans(&orphans);
+        for task in killed {
             let note = "orphan run killed after restart";
             engine.log(&task, Event::Stderr { line: note.into() });
             engine.log(&task, Event::State { state: "ready".into(), reason: Some(note.into()) });
+        }
+        for (task, w) in warned {
+            engine.log(&task, Event::Stderr { line: format!("orphan not killed: {w}") });
+        }
+        for note in [sess_note, trig_note].into_iter().flatten() {
+            eprintln!("suffice-backend: {note}");
+            engine.log("", Event::Stderr { line: note });
         }
         if !orphans.is_empty() {
             engine.save_runs()?;
@@ -424,14 +439,15 @@ impl Engine {
                 cmd.program = p.to_string_lossy().into_owned();
             }
             let program = cmd.program.clone();
-            if !self.pool.try_start(&run, cmd, task.timeout_secs) {
+            if !self.journal_start(&id, &program, &mut cmd) || !self.pool.try_start(&run, cmd, task.timeout_secs) {
+                self.forget_run(&id);
                 if let Some(k) = &task.session_key {
                     self.sessions.release(k, &id);
                 }
                 break;
             }
             let session = task.session_key.clone();
-            self.runs.insert(run, Run { task: id.clone(), agent: task.agent.clone(), session, error: false, program });
+            self.runs.insert(run, Run { task: id.clone(), agent: task.agent.clone(), session, error: false });
         }
     }
 
@@ -463,10 +479,13 @@ impl Engine {
     fn handle(&mut self, msg: PoolMsg) {
         match msg {
             PoolMsg::Started { run, pid } => {
-                if let Some((task, program)) = self.runs.get(&run).map(|r| (r.task.clone(), r.program.clone())) {
+                if let Some(task) = self.runs.get(&run).map(|r| r.task.clone()) {
                     // journal before Running so a crash after this point can find the process
                     let start = ps_field(pid, "lstart").unwrap_or_default();
-                    self.live.insert(task.clone(), (pid, program, start));
+                    if let Some(l) = self.live.get_mut(&task) {
+                        l.pid = Some(pid);
+                        l.start = start;
+                    }
                     let _ = self.save_runs();
                     let _ = self.set_state(&task, TaskState::Running { pid });
                 }
@@ -571,29 +590,42 @@ impl Engine {
     }
 
     /// Drop a finished run from runs.json.
+    /// Journal a run before spawn: a fresh nonce goes into the child's env and runs.json.
+    fn journal_start(&mut self, task: &str, program: &str, cmd: &mut Cmd) -> bool {
+        let Ok(nonce) = new_nonce() else { return false };
+        cmd.env.insert("SUFFICE_RUN_NONCE".into(), nonce.clone());
+        self.live.insert(task.to_string(), LiveRun { nonce, pid: None, program: program.to_string(), start: String::new() });
+        self.save_runs().is_ok()
+    }
+
     fn forget_run(&mut self, task: &str) {
         if self.live.remove(task).is_some() {
             let _ = self.save_runs();
         }
     }
 
+    /// Temp file, fsync, rename, then fsync the directory so the replace survives a crash.
     fn save_runs(&self) -> io::Result<()> {
         let v = Value::Obj(
             self.live
                 .iter()
-                .map(|(t, (pid, program, start))| {
+                .map(|(t, l)| {
                     let rec = Value::Obj(vec![
-                        ("pid".into(), Value::num(*pid as f64)),
-                        ("program".into(), Value::str(program)),
-                        ("start".into(), Value::str(start)),
+                        ("nonce".into(), Value::str(&l.nonce)),
+                        ("pid".into(), l.pid.map_or(Value::Null, |p| Value::num(p as f64))),
+                        ("program".into(), Value::str(&l.program)),
+                        ("start".into(), Value::str(&l.start)),
                     ]);
                     (t.clone(), rec)
                 })
                 .collect(),
         );
         let tmp = self.dir.join("runs.json.tmp");
-        fs::write(&tmp, format!("{v}\n"))?;
-        fs::rename(tmp, self.dir.join("runs.json"))
+        let mut f = File::create(&tmp)?;
+        f.write_all(format!("{v}\n").as_bytes())?;
+        f.sync_all()?;
+        fs::rename(&tmp, self.dir.join("runs.json"))?;
+        File::open(&self.dir)?.sync_all()
     }
 
     fn save_approvals(&self) -> io::Result<()> {
@@ -625,44 +657,125 @@ fn bad(e: impl std::fmt::Display) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, e.to_string())
 }
 
-/// `ps -o <field>=` for a live pid; None when the process is gone or ps fails.
-fn ps_field(pid: u32, field: &str) -> Option<String> {
-    let out = std::process::Command::new("ps").args(["-o", &format!("{field}="), "-p", &pid.to_string()]).output().ok()?;
-    let s = String::from_utf8_lossy(&out.stdout).trim().to_string();
-    (out.status.success() && !s.is_empty()).then_some(s)
+/// Output of `ps` with a fixed locale and zone so start times compare across calls.
+fn ps_out(args: &[&str]) -> Option<String> {
+    let out = Command::new("ps").env("LC_ALL", "C").env("TZ", "UTC").args(args).output().ok()?;
+    out.status.success().then(|| String::from_utf8_lossy(&out.stdout).into_owned())
 }
 
-/// Kill the groups of journaled runs whose pid still holds the same process (start time and
-/// program match, so a reused pid is never touched). SIGTERM, then SIGKILL after 3 s.
-fn kill_orphans(runs: &BTreeMap<TaskId, LiveRun>) -> Vec<TaskId> {
-    let mut killed = vec![];
-    for (task, (pid, program, start)) in runs {
-        let same = ps_field(*pid, "lstart").as_deref() == Some(start.as_str())
-            && ps_field(*pid, "command").is_some_and(|c| c.contains(program.as_str()));
-        if !same {
-            continue;
+/// `ps -o <field>=` for a live pid; None when the process is gone or ps fails.
+fn ps_field(pid: u32, field: &str) -> Option<String> {
+    let s = ps_out(&["-o", &format!("{field}="), "-p", &pid.to_string()])?;
+    let s = s.trim();
+    (!s.is_empty()).then(|| s.to_string())
+}
+
+/// True when `program` is one argv word (exact path, not a substring).
+fn argv_has(cmdline: &str, program: &str) -> bool {
+    cmdline.split_whitespace().any(|w| w == program)
+}
+
+/// Processes whose environment carries the run nonce: (pid, pgid, ps line).
+fn nonce_procs(nonce: &str) -> Vec<(u32, u32, String)> {
+    let key = format!("SUFFICE_RUN_NONCE={nonce}");
+    let out = ps_out(&["-axE", "-o", "pid=,pgid=,command="]).unwrap_or_default();
+    out.lines()
+        .filter(|l| l.split_whitespace().any(|w| w == key))
+        .filter_map(|l| {
+            let mut f = l.split_whitespace();
+            Some((f.next()?.parse().ok()?, f.next()?.parse().ok()?, l.to_string()))
+        })
+        .collect()
+}
+
+/// The group leader a journaled run still owns; None when the run is gone. Err when a
+/// process is there but cannot be proven to be ours, so it is never killed.
+fn find_target(run: &LiveRun) -> Result<Option<u32>, String> {
+    let (pid, same) = match run.pid {
+        Some(pid) => {
+            let Some(start) = ps_field(pid, "lstart") else { return Ok(None) };
+            // shortcut: lstart has 1 s resolution, not the microseconds of KERN_PROC_PID; the
+            // exact argv word and pgid == pid are also required. Upgrade if reuse within 1 s matters.
+            let cmd = ps_field(pid, "command").unwrap_or_default();
+            let pgid = ps_field(pid, "pgid").unwrap_or_default();
+            (pid, start == run.start && argv_has(&cmd, &run.program) && pgid == pid.to_string())
         }
-        let pgid = *pid as i32;
-        unsafe { kill(-pgid, 15) };
-        let mut waited = 0;
-        while unsafe { kill(pgid, 0) } == 0 && waited < 30 {
-            std::thread::sleep(Duration::from_millis(100));
-            waited += 1;
+        None if run.nonce.is_empty() => return Ok(None),
+        None => {
+            // a crash between journal and spawn leaves only the nonce; children share it, so take the leader
+            let procs = nonce_procs(&run.nonce);
+            let leaders: Vec<_> = procs.iter().filter(|(p, g, _)| p == g).collect();
+            match leaders.as_slice() {
+                [] if procs.is_empty() => return Ok(None),
+                [] => return Err("nonce found without a group leader".into()),
+                [(pid, _, line)] => (*pid, argv_has(line, &run.program)),
+                _ => return Err("several group leaders carry the run nonce".into()),
+            }
         }
-        if unsafe { kill(pgid, 0) } == 0 {
-            unsafe { kill(-pgid, 9) };
+    };
+    if same { Ok(Some(pid)) } else { Err(format!("pid {pid} is alive but is not the journaled run")) }
+}
+
+/// True while any non-zombie process is in the group (a zombie leader is already dead).
+fn group_alive(pgid: i32) -> bool {
+    let g = pgid.to_string();
+    ps_out(&["-axo", "pgid=,stat="]).unwrap_or_default().lines().any(|l| {
+        let mut f = l.split_whitespace();
+        f.next() == Some(g.as_str()) && f.next().is_some_and(|s| !s.starts_with('Z'))
+    })
+}
+
+/// Kill the groups of journaled runs whose process is proven to be ours. One shared wait:
+/// SIGTERM all, up to 3 s for every group to empty, then SIGKILL the survivors.
+/// shortcut: setsid escapees leave their group and are not found.
+fn kill_orphans(runs: &BTreeMap<TaskId, LiveRun>) -> (Vec<TaskId>, Vec<(TaskId, String)>) {
+    let (mut targets, mut warnings) = (vec![], vec![]);
+    for (task, run) in runs {
+        match find_target(run) {
+            Ok(Some(pid)) => targets.push((task.clone(), pid as i32)),
+            Ok(None) => {}
+            Err(w) => warnings.push((task.clone(), w)),
         }
-        killed.push(task.clone());
     }
-    killed
+    for (_, g) in &targets {
+        unsafe { kill(-g, 15) };
+    }
+    for _ in 0..30 {
+        if targets.iter().all(|(_, g)| !group_alive(*g)) {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    for (_, g) in &targets {
+        if group_alive(*g) {
+            unsafe { kill(-g, 9) };
+        }
+    }
+    (targets.into_iter().map(|(t, _)| t).collect(), warnings)
+}
+
+/// 16 random bytes from the OS, hex encoded.
+fn new_nonce() -> io::Result<String> {
+    let mut b = [0u8; 16];
+    File::open("/dev/urandom")?.read_exact(&mut b)?;
+    Ok(b.iter().map(|x| format!("{x:02x}")).collect())
 }
 
 fn parse_runs(text: &str) -> Option<BTreeMap<TaskId, LiveRun>> {
     let Value::Obj(kv) = json::parse(text).ok()? else { return None };
     kv.iter()
         .map(|(t, r)| {
-            let pid = r.get("pid")?.as_i64()? as u32;
-            Some((t.clone(), (pid, r.get("program")?.as_str()?.to_string(), r.get("start")?.as_str()?.to_string())))
+            let pid = match r.get("pid")? {
+                Value::Null => None,
+                v => Some(v.as_i64()? as u32),
+            };
+            let run = LiveRun {
+                nonce: r.get("nonce").and_then(Value::as_str).unwrap_or("").to_string(),
+                pid,
+                program: r.get("program")?.as_str()?.to_string(),
+                start: r.get("start")?.as_str()?.to_string(),
+            };
+            Some((t.clone(), run))
         })
         .collect()
 }

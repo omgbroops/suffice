@@ -21,24 +21,26 @@ pub struct Session {
 pub struct Sessions {
     path: PathBuf,
     map: BTreeMap<String, Session>,
+    pub corrupt: Option<String>,
 }
 
 impl Sessions {
     pub fn open(dir: &Path) -> io::Result<Sessions> {
         let path = dir.join("sessions.json");
+        let mut corrupt = None;
         let map = match std::fs::read_to_string(&path) {
             Ok(text) => match parse_sessions(&text) {
                 Ok(map) => map,
                 // garbage or torn write: keep the file aside and start empty rather than fail open
                 Err(_) => {
-                    crate::types::set_aside(&path);
+                    corrupt = Some(crate::types::set_aside(&path));
                     BTreeMap::new()
                 }
             },
             Err(e) if e.kind() == io::ErrorKind::NotFound => BTreeMap::new(),
             Err(e) => return Err(e),
         };
-        Ok(Sessions { path, map })
+        Ok(Sessions { path, map, corrupt })
     }
     pub fn get(&self, key: &str) -> Option<&Session> {
         self.map.get(key)

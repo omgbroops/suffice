@@ -151,3 +151,86 @@ fn orphan_run_is_killed_and_task_reruns_once() {
     assert_eq!(markers, "start 1\nstart 2\nend 2\n");
     assert_eq!(fs::read_to_string(work.join("count")).unwrap().trim(), "2");
 }
+
+fn orphan_script() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/sleep_orphan.sh")
+}
+
+/// Same `ps` call the engine uses for the start-time record.
+fn lstart(pid: u32) -> String {
+    let out = Command::new("ps").env("LC_ALL", "C").env("TZ", "UTC").args(["-o", "lstart=", "-p", &pid.to_string()]).output().unwrap();
+    String::from_utf8_lossy(&out.stdout).trim().to_string()
+}
+
+/// Spawn a fake agent in its own process group, as the pool does.
+fn spawn_orphan(nonce: &str) -> Child {
+    use std::os::unix::process::CommandExt;
+    Command::new(orphan_script()).env("SUFFICE_RUN_NONCE", nonce).process_group(0).spawn().unwrap()
+}
+
+/// Wait up to `secs` for the child to exit; true if it did.
+fn exits_within(child: &mut Child, secs: u64) -> bool {
+    let end = Instant::now() + Duration::from_secs(secs);
+    while Instant::now() < end {
+        if child.try_wait().unwrap().is_some() {
+            return true;
+        }
+        std::thread::sleep(Duration::from_millis(50));
+    }
+    false
+}
+
+#[test]
+fn spawn_then_crash_before_pid_is_found_by_nonce() {
+    let d = Dir::new("nonce");
+    let mut orphan = spawn_orphan("feedface00");
+    let runs = format!(
+        "{{\"t1\":{{\"nonce\":\"feedface00\",\"pid\":null,\"program\":\"{}\",\"start\":\"\"}}}}\n",
+        orphan_script().display()
+    );
+    fs::write(d.0.join("runs.json"), runs).unwrap();
+    Engine::open(&d.0, 2).unwrap();
+    assert!(exits_within(&mut orphan, 4), "nonce-tagged orphan was not killed");
+}
+
+#[test]
+fn pid_alive_but_not_ours_is_never_killed() {
+    let d = Dir::new("not-ours");
+    let mut other = Command::new("/bin/sleep").arg("30").spawn().unwrap();
+    let runs = format!(
+        "{{\"t1\":{{\"nonce\":\"\",\"pid\":{},\"program\":\"/nonexistent/fake_claude\",\"start\":\"{}\"}}}}\n",
+        other.id(),
+        lstart(other.id())
+    );
+    fs::write(d.0.join("runs.json"), runs).unwrap();
+    Engine::open(&d.0, 2).unwrap();
+    let alive = other.try_wait().unwrap().is_none();
+    let _ = other.kill();
+    let _ = other.wait();
+    assert!(alive, "an unrelated pid was killed");
+}
+
+#[test]
+fn three_orphans_close_in_under_four_seconds() {
+    let d = Dir::new("three");
+    let mut kids: Vec<Child> = (0..3).map(|i| spawn_orphan(&format!("n{i}"))).collect();
+    let entries: Vec<String> = kids
+        .iter()
+        .enumerate()
+        .map(|(i, c)| {
+            format!(
+                "\"t{i}\":{{\"nonce\":\"n{i}\",\"pid\":{},\"program\":\"{}\",\"start\":\"{}\"}}",
+                c.id(),
+                orphan_script().display(),
+                lstart(c.id())
+            )
+        })
+        .collect();
+    fs::write(d.0.join("runs.json"), format!("{{{}}}\n", entries.join(","))).unwrap();
+    let t0 = Instant::now();
+    Engine::open(&d.0, 2).unwrap();
+    assert!(t0.elapsed() < Duration::from_secs(4), "open took {:?}", t0.elapsed());
+    for k in kids.iter_mut() {
+        assert!(exits_within(k, 1), "orphan {} still alive", k.id());
+    }
+}
