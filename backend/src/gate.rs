@@ -23,12 +23,9 @@ const TASK_WORDS: &[&str] = &[
 // Words that hold only as a verb: at clause start or right after to/and/then/please.
 const TASK_VERBS: &[&str] = &["text", "order", "post", "drop", "release"];
 const VERB_LEAD: &[&str] = &["to", "and", "then", "please"];
-// "message" holds unless a noun context is on either side.
-const MSG_NOUN_PREV: &[&str] = &[
-    "the", "a", "an", "this", "that", "its", "his", "her", "their", "my", "your", "our", "error", "commit", "log", "warning",
-    "status", "exit", "chat", "help", "usage", "debug",
-];
-const MSG_NOUN_NEXT: &[&str] = &["is", "was", "says", "said", "mean", "means", "from", "text", "format", "type", "body", "field", "queue", "bus", "string", "in", "shows"];
+// "message" holds unless the previous word is a log/status-like noun or the next word is one of these.
+const MSG_PREV: &[&str] = &["error", "commit", "log", "warning", "status", "exit", "help", "usage", "debug"];
+const MSG_NEXT: &[&str] = &["mean", "means", "meant", "says", "said", "format"];
 // "reply" holds unless every token in its clause is one of these.
 const REPLY_OK: &[&str] = &[
     "with", "only", "just", "in", "one", "a", "an", "the", "word", "words", "number", "answer", "ok", "okay", "yes", "no",
@@ -58,8 +55,9 @@ fn fold(s: &str) -> String {
         .collect()
 }
 
-fn tokens(s: &str) -> Vec<String> {
-    fold(s).to_lowercase().split(|c: char| !c.is_alphanumeric()).filter(|w| !w.is_empty()).map(String::from).collect()
+/// Words of folded raw text, as (raw, lowercased) pairs, so indices line up even when lowercasing changes length.
+fn words(s: &str) -> Vec<(String, String)> {
+    s.split(|c: char| !c.is_alphanumeric()).filter(|x| !x.is_empty()).map(|r| (r.to_string(), r.to_lowercase())).collect()
 }
 
 /// Whole word `t` is `k` or one of its plain inflections (sends, deleting, posted, replied, paying).
@@ -81,45 +79,39 @@ pub fn check_task(task: &Task) -> Verdict {
         return hold("full access needs OK");
     }
     let prompt = fold(&task.prompt);
-    let w = tokens(&prompt);
-    if let Some(k) = TASK_WORDS.iter().find(|k| w.iter().any(|t| word_hit(t, k))) {
+    let all = words(&prompt);
+    if let Some(k) = TASK_WORDS.iter().find(|k| all.iter().any(|(_, l)| word_hit(l, k))) {
         return hold(&format!("prompt asks for outward action: {k}"));
+    }
+    let phrase_hit = |p: &&[&str]| all.windows(p.len()).any(|win| win.iter().zip(p.iter()).all(|((_, l), k)| word_hit(l, k)));
+    if let Some(p) = TASK_PHRASES.iter().find(|p| phrase_hit(p)) {
+        return hold(&format!("prompt asks for outward action: {}", p.join(" ")));
     }
     // Clauses split on raw punctuation (not hyphen), so "reply-with-thanks" stays in one clause.
     for clause in prompt.split(['.', ';', ',', ':', '!', '?', '\n', '。', '、']) {
-        let ct = tokens(clause);
-        // Same tokens as `ct`, case preserved, for the capitalized-name check.
-        let raw: Vec<&str> = clause.split(|c: char| !c.is_alphanumeric()).filter(|x| !x.is_empty()).collect();
-        for (j, t) in ct.iter().enumerate() {
-            if word_hit(t, "reply") {
-                let rest = &ct[j + 1..];
-                if rest.is_empty() || !rest.iter().all(|r| REPLY_OK.contains(&r.as_str())) {
+        let cw = words(clause);
+        for (j, (_, l)) in cw.iter().enumerate() {
+            if word_hit(l, "reply") {
+                let answer = cw[j + 1..].iter().all(|(_, n)| REPLY_OK.contains(&n.as_str()));
+                if j != 0 || !answer {
                     return hold("prompt asks for outward action: reply");
                 }
             }
-            if word_hit(t, "message") {
-                let prev = if j > 0 { ct[j - 1].as_str() } else { "" };
-                let noun = MSG_NOUN_PREV.contains(&prev) || ct.get(j + 1).is_some_and(|n| MSG_NOUN_NEXT.contains(&n.as_str()));
-                let to_near = ct[j + 1..(j + 4).min(ct.len())].iter().any(|n| n == "to");
-                let name = raw.iter().skip(j + 1).any(|n| n.starts_with(|c: char| c.is_uppercase() || !c.is_ascii()));
-                if !noun || to_near || name {
+            if word_hit(l, "message") {
+                let prev = if j > 0 { cw[j - 1].1.as_str() } else { "" };
+                let shape = MSG_PREV.contains(&prev) || cw.get(j + 1).is_some_and(|(_, n)| MSG_NEXT.contains(&n.as_str()));
+                let near = cw[j + 1..(j + 4).min(cw.len())].iter().any(|(_, n)| n == "to" || n == "for");
+                let name = cw[j + 1..].iter().any(|(r, _)| r.starts_with(|c: char| c.is_uppercase() || !c.is_ascii()));
+                if !shape || near || name {
                     return hold("prompt asks for outward action: message");
                 }
             }
         }
-    }
-    let phrase_hit = |p: &&[&str]| w.windows(p.len()).any(|win| win.iter().zip(p.iter()).all(|(t, k)| word_hit(t, k)));
-    if let Some(p) = TASK_PHRASES.iter().find(|p| phrase_hit(p)) {
-        return hold(&format!("prompt asks for outward action: {}", p.join(" ")));
-    }
-    for clause in prompt.split(['.', ';', ',', '!', '?', '\n', '。', '、']) {
-        let cw: Vec<String> = clause
-            .split_whitespace()
-            .map(|x| x.trim_matches(|c: char| !c.is_alphanumeric() && c != '-').to_lowercase())
-            .collect();
-        for (i, t) in cw.iter().enumerate() {
-            let lead = i == 0 || VERB_LEAD.contains(&cw[i - 1].as_str());
-            if let Some(k) = TASK_VERBS.iter().find(|k| lead && word_hit(t, k)) {
+        // Verbs match whole space-separated words, so hyphenated compounds like "post-processing" are not verbs.
+        let vw: Vec<String> = clause.split_whitespace().map(|x| x.trim_matches(|c: char| !c.is_alphanumeric() && c != '-').to_lowercase()).collect();
+        for (i, l) in vw.iter().enumerate() {
+            let lead = i == 0 || VERB_LEAD.contains(&vw[i - 1].as_str());
+            if let Some(k) = TASK_VERBS.iter().find(|k| lead && word_hit(l, k)) {
                 return hold(&format!("prompt asks for outward action: {k}"));
             }
         }
