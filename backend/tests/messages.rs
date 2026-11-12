@@ -1,8 +1,11 @@
 //! Engine tests for "message a task": a message becomes a follow-up task on the same session.
 use suffice::orchestrator::{Engine, MsgErr};
+use suffice::server::serve;
 use suffice::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::fs;
+use std::io::{Read, Write};
+use std::net::TcpStream;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
@@ -185,4 +188,44 @@ fn follow_up_ids_count_up() {
     assert_eq!(e.message("a", "two"), Ok("a.m2".to_string()));
     assert_eq!(e.message("a", "three"), Ok("a.m3".to_string()));
     assert_eq!(e.message("a.m1", "chained"), Ok("a.m1.m1".to_string()));
+}
+
+fn get_raw(port: u16, path: &str) -> (u16, String) {
+    let mut s = TcpStream::connect(("127.0.0.1", port)).unwrap();
+    s.set_read_timeout(Some(Duration::from_millis(1500))).unwrap();
+    write!(s, "GET {path} HTTP/1.1\r\nHost: 127.0.0.1\r\nAuthorization: Bearer tok\r\n\r\n").unwrap();
+    let mut out = String::new();
+    let _ = s.read_to_string(&mut out);
+    let code = out.split_whitespace().nth(1).and_then(|c| c.parse().ok()).unwrap_or(0);
+    (code, out)
+}
+
+#[test]
+fn thread_view_orders_turns_and_filters_events() {
+    let d = Dir::new("thread");
+    let mut e = engine(&d.0);
+    e.submit(task("a", "p")).unwrap();
+    assert_eq!(e.message("a", "one"), Ok("a.m1".to_string()));
+    assert_eq!(e.message("a", "hello there"), Ok("a.m2".to_string()));
+    let s = serve(e, "127.0.0.1:0", "tok").unwrap();
+    let port = s.port();
+
+    let (code, body) = get_raw(port, "/tasks/a/thread");
+    assert_eq!(code, 200, "{body}");
+    let root = body.find("\"id\":\"a\"").unwrap();
+    let (m1, m2) = (body.find("\"id\":\"a.m1\"").unwrap(), body.find("\"id\":\"a.m2\"").unwrap());
+    assert!(root < m1 && m1 < m2, "{body}");
+    assert!(body.contains("\"hello there\""), "{body}");
+    assert!(body.contains("\"kind\":\"user\""), "{body}");
+
+    let (_, body) = get_raw(port, "/tasks/a/thread?since=1000000");
+    assert!(body.contains("\"events\":[]"), "{body}");
+
+    let (code, body) = get_raw(port, "/tasks/a.m1/thread");
+    assert_eq!(code, 200, "{body}");
+    assert!(body.contains("\"id\":\"a.m2\""), "{body}");
+
+    let (code, _) = get_raw(port, "/tasks/zz/thread");
+    assert_eq!(code, 404);
+    s.stop();
 }
