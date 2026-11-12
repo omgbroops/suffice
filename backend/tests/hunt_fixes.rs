@@ -107,6 +107,14 @@ fn trigger_fire_is_not_resubmitted_after_crash_before_save() {
     assert_eq!(fired, vec!["ev-1".to_string()], "trigger fire was resubmitted after crash");
 }
 
+#[test]
+fn many_keys_parse_in_linear_time() {
+    let body = format!("{{{}}}", (0..150_000).map(|i| format!("\"k{i}\":1")).collect::<Vec<_>>().join(","));
+    let t = std::time::Instant::now();
+    assert!(suffice::json::parse(&body).is_ok());
+    assert!(t.elapsed() < std::time::Duration::from_secs(2), "{:?}", t.elapsed());
+}
+
 /// Writes at most `budget` bytes into `buf`, then fails: a torn write.
 struct Torn {
     buf: Vec<u8>,

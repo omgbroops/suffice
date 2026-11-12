@@ -548,7 +548,10 @@ impl Engine {
             while let Some(q) = self.queue.get(&format!("{id}-{n}")) {
                 // same agent and prompt as this trigger submits: a crash after submit but before
                 // save_triggers left this fire behind, so count it instead of firing again
-                if crate::server::parse_task(&t.template, String::new()).is_ok_and(|p| p.agent == q.agent && p.prompt == q.prompt) {
+                // and created by this trigger's lifetime after its last saved fire, so a recreated trigger
+                // (same id, older tasks) or an older same-prompt task never counts
+                let fresh = q.created_ms >= t.created_ms && t.last_fire_ms.is_none_or(|l| q.created_ms > l);
+                if fresh && crate::server::parse_task(&t.template, String::new()).is_ok_and(|p| p.agent == q.agent && p.prompt == q.prompt) {
                     replay = true;
                     break;
                 }
