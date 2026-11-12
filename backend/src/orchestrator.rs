@@ -360,8 +360,7 @@ impl Engine {
             break next;
         };
         // the approval covered the old kind's run; the new kind's prompt gate must run again
-        self.approved.remove(id);
-        if let Err(e) = self.save_approvals() {
+        if let Err(e) = self.drop_approvals(id) {
             eprintln!("suffice-backend: save approvals failed: {e}");
         }
         let _ = self.save_fallbacks();
@@ -600,9 +599,24 @@ impl Engine {
         Ok(())
     }
 
+    /// Forget every approval for a task (set, pending calls, held call), restoring memory if the save fails.
+    fn drop_approvals(&mut self, id: &str) -> io::Result<()> {
+        let (approved, calls, held) = (self.approved.clone(), self.calls.clone(), self.held.clone());
+        self.approved.remove(id);
+        self.calls.retain(|(t, _, _)| t.as_str() != id);
+        self.held.remove(id);
+        let saved = self.save_approvals();
+        if saved.is_err() {
+            (self.approved, self.calls, self.held) = (approved, calls, held);
+        }
+        saved
+    }
+
     /// Terminal failure that skips retries: a denied or given-up task must not respawn.
     fn fail_final(&mut self, id: &str, error: &str) -> Result<(), String> {
-        self.approved.remove(id);
+        if let Err(e) = self.drop_approvals(id) {
+            eprintln!("suffice-backend: save approvals failed: {e}");
+        }
         self.queue.fail_final(id, error)?;
         self.after_state(id);
         Ok(())
@@ -634,9 +648,7 @@ impl Engine {
         match self.queue.get(id).map(|t| &t.state) {
             Some(TaskState::Failed { .. } | TaskState::Cancelled) => {
                 // a manual retry repeats any outward action, so the prompt gate asks again
-                if self.approved.remove(id) {
-                    self.save_approvals().map_err(|e| e.to_string())?;
-                }
+                self.drop_approvals(id).map_err(|e| e.to_string())?;
                 self.set_state(id, TaskState::Ready)
             }
             Some(_) => Err(format!("task '{id}' is not failed or cancelled")),

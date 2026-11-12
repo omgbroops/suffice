@@ -358,3 +358,37 @@ fn manual_retry_after_approval_asks_again() {
     e.tick();
     assert!(matches!(state(&e, "q"), TaskState::NeedsApproval { .. }), "{:?}", state(&e, "q"));
 }
+
+#[test]
+fn retry_after_cancelled_approval_asks_again_for_same_call() {
+    let d = Dir::new("retry-stale-call");
+    let mut e = engine(&d.0, 1);
+    e.submit(with_env(task("c", &[], 0), &[("MODE", "tool"), ("SLEEP_SECS", "30")])).unwrap();
+    e.tick();
+    assert!(wait_for(&mut e, 10, |e| matches!(state(e, "c"), TaskState::NeedsApproval { .. })));
+    assert!(wait_for(&mut e, 10, has_exit));
+    e.approve("c").unwrap();
+    e.cancel("c").unwrap();
+    assert!(wait_for(&mut e, 10, has_exit));
+    e.retry("c").unwrap();
+    e.tick();
+    assert!(wait_for(&mut e, 10, |e| matches!(state(e, "c"), TaskState::NeedsApproval { .. })), "{:?}", state(&e, "c"));
+}
+
+#[test]
+fn retry_removes_task_from_saved_approvals() {
+    let d = Dir::new("retry-saved");
+    let mut e = engine(&d.0, 1);
+    let mut t = with_env(task("q", &[], 0), &[("MODE", "fail")]);
+    t.prompt = "publish the package".into();
+    e.submit(t).unwrap();
+    e.tick();
+    assert!(matches!(state(&e, "q"), TaskState::NeedsApproval { .. }));
+    e.approve("q").unwrap();
+    assert!(fs::read_to_string(d.0.join("approvals.json")).unwrap().contains("\"q\""));
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(matches!(state(&e, "q"), TaskState::Failed { .. }), "{:?}", state(&e, "q"));
+    e.retry("q").unwrap();
+    let saved = fs::read_to_string(d.0.join("approvals.json")).unwrap();
+    assert!(!saved.contains("\"q\""), "{saved}");
+}
