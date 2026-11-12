@@ -1086,7 +1086,7 @@ fn usage_rows(tasks: &[Task], events: &[Logged], saved: &crate::orchestrator::Li
         }
     }
     // no rate_limit event in the log (restart, trimmed log): use the saved window with the highest utilization
-    for (&kind, _) in sums.iter() {
+    for &kind in sums.keys() {
         if plan.contains_key(kind) {
             continue;
         }
