@@ -196,3 +196,58 @@ fn api_create_fire_delete() {
     assert_eq!(http(p, "DELETE", "/triggers/api", "").0, 404);
     s.stop();
 }
+
+#[test]
+fn failed_fire_retries_next_free_id_then_disables() {
+    let dir = Dir::new("retry");
+    let mut e = engine(&dir.0);
+    e.add_trigger("ret", When::Manual, template("hi")).unwrap();
+    e.submit(task("ret-1", "x")).unwrap();
+    assert_eq!(e.fire_now("ret").unwrap(), "fired");
+    assert!(state(&e, "ret-2").is_some());
+    assert_eq!(e.triggers()[0].fires, 2);
+
+    let bad = Value::Obj(vec![
+        ("agent".into(), Value::str("claude")),
+        ("prompt".into(), Value::str("hi")),
+        ("cwd".into(), Value::str(&std::env::temp_dir().to_string_lossy())),
+        ("deps".into(), Value::Arr(vec![Value::str("nope")])),
+    ]);
+    e.add_trigger("bad", When::Manual, bad).unwrap();
+    assert_eq!(e.fire_now("bad").unwrap(), "failed");
+    assert_eq!(e.fire_now("bad").unwrap(), "failed");
+    assert_eq!(e.fire_now("bad").unwrap(), "disabled");
+    assert!(!e.triggers().iter().find(|t| t.id == "bad").unwrap().enabled);
+}
+
+#[test]
+fn on_done_cycles_are_rejected() {
+    let dir = Dir::new("cycle");
+    let mut e = engine(&dir.0);
+    assert!(e.add_trigger("s", When::OnDone { task_prefix: "s-".into() }, template("x")).is_err());
+    e.add_trigger("a", When::OnDone { task_prefix: "b-".into() }, template("x")).unwrap();
+    assert!(e.add_trigger("b", When::OnDone { task_prefix: "a-".into() }, template("x")).is_err());
+    assert_eq!(e.triggers().len(), 1);
+}
+
+#[test]
+fn trigger_id_may_not_shadow_task_prefix() {
+    let dir = Dir::new("shadow");
+    let mut e = engine(&dir.0);
+    e.submit(task("job-1", "x")).unwrap();
+    assert!(e.add_trigger("job", When::Manual, template("hi")).is_err());
+    assert!(e.add_trigger("jobs", When::Manual, template("hi")).is_ok());
+}
+
+#[test]
+fn on_done_ignores_tasks_finished_before_creation() {
+    let dir = Dir::new("old");
+    let mut e = engine(&dir.0);
+    e.submit(task("old-1", "x")).unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(matches!(state(&e, "old-1"), Some(TaskState::Done)));
+    e.add_trigger("w", When::OnDone { task_prefix: "old-".into() }, template("next")).unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert_eq!(e.triggers()[0].fires, 0);
+    assert!(state(&e, "w-1").is_none());
+}

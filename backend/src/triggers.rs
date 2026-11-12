@@ -64,12 +64,18 @@ pub struct Trigger {
     pub next_due_ms: u64,
     /// OnDone only: finished task ids already matched, so each one fires the trigger once.
     pub done_seen: Vec<String>,
+    pub created_ms: u64,
+    /// Consecutive real submit failures; the trigger disables itself at 3.
+    pub failures: u32,
+    /// OnDone fire times in the last hour, for the rate cap.
+    /// shortcut: not persisted, so a restart resets the cap; persist if restarts must not reset it.
+    pub od_fires: Vec<u64>,
 }
 
 impl Trigger {
     pub fn new(id: String, when: When, template: Value, now: u64) -> Trigger {
         let next_due_ms = next_due(&when, now);
-        Trigger { id, when, template, enabled: true, fires: 0, last_fire_ms: None, next_due_ms, done_seen: vec![] }
+        Trigger { id, when, template, enabled: true, fires: 0, last_fire_ms: None, next_due_ms, done_seen: vec![], created_ms: now, failures: 0, od_fires: vec![] }
     }
 
     pub fn to_json(&self) -> Value {
@@ -83,6 +89,8 @@ impl Trigger {
             ("last_fire_ms".into(), opt(self.last_fire_ms)),
             ("next_due_ms".into(), Value::Num(self.next_due_ms as f64)),
             ("done_seen".into(), Value::Arr(self.done_seen.iter().map(|s| Value::str(s)).collect())),
+            ("created_ms".into(), Value::Num(self.created_ms as f64)),
+            ("failures".into(), Value::Num(self.failures as f64)),
         ])
     }
 
@@ -98,6 +106,9 @@ impl Trigger {
             last_fire_ms: v.get("last_fire_ms").and_then(Value::as_i64).map(|x| x.max(0) as u64),
             next_due_ms: n("next_due_ms"),
             done_seen: v.get("done_seen").and_then(Value::as_arr).unwrap_or(&[]).iter().filter_map(|x| x.as_str().map(str::to_string)).collect(),
+            created_ms: n("created_ms"),
+            failures: n("failures") as u32,
+            od_fires: vec![],
         })
     }
 }
@@ -106,9 +117,56 @@ impl Trigger {
 pub fn next_due(when: &When, now: u64) -> u64 {
     match when {
         When::Every { secs } => now.saturating_add(secs.saturating_mul(1000)),
-        When::Daily { hour, minute } => daily_due(now, *hour, *minute, local_offset_secs(now)),
+        When::Daily { hour, minute } => {
+            let off = local_offset_secs(now);
+            let due = daily_due(now, *hour, *minute, off);
+            // the offset at the target time can differ from now's (DST), so recompute with it
+            let off_due = local_offset_secs(due);
+            if off_due == off { due } else { daily_due(now, *hour, *minute, off_due) }
+        }
         _ => 0,
     }
+}
+
+/// Records an OnDone fire at `now`; false when 20 already fell within the last hour.
+pub fn od_allow(window: &mut Vec<u64>, now: u64) -> bool {
+    const HOUR: u64 = 3_600_000;
+    window.retain(|&t| now.saturating_sub(t) < HOUR);
+    if window.len() >= 20 {
+        return false;
+    }
+    window.push(now);
+    true
+}
+
+/// True if an OnDone chain that starts at trigger `id` (with `prefix`) can lead back to `id`.
+pub fn on_done_cycle(triggers: &[Trigger], id: &str, prefix: &str) -> bool {
+    let od: Vec<(&str, &str)> = triggers
+        .iter()
+        .filter_map(|t| match &t.when {
+            When::OnDone { task_prefix } => Some((t.id.as_str(), task_prefix.as_str())),
+            _ => None,
+        })
+        .chain(std::iter::once((id, prefix)))
+        .collect();
+    let mut seen = vec![id];
+    let mut stack = vec![id];
+    while let Some(from) = stack.pop() {
+        let out = format!("{from}-");
+        for &(to, p) in &od {
+            if !out.starts_with(p) {
+                continue;
+            }
+            if to == id {
+                return true;
+            }
+            if !seen.contains(&to) {
+                seen.push(to);
+                stack.push(to);
+            }
+        }
+    }
+    false
 }
 
 /// The first local wall-clock time of hour:minute strictly after `now_ms`, in UTC ms.
@@ -185,5 +243,28 @@ mod tests {
         assert_eq!(daily_due(0, 0, 0, 3600), 82_800_000);
         // 25h after epoch, 01:00 already passed today (UTC), so next is 01:00 on day 2.
         assert_eq!(daily_due(90_000_000, 1, 0, 0), 176_400_000);
+    }
+}
+
+#[cfg(test)]
+mod cap_tests {
+    use super::*;
+
+    #[test]
+    fn od_cap_is_20_per_hour() {
+        let mut w = vec![];
+        assert!((0..20).all(|i| od_allow(&mut w, i)));
+        assert!(!od_allow(&mut w, 20));
+        assert!(od_allow(&mut w, 3_600_000));
+    }
+
+    #[test]
+    fn on_done_cycles_are_detected() {
+        let od = |id: &str, p: &str| Trigger::new(id.into(), When::OnDone { task_prefix: p.into() }, Value::Null, 0);
+        assert!(on_done_cycle(&[], "s", "s-"));
+        assert!(!on_done_cycle(&[], "a", "b-"));
+        assert!(on_done_cycle(&[od("a", "b-")], "b", "a-"));
+        assert!(on_done_cycle(&[od("a", "b-"), od("b", "c-")], "c", "a-"));
+        assert!(!on_done_cycle(&[od("a", "b-")], "c", "a-"));
     }
 }

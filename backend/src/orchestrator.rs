@@ -117,9 +117,23 @@ impl Engine {
         if self.triggers.iter().any(|t| t.id == id) {
             return Err(format!("trigger '{id}' already exists"));
         }
+        let own = format!("{id}-");
+        if self.queue.all().iter().any(|t| t.id.starts_with(&own)) {
+            return Err(format!("trigger id '{id}' collides with an existing task id"));
+        }
+        if let When::OnDone { task_prefix } = &when {
+            if triggers::on_done_cycle(&self.triggers, id, task_prefix) {
+                return Err(format!("OnDone cycle through trigger '{id}'"));
+            }
+        }
         crate::server::parse_task(&template, String::new())?;
         let now = (self.clock)();
-        self.triggers.push(Trigger::new(id.to_string(), when, template, now));
+        let mut t = Trigger::new(id.to_string(), when, template, now);
+        if let When::OnDone { task_prefix } = &t.when {
+            // only tasks that finish after creation should count, so the ones already done are seen
+            t.done_seen = self.queue.all().into_iter().filter(|x| x.state == TaskState::Done && x.id.starts_with(task_prefix.as_str())).map(|x| x.id.clone()).collect();
+        }
+        self.triggers.push(t);
         self.save_triggers()
     }
 
@@ -151,11 +165,28 @@ impl Engine {
         triggers::save(&self.dir, &self.triggers).map_err(|e| e.to_string())
     }
 
+    fn trigger_snapshot(&self) -> String {
+        Value::Arr(self.triggers.iter().map(Trigger::to_json).collect()).to_string()
+    }
+
     /// Fire every enabled trigger that is due, or has a new finished task matching its prefix.
     fn run_triggers(&mut self) {
+        const DAY_MS: u64 = 86_400_000;
         let now = (self.clock)();
+        let before = self.trigger_snapshot();
         let done: Vec<TaskId> =
             self.queue.all().into_iter().filter(|t| t.state == TaskState::Done).map(|t| t.id.clone()).collect();
+        for t in self.triggers.iter_mut() {
+            // a backward clock jump can leave a Daily due far ahead; reschedule it
+            if matches!(t.when, When::Daily { .. }) && t.next_due_ms > now.saturating_add(2 * DAY_MS) {
+                t.next_due_ms = next_due(&t.when, now);
+            }
+            if matches!(t.when, When::OnDone { .. }) {
+                t.done_seen.retain(|d| done.contains(d));
+                let extra = t.done_seen.len().saturating_sub(1000);
+                t.done_seen.drain(..extra);
+            }
+        }
         for i in 0..self.triggers.len() {
             let t = &self.triggers[i];
             if !t.enabled {
@@ -176,7 +207,9 @@ impl Engine {
                 self.fire_trigger(i, now, d);
             }
         }
-        let _ = self.save_triggers();
+        if self.trigger_snapshot() != before {
+            let _ = self.save_triggers();
+        }
     }
 
     /// Submit the trigger's task unless its previous one is still open. Logs the outcome.
@@ -191,22 +224,41 @@ impl Engine {
             t.done_seen.push(d);
         }
         t.next_due_ms = next_due(&t.when, now);
+        let mut reason = None;
         let (outcome, task_id) = if busy {
             ("skipped", None)
+        } else if matches!(t.when, When::OnDone { .. }) && !triggers::od_allow(&mut t.od_fires, now) {
+            t.enabled = false;
+            reason = Some("more than 20 OnDone fires in an hour".to_string());
+            ("disabled", None)
         } else {
-            let fire_id = format!("{id}-{}", t.fires + 1);
+            // skip ids already taken (e.g. by a task the user submitted under this prefix)
+            let mut n = t.fires + 1;
+            while self.queue.get(&format!("{id}-{n}")).is_some() {
+                n += 1;
+            }
+            let fire_id = format!("{id}-{n}");
             let res = crate::server::parse_task(&t.template, fire_id.clone()).and_then(|task| self.queue.submit(task));
             match res {
                 Ok(()) => {
-                    let t = &mut self.triggers[i];
-                    t.fires += 1;
+                    t.fires = n;
                     t.last_fire_ms = Some(now);
+                    t.failures = 0;
                     ("fired", Some(fire_id))
                 }
-                Err(_) => ("failed", None),
+                Err(e) => {
+                    t.failures += 1;
+                    if t.failures >= 3 {
+                        t.enabled = false;
+                        reason = Some(format!("3 consecutive failures: {e}"));
+                        ("disabled", None)
+                    } else {
+                        ("failed", None)
+                    }
+                }
             }
         };
-        self.log(&id, Event::Trigger { outcome: outcome.to_string(), task_id });
+        self.log(&id, Event::Trigger { outcome: outcome.to_string(), task_id, reason });
         outcome
     }
 
@@ -635,8 +687,8 @@ pub fn logged_json(l: &Logged) -> Value {
             ("state", vec![("state", Value::str(state)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
         }
         Event::Approval { status } => ("approval", vec![("status", Value::str(status))]),
-        Event::Trigger { outcome, task_id } => {
-            ("trigger", vec![("outcome", Value::str(outcome)), ("task_id", task_id.as_deref().map_or(Value::Null, Value::str))])
+        Event::Trigger { outcome, task_id, reason } => {
+            ("trigger", vec![("outcome", Value::str(outcome)), ("task_id", task_id.as_deref().map_or(Value::Null, Value::str)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
         }
     };
     let mut o = vec![
@@ -676,6 +728,7 @@ fn logged_from(v: &Value) -> Result<Logged, String> {
         "trigger" => Event::Trigger {
             outcome: sval(v, "outcome")?,
             task_id: v.get("task_id").and_then(Value::as_str).map(str::to_string),
+            reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
         },
         other => return Err(format!("unknown event '{other}'")),
     };
