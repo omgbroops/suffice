@@ -110,6 +110,7 @@ impl P<'_> {
             Some(b'{') => {
                 self.i += 1;
                 let mut o = vec![];
+                let mut seen = std::collections::HashSet::new(); // linear: a 1 MiB body can hold ~100k keys
                 self.ws();
                 if self.b.get(self.i) == Some(&b'}') {
                     self.i += 1;
@@ -118,6 +119,10 @@ impl P<'_> {
                 loop {
                     self.ws();
                     let k = self.string()?;
+                    // fail closed: agents read last-wins, so a silently kept first key could differ from what they run
+                    if !seen.insert(k.clone()) {
+                        return Err(format!("duplicate key '{k}' at {}", self.i));
+                    }
                     self.ws();
                     self.eat(b':')?;
                     o.push((k, self.value(depth + 1)?));

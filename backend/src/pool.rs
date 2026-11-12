@@ -130,7 +130,9 @@ impl Pool {
                     }
                 }
             };
-            // free the slot as soon as the leader is gone; grandchildren may still hold the pipes
+            // leader is gone: SIGKILL its leftovers so they can't hold the pipes open below
+            unsafe { kill(-pgid, 9) };
+            // free the slot as soon as the leader is gone
             {
                 let mut g = inner.lock().unwrap();
                 if g.runs.get(&name).is_some_and(|r| r.pgid == pgid) {
