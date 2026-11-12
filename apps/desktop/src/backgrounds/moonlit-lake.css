@@ -1,0 +1,2 @@
+/* Isolate canvas repaint damage from the foreground glass/text layers. */
+.atmosphere[data-background='lake'] { z-index: 0; transform: translateZ(0); backface-visibility: hidden; }
