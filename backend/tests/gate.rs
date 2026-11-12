@@ -292,14 +292,19 @@ fn full_access_task_is_held_for_approval() {
 
 #[test]
 fn reply_and_message_narrowed() {
-    for p in ["Fix the error message in main.rs", "Reply with only the number", "What does this message mean?", "reply in one word"] {
+    for p in [
+        "Fix the error message in main.rs", "Reply with only the number", "What does this error message mean?",
+        "reply in one word", "Fix the commit message format", "Reply only: 42", "Answer with just: ok",
+    ] {
         assert!(!held(&check_task(&task(p))), "should allow: {p}");
     }
     for p in [
         "reply to the email from Sam", "Reply all with the update", "message the team on slack", "please message Bob",
         "then reply on the PR", "send a message to Bob", "can you message Sam", "you should message the team",
         "let's message Sam", "reply in the slack thread", "reply using the support account", "Reply only to the customer",
-        "Reply with a thank-you to Sam", "Reply briefly to the ticket", "DM Sam the link",
+        "Reply with a thank-you to Sam", "Reply briefly to the ticket", "DM Sam the link", "reply with ok, then cc the boss",
+        "Reply in a few sentences, addressing Sam directly", "reply-with-thanks Sam", "the message Sam",
+        "commit message Sam now", "your message to Sam goes out at 5", "REPLY WITH THANKS TO SAM",
     ] {
         assert!(held(&check_task(&task(p))), "should hold: {p}");
     }

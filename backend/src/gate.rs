@@ -18,7 +18,7 @@ fn hold(reason: &str) -> Verdict {
 const TASK_WORDS: &[&str] = &[
     "publish", "send", "sent", "resend", "email", "mail", "notify", "comment", "share", "tweet", "buy", "purchase",
     "bought", "pay", "paid", "deploy", "delete", "upload", "submit", "push", "forward", "announce",
-    "merge", "wipe", "ship", "dm",
+    "merge", "wipe", "ship", "dm", "cc", "bcc",
 ];
 // Words that hold only as a verb: at clause start or right after to/and/then/please.
 const TASK_VERBS: &[&str] = &["text", "order", "post", "drop", "release"];
@@ -29,11 +29,11 @@ const MSG_NOUN_PREV: &[&str] = &[
     "status", "exit", "chat", "help", "usage", "debug",
 ];
 const MSG_NOUN_NEXT: &[&str] = &["is", "was", "says", "said", "mean", "means", "from", "text", "format", "type", "body", "field", "queue", "bus", "string", "in", "shows"];
-// "reply" holds unless the next token is an allowed adverb and no nearby token names a recipient or channel.
-const REPLY_OK_NEXT: &[&str] = &["with", "only", "just", "briefly", "exactly", "concisely", "in", "using"];
-const REPLY_BLOCK: &[&str] = &[
-    "to", "on", "thread", "slack", "channel", "email", "mail", "customer", "client", "ticket", "account", "chat", "dm", "all",
-    "back", "him", "her", "them", "user", "team",
+// "reply" holds unless every token in its clause is one of these.
+const REPLY_OK: &[&str] = &[
+    "with", "only", "just", "in", "one", "a", "an", "the", "word", "words", "number", "answer", "ok", "okay", "yes", "no",
+    "sentence", "sentences", "line", "lines", "briefly", "using", "json", "plain", "text", "exactly", "short", "single", "done",
+    "ready",
 ];
 const TASK_PHRASES: &[&[&str]] = &[
     &["open", "a", "pr"],
@@ -73,19 +73,28 @@ pub fn check_task(task: &Task) -> Verdict {
     if let Some(k) = TASK_WORDS.iter().find(|k| w.iter().any(|t| word_hit(t, k))) {
         return hold(&format!("prompt asks for outward action: {k}"));
     }
+    // Clauses split on raw punctuation (not hyphen), so "reply-with-thanks" stays in one clause.
+    for clause in task.prompt.split(['.', ';', ',', ':', '!', '?', '\n']) {
+        let ct = tokens(clause);
+        for (j, t) in ct.iter().enumerate() {
+            if word_hit(t, "reply") {
+                let rest = &ct[j + 1..];
+                if rest.is_empty() || !rest.iter().all(|r| REPLY_OK.contains(&r.as_str())) {
+                    return hold("prompt asks for outward action: reply");
+                }
+            }
+        }
+    }
+    // Same tokenization as `w`, but case preserved, for the capitalized-name check.
+    let raw: Vec<&str> = task.prompt.split(|c: char| !c.is_alphanumeric()).filter(|x| !x.is_empty()).collect();
     for (i, t) in w.iter().enumerate() {
         if word_hit(t, "message") {
             let prev = if i > 0 { w[i - 1].as_str() } else { "" };
             let noun = MSG_NOUN_PREV.contains(&prev) || w.get(i + 1).is_some_and(|n| MSG_NOUN_NEXT.contains(&n.as_str()));
-            if !noun {
+            let to_near = w[i + 1..(i + 4).min(w.len())].iter().any(|n| n == "to");
+            let name = raw.get(i + 1).is_some_and(|n| n.starts_with(char::is_uppercase));
+            if !noun || to_near || name {
                 return hold("prompt asks for outward action: message");
-            }
-        }
-        if word_hit(t, "reply") {
-            let next_ok = w.get(i + 1).is_some_and(|n| REPLY_OK_NEXT.contains(&n.as_str()));
-            let near = &w[i + 1..(i + 7).min(w.len())];
-            if !next_ok || near.iter().any(|n| REPLY_BLOCK.contains(&n.as_str())) {
-                return hold("prompt asks for outward action: reply");
             }
         }
     }
