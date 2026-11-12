@@ -289,3 +289,35 @@ fn full_access_task_is_held_for_approval() {
     t.access = Access::Full;
     assert_eq!(check_task(&t), Verdict::Hold { reason: "full access needs OK".into() });
 }
+
+#[test]
+fn reply_and_message_narrowed() {
+    for p in [
+        "Fix the error message in main.rs", "Reply with only the number", "What does this message mean?",
+        "reply in one word", "Fix the commit message format", "Reply only: 42", "Answer with just: ok",
+    ] {
+        assert!(!held(&check_task(&task(p))), "should allow: {p}");
+    }
+    for p in [
+        "reply to the email from Sam", "Reply all with the update", "message the team on slack", "please message Bob",
+        "then reply on the PR", "send a message to Bob", "can you message Sam", "you should message the team",
+        "let's message Sam", "reply in the slack thread", "reply using the support account", "Reply only to the customer",
+        "Reply with a thank-you to Sam", "Reply briefly to the ticket", "DM Sam the link", "reply with ok, then cc the boss",
+        "Reply in a few sentences, addressing Sam directly", "reply-with-thanks Sam", "the message Sam",
+        "commit message Sam now", "your message to Sam goes out at 5", "REPLY WITH THANKS TO SAM",
+        "ｒｅｐｌｙ to Sam", "ｓｅｎｄ the file", "reply with ok。 message Sam", "the message 日本 Sam",
+        "the message about the launch Sam",
+        "Tell Bob to reply yes", "Ask Alice and reply ok", "Fix it and reply yes", "Have Bob reply done", "I will reply yes",
+        "the message bob", "Slack bob a message", "Leave a message for bob", "İx the message Bob", "İx the message 田中",
+        "commit message Bob now", "your message to Sam goes out",
+    ] {
+        assert!(held(&check_task(&task(p))), "should hold: {p}");
+    }
+}
+
+#[test]
+fn bare_reply_clause_holds() {
+    for p in ["Reply: bob", "Reply. Bob", "Reply\nbob", "reply"] {
+        assert!(matches!(check_task(&task(p)), Verdict::Hold { .. }), "{p}");
+    }
+}
