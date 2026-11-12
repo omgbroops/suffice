@@ -36,6 +36,8 @@ pub struct Engine {
     events: Vec<Logged>,
     subs: Vec<Sender<Logged>>,
     runs: HashMap<String, Run>,
+    /// Killed runs (held or cancelled) still alive until their Exited arrives; their session stays claimed.
+    zombies: HashMap<String, Run>,
     approved: BTreeSet<TaskId>,
     calls: BTreeSet<Call>,
     /// Last tool call that held each task, moved into `calls` by approve().
@@ -57,7 +59,7 @@ impl Engine {
             OpenOptions::new().write(true).open(&path)?.set_len(good as u64)?;
         }
         let file = OpenOptions::new().create(true).append(true).open(&path)?;
-        let (approved, calls) = load_approvals(dir)?;
+        let (approved, calls, held) = load_approvals(dir)?;
         let (tx, rx) = channel();
         Ok(Engine {
             dir: dir.to_path_buf(),
@@ -71,9 +73,10 @@ impl Engine {
             events,
             subs: vec![],
             runs: HashMap::new(),
+            zombies: HashMap::new(),
             approved,
             calls,
-            held: HashMap::new(),
+            held,
             programs: BTreeMap::new(),
         })
     }
@@ -103,11 +106,9 @@ impl Engine {
     pub fn cancel(&mut self, id: &str) -> Result<(), String> {
         let attempts = self.queue.get(id).ok_or(format!("no task '{id}'"))?.attempts;
         let run = run_id(id, attempts);
-        if let Some(r) = self.runs.get(&run) {
+        if let Some(r) = self.runs.remove(&run) {
             self.pool.kill(&run);
-            if let Some(k) = &r.session {
-                self.sessions.release(k, id);
-            }
+            self.zombies.insert(run, r);
         }
         self.queue.set_state(id, TaskState::Cancelled)
     }
@@ -134,8 +135,8 @@ impl Engine {
             }
             let Some(task) = self.queue.get(&id).cloned() else { continue };
             let run = run_id(&id, task.attempts);
-            if self.runs.contains_key(&run) {
-                continue; // started; state becomes Running when its Started message is pumped
+            if self.runs.contains_key(&run) || self.zombies.contains_key(&run) {
+                continue; // started, or killed but not yet exited (still holds the session)
             }
             if !self.approved.contains(&id) {
                 if let Verdict::Hold { reason } = gate::check_task(&task) {
@@ -209,6 +210,13 @@ impl Engine {
             }
             PoolMsg::Stderr { run, line } => self.on_event(&run, Event::Stderr { line }),
             PoolMsg::Exited { run, code, timed_out, killed } => {
+                if let Some(r) = self.zombies.remove(&run) {
+                    if let Some(k) = &r.session {
+                        self.sessions.release(k, &r.task);
+                    }
+                    self.log(&r.task, Event::Exit { code });
+                    return;
+                }
                 let Some(r) = self.runs.remove(&run) else { return };
                 if let Some(k) = &r.session {
                     self.sessions.release(k, &r.task);
@@ -266,12 +274,13 @@ impl Engine {
         }
         self.log(&task, ev);
         if let Some((reason, (_, name, input))) = hold {
-            self.pool.kill(run);
-            self.held.insert(task.clone(), (name, input));
-            let _ = self.queue.set_state(&task, TaskState::NeedsApproval { reason });
-            if let Some(k) = session {
-                self.sessions.release(&k, &task);
+            if let Some(r) = self.runs.remove(run) {
+                self.pool.kill(run);
+                self.zombies.insert(run.to_string(), r);
             }
+            self.held.insert(task.clone(), (name, input));
+            let _ = self.save_approvals();
+            let _ = self.queue.set_state(&task, TaskState::NeedsApproval { reason });
         }
     }
 
@@ -296,7 +305,13 @@ impl Engine {
                 .map(|(t, n, i)| Value::Arr(vec![Value::str(t), Value::str(n), Value::str(i)]))
                 .collect(),
         );
-        let v = Value::Obj(vec![("tasks".into(), tasks), ("calls".into(), calls)]);
+        let held = Value::Arr(
+            self.held
+                .iter()
+                .map(|(t, (n, i))| Value::Arr(vec![Value::str(t), Value::str(n), Value::str(i)]))
+                .collect(),
+        );
+        let v = Value::Obj(vec![("tasks".into(), tasks), ("calls".into(), calls), ("held".into(), held)]);
         let tmp = self.dir.join("approvals.json.tmp");
         fs::write(&tmp, format!("{v}\n"))?;
         fs::rename(tmp, self.dir.join("approvals.json"))
@@ -311,7 +326,7 @@ fn bad(e: impl std::fmt::Display) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, e.to_string())
 }
 
-fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>)> {
+fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
     let text = match fs::read_to_string(dir.join("approvals.json")) {
         Ok(t) => t,
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(Default::default()),
@@ -320,19 +335,27 @@ fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>)> 
     let v = json::parse(&text).map_err(|e| bad(format!("approvals.json: {e}")))?;
     let mut approved = BTreeSet::new();
     let mut calls = BTreeSet::new();
+    let mut held = HashMap::new();
     for t in v.get("tasks").and_then(Value::as_arr).unwrap_or(&[]) {
         approved.insert(t.as_str().ok_or_else(|| bad("approvals.json: task id"))?.to_string());
     }
     for c in v.get("calls").and_then(Value::as_arr).unwrap_or(&[]) {
-        match c.as_arr() {
-            Some([t, n, i]) => {
-                let s = |x: &Value| x.as_str().map(str::to_string).ok_or_else(|| bad("approvals.json: call"));
-                calls.insert((s(t)?, s(n)?, s(i)?));
-            }
-            _ => return Err(bad("approvals.json: call")),
-        }
+        let (t, n, i) = call_triple(c)?;
+        calls.insert((t, n, i));
     }
-    Ok((approved, calls))
+    for c in v.get("held").and_then(Value::as_arr).unwrap_or(&[]) {
+        let (t, n, i) = call_triple(c)?;
+        held.insert(t, (n, i));
+    }
+    Ok((approved, calls, held))
+}
+
+fn call_triple(c: &Value) -> io::Result<(String, String, String)> {
+    let s = |x: &Value| x.as_str().map(str::to_string).ok_or_else(|| bad("approvals.json: call"));
+    match c.as_arr() {
+        Some([t, n, i]) => Ok((s(t)?, s(n)?, s(i)?)),
+        _ => Err(bad("approvals.json: call")),
+    }
 }
 
 /// Replays events.jsonl. Returns the events and the byte length of the valid prefix.

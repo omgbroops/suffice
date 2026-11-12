@@ -270,3 +270,73 @@ fn running_task_is_recovered_after_crash() {
     e.run_until_idle(Duration::from_secs(20));
     assert_eq!(state(&e, "c"), TaskState::Done);
 }
+
+/// Fake agent that emits a held `git push` tool call, then lingers 2 s before finishing.
+fn slow_tool(d: &Path) -> PathBuf {
+    use std::os::unix::fs::PermissionsExt;
+    let p = d.join("slow.sh");
+    fs::write(&p, "#!/bin/sh\necho '{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"tool_use\",\"name\":\"Bash\",\"input\":{\"command\":\"git push\"}}]}}'\nsleep 2\necho '{\"type\":\"result\",\"is_error\":false,\"result\":\"d\"}'\n").unwrap();
+    fs::set_permissions(&p, fs::Permissions::from_mode(0o755)).unwrap();
+    p
+}
+
+#[test]
+fn approve_before_exit() {
+    let d = Dir::new("pa");
+    let mut e = Engine::open(&d.0, 1).unwrap();
+    e.set_program("claude", slow_tool(&d.0));
+    e.submit(task("t", &[], 0)).unwrap();
+    e.tick();
+    assert!(wait_for(&mut e, 10, |e| matches!(state(e, "t"), TaskState::NeedsApproval { .. })));
+    e.approve("t").unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert_eq!(state(&e, "t"), TaskState::Done);
+}
+
+#[test]
+fn approve_after_restart() {
+    let d = Dir::new("pb");
+    {
+        let mut e = Engine::open(&d.0, 1).unwrap();
+        e.set_program("claude", slow_tool(&d.0));
+        e.submit(task("t", &[], 0)).unwrap();
+        e.tick();
+        assert!(wait_for(&mut e, 10, |e| matches!(state(e, "t"), TaskState::NeedsApproval { .. })));
+        assert!(wait_for(&mut e, 10, has_exit));
+    }
+    let mut e = Engine::open(&d.0, 1).unwrap();
+    e.set_program("claude", slow_tool(&d.0));
+    e.approve("t").unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert_eq!(state(&e, "t"), TaskState::Done);
+}
+
+#[test]
+fn held_run_keeps_session_until_it_exits() {
+    let d = Dir::new("sess");
+    let mut e = Engine::open(&d.0, 2).unwrap();
+    e.set_program("claude", slow_tool(&d.0));
+    for id in ["t1", "t2"] {
+        let mut t = task(id, &[], 0);
+        t.session_key = Some("s".into());
+        e.submit(t).unwrap();
+    }
+    let end = Instant::now() + Duration::from_secs(20);
+    let mut t1_exited = false;
+    let mut violation = false;
+    while Instant::now() < end {
+        e.tick();
+        e.pump(Duration::from_millis(20));
+        t1_exited |= e.events_since(0).iter().any(|l| l.task == "t1" && matches!(l.event, Event::Exit { .. }));
+        if matches!(state(&e, "t2"), TaskState::Running { .. }) && !t1_exited {
+            violation = true;
+            break;
+        }
+        if !matches!(state(&e, "t2"), TaskState::Pending | TaskState::Ready) {
+            break;
+        }
+    }
+    assert!(!violation, "second task on the session started before the held run exited");
+    assert!(t1_exited);
+    assert!(!matches!(state(&e, "t2"), TaskState::Pending | TaskState::Ready));
+}
