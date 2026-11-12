@@ -731,7 +731,9 @@ impl Engine {
                 None => None,
             };
             let mut cmd = adapter::command(&task, resume.as_deref());
-            if let Some(p) = self.programs.get(&cmd.program) {
+            // override by agent kind (SUFFICE_PROGRAM_SUFFICE), else by program name (suffice's program is "node")
+            let kind = crate::server::kind_name(&task.agent);
+            if let Some(p) = self.programs.get(kind).or_else(|| self.programs.get(&cmd.program)) {
                 cmd.program = p.to_string_lossy().into_owned();
             }
             let program = cmd.program.clone();
