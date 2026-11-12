@@ -276,12 +276,22 @@ fn lit(s: &str) -> String {
     Value::str(s).to_string()
 }
 
-const CENTER_JS: &str = "(e=>{if(!e)return null;e.scrollIntoView({block:'center'});const r=e.getBoundingClientRect();\
-    return [r.x+r.width/2,r.y+r.height/2];})(document.querySelector(SEL))";
-const FOCUS_JS: &str = "(e=>{if(e)e.focus();return !!e;})(document.querySelector(SEL))";
 const TEXT_JS: &str = "(e=>e?e.innerText:null)(document.querySelector(SEL))";
-const INFO_JS: &str = "(e=>e?{text:e.innerText||e.textContent||'',value:e.value||'',\
-    type:e.getAttribute('type')||e.tagName,action:(e.form&&e.form.action)||''}:null)(document.querySelector(SEL))";
+// find the element, scroll it to center, stamp it, and return its center
+const FIND_JS: &str = "(e=>{if(!e)return null;e.scrollIntoView({block:'center'});const r=e.getBoundingClientRect();\
+    e.setAttribute('data-suffice-gate','__NONCE__');return {x:r.x+r.width/2,y:r.y+r.height/2};})(document.querySelector(SEL))";
+// the clickable target at the point is what gets gated; hit says whether it is the stamped element or inside it
+const CONFIRM_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');const t=document.elementFromPoint(__X__,__Y__);\
+    if(!t)return null;let c=t.closest('label,button,a,input,select,textarea,[role=button],[onclick]')||t;\
+    if(c.tagName==='LABEL'&&c.control)c=c.control;\
+    return {text:[c.innerText||c.textContent||'',c.getAttribute('aria-label'),c.title,c.alt].filter(Boolean).join(' '),value:c.value||'',type:c.getAttribute('type')||c.tagName,\
+    action:(c.form&&c.form.action)||'',hit:!!s&&(c===s||s.contains(c))};})()";
+// focus the stamped element, then describe whatever actually has focus
+const FOCUS_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');if(!s)return null;s.focus();\
+    const c=document.activeElement;if(!c)return null;\
+    return {text:[c.innerText||c.textContent||'',c.getAttribute('aria-label'),c.title,c.alt].filter(Boolean).join(' '),value:c.value||'',type:c.getAttribute('type')||c.tagName,\
+    action:(c.form&&c.form.action)||'',hit:c===s||s.contains(c)};})()";
+const UNSTAMP_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');if(s)s.removeAttribute('data-suffice-gate');return true;})()";
 
 pub struct Browser {
     child: Child,
@@ -404,7 +414,10 @@ impl Browser {
     pub fn navigate(&mut self, url: &str) -> Result<(), String> {
         self.call("Page.enable", obj(&[]))?;
         self.loaded = false;
-        self.call("Page.navigate", obj(&[("url", Value::str(url))]))?;
+        let r = self.call("Page.navigate", obj(&[("url", Value::str(url))]))?;
+        if let Some(e) = r.get("errorText").and_then(Value::as_str).filter(|e| !e.is_empty()) {
+            return Err(format!("navigate {url}: {e}"));
+        }
         while !self.loaded {
             self.pump()?;
         }
@@ -431,45 +444,85 @@ impl Browser {
         base64_decode(data)
     }
 
-    /// Runs the approval gate on the element before any input is sent.
-    fn gate_check(&mut self, name: &str, selector: &str) -> Result<(), String> {
-        let info = self.evaluate(&INFO_JS.replace("SEL", &lit(selector)))?;
-        let Value::Obj(mut kv) = info else { return Err(format!("no element matches {selector}")) };
+    /// Finds the element, stamps it, and runs the approval gate on it before any input is sent.
+    /// Returns the center and the stamp nonce; the caller must `unstamp` it.
+    fn find(&mut self, selector: &str) -> Result<(f64, f64, String), String> {
+        static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let n = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos()).unwrap_or(0);
+        let nonce = format!("{nanos:x}{n:x}");
+        let info = self.evaluate(&FIND_JS.replace("SEL", &lit(selector)).replace("__NONCE__", &nonce))?;
+        let num = |k: &str| match info.get(k) {
+            Some(Value::Num(f)) => Some(*f),
+            _ => None,
+        };
+        match (num("x"), num("y")) {
+            (Some(x), Some(y)) => Ok((x, y, nonce)),
+            _ => {
+                self.unstamp(&nonce);
+                Err(format!("no element matches {selector}"))
+            }
+        }
+    }
+
+    /// Best effort: remove the stamp left by `find`.
+    fn unstamp(&mut self, nonce: &str) {
+        let _ = self.evaluate(&UNSTAMP_JS.replace("__NONCE__", nonce));
+    }
+
+    /// Gates the element described by `info` (its hit flag is not gate input), then requires it to be the stamped target.
+    fn vet(name: &str, selector: &str, info: Value, changed: &str) -> Result<(), String> {
+        let Value::Obj(mut kv) = info else { return Err(changed.to_string()) };
+        let hit = kv.iter().any(|(k, v)| k == "hit" && *v == Value::Bool(true));
+        kv.retain(|(k, _)| k != "hit");
         kv.insert(0, ("selector".into(), Value::str(selector)));
         let input = Value::Obj(kv).to_string();
         match gate::check_event(&Event::ToolCall { name: name.into(), input }) {
             Verdict::Hold { reason } => Err(format!("held: {reason}")),
-            Verdict::Allow => Ok(()),
+            Verdict::Allow if hit => Ok(()),
+            Verdict::Allow => Err(changed.to_string()),
         }
     }
 
     pub fn click(&mut self, selector: &str) -> Result<(), String> {
-        self.gate_check("browser_click", selector)?;
-        let c = self.evaluate(&CENTER_JS.replace("SEL", &lit(selector)))?;
-        let (x, y) = match c.as_arr() {
-            Some([Value::Num(x), Value::Num(y)]) => (*x, *y),
-            _ => return Err(format!("no element matches {selector}")),
+        let (x, y, nonce) = self.find(selector)?;
+        let js = CONFIRM_JS.replace("__NONCE__", &nonce).replace("__X__", &format!("{x}")).replace("__Y__", &format!("{y}"));
+        // shortcut: coordinate clicks can't see JS listeners on plain divs/overlays that forward clicks, targets inside iframes/shadow roots,
+        // or a mousedown handler swapping the element before mouseup; upgrade to DOM.resolveNode + a gated objectId click if an agent hits one
+        let mut result = match self.evaluate(&js) {
+            Ok(info) => Self::vet("browser_click", selector, info, "click target changed"),
+            Err(e) => Err(e),
         };
-        for ty in ["mousePressed", "mouseReleased"] {
-            let params = obj(&[
-                ("type", Value::str(ty)),
-                ("x", Value::num(x)),
-                ("y", Value::num(y)),
-                ("button", Value::str("left")),
-                ("clickCount", Value::num(1.0)),
-            ]);
-            self.call("Input.dispatchMouseEvent", params)?;
+        if result.is_ok() {
+            for ty in ["mousePressed", "mouseReleased"] {
+                let params = obj(&[
+                    ("type", Value::str(ty)),
+                    ("x", Value::num(x)),
+                    ("y", Value::num(y)),
+                    ("button", Value::str("left")),
+                    ("clickCount", Value::num(1.0)),
+                ]);
+                if let Err(e) = self.call("Input.dispatchMouseEvent", params) {
+                    result = Err(e);
+                    break;
+                }
+            }
         }
-        Ok(())
+        self.unstamp(&nonce);
+        result
     }
 
     pub fn type_text(&mut self, selector: &str, text: &str) -> Result<(), String> {
-        self.gate_check("browser_type", selector)?;
-        if self.evaluate(&FOCUS_JS.replace("SEL", &lit(selector)))? != Value::Bool(true) {
-            return Err(format!("no element matches {selector}"));
-        }
-        self.call("Input.insertText", obj(&[("text", Value::str(text))]))?;
-        Ok(())
+        let (_, _, nonce) = self.find(selector)?;
+        let result = match self.evaluate(&FOCUS_JS.replace("__NONCE__", &nonce)) {
+            Ok(info) => match Self::vet("browser_type", selector, info, "target changed") {
+                Ok(()) => self.call("Input.insertText", obj(&[("text", Value::str(text))])).map(|_| ()),
+                Err(e) => Err(e),
+            },
+            Err(e) => Err(e),
+        };
+        self.unstamp(&nonce);
+        result
     }
 
     pub fn text(&mut self, selector: &str) -> Result<String, String> {
