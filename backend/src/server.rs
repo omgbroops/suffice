@@ -3,6 +3,7 @@
 
 use crate::json::{self, Value};
 use crate::orchestrator::{logged_json, Engine};
+use crate::triggers::{Trigger, When};
 use crate::types::{now_ms, Access, AgentKind, Event, Logged, Task, TaskState};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::io::{self, BufRead, BufReader, Read, Write};
@@ -141,7 +142,7 @@ fn reason_text(code: u16) -> &'static str {
 fn cors(origin: Option<&str>) -> String {
     match origin {
         Some(o) if ORIGINS.contains(&o) => format!(
-            "Access-Control-Allow-Origin: {o}\r\nAccess-Control-Allow-Headers: Authorization, Content-Type, Last-Event-ID\r\nAccess-Control-Allow-Methods: GET, POST, OPTIONS\r\n"
+            "Access-Control-Allow-Origin: {o}\r\nAccess-Control-Allow-Headers: Authorization, Content-Type, Last-Event-ID\r\nAccess-Control-Allow-Methods: GET, POST, DELETE, OPTIONS\r\n"
         ),
         _ => String::new(),
     }
@@ -492,6 +493,35 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
             })
         }
         ("GET", ["usage"]) => ask_res(ctx, |e| (200, Value::Arr(usage_rows(&e.tasks(), &e.events_since(0))))),
+        ("GET", ["triggers"]) => ask_res(ctx, |e| (200, Value::Arr(e.triggers().iter().map(Trigger::to_json).collect()))),
+        ("POST", ["triggers"]) => {
+            let v = match parse_body(body) {
+                Ok(v) => v,
+                Err(e) => return Ok(e),
+            };
+            ask_res(ctx, move |e| create_trigger(e, &v))
+        }
+        ("POST", ["triggers", id, "fire"]) => {
+            let id = id.to_string();
+            ask_res(ctx, move |e| match e.fire_now(&id) {
+                Ok(outcome) => (200, obj(vec![("outcome", Value::str(outcome))])),
+                Err(m) => trigger_err(m),
+            })
+        }
+        ("POST", ["triggers", id, action @ ("enable" | "disable")]) => {
+            let (id, on) = (id.to_string(), *action == "enable");
+            ask_res(ctx, move |e| {
+                let r = e.set_trigger_enabled(&id, on);
+                trigger_result(e, &id, r)
+            })
+        }
+        ("DELETE", ["triggers", id]) => {
+            let id = id.to_string();
+            ask_res(ctx, move |e| match e.remove_trigger(&id) {
+                Ok(()) => (200, obj(vec![("removed", Value::str(&id))])),
+                Err(m) => trigger_err(m),
+            })
+        }
         _ => err(404, format!("no route {method} {path}")),
     };
     Ok(res)
@@ -592,6 +622,7 @@ fn kind_of(e: &Event) -> &'static str {
         Event::Exit { .. } => "exit",
         Event::State { .. } => "state",
         Event::Approval { .. } => "approval",
+        Event::Trigger { .. } => "trigger",
     }
 }
 
@@ -607,6 +638,43 @@ fn kind_name(a: &AgentKind) -> &'static str {
         AgentKind::Gemini => "gemini",
         AgentKind::Suffice => "suffice",
         AgentKind::Generic { .. } => "generic",
+    }
+}
+
+fn trigger_err(m: String) -> Res {
+    if m.starts_with("no trigger") {
+        err(404, m)
+    } else {
+        err(400, m)
+    }
+}
+
+fn trigger_result(e: &Engine, id: &str, r: Result<(), String>) -> Res {
+    match r {
+        Err(m) => trigger_err(m),
+        Ok(()) => match e.triggers().iter().find(|t| t.id == id) {
+            Some(t) => (200, t.to_json()),
+            None => err(404, format!("no trigger '{id}'")),
+        },
+    }
+}
+
+fn create_trigger(e: &mut Engine, v: &Value) -> Res {
+    let Some(id) = v.get("id").and_then(Value::as_str) else { return err(400, "id is required") };
+    let when = match v.get("when").ok_or_else(|| "when is required".to_string()).and_then(When::from_json) {
+        Ok(w) => w,
+        Err(m) => return err(400, m),
+    };
+    let template = v.get("template").cloned().unwrap_or(Value::Null);
+    if !matches!(template, Value::Obj(_)) {
+        return err(400, "template must be an object");
+    }
+    if let Err(m) = e.add_trigger(id, when, template) {
+        return err(400, m);
+    }
+    match e.triggers().iter().find(|t| t.id == id) {
+        Some(t) => (201, t.to_json()),
+        None => err(500, "trigger vanished after add"),
     }
 }
 
@@ -667,7 +735,7 @@ fn create_task(e: &mut Engine, v: &Value) -> Res {
     }
 }
 
-fn parse_task(v: &Value, id: String) -> Result<Task, String> {
+pub fn parse_task(v: &Value, id: String) -> Result<Task, String> {
     let s = |k: &str| v.get(k).and_then(Value::as_str).map(str::to_string);
     let agent = match v.get("agent") {
         Some(Value::Str(a)) => match a.as_str() {

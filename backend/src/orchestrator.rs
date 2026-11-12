@@ -6,6 +6,7 @@ use crate::json::{self, Value};
 use crate::pool::{Pool, PoolMsg};
 use crate::queue::Queue;
 use crate::session::{Session, Sessions};
+use crate::triggers::{self, next_due, Trigger, When};
 use crate::types::{now_ms, AgentKind, Event, Logged, Task, TaskId, TaskState};
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs::{self, File, OpenOptions};
@@ -46,6 +47,10 @@ pub struct Engine {
     decisions: Vec<Value>,
     /// Program name -> path override, e.g. "claude" -> a custom install path.
     pub programs: BTreeMap<String, PathBuf>,
+    /// Scheduled and event-driven triggers, fired from tick().
+    triggers: Vec<Trigger>,
+    /// Time source for triggers; tests replace it with set_clock.
+    clock: Box<dyn Fn() -> u64 + Send>,
 }
 
 impl Engine {
@@ -63,6 +68,7 @@ impl Engine {
         let file = OpenOptions::new().create(true).append(true).open(&path)?;
         let (approved, calls, held) = load_approvals(dir)?;
         let decisions = load_decisions(dir)?;
+        let triggers = triggers::load(dir)?;
         let (tx, rx) = channel();
         Ok(Engine {
             dir: dir.to_path_buf(),
@@ -82,6 +88,8 @@ impl Engine {
             held,
             decisions,
             programs: BTreeMap::new(),
+            triggers,
+            clock: Box::new(now_ms),
         })
     }
 
@@ -91,6 +99,115 @@ impl Engine {
 
     pub fn submit(&mut self, task: Task) -> Result<(), String> {
         self.queue.submit(task)
+    }
+
+    pub fn set_clock(&mut self, f: impl Fn() -> u64 + Send + 'static) {
+        self.clock = Box::new(f);
+    }
+
+    pub fn triggers(&self) -> &[Trigger] {
+        &self.triggers
+    }
+
+    /// Add a trigger. The template is a task body (POST /tasks shape); its id is set per fire.
+    pub fn add_trigger(&mut self, id: &str, when: When, template: Value) -> Result<(), String> {
+        if id.is_empty() {
+            return Err("trigger id is required".into());
+        }
+        if self.triggers.iter().any(|t| t.id == id) {
+            return Err(format!("trigger '{id}' already exists"));
+        }
+        crate::server::parse_task(&template, String::new())?;
+        let now = (self.clock)();
+        self.triggers.push(Trigger::new(id.to_string(), when, template, now));
+        self.save_triggers()
+    }
+
+    pub fn remove_trigger(&mut self, id: &str) -> Result<(), String> {
+        let n = self.triggers.len();
+        self.triggers.retain(|t| t.id != id);
+        if self.triggers.len() == n {
+            return Err(format!("no trigger '{id}'"));
+        }
+        self.save_triggers()
+    }
+
+    pub fn set_trigger_enabled(&mut self, id: &str, enabled: bool) -> Result<(), String> {
+        let t = self.triggers.iter_mut().find(|t| t.id == id).ok_or(format!("no trigger '{id}'"))?;
+        t.enabled = enabled;
+        self.save_triggers()
+    }
+
+    /// Fire a trigger now, ignoring its schedule and enabled flag. Returns the outcome.
+    pub fn fire_now(&mut self, id: &str) -> Result<&'static str, String> {
+        let i = self.triggers.iter().position(|t| t.id == id).ok_or(format!("no trigger '{id}'"))?;
+        let now = (self.clock)();
+        let outcome = self.fire_trigger(i, now, None);
+        self.save_triggers()?;
+        Ok(outcome)
+    }
+
+    fn save_triggers(&self) -> Result<(), String> {
+        triggers::save(&self.dir, &self.triggers).map_err(|e| e.to_string())
+    }
+
+    /// Fire every enabled trigger that is due, or has a new finished task matching its prefix.
+    fn run_triggers(&mut self) {
+        let now = (self.clock)();
+        let done: Vec<TaskId> =
+            self.queue.all().into_iter().filter(|t| t.state == TaskState::Done).map(|t| t.id.clone()).collect();
+        for i in 0..self.triggers.len() {
+            let t = &self.triggers[i];
+            if !t.enabled {
+                continue;
+            }
+            let fresh: Vec<Option<TaskId>> = match &t.when {
+                When::OnDone { task_prefix } => {
+                    let own = format!("{}-", t.id);
+                    done.iter()
+                        .filter(|d| d.starts_with(task_prefix.as_str()) && !d.starts_with(&own) && !t.done_seen.contains(d))
+                        .map(|d| Some(d.clone()))
+                        .collect()
+                }
+                When::Every { .. } | When::Daily { .. } if now >= t.next_due_ms => vec![None],
+                _ => vec![],
+            };
+            for d in fresh {
+                self.fire_trigger(i, now, d);
+            }
+        }
+        let _ = self.save_triggers();
+    }
+
+    /// Submit the trigger's task unless its previous one is still open. Logs the outcome.
+    fn fire_trigger(&mut self, i: usize, now: u64, done: Option<TaskId>) -> &'static str {
+        let id = self.triggers[i].id.clone();
+        let prev = format!("{id}-{}", self.triggers[i].fires);
+        let busy = self.queue.get(&prev).is_some_and(|t| {
+            matches!(t.state, TaskState::Pending | TaskState::Ready | TaskState::Running { .. } | TaskState::NeedsApproval { .. })
+        });
+        let t = &mut self.triggers[i];
+        if let Some(d) = done {
+            t.done_seen.push(d);
+        }
+        t.next_due_ms = next_due(&t.when, now);
+        let (outcome, task_id) = if busy {
+            ("skipped", None)
+        } else {
+            let fire_id = format!("{id}-{}", t.fires + 1);
+            let res = crate::server::parse_task(&t.template, fire_id.clone()).and_then(|task| self.queue.submit(task));
+            match res {
+                Ok(()) => {
+                    let t = &mut self.triggers[i];
+                    t.fires += 1;
+                    t.last_fire_ms = Some(now);
+                    ("fired", Some(fire_id))
+                }
+                Err(_) => ("failed", None),
+            }
+        };
+        self.log(&id, Event::Trigger { outcome: outcome.to_string(), task_id });
+        outcome
     }
 
     pub fn approve(&mut self, id: &str) -> Result<(), String> {
@@ -191,6 +308,7 @@ impl Engine {
 
     /// Start every Ready task that fits the pool. Non-blocking.
     pub fn tick(&mut self) {
+        self.run_triggers();
         let pending: Vec<TaskId> =
             self.queue.all().into_iter().filter(|t| t.state == TaskState::Pending).map(|t| t.id.clone()).collect();
         let ready = self.queue.ready();
@@ -517,6 +635,9 @@ pub fn logged_json(l: &Logged) -> Value {
             ("state", vec![("state", Value::str(state)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
         }
         Event::Approval { status } => ("approval", vec![("status", Value::str(status))]),
+        Event::Trigger { outcome, task_id } => {
+            ("trigger", vec![("outcome", Value::str(outcome)), ("task_id", task_id.as_deref().map_or(Value::Null, Value::str))])
+        }
     };
     let mut o = vec![
         ("seq".to_string(), Value::Num(l.seq as f64)),
@@ -552,6 +673,10 @@ fn logged_from(v: &Value) -> Result<Logged, String> {
             reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
         },
         "approval" => Event::Approval { status: sval(v, "status")? },
+        "trigger" => Event::Trigger {
+            outcome: sval(v, "outcome")?,
+            task_id: v.get("task_id").and_then(Value::as_str).map(str::to_string),
+        },
         other => return Err(format!("unknown event '{other}'")),
     };
     Ok(Logged {
