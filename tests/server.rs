@@ -323,3 +323,21 @@ fn connection_cap_is_503_above_64() {
     drop(idle);
     srv.stop();
 }
+
+#[test]
+fn access_full_needs_approval_and_bad_access_is_400() {
+    let (_d, s) = start("access");
+    let port = s.port();
+    let body = r#"{"id":"f1","agent":"claude","prompt":"tidy up","cwd":"/tmp","access":"full"}"#;
+    let (code, resp) = http(port, "POST", "/tasks", &auth(), body);
+    assert_eq!(code, 201, "{resp}");
+    let held = wait_for(10, || {
+        let (_, r) = http(port, "GET", "/tasks/f1", &auth(), "");
+        body_of(&r).contains("\"state\":\"needs_approval\"") && body_of(&r).contains("\"access\":\"full\"")
+    });
+    assert!(held, "full access task was not held");
+
+    let bad = r#"{"id":"f2","agent":"claude","prompt":"x","cwd":"/tmp","access":"root"}"#;
+    assert_eq!(http(port, "POST", "/tasks", &auth(), bad).0, 400);
+    s.stop();
+}

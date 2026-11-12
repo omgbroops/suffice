@@ -1,7 +1,7 @@
 //! Durable task queue: an append-only JSONL journal in the data dir, replayed on start, so a crash
 //! or reboot loses nothing. Owns task state transitions and dependency order.
 use crate::json::{self, Value};
-use crate::types::{AgentKind, Task, TaskId, TaskState};
+use crate::types::{Access, AgentKind, Task, TaskId, TaskState};
 use std::collections::{BTreeMap, HashMap};
 use std::fs::{File, OpenOptions};
 use std::io::{self, Write};
@@ -292,6 +292,7 @@ fn task_to_json(t: &Task) -> Value {
         ("attempts".into(), Value::Num(t.attempts as f64)),
         ("timeout_secs".into(), Value::Num(t.timeout_secs as f64)),
         ("model".into(), opt_json(&t.model)),
+        ("access".into(), Value::str(t.access.name())),
         ("env".into(), env_to_json(&t.env)),
         ("state".into(), state_to_json(&t.state)),
         ("created_ms".into(), Value::Num(t.created_ms as f64)),
@@ -310,6 +311,11 @@ fn task_from_json(v: &Value) -> Result<Task, String> {
         attempts: field_num(v, "attempts")?,
         timeout_secs: field_num(v, "timeout_secs")?,
         model: field_opt(v, "model"),
+        // A missing field is an old journal line: Edit, the default.
+        access: match field_opt(v, "access") {
+            None => Access::Edit,
+            Some(a) => Access::from_name(&a).ok_or_else(|| format!("unknown access '{a}'"))?,
+        },
         env: env_from_json(v.get("env").ok_or("missing 'env'")?)?,
         state: state_from_json(v.get("state").ok_or("missing 'state'")?)?,
         created_ms: field_num(v, "created_ms")?,

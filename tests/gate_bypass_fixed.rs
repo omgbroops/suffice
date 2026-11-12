@@ -1,6 +1,6 @@
 //! Reviewer probes, now asserted. Every bypass must Hold; false positives must Allow.
 use loom::gate::{check_event, check_task, Verdict};
-use loom::types::{AgentKind, Event, Task, TaskState};
+use loom::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
@@ -16,6 +16,7 @@ fn task(p: &str) -> Task {
         attempts: 0,
         timeout_secs: 60,
         model: None,
+        access: Access::Edit,
         env: BTreeMap::new(),
         state: TaskState::Ready,
         created_ms: 0,

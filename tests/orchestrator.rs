@@ -1,5 +1,5 @@
 use loom::orchestrator::Engine;
-use loom::types::{AgentKind, Event, Task, TaskState};
+use loom::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -38,6 +38,7 @@ fn task(id: &str, deps: &[&str], max_retries: u32) -> Task {
         attempts: 0,
         timeout_secs: 60,
         model: None,
+        access: Access::Edit,
         env: BTreeMap::new(),
         state: TaskState::Pending,
         created_ms: 1,

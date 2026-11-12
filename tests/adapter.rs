@@ -1,5 +1,5 @@
 use loom::adapter::{command, parse_line};
-use loom::types::{AgentKind, Event, Task, TaskState};
+use loom::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
@@ -15,6 +15,7 @@ fn task(agent: AgentKind, prompt: &str, model: Option<&str>) -> Task {
         attempts: 0,
         timeout_secs: 60,
         model: model.map(str::to_string),
+        access: Access::Edit,
         env: BTreeMap::new(),
         state: TaskState::Pending,
         created_ms: 0,
@@ -40,7 +41,7 @@ fn claude_command_with_resume_and_model() {
     assert_eq!(c.program, "claude");
     assert_eq!(
         args(&c),
-        ["-p", "hi", "--output-format", "stream-json", "--verbose", "--resume", "sess-1", "--model", "sonnet"]
+        ["-p", "hi", "--output-format", "stream-json", "--verbose", "--permission-mode", "dontAsk", "--allowedTools", "Read", "Grep", "Glob", "Edit", "Write", "MultiEdit", "Bash(cargo test:*)", "Bash(cargo build:*)", "Bash(cargo check:*)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(ls:*)", "Bash(npm test:*)", "--resume", "sess-1", "--model", "sonnet"]
     );
     assert_eq!(c.stdin, None);
     assert_eq!(c.cwd, PathBuf::from("/tmp/work"));
@@ -49,7 +50,7 @@ fn claude_command_with_resume_and_model() {
 #[test]
 fn claude_command_plain() {
     let c = command(&task(AgentKind::Claude, "hi", None), None);
-    assert_eq!(args(&c), ["-p", "hi", "--output-format", "stream-json", "--verbose"]);
+    assert_eq!(args(&c), ["-p", "hi", "--output-format", "stream-json", "--verbose", "--permission-mode", "dontAsk", "--allowedTools", "Read", "Grep", "Glob", "Edit", "Write", "MultiEdit", "Bash(cargo test:*)", "Bash(cargo build:*)", "Bash(cargo check:*)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(ls:*)", "Bash(npm test:*)"]);
 }
 
 #[test]
@@ -58,14 +59,14 @@ fn codex_command_with_resume_and_model() {
     assert_eq!(c.program, "codex");
     assert_eq!(
         args(&c),
-        ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "resume", "th-9", "-m", "gpt-x", "do it"]
+        ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", "workspace-write", "resume", "th-9", "-m", "gpt-x", "do it"]
     );
 }
 
 #[test]
 fn codex_command_plain() {
     let c = command(&task(AgentKind::Codex, "do it", None), None);
-    assert_eq!(args(&c), ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "do it"]);
+    assert_eq!(args(&c), ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", "workspace-write", "do it"]);
 }
 
 #[test]
@@ -124,5 +125,59 @@ fn prompt_is_one_unchanged_argv_element() {
     for kind in [AgentKind::Claude, AgentKind::Codex, AgentKind::OpenCode, AgentKind::Gemini] {
         let c = command(&task(kind, prompt, None), None);
         assert_eq!(c.args.iter().filter(|a| a.as_str() == prompt).count(), 1);
+    }
+}
+
+fn with_access(agent: AgentKind, access: Access) -> Task {
+    let mut t = task(agent, "do it", None);
+    t.access = access;
+    t
+}
+
+#[test]
+fn claude_access_argv() {
+    let edit_tools = [
+        "Read", "Grep", "Glob", "Edit", "Write", "MultiEdit", "Bash(cargo test:*)", "Bash(cargo build:*)",
+        "Bash(cargo check:*)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(ls:*)",
+        "Bash(npm test:*)",
+    ];
+    let mut edit = vec!["--permission-mode", "dontAsk", "--allowedTools"];
+    edit.extend(edit_tools);
+    let read = ["--permission-mode", "dontAsk", "--allowedTools", "Read", "Grep", "Glob", "WebSearch"];
+    let full = ["--permission-mode", "bypassPermissions"];
+    for (access, want) in [(Access::Read, &read[..]), (Access::Edit, &edit[..]), (Access::Full, &full[..])] {
+        let c = command(&with_access(AgentKind::Claude, access), None);
+        let mut expect = vec!["-p".to_string(), "do it".into(), "--output-format".into(), "stream-json".into(), "--verbose".into()];
+        expect.extend(want.iter().map(|s| s.to_string()));
+        assert_eq!(c.args, expect, "{access:?}");
+    }
+}
+
+#[test]
+fn codex_access_argv() {
+    for (access, sandbox) in [(Access::Read, "read-only"), (Access::Edit, "workspace-write"), (Access::Full, "danger-full-access")] {
+        let c = command(&with_access(AgentKind::Codex, access), None);
+        assert_eq!(
+            c.args,
+            ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", sandbox, "do it"],
+            "{access:?}"
+        );
+        let r = command(&with_access(AgentKind::Codex, access), Some("sess"));
+        assert_eq!(
+            r.args,
+            ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", sandbox, "resume", "sess", "do it"],
+            "{access:?} resume"
+        );
+    }
+}
+
+#[test]
+fn opencode_gemini_generic_have_no_sandbox_flags() {
+    let generic = AgentKind::Generic { program: "echo".into(), args: vec![] };
+    for kind in [AgentKind::OpenCode, AgentKind::Gemini, generic] {
+        let base = command(&with_access(kind.clone(), Access::Edit), None).args;
+        for access in [Access::Read, Access::Full] {
+            assert_eq!(command(&with_access(kind.clone(), access), None).args, base, "{kind:?} {access:?}");
+        }
     }
 }

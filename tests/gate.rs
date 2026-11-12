@@ -1,5 +1,5 @@
 use loom::gate::{check_event, check_task, Verdict};
-use loom::types::{AgentKind, Event, Task, TaskState};
+use loom::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
@@ -15,6 +15,7 @@ fn task(prompt: &str) -> Task {
         attempts: 0,
         timeout_secs: 60,
         model: None,
+        access: Access::Edit,
         env: BTreeMap::new(),
         state: TaskState::Ready,
         created_ms: 0,
@@ -186,4 +187,11 @@ fn task_prompts() {
     for (prompt, want) in cases {
         assert_eq!(held(&check_task(&task(prompt))), *want, "prompt: {prompt}");
     }
+}
+
+#[test]
+fn full_access_task_is_held_for_approval() {
+    let mut t = task("summarize the repo");
+    t.access = Access::Full;
+    assert_eq!(check_task(&t), Verdict::Hold { reason: "full access needs OK".into() });
 }
