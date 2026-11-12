@@ -199,6 +199,22 @@ fn over_budget_claude_fails_over_to_suffice_and_usage_reports_percent() {
 }
 
 #[test]
+fn message_to_task_makes_follow_up_that_runs_and_is_logged() {
+    let s = start("message", &[]);
+    let body = format!(r#"{{"id":"orig","agent":"claude","prompt":"hi","cwd":{},"session_key":"sess"}}"#, cwd_json(&s));
+    let (c, b) = http(&s, "POST", "/tasks", &body);
+    assert_eq!(c, 201, "{b}");
+    let (c, b) = http(&s, "POST", "/tasks/orig/messages", r#"{"text":"and then?"}"#);
+    assert_eq!(c, 202, "{b}");
+    assert!(compact(&b).contains("\"task\":\"orig.m1\""), "{b}");
+    sleep(Duration::from_millis(1500));
+    assert_eq!(task_state(&s, "orig.m1"), "done");
+    let (c, b) = http(&s, "GET", "/events?task=orig&limit=500", "");
+    assert_eq!(c, 200, "{b}");
+    assert!(compact(&b).contains("\"kind\":\"user\""), "no user event: {b}");
+}
+
+#[test]
 fn fallback_to_kind_that_cannot_enforce_read_access_is_refused() {
     let s = start("fallback", &[]);
     let body = format!(

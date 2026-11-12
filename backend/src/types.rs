@@ -112,6 +112,8 @@ pub enum Event {
     RateLimit { window: String, utilization: Option<f64>, resets_at: Option<u64>, status: String },
     /// A task moved to another agent kind because of a budget cap or a rate limit.
     Failover { from: String, to: String, reason: String },
+    /// A message sent to a task from the UI; it becomes a follow-up task on the same session.
+    User { text: String },
 }
 
 impl TaskState {

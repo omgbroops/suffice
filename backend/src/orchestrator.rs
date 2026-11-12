@@ -159,6 +159,16 @@ extern "C" {
     fn kill(pid: i32, sig: i32) -> i32;
 }
 
+/// Why `Engine::message` refused a message.
+#[derive(Debug, PartialEq)]
+pub enum MsgErr {
+    NoTask,
+    Empty,
+    TooLong,
+    NoSession,
+    Submit(String),
+}
+
 pub struct Engine {
     dir: PathBuf,
     queue: Queue,
@@ -640,6 +650,46 @@ impl Engine {
             self.zombies.insert(run, r);
         }
         self.set_state(id, TaskState::Cancelled)
+    }
+
+    /// Send `text` to task `id` as a follow-up task `<id>.m<n>` on the same session. Returns its id.
+    pub fn message(&mut self, id: &str, text: &str) -> Result<TaskId, MsgErr> {
+        let orig = self.queue.get(id).ok_or(MsgErr::NoTask)?.clone();
+        if text.trim().is_empty() {
+            return Err(MsgErr::Empty);
+        }
+        if text.len() > 32768 {
+            return Err(MsgErr::TooLong);
+        }
+        if orig.session_key.is_none() {
+            return Err(MsgErr::NoSession);
+        }
+        let fid = (1..).map(|n| format!("{id}.m{n}")).find(|c| self.queue.get(c).is_none()).unwrap_or_default();
+        // a finished original needs no wait; a failed or cancelled one must not block its follow-up
+        let deps = if matches!(orig.state, TaskState::Done | TaskState::Failed { .. } | TaskState::Cancelled) {
+            vec![]
+        } else {
+            vec![id.to_string()]
+        };
+        let task = Task {
+            id: fid.clone(),
+            agent: orig.agent,
+            prompt: text.to_string(),
+            cwd: orig.cwd,
+            session_key: orig.session_key,
+            deps,
+            max_retries: 0,
+            attempts: 0,
+            timeout_secs: orig.timeout_secs,
+            model: orig.model,
+            access: orig.access,
+            env: BTreeMap::new(),
+            state: TaskState::Pending,
+            created_ms: now_ms(),
+        };
+        self.submit(task).map_err(MsgErr::Submit)?;
+        self.log(id, Event::User { text: text.to_string() });
+        Ok(fid)
     }
 
     pub fn sessions(&self) -> Vec<Session> {
@@ -1282,6 +1332,7 @@ pub fn logged_json(l: &Logged) -> Value {
             "failover",
             vec![("from", Value::str(from)), ("to", Value::str(to)), ("reason", Value::str(reason))],
         ),
+        Event::User { text } => ("user", vec![("text", Value::str(text))]),
     };
     let mut o = vec![
         ("seq".to_string(), Value::Num(l.seq as f64)),
@@ -1317,6 +1368,7 @@ fn logged_from(v: &Value) -> Result<Logged, String> {
             reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
         },
         "approval" => Event::Approval { status: sval(v, "status")? },
+        "user" => Event::User { text: sval(v, "text")? },
         "trigger" => Event::Trigger {
             outcome: sval(v, "outcome")?,
             task_id: v.get("task_id").and_then(Value::as_str).map(str::to_string),
