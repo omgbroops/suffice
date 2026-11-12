@@ -282,13 +282,14 @@ const FIND_JS: &str = "(e=>{if(!e)return null;e.scrollIntoView({block:'center'})
     e.setAttribute('data-suffice-gate','__NONCE__');return {x:r.x+r.width/2,y:r.y+r.height/2};})(document.querySelector(SEL))";
 // the clickable target at the point is what gets gated; hit says whether it is the stamped element or inside it
 const CONFIRM_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');const t=document.elementFromPoint(__X__,__Y__);\
-    if(!t)return null;const c=t.closest('button,a,input,select,textarea,[role=button],[onclick]')||t;\
-    return {text:c.innerText||c.textContent||'',value:c.value||'',type:c.getAttribute('type')||c.tagName,\
+    if(!t)return null;let c=t.closest('label,button,a,input,select,textarea,[role=button],[onclick]')||t;\
+    if(c.tagName==='LABEL'&&c.control)c=c.control;\
+    return {text:[c.innerText||c.textContent||'',c.getAttribute('aria-label'),c.title,c.alt].filter(Boolean).join(' '),value:c.value||'',type:c.getAttribute('type')||c.tagName,\
     action:(c.form&&c.form.action)||'',hit:!!s&&(c===s||s.contains(c))};})()";
 // focus the stamped element, then describe whatever actually has focus
 const FOCUS_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');if(!s)return null;s.focus();\
     const c=document.activeElement;if(!c)return null;\
-    return {text:c.innerText||c.textContent||'',value:c.value||'',type:c.getAttribute('type')||c.tagName,\
+    return {text:[c.innerText||c.textContent||'',c.getAttribute('aria-label'),c.title,c.alt].filter(Boolean).join(' '),value:c.value||'',type:c.getAttribute('type')||c.tagName,\
     action:(c.form&&c.form.action)||'',hit:c===s||s.contains(c)};})()";
 const UNSTAMP_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');if(s)s.removeAttribute('data-suffice-gate');return true;})()";
 
@@ -486,7 +487,8 @@ impl Browser {
     pub fn click(&mut self, selector: &str) -> Result<(), String> {
         let (x, y, nonce) = self.find(selector)?;
         let js = CONFIRM_JS.replace("__NONCE__", &nonce).replace("__X__", &format!("{x}")).replace("__Y__", &format!("{y}"));
-        // shortcut: a microsecond race remains between this check and the CDP mouse events, upgrade when a swapped-in target is seen getting clicked
+        // shortcut: coordinate clicks can't see JS listeners on plain divs/overlays that forward clicks, targets inside iframes/shadow roots,
+        // or a mousedown handler swapping the element before mouseup; upgrade to DOM.resolveNode + a gated objectId click if an agent hits one
         let mut result = match self.evaluate(&js) {
             Ok(info) => Self::vet("browser_click", selector, info, "click target changed"),
             Err(e) => Err(e),

@@ -132,3 +132,31 @@ fn click_refuses_when_element_is_covered_after_check() {
     drop(b);
     fs::remove_dir_all(dir).unwrap();
 }
+
+fn click_on(html: &str, sel: &str) -> (Result<(), String>, Value) {
+    let dir = std::env::temp_dir().join(format!("suffice-hunt2-lbl-{}-{}", std::process::id(), sel.len()));
+    fs::create_dir_all(&dir).unwrap();
+    let path = dir.join("index.html");
+    fs::write(&path, html).unwrap();
+    let mut b = Browser::launch(Path::new(CHROME)).expect("launch");
+    b.navigate(&format!("file://{}", path.display())).expect("navigate");
+    let r = b.click(sel);
+    let bought = b.evaluate("window.bought||0").unwrap();
+    drop(b);
+    fs::remove_dir_all(dir).unwrap();
+    (r, bought)
+}
+
+#[test]
+fn label_pointing_at_buy_button_is_gated_as_buy() {
+    let (r, bought) = click_on(r#"<label id=go for=buy>Continue</label><button id=buy onclick="window.bought=1">Buy now</button>"#, "#go");
+    assert!(r.unwrap_err().contains("held"));
+    assert_eq!(bought, Value::num(0.0));
+}
+
+#[test]
+fn icon_button_with_buy_aria_label_is_held() {
+    let (r, bought) = click_on(r#"<button id=b aria-label="Buy now" onclick="window.bought=1" style="width:40px;height:40px"></button>"#, "#b");
+    assert!(r.unwrap_err().contains("held"));
+    assert_eq!(bought, Value::num(0.0));
+}
