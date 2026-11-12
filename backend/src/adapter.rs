@@ -153,10 +153,37 @@ fn usage(u: Option<&Value>, cost_usd: Option<f64>) -> Event {
     }
 }
 
+/// One window of a `rate_limit_event`; its own resetsAt/status win over the top-level ones.
+fn rate_limit(window: &str, x: &Value, top: &str, top_reset: Option<u64>) -> Event {
+    Event::RateLimit {
+        window: window.to_string(),
+        utilization: match x.get("utilization") {
+            Some(Value::Num(n)) => Some(*n),
+            _ => None,
+        },
+        resets_at: x.get("resetsAt").and_then(Value::as_i64).and_then(|n| u64::try_from(n).ok()).or(top_reset),
+        status: sget(x, "status").unwrap_or_else(|| top.to_string()),
+    }
+}
+
 fn claude_event(v: &Value) -> Option<Vec<Event>> {
     let ty = v.get("type").and_then(Value::as_str)?;
     match ty {
-        "rate_limit_event" => Some(vec![]),
+        "rate_limit_event" => {
+            let info = v.get("rate_limit_info")?;
+            let top = sget(info, "status").unwrap_or_default();
+            let top_reset = info.get("resetsAt").and_then(Value::as_i64).and_then(|n| u64::try_from(n).ok());
+            let mut out = vec![];
+            if let Some(Value::Obj(ws)) = info.get("unifiedWindows") {
+                out.extend(ws.iter().map(|(w, x)| rate_limit(w, x, &top, top_reset)));
+            }
+            if out.is_empty() {
+                if let Some(w) = sget(info, "rateLimitType") {
+                    out.push(rate_limit(&w, info, &top, top_reset));
+                }
+            }
+            Some(out)
+        }
         "system" => match v.get("subtype").and_then(Value::as_str) {
             Some("init") => Some(vec![Event::Session { native_id: sget(v, "session_id")? }]),
             Some(s) if s.starts_with("hook") || s.starts_with("rate_limit") => Some(vec![]),

@@ -24,6 +24,10 @@ struct Run {
     agent: AgentKind,
     session: Option<String>,
     error: bool,
+    /// Set by a rejected rate limit or a rate-limit message on stderr; decides failover on exit.
+    rate_limited: bool,
+    /// Tool calls seen this run; a rate-limited run with any needs approval before a rerun.
+    tools: u32,
 }
 
 /// A run journaled in runs.json before spawn (nonce), then with its pid and start time.
@@ -34,6 +38,122 @@ struct LiveRun {
     /// `ps -o lstart` of the pid; "" until the pid is known.
     start: String,
 }
+
+/// A rate-limit message: a limit phrase and an HTTP 429 context, matched on whole tokens (ASCII case-insensitive).
+pub fn rate_limit_text(text: &str) -> bool {
+    let b = text.to_ascii_lowercase().into_bytes();
+    let bounded = |i: usize, n: usize| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b.get(i + n).is_none_or(|c| !c.is_ascii_alphanumeric());
+    let at = |p: &str| (0..b.len()).any(|i| b[i..].starts_with(p.as_bytes()) && bounded(i, p.len()));
+    let rate = (0..b.len()).any(|i| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b[i..].starts_with(b"rate") &&(b[i + 4..].starts_with(b"limit") || b[i + 4..].get(1..).is_some_and(|s| s.starts_with(b"limit"))));
+    // a bare 429 needs HTTP context ("took 1429ms", "429 ms" are not limits); the phrases stand alone
+    rate || b.windows(11).any(|w| w == b"usage limit") || ["429 too many", "status 429", "http 429", "error 429"].iter().any(|p| at(p))
+}
+
+/// Per-kind budget caps: kind name -> window -> max utilization (0.0-1.0) before the kind is skipped.
+pub type Caps = BTreeMap<String, BTreeMap<String, f64>>;
+/// Latest plan usage per kind and window: (utilization, resets_at unix s, status).
+type Limits = BTreeMap<String, BTreeMap<String, (Option<f64>, Option<u64>, String)>>;
+
+pub fn caps_json(caps: &Caps) -> Value {
+    Value::Obj(
+        caps.iter()
+            .map(|(k, ws)| (k.clone(), Value::Obj(ws.iter().map(|(w, c)| (w.clone(), Value::num(*c))).collect())))
+            .collect(),
+    )
+}
+
+/// None when the text is not a kind -> window -> 0.0..=1.0 map.
+pub fn parse_caps(text: &str) -> Option<Caps> {
+    let Value::Obj(kinds) = json::parse(text).ok()? else { return None };
+    kinds
+        .into_iter()
+        .map(|(k, v)| {
+            let Value::Obj(ws) = v else { return None };
+            let ws: BTreeMap<String, f64> = ws
+                .into_iter()
+                .map(|(w, c)| match c {
+                    Value::Num(n) if (0.0..=1.0).contains(&n) => Some((w, n)),
+                    _ => None,
+                })
+                .collect::<Option<_>>()?;
+            Some((k, ws))
+        })
+        .collect()
+}
+
+type Fallbacks = (HashMap<TaskId, (Vec<AgentKind>, u32)>, BTreeSet<TaskId>);
+
+fn parse_fallbacks(text: &str) -> Option<Fallbacks> {
+    let Value::Obj(tasks) = json::parse(text).ok()? else { return None };
+    let mut rerun = BTreeSet::new();
+    let map = tasks
+        .into_iter()
+        .map(|(id, v)| {
+            if let Some(Value::Bool(true)) = v.get("rerun") {
+                rerun.insert(id.clone());
+            }
+            let Some(Value::Arr(names)) = v.get("kinds") else { return None };
+            let kinds = names
+                .iter()
+                .map(|n| match n.as_str() {
+                    Some("claude") => Some(AgentKind::Claude),
+                    Some("opencode") => Some(AgentKind::OpenCode),
+                    Some("gemini") => Some(AgentKind::Gemini),
+                    Some("suffice") => Some(AgentKind::Suffice),
+                    _ => None,
+                })
+                .collect::<Option<Vec<_>>>()?;
+            let Some(Value::Num(waits)) = v.get("waits") else { return None };
+            Some((id, (kinds, *waits as u32)))
+        })
+        .collect::<Option<HashMap<_, _>>>()?;
+    Some((map, rerun))
+}
+
+fn parse_limits(text: &str) -> Option<Limits> {
+    let Value::Obj(kinds) = json::parse(text).ok()? else { return None };
+    kinds
+        .into_iter()
+        .map(|(k, v)| {
+            let Value::Obj(ws) = v else { return None };
+            let ws = ws
+                .into_iter()
+                .map(|(w, x)| {
+                    let util = match x.get("utilization") {
+                        Some(Value::Num(n)) => Some(*n),
+                        _ => None,
+                    };
+                    let reset = x.get("resets_at").and_then(Value::as_i64).and_then(|n| u64::try_from(n).ok());
+                    let status = x.get("status").and_then(Value::as_str).unwrap_or("").to_string();
+                    (w, (util, reset, status))
+                })
+                .collect();
+            Some((k, ws))
+        })
+        .collect()
+}
+
+/// A missing file is empty; an unreadable one is set aside and reported as torn (true).
+fn read_or_set_aside<T: Default>(path: &Path, parse: fn(&str) -> Option<T>) -> io::Result<(T, bool)> {
+    match fs::read_to_string(path) {
+        Ok(text) => Ok(parse(&text).map_or_else(
+            || {
+                crate::types::set_aside(path);
+                (T::default(), true)
+            },
+            |v| (v, false),
+        )),
+        Err(e) if e.kind() == io::ErrorKind::NotFound => Ok((T::default(), false)),
+        Err(e) => Err(e),
+    }
+}
+
+fn write_json(dir: &Path, name: &str, v: &Value) -> io::Result<()> {
+    let tmp = dir.join(format!("{name}.tmp"));
+    fs::write(&tmp, format!("{v}\n"))?;
+    fs::rename(tmp, dir.join(name))
+}
+
 
 extern "C" {
     fn kill(pid: i32, sig: i32) -> i32;
@@ -67,6 +187,13 @@ pub struct Engine {
     triggers: Vec<Trigger>,
     /// Time source for triggers; tests replace it with set_clock.
     clock: Box<dyn Fn() -> u64 + Send>,
+    caps: Caps,
+    limits: Limits,
+    /// Fallback agent kinds per task, tried in order on an over-cap or rate-limited exit, and the
+    /// rate-limit waits spent so far. Persisted in fallbacks.json.
+    fallbacks: HashMap<TaskId, (Vec<AgentKind>, u32)>,
+    /// Tasks whose rate-limited partial run had tool calls: a rerun on a fallback needs approval.
+    rerun: BTreeSet<TaskId>,
 }
 
 impl Engine {
@@ -87,6 +214,9 @@ impl Engine {
         let decisions = load_decisions(dir)?;
         let (triggers, trig_note) = triggers::load(dir)?;
         let orphans = load_runs(dir)?;
+        let (caps, caps_torn) = read_or_set_aside(&dir.join("budgets.json"), parse_caps)?;
+        let (limits, limits_torn) = read_or_set_aside(&dir.join("limits.json"), parse_limits)?;
+        let ((fallbacks, rerun), fallbacks_torn) = read_or_set_aside(&dir.join("fallbacks.json"), parse_fallbacks)?;
         let (tx, rx) = channel();
         let mut engine = Engine {
             dir: dir.to_path_buf(),
@@ -109,7 +239,17 @@ impl Engine {
             programs: BTreeMap::new(),
             triggers,
             clock: Box::new(now_ms),
+            caps,
+            limits,
+            fallbacks,
+            rerun,
         };
+        for (torn, file) in [(caps_torn, "budgets.json"), (limits_torn, "limits.json"), (fallbacks_torn, "fallbacks.json")] {
+            if torn {
+                let note = format!("{file} was unreadable and set aside; defaults used");
+                engine.log("budgets", Event::Stderr { line: note });
+            }
+        }
         // runs of the crashed server: their agents may still be alive and hold the task's session
         let (killed, warned) = kill_orphans(&orphans);
         for task in killed {
@@ -140,6 +280,103 @@ impl Engine {
 
     pub fn set_clock(&mut self, f: impl Fn() -> u64 + Send + 'static) {
         self.clock = Box::new(f);
+    }
+
+    /// Submit a task with agent kinds to fall back to on an over-cap or rate-limited exit.
+    pub fn submit_with(&mut self, task: Task, fallback: Vec<AgentKind>) -> Result<(), String> {
+        let id = task.id.clone();
+        let primary = crate::server::kind_name(&task.agent);
+        let mut kinds: Vec<AgentKind> = vec![];
+        for k in fallback {
+            let name = crate::server::kind_name(&k);
+            if name != primary && !kinds.iter().any(|x| crate::server::kind_name(x) == name) {
+                kinds.push(k);
+            }
+        }
+        self.queue.submit(task)?;
+        self.fallbacks.insert(id, (kinds, 0));
+        let _ = self.save_fallbacks();
+        Ok(())
+    }
+
+    pub fn budgets(&self) -> &Caps {
+        &self.caps
+    }
+
+    pub fn set_budgets(&mut self, caps: Caps) -> io::Result<()> {
+        self.caps = caps;
+        self.save_budgets()
+    }
+
+    /// Latest (utilization, resets_at, status) for a kind's plan window.
+    pub fn limit(&self, kind: &str, window: &str) -> Option<&(Option<f64>, Option<u64>, String)> {
+        self.limits.get(kind)?.get(window)
+    }
+
+    /// Unix ms when the kind unblocks if a cap in `caps` is reached now (None = not over cap).
+    fn over_cap(&self, kind: &str, now: u64) -> Option<u64> {
+        let caps = self.caps.get(kind)?;
+        caps.iter()
+            .filter_map(|(w, cap)| {
+                let (util, reset, _) = self.limit(kind, w)?;
+                let (util, reset) = ((*util)?, (*reset)? * 1000);
+                (util >= *cap && reset > now).then_some(reset)
+            })
+            .max()
+    }
+
+    /// Latest unix ms any window of a kind resets at, if still in the future.
+    fn latest_reset(&self, kind: &str, now: u64) -> Option<u64> {
+        self.limits.get(kind)?.values().filter_map(|(_, r, _)| (*r)?.checked_mul(1000)).filter(|r| *r > now).max()
+    }
+
+    /// Move a task to its next fallback kind; false when none is left.
+    fn failover(&mut self, id: &str, task: &Task, reason: &str) -> bool {
+        let next = match self.fallbacks.get_mut(id) {
+            Some((l, _)) if !l.is_empty() => l.remove(0),
+            _ => return false,
+        };
+        // the approval covered the old kind's run; the new kind's prompt gate must run again
+        self.approved.remove(id);
+        let _ = self.save_approvals();
+        let _ = self.save_fallbacks();
+        let (from, to) = (crate::server::kind_name(&task.agent), crate::server::kind_name(&next));
+        // a new session key keeps the next CLI from resuming the previous agent's conversation
+        let session = task.session_key.as_ref().map(|k| format!("{k}@{to}"));
+        if self.queue.retarget(id, next.clone(), session, TaskState::Ready, task.attempts).is_err() {
+            return false;
+        }
+        let ev = Event::Failover { from: from.into(), to: to.into(), reason: reason.into() };
+        self.log(id, ev);
+        true
+    }
+
+    fn save_fallbacks(&self) -> io::Result<()> {
+        let tasks = self.fallbacks.iter().map(|(id, (kinds, waits))| {
+            let names = kinds.iter().map(|k| Value::str(crate::server::kind_name(k))).collect();
+            let rerun = Value::Bool(self.rerun.contains(id));
+            (id.clone(), Value::Obj(vec![("kinds".into(), Value::Arr(names)), ("waits".into(), Value::num(*waits as f64)), ("rerun".into(), rerun)]))
+        });
+        write_json(&self.dir, "fallbacks.json", &Value::Obj(tasks.collect()))
+    }
+
+    fn save_budgets(&self) -> io::Result<()> {
+        write_json(&self.dir, "budgets.json", &caps_json(&self.caps))
+    }
+
+    fn save_limits(&self) -> io::Result<()> {
+        let kinds = self.limits.iter().map(|(k, ws)| {
+            let ws = ws.iter().map(|(w, (util, reset, status))| {
+                let fields = vec![
+                    ("utilization".into(), util.map_or(Value::Null, Value::Num)),
+                    ("resets_at".into(), reset.map_or(Value::Null, |r| Value::num(r as f64))),
+                    ("status".into(), Value::str(status)),
+                ];
+                (w.clone(), Value::Obj(fields))
+            });
+            (k.clone(), Value::Obj(ws.collect()))
+        });
+        write_json(&self.dir, "limits.json", &Value::Obj(kinds.collect()))
     }
 
     pub fn triggers(&self) -> &[Trigger] {
@@ -305,6 +542,11 @@ impl Engine {
             Some(_) => return Err(format!("task '{id}' is not waiting for approval")),
             None => return Err(format!("no task '{id}'")),
         }
+        if self.rerun.remove(id) {
+            let _ = self.save_fallbacks();
+            let task = self.queue.get(id).cloned().ok_or(format!("no task '{id}'"))?;
+            return if self.failover(id, &task, "rate limited") { Ok(()) } else { Err(format!("task '{id}' has no fallback left")) };
+        }
         self.approved.insert(id.to_string());
         if let Some((name, input)) = self.held.remove(id) {
             self.calls.insert((id.to_string(), name, input));
@@ -329,6 +571,11 @@ impl Engine {
     /// Move a task to `state` and log the change.
     fn set_state(&mut self, id: &str, state: TaskState) -> Result<(), String> {
         self.queue.set_state(id, state)?;
+        if self.queue.get(id).is_some_and(|t| matches!(t.state, TaskState::Done | TaskState::Cancelled | TaskState::Failed { .. })) {
+            self.fallbacks.remove(id);
+            self.rerun.remove(id);
+            let _ = self.save_fallbacks();
+        }
         self.log_state(id);
         Ok(())
     }
@@ -352,6 +599,14 @@ impl Engine {
             Some(_) => Err(format!("task '{id}' is not failed or cancelled")),
             None => Err(format!("no task '{id}'")),
         }
+    }
+
+    /// Refuse a pending approval: a rate-limited rerun is marked Failed, anything else is cancelled.
+    pub fn deny(&mut self, id: &str) -> Result<(), String> {
+        if self.rerun.remove(id) {
+            return self.set_state(id, TaskState::Failed { error: "rate limited rerun denied".into() });
+        }
+        self.cancel(id)
     }
 
     pub fn cancel(&mut self, id: &str) -> Result<(), String> {
@@ -398,6 +653,17 @@ impl Engine {
     /// Start every Ready task that fits the pool. Non-blocking.
     pub fn tick(&mut self) {
         self.run_triggers();
+        let now = (self.clock)();
+        let due: Vec<TaskId> = self
+            .queue
+            .all()
+            .into_iter()
+            .filter(|t| matches!(t.state, TaskState::Waiting { until } if until <= now))
+            .map(|t| t.id.clone())
+            .collect();
+        for id in due {
+            let _ = self.set_state(&id, TaskState::Ready);
+        }
         let pending: Vec<TaskId> =
             self.queue.all().into_iter().filter(|t| t.state == TaskState::Pending).map(|t| t.id.clone()).collect();
         let ready = self.queue.ready();
@@ -425,6 +691,13 @@ impl Engine {
                     continue;
                 }
             }
+            if let Some(reset) = self.over_cap(crate::server::kind_name(&task.agent), now) {
+                let kind = crate::server::kind_name(&task.agent);
+                if !self.failover(&id, &task, &format!("{kind} over budget cap")) {
+                    let _ = self.set_state(&id, TaskState::Waiting { until: reset });
+                }
+                continue;
+            }
             let resume = match &task.session_key {
                 Some(k) => {
                     if !self.sessions.claim(k, &task.agent, &id) {
@@ -447,7 +720,7 @@ impl Engine {
                 break;
             }
             let session = task.session_key.clone();
-            self.runs.insert(run, Run { task: id.clone(), agent: task.agent.clone(), session, error: false });
+            self.runs.insert(run, Run { task: id.clone(), agent: task.agent.clone(), session, error: false, rate_limited: false, tools: 0 });
         }
     }
 
@@ -528,6 +801,36 @@ impl Engine {
                     };
                     TaskState::Failed { error }
                 };
+                if r.rate_limited && !killed && matches!(state, TaskState::Failed { .. }) {
+                    let now = (self.clock)();
+                    let kind = crate::server::kind_name(&r.agent);
+                    let next = self.fallbacks.get(&r.task).and_then(|(l, _)| l.first()).map(|k| crate::server::kind_name(k));
+                    if let (Some(next), true) = (next, r.tools > 0) {
+                        let reason = format!("rerun on {next} after rate limit (partial run had {} tool calls)", r.tools);
+                        self.rerun.insert(r.task.clone());
+                        let _ = self.save_fallbacks();
+                        let _ = self.set_state(&r.task, TaskState::NeedsApproval { reason });
+                        return;
+                    }
+                    if next.is_some() {
+                        if let Some(task) = self.queue.get(&r.task).cloned() {
+                            if self.failover(&r.task, &task, "rate limited") {
+                                return;
+                            }
+                        }
+                    }
+                    let entry = self.fallbacks.entry(r.task.clone()).or_insert((vec![], 0));
+                    if entry.1 >= 3 {
+                        let _ = self.set_state(&r.task, TaskState::Failed { error: "rate limited, gave up".into() });
+                        return;
+                    }
+                    entry.1 += 1;
+                    let _ = self.save_fallbacks();
+                    // shortcut: a rate limit with no known reset waits a fixed 60s, upgrade when reset is always reported
+                    let until = self.latest_reset(kind, now).unwrap_or(now + 60_000);
+                    let _ = self.set_state(&r.task, TaskState::Waiting { until });
+                    return;
+                }
                 // Invalid transitions (cancelled or held runs) are expected here and ignored.
                 let _ = self.set_state(&r.task, state);
             }
@@ -547,7 +850,26 @@ impl Engine {
         if matches!(ev, Event::Result { is_error: true, .. }) {
             r.error = true;
         }
+        if matches!(ev, Event::ToolCall { .. }) {
+            r.tools += 1;
+        }
         let (task, session) = (r.task.clone(), r.session.clone());
+        let kind = crate::server::kind_name(&r.agent);
+        let limited = match &ev {
+            Event::RateLimit { status, .. } => status == "rejected",
+            Event::Stderr { line } => rate_limit_text(line),
+            Event::Result { text, .. } => rate_limit_text(text),
+            _ => false,
+        };
+        if limited {
+            r.rate_limited = true;
+        }
+        if let Event::RateLimit { window, utilization, resets_at, status } = &ev {
+            let w = (*utilization, *resets_at, status.clone());
+            self.limits.entry(kind.into()).or_default().insert(window.clone(), w);
+            let _ = self.save_limits();
+            self.log(&task, ev.clone());
+        }
         if let (Event::Session { native_id }, Some(k)) = (&ev, &session) {
             self.sessions.set_native(k, native_id);
         }
@@ -922,6 +1244,19 @@ pub fn logged_json(l: &Logged) -> Value {
         Event::Trigger { outcome, task_id, reason } => {
             ("trigger", vec![("outcome", Value::str(outcome)), ("task_id", task_id.as_deref().map_or(Value::Null, Value::str)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
         }
+        Event::RateLimit { window, utilization, resets_at, status } => (
+            "rate_limit",
+            vec![
+                ("window", Value::str(window)),
+                ("utilization", utilization.map_or(Value::Null, Value::Num)),
+                ("resets_at", resets_at.map_or(Value::Null, |r| Value::Num(r as f64))),
+                ("status", Value::str(status)),
+            ],
+        ),
+        Event::Failover { from, to, reason } => (
+            "failover",
+            vec![("from", Value::str(from)), ("to", Value::str(to)), ("reason", Value::str(reason))],
+        ),
     };
     let mut o = vec![
         ("seq".to_string(), Value::Num(l.seq as f64)),

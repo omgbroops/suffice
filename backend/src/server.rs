@@ -2,7 +2,7 @@
 //! send it closures and wait for the answer. Std only: a small HTTP/1.1 parser, one request per connection.
 
 use crate::json::{self, Value};
-use crate::orchestrator::{logged_json, Engine};
+use crate::orchestrator::{caps_json, logged_json, parse_caps, Engine};
 use crate::triggers::{Trigger, When};
 use crate::types::{now_ms, Access, AgentKind, Event, Logged, Task, TaskState};
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -489,10 +489,20 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 if !e.tasks().iter().any(|t| t.id == task && matches!(t.state, TaskState::NeedsApproval { .. })) {
                     return err(409, format!("task {task} is not awaiting approval"));
                 }
-                decide(e, &task, "denied", |e, t| e.cancel(t))
+                decide(e, &task, "denied", |e, t| e.deny(t))
             })
         }
         ("GET", ["usage"]) => ask_res(ctx, |e| (200, Value::Arr(usage_rows(&e.tasks(), &e.events_since(0))))),
+        ("GET", ["budgets"]) => ask_res(ctx, |e| (200, caps_json(e.budgets()))),
+        ("PUT", ["budgets"]) => {
+            let Some(caps) = std::str::from_utf8(body).ok().and_then(parse_caps) else {
+                return Err(err(400, "budgets must be {kind: {window: 0.0-1.0}}"));
+            };
+            ask_res(ctx, move |e| match e.set_budgets(caps) {
+                Ok(()) => (200, caps_json(e.budgets())),
+                Err(m) => err(500, m.to_string()),
+            })
+        }
         ("GET", ["triggers"]) => ask_res(ctx, |e| (200, Value::Arr(e.triggers().iter().map(Trigger::to_json).collect()))),
         ("POST", ["triggers"]) => {
             let v = match parse_body(body) {
@@ -623,6 +633,8 @@ fn kind_of(e: &Event) -> &'static str {
         Event::State { .. } => "state",
         Event::Approval { .. } => "approval",
         Event::Trigger { .. } => "trigger",
+        Event::RateLimit { .. } => "rate_limit",
+        Event::Failover { .. } => "failover",
     }
 }
 
@@ -630,7 +642,7 @@ fn task_keys(tasks: &[Task]) -> HashMap<String, Option<String>> {
     tasks.iter().map(|t| (t.id.clone(), t.session_key.clone())).collect()
 }
 
-fn kind_name(a: &AgentKind) -> &'static str {
+pub fn kind_name(a: &AgentKind) -> &'static str {
     match a {
         AgentKind::Claude => "claude",
         AgentKind::Codex => "codex",
@@ -726,13 +738,33 @@ fn create_task(e: &mut Engine, v: &Value) -> Res {
         Ok(t) => t,
         Err(m) => return err(400, m),
     };
-    if let Err(m) = e.submit(task) {
+    let fallback = match parse_fallback(v) {
+        Ok(f) => f,
+        Err(m) => return err(400, m),
+    };
+    if let Err(m) = e.submit_with(task, fallback) {
         return err(400, m);
     }
     match e.tasks().iter().find(|t| t.id == id) {
         Some(t) => (201, task_json(t)),
         None => err(500, "task vanished after submit"),
     }
+}
+
+/// Optional "fallback": agent names tried in order on an over-cap or rate-limited exit. Codex is never automatic.
+fn parse_fallback(v: &Value) -> Result<Vec<AgentKind>, String> {
+    let Some(names) = v.get("fallback").and_then(Value::as_arr) else { return Ok(vec![]) };
+    names
+        .iter()
+        .map(|n| match n.as_str() {
+            Some("claude") => Ok(AgentKind::Claude),
+            Some("opencode") => Ok(AgentKind::OpenCode),
+            Some("gemini") => Ok(AgentKind::Gemini),
+            Some("suffice") => Ok(AgentKind::Suffice),
+            Some("codex") => Err("codex is never an automatic fallback".to_string()),
+            _ => Err("fallback must be a list of claude, opencode, gemini or suffice".to_string()),
+        })
+        .collect()
 }
 
 pub fn parse_task(v: &Value, id: String) -> Result<Task, String> {
@@ -918,10 +950,15 @@ fn approval_json(t: &Task, held: Option<(String, String)>, ms: u64, status: &str
 fn usage_rows(tasks: &[Task], events: &[Logged]) -> Vec<Value> {
     let kinds: HashMap<&str, &'static str> = tasks.iter().map(|t| (t.id.as_str(), kind_name(&t.agent))).collect();
     let mut sums: BTreeMap<&'static str, (u64, u64, u64, Option<f64>)> = BTreeMap::new();
+    // latest plan window per kind: (window, utilization, resets_at)
+    let mut plan: HashMap<&'static str, (String, Option<f64>, Option<u64>)> = HashMap::new();
     for l in events {
         let Some(&kind) = kinds.get(l.task.as_str()) else { continue };
         let row = sums.entry(kind).or_default();
         match &l.event {
+            Event::RateLimit { window, utilization, resets_at, .. } => {
+                plan.insert(kind, (window.clone(), *utilization, *resets_at));
+            }
             Event::Exit { .. } => row.0 += 1,
             Event::Usage { input_tokens, output_tokens, cost_usd } => {
                 row.1 += input_tokens;
@@ -935,16 +972,20 @@ fn usage_rows(tasks: &[Task], events: &[Logged]) -> Vec<Value> {
     }
     sums.into_iter()
         .map(|(kind, (runs, i, o, cost))| {
+            let (window, percent, resets_ms) = match plan.get(kind) {
+                Some((w, u, r)) => (Value::str(w), u.map_or(Value::Null, |u| Value::Num(u * 100.0)), r.map_or(Value::Null, |r| Value::Num((r * 1000) as f64))),
+                None => (Value::Null, Value::Null, Value::Null),
+            };
             obj(vec![
                 ("subscription", Value::Null),
                 ("kind", Value::str(kind)),
-                ("window", Value::Null),
+                ("window", window),
                 ("runs", Value::Num(runs as f64)),
                 ("input_tokens", Value::Num(i as f64)),
                 ("output_tokens", Value::Num(o as f64)),
                 ("cost_usd", cost.map_or(Value::Null, Value::Num)),
-                ("percent", Value::Null),
-                ("resets_ms", Value::Null),
+                ("percent", percent),
+                ("resets_ms", resets_ms),
                 ("status", Value::str("ok")),
             ])
         })

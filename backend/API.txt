@@ -39,8 +39,10 @@ GET  /tasks/:id
 GET  /graph                      { "nodes": [Task…], "edges": [{"from":"t40","to":"t42"}] }
 POST /tasks                      body: { "id"?: auto, "agent", "prompt", "cwd", "session_key"?,
                                         "deps"?: [], "max_retries"?: 0, "timeout_secs"?: 1800,
-                                        "model"?, "env"?: {} }  -> 201 Task
-                                 400 on unknown dep / duplicate id / cycle
+                                        "model"?, "env"?: {}, "fallback"?: ["claude", …] }  -> 201 Task
+                                 fallback: kinds tried in order on an over-cap or rate-limited exit
+                                 (session becomes "<key>@<kind>"; codex is never automatic)
+                                 400 on unknown dep / duplicate id / cycle / bad fallback
 POST /tasks/:id/cancel           -> Task (state cancelled; kills the run if running)
 POST /tasks/:id/retry            failed|cancelled -> ready
 
@@ -90,6 +92,9 @@ GET /usage
      "resets_ms": … | null,
      "status": "ok" | "near_limit" | "limited" }]
 SSE: event: usage  data: <one row>  whenever it changes
+GET /budgets                     { "claude": { "seven_day": 0.9 } }  -> kind -> window -> cap (0.0-1.0)
+PUT /budgets                     same body, replaces all caps  -> 200 same body; 400 when malformed
+                                 a kind at or over its cap is skipped (failover, else waiting)
 
 ---------------------------------------------------------------- HEALTH
 GET /health   { "ok": true, "version": "0.1", "running": 3, "max_parallel": 4, "uptime_ms": … }
