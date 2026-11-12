@@ -341,3 +341,20 @@ fn held_run_keeps_session_until_it_exits() {
     assert!(t1_exited);
     assert!(!matches!(state(&e, "t2"), TaskState::Pending | TaskState::Ready));
 }
+
+#[test]
+fn manual_retry_after_approval_asks_again() {
+    let d = Dir::new("retry-reask");
+    let mut e = engine(&d.0, 1);
+    let mut t = with_env(task("q", &[], 0), &[("MODE", "fail")]);
+    t.prompt = "publish the package".into();
+    e.submit(t).unwrap();
+    e.tick();
+    assert!(matches!(state(&e, "q"), TaskState::NeedsApproval { .. }));
+    e.approve("q").unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert!(matches!(state(&e, "q"), TaskState::Failed { .. }), "{:?}", state(&e, "q"));
+    e.retry("q").unwrap();
+    e.tick();
+    assert!(matches!(state(&e, "q"), TaskState::NeedsApproval { .. }), "{:?}", state(&e, "q"));
+}

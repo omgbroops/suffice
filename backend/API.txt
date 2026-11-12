@@ -46,7 +46,7 @@ POST /tasks                      body: { "id"?: auto, "agent", "prompt", "cwd", 
                                  access is "full"; e.g. access "read" + fallback ["opencode"] -> 400
                                  400 on unknown dep / duplicate id / cycle / bad fallback
 POST /tasks/:id/cancel           -> Task (state cancelled; kills the run if running)
-POST /tasks/:id/retry            failed|cancelled -> ready
+POST /tasks/:id/retry            failed|cancelled -> ready (a past approval is dropped: gated prompts ask again)
 POST /tasks/:id/messages         {"text"} -> 202 {"task": "<id>.m<n>"}  follow-up task on the same session
                                  (waits for the original unless it is done/failed/cancelled); logs a "user"
                                  event on the original. 404 unknown id; 400 empty or > 32768 bytes; 409 no session_key

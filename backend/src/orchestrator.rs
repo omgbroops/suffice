@@ -632,7 +632,13 @@ impl Engine {
     /// Re-queue a failed or cancelled task.
     pub fn retry(&mut self, id: &str) -> Result<(), String> {
         match self.queue.get(id).map(|t| &t.state) {
-            Some(TaskState::Failed { .. } | TaskState::Cancelled) => self.set_state(id, TaskState::Ready),
+            Some(TaskState::Failed { .. } | TaskState::Cancelled) => {
+                // a manual retry repeats any outward action, so the prompt gate asks again
+                if self.approved.remove(id) {
+                    self.save_approvals().map_err(|e| e.to_string())?;
+                }
+                self.set_state(id, TaskState::Ready)
+            }
             Some(_) => Err(format!("task '{id}' is not failed or cancelled")),
             None => Err(format!("no task '{id}'")),
         }
