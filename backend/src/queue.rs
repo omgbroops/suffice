@@ -190,17 +190,34 @@ impl Queue {
     fn append(&mut self, v: &Value) -> io::Result<()> {
         let mut line = v.to_string();
         line.push('\n');
-        self.file.write_all(line.as_bytes())?;
-        self.file.flush()?;
+        let len = self.file.metadata()?.len();
         // plain fsync(2), not std's sync_data: macOS std issues F_FULLFSYNC (~4 ms per line), as SQLite avoids
-        extern "C" {
-            fn fsync(fd: i32) -> i32;
-        }
-        if unsafe { fsync(self.file.as_raw_fd()) } != 0 {
-            return Err(io::Error::last_os_error());
-        }
-        Ok(())
+        write_or_rollback(&mut self.file, len, line.as_bytes(), |f| {
+            extern "C" {
+                fn fsync(fd: i32) -> i32;
+            }
+            if unsafe { fsync(f.as_raw_fd()) } != 0 {
+                return Err(io::Error::last_os_error());
+            }
+            Ok(())
+        }, |f, n| f.set_len(n))
     }
+}
+
+/// Writes `line` after the `len` bytes already in `f`, then runs `sync`. On any error `rollback`
+/// cuts the file back to `len`, so a torn tail never sits in front of the next append.
+pub fn write_or_rollback<F: Write>(
+    f: &mut F,
+    len: u64,
+    line: &[u8],
+    sync: impl FnOnce(&mut F) -> io::Result<()>,
+    rollback: impl FnOnce(&mut F, u64) -> io::Result<()>,
+) -> io::Result<()> {
+    let res = f.write_all(line).and_then(|_| f.flush()).and_then(|_| sync(f));
+    if res.is_err() {
+        let _ = rollback(f, len);
+    }
+    res
 }
 
 fn allowed(from: &TaskState, to: &TaskState) -> bool {

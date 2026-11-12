@@ -544,11 +544,22 @@ impl Engine {
         } else {
             // skip ids already taken (e.g. by a task the user submitted under this prefix)
             let mut n = t.fires + 1;
-            while self.queue.get(&format!("{id}-{n}")).is_some() {
+            let mut replay = false;
+            while let Some(q) = self.queue.get(&format!("{id}-{n}")) {
+                // same agent and prompt as this trigger submits: a crash after submit but before
+                // save_triggers left this fire behind, so count it instead of firing again
+                if crate::server::parse_task(&t.template, String::new()).is_ok_and(|p| p.agent == q.agent && p.prompt == q.prompt) {
+                    replay = true;
+                    break;
+                }
                 n += 1;
             }
             let fire_id = format!("{id}-{n}");
-            let res = crate::server::parse_task(&t.template, fire_id.clone()).and_then(|task| self.queue.submit(task));
+            let res = if replay {
+                Ok(())
+            } else {
+                crate::server::parse_task(&t.template, fire_id.clone()).and_then(|task| self.queue.submit(task))
+            };
             match res {
                 Ok(()) => {
                     t.fires = n;

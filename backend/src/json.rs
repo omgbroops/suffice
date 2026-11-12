@@ -118,6 +118,10 @@ impl P<'_> {
                 loop {
                     self.ws();
                     let k = self.string()?;
+                    // fail closed: agents read last-wins, so a silently kept first key could differ from what they run
+                    if o.iter().any(|(x, _): &(String, Value)| *x == k) {
+                        return Err(format!("duplicate key '{k}' at {}", self.i));
+                    }
                     self.ws();
                     self.eat(b':')?;
                     o.push((k, self.value(depth + 1)?));
