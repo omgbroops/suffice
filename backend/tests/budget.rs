@@ -237,6 +237,33 @@ fn usage_falls_back_to_saved_limits_when_log_has_no_rate_limit() {
     srv.stop();
 }
 
+#[test]
+fn usage_fallback_skips_stale_saved_windows() {
+    let d = Dir::new("usage-stale");
+    {
+        let mut e = Engine::open(&d.0, 2).unwrap();
+        e.set_program("claude", sample_script(&d.0));
+        e.submit(task("t1", None)).unwrap();
+        e.run_until_idle(Duration::from_secs(20));
+    }
+    let log = d.0.join("events.jsonl");
+    let kept: String = std::fs::read_to_string(&log).unwrap().lines().filter(|l| !l.contains("rate_limit")).map(|l| format!("{l}\n")).collect();
+    std::fs::write(&log, kept).unwrap();
+    // five_hour is higher but expired (resets_at 1000 is long past); seven_day is fresh
+    std::fs::write(
+        d.0.join("limits.json"),
+        r#"{"claude":{"five_hour":{"utilization":0.95,"resets_at":1000,"status":"allowed"},"seven_day":{"utilization":0.40,"resets_at":4102444800,"status":"allowed"}}}"#,
+    )
+    .unwrap();
+    let e = Engine::open(&d.0, 2).unwrap();
+    let srv = serve(e, "127.0.0.1:0", TOKEN).unwrap();
+    let auth = format!("Authorization: Bearer {TOKEN}\r\n");
+    let (code, body) = http(srv.port(), "GET", "/usage", &auth, "");
+    assert_eq!(code, 200);
+    assert!(body.contains("\"window\":\"seven_day\"") && body.contains("\"percent\":40"), "body: {body}");
+    srv.stop();
+}
+
 fn http(port: u16, method: &str, path: &str, headers: &str, body: &str) -> (u16, String) {
     let mut s = TcpStream::connect(("127.0.0.1", port)).unwrap();
     s.set_read_timeout(Some(Duration::from_millis(1500))).unwrap();

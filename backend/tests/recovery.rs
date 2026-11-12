@@ -261,3 +261,27 @@ fn unreadable_event_line_is_skipped_not_truncated() {
     let text = fs::read_to_string(&log).unwrap();
     assert!(text.contains("from_a_newer_build") && text.contains("three"), "{text}");
 }
+
+#[test]
+fn torn_tail_after_invalid_utf8_line_is_cut_at_the_right_byte() {
+    let d = Dir::new("invalid-utf8");
+    let log = d.0.join("events.jsonl");
+    let l1 = b"{\"seq\":1,\"task\":\"a\",\"ms\":1,\"type\":\"text\",\"text\":\"one\"}\n".to_vec();
+    let l2 = b"{\"seq\":2,\"task\":\"a\",\"ms\":2,\"type\":\"text\",\"text\":\"two\xFF\"}\n".to_vec();
+    let l3 = b"{\"seq\":3,\"task\":\"a\",\"ms\":3,\"type\":\"text\",\"text\":\"three\"}\n".to_vec();
+    let good_len = l1.len() + l2.len() + l3.len();
+    let mut bytes = [l1, l2, l3].concat();
+    bytes.extend_from_slice(b"{\"seq\":4,\"tas");
+    fs::write(&log, &bytes).unwrap();
+    let e = Engine::open(&d.0, 2).unwrap();
+    drop(e);
+    assert_eq!(fs::metadata(&log).unwrap().len() as usize, good_len, "torn bytes must be cut exactly");
+    // the next append must start on a fresh line
+    {
+        let mut f = fs::OpenOptions::new().append(true).open(&log).unwrap();
+        f.write_all(b"{\"seq\":4,\"task\":\"a\",\"ms\":4,\"type\":\"text\",\"text\":\"four\"}\n").unwrap();
+    }
+    let e = Engine::open(&d.0, 2).unwrap();
+    let seqs: Vec<u64> = e.events_since(0).iter().map(|l| l.seq).collect();
+    assert_eq!(seqs, vec![1, 2, 3, 4]);
+}

@@ -465,13 +465,14 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
         }
         ("GET", ["tasks", id, "thread"]) => {
             let since = qnum(q, "since", 0).map_err(|m| err(400, m))?;
+            let limit = qnum(q, "limit", 500).map_err(|m| err(400, m))? as usize;
             let id = id.to_string();
             ask_res(ctx, move |e| {
                 let tasks = e.tasks();
                 // a follow-up id resolves to its root, so any turn gives the whole thread
                 let mut root_id = id.clone();
-                while let Some((p, _)) = root_id.rsplit_once(".m") {
-                    if follow_n(p, &root_id).is_some() && tasks.iter().any(|t| t.id == p) {
+                while let Some((p, _)) = root_id.rsplit_once('.') {
+                    if follow_nums(p, &root_id).is_some() && tasks.iter().any(|t| t.id == p) {
                         root_id = p.to_string();
                     } else {
                         break;
@@ -480,23 +481,22 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 let Some(root) = tasks.iter().find(|t| t.id == root_id) else {
                     return err(404, format!("no task '{id}'"));
                 };
-                let mut turns: Vec<(u64, &Task)> = tasks.iter().filter_map(|t| Some((follow_n(&root_id, &t.id)?, t))).collect();
-                turns.sort_by_key(|(n, _)| *n);
+                let mut turns: Vec<(Vec<u64>, &Task)> = tasks.iter().filter_map(|t| Some((follow_nums(&root_id, &t.id)?, t))).collect();
+                turns.sort_by(|a, b| a.0.cmp(&b.0));
                 let mut all: Vec<&Task> = vec![root];
                 all.extend(turns.iter().map(|(_, t)| *t));
                 let ids: HashSet<&str> = all.iter().map(|t| t.id.as_str()).collect();
                 let keys = task_keys(&tasks);
-                let events: Vec<Value> = e
-                    .events_since(since)
-                    .iter()
-                    .filter(|l| ids.contains(l.task.as_str()))
-                    .map(|l| event_json(l, keys.get(&l.task).cloned().flatten().as_deref()))
-                    .collect();
+                let mut evs: Vec<Logged> = e.events_since(since).into_iter().filter(|l| ids.contains(l.task.as_str())).collect();
+                let more = evs.len() > limit;
+                evs.truncate(limit);
+                let events: Vec<Value> = evs.iter().map(|l| event_json(l, keys.get(&l.task).cloned().flatten().as_deref())).collect();
                 let turns: Vec<Value> = all.iter().map(|t| task_json(t)).collect();
                 let body = obj(vec![
                     ("root", task_json(root)),
                     ("turns", Value::Arr(turns)),
                     ("events", Value::Arr(events)),
+                    ("more", Value::Bool(more)),
                 ]);
                 (200, body)
             })
@@ -802,13 +802,24 @@ fn task_result(e: &Engine, id: &str, r: Result<(), String>) -> Res {
     }
 }
 
-/// The n of a follow-up id `<root>.m<n>`, or None for any other id.
-fn follow_n(root: &str, id: &str) -> Option<u64> {
-    let n = id.strip_prefix(root)?.strip_prefix(".m")?;
-    if n.is_empty() || !n.bytes().all(|b| b.is_ascii_digit()) {
-        return None;
+/// The numbers of a follow-up id `<root>.m<n>[.m<n>...]`, or None for any other id.
+fn follow_nums(root: &str, id: &str) -> Option<Vec<u64>> {
+    let mut rest = id.strip_prefix(root)?;
+    let mut out = vec![];
+    while !rest.is_empty() {
+        let seg = rest.strip_prefix(".m")?;
+        let (digits, tail) = seg.split_at(seg.find('.').unwrap_or(seg.len()));
+        if digits.is_empty() || !digits.bytes().all(|b| b.is_ascii_digit()) {
+            return None;
+        }
+        out.push(digits.parse().ok()?);
+        rest = tail;
     }
-    n.parse().ok()
+    if out.is_empty() {
+        None
+    } else {
+        Some(out)
+    }
 }
 
 fn task_json(t: &Task) -> Value {
@@ -1090,7 +1101,9 @@ fn usage_rows(tasks: &[Task], events: &[Logged], saved: &crate::orchestrator::Li
         if plan.contains_key(kind) {
             continue;
         }
-        let best = saved.get(kind).and_then(|ws| ws.iter().max_by(|a, b| a.1 .0.unwrap_or(0.0).total_cmp(&b.1 .0.unwrap_or(0.0))));
+        // skip windows whose reset already passed: their utilization no longer applies
+        let now_s = now_ms() / 1000;
+        let best = saved.get(kind).and_then(|ws| ws.iter().filter(|w| w.1 .1.is_none_or(|r| r > now_s)).max_by(|a, b| a.1 .0.unwrap_or(0.0).total_cmp(&b.1 .0.unwrap_or(0.0))));
         if let Some((w, (u, r, _))) = best {
             plan.insert(kind, (w.clone(), *u, *r));
         }

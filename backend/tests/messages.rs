@@ -229,3 +229,31 @@ fn thread_view_orders_turns_and_filters_events() {
     assert_eq!(code, 404);
     s.stop();
 }
+
+#[test]
+fn thread_includes_chained_follow_ups_in_order_and_bounds_events() {
+    let d = Dir::new("thread-chain");
+    let mut e = engine(&d.0);
+    e.submit(task("a", "p")).unwrap();
+    e.run_until_idle(Duration::from_secs(20));
+    assert_eq!(e.message("a", "one"), Ok("a.m1".to_string()));
+    assert_eq!(e.message("a.m1", "chained"), Ok("a.m1.m1".to_string()));
+    assert_eq!(e.message("a", "two"), Ok("a.m2".to_string()));
+    let s = serve(e, "127.0.0.1:0", "tok").unwrap();
+    let port = s.port();
+
+    let (code, body) = get_raw(port, "/tasks/a/thread");
+    assert_eq!(code, 200, "{body}");
+    let pos = |id: &str| body.find(&format!("\"id\":\"{id}\"")).unwrap_or_else(|| panic!("missing {id}: {body}"));
+    assert!(pos("a") < pos("a.m1") && pos("a.m1") < pos("a.m1.m1") && pos("a.m1.m1") < pos("a.m2"), "{body}");
+    assert!(body.contains("\"more\":false"), "{body}");
+
+    let (code, body) = get_raw(port, "/tasks/a.m1.m1/thread");
+    assert_eq!(code, 200, "{body}");
+    assert!(body.contains("\"id\":\"a.m1.m1\""), "{body}");
+
+    let (_, body) = get_raw(port, "/tasks/a/thread?limit=1");
+    assert!(body.contains("\"more\":true"), "{body}");
+    assert_eq!(body.matches("\"seq\":").count(), 1, "{body}");
+    s.stop();
+}
