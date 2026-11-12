@@ -1,0 +1,15 @@
+[package]
+name = "loom"
+version = "0.1.0"
+edition = "2021"
+description = "Local agent engine: process pool, durable task queue, per-agent sessions for any agent CLI"
+
+# std only: no third-party crates
+[dependencies]
+
+[[bin]]
+name = "loomd"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 2
