@@ -1,6 +1,8 @@
 # Suffice
 
-The **Suffice CLI alpha** is available in [packages/cli](packages/cli/README.md). From this clone, run `npm ci` once, then `npx suffice`. It uses Pi's native terminal interface with Suffice's tools and branding: `/project` selects a repository and `/login` signs in. No global install or tarball step is needed. The research scripts below and frozen benchmark worktrees are unchanged.
+The local Electron app lives in [apps/desktop](apps/desktop/README.md). Run `bun install` and `bun run desktop` from this repository root. Bun hoists dependencies into the existing root `node_modules`; the desktop app does not have a separate install.
+
+The **Suffice CLI alpha** is available in [packages/cli](packages/cli/README.md). From this clone, run `bun install` once, then `node packages/cli/bin/suffice.mjs`. It uses Pi's native terminal interface with Suffice's tools and branding: `/project` selects a repository and `/login` signs in. No global install or tarball step is needed. The research scripts below and frozen benchmark worktrees are unchanged.
 
 Newest completed investigations: [Nemotron retrieval and revision-aware evidence](reports/EVIDENCE-EXPERIMENTS-RESULTS.md). Semantic retrieval improved offline region coverage but cost 6.3% more in scored repairs; the evidence record cost 85.2% more, and record plus directed checks 105.5% more. Every scored arm passed. No new policy was enabled by default. These are bounded observations, not general accuracy or cost guarantees. Independent saved-patch audits and isolated exported-layout replays passed; see [status](STATUS.md).
 
