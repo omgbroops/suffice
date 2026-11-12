@@ -5,7 +5,7 @@ use crate::gate::{self, Verdict};
 use crate::json::{self, Value};
 use crate::pool::{Pool, PoolMsg};
 use crate::queue::Queue;
-use crate::session::Sessions;
+use crate::session::{Session, Sessions};
 use crate::types::{now_ms, AgentKind, Event, Logged, Task, TaskId, TaskState};
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fs::{self, File, OpenOptions};
@@ -100,7 +100,29 @@ impl Engine {
             self.calls.insert((id.to_string(), name, input));
         }
         self.save_approvals().map_err(|e| e.to_string())?;
-        self.queue.set_state(id, TaskState::Ready)
+        self.set_state(id, TaskState::Ready)
+    }
+
+    /// Move a task to `state` and log the change.
+    fn set_state(&mut self, id: &str, state: TaskState) -> Result<(), String> {
+        let reason = match &state {
+            TaskState::NeedsApproval { reason } => Some(reason.clone()),
+            TaskState::Failed { error } => Some(error.clone()),
+            _ => None,
+        };
+        let name = state.name().to_string();
+        self.queue.set_state(id, state)?;
+        self.log(id, Event::State { state: name, reason });
+        Ok(())
+    }
+
+    /// Re-queue a failed or cancelled task.
+    pub fn retry(&mut self, id: &str) -> Result<(), String> {
+        match self.queue.get(id).map(|t| &t.state) {
+            Some(TaskState::Failed { .. } | TaskState::Cancelled) => self.set_state(id, TaskState::Ready),
+            Some(_) => Err(format!("task '{id}' is not failed or cancelled")),
+            None => Err(format!("no task '{id}'")),
+        }
     }
 
     pub fn cancel(&mut self, id: &str) -> Result<(), String> {
@@ -110,7 +132,24 @@ impl Engine {
             self.pool.kill(&run);
             self.zombies.insert(run, r);
         }
-        self.queue.set_state(id, TaskState::Cancelled)
+        self.set_state(id, TaskState::Cancelled)
+    }
+
+    pub fn sessions(&self) -> Vec<Session> {
+        self.sessions.all().into_iter().cloned().collect()
+    }
+
+    pub fn running(&self) -> usize {
+        self.pool.running()
+    }
+
+    pub fn max_parallel(&self) -> usize {
+        self.max_parallel
+    }
+
+    /// The last tool call that held `task` for approval: (name, input).
+    pub fn held_call(&self, task: &str) -> Option<(String, String)> {
+        self.held.get(task).cloned()
     }
 
     pub fn tasks(&self) -> Vec<Task> {
@@ -140,7 +179,7 @@ impl Engine {
             }
             if !self.approved.contains(&id) {
                 if let Verdict::Hold { reason } = gate::check_task(&task) {
-                    let _ = self.queue.set_state(&id, TaskState::NeedsApproval { reason });
+                    let _ = self.set_state(&id, TaskState::NeedsApproval { reason });
                     continue;
                 }
             }
@@ -196,8 +235,8 @@ impl Engine {
     fn handle(&mut self, msg: PoolMsg) {
         match msg {
             PoolMsg::Started { run, pid } => {
-                if let Some(r) = self.runs.get(&run) {
-                    let _ = self.queue.set_state(&r.task, TaskState::Running { pid });
+                if let Some(task) = self.runs.get(&run).map(|r| r.task.clone()) {
+                    let _ = self.set_state(&task, TaskState::Running { pid });
                 }
             }
             PoolMsg::Stdout { run, line } => {
@@ -237,14 +276,14 @@ impl Engine {
                     TaskState::Failed { error }
                 };
                 // Invalid transitions (cancelled or held runs) are expected here and ignored.
-                let _ = self.queue.set_state(&r.task, state);
+                let _ = self.set_state(&r.task, state);
             }
             PoolMsg::SpawnFailed { run, error } => {
                 if let Some(r) = self.runs.remove(&run) {
                     if let Some(k) = &r.session {
                         self.sessions.release(k, &r.task);
                     }
-                    let _ = self.queue.set_state(&r.task, TaskState::Failed { error });
+                    let _ = self.set_state(&r.task, TaskState::Failed { error });
                 }
             }
         }
@@ -280,7 +319,7 @@ impl Engine {
             }
             self.held.insert(task.clone(), (name, input));
             let _ = self.save_approvals();
-            let _ = self.queue.set_state(&task, TaskState::NeedsApproval { reason });
+            let _ = self.set_state(&task, TaskState::NeedsApproval { reason });
         }
     }
 
@@ -395,7 +434,7 @@ fn flag(v: &Value, k: &str) -> bool {
     v.get(k) == Some(&Value::Bool(true))
 }
 
-fn logged_json(l: &Logged) -> Value {
+pub fn logged_json(l: &Logged) -> Value {
     let (ty, fields) = match &l.event {
         Event::Session { native_id } => ("session", vec![("native_id", Value::str(native_id))]),
         Event::Text { text } => ("text", vec![("text", Value::str(text))]),
@@ -416,6 +455,9 @@ fn logged_json(l: &Logged) -> Value {
         Event::Raw { line } => ("raw", vec![("line", Value::str(line))]),
         Event::Stderr { line } => ("stderr", vec![("line", Value::str(line))]),
         Event::Exit { code } => ("exit", vec![("code", code.map_or(Value::Null, |c| Value::Num(c as f64)))]),
+        Event::State { state, reason } => {
+            ("state", vec![("state", Value::str(state)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
+        }
     };
     let mut o = vec![
         ("seq".to_string(), Value::Num(l.seq as f64)),
@@ -446,6 +488,10 @@ fn logged_from(v: &Value) -> Result<Logged, String> {
         "raw" => Event::Raw { line: sval(v, "line")? },
         "stderr" => Event::Stderr { line: sval(v, "line")? },
         "exit" => Event::Exit { code: num(v, "code").map(|c| c as i32) },
+        "state" => Event::State {
+            state: sval(v, "state")?,
+            reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
+        },
         other => return Err(format!("unknown event '{other}'")),
     };
     Ok(Logged {
