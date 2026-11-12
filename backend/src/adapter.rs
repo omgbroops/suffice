@@ -86,6 +86,9 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
     if matches!(task.agent, AgentKind::OpenCode) {
         env.extend(opencode_env(task.access));
     }
+    if matches!(task.agent, AgentKind::Suffice) {
+        env.insert("SUFFICE_GATE_CMD".into(), suffice_gate_cmd());
+    }
     Cmd {
         program,
         args,
@@ -184,8 +187,18 @@ fn claude_hook() -> Vec<String> {
 
 /// Settings JSON for a PreToolUse command hook running `exe gate-hook`. None if the path is not UTF-8.
 pub fn claude_hook_settings(exe: &Path) -> Option<String> {
+    Some(hook_json(&gate_hook_command(exe)?))
+}
+
+/// `'<exe>' gate-hook` with the exe path shell-quoted. None if the path is not UTF-8.
+pub fn gate_hook_command(exe: &Path) -> Option<String> {
     let quoted = format!("'{}'", exe.to_str()?.replace('\'', "'\\''"));
-    Some(hook_json(&format!("{quoted} gate-hook")))
+    Some(format!("{quoted} gate-hook"))
+}
+
+/// Shell command the suffice CLI runs before each bash call; exit 2 blocks it. Fails closed if the exe path is unknown.
+fn suffice_gate_cmd() -> String {
+    std::env::current_exe().ok().and_then(|exe| gate_hook_command(&exe)).unwrap_or_else(|| "echo 'suffice gate: hook unavailable' >&2; exit 2".into())
 }
 
 fn hook_json(command: &str) -> String {

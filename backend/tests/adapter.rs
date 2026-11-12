@@ -75,6 +75,13 @@ fn claude_command_has_gate_hook() {
 }
 
 #[test]
+fn suffice_command_has_gate_cmd() {
+    let c = command(&task(AgentKind::Suffice, "hi", None), None);
+    let g = c.env.get("SUFFICE_GATE_CMD").expect("SUFFICE_GATE_CMD");
+    assert!(g.ends_with(" gate-hook"), "{g}");
+}
+
+#[test]
 fn codex_command_with_resume_and_model() {
     let c = command(&task(AgentKind::Codex, "do it", Some("gpt-x")), Some("th-9"));
     assert_eq!(c.program, "codex");

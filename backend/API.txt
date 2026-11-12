@@ -132,3 +132,4 @@ after submit, computer-use/browser endpoints (they show up as tool_call events f
 Claude gate hook: claude runs with --settings wiring a PreToolUse command hook to 'suffice-backend gate-hook' (JSON: {"hooks":{"PreToolUse":[{"matcher":"*","hooks":[{"type":"command","command":"<exe> gate-hook"}]}]}}).
 gate-hook reads the tool call on stdin, exits 0 to allow, 2 to block (stderr shows the held reason); unparseable input fails closed.
 Calls the user approved for a task are passed to the hook in SUFFICE_APPROVED_CALLS (JSON [{name,input}]) and allowed on exact match.
+Suffice CLI gate: the suffice kind gets SUFFICE_GATE_CMD='<exe> gate-hook', which its bash tool runs (stdin: the Bash tool call JSON) before each command; exit 2 blocks it.
