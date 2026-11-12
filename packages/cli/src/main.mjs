@@ -45,8 +45,8 @@ export async function main(options) {
   const runtime=await ModelRuntime.create({authPath:resolve(options.home,'auth.json'),modelsPath:null,modelsStorePath:resolve(options.home,'catalog.json'),allowModelNetwork:false});
   if(options.command==='login') return login(runtime,options);
   if(options.command==='doctor') {
-    const tools=repositoryTools({workspace:options.cwd});
-    const bash=tools.find(t=>t.name==='bash');
+    const tools=repositoryTools({workspace:options.cwd,access:options.access});
+    const bash=repositoryTools({workspace:options.cwd}).find(t=>t.name==='bash'); // shell check needs bash even when --access hides it
     const result=await bash.execute('doctor',{command:'printf SUFFICE_SHELL_OK',timeout:10});
     if(!result.content?.some(c=>c.text?.includes('SUFFICE_SHELL_OK')) || result.isError) throw new Error('Bash check failed. On Windows, install Git for Windows (Git Bash).');
     const available=Boolean(runtime.getModel('openai',options.model));
