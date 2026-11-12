@@ -60,10 +60,7 @@ fn send(port: u16, request: &[u8]) -> (String, bool) {
     s.set_read_timeout(Some(Duration::from_millis(1500))).unwrap();
     let _ = s.write_all(request);
     let mut out = Vec::new();
-    let closed = match s.read_to_end(&mut out) {
-        Ok(_) => true,
-        Err(_) => false,
-    };
+    let closed = s.read_to_end(&mut out).is_ok();
     (String::from_utf8_lossy(&out).into_owned(), closed)
 }
 
@@ -71,7 +68,7 @@ fn send(port: u16, request: &[u8]) -> (String, bool) {
 fn oversized_header_line_without_newline_is_rejected_quickly() {
     let s = start("big-line");
     let mut req = b"GET /health HTTP/1.1\r\nX-Big: ".to_vec();
-    req.extend(std::iter::repeat(b'a').take(20 * 1024));
+    req.extend(std::iter::repeat_n(b'a', 20 * 1024));
     let t = Instant::now();
     let (resp, closed) = send(s.port, &req);
     let elapsed = t.elapsed();

@@ -111,7 +111,7 @@ fn oversized_body_is_413() {
 #[test]
 fn cors_preflight_allows_local_origin_only() {
     let (_d, s) = start("cors");
-    let ok = format!("Origin: http://localhost:7711\r\n");
+    let ok = "Origin: http://localhost:7711\r\n".to_string();
     let (code, resp) = http(s.port(), "OPTIONS", "/tasks", &ok, "");
     assert_eq!(code, 204);
     assert!(resp.contains("Access-Control-Allow-Origin: http://localhost:7711"), "{resp}");

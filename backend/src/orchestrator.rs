@@ -1227,7 +1227,10 @@ fn load_runs(dir: &Path) -> io::Result<BTreeMap<TaskId, LiveRun>> {
     }
 }
 
-fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
+/// Saved approvals: approved task ids, approved calls, held call per task.
+type Approvals = (BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>);
+
+fn load_approvals(dir: &Path) -> io::Result<Approvals> {
     let path = dir.join("approvals.json");
     let text = match fs::read_to_string(&path) {
         Ok(t) => t,
@@ -1241,7 +1244,7 @@ fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, H
     })
 }
 
-fn parse_approvals(text: &str) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
+fn parse_approvals(text: &str) -> io::Result<Approvals> {
     let v = json::parse(text).map_err(|e| bad(format!("approvals.json: {e}")))?;
     let mut approved = BTreeSet::new();
     let mut calls = BTreeSet::new();

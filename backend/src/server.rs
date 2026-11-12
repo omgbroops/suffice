@@ -247,7 +247,7 @@ fn read_head_line(r: &mut BufReader<TcpStream>, line: &mut String, budget: &mut 
             break;
         }
     }
-    let text = std::str::from_utf8(&bytes).map_err(|_| io::Error::new(io::ErrorKind::Other, "non-utf8 head"))?;
+    let text = std::str::from_utf8(&bytes).map_err(|_| io::Error::other("non-utf8 head"))?;
     line.push_str(text);
     Ok(bytes.len())
 }
