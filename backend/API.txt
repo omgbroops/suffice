@@ -47,15 +47,19 @@ POST /tasks                      body: { "id"?: auto, "agent", "prompt", "cwd", 
                                  400 on unknown dep / duplicate id / cycle / bad fallback
 POST /tasks/:id/cancel           -> Task (state cancelled; kills the run if running)
 POST /tasks/:id/retry            failed|cancelled -> ready
+POST /tasks/:id/messages         {"text"} -> 202 {"task": "<id>.m<n>"}  follow-up task on the same session
+                                 (waits for the original unless it is done/failed/cancelled); logs a "user"
+                                 event on the original. 404 unknown id; 400 empty or > 32768 bytes; 409 no session_key
 
 ---------------------------------------------------------------- EVENTS
 Event object (one line of the durable log):
   { "seq": 1093, "task": "t42", "agent_key": "frontend-bot" | null, "ms": …,
     "kind": "session" | "text" | "tool_call" | "tool_result" | "usage" | "result"
-            | "raw" | "stderr" | "exit" | "state",
+            | "raw" | "stderr" | "exit" | "state" | "user",
     ...kind fields:
       session     { "native_id" }
       text        { "text" }
+      user        { "text" }                     // a message sent to the task via POST /tasks/:id/messages
       tool_call   { "name", "input" }            // input = JSON text of the tool args
       tool_result { "name", "output", "is_error" }
       usage       { "input_tokens", "output_tokens", "cost_usd": null|number }

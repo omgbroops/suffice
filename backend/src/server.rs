@@ -2,7 +2,7 @@
 //! send it closures and wait for the answer. Std only: a small HTTP/1.1 parser, one request per connection.
 
 use crate::json::{self, Value};
-use crate::orchestrator::{caps_json, logged_json, parse_caps, Engine};
+use crate::orchestrator::{caps_json, logged_json, parse_caps, Engine, MsgErr};
 use crate::triggers::{Trigger, When};
 use crate::types::{now_ms, Access, AgentKind, Event, Logged, Task, TaskState};
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -426,6 +426,24 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 task_result(e, &id, r)
             })
         }
+        ("POST", ["tasks", id, "messages"]) => {
+            let v = match parse_body(body) {
+                Ok(v) => v,
+                Err(e) => return Ok(e),
+            };
+            let id = id.to_string();
+            ask_res(ctx, move |e| {
+                let text = v.get("text").and_then(Value::as_str).unwrap_or("").to_string();
+                match e.message(&id, &text) {
+                    Ok(task) => (202, obj(vec![("task", Value::str(&task))])),
+                    Err(MsgErr::NoTask) => err(404, format!("no task '{id}'")),
+                    Err(MsgErr::Empty) => err(400, "text is empty"),
+                    Err(MsgErr::TooLong) => err(400, "text is over 32768 bytes"),
+                    Err(MsgErr::NoSession) => err(409, format!("task '{id}' has no session")),
+                    Err(MsgErr::Submit(m)) => err(400, m),
+                }
+            })
+        }
         ("POST", ["tasks", id, "retry"]) => {
             let id = id.to_string();
             ask_res(ctx, move |e| {
@@ -635,6 +653,7 @@ fn kind_of(e: &Event) -> &'static str {
         Event::Trigger { .. } => "trigger",
         Event::RateLimit { .. } => "rate_limit",
         Event::Failover { .. } => "failover",
+        Event::User { .. } => "user",
     }
 }
 
