@@ -75,7 +75,7 @@ fn rate_limiter_identifiers_are_not_rate_limits() {
     for s in ["src/rate_limiter.rs:12 panicked", "RateLimiterConfig"] {
         assert!(!rate_limit_text(s), "{s}");
     }
-    for s in ["rate_limit_error", "Rate limited", "rate limits exceeded", "429 Too Many Requests"] {
+    for s in ["rate_limit_error", "RateLimitError", "RateLimitExceeded", "Rate limited", "rate limits exceeded", "429 Too Many Requests"] {
         assert!(rate_limit_text(s), "{s}");
     }
 }
@@ -88,8 +88,37 @@ fn navigate_to_closed_port_returns_error() {
 }
 
 #[test]
+fn click_next_cannot_be_redirected_to_buy() {
+    let html = r#"<button id=next style="position:absolute;left:10px;top:10px;width:120px;height:40px">Next</button>
+<script>
+new MutationObserver(() => {
+  const next = document.getElementById('next');
+  if (!next || !next.hasAttribute('data-suffice-gate') || document.getElementById('buy')) return;
+  const buy = document.createElement('button');
+  buy.id = 'buy';
+  buy.textContent = 'Buy now';
+  buy.setAttribute('onclick', 'window.bought=1');
+  buy.style.cssText = 'position:absolute;left:10px;top:10px;width:120px;height:40px;z-index:5';
+  buy.setAttribute('data-suffice-gate', next.getAttribute('data-suffice-gate'));
+  next.removeAttribute('data-suffice-gate');
+  document.body.appendChild(buy);
+}).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-suffice-gate'] });
+</script>"#;
+    let dir = std::env::temp_dir().join(format!("suffice-hunt2-redirect-{}", std::process::id()));
+    fs::create_dir_all(&dir).unwrap();
+    let path = dir.join("index.html");
+    fs::write(&path, html).unwrap();
+    let mut b = Browser::launch(Path::new(CHROME)).expect("launch");
+    b.navigate(&format!("file://{}", path.display())).expect("navigate");
+    assert!(b.click("#next").is_err(), "click on Next should be refused");
+    assert_eq!(b.evaluate("typeof window.bought").unwrap(), Value::str("undefined"));
+    drop(b);
+    fs::remove_dir_all(dir).unwrap();
+}
+
+#[test]
 fn click_refuses_when_element_is_covered_after_check() {
-    let html = r#"<button id=next style="position:absolute;left:10px;top:10px;width:120px;height:40px">Next</button><button id=buy onclick="window.bought=1" style="position:absolute;left:10px;top:10px;width:120px;height:40px;z-index:2">Buy now</button>"#;
+    let html = r#"<button id=next style="position:absolute;left:10px;top:10px;width:120px;height:40px">Next</button><div onclick="window.bought=1" style="position:absolute;left:10px;top:10px;width:120px;height:40px;z-index:2">Cover</div>"#;
     let dir = std::env::temp_dir().join(format!("suffice-hunt2-browser-{}", std::process::id()));
     fs::create_dir_all(&dir).unwrap();
     let path = dir.join("index.html");

@@ -277,13 +277,19 @@ fn lit(s: &str) -> String {
 }
 
 const TEXT_JS: &str = "(e=>e?e.innerText:null)(document.querySelector(SEL))";
-// one lookup: gate info plus the center, and a stamp so later steps act on this same element
+// find the element, scroll it to center, stamp it, and return its center
 const FIND_JS: &str = "(e=>{if(!e)return null;e.scrollIntoView({block:'center'});const r=e.getBoundingClientRect();\
-    e.setAttribute('data-suffice-gate','__NONCE__');return {text:e.innerText||e.textContent||'',value:e.value||'',\
-    type:e.getAttribute('type')||e.tagName,action:(e.form&&e.form.action)||'',x:r.x+r.width/2,y:r.y+r.height/2};})(document.querySelector(SEL))";
+    e.setAttribute('data-suffice-gate','__NONCE__');return {x:r.x+r.width/2,y:r.y+r.height/2};})(document.querySelector(SEL))";
+// the clickable target at the point is what gets gated; hit says whether it is the stamped element or inside it
 const CONFIRM_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');const t=document.elementFromPoint(__X__,__Y__);\
-    return !!s&&!!t&&(t===s||s.contains(t));})()";
-const FOCUS_JS: &str = "(e=>{if(e)e.focus();return !!e;})(document.querySelector('[data-suffice-gate=\"__NONCE__\"]'))";
+    if(!t)return null;const c=t.closest('button,a,input,select,textarea,[role=button],[onclick]')||t;\
+    return {text:c.innerText||c.textContent||'',value:c.value||'',type:c.getAttribute('type')||c.tagName,\
+    action:(c.form&&c.form.action)||'',hit:!!s&&(c===s||s.contains(c))};})()";
+// focus the stamped element, then describe whatever actually has focus
+const FOCUS_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');if(!s)return null;s.focus();\
+    const c=document.activeElement;if(!c)return null;\
+    return {text:c.innerText||c.textContent||'',value:c.value||'',type:c.getAttribute('type')||c.tagName,\
+    action:(c.form&&c.form.action)||'',hit:c===s||s.contains(c)};})()";
 const UNSTAMP_JS: &str = "(()=>{const s=document.querySelector('[data-suffice-gate=\"__NONCE__\"]');if(s)s.removeAttribute('data-suffice-gate');return true;})()";
 
 pub struct Browser {
@@ -439,42 +445,50 @@ impl Browser {
 
     /// Finds the element, stamps it, and runs the approval gate on it before any input is sent.
     /// Returns the center and the stamp nonce; the caller must `unstamp` it.
-    fn locate(&mut self, name: &str, selector: &str) -> Result<(f64, f64, String), String> {
+    fn find(&mut self, selector: &str) -> Result<(f64, f64, String), String> {
         static COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
         let n = COUNTER.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
         let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos()).unwrap_or(0);
         let nonce = format!("{nanos:x}{n:x}");
         let info = self.evaluate(&FIND_JS.replace("SEL", &lit(selector)).replace("__NONCE__", &nonce))?;
-        let Value::Obj(mut kv) = info else { return Err(format!("no element matches {selector}")) };
-        let num = |kv: &[(String, Value)], k: &str| match kv.iter().find(|(n, _)| n == k) {
-            Some((_, Value::Num(f))) => Some(*f),
+        let num = |k: &str| match info.get(k) {
+            Some(Value::Num(f)) => Some(*f),
             _ => None,
         };
-        let (Some(x), Some(y)) = (num(&kv, "x"), num(&kv, "y")) else { return Err(format!("no element matches {selector}")) };
-        kv.retain(|(k, _)| k != "x" && k != "y");
-        kv.insert(0, ("selector".into(), Value::str(selector)));
-        let input = Value::Obj(kv).to_string();
-        match gate::check_event(&Event::ToolCall { name: name.into(), input }) {
-            Verdict::Hold { reason } => {
+        match (num("x"), num("y")) {
+            (Some(x), Some(y)) => Ok((x, y, nonce)),
+            _ => {
                 self.unstamp(&nonce);
-                Err(format!("held: {reason}"))
+                Err(format!("no element matches {selector}"))
             }
-            Verdict::Allow => Ok((x, y, nonce)),
         }
     }
 
-    /// Best effort: remove the stamp left by `locate`.
+    /// Best effort: remove the stamp left by `find`.
     fn unstamp(&mut self, nonce: &str) {
         let _ = self.evaluate(&UNSTAMP_JS.replace("__NONCE__", nonce));
     }
 
+    /// Gates the element described by `info` (its hit flag is not gate input), then requires it to be the stamped target.
+    fn vet(name: &str, selector: &str, info: Value, changed: &str) -> Result<(), String> {
+        let Value::Obj(mut kv) = info else { return Err(changed.to_string()) };
+        let hit = kv.iter().any(|(k, v)| k == "hit" && *v == Value::Bool(true));
+        kv.retain(|(k, _)| k != "hit");
+        kv.insert(0, ("selector".into(), Value::str(selector)));
+        let input = Value::Obj(kv).to_string();
+        match gate::check_event(&Event::ToolCall { name: name.into(), input }) {
+            Verdict::Hold { reason } => Err(format!("held: {reason}")),
+            Verdict::Allow if hit => Ok(()),
+            Verdict::Allow => Err(changed.to_string()),
+        }
+    }
+
     pub fn click(&mut self, selector: &str) -> Result<(), String> {
-        let (x, y, nonce) = self.locate("browser_click", selector)?;
+        let (x, y, nonce) = self.find(selector)?;
         let js = CONFIRM_JS.replace("__NONCE__", &nonce).replace("__X__", &format!("{x}")).replace("__Y__", &format!("{y}"));
         // shortcut: a microsecond race remains between this check and the CDP mouse events, upgrade when a swapped-in target is seen getting clicked
         let mut result = match self.evaluate(&js) {
-            Ok(Value::Bool(true)) => Ok(()),
-            Ok(_) => Err("click target changed".to_string()),
+            Ok(info) => Self::vet("browser_click", selector, info, "click target changed"),
             Err(e) => Err(e),
         };
         if result.is_ok() {
@@ -497,10 +511,12 @@ impl Browser {
     }
 
     pub fn type_text(&mut self, selector: &str, text: &str) -> Result<(), String> {
-        let (_, _, nonce) = self.locate("browser_type", selector)?;
+        let (_, _, nonce) = self.find(selector)?;
         let result = match self.evaluate(&FOCUS_JS.replace("__NONCE__", &nonce)) {
-            Ok(Value::Bool(true)) => self.call("Input.insertText", obj(&[("text", Value::str(text))])).map(|_| ()),
-            Ok(_) => Err(format!("no element matches {selector}")),
+            Ok(info) => match Self::vet("browser_type", selector, info, "target changed") {
+                Ok(()) => self.call("Input.insertText", obj(&[("text", Value::str(text))])).map(|_| ()),
+                Err(e) => Err(e),
+            },
             Err(e) => Err(e),
         };
         self.unstamp(&nonce);

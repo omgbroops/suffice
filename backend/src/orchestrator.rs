@@ -45,7 +45,7 @@ pub fn rate_limit_text(text: &str) -> bool {
     let bounded = |i: usize, n: usize| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b.get(i + n).is_none_or(|c| !c.is_ascii_alphanumeric());
     let at = |p: &str| (0..b.len()).any(|i| b[i..].starts_with(p.as_bytes()) && bounded(i, p.len()));
     // "limit" may be followed only by s/ed/ing and then a non-alphanumeric char, so "rate_limiter" is not a match
-    let limit_end = |t: &[u8]| ["", "s", "ed", "ing"].iter().any(|e| t.starts_with(e.as_bytes()) && t.get(e.len()).is_none_or(|c| !c.is_ascii_alphanumeric()));
+    let limit_end = |t: &[u8]| ["", "s", "ed", "ing", "error", "exceeded", "reached"].iter().any(|e| t.starts_with(e.as_bytes()) && t.get(e.len()).is_none_or(|c| !c.is_ascii_alphanumeric()));
     let rate = (0..b.len()).any(|i| {
         (i == 0 || !b[i - 1].is_ascii_alphanumeric())
             && b[i..].starts_with(b"rate")
