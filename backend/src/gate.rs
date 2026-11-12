@@ -123,7 +123,11 @@ pub fn check_task(task: &Task) -> Verdict {
 }
 
 const SHELL_TOOLS: &[&str] = &["bash", "shell", "exec", "command_execution", "run_terminal_cmd"];
-const LOCAL_TOOLS: &[&str] = &["edit", "write", "multiedit", "notebookedit", "todowrite", "task"];
+// workspace-local tools; patch/todoread/lsp/skill are opencode's, apply_patch/update_plan codex's (their hooks send every call)
+const LOCAL_TOOLS: &[&str] = &[
+    "edit", "write", "multiedit", "notebookedit", "todowrite", "task", "patch", "apply_patch", "todoread", "update_plan",
+    "lsp", "skill",
+];
 const NON_SHELL_OUTWARD: &[&str] = &[
     "send", "email", "message", "post", "publish", "tweet", "purchase", "buy", "checkout", "pay", "transfer",
     "deploy", "upload", "delete", "remove",

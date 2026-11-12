@@ -30,6 +30,9 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
                 Access::Full => "danger-full-access",
             };
             let mut a = strs(&["exec", "--json", "--skip-git-repo-check", "-C", &cwd, "--sandbox", sandbox]);
+            // shortcut: no --dangerously-bypass-hook-trust (it also runs a cloned repo's own hooks unprompted),
+            // so codex may skip this untrusted hook; live run needed to see, then trust it via a managed layer
+            a.extend(codex_hook());
             if let Some(id) = resume {
                 a.extend(strs(&["resume", id]));
             }
@@ -190,6 +193,18 @@ fn claude_hook() -> Vec<String> {
 /// Settings JSON for a PreToolUse command hook running `exe gate-hook`. None if the path is not UTF-8.
 pub fn claude_hook_settings(exe: &Path) -> Option<String> {
     Some(hook_json(&gate_hook_command(exe)?))
+}
+
+/// `-c hooks.PreToolUse=...` running the gate hook for codex. Fails closed like `claude_hook`.
+fn codex_hook() -> Vec<String> {
+    let cmd = std::env::current_exe().ok().and_then(|exe| gate_hook_command(&exe)).unwrap_or_else(|| "echo 'suffice gate: hook unavailable' >&2; exit 2".into());
+    let hooks = format!("hooks.PreToolUse=[{{matcher=\".*\",hooks=[{{type=\"command\",command=\"{}\"}}]}}]", toml_basic_str(&cmd));
+    vec!["-c".into(), hooks]
+}
+
+/// Escapes `\` and `"` so `s` can sit inside a TOML basic string.
+pub fn toml_basic_str(s: &str) -> String {
+    s.replace('\\', "\\\\").replace('"', "\\\"")
 }
 
 /// `'<exe>' gate-hook` with the exe path shell-quoted. None if the path is not UTF-8.

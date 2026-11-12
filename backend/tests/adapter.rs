@@ -35,6 +35,14 @@ fn args(c: &suffice::types::Cmd) -> Vec<&str> {
     c.args.iter().map(String::as_str).collect()
 }
 
+/// Args with the `-c <hook>` pair removed, since its exe path differs per test binary.
+fn without_hook(c: &suffice::types::Cmd) -> Vec<&str> {
+    let mut v = args(c);
+    let i = v.iter().position(|a| *a == "-c").expect("codex hook -c");
+    v.drain(i..i + 2);
+    v
+}
+
 #[test]
 fn claude_command_with_resume_and_model() {
     let mut c = command(&task(AgentKind::Claude, "hi", Some("sonnet")), Some("sess-1"));
@@ -86,7 +94,7 @@ fn codex_command_with_resume_and_model() {
     let c = command(&task(AgentKind::Codex, "do it", Some("gpt-x")), Some("th-9"));
     assert_eq!(c.program, "codex");
     assert_eq!(
-        args(&c),
+        without_hook(&c),
         ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", "workspace-write", "resume", "th-9", "-m", "gpt-x", "do it"]
     );
 }
@@ -94,7 +102,7 @@ fn codex_command_with_resume_and_model() {
 #[test]
 fn codex_command_plain() {
     let c = command(&task(AgentKind::Codex, "do it", None), None);
-    assert_eq!(args(&c), ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", "workspace-write", "do it"]);
+    assert_eq!(without_hook(&c), ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", "workspace-write", "do it"]);
 }
 
 #[test]
@@ -224,19 +232,49 @@ fn claude_access_argv() {
 #[test]
 fn codex_access_argv() {
     for (access, sandbox) in [(Access::Read, "read-only"), (Access::Edit, "workspace-write"), (Access::Full, "danger-full-access")] {
+        let bypass: &[&str] = &[];
         let c = command(&with_access(AgentKind::Codex, access), None);
         assert_eq!(
-            c.args,
-            ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", sandbox, "do it"],
+            without_hook(&c),
+            [&["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", sandbox][..], bypass, &["do it"]].concat(),
             "{access:?}"
         );
         let r = command(&with_access(AgentKind::Codex, access), Some("sess"));
         assert_eq!(
-            r.args,
-            ["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", sandbox, "resume", "sess", "do it"],
+            without_hook(&r),
+            [&["exec", "--json", "--skip-git-repo-check", "-C", "/tmp/work", "--sandbox", sandbox][..], bypass, &["resume", "sess", "do it"]].concat(),
             "{access:?} resume"
         );
     }
+}
+
+#[test]
+fn codex_hook_at_every_access_level() {
+    for access in [Access::Read, Access::Edit, Access::Full] {
+        for resume in [None, Some("sess")] {
+            let c = command(&with_access(AgentKind::Codex, access), resume);
+            let i = c.args.iter().position(|a| a == "-c").expect("-c");
+            assert!(c.args[i + 1].starts_with("hooks.PreToolUse="), "{access:?}");
+            assert!(c.args[i + 1].contains(" gate-hook"), "{access:?}");
+            let resume_at = c.args.iter().position(|a| a == "resume");
+            assert!(resume_at.is_none_or(|r| i < r), "hook must precede resume");
+            assert_eq!(c.args.last().map(String::as_str), Some("do it"));
+        }
+    }
+}
+
+#[test]
+fn codex_never_bypasses_hook_trust() {
+    // the flag would also run a cloned repo's own hooks (e.g. SessionStart) with no model action
+    for access in [Access::Read, Access::Edit, Access::Full] {
+        let c = command(&with_access(AgentKind::Codex, access), None);
+        assert!(!c.args.iter().any(|a| a == "--dangerously-bypass-hook-trust"), "{access:?}");
+    }
+}
+
+#[test]
+fn toml_basic_str_escapes_quote_and_backslash() {
+    assert_eq!(suffice::adapter::toml_basic_str(r#"/a"b\c"#), r#"/a\"b\\c"#);
 }
 
 #[test]

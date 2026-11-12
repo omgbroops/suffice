@@ -321,3 +321,14 @@ fn bare_reply_clause_holds() {
         assert!(matches!(check_task(&task(p)), Verdict::Hold { .. }), "{p}");
     }
 }
+
+#[test]
+fn opencode_and_codex_local_tools_pass_the_hook() {
+    for t in ["patch", "apply_patch", "todoread", "update_plan", "lsp", "skill"] {
+        assert!(!held(&check_event(&call(t, "*** Begin Patch"))), "{t}");
+    }
+    // still held: asking a person, and look-alike names
+    for t in ["question", "patch_send", "apply_patch_and_deploy"] {
+        assert!(held(&check_event(&call(t, "x"))), "{t}");
+    }
+}
