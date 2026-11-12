@@ -320,7 +320,7 @@ impl Browser {
         };
         // If attach fails, dropping `b` kills the process and removes the profile.
         let mut b = Browser { child, profile, ws: None, loaded: false, next_id: 0 };
-        b.attach().map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+        b.attach().map_err(|e| io::Error::other(e))?;
         Ok(b)
     }
 

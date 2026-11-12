@@ -133,7 +133,7 @@ impl Pool {
             // free the slot as soon as the leader is gone; grandchildren may still hold the pipes
             {
                 let mut g = inner.lock().unwrap();
-                if g.runs.get(&name).map_or(false, |r| r.pgid == pgid) {
+                if g.runs.get(&name).is_some_and(|r| r.pgid == pgid) {
                     g.runs.remove(&name);
                 }
             }

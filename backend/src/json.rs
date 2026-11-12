@@ -269,7 +269,7 @@ mod tests {
     fn write_then_parse_is_identity() {
         let v = Value::Obj(vec![
             ("s".into(), Value::str("q\"\\\n\u{1}é")),
-            ("n".into(), Value::num(1_700_000_000_123_456u64 as f64)),
+            ("n".into(), Value::num(1_700_000_000_123_456_f64)),
             ("a".into(), Value::Arr(vec![Value::Null, Value::Bool(false), Value::num(-7)])),
         ]);
         assert_eq!(parse(&v.to_string()).unwrap(), v);
