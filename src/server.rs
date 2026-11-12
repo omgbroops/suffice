@@ -148,23 +148,20 @@ fn respond(w: &mut impl Write, code: u16, origin: Option<&str>, body: &str) -> i
     w.flush()
 }
 
-fn pct_decode(s: &str, plus: bool) -> String {
+/// None on a malformed escape (not exactly two ASCII hex digits after '%').
+fn pct_decode(s: &str, plus: bool) -> Option<String> {
     let b = s.as_bytes();
     let mut out = Vec::with_capacity(b.len());
     let mut i = 0;
     while i < b.len() {
         match b[i] {
-            b'%' if i + 2 < b.len() => {
-                match u8::from_str_radix(&s[i + 1..i + 3], 16) {
-                    Ok(v) => {
-                        out.push(v);
-                        i += 3;
-                    }
-                    Err(_) => {
-                        out.push(b'%');
-                        i += 1;
-                    }
+            b'%' => {
+                let h = b.get(i + 1..i + 3)?;
+                if !h.iter().all(u8::is_ascii_hexdigit) {
+                    return None;
                 }
+                out.push(u8::from_str_radix(std::str::from_utf8(h).ok()?, 16).ok()?);
+                i += 3;
             }
             b'+' if plus => {
                 out.push(b' ');
@@ -176,7 +173,7 @@ fn pct_decode(s: &str, plus: bool) -> String {
             }
         }
     }
-    String::from_utf8_lossy(&out).into_owned()
+    Some(String::from_utf8_lossy(&out).into_owned())
 }
 
 fn ct_eq(a: &str, b: &str) -> bool {
@@ -201,16 +198,26 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
         Err(_) => return,
     };
     let mut r = BufReader::new(stream);
+    let deadline = Instant::now() + Duration::from_secs(10);
     let mut line = String::new();
+    let (mut heads, mut head_bytes) = (0usize, 0usize);
     if r.read_line(&mut line).unwrap_or(0) == 0 {
         return;
     }
+    head_bytes += line.len();
     let mut parts = line.split_whitespace();
     let (method, target) = (parts.next().unwrap_or("").to_string(), parts.next().unwrap_or("").to_string());
-    let (mut auth, mut origin, mut last_id, mut len) = (None, None, None, 0usize);
+    let (mut auth, mut origin, mut last_id, mut len, mut host) = (None, None, None, 0usize, None);
     loop {
         line.clear();
         if r.read_line(&mut line).unwrap_or(0) == 0 {
+            return;
+        }
+        heads += 1;
+        head_bytes += line.len();
+        // shortcut: whole-request deadline checked per line, per-read timeout bounds a single stalled read
+        if heads > 100 || head_bytes > 16 * 1024 || Instant::now() > deadline {
+            let _ = respond(&mut w, 431, None, &err(431, "request headers too large").1.to_string());
             return;
         }
         let h = line.trim_end();
@@ -222,23 +229,36 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
             match k.trim().to_ascii_lowercase().as_str() {
                 "authorization" => auth = Some(v),
                 "origin" => origin = Some(v),
+                "host" => host = Some(v),
                 "last-event-id" => last_id = Some(v),
                 "content-length" => len = v.parse().unwrap_or(0),
                 _ => {}
             }
         }
     }
+    // DNS rebinding guard: a foreign Host name means the browser resolved an attacker domain to loopback
+    if host.is_some_and(|h| !matches!(h.split(':').next(), Some("127.0.0.1" | "localhost"))) {
+        let _ = respond(&mut w, 421, None, &err(421, "misdirected request").1.to_string());
+        return;
+    }
     let origin = origin.as_deref();
     let (raw_path, qs) = target.split_once('?').unwrap_or((&target, ""));
-    let path = pct_decode(raw_path, false);
-    let query: Vec<(String, String)> = qs
-        .split('&')
-        .filter(|p| !p.is_empty())
-        .map(|p| {
-            let (k, v) = p.split_once('=').unwrap_or((p, ""));
-            (pct_decode(k, true), pct_decode(v, true))
-        })
-        .collect();
+    let decoded = (|| {
+        let path = pct_decode(raw_path, false)?;
+        let query: Vec<(String, String)> = qs
+            .split('&')
+            .filter(|p| !p.is_empty())
+            .map(|p| {
+                let (k, v) = p.split_once('=').unwrap_or((p, ""));
+                Some((pct_decode(k, true)?, pct_decode(v, true)?))
+            })
+            .collect::<Option<_>>()?;
+        Some((path, query))
+    })();
+    let Some((path, query)) = decoded else {
+        let _ = respond(&mut w, 400, origin, &err(400, "bad percent-encoding").1.to_string());
+        return;
+    };
 
     if method == "OPTIONS" {
         let _ = respond(&mut w, 204, origin, "");
@@ -427,6 +447,9 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 return Err(err(404, format!("no approval '{id}'")));
             };
             ask_res(ctx, move |e| {
+                if !e.tasks().iter().any(|t| t.id == task && matches!(t.state, TaskState::NeedsApproval { .. })) {
+                    return err(409, format!("task {task} is not awaiting approval"));
+                }
                 let r = e.cancel(&task);
                 task_result(e, &task, r)
             })
@@ -454,7 +477,7 @@ fn serve_sse(ctx: &Ctx, w: &mut TcpStream, origin: Option<&str>, since: u64, q: 
     let mut keys: HashMap<String, Option<String>> = task_keys(&tasks);
     let mut last = since;
     let mut feed = Vec::new();
-    feed.extend(backlog.into_iter().map(Some));
+    feed.extend(backlog.into_iter().rev().map(Some));
     loop {
         let next = if let Some(l) = feed.pop() {
             l
@@ -606,13 +629,29 @@ fn create_task(e: &mut Engine, v: &Value) -> Res {
 
 fn parse_task(v: &Value, id: String) -> Result<Task, String> {
     let s = |k: &str| v.get(k).and_then(Value::as_str).map(str::to_string);
-    let agent = match s("agent").as_deref() {
-        Some("claude") => AgentKind::Claude,
-        Some("codex") => AgentKind::Codex,
-        Some("opencode") => AgentKind::OpenCode,
-        Some("gemini") => AgentKind::Gemini,
-        Some("generic") => return Err("generic agents need a program and args, not in API v0".into()),
-        Some(other) => return Err(format!("unknown agent '{other}'")),
+    let agent = match v.get("agent") {
+        Some(Value::Str(a)) => match a.as_str() {
+            "claude" => AgentKind::Claude,
+            "codex" => AgentKind::Codex,
+            "opencode" => AgentKind::OpenCode,
+            "gemini" => AgentKind::Gemini,
+            other => return Err(format!("unknown agent '{other}'")),
+        },
+        Some(g @ Value::Obj(_)) => {
+            let g = g.get("generic").ok_or("agent object must be {\"generic\": {...}}")?;
+            let program = g.get("program").and_then(Value::as_str).ok_or("generic needs program")?.to_string();
+            let args = match g.get("args") {
+                None => vec![],
+                Some(a) => a
+                    .as_arr()
+                    .ok_or("args must be an array")?
+                    .iter()
+                    .map(|x| x.as_str().map(str::to_string).ok_or("args must be strings"))
+                    .collect::<Result<_, _>>()?,
+            };
+            AgentKind::Generic { program, args }
+        }
+        Some(_) => return Err("agent must be a name or {\"generic\": {...}}".into()),
         None => return Err("missing agent".into()),
     };
     let prompt = s("prompt").ok_or("missing prompt")?;
@@ -757,9 +796,10 @@ mod tests {
 
     #[test]
     fn decodes_percent_and_plus() {
-        assert_eq!(pct_decode("a%20b+c", true), "a b c");
-        assert_eq!(pct_decode("a+b", false), "a+b");
-        assert_eq!(pct_decode("%zz", false), "%zz");
+        assert_eq!(pct_decode("a%20b+c", true).as_deref(), Some("a b c"));
+        assert_eq!(pct_decode("a+b", false).as_deref(), Some("a+b"));
+        assert_eq!(pct_decode("%zz", false), None);
+        assert_eq!(pct_decode("%+1", false), None);
     }
 
     #[test]

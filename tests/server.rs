@@ -43,7 +43,7 @@ fn http(port: u16, method: &str, path: &str, headers: &str, body: &str) -> (u16,
     s.set_read_timeout(Some(Duration::from_millis(1500))).unwrap();
     write!(
         s,
-        "{method} {path} HTTP/1.1\r\nHost: x\r\n{headers}Content-Length: {}\r\n\r\n{body}",
+        "{method} {path} HTTP/1.1\r\nHost: 127.0.0.1:{port}\r\n{headers}Content-Length: {}\r\n\r\n{body}",
         body.len()
     )
     .unwrap();
@@ -195,5 +195,119 @@ fn duplicate_and_unknown_dep_are_400() {
     assert_eq!(http(port, "POST", "/tasks", &auth(), &task_body("d1", "x")).0, 400);
     let bad = r#"{"id":"d2","agent":"claude","prompt":"x","cwd":"/tmp","deps":["nope"]}"#;
     assert_eq!(http(port, "POST", "/tasks", &auth(), bad).0, 400);
+    s.stop();
+}
+
+fn raw(port: u16, bytes: &[u8]) -> String {
+    let mut s = TcpStream::connect(("127.0.0.1", port)).unwrap();
+    s.set_read_timeout(Some(Duration::from_secs(5))).unwrap();
+    s.write_all(bytes).unwrap();
+    let mut out = String::new();
+    let _ = s.read_to_string(&mut out);
+    out
+}
+
+fn ids_of(resp: &str) -> Vec<u64> {
+    resp.lines().filter_map(|l| l.strip_prefix("id: ")).filter_map(|n| n.parse().ok()).collect()
+}
+
+#[test]
+fn state_events_cover_dep_ready_and_retry() {
+    let (_d, s) = start("states");
+    let port = s.port();
+    http(port, "POST", "/tasks", &auth(), &task_body("s1", "one"));
+    let dep = r#"{"id":"s2","agent":"claude","prompt":"two","cwd":"/tmp","deps":["s1"]}"#;
+    assert_eq!(http(port, "POST", "/tasks", &auth(), dep).0, 201);
+    let retry = r#"{"id":"s3","agent":"claude","prompt":"three","cwd":"/tmp","max_retries":1,"env":{"MODE":"fail"}}"#;
+    assert_eq!(http(port, "POST", "/tasks", &auth(), retry).0, 201);
+    let finished = wait_for(20, || {
+        let (_, r) = http(port, "GET", "/tasks/s3", &auth(), "");
+        body_of(&r).contains("\"state\":\"failed\"") && body_of(&r).contains("\"attempts\":1")
+    });
+    assert!(finished, "retry task did not fail after its retry");
+    let (_, dep_ev) = http(port, "GET", "/events?task=s2", &auth(), "");
+    assert!(body_of(&dep_ev).contains("\"state\":\"ready\""), "dep ready not logged: {dep_ev}");
+    let (_, retry_ev) = http(port, "GET", "/events?task=s3", &auth(), "");
+    assert!(retry_ev.matches("\"state\":\"ready\"").count() >= 2, "retry ready not logged: {retry_ev}");
+    s.stop();
+}
+
+#[test]
+fn generic_agent_is_held_until_approved() {
+    let (_d, s) = start("generic");
+    let port = s.port();
+    let body = r#"{"id":"g1","agent":{"generic":{"program":"/bin/echo","args":["hi"]}},"prompt":"x","cwd":"/tmp"}"#;
+    assert_eq!(http(port, "POST", "/tasks", &auth(), body).0, 201);
+    let held = wait_for(10, || {
+        let (_, r) = http(port, "GET", "/tasks/g1", &auth(), "");
+        body_of(&r).contains("\"state\":\"needs_approval\"") && body_of(&r).contains("custom program")
+    });
+    assert!(held, "generic task not held");
+    assert_eq!(http(port, "POST", "/approvals/ag1/approve", &auth(), "").0, 200);
+    let ran = wait_for(20, || {
+        let (_, r) = http(port, "GET", "/tasks/g1", &auth(), "");
+        body_of(&r).contains("\"state\":\"done\"")
+    });
+    assert!(ran, "approved generic task did not run");
+    s.stop();
+}
+
+#[test]
+fn sse_replays_all_events_in_order() {
+    let (_d, s) = start("sseorder");
+    let port = s.port();
+    for i in 0..4 {
+        http(port, "POST", "/tasks", &auth(), &task_body(&format!("o{i}"), "hi"));
+    }
+    wait_for(30, || {
+        let (_, r) = http(port, "GET", "/tasks", &auth(), "");
+        body_of(&r).matches("\"state\":\"done\"").count() == 4
+    });
+    let (_, all) = http(port, "GET", "/events?limit=500", &auth(), "");
+    let want: Vec<u64> = all.split("\"seq\":").skip(1).filter_map(|x| x.split(|c: char| !c.is_ascii_digit()).next()?.parse().ok()).collect();
+    assert!(want.len() >= 20, "need 20+ events, got {}", want.len());
+    let (_, resp) = http(port, "GET", "/stream?since=0&token=test-token", "", "");
+    let got = ids_of(&resp);
+    assert_eq!(got, want);
+    s.stop();
+}
+
+#[test]
+fn deny_on_non_pending_task_is_409() {
+    let (_d, s) = start("deny409");
+    let port = s.port();
+    http(port, "POST", "/tasks", &auth(), &task_body("q1", "hello"));
+    wait_for(20, || body_of(&http(port, "GET", "/tasks/q1", &auth(), "").1).contains("\"state\":\"done\""));
+    assert_eq!(http(port, "POST", "/approvals/aq1/deny", &auth(), "").0, 409);
+    s.stop();
+}
+
+#[test]
+fn oversized_headers_are_431() {
+    let (_d, s) = start("hdrs");
+    let mut req = format!("GET /health HTTP/1.1\r\nHost: 127.0.0.1:{}\r\n{}", s.port(), auth());
+    req.push_str(&"X-Pad: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\n".repeat(300));
+    req.push_str("\r\n");
+    let out = raw(s.port(), req.as_bytes());
+    assert!(out.starts_with("HTTP/1.1 431"), "{out}");
+    s.stop();
+}
+
+#[test]
+fn bad_percent_escapes_are_400_not_panics() {
+    let (_d, s) = start("pct");
+    let port = s.port();
+    assert_eq!(http(port, "GET", "/tasks/%+1", &auth(), "").0, 400);
+    assert_eq!(http(port, "GET", "/tasks/%é", &auth(), "").0, 400);
+    assert_eq!(http(port, "GET", "/health", &auth(), "").0, 200, "server died");
+    s.stop();
+}
+
+#[test]
+fn foreign_host_header_is_421() {
+    let (_d, s) = start("host");
+    let req = format!("GET /health HTTP/1.1\r\nHost: evil.example:{}\r\n{}\r\n", s.port(), auth());
+    let out = raw(s.port(), req.as_bytes());
+    assert!(out.starts_with("HTTP/1.1 421"), "{out}");
     s.stop();
 }

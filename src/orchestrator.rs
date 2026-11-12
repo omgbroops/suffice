@@ -105,15 +105,21 @@ impl Engine {
 
     /// Move a task to `state` and log the change.
     fn set_state(&mut self, id: &str, state: TaskState) -> Result<(), String> {
-        let reason = match &state {
-            TaskState::NeedsApproval { reason } => Some(reason.clone()),
-            TaskState::Failed { error } => Some(error.clone()),
-            _ => None,
-        };
-        let name = state.name().to_string();
         self.queue.set_state(id, state)?;
-        self.log(id, Event::State { state: name, reason });
+        self.log_state(id);
         Ok(())
+    }
+
+    /// Log the task's current state (after the queue may have turned a Failed into a retry Ready).
+    fn log_state(&mut self, id: &str) {
+        let Some(t) = self.queue.get(id) else { return };
+        let (state, reason) = match &t.state {
+            TaskState::NeedsApproval { reason } => (t.state.name(), Some(reason.clone())),
+            TaskState::Failed { error } => (t.state.name(), Some(error.clone())),
+            s => (s.name(), None),
+        };
+        let event = Event::State { state: state.to_string(), reason };
+        self.log(id, event);
     }
 
     /// Re-queue a failed or cancelled task.
@@ -168,7 +174,15 @@ impl Engine {
 
     /// Start every Ready task that fits the pool. Non-blocking.
     pub fn tick(&mut self) {
-        for id in self.queue.ready() {
+        let pending: Vec<TaskId> =
+            self.queue.all().into_iter().filter(|t| t.state == TaskState::Pending).map(|t| t.id.clone()).collect();
+        let ready = self.queue.ready();
+        for id in pending {
+            if self.queue.get(&id).is_some_and(|t| t.state != TaskState::Pending) {
+                self.log_state(&id);
+            }
+        }
+        for id in ready {
             if self.pool.running() >= self.max_parallel {
                 break;
             }
@@ -178,6 +192,10 @@ impl Engine {
                 continue; // started, or killed but not yet exited (still holds the session)
             }
             if !self.approved.contains(&id) {
+                if matches!(task.agent, AgentKind::Generic { .. }) {
+                    let _ = self.set_state(&id, TaskState::NeedsApproval { reason: "custom program".into() });
+                    continue;
+                }
                 if let Verdict::Hold { reason } = gate::check_task(&task) {
                     let _ = self.set_state(&id, TaskState::NeedsApproval { reason });
                     continue;
