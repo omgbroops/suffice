@@ -230,7 +230,7 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
                         }
                         _ => bad = true,
                     }
-                } else if (x.starts_with("http://") || x.starts_with("https://")) && !x.contains('@') {
+                } else if plain_get_url(x) {
                     urls += 1;
                 } else {
                     bad = true;
@@ -244,9 +244,13 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
             let (mut words, mut bad, mut i) = (Vec::new(), false, 0);
             while i < a.len() {
                 match a[i] {
-                    "--json" | "-R" | "--repo" => {
+                    "--json" => {
                         i += 1;
                         bad |= !a.get(i).is_some_and(|v| !v.starts_with('-'));
+                    }
+                    "-R" | "--repo" => {
+                        i += 1;
+                        bad |= !a.get(i).is_some_and(|v| owner_repo(v));
                     }
                     "-L" | "--limit" => {
                         i += 1;
@@ -268,7 +272,7 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
         "python3" | "node" => {
             let script = |p: &str| {
                 let ext = if prog == "python3" { p.ends_with(".py") } else { p.ends_with(".js") || p.ends_with(".mjs") };
-                ext && !p.contains('/') && !unsafe_path(p)
+                ext && !p.starts_with('-') && !p.contains('/') && !unsafe_path(p)
             };
             let ok = a.len() == 1 && script(a[0]);
             (!ok).then_some("python3/node: only a plain relative script, no flags")
@@ -276,7 +280,8 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
         "docker" => match a {
             ["ps" | "images"] => None,
             ["build", "-t", name, path] => {
-                let ok = !name.starts_with('-') && !path.starts_with('-') && !path.starts_with(['/', '~']) && !path.contains("..");
+                let ctx = *path == "." || (path.chars().all(|c| c.is_ascii_alphanumeric() || "_.-".contains(c)) && !path.contains(".git") && !path.contains(".."));
+                let ok = !name.starts_with('-') && !path.starts_with('-') && ctx;
                 (!ok).then_some("docker build: only -t NAME and a relative path")
             }
             _ => Some("docker subcommand not on safe list"),
@@ -284,6 +289,24 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
         p if SHELL_READ_ONLY.contains(&p) => None,
         _ => Some("command not on safe list"),
     }
+}
+
+/// curl GET target: https, exact allowlisted host, no userinfo, globbing or long query.
+fn plain_get_url(u: &str) -> bool {
+    const HOSTS: &[&str] = &[
+        "github.com", "api.github.com", "raw.githubusercontent.com", "crates.io", "static.crates.io", "docs.rs",
+        "registry.npmjs.org", "pypi.org", "files.pythonhosted.org",
+    ];
+    let Some(rest) = u.strip_prefix("https://") else { return false };
+    let host = &rest[..rest.find(['/', '?', '#']).unwrap_or(rest.len())];
+    let query_len = u.split_once('?').map_or(0, |(_, q)| q.len());
+    HOSTS.contains(&host) && query_len <= 200 && !u.contains(['[', ']', '{', '}', '@'])
+}
+
+/// gh -R/--repo value: exactly owner/repo, no host prefix.
+fn owner_repo(v: &str) -> bool {
+    let ok = |s: &str| !s.is_empty() && s.chars().all(|c| c.is_ascii_alphanumeric() || "_.-".contains(c));
+    v.split_once('/').is_some_and(|(o, r)| ok(o) && ok(r))
 }
 
 /// Lowercase words of a tool name, split on separators and camelCase boundaries.
