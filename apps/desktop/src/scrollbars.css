@@ -1,0 +1,16 @@
+/* One scrollbar treatment for transcripts, navigation, menus and code. */
+* { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+
+@supports selector(::-webkit-scrollbar) {
+  /* Let the custom thumb geometry replace Chromium's native Windows controls. */
+  * { scrollbar-width: auto; scrollbar-color: auto; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+  ::-webkit-scrollbar-thumb { min-height: 32px; border: 3px solid transparent; border-radius: 10px; background: var(--scrollbar-thumb); background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background-color: var(--scrollbar-thumb-hover); }
+  ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+}
+
+@media (forced-colors: active) {
+  * { scrollbar-width: thin; scrollbar-color: auto; }
+}
