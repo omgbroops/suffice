@@ -1,4 +1,4 @@
-use loom::computer::{run, run_ungated, Action, Button, Desktop, FakeDesktop};
+use suffice::computer::{run, run_ungated, Action, Button, Desktop, FakeDesktop};
 
 fn click(x: i32, y: i32) -> Action {
     Action::Click { x, y, button: Button::Left }

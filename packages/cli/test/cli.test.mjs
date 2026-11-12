@@ -107,3 +107,24 @@ test('file scope rejects an escaping directory link, including for new files',as
     await assert.rejects(repositoryPath(repo,'linked/new.txt'),/leaves/);
   } finally {await rm(dir,{recursive:true,force:true});}
 });
+
+test('serve parses its flags and only accepts them for serve',()=>{
+  assert.equal(parseOptions(['serve']).command,'serve');
+  const o=parseOptions(['serve','--port','8080','--max','4']);
+  assert.equal(o.command,'serve');assert.equal(o.port,8080);assert.equal(o.max,4);
+  assert.throws(()=>parseOptions(['serve','--port','0']),/positive integer/);
+  assert.throws(()=>parseOptions(['--port','8080']),/only apply to serve/);
+});
+
+test('serve runs the backend binary with the home backend dir and forwards its exit code',async()=>{
+  const dir=await mkdtemp(resolve(tmpdir(),'suffice-serve-'));
+  const fake=resolve(dir,'fake-backend.sh');
+  await writeFile(fake,'#!/bin/sh\necho "$@"\nexit 0\n');
+  await (await import('node:fs/promises')).chmod(fake,0o755);
+  const entry=resolve(import.meta.dirname,'../bin/suffice.mjs');
+  const home=resolve(dir,'home');
+  const run=spawnSync(process.execPath,[entry,'serve','--port','9100','--home',home],{encoding:'utf8',env:{...process.env,SUFFICE_BACKEND_BIN:fake}});
+  assert.equal(run.status,0,run.stderr);
+  assert.match(run.stdout,new RegExp(`serve --dir ${home.replaceAll('/','\\/')}/backend --port 9100`));
+  await rm(dir,{recursive:true,force:true});
+});

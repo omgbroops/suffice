@@ -1,5 +1,5 @@
-use loom::session::Sessions;
-use loom::types::AgentKind;
+use suffice::session::Sessions;
+use suffice::types::AgentKind;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -8,7 +8,7 @@ static N: AtomicUsize = AtomicUsize::new(0);
 struct Dir(PathBuf);
 impl Dir {
     fn new() -> Dir {
-        let p = std::env::temp_dir().join(format!("loom-test-{}-{}", std::process::id(), N.fetch_add(1, Ordering::SeqCst)));
+        let p = std::env::temp_dir().join(format!("suffice-test-{}-{}", std::process::id(), N.fetch_add(1, Ordering::SeqCst)));
         let _ = std::fs::remove_dir_all(&p);
         std::fs::create_dir_all(&p).unwrap();
         Dir(p)

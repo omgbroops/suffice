@@ -1,4 +1,4 @@
-//! loom: one background program that owns every agent run.
+//! suffice backend: one background program that owns every agent run.
 //!
 //! Flow: a client submits a Task (HTTP, server.rs) -> queue.rs stores it durably -> orchestrator.rs
 //! picks ready tasks (deps done, session free, gate passed) -> pool.rs spawns the agent CLI built by

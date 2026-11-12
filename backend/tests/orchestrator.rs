@@ -1,5 +1,5 @@
-use loom::orchestrator::Engine;
-use loom::types::{Access, AgentKind, Event, Task, TaskState};
+use suffice::orchestrator::Engine;
+use suffice::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -9,7 +9,7 @@ struct Dir(PathBuf);
 
 impl Dir {
     fn new(name: &str) -> Dir {
-        let p = std::env::temp_dir().join(format!("loom-orch-test-{}-{}", name, std::process::id()));
+        let p = std::env::temp_dir().join(format!("suffice-orch-test-{}-{}", name, std::process::id()));
         let _ = fs::remove_dir_all(&p);
         fs::create_dir_all(&p).unwrap();
         Dir(p)

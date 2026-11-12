@@ -7,9 +7,9 @@ use std::process::{Command, Stdio};
 
 #[test]
 fn serve_prints_port_and_answers_health_with_token() {
-    let dir = std::env::temp_dir().join(format!("loom-cli-test-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("suffice-cli-test-{}", std::process::id()));
     let _ = fs::remove_dir_all(&dir);
-    let mut child = Command::new(env!("CARGO_BIN_EXE_loom"))
+    let mut child = Command::new(env!("CARGO_BIN_EXE_suffice-backend"))
         .args(["serve", "--port", "0", "--dir"])
         .arg(&dir)
         .stdout(Stdio::piped())

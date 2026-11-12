@@ -291,7 +291,7 @@ impl Browser {
     /// Starts headless Chrome on a fresh profile and attaches to its page target.
     pub fn launch(binary: &Path) -> io::Result<Browser> {
         let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos()).unwrap_or(0);
-        let profile = std::env::temp_dir().join(format!("loom-browser-{}-{nanos}", std::process::id()));
+        let profile = std::env::temp_dir().join(format!("suffice-browser-{}-{nanos}", std::process::id()));
         fs::create_dir_all(&profile)?;
         let spawned = Command::new(binary)
             .args([

@@ -76,7 +76,7 @@ impl Desktop for MacDesktop {
         (0, 0)
     }
     fn screenshot_png(&mut self) -> io::Result<Vec<u8>> {
-        let path = std::env::temp_dir().join(format!("loom-shot-{}-{}.png", std::process::id(), nanos()));
+        let path = std::env::temp_dir().join(format!("suffice-shot-{}-{}.png", std::process::id(), nanos()));
         let status = std::process::Command::new("/usr/sbin/screencapture").args(["-x", "-t", "png"]).arg(&path).status()?;
         if !status.success() {
             return Err(io::Error::other("screencapture failed"));

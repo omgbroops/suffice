@@ -207,6 +207,7 @@ pub(crate) fn agent_to_json(a: &AgentKind) -> Value {
         AgentKind::Codex => ("codex", vec![]),
         AgentKind::OpenCode => ("opencode", vec![]),
         AgentKind::Gemini => ("gemini", vec![]),
+        AgentKind::Suffice => ("suffice", vec![]),
         AgentKind::Generic { program, args } => (
             "generic",
             vec![
@@ -226,6 +227,7 @@ pub(crate) fn agent_from_json(v: &Value) -> Result<AgentKind, String> {
         "codex" => AgentKind::Codex,
         "opencode" => AgentKind::OpenCode,
         "gemini" => AgentKind::Gemini,
+        "suffice" => AgentKind::Suffice,
         "generic" => AgentKind::Generic {
             program: field_str(v, "program")?.into(),
             args: field_strs(v, "args")?,

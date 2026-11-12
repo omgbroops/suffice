@@ -1,5 +1,5 @@
-use loom::queue::Queue;
-use loom::types::{Access, AgentKind, Task, TaskState};
+use suffice::queue::Queue;
+use suffice::types::{Access, AgentKind, Task, TaskState};
 use std::collections::BTreeMap;
 use std::io::Write;
 use std::path::PathBuf;
@@ -10,7 +10,7 @@ static N: AtomicUsize = AtomicUsize::new(0);
 struct Dir(PathBuf);
 impl Dir {
     fn new() -> Dir {
-        let p = std::env::temp_dir().join(format!("loom-test-{}-{}", std::process::id(), N.fetch_add(1, Ordering::SeqCst)));
+        let p = std::env::temp_dir().join(format!("suffice-test-{}-{}", std::process::id(), N.fetch_add(1, Ordering::SeqCst)));
         let _ = std::fs::remove_dir_all(&p);
         std::fs::create_dir_all(&p).unwrap();
         Dir(p)

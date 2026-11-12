@@ -1,5 +1,5 @@
-use loom::adapter::{command, parse_line};
-use loom::types::{Access, AgentKind, Event, Task, TaskState};
+use suffice::adapter::{command, parse_line};
+use suffice::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
@@ -31,7 +31,7 @@ fn parse_all(kind: &AgentKind, lines: &[String]) -> Vec<Event> {
     lines.iter().flat_map(|l| parse_line(kind, l)).collect()
 }
 
-fn args(c: &loom::types::Cmd) -> Vec<&str> {
+fn args(c: &suffice::types::Cmd) -> Vec<&str> {
     c.args.iter().map(String::as_str).collect()
 }
 
@@ -180,4 +180,25 @@ fn opencode_gemini_generic_have_no_sandbox_flags() {
             assert_eq!(command(&with_access(kind.clone(), access), None).args, base, "{kind:?} {access:?}");
         }
     }
+}
+
+#[test]
+fn suffice_command_with_model() {
+    std::env::set_var("SUFFICE_REPO", "/repo");
+    let c = command(&task(AgentKind::Suffice, "hi", Some("gpt-x")), None);
+    assert_eq!(c.program, "node");
+    assert_eq!(args(&c), vec!["/repo/packages/cli/bin/suffice.mjs", "-p", "--cwd", "/tmp/work", "--model", "gpt-x", "hi"]);
+}
+
+#[test]
+fn suffice_command_without_model() {
+    std::env::set_var("SUFFICE_REPO", "/repo");
+    let c = command(&task(AgentKind::Suffice, "hi", None), None);
+    assert_eq!(args(&c), vec!["/repo/packages/cli/bin/suffice.mjs", "-p", "--cwd", "/tmp/work", "hi"]);
+}
+
+#[test]
+fn suffice_parse_emits_text_per_line() {
+    let ev = parse_line(&AgentKind::Suffice, "final answer");
+    assert_eq!(ev, vec![Event::Text { text: "final answer".into() }]);
 }

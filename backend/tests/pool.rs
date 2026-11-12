@@ -1,5 +1,5 @@
-use loom::pool::{Pool, PoolMsg};
-use loom::types::Cmd;
+use suffice::pool::{Pool, PoolMsg};
+use suffice::types::Cmd;
 use std::collections::BTreeMap;
 use std::sync::mpsc::{channel, Receiver};
 use std::thread;
@@ -163,7 +163,7 @@ fn kill_takes_down_whole_process_group() {
 fn missing_program_is_spawn_failed() {
     let (tx, rx) = channel();
     let pool = Pool::new(1, tx);
-    assert!(pool.try_start("m", cmd("/nonexistent/loom-no-such-program", &[], None), 0));
+    assert!(pool.try_start("m", cmd("/nonexistent/suffice-no-such-program", &[], None), 0));
     match next(&rx) {
         PoolMsg::SpawnFailed { run, .. } => assert_eq!(run, "m"),
         other => panic!("expected SpawnFailed, got {other:?}"),

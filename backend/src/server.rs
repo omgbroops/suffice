@@ -605,6 +605,7 @@ fn kind_name(a: &AgentKind) -> &'static str {
         AgentKind::Codex => "codex",
         AgentKind::OpenCode => "opencode",
         AgentKind::Gemini => "gemini",
+        AgentKind::Suffice => "suffice",
         AgentKind::Generic { .. } => "generic",
     }
 }
@@ -674,6 +675,7 @@ fn parse_task(v: &Value, id: String) -> Result<Task, String> {
             "codex" => AgentKind::Codex,
             "opencode" => AgentKind::OpenCode,
             "gemini" => AgentKind::Gemini,
+            "suffice" => AgentKind::Suffice,
             other => return Err(format!("unknown agent '{other}'")),
         },
         Some(g @ Value::Obj(_)) => {

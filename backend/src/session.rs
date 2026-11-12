@@ -87,7 +87,7 @@ impl Sessions {
     /// upgrade the signatures once callers can act on a failed save.
     fn save_quiet(&self) {
         if let Err(e) = self.save() {
-            eprintln!("loom: sessions.json not saved: {e}");
+            eprintln!("suffice-backend: sessions.json not saved: {e}");
         }
     }
     /// Write a temp file, fsync it, then rename over `sessions.json` (atomic replace).

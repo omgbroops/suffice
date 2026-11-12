@@ -1,7 +1,7 @@
-//! End-to-end: the loom UI at :7711 shows a real agent task live from `loom serve` on :7878.
+//! End-to-end: the Suffice UI at :7711 shows a real agent task live from `suffice-backend serve` on :7878.
 //! Run: cargo run --example e2e_ui (server + UI must be up; submits ONE cheap claude haiku task).
-use loom::browser::Browser;
-use loom::json::Value;
+use suffice::browser::Browser;
+use suffice::json::Value;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 use std::path::Path;
@@ -10,7 +10,7 @@ use std::time::{Duration, Instant};
 const SHELL: &str = "/Users/abhayg/Library/Caches/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell";
 
 fn http(method: &str, path: &str, token: &str, body: &str) -> String {
-    let mut s = TcpStream::connect("127.0.0.1:7878").expect("loom serve not running");
+    let mut s = TcpStream::connect("127.0.0.1:7878").expect("suffice-backend serve not running");
     let req = format!(
         "{method} {path} HTTP/1.1\r\nHost: 127.0.0.1:7878\r\nAuthorization: Bearer {token}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
         body.len()
@@ -35,14 +35,14 @@ fn wait_for(b: &mut Browser, what: &str, js: &str, secs: u64) -> bool {
 }
 
 fn main() {
-    let token = std::fs::read_to_string(format!("{}/.loom/token", std::env::var("HOME").unwrap())).unwrap();
+    let token = std::fs::read_to_string(format!("{}/.suffice/backend/token", std::env::var("HOME").unwrap())).unwrap();
     let token = token.trim();
     let stamp = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
     let (task, held) = (format!("e2e-{stamp}"), format!("e2e-held-{stamp}"));
     let mut b = Browser::launch(Path::new(SHELL)).expect("launch headless shell");
-    b.navigate(&format!("http://localhost:7711/loom-ui/?token={token}")).unwrap();
+    b.navigate(&format!("http://localhost:7711/suffice-ui/?token={token}")).unwrap();
     std::thread::sleep(Duration::from_secs(2));
-    let mode = b.evaluate("window.Loom && Loom.mode").unwrap_or(Value::Null);
+    let mode = b.evaluate("window.Suffice && Suffice.mode").unwrap_or(Value::Null);
     println!("UI mode: {mode}");
 
     // one real, cheap, read-only agent run on a fixed session = an agent row
@@ -66,7 +66,7 @@ fn main() {
     b.evaluate("document.querySelector('nav.views button[data-v=\"inbox\"]').click(), true").ok();
     ok &= wait_for(&mut b, "held task in approval inbox", &format!("document.body.innerText.includes('{held}') || document.body.innerText.includes('publish the package')"), 30);
     if let Ok(png) = b.screenshot_png() {
-        std::fs::write("/tmp/loom-e2e.png", png).ok();
+        std::fs::write("/tmp/suffice-e2e.png", png).ok();
     }
     // leave nothing pending: deny the held one
     let ap = http("GET", "/approvals?status=pending", token, "");

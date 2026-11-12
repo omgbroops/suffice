@@ -11,6 +11,7 @@ pub enum AgentKind {
     Codex,
     OpenCode,
     Gemini,
+    Suffice,
     Generic { program: String, args: Vec<String> },
 }
 

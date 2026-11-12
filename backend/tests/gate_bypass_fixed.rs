@@ -1,6 +1,6 @@
 //! Reviewer probes, now asserted. Every bypass must Hold; false positives must Allow.
-use loom::gate::{check_event, check_task, Verdict};
-use loom::types::{Access, AgentKind, Event, Task, TaskState};
+use suffice::gate::{check_event, check_task, Verdict};
+use suffice::types::{Access, AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 

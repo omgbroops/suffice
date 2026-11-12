@@ -1,6 +1,7 @@
 //! Per-CLI command building and output parsing. Pure: no process spawning here.
 use crate::json::{self, Value};
 use crate::types::{Access, AgentKind, Cmd, Event, Task};
+use std::path::{Path, PathBuf};
 
 /// Build the headless command for a task. `resume` is the CLI's native session id from a
 /// previous run on the same session_key.
@@ -60,6 +61,20 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             }
             ("gemini".into(), a)
         }
+        AgentKind::Suffice => {
+            // shortcut: suffice CLI has no sandbox flag yet (doctor reports sandbox:false); gate only
+            let repo = std::env::var("SUFFICE_REPO").map(PathBuf::from).unwrap_or_else(|_| {
+                Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap_or(Path::new(".")).to_path_buf()
+            });
+            let script = repo.join("packages/cli/bin/suffice.mjs").to_string_lossy().into_owned();
+            let cwd = task.cwd.to_string_lossy().into_owned();
+            let mut a = vec![script, "-p".into(), "--cwd".into(), cwd];
+            if let Some(m) = &task.model {
+                a.extend(strs(&["--model", m]));
+            }
+            a.push(prompt);
+            ("node".into(), a)
+        }
         AgentKind::Generic { program, args } => {
             // shortcut: no CLI-level sandbox flag for generic, gate only; check its permission config when wiring
             let mut a = args.clone();
@@ -79,7 +94,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
 /// Parse one stdout line from this agent kind into zero or more normalized events.
 /// Unparseable lines become Event::Raw, never dropped.
 pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
-    if let AgentKind::Generic { .. } = kind {
+    if let AgentKind::Generic { .. } | AgentKind::Suffice = kind {
         return vec![Event::Text { text: line.to_string() }];
     }
     let Ok(v) = json::parse(line) else {
@@ -92,7 +107,7 @@ pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
         AgentKind::OpenCode => defensive_event(&v),
         // shortcut: gemini event shape unverified, capture a sample
         AgentKind::Gemini => defensive_event(&v),
-        AgentKind::Generic { .. } => None,
+        AgentKind::Generic { .. } | AgentKind::Suffice => None,
     };
     ev.unwrap_or_else(|| raw(line))
 }

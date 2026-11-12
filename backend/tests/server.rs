@@ -1,5 +1,5 @@
-use loom::orchestrator::Engine;
-use loom::server::{serve, Server};
+use suffice::orchestrator::Engine;
+use suffice::server::{serve, Server};
 use std::fs;
 use std::io::{Read, Write};
 use std::net::TcpStream;
@@ -12,7 +12,7 @@ struct Dir(PathBuf);
 
 impl Dir {
     fn new(name: &str) -> Dir {
-        let p = std::env::temp_dir().join(format!("loom-server-test-{}-{}", name, std::process::id()));
+        let p = std::env::temp_dir().join(format!("suffice-server-test-{}-{}", name, std::process::id()));
         let _ = fs::remove_dir_all(&p);
         fs::create_dir_all(&p).unwrap();
         Dir(p)

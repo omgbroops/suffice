@@ -1,5 +1,5 @@
-use loom::browser::{accept_key, base64_decode, base64_encode, encode_frame, read_frame, Browser};
-use loom::json::Value;
+use suffice::browser::{accept_key, base64_decode, base64_encode, encode_frame, read_frame, Browser};
+use suffice::json::Value;
 use std::fs;
 use std::io::Cursor;
 use std::path::{Path, PathBuf};
@@ -11,7 +11,7 @@ unsafe extern "C" {
 }
 
 fn page(name: &str, html: &str) -> (PathBuf, String) {
-    let dir = std::env::temp_dir().join(format!("loom-browser-test-{}-{name}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("suffice-browser-test-{}-{name}", std::process::id()));
     fs::create_dir_all(&dir).unwrap();
     let path = dir.join("index.html");
     fs::write(&path, html).unwrap();
@@ -27,8 +27,8 @@ fn launch_on(html: &str, name: &str) -> (Browser, PathBuf) {
 
 #[test]
 fn navigate_and_evaluate_title() {
-    let (mut b, dir) = launch_on("<title>Hello Loom</title><p>hi</p>", "title");
-    assert_eq!(b.evaluate("document.title").unwrap(), Value::str("Hello Loom"));
+    let (mut b, dir) = launch_on("<title>Hello Suffice</title><p>hi</p>", "title");
+    assert_eq!(b.evaluate("document.title").unwrap(), Value::str("Hello Suffice"));
     drop(b);
     fs::remove_dir_all(dir).unwrap();
 }

@@ -10,6 +10,7 @@ Usage: suffice [options] [task]
   suffice --print "explain this"  Run one task, then exit
   suffice login                   Sign in with your own OpenAI account
   suffice doctor                  Check local setup without model inference
+  suffice serve [--port N] [--max N]  Run the Rust backend server (needs cargo build --release)
 
 Options:
   --cwd PATH          Starting repository (default: current directory)
@@ -31,7 +32,7 @@ Pi's interface and engine, with Suffice's tools, prompt and codemode setup.
 
 export function parseOptions(args, env=process.env) {
   const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', maxCost:10, timeout:600, prompt:''};
-  const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--max-cost':'maxCost','--timeout':'timeout'};
+  const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--max-cost':'maxCost','--timeout':'timeout','--port':'port','--max':'max'};
   const words=[];
   for(let i=0;i<args.length;i++) {
     const arg=args[i];
@@ -44,8 +45,14 @@ export function parseOptions(args, env=process.env) {
     else if(arg.startsWith('-')) throw new Error(`Unknown option: ${arg}`);
     else words.push(arg);
   }
-  if(words.length===1 && ['login','doctor'].includes(words[0])) options.command=words[0];
+  if(words.length===1 && ['login','doctor','serve'].includes(words[0])) options.command=words[0];
   else options.prompt=words.join(' ');
+  if((options.port!==undefined || options.max!==undefined) && options.command!=='serve') throw new Error('--port and --max only apply to serve');
+  for(const key of ['port','max']) {
+    if(options[key]===undefined) continue;
+    options[key]=Number(options[key]);
+    if(!Number.isInteger(options[key]) || options[key]<=0) throw new Error(`${key} must be a positive integer`);
+  }
   if(!['off','minimal','low','medium','high','xhigh'].includes(options.effort)) throw new Error('Invalid effort. Use off, minimal, low, medium, high, or xhigh.');
   for(const key of ['maxCost','timeout']) {
     options[key]=Number(options[key]);
