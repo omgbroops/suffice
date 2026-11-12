@@ -76,6 +76,36 @@ fn opencode_command_with_resume_and_model() {
     assert_eq!(args(&c), ["run", "--format", "json", "--session", "s-2", "-m", "m1", "p"]);
 }
 
+fn opencode_permission(access: Access) -> Option<suffice::json::Value> {
+    let mut t = task(AgentKind::OpenCode, "p", None);
+    t.access = access;
+    let c = command(&t, None);
+    c.env.get("OPENCODE_PERMISSION").map(|s| suffice::json::parse(s).expect("valid json"))
+}
+
+#[test]
+fn opencode_access_sets_permission_env() {
+    use suffice::json::Value;
+    for (access, edit) in [(Access::Read, "deny"), (Access::Edit, "allow")] {
+        let p = opencode_permission(access).expect("permission env set");
+        assert_eq!(p.get("edit").and_then(Value::as_str), Some(edit));
+        assert_eq!(p.get("bash").and_then(Value::as_str), Some("deny"));
+        let mut t = task(AgentKind::OpenCode, "p", None);
+        t.access = access;
+        let c = command(&t, None);
+        assert_eq!(c.env.get("OPENCODE_DISABLE_PROJECT_CONFIG").map(String::as_str), Some("1"));
+    }
+}
+
+#[test]
+fn opencode_full_has_no_permission_env() {
+    let mut t = task(AgentKind::OpenCode, "p", None);
+    t.access = Access::Full;
+    let c = command(&t, None);
+    assert!(!c.env.contains_key("OPENCODE_PERMISSION"));
+    assert!(!c.env.contains_key("OPENCODE_DISABLE_PROJECT_CONFIG"));
+}
+
 #[test]
 fn gemini_command_with_resume() {
     let c = command(&task(AgentKind::Gemini, "p", None), Some("g-3"));
