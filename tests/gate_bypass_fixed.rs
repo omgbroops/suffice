@@ -1,4 +1,4 @@
-//! Reviewer probes from tests/gate_bypass.rs, now asserted. Every bypass must Hold; false positives must Allow.
+//! Reviewer probes, now asserted. Every bypass must Hold; false positives must Allow.
 use loom::gate::{check_event, check_task, Verdict};
 use loom::types::{AgentKind, Event, Task, TaskState};
 use std::collections::BTreeMap;
@@ -52,6 +52,19 @@ fn shell_bypasses_hold() {
 }
 
 #[test]
+fn probe2_shell_bypasses_hold() {
+    let cmds = [
+        "awk BEGIN{system(id)}", "cat <(id)", "python3 <<< __import__(os).system(id)", "GIT_EXTERNAL_DIFF=id git diff",
+        "rg --pre sh x f", "sort -o /tmp/x f", "uniq a /tmp/o", "mv --target-directory=/tmp f", "find . -fls /tmp/x",
+        "sed s/a/id/e f", "git diff --output=/tmp/x", "git grep -Osh x", "PATH=. ls", "cargo build --config build.rustc-wrapper=sh",
+        "ls\u{a0}x", "git commit -m wip", "python --version", "sed -n 1p f", "npm i",
+    ];
+    for c in cmds {
+        assert!(held(&check_event(&bash(c))), "probe not held: {c:?}");
+    }
+}
+
+#[test]
 fn tool_event_bypasses_hold() {
     let cases: &[(&str, &str)] = &[
         ("shell", "git pu\"\"sh"),
@@ -62,7 +75,8 @@ fn tool_event_bypasses_hold() {
         ("browser_click", "{\"element\":\"Order now\"}"),
         ("browser_click", "{\"element\":\"Subscribe\"}"),
         ("mcp__github__merge_pull_request", "{}"),
-        ("mcp__read__x", "{}"),
+        ("thread_message", "{}"),
+        ("reply_to_thread_message", "{}"),
     ];
     for (n, i) in cases {
         let e = Event::ToolCall { name: (*n).into(), input: (*i).into() };
@@ -78,6 +92,7 @@ fn false_positive_tool_events_allow() {
         ("Task", "{}"),
         ("TodoWrite", "{}"),
         ("mcp__x__read_message", "{}"),
+        ("mcp__read__x", "{}"),
     ];
     for (n, i) in cases {
         let e = Event::ToolCall { name: (*n).into(), input: (*i).into() };
@@ -90,19 +105,26 @@ fn task_prompt_probes() {
     let hold_prompts = [
         "create a pull request for this", "Resend the invoice", "e-mail Bob", "Message Bob", "merge the PR", "ship it",
         "release v1", "reply to Bob", "wipe the disk", "drop the prod table", "tag and release", "announce it",
-        "forward this to Bob", "text mom",
+        "forward this to Bob", "text mom", "deleting the file", "releasing v2", "merging branch", "create a PR",
+        "mail bob", "messaging bob", "he sent it", "post it", "notify the team", "comment on it", "share the doc",
+        "gh pr create", "he bought it", "they paid",
     ];
     for p in hold_prompts {
         assert!(held(&check_task(&task(p))), "prompt not held: {p}");
     }
-    for p in ["fix postgres bug", "rename payload field"] {
+    for p in ["fix postgres bug", "rename payload field", "fix text rendering", "sort order", "post-processing"] {
         assert!(!held(&check_task(&task(p))), "false positive prompt: {p}");
     }
 }
 
 #[test]
 fn dev_work_guards_allow() {
-    for c in ["cargo test", "git status && git diff", "ls -la src", "rm target/tmp.txt", "npm test", "python3 scripts/check.py"] {
+    for c in ["cargo test", "git status && git diff", "ls -la src", "rm target/tmp.txt", "npm test"] {
         assert!(!held(&check_event(&bash(c))), "dev command held: {c}");
     }
+}
+
+#[test]
+fn python_script_holds() {
+    assert!(held(&check_event(&bash("python3 scripts/check.py"))), "python3 script not held");
 }

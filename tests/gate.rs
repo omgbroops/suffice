@@ -57,7 +57,7 @@ fn shell_commands() {
         ("yarn publish", true),
         ("npm test", false),
         ("npm install -g x", true),
-        ("npm install x", false),
+        ("npm install x", true),
         ("cargo publish", true),
         ("cargo publish --dry-run", true),
         ("cargo test", false),
