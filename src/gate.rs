@@ -256,6 +256,16 @@ fn non_shell(name: &str, input: &str) -> Verdict {
     if n.contains("click") && buy_words.iter().any(|k| i.contains(*k)) {
         return hold("browser click on outward control");
     }
+    if n == "browser_click" || n == "browser_type" {
+        const BROWSER_OUTWARD: &[&str] = &[
+            "buy", "pay", "checkout", "order", "purchase", "subscribe", "send", "publish", "post", "submit",
+            "confirm", "delete", "sign up", "place order",
+        ];
+        let outward = BROWSER_OUTWARD.iter().any(|k| i.contains(*k))
+            || i.contains("type=submit") || i.contains("\"submit\"")
+            || (i.contains("form") && i.contains("action"));
+        return if outward { hold("browser outward action") } else { Verdict::Allow };
+    }
     if READ_ONLY_TOOLS.contains(&n.as_str()) {
         if n == "webfetch" && ["\"post\"", "\"put\"", "\"patch\"", "\"delete\""].iter().any(|m| i.contains(*m)) {
             return hold("WebFetch write method");

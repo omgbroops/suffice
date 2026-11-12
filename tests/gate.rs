@@ -139,6 +139,24 @@ fn non_shell_tools() {
 }
 
 #[test]
+fn browser_tools() {
+    let cases: &[(&str, &str, bool)] = &[
+        ("browser_click", r##"{"selector":"#search-btn","text":"Search"}"##, false),
+        ("browser_type", r#"{"selector":"input[name=q]","value":"rust books"}"#, false),
+        ("browser_click", r#"{"selector":"button","text":"Place order"}"#, true),
+        ("browser_click", r#"{"selector":"button","text":"Subscribe now"}"#, true),
+        ("browser_type", r#"{"selector":"input","value":"pay now"}"#, true),
+        ("browser_click", r#"{"selector":"input","attrs":"type=submit"}"#, true),
+        ("browser_click", r#"{"selector":"form","attrs":"form action=/save"}"#, true),
+        ("browser_frobnicate", "{}", true),
+    ];
+    for (name, input, want) in cases {
+        let e = Event::ToolCall { name: (*name).into(), input: (*input).into() };
+        assert_eq!(held(&check_event(&e)), *want, "tool: {name} {input}");
+    }
+}
+
+#[test]
 fn non_tool_events_allow() {
     let e = Event::Text { text: "git push".into() };
     assert_eq!(check_event(&e), Verdict::Allow);
