@@ -44,6 +44,24 @@ export function renderCode(container,result,isDiff=false){
  if(diff){const added=rows.filter(line=>line.kind==='addition').length,removed=rows.filter(line=>line.kind==='deletion').length;const stats=document.createElement('span');stats.className='panel-diff-stats';stats.setAttribute('aria-label',`${added} additions, ${removed} deletions`);stats.append(textElement('span','diff-added','+'+added),textElement('span','diff-removed','−'+removed));container.parentElement.querySelector('.panel-content-bar')?.insertBefore(stats,container.parentElement.querySelector('.panel-content-bar > button:last-child'));}
 }
 
+export function filterFileTreeRows(rows,query){
+ const needle=query.toLowerCase().trim(),visiblePaths=new Set();
+ if(needle)for(const row of rows){
+  if(!row.dataset.path.toLowerCase().includes(needle))continue;
+  // Add each match and its ancestors once, rather than scanning matches per row.
+  let path=row.dataset.path;
+  while(!visiblePaths.has(path)){
+   visiblePaths.add(path);
+   const slash=path.lastIndexOf('/');
+   if(slash<0)break;
+   path=path.slice(0,slash);
+  }
+ }
+ for(const row of rows)row.hidden=!!needle&&!visiblePaths.has(row.dataset.path);
+ const available=rows.filter(row=>!row.hidden&&!row.disabled);
+ rows.forEach(row=>row.tabIndex=row===available[0]?0:-1);
+}
+
 export function renderFileTree(container,{directories,expanded,onFolder,onFile}){
  const tree=document.createElement('div');tree.className='file-tree';tree.setAttribute('role','tree');tree.setAttribute('aria-label','Project files');container.append(tree);
  function children(directory,level=1){for(const entry of directories.get(directory)?.entries??[]){
@@ -67,7 +85,7 @@ export function renderFileTree(container,{directories,expanded,onFolder,onFile})
   if(event.key==='ArrowRight'&&row?.dataset.folder==='true'){if(row.getAttribute('aria-expanded')==='false')onFolder(row.dataset.path);else focus(rows[index+1]);}
   if(event.key==='ArrowLeft'&&row){if(row.getAttribute('aria-expanded')==='true')onFolder(row.dataset.path);else{const parent=row.dataset.path.split('/').slice(0,-1).join('/');focus(rows.find(el=>el.dataset.path===parent));}}
  });
- return query=>{const rows=[...tree.querySelectorAll('.tree-row')],needle=query.toLowerCase().trim();const matches=rows.filter(row=>row.dataset.path.toLowerCase().includes(needle));for(const row of rows)row.hidden=!!needle&&!matches.some(match=>match===row||match.dataset.path.startsWith(row.dataset.path+'/'));const available=rows.filter(row=>!row.hidden&&!row.disabled);rows.forEach(row=>row.tabIndex=row===available[0]?0:-1);};
+ return query=>filterFileTreeRows([...tree.querySelectorAll('.tree-row')],query);
 }
 
 export function renderChanges(container,{entries,collapsed=[],onGroup,onFile}){
