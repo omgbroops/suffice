@@ -219,6 +219,39 @@ fn qnum(q: &[(String, String)], k: &str, default: u64) -> Result<u64, String> {
     }
 }
 
+/// Reads one head line (through '\n') under a shared byte budget and a whole-head deadline.
+/// Each fill_buf waits at most the time left, so a dribbling sender cannot hold the connection.
+fn read_head_line(r: &mut BufReader<TcpStream>, line: &mut String, budget: &mut usize, deadline: Instant) -> io::Result<usize> {
+    let mut bytes = Vec::new();
+    loop {
+        let left = deadline.saturating_duration_since(Instant::now());
+        if left.is_zero() {
+            return Err(io::Error::from(io::ErrorKind::TimedOut));
+        }
+        r.get_ref().set_read_timeout(Some(left.max(Duration::from_millis(1))))?;
+        let buf = r.fill_buf()?;
+        if buf.is_empty() {
+            break;
+        }
+        let (take, done) = match buf.iter().position(|&b| b == b'\n') {
+            Some(i) => (i + 1, true),
+            None => (buf.len(), false),
+        };
+        if take > *budget {
+            return Err(io::Error::new(io::ErrorKind::InvalidData, "request head too large"));
+        }
+        *budget -= take;
+        bytes.extend_from_slice(&buf[..take]);
+        r.consume(take);
+        if done {
+            break;
+        }
+    }
+    let text = std::str::from_utf8(&bytes).map_err(|_| io::Error::new(io::ErrorKind::Other, "non-utf8 head"))?;
+    line.push_str(text);
+    Ok(bytes.len())
+}
+
 fn handle_conn(stream: TcpStream, ctx: &Ctx) {
     let _ = stream.set_read_timeout(Some(Duration::from_secs(10)));
     let mut w = match stream.try_clone() {
@@ -227,24 +260,34 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
     };
     let mut r = BufReader::new(stream);
     let deadline = Instant::now() + Duration::from_secs(10);
+    let mut budget = 16 * 1024usize;
     let mut line = String::new();
-    let (mut heads, mut head_bytes) = (0usize, 0usize);
-    if r.read_line(&mut line).unwrap_or(0) == 0 {
-        return;
+    let mut heads = 0usize;
+    match read_head_line(&mut r, &mut line, &mut budget, deadline) {
+        Ok(0) => return,
+        Ok(_) => {}
+        Err(e) if e.kind() == io::ErrorKind::InvalidData => {
+            reject(r.get_mut(), None, 431, "request headers too large");
+            return;
+        }
+        Err(_) => return,
     }
-    head_bytes += line.len();
     let mut parts = line.split_whitespace();
     let (method, target) = (parts.next().unwrap_or("").to_string(), parts.next().unwrap_or("").to_string());
     let (mut auth, mut origin, mut last_id, mut len, mut host) = (None, None, None, 0usize, None);
     loop {
         line.clear();
-        if r.read_line(&mut line).unwrap_or(0) == 0 {
-            return;
-        }
         heads += 1;
-        head_bytes += line.len();
-        // shortcut: whole-request deadline checked per line, per-read timeout bounds a single stalled read
-        if heads > 100 || head_bytes > 16 * 1024 || Instant::now() > deadline {
+        match read_head_line(&mut r, &mut line, &mut budget, deadline) {
+            Ok(0) => return,
+            Ok(_) => {}
+            Err(e) if e.kind() == io::ErrorKind::InvalidData => {
+                reject(r.get_mut(), None, 431, "request headers too large");
+                return;
+            }
+            Err(_) => return,
+        }
+        if heads > 100 {
             reject(r.get_mut(), None, 431, "request headers too large");
             return;
         }
@@ -264,6 +307,7 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
             }
         }
     }
+    let _ = r.get_ref().set_read_timeout(Some(Duration::from_secs(10)));
     // DNS rebinding guard: a foreign Host name means the browser resolved an attacker domain to loopback
     if host.is_some_and(|h| !matches!(h.split(':').next(), Some("127.0.0.1" | "localhost"))) {
         reject(r.get_mut(), None, 421, "misdirected request");

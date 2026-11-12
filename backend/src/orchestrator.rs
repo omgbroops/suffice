@@ -150,7 +150,9 @@ fn read_or_set_aside<T: Default>(path: &Path, parse: fn(&str) -> Option<T>) -> i
 
 fn write_json(dir: &Path, name: &str, v: &Value) -> io::Result<()> {
     let tmp = dir.join(format!("{name}.tmp"));
-    fs::write(&tmp, format!("{v}\n"))?;
+    let mut f = File::create(&tmp)?;
+    f.write_all(format!("{v}\n").as_bytes())?;
+    f.sync_all()?;
     fs::rename(tmp, dir.join(name))
 }
 
@@ -359,7 +361,9 @@ impl Engine {
         };
         // the approval covered the old kind's run; the new kind's prompt gate must run again
         self.approved.remove(id);
-        let _ = self.save_approvals();
+        if let Err(e) = self.save_approvals() {
+            eprintln!("suffice-backend: save approvals failed: {e}");
+        }
         let _ = self.save_fallbacks();
         let (from, to) = (crate::server::kind_name(&task.agent), crate::server::kind_name(&next));
         // a new session key keeps the next CLI from resuming the previous agent's conversation
@@ -1041,7 +1045,9 @@ impl Engine {
         );
         let v = Value::Obj(vec![("tasks".into(), tasks), ("calls".into(), calls), ("held".into(), held)]);
         let tmp = self.dir.join("approvals.json.tmp");
-        fs::write(&tmp, format!("{v}\n"))?;
+        let mut f = File::create(&tmp)?;
+        f.write_all(format!("{v}\n").as_bytes())?;
+        f.sync_all()?;
         fs::rename(tmp, self.dir.join("approvals.json"))
     }
 }
