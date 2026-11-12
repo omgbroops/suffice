@@ -232,7 +232,7 @@ fn claude_access_argv() {
 #[test]
 fn codex_access_argv() {
     for (access, sandbox) in [(Access::Read, "read-only"), (Access::Edit, "workspace-write"), (Access::Full, "danger-full-access")] {
-        let bypass: &[&str] = if access == Access::Full { &["--dangerously-bypass-hook-trust"] } else { &[] };
+        let bypass: &[&str] = &[];
         let c = command(&with_access(AgentKind::Codex, access), None);
         assert_eq!(
             without_hook(&c),
@@ -264,10 +264,11 @@ fn codex_hook_at_every_access_level() {
 }
 
 #[test]
-fn codex_bypass_hook_trust_only_for_full() {
+fn codex_never_bypasses_hook_trust() {
+    // the flag would also run a cloned repo's own hooks (e.g. SessionStart) with no model action
     for access in [Access::Read, Access::Edit, Access::Full] {
         let c = command(&with_access(AgentKind::Codex, access), None);
-        assert_eq!(c.args.iter().any(|a| a == "--dangerously-bypass-hook-trust"), access == Access::Full, "{access:?}");
+        assert!(!c.args.iter().any(|a| a == "--dangerously-bypass-hook-trust"), "{access:?}");
     }
 }
 

@@ -30,11 +30,9 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
                 Access::Full => "danger-full-access",
             };
             let mut a = strs(&["exec", "--json", "--skip-git-repo-check", "-C", &cwd, "--sandbox", sandbox]);
+            // shortcut: no --dangerously-bypass-hook-trust (it also runs a cloned repo's own hooks unprompted),
+            // so codex may skip this untrusted hook; live run needed to see, then trust it via a managed layer
             a.extend(codex_hook());
-            // Full is already danger-full-access, so trusting repo-provided hooks adds no exposure
-            if task.access == Access::Full {
-                a.push("--dangerously-bypass-hook-trust".into());
-            }
             if let Some(id) = resume {
                 a.extend(strs(&["resume", id]));
             }
