@@ -15,7 +15,7 @@ function gateBash(command) {
     const child=spawn('/bin/sh',['-c',process.env.SUFFICE_GATE_CMD],{stdio:['pipe','ignore','pipe']});
     let stderr='';
     const fail=()=>{clearTimeout(timer);reject(new Error(stderr.trim()||'suffice gate: blocked'));};
-    const timer=setTimeout(()=>child.kill('SIGKILL'),10000);
+    const timer=setTimeout(()=>{child.kill('SIGKILL');fail();},10000); // reject now: a grandchild holding stderr would delay 'close'
     child.stderr.on('data',d=>{stderr+=d;});
     child.stdin.on('error',()=>{});
     child.on('error',fail);
