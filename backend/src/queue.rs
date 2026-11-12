@@ -112,6 +112,27 @@ impl Queue {
         self.record(i, state, attempts).map_err(|e| e.to_string())
     }
 
+    /// Journaled move to another agent kind and session key (failover), with its new state.
+    pub fn retarget(&mut self, id: &str, agent: AgentKind, session_key: Option<String>, state: TaskState, attempts: u32) -> Result<(), String> {
+        let i = *self.index.get(id).ok_or_else(|| format!("unknown task '{id}'"))?;
+        let from = self.tasks[i].state.clone();
+        if matches!(from, TaskState::Cancelled | TaskState::Done) || !allowed(&from, &state) {
+            return Err(format!("task '{id}' cannot move from {from:?} to {state:?}"));
+        }
+        let line = Value::Obj(vec![
+            ("op".into(), Value::str("retarget")),
+            ("id".into(), Value::str(id)),
+            ("agent".into(), agent_to_json(&agent)),
+            ("session_key".into(), opt_json(&session_key)),
+            ("state".into(), state_to_json(&state)),
+            ("attempts".into(), Value::Num(attempts as f64)),
+        ]);
+        self.append(&line).map_err(|e| e.to_string())?;
+        let t = &mut self.tasks[i];
+        (t.agent, t.session_key, t.state, t.attempts) = (agent, session_key, state, attempts);
+        Ok(())
+    }
+
     fn replay(&mut self, line: &[u8]) -> Result<(), String> {
         let text = std::str::from_utf8(line).map_err(|e| e.to_string())?;
         let v = json::parse(text)?;
@@ -128,6 +149,14 @@ impl Queue {
                 let i = *self.index.get(field_str(&v, "id")?).ok_or("state for unknown task")?;
                 self.tasks[i].state = state_from_json(v.get("state").ok_or("missing 'state'")?)?;
                 self.tasks[i].attempts = field_num(&v, "attempts")?;
+            }
+            "retarget" => {
+                let i = *self.index.get(field_str(&v, "id")?).ok_or("retarget for unknown task")?;
+                let t = &mut self.tasks[i];
+                t.agent = agent_from_json(v.get("agent").ok_or("missing 'agent'")?)?;
+                t.session_key = field_opt(&v, "session_key");
+                t.state = state_from_json(v.get("state").ok_or("missing 'state'")?)?;
+                t.attempts = field_num(&v, "attempts")?;
             }
             other => return Err(format!("unknown op '{other}'")),
         }
@@ -167,10 +196,12 @@ fn allowed(from: &TaskState, to: &TaskState) -> bool {
     matches!(
         (from, to),
         (Pending, Ready | Cancelled)
-            | (Ready, Running { .. } | NeedsApproval { .. } | Cancelled | Failed { .. })
-            | (Running { .. }, Done | Failed { .. } | NeedsApproval { .. } | Cancelled)
-            | (NeedsApproval { .. }, Ready | Cancelled)
+            | (Ready, Ready | Running { .. } | NeedsApproval { .. } | Cancelled | Failed { .. })
+            | (Running { .. }, Done | Failed { .. } | NeedsApproval { .. } | Cancelled | Ready)
+            | (NeedsApproval { .. }, Ready | Cancelled | Failed { .. })
             | (Failed { .. } | Cancelled, Ready)
+            | (Ready | Running { .. }, Waiting { .. })
+            | (Waiting { .. }, Ready | Cancelled)
     )
 }
 
@@ -245,6 +276,7 @@ fn state_to_json(s: &TaskState) -> Value {
         TaskState::Done => ("done", vec![]),
         TaskState::Failed { error } => ("failed", vec![("error".into(), Value::str(error))]),
         TaskState::Cancelled => ("cancelled", vec![]),
+        TaskState::Waiting { until } => ("waiting", vec![("until".into(), Value::Num(*until as f64))]),
     };
     let mut o = vec![("s".into(), Value::str(tag))];
     o.extend(extra);
@@ -260,6 +292,7 @@ fn state_from_json(v: &Value) -> Result<TaskState, String> {
         "done" => TaskState::Done,
         "failed" => TaskState::Failed { error: field_str(v, "error")?.into() },
         "cancelled" => TaskState::Cancelled,
+        "waiting" => TaskState::Waiting { until: field_num(v, "until")? },
         other => return Err(format!("unknown state '{other}'")),
     })
 }

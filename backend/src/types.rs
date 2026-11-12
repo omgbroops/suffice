@@ -24,6 +24,8 @@ pub enum TaskState {
     Done,
     Failed { error: String },
     Cancelled,
+    /// Held by a budget or rate limit until `until` (unix ms), then Ready again.
+    Waiting { until: u64 },
 }
 
 /// What the agent's own sandbox allows. Enforced by each CLI's flags, not by the gate.
@@ -106,6 +108,10 @@ pub enum Event {
     Approval { status: String },
     /// A trigger fired ("fired", "skipped", "failed" or "disabled"); logged under the trigger id.
     Trigger { outcome: String, task_id: Option<TaskId>, reason: Option<String> },
+    /// Plan usage for one window of an agent kind (utilization 0.0-1.0, resets_at unix s).
+    RateLimit { window: String, utilization: Option<f64>, resets_at: Option<u64>, status: String },
+    /// A task moved to another agent kind because of a budget cap or a rate limit.
+    Failover { from: String, to: String, reason: String },
 }
 
 impl TaskState {
@@ -119,6 +125,7 @@ impl TaskState {
             TaskState::Done => "done",
             TaskState::Failed { .. } => "failed",
             TaskState::Cancelled => "cancelled",
+            TaskState::Waiting { .. } => "waiting",
         }
     }
 }
