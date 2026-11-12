@@ -375,7 +375,8 @@ impl Browser {
     fn pump(&mut self) -> Result<Value, String> {
         let ws = self.ws.as_mut().ok_or("not connected")?;
         let msg = json::parse(&ws.next_text()?)?;
-        if msg.get("method").and_then(Value::as_str) == Some("Page.loadEventFired") {
+        // headless shell occasionally skips loadEventFired on file:// loads but still sends frameStoppedLoading
+        if matches!(msg.get("method").and_then(Value::as_str), Some("Page.loadEventFired" | "Page.frameStoppedLoading")) {
             self.loaded = true;
         }
         Ok(msg)
