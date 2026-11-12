@@ -311,3 +311,15 @@ fn foreign_host_header_is_421() {
     assert!(out.starts_with("HTTP/1.1 421"), "{out}");
     s.stop();
 }
+
+#[test]
+fn connection_cap_is_503_above_64() {
+    let (_dir, srv) = start("cap");
+    let port = srv.port();
+    // 64 idle connections each occupy a slot until they send a request or time out
+    let idle: Vec<TcpStream> = (0..64).map(|_| TcpStream::connect(("127.0.0.1", port)).unwrap()).collect();
+    let (code, _) = http(port, "GET", "/health", &auth(), "");
+    assert_eq!(code, 503);
+    drop(idle);
+    srv.stop();
+}

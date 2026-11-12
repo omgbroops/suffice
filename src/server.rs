@@ -6,15 +6,16 @@ use crate::orchestrator::{logged_json, Engine};
 use crate::types::{now_ms, AgentKind, Event, Logged, Task, TaskState};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::io::{self, BufRead, BufReader, Read, Write};
-use std::net::{SocketAddr, TcpListener, TcpStream};
+use std::net::{Shutdown, SocketAddr, TcpListener, TcpStream};
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
 use std::sync::Arc;
 use std::thread::{self, JoinHandle};
 use std::time::{Duration, Instant};
 
 const MAX_BODY: usize = 1 << 20;
+const MAX_CONNS: usize = 64;
 const ORIGINS: [&str; 3] = ["http://localhost:7711", "http://127.0.0.1:7711", "null"];
 
 type Job = Box<dyn FnOnce(&mut Engine) + Send>;
@@ -63,14 +64,24 @@ pub fn serve(engine: Engine, addr: &str, token: &str) -> io::Result<Server> {
     let engine_stop = stop.clone();
     let engine_thread = thread::spawn(move || run_engine(engine, job_rx, engine_stop));
     let accept_stop = stop.clone();
+    let active = Arc::new(AtomicUsize::new(0));
     let accept_thread = thread::spawn(move || {
         for conn in listener.incoming() {
             if accept_stop.load(Ordering::SeqCst) {
                 break;
             }
-            if let Ok(s) = conn {
-                let ctx = ctx.clone();
-                thread::spawn(move || handle_conn(s, &ctx));
+            if let Ok(mut s) = conn {
+                if active.fetch_add(1, Ordering::SeqCst) >= MAX_CONNS {
+                    active.fetch_sub(1, Ordering::SeqCst);
+                    // shortcut: each over-cap reject thread lives up to 1 s, a flood spawns many, upgrade to a bounded pool if needed
+                    thread::spawn(move || reject(&mut s, None, 503, "too many connections"));
+                    continue;
+                }
+                let (ctx, active) = (ctx.clone(), active.clone());
+                thread::spawn(move || {
+                    handle_conn(s, &ctx);
+                    active.fetch_sub(1, Ordering::SeqCst);
+                });
             }
         }
     });
@@ -176,6 +187,22 @@ fn pct_decode(s: &str, plus: bool) -> Option<String> {
     Some(String::from_utf8_lossy(&out).into_owned())
 }
 
+/// Early error: write the response, then drain the rest of the request so the kernel does not RST
+/// before the client reads it. Drain stops at EOF, 1 s, or 1 MB.
+fn reject(s: &mut TcpStream, origin: Option<&str>, code: u16, msg: &str) {
+    let _ = respond(s, code, origin, &err(code, msg).1.to_string());
+    let _ = s.flush();
+    let _ = s.shutdown(Shutdown::Write);
+    let _ = s.set_read_timeout(Some(Duration::from_secs(1)));
+    let (start, mut total, mut buf) = (Instant::now(), 0usize, [0u8; 4096]);
+    while total < 1 << 20 && start.elapsed() < Duration::from_secs(1) {
+        match s.read(&mut buf) {
+            Ok(0) | Err(_) => break,
+            Ok(n) => total += n,
+        }
+    }
+}
+
 fn ct_eq(a: &str, b: &str) -> bool {
     a.len() == b.len() && a.bytes().zip(b.bytes()).fold(0u8, |acc, (x, y)| acc | (x ^ y)) == 0
 }
@@ -217,7 +244,7 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
         head_bytes += line.len();
         // shortcut: whole-request deadline checked per line, per-read timeout bounds a single stalled read
         if heads > 100 || head_bytes > 16 * 1024 || Instant::now() > deadline {
-            let _ = respond(&mut w, 431, None, &err(431, "request headers too large").1.to_string());
+            reject(r.get_mut(), None, 431, "request headers too large");
             return;
         }
         let h = line.trim_end();
@@ -238,7 +265,7 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
     }
     // DNS rebinding guard: a foreign Host name means the browser resolved an attacker domain to loopback
     if host.is_some_and(|h| !matches!(h.split(':').next(), Some("127.0.0.1" | "localhost"))) {
-        let _ = respond(&mut w, 421, None, &err(421, "misdirected request").1.to_string());
+        reject(r.get_mut(), None, 421, "misdirected request");
         return;
     }
     let origin = origin.as_deref();
@@ -256,7 +283,7 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
         Some((path, query))
     })();
     let Some((path, query)) = decoded else {
-        let _ = respond(&mut w, 400, origin, &err(400, "bad percent-encoding").1.to_string());
+        reject(r.get_mut(), origin, 400, "bad percent-encoding");
         return;
     };
 
@@ -265,14 +292,14 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
         return;
     }
     if len > MAX_BODY {
-        let _ = respond(&mut w, 413, origin, &err(413, "body too large").1.to_string());
+        reject(r.get_mut(), origin, 413, "body too large");
         return;
     }
     let bearer = auth.as_deref().and_then(|a| a.strip_prefix("Bearer ")).map(str::trim);
     let token_ok = bearer.is_some_and(|t| ct_eq(t, &ctx.token))
         || (path == "/stream" && qget(&query, "token").is_some_and(|t| ct_eq(t, &ctx.token)));
     if !token_ok {
-        let _ = respond(&mut w, 401, origin, &err(401, "unauthorized").1.to_string());
+        reject(r.get_mut(), origin, 401, "unauthorized");
         return;
     }
     let mut body = vec![0u8; len];
