@@ -52,7 +52,7 @@ pub fn rate_limit_text(text: &str) -> bool {
 /// Per-kind budget caps: kind name -> window -> max utilization (0.0-1.0) before the kind is skipped.
 pub type Caps = BTreeMap<String, BTreeMap<String, f64>>;
 /// Latest plan usage per kind and window: (utilization, resets_at unix s, status).
-type Limits = BTreeMap<String, BTreeMap<String, (Option<f64>, Option<u64>, String)>>;
+pub type Limits = BTreeMap<String, BTreeMap<String, (Option<f64>, Option<u64>, String)>>;
 
 pub fn caps_json(caps: &Caps) -> Value {
     Value::Obj(
@@ -325,6 +325,11 @@ impl Engine {
     pub fn set_budgets(&mut self, caps: Caps) -> io::Result<()> {
         self.caps = caps;
         self.save_budgets()
+    }
+
+    /// Saved plan usage for every kind and window (survives restarts, unlike the event log).
+    pub fn limits(&self) -> &Limits {
+        &self.limits
     }
 
     /// Latest (utilization, resets_at, status) for a kind's plan window.

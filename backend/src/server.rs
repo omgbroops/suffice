@@ -592,7 +592,7 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 decide(e, &task, "denied", |e, t| e.deny(t))
             })
         }
-        ("GET", ["usage"]) => ask_res(ctx, |e| (200, Value::Arr(usage_rows(&e.tasks(), &e.events_since(0))))),
+        ("GET", ["usage"]) => ask_res(ctx, |e| (200, Value::Arr(usage_rows(&e.tasks(), &e.events_since(0), e.limits())))),
         ("GET", ["budgets"]) => ask_res(ctx, |e| (200, caps_json(e.budgets()))),
         ("PUT", ["budgets"]) => {
             let Some(caps) = std::str::from_utf8(body).ok().and_then(parse_caps) else {
@@ -698,7 +698,7 @@ fn serve_sse(ctx: &Ctx, w: &mut TcpStream, origin: Option<&str>, since: u64, q: 
                 }
             }
             Event::Usage { .. } => {
-                let row = ask(ctx, |e| usage_rows(&e.tasks(), &e.events_since(0))).unwrap_or_default();
+                let row = ask(ctx, |e| usage_rows(&e.tasks(), &e.events_since(0), e.limits())).unwrap_or_default();
                 let agent = tasks_kind(&tasks, &l.task).unwrap_or("generic");
                 if let Some(r) = row.iter().find(|r| r.get("kind").and_then(Value::as_str) == Some(agent)) {
                     write!(w, "event: usage\ndata: {r}\n\n")?;
@@ -1062,7 +1062,7 @@ fn approval_json(t: &Task, held: Option<(String, String)>, ms: u64, status: &str
 }
 
 /// One /usage row per agent kind (subscriptions are not tracked yet, so subscription and window are null).
-fn usage_rows(tasks: &[Task], events: &[Logged]) -> Vec<Value> {
+fn usage_rows(tasks: &[Task], events: &[Logged], saved: &crate::orchestrator::Limits) -> Vec<Value> {
     let kinds: HashMap<&str, &'static str> = tasks.iter().map(|t| (t.id.as_str(), kind_name(&t.agent))).collect();
     let mut sums: BTreeMap<&'static str, (u64, u64, u64, Option<f64>)> = BTreeMap::new();
     // latest plan window per kind: (window, utilization, resets_at)
@@ -1083,6 +1083,16 @@ fn usage_rows(tasks: &[Task], events: &[Logged]) -> Vec<Value> {
                 }
             }
             _ => {}
+        }
+    }
+    // no rate_limit event in the log (restart, trimmed log): use the saved window with the highest utilization
+    for (&kind, _) in sums.iter() {
+        if plan.contains_key(kind) {
+            continue;
+        }
+        let best = saved.get(kind).and_then(|ws| ws.iter().max_by(|a, b| a.1 .0.unwrap_or(0.0).total_cmp(&b.1 .0.unwrap_or(0.0))));
+        if let Some((w, (u, r, _))) = best {
+            plan.insert(kind, (w.clone(), *u, *r));
         }
     }
     sums.into_iter()
