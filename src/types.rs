@@ -101,6 +101,8 @@ pub enum Event {
     Exit { code: Option<i32> },
     /// A task state change, logged by the engine for live queue views.
     State { state: String, reason: Option<String> },
+    /// An approval was decided ("approved" or "denied"); the full record is in approvals_log.jsonl.
+    Approval { status: String },
 }
 
 impl TaskState {

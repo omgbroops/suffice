@@ -353,17 +353,30 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
         }),
         ("GET", ["agents"]) => ask_res(ctx, |e| {
             let tasks = e.tasks();
-            (200, Value::Arr(e.sessions().iter().map(|s| Value::Obj(agent_fields(s, &tasks))).collect()))
+            let sessions = e.sessions();
+            let mut seen: Vec<&str> = sessions.iter().map(|s| s.key.as_str()).collect();
+            let mut out: Vec<Value> = sessions.iter().map(|s| Value::Obj(agent_fields(s, &tasks))).collect();
+            // agents known only from tasks, before any session claims their key
+            for k in tasks.iter().filter_map(|t| t.session_key.as_deref()) {
+                if !seen.contains(&k) {
+                    seen.push(k);
+                    out.push(Value::Obj(task_agent_fields(k, &tasks)));
+                }
+            }
+            (200, Value::Arr(out))
         }),
         ("GET", ["agents", key]) => {
             let key = key.to_string();
             ask_res(ctx, move |e| {
-                let Some(s) = e.sessions().into_iter().find(|s| s.key == key) else {
-                    return err(404, format!("no agent '{key}'"));
-                };
                 let tasks = e.tasks();
+                let mut fields = match e.sessions().into_iter().find(|s| s.key == key) {
+                    Some(s) => agent_fields(&s, &tasks),
+                    None if tasks.iter().any(|t| t.session_key.as_deref() == Some(key.as_str())) => {
+                        task_agent_fields(&key, &tasks)
+                    }
+                    None => return err(404, format!("no agent '{key}'")),
+                };
                 let keys = task_keys(&tasks);
-                let mut fields = agent_fields(&s, &tasks);
                 let all = e.events_since(0);
                 let recent: Vec<Value> = all
                     .iter()
@@ -447,16 +460,17 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
             })
         }
         ("GET", ["approvals"]) => {
-            if qget(q, "status").is_some_and(|s| s != "pending") {
-                return Ok((200, Value::Arr(vec![])));
-            }
-            ask_res(ctx, |e| {
-                let out = e
+            let want = qget(q, "status").map(str::to_string);
+            ask_res(ctx, move |e| {
+                let mut out: Vec<Value> = e
                     .tasks()
                     .iter()
                     .filter(|t| matches!(t.state, TaskState::NeedsApproval { .. }))
-                    .map(|t| approval_json(t, e.held_call(&t.id), t.created_ms))
+                    .map(|t| approval_json(t, e.held_call(&t.id), t.created_ms, "pending"))
                     .collect();
+                out.extend(e.decisions().iter().cloned());
+                out.retain(|a| want.as_deref().is_none_or(|s| a.get("status").and_then(Value::as_str) == Some(s)));
+                out.sort_by_key(|a| std::cmp::Reverse(ms_of(a)));
                 (200, Value::Arr(out))
             })
         }
@@ -464,10 +478,7 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
             let Some(task) = id.strip_prefix('a').map(str::to_string) else {
                 return Err(err(404, format!("no approval '{id}'")));
             };
-            ask_res(ctx, move |e| {
-                let r = e.approve(&task);
-                task_result(e, &task, r)
-            })
+            ask_res(ctx, move |e| decide(e, &task, "approved", |e, t| e.approve(t)))
         }
         ("POST", ["approvals", id, "deny"]) => {
             let Some(task) = id.strip_prefix('a').map(str::to_string) else {
@@ -477,8 +488,7 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
                 if !e.tasks().iter().any(|t| t.id == task && matches!(t.state, TaskState::NeedsApproval { .. })) {
                     return err(409, format!("task {task} is not awaiting approval"));
                 }
-                let r = e.cancel(&task);
-                task_result(e, &task, r)
+                decide(e, &task, "denied", |e, t| e.cancel(t))
             })
         }
         ("GET", ["usage"]) => ask_res(ctx, |e| (200, Value::Arr(usage_rows(&e.tasks(), &e.events_since(0))))),
@@ -542,7 +552,7 @@ fn serve_sse(ctx: &Ctx, w: &mut TcpStream, origin: Option<&str>, since: u64, q: 
                 let id = l.task.clone();
                 if let Some(Some(ap)) = ask(ctx, move |e| {
                     let t = e.tasks().into_iter().find(|t| t.id == id)?;
-                    Some(approval_json(&t, e.held_call(&t.id), l_ms(&t)))
+                    Some(approval_json(&t, e.held_call(&t.id), l_ms(&t), "pending"))
                 }) {
                     write!(w, "event: approval\ndata: {ap}\n\n")?;
                 }
@@ -581,6 +591,7 @@ fn kind_of(e: &Event) -> &'static str {
         Event::Stderr { .. } => "stderr",
         Event::Exit { .. } => "exit",
         Event::State { .. } => "state",
+        Event::Approval { .. } => "approval",
     }
 }
 
@@ -764,7 +775,54 @@ fn event_json(l: &Logged, agent_key: Option<&str>) -> Value {
     Value::Obj(out)
 }
 
-fn approval_json(t: &Task, held: Option<(String, String)>, ms: u64) -> Value {
+/// Apply an approve/deny action; on success, append the decided approval to the log.
+fn decide(e: &mut Engine, task: &str, status: &str, act: impl FnOnce(&mut Engine, &str) -> Result<(), String>) -> Res {
+    // snapshot before the action: the held call and task fields are gone after it
+    let snap = e.tasks().into_iter().find(|t| t.id == task).map(|t| approval_json(&t, e.held_call(task), now_ms(), status));
+    let r = act(e, task);
+    if r.is_ok() {
+        if let Some(rec) = snap {
+            if let Err(m) = e.record_decision(task, status, rec) {
+                return err(500, m);
+            }
+        }
+    }
+    task_result(e, task, r)
+}
+
+fn ms_of(a: &Value) -> u64 {
+    match a.get("ms") {
+        Some(Value::Num(n)) => *n as u64,
+        _ => 0,
+    }
+}
+
+/// An agent known only from its tasks: status and kind come from those tasks.
+fn task_agent_fields(key: &str, tasks: &[Task]) -> Vec<(String, Value)> {
+    let mine: Vec<&Task> = tasks.iter().filter(|t| t.session_key.as_deref() == Some(key)).collect();
+    let status = if mine.iter().any(|t| matches!(t.state, TaskState::Running { .. })) {
+        "running"
+    } else if mine.iter().any(|t| matches!(t.state, TaskState::NeedsApproval { .. })) {
+        "waiting_approval"
+    } else if mine.last().is_some_and(|t| matches!(t.state, TaskState::Failed { .. })) {
+        "error"
+    } else {
+        "idle"
+    };
+    let last = mine.last();
+    vec![
+        ("key".into(), Value::str(key)),
+        ("kind".into(), Value::str(last.map_or("generic", |t| kind_name(&t.agent)))),
+        ("subscription".into(), Value::Null),
+        ("status".into(), Value::str(status)),
+        ("task".into(), Value::Null),
+        ("native_id".into(), Value::Null),
+        ("runs".into(), Value::Num(0.0)),
+        ("last_ms".into(), Value::Num(last.map_or(0, |t| t.created_ms) as f64)),
+    ]
+}
+
+fn approval_json(t: &Task, held: Option<(String, String)>, ms: u64, status: &str) -> Value {
     let reason = match &t.state {
         TaskState::NeedsApproval { reason } => Some(reason.as_str()),
         _ => None,
@@ -781,7 +839,7 @@ fn approval_json(t: &Task, held: Option<(String, String)>, ms: u64) -> Value {
         ("reason", opt(reason)),
         ("tool", tool),
         ("prompt", Value::str(&t.prompt)),
-        ("status", Value::str("pending")),
+        ("status", Value::str(status)),
         ("ms", Value::Num(ms as f64)),
     ])
 }

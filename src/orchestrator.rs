@@ -42,6 +42,8 @@ pub struct Engine {
     calls: BTreeSet<Call>,
     /// Last tool call that held each task, moved into `calls` by approve().
     held: HashMap<TaskId, (String, String)>,
+    /// Decided approval records, oldest first (mirrors approvals_log.jsonl).
+    decisions: Vec<Value>,
     /// Program name -> path override, e.g. "claude" -> a custom install path.
     pub programs: BTreeMap<String, PathBuf>,
 }
@@ -60,6 +62,7 @@ impl Engine {
         }
         let file = OpenOptions::new().create(true).append(true).open(&path)?;
         let (approved, calls, held) = load_approvals(dir)?;
+        let decisions = load_decisions(dir)?;
         let (tx, rx) = channel();
         Ok(Engine {
             dir: dir.to_path_buf(),
@@ -77,6 +80,7 @@ impl Engine {
             approved,
             calls,
             held,
+            decisions,
             programs: BTreeMap::new(),
         })
     }
@@ -101,6 +105,19 @@ impl Engine {
         }
         self.save_approvals().map_err(|e| e.to_string())?;
         self.set_state(id, TaskState::Ready)
+    }
+
+    /// Append an approval decision to approvals_log.jsonl and log an approval event.
+    pub fn record_decision(&mut self, task: &str, status: &str, rec: Value) -> Result<(), String> {
+        let mut f = OpenOptions::new().create(true).append(true).open(self.dir.join("approvals_log.jsonl")).map_err(|e| e.to_string())?;
+        f.write_all(format!("{rec}\n").as_bytes()).map_err(|e| e.to_string())?;
+        self.decisions.push(rec);
+        self.log(task, Event::Approval { status: status.to_string() });
+        Ok(())
+    }
+
+    pub fn decisions(&self) -> &[Value] {
+        &self.decisions
     }
 
     /// Move a task to `state` and log the change.
@@ -437,6 +454,29 @@ fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
     Ok((out, good))
 }
 
+/// Reads approvals_log.jsonl. A torn tail is cut off so the next append starts a clean line.
+fn load_decisions(dir: &Path) -> io::Result<Vec<Value>> {
+    let path = dir.join("approvals_log.jsonl");
+    let text = match fs::read_to_string(&path) {
+        Ok(t) => t,
+        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(vec![]),
+        Err(e) => return Err(e),
+    };
+    let mut out = vec![];
+    let mut good = 0;
+    for line in text.split_inclusive('\n') {
+        if !line.ends_with('\n') {
+            break;
+        }
+        out.push(json::parse(line.trim_end()).map_err(|e| bad(format!("approvals_log.jsonl: {e}")))?);
+        good += line.len();
+    }
+    if good < text.len() {
+        OpenOptions::new().write(true).open(&path)?.set_len(good as u64)?;
+    }
+    Ok(out)
+}
+
 fn sval(v: &Value, k: &str) -> Result<String, String> {
     v.get(k).and_then(Value::as_str).map(str::to_string).ok_or_else(|| format!("missing {k}"))
 }
@@ -476,6 +516,7 @@ pub fn logged_json(l: &Logged) -> Value {
         Event::State { state, reason } => {
             ("state", vec![("state", Value::str(state)), ("reason", reason.as_deref().map_or(Value::Null, Value::str))])
         }
+        Event::Approval { status } => ("approval", vec![("status", Value::str(status))]),
     };
     let mut o = vec![
         ("seq".to_string(), Value::Num(l.seq as f64)),
@@ -510,6 +551,7 @@ fn logged_from(v: &Value) -> Result<Logged, String> {
             state: sval(v, "state")?,
             reason: v.get("reason").and_then(Value::as_str).map(str::to_string),
         },
+        "approval" => Event::Approval { status: sval(v, "status")? },
         other => return Err(format!("unknown event '{other}'")),
     };
     Ok(Logged {
