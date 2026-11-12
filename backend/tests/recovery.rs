@@ -184,6 +184,15 @@ fn exits_within(child: &mut Child, secs: u64) -> bool {
 fn spawn_then_crash_before_pid_is_found_by_nonce() {
     let d = Dir::new("nonce");
     let mut orphan = spawn_orphan("feedface00");
+    // wait for python to exec: until then ps shows /usr/bin/env, whose environment macOS hides
+    let end = Instant::now() + Duration::from_secs(10);
+    while Instant::now() < end {
+        let ps = Command::new("ps").args(["-E", "-o", "command=", "-p", &orphan.id().to_string()]).output().unwrap();
+        if String::from_utf8_lossy(&ps.stdout).contains("SUFFICE_RUN_NONCE=feedface00") {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(50));
+    }
     let runs = format!(
         "{{\"t1\":{{\"nonce\":\"feedface00\",\"pid\":null,\"program\":\"{}\",\"start\":\"\"}}}}\n",
         orphan_script().display()
