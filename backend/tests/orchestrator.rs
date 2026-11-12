@@ -226,7 +226,7 @@ fn parallel_cap_is_reached_and_not_exceeded() {
     let d = Dir::new("cap");
     let mut e = engine(&d.0, 4);
     for i in 0..8 {
-        e.submit(with_env(task(&format!("p{i}"), &[], 0), &[("MODE", "sleep"), ("SLEEP_SECS", "0.3")])).unwrap();
+        e.submit(with_env(task(&format!("p{i}"), &[], 0), &[("MODE", "sleep"), ("SLEEP_SECS", "2")])).unwrap(); // long enough that 4 spawns overlap even on slow E-cores
     }
     let mut max = 0;
     let end = Instant::now() + Duration::from_secs(20);
