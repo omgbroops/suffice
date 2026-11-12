@@ -44,7 +44,15 @@ pub fn rate_limit_text(text: &str) -> bool {
     let b = text.to_ascii_lowercase().into_bytes();
     let bounded = |i: usize, n: usize| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b.get(i + n).is_none_or(|c| !c.is_ascii_alphanumeric());
     let at = |p: &str| (0..b.len()).any(|i| b[i..].starts_with(p.as_bytes()) && bounded(i, p.len()));
-    let rate = (0..b.len()).any(|i| (i == 0 || !b[i - 1].is_ascii_alphanumeric()) && b[i..].starts_with(b"rate") &&(b[i + 4..].starts_with(b"limit") || b[i + 4..].get(1..).is_some_and(|s| s.starts_with(b"limit"))));
+    // "limit" may be followed only by s/ed/ing and then a non-alphanumeric char, so "rate_limiter" is not a match
+    let limit_end = |t: &[u8]| ["", "s", "ed", "ing"].iter().any(|e| t.starts_with(e.as_bytes()) && t.get(e.len()).is_none_or(|c| !c.is_ascii_alphanumeric()));
+    let rate = (0..b.len()).any(|i| {
+        (i == 0 || !b[i - 1].is_ascii_alphanumeric())
+            && b[i..].starts_with(b"rate")
+            && b.get(i + 4..).is_some_and(|r| {
+                r.strip_prefix(b"limit").is_some_and(limit_end) || r.get(1..).and_then(|s| s.strip_prefix(b"limit")).is_some_and(limit_end)
+            })
+    });
     // a bare 429 needs HTTP context ("took 1429ms", "429 ms" are not limits); the phrases stand alone
     rate || b.windows(11).any(|w| w == b"usage limit") || ["429 too many", "status 429", "http 429", "error 429"].iter().any(|p| at(p))
 }
@@ -958,10 +966,19 @@ impl Engine {
                 let _ = self.set_state(&r.task, state);
             }
             PoolMsg::SpawnFailed { run, error } => {
+                // cancelled before the spawn failed: the run lives in zombies and holds the session
+                if let Some(r) = self.zombies.remove(&run) {
+                    if let Some(k) = &r.session {
+                        self.sessions.release(k, &r.task);
+                    }
+                    self.forget_run(&r.task);
+                    return;
+                }
                 if let Some(r) = self.runs.remove(&run) {
                     if let Some(k) = &r.session {
                         self.sessions.release(k, &r.task);
                     }
+                    self.forget_run(&r.task);
                     let _ = self.set_state(&r.task, TaskState::Failed { error });
                 }
             }
