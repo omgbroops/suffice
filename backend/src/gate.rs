@@ -87,12 +87,15 @@ pub fn check_task(task: &Task) -> Verdict {
     if let Some(p) = TASK_PHRASES.iter().find(|p| phrase_hit(p)) {
         return hold(&format!("prompt asks for outward action: {}", p.join(" ")));
     }
+    // shortcut: word rules catch honest outward asks, not adversarial prompts ("tell bob hi" or "error message bob" pass);
+    // tool-call checks (check_event) are the real boundary. Upgrade to a classifier if prompts come from untrusted sources.
     // Clauses split on raw punctuation (not hyphen), so "reply-with-thanks" stays in one clause.
     for clause in prompt.split(['.', ';', ',', ':', '!', '?', '\n', '。', '、']) {
         let cw = words(clause);
         for (j, (_, l)) in cw.iter().enumerate() {
             if word_hit(l, "reply") {
-                let answer = cw[j + 1..].iter().all(|(_, n)| REPLY_OK.contains(&n.as_str()));
+                // a bare "Reply." would pass vacuously and leave the recipient to the next clause
+                let answer = j + 1 < cw.len() && cw[j + 1..].iter().all(|(_, n)| REPLY_OK.contains(&n.as_str()));
                 if j != 0 || !answer {
                     return hold("prompt asks for outward action: reply");
                 }

@@ -314,3 +314,10 @@ fn reply_and_message_narrowed() {
         assert!(held(&check_task(&task(p))), "should hold: {p}");
     }
 }
+
+#[test]
+fn bare_reply_clause_holds() {
+    for p in ["Reply: bob", "Reply. Bob", "Reply\nbob", "reply"] {
+        assert!(matches!(check_task(&task(p)), Verdict::Hold { .. }), "{p}");
+    }
+}
