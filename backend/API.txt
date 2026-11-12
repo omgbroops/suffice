@@ -2,6 +2,7 @@ SUFFICE LOCAL API  v0 (draft 2026-11-11, shape is fixed; server lands next)
 
 Base: http://127.0.0.1:7878   (port from `suffice-backend serve --port`)
 Auth: header  Authorization: Bearer <token>   token in ~/.suffice/backend/token (0600). Also ?token= on stream URLs
+Env: SUFFICE_PROGRAM_<NAME>=/path/to/bin overrides the CLI binary for agent NAME (e.g. SUFFICE_PROGRAM_CLAUDE); for custom installs and tests.
       (EventSource can't set headers). Every other request without it: 401.
 CORS: Access-Control-Allow-Origin echoed only for http://localhost:7711, http://127.0.0.1:7711 and
       null (file://); Allow-Headers: Authorization, Content-Type, Last-Event-ID; OPTIONS preflight -> 204.

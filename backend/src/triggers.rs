@@ -161,9 +161,17 @@ pub fn load(dir: &Path) -> io::Result<Vec<Trigger>> {
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(vec![]),
         Err(e) => return Err(e),
     };
-    let bad = |e: String| io::Error::new(io::ErrorKind::InvalidData, e);
-    let v = crate::json::parse(&text).map_err(|e| bad(e.to_string()))?;
-    v.as_arr().unwrap_or(&[]).iter().map(|t| Trigger::from_json(t).map_err(bad)).collect()
+    let parsed = crate::json::parse(&text).and_then(|v| {
+        v.as_arr().unwrap_or(&[]).iter().map(Trigger::from_json).collect::<Result<Vec<_>, String>>()
+    });
+    match parsed {
+        Ok(triggers) => Ok(triggers),
+        // garbage or torn write: keep the file aside and start with no triggers rather than fail open
+        Err(_) => {
+            crate::types::set_aside(&dir.join("triggers.json"));
+            Ok(vec![])
+        }
+    }
 }
 
 pub fn save(dir: &Path, triggers: &[Trigger]) -> io::Result<()> {

@@ -23,6 +23,14 @@ struct Run {
     agent: AgentKind,
     session: Option<String>,
     error: bool,
+    program: String,
+}
+
+/// A started agent process, journaled in runs.json: (pid = pgid, program, process start time).
+type LiveRun = (u32, String, String);
+
+extern "C" {
+    fn kill(pid: i32, sig: i32) -> i32;
 }
 
 pub struct Engine {
@@ -45,6 +53,8 @@ pub struct Engine {
     held: HashMap<TaskId, (String, String)>,
     /// Decided approval records, oldest first (mirrors approvals_log.jsonl).
     decisions: Vec<Value>,
+    /// Runs started and not yet exited, by task id (mirrors runs.json).
+    live: BTreeMap<TaskId, LiveRun>,
     /// Program name -> path override, e.g. "claude" -> a custom install path.
     pub programs: BTreeMap<String, PathBuf>,
     /// Scheduled and event-driven triggers, fired from tick().
@@ -69,8 +79,9 @@ impl Engine {
         let (approved, calls, held) = load_approvals(dir)?;
         let decisions = load_decisions(dir)?;
         let triggers = triggers::load(dir)?;
+        let orphans = load_runs(dir)?;
         let (tx, rx) = channel();
-        Ok(Engine {
+        let mut engine = Engine {
             dir: dir.to_path_buf(),
             queue,
             sessions,
@@ -87,10 +98,21 @@ impl Engine {
             calls,
             held,
             decisions,
+            live: BTreeMap::new(),
             programs: BTreeMap::new(),
             triggers,
             clock: Box::new(now_ms),
-        })
+        };
+        // runs of the crashed server: their agents may still be alive and hold the task's session
+        for task in kill_orphans(&orphans) {
+            let note = "orphan run killed after restart";
+            engine.log(&task, Event::Stderr { line: note.into() });
+            engine.log(&task, Event::State { state: "ready".into(), reason: Some(note.into()) });
+        }
+        if !orphans.is_empty() {
+            engine.save_runs()?;
+        }
+        Ok(engine)
     }
 
     pub fn set_program(&mut self, name: &str, path: impl Into<PathBuf>) {
@@ -349,6 +371,7 @@ impl Engine {
             if let Some(p) = self.programs.get(&cmd.program) {
                 cmd.program = p.to_string_lossy().into_owned();
             }
+            let program = cmd.program.clone();
             if !self.pool.try_start(&run, cmd, task.timeout_secs) {
                 if let Some(k) = &task.session_key {
                     self.sessions.release(k, &id);
@@ -356,7 +379,7 @@ impl Engine {
                 break;
             }
             let session = task.session_key.clone();
-            self.runs.insert(run, Run { task: id.clone(), agent: task.agent.clone(), session, error: false });
+            self.runs.insert(run, Run { task: id.clone(), agent: task.agent.clone(), session, error: false, program });
         }
     }
 
@@ -388,7 +411,11 @@ impl Engine {
     fn handle(&mut self, msg: PoolMsg) {
         match msg {
             PoolMsg::Started { run, pid } => {
-                if let Some(task) = self.runs.get(&run).map(|r| r.task.clone()) {
+                if let Some((task, program)) = self.runs.get(&run).map(|r| (r.task.clone(), r.program.clone())) {
+                    // journal before Running so a crash after this point can find the process
+                    let start = ps_field(pid, "lstart").unwrap_or_default();
+                    self.live.insert(task.clone(), (pid, program, start));
+                    let _ = self.save_runs();
                     let _ = self.set_state(&task, TaskState::Running { pid });
                 }
             }
@@ -406,6 +433,7 @@ impl Engine {
                     if let Some(k) = &r.session {
                         self.sessions.release(k, &r.task);
                     }
+                    self.forget_run(&r.task);
                     self.log(&r.task, Event::Exit { code });
                     return;
                 }
@@ -413,6 +441,7 @@ impl Engine {
                 if let Some(k) = &r.session {
                     self.sessions.release(k, &r.task);
                 }
+                self.forget_run(&r.task);
                 self.log(&r.task, Event::Exit { code });
                 let state = if code == Some(0) && !r.error && !killed && !timed_out {
                     TaskState::Done
@@ -489,6 +518,32 @@ impl Engine {
         self.events.push(l);
     }
 
+    /// Drop a finished run from runs.json.
+    fn forget_run(&mut self, task: &str) {
+        if self.live.remove(task).is_some() {
+            let _ = self.save_runs();
+        }
+    }
+
+    fn save_runs(&self) -> io::Result<()> {
+        let v = Value::Obj(
+            self.live
+                .iter()
+                .map(|(t, (pid, program, start))| {
+                    let rec = Value::Obj(vec![
+                        ("pid".into(), Value::num(*pid as f64)),
+                        ("program".into(), Value::str(program)),
+                        ("start".into(), Value::str(start)),
+                    ]);
+                    (t.clone(), rec)
+                })
+                .collect(),
+        );
+        let tmp = self.dir.join("runs.json.tmp");
+        fs::write(&tmp, format!("{v}\n"))?;
+        fs::rename(tmp, self.dir.join("runs.json"))
+    }
+
     fn save_approvals(&self) -> io::Result<()> {
         let tasks = Value::Arr(self.approved.iter().map(|t| Value::str(t)).collect());
         let calls = Value::Arr(
@@ -518,13 +573,77 @@ fn bad(e: impl std::fmt::Display) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, e.to_string())
 }
 
+/// `ps -o <field>=` for a live pid; None when the process is gone or ps fails.
+fn ps_field(pid: u32, field: &str) -> Option<String> {
+    let out = std::process::Command::new("ps").args(["-o", &format!("{field}="), "-p", &pid.to_string()]).output().ok()?;
+    let s = String::from_utf8_lossy(&out.stdout).trim().to_string();
+    (out.status.success() && !s.is_empty()).then_some(s)
+}
+
+/// Kill the groups of journaled runs whose pid still holds the same process (start time and
+/// program match, so a reused pid is never touched). SIGTERM, then SIGKILL after 3 s.
+fn kill_orphans(runs: &BTreeMap<TaskId, LiveRun>) -> Vec<TaskId> {
+    let mut killed = vec![];
+    for (task, (pid, program, start)) in runs {
+        let same = ps_field(*pid, "lstart").as_deref() == Some(start.as_str())
+            && ps_field(*pid, "command").is_some_and(|c| c.contains(program.as_str()));
+        if !same {
+            continue;
+        }
+        let pgid = *pid as i32;
+        unsafe { kill(-pgid, 15) };
+        let mut waited = 0;
+        while unsafe { kill(pgid, 0) } == 0 && waited < 30 {
+            std::thread::sleep(Duration::from_millis(100));
+            waited += 1;
+        }
+        if unsafe { kill(pgid, 0) } == 0 {
+            unsafe { kill(-pgid, 9) };
+        }
+        killed.push(task.clone());
+    }
+    killed
+}
+
+fn parse_runs(text: &str) -> Option<BTreeMap<TaskId, LiveRun>> {
+    let Value::Obj(kv) = json::parse(text).ok()? else { return None };
+    kv.iter()
+        .map(|(t, r)| {
+            let pid = r.get("pid")?.as_i64()? as u32;
+            Some((t.clone(), (pid, r.get("program")?.as_str()?.to_string(), r.get("start")?.as_str()?.to_string())))
+        })
+        .collect()
+}
+
+/// Reads runs.json. Unreadable content is set aside and treated as no runs.
+fn load_runs(dir: &Path) -> io::Result<BTreeMap<TaskId, LiveRun>> {
+    let path = dir.join("runs.json");
+    match fs::read_to_string(&path) {
+        Ok(text) => Ok(parse_runs(&text).unwrap_or_else(|| {
+            crate::types::set_aside(&path);
+            BTreeMap::new()
+        })),
+        Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(BTreeMap::new()),
+        Err(e) => Err(e),
+    }
+}
+
 fn load_approvals(dir: &Path) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
-    let text = match fs::read_to_string(dir.join("approvals.json")) {
+    let path = dir.join("approvals.json");
+    let text = match fs::read_to_string(&path) {
         Ok(t) => t,
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(Default::default()),
         Err(e) => return Err(e),
     };
-    let v = json::parse(&text).map_err(|e| bad(format!("approvals.json: {e}")))?;
+    // unreadable approvals are set aside and dropped: tasks must be approved again (fails closed)
+    parse_approvals(&text).or_else(|_| {
+        crate::types::set_aside(&path);
+        Ok(Default::default())
+    })
+}
+
+fn parse_approvals(text: &str) -> io::Result<(BTreeSet<TaskId>, BTreeSet<Call>, HashMap<TaskId, (String, String)>)> {
+    let v = json::parse(text).map_err(|e| bad(format!("approvals.json: {e}")))?;
     let mut approved = BTreeSet::new();
     let mut calls = BTreeSet::new();
     let mut held = HashMap::new();
@@ -552,8 +671,8 @@ fn call_triple(c: &Value) -> io::Result<(String, String, String)> {
 
 /// Replays events.jsonl. Returns the events and the byte length of the valid prefix.
 fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
-    let text = match fs::read_to_string(path) {
-        Ok(t) => t,
+    let text = match fs::read(path) {
+        Ok(t) => String::from_utf8_lossy(&t).into_owned(),
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok((vec![], 0)),
         Err(e) => return Err(e),
     };
@@ -563,9 +682,8 @@ fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
         if !line.ends_with('\n') {
             break; // torn tail
         }
-        let l = json::parse(line.trim_end())
-            .and_then(|v| logged_from(&v))
-            .map_err(|e| bad(format!("events.jsonl: {e}")))?;
+        // a garbage line ends the good prefix; it is truncated like a torn tail
+        let Ok(l) = json::parse(line.trim_end()).and_then(|v| logged_from(&v)) else { break };
         out.push(l);
         good += line.len();
     }
@@ -575,8 +693,8 @@ fn read_log(path: &Path) -> io::Result<(Vec<Logged>, usize)> {
 /// Reads approvals_log.jsonl. A torn tail is cut off so the next append starts a clean line.
 fn load_decisions(dir: &Path) -> io::Result<Vec<Value>> {
     let path = dir.join("approvals_log.jsonl");
-    let text = match fs::read_to_string(&path) {
-        Ok(t) => t,
+    let text = match fs::read(&path) {
+        Ok(t) => String::from_utf8_lossy(&t).into_owned(),
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(vec![]),
         Err(e) => return Err(e),
     };
@@ -586,7 +704,8 @@ fn load_decisions(dir: &Path) -> io::Result<Vec<Value>> {
         if !line.ends_with('\n') {
             break;
         }
-        out.push(json::parse(line.trim_end()).map_err(|e| bad(format!("approvals_log.jsonl: {e}")))?);
+        let Ok(v) = json::parse(line.trim_end()) else { break };
+        out.push(v);
         good += line.len();
     }
     if good < text.len() {

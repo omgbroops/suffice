@@ -132,6 +132,11 @@ pub struct Logged {
     pub event: Event,
 }
 
+/// Move an unreadable state file to `<name>.corrupt` so open can start empty without losing it.
+pub fn set_aside(path: &std::path::Path) {
+    let _ = std::fs::rename(path, path.with_extension("corrupt"));
+}
+
 pub fn now_ms() -> u64 {
     std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
 }
