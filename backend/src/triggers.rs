@@ -94,17 +94,20 @@ impl Trigger {
         ])
     }
 
-    fn from_json(v: &Value) -> Result<Trigger, String> {
+    fn from_json(v: &Value, now: u64) -> Result<Trigger, String> {
         let s = |k: &str| v.get(k).and_then(Value::as_str).map(str::to_string).ok_or(format!("trigger.{k} is required"));
         let n = |k: &str| v.get(k).and_then(Value::as_i64).unwrap_or(0).max(0) as u64;
+        let when = When::from_json(v.get("when").ok_or("trigger.when is required")?)?;
+        // an unreadable next_due_ms must not become 0 (a fire on the next tick): recompute it
+        let next_due_ms = v.get("next_due_ms").and_then(Value::as_i64).map_or_else(|| next_due(&when, now), |x| x.max(0) as u64);
         Ok(Trigger {
             id: s("id")?,
-            when: When::from_json(v.get("when").ok_or("trigger.when is required")?)?,
+            when,
             template: v.get("template").cloned().unwrap_or(Value::Null),
             enabled: matches!(v.get("enabled"), Some(Value::Bool(true))),
             fires: n("fires") as u32,
             last_fire_ms: v.get("last_fire_ms").and_then(Value::as_i64).map(|x| x.max(0) as u64),
-            next_due_ms: n("next_due_ms"),
+            next_due_ms,
             done_seen: v.get("done_seen").and_then(Value::as_arr).unwrap_or(&[]).iter().filter_map(|x| x.as_str().map(str::to_string)).collect(),
             created_ms: n("created_ms"),
             failures: n("failures") as u32,
@@ -220,7 +223,8 @@ pub fn load(dir: &Path) -> io::Result<(Vec<Trigger>, Option<String>)> {
         Err(e) => return Err(e),
     };
     let parsed = crate::json::parse(&text).and_then(|v| {
-        v.as_arr().unwrap_or(&[]).iter().map(Trigger::from_json).collect::<Result<Vec<_>, String>>()
+        let now = crate::types::now_ms();
+        v.as_arr().unwrap_or(&[]).iter().map(|x| Trigger::from_json(x, now)).collect::<Result<Vec<_>, String>>()
     });
     match parsed {
         Ok(triggers) => Ok((triggers, None)),

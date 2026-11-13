@@ -449,6 +449,9 @@ impl Engine {
                 return Err(format!("OnDone cycle through trigger '{id}'"));
             }
         }
+        if matches!(when, When::Every { secs } if secs > 315_360_000) {
+            return Err("every too large".into());
+        }
         crate::server::parse_task(&template, String::new())?;
         let now = (self.clock)();
         let mut t = Trigger::new(id.to_string(), when, template, now);
