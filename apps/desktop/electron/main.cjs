@@ -40,6 +40,10 @@ app.whenReady().then(async()=>{
   handle('git-info',async()=>({...await github.info(project),login:await github.user()}));
   handle('issues',()=>github.issues(project));
   handle('prs',()=>github.prs(project));
+  // neon github panes: read-only list/detail; kind and state come from allowlists
+  const ghKind=k=>{if(k!=='pr'&&k!=='issue')throw new Error('Bad kind');return k;};
+  handle('github-list',(o)=>{const kind=ghKind(o?.kind),states=kind==='pr'?['open','closed','merged']:['open','closed'];if(!states.includes(o.state))throw new Error('Bad state');return github.listFull(project,{kind,state:o.state,limit:Math.min(Math.max(Math.trunc(o.limit)||50,1),100)});});
+  handle('github-detail',(o)=>{const kind=ghKind(o?.kind);if(!Number.isInteger(o.number)||o.number<1)throw new Error('Bad number');return github.detail(project,{kind,number:o.number});});
   handle('branch-prs',root=>typeof root==='string'&&root?github.branchPrs(root):{});
   // explore pane: read-only git views of the selected project
   handle('git-branches',()=>github.gitBranches(project));

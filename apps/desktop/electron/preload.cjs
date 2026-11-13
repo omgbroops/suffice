@@ -14,6 +14,8 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   gitInfo:()=>invoke('suffice:git-info'),
   issues:()=>invoke('suffice:issues'),
   prs:()=>invoke('suffice:prs'),
+  githubList:o=>invoke('suffice:github-list',o),
+  githubDetail:o=>invoke('suffice:github-detail',o),
   branchPrs:root=>invoke('suffice:branch-prs',root),
   gitBranches:()=>invoke('suffice:git-branches'),
   gitLog:()=>invoke('suffice:git-log'),
