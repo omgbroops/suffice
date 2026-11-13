@@ -17,7 +17,7 @@ registerPane('auto', {
     const status = i => {
       if (i.lastStatus === 'running' || busy.has(i.id)) return ['running', 'Running'];
       if (!i.lastStatus) return ['', 'Not run yet'];
-      const text = `${i.lastStatus === 'ok' ? 'Succeeded' : i.lastStatus === 'error' ? 'Failed' : 'Skipped, busy'} ${ago(i.lastRunAt || Date.now())} ago`;
+      const text = `${i.lastStatus === 'ok' ? 'Succeeded' : i.lastStatus === 'error' ? 'Failed' : 'Skipped, busy'} ${Date.now() - (i.lastRunAt || Date.now()) < 60000 ? 'just now' : ago(i.lastRunAt) + ' ago'}`;
       return [i.lastStatus === 'ok' ? 'ok' : i.lastStatus === 'error' ? 'err' : 'skip', text];
     };
     const projectName = p => projects.find(x => x.path === p)?.name || p.split('/').pop();

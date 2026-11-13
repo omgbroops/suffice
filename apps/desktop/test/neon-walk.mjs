@@ -46,17 +46,9 @@ try{
  await shot('01b-thread-details');
  await page.locator('[data-nx="density"]').click();assert.equal(await page.locator('.thread-row .nx-meta').first().isVisible(),false,'compact hides details');await shot('01c-compact');
  await page.locator('[data-nx="density"]').click();
- await page.locator('.nx-row[data-nx="prs"]').click();await page.locator('.nx-pop').waitFor();await page.waitForTimeout(300);await shot('02-prs');
- const rows=await page.locator('.nx-pop-main').count();console.log('pr rows',rows);
- if(rows){
-  await page.locator('.nx-pop [data-open]').first().click();await page.waitForTimeout(300);
-  const urls=await app.evaluate(()=>globalThis.__opened);console.log('opened',urls);assert.ok(urls[0]?.startsWith('https://github.com/'),'arrow opens the PR on GitHub');
-  await page.locator('.nx-pop-main').first().click();await page.waitForTimeout(300);
-  const text=await page.locator('#prompt').inputValue();console.log('prompt',text);assert.ok(text.startsWith('Review pull request #'),'row fills the composer');
-  await shot('03-pr-in-composer');
- }
- await page.locator('.nx-row[data-nx="issues"]').click();await page.locator('.nx-pop').waitFor();await page.waitForTimeout(300);await shot('04-issues');
- await page.keyboard.press('Escape');assert.equal(await page.locator('.nx-pop').count(),0,'Escape closes the list');
+ // the PR and issue lists are full panes now (neon-github-walk covers their contents)
+ await page.locator('.nx-row[data-nx="prs"]').click();await page.locator('.nx-pane[data-pane="prs"]').waitFor();await shot('02-prs-pane');
+ await page.keyboard.press('Escape');assert.equal(await page.locator('.nx-pane').count(),0,'Escape closes the pane');
  assert.deepEqual(errors,[],'no page errors');
  console.log('PASS');
 }finally{await app.close();}
