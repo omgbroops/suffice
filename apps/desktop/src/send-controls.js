@@ -1,12 +1,13 @@
 import {icon} from './ui.js';
 export function connectSendControls(form,prompt,send){
- let running=false,control=false;
- function render(){send.innerHTML=running?'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="8" height="8" rx="1" fill="currentColor"/></svg>':icon('arrow');send.setAttribute('aria-label',running?'Stop task':'Start session');send.title=send.getAttribute('aria-label');form.dataset.running=String(running);form.backgroundIntent=control;}
+ let running=false,control=false,displayed;
+ function render(){const stopping=running&&!prompt.value.trim()&&!form.attachments?.count;if(displayed!==stopping){displayed=stopping;send.innerHTML=stopping?'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3.5" fill="currentColor"/></svg>':icon('arrow');}send.setAttribute('aria-label',stopping?'Stop task':running?'Steer agent':'Start session');send.title=send.getAttribute('aria-label');form.dataset.running=String(running);form.backgroundIntent=control;}
  form.setRunning=value=>{running=value;render();};
  document.addEventListener('keydown',event=>{if(event.key==='Control'&&form.contains(document.activeElement)){control=true;render();}});
  document.addEventListener('keyup',event=>{if(event.key==='Control'){control=false;render();}});
  window.addEventListener('blur',()=>{control=false;render();});
  form.addEventListener('focusout',()=>queueMicrotask(()=>{if(!form.contains(document.activeElement)){control=false;render();}}));
  prompt.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey)form.backgroundSubmit=event.ctrlKey;},true);
+ prompt.addEventListener('input',render);
  render();
 }
