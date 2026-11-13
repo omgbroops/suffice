@@ -15,7 +15,7 @@ function threadTime(timestamp){
  }
 }
 
-export function connectThreads({api,prompt,send,toast,ensureProject}){
+export function connectThreads({api,prompt,send,toast,ensureProject,ensureSignedIn}){
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
  const transition=createThreadTransition(workspace,form);
  const newSession=document.querySelector('.new-session');newSession.setAttribute('aria-current','page');
@@ -141,7 +141,7 @@ export function connectThreads({api,prompt,send,toast,ensureProject}){
   if(event.event==='tool_start'){flushMarkdown();if(current&&!streamed)current.remove();current=null;streamed='';if(!liveGroup){liveGroup=document.createElement('details');liveGroup.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';liveLog=document.createElement('div');liveLog.className='thread-activity-log';liveGroup.append(summary,liveLog);history.insertBefore(liveGroup,statusLine);}const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});liveTools.set(event.id,widget);liveLog.append(widget.element);status(`Running ${event.name}`);reasoning='';if(pinned)bottom();}
   if(event.event==='tool_output'||event.event==='tool_end'){liveTools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(pinned)bottom();if(event.event==='tool_end')status('Working');}
  });
- api.status().then(async status=>{await refresh();if(!status.authenticated)toast('Sign in through the Suffice CLI to connect your account.');}).catch(error=>toast(error.message));
+ api.status().then(()=>refresh()).catch(error=>toast(error.message));
  document.addEventListener('click',async event=>{
   const control=event.target.closest('[data-action]');if(!control)return;
   if(control.dataset.action==='repo-menu'){
@@ -158,7 +158,10 @@ export function connectThreads({api,prompt,send,toast,ensureProject}){
   event.preventDefault();event.stopImmediatePropagation();
   if(busy){await api.abort().catch(error=>toast(error.message));return;}
   if(opening)return;
-  if(ensureProject&&!workspace.classList.contains('thread-view')){opening=true;let picked;try{picked=await ensureProject();}finally{opening=false;}if(!picked){prompt.focus();return;}}
+  if(!workspace.classList.contains('thread-view')||!form.modelSelection){
+   // no project or (with no chosen model) no sign-in yet: ask for it in place, then send the same draft
+   opening=true;let ready=true;try{if(ensureProject&&!workspace.classList.contains('thread-view'))ready=await ensureProject();if(ready&&ensureSignedIn&&!form.modelSelection)ready=await ensureSignedIn();}finally{opening=false;}if(!ready){prompt.focus();return;}
+  }
   const text=prompt.value.trim()||(form.attachments?.count?'Please review the attached files.':'');if(!text)return;
   const inBackground=form.backgroundSubmit||form.backgroundIntent;form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}

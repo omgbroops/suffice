@@ -1,10 +1,10 @@
-const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard}=require('electron');
+const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell}=require('electron');
 const path=require('node:path');
 const {pathToFileURL}=require('node:url');
 const workspaceFiles=require('./workspace-files.cjs');
 const {prepareAttachments,clipboardFiles}=require('./attachments.cjs');
 let background;
-let win,worker,project=null,selectedProject=null,sequence=0,running=false;
+let win,worker,loginUrl=null,project=null,selectedProject=null,sequence=0,running=false;
 const requests=new Map();
 function request(action,payload){
   if(!worker)return Promise.reject(new Error('Harness process is not available'));
@@ -15,6 +15,7 @@ app.whenReady().then(async()=>{
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));
   worker=utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'});
   worker.on('message',message=>{
+    if(message.event==='login_url'){try{if(new URL(message.url).protocol==='https:'){loginUrl=message.url;void shell.openExternal(loginUrl);}}catch{}}
     if(message.event){if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
     const pending=requests.get(message.id);if(!pending)return;requests.delete(message.id);
     message.ok?pending.resolve(message.result):pending.reject(new Error(message.error));
@@ -55,6 +56,10 @@ app.whenReady().then(async()=>{
   handle('run',payload=>runTask(payload));
   handle('run-background',payload=>runTask(payload,true));
   handle('abort',()=>request('abort'));
+  handle('login',()=>request('login'));
+  handle('login-input',text=>{if(typeof text!=='string'||text.length>10000)throw new Error('Invalid sign-in response');return request('login-input',{text});});
+  handle('login-cancel',()=>request('login-cancel'));
+  handle('login-open',()=>{if(loginUrl)void shell.openExternal(loginUrl);});
   handle('reset',async()=>{await request('reset');project=selectedProject;});
   handle('window',action=>{
     if(action==='minimize')win.minimize();
@@ -68,6 +73,7 @@ app.whenReady().then(async()=>{
     if(closing)return;event.preventDefault();closing=true;
     const shutdown=(async()=>{
       background.stop();
+      await request('login-cancel').catch(()=>{});
       await request('abort').catch(()=>{});
       const until=Date.now()+3000;while(running&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,25));
       if(!running)await request('reset').catch(()=>{});

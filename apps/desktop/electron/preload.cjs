@@ -19,6 +19,10 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   runBackground:payload=>invoke('suffice:run-background',payload),
   clipboardFiles:()=>invoke('suffice:clipboard-files'),
   abort:()=>invoke('suffice:abort'),
+  login:()=>invoke('suffice:login'),
+  loginInput:text=>invoke('suffice:login-input',text),
+  loginCancel:()=>invoke('suffice:login-cancel'),
+  loginOpen:()=>invoke('suffice:login-open'),
   reset:()=>invoke('suffice:reset'),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
 });

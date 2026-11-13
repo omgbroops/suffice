@@ -1,5 +1,6 @@
 import {sessionUsage} from './usage.mjs';
-import {mkdir,realpath,stat} from 'node:fs/promises';
+import {mkdir,readFile,realpath,stat,writeFile} from 'node:fs/promises';
+import {randomUUID} from 'node:crypto';
 import {resolve,dirname} from 'node:path';
 import {ModelRuntime,SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
@@ -10,7 +11,7 @@ const port=process.parentPort;
 const send=value=>port?port.postMessage(value):process.send?.(value);
 export function createHarnessHost({send,createRuntime=options=>ModelRuntime.create(options),createSession=createSufficeSession,home=parseOptions([]).home}) {
 let agent,runtime,workspace,busy=false;
-let resumePath=null,viewedUsage=null;
+let resumePath=null,viewedUsage=null,login=null;
 const threads=createThreadStore(home);
 async function receive(message) {
   const {id,action,payload={}}=message;
@@ -19,6 +20,23 @@ async function receive(message) {
     if(action==='abort'){agent?.abort();send({id,ok:true});return;}
     if(action==='usage'){send({id,ok:true,result:sessionUsage(agent?.session)??viewedUsage});return;}
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
+    if(action==='login-input'){login?.answer?.(String(payload.text??''));send({id,ok:true});return;}
+    if(action==='login-cancel'){login?.controller.abort();send({id,ok:true});return;}
+    if(action==='login'){
+      // Same OpenAI OAuth sign-in as `suffice login`; the browser URL and any paste request go to the window as events.
+      if(!runtime)throw new Error('Harness is not ready');
+      if(login)throw new Error('Sign-in is already in progress');
+      const identity=resolve(home,'host-id');let deviceId;
+      try{deviceId=(await readFile(identity,'utf8')).trim();}catch(error){if(error.code!=='ENOENT')throw error;deviceId=randomUUID();await mkdir(home,{recursive:true,mode:0o700});await writeFile(identity,deviceId,{mode:0o600});}
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15*60_000);login={controller};
+      try{
+        await runtime.login('openai','oauth',{signal:controller.signal,
+          notify(event){if(event.type==='auth_url')send({event:'login_url',url:event.url});else if(event.type==='progress')send({event:'login_progress',message:event.message});},
+          prompt(request){send({event:'login_prompt',message:request?.message??'Paste the login response'});return new Promise((resolve,reject)=>{login.answer=resolve;controller.signal.addEventListener('abort',()=>reject(new Error('Sign-in cancelled')),{once:true});});}
+        },{getDeviceId:()=>deviceId,agentName:'Suffice'});
+      }finally{clearTimeout(timer);login=null;}
+      send({id,ok:true,result:{authenticated:runtime.isUsingSubscription('openai')}});return;
+    }
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
     if(action==='reset'){await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
@@ -43,7 +61,7 @@ async function receive(message) {
     if(typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('A valid prompt is required');
     if(!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort))throw new Error('Invalid effort');
     if(!runtime)throw new Error('Harness is not ready');
-    if(!payload.model&&!runtime.isUsingSubscription('openai'))throw new Error('Sign in with the Suffice CLI first: bun run packages/cli/bin/suffice.mjs login');
+    if(!payload.model&&!runtime.isUsingSubscription('openai'))throw new Error('Sign in to start a session');
     let selected;
     if(payload.model){selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Sign in with the Suffice CLI for this provider.');if(!(selected.reasoning?getSupportedThinkingLevels(selected):['off']).includes(payload.effort))throw new Error('Unsupported effort for this model');}
     const cwd=await realpath(payload.cwd);
@@ -76,6 +94,8 @@ async function receive(message) {
 }
 return receive;
 }
-const receive=createHarnessHost({send});
-if(port)port.on('message',event=>void receive(event.data));
-else if(process.send)process.on('message',message=>void receive(message));
+export function serve(options={}){
+  const receive=createHarnessHost({send,...options});
+  if(port)port.on('message',event=>void receive(event.data));
+  else if(process.send)process.on('message',message=>void receive(message));
+}
