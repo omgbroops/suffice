@@ -370,19 +370,20 @@ function backgroundOptions() {
 
 function showSettings() { showDialog('Workspace settings', `<div class="settings-row"><span>Workspace</span><strong>Suffice</strong></div><div class="settings-row"><span>Appearance</span><strong>${getTheme() === 'light' ? 'Light' : 'Dark'}</strong></div><div class="settings-row"><span>Environment</span><strong>Visual prototype</strong></div><div class="sample-note">Settings preview · nothing is saved remotely</div>`); }
 
-function showSearch() {
-  const source=[...document.querySelectorAll('.sidebar-sessions .thread-row')];
-  showDialog('Search sessions', '<label class="sr-only" for="session-search">Search sessions</label><input id="session-search" class="search-input" placeholder="Search sessions…" /><div class="search-results"></div>');
-  const search=document.querySelector('#session-search'),results=document.querySelector('.search-results');
-  function render(){results.replaceChildren();const query=search.value.trim().toLowerCase();for(const row of source){if(!`${row.textContent} ${row.dataset.project||''}`.toLowerCase().includes(query))continue;const item=row.cloneNode(true);item.removeAttribute('data-thread');item.removeAttribute('aria-pressed');item.addEventListener('click',()=>{dialog.close();row.click();});results.append(item);}if(!results.children.length){const empty=document.createElement('p');empty.className='muted';empty.textContent='No sessions found';results.append(empty);}}
-  search.addEventListener('input',render);render();search.focus();
-}
+const spotlight=createSpotlight({commands:()=>[
+ {id:'new',title:'New session',icon:'plus',run:()=>document.querySelector('.new-session').click()},
+ {id:'sidebar',title:'Toggle sidebar',icon:'panel',run:()=>document.querySelector('[data-action="toggle-sidebar"]').click()},
+ {id:'project',title:'Choose project',icon:'folder',run:()=>document.querySelector('.project-picker')?.click()},
+ {id:'theme',title:getTheme()==='dark'?'Use light theme':'Use dark theme',icon:'agent',run:()=>setTheme(getTheme()==='dark'?'light':'dark')},
+ {id:'settings',title:'Workspace settings',icon:'agent',run:showSettings}
+]});
+function showSearch(keyboard=false){spotlight.open({keyboard});}
 
 dialog.addEventListener('click', (e) => { if (e.target === dialog) { const r = dialog.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close(); } });
 
 document.addEventListener('keydown', (e) => {
 
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); showSearch(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); showSearch(true); }
 
 });
 
