@@ -1,10 +1,11 @@
 // Read-only visual review against the local harness. Never sends a prompt.
 import {_electron} from 'playwright-core';
-import {electronPath} from './electron-app.mjs';
+import {electronPath,testEnv} from './electron-app.mjs';
 import {resolve} from 'node:path';
 import {mkdir,writeFile} from 'node:fs/promises';
 const output=resolve('apps/desktop/visual-review/tactile');await mkdir(output,{recursive:true});
-const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
+// allowlist env: no provider keys reach the real harness
+const env=testEnv();
 const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop')],env});
 let keep=false;
 try{

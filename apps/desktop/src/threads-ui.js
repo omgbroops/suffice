@@ -16,7 +16,7 @@ function threadTime(timestamp){
  }
 }
 
-export function connectThreads({api,prompt,send,toast,ensureProject,ensureSignedIn}){
+export function connectThreads({api,prompt,send,toast,projectsReady,ensureProject,ensureSignedIn}){
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
  const transition=createThreadTransition(workspace,form);
  const newSession=document.querySelector('.new-session');newSession.setAttribute('aria-current','page');
@@ -93,6 +93,7 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
     detail(label,part.text);
    }
    if(text&&['user','assistant'].includes(entry.role)){message(entry.role,text);activity=null;}
+   if(entry.role==='assistant'&&entry.errorMessage){const host=text?history.lastElementChild:message('assistant','');const note=document.createElement('p');note.className='thread-error';note.textContent=entry.errorMessage;host.append(note);activity=null;}
   }
   for(const group of history.querySelectorAll('.thread-activity')){
    if(group.querySelector('summary').textContent!=='Reasoning')continue;
@@ -153,7 +154,7 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
   if(event.event==='tool_start'){flushMarkdown();if(current&&!streamed)current.remove();current=null;streamed='';if(!liveGroup){liveGroup=document.createElement('details');liveGroup.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';liveLog=document.createElement('div');liveLog.className='thread-activity-log';liveGroup.append(summary,liveLog);history.insertBefore(liveGroup,statusLine);}const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});liveTools.set(event.id,widget);liveLog.append(widget.element);status(`Running ${event.name}`);reasoning='';if(pinned)bottom();}
   if(event.event==='tool_output'||event.event==='tool_end'){liveTools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(pinned)bottom();if(event.event==='tool_end')status('Working');}
  });
- api.status().then(()=>refresh()).then(()=>{let last;try{last=localStorage.getItem('suffice-last-thread');}catch{}list.querySelector(`.thread-row[data-thread="${CSS.escape(last||'')}"]`)?.click();}).catch(error=>toast(error.message));
+ api.status().then(()=>refresh()).then(()=>projectsReady).then(()=>{let last;try{last=localStorage.getItem('suffice-last-thread');}catch{}list.querySelector(`.thread-row[data-thread="${CSS.escape(last||'')}"]`)?.click();}).catch(error=>toast(error.message));
  document.addEventListener('click',async event=>{
   const control=event.target.closest('[data-action]');if(!control)return;
   if(control.dataset.action==='repo-menu'){

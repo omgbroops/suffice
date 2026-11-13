@@ -30,9 +30,12 @@ async function receive(message) {
       // Same OpenAI OAuth sign-in as `suffice login`; the browser URL and any paste request go to the window as events.
       if(!runtime)throw new Error('Harness is not ready');
       if(login)throw new Error('Sign-in is already in progress');
+      login={};
       const identity=resolve(home,'host-id');let deviceId;
-      try{deviceId=(await readFile(identity,'utf8')).trim();}catch(error){if(error.code!=='ENOENT')throw error;deviceId=randomUUID();await mkdir(home,{recursive:true,mode:0o700});await writeFile(identity,deviceId,{mode:0o600});}
-      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15*60_000);login={controller};
+      try{
+        try{deviceId=(await readFile(identity,'utf8')).trim();}catch(error){if(error.code!=='ENOENT')throw error;deviceId=randomUUID();await mkdir(home,{recursive:true,mode:0o700});await writeFile(identity,deviceId,{mode:0o600});}
+      }catch(error){login=null;throw error;}
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15*60_000);login.controller=controller;
       try{
         await runtime.login('openai','oauth',{signal:controller.signal,
           notify(event){if(event.type==='auth_url')send({event:'login_url',url:event.url});else if(event.type==='progress')send({event:'login_progress',message:event.message});},

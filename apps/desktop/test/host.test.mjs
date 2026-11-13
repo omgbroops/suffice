@@ -46,3 +46,19 @@ test('host rejects malformed and unauthenticated tasks without executing the har
  assert.match(messages.find(m=>m.id===2).error,/Sign in/);assert.equal(created,0);
  assert.equal(messages.find(m=>m.id===3).ok,false);
 });
+
+test('two quick sign-in requests start one login',{timeout:5000},async()=>{
+ const messages=[];let logins=0;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-login-test-'));
+ const runtime={isUsingSubscription:()=>false,async login(_provider,_type,{prompt}){logins++;await prompt({message:'Paste'});}};
+ const host=createHarnessHost({send:message=>messages.push(message),createRuntime:async()=>runtime,home});
+ await host({id:1,action:'status'});
+ const first=host({id:2,action:'login'});const second=host({id:3,action:'login'});
+ await second;
+ assert.match(messages.find(m=>m.id===3).error,/already in progress/);
+ while(!messages.some(m=>m.event==='login_prompt'))await new Promise(r=>setTimeout(r,1));
+ await host({id:4,action:'login-input',payload:{text:'code'}});
+ await first;
+ assert.equal(messages.find(m=>m.id===2).ok,true);
+ assert.equal(logins,1);
+});

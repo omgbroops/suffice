@@ -18,13 +18,13 @@ export function connectSignIn({api,toast}){
   status.textContent=running?(url?'Finish signing in in your browser.':'Opening your browser…'):'Sign in with your OpenAI account to start sessions.';
   start.innerHTML=icon(running?'refresh':'external')+`<span>${running?'Open the sign-in page again':'Continue in browser'}</span>`;start.disabled=running&&!url;cancel.hidden=!running;
  }
- function close(focus=false){hidePopover(menu);pill.setAttribute('aria-expanded','false');if(focus&&!pill.hidden)pill.focus();if(!running)settle(false);}
+ function close(focus=false){hidePopover(menu);pill.setAttribute('aria-expanded','false');if(focus&&!pill.hidden)pill.focus();settle(false);}
  function open(){draw();const rect=(pill.offsetParent?pill:document.querySelector('.send-button')).getBoundingClientRect();menu.style.left=`${Math.max(12,Math.min(rect.left,innerWidth-292))}px`;menu.style.top=`${Math.min(rect.bottom+6,innerHeight-300)}px`;menu.style.setProperty('--popover-origin','top left');showPopover(menu);pill.setAttribute('aria-expanded','true');start.focus();}
  function done(){signedIn=true;running=false;url=null;pill.hidden=true;paste.hidden=true;settle(true);close();toast('Signed in');document.dispatchEvent(new Event('suffice:signed-in'));}
  async function begin(){
   running=true;url=null;paste.value='';draw();
-  try{const result=await api.login();if(result?.authenticated)done();else{running=false;draw();toast('Sign-in did not finish. Try again.');}}
-  catch(error){running=false;paste.hidden=true;draw();if(!/cancelled/i.test(error.message))toast(error.message);}
+  try{const result=await api.login();if(result?.authenticated)done();else{running=false;settle(false);draw();toast('Sign-in did not finish. Try again.');}}
+  catch(error){running=false;settle(false);paste.hidden=true;draw();if(!/cancelled/i.test(error.message))toast(error.message);}
  }
  api.onEvent(event=>{
   if(event.event==='login_url'){url=event.url;draw();}

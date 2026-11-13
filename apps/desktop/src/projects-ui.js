@@ -29,5 +29,5 @@ export function connectProjects({api,toast}){
  window.addEventListener('resize',()=>close());
  const ready=api.projects().then(async items=>{projects=items;const id=localStorage.getItem('suffice-project');if(items.some(p=>p.id===id))apply(await api.selectProject(id));}).catch(error=>toast(error.message));
  // Sending with no project opens the picker; resolves true once one is picked, false if dismissed.
- return {async ensure(){await ready;if(selected)return true;const picked=new Promise(resolve=>{settle(false);waiting=resolve;});await open();return picked;}};
+ return {ready,async ensure(){await ready;if(selected)return true;const picked=new Promise(resolve=>{settle(false);waiting=resolve;});await open();return picked;}};
 }

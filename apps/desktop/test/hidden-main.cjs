@@ -15,7 +15,10 @@ const HiddenWindow=new Proxy(electron.BrowserWindow,{construct(Target,[options={
 // SUFFICE_FAKE_HARNESS=1 swaps the harness process for the fake one in this folder (no provider, no network).
 const fake=process.env.SUFFICE_FAKE_HARNESS==='1'?require('node:path').join(__dirname,'fake-worker-entry.mjs'):null;
 const utilityProcess={fork:(entry,...rest)=>electron.utilityProcess.fork(fake&&entry.endsWith('worker-entry.mjs')?fake:entry,...rest)};
-const patched=new Proxy(electron,{get:(target,key)=>key==='BrowserWindow'?HiddenWindow:key==='utilityProcess'?utilityProcess:target[key]});
+// SUFFICE_TEST_SLOW_IPC=channel=ms delays one IPC handler, to pin down startup ordering races.
+const [slowChannel,slowMs]=(process.env.SUFFICE_TEST_SLOW_IPC||'').split('=');
+const ipcMain=new Proxy(electron.ipcMain,{get:(target,key)=>key==='handle'?(channel,fn)=>target.handle(channel,channel===slowChannel?async(...args)=>{await new Promise(r=>setTimeout(r,Number(slowMs)));return fn(...args);}:fn):typeof target[key]==='function'?target[key].bind(target):target[key]});
+const patched=new Proxy(electron,{get:(target,key)=>key==='BrowserWindow'?HiddenWindow:key==='utilityProcess'?utilityProcess:key==='ipcMain'?ipcMain:target[key]});
 const load=Module._load;
 Module._load=function(request,...rest){return request==='electron'?patched:load.call(this,request,...rest);};
 require('../electron/main.cjs');
