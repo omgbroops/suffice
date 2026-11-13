@@ -27,7 +27,7 @@ export function connectWorkspaceTools(api){
     values[3].textContent=valid(usage?.totalTokens)?format.format(usage.totalTokens):'–';
   }
   let revision=0;
-  async function refresh(){const version=++revision;try{const usage=await api.usage();if(version===revision)update(usage);}catch{/* Keep the last receipt if the harness is restarting. */}}
+  async function refresh(){const version=++revision;try{const usage=await api.usage(viewState.id);if(version===revision)update(usage);}catch{/* Keep the last receipt if the harness is restarting. */}}
   function position(){const r=ring.getBoundingClientRect();details.style.top=`${r.bottom+7}px`;details.style.left=`${Math.max(8,Math.min(r.right-details.offsetWidth,innerWidth-details.offsetWidth-8))}px`;}
   let delay;
   function hide(){clearTimeout(delay);details.hidden=true;ring.setAttribute('aria-expanded','false');}
@@ -36,7 +36,7 @@ export function connectWorkspaceTools(api){
   document.addEventListener('pointerdown',event=>{if(!ring.contains(event.target))hide();});
   ring.addEventListener('pointerenter',event=>{if(event.pointerType!=='touch')show();});ring.addEventListener('pointerleave',hide);ring.addEventListener('focus',show);ring.addEventListener('blur',hide);ring.addEventListener('keydown',event=>{if(event.key==='Escape')hide();});
   window.addEventListener('resize',()=>{if(!details.hidden)position();});
-  api.onEvent(event=>{if(event.event==='usage'){revision++;update(event.usage);}});
+  api.onEvent(event=>{if(event.event==='usage'&&(!event.threadId||event.threadId===viewState.id)){revision++;update(event.usage);}});
   document.addEventListener('suffice:usage-change',()=>void refresh());
   tools.hidden=!viewState.id;
   viewState.subscribe(event=>{if(event.type==='select'||event.type==='adopt'){tools.hidden=!event.id;hide();}});
