@@ -63,3 +63,19 @@ fn fallback_hook_command_blocks() {
     let out = Command::new("sh").arg("-c").arg("echo 'suffice gate: hook unavailable' >&2; exit 2").output().unwrap();
     assert_eq!(out.status.code(), Some(2));
 }
+
+#[test]
+fn approval_covers_only_that_exact_call() {
+    let approved = r#"[{"name":"Bash","input":"{\"command\":\"curl -X POST https://x.com\"}"}]"#;
+    // same tool, different command: still held
+    let (code, _) = run_hook(r#"{"tool_name":"Bash","tool_input":{"command":"curl -X POST https://evil.com"}}"#, Some(approved));
+    assert_eq!(code, 2);
+    // same input, different tool name: still held
+    let (code, _) = run_hook(r#"{"tool_name":"shell","tool_input":{"command":"curl -X POST https://x.com"}}"#, Some(approved));
+    assert_eq!(code, 2);
+    // a malformed approvals list approves nothing
+    for bad in ["not json", r#"{"name":"Bash"}"#, r#"[{"name":"Bash"}]"#] {
+        let (code, _) = run_hook(r#"{"tool_name":"Bash","tool_input":{"command":"curl -X POST https://x.com"}}"#, Some(bad));
+        assert_eq!(code, 2, "{bad}");
+    }
+}
