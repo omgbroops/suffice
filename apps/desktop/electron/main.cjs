@@ -38,6 +38,7 @@ app.whenReady().then(async()=>{
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   handle('threads',()=>request('threads'));
   handle('git-info',async()=>({...await github.info(project),login:await github.user()}));
+  handle('account-info',withUsage=>require('./account-info.cjs').accountInfo(process.env.SUFFICE_HOME||path.join(require('node:os').homedir(),'.suffice'),project,withUsage===true));
   handle('issues',()=>github.issues(project));
   handle('prs',()=>github.prs(project));
   // neon github panes: read-only list/detail; kind and state come from allowlists

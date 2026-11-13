@@ -30,7 +30,7 @@ let page;try{
  await page.locator('.project-picker').click();await page.locator('.project-add').click();await page.waitForTimeout(3000);
  const shot=async name=>page.screenshot({path:resolve(out,name+'.png'),timeout:30000});
 
- await page.waitForFunction(()=>document.querySelector('.nx-foot .nx-org')?.textContent.includes('/'),null,{timeout:20000});
+ await page.waitForFunction(()=>/\d/.test(document.querySelector('[data-nx="issues"] .nx-badge')?.textContent||''),null,{timeout:20000});
  // PRs
  await page.locator('.nx-row[data-nx="prs"]').click();await page.locator('.nx-gh-row').first().waitFor({timeout:30000});await shot('01-prs-open');
  assert.ok((await page.locator('.nx-pane-head .nx-gh-repo').textContent()).includes('/'),'header shows owner/name');

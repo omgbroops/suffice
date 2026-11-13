@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   models:()=>invoke('suffice:models'),
   threads:()=>invoke('suffice:threads'),
   gitInfo:()=>invoke('suffice:git-info'),
+  accountInfo:withUsage=>invoke('suffice:account-info',Boolean(withUsage)),
   issues:()=>invoke('suffice:issues'),
   prs:()=>invoke('suffice:prs'),
   githubList:o=>invoke('suffice:github-list',o),

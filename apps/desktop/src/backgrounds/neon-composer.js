@@ -1,8 +1,6 @@
-// Neon composer menus: "+" add menu, run options, run-location chip, footer account menu, dictation.
+// Neon composer menus: "+" add menu, run options, run-location chip, dictation.
 // Mounted from mountNeonChrome; returns a cleanup. Menus are .nx.nx-pop.nx-menu popovers.
-import { getTheme, setTheme } from '../theme.js';
-
-export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, form, foot, getLogin }) {
+export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, form }) {
   const undo = [];
   let menu = null, anchorEl = null;
   const q = (s, r = document) => r.querySelector(s);
@@ -155,29 +153,11 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     menu?.querySelector('.nx-mi[disabled]:first-of-type')?.remove();
   };
 
-  // ---- footer account menu ----
-  const footMenu = anchor => {
-    const login = getLogin(), theme = getTheme();
-    openMenu(anchor, [
-      { label: 'Settings', icon: I.gear, run: () => { const b = document.createElement('button'); b.dataset.action = 'settings'; b.hidden = true; document.body.append(b); b.click(); b.remove(); } },
-      ...(login ? [{ label: 'GitHub profile', icon: I.user, hint: login, run: () => api.openGithub(`https://github.com/${encodeURIComponent(login)}`).catch(e => note(e.message)) }] : []),
-      { label: 'Theme: Dark', icon: '<span class="nx-i-pad"></span>', check: theme === 'dark', run: () => setTheme('dark') },
-      { label: 'Theme: Light', icon: '<span class="nx-i-pad"></span>', check: theme === 'light', run: () => setTheme('light') },
-      { sep: 1 },
-      { label: 'Sign out', icon: I.exit, run: async () => { try { await api.logout(); note('Signed out'); window.dispatchEvent(new Event('suffice:signed-out')); } catch (e) { note(e.message); } } },
-    ], { label: 'Account' });
-    menu?.querySelector('.nx-mi[disabled]')?.classList.add('nx-mi-sub');
-  };
-  if (foot) { foot.setAttribute('role', 'button'); foot.tabIndex = 0; foot.setAttribute('aria-haspopup', 'menu'); foot.setAttribute('aria-label', 'Account menu'); }
-  const onFootKey = e => { if ((e.key === 'Enter' || e.key === ' ') && !menu) { e.preventDefault(); footMenu(foot); } };
-  foot?.addEventListener('keydown', onFootKey); undo.push(() => foot?.removeEventListener('keydown', onFootKey));
-
   // ---- delegated clicks (capture: replace the chrome's own handlers for these controls) ----
   const onClick = e => {
-    const t = e.target.closest?.('[data-nx="tools"], [data-nx="env"], [data-action="attach"], .nx-foot');
+    const t = e.target.closest?.('[data-nx="tools"], [data-nx="env"], [data-action="attach"]');
     if (!t || (t.matches('[data-action="attach"]') && !t.closest('.composer'))) return;
     e.preventDefault(); e.stopImmediatePropagation();
-    if (t.matches('.nx-foot')) return footMenu(t);
     if (t.matches('[data-nx="env"]')) return envMenu(t);
     if (t.matches('[data-nx="tools"]')) return runOptions(t);
     addMenu(t);

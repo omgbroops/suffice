@@ -31,14 +31,14 @@ try{
  const shot=async name=>page.screenshot({path:resolve(out,name+'.png'),timeout:30000});
  await shot('01-home');
  const state=await page.evaluate(()=>({project:document.querySelector('.project-bar .project-name')?.textContent+' | '+document.querySelector('.project-bar .git-pill')?.textContent.trim(),inRow:!!document.querySelector('.project-bar [data-nx="repos"]'),repos:document.querySelector('[data-nx="repos"] .nx-chip-label')?.textContent,
-  user:document.querySelector('.nx-foot .nx-name')?.textContent,org:document.querySelector('.nx-foot .nx-org')?.textContent,prBadge:document.querySelector('[data-nx="prs"] .nx-badge')?.textContent,threads:document.querySelectorAll('.thread-row .nx-av').length,times:[...document.querySelectorAll('.thread-row .nx-time')].map(e=>e.textContent)}));
+  user:document.querySelector('.nx-foot .nx-um-name')?.textContent,plan:document.querySelector('.nx-foot .nx-um-plan')?.textContent,prBadge:document.querySelector('[data-nx="prs"] .nx-badge')?.textContent,threads:document.querySelectorAll('.thread-row .nx-av').length,times:[...document.querySelectorAll('.thread-row .nx-time')].map(e=>e.textContent)}));
  console.log(JSON.stringify(state));
  if(process.env.NEON_PROBE)console.log(await page.evaluate(()=>JSON.stringify({bar:(()=>{const b=document.querySelector('.project-bar');return b&&{parent:b.parentElement.className,cls:b.className,html:b.outerHTML.slice(0,300)};})(),
   tb:[...document.querySelectorAll('.home .composer-toolbar *')].filter(e=>e.parentElement.classList.contains('toolbar-group')||e.parentElement.classList.contains('composer-toolbar')).map(e=>({c:e.className.baseVal??e.className,o:getComputedStyle(e).order,d:getComputedStyle(e).display,x:Math.round(e.getBoundingClientRect().x),w:Math.round(e.getBoundingClientRect().width)})),
   send:getComputedStyle(document.querySelector('.home .send-group')).backgroundImage.slice(0,60)})));
  assert.ok(/suffice-desktop \| \S/.test(state.project),'project + branch chips');assert.ok(state.inRow,'extra chips share the project row');
  assert.ok(/repo/.test(state.repos),'repo count');
- assert.ok(state.org.includes('/'),'footer shows the GitHub repo');
+ assert.ok(state.user?.trim()&&/^· \S/.test(state.plan||''),'footer shows the user name and plan');
  assert.equal(state.threads,3,'every thread row has an avatar');
  await page.waitForFunction(()=>document.querySelector('.thread-row .nx-pr'),null,{timeout:20000}).catch(async e=>{console.log('rows',await page.evaluate(()=>JSON.stringify([...document.querySelectorAll('.thread-row')].map(r=>({...r.dataset,meta:r.querySelector('.nx-meta')?.outerHTML.slice(0,200)})))));throw e;});
  const rowMeta=await page.evaluate(()=>[...document.querySelectorAll('.thread-row .nx-meta')].map(m=>m.textContent));console.log('meta',rowMeta);

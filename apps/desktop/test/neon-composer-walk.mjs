@@ -95,20 +95,17 @@ try{
   await prompt.fill('');await mic.waitFor();
  }else{assert.equal(await page.locator('.composer').evaluate(e=>e.classList.contains('nx-no-stt')),true);await shot('10-no-stt');}
 
- // footer account menu
- const foot=page.locator('.nx-foot');
- await foot.click();await pop.waitFor();await shot('13-account-menu');
- await page.keyboard.press('ArrowDown');await closed('account menu');
- await foot.focus();await page.keyboard.press('Enter');await pop.waitFor();await closed('account menu (keyboard)');
- const login=await page.evaluate(()=>window.sufficeDesktop.gitInfo().then(i=>i.login||'').catch(()=>''));console.log('login',JSON.stringify(login));
- await foot.click();
- if(login){await item('GitHub profile').click();assert.deepEqual((await app.evaluate(()=>globalThis.__opened)).slice(-1),['https://github.com/'+login],'profile link opened');}
- else{assert.equal(await item('GitHub profile').count(),0,'no profile row without a login');await closed('account menu (no login)');}
- await foot.click();const was=await page.evaluate(()=>document.documentElement.dataset.theme||'dark');
- await item(was==='light'?'Dark':'Light').click();await page.waitForTimeout(300);assert.notEqual(await page.evaluate(()=>document.documentElement.dataset.theme||'dark'),was,'theme toggles');await shot('14-theme-toggled');
- await foot.click();await item(was==='light'?'Light':'Dark').click();await page.waitForTimeout(300);
- await foot.click();await item('Settings').click();await page.locator('#dialog-title').filter({hasText:/^Settings$/}).waitFor({timeout:5000});await shot('15-settings');await page.keyboard.press('Escape');
- await foot.click();await item('Sign out').click();await page.waitForTimeout(800);await shot('16-signed-out');
+
+ // footer account menu (the full walk is neon-user-menu-walk.mjs)
+ const foot=page.locator('.nx-foot'),um=page.locator('.nx-um'),umi=t=>um.locator('.nx-um-mi',{hasText:t});
+ await foot.click();await um.first().waitFor();await shot('13-account-menu');
+ await page.keyboard.press('Escape');assert.equal(await um.count(),0,'account menu: Escape closes');
+ await foot.focus();await page.keyboard.press('Enter');await um.first().waitFor();await page.keyboard.press('Escape');assert.equal(await um.count(),0,'account menu (keyboard): Escape closes');
+ await foot.click();await umi('Settings').click();await page.locator('.nx-st').waitFor({timeout:5000});await shot('15-settings');
+ const was=await page.evaluate(()=>document.documentElement.dataset.theme||'dark');
+ await page.locator('.nx-st-nav',{hasText:'Appearance'}).click();await page.locator(`.nx-st-opt[data-theme="${was==='light'?'dark':'light'}"]`).click();await page.waitForTimeout(300);assert.notEqual(await page.evaluate(()=>document.documentElement.dataset.theme||'dark'),was,'theme toggles');await shot('14-theme-toggled');
+ await page.locator(`.nx-st-opt[data-theme="${was}"]`).click();await page.keyboard.press('Escape');assert.equal(await page.locator('.nx-st').count(),0,'Escape closes Settings');
+ await foot.click();await umi('Sign out').click();await page.waitForTimeout(800);await shot('16-signed-out');
 
  // header icons and More
  await page.locator('[data-nx="search"]').first().click();await page.locator('#session-search').waitFor();await shot('17-search');await page.keyboard.press('Escape');await page.waitForTimeout(200);
