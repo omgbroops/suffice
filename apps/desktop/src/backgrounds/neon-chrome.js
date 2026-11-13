@@ -1,5 +1,7 @@
 // Neon skin chrome: the extra sidebar nav, avatars, footer and composer controls the
 // neon reference layout needs. Everything added carries .nx and is removed on unmount.
+import './neon-threads-pane.js';
+import './neon-explore-pane.js';
 const S = (d, extra = '') => `<svg class="nx-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${extra}>${d}</svg>`;
 export const NX_ICONS = {
   compose: S('<path d="M12 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/><path d="M17.5 3.5a2.1 2.1 0 0 1 3 3L13 14l-4 1 1-4Z"/>'),
@@ -171,7 +173,7 @@ export function mountNeonChrome() {
   undo.push(closePop);
 
   // panes: modules registered with registerPane open in the main column
-  const panes = createPaneHost({ api, note, esc, ago, icons: I, pixelAvatar, fillComposer: text => { panes.close(); if (prompt) { prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); prompt.focus(); } } });
+  const panes = createPaneHost({ api, note, esc, ago, icons: I, pixelAvatar, userAv, fillComposer: text => { panes.close(); if (prompt) { prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); prompt.focus(); } } });
   undo.push(() => panes.close());
   // wire everything to real actions
   const fire = sel => document.querySelector(sel)?.click();

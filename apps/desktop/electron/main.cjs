@@ -41,6 +41,9 @@ app.whenReady().then(async()=>{
   handle('issues',()=>github.issues(project));
   handle('prs',()=>github.prs(project));
   handle('branch-prs',root=>typeof root==='string'&&root?github.branchPrs(root):{});
+  // explore pane: read-only git views of the selected project
+  handle('git-branches',()=>github.gitBranches(project));
+  handle('git-log',()=>github.gitLog(project));
   handle('open-github',url=>{if(!github.safeUrl(url))throw new Error('Only github.com links open here');return shell.openExternal(url);});
   handle('projects',()=>projects.list());
   handle('select-project',async id=>{if(running)throw new Error('Stop the current task first');const item=(await projects.list()).find(p=>p.id===id);if(!item)throw new Error('Project not found');await request('reset');project=selectedProject=item.path;return {...item,git:await projects.git(project)};});

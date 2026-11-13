@@ -46,4 +46,16 @@ async function branchPrs(root){
 // Only GitHub pages open externally from this panel.
 const safeUrl=url=>{try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='github.com';}catch{return false;}};
 
-module.exports={info,user,issues:root=>list(root,'issue'),prs:root=>list(root,'pr'),branchPrs,githubRepo,safeUrl};
+// --- Explore pane (read-only): local branches and recent commits of the selected project ---
+async function gitBranches(root){
+ if(!root)throw new Error('No project selected');
+ const out=await git(root,['branch','--sort=-committerdate','--format=%(refname:short)%09%(committerdate:relative)%09%(HEAD)%09%(subject)']);
+ return out.split('\n').filter(Boolean).map(l=>{const [name,when,head,subject]=l.split('\t');return {name,current:head==='*',when,subject};});
+}
+async function gitLog(root){
+ if(!root)throw new Error('No project selected');
+ const out=await git(root,['log','-30','--format=%h%x09%s%x09%an%x09%cr']);
+ return out.split('\n').filter(Boolean).map(l=>{const [sha,subject,author,when]=l.split('\t');return {sha,subject,author,when};});
+}
+
+module.exports={gitBranches,gitLog,info,user,issues:root=>list(root,'issue'),prs:root=>list(root,'pr'),branchPrs,githubRepo,safeUrl};
