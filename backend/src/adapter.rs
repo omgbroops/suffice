@@ -39,7 +39,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             if let Some(m) = &task.model {
                 a.extend(strs(&["-m", m]));
             }
-            a.push(prompt);
+            a.push(prompt_arg(prompt));
             ("codex".into(), a)
         }
         AgentKind::OpenCode => {
@@ -50,7 +50,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             if let Some(m) = &task.model {
                 a.extend(strs(&["-m", m]));
             }
-            a.push(prompt);
+            a.push(prompt_arg(prompt));
             ("opencode".into(), a)
         }
         AgentKind::Gemini => {
@@ -75,13 +75,13 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             if let Some(m) = &task.model {
                 a.extend(strs(&["--model", m]));
             }
-            a.push(prompt);
+            a.push(prompt_arg(prompt));
             ("node".into(), a)
         }
         AgentKind::Generic { program, args } => {
             // shortcut: no CLI-level sandbox flag for generic, gate only; check its permission config when wiring
             let mut a = args.clone();
-            a.push(prompt);
+            a.push(prompt_arg(prompt));
             (program.clone(), a)
         }
     };
@@ -358,6 +358,12 @@ fn hook_json(command: &str) -> String {
     Value::Obj(vec![("hooks".into(), pre)]).to_string()
 }
 
+/// Prompt as a trailing positional: a leading '-' would parse as a flag, so it gets a leading space.
+// shortcut: leading space alters the prompt text, upgrade to a proper `--` separator once each CLI's parser is confirmed
+fn prompt_arg(prompt: String) -> String {
+    if prompt.starts_with('-') { format!(" {prompt}") } else { prompt }
+}
+
 fn strs(xs: &[&str]) -> Vec<String> {
     xs.iter().map(|s| s.to_string()).collect()
 }
@@ -418,7 +424,11 @@ fn claude_event(v: &Value) -> Option<Vec<Event>> {
             let mut out = vec![];
             for item in content(v) {
                 match item.get("type").and_then(Value::as_str) {
-                    Some("text") => out.push(Event::Text { text: sget(item, "text")? }),
+                    Some("text") => {
+                        if let Some(text) = sget(item, "text") {
+                            out.push(Event::Text { text });
+                        }
+                    }
                     Some("tool_use") => out.push(Event::ToolCall {
                         name: sget(item, "name")?,
                         input: item.get("input").map(|i| i.to_string()).unwrap_or_default(),

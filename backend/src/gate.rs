@@ -122,7 +122,7 @@ pub fn check_task(task: &Task) -> Verdict {
     Verdict::Allow
 }
 
-const SHELL_TOOLS: &[&str] = &["bash", "shell", "exec", "command_execution", "run_terminal_cmd"];
+const SHELL_TOOLS: &[&str] = &["bash", "shell", "exec", "command_execution", "run_terminal_cmd", "run_shell_command", "local_shell"];
 // workspace-local tools; patch/todoread/lsp/skill are opencode's, apply_patch/update_plan codex's (their hooks send every call)
 const LOCAL_TOOLS: &[&str] = &[
     "edit", "write", "multiedit", "notebookedit", "todowrite", "task", "patch", "apply_patch", "todoread", "update_plan",
@@ -133,7 +133,14 @@ const NON_SHELL_OUTWARD: &[&str] = &[
     "deploy", "upload", "delete", "remove",
 ];
 const READ_WORDS: &[&str] = &["read", "list", "get", "search"];
-const READ_ONLY_TOOLS: &[&str] = &["read", "grep", "glob", "ls", "cat", "websearch", "webfetch"];
+const ACTION_VERBS: &[&str] = &[
+    "execute", "exec", "run", "eval", "spawn", "shell", "bash", "command", "kill", "install", "write", "delete", "remove",
+    "create", "update", "set", "apply", "deploy", "start", "stop", "move", "rename", "upload", "invoke", "call",
+    "replace", "clear", "reset", "drop", "truncate", "put", "save", "commit", "push", "purge", "wipe", "edit", "modify",
+    "terminate", "restart", "launch", "trigger", "post", "patch", "insert", "append", "overwrite", "destroy", "erase",
+];
+const SHELL_KEYS: &[&str] = &["cmd", "command", "script", "code", "shell"];
+const READ_ONLY_TOOLS: &[&str] =&["read", "grep", "glob", "ls", "cat", "websearch", "webfetch"];
 
 // Shell: a command is allowed only if every part (split on ; & | newline) is a program on these lists,
 // with flags checked per program.
@@ -160,7 +167,18 @@ pub fn check_event(event: &Event) -> Verdict {
 /// The command text: the "command" or "cmd" field when the input is JSON, else the raw input.
 fn shell_command(input: &str) -> String {
     match crate::json::parse(input) {
-        Ok(v) => v.get("command").or_else(|| v.get("cmd")).and_then(|c| c.as_str()).unwrap_or(input).to_string(),
+        // codex local_shell nests the argv under "action"
+        Ok(v) => match v.get("command").or_else(|| v.get("cmd")).or_else(|| v.get("action").and_then(|a| a.get("command"))) {
+            Some(c) if c.as_str().is_some() => c.as_str().unwrap().to_string(),
+            // argv array (codex local_shell): join only plain words; anything with spaces stays raw JSON, which the quote rule holds
+            Some(c) => match c.as_arr() {
+                Some(xs) if !xs.is_empty() && xs.iter().all(|x| x.as_str().is_some_and(|w| !w.is_empty() && !w.contains(char::is_whitespace))) => {
+                    xs.iter().map(|x| x.as_str().unwrap()).collect::<Vec<_>>().join(" ")
+                }
+                _ => input.to_string(),
+            },
+            None => input.to_string(),
+        },
         Err(_) => input.to_string(),
     }
 }
@@ -211,8 +229,17 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
         ]))
         .then_some("grep/rg flag not on safe list"),
         "git" => {
-            if a.iter().any(|x| x.starts_with("-c")) {
-                return Some("git -c");
+            // no global options at all: -c injects config, and value-taking ones (-C x, --git-dir x) hide a later -c from any scan
+            if a.first().is_some_and(|x| x.starts_with('-')) {
+                return Some("git global option");
+            }
+            // git expands unique long-flag prefixes, so "--upload-p" or "--rec" means the dangerous flag too
+            let danger = |x: &str| {
+                let n = x.split('=').next().unwrap_or(x);
+                n.len() > 2 && n.starts_with("--") && ["--upload-pack", "--receive-pack", "--exec", "--config"].iter().any(|d| d.starts_with(n) || n.starts_with(d))
+            };
+            if a.iter().any(|x| danger(x)) {
+                return Some("git --upload-pack/--receive-pack/--exec/--config");
             }
             match sub {
                 Some("diff" | "show" | "log") => {
@@ -222,7 +249,7 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
                     };
                     (!flags.iter().all(|f| ok(f))).then_some("git diff/show/log flag not on safe list")
                 }
-                Some(s) if GIT_SUBCMDS.contains(&s) => None,
+                Some(s) if GIT_SUBCMDS.contains(&s) => git_sub_rule(s, a, &flags, &paths),
                 _ => Some("git subcommand not on safe list"),
             }
         }
@@ -337,6 +364,40 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
     }
 }
 
+/// Per-subcommand safe lists for git; None when the subcommand's args are allowed.
+fn git_sub_rule(sub: &str, _a: &[&str], flags: &[&str], paths: &[&str]) -> Option<&'static str> {
+    // allowlists, not denylists: git takes unique prefixes of long flags (--del, --forc), so a held-flag list leaks
+    let rest = paths.get(1..).unwrap_or(&[]);
+    let only = |ok: &[&str]| flags.iter().all(|f| ok.contains(f));
+    // ref/remote names only: no ':' (ext::, url, refspec), no leading '.' or '/' (paths), no "..", no '~'
+    let refname = |r: &str| {
+        !r.is_empty()
+            && !r.starts_with(['.', '/'])
+            && !r.contains("..")
+            && r.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '_' | '-' | '/' | '.'))
+    };
+    match sub {
+        "fetch" => (!only(&["--all", "--prune", "--tags", "-q", "--quiet"]) || !rest.iter().all(|r| refname(r)))
+            .then_some("git fetch flag or remote not on safe list"),
+        // listing and creating branches; delete/move/force/upstream/edit-description are held
+        "branch" => (!only(&["-a", "-r", "-v", "-vv", "-l", "--list", "--all", "--remotes", "--verbose", "--show-current", "--merged", "--no-merged"])
+            || !rest.iter().all(|r| refname(r)))
+        .then_some("git branch flag not on safe list"),
+        // checkout can't tell a branch from a path (`git checkout src/` discards edits): only `-b <new>` passes; use switch
+        "checkout" => (!(flags == ["-b"] && rest.len() == 1 && refname(rest[0]))).then_some("git checkout: use git switch, or checkout -b <new>"),
+        "switch" => (!only(&["-c", "--create", "--detach"]) || rest.len() > 2 || !rest.iter().all(|r| refname(r)))
+            .then_some("git switch flag or name not on safe list"),
+        "stash" => match rest.first() {
+            None | Some(&"list") | Some(&"show") | Some(&"push") => {
+                (!only(&["-m", "--message", "-u", "--include-untracked", "-q", "--quiet", "--stat"])).then_some("git stash flag not on safe list")
+            }
+            _ => Some("git stash subcommand not on safe list"),
+        },
+        "worktree" => (rest.first() != Some(&"list") || !flags.is_empty()).then_some("git worktree: only list"),
+        _ => None,
+    }
+}
+
 /// curl GET target: https, exact allowlisted host, no userinfo, globbing or long query.
 fn plain_get_url(u: &str) -> bool {
     const HOSTS: &[&str] = &[
@@ -374,12 +435,18 @@ fn non_shell(name: &str, input: &str) -> Verdict {
     if LOCAL_TOOLS.contains(&n.as_str()) {
         return Verdict::Allow;
     }
-    // Whole-word read verb (read_message, list_files) with no other outward word; "message" must follow the read verb.
+    // any other tool carrying a command-like key is treated as running it, whatever its name says
+    if crate::json::parse(input).is_ok_and(|v| SHELL_KEYS.iter().any(|k| v.get(k).is_some())) {
+        return hold("input has a command-like key");
+    }
+    // Whole-word read verb (read_message, list_files) with no other outward or action word; "message" must follow the read verb.
     let words = name_words(name);
     let other = words.iter().any(|w| w != "message" && NON_SHELL_OUTWARD.contains(&w.as_str()));
+    // plural/3rd-person forms too: "runs", "executes", "deletes"
+    let action = words.iter().any(|w| ACTION_VERBS.contains(&w.as_str()) || w.strip_suffix('s').is_some_and(|b| ACTION_VERBS.contains(&b)) || w.strip_suffix("es").is_some_and(|b| ACTION_VERBS.contains(&b)));
     let read = words.iter().position(|w| READ_WORDS.contains(&w.as_str()));
     let msg = words.iter().position(|w| w == "message");
-    if !other && read.is_some_and(|r| msg.is_none_or(|m| r < m)) {
+    if !other && !action && read.is_some_and(|r| msg.is_none_or(|m| r < m)) {
         return Verdict::Allow;
     }
     let i = input.to_lowercase();
