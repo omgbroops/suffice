@@ -40,5 +40,9 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   toggleAutomation:(id,enabled)=>invoke('suffice:automation-toggle',id,enabled),
   runAutomation:id=>invoke('suffice:automation-run-now',id),
   reset:()=>invoke('suffice:reset'),
+  // neon composer
+  worktreeCreate:()=>invoke('suffice:worktree-create'),
+  transcribe:pcm=>invoke('suffice:transcribe',pcm),
+  sttAvailable:()=>invoke('suffice:stt-available'),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
 });
