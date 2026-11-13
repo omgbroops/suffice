@@ -509,9 +509,10 @@ fn claude_event(v: &Value) -> Option<Vec<Event>> {
                             out.push(Event::Text { text });
                         }
                     }
-                    Some("tool_use") => out.push(Event::ToolCall {
-                        name: sget(item, "name")?,
-                        input: item.get("input").map(|i| i.to_string()).unwrap_or_default(),
+                    // fail closed: an unnamed tool_use is still a call, so it is gated under a name no list allows
+                    Some("tool_use") => out.push(match sget(item, "name") {
+                        Some(name) => Event::ToolCall { name, input: item.get("input").map(|i| i.to_string()).unwrap_or_default() },
+                        None => Event::ToolCall { name: "claude_unreadable_tool_use".into(), input: item.to_string() },
                     }),
                     _ => {}
                 }
@@ -551,13 +552,40 @@ fn codex_event(v: &Value) -> Option<Vec<Event>> {
     let ty = v.get("type").and_then(Value::as_str)?;
     match ty {
         "thread.started" => Some(vec![Event::Session { native_id: sget(v, "thread_id")? }]),
-        "item.completed" => {
+        "item.started" | "item.completed" => {
             let item = v.get("item")?;
-            match item.get("type").and_then(Value::as_str)? {
-                "agent_message" => Some(vec![Event::Text { text: sget(item, "text")? }]),
-                "command_execution" => {
-                    Some(vec![Event::ToolCall { name: "shell".into(), input: sget(item, "command")? }])
-                }
+            let unreadable = || Some(vec![Event::ToolCall { name: "codex_unreadable_tool_call".into(), input: v.to_string() }]);
+            let Some(kind) = item.get("type").and_then(Value::as_str) else {
+                return if ty == "item.started" { unreadable() } else { None };
+            };
+            match (ty, kind) {
+                ("item.completed", "agent_message") => Some(vec![Event::Text { text: sget(item, "text")? }]),
+                ("item.completed", "command_execution") => Some(vec![Event::ToolResult {
+                    name: sget(item, "id").unwrap_or_default(),
+                    output: sget(item, "aggregated_output").unwrap_or_default(),
+                    is_error: item.get("exit_code").and_then(Value::as_i64) != Some(0),
+                }]),
+                // fires when the command is spawned, before it finishes
+                ("item.started", "command_execution") => match sget(item, "command") {
+                    // the codex PreToolUse hook's (tool_name, tool_input) shape, so an approval recorded here matches it on resume
+                    // shortcut: assumes tool_input is exactly {"command"}; confirm against a real codex hook payload in a live run
+                    Some(cmd) => Some(vec![Event::ToolCall {
+                        name: "Bash".into(),
+                        input: Value::Obj(vec![("command".into(), Value::Str(cmd))]).to_string(),
+                    }]),
+                    None => unreadable(),
+                },
+                ("item.started", "mcp_tool_call") => match (sget(item, "server"), sget(item, "tool")) {
+                    (Some(server), Some(tool)) => Some(vec![Event::ToolCall {
+                        name: format!("mcp__{server}__{tool}"),
+                        input: item.get("arguments").map(|a| a.to_string()).unwrap_or_default(),
+                    }]),
+                    _ => unreadable(),
+                },
+                ("item.started", "file_change") => match item.get("changes") {
+                    Some(c) => Some(vec![Event::ToolCall { name: "apply_patch".into(), input: c.to_string() }]),
+                    None => unreadable(),
+                },
                 _ => None,
             }
         }
@@ -572,7 +600,7 @@ fn codex_event(v: &Value) -> Option<Vec<Event>> {
 }
 
 /// gemini-cli `--output-format stream-json` (packages/core/src/output/types.ts: init, message,
-/// tool_use, tool_result, error, result). gemini has no pre-exec hook here, so this is its only gate.
+/// tool_use, tool_result, error, result). Post-hoc gate; the pre-exec one is the BeforeTool hook (install_gemini_gate).
 fn gemini_event(v: &Value) -> Option<Vec<Event>> {
     let ty = v.get("type").and_then(Value::as_str)?.to_ascii_lowercase();
     match ty.as_str() {
