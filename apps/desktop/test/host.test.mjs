@@ -6,9 +6,9 @@ import {resolve} from 'node:path';
 import {createHarnessHost} from '../electron/worker.mjs';
 
 test('host streams events, reuses a session, prevents overlapping tasks, cancels, and disposes',async()=>{
- const messages=[];let created=0,disposed=0,subscriber,release,runOptions;
- const agent={session:{getSessionStats:()=>({cost:.12,tokens:{total:4000},contextUsage:{tokens:2000,percent:2}}),subscribe:fn=>{subscriber=fn;},setThinkingLevel:()=>{}},totals:{},sessionPath:()=>'/test/session',run:async(_prompt,options)=>{runOptions=options;subscriber({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:'hello'}});return new Promise(resolve=>{release=()=>resolve('hello');});},abort:()=>release(),dispose:async()=>{disposed++;}};
- const host=createHarnessHost({send:message=>messages.push(message),createRuntime:async()=>({isUsingSubscription:()=>true}),createSession:async()=>{created++;return agent;}});
+ const messages=[];let created=0,disposed=0,subscriber,release,runOptions,steering;
+ const agent={session:{steer:async(text,images)=>{steering={text,images};},getSessionStats:()=>({cost:.12,tokens:{total:4000},contextUsage:{tokens:2000,percent:2}}),subscribe:fn=>{subscriber=fn;},setThinkingLevel:()=>{}},totals:{},sessionPath:()=>'/test/session',run:async(_prompt,options)=>{runOptions=options;subscriber({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:'hello'}});return new Promise(resolve=>{release=()=>resolve('hello');});},abort:()=>release(),dispose:async()=>{disposed++;}};
+ const host=createHarnessHost({home:await mkdtemp(resolve(tmpdir(),'suffice-host-home-')),send:message=>messages.push(message),createRuntime:async()=>({isUsingSubscription:()=>true}),createSession:async()=>{created++;return agent;}});
  const cwd=await mkdtemp(resolve(tmpdir(),'suffice-host-test-'));
  await host({id:1,action:'status'});
  const run=host({id:2,action:'run',payload:{prompt:'hello',effort:'low',cwd,images:[{type:'image',data:'fixture',mimeType:'image/png'}]}});
@@ -26,6 +26,7 @@ test('host streams events, reuses a session, prevents overlapping tasks, cancels
  await host({id:30,action:'usage'});
  assert.equal(messages.find(m=>m.id===30).result.windowTokens,2000);
  assert.equal(messages.find(m=>m.id===30).result.totalTokens,4000);
+ await host({id:32,action:'steer',payload:{prompt:'inspect tests first'}});assert.deepEqual(steering,{text:'inspect tests first',images:undefined});assert.equal(messages.find(m=>m.id===32).ok,true);
  await host({id:3,action:'run',payload:{prompt:'duplicate',effort:'low',cwd}});
  assert.match(messages.find(m=>m.id===3).error,/already running/);
  await host({id:4,action:'reset'});assert.equal(disposed,0);
@@ -37,7 +38,7 @@ test('host streams events, reuses a session, prevents overlapping tasks, cancels
 
 test('host rejects malformed and unauthenticated tasks without executing the harness',async()=>{
  const messages=[];let created=0;
- const host=createHarnessHost({send:m=>messages.push(m),createRuntime:async()=>({isUsingSubscription:()=>false}),createSession:async()=>{created++;}});
+ const host=createHarnessHost({home:await mkdtemp(resolve(tmpdir(),'suffice-host-home-')),send:m=>messages.push(m),createRuntime:async()=>({isUsingSubscription:()=>false}),createSession:async()=>{created++;}});
  await host({id:1,action:'status'});
  await host({id:2,action:'run',payload:{prompt:'hello',effort:'low',cwd:process.cwd()}});
  await host({id:30,action:'usage'});
