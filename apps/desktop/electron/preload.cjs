@@ -30,5 +30,9 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   loginCancel:()=>invoke('suffice:login-cancel'),
   loginOpen:()=>invoke('suffice:login-open'),
   reset:()=>invoke('suffice:reset'),
+  // neon composer
+  worktreeCreate:()=>invoke('suffice:worktree-create'),
+  transcribe:pcm=>invoke('suffice:transcribe',pcm),
+  sttAvailable:()=>invoke('suffice:stt-available'),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
 });

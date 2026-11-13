@@ -51,6 +51,8 @@ app.whenReady().then(async()=>{
     if(result.canceled)return null;
     await request('reset');project=selectedProject=result.filePaths[0];return {...await projects.add(project),git:await projects.git(project)};
   });
+  // neon composer: git worktree + offline dictation (electron/composer-ipc.cjs)
+  require('./composer-ipc.cjs').register({handle,projects,request,getProject:()=>project,setProject:p=>{project=selectedProject=p;},isRunning:()=>running});
   async function runTask(payload,inBackground=false){
     if(running&&!inBackground)throw new Error('A task is already running');
     if(!project)throw new Error('Choose a project above the composer first');

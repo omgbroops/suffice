@@ -1,5 +1,7 @@
 // Neon skin chrome: the extra sidebar nav, avatars, footer and composer controls the
 // neon reference layout needs. Everything added carries .nx and is removed on unmount.
+import './neon-composer.css'; // composer menus + dictation (neon-composer.js)
+import { mountNeonComposer } from './neon-composer.js';
 const S = (d, extra = '') => `<svg class="nx-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${extra}>${d}</svg>`;
 export const NX_ICONS = {
   compose: S('<path d="M12 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/><path d="M17.5 3.5a2.1 2.1 0 0 1 3 3L13 14l-4 1 1-4Z"/>'),
@@ -23,6 +25,19 @@ export const NX_ICONS = {
   sliders: S('<path d="M7 4v6M7 14v6M17 4v2M17 10v10"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="8" r="2"/>'),
   branch: S('<circle cx="6" cy="5.5" r="2"/><circle cx="6" cy="18.5" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7.5v9M18 10c0 4-6 3.5-11 7"/>'),
   rows: S('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+  // composer menus
+  at: S('<circle cx="12" cy="12" r="3.5"/><path d="M15.5 12v1.5a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3.4 6.8"/>'),
+  slash: S('<path d="M16 4 8 20"/>'),
+  image: S('<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.5"/><path d="m4 17 5-4.5 4 3.5 3-2.5 4 3.5"/>'),
+  clipboard: S('<rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5h6v2.5H9Z"/>'),
+  check: S('<path d="m5 12.5 4.5 4.5L19 7.5"/>'),
+  gear: S('<circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18"/>'),
+  user: S('<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>'),
+  exit: S('<path d="M10 4.5H6.5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2H10M15 8l4 4-4 4M19 12H9.5"/>'),
+  stop: S('<rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/>'),
+  worktree: S('<circle cx="6" cy="5.5" r="2"/><circle cx="6" cy="18.5" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 7.5v9M8 12h8"/>'),
+  minus: S('<path d="M5 12h14"/>'),
+  dots: S('<path d="M6 12h.01M12 12h.01M18 12h.01" stroke-width="2.8"/>'),
   mic: S('<rect x="9" y="3.5" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>'),
 };
 const I = NX_ICONS;
@@ -177,8 +192,13 @@ export function mountNeonChrome() {
   const fire = sel => document.querySelector(sel)?.click();
   const actions = {
     new: () => fire('[data-action="new"]'), threads: () => fire('[data-action="search-sessions"]'), search: () => fire('[data-action="search-sessions"]'),
-    sidebar: () => fire('[data-action="toggle-sidebar"]'), layout: () => fire('[data-action="toggle-panel"], .workspace-tool[aria-label*="panel" i]'),
-    more: () => fire('[data-action="workspace-menu"]'), project: () => fire('.project-picker'), repos: () => fire('.project-picker'),
+    sidebar: () => fire('[data-action="toggle-sidebar"]'),
+    // the right panel toggle exists only while a thread is open
+    layout: () => { const t = document.querySelector('.workspace-tool[aria-label="Toggle right panel"]'); if (t && t.offsetParent) t.click(); else note('Open a thread first'); },
+    more: () => { // the stock header button is display:none, so anchor the workspace menu on a stand-in at the More row
+      const row = document.querySelector('.nx-row[data-nx="more"]'), r = row.getBoundingClientRect(), b = document.createElement('button');
+      b.dataset.action = 'workspace-menu'; b.style.cssText = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;opacity:0;pointer-events:none`;
+      document.body.append(b); setTimeout(() => { b.click(); b.remove(); }); }, // deferred: the row's own click would otherwise close the menu as an outside click project: () => fire('.project-picker'), repos: () => fire('.project-picker'),
     density: () => setCompact(!document.body.hasAttribute('data-nx-compact')),
     tools: () => fire('[data-action="attach"]'), issues: b => openList('issues', b), prs: b => openList('prs', b),
   };
@@ -193,6 +213,8 @@ export function mountNeonChrome() {
   const onKey = e => { if (e.key !== 'Escape') return; if (pop) closePop(); else if (panes.current && !e.target.closest?.('input, textarea, select')) panes.close(); };
   document.addEventListener('click', onClick); document.addEventListener('keydown', onKey);
   undo.push(() => { document.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); });
+  // composer menus, run options, footer menu, dictation (neon-composer.js)
+  undo.push(mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, form, foot, getLogin: () => login }));
 
   return () => { undo.forEach(f => f()); added.forEach(el => el?.remove()); delete document.body.dataset.skin; };
 }
