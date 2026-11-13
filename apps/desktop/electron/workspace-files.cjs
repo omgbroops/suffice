@@ -1,7 +1,6 @@
 const fs=require('node:fs/promises');
 const path=require('node:path');
-const {promisify}=require('node:util');
-const exec=promisify(require('node:child_process').execFile);
+const shared=require('./git.cjs');
 const limit=256*1024;
 async function inside(root,name=''){
  if(!root)throw new Error('No project selected');
@@ -25,7 +24,7 @@ async function read(root,name){
   return {path:name,text:buffer.subarray(0,bytesRead).toString('utf8'),truncated:info.size>limit};
  }finally{await handle.close();}
 }
-const git=async(root,args)=>{if(!root)throw new Error('No project selected');return (await exec('git',['--no-optional-locks','-c','core.fsmonitor=false','-C',root,...args],{windowsHide:true,timeout:8000,maxBuffer:2*1024*1024})).stdout;};
+const git=(root,args)=>shared.git(root,args,{timeout:8000,maxBuffer:2*1024*1024,raw:true});
 async function changes(root){
  let output;try{output=await git(root,['status','--porcelain=v1','-z','--untracked-files=all']);}catch(error){if(error.stderr?.includes('not a git repository'))return {git:false,entries:[]};throw new Error('Could not read Git changes');}
  const records=output.split('\0'),entries=[];

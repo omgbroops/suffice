@@ -5,10 +5,11 @@ const path=require('node:path');
 const crypto=require('node:crypto');
 const {execFile}=require('node:child_process');
 const {promisify}=require('node:util');
+const {git}=require('./git.cjs');
+const {sufficeHome}=require('./paths.cjs');
 const exec=promisify(execFile);
 
 const home=os.homedir();
-const sufficeHome=()=>process.env.SUFFICE_HOME||path.join(home,'.suffice');
 const exists=p=>{try{return fs.statSync(p).isFile();}catch{return false;}};
 
 function findBinary(){
@@ -26,7 +27,7 @@ function wav(pcm){
   return Buffer.concat([h,pcm]);
 }
 
-exports.register=({handle,projects,request,getProject,setProject,isRunning})=>{
+exports.register=({handle,projects,request,getProject,setProject,isBusy})=>{
   handle('stt-available',()=>Boolean(findBinary()&&findModel()));
   // input: 16 kHz mono signed 16-bit little-endian PCM, at most ~2 minutes
   handle('transcribe',async pcm=>{
@@ -43,13 +44,15 @@ exports.register=({handle,projects,request,getProject,setProject,isRunning})=>{
   });
   // local git only: never fetches, pushes or touches a remote
   handle('worktree-create',async()=>{
-    if(isRunning())throw new Error('Stop the current task first');
+    const stopFirst=()=>{if(isBusy())throw new Error('Stop the current task first');};
+    stopFirst();
     const current=getProject();if(!current)throw new Error('Choose a project first');
-    let top;try{top=(await exec('git',['-C',current,'rev-parse','--show-toplevel'],{timeout:5000})).stdout.trim();}catch{throw new Error('This project is not a git repository');}
+    let top;try{top=await git(current,['rev-parse','--show-toplevel'],{timeout:5000});}catch{throw new Error('This project is not a git repository');}
     const hex=crypto.randomBytes(3).toString('hex'),root=path.join(sufficeHome(),'worktrees'),dest=path.join(root,`${path.basename(top)}-${hex}`);
     fs.mkdirSync(root,{recursive:true});
-    try{await exec('git',['-C',top,'worktree','add',dest,'-b',`suffice/${hex}`,'HEAD'],{timeout:60000});}catch(error){throw new Error(String(error.stderr||error.message).trim().split('\n').pop());}
+    try{await git(top,['worktree','add','-b',`suffice/${hex}`,'--',dest,'HEAD'],{timeout:60000});}catch(error){throw new Error(String(error.stderr||error.message).trim().split('\n').pop());}
     const item=await projects.add(fs.realpathSync(dest));
+    stopFirst();
     await request('reset');setProject(item.path);
     return {...item,git:await projects.git(item.path)};
   });

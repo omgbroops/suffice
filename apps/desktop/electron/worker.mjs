@@ -93,7 +93,7 @@ async function receive(message) {
         if(event.type==='tool_execution_end')send({event:'tool_end',id:event.toolCallId,result:event.result,isError:event.isError});
       });
     } else {if(selected&&(agent.session.model?.id!==selected.id||agent.session.model?.provider!==selected.provider))await agent.session.setModel(selected);agent.session.setThinkingLevel(payload.effort);}
-    const sessionPath=agent.sessionPath();if(sessionPath){await threads.noteStart(sessionPath,cwd);send({event:'thread_started',id:threadId(sessionPath)});}
+    const sessionPath=agent.sessionPath();if(sessionPath){if(!resumePath)void threads.noteStart(sessionPath,cwd);send({event:'thread_started',id:threadId(sessionPath)});}
     const text=await agent.run(payload.prompt,{images:payload.images});
     send({id,ok:true,result:{text,sessionPath:agent.sessionPath(),threadId:agent.sessionPath()?threadId(agent.sessionPath()):null,usage:agent.totals}});
   } catch(error){send({id,ok:false,error:error.message});}
