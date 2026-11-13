@@ -123,3 +123,16 @@ test('ttl cache: hit inside ttl, reload after, failures not kept, concurrent cal
   await assert.rejects(c.get('bad',async()=>{throw new Error('no');}));
   assert.equal(await c.get('bad',async()=>'ok'),'ok');
 });
+
+test('a hostile repo filter does not run through the git runner',async()=>{
+ const dir=tmp(),repo=path.join(dir,'r'),flag=path.join(dir,'PWNED');
+ const g=(...a)=>execFileSync('git',['-C',repo,...a]);
+ fs.mkdirSync(repo);g('init','-q');g('config','user.email','t@t');g('config','user.name','t');
+ fs.writeFileSync(path.join(repo,'f'),'a\n');g('add','f');g('commit','-qm','a');
+ fs.writeFileSync(path.join(repo,'.gitattributes'),'* filter=x diff=x\n');
+ g('config','filter.x.clean',`sh -c 'touch "${flag}"; cat'`);g('config','diff.x.textconv',`sh -c 'touch "${flag}"; cat "$0"'`);
+ fs.writeFileSync(path.join(repo,'f'),'b\n');
+ const {git}=createRunner();
+ await git(repo,['status','--porcelain']);await git(repo,['diff','--no-ext-diff','--','f']);
+ assert.equal(fs.existsSync(flag),false);
+});

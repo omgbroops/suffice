@@ -5,6 +5,9 @@ const {execFile}=require('node:child_process');
 const path=require('node:path');
 // Apps started from Finder get a bare PATH; add the usual tool locations.
 const PATH=[process.env.PATH,'/opt/homebrew/bin','/usr/local/bin',path.join(process.env.HOME||'','.local/bin'),path.join(process.env.HOME||'','.local/share/mise/shims')].filter(Boolean).join(path.delimiter);
+// Attributes come from the empty tree, so a hostile repo's .gitattributes can't select a clean/smudge filter or diff driver.
+// shortcut: git older than 2.42 ignores GIT_ATTR_SOURCE; require 2.42+ or read filter.* names and blank them per call.
+const EMPTY_TREE='4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 const HARDEN=['--no-optional-locks','-c','core.fsmonitor=false','-c','core.hooksPath=/dev/null'];
 
 function gitArgs(root,args){
@@ -13,7 +16,7 @@ function gitArgs(root,args){
 }
 // A caller-supplied GIT_DIR or GIT_CONFIG_* would redirect git away from the folder we pass.
 function cleanEnv(env){
- const out={...env,PATH,GH_PROMPT_DISABLED:'1',GIT_TERMINAL_PROMPT:'0'};
+ const out={...env,PATH,GH_PROMPT_DISABLED:'1',GIT_TERMINAL_PROMPT:'0',GIT_ATTR_SOURCE:EMPTY_TREE};
  for(const key of Object.keys(out))if(key==='GIT_DIR'||key==='GIT_WORK_TREE'||key.startsWith('GIT_CONFIG'))delete out[key];
  return out;
 }

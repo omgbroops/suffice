@@ -16,6 +16,7 @@ const ghKind=kind=>{if(kind!=='pr'&&kind!=='issue')throw new Error('Bad kind');r
 
 if(!app.requestSingleInstanceLock())app.quit();
 else{
+ app.on('second-instance',()=>{if(!win||win.isDestroyed())return;if(win.isMinimized())win.restore();win.focus();});
  app.whenReady().then(start);
  app.on('window-all-closed',()=>app.quit());
 }
@@ -39,8 +40,8 @@ async function start(){
  win=new BrowserWindow({width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
  const isOwnPage=url=>{try{const u=new URL(url);return u.protocol==='file:'&&u.pathname===entryPath;}catch{return false;}};
  // Only the microphone, and only for the app's own page.
- session.defaultSession.setPermissionRequestHandler((contents,permission,callback,details)=>callback(permission==='media'&&isOwnPage(details?.requestingUrl||contents.getURL())));
- session.defaultSession.setPermissionCheckHandler((contents,permission,origin)=>permission==='media'&&isOwnPage(origin||contents?.getURL()||''));
+ session.defaultSession.setPermissionRequestHandler((contents,permission,callback,details)=>callback(permission==='media'&&details?.mediaTypes?.length>0&&details.mediaTypes.every(type=>type==='audio')&&isOwnPage(details?.requestingUrl||contents.getURL())));
+ session.defaultSession.setPermissionCheckHandler((contents,permission,origin,details)=>permission==='media'&&details?.mediaType==='audio'&&isOwnPage(origin||contents?.getURL()||''));
  win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
  const guard=event=>{if(event.url!==entry)event.preventDefault();};
  win.webContents.on('will-navigate',guard);
