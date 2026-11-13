@@ -43,7 +43,32 @@ async function branchPrs(root){
  }catch{return {};}
 }
 
+// --- neon github panes: richer read-only list + detail (gh pr/issue list|view only; callers validate kind/state) ---
+const CHECK_BAD=/^(FAILURE|TIMED_OUT|CANCELLED|ACTION_REQUIRED|STARTUP_FAILURE|ERROR)$/,CHECK_WAIT=/^(PENDING|EXPECTED|QUEUED|IN_PROGRESS|WAITING|REQUESTED)$/;
+function checkCounts(rollup){const c={pass:0,fail:0,pending:0};for(const x of rollup||[]){const v=String(x.conclusion||x.state||x.status||'').toUpperCase();if(CHECK_BAD.test(v))c.fail++;else if(CHECK_WAIT.test(v)||(x.status&&x.status!=='COMPLETED'))c.pending++;else c.pass++;}return c;}
+async function listFull(root,{kind,state,limit}){
+ const meta=await info(root);
+ if(!meta.git)return {available:false,reason:'This project is not a git repository',items:[]};
+ if(!meta.repo)return {available:false,reason:'No GitHub remote named origin',items:[]};
+ const fields=kind==='pr'?'number,title,url,state,isDraft,headRefName,baseRefName,author,updatedAt,reviewDecision,statusCheckRollup,additions,deletions':'number,title,url,state,labels,assignees,comments,author,updatedAt';
+ try{
+  const out=await run('gh',[kind,'list','--repo',meta.repo,'--state',state,'--limit',String(limit),'--json',fields],root);
+  return {available:true,repo:meta.repo,items:JSON.parse(out||'[]').map(x=>({number:x.number,title:x.title,url:x.url,state:x.state,updated:Date.parse(x.updatedAt),author:x.author?.login||'',
+   ...(kind==='pr'?{draft:Boolean(x.isDraft),branch:x.headRefName||'',base:x.baseRefName||'',review:x.reviewDecision||'',checks:checkCounts(x.statusCheckRollup),additions:x.additions||0,deletions:x.deletions||0}
+    :{labels:(x.labels||[]).map(l=>({name:l.name,color:l.color})),assignees:(x.assignees||[]).map(a=>a.login),comments:Array.isArray(x.comments)?x.comments.length:Number(x.comments)||0})}))};
+ }catch(error){
+  const text=String(error.stderr||error.message);
+  return {available:false,repo:meta.repo,reason:error.code==='ENOENT'?'GitHub CLI (gh) is not installed':/auth|login/i.test(text)?'Run gh auth login to see GitHub data':text.split('\n')[0].slice(0,160),items:[]};
+ }
+}
+async function detail(root,{kind,number}){
+ const meta=await info(root);if(!meta.repo)throw new Error('No GitHub remote named origin');
+ const out=JSON.parse(await run('gh',[kind,'view',String(number),'--repo',meta.repo,'--json',kind==='pr'?'body,comments,files':'body,comments'],root)||'{}');
+ return {body:out.body||'',comments:(out.comments||[]).length,files:(out.files||[]).map(f=>f.path)};
+}
+// --- end neon github panes ---
+
 // Only GitHub pages open externally from this panel.
 const safeUrl=url=>{try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='github.com';}catch{return false;}};
 
-module.exports={info,user,issues:root=>list(root,'issue'),prs:root=>list(root,'pr'),branchPrs,githubRepo,safeUrl};
+module.exports={info,user,issues:root=>list(root,'issue'),prs:root=>list(root,'pr'),branchPrs,githubRepo,safeUrl,listFull,detail};

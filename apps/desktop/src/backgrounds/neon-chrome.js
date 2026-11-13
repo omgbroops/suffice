@@ -48,6 +48,7 @@ const esc = t => String(t).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
 function note(text) { const t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = text; document.body.append(t); setTimeout(() => t.remove(), 3200); }
 
 import { createPaneHost, hasPane } from './neon-panes.js';
+import './neon-github-panes.js'; // registers the issues + prs panes
 
 export function mountNeonChrome() {
   const api = window.sufficeDesktop, added = [], undo = [];
@@ -145,31 +146,6 @@ export function mountNeonChrome() {
   const bootWatch = setInterval(() => { watchPicker(); if (pmo) { clearInterval(bootWatch); later(); } }, 300);
   undo.push(() => { clearInterval(bootWatch); clearTimeout(timer); pmo?.disconnect(); });
 
-  // issue / PR list: row fills the composer, arrow opens GitHub
-  let pop = null;
-  const closePop = () => { pop?.remove(); pop = null; };
-  function openList(kind, anchor) {
-    closePop();
-    const res = data[kind], label = kind === 'prs' ? 'Pull requests' : 'Issues';
-    pop = document.createElement('div'); pop.className = 'nx nx-pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', label);
-    const items = res?.items || [];
-    pop.innerHTML = `<div class="nx-pop-head">${label}${res?.repo ? `<span>${esc(res.repo)}</span>` : ''}</div>` + (!api?.issues ? '<div class="nx-pop-empty">Open the desktop app to load GitHub data.</div>'
-      : !res ? '<div class="nx-pop-empty">Loading…</div>'
-      : !res.available ? `<div class="nx-pop-empty">${esc(res.reason)}</div>`
-      : !items.length ? `<div class="nx-pop-empty">No open ${label.toLowerCase()}.</div>`
-      : items.map((x, i) => `<div class="nx-pop-row"><button type="button" class="nx-pop-main" data-i="${i}"><span class="nx-num">#${x.number}</span><span class="nx-pop-title">${esc(x.title)}</span><span class="nx-time">${ago(x.updated)}</span></button><button type="button" class="nx-ib" data-open="${i}" aria-label="Open #${x.number} on GitHub">${S('<path d="M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4"/>')}</button></div>`).join(''));
-    document.body.append(pop);
-    const r = anchor.getBoundingClientRect(); pop.style.left = `${r.right + 8}px`; pop.style.top = `${Math.min(r.top, innerHeight - pop.offsetHeight - 12)}px`;
-    pop.addEventListener('click', e => {
-      const open = e.target.closest('[data-open]'), main = e.target.closest('.nx-pop-main');
-      if (open) { api.openGithub(items[+open.dataset.open].url).catch(err => note(err.message)); return; }
-      if (main && prompt) { const x = items[+main.dataset.i];
-        prompt.value = kind === 'prs' ? `Review pull request #${x.number} "${x.title}" (branch ${x.branch}): ${x.url}` : `Fix issue #${x.number} "${x.title}": ${x.url}`;
-        prompt.dispatchEvent(new Event('input', { bubbles: true })); prompt.focus(); closePop(); }
-    });
-  }
-  undo.push(closePop);
-
   // panes: modules registered with registerPane open in the main column
   const panes = createPaneHost({ api, note, esc, ago, icons: I, pixelAvatar, fillComposer: text => { panes.close(); if (prompt) { prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); prompt.focus(); } } });
   undo.push(() => panes.close());
@@ -180,17 +156,16 @@ export function mountNeonChrome() {
     sidebar: () => fire('[data-action="toggle-sidebar"]'), layout: () => fire('[data-action="toggle-panel"], .workspace-tool[aria-label*="panel" i]'),
     more: () => fire('[data-action="workspace-menu"]'), project: () => fire('.project-picker'), repos: () => fire('.project-picker'),
     density: () => setCompact(!document.body.hasAttribute('data-nx-compact')),
-    tools: () => fire('[data-action="attach"]'), issues: b => openList('issues', b), prs: b => openList('prs', b),
+    tools: () => fire('[data-action="attach"]'),
   };
   const onClick = e => {
-    if (pop && !e.target.closest('.nx-pop, [data-nx="issues"], [data-nx="prs"]')) closePop();
     const b = e.target.closest('[data-nx]'); if (!b) return; e.preventDefault();
     const act = actions[b.dataset.nx];
     if (b.closest('.nx-nav') && hasPane(b.dataset.nx)) { panes.open(b.dataset.nx); return; }
     if (b.dataset.nx === 'new') panes.close();
     if (act) act(b); else note(`${b.querySelector('.nx-label, span')?.textContent || b.getAttribute('aria-label')}: not in Suffice yet`);
   };
-  const onKey = e => { if (e.key !== 'Escape') return; if (pop) closePop(); else if (panes.current && !e.target.closest?.('input, textarea, select')) panes.close(); };
+  const onKey = e => { if (e.key !== 'Escape') return; if (panes.current && !e.target.closest?.('input, textarea, select')) panes.close(); };
   document.addEventListener('click', onClick); document.addEventListener('keydown', onKey);
   undo.push(() => { document.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); });
 
