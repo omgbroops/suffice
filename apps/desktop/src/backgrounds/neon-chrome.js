@@ -177,7 +177,8 @@ export function mountNeonChrome() {
     more: () => { // the stock header button is display:none, so anchor the workspace menu on a stand-in at the More row
       const row = document.querySelector('.nx-row[data-nx="more"]'), r = row.getBoundingClientRect(), b = document.createElement('button');
       b.dataset.action = 'workspace-menu'; b.style.cssText = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;opacity:0;pointer-events:none`;
-      document.body.append(b); setTimeout(() => { b.click(); b.remove(); }); }, // deferred: the row's own click would otherwise close the menu as an outside click project: () => fire('.project-picker'), repos: () => fire('.project-picker'),
+      document.body.append(b); setTimeout(() => { b.click(); b.remove(); }); }, // deferred: the row's own click would otherwise close the menu as an outside click
+    project: () => fire('.project-picker'), repos: () => fire('.project-picker'),
     density: () => setCompact(!document.body.hasAttribute('data-nx-compact')),
     tools: () => fire('[data-action="attach"]'),
   };

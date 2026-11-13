@@ -46,6 +46,10 @@ try{
  await shot('01b-thread-details');
  await page.locator('[data-nx="density"]').click();assert.equal(await page.locator('.thread-row .nx-meta').first().isVisible(),false,'compact hides details');await shot('01c-compact');
  await page.locator('[data-nx="density"]').click();
+ // the repos chip opens Suffice's project picker
+ await page.locator('[data-nx="repos"]').click();await page.waitForTimeout(300);
+ assert.equal(await page.locator('.project-picker').getAttribute('aria-expanded'),'true','repos chip opens the project picker');
+ await page.keyboard.press('Escape');await page.waitForTimeout(200);
  // the PR and issue lists are full panes now (neon-github-walk covers their contents)
  await page.locator('.nx-row[data-nx="prs"]').click();await page.locator('.nx-pane[data-pane="prs"]').waitFor();await shot('02-prs-pane');
  await page.keyboard.press('Escape');assert.equal(await page.locator('.nx-pane').count(),0,'Escape closes the pane');
