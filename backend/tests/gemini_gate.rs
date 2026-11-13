@@ -2,7 +2,6 @@
 use std::collections::BTreeMap;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
-use std::path::PathBuf;
 use std::time::{Duration, Instant};
 use suffice::adapter::parse_line;
 use suffice::gate::{check_event, Verdict};
