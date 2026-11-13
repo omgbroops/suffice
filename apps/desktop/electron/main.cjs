@@ -51,14 +51,27 @@ app.whenReady().then(async()=>{
     if(result.canceled)return null;
     await request('reset');project=selectedProject=result.filePaths[0];return {...await projects.add(project),git:await projects.git(project)};
   });
-  async function runTask(payload,inBackground=false){
+  async function runTask(payload,inBackground=false,cwdOverride=null){
     if(running&&!inBackground)throw new Error('A task is already running');
-    if(!project)throw new Error('Choose a project above the composer first');
+    if(!project&&!cwdOverride)throw new Error('Choose a project above the composer first');
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
-    const cwd=project;
+    const cwd=cwdOverride||project;
     if(!inBackground)running=true;
     try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);const task={prompt:payload.prompt+attached.context,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,cwd};return await (inBackground?background.run(task):request('run',task));}finally{if(!inBackground)running=false;}
   }
+  // --- automations: scheduled saved prompts (electron/automations.cjs); runs reuse the background-task path ---
+  const automations=require('./automations.cjs').createAutomations({
+    file:path.join(process.env.SUFFICE_HOME||path.join(require('node:os').homedir(),'.suffice'),'automations.json'),
+    busy:()=>running,
+    run:item=>runTask({prompt:item.prompt,effort:item.effort,model:item.model,provider:item.provider},true,item.projectPath),
+  });
+  handle('automations',()=>automations.list());
+  handle('automation-save',input=>automations.save(input));
+  handle('automation-delete',id=>automations.remove(id));
+  handle('automation-toggle',(id,enabled)=>automations.toggle(id,enabled));
+  handle('automation-run-now',id=>automations.runNow(id));
+  const automationTimer=setInterval(()=>{automations.tick().catch(()=>{});},30000);
+  app.on('will-quit',()=>clearInterval(automationTimer));
   handle('run',payload=>runTask(payload));
   handle('run-background',payload=>runTask(payload,true));
   handle('abort',()=>request('abort'));

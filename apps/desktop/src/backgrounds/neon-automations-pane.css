@@ -1,0 +1,51 @@
+/* Automations pane. Scoped to the neon skin; tokens come from neon-skin.css. */
+body[data-skin='neon'] .na { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+body[data-skin='neon'] .na-rows { list-style: none; margin: 0; padding: 0; border: 1px solid #1f1d23; border-radius: 8px; overflow: hidden; }
+body[data-skin='neon'] .na-row { display: grid; grid-template-columns: 38px minmax(180px, 1.4fr) 150px minmax(150px, 1fr) auto; align-items: center; gap: 14px; min-height: 56px; padding: 8px 14px; border-top: 1px solid #1f1d23; font-size: 14px; }
+body[data-skin='neon'] .na-row:first-child { border-top: 0; }
+body[data-skin='neon'] .na-row:hover { background: #131116; }
+body[data-skin='neon'] .na-main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+body[data-skin='neon'] .na-name { color: var(--nx-strong); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+body[data-skin='neon'] .na-sub, body[data-skin='neon'] .na-next { color: #8b868a; font-size: 13px; }
+body[data-skin='neon'] .na-row.is-off .na-name { color: #8b868a; }
+body[data-skin='neon'] .na-last { color: #b7b1b5; font-size: 13px; display: flex; flex-direction: column; gap: 2px; }
+body[data-skin='neon'] .na-last[data-state='ok'] { color: #6fd08c; }
+body[data-skin='neon'] .na-last[data-state='err'] { color: #e5707a; }
+body[data-skin='neon'] .na-last[data-state='running'] { color: #ac75f5; }
+body[data-skin='neon'] .na-last[data-state='skip'] { color: #8b868a; }
+body[data-skin='neon'] .na-link { align-self: flex-start; padding: 0; border: 0; background: none; color: #b7b1b5; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+body[data-skin='neon'] .na-link:hover { color: var(--nx-strong); }
+body[data-skin='neon'] .na-btns { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+body[data-skin='neon'] .na-confirm { color: #b7b1b5; font-size: 13px; margin-right: 4px; }
+
+body[data-skin='neon'] .na-toggle { position: relative; width: 34px; height: 20px; padding: 0; border: 0; border-radius: 10px; background: #252328; cursor: pointer; transition: background .15s; }
+body[data-skin='neon'] .na-toggle span { position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #b7b1b5; transition: transform .15s, background .15s; }
+body[data-skin='neon'] .na-toggle[aria-checked='true'] { background: #ac75f5; }
+body[data-skin='neon'] .na-toggle[aria-checked='true'] span { transform: translateX(14px); background: #fefbff; }
+
+body[data-skin='neon'] .na-btn, body[data-skin='neon'] .na-primary { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 0; border-radius: 8px; background: #252328; color: #fefbff; font: 500 13px/1 var(--font-sans); cursor: pointer; }
+body[data-skin='neon'] .na-btn:hover { background: #2e2c32; }
+body[data-skin='neon'] .na-btn:disabled { opacity: .5; cursor: default; }
+body[data-skin='neon'] .na-primary { background: #ac75f5; color: #0f0e11; }
+body[data-skin='neon'] .na-primary:hover { background: #b88af7; }
+body[data-skin='neon'] .na-primary .nx-i { width: 14px; height: 14px; }
+body[data-skin='neon'] .na-danger { background: #3a1d22; color: #e5707a; }
+body[data-skin='neon'] .na-danger:hover { background: #4a2229; }
+
+body[data-skin='neon'] .na-empty { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 72px 0; color: #8b868a; text-align: center; }
+body[data-skin='neon'] .na-empty .nx-i { width: 28px; height: 28px; color: #6d6b6c; }
+body[data-skin='neon'] .na-empty p { margin: 0; max-width: 420px; font-size: 14px; line-height: 1.5; }
+
+body[data-skin='neon'] .na-form { display: flex; flex-direction: column; gap: 14px; padding: 18px; border: 1px solid #1f1d23; border-radius: 8px; background: #131116; }
+body[data-skin='neon'] .na-form label { display: flex; flex-direction: column; gap: 6px; color: #8b868a; font-size: 13px; }
+body[data-skin='neon'] .na-form label[hidden] { display: none; }
+body[data-skin='neon'] .na-form input, body[data-skin='neon'] .na-form select, body[data-skin='neon'] .na-form textarea { box-sizing: border-box; width: 100%; padding: 8px 10px; border: 1px solid #1f1d23; border-radius: 8px; background: #1a1a1a; color: #fefbff; font: 400 14px/1.4 var(--font-sans); color-scheme: dark; }
+body[data-skin='neon'] .na-form input, body[data-skin='neon'] .na-form select { height: 36px; padding-top: 0; padding-bottom: 0; }
+body[data-skin='neon'] .na-form textarea { resize: vertical; min-height: 88px; }
+body[data-skin='neon'] .na-form ::placeholder { color: #6d6b6c; }
+body[data-skin='neon'] .na-form input:focus, body[data-skin='neon'] .na-form select:focus, body[data-skin='neon'] .na-form textarea:focus { outline: 0; border-color: #ac75f5; }
+body[data-skin='neon'] .na-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+body[data-skin='neon'] .na-error { color: #e5707a; font-size: 13px; }
+body[data-skin='neon'] .na-form-btns { display: flex; gap: 8px; }
+body[data-skin='neon'] .na-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+body[data-skin='neon'] .na-bar p { margin: 0; color: #8b868a; font-size: 13px; }

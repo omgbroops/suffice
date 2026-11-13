@@ -1,3 +1,4 @@
+import './neon-automations-pane.js'; // Automations pane (registers itself)
 // Neon skin chrome: the extra sidebar nav, avatars, footer and composer controls the
 // neon reference layout needs. Everything added carries .nx and is removed on unmount.
 const S = (d, extra = '') => `<svg class="nx-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${extra}>${d}</svg>`;
