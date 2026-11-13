@@ -55,7 +55,7 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
         }
         AgentKind::Gemini => {
             // shortcut: gemini flags unverified (CLI not installed), check gemini --help when installed
-            // shortcut: no CLI-level sandbox flag for gemini, gate only; check its permission config when wiring
+            // gated pre-exec by a BeforeTool hook (install_gemini_gate) and post-hoc by gemini_event
             let mut a = strs(&["-p"]);
             a.push(prompt);
             a.extend(strs(&["--output-format", "stream-json"]));
@@ -93,6 +93,20 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
     }
     if matches!(task.agent, AgentKind::Suffice) {
         env.insert("SUFFICE_GATE_CMD".into(), suffice_gate_cmd());
+    }
+    let (mut program, mut args) = (program, args);
+    if matches!(task.agent, AgentKind::Gemini) {
+        // set after task.env so a task cannot point gemini at settings without the gate hook
+        match install_gemini_gate(&gemini_settings_path(), &suffice_gate_cmd(), Path::new(GEMINI_MAC_SYSTEM_SETTINGS)) {
+            Ok(path) => {
+                env.insert("GEMINI_CLI_SYSTEM_SETTINGS_PATH".into(), path.to_string_lossy().into_owned());
+            }
+            // fail closed: without the hook gemini runs every tool unchecked, so don't start it
+            Err(e) => {
+                program = "sh".into();
+                args = vec!["-c".into(), format!("echo 'suffice: gemini gate settings not written: {}' >&2; exit 1", e.to_string().replace('\'', ""))];
+            }
+        }
     }
     Cmd {
         program,
@@ -142,6 +156,10 @@ pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
         return vec![Event::Text { text: line.to_string() }];
     }
     let Ok(v) = json::parse(line) else {
+        // fail closed for gemini: an unreadable line that may be a tool_use (dup keys, the 1 MiB cut) is still a call
+        if matches!(kind, AgentKind::Gemini) && line.to_ascii_lowercase().contains("tool_use") {
+            return vec![Event::ToolCall { name: "gemini_unreadable_tool_use".into(), input: line.to_string() }];
+        }
         return raw(line);
     };
     let ev = match kind {
@@ -149,8 +167,7 @@ pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
         AgentKind::Codex => codex_event(&v),
         // shortcut: opencode event shape unverified, capture a sample
         AgentKind::OpenCode => defensive_event(&v),
-        // shortcut: gemini event shape unverified, capture a sample
-        AgentKind::Gemini => defensive_event(&v),
+        AgentKind::Gemini => gemini_event(&v),
         AgentKind::Generic { .. } | AgentKind::Suffice => None,
     };
     ev.unwrap_or_else(|| raw(line))
@@ -350,6 +367,68 @@ pub fn install_opencode_gate(dir: &Path) -> std::io::Result<()> {
     })
 }
 
+/// gemini-cli's macOS system settings file; ours replaces it via GEMINI_CLI_SYSTEM_SETTINGS_PATH, so its keys are carried over.
+pub const GEMINI_MAC_SYSTEM_SETTINGS: &str = "/Library/Application Support/GeminiCli/settings.json";
+
+/// `<SUFFICE_HOME or ~/.suffice>/backend/gemini/system-settings.json`.
+pub fn gemini_settings_path() -> PathBuf {
+    opencode_config_dir().parent().unwrap_or(Path::new(".")).join("gemini").join("system-settings.json")
+}
+
+/// Writes gemini system settings whose BeforeTool hook runs `gate_cmd` on every tool (exit 2 blocks), keeping the
+/// keys and BeforeTool hooks of the real system settings at `base`. Rewritten each run (temp + rename), since a
+/// previous run's agent may have edited it. System settings override user and workspace ones in gemini-cli.
+pub fn install_gemini_gate(path: &Path, gate_cmd: &str, base: &Path) -> std::io::Result<PathBuf> {
+    if !path.is_absolute() {
+        return Err(std::io::Error::other("gemini settings path is not absolute"));
+    }
+    let mut top = match std::fs::read_to_string(base).ok().map(|t| json::parse(&t)) {
+        Some(Ok(Value::Obj(kv))) => kv,
+        _ => vec![],
+    };
+    let ours = Value::Obj(vec![
+        ("matcher".into(), Value::str(".*")),
+        ("hooks".into(), Value::Arr(vec![Value::Obj(vec![
+            // random per run: hooksConfig.disabled is a union over layers, so a known name could be disabled from user settings
+            ("name".into(), Value::str(&format!("suffice-gate-{}", random_hex()?))),
+            ("type".into(), Value::str("command")),
+            ("command".into(), Value::str(gate_cmd)),
+            ("timeout".into(), Value::num(600_000.0)),
+        ])])),
+    ]);
+    let mut hooks = match top.iter().position(|(k, _)| k == "hooks").map(|i| top.remove(i).1) {
+        Some(Value::Obj(kv)) => kv,
+        _ => vec![],
+    };
+    let mut before = match hooks.iter().position(|(k, _)| k == "BeforeTool").map(|i| hooks.remove(i).1) {
+        Some(Value::Arr(a)) => a,
+        _ => vec![],
+    };
+    before.insert(0, ours);
+    hooks.push(("BeforeTool".into(), Value::Arr(before)));
+    top.push(("hooks".into(), Value::Obj(hooks)));
+    // system settings merge last, so this beats a user/workspace hooksConfig.enabled=false; base disabled lists are dropped
+    top.retain(|(k, _)| k != "hooksConfig");
+    top.push(("hooksConfig".into(), Value::Obj(vec![("enabled".into(), Value::Bool(true))])));
+    let text = Value::Obj(top).to_string();
+    let dir = path.parent().ok_or_else(|| std::io::Error::other("gemini settings path has no parent"))?;
+    std::fs::create_dir_all(dir)?;
+    static N: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+    let tmp = dir.join(format!(".settings.{}.{}.tmp", std::process::id(), N.fetch_add(1, std::sync::atomic::Ordering::Relaxed)));
+    std::fs::write(&tmp, text)?;
+    std::fs::rename(&tmp, path).inspect_err(|_| {
+        let _ = std::fs::remove_file(&tmp);
+    })?;
+    Ok(path.to_path_buf())
+}
+
+fn random_hex() -> std::io::Result<String> {
+    use std::io::Read;
+    let mut b = [0u8; 12];
+    std::fs::File::open("/dev/urandom")?.read_exact(&mut b)?;
+    Ok(b.iter().map(|x| format!("{x:02x}")).collect())
+}
+
 fn hook_json(command: &str) -> String {
     let cmd = Value::Str(command.to_string());
     let hook = Value::Obj(vec![("type".into(), Value::str("command")), ("command".into(), cmd)]);
@@ -491,7 +570,35 @@ fn codex_event(v: &Value) -> Option<Vec<Event>> {
     }
 }
 
-/// Best-effort parse for CLIs without a captured sample (opencode, gemini).
+/// gemini-cli `--output-format stream-json` (packages/core/src/output/types.ts: init, message,
+/// tool_use, tool_result, error, result). gemini has no pre-exec hook here, so this is its only gate.
+fn gemini_event(v: &Value) -> Option<Vec<Event>> {
+    let ty = v.get("type").and_then(Value::as_str)?.to_ascii_lowercase();
+    match ty.as_str() {
+        "init" => Some(vec![Event::Session { native_id: sget(v, "session_id")? }]),
+        "message" if v.get("role").and_then(Value::as_str) == Some("assistant") => Some(vec![Event::Text { text: sget(v, "content")? }]),
+        "message" => Some(vec![]),
+        // fail closed: a tool_use the gate can't name or read is still a tool call, under a name no list allows
+        "tool_use" => Some(vec![match (sget(v, "tool_name"), v.get("parameters")) {
+            (Some(name), Some(p @ Value::Obj(_))) => Event::ToolCall { name, input: p.to_string() },
+            _ => Event::ToolCall { name: "gemini_unreadable_tool_use".into(), input: v.to_string() },
+        }]),
+        "tool_result" => {
+            let is_error = v.get("status").and_then(Value::as_str) != Some("success");
+            let output = sget(v, "output").or_else(|| v.get("error").and_then(|e| sget(e, "message"))).unwrap_or_default();
+            Some(vec![Event::ToolResult { name: sget(v, "tool_id").unwrap_or_default(), output, is_error }])
+        }
+        "error" => Some(vec![Event::Stderr { line: v.get("message").and_then(Value::as_str).map(str::to_string).unwrap_or_else(|| v.to_string()) }]),
+        "result" => {
+            let is_error = v.get("status").and_then(Value::as_str) != Some("success");
+            let text = v.get("error").and_then(|e| sget(e, "message")).unwrap_or_default();
+            Some(vec![Event::Result { text, is_error }])
+        }
+        _ => None,
+    }
+}
+
+/// Best-effort parse for CLIs without a captured sample (opencode).
 fn defensive_event(v: &Value) -> Option<Vec<Event>> {
     let mut out = vec![];
     if let Some(id) = sget(v, "sessionID").or_else(|| sget(v, "session_id")) {
