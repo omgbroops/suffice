@@ -12,9 +12,11 @@ const home=await realpath(await mkdtemp(resolve(tmpdir(),'suffice-neon-')));
 const dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});
 for(const [id,title,mins] of [['one','Fix the session restore race',40],['two','Speed up the seafood tests',60*26],['three','Add the neon layout',60*24*6]]){
  const t=new Date(Date.now()-mins*60000).toISOString();
- const entries=[{type:'session',version:3,id,timestamp:t,cwd:repo},{type:'message',id:'u',parentId:null,timestamp:t,message:{role:'user',content:[{type:'text',text:title}],timestamp:Date.parse(t)}},{type:'message',id:'a',parentId:'u',timestamp:t,message:{role:'assistant',content:[{type:'text',text:'Done.'}],provider:'fake',model:'fake',usage:{input:1,output:1,cacheRead:0,cacheWrite:0,totalTokens:2,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}},stopReason:'stop',timestamp:Date.parse(t)}}];
+ const entries=[{type:'session',version:3,id,timestamp:t,cwd:repo},{type:'message',id:'u',parentId:null,timestamp:t,message:{role:'user',content:[{type:'text',text:title}],timestamp:Date.parse(t)}},{type:'message',id:'a',parentId:'u',timestamp:t,message:{role:'assistant',content:[{type:'text',text:'Done.'}],provider:'fake',model:'fake-model-1',usage:{input:1,output:1,cacheRead:0,cacheWrite:0,totalTokens:2,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}},stopReason:'stop',timestamp:Date.parse(t)}}];
  await writeFile(resolve(dir,id+'.jsonl'),entries.map(e=>JSON.stringify(e)).join('\n')+'\n');
 }
+const {threadId}=await import('../electron/threads.mjs');
+await writeFile(resolve(home,'thread-meta.json'),JSON.stringify({[threadId(resolve(dir,'one.jsonl'))]:{branch:'bg-perf'}}));
 const errors=[],opened=[];
 const app=await _electron.launch({executablePath:electronPath,args:[hiddenMain,'--user-data-dir='+resolve(home,'electron')],env:testEnv({SUFFICE_HOME:home,SUFFICE_FAKE_HARNESS:'1',SUFFICE_FAKE_SIGNED_IN:'1'})});
 try{
@@ -38,6 +40,12 @@ try{
  assert.ok(/repo/.test(state.repos),'repo count');
  assert.ok(state.org.includes('/'),'footer shows the GitHub repo');
  assert.equal(state.threads,3,'every thread row has an avatar');
+ await page.waitForFunction(()=>document.querySelector('.thread-row .nx-pr'),null,{timeout:20000}).catch(async e=>{console.log('rows',await page.evaluate(()=>JSON.stringify([...document.querySelectorAll('.thread-row')].map(r=>({...r.dataset,meta:r.querySelector('.nx-meta')?.outerHTML.slice(0,200)})))));throw e;});
+ const rowMeta=await page.evaluate(()=>[...document.querySelectorAll('.thread-row .nx-meta')].map(m=>m.textContent));console.log('meta',rowMeta);
+ assert.ok(rowMeta.some(t=>t.includes('bg-perf')&&t.includes('#2')&&t.includes('fake-model-1')),'branch, its PR and the model show on the row');
+ await shot('01b-thread-details');
+ await page.locator('[data-nx="density"]').click();assert.equal(await page.locator('.thread-row .nx-meta').first().isVisible(),false,'compact hides details');await shot('01c-compact');
+ await page.locator('[data-nx="density"]').click();
  await page.locator('.nx-row[data-nx="prs"]').click();await page.locator('.nx-pop').waitFor();await page.waitForTimeout(300);await shot('02-prs');
  const rows=await page.locator('.nx-pop-main').count();console.log('pr rows',rows);
  if(rows){

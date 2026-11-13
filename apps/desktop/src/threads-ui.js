@@ -129,7 +129,7 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
   head.addEventListener('click',()=>{const next=section.hasAttribute('data-collapsed');section.toggleAttribute('data-collapsed',!next);head.setAttribute('aria-expanded',String(next));if(next)collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-collapsed-projects',JSON.stringify([...collapsedProjects]));}catch{}});
   section.append(head);list.append(section);
   for(const thread of group.items){
-   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
+   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;if(thread.cwd)row.dataset.cwd=thread.cwd;if(thread.branch)row.dataset.branch=thread.branch;if(thread.model)row.dataset.model=thread.model;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
    const dot=document.createElement('span');dot.className='list-dot';dot.textContent='·';dot.setAttribute('aria-hidden','true');
    const content=document.createElement('span');content.className='row-content';
    const name=document.createElement('span');name.className='row-title';name.textContent=thread.title;

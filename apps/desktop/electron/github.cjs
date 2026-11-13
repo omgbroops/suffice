@@ -35,7 +35,15 @@ async function list(root,kind){
  }
 }
 
+// Newest pull request per head branch, any state, for the thread rows.
+async function branchPrs(root){
+ const meta=await info(root);if(!meta.repo)return {};
+ try{const out=await run('gh',['pr','list','--repo',meta.repo,'--state','all','--limit','200','--json','number,state,isDraft,headRefName,url'],root);
+  const map={};for(const x of JSON.parse(out||'[]'))map[x.headRefName]??={number:x.number,state:x.isDraft&&x.state==='OPEN'?'DRAFT':x.state,url:x.url};return map;
+ }catch{return {};}
+}
+
 // Only GitHub pages open externally from this panel.
 const safeUrl=url=>{try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='github.com';}catch{return false;}};
 
-module.exports={info,user,issues:root=>list(root,'issue'),prs:root=>list(root,'pr'),githubRepo,safeUrl};
+module.exports={info,user,issues:root=>list(root,'issue'),prs:root=>list(root,'pr'),branchPrs,githubRepo,safeUrl};

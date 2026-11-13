@@ -21,6 +21,8 @@ export const NX_ICONS = {
   repo: S('<path d="M12 3.5a8.5 8.5 0 0 0-2.7 16.6c.4 0 .6-.2.6-.5v-1.8c-2.4.5-2.9-1-2.9-1-.4-1-1-1.3-1-1.3-.8-.5.1-.5.1-.5.9.1 1.3.9 1.3.9.8 1.3 2 1 2.6.7 0-.6.3-1 .6-1.2-1.9-.2-3.9-1-3.9-4.2 0-.9.3-1.7.9-2.3-.1-.2-.4-1.1.1-2.3 0 0 .7-.2 2.3.9a8 8 0 0 1 4.2 0c1.6-1.1 2.3-.9 2.3-.9.5 1.2.2 2.1.1 2.3.6.6.9 1.4.9 2.3 0 3.3-2 4-3.9 4.2.3.3.6.8.6 1.6v2.4c0 .3.2.6.6.5A8.5 8.5 0 0 0 12 3.5Z" fill="currentColor" stroke="none"/>'),
   chev: S('<path d="m7 10 5 5 5-5"/>', ' data-chev'),
   sliders: S('<path d="M7 4v6M7 14v6M17 4v2M17 10v10"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="8" r="2"/>'),
+  branch: S('<circle cx="6" cy="5.5" r="2"/><circle cx="6" cy="18.5" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7.5v9M18 10c0 4-6 3.5-11 7"/>'),
+  rows: S('<path d="M4 7h16M4 12h16M4 17h16"/>'),
   mic: S('<rect x="9" y="3.5" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>'),
 };
 const I = NX_ICONS;
@@ -45,6 +47,8 @@ const ago = ms => { const m = Math.max(0, (Date.now() - ms) / 60000); return m <
 const esc = t => String(t).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
 function note(text) { const t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = text; document.body.append(t); setTimeout(() => t.remove(), 3200); }
 
+import { createPaneHost, hasPane } from './neon-panes.js';
+
 export function mountNeonChrome() {
   const api = window.sufficeDesktop, added = [], undo = [];
   const put = (parent, html, where = 'beforeend') => { if (!parent) return null; parent.insertAdjacentHTML(where, html); const el = where === 'afterend' ? parent.nextElementSibling : where === 'beforebegin' ? parent.previousElementSibling : where === 'afterbegin' ? parent.firstElementChild : parent.lastElementChild; added.push(el); return el; };
@@ -56,20 +60,52 @@ export function mountNeonChrome() {
   const nav = [['compose', 'New thread', 'new'], ['list', 'Threads', 'threads'], ['issue', 'Issues', 'issues'], ['pr', 'Pull requests', 'prs'], ['auto', 'Automations', 'auto'], ['explore', 'Explore', 'explore'], ['more', 'More', 'more']];
   put(side?.querySelector('.new-session'), `<nav class="nx nx-nav" aria-label="Main">${nav.map(([ic, label, key], i) =>
     `<button class="nx-row${i ? '' : ' is-current'}" data-nx="${key}">${I[ic]}<span class="nx-label">${label}</span><span class="nx-badge" hidden></span></button>`).join('')}</nav>`, 'afterend');
-  put(side?.querySelector('.session-section'), `<div class="nx nx-sec"><span>Threads</span><span class="nx-sec-tools"><button class="nx-ib" data-nx="new" aria-label="New thread">${I.plus}</button><button class="nx-ib" data-nx="search" aria-label="Search threads">${I.search}</button></span></div>`, 'afterbegin');
+  put(side?.querySelector('.session-section'), `<div class="nx nx-sec"><span>Threads</span><span class="nx-sec-tools"><button class="nx-ib" data-nx="density" aria-label="Compact thread list" aria-pressed="false">${I.rows}</button><button class="nx-ib" data-nx="new" aria-label="New thread">${I.plus}</button><button class="nx-ib" data-nx="search" aria-label="Search threads">${I.search}</button></span></div>`, 'afterbegin');
   const foot = put(side, `<div class="nx nx-foot">${pixelAvatar('local')}<span class="nx-who"><span class="nx-name">Local</span><span class="nx-org">No GitHub account</span></span><span class="nx-dot" aria-label="Ready"></span></div>`);
 
-  // thread rows: pixel avatar + short age (rows are re-rendered, so watch the list)
+  // thread rows: who started it, age, and (unless compact) branch, its PR and the model
+  // shortcut: local threads are all the signed-in user's; team plans need the author saved per thread.
   const list = side?.querySelector('.sidebar-sessions');
-  const deco = () => list?.querySelectorAll('.session-row--sidebar:not([data-nx-deco])').forEach(row => {
-    row.dataset.nxDeco = '1';
-    const meta = row.querySelector('.row-meta'), when = meta?.dateTime ? Date.parse(meta.dateTime) : NaN;
-    row.insertAdjacentHTML('afterbegin', pixelAvatar(row.querySelector('.row-title')?.textContent || ''));
-    row.insertAdjacentHTML('beforeend', `<span class="nx-time">${Number.isFinite(when) ? ago(when) : shortTime(meta?.textContent)}</span>`);
-  });
+  let login = '';
+  const prsByCwd = new Map();
+  const userAv = () => login ? `<img class="nx-av" src="https://github.com/${encodeURIComponent(login)}.png?size=40" alt="" referrerpolicy="no-referrer" draggable="false">` : pixelAvatar('local');
+  const meta = row => {
+    const branch = row.dataset.branch, model = row.dataset.model, pr = branch && prsByCwd.get(row.dataset.cwd)?.[branch];
+    return [branch && `<span class="nx-branch">${I.branch}<span>${esc(branch)}</span></span>`,
+      pr && `<span class="nx-pr" data-state="${esc(pr.state.toLowerCase())}" title="Pull request #${pr.number} ${esc(pr.state.toLowerCase())}">${I.pr}#${pr.number}</span>`,
+      model && `<span class="nx-model">${esc(model.split('/').pop())}</span>`].filter(Boolean).join('');
+  };
+  const fillMeta = () => list?.querySelectorAll('.session-row--sidebar[data-nx-deco]').forEach(row => {
+    const m = row.querySelector('.nx-meta'), html = meta(row); if (m && m.dataset.html !== html) { m.dataset.html = html; m.innerHTML = html; m.hidden = !html; } });
+  async function loadPrs() {
+    if (!api?.branchPrs || !list) return;
+    const roots = [...new Set([...list.querySelectorAll('.session-row--sidebar[data-branch][data-cwd]')].map(r => r.dataset.cwd))];
+    await Promise.all(roots.map(async root => prsByCwd.set(root, await api.branchPrs(root).catch(() => ({})))));
+    fillMeta();
+  }
+  const deco = () => {
+    let fresh = false;
+    list?.querySelectorAll('.session-row--sidebar:not([data-nx-deco])').forEach(row => {
+      row.dataset.nxDeco = '1';
+      const time = row.querySelector('.row-meta'), when = time?.dateTime ? Date.parse(time.dateTime) : NaN;
+      row.insertAdjacentHTML('afterbegin', userAv());
+      row.querySelector('.row-content')?.insertAdjacentHTML('beforeend', '<span class="nx-meta" hidden></span>');
+      row.insertAdjacentHTML('beforeend', `<span class="nx-time">${Number.isFinite(when) ? ago(when) : shortTime(time?.textContent)}</span>`);
+      if (row.dataset.cwd && row.dataset.branch && !prsByCwd.has(row.dataset.cwd)) fresh = true;
+    });
+    fillMeta(); if (fresh) loadPrs();
+  };
   deco();
-  const mo = list && new MutationObserver(deco); mo?.observe(list, { childList: true });
-  undo.push(() => { mo?.disconnect(); list?.querySelectorAll('[data-nx-deco]').forEach(r => { r.removeAttribute('data-nx-deco'); r.querySelectorAll('.nx-av,.nx-time').forEach(e => e.remove()); }); });
+  const mo = list && new MutationObserver(deco); mo?.observe(list, { childList: true, subtree: true });
+  // a GitHub avatar that fails to load falls back to the pixel one
+  const onAvError = e => { if (e.target.matches?.('img.nx-av')) e.target.outerHTML = pixelAvatar(login || 'local'); };
+  side?.addEventListener('error', onAvError, true);
+  const density = side?.querySelector('[data-nx="density"]');
+  const setCompact = on => { document.body.toggleAttribute('data-nx-compact', on); density?.setAttribute('aria-pressed', String(on)); try { localStorage.setItem('suffice-thread-compact', on ? '1' : ''); } catch {} };
+  let compact = false; try { compact = localStorage.getItem('suffice-thread-compact') === '1'; } catch {}
+  setCompact(compact);
+  undo.push(() => { mo?.disconnect(); side?.removeEventListener('error', onAvError, true); document.body.removeAttribute('data-nx-compact');
+    list?.querySelectorAll('[data-nx-deco]').forEach(r => { r.removeAttribute('data-nx-deco'); r.querySelectorAll('.nx-av,.nx-time,.nx-meta').forEach(e => e.remove()); }); });
 
   // composer: project/branch, where it runs, and repo count above; sliders in the toolbar
   const form = document.querySelector('.home .composer');
@@ -91,7 +127,9 @@ export function mountNeonChrome() {
       if (repos) repos.textContent = `${projects.length} repo${projects.length === 1 ? '' : 's'}`;
       foot.querySelector('.nx-name').textContent = info.login || info.author || 'Local';
       foot.querySelector('.nx-org').textContent = info.repo || (info.git ? 'No GitHub remote' : 'Not a git repository');
-      foot.querySelector('.nx-av').outerHTML = pixelAvatar(info.login || info.author || 'local');
+      if (info.login !== login) { login = info.login || ''; list?.querySelectorAll('.session-row--sidebar > .nx-av').forEach(av => { av.outerHTML = userAv(); }); }
+      foot.querySelector('.nx-av').outerHTML = login ? userAv() : pixelAvatar(info.author || 'local');
+      loadPrs();
     } catch (error) { note(error.message); }
   }
   refresh();
@@ -132,21 +170,27 @@ export function mountNeonChrome() {
   }
   undo.push(closePop);
 
+  // panes: modules registered with registerPane open in the main column
+  const panes = createPaneHost({ api, note, esc, ago, icons: I, pixelAvatar, fillComposer: text => { panes.close(); if (prompt) { prompt.value = text; prompt.dispatchEvent(new Event('input', { bubbles: true })); prompt.focus(); } } });
+  undo.push(() => panes.close());
   // wire everything to real actions
   const fire = sel => document.querySelector(sel)?.click();
   const actions = {
     new: () => fire('[data-action="new"]'), threads: () => fire('[data-action="search-sessions"]'), search: () => fire('[data-action="search-sessions"]'),
     sidebar: () => fire('[data-action="toggle-sidebar"]'), layout: () => fire('[data-action="toggle-panel"], .workspace-tool[aria-label*="panel" i]'),
     more: () => fire('[data-action="workspace-menu"]'), project: () => fire('.project-picker'), repos: () => fire('.project-picker'),
+    density: () => setCompact(!document.body.hasAttribute('data-nx-compact')),
     tools: () => fire('[data-action="attach"]'), issues: b => openList('issues', b), prs: b => openList('prs', b),
   };
   const onClick = e => {
     if (pop && !e.target.closest('.nx-pop, [data-nx="issues"], [data-nx="prs"]')) closePop();
     const b = e.target.closest('[data-nx]'); if (!b) return; e.preventDefault();
     const act = actions[b.dataset.nx];
+    if (b.closest('.nx-nav') && hasPane(b.dataset.nx)) { panes.open(b.dataset.nx); return; }
+    if (b.dataset.nx === 'new') panes.close();
     if (act) act(b); else note(`${b.querySelector('.nx-label, span')?.textContent || b.getAttribute('aria-label')}: not in Suffice yet`);
   };
-  const onKey = e => { if (e.key === 'Escape') closePop(); };
+  const onKey = e => { if (e.key !== 'Escape') return; if (pop) closePop(); else if (panes.current && !e.target.closest?.('input, textarea, select')) panes.close(); };
   document.addEventListener('click', onClick); document.addEventListener('keydown', onKey);
   undo.push(() => { document.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); });
 
