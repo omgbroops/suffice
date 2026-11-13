@@ -138,3 +138,11 @@ fn gemini_and_codex_shell_tools_route_to_shell_rules() {
     assert!(verdict("local_shell", r#"{"command":["bash","-lc","rm -rf ~"]}"#));
     assert!(verdict("local_shell", r#"{"command":["rm","-rf","/"]}"#));
 }
+
+#[test]
+fn git_global_options_are_held_and_nested_local_shell_is_read() {
+    assert!(held_sh("git -C status -c core.fsmonitor=touch status"));
+    assert!(held_sh("git --git-dir status -c core.sshCommand=x fetch origin"));
+    assert!(!verdict("local_shell", r#"{"type":"exec","action":{"command":["ls","-la"]}}"#));
+    assert!(verdict("local_shell", r#"{"type":"exec","action":{"command":["bash","-lc","rm -rf ~"]}}"#));
+}

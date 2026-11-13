@@ -167,7 +167,8 @@ pub fn check_event(event: &Event) -> Verdict {
 /// The command text: the "command" or "cmd" field when the input is JSON, else the raw input.
 fn shell_command(input: &str) -> String {
     match crate::json::parse(input) {
-        Ok(v) => match v.get("command").or_else(|| v.get("cmd")) {
+        // codex local_shell nests the argv under "action"
+        Ok(v) => match v.get("command").or_else(|| v.get("cmd")).or_else(|| v.get("action").and_then(|a| a.get("command"))) {
             Some(c) if c.as_str().is_some() => c.as_str().unwrap().to_string(),
             // argv array (codex local_shell): join only plain words; anything with spaces stays raw JSON, which the quote rule holds
             Some(c) => match c.as_arr() {
@@ -228,9 +229,9 @@ fn part_rule(prog: &str, a: &[&str]) -> Option<&'static str> {
         ]))
         .then_some("grep/rg flag not on safe list"),
         "git" => {
-            // global -c (config injection) sits before the subcommand; after it, -c is e.g. switch's --create
-            if a.iter().take_while(|x| x.starts_with('-')).any(|x| x.starts_with("-c")) {
-                return Some("git -c");
+            // no global options at all: -c injects config, and value-taking ones (-C x, --git-dir x) hide a later -c from any scan
+            if a.first().is_some_and(|x| x.starts_with('-')) {
+                return Some("git global option");
             }
             // git expands unique long-flag prefixes, so "--upload-p" or "--rec" means the dangerous flag too
             let danger = |x: &str| {
