@@ -1,3 +1,4 @@
+import './neon-automations-pane.js'; // Automations pane (registers itself)
 // Neon skin chrome: the extra sidebar nav, avatars, footer and composer controls the
 // neon reference layout needs. Everything added carries .nx and is removed on unmount.
 import './neon-threads-pane.js';
