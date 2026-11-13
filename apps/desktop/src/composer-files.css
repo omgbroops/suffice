@@ -42,7 +42,7 @@
 
 .desktop-app { --chrome-center-y: calc(var(--sidebar-heading-top) + var(--sidebar-heading-height) / 2); --window-chrome-inset: calc(max(0px,var(--chrome-control-top) - 8px) + 2px); --window-controls-width: 106px; }
 .desktop-app .workspace-tools { top: calc(var(--chrome-center-y) - 12.5px); }
-.desktop-app .right-panel-open .workspace-tools { right: calc(var(--right-panel-width) + 5px); }
+.desktop-app .right-panel-open .workspace-tools { right: calc(var(--right-panel-width) + var(--workspace-tools-inset)); }
 
 
 .attachment-tray { --fade-left: 0px; --fade-right: 0px; mask-image: linear-gradient(to right,transparent,black var(--fade-left),black calc(100% - var(--fade-right)),transparent); }
@@ -57,5 +57,9 @@
 
 .desktop-app .thread-view .send-options { display: none; }
 
-.desktop-app .workspace.background-none { background: var(--surface-thread); }
-.background-none .thread-atmosphere,.background-none .atmosphere-shade { display: none; }
+.desktop-app .workspace.background-none { background: var(--surface-editor); }
+.background-none .thread-atmosphere,.background-none .atmosphere-shade,.background-none .thread-backdrop { display: none; }
+
+/* Carry the canvas hairline through the concave window-control cutout. */
+.window-control-edge { position: absolute; pointer-events: none; top: calc(29px - var(--chrome-center-y) + var(--notch)); left: 0; right: calc(10px - var(--window-chrome-inset) + var(--notch)); bottom: 0; border-left: .5px solid var(--border); border-bottom: .5px solid var(--border); border-bottom-left-radius: 12px; }
+.right-panel-open .window-control-edge { display: none; }

@@ -12,7 +12,7 @@
 .git-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 260px; padding: 2px 9px; border-radius: 12px; background: var(--surface-active); color: var(--text-muted); font-size: 12px; line-height: 20px; }
 .git-pill .icon { width: 13px; height: 13px; }
 .git-pill span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.popover.project-menu { background: var(--surface-composer); position: fixed; z-index: 60; width: 280px; padding: 5px; }
+.popover.project-menu { background: var(--surface-composer); position: fixed; z-index: 60; width: 280px; padding: var(--menu-inset); }
 .project-search { width: 100%; padding: 7px 9px 10px; border: 0; background: transparent; color: var(--text); font-size: 13px; outline: none; }
 .popover .project-search:focus-visible { outline: none; box-shadow: none; }
 .project-options { max-height: 200px; overflow-y: auto; padding-block: 4px; }
@@ -72,15 +72,13 @@
 @media(max-width:699px){.thread-view{height:calc(100svh - 12px)}.thread-messages{width:calc(100% - 32px)}.thread-header{padding-left:54px}.thread-user{max-width:94%}}
 /* Shared glass material for the project controls and composer. */
 .desktop-app .composer:focus-within { border-color: var(--border-strong); }
-.workspace.thread-view .composer { box-shadow: none; }
-:root[data-theme='light'] .workspace.thread-view .composer { box-shadow: none; }
 .project-bar .git-pill { border-radius: 12px; padding: 3px 10px; min-height: 28px; background: var(--surface-composer); border: 1px solid var(--border-strong); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
 .project-bar .project-picker { border-radius: 9px; padding: 3px 8px; min-height: 28px; background: var(--surface-composer); border: 1px solid var(--border-strong); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); color: var(--text-muted); transition: background 100ms ease,color 100ms ease; }
 .project-bar .project-picker:hover,.project-bar .project-picker[aria-expanded='true'] { background: var(--surface-menu); color: var(--text); }
 .project-bar .project-picker:active:not(:disabled) { transform: none; }
 .project-badge { display: inline-grid; place-items: center; flex: 0 0 20px; width: 20px; height: 20px; border-radius: 5px; color: #ffffff; font: 500 12px/1 var(--font-sans); letter-spacing: 0; }
 .project-picker:focus:not(:focus-visible) { outline: none; }
-.popover.model-picker { background: var(--surface-composer); width: 280px; padding: 6px; overflow-y: auto; }
+.popover.model-picker { background: var(--surface-composer); width: 280px; padding: var(--menu-inset); overflow-y: auto; }
 .model-button { gap: 7px; }
 .model-button #model-label { color: var(--text-strong); font-weight: 500; }
 .model-effort { color: var(--text-muted); font-weight: 400; }
@@ -154,7 +152,7 @@
 .model-options[data-more-bottom='true'] { --list-fade-bottom: 22px; }
 
 /* Workspace utilities sit on the canvas, separate from the window controls. */
-.desktop-app { --right-panel-width: min(480px,45vw); --workspace-tools-width: 72px; }
+.desktop-app { --right-panel-width: min(480px,45vw); }
 .workspace-tools { position: fixed; top: 5px; right: calc(var(--window-controls-width) + 8px); z-index: 100; display: flex; align-items: center; gap: 6px; -webkit-app-region: no-drag; }
 .workspace-tool { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: var(--text-muted); transition: color 120ms ease,background 120ms ease; }
 .workspace-tool:hover,.workspace-tool[aria-expanded='true'] { color: var(--text); background: var(--surface-active); }
@@ -176,3 +174,16 @@
 .desktop-app .right-panel-open .workspace { margin-right: calc(var(--right-panel-width) + 8px); }
 @keyframes context-tooltip-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
 @media(prefers-reduced-motion:reduce){.right-sidebar,.desktop-app .workspace,.context-ring-value { transition: none; }.context-usage-details { animation: none; }}
+
+/* Each top strip drags natively; interactive controls explicitly opt out. */
+.desktop-app .window-drag-region { left: var(--sidebar-width); right: calc(var(--window-controls-width) + var(--workspace-tools-width) + 8px); height: 44px; user-select: none; }
+.desktop-app .right-panel-open .window-drag-region { right: calc(var(--right-panel-width) + var(--workspace-tools-width) + var(--workspace-tools-inset)); }
+.desktop-app .sidebar-collapsed .window-drag-region { left: 48px; }
+.panel-drag-region { position: absolute; inset: 0 0 auto; height: 44px; z-index: 0; -webkit-app-region: drag; user-select: none; }
+.desktop-app .sidebar-heading { position: relative; z-index: 1; }
+.desktop-app :is(.sidebar-heading,.thread-header,.right-panel-header) { -webkit-app-region: drag; user-select: none; }
+.desktop-app .right-panel-header { z-index: 1; }
+.desktop-app :is(.sidebar-heading,.right-panel-header) :is(button,input,a,[role='tab']),.desktop-app .panel-tab,.desktop-app .sidebar-reopen,.desktop-app .sidebar-resizer { -webkit-app-region: no-drag; }
+.desktop-app .workspace.background-none .project-bar :is(.project-picker,.git-pill) { background: transparent; border-color: transparent; outline: none; box-shadow: none; }
+
+.project-list-status { padding: 8px 10px; color: var(--text-faint); font-size: 12px; }
