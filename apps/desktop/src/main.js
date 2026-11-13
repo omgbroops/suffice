@@ -371,7 +371,10 @@ function showSearch() {
   showDialog('Search sessions', '<label class="sr-only" for="session-search">Search sessions</label><input id="session-search" class="search-input" placeholder="Search sessions…" /><div class="search-results"></div>');
   const search=document.querySelector('#session-search'),results=document.querySelector('.search-results');
   function render(){results.replaceChildren();const query=search.value.trim().toLowerCase();for(const row of source){if(!`${row.textContent} ${row.dataset.project||''}`.toLowerCase().includes(query))continue;const item=row.cloneNode(true);item.removeAttribute('data-thread');item.removeAttribute('aria-pressed');item.addEventListener('click',()=>{dialog.close();row.click();});results.append(item);}if(!results.children.length){const empty=document.createElement('p');empty.className='muted';empty.textContent='No sessions found';results.append(empty);}}
-  search.addEventListener('input',render);render();search.focus();
+  search.addEventListener('input',render);
+  search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();results.querySelector('.thread-row')?.click();}else if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('.thread-row')?.focus();}});
+  results.addEventListener('keydown',e=>{const rows=[...results.querySelectorAll('.thread-row')],i=rows.indexOf(document.activeElement);if(i<0)return;if(e.key==='ArrowDown'){e.preventDefault();rows[i+1]?.focus();}else if(e.key==='ArrowUp'){e.preventDefault();if(i===0)search.focus();else rows[i-1].focus();}});
+  render();search.focus();
 }
 
 dialog.addEventListener('click', (e) => { if (e.target === dialog) { const r = dialog.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close(); } });
@@ -379,6 +382,7 @@ dialog.addEventListener('click', (e) => { if (e.target === dialog) { const r = d
 document.addEventListener('keydown', (e) => {
 
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); showSearch(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'n' && !e.shiftKey && !document.querySelector('dialog[open]')) { e.preventDefault(); document.querySelector('.sidebar .new-session')?.click(); }
 
 });
 

@@ -30,6 +30,7 @@ try{
  await seen('send-no-project');
  await page.keyboard.press('Escape');await page.waitForTimeout(500);await seen('picker-dismissed');
  await send();await page.waitForTimeout(600);await seen('project-menu');
+ state.emptyMenu=await page.evaluate(()=>({search:!document.querySelector('.project-search').hidden,focus:document.activeElement?.textContent.trim()}));console.log('   empty project menu:',JSON.stringify(state.emptyMenu));
  await page.getByRole('button',{name:'New project',exact:true}).click();await page.waitForTimeout(1200);
  await seen('sign-in-asked');
  await page.getByRole('button',{name:'Continue in browser'}).click();await page.waitForTimeout(1200);
@@ -51,6 +52,7 @@ try{
  check(state['signing-in'].paste&&state['signing-in'].signIn,'sign-in prompt did not stay up for the paste step');
  check(state['first-send'].thread&&state['first-send'].bubble.includes('Fake harness reply: Add a dark mode toggle')&&!state['first-send'].pill,'signing in did not send the draft');
  check(state['switch-project'].project==='beta-api'&&!state['switch-project'].pill,'project switch failed');
+ check(!state.emptyMenu.search&&state.emptyMenu.focus==='New project','empty project menu shows a search with nothing to search, or focus is not on New project');
  check(!/Error invoking remote method/.test(JSON.stringify(state)),'raw IPC error text shown');
  console.log('errors',JSON.stringify(errors));
 }finally{await app.close().catch(()=>{});}

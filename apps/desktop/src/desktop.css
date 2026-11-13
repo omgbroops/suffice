@@ -43,6 +43,9 @@
 .workspace.thread-view .home { position: absolute; bottom: 16px; left: 0; right: 0; padding: 0; min-height: 0; z-index: 2; }
 .thread-header { position: absolute; top: 0; left: 0; right: calc(var(--window-controls-width) + 8px); height: 54px; padding: 17px 24px; color: var(--text-strong); font-size: 13px; font-weight: 500; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .thread-view .thread-transcript { position: absolute; inset: 54px 0 0; display: block; overflow-y: auto; scrollbar-gutter: stable both-edges; scroll-padding-bottom: var(--transcript-bottom-space,184px); mask-image: linear-gradient(transparent,black 18px,black calc(100% - 24px),transparent); }
+.jump-latest { position: absolute; left: 50%; bottom: calc(var(--transcript-bottom-space,184px) - 36px); transform: translateX(-50%); z-index: 3; width: 32px; height: 32px; min-height: 0; padding: 0; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--surface-composer); color: var(--text); }
+.jump-latest svg { transform: rotate(180deg); }
+.jump-latest[hidden]{display:none}
 .thread-messages { width: min(var(--composer-width),calc(100% - 64px)); margin: 0 auto; padding: 16px 0; font-size: 14px; line-height: 22px; letter-spacing: -.01em; }
 .thread-message { margin: 0 0 24px; overflow-wrap: anywhere; font-size: inherit; line-height: inherit; font-weight: 400; }
 .thread-user { width: fit-content; white-space: pre-wrap; margin-left: auto; max-width: 82%; padding: 8px 14px; border-radius: 16px; background: var(--surface-thread-bubble); color: var(--text-strong); }
@@ -186,3 +189,4 @@
 .project-group[data-collapsed] .thread-row { display: none; }
 
 .thread-error { color: var(--red); margin-top: 8px; }
+.desktop-app .jump-latest { border-radius: 50%; }

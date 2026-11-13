@@ -60,8 +60,10 @@ try{
  state.attachUser=await page.evaluate(()=>[...document.querySelectorAll('.thread-user')].at(-1)?.textContent.trim().slice(0,120));
  await shot('attached-sent');console.log('reply',JSON.stringify(state.attachReply),'user bubble',JSON.stringify(state.attachUser));
  // Cmd+N from inside a thread
+ await page.mouse.move(1000,400);for(let i=0;i<6;i++){await page.mouse.wheel(0,-800);await page.waitForTimeout(30);}await page.waitForTimeout(300);state.jumpBeforeLeave=await page.locator('.jump-latest').isVisible();console.log('jump visible before leaving:',state.jumpBeforeLeave);
  state.inThread=await page.evaluate(()=>document.querySelector('.workspace').classList.contains('thread-view'));
  await page.keyboard.press('Meta+n');await page.waitForTimeout(600);state.cmdN=state.inThread&&await page.evaluate(()=>!document.querySelector('.workspace').classList.contains('thread-view'));console.log('Cmd+N from a thread -> home:',state.cmdN);
+ state.jumpOnHome=await page.locator('.jump-latest').isVisible().catch(()=>false);await shot('cmd-n-home');
  const check=(ok,m)=>{if(!ok)errors.push(m);};
  check(!order.some(f=>f.endsWith('(no ring)')),'a focused control has no visible focus ring');
  check(state.searchOpen&&state.searchOpened==='Long thread'&&state.searchClosed,'Cmd+K search can\'t open a thread by keyboard');
@@ -70,6 +72,7 @@ try{
  check(state.longWhileStreaming.top<=state.longScrolledUp.top+4&&state.longScrolledUp.top<state.longScrolledUp.max-500,'new reply yanked the view down while reading older messages');
  check(state.longWhileStreaming.jump.length>0,'no jump-to-latest control while scrolled up during a reply');
  check(/\[images:1\]/.test(state.attachReply||'')&&/\[context:/.test(state.attachReply||''),'pasted image or dropped file did not reach the run');
+ check(!state.jumpOnHome,'jump-to-latest left showing on the home screen');
  console.log('errors',JSON.stringify(errors));
 }finally{await app.close().catch(()=>{});}
 process.exit(errors.length?1:0);

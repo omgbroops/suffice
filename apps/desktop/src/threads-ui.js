@@ -30,9 +30,12 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
  let statusLine=null,reasoning='',renderFrame=0;const liveTools=new Map();let liveGroup=null,liveLog=null;
  let following=true,lastScrollTop=0,scrollFrame=0;
  const nearBottom=()=>transcript.scrollHeight-transcript.scrollTop-transcript.clientHeight<8;
- const bottom=(force=false)=>{if(force)following=true;if(!following)return;transcript.scrollTop=transcript.scrollHeight;if(!scrollFrame)scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;if(following){transcript.scrollTop=transcript.scrollHeight;lastScrollTop=transcript.scrollTop;}});};
+ const jump=document.createElement('button');jump.type='button';jump.className='button jump-latest';jump.setAttribute('aria-label','Jump to latest');jump.innerHTML=icon('arrow');jump.hidden=true;workspace.append(jump);
+ const updateJump=()=>{jump.hidden=!workspace.classList.contains('thread-view')||nearBottom();};
+ jump.addEventListener('click',()=>{bottom(true);jump.hidden=true;});
+ const bottom=(force=false)=>{if(force)following=true;updateJump();if(!following)return;transcript.scrollTop=transcript.scrollHeight;if(!scrollFrame)scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;if(following){transcript.scrollTop=transcript.scrollHeight;lastScrollTop=transcript.scrollTop;}});};
  transcript.addEventListener('wheel',event=>{if(event.deltaY<0)following=false;},{passive:true});
- transcript.addEventListener('scroll',()=>{if(nearBottom())following=true;else if(transcript.scrollTop<lastScrollTop-1)following=false;lastScrollTop=transcript.scrollTop;},{passive:true});
+ transcript.addEventListener('scroll',()=>{if(nearBottom())following=true;else if(transcript.scrollTop<lastScrollTop-1)following=false;lastScrollTop=transcript.scrollTop;updateJump();},{passive:true});
  transcript.addEventListener('keydown',event=>{if(['PageUp','Home','ArrowUp'].includes(event.key))following=false;});
  let draftTimer,viewScrollTimer;
  function saveView(){clearTimeout(draftTimer);clearTimeout(viewScrollTimer);viewState.update({draft:prompt.value,scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});}
@@ -42,7 +45,7 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
  transcript.addEventListener('scroll',()=>{clearTimeout(viewScrollTimer);const id=viewState.id;viewScrollTimer=setTimeout(()=>{if(id===viewState.id&&id)viewState.update({scrollTop:transcript.scrollTop,following});},150);},{passive:true});
  window.addEventListener('beforeunload',saveView);
  new ResizeObserver(()=>bottom()).observe(history);
- new ResizeObserver(()=>{transcript.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
+ new ResizeObserver(()=>{workspace.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
  function threadView(title,animate=false){const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
  function clear(){
   const wasThread=workspace.classList.contains('thread-view');
