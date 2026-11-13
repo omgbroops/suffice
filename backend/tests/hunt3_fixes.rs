@@ -98,3 +98,43 @@ fn claude_assistant_text_without_string_keeps_tool_use() {
         "no Bash ToolCall in {evs:?}"
     );
 }
+
+fn verdict(name: &str, input: &str) -> bool {
+    matches!(check_event(&Event::ToolCall { name: name.into(), input: input.into() }), Verdict::Hold { .. })
+}
+fn held_sh(c: &str) -> bool {
+    verdict("Bash", &suffice::json::Value::Obj(vec![("command".into(), suffice::json::Value::str(c))]).to_string())
+}
+
+#[test]
+fn git_abbreviations_paths_and_transports_are_held() {
+    for c in [
+        "git branch --del feat", "git switch --discard-c main", "git checkout --forc x", "git checkout src/foo.rs",
+        "git checkout HEAD file", "git checkout ./", "git checkout main", "git fetch ext::sh", "git worktree add /tmp/x",
+        "git worktree move a b", "git branch --edit-description", "git branch --set-upstream-to=o/x", "git add --upload-p=x",
+        "git stash pop", "git stash drop", "git fetch ../r",
+    ] {
+        assert!(held_sh(c), "should hold: {c}");
+    }
+    for c in ["git switch main", "git switch -c feat/x", "git checkout -b feat", "git branch -a", "git fetch origin",
+              "git fetch --all", "git stash", "git stash list", "git worktree list", "git status"] {
+        assert!(!held_sh(c), "should allow: {c}");
+    }
+}
+
+#[test]
+fn more_action_verbs_and_plurals_skip_the_read_shortcut() {
+    for n in ["search_and_replace", "get_and_reset", "list_runs", "read_then_executes", "get_and_push"] {
+        assert!(verdict(n, "{}"), "should hold: {n}");
+    }
+    assert!(!verdict("list_files", "{}"));
+}
+
+#[test]
+fn gemini_and_codex_shell_tools_route_to_shell_rules() {
+    assert!(!verdict("run_shell_command", r#"{"command":"ls"}"#));
+    assert!(verdict("run_shell_command", r#"{"command":"rm -rf ~"}"#));
+    assert!(!verdict("local_shell", r#"{"command":["ls","-la"]}"#));
+    assert!(verdict("local_shell", r#"{"command":["bash","-lc","rm -rf ~"]}"#));
+    assert!(verdict("local_shell", r#"{"command":["rm","-rf","/"]}"#));
+}
