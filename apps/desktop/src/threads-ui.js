@@ -15,7 +15,7 @@ function threadTime(timestamp){
  }
 }
 
-export function connectThreads({api,prompt,send,toast}){
+export function connectThreads({api,prompt,send,toast,ensureProject}){
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
  const transition=createThreadTransition(workspace,form);
  const newSession=document.querySelector('.new-session');newSession.setAttribute('aria-current','page');
@@ -158,6 +158,7 @@ export function connectThreads({api,prompt,send,toast}){
   event.preventDefault();event.stopImmediatePropagation();
   if(busy){await api.abort().catch(error=>toast(error.message));return;}
   if(opening)return;
+  if(ensureProject&&!workspace.classList.contains('thread-view')){opening=true;let picked;try{picked=await ensureProject();}finally{opening=false;}if(!picked){prompt.focus();return;}}
   const text=prompt.value.trim()||(form.attachments?.count?'Please review the attached files.':'');if(!text)return;
   const inBackground=form.backgroundSubmit||form.backgroundIntent;form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}

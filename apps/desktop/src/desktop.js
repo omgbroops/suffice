@@ -13,8 +13,8 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   chrome.innerHTML=controls.map(([action,label,path])=>`<button type="button" class="window-control" data-window="${action}" aria-label="${label}" title="${label}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">${path}</svg></button>`).join('');
   chrome.addEventListener('click',event=>{const control=event.target.closest('[data-window]');if(control)void api.windowControl(control.dataset.window);});document.body.append(chrome);
   const drag=document.createElement('div');drag.className='window-drag-region';drag.setAttribute('aria-hidden','true');document.body.append(drag);
-  connectThreads({api,prompt,send,toast});
-  connectProjects({api,toast});
+  const projects=connectProjects({api,toast});
+  connectThreads({api,prompt,send,toast,ensureProject:projects.ensure});
   connectModels({api,toast});
   connectWorkspaceTools(api);
   connectTooltips();
