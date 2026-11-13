@@ -15,6 +15,12 @@ const runtime={
 async function createSession(options){
  const listeners=[];
  return {session:{subscribe:f=>listeners.push(f),model:null,setThinkingLevel(){},setModel(){}},sessionPath:()=>null,totals:null,async dispose(){},
-  async run(text){const reply='Fake harness reply: '+text+' [in '+options.cwd.split(/[\\/]/).pop()+']';for(const f of listeners){f({type:'message_start',message:{role:'assistant'}});f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:reply}});}return reply;}};
+  aborted:false,abort(){this.aborted=true;},
+  // "slow:" streams for ~10 s and stops on abort; "fail:" streams part of a reply, then the provider errors
+  async run(text){const emit=delta=>listeners.forEach(f=>f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta}}));
+   if(text.startsWith('slow:')||text.startsWith('fail:')){this.aborted=false;listeners.forEach(f=>f({type:'message_start',message:{role:'assistant'}}));let out='';
+    for(let i=0;i<(text.startsWith('slow:')?40:4);i++){if(this.aborted)return out;const chunk=`chunk ${i} `;out+=chunk;emit(chunk);await new Promise(r=>setTimeout(r,250));}
+    if(text.startsWith('fail:'))throw new Error('529 Overloaded: the provider is busy, try again');return out;}
+   const reply='Fake harness reply: '+text+' [in '+options.cwd.split(/[\\/]/).pop()+']';for(const f of listeners){f({type:'message_start',message:{role:'assistant'}});f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:reply}});}return reply;}};
 }
 serve({createRuntime:async()=>runtime,createSession});
