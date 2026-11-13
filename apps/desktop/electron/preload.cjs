@@ -1,7 +1,8 @@
 const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
+  openExternal:url=>ipcRenderer.invoke('suffice:open-external',url),
   windowControl:action=>ipcRenderer.invoke('suffice:window',action),
-  usage:()=>ipcRenderer.invoke('suffice:usage'),
+  usage:threadId=>ipcRenderer.invoke('suffice:usage',threadId),
   files:directory=>ipcRenderer.invoke('suffice:files',directory),
   file:name=>ipcRenderer.invoke('suffice:file',name),
   changes:()=>ipcRenderer.invoke('suffice:changes'),
@@ -16,7 +17,8 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   run:payload=>ipcRenderer.invoke('suffice:run',payload),
   runBackground:payload=>ipcRenderer.invoke('suffice:run-background',payload),
   clipboardFiles:()=>ipcRenderer.invoke('suffice:clipboard-files'),
-  abort:()=>ipcRenderer.invoke('suffice:abort'),
+  abort:threadId=>ipcRenderer.invoke('suffice:abort',threadId),
+  steer:payload=>ipcRenderer.invoke('suffice:steer',payload),
   reset:()=>ipcRenderer.invoke('suffice:reset'),
   onEvent:callback=>{const listener=(_event,value)=>callback(value);ipcRenderer.on('suffice:event',listener);return()=>ipcRenderer.removeListener('suffice:event',listener);},
 });

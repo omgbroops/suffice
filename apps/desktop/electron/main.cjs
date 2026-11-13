@@ -1,10 +1,10 @@
-const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard}=require('electron');
+const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell}=require('electron');
 const path=require('node:path');
 const {pathToFileURL}=require('node:url');
 const workspaceFiles=require('./workspace-files.cjs');
 const {prepareAttachments,clipboardFiles}=require('./attachments.cjs');
 let background;
-let win,worker,project=null,selectedProject=null,sequence=0,running=false;
+let win,worker,project=null,selectedProject=null,sequence=0,running=0;
 const requests=new Map();
 function request(action,payload){
   if(!worker)return Promise.reject(new Error('Harness process is not available'));
@@ -17,6 +17,7 @@ else app.on('second-instance',()=>{
 });
 if(primary)app.whenReady().then(async()=>{
   background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:message=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);}});
+  const {projectIdentityMetadata}=await import('./sidebar-metadata.mjs');
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));
   worker=utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'});
   worker.on('message',message=>{
@@ -31,36 +32,38 @@ if(primary)app.whenReady().then(async()=>{
   win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry)event.preventDefault();});
   function handle(name,handler){ipcMain.handle(`suffice:${name}`,(event,...args)=>{if(event.senderFrame!==win.webContents.mainFrame)throw new Error('Untrusted frame');return handler(...args);});}
+  handle('open-external',url=>{const parsed=new URL(url);if(parsed.protocol!=='https:'||parsed.hostname!=='github.com')throw new Error('Unsupported link');return shell.openExternal(parsed.href);});
   handle('status',()=>request('status'));
   handle('models',()=>request('models'));
-  handle('usage',()=>request('usage'));
+  handle('usage',threadId=>request('usage',{threadId}));
   handle('files',directory=>workspaceFiles.list(project,directory));
   handle('file',name=>workspaceFiles.read(project,name));
   handle('changes',()=>workspaceFiles.changes(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
-  handle('threads',()=>request('threads'));
-  handle('projects',()=>projects.list());
-  handle('select-project',async id=>{if(running)throw new Error('Stop the current task first');const item=(await projects.list()).find(p=>p.id===id);if(!item)throw new Error('Project not found');await request('reset');project=selectedProject=item.path;return {...item,git:await projects.git(project)};});
-  handle('thread',async id=>{if(running)throw new Error('Stop the current task before switching threads');const thread=await request('thread',{id});project=thread.cwd;return thread;});
+  const threadLocations=new Map();
+  handle('threads',async()=>{const threads=await request('threads');for(const thread of threads)threadLocations.set(thread.id,thread.cwd);return threads;});
+  handle('projects',async()=>Promise.all((await projects.list()).map(async item=>({...item,...await projectIdentityMetadata(item.path)}))));
+  handle('select-project',async id=>{const revision=++viewedThreadRevision,item=(await projects.list()).find(p=>p.id===id);if(!item)throw new Error('Project not found');if(revision===viewedThreadRevision){await request('reset');selectedProject=item.path;if(revision===viewedThreadRevision)project=item.path;}return {...item,...await projectIdentityMetadata(item.path),git:await projects.git(item.path)};});
+  let viewedThreadRevision=0;
+  handle('thread',async id=>{const revision=++viewedThreadRevision;if(threadLocations.has(id))project=threadLocations.get(id);const thread=await request('thread',{id});threadLocations.set(id,thread.cwd);if(revision===viewedThreadRevision)project=thread.cwd;return thread;});
   handle('project',async()=>{
-    if(running)throw new Error('Stop the current task before changing projects');
     const result=await dialog.showOpenDialog(win,{properties:['openDirectory'],title:'Choose a project'});
     if(result.canceled)return null;
-    await request('reset');project=selectedProject=result.filePaths[0];return {...await projects.add(project),git:await projects.git(project)};
+    await request('reset');project=selectedProject=result.filePaths[0];return {...await projects.add(project),...await projectIdentityMetadata(project),git:await projects.git(project)};
   });
   async function runTask(payload,inBackground=false){
-    if(running&&!inBackground)throw new Error('A task is already running');
     if(!project)throw new Error('Choose a project above the composer first');
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
     const cwd=project;
-    if(!inBackground)running=true;
-    try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);const task={prompt:payload.prompt+attached.context,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,cwd};return await (inBackground?background.run(task):request('run',task));}finally{if(!inBackground)running=false;}
+    running++;
+    try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);const task={prompt:payload.prompt+attached.context,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,threadId:payload.threadId,cwd};return await request('run',task);}finally{running--;}
   }
   handle('run',payload=>runTask(payload));
   handle('run-background',payload=>runTask(payload,true));
-  handle('abort',()=>request('abort'));
-  handle('reset',async()=>{await request('reset');project=selectedProject;});
+  handle('abort',threadId=>request('abort',{threadId}));
+  handle('steer',async payload=>{if(!payload||typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('Invalid steering message');const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);return request('steer',{threadId:payload.threadId,prompt:payload.prompt+attached.context,images:attached.images});});
+  handle('reset',async()=>{const revision=++viewedThreadRevision;await request('reset');if(revision===viewedThreadRevision)project=selectedProject;});
   handle('window',action=>{
     if(action==='minimize')win.minimize();
     else if(action==='maximize'){win.isMaximized()?win.unmaximize():win.maximize();}
@@ -73,7 +76,7 @@ if(primary)app.whenReady().then(async()=>{
     if(closing)return;event.preventDefault();closing=true;
     const shutdown=(async()=>{
       background.stop();
-      await request('abort').catch(()=>{});
+      await request('shutdown').catch(()=>{});
       const until=Date.now()+3000;while(running&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,25));
       if(!running)await request('reset').catch(()=>{});
     })();
