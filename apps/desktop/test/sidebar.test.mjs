@@ -1,0 +1,57 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {resolve} from 'node:path';
+import {_electron} from 'playwright-core';
+import {projectMetadata} from '../electron/sidebar-metadata.mjs';
+import {projectIdentity} from '../src/thread-row.js';
+test('project icons use local assets, explicit overrides and stable monograms',async()=>{
+ const cwd=await mkdtemp(resolve(tmpdir(),'suffice-icons-'));await mkdir(resolve(cwd,'public'));await writeFile(resolve(cwd,'public/favicon.svg'),'<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>');
+ assert.match((await projectMetadata(cwd)).projectImage,/^data:image\/svg\+xml;base64,/);
+ const override=await mkdtemp(resolve(tmpdir(),'suffice-icon-override-'));await writeFile(resolve(override,'t3.json'),JSON.stringify({projectIcon:{kind:'emoji',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬'}}));assert.equal((await projectMetadata(override)).projectIcon.emoji,'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬');
+ assert.deepEqual(projectIdentity('Suffice'),projectIdentity('Suffice'));assert.equal(projectIdentity('Pixel Design System').text,'PS');assert.equal(projectIdentity('T3 Code').text,'T3');
+});
+test('informational sidebar rows, hover detail and themed states',{timeout:60000},async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-sidebar-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ try{const page=await app.firstWindow();await page.locator('.composer').waitFor();
+ await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[
+ {id:'approval',title:'Fix double charge on retried webhooks',project:'Halo Pay',projectDiff:{added:100,removed:40,scope:'branch'},cwd:'C:/Projects/halo',branch:'fix/webhook-idempotency-on-retries',provider:'openai',model:'gpt-6.1-sol',status:'approval',modified:Date.now()},
+ {id:'done',title:'Audit color tokens for contrast',project:'Pixel Design System',branch:'chore/token-audit',provider:'openai',status:'done',worktree:true,pr:{number:3,state:'OPEN',checks:'passed',url:'https://github.com/example/example/pull/3'},modified:Date.now()-3600000},
+ {id:'mobile',title:'Animate the onboarding carousel',project:'Orbit Mobile',branch:'feat/onboarding-motion',provider:'anthropic',status:'done',pr:{number:918,state:'MERGED',checks:'passed'},modified:Date.now()-7200000},
+ {id:'none',title:"What's a good name for a coding agent?",project:null,provider:'anthropic',status:'done',modified:Date.now()-80000},
+ {id:'working',title:'Rebuild pricing page with new tiers',project:'Northwind',branch:'feat/pricing-tiers',provider:'anthropic',status:'working',startedAt:Date.now()-720000,terminalCount:1,modified:Date.now()},
+ {id:'failed',title:'Rate limit the public API',project:'Forge API',branch:'main',provider:'openai',status:'failed',error:'Task stopped by provider',projectImage:'data:image/png;base64,broken',diff:{added:77,removed:12,scope:'chat'},modified:Date.now()-300000}
+ ]);});
+ await page.evaluate(()=>{localStorage.setItem('suffice-sidebar-width','300');localStorage.setItem('suffice-thread-view-v1:done',JSON.stringify({draft:'Review these changes'}));});await page.reload();
+ await page.locator('.thread-card').last().waitFor();assert.equal(await page.locator('.thread-card').count(),6);assert.equal(await page.locator('#sidebar-section-label').innerText(),'Threads');assert.equal(await page.locator('.done-button').count(),0);assert.equal(await page.locator('[data-thread="none"] .thread-no-branch').innerText(),'No Git');assert.equal((await page.locator('[data-thread="none"]').boundingBox()).height,(await page.locator('[data-thread="working"]').boundingBox()).height);
+ assert.equal(await page.locator('[data-thread="done"] .thread-draft').count(),1);
+ assert.equal(await page.locator('[data-thread="failed"] .thread-removed').textContent(),'\u221212');
+ assert.equal(await page.locator('[data-thread="done"] .thread-draft').evaluate(el=>getComputedStyle(el).color),await page.locator('[data-thread="done"] .thread-age').evaluate(el=>getComputedStyle(el).color));
+ await page.waitForFunction(()=>document.querySelector('[data-thread="failed"] .thread-project-icon').classList.contains('thread-monogram'));
+ await page.waitForTimeout(500);await page.mouse.move(700,700);await page.locator('[data-thread="working"]').hover();await page.waitForFunction(()=>!document.querySelector('.thread-hover-card').hidden&&document.querySelector('.thread-hover-card').textContent.includes('Northwind'));assert.match(await page.locator('.thread-hover-card').innerText(),/Northwind/);assert.equal(await page.locator('[data-thread="working"] .thread-card-heading .thread-age').count(),1);assert.equal(await page.locator('[data-thread="working"] .thread-project-line .thread-age').count(),0);await page.locator('.thread-hover-card').screenshot({path:resolve('apps/desktop/sidebar-hover-refined.png')});
+ await page.mouse.move(700,700);await page.screenshot({path:resolve('apps/desktop/sidebar-information-dark.png')});
+ await page.evaluate(()=>document.documentElement.dataset.theme='light');await page.screenshot({path:resolve('apps/desktop/sidebar-information-light.png')});
+ assert.match(await page.locator('[data-thread="working"] .thread-age').innerText(),/12m/);
+ const originalWidth=(await page.locator('.thread-card').first().boundingBox()).width;
+ await page.evaluate(()=>{document.documentElement.dataset.theme='dark';const list=document.querySelector('.sidebar-sessions'),row=list.firstElementChild;for(let i=0;i<18;i++){const copy=row.cloneNode(true);copy.dataset.thread='overflow-'+i;list.append(copy);}});
+ const scrolling=await page.evaluate(()=>{const list=document.querySelector('.sidebar-sessions'),section=document.querySelector('.session-section');return {overflows:list.scrollHeight>list.clientHeight,sectionOverflows:section.scrollHeight>section.clientHeight+1,gap:list.getBoundingClientRect().right-list.firstElementChild.getBoundingClientRect().right};});assert.equal(scrolling.overflows,true);assert.equal(scrolling.sectionOverflows,false);assert.ok(scrolling.gap<1);assert.equal((await page.locator('.thread-card').first().boundingBox()).width,originalWidth);await page.waitForFunction(()=>!document.querySelector('.sidebar-scroll-rail').hidden);const rail=await page.locator('.sidebar-scroll-rail').boundingBox(),sidebar=await page.locator('.sidebar').boundingBox();assert.ok(Math.abs(rail.x+rail.width-sidebar.x-sidebar.width)<=3);
+ assert.equal(await page.locator('.sidebar-sessions').getAttribute('data-fade-bottom'),'true');await page.locator('.sidebar-sessions').evaluate(el=>el.scrollTop=el.scrollHeight);await page.waitForFunction(()=>document.querySelector('.sidebar-sessions').dataset.fadeTop==='true'&&document.querySelector('.sidebar-sessions').dataset.fadeBottom==='false');await page.locator('.sidebar-sessions').evaluate(el=>el.scrollTop=0);await page.screenshot({path:resolve('apps/desktop/sidebar-scroll-spacing.png')});
+
+ const choose=async(value)=>{await page.locator('[data-action="sidebar-menu"]').click();const labels={'group=project':['Group by','Project'],'filter=working':['Filter','Running']};if(labels[value]){await page.getByRole('menuitem',{name:labels[value][0],exact:true}).click();await page.getByRole('menuitemradio',{name:labels[value][1],exact:true}).click();}else await page.locator('[data-menu-action=\"sidebar:'+value+'\"]').click();};
+ // Exercise the actual shared menu action, then the persisted layout choices.
+ await page.locator('[data-action="sidebar-menu"]').click();await page.locator('[data-menu-action="sidebar:compact=toggle"]').click();assert.equal(await page.locator('.sidebar-sessions').getAttribute('data-compact'),'true');assert.equal(await page.locator('.thread-project-line').count(),0);assert.equal((await page.locator('.thread-card').first().boundingBox()).height,(await page.locator('.new-session').boundingBox()).height);
+ assert.equal(await page.locator('[data-thread="done"] .thread-state').isVisible(),false);assert.equal(await page.locator('[data-thread="working"] .thread-state').isVisible(),true);await page.waitForTimeout(180);await page.screenshot({path:resolve('apps/desktop/sidebar-compact.png')});
+ await choose('compact=toggle');await choose('group=project');assert.equal(await page.locator('.thread-project-group').count(),6);
+ assert.equal(await page.locator('.thread-project-diff').textContent(),'+100\u221240');
+ const inset=await page.locator('.thread-group-rows .thread-card').first().evaluate(el=>parseFloat(getComputedStyle(el).paddingLeft));assert.equal(inset,28);const rowLeft=(await page.locator('.thread-group-rows .thread-card').first().boundingBox()).x,groupLeft=(await page.locator('.thread-group-toggle').first().boundingBox()).x;assert.equal(rowLeft-groupLeft,0);assert.equal(await page.locator('.thread-project-line').count(),0);assert.equal(await page.locator('.thread-card').first().locator('.thread-branch-line .thread-state').count(),1);assert.ok((await page.locator('.thread-card').first().boundingBox()).height<55);
+ await page.waitForTimeout(180);await page.screenshot({path:resolve('apps/desktop/sidebar-project-groups.png')});
+ const firstRow=page.locator('.thread-card').first();await page.mouse.move(700,700);const titleColor=await firstRow.locator('.row-title').evaluate(el=>getComputedStyle(el).color);assert.equal(titleColor,await page.locator('#sidebar-section-label').evaluate(el=>getComputedStyle(el).color));await firstRow.hover();assert.equal(await firstRow.locator('.row-title').evaluate(el=>getComputedStyle(el).color),titleColor);
+ await page.locator('.thread-group-toggle').first().click();await page.waitForFunction(()=>document.querySelector('.thread-group-rows').hidden);assert.equal(await page.locator('.thread-group-toggle').first().getAttribute('aria-expanded'),'false');await page.reload();await page.locator('.thread-project-group').last().waitFor();assert.equal(await page.locator('.thread-group-toggle').first().getAttribute('aria-expanded'),'false');
+ await page.locator('.thread-group-toggle').first().click();await page.waitForFunction(()=>!document.querySelector('.thread-group-rows').hidden&&document.querySelector('.thread-group-rows').getAnimations().length===0);assert.equal(await page.locator('.thread-group-toggle').first().getAttribute('aria-expanded'),'true');await page.locator('.thread-group-toggle').first().click();await page.locator('.thread-group-toggle').first().click();await page.waitForFunction(()=>!document.querySelector('.thread-group-rows').hidden&&document.querySelector('.thread-group-rows').getAnimations().length===0);
+ await choose('compact=toggle');assert.equal(await page.locator('.thread-card .thread-project-icon').count(),0);assert.equal(await page.locator('.thread-group-toggle .thread-project-icon').count(),6);await choose('compact=toggle');
+ await choose('filter=working');assert.equal(await page.locator('.thread-card').count(),1);assert.equal(await page.locator('.thread-card').getAttribute('data-thread'),'working');
+ await choose('reset');assert.equal(await page.locator('.thread-card').count(),6);assert.equal(await page.locator('.thread-project-line').count(),6);
+ }finally{await app.close();}
+});

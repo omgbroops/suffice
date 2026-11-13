@@ -1,3 +1,5 @@
+import {createSpotlight} from './spotlight.js';
+import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
 import {connectAttachments} from './attachments.js';
 import {connectSendControls} from './send-controls.js';
@@ -11,6 +13,7 @@ import './styles.css';
 import './tactile.css';
 import './right-panel.css';
 import './composer-files.css';
+import './thread-row.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 
@@ -82,9 +85,8 @@ document.querySelector('#app').innerHTML = `
 
     ${button('New session', { icon: 'plus', variant: 'subtle', className: 'new-session', action: 'new', content: 'New session' })}
 
-    <div class="session-section"><div class="section-label">${icon('clock')}<span id="sidebar-section-label">Recent</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
+    <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
 
-    ${button('Show completed sessions', { icon: 'check', className: 'done-button', action: 'done', content: 'Done', attrs: 'aria-pressed="false"' })}
 
 
   </aside>
@@ -169,7 +171,6 @@ const { open: menu, close: closeMenu } = createMenu(popover);
 
 const dialog = document.querySelector('dialog');
 
-let completed = false;
 
 let toastTimeout;
 
@@ -226,6 +227,8 @@ document.addEventListener('click', (e) => {
     const [type, value] = item.dataset.menuAction.split(':');
 
     if (type === 'background-send') { document.querySelector('.composer').backgroundSubmit=true;document.querySelector('.composer').requestSubmit(); }
+
+    if (type === 'sidebar') sidebarPreferences.choose(value);
 
     if (type === 'model') document.querySelector('#model-label').textContent = value;
 
@@ -307,9 +310,10 @@ document.addEventListener('click', (e) => {
 
     case 'send-menu': menu(control, [{ label: 'Start session in background', action: 'background-send:start' }]); break;
 
-    case 'workspace-menu': menu(control, [{ label: 'Background', children: backgroundOptions }, { label: 'Theme', children: themeOptions }, { label: 'Workspace settings', action: 'settings:open' }]); break;
+    case 'sidebar-menu': menu(control, sidebarPreferences.items(), 'Sidebar'); break;
 
-    case 'done': completed = !completed; control.setAttribute('aria-pressed', String(completed)); document.querySelector('#sidebar-section-label').textContent = completed ? 'Completed' : 'Recent'; document.querySelector('.sidebar-sessions').innerHTML = sessions.map((s, i) => sessionRow(s, i, true)).join(''); break;
+    case 'workspace-menu': menu(control, [{ label: 'Sidebar', children: () => sidebarPreferences.items() }, { label: 'Background', children: backgroundOptions }, { label: 'Theme', children: themeOptions }, { label: 'Workspace settings', action: 'settings:open' }]); break;
+
 
     case 'search-sessions': showSearch(); break;
 

@@ -1,3 +1,9 @@
+import {updateThreadDirectory} from './thread-directory.js';
+import {setProjectGroupExpanded} from './project-group-motion.js';
+import {sidebarPreferences} from './sidebar-preferences.js';
+import {connectOverlayScrollbar} from './overlay-scrollbar.js';
+import {icon} from './ui.js';
+import {populateThreadRow,tickThreadTimes,connectThreadHover,projectBadge} from './thread-row.js';
 import {threadViewState as viewState} from './thread-view-state.js';
 import {marked} from 'marked';
 import DOMPurify from 'dompurify';
@@ -6,27 +12,25 @@ import {groupActions,actionTitle} from './action-display.js';
 import {connectDisclosureMotion} from './disclosure-motion.js';
 import {createToolWidget,toolOutput} from './tool-widget.js';
 
-const relativeTime=new Intl.RelativeTimeFormat(undefined,{numeric:'auto'});
-function threadTime(timestamp){
- const seconds=Math.max(0,(Date.now()-timestamp)/1000);
- if(seconds<60)return 'just now';
- for(const [unit,size] of [['year',31536000],['month',2592000],['week',604800],['day',86400],['hour',3600],['minute',60]]){
-  if(seconds>=size)return relativeTime.format(-Math.floor(seconds/size),unit);
- }
-}
-
 export function connectThreads({api,prompt,send,toast}){
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
  const transition=createThreadTransition(workspace,form);
  const newSession=document.querySelector('.new-session');newSession.setAttribute('aria-current','page');
  const list=document.querySelector('.sidebar-sessions');list.replaceChildren();
- document.querySelector('#sidebar-section-label').textContent='Recent';
+ const sectionLabel=document.querySelector('#sidebar-section-label');sectionLabel.textContent='Threads';
+ const options=document.createElement('button');options.type='button';options.className='icon-button sidebar-options';options.dataset.action='sidebar-menu';options.setAttribute('aria-label','Sidebar options');options.innerHTML=icon('more');sectionLabel.parentElement.append(options);
+ connectOverlayScrollbar(list);
  const transcript=document.createElement('section');transcript.className='thread-transcript';transcript.setAttribute('aria-label','Thread transcript');
- const history=document.createElement('div');history.className='thread-messages';transcript.append(history);workspace.append(transcript);
- connectDisclosureMotion(history);
+ let history=document.createElement('div');history.className='thread-messages';transcript.append(history);workspace.append(transcript);
+ connectDisclosureMotion(transcript);
  const header=document.createElement('header');header.className='thread-header';header.hidden=true;workspace.append(header);
- let busy=false,opening=false,current=null,streamed='',activeId=null,refreshVersion=0,previousMotion;
- let statusLine=null,reasoning='',renderFrame=0;const liveTools=new Map();let liveGroup=null,liveLog=null;
+ let busy=false,opening=false,activeId=null,refreshVersion=0,openRevision=0,previousMotion;
+ const savedHistories=new Map();let selectionReady=Promise.resolve();
+ const jobs=new Map();
+ const visibleJob=()=>jobs.get(activeId);
+ function syncRunning(){busy=!!visibleJob()?.running;form.setRunning(busy);send.disabled=!busy&&!prompt.value.trim();}
+ const historyObserver=new ResizeObserver(()=>bottom());
+ function showHistory(node){historyObserver.disconnect();history=node;transcript.replaceChildren(history);historyObserver.observe(history);}
  let following=true,lastScrollTop=0,scrollFrame=0;
  const nearBottom=()=>transcript.scrollHeight-transcript.scrollTop-transcript.clientHeight<8;
  const bottom=(force=false)=>{if(force)following=true;if(!following)return;transcript.scrollTop=transcript.scrollHeight;if(!scrollFrame)scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;if(following){transcript.scrollTop=transcript.scrollHeight;lastScrollTop=transcript.scrollTop;}});};
@@ -34,20 +38,20 @@ export function connectThreads({api,prompt,send,toast}){
  transcript.addEventListener('scroll',()=>{if(nearBottom())following=true;else if(transcript.scrollTop<lastScrollTop-1)following=false;lastScrollTop=transcript.scrollTop;},{passive:true});
  transcript.addEventListener('keydown',event=>{if(['PageUp','Home','ArrowUp'].includes(event.key))following=false;});
  let draftTimer,viewScrollTimer;
- function saveView(){clearTimeout(draftTimer);clearTimeout(viewScrollTimer);viewState.update({draft:prompt.value,scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});}
+ function saveView(){clearTimeout(draftTimer);clearTimeout(viewScrollTimer);viewState.update({...(prompt.value!==viewState.state.draft?{draft:prompt.value}:{}),scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});}
  function restoreView(){const state=viewState.state;prompt.value=state.draft;send.disabled=!prompt.value.trim();following=state.following;requestAnimationFrame(()=>{if(following)bottom(true);else{transcript.scrollTop=state.scrollTop;lastScrollTop=transcript.scrollTop;}});}
  prompt.value=viewState.state.draft;send.disabled=!prompt.value.trim();
  prompt.addEventListener('input',()=>{clearTimeout(draftTimer);draftTimer=setTimeout(saveView,180);});
  transcript.addEventListener('scroll',()=>{clearTimeout(viewScrollTimer);const id=viewState.id;viewScrollTimer=setTimeout(()=>{if(id===viewState.id&&id)viewState.update({scrollTop:transcript.scrollTop,following});},150);},{passive:true});
  window.addEventListener('beforeunload',saveView);
- new ResizeObserver(()=>bottom()).observe(history);
+ historyObserver.observe(history);
  new ResizeObserver(()=>{transcript.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
  function threadView(title,animate=false){const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
  function clear(){
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
    if(workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
-   workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;history.replaceChildren();activeId=null;viewState.select(null);restoreView();
+   workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;showHistory(document.createElement('div'));history.className='thread-messages';activeId=null;viewState.select(null);restoreView();syncRunning();
    list.querySelectorAll('.thread-row').forEach(row=>row.setAttribute('aria-pressed','false'));
   };
   if(wasThread)transition.leave(change);else{transition.cancel();change();}
@@ -59,8 +63,6 @@ export function connectThreads({api,prompt,send,toast}){
   if(element.querySelector('pre code'))codeTimers.set(element,setTimeout(()=>{if(element.isConnected)void import('./code-highlight.js').then(({colorCode})=>Promise.all([...element.querySelectorAll('pre code')].map(code=>colorCode(code,'snippet.'+(code.className.match(/language-([\w+-]+)/)?.[1]||'text'))))).catch(()=>{});},120));
  }
  function plainReasoning(text){const node=document.createElement('div');markdown(node,text);return node.textContent.replace(/[*_`~]/g,'').replace(/^#{1,6}\s*/gm,'').split('\n').map(line=>line.trim()).filter(Boolean).at(-1)||'Working';}
- function status(text){if(statusLine){statusLine.textContent=text;statusLine.hidden=false;}}
- function flushMarkdown(){if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0;}if(current)markdown(current,streamed);}
  function message(role,text){const element=document.createElement('article');element.className=`thread-message thread-${role}`;if(role==='assistant')markdown(element,text);else element.textContent=text;history.append(element);bottom();return element;}
  function renderMessages(messages){
   history.replaceChildren();
@@ -101,6 +103,12 @@ export function connectThreads({api,prompt,send,toast}){
  }
  let savedThreads=[];
  const optimisticThreads=new Map();
+ const collapsedProjects=new Set();
+ try{for(const key of JSON.parse(localStorage.getItem('suffice-sidebar-collapsed-v1')||'[]'))collapsedProjects.add(key);}catch{}
+ sidebarPreferences.subscribe(drawThreads);
+ connectThreadHover(list);
+ setInterval(()=>tickThreadTimes(list),1000);
+ viewState.subscribe(event=>{if(event.type==='update'&&event.changed?.includes('draft'))drawThreads();});
  function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project'){
   optimisticThreads.set(id,{id,title:title.slice(0,90),project,modified:Date.now()});drawThreads();
  }
@@ -109,37 +117,92 @@ export function connectThreads({api,prompt,send,toast}){
   const version=++refreshVersion,threads=await api.threads();if(version!==refreshVersion)return;
   savedThreads=threads;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
- function drawThreads(){
-  const threads=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))].sort((a,b)=>b.modified-a.modified);
-  list.replaceChildren();
-  for(const thread of threads){
-   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
-   const dot=document.createElement('span');dot.className='list-dot';dot.textContent='·';dot.setAttribute('aria-hidden','true');
-   const content=document.createElement('span');content.className='row-content';
-   const name=document.createElement('span');name.className='row-title';name.textContent=thread.title;
-   const time=document.createElement('time');time.className='row-meta';time.dateTime=new Date(thread.modified).toISOString();time.textContent=threadTime(thread.modified);time.title=new Date(thread.modified).toLocaleString();content.append(name,time);row.append(dot,content);
-   row.addEventListener('click',async()=>{
-    if(busy){toast('Stop the current task before switching threads.');return;}
-    if(opening)return;opening=true;saveView();
-    try{
-     const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));activeId=thread.id;viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
-     restoreView();list.querySelectorAll('.thread-row').forEach(el=>el.setAttribute('aria-pressed',String(el===row)));
-    }catch(error){toast(error.message);}finally{opening=false;}
-   });list.append(row);
-  }
+ async function openSavedThread(thread){
+  if(!thread)return;const version=++openRevision;saveView();
+  const entering=!workspace.classList.contains('thread-view');
+  const selection=api.openThread(thread.id);selectionReady=selection;selection.catch(()=>{});
+  transition.cancel();
+  activeId=thread.id;viewState.select(thread.id);following=false;
+  const job=jobs.get(thread.id),cached=savedHistories.get(thread.id);
+  const reusable=job?.history||(cached?.modified===thread.modified?cached.node:null);
+  showHistory(reusable||document.createElement('div'));history.className='thread-messages';
+  transcript.setAttribute('aria-busy',String(!reusable));
+  threadView(thread.title,entering);restoreView();syncRunning();
+  localStorage.setItem('suffice-thread-seen:'+thread.id,String(Date.now()));
+  for(const row of list.querySelectorAll('.thread-row')){row.setAttribute('aria-pressed',String(row.dataset.thread===activeId));if(row.dataset.thread===activeId)row.dataset.unread='false';}
+  try{
+   const selected=await selection;if(version!==openRevision||activeId!==thread.id)return;
+   document.dispatchEvent(new Event('suffice:usage-change'));
+   if(!reusable){saveView();renderMessages(selected.messages);savedHistories.delete(thread.id);if(JSON.stringify(selected.messages).length<4*1024*1024)savedHistories.set(thread.id,{modified:thread.modified,node:history});while(savedHistories.size>10)savedHistories.delete(savedHistories.keys().next().value);restoreView();}
+  }catch(error){if(version===openRevision){toast(error.message);if(!reusable){const message=document.createElement('p');message.className='thread-status';message.textContent='Could not load transcript';history.append(message);}}}
+  finally{if(version===openRevision)transcript.setAttribute('aria-busy','false');}
  }
+ function drawThreads(){
+  const scroll=list.scrollTop;
+  const prefs=sidebarPreferences.get();
+  const all=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))];
+  updateThreadDirectory(all,openSavedThread);
+  const unread=thread=>thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0);
+  const status=thread=>jobs.get(thread.id)?.running?'working':jobs.has(thread.id)?(jobs.get(thread.id).failed?'failed':'done'):thread.status;
+  const threads=all.filter(thread=>prefs.filter==='all'||prefs.filter==='working'&&status(thread)==='working'||prefs.filter==='attention'&&['approval','input','failed'].includes(status(thread))||prefs.filter==='unread'&&unread(thread)||prefs.filter==='draft'&&!!viewState.read(thread.id).draft).sort((a,b)=>prefs.sort==='name'?a.title.localeCompare(b.title):b.modified-a.modified);
+  sectionLabel.textContent=prefs.group==='project'?'Threads':prefs.filter==='all'?'Threads':({working:'Running',attention:'Needs attention',unread:'Unread',draft:'Drafts'})[prefs.filter];
+  list.dataset.compact=String(prefs.compact);list.dataset.group=prefs.group;
+  for(const field of ['branch','provider','diff'])list.dataset[field]=String(prefs[field]);
+  list.replaceChildren();
+  const groups=new Map();
+  for(const thread of threads){
+   let target=list;
+   if(prefs.group==='project'){
+    const key=thread.cwd||thread.project||'__none';
+    if(!groups.has(key)){
+     const group=document.createElement('section');group.className='thread-project-group';
+     const label=document.createElement('button');label.type='button';label.className='thread-group-toggle';label.setAttribute('aria-expanded',String(!collapsedProjects.has(key)));label.innerHTML=icon('chevron');
+     const name=document.createElement('span');name.className='thread-group-name';name.textContent=thread.project||'No project';const count=document.createElement('span');count.className='thread-group-count';count.textContent=String(threads.filter(t=>(t.cwd||t.project||'__none')===key).length);label.append(projectBadge(thread),name);
+     if(thread.projectDiff&&(thread.projectDiff.added||thread.projectDiff.removed)){const diff=document.createElement('span');diff.className='thread-project-diff';diff.setAttribute('aria-label',thread.projectDiff.scope==='branch'?'Project branch changes, including uncommitted edits':'Project uncommitted changes');const added=document.createElement('span'),removed=document.createElement('span');added.className='thread-added';removed.className='thread-removed';added.textContent='+'+thread.projectDiff.added;removed.textContent='\u2212'+thread.projectDiff.removed;diff.append(added,removed);label.append(diff);}label.append(count);
+     const body=document.createElement('div');body.className='thread-group-rows';body.hidden=collapsedProjects.has(key);body.inert=body.hidden;label.addEventListener('click',()=>{if(collapsedProjects.has(key))collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-sidebar-collapsed-v1',JSON.stringify([...collapsedProjects]));}catch{}const expanded=!collapsedProjects.has(key);label.setAttribute('aria-expanded',String(expanded));setProjectGroupExpanded(body,expanded);});group.append(label,body);list.append(group);groups.set(key,body);
+    }target=groups.get(key);
+   }
+   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
+   const job=jobs.get(thread.id);const details={...thread,...(job?{status:job.running?'working':job.failed?'failed':'done',startedAt:job.startedAt,provider:job.provider||thread.provider,model:job.model||thread.model,terminalCount:job.terminalCount,...(job.diff?{diff:job.diff}:{})}: {})};populateThreadRow(row,details,{draft:!!viewState.read(thread.id).draft,unread:thread.id!==activeId&&thread.modified>Number(localStorage.getItem('suffice-thread-seen:'+thread.id)||0)});
+   row.addEventListener('click',()=>void openSavedThread(thread));target.append(row);
+  }
+  if(!threads.length){const empty=document.createElement('div');empty.className='sidebar-empty';empty.textContent=all.length?'No matching threads':'No threads yet';list.append(empty);}
+  tickThreadTimes(list);list.scrollTop=scroll;
+ }
+ function createJob(id,title,node){
+  const job={id,title,history:node,running:true,startedAt:Date.now(),provider:form.modelSelection?.provider,model:form.modelSelection?.model,terminalCount:0};jobs.set(id,job);
+  let current=null,streamed='',reasoning='',group=null,log=null;const tools=new Map();
+  const statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';node.append(statusLine);
+  const status=text=>{statusLine.textContent=text;statusLine.hidden=false;};
+  const response=()=>{if(!current){current=document.createElement('article');current.className='thread-message thread-assistant';node.insertBefore(current,statusLine);}return current;};
+  // The status is the live insertion point, not a footer below queued messages.
+  job.addSteering=text=>{const bubble=document.createElement('article');bubble.className='thread-message thread-user';bubble.textContent=text;node.insertBefore(bubble,statusLine);group=log=null;return bubble;};
+  job.event=event=>{
+   if(event.event==='changes'){job.diff=event.diff;drawThreads();}
+   if(event.event==='assistant_start'){reasoning='';if(streamed){current=null;streamed='';}status('Working');}
+   if(event.event==='text'){streamed+=event.text;markdown(response(),streamed);statusLine.hidden=true;}
+   if(event.event==='reasoning'){reasoning+=event.text||'';status(plainReasoning(reasoning));}
+   if(event.event==='tool')status(`Running ${event.name}`);
+   if(event.event==='tool_start'){
+    if(/bash|shell|terminal/.test(event.name)){job.terminalCount++;drawThreads();}
+    current=null;streamed='';if(!group){group=document.createElement('details');group.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';log=document.createElement('div');log.className='thread-activity-log';group.append(summary,log);node.insertBefore(group,statusLine);}
+    const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});tools.set(event.id,widget);log.append(widget.element);status(`Running ${event.name}`);reasoning='';
+   }
+   if(event.event==='tool_output'||event.event==='tool_end'){tools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(event.event==='tool_end'){status('Working');if(job.terminalCount){job.terminalCount--;drawThreads();}}}
+   if(event.event==='text')group=log=null;
+   if(node===history)bottom();
+  };
+  job.finish=(result,error)=>{if(error)response().textContent=error.message;else if(result?.text)markdown(response(),result.text);statusLine.remove();job.running=false;job.failed=!!error;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  return job;
+ }
+ function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);}drawThreads();}
  api.onEvent(event=>{
-  if(event.event==='background_started'){adoptOptimistic(event.clientId,event.threadId);if(!optimisticThreads.has(event.threadId))addOptimistic(event.threadId,event.title||'New session',event.project);drawThreads();void refresh().catch(()=>{});return;}
+  const job=jobs.get(event.threadId)||jobs.get(event.clientId)||(!event.threadId&&!event.clientId?visibleJob():null);
+  if(event.event==='background_started'){adoptOptimistic(event.clientId,event.threadId);void refresh().catch(()=>{});return;}
   if(event.event==='background_completed'){void refresh().catch(()=>{});return;}
-  if(!busy)return;
-  if(event.event==='thread_started'){adoptOptimistic(activeId,event.id);activeId=event.id;viewState.adopt(event.id);drawThreads();void refresh().catch(()=>{});}
-  const pinned=transcript.scrollHeight-transcript.scrollTop-transcript.clientHeight<100;
-  if(event.event==='assistant_start'){reasoning='';if(streamed){flushMarkdown();current=null;streamed='';}status('Working');}
-  if(event.event==='text'){if(!current){current=message('assistant','');history.insertBefore(current,statusLine);liveGroup=null;liveLog=null;}streamed+=event.text;statusLine.hidden=true;if(!renderFrame)renderFrame=requestAnimationFrame(()=>{renderFrame=0;if(current)markdown(current,streamed);if(pinned)bottom();});}
-  if(event.event==='reasoning'){reasoning+=event.text||'';status(plainReasoning(reasoning));}
-  if(event.event==='tool')status(`Running ${event.name}`);
-  if(event.event==='tool_start'){flushMarkdown();if(current&&!streamed)current.remove();current=null;streamed='';if(!liveGroup){liveGroup=document.createElement('details');liveGroup.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';liveLog=document.createElement('div');liveLog.className='thread-activity-log';liveGroup.append(summary,liveLog);history.insertBefore(liveGroup,statusLine);}const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});liveTools.set(event.id,widget);liveLog.append(widget.element);status(`Running ${event.name}`);reasoning='';if(pinned)bottom();}
-  if(event.event==='tool_output'||event.event==='tool_end'){liveTools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(pinned)bottom();if(event.event==='tool_end')status('Working');}
+  if(!job?.running)return;
+  if(event.event==='thread_started'){adoptJob(job,event.id);void refresh().catch(()=>{});return;}
+  job.event(event);
  });
  api.status().then(async status=>{await refresh();if(!status.authenticated)toast('Sign in through the Suffice CLI to connect your account.');}).catch(error=>toast(error.message));
  document.addEventListener('click',async event=>{
@@ -150,34 +213,36 @@ export function connectThreads({api,prompt,send,toast}){
   }
   if(control.dataset.action==='new'){
    event.preventDefault();event.stopImmediatePropagation();
-   try{if(busy){await api.abort();return;}saveView();await api.reset();document.dispatchEvent(new Event('suffice:usage-change'));clear();await refresh();}catch(error){toast(error.message);}return;
+   try{openRevision++;selectionReady=Promise.resolve();saveView();void api.reset().catch(error=>toast(error.message));document.dispatchEvent(new Event('suffice:usage-change'));clear();void refresh().catch(()=>{});}catch(error){toast(error.message);}return;
   }
-  if(control.dataset.action==='done'){event.preventDefault();event.stopImmediatePropagation();toast('Thread archive is not connected yet.');}
  },true);
  form.addEventListener('submit',async event=>{
   event.preventDefault();event.stopImmediatePropagation();
-  if(busy){await api.abort().catch(error=>toast(error.message));return;}
+  if(busy&&!prompt.value.trim()&&!form.attachments?.count){await api.abort(activeId).catch(error=>toast(error.message));return;}
   if(opening)return;
   const text=prompt.value.trim()||(form.attachments?.count?'Please review the attached files.':'');if(!text)return;
   const inBackground=form.backgroundSubmit||form.backgroundIntent;form.backgroundSubmit=false;
   let attachments;opening=true;try{attachments=await form.attachments?.payload();}catch(error){toast(error.message);return;}finally{opening=false;}
-  if(inBackground){
-   const selection=form.modelSelection||{effort:'low'},origin=viewState.id;
-   const clientId='pending:'+crypto.randomUUID();addOptimistic(clientId,text);
-   prompt.value='';form.attachments?.clear();saveView();send.disabled=true;
-   void api.runBackground({prompt:text,...selection,attachments,clientId}).then(result=>{if(result.threadId)adoptOptimistic(clientId,result.threadId);return refresh().catch(()=>{});}).catch(error=>{optimisticThreads.delete(clientId);drawThreads();toast(error.message);if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}});
-   return;
+  if(busy){
+   const textToSteer=prompt.value.trim();if(!textToSteer)return;
+   const target=visibleJob(),origin=activeId;
+   prompt.value='';form.attachments?.clear();saveView();form.resizePrompt?.();syncRunning();
+   try{await api.steer({threadId:origin,prompt:textToSteer,attachments});const bubble=target.addSteering(textToSteer);if(activeId===origin){transition.reveal(bubble,'user',0);bottom(true);}}catch(error){toast(error.message);if(activeId===origin&&!prompt.value){prompt.value=textToSteer;prompt.dispatchEvent(new Event('input'));}}return;
   }
-  busy=true;form.setRunning(true);form.attachments?.clear();
-  const entering=!workspace.classList.contains('thread-view');saveView();viewState.update({draft:''});if(entering){const model=form.modelSelection;viewState.select('pending:'+crypto.randomUUID());if(model)viewState.update({model});activeId=viewState.id;addOptimistic(activeId,text);}busy=true;threadView(header.hidden?text.slice(0,90):header.textContent,entering);const userMessage=message('user',text);current=message('assistant','');statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';history.append(statusLine);liveTools.clear();liveGroup=null;liveLog=null;reasoning='';transition.reveal(userMessage,'user',entering?undefined:0);if(entering)transition.reveal(statusLine,'assistant');bottom(true);streamed='';prompt.value='';form.resizePrompt?.();
-  send.disabled=false;
-  const selection=form.modelSelection||{effort:'low'};
-  try{const result=await api.run({prompt:text,...selection,attachments});if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}flushMarkdown();markdown(current,result.text);if(result.threadId){adoptOptimistic(activeId,result.threadId);activeId=result.threadId;viewState.adopt(result.threadId);}}
-  catch(error){if(activeId?.startsWith('pending:')){optimisticThreads.delete(activeId);drawThreads();}if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0;}if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}current.textContent=error.message;}
-  finally{
-   statusLine?.remove();statusLine=null;busy=false;current=null;form.setRunning(false);send.disabled=!prompt.value.trim();
-   saveView();document.dispatchEvent(new Event('suffice:usage-change'));document.dispatchEvent(new Event('suffice:thread-updated'));await refresh().catch(error=>toast(error.message));bottom();
-  }
+  const entering=!workspace.classList.contains('thread-view'),origin=viewState.id;
+  const id=inBackground||entering?'pending:'+crypto.randomUUID():activeId;
+  const selection=form.modelSelection||{effort:'low'};saveView();
+  const node=inBackground?document.createElement('div'):history;node.className='thread-messages';
+  const user=document.createElement('article');user.className='thread-message thread-user';user.textContent=text;node.append(user);
+  const job=createJob(id,header.hidden?text.slice(0,90):header.textContent,node);
+  if(entering||inBackground)addOptimistic(id,text);
+  if(!inBackground){if(entering){transition.cancel();viewState.select(id);viewState.update({model:selection});activeId=id;}threadView(job.title,entering);transition.reveal(user,'user',entering?undefined:0);}
+  prompt.value='';form.attachments?.clear();viewState.update({draft:''});form.resizePrompt?.();syncRunning();bottom(true);
+  const payload={prompt:text,...selection,attachments,clientId:id,...(!id.startsWith('pending:')?{threadId:id}:{})};
+  void selectionReady.catch(()=>{}).then(()=>(inBackground?api.runBackground(payload):api.run(payload))).then(result=>{adoptJob(job,result.threadId);job.finish(result);}).catch(error=>{
+   if(job.id.startsWith('pending:')){optimisticThreads.delete(job.id);drawThreads();}job.finish(null,error);
+   if(inBackground){toast(error.message);if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}}
+  });
  },true);
  prompt.addEventListener('input',()=>{if(busy)send.disabled=false;});
 }
