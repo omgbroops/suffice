@@ -159,3 +159,23 @@ fn gemini_command_points_at_gate_settings_and_task_env_cannot_override() {
     let v = suffice::json::parse(&fs::read_to_string(p).unwrap()).unwrap();
     assert!(v.get("hooks").unwrap().get("BeforeTool").is_some());
 }
+
+#[test]
+fn settings_force_hooks_on_and_name_the_gate_unguessably() {
+    let d = settings_dir("cfg");
+    let base = d.join("base.json");
+    fs::write(&base, r#"{"hooksConfig":{"enabled":false,"disabled":["suffice-gate"]}}"#).unwrap();
+    let name_of = |p: &std::path::Path| {
+        let v = suffice::json::parse(&fs::read_to_string(p).unwrap()).unwrap();
+        let cfg = v.get("hooksConfig").unwrap().clone();
+        assert_eq!(cfg.get("enabled"), Some(&suffice::json::Value::Bool(true)));
+        assert!(cfg.get("disabled").is_none());
+        v.get("hooks").unwrap().get("BeforeTool").unwrap().as_arr().unwrap()[0].get("hooks").unwrap().as_arr().unwrap()[0]
+            .get("name").unwrap().as_str().unwrap().to_string()
+    };
+    let a = name_of(&suffice::adapter::install_gemini_gate(&d.join("s.json"), "GATE", &base).unwrap());
+    let b = name_of(&suffice::adapter::install_gemini_gate(&d.join("s.json"), "GATE", &base).unwrap());
+    assert!(a.starts_with("suffice-gate-") && a.len() > 30, "{a}");
+    assert_ne!(a, b, "hook name must change per install");
+    let _ = fs::remove_dir_all(&d);
+}

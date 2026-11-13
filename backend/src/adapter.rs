@@ -389,7 +389,8 @@ pub fn install_gemini_gate(path: &Path, gate_cmd: &str, base: &Path) -> std::io:
     let ours = Value::Obj(vec![
         ("matcher".into(), Value::str(".*")),
         ("hooks".into(), Value::Arr(vec![Value::Obj(vec![
-            ("name".into(), Value::str("suffice-gate")),
+            // random per run: hooksConfig.disabled is a union over layers, so a known name could be disabled from user settings
+            ("name".into(), Value::str(&format!("suffice-gate-{}", random_hex()?))),
             ("type".into(), Value::str("command")),
             ("command".into(), Value::str(gate_cmd)),
             ("timeout".into(), Value::num(600_000.0)),
@@ -406,6 +407,9 @@ pub fn install_gemini_gate(path: &Path, gate_cmd: &str, base: &Path) -> std::io:
     before.insert(0, ours);
     hooks.push(("BeforeTool".into(), Value::Arr(before)));
     top.push(("hooks".into(), Value::Obj(hooks)));
+    // system settings merge last, so this beats a user/workspace hooksConfig.enabled=false; base disabled lists are dropped
+    top.retain(|(k, _)| k != "hooksConfig");
+    top.push(("hooksConfig".into(), Value::Obj(vec![("enabled".into(), Value::Bool(true))])));
     let text = Value::Obj(top).to_string();
     let dir = path.parent().ok_or_else(|| std::io::Error::other("gemini settings path has no parent"))?;
     std::fs::create_dir_all(dir)?;
@@ -416,6 +420,13 @@ pub fn install_gemini_gate(path: &Path, gate_cmd: &str, base: &Path) -> std::io:
         let _ = std::fs::remove_file(&tmp);
     })?;
     Ok(path.to_path_buf())
+}
+
+fn random_hex() -> std::io::Result<String> {
+    use std::io::Read;
+    let mut b = [0u8; 12];
+    std::fs::File::open("/dev/urandom")?.read_exact(&mut b)?;
+    Ok(b.iter().map(|x| format!("{x:02x}")).collect())
 }
 
 fn hook_json(command: &str) -> String {
