@@ -1,6 +1,4 @@
-// Full-page panes for the neon sidebar nav (Threads, Issues, Pull requests, Automations, Explore).
-// A pane covers the main column; "New thread" or Escape returns to the composer.
-// Each pane module calls registerPane(key, { title, mount(el, ctx) }) and mount may return a cleanup function.
+// mount may return a cleanup; it runs on every close, including switching panes.
 const panes = new Map();
 export const registerPane = (key, def) => panes.set(key, def);
 export const hasPane = key => panes.has(key);

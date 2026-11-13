@@ -98,7 +98,7 @@ registerPane('auto', {
     (async () => {
       [projects, models] = await Promise.all([api.projects().catch(() => []), api.models().catch(() => [])]);
       await refresh();
-      timer = setInterval(refresh, 3000);
+      if (alive) timer = setInterval(refresh, 3000); // pane may have closed during the awaits
     })();
     return () => { alive = false; clearInterval(timer); document.removeEventListener('click', onClick, true); };
   },

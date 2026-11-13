@@ -1,6 +1,7 @@
 // Full-page Issues and Pull requests panes for the neon layout: tabs, filters, rows, and a detail panel.
 import './neon-github-panes.css';
 import { registerPane } from './neon-panes.js';
+import { stateOf, matchesQuery } from './neon-util.js';
 
 const TABS = { prs: [['open', 'Open'], ['merged', 'Merged'], ['closed', 'Closed']], issues: [['open', 'Open'], ['closed', 'Closed']] };
 
@@ -22,7 +23,7 @@ function mountGithub(kind, el, ctx) {
   const rowHtml = (x, i) => {
     const checks = x.checks && (x.checks.fail ? 'fail' : x.checks.pending ? 'pending' : x.checks.pass ? 'pass' : '');
     const review = { APPROVED: 'Approved', CHANGES_REQUESTED: 'Changes requested', REVIEW_REQUIRED: 'Review needed' }[x.review] || '';
-    const state = x.state.toLowerCase();
+    const state = stateOf(x);
     return `<button type="button" class="nx-gh-row${st.sel === x.number ? ' is-sel' : ''}" role="listitem" data-i="${i}">
       <span class="nx-gh-state" data-state="${state}">${isPr ? icons.pr : icons.issue}</span>
       <span class="nx-gh-num">#${x.number}</span><span class="nx-gh-title">${esc(x.title)}</span>
@@ -34,7 +35,7 @@ function mountGithub(kind, el, ctx) {
       ${isPr ? `<span class="nx-gh-diff"><b>+${x.additions}</b> <i>-${x.deletions}</i></span>` : ''}
       ${av(x.author).replace('alt=""', `alt="${esc(x.author)}"`)}<span class="nx-gh-age">${ago(x.updated)}</span></button>`;
   };
-  const visible = () => (st.res?.items || []).filter(x => (!st.mine || x.author === st.login) && (!st.label || x.labels?.some(l => l.name === st.label)) && (!st.q || x.title.toLowerCase().includes(st.q)));
+  const visible = () => (st.res?.items || []).filter(x => (!st.mine || x.author === st.login) && (!st.label || x.labels?.some(l => l.name === st.label)) && matchesQuery(x, st.q));
   function renderList() {
     el.querySelectorAll('[data-tab]').forEach(b => { const on = b.dataset.tab === st.tab; b.setAttribute('aria-selected', String(on)); b.classList.toggle('is-on', on); });
     const mine = $('[data-mine]'); mine.classList.toggle('is-on', st.mine); mine.setAttribute('aria-pressed', String(st.mine));
@@ -56,8 +57,8 @@ function mountGithub(kind, el, ctx) {
   async function openDetail(x) {
     st.sel = x.number; st.detail = null; listEl.querySelectorAll('.nx-gh-row').forEach(r => r.classList.toggle('is-sel', +r.dataset.i === st.res.items.indexOf(x)));
     const prompt = isPr ? `Review pull request #${x.number} "${x.title}" (branch ${x.branch}): ${x.url}` : `Fix issue #${x.number} "${x.title}": ${x.url}`;
-    const draw = d => { detEl.hidden = false; detEl.innerHTML = `<div class="nx-gh-dh"><span class="nx-gh-state" data-state="${x.state.toLowerCase()}">${isPr ? icons.pr : icons.issue}</span><h3>${esc(x.title)}</h3><button type="button" class="nx-gh-x" data-close aria-label="Close details">${icons.plus}</button></div>
-      <div class="nx-gh-sub">#${x.number} by ${esc(x.author)} &middot; ${esc(x.state.toLowerCase())}${isPr ? ` &middot; ${esc(x.branch)} &rarr; ${esc(x.base)}` : ''}${d ? ` &middot; ${d.comments} comment${d.comments === 1 ? '' : 's'}` : ''}</div>
+    const draw = d => { detEl.hidden = false; detEl.innerHTML = `<div class="nx-gh-dh"><span class="nx-gh-state" data-state="${stateOf(x)}">${isPr ? icons.pr : icons.issue}</span><h3>${esc(x.title)}</h3><button type="button" class="nx-gh-x" data-close aria-label="Close details">${icons.plus}</button></div>
+      <div class="nx-gh-sub">#${x.number} by ${esc(x.author)} &middot; ${esc(stateOf(x))}${isPr ? ` &middot; ${esc(x.branch)} &rarr; ${esc(x.base)}` : ''}${d ? ` &middot; ${d.comments} comment${d.comments === 1 ? '' : 's'}` : ''}</div>
       <div class="nx-gh-btns"><button type="button" class="nx-gh-btn is-primary" data-fill>${isPr ? 'Review this PR' : 'Fix this issue'}</button><button type="button" class="nx-gh-btn" data-gh>Open on GitHub</button></div>
       <div class="nx-gh-scroll">${d ? `<pre class="nx-gh-body-text">${esc(d.body.trim() || 'No description provided.')}</pre>${isPr ? `<h4>Changed files (${d.files.length})</h4><ul class="nx-gh-files">${d.files.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}` : '<div class="nx-gh-empty">Loading…</div>'}</div>`;
       detEl.querySelector('[data-fill]').onclick = () => fillComposer(prompt);

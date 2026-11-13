@@ -1,12 +1,9 @@
-// Neon composer menus: "+" add menu, run options, run-location chip, dictation.
-// Mounted from mountNeonChrome; returns a cleanup. Menus are .nx.nx-pop.nx-menu popovers.
+import { matchesQuery } from './neon-util.js';
 export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, form }) {
   const undo = [];
   let menu = null, anchorEl = null;
   const q = (s, r = document) => r.querySelector(s);
-  const fire = s => q(s)?.click();
 
-  // ---- popover helper ----
   function closeMenu(focus = true) { const a = anchorEl; menu?.remove(); menu = null; anchorEl = null; a?.setAttribute('aria-expanded', 'false'); if (focus && a?.isConnected) a.focus?.(); }
   function place() {
     if (!menu || !anchorEl) return;
@@ -48,7 +45,6 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
   window.addEventListener('resize', place);
   undo.push(() => { document.removeEventListener('keydown', onKey, true); document.removeEventListener('pointerdown', onDown, true); window.removeEventListener('resize', place); closeMenu(false); });
 
-  // ---- prompt insert ----
   function insert(text) {
     if (!prompt) return;
     const s = prompt.selectionStart ?? prompt.value.length, e = prompt.selectionEnd ?? s, v = prompt.value;
@@ -58,7 +54,6 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     prompt.dispatchEvent(new Event('input', { bubbles: true })); prompt.focus();
   }
 
-  // ---- "+" add menu ----
   async function pasteFiles() {
     try {
       const files = await api.clipboardFiles();
@@ -75,7 +70,7 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     m.innerHTML = `<div class="nx-pop-head">Issue or pull request</div><input class="nx-search" type="search" placeholder="Search" aria-label="Search issues and pull requests" autocomplete="off"><div class="nx-list" role="menu"></div>`;
     const box = q('.nx-list', m), input = q('.nx-search', m); let all = [], reason = 'Loading…';
     const draw = () => {
-      const t = input.value.trim().toLowerCase(), hit = all.filter(x => !t || `${x.number} ${x.title}`.toLowerCase().includes(t));
+      const hit = all.filter(x => matchesQuery(x, input.value.trim()));
       box.replaceChildren();
       if (!hit.length) { box.append(Object.assign(document.createElement('div'), { className: 'nx-pop-empty', textContent: all.length ? 'No matches.' : reason })); place(); return; }
       for (const x of hit) box.append(row({ label: x.title, hint: `#${x.number}`, icon: x.kind === 'pr' ? I.pr : I.issue, run: () => insert(`#${x.number} ${x.title} ${x.url}`) }));
@@ -99,7 +94,6 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     { label: 'Mention a file', icon: I.at, run: () => insert('@') },
   ], { label: 'Add to prompt' });
 
-  // ---- run options ----
   let background = false;
   const onSubmit = () => { if (background) form.backgroundSubmit = true; };
   form?.addEventListener('submit', onSubmit, true); undo.push(() => form?.removeEventListener('submit', onSubmit, true));
@@ -125,7 +119,6 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     draw();
   }
 
-  // ---- run location chip ----
   const envChip = () => q('[data-nx="env"]');
   async function newWorktree() {
     try {
@@ -153,7 +146,6 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     menu?.querySelector('.nx-mi[disabled]:first-of-type')?.remove();
   };
 
-  // ---- delegated clicks (capture: replace the chrome's own handlers for these controls) ----
   const onClick = e => {
     const t = e.target.closest?.('[data-nx="tools"], [data-nx="env"], [data-action="attach"]');
     if (!t || (t.matches('[data-action="attach"]') && !t.closest('.composer'))) return;
@@ -167,7 +159,6 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
   q('.composer [data-action="attach"]', form)?.setAttribute('aria-haspopup', 'menu');
   envChip()?.setAttribute('aria-haspopup', 'menu');
 
-  // ---- mic: dictation through local whisper.cpp ----
   const send = q('.send-button', form), group = q('.send-group', form);
   let mic = null, stt = false, rec = null;
   async function toPcm(blob) {
