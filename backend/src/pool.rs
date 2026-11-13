@@ -7,9 +7,9 @@ use std::io::{BufRead, BufReader, Read, Write};
 use std::os::unix::process::CommandExt;
 use std::process::{Command, Stdio};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::mpsc::Sender;
+use std::sync::mpsc::{channel, Sender};
 use std::sync::{Arc, Mutex};
-use std::thread::{self, JoinHandle};
+use std::thread;
 use std::time::{Duration, Instant};
 
 extern "C" {
@@ -50,11 +50,45 @@ fn terminate(pgid: i32) {
     });
 }
 
-fn read_lines<R: Read + Send + 'static>(r: R, out: Sender<PoolMsg>, run: String, stderr: bool) -> JoinHandle<()> {
+const MAX_LINE: usize = 1 << 20;
+
+/// Next line without its '\n', keeping at most MAX_LINE bytes; the flag says the rest was dropped.
+/// None at EOF.
+fn next_line<R: BufRead>(r: &mut R) -> std::io::Result<Option<(Vec<u8>, bool)>> {
+    let (mut line, mut cut, mut any) = (Vec::new(), false, false);
+    loop {
+        let avail = r.fill_buf()?;
+        if avail.is_empty() {
+            return Ok(if any { Some((line, cut)) } else { None });
+        }
+        any = true;
+        let (done, used) = match avail.iter().position(|&b| b == b'\n') {
+            Some(i) => (true, i),
+            None => (false, avail.len()),
+        };
+        let room = MAX_LINE - line.len();
+        if used > room {
+            line.extend_from_slice(&avail[..room]);
+            cut = true;
+        } else {
+            line.extend_from_slice(&avail[..used]);
+        }
+        r.consume(if done { used + 1 } else { used });
+        if done {
+            return Ok(Some((line, cut)));
+        }
+    }
+}
+
+/// Signals `done` when the stream ends, so the watcher can wait for it with a timeout.
+fn read_lines<R: Read + Send + 'static>(r: R, out: Sender<PoolMsg>, run: String, stderr: bool, done: Sender<()>) {
     thread::spawn(move || {
-        for line in BufReader::new(r).split(b'\n') {
-            let Ok(bytes) = line else { break };
-            let text = String::from_utf8_lossy(&bytes).trim_end_matches('\r').to_string();
+        let mut r = BufReader::new(r);
+        while let Ok(Some((bytes, cut))) = next_line(&mut r) {
+            let mut text = String::from_utf8_lossy(&bytes).trim_end_matches('\r').to_string();
+            if cut {
+                text.push_str(" …[truncated]");
+            }
             let msg = if stderr {
                 PoolMsg::Stderr { run: run.clone(), line: text }
             } else {
@@ -62,7 +96,8 @@ fn read_lines<R: Read + Send + 'static>(r: R, out: Sender<PoolMsg>, run: String,
             };
             let _ = out.send(msg);
         }
-    })
+        let _ = done.send(());
+    });
 }
 
 impl Pool {
@@ -104,13 +139,17 @@ impl Pool {
                 let _ = stdin.write_all(input.as_bytes());
             });
         }
-        let mut readers = Vec::new();
+        let (done_tx, done_rx) = channel();
+        let mut readers = 0;
         if let Some(o) = child.stdout.take() {
-            readers.push(read_lines(o, out.clone(), run.to_string(), false));
+            read_lines(o, out.clone(), run.to_string(), false, done_tx.clone());
+            readers += 1;
         }
         if let Some(e) = child.stderr.take() {
-            readers.push(read_lines(e, out.clone(), run.to_string(), true));
+            read_lines(e, out.clone(), run.to_string(), true, done_tx.clone());
+            readers += 1;
         }
+        drop(done_tx);
         let inner = self.inner.clone();
         let name = run.to_string();
         let start = Instant::now();
@@ -139,8 +178,12 @@ impl Pool {
                     g.runs.remove(&name);
                 }
             }
-            for r in readers {
-                let _ = r.join();
+            // shortcut: after 2 s the readers are detached, so a daemonized grandchild that holds the pipe leaks one thread per run and can send lines after Exited; upgrade by reading with poll/non-blocking fds or killing the whole session
+            let deadline = Instant::now() + Duration::from_secs(2);
+            for _ in 0..readers {
+                if done_rx.recv_timeout(deadline.saturating_duration_since(Instant::now())).is_err() {
+                    break;
+                }
             }
             let _ = out.send(PoolMsg::Exited {
                 run: name,

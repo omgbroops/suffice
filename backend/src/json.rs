@@ -137,15 +137,50 @@ impl P<'_> {
                     }
                 }
             }
-            Some(_) => {
+            Some(b'-' | b'0'..=b'9') => {
+                // RFC 8259 grammar: -? (0 | [1-9][0-9]*) (\.[0-9]+)? ([eE][+-]?[0-9]+)?
                 let st = self.i;
-                while matches!(self.b.get(self.i), Some(b'-' | b'+' | b'.' | b'e' | b'E' | b'0'..=b'9')) {
+                let bad = format!("bad value at {st}");
+                if self.b.get(self.i) == Some(&b'-') {
                     self.i += 1;
                 }
+                match self.b.get(self.i) {
+                    Some(b'0') => self.i += 1,
+                    Some(b'1'..=b'9') => {
+                        self.digits();
+                    }
+                    _ => return Err(bad),
+                }
+                if self.b.get(self.i) == Some(&b'.') {
+                    self.i += 1;
+                    if self.digits() == 0 {
+                        return Err(bad);
+                    }
+                }
+                if matches!(self.b.get(self.i), Some(b'e' | b'E')) {
+                    self.i += 1;
+                    if matches!(self.b.get(self.i), Some(b'+' | b'-')) {
+                        self.i += 1;
+                    }
+                    if self.digits() == 0 {
+                        return Err(bad);
+                    }
+                }
                 let t = std::str::from_utf8(&self.b[st..self.i]).map_err(|e| e.to_string())?;
-                t.parse::<f64>().map(Value::Num).map_err(|_| format!("bad value at {st}"))
+                match t.parse::<f64>() {
+                    Ok(n) if n.is_finite() => Ok(Value::Num(n)),
+                    _ => Err(bad),
+                }
             }
+            Some(_) => Err(format!("bad value at {}", self.i)),
         }
+    }
+    fn digits(&mut self) -> usize {
+        let st = self.i;
+        while matches!(self.b.get(self.i), Some(b'0'..=b'9')) {
+            self.i += 1;
+        }
+        self.i - st
     }
     fn hex4(&mut self) -> Result<u32, String> {
         let h = self.b.get(self.i..self.i + 4).ok_or("short \\u escape")?;
