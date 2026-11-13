@@ -1,6 +1,8 @@
 // Automations: saved prompts that run on a schedule against a project, while the app is open.
 // Pure helpers (validate, nextRunAt) plus a small store/scheduler; the real run goes through main.cjs runTask.
+// isRegistered(path) limits projectPath to saved projects, at save and again at run.
 const fs=require('node:fs');
+const store=require('./json-store.cjs');
 const path=require('node:path');
 const crypto=require('node:crypto');
 const HOUR=3600000,KINDS=['hourly','daily','weekdays'],EFFORTS=['off','minimal','low','medium','high','xhigh','max'];
@@ -9,12 +11,13 @@ function fail(message){throw new Error(message);}
 const str=(value,label,max,min=1)=>{if(typeof value!=='string')fail(`${label} must be text`);const v=value.trim();if(v.length<min||v.length>max)fail(`${label} must be ${min}-${max} characters`);return v;};
 
 // Returns a clean item body (no ids or run state) or throws a user-readable Error.
-function validate(input){
+function validate(input,isRegistered=()=>true){
   if(!input||typeof input!=='object'||Array.isArray(input))fail('Invalid automation');
   const name=str(input.name,'Name',80),prompt=str(input.prompt,'Prompt',20000),projectPath=str(input.projectPath,'Project',4096);
   if(!path.isAbsolute(projectPath))fail('Project must be an absolute path');
   let stat;try{stat=fs.statSync(projectPath);}catch{fail('Project folder does not exist');}
   if(!stat.isDirectory())fail('Project is not a folder');
+  if(!isRegistered(projectPath))fail('Project is not in your project list');
   const s=input.schedule;if(!s||typeof s!=='object'||!KINDS.includes(s.kind))fail('Schedule must be hourly, daily or weekdays');
   const schedule={kind:s.kind};
   if(s.kind==='hourly'){const n=s.everyHours===undefined?1:s.everyHours;if(!Number.isInteger(n)||n<1||n>168)fail('Hours must be a whole number from 1 to 168');schedule.everyHours=n;}
@@ -37,17 +40,17 @@ function nextRunAt(item,base){
 const dueAt=item=>item.enabled?nextRunAt(item,Math.max(item.lastRunAt||0,item.anchorAt)):null;
 
 // run(item)->Promise<{threadId}>; busy()->bool. Both injected so tests need no Electron.
-function createAutomations({file,now=Date.now,run,busy=()=>false}){
+function createAutomations({file,now=Date.now,run,busy=()=>false,isRegistered=()=>true}){
   let items=null,active=false;
-  const load=()=>{if(!items){try{items=JSON.parse(fs.readFileSync(file,'utf8'));if(!Array.isArray(items))items=[];}catch{items=[];}
+  const load=()=>{if(!items){const saved=store.read(file,[]);items=Array.isArray(saved)?saved:[];
     // a run that was in flight when the app quit cannot still be running
     for(const i of items)if(i.lastStatus==='running')i.lastStatus='error',i.lastError='Interrupted by app exit';}return items;};
-  const persist=()=>{fs.mkdirSync(path.dirname(file),{recursive:true});const tmp=`${file}.${process.pid}.tmp`;fs.writeFileSync(tmp,JSON.stringify(items,null,1));fs.renameSync(tmp,file);};
+  const persist=()=>store.write(file,items,1);
   const view=i=>({...i,nextRunAt:dueAt(i)});
   const find=id=>{const i=load().find(x=>x.id===id);if(!i)fail('Automation not found');return i;};
   const list=()=>load().map(view);
   function save(input){
-    const body=validate(input);
+    const body=validate(input,isRegistered);
     if(input.id===undefined||input.id===null){
       const item={id:crypto.randomUUID(),...body,enabled:true,createdAt:now(),anchorAt:now(),lastRunAt:null,lastStatus:null,lastThreadId:null,lastError:null};
       load().push(item);persist();return view(item);
@@ -60,6 +63,7 @@ function createAutomations({file,now=Date.now,run,busy=()=>false}){
   function toggle(id,enabled){const item=find(id);if(typeof enabled!=='boolean')fail('Invalid toggle');item.enabled=enabled;item.anchorAt=now();persist();return view(item);}
   // scheduled=false (Run now) still records the run; a skipped-busy result keeps lastRunAt so the next tick retries.
   async function runItem(item){
+    if(!isRegistered(item.projectPath)){item.lastStatus='error';item.lastError='Project is not in your project list';item.lastRunAt=now();persist();return view(item);}
     if(active||busy()){item.lastStatus='skipped: busy';persist();return view(item);}
     active=true;item.lastStatus='running';item.lastError=null;persist();
     try{const result=await run(item);item.lastStatus='ok';if(result?.threadId)item.lastThreadId=result.threadId;}

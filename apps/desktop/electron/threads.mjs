@@ -1,9 +1,12 @@
-import {readdir,realpath,readFile,writeFile,open as openFile} from 'node:fs/promises';
-import {execFile} from 'node:child_process';
+import {readdir,realpath,readFile,open as openFile} from 'node:fs/promises';
+import {createRequire} from 'node:module';
 import {resolve,sep,basename} from 'node:path';
 import {createHash} from 'node:crypto';
 import {SessionManager,buildSessionProjection} from '@earendil-works/pi-coding-agent';
 import {savedUsage} from './usage.mjs';
+
+const require=createRequire(import.meta.url);
+const {git}=require('./git.cjs'),store=require('./json-store.cjs');
 
 export const threadId=path=>createHash('sha256').update(process.platform==='win32'?resolve(path).toLowerCase():resolve(path)).digest('hex').slice(0,32);
 // Last model a thread used, from the end of its session file.
@@ -16,24 +19,34 @@ async function lastModel(path){
  }catch{}finally{await file?.close();}
  return null;
 }
-const gitBranch=cwd=>new Promise(done=>execFile('git',['--no-optional-locks','-C',cwd,'rev-parse','--abbrev-ref','HEAD'],{timeout:5000,windowsHide:true},(error,out)=>done(error?null:out.trim()||null)));
+const gitBranch=cwd=>git(cwd,['rev-parse','--abbrev-ref','HEAD'],{timeout:5000}).then(out=>out||null,()=>null);
+
+const part=p=>p.type==='text'?{type:'text',text:p.text}:p.type==='thinking'?{type:'thinking',text:p.thinking}:p.type==='toolCall'?{type:'toolCall',id:p.id,name:p.name,text:JSON.stringify(p.arguments,null,2)}:{type:p.type,text:`[${p.type}]`};
+const content=message=>typeof message.content==='string'?[{type:'text',text:message.content}]:(Array.isArray(message.content)?message.content:[{type:'text',text:message.output||JSON.stringify(message,null,2)}]).map(part);
+const projectMessage=message=>({role:message.role,toolName:message.toolName,toolCallId:message.toolCallId,isError:message.isError,errorMessage:message.stopReason==='error'?message.errorMessage:undefined,content:content(message)});
+const title=info=>info.name||info.firstMessage?.slice(0,90)||'Untitled thread';
 
 export function createThreadStore(home){
  const root=resolve(home,'sessions'),metaPath=resolve(home,'thread-meta.json');let known=new Map();
  // Branch each thread started on; sessions don't record it, so the desktop app notes it at start.
- const readMeta=async()=>{try{return JSON.parse(await readFile(metaPath,'utf8'));}catch{return {};}};
+ // A corrupt file is moved to .bad by the store, so a later write cannot destroy it.
+ const readMeta=()=>store.read(metaPath,{});
  let writing=Promise.resolve();
+ // Callers do not await this: thread_started must not wait for git.
  function noteStart(sessionPath,cwd){
-  writing=writing.then(async()=>{const id=threadId(sessionPath),meta=await readMeta();if(meta[id])return;const branch=await gitBranch(cwd);if(!branch||branch==='HEAD')return;meta[id]={branch};await writeFile(metaPath,JSON.stringify(meta));}).catch(()=>{});
+  writing=writing.then(async()=>{const id=threadId(sessionPath);if(readMeta()[id])return;const branch=await gitBranch(cwd);if(!branch||branch==='HEAD')return;const meta=readMeta();if(meta[id])return;meta[id]={branch};store.write(metaPath,meta);}).catch(()=>{});
   return writing;
  }
+ // Re-read a session's tail only when the file changed.
+ const models=new Map();
+ const modelOf=async info=>{const hit=models.get(info.path);if(hit&&hit.modified===+info.modified)return hit.model;const model=await lastModel(info.path);models.set(info.path,{modified:+info.modified,model});return model;};
  async function list(){
   let directories=[];try{directories=await readdir(root,{withFileTypes:true});}catch(error){if(error.code!=='ENOENT')throw error;}
   const groups=await Promise.all(directories.filter(entry=>entry.isDirectory()).map(entry=>SessionManager.listAll(resolve(root,entry.name))));
   const infos=groups.flat().filter(info=>info.messageCount>0).sort((a,b)=>+b.modified-+a.modified);
   known=new Map(infos.map(info=>[threadId(info.path),info]));
-  const meta=await readMeta(),models=await Promise.all(infos.map(info=>lastModel(info.path)));
-  return infos.map((info,i)=>{const id=threadId(info.path);return {id,title:info.name||info.firstMessage?.slice(0,90)||'Untitled thread',project:basename(info.cwd||'Project'),cwd:info.cwd||null,modified:+info.modified,branch:meta[id]?.branch||null,model:models[i]};});
+  const meta=readMeta(),lastModels=await Promise.all(infos.map(modelOf));
+  return infos.map((info,i)=>{const id=threadId(info.path);return {id,title:title(info),project:basename(info.cwd||'Project'),cwd:info.cwd||null,modified:+info.modified,branch:meta[id]?.branch||null,model:lastModels[i]};});
  }
  async function open(id,resolveModel=()=>undefined){
   if(typeof id!=='string'||!known.has(id))throw new Error('Thread not found. Refresh the thread list.');
@@ -43,7 +56,7 @@ export function createThreadStore(home){
   const messages=buildSessionProjection(entries.filter(entry=>entry.type!=='session')).messages;
   const lastAssistant=[...messages].reverse().find(message=>message.role==='assistant');
   const usage=savedUsage(entries,lastAssistant?resolveModel(lastAssistant.provider,lastAssistant.model):undefined);
-  return {id,title:info.name||info.firstMessage?.slice(0,90)||'Untitled thread',cwd:info.cwd,path,usage,messages:messages.map(message=>({role:message.role,toolName:message.toolName,toolCallId:message.toolCallId,isError:message.isError,errorMessage:message.stopReason==='error'?message.errorMessage:undefined,content:typeof message.content==='string'?[{type:'text',text:message.content}]:(Array.isArray(message.content)?message.content:[{type:'text',text:message.output||JSON.stringify(message,null,2)}]).map(part=>part.type==='text'?{type:'text',text:part.text}:part.type==='thinking'?{type:'thinking',text:part.thinking}:part.type==='toolCall'?{type:'toolCall',id:part.id,name:part.name,text:JSON.stringify(part.arguments,null,2)}:{type:part.type,text:`[${part.type}]`})}))};
+  return {id,title:title(info),cwd:info.cwd,path,usage,messages:messages.map(projectMessage)};
  }
  return {list,open,noteStart};
 }

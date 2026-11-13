@@ -1,10 +1,8 @@
-// Account facts for the user menu and Settings: git identity, the OpenAI sign-in claims, and token/cost totals read from saved sessions.
-const {promisify}=require('node:util');
-const exec=promisify(require('node:child_process').execFile);
+const {git,run}=require('./git.cjs');
 const fs=require('node:fs/promises');
 const path=require('node:path');
 
-const gitConfig=(key,cwd)=>exec('git',['config',key],{cwd:cwd||undefined,windowsHide:true,timeout:5000}).then(r=>r.stdout.trim()).catch(()=>'');
+const gitConfig=(key,cwd)=>(cwd?git(cwd,['config',key],{timeout:5000}):run('git',['config',key],undefined,{timeout:5000})).catch(()=>'');
 
 // Any string in auth.json shaped like a JWT is decoded (no verification: display only). Missing or odd shapes give nulls.
 function claims(home){
