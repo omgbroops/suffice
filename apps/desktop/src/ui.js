@@ -1,6 +1,8 @@
 // Shared primitives: every control and surface is assembled from these helpers.
 export { mark } from './brand.js';
 const paths = {
+  pencil: '<path d="m15 4 5 5M4 20l4.5-1 12-12a2.1 2.1 0 0 0-3-3l-12 12L4 20Z"/>',
+  warning: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
   file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
   files: '<path d="M14 2H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6Z"/><path d="M14 2v4h4M8 22h12a2 2 0 0 0 2-2V8"/>',
