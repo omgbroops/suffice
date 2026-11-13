@@ -6,6 +6,7 @@ import {resolve} from 'node:path';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {_electron} from 'playwright-core';
+import {nativeHitTests} from './native-hit-test.mjs';
 
 test('thread panels, file views, tabs and drafts restore independently, including across reload', {timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-panel-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-panel-project-'));
@@ -31,6 +32,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   assert.match(await page.locator('.thread-user').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
   const size=selector=>page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return [r.width,r.height,s.padding,s.borderRadius];});
   assert.deepEqual(await size('.workspace-tools > button:last-child'),await size('.sidebar .sidebar-tools > button:last-child'));
+  const rightSize=await size('.workspace-tools > button:last-child');assert.equal(rightSize[0],rightSize[1]);assert.equal(rightSize[0],25);
   await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
   const reopen=page.getByRole('button',{name:'Open sidebar',exact:true});
   assert.deepEqual(await size('.sidebar-reopen'),await size('.workspace-tools > button:last-child'));
@@ -38,9 +40,11 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   assert.ok(Math.abs(alignment.reopen-alignment.window)<.5);assert.ok(Math.abs(alignment.title-alignment.window)<1.5);assert.ok(alignment.titleX>=alignment.buttonRight+6);
   assert.equal(await reopen.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');
   await page.screenshot({path:resolve('apps/desktop/desktop-collapsed-header.png')});
+  const reopenPoint=await reopen.evaluate(el=>{const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};});const reopenHits=await nativeHitTests(app,[reopenPoint]);if(reopenHits)assert.deepEqual(reopenHits,[1]);
   await reopen.click();
   await page.locator('#prompt').fill('Draft for one');await page.getByRole('button',{name:'Toggle right panel'}).click();
   await page.locator('.panel-launcher').getByRole('button',{name:'Files',exact:true}).click();
+  const toolInset=await page.evaluate(()=>document.querySelector('.workspace').getBoundingClientRect().right-document.querySelector('.workspace-tools').getBoundingClientRect().right);assert.equal(toolInset,12);
   const surfaces=await page.evaluate(()=>{const editor=document.querySelector('.right-panel-content'),chat=document.querySelector('.workspace');return {editor:getComputedStyle(editor).borderRadius,chat:getComputedStyle(chat).borderRadius,gap:editor.getBoundingClientRect().left-chat.getBoundingClientRect().right};});assert.equal(surfaces.editor,surfaces.chat);assert.equal(surfaces.gap,8);
   await page.getByRole('treeitem',{name:'src',exact:true}).focus();await page.keyboard.press('ArrowRight');
   await page.getByRole('treeitem',{name:'nested.ts',exact:true}).waitFor();
@@ -68,6 +72,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   assert.ok(tabAlignment.tabs.every(y=>Math.abs(y-tabAlignment.window)<.5));
   assert.ok(tabAlignment.header.right<=tabAlignment.controls.x-6);
   await page.locator('.panel-path').filter({hasText:'changed files'}).waitFor();
+  const tabSurface=await page.locator('.panel-tab[data-active="true"]').evaluate(el=>{const tab=getComputedStyle(el),editor=getComputedStyle(document.querySelector('.right-panel-content'));return {tab:tab.backgroundColor,editor:editor.backgroundColor,edge:tab.outlineColor,border:editor.borderTopColor};});assert.equal(tabSurface.tab,tabSurface.editor);assert.equal(tabSurface.edge,tabSurface.border);assert.equal(await page.locator('.workspace-tools').evaluate(el=>getComputedStyle(el).gap),'4px');
   assert.deepEqual(await page.locator('.change-folder').first().evaluate(folderStyle),filesFolderStyle);
   await page.getByRole('menu',{name:'Panel options'}).waitFor({state:'hidden'});
   await page.screenshot({path:resolve('apps/desktop/desktop-changes-list.png')});

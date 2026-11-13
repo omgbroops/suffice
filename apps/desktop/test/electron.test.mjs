@@ -4,6 +4,7 @@ import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {nativeHitTests} from './native-hit-test.mjs';
 
 test('Electron loads the unchanged shell and reaches the real isolated harness', {timeout:60000},async()=>{
   const home=await mkdtemp(resolve(tmpdir(),'suffice-desktop-test-'));
@@ -24,6 +25,10 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
     await page.locator('.composer').waitFor();
     const status=await page.evaluate(()=>window.sufficeDesktop.status());
+    const composerShadow=await page.locator('.composer').evaluate(el=>getComputedStyle(el).boxShadow);
+    for(const selector of ['.sidebar-heading','.right-panel-header','.window-drag-region','.sidebar .panel-drag-region','.right-sidebar .panel-drag-region']){assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-app-region')),'drag');assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).userSelect),'none');}
+    assert.equal(await page.getByRole('button',{name:'Search sessions',exact:true}).evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-app-region')),'no-drag');
+    const hitPoints=await page.evaluate(()=>{const center=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};};return [center('.sidebar .brand-wordmark'),center('.sidebar [data-action="search-sessions"]'),center('.window-controls button'),center('.window-drag-region')];});const hits=await nativeHitTests(electron,hitPoints);if(hits)assert.deepEqual(hits,[2,1,1,2]);
     assert.match(await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
     await page.getByRole('button',{name:'Maximize or restore'}).click();
     await page.getByRole('button',{name:'Maximize or restore'}).click();
@@ -35,6 +40,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.equal(await page.locator('#right-sidebar').getAttribute('aria-hidden'),'true');
     await page.locator('.thread-row').filter({hasText:'First saved thread'}).click();
     await page.locator('.workspace.thread-view').waitFor();
+    assert.equal(await page.locator('.composer').evaluate(el=>getComputedStyle(el).boxShadow),composerShadow);assert.notEqual(composerShadow,'none');
     assert.equal(await page.getByRole('button',{name:'Session options'}).isVisible(),false);
     const centers=await page.evaluate(()=>{const cy=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};return {left:cy(document.querySelector('.sidebar .sidebar-tools button')),right:[...document.querySelectorAll('.workspace-tool')].map(cy)};});
     assert.ok(centers.right.every(y=>Math.abs(y-centers.left)<.5));
@@ -133,7 +139,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.ok(typography.every(value=>value==='13px/20px'));
     const row=page.locator('.thread-row').filter({hasText:'First saved thread'});
     const titleBox=await row.locator('.row-title').boundingBox(),timeBox=await row.locator('.row-meta').boundingBox();
-    assert.ok(timeBox.y>=titleBox.y+titleBox.height);
+    assert.ok(Math.abs(timeBox.y-titleBox.y)<5);
     await page.screenshot({path:resolve('apps/desktop/desktop-thread-short.png')});
     const composer=await page.locator('.composer').boundingBox();
     assert.ok(composer.y>600);
