@@ -54,7 +54,8 @@ pub fn command(task: &Task, resume: Option<&str>) -> Cmd {
             ("opencode".into(), a)
         }
         AgentKind::Gemini => {
-            // shortcut: gemini flags unverified (CLI not installed), check gemini --help when installed
+            // flags checked vs gemini-cli source (config.ts, sessionUtils.ts): -p = headless, --resume takes a session id
+        // shortcut: sessions are scoped per project dir, so a resumed task must keep its cwd; untested live (CLI not installed)
             // gated pre-exec by a BeforeTool hook (install_gemini_gate) and post-hoc by gemini_event
             let mut a = strs(&["-p"]);
             a.push(prompt);
