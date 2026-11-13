@@ -4,6 +4,7 @@ import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {electronPath,hiddenMain,testEnv} from './electron-app.mjs';
 
 test('Electron loads the unchanged shell and reaches the real isolated harness', {timeout:60000},async()=>{
   const home=await mkdtemp(resolve(tmpdir(),'suffice-desktop-test-'));
@@ -17,8 +18,8 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     if(id==='two')entries.find(entry=>entry.id==='assistant').message.content[0].thinking='Checking the saved context.';
     await writeFile(resolve(sessions,id+'.jsonl'),entries.map(e=>JSON.stringify(e)).join('\n')+'\n');
   }
-  const env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
-  const electron=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+  const env=testEnv({SUFFICE_HOME:home});
+  const electron=await _electron.launch({executablePath:electronPath,args:[hiddenMain,'--user-data-dir='+resolve(home,'electron')],env});
   try{
     const page=await electron.firstWindow();
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -158,7 +159,12 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.locator('.project-option').click();
     await page.locator('#prompt').fill('Read hello.txt');
     await page.locator('#prompt').press('Enter');
-    await page.locator('.thread-assistant').filter({hasText:'Sign in with the Suffice CLI first'}).waitFor();
+    // signed out: sending asks to sign in (draft kept) instead of failing; the real harness still refuses an unauthenticated run
+    await page.locator('.sign-in-menu').waitFor();assert.equal(await page.locator('#prompt').inputValue(),'Read hello.txt');assert.equal(await page.locator('.workspace.thread-view').count(),0);
+    assert.equal(await page.evaluate(()=>window.sufficeDesktop.run({prompt:'Read hello.txt',effort:'low'}).catch(error=>error.message)),'Sign in to start a session');
+    await electron.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:login');ipcMain.handle('suffice:login',()=>({authenticated:true}));});
+    await page.getByRole('button',{name:'Continue in browser'}).click();
+    await page.locator('.thread-assistant').filter({hasText:'Sign in to start a session'}).waitFor();
     await page.getByRole('button',{name:'New session',exact:true}).click();
     assert.equal(await page.locator('.thread-message').count(),0);
     assert.equal(await page.locator('.new-session').getAttribute('aria-current'),'page');

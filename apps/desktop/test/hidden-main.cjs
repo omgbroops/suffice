@@ -2,7 +2,16 @@
 const Module=require('node:module');
 const electron=require('electron');
 if(process.platform==='darwin')electron.app.setActivationPolicy('accessory');
-class HiddenWindow extends electron.BrowserWindow{constructor(options={}){super({...options,show:false});}}
+// A construct trap, not a subclass: subclass instances drop out of BrowserWindow.getAllWindows().
+const HiddenWindow=new Proxy(electron.BrowserWindow,{construct(Target,[options={}]){
+  const win=new Target({...options,show:false});
+  // maximize() would show a hidden window on screen; track the state instead (the IPC path is still exercised)
+  let maximized=false;
+  win.maximize=()=>{maximized=true;win.emit('maximize');};
+  win.unmaximize=()=>{if(maximized){maximized=false;win.emit('unmaximize');}};
+  win.isMaximized=()=>maximized;
+  return win;
+}});
 // SUFFICE_FAKE_HARNESS=1 swaps the harness process for the fake one in this folder (no provider, no network).
 const fake=process.env.SUFFICE_FAKE_HARNESS==='1'?require('node:path').join(__dirname,'fake-worker-entry.mjs'):null;
 const utilityProcess={fork:(entry,...rest)=>electron.utilityProcess.fork(fake&&entry.endsWith('worker-entry.mjs')?fake:entry,...rest)};

@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,writeFile,readFile} from 'node:fs/promises';
+import {mkdtemp,mkdir,writeFile,readFile,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {createThreadStore} from '../electron/threads.mjs';
 import {createHarnessHost} from '../electron/worker.mjs';
 
 test('saved transcripts are read without modification and resume their original engine context',async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-thread-test-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-thread-project-'));
+ // realpath: on macOS the temp dir is /var -> /private/var, and the host resolves real paths
+ const home=await realpath(await mkdtemp(resolve(tmpdir(),'suffice-thread-test-'))),cwd=await realpath(await mkdtemp(resolve(tmpdir(),'suffice-thread-project-')));
  const dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});const file=resolve(dir,'thread.jsonl');
  const now=new Date().toISOString();
  const source=[{type:'session',version:3,id:'fixture',timestamp:now,cwd},{type:'message',id:'user',parentId:null,timestamp:now,message:{role:'user',content:[{type:'text',text:'Remember the earlier context'}],timestamp:Date.now()}}].map(e=>JSON.stringify(e)).join('\n')+'\n';await writeFile(file,source);

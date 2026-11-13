@@ -4,10 +4,11 @@ import {mkdtemp,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
+import {electronPath,hiddenMain,testEnv} from './electron-app.mjs';
 
 test('composer attachments, preview menus, persisted defaults and background sends', {timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-composer-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-composer-')),env=testEnv({SUFFICE_HOME:home,SUFFICE_FAKE_HARNESS:'1',SUFFICE_FAKE_SIGNED_IN:'1'});
+ const app=await _electron.launch({executablePath:electronPath,args:[hiddenMain,'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.locator('.composer').waitFor();
   await page.waitForFunction(()=>document.querySelector('.atmosphere')?.dataset.background==='lake');
@@ -33,6 +34,9 @@ test('composer attachments, preview menus, persisted defaults and background sen
   for(let i=0;i<12;i++){await page.locator('.attachment-tray').evaluate(el=>el.scrollLeft=el.scrollWidth);const remove=page.getByRole('button',{name:'Remove attachment-'+i+'.txt',exact:true});await remove.evaluate(el=>el.click());}
   await page.reload();await page.getByRole('button',{name:'Preview image.png'}).waitFor();assert.equal(await page.locator('.attachment-card').count(),2);assert.equal(await page.locator('.atmosphere').getAttribute('data-background'),'lake');
   await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:run-background');ipcMain.handle('suffice:run-background',(_event,payload)=>{globalThis.sentBackground=payload;return new Promise(resolve=>{globalThis.finishBackground=resolve;});});});
+  // a real send needs a project; pick one the way a user does (sign-in comes from the fake harness)
+  const project=await mkdtemp(resolve(tmpdir(),'suffice-composer-project-'));await app.evaluate(({dialog},folder)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[folder]});},project);
+  await page.getByRole('button',{name:'Choose project',exact:true}).click();await page.getByRole('button',{name:'New project',exact:true}).click();await page.locator('.git-pill:not(.sign-in-pill)').waitFor();
   const prompt=page.locator('#prompt');await prompt.fill('Background fixture');const arrow=await page.locator('.send-button').innerHTML();await prompt.focus();await page.keyboard.down('Control');assert.equal(await page.locator('.send-button').innerHTML(),arrow);await page.keyboard.press('Enter');await page.keyboard.up('Control');
   await page.waitForFunction(()=>document.querySelector('#prompt').value==='');assert.equal(await page.locator('.workspace').evaluate(el=>el.classList.contains('thread-view')),false);
   const sent=await app.evaluate(()=>globalThis.sentBackground);assert.equal(sent.prompt,'Background fixture');assert.equal(sent.attachments.length,2);assert.equal(sent.attachments[0].type,'image/png');

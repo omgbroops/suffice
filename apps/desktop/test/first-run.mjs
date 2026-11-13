@@ -6,15 +6,14 @@ import {_electron} from 'playwright-core';
 import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
+import {electronPath,hiddenMain,testEnv} from './electron-app.mjs';
 const out=resolve(process.argv[2]||'flows-shots');await mkdir(out,{recursive:true});
 const home=await mkdtemp(resolve(tmpdir(),'suffice-first-run-'));
 const alpha=resolve(home,'alpha-site'),beta=resolve(home,'beta-api');
 await mkdir(alpha);await mkdir(beta);await writeFile(resolve(alpha,'README.md'),'alpha');
-const electronPath=resolve('node_modules/electron/dist',process.platform==='darwin'?'Electron.app/Contents/MacOS/Electron':process.platform==='win32'?'electron.exe':'electron');
-const env={SUFFICE_HOME:resolve(home,'suffice'),SUFFICE_FAKE_HARNESS:'1'};
-for(const k of ['PATH','HOME','USER','LOGNAME','SHELL','TMPDIR','LANG','SystemRoot','TEMP'])if(process.env[k])env[k]=process.env[k];
+const env=testEnv({SUFFICE_HOME:resolve(home,'suffice'),SUFFICE_FAKE_HARNESS:'1'});
 const errors=[],state={};let n=0;
-const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop/test/hidden-main.cjs'),'--user-data-dir='+resolve(home,'electron')],env});
+const app=await _electron.launch({executablePath:electronPath,args:[hiddenMain,'--user-data-dir='+resolve(home,'electron')],env});
 try{
  // native edges only: the folder dialog returns a temp folder, the browser opener records instead of opening
  await app.evaluate(({dialog,shell},p)=>{globalThis.opened=[];shell.openExternal=async url=>{globalThis.opened.push(url);};dialog.showOpenDialog=async()=>({canceled:false,filePaths:[p]});},alpha);

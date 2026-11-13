@@ -1,5 +1,6 @@
 // Explicit opt-in provider smoke test. Not part of test:desktop.
 import {_electron} from 'playwright-core';
+import {electronPath} from './electron-app.mjs';
 import {mkdtemp,writeFile,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
@@ -8,7 +9,7 @@ const project=await mkdtemp(resolve(tmpdir(),'suffice-live-smoke-'));
 const expected='SUFFICE_DESKTOP_BRIDGE_OK';
 await writeFile(resolve(project,'hello.txt'),expected);
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
-const app=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop')],env});
+const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop')],env});
 try{
  const page=await app.firstWindow();await page.locator('.composer').waitFor();
  const status=await page.evaluate(()=>window.sufficeDesktop.status());assert.equal(status.authenticated,true,'Sign in using the CLI before the live smoke test');

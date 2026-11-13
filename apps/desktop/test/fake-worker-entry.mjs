@@ -3,7 +3,7 @@
 import {parseOptions} from '../../../packages/cli/src/options.mjs';
 process.env.PI_CODING_AGENT_DIR=parseOptions([]).home;
 const {serve}=await import('../electron/worker.mjs');
-let signedIn=false;
+let signedIn=process.env.SUFFICE_FAKE_SIGNED_IN==='1';
 const runtime={
  isUsingSubscription:()=>signedIn,getAvailable:async()=>[],getModel:()=>undefined,
  async login(provider,type,{notify,prompt}){
