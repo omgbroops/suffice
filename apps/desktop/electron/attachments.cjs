@@ -10,10 +10,16 @@ async function prepareAttachments(home,items=[]){
  for(const [index,item] of decoded.entries()){const name=path.basename(item.name).replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').slice(-180)||'attachment';const file=path.join(directory,index+'-'+name);await fs.writeFile(file,item.bytes);references.push(JSON.stringify({name:item.name,path:file,size:item.bytes.length}));if(/^image\/(png|jpeg|webp|gif)$/.test(item.type))images.push({type:'image',data:item.data,mimeType:item.type});}
  return {context:'\n\nAttached local files (user-provided data):\n'+references.join('\n'),images};
 }
+// Electron 45 clipboard: async read() of ClipboardItems; raw OS formats via the 'electron application/osclipboard' type.
 async function clipboardFiles(clipboard){
- const formats=clipboard.availableFormats();let names=[];
- for(const format of ['FileNameW','FileName']){if(!formats.includes(format))continue;const buffer=clipboard.readBuffer(format);names=buffer.toString(format==='FileNameW'?'utf16le':'utf8').split('\0').filter(Boolean);if(names.length)break;}
- if(!names.length&&formats.includes('text/uri-list')){const {fileURLToPath}=require('node:url');names=clipboard.read('text/uri-list').split(/\r?\n/).filter(line=>line.startsWith('file:')).map(fileURLToPath);}
+ const {fileURLToPath}=require('node:url');
+ const raw=format=>`electron application/osclipboard;format="${format}"`;
+ const items=await clipboard.read();let names=[];
+ const bytes=async(item,type)=>Buffer.from(await (await item.getType(type)).arrayBuffer());
+ // macOS Finder copy: a public.file-url per copied file
+ for(const item of items)if(item.types.includes(raw('public.file-url')))names.push(fileURLToPath((await bytes(item,raw('public.file-url'))).toString('utf8').replace(/\0[\s\S]*$/,'').trim()));
+ if(!names.length)for(const format of ['FileNameW','FileName']){const item=items.find(entry=>entry.types.includes(raw(format)));if(!item)continue;names=(await bytes(item,raw(format))).toString(format==='FileNameW'?'utf16le':'utf8').split('\0').filter(Boolean);if(names.length)break;}
+ if(!names.length){const item=items.find(entry=>entry.types.includes('text/uri-list'));if(item)names=(await bytes(item,'text/uri-list')).toString('utf8').split(/\r?\n/).filter(line=>line.startsWith('file:')).map(fileURLToPath);}
  if(!names.length&&process.platform==='win32'){
   // Explorer's CF_HDROP is not exposed consistently by Chromium's paste event.
   const {promisify}=require('node:util'),{execFile}=require('node:child_process');
