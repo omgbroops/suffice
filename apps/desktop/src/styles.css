@@ -128,7 +128,7 @@ button, h1, h2, p { margin: 0; }
 :root[data-theme='light'] .atmosphere { filter: invert(1) hue-rotate(180deg); }
 :root[data-theme='light'] .atmosphere-shade { background: linear-gradient(180deg, transparent, #f7f7f740); }
 /* Floating surfaces share the widgets' material and corner rules. */
-.popover { position: fixed; z-index: 30; width: var(--menu-width); max-width: calc(100vw - 24px); padding: 6px; border: 1px solid var(--border-strong); border-radius: var(--radius-menu); background: var(--surface-menu); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); box-shadow: var(--shadow-float), inset 0 1px 0 #ffffff04; transform-origin: var(--popover-origin, top right); animation: pop-in 140ms var(--ease-out); }
+.popover { position: fixed; z-index: 30; width: var(--menu-width); max-width: calc(100vw - 24px); padding: var(--menu-inset); border: 1px solid var(--border-strong); border-radius: var(--radius-menu); background: var(--surface-menu); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); box-shadow: var(--shadow-float), inset 0 1px 0 #ffffff04; transform-origin: var(--popover-origin, top right); animation: pop-in 140ms var(--ease-out); }
 .popover-heading { padding: 5px 9px; color: var(--sidebar-meta); font-size: 12px; line-height: 18px; font-weight: 500; }
 .popover[data-keyboard='true'] { animation: none; }
 .menu-item { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); width: 100%; min-height: var(--menu-row-height); text-align: left; padding: 6px 9px; border-radius: 8px; background: transparent; font-size: 13px; line-height: 18px; transition: background 100ms ease; }
