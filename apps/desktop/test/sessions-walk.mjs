@@ -18,18 +18,23 @@ for(const [id,title,cwd,reply] of [['one','Fix the login redirect',alpha,'Fixed 
 const errors=[],state={};let n=0;
 const app=await _electron.launch({executablePath:electronPath,args:[hiddenMain,'--user-data-dir='+resolve(home,'electron')],env:testEnv({SUFFICE_HOME:home,SUFFICE_FAKE_HARNESS:'1',SUFFICE_FAKE_SIGNED_IN:'1'})});
 try{
- await app.evaluate(({shell})=>{shell.openExternal=async()=>{};});
+ await app.evaluate(({shell,dialog},p)=>{shell.openExternal=async()=>{};dialog.showOpenDialog=async()=>({canceled:false,filePaths:[p]});},alpha);
  const page=await app.firstWindow();page.on('pageerror',e=>errors.push(e.message));
  await page.locator('.composer').waitFor();await page.waitForTimeout(1500);
  const seen=async name=>{
   n++;await page.screenshot({path:resolve(out,`${String(n).padStart(2,'0')}-${name}.png`),timeout:30000});
-  const s=await page.evaluate(()=>({rows:[...document.querySelectorAll('.thread-row')].map(r=>r.querySelector('.row-title')?.textContent+(r.getAttribute('aria-pressed')==='true'?' *':'')),header:document.querySelector('.thread-header:not([hidden])')?.textContent||'',project:document.querySelector('.project-picker .project-name')?.textContent,messages:document.querySelectorAll('.thread-message').length,last:[...document.querySelectorAll('.thread-message')].at(-1)?.textContent?.slice(0,60)||'',dialog:document.querySelector('dialog[open]')?.textContent?.replace(/\s+/g,' ').slice(0,160)||'',toast:document.querySelector('.toast:not([hidden])')?.textContent||''}));
+  const s=await page.evaluate(()=>({groups:[...document.querySelectorAll('.sidebar-sessions .project-group')].map(g=>g.querySelector('.project-group-label').textContent+':'+g.querySelectorAll('.thread-row').length+(g.hasAttribute('data-collapsed')?' (collapsed)':'')),rows:[...document.querySelectorAll('.thread-row')].map(r=>r.querySelector('.row-title')?.textContent+(r.getAttribute('aria-pressed')==='true'?' *':'')),header:document.querySelector('.thread-header:not([hidden])')?.textContent||'',project:document.querySelector('.project-picker .project-name')?.textContent,messages:document.querySelectorAll('.thread-message').length,last:[...document.querySelectorAll('.thread-message')].at(-1)?.textContent?.slice(0,60)||'',dialog:document.querySelector('dialog[open]')?.textContent?.replace(/\s+/g,' ').slice(0,160)||'',toast:document.querySelector('.toast:not([hidden])')?.textContent||''}));
   state[name]=s;console.log(String(n).padStart(2,'0'),name.padEnd(16),JSON.stringify(s));
  };
  await seen('home');
+ // pick alpha on the home screen, then follow up in a beta thread: the reply must run in beta
+ await page.getByRole('button',{name:'Choose project',exact:true}).click();await page.getByRole('button',{name:'New project',exact:true}).click();await page.waitForTimeout(800);
  await page.locator('.thread-row').filter({hasText:'Fix the login redirect'}).click();await page.waitForTimeout(1000);await seen('open-thread');
  await page.locator('.thread-row').filter({hasText:'Add rate limiting'}).click();await page.waitForTimeout(1000);await seen('switch-thread');
  await page.locator('#prompt').fill('Also log rejected requests');await page.locator('#prompt').press('Enter');await page.waitForTimeout(1500);await seen('follow-up');
+ await page.locator('.thread-row').filter({hasText:'Fix the login redirect'}).click();await page.waitForTimeout(900);
+ await page.locator('#prompt').fill('Add a test for it');await page.locator('#prompt').press('Enter');await page.waitForTimeout(1500);await seen('follow-up-alpha');
+ await page.locator('.project-group-label').filter({hasText:'beta-api'}).click();await page.waitForTimeout(300);await seen('collapse-other');
  await page.getByRole('button',{name:'New session'}).first().click();await page.waitForTimeout(900);await seen('new-session');
  await page.locator('[data-action="workspace-menu"]').first().click();await page.waitForTimeout(400);
  await page.getByText('Workspace settings',{exact:true}).click();await page.waitForTimeout(600);await seen('settings');
@@ -39,6 +44,10 @@ try{
  const hits=await page.evaluate(()=>[...document.querySelectorAll('dialog[open] button, dialog[open] [role="option"]')].map(b=>b.textContent.trim().slice(0,50)).filter(Boolean));console.log('   search shows:',JSON.stringify(hits));
  const check=(ok,m)=>{if(!ok)errors.push(m);};
  check(state.home.rows.length===2,'saved sessions not listed');
+ check(JSON.stringify(state.home.groups.map(g=>g.split(':')[0]).sort())==='["alpha-site","beta-api"]','sidebar not grouped by project');
+ check(state['follow-up'].last.includes('[in beta-api]'),'follow-up in a beta thread did not run in beta (home picker was alpha)');
+ check(state['follow-up-alpha'].last.includes('[in alpha-site]'),'follow-up in an alpha thread did not run in alpha');
+ check(state['collapse-other'].groups.some(g=>g.startsWith('beta-api')&&g.endsWith('(collapsed)'))&&state['collapse-other'].groups.some(g=>g.startsWith('alpha-site')&&!g.endsWith('(collapsed)')),'project group did not collapse');
  check(state['open-thread'].header==='Fix the login redirect'&&state['open-thread'].messages===2,'opening a saved thread failed');
  check(state['switch-thread'].header==='Add rate limiting','switching threads failed');
  check(state['follow-up'].last.includes('Fake harness reply: Also log rejected requests'),'follow-up in a saved thread failed');

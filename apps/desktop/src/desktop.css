@@ -181,3 +181,6 @@
 
 /* no thread archive in the desktop app yet; a control that only says so is a dead end */
 .desktop-app .done-button { display: none; }
+.project-group-label { width: 100%; border: 0; background: none; cursor: pointer; text-align: left; font-family: inherit; }
+.project-group-label > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project-group[data-collapsed] .thread-row { display: none; }

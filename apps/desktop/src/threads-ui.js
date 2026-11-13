@@ -5,6 +5,7 @@ import {createThreadTransition} from './thread-transition.js';
 import {groupActions,actionTitle} from './action-display.js';
 import {connectDisclosureMotion} from './disclosure-motion.js';
 import {createToolWidget,toolOutput} from './tool-widget.js';
+import {icon} from './ui.js';
 
 const relativeTime=new Intl.RelativeTimeFormat(undefined,{numeric:'auto'});
 function threadTime(timestamp){
@@ -100,9 +101,10 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
   }
  }
  let savedThreads=[];
+ let collapsedProjects;try{collapsedProjects=new Set(JSON.parse(localStorage.getItem('suffice-collapsed-projects')||'[]'));}catch{collapsedProjects=new Set();}
  const optimisticThreads=new Map();
- function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project'){
-  optimisticThreads.set(id,{id,title:title.slice(0,90),project,modified:Date.now()});drawThreads();
+ function addOptimistic(id,title,project=document.querySelector('.project-picker')?.textContent.trim()||'Project',cwd=document.querySelector('.project-picker')?.title||null){
+  optimisticThreads.set(id,{id,title:title.slice(0,90),project,cwd,modified:Date.now()});drawThreads();
  }
  function adoptOptimistic(previous,id){const thread=optimisticThreads.get(previous);if(thread){optimisticThreads.delete(previous);optimisticThreads.set(id,{...thread,id});}}
  async function refresh(){
@@ -112,7 +114,16 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
  function drawThreads(){
   const threads=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))].sort((a,b)=>b.modified-a.modified);
   list.replaceChildren();
-  for(const thread of threads){
+  // grouped by project (newest first): a thread's project is visible without a label on every row
+  const groups=new Map();
+  for(const thread of threads){const key=thread.cwd||thread.project;if(!groups.has(key))groups.set(key,{name:thread.project,items:[]});groups.get(key).items.push(thread);}
+  for(const [key,group] of groups){
+  const section=document.createElement('div');section.className='project-group';section.dataset.projectKey=key;
+  const head=document.createElement('button');head.type='button';head.className='section-label project-group-label';head.title=key;head.innerHTML=icon('folder');const label=document.createElement('span');label.textContent=group.name;head.append(label);
+  const open=!collapsedProjects.has(key)||group.items.some(thread=>thread.id===activeId);head.setAttribute('aria-expanded',String(open));section.toggleAttribute('data-collapsed',!open);
+  head.addEventListener('click',()=>{const next=section.hasAttribute('data-collapsed');section.toggleAttribute('data-collapsed',!next);head.setAttribute('aria-expanded',String(next));if(next)collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-collapsed-projects',JSON.stringify([...collapsedProjects]));}catch{}});
+  section.append(head);list.append(section);
+  for(const thread of group.items){
    const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
    const dot=document.createElement('span');dot.className='list-dot';dot.textContent='·';dot.setAttribute('aria-hidden','true');
    const content=document.createElement('span');content.className='row-content';
@@ -125,8 +136,8 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
      const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));activeId=thread.id;viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
      restoreView();list.querySelectorAll('.thread-row').forEach(el=>el.setAttribute('aria-pressed',String(el===row)));
     }catch(error){toast(error.message);}finally{opening=false;}
-   });list.append(row);
-  }
+   });section.append(row);
+  }}
  }
  api.onEvent(event=>{
   if(event.event==='background_started'){adoptOptimistic(event.clientId,event.threadId);if(!optimisticThreads.has(event.threadId))addOptimistic(event.threadId,event.title||'New session',event.project);drawThreads();void refresh().catch(()=>{});return;}

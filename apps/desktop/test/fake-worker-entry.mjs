@@ -12,9 +12,9 @@ const runtime={
   signedIn=true;
  },
 };
-async function createSession(){
+async function createSession(options){
  const listeners=[];
  return {session:{subscribe:f=>listeners.push(f),model:null,setThinkingLevel(){},setModel(){}},sessionPath:()=>null,totals:null,async dispose(){},
-  async run(text){const reply='Fake harness reply: '+text;for(const f of listeners){f({type:'message_start',message:{role:'assistant'}});f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:reply}});}return reply;}};
+  async run(text){const reply='Fake harness reply: '+text+' [in '+options.cwd.split(/[\\/]/).pop()+']';for(const f of listeners){f({type:'message_start',message:{role:'assistant'}});f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:reply}});}return reply;}};
 }
 serve({createRuntime:async()=>runtime,createSession});

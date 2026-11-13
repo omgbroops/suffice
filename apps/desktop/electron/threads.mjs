@@ -12,7 +12,7 @@ export function createThreadStore(home){
   const groups=await Promise.all(directories.filter(entry=>entry.isDirectory()).map(entry=>SessionManager.listAll(resolve(root,entry.name))));
   const infos=groups.flat().filter(info=>info.messageCount>0).sort((a,b)=>+b.modified-+a.modified);
   known=new Map(infos.map(info=>[threadId(info.path),info]));
-  return infos.map(info=>({id:threadId(info.path),title:info.name||info.firstMessage?.slice(0,90)||'Untitled thread',project:basename(info.cwd||'Project'),modified:+info.modified}));
+  return infos.map(info=>({id:threadId(info.path),title:info.name||info.firstMessage?.slice(0,90)||'Untitled thread',project:basename(info.cwd||'Project'),cwd:info.cwd||null,modified:+info.modified}));
  }
  async function open(id,resolveModel=()=>undefined){
   if(typeof id!=='string'||!known.has(id))throw new Error('Thread not found. Refresh the thread list.');
