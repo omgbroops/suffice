@@ -31,6 +31,7 @@ struct Run {
 }
 
 /// A run journaled in runs.json before spawn (nonce), then with its pid and start time.
+#[derive(Clone)]
 struct LiveRun {
     nonce: String,
     pid: Option<u32>,
@@ -286,6 +287,10 @@ impl Engine {
         }
         for (task, w) in warned {
             engine.log(&task, Event::Stderr { line: format!("orphan not killed: {w}") });
+            // keep the journal entry so the unproven process is not forgotten at save_runs
+            if let Some(run) = orphans.get(&task) {
+                engine.live.insert(task.clone(), run.clone());
+            }
         }
         for note in [sess_note, trig_note].into_iter().flatten() {
             eprintln!("suffice-backend: {note}");
@@ -1163,12 +1168,20 @@ fn nonce_procs(nonce: &str) -> Vec<(u32, u32, String)> {
 fn find_target(run: &LiveRun) -> Result<Option<u32>, String> {
     let (pid, same) = match run.pid {
         Some(pid) => {
-            let Some(start) = ps_field(pid, "lstart") else { return Ok(None) };
+            let Some(start) = ps_field(pid, "lstart") else {
+                // leader gone but its group may hold children; pid is the pgid (setpgid in pool)
+                if !group_alive(pid as i32) {
+                    return Ok(None);
+                }
+                unsafe { kill(-(pid as i32), 9) };
+                return Ok(Some(pid));
+            };
             // shortcut: lstart has 1 s resolution, not the microseconds of KERN_PROC_PID; the
             // exact argv word and pgid == pid are also required. Upgrade if reuse within 1 s matters.
             let cmd = ps_field(pid, "command").unwrap_or_default();
             let pgid = ps_field(pid, "pgid").unwrap_or_default();
-            (pid, start == run.start && argv_has(&cmd, &run.program) && pgid == pid.to_string())
+            // an empty start (lstart failed at spawn) falls back to the argv word alone
+            (pid, (run.start.is_empty() || start == run.start) && argv_has(&cmd, &run.program) && pgid == pid.to_string())
         }
         None if run.nonce.is_empty() => return Ok(None),
         None => {

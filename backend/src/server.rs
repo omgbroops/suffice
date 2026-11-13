@@ -188,6 +188,15 @@ fn pct_decode(s: &str, plus: bool) -> Option<String> {
     Some(String::from_utf8_lossy(&out).into_owned())
 }
 
+/// Total time allowed for a request body. `SUFFICE_BODY_DEADLINE_MS` overrides it for tests.
+fn body_deadline() -> Duration {
+    static D: std::sync::OnceLock<Duration> = std::sync::OnceLock::new();
+    *D.get_or_init(|| {
+        let ms = std::env::var("SUFFICE_BODY_DEADLINE_MS").ok().and_then(|v| v.parse().ok());
+        Duration::from_millis(ms.unwrap_or(30_000))
+    })
+}
+
 /// Early error: write the response, then drain the rest of the request so the kernel does not RST
 /// before the client reads it. Drain stops at EOF, 1 s, or 1 MB.
 fn reject(s: &mut TcpStream, origin: Option<&str>, code: u16, msg: &str) {
@@ -347,9 +356,23 @@ fn handle_conn(stream: TcpStream, ctx: &Ctx) {
         reject(r.get_mut(), origin, 401, "unauthorized");
         return;
     }
+    // whole-body deadline: the per-read timeout alone lets a slow trickle hold the slot forever
+    let deadline = Instant::now() + body_deadline();
     let mut body = vec![0u8; len];
-    if r.read_exact(&mut body).is_err() {
-        return;
+    let mut got = 0;
+    while got < len {
+        let left = deadline.saturating_duration_since(Instant::now());
+        if left.is_zero() {
+            reject(r.get_mut(), origin, 408, "body timeout");
+            return;
+        }
+        if r.get_ref().set_read_timeout(Some(left)).is_err() {
+            return;
+        }
+        match r.read(&mut body[got..]) {
+            Ok(0) | Err(_) => return,
+            Ok(n) => got += n,
+        }
     }
 
     if method == "GET" && path == "/stream" {
@@ -639,6 +662,8 @@ fn route(ctx: &Ctx, method: &str, path: &str, q: &[(String, String)], body: &[u8
 
 /// Serve the SSE stream. Replays the log after `since`, then forwards live events.
 fn serve_sse(ctx: &Ctx, w: &mut TcpStream, origin: Option<&str>, since: u64, q: &[(String, String)]) -> io::Result<()> {
+    // a client that stops reading ends its stream instead of pinning a connection slot
+    let _ = w.set_write_timeout(Some(Duration::from_secs(10)));
     let (task_f, agent_f) = (qget(q, "task").map(str::to_string), qget(q, "agent").map(str::to_string));
     let Some((backlog, rx, tasks)) = ask(ctx, move |e| {
         let rx = e.subscribe();
