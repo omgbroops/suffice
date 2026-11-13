@@ -80,3 +80,82 @@ fn gemini_run_with_destructive_shell_call_needs_approval() {
     let _ = fs::remove_dir_all(&dir);
     assert!(matches!(s, TaskState::NeedsApproval { .. }), "gemini rm -rf ran ungated: {s:?}");
 }
+
+#[test]
+fn unparseable_or_oddly_cased_tool_use_fails_closed() {
+    for line in [
+        r#"{"type":"tool_use","type":"message","tool_name":"run_shell_command","parameters":{"command":"rm -rf ~"}}"#,
+        "{\"type\":\"tool_use\",\"tool_name\":\"run_shell_command\",\"parameters\":{\"command\":\"aaaa …[truncated]",
+        r#"{"type":"Tool_Use","tool_name":"run_shell_command","parameters":{"command":"rm -rf ~"}}"#,
+    ] {
+        let ev = parse_line(&AgentKind::Gemini, line);
+        assert!(matches!(&ev[..], [Event::ToolCall { .. }]) && held(&ev[0]), "{line}: {ev:?}");
+    }
+}
+
+fn settings_dir(tag: &str) -> std::path::PathBuf {
+    let d = std::env::temp_dir().join(format!("suffice-gemini-settings-{tag}-{}", std::process::id()));
+    let _ = fs::remove_dir_all(&d);
+    fs::create_dir_all(&d).unwrap();
+    d
+}
+
+#[test]
+fn installed_settings_put_the_gate_first_and_keep_base_settings() {
+    let d = settings_dir("keep");
+    let base = d.join("base.json");
+    fs::write(&base, r#"{"general":{"vimMode":true},"hooks":{"BeforeTool":[{"matcher":"x","hooks":[]}],"AfterTool":[]}}"#).unwrap();
+    let out = suffice::adapter::install_gemini_gate(&d.join("g/settings.json"), "GATE", &base).unwrap();
+    let v = suffice::json::parse(&fs::read_to_string(&out).unwrap()).unwrap();
+    assert!(v.get("general").is_some());
+    let hooks = v.get("hooks").unwrap();
+    assert!(hooks.get("AfterTool").is_some());
+    let bt = hooks.get("BeforeTool").unwrap().as_arr().unwrap();
+    assert_eq!(bt.len(), 2);
+    assert_eq!(bt[0].get("matcher").unwrap().as_str(), Some(".*"));
+    let h = &bt[0].get("hooks").unwrap().as_arr().unwrap()[0];
+    assert_eq!(h.get("command").unwrap().as_str(), Some("GATE"));
+    assert_eq!(h.get("type").unwrap().as_str(), Some("command"));
+    assert!(suffice::adapter::install_gemini_gate(std::path::Path::new("rel/s.json"), "GATE", &base).is_err());
+    let _ = fs::remove_dir_all(&d);
+}
+
+#[test]
+fn installed_hook_blocks_a_destructive_gemini_call_through_the_real_gate_binary() {
+    let d = settings_dir("hook");
+    let cmd = format!("'{}' gate-hook", env!("CARGO_BIN_EXE_suffice-backend"));
+    let out = suffice::adapter::install_gemini_gate(&d.join("settings.json"), &cmd, &d.join("none.json")).unwrap();
+    let v = suffice::json::parse(&fs::read_to_string(&out).unwrap()).unwrap();
+    let hook_cmd = v.get("hooks").unwrap().get("BeforeTool").unwrap().as_arr().unwrap()[0].get("hooks").unwrap().as_arr().unwrap()[0]
+        .get("command").unwrap().as_str().unwrap().to_string();
+    let run = |input: &str| {
+        use std::io::Write;
+        let mut c = std::process::Command::new("sh").arg("-c").arg(&hook_cmd).env_remove("SUFFICE_APPROVED_CALLS")
+            .stdin(std::process::Stdio::piped()).stderr(std::process::Stdio::null()).spawn().unwrap();
+        c.stdin.take().unwrap().write_all(input.as_bytes()).unwrap();
+        c.wait().unwrap().code()
+    };
+    // gemini BeforeTool input: common fields + tool_name + tool_input (docs/hooks/reference.md)
+    let ev = |tool: &str, input: &str| format!(r#"{{"session_id":"s","transcript_path":"/t","cwd":"/","hook_event_name":"BeforeTool","timestamp":"t","tool_name":"{tool}","tool_input":{input}}}"#);
+    assert_eq!(run(&ev("run_shell_command", r#"{"command":"rm -rf ~"}"#)), Some(2));
+    assert_eq!(run(&ev("run_shell_command", r#"{"command":"ls"}"#)), Some(0));
+    assert_eq!(run(&ev("write_file", r#"{"file_path":"a","content":"x"}"#)), Some(0));
+    let _ = fs::remove_dir_all(&d);
+}
+
+#[test]
+fn gemini_command_points_at_gate_settings_and_task_env_cannot_override() {
+    let mut t = Task {
+        id: "g".into(), agent: AgentKind::Gemini, prompt: "p".into(), cwd: std::env::temp_dir(), session_key: None,
+        deps: vec![], max_retries: 0, attempts: 0, timeout_secs: 60, model: None, access: Access::Edit,
+        env: BTreeMap::new(), state: TaskState::Pending, created_ms: 1,
+    };
+    t.env.insert("GEMINI_CLI_SYSTEM_SETTINGS_PATH".into(), "/tmp/evil.json".into());
+    let c = suffice::adapter::command(&t, None);
+    assert_eq!(c.program, "gemini");
+    let p = c.env.get("GEMINI_CLI_SYSTEM_SETTINGS_PATH").expect("gate settings env");
+    assert_ne!(p, "/tmp/evil.json");
+    assert_eq!(std::path::PathBuf::from(p), suffice::adapter::gemini_settings_path());
+    let v = suffice::json::parse(&fs::read_to_string(p).unwrap()).unwrap();
+    assert!(v.get("hooks").unwrap().get("BeforeTool").is_some());
+}
