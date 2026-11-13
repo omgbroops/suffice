@@ -149,8 +149,7 @@ pub fn parse_line(kind: &AgentKind, line: &str) -> Vec<Event> {
         AgentKind::Codex => codex_event(&v),
         // shortcut: opencode event shape unverified, capture a sample
         AgentKind::OpenCode => defensive_event(&v),
-        // shortcut: gemini event shape unverified, capture a sample
-        AgentKind::Gemini => defensive_event(&v),
+        AgentKind::Gemini => gemini_event(&v),
         AgentKind::Generic { .. } | AgentKind::Suffice => None,
     };
     ev.unwrap_or_else(|| raw(line))
@@ -491,7 +490,34 @@ fn codex_event(v: &Value) -> Option<Vec<Event>> {
     }
 }
 
-/// Best-effort parse for CLIs without a captured sample (opencode, gemini).
+/// gemini-cli `--output-format stream-json` (packages/core/src/output/types.ts: init, message,
+/// tool_use, tool_result, error, result). gemini has no pre-exec hook here, so this is its only gate.
+fn gemini_event(v: &Value) -> Option<Vec<Event>> {
+    match v.get("type").and_then(Value::as_str)? {
+        "init" => Some(vec![Event::Session { native_id: sget(v, "session_id")? }]),
+        "message" if v.get("role").and_then(Value::as_str) == Some("assistant") => Some(vec![Event::Text { text: sget(v, "content")? }]),
+        "message" => Some(vec![]),
+        // fail closed: a tool_use the gate can't name or read is still a tool call, under a name no list allows
+        "tool_use" => Some(vec![match (sget(v, "tool_name"), v.get("parameters")) {
+            (Some(name), Some(p @ Value::Obj(_))) => Event::ToolCall { name, input: p.to_string() },
+            _ => Event::ToolCall { name: "gemini_unreadable_tool_use".into(), input: v.to_string() },
+        }]),
+        "tool_result" => {
+            let is_error = v.get("status").and_then(Value::as_str) != Some("success");
+            let output = sget(v, "output").or_else(|| v.get("error").and_then(|e| sget(e, "message"))).unwrap_or_default();
+            Some(vec![Event::ToolResult { name: sget(v, "tool_id").unwrap_or_default(), output, is_error }])
+        }
+        "error" => Some(vec![Event::Stderr { line: v.get("message").and_then(Value::as_str).map(str::to_string).unwrap_or_else(|| v.to_string()) }]),
+        "result" => {
+            let is_error = v.get("status").and_then(Value::as_str) != Some("success");
+            let text = v.get("error").and_then(|e| sget(e, "message")).unwrap_or_default();
+            Some(vec![Event::Result { text, is_error }])
+        }
+        _ => None,
+    }
+}
+
+/// Best-effort parse for CLIs without a captured sample (opencode).
 fn defensive_event(v: &Value) -> Option<Vec<Event>> {
     let mut out = vec![];
     if let Some(id) = sget(v, "sessionID").or_else(|| sget(v, "session_id")) {
