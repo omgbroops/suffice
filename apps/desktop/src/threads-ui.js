@@ -48,6 +48,7 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
    if(workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
+   try{localStorage.removeItem('suffice-last-thread');}catch{}
    workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;history.replaceChildren();activeId=null;viewState.select(null);restoreView();
    list.querySelectorAll('.thread-row').forEach(row=>row.setAttribute('aria-pressed','false'));
   };
@@ -133,7 +134,7 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
     if(busy){toast('Stop the current task before switching threads.');return;}
     if(opening)return;opening=true;saveView();
     try{
-     const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));activeId=thread.id;viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
+     const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));activeId=thread.id;try{localStorage.setItem('suffice-last-thread',thread.id);}catch{}viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
      restoreView();list.querySelectorAll('.thread-row').forEach(el=>el.setAttribute('aria-pressed',String(el===row)));
     }catch(error){toast(error.message);}finally{opening=false;}
    });section.append(row);
@@ -152,7 +153,7 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
   if(event.event==='tool_start'){flushMarkdown();if(current&&!streamed)current.remove();current=null;streamed='';if(!liveGroup){liveGroup=document.createElement('details');liveGroup.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';liveLog=document.createElement('div');liveLog.className='thread-activity-log';liveGroup.append(summary,liveLog);history.insertBefore(liveGroup,statusLine);}const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});liveTools.set(event.id,widget);liveLog.append(widget.element);status(`Running ${event.name}`);reasoning='';if(pinned)bottom();}
   if(event.event==='tool_output'||event.event==='tool_end'){liveTools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(pinned)bottom();if(event.event==='tool_end')status('Working');}
  });
- api.status().then(()=>refresh()).catch(error=>toast(error.message));
+ api.status().then(()=>refresh()).then(()=>{let last;try{last=localStorage.getItem('suffice-last-thread');}catch{}list.querySelector(`.thread-row[data-thread="${CSS.escape(last||'')}"]`)?.click();}).catch(error=>toast(error.message));
  document.addEventListener('click',async event=>{
   const control=event.target.closest('[data-action]');if(!control)return;
   if(control.dataset.action==='repo-menu'){
@@ -187,8 +188,8 @@ export function connectThreads({api,prompt,send,toast,ensureProject,ensureSigned
   const entering=!workspace.classList.contains('thread-view');saveView();viewState.update({draft:''});if(entering){const model=form.modelSelection;viewState.select('pending:'+crypto.randomUUID());if(model)viewState.update({model});activeId=viewState.id;addOptimistic(activeId,text);}busy=true;threadView(header.hidden?text.slice(0,90):header.textContent,entering);const userMessage=message('user',text);current=message('assistant','');statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';history.append(statusLine);liveTools.clear();liveGroup=null;liveLog=null;reasoning='';transition.reveal(userMessage,'user',entering?undefined:0);if(entering)transition.reveal(statusLine,'assistant');bottom(true);streamed='';prompt.value='';form.resizePrompt?.();
   send.disabled=false;
   const selection=form.modelSelection||{effort:'low'};
-  try{const result=await api.run({prompt:text,...selection,attachments});if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}flushMarkdown();markdown(current,result.text);if(result.threadId){adoptOptimistic(activeId,result.threadId);activeId=result.threadId;viewState.adopt(result.threadId);}}
-  catch(error){if(activeId?.startsWith('pending:')){optimisticThreads.delete(activeId);drawThreads();}if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0;}if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}current.textContent=error.message;}
+  try{const result=await api.run({prompt:text,...selection,attachments});if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}flushMarkdown();markdown(current,result.text);if(result.threadId){adoptOptimistic(activeId,result.threadId);activeId=result.threadId;viewState.adopt(result.threadId);try{localStorage.setItem('suffice-last-thread',result.threadId);}catch{}}}
+  catch(error){if(activeId?.startsWith('pending:')){optimisticThreads.delete(activeId);drawThreads();}if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0;}if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}const note=document.createElement('p');note.className='thread-error';note.textContent=error.message;current.append(note);}
   finally{
    statusLine?.remove();statusLine=null;busy=false;current=null;form.setRunning(false);send.disabled=!prompt.value.trim();
    saveView();document.dispatchEvent(new Event('suffice:usage-change'));document.dispatchEvent(new Event('suffice:thread-updated'));await refresh().catch(error=>toast(error.message));bottom();

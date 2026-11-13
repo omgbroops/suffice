@@ -68,7 +68,7 @@ async function receive(message) {
     if(!payload.model&&!runtime.isUsingSubscription('openai'))throw new Error('Sign in to start a session');
     let selected;
     if(payload.model){selected=(await runtime.getAvailable()).find(model=>model.id===payload.model&&model.provider===payload.provider);if(!selected)throw new Error('Model unavailable. Sign in with the Suffice CLI for this provider.');if(!(selected.reasoning?getSupportedThinkingLevels(selected):['off']).includes(payload.effort))throw new Error('Unsupported effort for this model');}
-    const cwd=await realpath(payload.cwd);
+    const cwd=await realpath(payload.cwd).catch(()=>{throw new Error(`This thread's project folder is missing (${payload.cwd}). It was moved or deleted.`);});
     if(!(await stat(cwd)).isDirectory())throw new Error('Choose a project directory');
     busy=true;ownsRun=true;
     if(agent&&workspace!==cwd){await agent.dispose();agent=null;}
