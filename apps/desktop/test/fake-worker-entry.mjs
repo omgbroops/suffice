@@ -25,10 +25,11 @@ async function createSession(options){
  return {session:{subscribe:f=>listeners.push(f),model:null,setThinkingLevel(){},setModel(){}},sessionPath:()=>manager.getSessionFile(),totals:null,async dispose(){},
   aborted:false,abort(){this.aborted=true;},
   // "slow:" streams for ~10 s and stops on abort; "fail:" streams part of a reply, then the provider errors
-  async run(text){user(text);const emit=delta=>listeners.forEach(f=>f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta}}));
+  async run(text,{images}={}){user(text);const emit=delta=>listeners.forEach(f=>f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta}}));
    if(text.startsWith('slow:')||text.startsWith('fail:')){this.aborted=false;listeners.forEach(f=>f({type:'message_start',message:{role:'assistant'}}));let out='';
     for(let i=0;i<(text.startsWith('slow:')?40:4);i++){if(this.aborted){assistant(out,'aborted');return out;}const chunk=`chunk ${i} `;out+=chunk;emit(chunk);await new Promise(r=>setTimeout(r,250));}
     if(text.startsWith('fail:')){const message='529 Overloaded: the provider is busy, try again';assistant(out,'error',message);throw new Error(message);}assistant(out);return out;}
-   const reply='Fake harness reply: '+text+' [in '+options.cwd.split(/[\\/]/).pop()+']';for(const f of listeners){f({type:'message_start',message:{role:'assistant'}});f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:reply}});}assistant(reply);return reply;}};
+   // first line only, plus what came attached: image count and the size of inlined file context
+   const reply='Fake harness reply: '+text.split('\n')[0]+' [in '+options.cwd.split(/[\\/]/).pop()+']'+(images?.length?` [images:${images.length}]`:'')+(text.includes('\n')?` [context:${text.length-text.split('\n')[0].length}]`:'');for(const f of listeners){f({type:'message_start',message:{role:'assistant'}});f({type:'message_update',assistantMessageEvent:{type:'text_delta',delta:reply}});}assistant(reply);return reply;}};
 }
 serve({createRuntime:async()=>runtime,createSession});
