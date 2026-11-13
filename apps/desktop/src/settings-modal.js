@@ -1,16 +1,19 @@
 // Neon Settings window: Account, Usage, Appearance, Shortcuts. Opened by the 'suffice:settings' window event (see desktop.js).
 import './settings-modal.css';
-import { UM_ICONS, keyLabel, modLabel } from './backgrounds/neon-user-menu.js';
+import { keyLabel, modLabel } from './backgrounds/neon-user-menu.js';
+import { UM_ICONS } from './backgrounds/neon-icons.js';
+import { esc } from './backgrounds/neon-util.js';
 import { backgroundPresets } from './backgrounds/presets.js';
 import { getTheme, setTheme } from './theme.js';
 
 const NAV = [['account', 'Account', 'user'], ['usage', 'Usage', 'gauge'], ['appearance', 'Appearance', 'palette'], ['shortcuts', 'Shortcuts', 'keyboard']];
-const esc = t => String(t ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
 const fmtN = n => Number(n || 0).toLocaleString('en-US');
 const fmtC = n => `$${Number(n || 0).toFixed(2)}`;
 
 export function connectSettingsModal({ api, signIn }) {
   let root = null, page = 'account', query = '', info = {}, usage = null, prevFocus = null;
+  const timers = new Set();
+  const later = (fn, ms) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); };
   const shortcuts = () => {
     const mod = modLabel();
     return [
@@ -77,6 +80,7 @@ export function connectSettingsModal({ api, signIn }) {
   function close() {
     if (!root) return;
     document.removeEventListener('keydown', onKey, true); document.removeEventListener('suffice:signed-in', refreshAcct); document.removeEventListener('suffice:signed-out', refreshAcct);
+    timers.forEach(clearTimeout); timers.clear();
     root.remove(); root = null;
     (prevFocus?.isConnected ? prevFocus : document.querySelector('.nx-foot'))?.focus?.();
   }
@@ -100,7 +104,7 @@ export function connectSettingsModal({ api, signIn }) {
       else if (t.dataset.act === 'out') window.dispatchEvent(new CustomEvent('suffice:sign-out'));
       else if (t.dataset.act === 'in') window.dispatchEvent(new CustomEvent('suffice:sign-in'));
       else if (t.dataset.theme) { setTheme(t.dataset.theme); paint(); }
-      else if (t.dataset.skin) { const b = document.createElement('button'); b.dataset.menuAction = `background:${t.dataset.skin}`; b.hidden = true; document.body.append(b); b.click(); b.remove(); setTimeout(() => { paint(); }, 0); }
+      else if (t.dataset.skin) { const b = document.createElement('button'); b.dataset.menuAction = `background:${t.dataset.skin}`; b.hidden = true; document.body.append(b); b.click(); b.remove(); later(paint, 0); }
       else if ('compact' in t.dataset) { document.querySelector('[data-nx="density"]')?.click(); paint(); }
     });
     document.addEventListener('keydown', onKey, true);
@@ -110,6 +114,6 @@ export function connectSettingsModal({ api, signIn }) {
     root.querySelector('.nx-st-nav[aria-current="true"]')?.focus();
     return true;
   }
-  function refreshAcct() { if (!root) return; setTimeout(() => { if (page === 'usage') load(true); else load(false); }, 50); }
+  function refreshAcct() { if (!root) return; later(() => load(page === 'usage'), 50); }
   return { open, get isOpen() { return Boolean(root); } };
 }

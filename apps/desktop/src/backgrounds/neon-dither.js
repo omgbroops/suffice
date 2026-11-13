@@ -28,17 +28,13 @@ export function mountNeonDither(canvas, config) {
       if (fill) { s.fillStyle = rgb(fill); s.fill(); }
       if (edge) { s.strokeStyle = rgb(edge); s.lineWidth = edgeW; s.stroke(); }
     };
-    // field
     const g = s.createLinearGradient(0, 0, W, 0);
     g.addColorStop(0, '#221f2b'); g.addColorStop(.55, '#2a2433'); g.addColorStop(1, '#241f2c');
     s.fillStyle = g; s.fillRect(0, 0, W, H);
-    // teal mist on the right third
     const t = s.createLinearGradient(W * .74, 0, W, 0);
     t.addColorStop(0, 'rgba(30,110,120,0)'); t.addColorStop(.45, 'rgba(34,128,138,.75)'); t.addColorStop(1, 'rgba(44,150,158,.95)');
     s.fillStyle = t; s.fillRect(0, 0, W, H);
-    // tall dark slab, left of centre, maroon rim
     poly([[.27, -.02], [.37, -.02], [.40, .55], [.43, .96], [.31, .98], [.29, .50]], [24, 21, 30], [84, 44, 70], 2);
-    // shard cluster with magenta rim light
     const shards = [
       [[.47, .06], [.62, .02], [.66, .30], [.55, .44], [.46, .30]],
       [[.58, .30], [.74, .18], [.80, .40], [.70, .58], [.60, .52]],
@@ -47,26 +43,21 @@ export function mountNeonDither(canvas, config) {
       [[.40, .10], [.47, .06], [.46, .30], [.42, .36]],
     ];
     shards.forEach((pts, i) => poly(pts, [38 + i * 3, 30 + i * 2, 50 + i * 4], [150, 48, 160], 1.4));
-    // inner facets
     s.globalAlpha = .55; shards.forEach(pts => { const [a, , c] = pts; s.beginPath(); s.moveTo(...P(...a)); s.lineTo(...P(...c)); s.strokeStyle = '#6c2a8a'; s.lineWidth = 1; s.stroke(); }); s.globalAlpha = 1;
-    // eye: magenta lens on the cluster
     const [ex, ey] = P(.71, .30), er = Math.max(3, H * .045);
     const eg = s.createRadialGradient(ex, ey, 0, ex, ey, er * 2.4);
     eg.addColorStop(0, '#e070e0'); eg.addColorStop(.35, '#a83ca8'); eg.addColorStop(1, 'rgba(110,40,140,0)');
     s.fillStyle = eg; s.beginPath(); s.arc(ex, ey, er * 2.4, 0, Math.PI * 2); s.fill();
-    // flowing bands, lower left
     for (let k = 0; k < 4; k++) {
       s.beginPath(); const base = .62 + k * .09;
       for (let i = 0; i <= 40; i++) { const u = i / 40 * .62, v = base + .10 * Math.sin(u * 5 + k) - u * .18; s[i ? 'lineTo' : 'moveTo'](...P(u, v)); }
       s.lineTo(...P(.62, 1.05)); s.lineTo(...P(0, 1.05)); s.closePath();
       s.fillStyle = rgb([[70, 60, 112], [86, 70, 128], [62, 56, 104], [96, 76, 136]][k]); s.globalAlpha = .55; s.fill(); s.globalAlpha = 1;
     }
-    // speckle: dust of magenta and blue on the dark field
     for (let i = 0; i < W * H * .0016; i++) {
       const u = R() * .72, v = R(), c = R() < .6 ? [176, 64, 184] : [72, 84, 170];
       s.fillStyle = rgb(c); s.fillRect(Math.floor(u * W), Math.floor(v * H), 1 + (R() < .3), 1);
     }
-    // broken neon strokes (rim light sweeping across the upper left)
     s.strokeStyle = '#b040b8'; s.lineWidth = 1.2;
     for (let k = 0; k < 5; k++) {
       s.beginPath(); const y0 = R() * .35 + .05, x0 = R() * .25;

@@ -38,15 +38,34 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
  transcript.addEventListener('scroll',()=>{if(nearBottom())following=true;else if(transcript.scrollTop<lastScrollTop-1)following=false;lastScrollTop=transcript.scrollTop;updateJump();},{passive:true});
  transcript.addEventListener('keydown',event=>{if(['PageUp','Home','ArrowUp'].includes(event.key))following=false;});
  let draftTimer,viewScrollTimer;
- function saveView(){clearTimeout(draftTimer);clearTimeout(viewScrollTimer);viewState.update({draft:prompt.value,scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});}
- function restoreView(){const state=viewState.state;prompt.value=state.draft;send.disabled=!prompt.value.trim();following=state.following;requestAnimationFrame(()=>{if(following)bottom(true);else{transcript.scrollTop=state.scrollTop;lastScrollTop=transcript.scrollTop;}});}
+ function saveView(){
+  clearTimeout(draftTimer);clearTimeout(viewScrollTimer);
+  viewState.update({draft:prompt.value,scrollTop:transcript.scrollTop,following,...(form.modelSelection?{model:form.modelSelection}:{})});
+ }
+ function restoreView(){
+  const state=viewState.state;
+  prompt.value=state.draft;send.disabled=!prompt.value.trim();following=state.following;
+  requestAnimationFrame(()=>{
+   if(following)bottom(true);
+   else{transcript.scrollTop=state.scrollTop;lastScrollTop=transcript.scrollTop;}
+  });
+ }
  prompt.value=viewState.state.draft;send.disabled=!prompt.value.trim();
  prompt.addEventListener('input',()=>{clearTimeout(draftTimer);draftTimer=setTimeout(saveView,180);});
  transcript.addEventListener('scroll',()=>{clearTimeout(viewScrollTimer);const id=viewState.id;viewScrollTimer=setTimeout(()=>{if(id===viewState.id&&id)viewState.update({scrollTop:transcript.scrollTop,following});},150);},{passive:true});
  window.addEventListener('beforeunload',saveView);
  new ResizeObserver(()=>bottom()).observe(history);
  new ResizeObserver(()=>{workspace.style.setProperty('--transcript-bottom-space',`${form.getBoundingClientRect().height+48}px`);bottom();}).observe(form);
- function threadView(title,animate=false){const change=()=>{if(!workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));}workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;};if(animate)transition.enter(change);else change();}
+ function threadView(title,animate=false){
+  const change=()=>{
+   if(!workspace.classList.contains('thread-view')){
+    const canvas=workspace.querySelector('.atmosphere');
+    previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));
+   }
+   workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;
+  };
+  if(animate)transition.enter(change);else change();
+ }
  function clear(){
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
@@ -59,9 +78,17 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
  }
 
  const codeTimers=new WeakMap();
- function markdown(element,text){element.innerHTML=DOMPurify.sanitize(marked.parse(text),{USE_PROFILES:{html:true},ALLOW_DATA_ATTR:false,FORBID_TAGS:['img','video','audio','iframe','form','input','button','style'],FORBID_ATTR:['style','id','name']});
+ function highlight(element){
+  if(!element.isConnected)return;
+  const lang=code=>code.className.match(/language-([\w+-]+)/)?.[1]||'text';
+  void import('./code-highlight.js')
+   .then(({colorCode})=>Promise.all([...element.querySelectorAll('pre code')].map(code=>colorCode(code,'snippet.'+lang(code)))))
+   .catch(()=>{});
+ }
+ function markdown(element,text){
+  element.innerHTML=DOMPurify.sanitize(marked.parse(text),{USE_PROFILES:{html:true},ALLOW_DATA_ATTR:false,FORBID_TAGS:['img','video','audio','iframe','form','input','button','style'],FORBID_ATTR:['style','id','name']});
   clearTimeout(codeTimers.get(element));
-  if(element.querySelector('pre code'))codeTimers.set(element,setTimeout(()=>{if(element.isConnected)void import('./code-highlight.js').then(({colorCode})=>Promise.all([...element.querySelectorAll('pre code')].map(code=>colorCode(code,'snippet.'+(code.className.match(/language-([\w+-]+)/)?.[1]||'text'))))).catch(()=>{});},120));
+  if(element.querySelector('pre code'))codeTimers.set(element,setTimeout(()=>highlight(element),120));
  }
  function plainReasoning(text){const node=document.createElement('div');markdown(node,text);return node.textContent.replace(/[*_`~]/g,'').replace(/^#{1,6}\s*/gm,'').split('\n').map(line=>line.trim()).filter(Boolean).at(-1)||'Working';}
  function status(text){if(statusLine){statusLine.textContent=text;statusLine.hidden=false;}}
@@ -116,46 +143,95 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
   const version=++refreshVersion,threads=await api.threads();if(version!==refreshVersion)return;
   savedThreads=threads;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
+ function projectGroup(key,group){
+  const section=document.createElement('div');section.className='project-group';section.dataset.projectKey=key;
+  const head=document.createElement('button');head.type='button';head.className='section-label project-group-label';head.title=key;head.innerHTML=icon('folder');
+  const label=document.createElement('span');label.textContent=group.name;head.append(label);
+  const open=!collapsedProjects.has(key)||group.items.some(thread=>thread.id===activeId);
+  head.setAttribute('aria-expanded',String(open));section.toggleAttribute('data-collapsed',!open);
+  head.addEventListener('click',()=>{
+   const next=section.hasAttribute('data-collapsed');
+   section.toggleAttribute('data-collapsed',!next);head.setAttribute('aria-expanded',String(next));
+   if(next)collapsedProjects.delete(key);else collapsedProjects.add(key);
+   try{localStorage.setItem('suffice-collapsed-projects',JSON.stringify([...collapsedProjects]));}catch{}
+  });
+  section.append(head);
+  for(const thread of group.items)section.append(threadRow(thread));
+  return section;
+ }
+ function threadRow(thread){
+  const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';
+  row.dataset.thread=thread.id;row.dataset.project=thread.project;
+  if(thread.cwd)row.dataset.cwd=thread.cwd;
+  if(thread.branch)row.dataset.branch=thread.branch;
+  if(thread.model)row.dataset.model=thread.model;
+  row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
+  const dot=document.createElement('span');dot.className='list-dot';dot.textContent='·';dot.setAttribute('aria-hidden','true');
+  const content=document.createElement('span');content.className='row-content';
+  const name=document.createElement('span');name.className='row-title';name.textContent=thread.title;
+  const time=document.createElement('time');time.className='row-meta';time.dateTime=new Date(thread.modified).toISOString();time.textContent=threadTime(thread.modified);time.title=new Date(thread.modified).toLocaleString();
+  content.append(name,time);row.append(dot,content);
+  row.addEventListener('click',async()=>{
+   if(busy){toast('Stop the current task before switching threads.');return;}
+   if(opening)return;opening=true;saveView();
+   try{
+    const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));
+    activeId=thread.id;try{localStorage.setItem('suffice-last-thread',thread.id);}catch{}
+    viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
+    restoreView();list.querySelectorAll('.thread-row').forEach(el=>el.setAttribute('aria-pressed',String(el===row)));
+   }catch(error){toast(error.message);}finally{opening=false;}
+  });
+  return row;
+ }
  function drawThreads(){
   const threads=[...optimisticThreads.values(),...savedThreads.filter(thread=>!optimisticThreads.has(thread.id))].sort((a,b)=>b.modified-a.modified);
   list.replaceChildren();
   // grouped by project (newest first): a thread's project is visible without a label on every row
   const groups=new Map();
-  for(const thread of threads){const key=thread.cwd||thread.project;if(!groups.has(key))groups.set(key,{name:thread.project,items:[]});groups.get(key).items.push(thread);}
-  for(const [key,group] of groups){
-  const section=document.createElement('div');section.className='project-group';section.dataset.projectKey=key;
-  const head=document.createElement('button');head.type='button';head.className='section-label project-group-label';head.title=key;head.innerHTML=icon('folder');const label=document.createElement('span');label.textContent=group.name;head.append(label);
-  const open=!collapsedProjects.has(key)||group.items.some(thread=>thread.id===activeId);head.setAttribute('aria-expanded',String(open));section.toggleAttribute('data-collapsed',!open);
-  head.addEventListener('click',()=>{const next=section.hasAttribute('data-collapsed');section.toggleAttribute('data-collapsed',!next);head.setAttribute('aria-expanded',String(next));if(next)collapsedProjects.delete(key);else collapsedProjects.add(key);try{localStorage.setItem('suffice-collapsed-projects',JSON.stringify([...collapsedProjects]));}catch{}});
-  section.append(head);list.append(section);
-  for(const thread of group.items){
-   const row=document.createElement('button');row.type='button';row.className='thread-row session-row session-row--sidebar';row.dataset.thread=thread.id;row.dataset.project=thread.project;if(thread.cwd)row.dataset.cwd=thread.cwd;if(thread.branch)row.dataset.branch=thread.branch;if(thread.model)row.dataset.model=thread.model;row.setAttribute('aria-pressed',String(thread.id===activeId));row.title=`${thread.title} · ${thread.project}`;
-   const dot=document.createElement('span');dot.className='list-dot';dot.textContent='·';dot.setAttribute('aria-hidden','true');
-   const content=document.createElement('span');content.className='row-content';
-   const name=document.createElement('span');name.className='row-title';name.textContent=thread.title;
-   const time=document.createElement('time');time.className='row-meta';time.dateTime=new Date(thread.modified).toISOString();time.textContent=threadTime(thread.modified);time.title=new Date(thread.modified).toLocaleString();content.append(name,time);row.append(dot,content);
-   row.addEventListener('click',async()=>{
-    if(busy){toast('Stop the current task before switching threads.');return;}
-    if(opening)return;opening=true;saveView();
-    try{
-     const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));activeId=thread.id;try{localStorage.setItem('suffice-last-thread',thread.id);}catch{}viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
-     restoreView();list.querySelectorAll('.thread-row').forEach(el=>el.setAttribute('aria-pressed',String(el===row)));
-    }catch(error){toast(error.message);}finally{opening=false;}
-   });section.append(row);
-  }}
+  for(const thread of threads){
+   const key=thread.cwd||thread.project;
+   if(!groups.has(key))groups.set(key,{name:thread.project,items:[]});
+   groups.get(key).items.push(thread);
+  }
+  for(const [key,group] of groups)list.append(projectGroup(key,group));
+ }
+ const refreshList=()=>void refresh().catch(error=>toast(error.message));
+ function liveToolStart(event,pinned){
+  flushMarkdown();if(current&&!streamed)current.remove();current=null;streamed='';
+  if(!liveGroup){
+   liveGroup=document.createElement('details');liveGroup.className='thread-activity';
+   const summary=document.createElement('summary');summary.textContent='Work';
+   liveLog=document.createElement('div');liveLog.className='thread-activity-log';liveGroup.append(summary,liveLog);
+   history.insertBefore(liveGroup,statusLine);
+  }
+  const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});
+  liveTools.set(event.id,widget);liveLog.append(widget.element);status(`Running ${event.name}`);reasoning='';
+  if(pinned)bottom();
  }
  api.onEvent(event=>{
-  if(event.event==='background_started'){adoptOptimistic(event.clientId,event.threadId);if(!optimisticThreads.has(event.threadId))addOptimistic(event.threadId,event.title||'New session',event.project);drawThreads();void refresh().catch(()=>{});return;}
-  if(event.event==='background_completed'){void refresh().catch(()=>{});return;}
+  if(event.event==='background_started'){
+   adoptOptimistic(event.clientId,event.threadId);
+   if(!optimisticThreads.has(event.threadId))addOptimistic(event.threadId,event.title||'New session',event.project);
+   drawThreads();refreshList();return;
+  }
+  if(event.event==='background_completed'){refreshList();return;}
   if(!busy)return;
-  if(event.event==='thread_started'){adoptOptimistic(activeId,event.id);activeId=event.id;viewState.adopt(event.id);drawThreads();void refresh().catch(()=>{});}
+  if(event.event==='thread_started'){adoptOptimistic(activeId,event.id);activeId=event.id;viewState.adopt(event.id);drawThreads();refreshList();}
   const pinned=transcript.scrollHeight-transcript.scrollTop-transcript.clientHeight<100;
   if(event.event==='assistant_start'){reasoning='';if(streamed){flushMarkdown();current=null;streamed='';}status('Working');}
-  if(event.event==='text'){if(!current){current=message('assistant','');history.insertBefore(current,statusLine);liveGroup=null;liveLog=null;}streamed+=event.text;statusLine.hidden=true;if(!renderFrame)renderFrame=requestAnimationFrame(()=>{renderFrame=0;if(current)markdown(current,streamed);if(pinned)bottom();});}
+  if(event.event==='text'){
+   if(!current){current=message('assistant','');history.insertBefore(current,statusLine);liveGroup=null;liveLog=null;}
+   streamed+=event.text;statusLine.hidden=true;
+   if(!renderFrame)renderFrame=requestAnimationFrame(()=>{renderFrame=0;if(current)markdown(current,streamed);if(pinned)bottom();});
+  }
   if(event.event==='reasoning'){reasoning+=event.text||'';status(plainReasoning(reasoning));}
   if(event.event==='tool')status(`Running ${event.name}`);
-  if(event.event==='tool_start'){flushMarkdown();if(current&&!streamed)current.remove();current=null;streamed='';if(!liveGroup){liveGroup=document.createElement('details');liveGroup.className='thread-activity';const summary=document.createElement('summary');summary.textContent='Work';liveLog=document.createElement('div');liveLog.className='thread-activity-log';liveGroup.append(summary,liveLog);history.insertBefore(liveGroup,statusLine);}const widget=createToolWidget({name:event.name,text:JSON.stringify(event.input||{},null,2),done:false});liveTools.set(event.id,widget);liveLog.append(widget.element);status(`Running ${event.name}`);reasoning='';if(pinned)bottom();}
-  if(event.event==='tool_output'||event.event==='tool_end'){liveTools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');if(pinned)bottom();if(event.event==='tool_end')status('Working');}
+  if(event.event==='tool_start')liveToolStart(event,pinned);
+  if(event.event==='tool_output'||event.event==='tool_end'){
+   liveTools.get(event.id)?.update(toolOutput(event.result),event.isError,event.event!=='tool_end');
+   if(pinned)bottom();
+   if(event.event==='tool_end')status('Working');
+  }
  });
  api.status().then(()=>refresh()).then(()=>projectsReady).then(()=>{let last;try{last=localStorage.getItem('suffice-last-thread');}catch{}list.querySelector(`.thread-row[data-thread="${CSS.escape(last||'')}"]`)?.click();}).catch(error=>toast(error.message));
  document.addEventListener('click',async event=>{
@@ -185,15 +261,42 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
    const selection=form.modelSelection||{effort:'low'},origin=viewState.id;
    const clientId='pending:'+crypto.randomUUID();addOptimistic(clientId,text);
    prompt.value='';form.attachments?.clear();saveView();send.disabled=true;
-   void api.runBackground({prompt:text,...selection,attachments,clientId}).then(result=>{if(result.threadId)adoptOptimistic(clientId,result.threadId);return refresh().catch(()=>{});}).catch(error=>{optimisticThreads.delete(clientId);drawThreads();toast(error.message);if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}});
+   void api.runBackground({prompt:text,...selection,attachments,clientId}).then(result=>{if(result.threadId)adoptOptimistic(clientId,result.threadId);return refresh().catch(error=>toast(error.message));}).catch(error=>{
+    optimisticThreads.delete(clientId);drawThreads();toast(error.message);
+    if(viewState.id===origin&&!prompt.value){prompt.value=text;prompt.dispatchEvent(new Event('input'));}
+   });
    return;
   }
   busy=true;form.setRunning(true);form.attachments?.clear();
-  const entering=!workspace.classList.contains('thread-view');saveView();viewState.update({draft:''});if(entering){const model=form.modelSelection;viewState.select('pending:'+crypto.randomUUID());if(model)viewState.update({model});activeId=viewState.id;addOptimistic(activeId,text);}busy=true;threadView(header.hidden?text.slice(0,90):header.textContent,entering);const userMessage=message('user',text);current=message('assistant','');statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';history.append(statusLine);liveTools.clear();liveGroup=null;liveLog=null;reasoning='';transition.reveal(userMessage,'user',entering?undefined:0);if(entering)transition.reveal(statusLine,'assistant');bottom(true);streamed='';prompt.value='';form.resizePrompt?.();
+  const entering=!workspace.classList.contains('thread-view');saveView();viewState.update({draft:''});
+  if(entering){
+   const model=form.modelSelection;
+   viewState.select('pending:'+crypto.randomUUID());
+   if(model)viewState.update({model});
+   activeId=viewState.id;addOptimistic(activeId,text);
+  }
+  busy=true;threadView(header.hidden?text.slice(0,90):header.textContent,entering);
+  const userMessage=message('user',text);current=message('assistant','');
+  statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';history.append(statusLine);
+  liveTools.clear();liveGroup=null;liveLog=null;reasoning='';
+  transition.reveal(userMessage,'user',entering?undefined:0);if(entering)transition.reveal(statusLine,'assistant');
+  bottom(true);streamed='';prompt.value='';form.resizePrompt?.();
   send.disabled=false;
   const selection=form.modelSelection||{effort:'low'};
-  try{const result=await api.run({prompt:text,...selection,attachments});if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}flushMarkdown();markdown(current,result.text);if(result.threadId){adoptOptimistic(activeId,result.threadId);activeId=result.threadId;viewState.adopt(result.threadId);try{localStorage.setItem('suffice-last-thread',result.threadId);}catch{}}}
-  catch(error){if(activeId?.startsWith('pending:')){optimisticThreads.delete(activeId);drawThreads();}if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0;}if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}const note=document.createElement('p');note.className='thread-error';note.textContent=error.message;current.append(note);}
+  try{
+   const result=await api.run({prompt:text,...selection,attachments});
+   if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}
+   flushMarkdown();markdown(current,result.text);
+   if(result.threadId){
+    adoptOptimistic(activeId,result.threadId);activeId=result.threadId;viewState.adopt(result.threadId);
+    try{localStorage.setItem('suffice-last-thread',result.threadId);}catch{}
+   }
+  }catch(error){
+   if(activeId?.startsWith('pending:')){optimisticThreads.delete(activeId);drawThreads();}
+   if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0;}
+   if(!current){current=message('assistant','');history.insertBefore(current,statusLine);}
+   const note=document.createElement('p');note.className='thread-error';note.textContent=error.message;current.append(note);
+  }
   finally{
    statusLine?.remove();statusLine=null;busy=false;current=null;form.setRunning(false);send.disabled=!prompt.value.trim();
    saveView();document.dispatchEvent(new Event('suffice:usage-change'));document.dispatchEvent(new Event('suffice:thread-updated'));await refresh().catch(error=>toast(error.message));bottom();
