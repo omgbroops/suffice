@@ -31,7 +31,8 @@ export function repositoryTools({workspace, commandTimeout=180, shellPath, acces
   return [
     ...native.map(tool=>({...tool,label:tool.label??tool.name,
       async execute(id,args,signal,onUpdate) {
-        if(tool.name!=='bash') await repositoryPath(workspace,args.path);
+        // hand the tool the checked absolute path: its own expandPath strips '@' and expands '~', which would point elsewhere
+        if(tool.name!=='bash') args={...args,path:await repositoryPath(workspace,args.path)};
         else if(process.env.SUFFICE_GATE_CMD) await gateBash(args.command);
         if(tool.name==='bash') args={...args,timeout:Math.min(Math.max(args.timeout??commandTimeout,1),commandTimeout)};
         return tool.execute(id,args,signal,onUpdate);

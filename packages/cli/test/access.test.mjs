@@ -104,3 +104,17 @@ test('bash execute is unchanged when SUFFICE_GATE_CMD is unset', async () => {
     await rm(dir,{recursive:true,force:true});
   }
 });
+
+test('write cannot leave the workspace through @ or ~ path spellings', async () => {
+  const dir=await mkdtemp(resolve(tmpdir(),'suffice-ws-')), out=await mkdtemp(resolve(tmpdir(),'suffice-out-'));
+  const name=`suffice-probe-${process.pid}-${Date.now()}`, home=resolve(process.env.HOME,name);
+  try {
+    const write=repositoryTools({workspace:dir,access:'edit'}).find(t=>t.name==='write');
+    await write.execute('c1',{path:`@${out}/x`,content:'pwn'}).catch(()=>{});
+    await write.execute('c2',{path:`~/${name}`,content:'pwn'}).catch(()=>{});
+    assert.equal(existsSync(resolve(out,'x')),false,'wrote outside via @');
+    assert.equal(existsSync(home),false,'wrote outside via ~');
+  } finally {
+    await rm(home,{force:true}); await rm(dir,{recursive:true,force:true}); await rm(out,{recursive:true,force:true});
+  }
+});
