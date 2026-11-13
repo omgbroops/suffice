@@ -4,6 +4,12 @@ export const ACTIVE_BACKGROUND = 'lake';
 
 export const backgroundPresets = Object.freeze({
   none: Object.freeze({label: 'None',type: 'none'}),
+  neon: Object.freeze({ label: 'Neon dither', type: 'neon-dither', seed: 51877, cell: 2, contrast: 1.9 }),
+  'neon-cliffs': Object.freeze({ label: 'Neon cliffs', type: 'neon-dither', seed: 51877, cell: 2, contrast: 1.9, image: 'art/carina_nebula.jpg', gamma: 1.2, exposure: .95, focusY: .6 }),
+  'neon-mech': Object.freeze({ label: 'Neon mech', type: 'neon-dither', seed: 51877, cell: 2, contrast: 1.9, image: 'art/mech-v13.png', grade: false, gamma: .85, exposure: 1.3, tealRight: .3 }),
+  'neon-mech-2': Object.freeze({ label: 'Neon mech 2', type: 'neon-dither', seed: 51877, cell: 2, contrast: 1.9, image: 'art/mech-v4.png', grade: false, gamma: .85, exposure: 1.3 }),
+  'neon-ring': Object.freeze({ label: 'Neon ring', type: 'neon-dither', seed: 51877, cell: 2, contrast: 1.9, image: 'art/southern_ring_nebula.jpg', gamma: 1.1, exposure: 1 }),
+  'neon-eagle': Object.freeze({ label: 'Neon eagle', type: 'neon-dither', seed: 51877, cell: 2, contrast: 1.9, image: 'art/PIA25433.jpg', gamma: 1.1, exposure: 1 }),
   oceanic: Object.freeze({ label: 'Oceanic Shimmer', type: 'oceanic-shimmer', opacity: .22, lightOpacity: .16 }),
   lake: Object.freeze({ label: 'Moonlit lake', type: 'moonlit-lake', seed: 74281, pixelPitch: 3, exposure: .92 }),
   sonar: Object.freeze({
