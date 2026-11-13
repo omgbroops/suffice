@@ -6,6 +6,9 @@ import { mountGradientAscii } from './backgrounds/gradient-ascii.js';
 import { mountSonarGrid } from './backgrounds/sonar-grid.js';
 import { mountOceanicShimmer } from './backgrounds/oceanic-shimmer.js';
 import { mountMoonlitLake } from './backgrounds/moonlit-lake.js';
+import { mountNeonDither } from './backgrounds/neon-dither.js';
+import './backgrounds/neon-skin.css';
+import { mountNeonChrome } from './backgrounds/neon-chrome.js';
 
 export function mountAtmosphere(canvas) {
   const requested = new URLSearchParams(window.location.search).get('background');
@@ -18,6 +21,7 @@ export function mountAtmosphere(canvas) {
   canvas.hidden=preset.type==='none';
   if(preset.type==='none')return ()=>{};
   if (preset.type === 'oceanic-shimmer') return mountOceanicShimmer(canvas, preset);
+  if (preset.type === 'neon-dither') { const off = [mountNeonDither(canvas, preset), mountNeonChrome()]; return () => off.forEach(f => f()); }
   if (preset.type === 'moonlit-lake') return mountMoonlitLake(canvas, preset);
   if (preset.type === 'sonar-grid') return mountSonarGrid(canvas, preset);
   if (preset.type === 'gradient-ascii') return mountGradientAscii(canvas, preset);

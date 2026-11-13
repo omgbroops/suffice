@@ -2,6 +2,7 @@ const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell}=require(
 const path=require('node:path');
 const {pathToFileURL}=require('node:url');
 const workspaceFiles=require('./workspace-files.cjs');
+const github=require('./github.cjs');
 const {prepareAttachments,clipboardFiles}=require('./attachments.cjs');
 let background;
 let win,worker,loginUrl=null,project=null,selectedProject=null,sequence=0,running=false;
@@ -36,6 +37,10 @@ app.whenReady().then(async()=>{
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
   handle('threads',()=>request('threads'));
+  handle('git-info',async()=>({...await github.info(project),login:await github.user()}));
+  handle('issues',()=>github.issues(project));
+  handle('prs',()=>github.prs(project));
+  handle('open-github',url=>{if(!github.safeUrl(url))throw new Error('Only github.com links open here');return shell.openExternal(url);});
   handle('projects',()=>projects.list());
   handle('select-project',async id=>{if(running)throw new Error('Stop the current task first');const item=(await projects.list()).find(p=>p.id===id);if(!item)throw new Error('Project not found');await request('reset');project=selectedProject=item.path;return {...item,git:await projects.git(project)};});
   handle('thread',async id=>{if(running)throw new Error('Stop the current task before switching threads');const thread=await request('thread',{id});project=thread.cwd;return thread;});
