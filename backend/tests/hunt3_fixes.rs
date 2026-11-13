@@ -146,3 +146,12 @@ fn git_global_options_are_held_and_nested_local_shell_is_read() {
     assert!(!verdict("local_shell", r#"{"type":"exec","action":{"command":["ls","-la"]}}"#));
     assert!(verdict("local_shell", r#"{"type":"exec","action":{"command":["bash","-lc","rm -rf ~"]}}"#));
 }
+
+#[test]
+fn gemini_local_tools_pass_and_ask_user_holds() {
+    for n in ["write_file", "replace", "write_todos", "activate_skill", "update_topic", "complete_task", "enter_plan_mode", "exit_plan_mode",
+              "read_file", "glob", "grep_search", "list_directory", "read_many_files", "google_web_search"] {
+        assert!(!verdict(n, r#"{"file_path":"a"}"#), "should allow: {n}");
+    }
+    assert!(verdict("ask_user", "{}"));
+}

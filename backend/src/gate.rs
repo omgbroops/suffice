@@ -127,6 +127,8 @@ const SHELL_TOOLS: &[&str] = &["bash", "shell", "exec", "command_execution", "ru
 const LOCAL_TOOLS: &[&str] = &[
     "edit", "write", "multiedit", "notebookedit", "todowrite", "task", "patch", "apply_patch", "todoread", "update_plan",
     "lsp", "skill",
+    // gemini-cli's (packages/core/src/tools/definitions/base-declarations.ts); ask_user stays held like question
+    "write_file", "replace", "write_todos", "activate_skill", "update_topic", "complete_task", "enter_plan_mode", "exit_plan_mode",
 ];
 const NON_SHELL_OUTWARD: &[&str] = &[
     "send", "email", "message", "post", "publish", "tweet", "purchase", "buy", "checkout", "pay", "transfer",
