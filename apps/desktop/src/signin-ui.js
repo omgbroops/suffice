@@ -38,5 +38,6 @@ export function connectSignIn({api,toast}){
  document.addEventListener('pointerdown',event=>{if(!menu.contains(event.target)&&!pill.contains(event.target))close();});
  window.addEventListener('resize',()=>close());
  const ready=api.status().then(result=>{signedIn=Boolean(result.authenticated);pill.hidden=signedIn;}).catch(error=>toast(error.message));
- return {async ensure(){await ready;if(signedIn)return true;const result=new Promise(resolve=>{settle(false);waiting=resolve;});open();return result;}};
+ async function signOut(){await api.logout();signedIn=false;pill.hidden=false;document.dispatchEvent(new Event('suffice:signed-out'));}
+ return {get signedIn(){return signedIn;},ready,open,signOut,async ensure(){await ready;if(signedIn)return true;const result=new Promise(resolve=>{settle(false);waiting=resolve;});open();return result;}};
 }

@@ -5,7 +5,7 @@ process.env.PI_CODING_AGENT_DIR=parseOptions([]).home;
 const {serve}=await import('../electron/worker.mjs');
 let signedIn=process.env.SUFFICE_FAKE_SIGNED_IN==='1';
 const runtime={
- isUsingSubscription:()=>signedIn,getAvailable:async()=>[],getModel:()=>undefined,
+ isUsingSubscription:()=>signedIn,async logout(){signedIn=false;},getAvailable:async()=>[],getModel:()=>undefined,
  async login(provider,type,{notify,prompt}){
   notify({type:'auth_url',url:'https://auth.example.invalid/oauth/authorize?fake=1'});
   if(await prompt({message:'Paste the login response'})!=='fake-code')throw new Error('Login response not recognized');

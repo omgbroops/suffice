@@ -22,6 +22,10 @@ async function receive(message) {
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(action==='login-input'){login?.answer?.(String(payload.text??''));send({id,ok:true});return;}
     if(action==='login-cancel'){login?.controller.abort();send({id,ok:true});return;}
+    if(action==='logout'){
+      if(!runtime)throw new Error('Harness is not ready');
+      await runtime.logout('openai');send({id,ok:true,result:{authenticated:runtime.isUsingSubscription('openai')}});return;
+    }
     if(action==='login'){
       // Same OpenAI OAuth sign-in as `suffice login`; the browser URL and any paste request go to the window as events.
       if(!runtime)throw new Error('Harness is not ready');

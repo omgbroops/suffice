@@ -44,5 +44,5 @@ export function connectModels({api,toast}){
  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden){event.preventDefault();close(true);}});
  label();
  function load(){api.status().then(()=>api.models()).then(items=>{loading=false;models=items;let stored;try{stored=viewState.state.model??JSON.parse(localStorage.getItem('suffice-model'));}catch{}selected=models.find(m=>m.id===stored?.model&&m.provider===stored?.provider)||models.find(m=>m.id==='gpt-6.1-sol')||models[0];effort=selected?.efforts.includes(stored?.effort)?stored.effort:selected?.efforts.includes('low')?'low':selected?.efforts[0]||'off';save();label();if(!panel.hidden)render();}).catch(error=>{loading=false;label();toast(error.message);});}
- load();document.addEventListener('suffice:signed-in',load);
+ load();document.addEventListener('suffice:signed-in',load);document.addEventListener('suffice:signed-out',load);
 }

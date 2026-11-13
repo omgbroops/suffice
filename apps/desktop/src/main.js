@@ -364,7 +364,7 @@ function backgroundOptions() {
 
 }
 
-function showSettings() { showDialog('Workspace settings', `<div class="settings-row"><span>Workspace</span><strong>Suffice</strong></div><div class="settings-row"><span>Appearance</span><strong>${getTheme() === 'light' ? 'Light' : 'Dark'}</strong></div><div class="settings-row"><span>Environment</span><strong>Visual prototype</strong></div><div class="sample-note">Settings preview · nothing is saved remotely</div>`); }
+function showSettings() { if (desktop?.settings) { void desktop.settings(); return; } showDialog('Workspace settings', `<div class="settings-row"><span>Workspace</span><strong>Suffice</strong></div><div class="settings-row"><span>Appearance</span><strong>${getTheme() === 'light' ? 'Light' : 'Dark'}</strong></div><div class="settings-row"><span>Environment</span><strong>Visual prototype</strong></div><div class="sample-note">Settings preview · nothing is saved remotely</div>`); }
 
 function showSearch() {
   const source=[...document.querySelectorAll('.sidebar-sessions .thread-row')];
@@ -388,4 +388,4 @@ setupSidebarResize();
 connectSendControls(document.querySelector('.composer'),prompt,send);
 connectComposerSize(document.querySelector('.composer'),prompt);
 connectAttachments({form:document.querySelector('.composer'),prompt,send,input:document.querySelector('#file-input'),toast});
-connectDesktop({prompt,send,toast,escapeHtml});
+const desktop = connectDesktop({prompt,send,toast,escapeHtml,showDialog,closeDialog:()=>dialog.close()});

@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   clipboardFiles:()=>invoke('suffice:clipboard-files'),
   abort:()=>invoke('suffice:abort'),
   login:()=>invoke('suffice:login'),
+  logout:()=>invoke('suffice:logout'),
   loginInput:text=>invoke('suffice:login-input',text),
   loginCancel:()=>invoke('suffice:login-cancel'),
   loginOpen:()=>invoke('suffice:login-open'),

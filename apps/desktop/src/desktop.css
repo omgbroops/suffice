@@ -178,3 +178,6 @@
 .desktop-app .right-panel-open .workspace { margin-right: calc(var(--right-panel-width) + 8px); }
 @keyframes context-tooltip-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
 @media(prefers-reduced-motion:reduce){.right-sidebar,.desktop-app .workspace,.context-ring-value { transition: none; }.context-usage-details { animation: none; }}
+
+/* no thread archive in the desktop app yet; a control that only says so is a dead end */
+.desktop-app .done-button { display: none; }

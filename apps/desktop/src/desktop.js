@@ -3,9 +3,10 @@ import { connectProjects } from './projects-ui.js';
 import {connectSignIn} from './signin-ui.js';
 import {connectModels} from './models-ui.js';
 import {connectTooltips} from './tooltips.js';
+import {getTheme} from './theme.js';
 import {connectWorkspaceTools} from './workspace-tools.js';
 // Desktop-only behavior; the existing shell markup, tokens and controls stay.
-export function connectDesktop({prompt,send,toast,escapeHtml}) {
+export function connectDesktop({prompt,send,toast,escapeHtml,showDialog,closeDialog}) {
   const api=window.sufficeDesktop;
   if(!api)return;
   document.documentElement.classList.add('desktop-app');
@@ -19,4 +20,13 @@ export function connectDesktop({prompt,send,toast,escapeHtml}) {
   connectModels({api,toast});
   connectWorkspaceTools(api);
   connectTooltips();
+  // Real settings for the desktop app: account, current project, appearance.
+  async function settings(){
+    await signIn.ready;
+    const project=document.querySelector('.project-picker .project-name')?.textContent;
+    const row=(label,value)=>`<div class="settings-row"><span>${label}</span><strong>${escapeHtml(value)}</strong></div>`;
+    showDialog('Settings',row('Account',signIn.signedIn?'OpenAI · signed in':'Not signed in')+row('Project',project&&project!=='Select project'?project:'None selected')+row('Appearance',getTheme()==='light'?'Light':'Dark')+`<button type="button" class="button button--subtle dialog-action settings-account">${signIn.signedIn?'Sign out':'Sign in'}</button>`);
+    document.querySelector('.settings-account').addEventListener('click',async()=>{closeDialog();if(!signIn.signedIn){signIn.open();return;}try{await signIn.signOut();toast('Signed out');}catch(error){toast(error.message);}});
+  }
+  return {settings};
 }

@@ -57,6 +57,7 @@ app.whenReady().then(async()=>{
   handle('run-background',payload=>runTask(payload,true));
   handle('abort',()=>request('abort'));
   handle('login',()=>request('login'));
+  handle('logout',()=>{if(running)throw new Error('Stop the current task first');return request('logout');});
   handle('login-input',text=>{if(typeof text!=='string'||text.length>10000)throw new Error('Invalid sign-in response');return request('login-input',{text});});
   handle('login-cancel',()=>request('login-cancel'));
   handle('login-open',()=>{if(loginUrl)void shell.openExternal(loginUrl);});
