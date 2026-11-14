@@ -33,7 +33,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.match(await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
     await page.getByRole('button',{name:'Maximize or restore'}).click();
     await page.getByRole('button',{name:'Maximize or restore'}).click();
-    await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.unmaximize();win.setBounds({x:80,y:80,width:1440,height:900});});
+    await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.unmaximize();win.setContentSize(1440,900);win.setPosition(0,0);});
     await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
     const controls=await page.locator('.window-control').evaluateAll(elements=>elements.map(el=>({width:el.clientWidth,height:el.clientHeight,icon:el.querySelector('svg').getBoundingClientRect().width})));
     assert.ok(controls.every(control=>control.width===28&&control.height===28&&control.icon===16));
