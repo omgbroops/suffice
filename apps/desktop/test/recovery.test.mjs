@@ -37,3 +37,9 @@ test('closing or disposing a pending terminal does not spawn an orphan',async()=
  const manager=createTerminalManager({resolveCwd:()=>new Promise(resolve=>finish=resolve),resolveShell:async()=>'/bin/bash',emit:()=>{},spawn:()=>{spawns++;throw new Error('Must not spawn');}});
  const id='terminal:11111111-1111-4111-8111-111111111111';const pending=manager.create({threadId:'saved',id});manager.dispose();finish(cwd);await assert.rejects(pending,/closed/);assert.equal(spawns,0);assert.equal(manager.count,0);
 });
+
+ test('native backup flush drains coalesced snapshots before their timer',async()=>{
+ const directory=await mkdtemp(resolve(tmpdir(),'suffice-view-flush-')),store=createViewStateStore(directory,{delayMs:60000}),key='suffice-thread-view-v1:new';
+ const earlier=store.save({key,value:JSON.stringify({draft:'earlier'})}),latest=store.save({key,value:JSON.stringify({draft:'latest'})});
+ await store.flush();await Promise.all([earlier,latest]);assert.equal(JSON.parse((await store.load())[key]).draft,'latest');
+ });

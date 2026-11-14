@@ -13,6 +13,9 @@ states through validated Electron IPC into the application's profile directory.
 Each write flushes a temporary file before rename. Restore a newer native backup
 before mounting chats. Bound keys, state sizes and loaded file count; never accept
 renderer filesystem paths. Keep source transcripts and credentials separate.
+Native writes coalesce latest values per key on a bounded 250ms timer, and normal
+application quit explicitly flushes queued backups. Input has a separate 180ms
+debounce. The coalescing timer does not slide indefinitely with further edits.
 ## Consequences
 Normal typing remains asynchronous; only completed native writes are recoverable.
 Disk-full errors and power loss are not a durability guarantee. The existing
