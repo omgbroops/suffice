@@ -25,7 +25,7 @@ export function createTerminalViews({api,onLabel}){
    view.start=(async()=>{try{await document.fonts.ready;fit.fit();const snapshot=await api.terminalCreate({threadId,id,ordinal,cols:Math.max(2,term.cols),rows:Math.max(1,term.rows)});if(view.closed){void api.terminalClose({threadId,id});return;}if(snapshot.windowsPty)term.options.windowsPty=snapshot.windowsPty;view.ready=true;view.sequence=snapshot.sequence;term.write(snapshot.output);onLabel(threadId,id,snapshot.label);if(snapshot.exited)ended(view,snapshot.exitCode);for(const event of view.queued){if(event.type==='data'&&event.sequence>view.sequence){view.sequence=event.sequence;term.write(event.data);}if(event.type==='exit')ended(view,event.exitCode);}view.queued=[];
     if(node.isConnected){fit.fit();term.focus();}
    }catch(error){if(!view.closed)term.write('\x1b[90m'+String(error.message).replace(/[\x00-\x1f\x7f]/g,' ')+'\x1b[0m\r\n');}})();
-  }else{body.replaceChildren(view.node);requestAnimationFrame(()=>{if(view.node.isConnected){view.fit.fit();view.term.focus();}});}
+  }else if(view.node.parentElement!==body){body.replaceChildren(view.node);requestAnimationFrame(()=>{if(view.node.isConnected){view.fit.fit();view.term.focus();}});}
   return view;
  }
  function close(threadId,id){const name=key(threadId,id),view=views.get(name);if(view){view.closed=true;clearTimeout(view.resizeTimer);cancelAnimationFrame(view.frame);view.resize.disconnect();view.term.dispose();views.delete(name);}void api.terminalClose({threadId,id}).catch(()=>{});}
