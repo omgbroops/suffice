@@ -21,7 +21,7 @@ test('workspace directory aliases produce complete receipts and share conflict i
  let token=await throughAlias.before('edit',{path:'file.txt'});await writeFile(resolve(alias,'file.txt'),'after\n');await throughAlias.after(token);
  assert.deepEqual(await readChatChanges(home,id),{added:1,removed:1,files:1,partial:false,scope:'chat'});
  const canonical=createChatChangeTracker({cwd,home,getId:()=>secondId});
- token=await throughAlias.before('edit',{path:'file.txt'});const other=await canonical.before('edit',{path:'file.txt'});
+ token=await throughAlias.before('edit',{path:resolve(cwd,'file.txt')});const other=await canonical.before('edit',{path:'file.txt'});
  await writeFile(resolve(cwd,'file.txt'),'overlap\n');await throughAlias.after(token);await canonical.after(other);
  assert.equal((await readChatChanges(home,id)).partial,true);assert.equal((await readChatChanges(home,secondId)).partial,true);
 });

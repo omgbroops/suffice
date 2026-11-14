@@ -5,7 +5,9 @@ import {createHash} from 'node:crypto';
 export const hash=value=>createHash('sha256').update(value).digest('hex');
 export async function repositoryPath(workspace, path) {
   if(typeof path!=='string' || !path || path.includes('\0')) throw new Error('A repository file path is required');
-  const root=await realpath(workspace), target=resolve(root,path);
+  const logicalRoot=resolve(workspace),root=await realpath(logicalRoot),logicalTarget=resolve(logicalRoot,path),suffix=relative(logicalRoot,logicalTarget);
+  const insideLogical=suffix===''||(!isAbsolute(suffix)&&suffix!=='..'&&!suffix.startsWith('..'+sep));
+  const target=insideLogical?resolve(root,suffix):logicalTarget;
   const within=p=>{const r=relative(root,p);return r==='' || (!isAbsolute(r) && r!=='..' && !r.startsWith('..'+sep));};
   if(!within(target)) throw new Error('Path is outside the authorized repository');
   let current=target;

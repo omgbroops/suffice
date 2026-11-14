@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,writeFile,readFile} from 'node:fs/promises';
+import {mkdtemp,writeFile,readFile,symlink,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {repositoryTools} from '../src/tools.mjs';
@@ -56,3 +56,11 @@ test('restricted sessions never register deferred browser or desktop escape capa
   try{const names=agent.session.getAllTools().map(tool=>tool.name);assert.ok(names.includes('read'));assert.ok(!names.includes('bash'));assert.ok(!names.some(name=>/browser|desktop/.test(name)));assert.doesNotMatch(agent.session.systemPrompt,/operating websites and native apps/);assert.equal(agent.totals.modelCalls,0);}finally{await agent.dispose();}
  }
 });
+
+ test('absolute workspace aliases map into the authorized root while outside links remain denied',async()=>{
+ const root=await mkdtemp(resolve(tmpdir(),'suffice-tool-alias-')),workspace=resolve(root,'alias'),canonical=await mkdtemp(resolve(tmpdir(),'suffice-tool-root-')),outside=await mkdtemp(resolve(tmpdir(),'suffice-tool-outside-'));
+ await symlink(canonical,workspace,process.platform==='win32'?'junction':'dir');await symlink(outside,resolve(canonical,'escape'),process.platform==='win32'?'junction':'dir');
+ const write=repositoryTools({workspace}).find(tool=>tool.name==='write');
+ for(const path of [resolve(workspace,'alias.txt'),resolve(await realpath(canonical),'canonical.txt')])await write.execute('inside',{path,content:'inside'},undefined,()=>{});
+ assert.equal(await readFile(resolve(canonical,'alias.txt'),'utf8'),'inside');await assert.rejects(write.execute('escape',{path:resolve(workspace,'escape','outside.txt'),content:'denied'},undefined,()=>{}),/leaves/);
+ });
