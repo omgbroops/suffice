@@ -20,6 +20,7 @@ export function createThreadRouter({send,createHost,createRuntime}) {
    let result;
    if(action==='shutdown'){await Promise.all([...records].map(record=>record.request('abort')));result=null;}
    else if(['status','models','threads'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?'working':run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
+   else if(action==='thread-location'){await catalog.ready;result=await catalog.request(action,payload);}
    else if(action==='thread'){
     const revision=++selectionRevision,live=byThread.get(payload.id);
     if(live?.busy){selected=live;viewedThread=payload.id;result={id:payload.id,title:live.title,cwd:live.cwd,messages:[],running:true};send({id,ok:true,result});return;}

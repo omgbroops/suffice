@@ -44,7 +44,7 @@ if(primary)app.whenReady().then(async()=>{
   app.on('will-quit',()=>providerSettings.cancel());
   handle('preferences',()=>settings.stored());
   handle('desktop-preference',async payload=>{if(payload?.id==='startup'&&typeof payload.value==='boolean'){app.setLoginItemSettings({openAtLogin:payload.value,path:process.execPath,args:app.isPackaged?[]:[app.getAppPath()]});}if(payload?.id==='history-retention'&&!['Until deleted','30 days','90 days'].includes(payload.value))throw new Error('Invalid retention');if(payload?.id==='history-retention'&&payload.value!=='Until deleted'){if(running)throw new Error('Finish active agents before changing history retention');const answer=await dialog.showMessageBox(win,{type:'question',message:'Apply history retention?',detail:'Chats older than '+payload.value+' will be moved to the Recycle Bin automatically. The currently viewed chat is kept.',buttons:['Cancel','Apply'],defaultId:0,cancelId:0});if(answer.response!==1)throw new Error('Retention change cancelled');await enforceRetention(parseInt(payload.value));}return settings.set(payload?.id,payload?.value);});
-  handle('open-external',url=>{const parsed=new URL(url);if(parsed.protocol!=='https:'||parsed.hostname!=='github.com')throw new Error('Unsupported link');return shell.openExternal(parsed.href);});
+  handle('open-external',url=>{const parsed=new URL(url);if(parsed.protocol!=='https:'||parsed.username||parsed.password)throw new Error('Unsupported link');return shell.openExternal(parsed.href);});
   handle('status',()=>request('status'));
   handle('models',options=>request('models',{all:options?.all===true}));
   handle('usage',threadId=>request('usage',{threadId}));
@@ -59,6 +59,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('terminal-write',payload=>terminals.write(payload));
   handle('terminal-resize',payload=>terminals.resize(payload));
   handle('terminal-close',payload=>terminals.close(payload));
+  handle('fork-thread',async id=>{if(typeof id!=='string'||!/^[a-f0-9]{32}$/.test(id))throw new Error('Invalid thread');if(background?.has?.(id))throw new Error('Stop this thread before forking it');const source=await request('thread',{id});if(source.running)throw new Error('Stop this thread before forking it');let cwd=source.cwd;const exists=await require('node:fs/promises').stat(cwd).then(info=>info.isDirectory()).catch(()=>false);if(!exists){const chosen=await dialog.showOpenDialog(win,{title:'Choose a project for the fork',properties:['openDirectory']});if(chosen.canceled)return null;cwd=chosen.filePaths[0];}const fork=await (await import('./fork-thread.mjs')).forkSavedThread({sourcePath:await request('thread-location',{id}),cwd,home:settingsHome,title:source.title});threadLocations.set(fork.id,fork.cwd);const {path,...view}=fork;return view;});
   handle('threads',async()=>{const threads=await request('threads');for(const thread of threads)threadLocations.set(thread.id,thread.cwd);return threads;});
   handle('projects',async()=>Promise.all((await projects.list()).map(async item=>({...item,...await projectIdentityMetadata(item.path)}))));
   handle('initial-project',async()=>{if(!selectedProject)return null;const item=(await projects.list()).find(item=>item.path===selectedProject);return item?{...item,...await projectIdentityMetadata(item.path),git:await projects.git(item.path)}:null;});

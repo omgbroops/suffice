@@ -1,3 +1,4 @@
+import {connectThreadFork} from './thread-fork.js';
 import {preference} from './settings-preferences.js';
 import {updateThreadDirectory} from './thread-directory.js';
 import {setProjectGroupExpanded} from './project-group-motion.js';
@@ -120,6 +121,7 @@ export function connectThreads({api,prompt,send,toast}){
   const version=++refreshVersion,threads=await api.threads();if(version!==refreshVersion)return;
   savedThreads=threads;for(const thread of threads)optimisticThreads.delete(thread.id);drawThreads();
  }
+ connectThreadFork(list,{api,toast,onFork:async fork=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(thread)await openSavedThread(thread);}});
  async function openSavedThread(thread){
   if(!thread)return;const version=++openRevision;saveView();
   const entering=!workspace.classList.contains('thread-view');

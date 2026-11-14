@@ -30,5 +30,6 @@ export function createThreadStore(home){
   const value={id,title:info.name||info.firstMessage?.slice(0,90)||'Untitled thread',cwd:info.cwd,path,usage,messages:messages.map(message=>({role:message.role,toolName:message.toolName,toolCallId:message.toolCallId,isError:message.isError,content:typeof message.content==='string'?[{type:'text',text:message.content}]:(Array.isArray(message.content)?message.content:[{type:'text',text:message.output||JSON.stringify(message,null,2)}]).map(part=>part.type==='text'?{type:'text',text:part.text}:part.type==='thinking'?{type:'thinking',text:part.thinking}:part.type==='toolCall'?{type:'toolCall',id:part.id,name:part.name,text:JSON.stringify(part.arguments,null,2)}:{type:part.type,text:`[${part.type}]`})}))};
   if(infoStat.size<=4*1024*1024){transcripts.delete(path);transcripts.set(path,{version,value});while(transcripts.size>12)transcripts.delete(transcripts.keys().next().value);}return value;
  }
- return {list,open};
+ async function location(id){if(typeof id!=='string'||!known.has(id))throw new Error('Thread not found');const file=await realpath(known.get(id).path),base=await realpath(root);if(!file.startsWith(base+sep))throw new Error('Thread path is outside the session directory');return file;}
+ return {list,open,location};
 }

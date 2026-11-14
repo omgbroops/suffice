@@ -26,6 +26,7 @@ async function receive(message) {
     if(action==='approval-answer'){approvals.get(payload.requestId)?.(!!payload.allow);approvals.delete(payload.requestId);send({id,ok:true});return;}
     if(action==='abort'){for(const resolve of approvals.values())resolve(false);approvals.clear();agent?.abort();send({id,ok:true});return;}
     if(action==='usage'){send({id,ok:true,result:sessionUsage(agent?.session)??viewedUsage});return;}
+    if(action==='thread-location'){send({id,ok:true,result:await threads.location(payload.id)});return;}
     if(action==='threads'){send({id,ok:true,result:await threads.list()});return;}
     if(busy)throw new Error('A task is already running. Stop it before changing sessions.');
     if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
