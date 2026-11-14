@@ -1,0 +1,118 @@
+{
+ "steps": [
+  {
+   "step": "Open Timeline while the server is slow: skeleton rows",
+   "frame": "01-loading.png"
+  },
+  {
+   "step": "New app with no saves",
+   "frame": "02-empty.png"
+  },
+  {
+   "step": "Normal: 9 saves, newest selected, no Rewind button (it is the current state)",
+   "frame": "03-normal.png"
+  },
+  {
+   "step": "Click the failing-test save (22 minutes before the newest)",
+   "frame": "04-failing-test.png"
+  },
+  {
+   "step": "Click Rewind to: confirm shows what changes",
+   "frame": "05-confirm-failing.png"
+  },
+  {
+   "step": "Select the save from before the notes migration, open confirm: the rewind brings tasks.notes back",
+   "frame": "06-confirm-destructive.png"
+  },
+  {
+   "step": "Select a save after the migration: the data stays gone, newest save that still has it is named",
+   "frame": "07-confirm-after-migration.png"
+  },
+  {
+   "step": "Click Rewind: done sentence, head marked Current, undo save added",
+   "frame": "08-rewind-done.png"
+  },
+  {
+   "step": "Click Rewind with a slow server: buttons disabled, label Rewinding",
+   "frame": "09-rewinding.png"
+  },
+  {
+   "step": "Server answers 500 on rewind: plain sentence, Try again",
+   "frame": "10-rewind-failed.png"
+  },
+  {
+   "step": "Server answers 500 on load",
+   "frame": "11-load-failed.png"
+  },
+  {
+   "step": "Very long save message wraps and selected row shows 6 lines",
+   "frame": "12-long-message.png"
+  },
+  {
+   "step": "Confirm with the long name",
+   "frame": "13-long-message-confirm.png"
+  },
+  {
+   "step": "Scroll 200 saves to the bottom at 400 px per frame",
+   "perf": {
+    "rows": 200,
+    "frames": 32,
+    "total_ms": 265,
+    "worst_frame_ms": 10
+   }
+  },
+  {
+   "step": "200 saves scrolled to the bottom",
+   "frame": "14-many-bottom.png"
+  },
+  {
+   "step": "Tab to the list: focus ring on the newest save",
+   "frame": "15-kb-1-focus.png"
+  },
+  {
+   "step": "ArrowDown twice: selection moves to the third save",
+   "frame": "16-kb-2-arrows.png"
+  },
+  {
+   "step": "Enter: confirm opens, focus on Rewind",
+   "frame": "17-kb-3-enter.png"
+  },
+  {
+   "step": "Escape: confirm closes, focus back on the save row",
+   "frame": "18-kb-4-escape.png"
+  },
+  {
+   "step": "Active element after Escape",
+   "value": "cloud-tl-row true"
+  },
+  {
+   "step": "Narrow window 820 px, confirm open",
+   "frame": "19-narrow-confirm.png"
+  },
+  {
+   "step": "Normal at 820 px",
+   "frame": "20-normal-820.png"
+  },
+  {
+   "step": "Destructive confirm at 820 px",
+   "frame": "21-confirm-destructive-820.png"
+  },
+  {
+   "step": "Normal at 1024 px",
+   "frame": "22-normal-1024.png"
+  },
+  {
+   "step": "Destructive confirm at 1024 px",
+   "frame": "23-confirm-destructive-1024.png"
+  },
+  {
+   "step": "Light theme, normal",
+   "frame": "24-light-normal.png"
+  },
+  {
+   "step": "Light theme, confirm with destructive sentence",
+   "frame": "25-light-confirm.png"
+  }
+ ],
+ "errors": []
+}

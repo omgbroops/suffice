@@ -1,6 +1,7 @@
 // Cloud thread panels (Preview, Tests, Timeline) and the collapsed activity rows between messages.
 import {icon} from './ui.js';
-import {cloudProvider,clock,chips,previewHtml} from './cloud-data.js';
+import {cloudProvider,clock,previewHtml} from './cloud-data.js';
+import {renderTimeline} from './cloud-timeline.js';
 import {createToolWidget} from './tool-widget.js';
 
 export const cloudTabs={preview:{label:'Preview',icon:'globe'},tests:{label:'Tests',icon:'check'},timeline:{label:'Timeline',icon:'history'}};
@@ -44,37 +45,9 @@ function tests(body,provider,open){
  body.append(pane);
 }
 
-function timeline(body,provider){
- const pane=el('div','cloud-pane'),status=el('p','cloud-note');status.setAttribute('role','status');
- const list=el('ol','cloud-timeline');pane.append(status,list);body.append(pane);
- const triggerName={deploy:'Deploy',agent_edit:'Agent edit',save:'Saved'};
- function draw(openId=null,focusId=null){
-  list.replaceChildren();
-  for(const entry of provider.timeline()){
-   const li=el('li','cloud-entry');li.dataset.id=entry.id;
-   const row=el('div','cloud-entry-row');
-   const info=el('div','cloud-entry-info');info.append(el('strong','',entry.label),el('span','cloud-chips',chips(entry).split(' · ').map(c=>c.replace(/ /g,'\u00a0')).join(' · ')));
-   const when=el('div','cloud-entry-when');when.append(el('time','',clock(entry.created)),el('span','cloud-meta',entry.pinned?`${triggerName[entry.trigger]}\npinned`:triggerName[entry.trigger]));
-   const trigger=action('Rewind here',()=>toggle(true),'button button--subtle cloud-action');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-label',`Rewind to ${clock(entry.created)}`);trigger.textContent='Rewind here';
-   row.append(info,when,trigger);li.append(row);
-   const confirm=el('div','cloud-confirm');confirm.hidden=true;confirm.setAttribute('role','group');confirm.setAttribute('aria-label',`Confirm rewind to ${clock(entry.created)}`);
-   confirm.append(el('p','',`Go back to ${clock(entry.created)}? Code, database and memory return to this state. The current state is saved first.`));
-   const yes=action('Rewind',()=>{try{provider.rewind(entry.id,'inplace');status.textContent=`Rewound to ${clock(entry.created)}.`;pendingRewind=null;draw(null,entry.id);}catch(error){status.textContent=error.message;}},'button button--primary cloud-action');
-   const no=action('Cancel',()=>toggle(false),'button button--ghost cloud-action');
-   confirm.append(el('div','cloud-confirm-actions'));confirm.lastChild.append(yes,no);li.append(confirm);
-   function toggle(show){confirm.hidden=!show;trigger.setAttribute('aria-expanded',String(show));li.dataset.confirming=String(show);if(show)yes.focus();else trigger.focus();}
-   li.addEventListener('keydown',event=>{if(event.key==='Escape'&&!confirm.hidden){event.preventDefault();event.stopPropagation();toggle(false);}});
-   list.append(li);
-   if(entry.id===openId)toggle(true);
-   if(entry.id===focusId)trigger.focus();
-  }
- }
- draw(pendingRewind);
-}
-
 export function renderCloudTab(body,type,{threadId,open}){
  body.replaceChildren();const provider=cloudProvider(threadId);
- ({preview:()=>preview(body,provider),tests:()=>tests(body,provider,open),timeline:()=>timeline(body,provider)})[type]();
+ ({preview:()=>preview(body,provider),tests:()=>tests(body,provider,open),timeline:()=>{const id=pendingRewind;pendingRewind=null;renderTimeline(body,provider,id);}})[type]();
 }
 
 // Collapsed rows built from the tool row: a click opens the matching tab instead of expanding.

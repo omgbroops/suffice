@@ -164,7 +164,7 @@
 .model-options[data-more-bottom='true'] { --list-fade-bottom: 22px; }
 
 /* Workspace utilities sit on the canvas, separate from the window controls. */
-.desktop-app { --right-panel-width: min(480px,45vw); --workspace-tools-width: 72px; }
+.desktop-app { --right-panel-width: max(260px,min(480px,45vw,100vw - var(--sidebar-width) - 460px)); --workspace-tools-width: 72px; }
 .workspace-tools { position: fixed; top: 5px; right: calc(var(--window-controls-width) + 8px); z-index: 100; display: flex; align-items: center; gap: 6px; -webkit-app-region: no-drag; }
 .workspace-tool { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: var(--text-muted); transition: color 120ms ease,background 120ms ease; }
 .workspace-tool:hover,.workspace-tool[aria-expanded='true'] { color: var(--text); background: var(--surface-active); }
@@ -184,6 +184,8 @@
 .right-panel-open .right-sidebar { transform: translateX(0); visibility: visible; }
 .desktop-app .workspace { transition: margin-right 220ms var(--ease-out); }
 .desktop-app .right-panel-open .workspace { margin-right: calc(var(--right-panel-width) + 8px); }
+/* narrow window: the panel is a drawer over the chat, the chat keeps its width */
+@media(max-width:1100px){.desktop-app.desktop-app .right-panel-open .workspace { margin-right: 0; }}
 @keyframes context-tooltip-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
 @media(prefers-reduced-motion:reduce){.right-sidebar,.desktop-app .workspace,.context-ring-value { transition: none; }.context-usage-details { animation: none; }}
 

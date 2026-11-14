@@ -67,7 +67,7 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 .diff-added { color: var(--green); }.diff-removed { color: var(--red); }
 .desktop-app .right-panel-open .workspace-tools { right: calc(var(--right-panel-width) + 16px); }
 .desktop-app .right-panel-open .window-drag-region { right: calc(var(--right-panel-width) + var(--workspace-tools-width) + 24px); }
-@container(max-width:300px){.panel-tab .panel-tab-close { display: none; }}
+@container(max-width:420px){.panel-tab .panel-tab-close { display: none; }.panel-tab .panel-tab-select { padding-inline: 2px; }}
 @container(max-width:260px){.panel-tab-select > span { display: none; }.panel-tab-select { padding-inline: 5px; }.right-panel-header { gap: 1px; }.panel-tab[data-active='true']::after { left: 4px; right: 4px; }}
 @media(hover:hover) and (pointer:fine){.panel-file-row:hover,.change-folder:hover,.panel-tab-select:hover { background: var(--hover-fill); }}
 @media(pointer:coarse){.workspace-tools.sidebar-tools .workspace-tool,.panel-file-row { min-height: 44px; min-width: 44px; }.panel-tab .panel-tab-close { opacity: 1; }}
@@ -149,7 +149,7 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 .editor-splitter:hover::after,.editor-splitter:focus-visible::after,.editor-splitter[data-dragging='true']::after { opacity: .4; }
 .editor-splitter:focus-visible { outline: none; }
 .panel-editor[data-splitting='true'] { cursor: col-resize; user-select: none; }
-@container(min-width:301px){.panel-tab .panel-tab-close { display: inline-flex; }}
+@container(min-width:421px){.panel-tab .panel-tab-close { display: inline-flex; }}
 
 /* Both explorers use the same folder row, including its disclosure and padding. */
 .explorer-folder-row { border-radius: 5px; color: var(--text); margin: 0; }

@@ -35,6 +35,8 @@ test('cloud threads get Go live, three panel tabs, activity rows and a rewind co
   assert.equal(await page.getByRole('tab',{name:'Tests'}).getAttribute('aria-selected'),'true');
   await page.getByRole('tab',{name:'Tests'}).press('Enter');
   await page.getByRole('tab',{name:'Timeline'}).click();
+  assert.equal(await page.getByRole('button',{name:/^Rewind to/}).count(),0,'no Rewind on the newest save');
+  await page.locator('.cloud-tl-row').nth(1).click();
   await page.getByRole('button',{name:'Rewind to'}).first().waitFor();
   // activity rows open their tab
   await page.getByRole('tab',{name:'Preview'}).click();
@@ -43,12 +45,13 @@ test('cloud threads get Go live, three panel tabs, activity rows and a rewind co
   await page.getByText('Copy for your agent').first().waitFor();
   // rewind confirm: Escape closes it and focus returns to the trigger
   await page.getByRole('tab',{name:'Timeline'}).click();
+  await page.locator('.cloud-tl-row').nth(1).click();
   const trigger=page.getByRole('button',{name:/^Rewind to \d\d:\d\d$/}).first();
   await trigger.click();
-  assert.equal(await page.locator('.cloud-confirm').first().isVisible(),true);
+  assert.equal(await page.locator('.cloud-tl-confirm').first().isVisible(),true);
   await page.keyboard.press('Escape');
-  assert.equal(await page.locator('.cloud-confirm').first().isVisible(),false);
-  assert.equal(await trigger.evaluate(el=>el===document.activeElement),true,'focus returns to Rewind here');
+  assert.equal(await page.locator('.cloud-tl-confirm').first().isVisible(),false);
+  assert.equal(await page.locator('.cloud-tl-row[aria-selected=true]').evaluate(el=>el===document.activeElement),true,'focus returns to the selected save');
  }finally{await app.close();}
 });
 
@@ -75,5 +78,28 @@ test('a cloud thread shows Cloud on the composer chip and puts activity rows aft
   await open('Thread plain');
   assert.equal(await chip(),'Local');
   assert.equal(await page.locator('.thread-cloud-rows').count(),0);
+ }finally{await app.close();}
+});
+
+test('at 820 and 1024 px the cloud panel leaves the composer 320 px and shows every tab label whole',{timeout:90000},async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-cloud-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});
+ const timestamp=new Date().toISOString();await writeFile(resolve(dir,'cloud.jsonl'),[
+  {type:'session',version:3,id:'cloud',timestamp,cwd:home},
+  {type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Thread cloud'}],timestamp:Date.now()}},
+  {type:'message',id:'assistant',parentId:'user',timestamp,message:{role:'assistant',content:[{type:'text',text:'Reply cloud'}],timestamp:Date.now(),stopReason:'stop'}},
+ ].map(entry=>JSON.stringify(entry)).join('\n')+'\n');
+ const app=await _electron.launch({executablePath:electronPath,args:[hiddenMain,'--user-data-dir='+resolve(home,'electron')],env:testEnv({SUFFICE_HOME:home})});
+ try{
+  const page=await app.firstWindow();
+  await page.locator('.thread-row').first().waitFor({timeout:15000});
+  await page.evaluate(k=>{localStorage.setItem('suffice-background','neon-mech');localStorage.setItem(k,JSON.stringify({cloud:true,panelOpen:true,tabs:['preview','tests','timeline'],activeTab:'timeline'}));},'suffice-thread-view-v1:'+threadId(resolve(dir,'cloud.jsonl')));
+  for(const w of [820,1024]){
+   await page.setViewportSize({width:w,height:1000});await page.reload();
+   await page.locator('.thread-row').filter({hasText:'Thread cloud'}).click();await page.locator('[role=tab]').first().waitFor();await page.waitForTimeout(400);
+   const m=await page.evaluate(()=>{const strip=document.querySelector('.right-panel-tabs').getBoundingClientRect();return {strip:[strip.left,strip.right],panel:document.querySelector('.right-sidebar').getBoundingClientRect().width,rects:[...document.querySelectorAll('[role=tab]')].map(t=>{const r=t.getBoundingClientRect();return [r.left,r.right];}),composer:document.querySelector('.composer').getBoundingClientRect().width,tabs:[...document.querySelectorAll('[role=tab]')].map(t=>{const r=t.getBoundingClientRect();return {name:t.textContent.trim(),inside:r.left>=strip.left-1&&r.right<=strip.right+1,whole:t.scrollWidth<=t.clientWidth+1};})};});
+   assert.ok(m.composer>=320,`composer ${m.composer}px at ${w}`);
+   assert.equal(m.tabs.length,3);
+   for(const t of m.tabs)assert.ok(t.inside&&t.whole,`tab ${t.name} clipped at ${w}: ${JSON.stringify(t)} ${JSON.stringify(m)}`);
+  }
  }finally{await app.close();}
 });

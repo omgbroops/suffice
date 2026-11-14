@@ -34,7 +34,7 @@ const fixture=()=>({
 // Activity rows between messages: `at` is when it happened, `after` is the index of the message it follows (0 = the user's, 1 = the reply).
 const activity=f=>[
  {id:'boot',text:`Booted on a microVM · ${(f.app.boot_ms/1000).toFixed(1)} s`,tab:'preview',at:at(22,31),after:0},
- {id:'tests-ok',text:'Agent tests · 6 of 6 passed',tab:'tests',at:at(22,36),after:0},
+ {id:'tests-ok',text:'Agent tests · 5 of 6 passed',tab:'tests',at:at(22,36),after:0},
  {id:'saved',text:'Saved before the edit · Rewind',tab:'timeline',at:at(22,39),after:1},
  {id:'tests-fail',text:`Checkout test failed at step ${f.runs[0].failing_step.index+1}`,tab:'tests',status:'error',at:at(22,43),after:1},
 ];
