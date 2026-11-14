@@ -4,7 +4,7 @@ export function getTheme() {
   return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 }
 
-document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getTheme() === 'light' ? '#f6f6f6' : '#0e0e0e');
+if(typeof document!=='undefined')document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getTheme() === 'light' ? '#f6f6f6' : '#0e0e0e');
 
 export function setTheme(theme) {
   if (!['dark', 'light'].includes(theme)) return;
