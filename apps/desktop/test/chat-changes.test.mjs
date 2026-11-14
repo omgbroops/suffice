@@ -5,13 +5,34 @@ import {pathToFileURL} from 'node:url';
 import {projectMetadata} from '../electron/sidebar-metadata.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,writeFile,readFile,rm} from 'node:fs/promises';
+import {mkdtemp,writeFile,readFile,rm,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {createChatChangeTracker,readChatChanges} from '../electron/chat-changes.mjs';
 import {repositoryTools} from '../../../packages/cli/src/tools.mjs';
 const id='a'.repeat(32),secondId='b'.repeat(32);
 const fixture=async()=>{const cwd=await mkdtemp(resolve(tmpdir(),'suffice-changes-'));return {cwd,home:await mkdtemp(resolve(tmpdir(),'suffice-change-home-'))};};
+
+test('workspace directory aliases produce complete receipts and share conflict identity',async()=>{
+ const {cwd,home}=await fixture(),aliases=await mkdtemp(resolve(tmpdir(),'suffice-alias-')),alias=resolve(aliases,'workspace');
+ await symlink(cwd,alias,process.platform==='win32'?'junction':'dir');
+ await writeFile(resolve(cwd,'file.txt'),'before\n');
+ const throughAlias=createChatChangeTracker({cwd:alias,home,getId:()=>id});
+ let token=await throughAlias.before('edit',{path:'file.txt'});await writeFile(resolve(alias,'file.txt'),'after\n');await throughAlias.after(token);
+ assert.deepEqual(await readChatChanges(home,id),{added:1,removed:1,files:1,partial:false,scope:'chat'});
+ const canonical=createChatChangeTracker({cwd,home,getId:()=>secondId});
+ token=await throughAlias.before('edit',{path:'file.txt'});const other=await canonical.before('edit',{path:'file.txt'});
+ await writeFile(resolve(cwd,'file.txt'),'overlap\n');await throughAlias.after(token);await canonical.after(other);
+ assert.equal((await readChatChanges(home,id)).partial,true);assert.equal((await readChatChanges(home,secondId)).partial,true);
+});
+
+test('canonical workspace containment still excludes directory links escaping the root',async()=>{
+ const {cwd,home}=await fixture(),outside=await mkdtemp(resolve(tmpdir(),'suffice-outside-'));
+ await writeFile(resolve(outside,'file.txt'),'before\n');await symlink(outside,resolve(cwd,'escape'),process.platform==='win32'?'junction':'dir');
+ const tracker=createChatChangeTracker({cwd,home,getId:()=>id}),token=await tracker.before('edit',{path:'escape/file.txt'});
+ await writeFile(resolve(outside,'file.txt'),'after\n');await tracker.after(token);
+ assert.deepEqual(await readChatChanges(home,id),{added:0,removed:0,files:0,partial:true,scope:'chat'});
+});
 test('chat receipts exclude existing dirt, compose net edits, persist and isolate threads',async()=>{
  const {cwd,home}=await fixture();await writeFile(resolve(cwd,'a.txt'),'preexisting dirty line\nkeep\n');const tracker=createChatChangeTracker({cwd,home,getId:()=>id});const tools=repositoryTools({workspace:cwd,toolObserver:tracker});const write=tools.find(t=>t.name==='write');
  await write.execute('1',{path:'a.txt',content:'preexisting dirty line\nkeep\nnew\n'},undefined,()=>{});assert.deepEqual(await readChatChanges(home,id),{added:1,removed:0,files:1,partial:false,scope:'chat'});

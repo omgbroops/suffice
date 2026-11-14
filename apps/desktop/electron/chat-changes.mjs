@@ -13,8 +13,8 @@ export async function readChatChanges(home,id){const path=ledgerPath(home,id);if
 // Local snapshots are receipts only: no stash, index writes, checkout or reset.
 export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
  let state={version:1,files:{},partial:false},loading,tail=Promise.resolve();
- const key=process.platform==='win32'?resolve(cwd).toLowerCase():resolve(cwd);
- const operations=resolve(home,'chat-change-activity',createHash('sha256').update(key).digest('hex'));
+ let canonicalRoot,key,operations;
+ async function initialize(){canonicalRoot??=await realpath(cwd);key=process.platform==='win32'?canonicalRoot.toLowerCase():canonicalRoot;operations=resolve(home,'chat-change-activity',createHash('sha256').update(key).digest('hex'));}
  const overlaps=(a,b)=>!a||!b||a.some(path=>b.includes(path));
  async function peers(token){
   for(const name of await readdir(operations)){if(!name.endsWith('.json')||name===token.operation+'.json')continue;
@@ -26,7 +26,7 @@ export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
  }
 
  async function load(){if(!loading)loading=(async()=>{try{const path=ledgerPath(home,getId());if(path){const saved=JSON.parse(await readFile(path,'utf8'));if(saved.version===1&&saved.files&&typeof saved.files==='object')state=saved;}}catch{}})();await loading;}
- async function text(name){const path=resolve(cwd,name),rel=relative(cwd,path);if(isAbsolute(rel)||rel==='..'||rel.startsWith('..'+sep))return null;try{const info=await lstat(path);if(!info.isFile()||info.isSymbolicLink()||info.size>maxFile)return null;const actual=await realpath(path),inside=relative(cwd,actual);if(isAbsolute(inside)||inside==='..'||inside.startsWith('..'+sep))return null;const bytes=await readFile(path);if(bytes.length>maxFile||bytes.includes(0))return null;return new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch(error){if(error.code==='ENOENT')return '';return null;}}
+ async function text(name){const path=resolve(cwd,name),rel=relative(cwd,path);if(isAbsolute(rel)||rel==='..'||rel.startsWith('..'+sep))return null;try{const info=await lstat(path);if(!info.isFile()||info.isSymbolicLink()||info.size>maxFile)return null;const actual=await realpath(path),inside=relative(canonicalRoot,actual);if(isAbsolute(inside)||inside==='..'||inside.startsWith('..'+sep))return null;const bytes=await readFile(path);if(bytes.length>maxFile||bytes.includes(0))return null;return new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch(error){if(error.code==='ENOENT')return '';return null;}}
  async function snapshot(names){let partial=false;if(!names){try{const {stdout}=await exec('git',['-C',cwd,'ls-files','--cached','--others','--exclude-standard','-z'],{windowsHide:true,timeout:5000,maxBuffer:8*1024*1024});names=[...new Set(stdout.split('\0').filter(Boolean))];}catch{names=[];const walk=async dir=>{for(const entry of await readdir(resolve(cwd,dir),{withFileTypes:true})){if(excluded.has(entry.name)||entry.isSymbolicLink())continue;const name=dir?dir+'/'+entry.name:entry.name;if(names.length>=maxFiles){partial=true;return;}if(entry.isDirectory())await walk(name);else if(entry.isFile())names.push(name);}};await walk('');}}
   const values=new Map();let bytes=0;if(names.length>maxFiles)partial=true;
   for(const name of names.slice(0,maxFiles)){const value=await text(name);if(value===null){partial=true;continue;}bytes+=Buffer.byteLength(value);if(bytes>maxTotal){partial=true;break;}values.set(name,value);}
@@ -34,7 +34,7 @@ export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
  }
  async function save(){const path=ledgerPath(home,getId());if(!path)return;state.summary=totals(state);const value=JSON.stringify(state);const summary=state.summary;tail=tail.catch(()=>{}).then(async()=>{await mkdir(resolve(home,'chat-changes'),{recursive:true,mode:0o700});const temporary=path+'.tmp';await writeFile(temporary,value,{mode:0o600});await rename(temporary,path);const summaryPath=path.replace('.json','.summary.json');await writeFile(summaryPath+'.tmp',JSON.stringify(summary),{mode:0o600});await rename(summaryPath+'.tmp',summaryPath);onChange(summary);});await tail;}
  return {
-  async before(name,args){if(!['write','edit','bash'].includes(name))return null;await load();const names=name==='bash'?null:[relative(cwd,resolve(cwd,args.path)).split(sep).join('/')];const token={names,conflict:false,operation:randomUUID()};const others=active.get(key)||new Set();for(const other of others){if(!names||!other.names||names.some(path=>other.names.includes(path)))token.conflict=other.conflict=true;}others.add(token);active.set(key,others);
+  async before(name,args){if(!['write','edit','bash'].includes(name))return null;await initialize();await load();const names=name==='bash'?null:[relative(cwd,resolve(cwd,args.path)).split(sep).join('/')];const token={names,conflict:false,operation:randomUUID()};const others=active.get(key)||new Set();for(const other of others){if(!names||!other.names||names.some(path=>other.names.includes(path)))token.conflict=other.conflict=true;}others.add(token);active.set(key,others);
    try{await mkdir(operations,{recursive:true,mode:0o700});await writeFile(resolve(operations,token.operation+'.json'),JSON.stringify({pid:process.pid,names}),{mode:0o600});await peers(token);token.before=await snapshot(names);}catch{token.before={values:new Map(),partial:true};token.conflict=true;}return token;
   },
   async after(token){if(!token)return;try{const after=await snapshot(token.names);await peers(token);state.partial ||= token.before.partial||after.partial||token.conflict;
