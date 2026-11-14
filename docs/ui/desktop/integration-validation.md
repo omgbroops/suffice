@@ -29,3 +29,18 @@ No paid model calls were required. The user's existing app was left running.
 
 The ADRs and design document record accumulated implementation after the new
 coordination rules arrived; they do not claim to have preceded the original work.
+
+## Canonical-path follow-up
+
+Claude's native macOS run of the original integration head did not finish within
+1200 seconds (18 passed, 11 failed so far). No blanket macOS success is claimed.
+The first follow-up canonicalizes receipt workspace containment and cross-alias
+operation identity, and corrects two tests to expect canonical session paths.
+Directory-link escape checks remain in place.
+
+After that patch, native Windows targeted receipt/transcript tests passed 10/10;
+the complete serialized desktop suite passed 53/53 (exit 0); the combined root/CLI
+suite passed 105 with 2 skipped (exit 0). The two new tests exercise a directory
+alias, cross-alias operation conflicts, and an escaping directory link. Native
+macOS rerun and the remaining timeout diagnostics are still pending. No renderer
+code changed in this follow-up, so the existing build remains applicable.
