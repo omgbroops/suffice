@@ -10,12 +10,16 @@ Usage: suffice [options] [task]
   suffice --print "explain this"  Run one task, then exit
   suffice login                   Sign in with your own OpenAI account
   suffice doctor                  Check local setup without model inference
+  suffice setup-automation        Prepare browser and desktop dependencies
 
 Options:
   --cwd PATH          Starting repository (default: current directory)
   --model ID          gpt-6.1-sol (default), gpt-6-luna, or another catalog ID
   --effort LEVEL      off, minimal, low (default), medium, high, xhigh
   --continue          Continue the most recent session in this repository
+  --no-browser        Disable browser tools and their discovery/instructions
+  --no-desktop        Disable native app tools and their discovery/instructions
+  --browser-headless  Run the dedicated browser without a visible window
   --home PATH         Credential/session directory (default: ~/.suffice)
   --max-cost USD      API-equivalent allowance per task (default: 10)
   --timeout SECONDS   Time allowance per task (default: 600)
@@ -30,7 +34,7 @@ Pi's interface and engine, with Suffice's tools, prompt and codemode setup.
 `;
 
 export function parseOptions(args, env=process.env) {
-  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', maxCost:10, timeout:600, prompt:''};
+  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', maxCost:10, timeout:600, prompt:'',browser:env.SUFFICE_BROWSER!=='0',desktop:env.SUFFICE_DESKTOP!=='0',browserHeadless:env.SUFFICE_BROWSER_HEADLESS==='1'};
   const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--max-cost':'maxCost','--timeout':'timeout'};
   const words=[];
   for(let i=0;i<args.length;i++) {
@@ -40,11 +44,14 @@ export function parseOptions(args, env=process.env) {
     else if(['--version','-v'].includes(arg)) options.version=true;
     else if(['--print','-p'].includes(arg)) options.print=true;
     else if(arg==='--continue') options.continue=true;
+    else if(arg==='--no-browser') options.browser=false;
+    else if(arg==='--no-desktop') options.desktop=false;
+    else if(arg==='--browser-headless') options.browserHeadless=true;
     else if(values[arg]) { if(!args[i+1] || args[i+1].startsWith('--')) throw new Error(`Missing value for ${arg}`); options[values[arg]]=args[++i]; if(arg==='--cwd') options.cwdExplicit=true; }
     else if(arg.startsWith('-')) throw new Error(`Unknown option: ${arg}`);
     else words.push(arg);
   }
-  if(words.length===1 && ['login','doctor'].includes(words[0])) options.command=words[0];
+  if(words.length===1 && ['login','doctor','setup-automation'].includes(words[0])) options.command=words[0];
   else options.prompt=words.join(' ');
   if(!['off','minimal','low','medium','high','xhigh'].includes(options.effort)) throw new Error('Invalid effort. Use off, minimal, low, medium, high, or xhigh.');
   for(const key of ['maxCost','timeout']) {

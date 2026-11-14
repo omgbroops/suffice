@@ -7,6 +7,7 @@ import {ModelRuntime} from '@earendil-works/pi-coding-agent';
 import {VERSION} from './options.mjs';
 import {createSufficeSession} from './session.mjs';
 import {repositoryTools} from './tools.mjs';
+import {setupAutomation} from './automation.mjs';
 
 async function login(runtime,options,sharedReader) {
   const identity=resolve(options.home,'host-id');
@@ -39,6 +40,7 @@ async function login(runtime,options,sharedReader) {
 }
 
 export async function main(options) {
+  if(options.command==='setup-automation') {console.log(await setupAutomation());return;}
   options.cwd=await realpath(options.cwd);
   if(!(await stat(options.cwd)).isDirectory()) throw new Error('--cwd must be a directory');
   await mkdir(options.home,{recursive:true,mode:0o700});
