@@ -6,7 +6,7 @@ One shared initializer uses auth.json, models.json and catalog.json under SUFFIC
 
 ## Desktop
 
-Composer and settings share provider icon aliases. With no selectable model the composer opens Providers. A missing previously selected model is shown as unavailable and requires an explicit replacement. Fork creates a new Pi session using the original conversation's project, or asks for an existing directory if its original directory is gone. The original transcript and ID remain untouched; the fork gets its own view state and no inherited PR ownership.
+Composer and settings share provider icon aliases. With no selectable model the composer says Connect a provider and opens Providers. When alternatives exist, a missing previously selected model is shown as unavailable and requires an explicit replacement. Fork creates a new Pi session using the original conversation's project, or asks for an existing directory if its original directory is gone. The original transcript and ID remain untouched; the fork gets its own view state and no inherited PR ownership.
 
 Mermaid fences render as SVG after streaming settles. Pie and flow diagrams use the current theme. Click directives are stripped and parsed as data; safe HTTPS destinations become explicit links on the rendered nodes. Callback directives never run. Invalid/oversized diagrams keep their source. Tool input/output scrolling reaches within 3px of the enclosing widget edge while text keeps its existing inset.
 
