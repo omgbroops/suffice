@@ -1,7 +1,6 @@
 import {createSufficeModelRuntime,modelRuntimeOptions} from './model-runtime.mjs';
-import {mkdir, readFile, writeFile, realpath, stat} from 'node:fs/promises';
-import {resolve} from 'node:path';
-import {randomUUID} from 'node:crypto';
+import {mkdir, realpath, stat} from 'node:fs/promises';
+import {installationId} from './installation-id.mjs';
 import {spawn} from 'node:child_process';
 import {createInterface} from 'node:readline/promises';
 
@@ -11,10 +10,7 @@ import {repositoryTools} from './tools.mjs';
 import {setupAutomation} from './automation.mjs';
 
 async function login(runtime,options,sharedReader) {
-  const identity=resolve(options.home,'host-id');
-  let deviceId;
-  try {deviceId=(await readFile(identity,'utf8')).trim();}
-  catch(e) {if(e.code!=='ENOENT') throw e;deviceId=randomUUID();await writeFile(identity,deviceId,{mode:0o600});}
+  const deviceId=await installationId(options.home);
   const controller=new AbortController();
   const cancel=()=>controller.abort();process.on('SIGINT',cancel);
   const timer=setTimeout(cancel,15*60_000);let reader=sharedReader;
