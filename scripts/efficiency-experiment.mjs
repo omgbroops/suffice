@@ -12,7 +12,7 @@ const directory=resolve(stateDir,'efficiency-runs',campaign);await mkdir(directo
 const resourceFloorMiB=args['--resource-floor-mib']===undefined?null:Number(args['--resource-floor-mib']);
 if(resourceFloorMiB!==null&&(!args['--resume']||!Number.isInteger(resourceFloorMiB)||resourceFloorMiB<1024||resourceFloorMiB>5120))throw new Error('Resource-only continuation floor must be 1024-5120 MiB and requires --resume');
 async function artifactSize(path){let total=0;for(const e of await readdir(path,{withFileTypes:true})){const p=resolve(path,e.name);if(e.isDirectory())total+=await artifactSize(p);else if(e.isFile())total+=(await stat(p)).size;}return total;}
-const sourcePaths=['package.json','package-lock.json','scripts/efficiency-experiment.mjs','scripts/efficiency-report.mjs','scripts/prepare-efficiency.mjs','docs/TOOL-EFFICIENCY.md',
+const sourcePaths=['package.json','bun.lock','scripts/efficiency-experiment.mjs','scripts/efficiency-report.mjs','scripts/prepare-efficiency.mjs','docs/TOOL-EFFICIENCY.md',
   ...(await filesIn(resolve(root,'src'))).map(p=>`src/${p}`),...(await filesIn(resolve(root,'benchmarks/efficiency'))).map(p=>`benchmarks/efficiency/${p}`),'benchmarks/real/visible.test.mjs','tests/tool-efficiency.test.mjs'];
 if(args['--smoke'])sourcePaths.push('benchmarks/real/tasks.mjs','benchmarks/real/prerelease-subset.test.mjs');
 const inputs={};for(const file of sourcePaths)inputs[file]=hash(await readFile(resolve(root,file)));
