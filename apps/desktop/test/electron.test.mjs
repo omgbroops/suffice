@@ -33,7 +33,11 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.match(await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
     await page.getByRole('button',{name:'Maximize or restore'}).click();
     await page.getByRole('button',{name:'Maximize or restore'}).click();
+    const originalBounds=await electron.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].getBounds());
+    const oldWidth=await page.evaluate(()=>innerWidth);await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.setSize(win.getBounds().width-80,win.getBounds().height);});await page.waitForFunction(width=>innerWidth===width-80,oldWidth);await electron.evaluate(({BrowserWindow},bounds)=>BrowserWindow.getAllWindows()[0].setBounds(bounds),originalBounds);await page.waitForFunction(width=>innerWidth===width,oldWidth);
     await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.unmaximize();win.setContentSize(1440,900);win.setPosition(0,0);});
+    // Hosted macOS displays are 1024px wide; test CSS at the intended viewport after real native resize checks.
+    if(process.platform==='darwin')await page.setViewportSize({width:1440,height:900});
     await page.waitForFunction(()=>innerWidth===1440&&innerHeight===900);
     const controls=await page.locator('.window-control').evaluateAll(elements=>elements.map(el=>({width:el.clientWidth,height:el.clientHeight,icon:el.querySelector('svg').getBoundingClientRect().width})));
     assert.ok(controls.every(control=>control.width===28&&control.height===28&&control.icon===16));
@@ -66,8 +70,6 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.screenshot({path:resolve('apps/desktop/desktop-context-details.png')});
     await contextButton.press('Escape');
     assert.equal(await page.locator('.context-usage-details').isVisible(),false);
-    const originalBounds=await electron.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].getBounds());
-    const oldWidth=await page.evaluate(()=>innerWidth);await electron.evaluate(({BrowserWindow})=>{const win=BrowserWindow.getAllWindows()[0];win.setSize(win.getBounds().width-80,win.getBounds().height);});await page.waitForFunction(width=>innerWidth===width-80,oldWidth);await electron.evaluate(({BrowserWindow},bounds)=>BrowserWindow.getAllWindows()[0].setBounds(bounds),originalBounds);await page.waitForFunction(width=>innerWidth===width,oldWidth);
     const canvasBefore=await page.locator('.workspace').boundingBox();
     await page.getByRole('button',{name:'Toggle right panel'}).click();
     await page.waitForTimeout(260);
