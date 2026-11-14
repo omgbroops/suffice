@@ -1,9 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { scopedPath, runNodeTests } from '../src/workspace.mjs';
+
+test('permissioned tests accept canonical workspace aliases without broadening read access',async()=>{
+ const root=await mkdtemp(resolve(tmpdir(),'suffice-permission-alias-')),workspace=resolve(root,'workspace'),alias=resolve(root,'alias');
+ await mkdir(workspace);await mkdir(resolve(workspace,'tests'));await writeFile(resolve(workspace,'value.mjs'),'export const value=42;\n');await writeFile(resolve(root,'outside.txt'),'private');
+ await writeFile(resolve(workspace,'tests/visible.test.mjs'),`import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {value} from '../value.mjs';test('canonical scope',()=>{assert.equal(value,42);assert.throws(()=>readFileSync('../outside.txt'),e=>e.code==='ERR_ACCESS_DENIED');});\n`);
+ await symlink(workspace,alias,process.platform==='win32'?'junction':'dir');const result=await runNodeTests(alias,resolve(alias,'tests/visible.test.mjs'));assert.equal(result.status,'passed',result.stderr+'\n'+result.stdout);
+});
 
 test('workspace paths reject traversal, hidden paths and test edits', async () => {
   const root = await mkdtemp(resolve(tmpdir(), 'suffice-scope-'));

@@ -52,16 +52,17 @@ export async function readText(root, path) {
 }
 
 export async function runNodeTests(workspace, testPath, { signal, timeoutMs = 15_000 } = {}) {
-  const absoluteTest = resolve(testPath);
+  const canonicalWorkspace = await realpath(workspace);
+  const absoluteTest = await realpath(testPath);
   const testSource = await readFile(absoluteTest, 'utf8');
   const expectedNames = [...testSource.matchAll(/\btest\(\s*['"]([^'"]+)['"]/g)].map(m => m[1]).filter(n => !n.startsWith('acceptance requires'));
-  const args = ['--permission', `--allow-fs-read=${resolve(workspace)}`, `--allow-fs-read=${absoluteTest}`,
+  const args = ['--permission', `--allow-fs-read=${canonicalWorkspace}`, `--allow-fs-read=${absoluteTest}`,
     '--max-old-space-size=128', '--test-reporter=tap', absoluteTest];
   const started = Date.now();
   return new Promise(resolveResult => {
-    const child = spawn(process.execPath, args, { cwd: workspace, windowsHide: true, env: {
+    const child = spawn(process.execPath, args, { cwd: canonicalWorkspace, windowsHide: true, env: {
       SystemRoot: process.env.SystemRoot ?? '', WINDIR: process.env.WINDIR ?? '',
-      SUFFICE_WORKSPACE: resolve(workspace), NODE_NO_WARNINGS: '1',
+      SUFFICE_WORKSPACE: canonicalWorkspace, NODE_NO_WARNINGS: '1',
     }, stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '', stderr = '', truncated = false, timedOut = false;
     const add = key => chunk => {
