@@ -187,3 +187,11 @@
 .desktop-app .workspace.background-none .project-bar :is(.project-picker,.git-pill) { background: transparent; border-color: transparent; outline: none; box-shadow: none; }
 
 .project-list-status { padding: 8px 10px; color: var(--text-faint); font-size: 12px; }
+
+/* Let code scrollbars hug the widget while preserving the text inset. */
+.tool-widget .tool-input,.tool-widget .tool-output { margin-right:-9px; padding-right:9px; }
+
+.thread-diagram { margin:12px 0; padding:12px; overflow:auto; border-radius:var(--radius-panel); background:var(--surface-composer); }
+.thread-diagram svg { max-width:100%; max-height:420px; height:auto; }
+.thread-diagram .diagram-link { cursor:pointer; }
+.thread-diagram .diagram-link:hover { opacity:.8; }
