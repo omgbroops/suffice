@@ -14,7 +14,7 @@ export function createThreadViewStore(storage){
  const cache=new Map(),listeners=new Set();let active=null;
  const key=id=>id??'new';
  function read(id){const name=key(id);if(!cache.has(name)){let value;try{value=JSON.parse(storage.getItem(prefix+name));}catch{}const normalized=normalize(value);if(!preference('restore-terminal',true)){for(const tab of normalized.tabs.filter(tab=>tab.startsWith('terminal:')))if(id)void globalThis.window?.sufficeDesktop?.terminalClose({threadId:id,id:tab}).catch(()=>{});normalized.tabs=normalized.tabs.filter(tab=>!tab.startsWith('terminal:'));normalized.terminals={};if(!normalized.tabs.includes(normalized.activeTab))normalized.activeTab=normalized.tabs[0]??null;}cache.set(name,normalized);}return cache.get(name);}
- function write(id,state){cache.set(key(id),state);try{storage.setItem(prefix+key(id),JSON.stringify(state));}catch{/* A full or unavailable preference store must not block typing. */}}
+ function write(id,state){state={...state,updatedAt:Date.now()};cache.set(key(id),state);try{storage.setItem(prefix+key(id),JSON.stringify(state));}catch{/* A full or unavailable preference store must not block typing. */}}
  const notify=event=>listeners.forEach(listener=>listener(event));
  return {
   get id(){return active;},get state(){return read(active);},read,
@@ -24,4 +24,7 @@ export function createThreadViewStore(storage){
   subscribe(listener){listeners.add(listener);return()=>listeners.delete(listener);},
  };
 }
-export const threadViewState=createThreadViewStore({getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value),removeItem:key=>localStorage.removeItem(key)});
+export async function restoreThreadViews(){
+ try{const values=await globalThis.window?.sufficeDesktop?.viewStates?.();for(const [key,value] of Object.entries(values||{})){let cached;try{cached=JSON.parse(localStorage.getItem(key));}catch{}const saved=JSON.parse(value);if((saved.updatedAt||0)>=(cached?.updatedAt||0))localStorage.setItem(key,value);}}catch{/* Browser cache remains available if native backup storage is unavailable. */}
+}
+export const threadViewState=createThreadViewStore({getItem:key=>localStorage.getItem(key),setItem:(key,value)=>{localStorage.setItem(key,value);void Promise.resolve(globalThis.window?.sufficeDesktop?.saveViewState?.({key,value})).catch(()=>{});},removeItem:key=>{localStorage.removeItem(key);void Promise.resolve(globalThis.window?.sufficeDesktop?.saveViewState?.({key,value:null})).catch(()=>{});}});

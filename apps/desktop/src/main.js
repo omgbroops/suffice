@@ -1,5 +1,5 @@
 import {connectSettingsPrivacy} from './settings-privacy.js';
-import {threadViewState} from './thread-view-state.js';
+import {threadViewState,restoreThreadViews} from './thread-view-state.js';
 import {preference,initializePreferences} from './settings-preferences.js';
 import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
@@ -33,6 +33,7 @@ import { getTheme, setTheme } from './theme.js';
 import { icon, mark, button, panel } from './ui.js';
 
 await initializePreferences();
+await restoreThreadViews();
 const sessions = [
 
   { title: 'Rebuild the cloud workspace', time: '8 days ago', repo: 'suffice-cloud', description: 'Create a focused workspace for coding agents. Refine the composer, session history, and activity overview.', public: true },
