@@ -1,7 +1,7 @@
 import {readdir,realpath,stat,mkdir,copyFile} from 'node:fs/promises';
 import {resolve,relative,dirname,sep} from 'node:path';
 export async function sessionFiles(home){
- const root=resolve(home,'sessions'),result=[];
+ let root;try{root=await realpath(resolve(home,'sessions'));}catch(error){if(error.code==='ENOENT')return [];throw error;}const result=[];
  async function visit(folder){let entries;try{entries=await readdir(folder,{withFileTypes:true});}catch(error){if(error.code==='ENOENT')return;throw error;}for(const entry of entries){if(entry.isSymbolicLink())continue;const path=resolve(folder,entry.name);if(entry.isDirectory())await visit(path);else if(entry.isFile()&&entry.name.endsWith('.jsonl')){const real=await realpath(path);if(!real.startsWith(root+sep))throw new Error('Invalid session path');result.push({path:real,relative:relative(root,real),modified:(await stat(real)).mtimeMs});}}}
  await visit(root);return result;
 }
