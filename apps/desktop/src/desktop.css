@@ -115,11 +115,16 @@
 .custom-tooltip { position: fixed; z-index: 150; max-width: min(300px,calc(100vw - 12px)); padding: 5px 9px; border-radius: 7px; background: var(--surface-menu); color: var(--text); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); box-shadow: var(--shadow-float); font-size: 12px; line-height: 18px; overflow-wrap: anywhere; pointer-events: none; }
 .project-badge.project-folder { flex: 0 0 16px; width: 16px; height: 16px; background: none; color: inherit; }
 .project-folder .icon { width: 16px; height: 16px; }
-.thread-atmosphere { position: absolute; inset: 0; z-index: 0; isolation: isolate; pointer-events: none; transform: scale(1); filter: blur(0); opacity: 1; transition: transform var(--thread-motion-duration) var(--ease-out),filter var(--thread-motion-duration) var(--ease-out),opacity var(--thread-motion-duration) var(--ease-out); }
+.thread-atmosphere { position: absolute; inset: 0; z-index: 0; isolation: isolate; pointer-events: none; transform: scale(1); opacity: 1; transition: transform var(--thread-motion-duration) var(--ease-out),opacity var(--thread-motion-duration) var(--ease-out); }
 .thread-backdrop { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: var(--surface-thread); opacity: 0; transition: opacity var(--thread-motion-duration) var(--ease-out); }
 .thread-view .thread-atmosphere { opacity: 0; }
-.thread-view[data-thread-background='atmosphere'] .thread-atmosphere { opacity: 1; transform: scale(1.06); filter: blur(14px); }
-.thread-view[data-thread-background='atmosphere'] .thread-backdrop { opacity: .6; }
+/* art at full strength, never blurred; a soft dark blob sits only behind each block of text (Abhay 2026-11-13) */
+.thread-view[data-thread-background='atmosphere'] .thread-atmosphere { opacity: 1; }
+.thread-view[data-thread-background='atmosphere'] .thread-messages > :not(.thread-user) { position: relative; isolation: isolate; width: fit-content; max-width: 100%; }
+.thread-view[data-thread-background='atmosphere'] .thread-messages > :not(.thread-user)::after { content: ""; position: absolute; inset: -4px -10px; z-index: -1; pointer-events: none; border-radius: 18px; background: var(--text-scrim); box-shadow: 0 0 34px 20px var(--text-scrim); }
+.thread-view[data-thread-background='atmosphere'] .thread-backdrop { opacity: 0; }
+:root { --text-scrim: rgb(9 9 11 / .58); }
+:root[data-theme='light'] { --text-scrim: rgb(250 250 248 / .62); }
 :root[data-theme='light'] .thread-view[data-thread-background='atmosphere'] .thread-backdrop { opacity: .55; }
 .thread-view .project-bar-ghost { display: flex; }
 @media(prefers-reduced-motion:reduce){.thread-atmosphere,.thread-backdrop { transition: none; }.thread-view[data-thread-background='atmosphere'] .thread-atmosphere { transform: none; }}

@@ -12,8 +12,13 @@ export function connectAttachments({form,prompt,send,input,toast}){
  tray.addEventListener('scroll',edges,{passive:true});new ResizeObserver(edges).observe(tray);
  tray.addEventListener('wheel',event=>{if(tray.scrollWidth>tray.clientWidth&&Math.abs(event.deltaY)>Math.abs(event.deltaX)){event.preventDefault();tray.scrollLeft+=event.deltaY;}},{passive:false});
  const database=new Promise(resolve=>{const request=indexedDB.open('suffice-attachments',1);request.onupgradeneeded=()=>request.result.createObjectStore('drafts');request.onsuccess=()=>resolve(request.result);request.onerror=()=>resolve(null);});
- async function persist(key,value){const db=await database;if(db){const tx=db.transaction('drafts','readwrite');tx.objectStore('drafts').put(value,key);}}
- async function restore(key){if(cache.has(key))return cache.get(key);const db=await database;if(!db)return [];return new Promise(resolve=>{const request=db.transaction('drafts').objectStore('drafts').get(key);request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>resolve([]);});}
+ // Coalesce per key: a burst of edits queues one write of the newest state, not one blob-cloning transaction per edit that a reload can abort.
+const pending=new Map();let flushing=false;
+// Blob writes can outlive a reload; this synchronous manifest records which files the draft still holds so restore drops removed ones.
+const id=file=>[file.name,file.size,file.lastModified].join('|');
+function manifest(key,value){try{if(value)localStorage.setItem('suffice-attachments:'+key,JSON.stringify(value.map(id)));else return JSON.parse(localStorage.getItem('suffice-attachments:'+key));}catch{}return null;}
+async function persist(key,value){manifest(key,value);pending.set(key,value);if(flushing)return;flushing=true;try{const db=await database;while(pending.size){const [k,v]=pending.entries().next().value;pending.delete(k);if(!db)continue;await new Promise(done=>{const tx=db.transaction('drafts','readwrite',{durability:'relaxed'});tx.objectStore('drafts').put(v,k);tx.oncomplete=tx.onabort=tx.onerror=done;});}}finally{flushing=false;}}
+ async function restore(key){if(cache.has(key))return cache.get(key);const db=await database;if(!db)return [];return new Promise(resolve=>{const request=db.transaction('drafts').objectStore('drafts').get(key);request.onsuccess=()=>{const saved=request.result||[],keep=manifest(key);resolve(keep?saved.filter(file=>keep.includes(id(file))):saved);};request.onerror=()=>resolve([]);});}
  function changed(){cache.set(activeKey,files);void persist(activeKey,files);render();prompt.dispatchEvent(new Event('input'));form.dispatchEvent(new Event('attachments-change'));}
  function render(){urls.forEach(URL.revokeObjectURL);urls=[];tray.replaceChildren();tray.hidden=!files.length;
   files.forEach((file,index)=>{

@@ -1,10 +1,10 @@
 const prefix='suffice-thread-view-v1:';
-const empty=()=>({draft:'',panelOpen:false,tabs:[],activeTab:null,panelWidth:null,scrollTop:0,following:true,model:null,files:{directory:'',file:null,scroll:0,expanded:[],query:'',filterOpen:false,explorerOpen:true,explorerWidth:null,recent:[]},changes:{file:null,scroll:0,collapsed:[],query:'',filterOpen:false,explorerOpen:true,explorerWidth:null,recent:[]}});
+const empty=()=>({draft:'',cloud:false,panelOpen:false,tabs:[],activeTab:null,panelWidth:null,scrollTop:0,following:true,model:null,files:{directory:'',file:null,scroll:0,expanded:[],query:'',filterOpen:false,explorerOpen:true,explorerWidth:null,recent:[]},changes:{file:null,scroll:0,collapsed:[],query:'',filterOpen:false,explorerOpen:true,explorerWidth:null,recent:[]}});
 function normalize(value){
  const defaults=empty(),state={...defaults,...value};
  state.files={...defaults.files,...value?.files};state.changes={...defaults.changes,...value?.changes};
  state.draft=typeof state.draft==='string'?state.draft:'';
- state.tabs=[...new Set(Array.isArray(state.tabs)?state.tabs.filter(tab=>['files','changes'].includes(tab)):[])];
+ state.tabs=[...new Set(Array.isArray(state.tabs)?state.tabs.filter(tab=>['files','changes','preview','tests','timeline'].includes(tab)):[])];
  state.activeTab=state.tabs.includes(state.activeTab)?state.activeTab:state.tabs[0]??null;
  return state;
 }

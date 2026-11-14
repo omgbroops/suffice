@@ -113,7 +113,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.locator('.thread-row').filter({hasText:'First saved thread'}).click();
     await page.locator('.thread-assistant strong').filter({hasText:'First'}).waitFor();
     assert.equal(await page.locator('.workspace').getAttribute('data-thread-background'),'atmosphere');
-    await page.waitForFunction(()=>getComputedStyle(document.querySelector('.thread-atmosphere')).filter==='blur(14px)');
+    await page.waitForFunction(()=>{const s=getComputedStyle(document.querySelector('.thread-atmosphere'));return s.filter==='none'&&s.opacity==='1';}); // art stays crisp at full strength; text gets its own scrim (Abhay 2026-11-13: no fog)
     assert.equal(await page.locator('.new-session').getAttribute('aria-current'),null);
     await page.waitForFunction(()=>getComputedStyle(document.querySelector('.new-session')).backgroundColor==='rgba(0, 0, 0, 0)');
     assert.equal(await page.locator('.new-session').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');

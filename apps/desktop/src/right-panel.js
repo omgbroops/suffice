@@ -2,9 +2,10 @@ import {icon} from './ui.js';
 import {createPanelEditor} from './panel-editor.js';
 import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 import {threadViewState as store} from './thread-view-state.js';
+import {cloudTabs,isCloudTab,renderCloudTab} from './cloud-ui.js';
 import {renderFileTree,renderChanges,renderCode,textElement} from './panel-content.js';
 
-const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'}};
+const options={files:{label:'Files',icon:'files'},changes:{label:'Changes',icon:'changes'},...cloudTabs};
 export function panelIconButton(label,glyph){const button=document.createElement('button');button.type='button';button.className='button button--ghost';button.setAttribute('aria-label',label);button.title=label;button.innerHTML=icon(glyph);return button;}
 const textNode=textElement;
 export function connectRightPanel({sidebar,resize,toggle,api}){
@@ -20,9 +21,9 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
  function closeMenu(){hidePopover(menu);add.setAttribute('aria-expanded','false');}
  function activate(type){const current=store.state;store.update({tabs:current.tabs.includes(type)?current.tabs:[...current.tabs,type],activeTab:type});closeMenu();}
  function close(type){const current=store.state,remaining=current.tabs.filter(tab=>tab!==type);store.update({tabs:remaining,activeTab:current.activeTab===type?remaining[Math.max(0,current.tabs.indexOf(type)-1)]??null:current.activeTab});}
- function choices(container){for(const [type,option] of Object.entries(options)){const button=document.createElement('button');button.type='button';button.className='menu-item';if(container.getAttribute('role')==='menu')button.setAttribute('role','menuitem');button.innerHTML=icon(option.icon);button.append(textNode('span','',option.label));button.addEventListener('click',()=>activate(type));container.append(button);}}
+ function choices(container){for(const [type,option] of Object.entries(options)){if(isCloudTab(type)&&!store.state.cloud)continue;const button=document.createElement('button');button.type='button';button.className='menu-item';if(container.getAttribute('role')==='menu')button.setAttribute('role','menuitem');button.innerHTML=icon(option.icon);button.append(textNode('span','',option.label));button.addEventListener('click',()=>activate(type));container.append(button);}}
  choices(menu);
- add.addEventListener('click',()=>{if(add.getAttribute('aria-expanded')==='true'){closeMenu();return;}showPopover(menu);const r=add.getBoundingClientRect();menu.style.left=`${Math.max(8,Math.min(r.left,innerWidth-menu.offsetWidth-8))}px`;menu.style.top=`${r.bottom+6}px`;menu.style.setProperty('--popover-origin','top left');add.setAttribute('aria-expanded','true');if(keyboardInteraction())menu.querySelector('button')?.focus();});
+ add.addEventListener('click',()=>{if(add.getAttribute('aria-expanded')==='true'){closeMenu();return;}menu.replaceChildren();choices(menu);showPopover(menu);const r=add.getBoundingClientRect();menu.style.left=`${Math.max(8,Math.min(r.left,innerWidth-menu.offsetWidth-8))}px`;menu.style.top=`${r.bottom+6}px`;menu.style.setProperty('--popover-origin','top left');add.setAttribute('aria-expanded','true');if(keyboardInteraction())menu.querySelector('button')?.focus();});
  document.addEventListener('pointerdown',event=>{if(!menu.contains(event.target)&&!add.contains(event.target))closeMenu();});
  menu.addEventListener('keydown',event=>{if(event.key==='Escape'){closeMenu();add.focus();}if(['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();const items=[...menu.querySelectorAll('button')],index=items.indexOf(document.activeElement);items[(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length].focus();}});
  tabs.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End','Delete'].includes(event.key))return;event.preventDefault();const current=store.state,index=current.tabs.indexOf(current.activeTab);if(event.key==='Delete'){close(current.activeTab);return;}const next=event.key==='Home'?0:event.key==='End'?current.tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+current.tabs.length)%current.tabs.length;store.update({activeTab:current.tabs[next]});tabs.querySelector('[aria-selected="true"]')?.focus();});
@@ -36,6 +37,7 @@ export function connectRightPanel({sidebar,resize,toggle,api}){
   drawTabs();
   if(!type){body.removeAttribute('role');body.removeAttribute('aria-labelledby');body.removeAttribute('aria-busy');body.replaceChildren();const launcher=document.createElement('div');launcher.className='panel-launcher';choices(launcher);body.append(launcher);return;}
   body.setAttribute('role','tabpanel');body.setAttribute('aria-labelledby','panel-tab-'+type);body.setAttribute('aria-busy','true');
+  if(isCloudTab(type)){renderCloudTab(body,type,{threadId:id,open:activate});body.setAttribute('aria-busy','false');return;}
   const focusedPath=body.contains(document.activeElement)?document.activeElement.dataset.path:null;
   const viewKey=JSON.stringify([id,type,state[type].file]);
   if(viewKey!==renderedViewKey||!body.querySelector('.panel-scroll'))message('Loading…');

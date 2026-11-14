@@ -6,6 +6,8 @@ import {groupActions,actionTitle} from './action-display.js';
 import {connectDisclosureMotion} from './disclosure-motion.js';
 import {createToolWidget,toolOutput} from './tool-widget.js';
 import {icon} from './ui.js';
+import {cloudActivity} from './cloud-ui.js';
+import {cloudProvider} from './cloud-data.js';
 
 const relativeTime=new Intl.RelativeTimeFormat(undefined,{numeric:'auto'});
 function threadTime(timestamp){
@@ -26,6 +28,20 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
  const history=document.createElement('div');history.className='thread-messages';transcript.append(history);workspace.append(transcript);
  connectDisclosureMotion(history);
  const header=document.createElement('header');header.className='thread-header';header.hidden=true;workspace.append(header);
+ const headerTitle=document.createElement('span');headerTitle.className='thread-title';
+ const goLiveButton=document.createElement('button');goLiveButton.type='button';goLiveButton.className='button button--primary thread-golive';goLiveButton.textContent='Go live';goLiveButton.hidden=true;
+ header.append(headerTitle,goLiveButton);
+ const showCloud=()=>{const cloud=viewState.state.cloud;goLiveButton.hidden=!cloud;
+  const label=document.querySelector('[data-nx="env"] span');if(label&&(cloud||label.textContent==='Cloud')){label.textContent=cloud?'Cloud':'Local';if(cloud)form.dataset.cloud='1';else delete form.dataset.cloud;}};
+ function openCloudTab(tab){const tabs=viewState.state.tabs;viewState.update({panelOpen:true,tabs:tabs.includes(tab)?tabs:[...tabs,tab],activeTab:tab});}
+ function cloudRows(){
+  history.querySelectorAll('.thread-cloud-rows').forEach(node=>node.remove());if(!viewState.state.cloud||!viewState.id)return;
+  const messages=[...history.querySelectorAll(':scope > .thread-user, :scope > .thread-assistant')];
+  if(!messages.length)return history.prepend(cloudActivity(viewState.id,openCloudTab));
+  messages.forEach((message,index)=>{const rows=cloudActivity(viewState.id,openCloudTab,index,index===messages.length-1);if(rows.children.length)message.after(rows);});
+ }
+ viewState.subscribe(event=>{if(event.type!=='update'||event.changed.includes('cloud'))showCloud();});
+ goLiveButton.addEventListener('click',()=>{const live=cloudProvider(viewState.id).goLive();toast(`Live at ${live.url}`);});
  let busy=false,opening=false,current=null,streamed='',activeId=null,refreshVersion=0,previousMotion;
  let statusLine=null,reasoning='',renderFrame=0;const liveTools=new Map();let liveGroup=null,liveLog=null;
  let following=true,lastScrollTop=0,scrollFrame=0;
@@ -62,7 +78,7 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
     const canvas=workspace.querySelector('.atmosphere');
     previousMotion=canvas.dataset.motion;canvas.dataset.motion='paused';canvas.dispatchEvent(new Event('motion-change'));
    }
-   workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');header.textContent=title;header.hidden=false;
+   workspace.classList.add('thread-view');newSession.removeAttribute('aria-current');headerTitle.textContent=title;header.dataset.title=title;showCloud();header.hidden=false;
   };
   if(animate)transition.enter(change);else change();
  }
@@ -177,7 +193,7 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
    try{
     const selected=await api.openThread(thread.id);saveView();document.dispatchEvent(new Event('suffice:usage-change'));
     activeId=thread.id;try{localStorage.setItem('suffice-last-thread',thread.id);}catch{}
-    viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);
+    viewState.select(thread.id);following=false;threadView(selected.title,!workspace.classList.contains('thread-view'));renderMessages(selected.messages);showCloud();cloudRows();
     restoreView();list.querySelectorAll('.thread-row').forEach(el=>el.setAttribute('aria-pressed',String(el===row)));
    }catch(error){toast(error.message);}finally{opening=false;}
   });
@@ -273,9 +289,10 @@ export function connectThreads({api,prompt,send,toast,projectsReady,ensureProjec
    const model=form.modelSelection;
    viewState.select('pending:'+crypto.randomUUID());
    if(model)viewState.update({model});
+   if(form.dataset.cloud==='1')viewState.update({cloud:true,panelOpen:true,tabs:['preview','tests','timeline'],activeTab:'preview'});
    activeId=viewState.id;addOptimistic(activeId,text);
   }
-  busy=true;threadView(header.hidden?text.slice(0,90):header.textContent,entering);
+  busy=true;threadView(header.hidden?text.slice(0,90):header.dataset.title,entering);
   const userMessage=message('user',text);current=message('assistant','');
   statusLine=document.createElement('div');statusLine.className='thread-status';statusLine.setAttribute('role','status');statusLine.textContent='Working';history.append(statusLine);
   liveTools.clear();liveGroup=null;liveLog=null;reasoning='';

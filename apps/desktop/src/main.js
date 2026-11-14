@@ -11,6 +11,7 @@ import './styles.css';
 import './tactile.css';
 import './right-panel.css';
 import './composer-files.css';
+import './cloud.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 

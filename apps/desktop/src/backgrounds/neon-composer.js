@@ -131,7 +131,7 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
       }
       if (!opt) throw new Error('Worktree created but not found in the project list');
       opt.click(); document.querySelectorAll('.project-menu').forEach(e => e.matches('[open], :popover-open') && e.hidePopover?.());
-      const l = envChip()?.querySelector('span'); if (l) l.textContent = 'Worktree';
+      const l = envChip()?.querySelector('span'); if (l) l.textContent = 'Worktree'; delete form.dataset.cloud;
       note(`Worktree ready on branch ${item.git?.branch || ''}`.trim());
     } catch (error) { note(error.message); }
   }
@@ -139,9 +139,9 @@ export function mountNeonComposer({ api, note, esc, icons: I, S, data, prompt, f
     const wt = envChip()?.querySelector('span')?.textContent === 'Worktree';
     openMenu(anchor, [
       { label: 'Run on', sep: 0, disabled: true, hint: '' },
-      { label: 'This folder', icon: I.folder, check: !wt, run: () => { const l = envChip()?.querySelector('span'); if (l) l.textContent = 'Local'; } },
+      { label: 'This folder', icon: I.folder, check: !wt && form.dataset.cloud !== '1', run: () => { const l = envChip()?.querySelector('span'); if (l) l.textContent = 'Local'; delete form.dataset.cloud; } },
       { label: 'New git worktree', icon: I.worktree, run: newWorktree },
-      { label: 'Cloud', icon: I.cloud, disabled: true, hint: 'not available yet' },
+      { label: 'Cloud', icon: I.cloud, check: form.dataset.cloud === '1', run: () => { const l = envChip()?.querySelector('span'); if (l) l.textContent = 'Cloud'; form.dataset.cloud = '1'; } },
     ], { label: 'Run on', head: 'Run on' });
     menu?.querySelector('.nx-mi[disabled]:first-of-type')?.remove();
   };
