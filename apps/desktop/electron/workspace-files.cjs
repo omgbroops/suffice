@@ -26,20 +26,31 @@ async function read(root,name){
  }finally{await handle.close();}
 }
 const git=async(root,args)=>{if(!root)throw new Error('No project selected');return (await exec('git',['--no-optional-locks','-c','core.fsmonitor=false','-C',root,...args],{windowsHide:true,timeout:8000,maxBuffer:2*1024*1024})).stdout;};
-async function changes(root){
+function parseNumstat(output){
+ const stats=new Map(),records=output.split('\0');
+ for(let i=0;i<records.length;i++){const match=records[i].match(/^([\d-]+)\t([\d-]+)\t([\s\S]*)$/);if(!match)continue;let name=match[3];if(!name){i++;name=records[++i];}stats.set(name,{added:match[1]==='-'?null:Number(match[1]),removed:match[2]==='-'?null:Number(match[2]),binary:match[1]==='-'});}
+ return stats;
+}
+async function changes(root,includeStats=true){
  let output;try{output=await git(root,['status','--porcelain=v1','-z','--untracked-files=all']);}catch(error){if(error.stderr?.includes('not a git repository'))return {git:false,entries:[]};throw new Error('Could not read Git changes');}
  const records=output.split('\0'),entries=[];
  for(let i=0;i<records.length;i++){if(!records[i])continue;const status=records[i].slice(0,2),name=records[i].slice(3);const from=/[RC]/.test(status)?records[++i]:undefined;entries.push({path:name,status,from});}
+ if(includeStats){
+  let stats,unborn=false;const args=['diff','--no-ext-diff','--no-textconv','--numstat','-z'];
+  try{stats=parseNumstat(await git(root,[...args,'HEAD','--']));}catch{unborn=true;stats=parseNumstat(await git(root,[...args,'--cached','--']).catch(()=>''));}
+  for(const entry of entries)Object.assign(entry,stats.get(entry.path)||{added:0,removed:0});
+  const newFiles=entries.filter(entry=>entry.status==='??'||unborn&&entry.status.includes('A'));let next=0;
+  await Promise.all(Array.from({length:Math.min(4,newFiles.length)},async()=>{while(next<newFiles.length){const entry=newFiles[next++];try{const result=await read(root,entry.path);Object.assign(entry,{added:result.binary||result.truncated?null:result.text?result.text.split('\n').length-(result.text.endsWith('\n')?1:0):0,removed:0,binary:!!result.binary,statsPartial:result.truncated});}catch{Object.assign(entry,{added:null,removed:null});}}}));
+ }
  return {git:true,entries};
 }
 async function diff(root,name){
- const changed=await changes(root),entry=changed.entries.find(entry=>entry.path===name);
+ const changed=await changes(root,false),entry=changed.entries.find(entry=>entry.path===name);
  if(!entry)throw new Error('This file no longer has changes');
  if(entry.status==='??')return {...await read(root,name),untracked:true};
  const args=['diff','--no-ext-diff','--no-textconv','--no-color'];
  const paths=entry.from?[entry.from,name]:[name];
- const unstaged=await git(root,[...args,'--',...paths]),staged=await git(root,[...args,'--cached','--',...paths]);
- const text=[staged,unstaged].filter(Boolean).join('\n');
+ let text;try{text=await git(root,[...args,'HEAD','--',...paths]);}catch{if(entry.status.includes('A'))return {...await read(root,name),untracked:true};const unstaged=await git(root,[...args,'--',...paths]),staged=await git(root,[...args,'--cached','--',...paths]);text=[staged,unstaged].filter(Boolean).join('\n');}
  return {path:name,text:text.slice(0,limit),truncated:text.length>limit};
 }
-module.exports={list,read,changes,diff};
+module.exports={list,read,changes,diff,parseNumstat};
