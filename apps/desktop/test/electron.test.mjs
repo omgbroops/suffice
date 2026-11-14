@@ -19,7 +19,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     if(id==='two')entries.find(entry=>entry.id==='assistant').message.content[0].thinking='Checking the saved context.';
     await writeFile(resolve(sessions,id+'.jsonl'),entries.map(e=>JSON.stringify(e)).join('\n')+'\n');
   }
-  const env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+  const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
   const electron=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
   try{
     const page=await electron.firstWindow();

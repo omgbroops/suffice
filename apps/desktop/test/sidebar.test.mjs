@@ -14,7 +14,7 @@ test('project icons use local assets, explicit overrides and stable monograms',a
  assert.deepEqual(projectIdentity('Suffice'),projectIdentity('Suffice'));assert.equal(projectIdentity('Pixel Design System').text,'PS');assert.equal(projectIdentity('T3 Code').text,'T3');
 });
 test('informational sidebar rows, hover detail and themed states',{timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-sidebar-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-sidebar-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();
  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[

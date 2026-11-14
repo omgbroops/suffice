@@ -7,7 +7,7 @@ import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 
 test('composer attachments, preview menus, persisted defaults and background sends', {timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-composer-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-composer-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.locator('.composer').waitFor();
