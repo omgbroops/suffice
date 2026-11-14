@@ -44,3 +44,33 @@ suite passed 105 with 2 skipped (exit 0). The two new tests exercise a directory
 alias, cross-alias operation conflicts, and an escaping directory link. Native
 macOS rerun and the remaining timeout diagnostics are still pending. No renderer
 code changed in this follow-up, so the existing build remains applicable.
+
+## Reliability follow-up, native CI
+
+The source at 735eb59 built successfully on native Windows. Its full serialized
+desktop suite passed 60/60, exit 0. The combined core/CLI command passed 113 with
+2 skipped, exit 0; that local run includes one concurrent automation test excluded
+from this PR. The exact published tree passed 112 core/CLI tests with 2 skipped
+on both hosted platforms in [run 43617188907](https://github.com/sufficelabs/suffice/actions/runs/43617188907).
+
+That hosted run intentionally remains failed: macOS passed 56/60 desktop checks,
+Windows 59/60. It proved the macOS PTY helper repair and worker/crash recovery;
+remaining failures exposed fixed-viewport assumptions, an overly broad provider
+selector, a project-order-dependent assertion, and terminal focus after closing
+an inactive tab. Follow-up changes target those causes without skipping checks
+or relaxing terminal output counts. Focused native Windows reruns passed.
+Latest hosted results belong in the PR conversation; this records the failed
+run rather than replacing its evidence with a local pass.
+
+The macOS hosted display is 1024 pixels wide. Tests requiring a 1440x900 CSS
+viewport use Playwright viewport emulation only after checking real native
+window resize behavior. This does not prove native hit testing on a physical
+1440-pixel Mac display. The hidden-window flag is verified for the isolated
+recovery test; keyboard/visual interaction suites require a visible test runner.
+A hidden composer interaction experiment timed out and is not counted as a pass.
+
+Recovery tests wait for an acknowledged native draft backup, force-terminate the
+isolated app process tree, and recover saved transcript bytes and the draft on a
+fresh launch. Normal shutdown disposes real PTYs. These are not power-loss or
+arbitrary single-process orphan-cleanup guarantees. No paid calls, WSL, Linux
+compatibility claim, installer build, cloud-panel merge or Rust change is included.
