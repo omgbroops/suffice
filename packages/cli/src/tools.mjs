@@ -2,14 +2,19 @@ import {createCodingTools,createPowerShellTool} from '@earendil-works/pi-coding-
 import {repositoryPath} from './workspace.mjs';
 import {createNavigation} from './navigation.mjs';
 import {nativeShellPath} from './shell.mjs';
+import {commandGate} from './command-gate.mjs';
 
-export function repositoryTools({workspace, commandTimeout=180, shellPath, preferredShell, toolObserver}) {
+const nativeByAccess={read:['read'],edit:['read','edit','write'],full:['read','edit','write','bash','powershell']};
+export function repositoryTools({workspace, commandTimeout=180, shellPath, preferredShell, toolObserver,access='full'}) {
+  if(!Object.hasOwn(nativeByAccess,access))throw new Error('Unknown access level: '+access);
   let native=createCodingTools(workspace,{bash:{shellPath:nativeShellPath(shellPath),exposeSessionEnvironment:false}});if(preferredShell==='PowerShell'&&process.platform==='win32')native=[...native.filter(tool=>!['bash','powershell'].includes(tool.name)),createPowerShellTool(workspace,{exposeSessionEnvironment:false})];
   return [
-    ...native.map(tool=>({...tool,label:tool.label??tool.name,
+    ...native.filter(tool=>nativeByAccess[access].includes(tool.name)).map(tool=>({...tool,label:tool.label??tool.name,
       async execute(id,args,signal,onUpdate) {
-        if(!['bash','powershell'].includes(tool.name)) await repositoryPath(workspace,args.path);
-        else args={...args,timeout:Math.min(Math.max(args.timeout??commandTimeout,1),commandTimeout)};
+        signal?.throwIfAborted();
+        if(!['bash','powershell'].includes(tool.name)) args={...args,path:await repositoryPath(workspace,args.path)};
+        else {await commandGate(args.command,{signal,toolName:tool.name==='powershell'?'PowerShell':'Bash'});args={...args,timeout:Math.min(Math.max(args.timeout??commandTimeout,1),commandTimeout)};}
+        signal?.throwIfAborted();
         // Optional product instrumentation sees nested codemode calls as well.
         let observation;
         try { observation=await toolObserver?.before(tool.name,args); } catch {}

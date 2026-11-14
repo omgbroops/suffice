@@ -13,6 +13,8 @@ export const PROMPT='Implement the requested change in this repository. Investig
 
 export async function createSufficeSession(options, runtime, {onTool=()=>{}, onAssistant=()=>{}, onApproval, toolObserver}={}) {
   const workspace=options.cwd;
+  const access=options.access??'full';if(!['read','edit','full'].includes(access))throw new Error('Invalid access level');
+  const externalAccess=access==='full';
   const sessionDir=resolve(options.home,'sessions',hash(workspace).slice(0,20));
   const eventDir=resolve(options.home,'events');
   await mkdir(sessionDir,{recursive:true,mode:0o700});
@@ -22,9 +24,9 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const totals={input:0,cacheRead:0,cacheWrite:0,output:0,estimatedApiUsd:0,modelCalls:0,costUnknown:false};
   const log=event=>{tail=tail.then(()=>appendFile(eventPath,JSON.stringify({at:new Date().toISOString(),...event})+'\n',{mode:0o600})).catch(e=>{logError??=e; void session?.abort();});};
   const manager=options.sessionManager??(options.continue?SessionManager.continueRecent(workspace,sessionDir):SessionManager.create(workspace,sessionDir));
-  const automation=createAutomation({home:options.home,sessionId:hash(manager.getSessionFile()??randomUUID()).slice(0,32),browser:options.browser!==false,desktop:options.desktop!==false,headless:options.browserHeadless===true});
+  const automation=createAutomation({home:options.home,sessionId:hash(manager.getSessionFile()??randomUUID()).slice(0,32),browser:externalAccess&&options.browser!==false,desktop:externalAccess&&options.desktop!==false,headless:options.browserHeadless===true});
   const systemPrompt=PROMPT+(options.additionalContext||'')+(options.desktopSettings?.signoff?'\nUse git commit --signoff when committing changes.':'')+(automation.prompt?'\nWhen explicitly requested, operating websites and native apps is also within scope. '+automation.prompt:'');
-  const tools=[...repositoryTools({workspace,shellPath:options.shellPath,preferredShell:options.desktopSettings?.['execution-shell'],toolObserver}),...automation.tools];
+  const tools=[...repositoryTools({workspace,access,shellPath:options.shellPath,preferredShell:options.desktopSettings?.['execution-shell'],toolObserver}),...automation.tools];
   const names=tools.filter(t=>t.exposure!=='deferred').map(t=>t.name);
   const contextWindow=options.modelObject?.contextWindow||runtime.getModel?.('openai',options.model)?.contextWindow||128000;
   const settings=SettingsManager.inMemory({compaction:{enabled:options.desktopSettings?.['auto-compact']===true,reserveTokens:Math.round(contextWindow*(1-parseInt(options.desktopSettings?.['compact-at']||'80%')/100)),keepRecentTokens:Math.min(10000,Math.floor(contextWindow*.15))},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
@@ -90,7 +92,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     }
     onAssistant(m);
   });
-  log({type:'startup',version:`suffice-cli-${VERSION}`,profile:'general-v1-derived',cwd:workspace,model:model.id,effort:session.thinkingLevel,systemPrompt,tools:session.getActiveToolNames(),capabilities:{browser:options.browser!==false,desktop:options.desktop!==false},sandbox:false});
+  log({type:'startup',version:`suffice-cli-${VERSION}`,profile:'general-v1-derived',cwd:workspace,model:model.id,effort:session.thinkingLevel,systemPrompt,tools:session.getActiveToolNames(),capabilities:{browser:externalAccess&&options.browser!==false,desktop:externalAccess&&options.desktop!==false},sandbox:false});
   return {
     session, totals, eventPath, sessionPath:()=>manager.getSessionFile(), created,
     services:{cwd:workspace,agentDir:options.home,modelRuntime:runtime,settingsManager:settings,resourceLoader:loader,diagnostics:[]},

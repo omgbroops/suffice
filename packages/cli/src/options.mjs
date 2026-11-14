@@ -16,6 +16,7 @@ Options:
   --cwd PATH          Starting repository (default: current directory)
   --model ID          gpt-6.1-sol (default), gpt-6-luna, or another catalog ID
   --effort LEVEL      off, minimal, low (default), medium, high, xhigh
+  --access LEVEL      read, edit, or full (default: full)
   --continue          Continue the most recent session in this repository
   --no-browser        Disable browser tools and their discovery/instructions
   --no-desktop        Disable native app tools and their discovery/instructions
@@ -34,8 +35,8 @@ Pi's interface and engine, with Suffice's tools, prompt and codemode setup.
 `;
 
 export function parseOptions(args, env=process.env) {
-  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', maxCost:10, timeout:600, prompt:'',browser:env.SUFFICE_BROWSER!=='0',desktop:env.SUFFICE_DESKTOP!=='0',browserHeadless:env.SUFFICE_BROWSER_HEADLESS==='1'};
-  const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--max-cost':'maxCost','--timeout':'timeout'};
+  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', access:'full', maxCost:10, timeout:600, prompt:'',browser:env.SUFFICE_BROWSER!=='0',desktop:env.SUFFICE_DESKTOP!=='0',browserHeadless:env.SUFFICE_BROWSER_HEADLESS==='1'};
+  const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--access':'access','--max-cost':'maxCost','--timeout':'timeout'};
   const words=[];
   for(let i=0;i<args.length;i++) {
     const arg=args[i];
@@ -54,6 +55,7 @@ export function parseOptions(args, env=process.env) {
   if(words.length===1 && ['login','doctor','setup-automation'].includes(words[0])) options.command=words[0];
   else options.prompt=words.join(' ');
   if(!['off','minimal','low','medium','high','xhigh'].includes(options.effort)) throw new Error('Invalid effort. Use off, minimal, low, medium, high, or xhigh.');
+  if(!['read','edit','full'].includes(options.access))throw new Error('Invalid access. Use read, edit, or full.');
   for(const key of ['maxCost','timeout']) {
     options[key]=Number(options[key]);
     if(!Number.isFinite(options[key]) || options[key]<=0) throw new Error(`${key} must be a positive number`);
