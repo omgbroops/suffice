@@ -19,8 +19,15 @@ test('workspace browsing rejects escapes and shows real tracked, renamed and unt
  await assert.rejects(files.read(root,resolve(outside,'secret.txt')),/Invalid workspace path/);
  await assert.rejects(files.list(root,'escape'),/outside this project/);
  const changes=await files.changes(root);assert.ok(changes.entries.some(entry=>entry.path==='new.txt'&&entry.status==='??'));
+ assert.deepEqual([changes.entries.find(entry=>entry.path==='hello.txt').added,changes.entries.find(entry=>entry.path==='hello.txt').removed],[1,1]);assert.equal(changes.entries.find(entry=>entry.path==='new.txt').added,1);
  assert.ok(changes.entries.some(entry=>entry.path==='renamed name.txt'&&entry.from==='old name.txt'));
  assert.match((await files.diff(root,'hello.txt')).text,/\+after/);
  assert.match((await files.diff(root,'new.txt')).text,/new file/);
  assert.equal((await files.changes(outside)).git,false);
+});
+
+test('change counts describe net edits, renames, binary files and unborn repositories',async()=>{
+ const root=await mkdtemp(resolve(tmpdir(),'suffice-diff-stats-')),git=args=>exec('git',['-C',root,...args],{windowsHide:true});await git(['init','-q']);await writeFile(resolve(root,'initial.txt'),'initial\n');await git(['add','initial.txt']);assert.equal((await files.changes(root)).entries.find(entry=>entry.path==='initial.txt').added,1);await git(['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','fixture']);
+ await writeFile(resolve(root,'initial.txt'),'staged\n');await git(['add','initial.txt']);await writeFile(resolve(root,'initial.txt'),'final\n');await writeFile(resolve(root,'image.dat'),Buffer.from([0,1,2]));const entries=(await files.changes(root)).entries;const modified=entries.find(entry=>entry.path==='initial.txt');assert.deepEqual([modified.added,modified.removed],[1,1]);assert.equal(entries.find(entry=>entry.path==='image.dat').binary,true);const diff=await files.diff(root,'initial.txt');assert.match(diff.text,/-initial/);assert.doesNotMatch(diff.text,/staged/);
+ const renamed=files.parseNumstat('0\t0\t\0old name.ts\0new name.ts\0-\t-\timage.png\0');assert.deepEqual(renamed.get('new name.ts'),{added:0,removed:0,binary:false});assert.equal(renamed.get('image.png').binary,true);
 });

@@ -1,3 +1,4 @@
+import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
@@ -14,7 +15,7 @@ test('project icons use local assets, explicit overrides and stable monograms',a
 });
 test('informational sidebar rows, hover detail and themed states',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-sidebar-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{const page=await app.firstWindow();await page.locator('.composer').waitFor();
  await app.evaluate(({ipcMain})=>{ipcMain.removeHandler('suffice:threads');ipcMain.handle('suffice:threads',()=>[
  {id:'approval',title:'Fix double charge on retried webhooks',project:'Halo Pay',projectDiff:{added:100,removed:40,scope:'branch'},cwd:'C:/Projects/halo',branch:'fix/webhook-idempotency-on-retries',provider:'openai',model:'gpt-6.1-sol',status:'approval',modified:Date.now()},

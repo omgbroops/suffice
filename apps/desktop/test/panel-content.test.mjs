@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {parseUnifiedDiff,filterFileTreeRows} from '../src/panel-content.js';
+import {parseUnifiedDiff,splitDiffRows,filterFileTreeRows} from '../src/panel-content.js';
+
+test('split diffs pair replacements and preserve unequal additions and hunk boundaries',()=>{
+ const rows=parseUnifiedDiff('@@ -2,3 +2,4 @@\n-old\n+new\n+extra\n context\n tail\n@@ -30,1 +31,0 @@\n-deleted\n');
+ const pairs=splitDiffRows(rows);assert.equal(pairs[0].hunk.kind,'hunk');assert.equal(pairs[1].left.text,'old');assert.equal(pairs[1].right.text,'new');assert.equal(pairs[2].left,null);assert.equal(pairs[2].right.text,'extra');assert.deepEqual([pairs[3].left.old,pairs[3].right.new],[3,4]);assert.equal(pairs.at(-1).left.old,30);assert.equal(pairs.at(-1).right,null);
+});
 
 test('diff presentation retains source line numbers across multiple hunks',()=>{
  const rows=parseUnifiedDiff('diff --git a/a b/a\n--- a/a\n+++ b/a\n@@ -3,2 +3,2 @@\n-old\n+new\n context\n@@ -20,0 +21,1 @@\n+added\n\\ No newline at end of file\n');

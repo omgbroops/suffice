@@ -1,3 +1,4 @@
+import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,writeFile} from 'node:fs/promises';
@@ -21,7 +22,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   {type:'message',id:'assistant',parentId:'user',timestamp,message:{role:'assistant',content:[{type:'text',text:'Reply '+id+'\n\n'+'A paragraph for checking scroll restoration.\n\n'.repeat(50)}],timestamp:Date.now(),stopReason:'stop'}},
  ].map(entry=>JSON.stringify(entry)).join('\n')+'\n');}
  const env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.thread-row').filter({hasText:'Thread one'}).waitFor();
   assert.equal(await page.locator('.workspace-tools').isVisible(),false);
@@ -48,8 +49,8 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   const surfaces=await page.evaluate(()=>{const editor=document.querySelector('.right-panel-content'),chat=document.querySelector('.workspace');return {editor:getComputedStyle(editor).borderRadius,chat:getComputedStyle(chat).borderRadius,gap:editor.getBoundingClientRect().left-chat.getBoundingClientRect().right};});assert.equal(surfaces.editor,surfaces.chat);assert.equal(surfaces.gap,8);
   await page.getByRole('treeitem',{name:'src',exact:true}).focus();await page.keyboard.press('ArrowRight');
   await page.getByRole('treeitem',{name:'nested.ts',exact:true}).waitFor();
-  const folderStyle=element=>{const s=getComputedStyle(element),icon=element.querySelector('.icon:not(.tree-chevron)');return [s.padding,s.borderRadius,s.fontSize,s.fontWeight,s.lineHeight,s.gap,getComputedStyle(icon).width];};const filesFolderStyle=await page.getByRole('treeitem',{name:'src',exact:true}).evaluate(folderStyle);
-  for(const [name,kind] of [['nested.ts','typescript'],['sample.js','javascript'],['sample.java','java'],['sample.pdf','pdf']]){const image=page.getByRole('treeitem',{name,exact:true}).locator('img');assert.match(await image.getAttribute('src'),new RegExp(kind));assert.ok(await image.evaluate(el=>el.complete&&el.naturalWidth>0));}
+  const folderStyle=element=>{const s=getComputedStyle(element),icon=element.querySelector('.icon:not(.tree-chevron)');return [s.padding,s.borderRadius,s.fontSize,s.fontWeight,s.lineHeight,s.gap,icon?getComputedStyle(icon).width:null];};const filesFolderStyle=await page.getByRole('treeitem',{name:'src',exact:true}).evaluate(folderStyle);
+  for(const [name,kind] of [['nested.ts','typescript'],['sample.js','javascript'],['sample.java','java'],['sample.pdf','pdf']]){const image=page.getByRole('treeitem',{name,exact:true}).locator('img');assert.match(await image.getAttribute('src'),new RegExp(kind));assert.ok(await image.evaluate(async el=>{await el.decode();return el.complete&&el.naturalWidth>0;}));}
   await page.getByRole('treeitem',{name:'nested.ts',exact:true}).click();await page.locator('.syntax-token').first().waitFor();
   assert.match(await page.locator('.panel-code').evaluate(el=>getComputedStyle(el).fontFamily),/JetBrains Mono/);
   const color=()=>page.locator('.syntax-token').first().evaluate(el=>getComputedStyle(el).color);
@@ -73,7 +74,7 @@ test('thread panels, file views, tabs and drafts restore independently, includin
   assert.ok(tabAlignment.header.right<=tabAlignment.controls.x-6);
   await page.locator('.panel-path').filter({hasText:'changed files'}).waitFor();
   const tabSurface=await page.locator('.panel-tab[data-active="true"]').evaluate(el=>{const tab=getComputedStyle(el),editor=getComputedStyle(document.querySelector('.right-panel-content'));return {tab:tab.backgroundColor,editor:editor.backgroundColor,edge:tab.outlineColor,border:editor.borderTopColor};});assert.equal(tabSurface.tab,tabSurface.editor);assert.equal(tabSurface.edge,tabSurface.border);assert.equal(await page.locator('.workspace-tools').evaluate(el=>getComputedStyle(el).gap),'4px');
-  assert.deepEqual(await page.locator('.change-folder').first().evaluate(folderStyle),filesFolderStyle);
+  assert.deepEqual((await page.locator('.change-folder').first().evaluate(folderStyle)).slice(0,-1),filesFolderStyle.slice(0,-1));assert.equal(await page.locator('.change-folder > .icon:not(.tree-chevron)').count(),0);
   await page.getByRole('menu',{name:'Panel options'}).waitFor({state:'hidden'});
   await page.screenshot({path:resolve('apps/desktop/desktop-changes-list.png')});
   await page.locator('.panel-file-row').filter({hasText:'hello.txt'}).click();await page.locator('.panel-code .addition').filter({hasText:'+after'}).waitFor();

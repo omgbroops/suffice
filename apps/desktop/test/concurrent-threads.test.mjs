@@ -1,3 +1,4 @@
+import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp} from 'node:fs/promises';
@@ -7,7 +8,7 @@ import {_electron} from 'playwright-core';
 
 test('threads keep independent live runs and accept steering without aborting',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-concurrent-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+ const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.composer').waitFor();
   await app.evaluate(({ipcMain,BrowserWindow})=>{

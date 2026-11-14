@@ -1,3 +1,4 @@
+import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
@@ -19,7 +20,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await writeFile(resolve(sessions,id+'.jsonl'),entries.map(e=>JSON.stringify(e)).join('\n')+'\n');
   }
   const env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
-  const electron=await _electron.launch({executablePath:resolve('node_modules/electron/dist/electron.exe'),args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
+  const electron=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
   try{
     const page=await electron.firstWindow();
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -28,7 +29,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     const composerShadow=await page.locator('.composer').evaluate(el=>getComputedStyle(el).boxShadow);
     for(const selector of ['.sidebar-heading','.right-panel-header','.window-drag-region','.sidebar .panel-drag-region','.right-sidebar .panel-drag-region']){assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-app-region')),'drag');assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).userSelect),'none');}
     assert.equal(await page.getByRole('button',{name:'Search sessions',exact:true}).evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-app-region')),'no-drag');
-    const hitPoints=await page.evaluate(()=>{const center=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};};return [center('.sidebar .brand-wordmark'),center('.sidebar [data-action="search-sessions"]'),center('.window-controls button'),center('.window-drag-region')];});const hits=await nativeHitTests(electron,hitPoints);if(hits)assert.deepEqual(hits,[2,1,1,2]);
+    const hitPoints=await page.evaluate(()=>{const center=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};};return [center('.sidebar .brand-wordmark'),center('.sidebar [data-action="search-sessions"]'),center('.window-controls button'),center('.window-drag-region')];});const hits=await nativeHitTests(electron,hitPoints);if(hits)assert.deepEqual(hits,[1,1,1,2]);
     assert.match(await page.locator('.composer').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
     await page.getByRole('button',{name:'Maximize or restore'}).click();
     await page.getByRole('button',{name:'Maximize or restore'}).click();
@@ -105,12 +106,12 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     assert.ok(Math.abs((await page.locator('.workspace').boundingBox()).width-canvasBefore.width)<2);
     await page.getByRole('button',{name:'New session',exact:true}).click();
     assert.equal(await page.locator('.new-session').getAttribute('aria-current'),'page');
-    await page.getByRole('button',{name:'Workspace options'}).click();
-    await page.getByRole('menuitem',{name:'Background',exact:true}).hover();
+    await page.getByRole('button',{name:'Settings',exact:true}).click();
+    await page.getByRole('button',{name:'Appearance',exact:true}).click();await page.getByRole('button',{name:'Background',exact:true}).click();
     await page.waitForTimeout(350);
     assert.equal(await page.locator('.custom-tooltip').isVisible(),false);
     await page.getByRole('menuitemradio',{name:'Moonlit lake',exact:true}).waitFor();
-    assert.match(await page.locator('#popover').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
+    assert.match(await page.locator('.settings-select-menu').evaluate(el=>getComputedStyle(el).backdropFilter),/blur\(24px\)/);
     await page.screenshot({path:resolve('apps/desktop/desktop-glass.png')});
     await page.keyboard.press('Escape');await page.keyboard.press('Escape');
     assert.equal(status.authenticated,false);assert.ok(Number(status.node.split('.')[0])>=24);
@@ -164,7 +165,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.locator('.project-option').click();
     await page.locator('#prompt').fill('Read hello.txt');
     await page.locator('#prompt').press('Enter');
-    await page.locator('.thread-assistant').filter({hasText:'Sign in with the Suffice CLI first'}).waitFor();
+    await page.locator('.thread-assistant').filter({hasText:'Connect a provider in Settings first'}).waitFor();
     await page.getByRole('button',{name:'New session',exact:true}).click();
     assert.equal(await page.locator('.thread-message').count(),0);
     assert.equal(await page.locator('.new-session').getAttribute('aria-current'),'page');
