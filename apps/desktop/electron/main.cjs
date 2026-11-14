@@ -1,5 +1,7 @@
 const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification}=require('electron');
 const path=require('node:path');
+const appIcon=path.join(__dirname,'../assets/suffice-logo.png');
+if(process.platform==='win32')app.setAppUserModelId('com.suffice.desktop');
 const {pathToFileURL}=require('node:url');
 const {randomUUID,createHash}=require('node:crypto');
 const workspaceFiles=require('./workspace-files.cjs');
@@ -15,6 +17,7 @@ else app.on('second-instance',()=>{
   if(win&&!win.isDestroyed()){if(win.isMinimized())win.restore();win.show();win.focus();}
 });
 if(primary)app.whenReady().then(async()=>{
+  if(process.platform==='darwin')app.dock?.setIcon(appIcon);
   const {parseOptions}=await import('@suffice/harness');
   const settingsHome=parseOptions([]).home;
   const settings=(await import('./settings-store.mjs')).createSettingsStore(settingsHome);
@@ -26,7 +29,7 @@ if(primary)app.whenReady().then(async()=>{
    onEvent:message=>{if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval'){void notify('approval','Agent needs approval');void dialog.showMessageBox(win,{type:'question',title:'Allow agent action?',message:message.name,detail:JSON.stringify(message.input,null,2).slice(0,8000),buttons:['Deny','Allow'],defaultId:0,cancelId:0}).then(answer=>request('approval-answer',{threadId:message.threadId,requestId:message.requestId,allow:answer.response===1}));return;}if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;},
    onStderr:data=>process.stderr.write(data)
   });
-  win=new BrowserWindow({show:process.env.SUFFICE_TEST_HIDE_WINDOW!=='1',width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+  win=new BrowserWindow({icon:appIcon,show:process.env.SUFFICE_TEST_HIDE_WINDOW!=='1',width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
   const entry=pathToFileURL(path.join(__dirname,'../dist/index.html')).href;
   win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry)event.preventDefault();});
