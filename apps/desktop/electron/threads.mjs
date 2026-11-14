@@ -1,4 +1,5 @@
 import {readChatChanges} from './chat-changes.mjs';
+import {readTranscriptJournal} from './transcript-journal.mjs';
 import {hostname} from 'node:os';
 import {projectMetadata,sessionMetadata} from './sidebar-metadata.mjs';
 import {readdir,realpath,readFile,stat} from 'node:fs/promises';
@@ -22,7 +23,7 @@ export function createThreadStore(home){
   const info=known.get(id),path=await realpath(info.path),base=await realpath(root);
   if(!path.startsWith(base+sep))throw new Error('Thread path is outside the session directory');
   const infoStat=await stat(path),version=`${infoStat.mtimeMs}:${infoStat.size}`,cached=transcripts.get(path);if(cached?.version===version)return cached.value;
-  const entries=(await readFile(path,'utf8')).split('\n').filter(Boolean).map(line=>JSON.parse(line));
+  const entries=readTranscriptJournal(await readFile(path,'utf8'));
   const messages=buildSessionProjection(entries.filter(entry=>entry.type!=='session')).messages;
   const lastAssistant=[...messages].reverse().find(message=>message.role==='assistant');
   const usage=savedUsage(entries,lastAssistant?resolveModel(lastAssistant.provider,lastAssistant.model):undefined);
