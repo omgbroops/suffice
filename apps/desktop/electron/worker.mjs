@@ -1,3 +1,4 @@
+import {createSufficeModelRuntime,modelRuntimeOptions} from '../../../packages/cli/src/model-runtime.mjs';
 import {projectContext,rememberProject,threadTitle} from './engine-settings.mjs';
 import {invalidateProjectMetadata} from './sidebar-metadata.mjs';
 import {createChatChangeTracker} from './chat-changes.mjs';
@@ -5,14 +6,14 @@ import {createThreadRouter} from './thread-router.mjs';
 import {sessionUsage} from './usage.mjs';
 import {mkdir,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
-import {ModelRuntime,SessionManager} from '@earendil-works/pi-coding-agent';
+import {SessionManager} from '@earendil-works/pi-coding-agent';
 import {createThreadStore,threadId} from './threads.mjs';
 import {createSufficeSession,parseOptions} from '@suffice/harness';
 import {getSupportedThinkingLevels} from '@earendil-works/pi-ai/compat';
 
 const port=process.parentPort;
 const send=value=>port?port.postMessage(value):process.send?.(value);
-export function createHarnessHost({send,createRuntime=options=>ModelRuntime.create(options),createSession=createSufficeSession,home=parseOptions([]).home,threadStore}) {
+export function createHarnessHost({send,createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})}),createSession=createSufficeSession,home=parseOptions([]).home,threadStore}) {
 let agent,runtime,workspace,changeTracker,busy=false;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
 let resumePath=null,viewedUsage=null,viewRevision=0;
@@ -30,7 +31,7 @@ async function receive(message) {
     if(action==='reset'){viewRevision++;await agent?.dispose();agent=null;resumePath=null;viewedUsage=null;send({event:'usage',usage:null});send({id,ok:true});return;}
     if(action==='models'){
       if(!runtime)throw new Error('Harness is not ready');
-      runtime=await createRuntime({authPath:resolve(home,'auth.json'),modelsPath:null,modelsStorePath:resolve(home,'catalog.json'),allowModelNetwork:false});
+      await runtime.refresh?.({allowNetwork:false});
       const available=await runtime.getAvailable();const models=payload.all?runtime.getModels():available;
       send({id,ok:true,result:models.map(model=>({id:model.id,name:model.name,provider:model.provider,available:available.some(item=>item.id===model.id&&item.provider===model.provider),efforts:model.reasoning?getSupportedThinkingLevels(model):[]}))});return;
     }
@@ -43,7 +44,7 @@ async function receive(message) {
       const options=parseOptions([]);
       options.home=home;
       await mkdir(options.home,{recursive:true});
-      runtime??=await createRuntime({authPath:resolve(options.home,'auth.json'),modelsPath:null,modelsStorePath:resolve(options.home,'catalog.json'),allowModelNetwork:false});
+      runtime??=await createRuntime(modelRuntimeOptions(options.home));
       send({id,ok:true,result:{authenticated:runtime.isUsingSubscription('openai')||(await runtime.getAvailable?.()||[]).length>0,node:process.versions.node}});return;
     }
     if(action!=='run')throw new Error('Unknown harness action');
@@ -87,6 +88,6 @@ async function receive(message) {
 return receive;
 }
 const sharedThreads=createThreadStore(parseOptions([]).home);
-const receive=createThreadRouter({send,createHost:options=>createHarnessHost({...options,threadStore:sharedThreads}),createRuntime:options=>ModelRuntime.create(options)});
+const receive=createThreadRouter({send,createHost:options=>createHarnessHost({...options,threadStore:sharedThreads}),createRuntime:options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})})});
 if(port)port.on('message',event=>void receive(event.data));
 else if(process.send)process.on('message',message=>void receive(message));

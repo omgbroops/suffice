@@ -2,6 +2,7 @@ const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
   viewStates:()=>ipcRenderer.invoke('suffice:view-states'),
   saveViewState:payload=>ipcRenderer.invoke('suffice:save-view-state',payload),
+  refreshModels:()=>ipcRenderer.invoke('suffice:refresh-models'),
   providers:()=>ipcRenderer.invoke('suffice:providers'),
   providerLogin:payload=>ipcRenderer.invoke('suffice:provider-login',payload),
   providerAnswer:payload=>ipcRenderer.invoke('suffice:provider-answer',payload),

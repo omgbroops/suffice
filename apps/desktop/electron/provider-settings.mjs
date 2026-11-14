@@ -1,11 +1,12 @@
-import {ModelRuntime} from '@earendil-works/pi-coding-agent';
+import {createSufficeModelRuntime,modelRuntimeOptions,refreshModelCatalog} from '../../../packages/cli/src/model-runtime.mjs';
+
 import {parseOptions} from '@suffice/harness';
-import {resolve} from 'node:path';
+
 
 // Pi owns provider discovery, login prompts, persistence and token refresh.
-export function createProviderSettings({emit,openBrowser,createRuntime=options=>ModelRuntime.create(options),home=parseOptions([]).home}){
+export function createProviderSettings({emit,openBrowser,onCatalog=()=>{},createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:onCatalog}),home=parseOptions([]).home}){
  let runtimePromise,operation,pending,sequence=0;
- const runtime=()=>runtimePromise??=createRuntime({authPath:resolve(home,'auth.json'),modelsPath:null,modelsStorePath:resolve(home,'catalog.json'),allowModelNetwork:false});
+ const runtime=()=>runtimePromise??=createRuntime(modelRuntimeOptions(home));
  async function list(){const rt=await runtime(),credentials=await rt.listCredentials();return rt.getProviders().map(provider=>({id:provider.id,name:provider.name,connected:rt.hasConfiguredAuth(provider.id),credential:credentials.find(c=>c.providerId===provider.id)?.type,methods:[...(provider.auth.apiKey?.login?[{id:'api_key',name:provider.auth.apiKey.name}]:[]),...(provider.auth.oauth?[{id:'oauth',name:provider.auth.oauth.name||'Subscription'}]:[])]})).sort((a,b)=>a.name.localeCompare(b.name));}
  async function login(payload){
   if(operation)throw new Error('Finish or cancel the current connection first');
@@ -16,9 +17,10 @@ export function createProviderSettings({emit,openBrowser,createRuntime=options=>
    const id=++sequence;const abort=()=>{if(pending?.id===id){pending=null;emit({type:'prompt-cancel',id});}reject(new Error('Connection cancelled'));};
    const signal=prompt.signal??controller.signal;if(signal.aborted){abort();return;}signal.addEventListener('abort',abort,{once:true});pending={id,answer:value=>{signal.removeEventListener('abort',abort);resolve(value);}};
    emit({type:'prompt',id,prompt:{type:prompt.type,message:prompt.message,placeholder:prompt.placeholder,options:prompt.options}});
-  })});return await list();}finally{clearTimeout(timeout);operation=null;pending=null;emit({type:'finished'});}
+  })});void refresh({force:true,providers:[provider.id]});return await list();}finally{clearTimeout(timeout);operation=null;pending=null;emit({type:'finished'});}
  }
  function answer(payload){if(!pending||payload?.id!==pending.id||typeof payload.value!=='string'||payload.value.length>32000)throw new Error('Invalid login response');const prompt=pending;pending=null;prompt.answer(payload.value);}
  async function logout(id){if(operation)throw new Error('Finish connection first');const rt=await runtime();if(!rt.getProvider(id))throw new Error('Unknown provider');await rt.logout(id);return list();}
- return {list,login,answer,logout,cancel(){operation?.abort();}};
+ async function refresh(options={}){return refreshModelCatalog(await runtime(),{...options,onRefresh:onCatalog});}
+ return {list,login,answer,logout,refresh,cancel(){operation?.abort();}};
 }

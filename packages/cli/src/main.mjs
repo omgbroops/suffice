@@ -1,9 +1,10 @@
+import {createSufficeModelRuntime,modelRuntimeOptions} from './model-runtime.mjs';
 import {mkdir, readFile, writeFile, realpath, stat} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {createInterface} from 'node:readline/promises';
-import {ModelRuntime} from '@earendil-works/pi-coding-agent';
+
 import {VERSION} from './options.mjs';
 import {createSufficeSession} from './session.mjs';
 import {repositoryTools} from './tools.mjs';
@@ -44,7 +45,7 @@ export async function main(options) {
   options.cwd=await realpath(options.cwd);
   if(!(await stat(options.cwd)).isDirectory()) throw new Error('--cwd must be a directory');
   await mkdir(options.home,{recursive:true,mode:0o700});
-  const runtime=await ModelRuntime.create({authPath:resolve(options.home,'auth.json'),modelsPath:null,modelsStorePath:resolve(options.home,'catalog.json'),allowModelNetwork:false});
+  const runtime=await createSufficeModelRuntime(modelRuntimeOptions(options.home));
   if(options.command==='login') return login(runtime,options);
   if(options.command==='doctor') {
     const tools=repositoryTools({workspace:options.cwd});
