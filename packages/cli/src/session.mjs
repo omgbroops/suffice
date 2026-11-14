@@ -29,7 +29,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const tools=[...repositoryTools({workspace,access,shellPath:options.shellPath,preferredShell:options.desktopSettings?.['execution-shell'],toolObserver}),...automation.tools];
   const names=tools.filter(t=>t.exposure!=='deferred').map(t=>t.name);
   const contextWindow=options.modelObject?.contextWindow||runtime.getModel?.('openai',options.model)?.contextWindow||128000;
-  const settings=SettingsManager.inMemory({compaction:{enabled:options.desktopSettings?.['auto-compact']===true,reserveTokens:Math.round(contextWindow*(1-parseInt(options.desktopSettings?.['compact-at']||'80%')/100)),keepRecentTokens:Math.min(10000,Math.floor(contextWindow*.15))},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
+  const settings=SettingsManager.inMemory({compaction:{enabled:options.desktopSettings?.['auto-compact']!==false,reserveTokens:Math.round(contextWindow*(1-parseInt(options.desktopSettings?.['compact-at']||'80%')/100)),keepRecentTokens:Math.min(10000,Math.floor(contextWindow*.15))},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
   const observer=pi=>{
     pi.on('tool_call',async e=>{
@@ -49,7 +49,7 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
     pi.on('session_shutdown',async event=>{finish();if(event.reason!=='reload')await automation.dispose();await tail;if(logError) throw logError;});
   };
-  const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,noExtensions:true,noSkills:true,noPromptTemplates:true,noThemes:true,noContextFiles:options.desktopSettings?.['project-instructions']===false,systemPrompt,extensionFactories:[createCodemodeExtension({mode:'only',models:false,inlineBudget:2000}),observer,...(options.extensions??[])]});
+  const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,noExtensions:true,noSkills:true,noPromptTemplates:true,noThemes:true,noContextFiles:options.desktopSettings?.['project-instructions']===false,systemPrompt,extensionFactories:[createCodemodeExtension({mode:'only',models:true,inlineBudget:2000}),observer,...(options.extensions??[])]});
   await loader.reload();
   const model=options.modelObject??runtime.getModel('openai',options.model);
   if(!model) throw new Error(`Model is absent from the pinned catalog: ${options.model}`);

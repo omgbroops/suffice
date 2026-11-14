@@ -10,7 +10,7 @@ export const settingsSections=[
   group('Privacy',[toggle('private-labels','Hide sensitive details',false,'Conceal paths and account details while sharing your screen.')]),
  ]},
  {id:'appearance',title:'Appearance',icon:'agent',category:'Personal',groups:[
-  group('Theme',[{id:'mode',label:'Mode',value:'Dark',options:['System','Light','Dark'],type:'segment'},select('background','Background','Moonlit lake',['Moonlit lake','ASCII gradient','Pixel horizon','Orbital','Oceanic Shimmer','None']),{id:'accent',label:'Accent color',value:'#7b9ed5',type:'palette'},toggle('glass','Translucent surfaces',true)]),
+  group('Theme',[{id:'mode',label:'Mode',value:'Dark',options:['System','Light','Dark'],type:'segment'},select('background','Background','Pixel horizon',['Moonlit lake','ASCII gradient','Pixel horizon','Orbital','Oceanic Shimmer','None']),{id:'accent',label:'Accent color',value:'#7b9ed5',type:'palette'},toggle('glass','Translucent surfaces',true)]),
   group('Motion',[toggle('background-motion','Animate background',true),toggle('reduced-motion','Reduce motion')]),
   group('Typography',[select('interface-font','Interface font','Inter',['Inter','Geist','Geist Mono','System']),select('code-font','Code font','JetBrains Mono',['JetBrains Mono','Geist Mono','System mono']),select('text-size','Text size','13 px',['12 px','13 px','14 px','15 px']),select('density','Density','Comfortable',['Comfortable','Compact'])]),
  ]},
@@ -32,7 +32,7 @@ export const settingsSections=[
   group('Transcript',[toggle('collapse-work','Collapse completed actions',true),toggle('show-reasoning','Show reasoning status',true),toggle('stream-markdown','Render Markdown while streaming',true)]),
  ]},
  {id:'context',title:'Context & memory',icon:'context',category:'Agent',groups:[
-  group('Context window',[toggle('auto-compact','Automatic compaction',false),select('compact-at','Compact at','80%',['70%','80%','90%']),toggle('context-ring','Show context usage',true)]),
+  group('Context window',[toggle('auto-compact','Automatic compaction',true),select('compact-at','Compact at','80%',['70%','80%','90%']),toggle('context-ring','Show context usage',true)]),
   group('Repository context',[toggle('project-instructions','Read project instructions',true),toggle('git-context','Include Git context',true),toggle('remember-context','Remember project context',false,'Reuse the last response in new sessions for this project.')]),
  ]},
  {id:'projects',title:'Projects & Git',icon:'branch',category:'Workspace',groups:[

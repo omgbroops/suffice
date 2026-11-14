@@ -5,7 +5,7 @@ import {settingsSections} from '../src/settings-data.js';
 import {backgroundPresets} from '../src/backgrounds/presets.js';
 const rows=settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id);
 export const settingsDefaults=Object.fromEntries(rows.filter(row=>!['provider','action'].includes(row.type)).map(row=>[row.id,row.value]));
-Object.assign(settingsDefaults,{'disabled-models':[],background:'lake',tray:false,'auto-compact':false,'approval-mode':'Never ask'});
+Object.assign(settingsDefaults,{'disabled-models':[],background:'horizon',tray:false,'auto-compact':true,'approval-mode':'Never ask'});
 export function createSettingsStore(home){
  const file=resolve(home,'desktop-settings.json');let values={...settingsDefaults},configured={},tail=Promise.resolve();
  async function reload(){try{configured=JSON.parse(await readFile(file,'utf8'));values={...settingsDefaults,...configured};}catch(error){if(error.code!=='ENOENT')throw error;}}

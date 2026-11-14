@@ -1,6 +1,6 @@
-// Moonlit Lake is the default; earlier studies remain available.
+// Pixel horizon is the default; earlier studies remain available.
 // Preview any preset with ?background=<preset key>.
-export const ACTIVE_BACKGROUND = 'lake';
+export const ACTIVE_BACKGROUND = 'horizon';
 
 export const backgroundPresets = Object.freeze({
   none: Object.freeze({label: 'None',type: 'none'}),
