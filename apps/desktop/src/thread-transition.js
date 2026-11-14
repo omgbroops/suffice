@@ -6,7 +6,7 @@ export function createThreadTransition(workspace,composer){
  const atmosphere=document.createElement('div');atmosphere.className='thread-atmosphere';atmosphere.setAttribute('aria-hidden','true');
  for(const node of workspace.querySelectorAll(':scope > .atmosphere,:scope > .atmosphere-shade,:scope > .gradient-ascii-host,:scope > .sonar-grid-host,:scope > .oceanic-shimmer-host'))atmosphere.append(node);
  const dim=document.createElement('div');dim.className='thread-backdrop';dim.setAttribute('aria-hidden','true');workspace.prepend(atmosphere,dim);
- const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const reduced=()=>document.documentElement.classList.contains('reduce-motion')||matchMedia('(prefers-reduced-motion: reduce)').matches;
  const ease=()=>getComputedStyle(workspace).getPropertyValue('--ease-out').trim();
  let animations=[],ghost;
  function cancel(){for(const animation of animations)animation.cancel();animations=[];ghost?.remove();ghost=null;}

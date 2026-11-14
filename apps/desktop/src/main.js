@@ -1,3 +1,7 @@
+import {connectSettingsPrivacy} from './settings-privacy.js';
+import {threadViewState} from './thread-view-state.js';
+import {preference,initializePreferences} from './settings-preferences.js';
+import {createSettings} from './settings.js';
 import {createSpotlight} from './spotlight.js';
 import {sidebarPreferences} from './sidebar-preferences.js';
 import {connectComposerSize} from './composer-size.js';
@@ -8,6 +12,8 @@ import './desktop.css';
 import '@fontsource/geist/400.css';
 
 import '@fontsource/geist/500.css';
+import '@fontsource/geist-mono/400.css';
+import '@fontsource/geist-mono/500.css';
 
 import './styles.css';
 import './tactile.css';
@@ -26,6 +32,7 @@ import { getTheme, setTheme } from './theme.js';
 
 import { icon, mark, button, panel } from './ui.js';
 
+await initializePreferences();
 const sessions = [
 
   { title: 'Rebuild the cloud workspace', time: '8 days ago', repo: 'suffice-cloud', description: 'Create a focused workspace for coding agents. Refine the composer, session history, and activity overview.', public: true },
@@ -81,11 +88,12 @@ document.querySelector('#app').innerHTML = `
   <aside class="sidebar" id="session-sidebar" aria-label="Session navigation">
     <div class="sidebar-resizer" role="separator" tabindex="0" aria-label="Resize sidebar" aria-orientation="vertical" aria-controls="session-sidebar" aria-valuemin="190" aria-valuemax="400" aria-valuenow="200"></div>
 
-    <div class="sidebar-heading"><span class="brand-wordmark" aria-label="Suffice">[suffice]</span><div class="sidebar-tools">${button('Workspace options', { icon: 'more', action: 'workspace-menu' })}${button('Search sessions', { icon: 'search', action: 'search-sessions' })}${button('Collapse sidebar', { icon: 'panel', action: 'toggle-sidebar' })}</div></div>
+    <div class="sidebar-heading"><button type="button" class="brand-wordmark brand-home" data-action="brand-home" aria-label="Suffice home">[suffice]</button><div class="sidebar-tools">${button('Settings', { icon: 'gear', action: 'settings' })}${button('Search sessions', { icon: 'search', action: 'search-sessions' })}${button('Collapse sidebar', { icon: 'panel', action: 'toggle-sidebar' })}</div></div>
 
     ${button('New session', { icon: 'plus', variant: 'subtle', className: 'new-session', action: 'new', content: 'New session' })}
 
     <div class="session-section"><div class="section-label"><span id="sidebar-section-label">Threads</span></div><div class="sidebar-sessions">${sessions.map((s, i) => sessionRow(s, i, true)).join('')}</div></div>
+
 
 
 
@@ -198,7 +206,7 @@ function showDialog(title, content) {
 
 prompt.addEventListener('input', () => { send.disabled = !prompt.value.trim(); });
 
-prompt.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!send.disabled) document.querySelector('form').requestSubmit(); } });
+prompt.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && (preference('send','Enter')==='Enter'||e.ctrlKey||e.metaKey)) { e.preventDefault(); if (!send.disabled) document.querySelector('form').requestSubmit(); } });
 
 document.querySelector('form').addEventListener('submit', (e) => {
 
@@ -296,6 +304,8 @@ document.addEventListener('click', (e) => {
 
   switch (action) {
 
+    case 'brand-home': Promise.resolve(settingsPage?.close()).then(()=>document.querySelector('.new-session').click()); break;
+
     case 'new': prompt.value = ''; send.disabled = true; document.querySelector('.composer').attachments?.clear(); prompt.focus(); if (innerWidth < 700) document.body.classList.remove('sidebar-open'); break;
 
     case 'toggle-sidebar': if (innerWidth < 700) document.body.classList.toggle('sidebar-open'); else document.body.classList.toggle('sidebar-collapsed'); break;
@@ -368,7 +378,8 @@ function backgroundOptions() {
 
 }
 
-function showSettings() { showDialog('Workspace settings', `<div class="settings-row"><span>Workspace</span><strong>Suffice</strong></div><div class="settings-row"><span>Appearance</span><strong>${getTheme() === 'light' ? 'Light' : 'Dark'}</strong></div><div class="settings-row"><span>Environment</span><strong>Visual prototype</strong></div><div class="sample-note">Settings preview · nothing is saved remotely</div>`); }
+let settingsPage;
+function showSettings() { closeMenu(); if(settingsPage?.isOpen)settingsPage.close();else (settingsPage??=createSettings()).open(); }
 
 const spotlight=createSpotlight({commands:()=>[
  {id:'new',title:'New session',icon:'plus',run:()=>document.querySelector('.new-session').click()},
@@ -383,6 +394,8 @@ dialog.addEventListener('click', (e) => { if (e.target === dialog) { const r = d
 
 document.addEventListener('keydown', (e) => {
 
+  if ((e.metaKey || e.ctrlKey) && e.key === ',') { e.preventDefault(); showSettings(); }
+
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); showSearch(true); }
 
 });
@@ -394,3 +407,13 @@ connectSendControls(document.querySelector('.composer'),prompt,send);
 connectComposerSize(document.querySelector('.composer'),prompt);
 connectAttachments({form:document.querySelector('.composer'),prompt,send,input:document.querySelector('#file-input'),toast});
 connectDesktop({prompt,send,toast,escapeHtml});
+
+document.addEventListener('suffice-preference',event=>{const {id,value}=event.detail;if(id==='background'){localStorage.setItem('suffice-background',value);unmountAtmosphere();const url=new URL(location.href);url.searchParams.set('background',value);history.replaceState(null,'',url);unmountAtmosphere=mountAtmosphere(document.querySelector('.atmosphere'));}if(id==='background-motion'||id==='reduced-motion'||id==='background'){document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';}});
+document.querySelector('.atmosphere').dataset.motion=preference('background-motion',true)&&!preference('reduced-motion',false)?'running':'paused';
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defaultPrevented&&preference('escape',false)&&!document.querySelector('.settings-main:not([hidden])')&&document.querySelector('.composer')?.dataset.running==='true')void window.sufficeDesktop.abort(threadViewState.id);});
+
+document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey))return;if(event.key.toLowerCase()==='n'){event.preventDefault();document.querySelector('.brand-home').click();}if(event.key.toLowerCase()==='b'){event.preventDefault();document.querySelector('[data-action=toggle-sidebar]').click();}});
+
+window.sufficeDesktop?.onNotification?.(event=>{if(!event.play)return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const audio=new Audio(),oscillator=audio.createOscillator(),gain=audio.createGain(),duration=event.sound==='Click'?.05:event.sound==='Chime'?.3:.16;oscillator.frequency.value=event.sound==='Click'?180:event.sound==='Chime'?740:440;gain.gain.setValueAtTime(.06,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);oscillator.connect(gain);gain.connect(audio.destination);oscillator.start();oscillator.stop(audio.currentTime+duration);oscillator.onended=()=>audio.close();});
+
+connectSettingsPrivacy();
