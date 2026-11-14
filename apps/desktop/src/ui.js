@@ -1,12 +1,23 @@
 // Shared primitives: every control and surface is assembled from these helpers.
 export { mark } from './brand.js';
 const paths = {
+  home:'<g transform="translate(1.2 1.2) scale(.9)"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></g>',
+  gear:'<g transform="translate(1.2 .57) scale(.9)"><path d="m9.5 3-.6 2.3-1.7 1-2.3-.6-2.5 4.3 1.7 1.7v2L2.4 15.4l2.5 4.3 2.3-.6 1.7 1 .6 2.3h5l.6-2.3 1.7-1 2.3.6 2.5-4.3-1.7-1.7v-2l1.7-1.7-2.5-4.3-2.3.6-1.7-1L14.5 3Z"/><circle cx="12" cy="12.7" r="3"/></g>',
+  bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
+  keyboard:'<rect x="2" y="5" width="20" height="14" rx="3"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"/>',
+  lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/>',
+  context:'<circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 6"/>',
+  terminal: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/>',
   pencil: '<path d="m15 4 5 5M4 20l4.5-1 12-12a2.1 2.1 0 0 0-3-3l-12 12L4 20Z"/>',
   warning: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
   file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
   files: '<path d="M14 2H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6Z"/><path d="M14 2v4h4M8 22h12a2 2 0 0 0 2-2V8"/>',
   changes: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 9h8M12 5v8M8 17h8"/>',
+  'diff-add': '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8m-4-4v8"/>',
+  'diff-delete': '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8"/>',
+  'diff-modify': '<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="12" cy="12" r="1"/>',
   back: '<path d="M19 12H5m6-6-6 6 6 6"/>',
   refresh: '<path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/>',
 
@@ -31,6 +42,8 @@ const paths = {
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/>',
   folder: '<path d="M3 7V4h6l3 3h9v13H3V7Z"/>',
+  wrap: '<path d="M4 6h16M4 11h12a4 4 0 0 1 0 8h-4m3-3-3 3 3 3M4 16h3"/>',
+  split: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/>',
   attach: '<path d="m8 13 7-7a3 3 0 0 1 4 4l-9 9a5 5 0 0 1-7-7l9-9"/>',
   settings: '<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',
   bug: '<rect x="7" y="7" width="10" height="14" rx="5"/><path d="m9 7-2-4m8 4 2-4M3 10h4m10 0h4M3 16h4m10 0h4M12 8v12"/>',
