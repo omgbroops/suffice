@@ -45,3 +45,7 @@ The forced-exit experiment exposed Chromium storage flush delay. Add bounded
 native view-state backups (ADR 0007), restore them before chat mounting, and test
 the actual forced process-tree exit without a graceful storage flush. This does
 not promise orphan cleanup when only one arbitrary browser process is killed.
+
+### Native dependency setup
+
+The pinned node-pty 1.1.0 package ships macOS spawn-helper without execute bits ([upstream issue 919](https://github.com/microsoft/node-pty/issues/919)). Desktop setup validates and repairs only the known host helper files, preserving their other mode bits. Native CI must exercise a real PTY afterward. This is dependency setup, not installer packaging.

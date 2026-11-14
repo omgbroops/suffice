@@ -30,7 +30,7 @@
     "desktop": "bun run apps/desktop/electron/dev.mjs",
     "desktop:build": "bun run --cwd apps/desktop build",
     "test:desktop": "node --test --test-concurrency=1 apps/desktop/test/*.test.mjs",
-    "desktop:setup": "bun node_modules/electron/install.js",
+    "desktop:setup": "bun scripts/setup-desktop.mjs",
     "postinstall": "bun run desktop:setup"
   },
   "dependencies": {
