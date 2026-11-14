@@ -1,7 +1,7 @@
 import electronPath from 'electron';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,writeFile,readdir} from 'node:fs/promises';
+import {mkdtemp,mkdir,writeFile,readdir,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
@@ -10,7 +10,7 @@ const {createTerminalManager}=createRequire(import.meta.url)('../electron/termin
 const terminalId='terminal:11111111-1111-4111-8111-111111111111';
 test('terminal manager validates input, scopes processes, buffers output and cleans up',async()=>{
  const cwd=await mkdtemp(resolve(tmpdir(),'suffice-terminal-manager-')),events=[],instances=[];const manager=createTerminalManager({resolveCwd:async id=>id==='one'?cwd:null,resolveShell:async()=>'/bin/bash',emit:event=>events.push(event),spawn:(shell,args,options)=>{const record={shell,args,options,writes:[],write(data){this.writes.push(data);},resize(cols,rows){this.size=[cols,rows];},kill(){this.killed=true;},onData(fn){this.data=fn;},onExit(fn){this.exit=fn;}};instances.push(record);return record;}});
- const first=await manager.create({threadId:'one',id:terminalId});await manager.create({threadId:'one',id:terminalId});assert.equal(instances.length,1);assert.equal(instances[0].options.cwd,cwd);instances[0].data('hello');const replay=await manager.create({threadId:'one',id:terminalId});assert.equal(replay.output,'hello');manager.write({threadId:'one',id:terminalId,data:'pwd\r'});assert.deepEqual(instances[0].writes,['pwd\r']);manager.resize({threadId:'one',id:terminalId,cols:100,rows:32});assert.deepEqual(instances[0].size,[100,32]);assert.throws(()=>manager.write({threadId:'two',id:terminalId,data:'x'}),/not open/);assert.throws(()=>manager.resize({threadId:'one',id:terminalId,cols:-1,rows:4}),/size/);await assert.rejects(manager.create({threadId:'unknown',id:terminalId}),/no project/);manager.dispose();assert.equal(instances[0].killed,true);assert.equal(manager.count,0);assert.equal(first.id,terminalId);
+ const first=await manager.create({threadId:'one',id:terminalId});await manager.create({threadId:'one',id:terminalId});assert.equal(instances.length,1);assert.equal(instances[0].options.cwd,await realpath(cwd));instances[0].data('hello');const replay=await manager.create({threadId:'one',id:terminalId});assert.equal(replay.output,'hello');manager.write({threadId:'one',id:terminalId,data:'pwd\r'});assert.deepEqual(instances[0].writes,['pwd\r']);manager.resize({threadId:'one',id:terminalId,cols:100,rows:32});assert.deepEqual(instances[0].size,[100,32]);assert.throws(()=>manager.write({threadId:'two',id:terminalId,data:'x'}),/not open/);assert.throws(()=>manager.resize({threadId:'one',id:terminalId,cols:-1,rows:4}),/size/);await assert.rejects(manager.create({threadId:'unknown',id:terminalId}),/no project/);manager.dispose();assert.equal(instances[0].killed,true);assert.equal(manager.count,0);assert.equal(first.id,terminalId);
 });
 test('real native terminals stream commands, stay independent and survive tab/chat switches',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-terminals-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-terminal-project-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});await writeFile(resolve(cwd,'fixture.txt'),'TERMINAL_FIXTURE_CONTENT');
