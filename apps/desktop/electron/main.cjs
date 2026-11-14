@@ -34,10 +34,11 @@ if(primary)app.whenReady().then(async()=>{
   const views=require('./view-state-store.cjs').createViewStateStore(path.join(app.getPath('userData'),'thread-views'));
   handle('view-states',()=>views.load());
   handle('save-view-state',payload=>views.save(payload));
-  const providerSettings=(await import('./provider-settings.mjs')).createProviderSettings({onCatalog:catalog=>{if(!win.isDestroyed())win.webContents.send('suffice:event',{event:'models_changed',catalog});},emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});
+  const {createProviderSettings,providerLoginErrorMessage}=await import('./provider-settings.mjs');
+  const providerSettings=createProviderSettings({onCatalog:catalog=>{if(!win.isDestroyed())win.webContents.send('suffice:event',{event:'models_changed',catalog});},emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});
   handle('providers',()=>providerSettings.list());
   handle('refresh-models',()=>providerSettings.refresh({force:true}));
-  handle('provider-login',async payload=>{try{return await providerSettings.login(payload);}catch{throw new Error('Provider connection cancelled or unsuccessful');}});
+  handle('provider-login',async payload=>{try{return await providerSettings.login(payload);}catch(error){throw new Error(providerLoginErrorMessage(error));}});
   handle('provider-answer',payload=>providerSettings.answer(payload));
   handle('provider-cancel',()=>providerSettings.cancel());
   handle('provider-logout',id=>providerSettings.logout(id));
