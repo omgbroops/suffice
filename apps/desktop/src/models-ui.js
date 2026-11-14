@@ -1,3 +1,4 @@
+import {providerIcon} from './provider-icons.js';
 import {preference} from './settings-preferences.js';
 import {icon} from './ui.js';
 import {createCollectionNavigation} from './components/ui/collection-navigation.js';
@@ -5,9 +6,8 @@ import {threadViewState as viewState} from './thread-view-state.js';
 import {showPopover,hidePopover,keyboardInteraction} from './popover-motion.js';
 const titles={off:'Off',minimal:'Minimal',low:'Low',medium:'Medium',high:'High',xhigh:'Extra high',max:'Max'};
 const effortLabel=value=>titles[value]||String(value).charAt(0).toUpperCase()+String(value).slice(1);
-const marks={openai:'openai','openai-codex':'openai',anthropic:'anthropic',google:'gemini','google-gemini-cli':'gemini','google-vertex':'gemini',deepseek:'deepseek',mistral:'mistral',xai:'xai',groq:'groq',ollama:'ollama',openrouter:'openrouter',azure:'azure','azure-openai-responses':'azure',cohere:'cohere'};
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const logo=provider=>marks[provider]?`<img class="provider-logo" src="./providers/${marks[provider]}.svg" alt=""/>`:icon('agent');
+const logo=provider=>providerIcon(provider)?`<img class="provider-logo" src="./providers/${providerIcon(provider)}.svg" alt=""/>`:icon('agent');
 
 export function connectModels({api,toast}){
  const button=document.querySelector('.model-button'),form=document.querySelector('.composer');
@@ -41,10 +41,11 @@ export function connectModels({api,toast}){
   }
   navigation.sync();position();animate();
  }
- button.addEventListener('click',()=>{if(button.getAttribute('aria-expanded')==='true'){close();return;}stage=selected?.efforts.length?'effort':'list';showPopover(panel);button.setAttribute('aria-expanded','true');render();});
+ button.addEventListener('click',()=>{if(!models.some(model=>model.available!==false)){close();document.dispatchEvent(new CustomEvent('suffice-open-settings',{detail:{section:'providers'}}));return;}if(button.getAttribute('aria-expanded')==='true'){close();return;}stage=selected?.efforts.length?'effort':'list';showPopover(panel);button.setAttribute('aria-expanded','true');render();});
  panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close(true);}if(event.target.type!=='range')navigation.keydown(event);});
  document.addEventListener('pointerdown',event=>{if(!panel.contains(event.target)&&!button.contains(event.target))close();});window.addEventListener('resize',()=>close());
  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden){event.preventDefault();close(true);}});
- function refreshModels(){return api.status().then(()=>api.models()).then(items=>{loading=false;models=items.filter(model=>!preference('disabled-models',[]).includes(model.provider+'|'+model.id));form.modelsDisabled=items.length>0&&models.length===0;let stored;try{stored=viewState.state.model??JSON.parse(localStorage.getItem('suffice-model'));}catch{}if(!viewState.id&&preference('default-model','Last used')!=='Last used'){const [provider,model]=preference('default-model','').split('|');stored={provider,model,effort:preference('default-effort','Medium').toLowerCase().replace('extra high','xhigh')};}if(!viewState.id&&preference('default-effort',null))stored={...stored,effort:preference('default-effort','Medium').toLowerCase().replace('extra high','xhigh')};selected=models.find(m=>m.id===stored?.model&&m.provider===stored?.provider&&m.available!==false)||models.find(m=>m.id==='gpt-6.1-sol'&&m.available!==false)||models.find(m=>m.available!==false);effort=selected?.efforts.includes(stored?.effort)?stored.effort:selected?.efforts.includes('low')?'low':selected?.efforts[0]||'off';save();label();if(!panel.hidden)render();}).catch(error=>{loading=false;label();toast(error.message);});}
+ function refreshModels(){return api.status().then(()=>api.models()).then(items=>{loading=false;models=items.filter(model=>!preference('disabled-models',[]).includes(model.provider+'|'+model.id));form.modelsDisabled=items.length>0&&models.length===0;let stored;try{stored=viewState.state.model??JSON.parse(localStorage.getItem('suffice-model'));}catch{}if(!viewState.id&&preference('default-model','Last used')!=='Last used'){const [provider,model]=preference('default-model','').split('|');stored={provider,model,effort:preference('default-effort','Medium').toLowerCase().replace('extra high','xhigh')};}if(!viewState.id&&preference('default-effort',null))stored={...stored,effort:preference('default-effort','Medium').toLowerCase().replace('extra high','xhigh')};selected=models.find(m=>m.id===stored?.model&&m.provider===stored?.provider&&m.available!==false)||(stored?.model?{id:stored.model,provider:stored.provider,name:stored.model+' (unavailable)',available:false,efforts:[]}:null)||models.find(m=>m.id==='gpt-6.1-sol'&&m.available!==false)||models.find(m=>m.available!==false);form.modelsDisabled ||= selected?.available===false;effort=selected?.available===false?(stored?.effort||'off'):selected?.efforts.includes(stored?.effort)?stored.effort:selected?.efforts.includes('low')?'low':selected?.efforts[0]||'off';save();label();if(!panel.hidden)render();}).catch(error=>{loading=false;label();toast(error.message);});}
+ api.onEvent?.(event=>{if(event.event==='models_changed')void refreshModels();});
  label();void refreshModels();document.addEventListener('suffice-models-refresh',()=>void refreshModels());document.addEventListener('suffice-preference',event=>{if(event.detail.id==='disabled-models'||!viewState.id&&['default-model','default-effort'].includes(event.detail.id))void refreshModels();});
 }

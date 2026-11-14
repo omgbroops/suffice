@@ -380,6 +380,7 @@ function backgroundOptions() {
 }
 
 let settingsPage;
+document.addEventListener('suffice-open-settings',event=>{closeMenu();(settingsPage??=createSettings()).open(event.detail?.section);});
 function showSettings() { closeMenu(); if(settingsPage?.isOpen)settingsPage.close();else (settingsPage??=createSettings()).open(); }
 
 const spotlight=createSpotlight({commands:()=>[
