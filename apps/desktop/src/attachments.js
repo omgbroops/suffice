@@ -7,14 +7,14 @@ const dataURL=file=>new Promise((resolve,reject)=>{const reader=new FileReader()
 export function connectAttachments({form,prompt,send,input,toast}){
  const tray=form.querySelector('.attachment-chip');tray.className='attachment-tray';input.multiple=true;
  let files=[],urls=[],activeKey=store.id||'new',generation=0;
- const cache=new Map();
+ const cache=new Map();let persistence=Promise.resolve(),pendingWrites=0;
  function edges(){tray.dataset.moreLeft=String(tray.scrollLeft>1);tray.dataset.moreRight=String(tray.scrollWidth-tray.clientWidth-tray.scrollLeft>1);}
  tray.addEventListener('scroll',edges,{passive:true});new ResizeObserver(edges).observe(tray);
  tray.addEventListener('wheel',event=>{if(tray.scrollWidth>tray.clientWidth&&Math.abs(event.deltaY)>Math.abs(event.deltaX)){event.preventDefault();tray.scrollLeft+=event.deltaY;}},{passive:false});
  const database=new Promise(resolve=>{const request=indexedDB.open('suffice-attachments',1);request.onupgradeneeded=()=>request.result.createObjectStore('drafts');request.onsuccess=()=>resolve(request.result);request.onerror=()=>resolve(null);});
- async function persist(key,value){const db=await database;if(db){const tx=db.transaction('drafts','readwrite');tx.objectStore('drafts').put(value,key);}}
+ function persist(key,value){const snapshot=[...value];pendingWrites++;form.dataset.attachmentsSaving='true';const job=persistence.then(async()=>{const db=await database;if(!db)throw new Error('Attachment storage is unavailable');await new Promise((resolve,reject)=>{const tx=db.transaction('drafts','readwrite');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Attachment save interrupted'));tx.objectStore('drafts').put(snapshot,key);});});persistence=job.catch(()=>{}).finally(()=>{pendingWrites--;form.dataset.attachmentsSaving=String(pendingWrites>0);});return job;}
  async function restore(key){if(cache.has(key))return cache.get(key);const db=await database;if(!db)return [];return new Promise(resolve=>{const request=db.transaction('drafts').objectStore('drafts').get(key);request.onsuccess=()=>resolve(request.result||[]);request.onerror=()=>resolve([]);});}
- function changed(){cache.set(activeKey,files);void persist(activeKey,files);render();prompt.dispatchEvent(new Event('input'));form.dispatchEvent(new Event('attachments-change'));}
+ function changed(){cache.set(activeKey,files);void persist(activeKey,files).catch(()=>toast('Could not save attachments.'));render();prompt.dispatchEvent(new Event('input'));form.dispatchEvent(new Event('attachments-change'));}
  function render(){urls.forEach(URL.revokeObjectURL);urls=[];tray.replaceChildren();tray.hidden=!files.length;
   files.forEach((file,index)=>{
    const item=document.createElement('div');item.className='attachment-card'+(file.type.startsWith('image/')?' attachment-image':'');
@@ -31,9 +31,9 @@ export function connectAttachments({form,prompt,send,input,toast}){
  form.addEventListener('dragleave',()=>form.classList.remove('attachment-drag'));
  form.addEventListener('drop',event=>{event.preventDefault();form.classList.remove('attachment-drag');add(event.dataTransfer.files);});
  prompt.addEventListener('input',()=>{if(form.dataset.running!=='true')send.disabled=!prompt.value.trim()&&!files.length;});
- store.subscribe(async event=>{if(event.type!=='select'&&event.type!=='adopt')return;const next=event.id||'new';if(next===activeKey)return;cache.set(activeKey,files);if(event.type==='adopt'){activeKey=next;cache.set(next,files);void persist(next,files);return;}const token=++generation;activeKey=next;files=[];render();const saved=await restore(next);if(token===generation){files=saved;render();}});
+ store.subscribe(async event=>{if(event.type!=='select'&&event.type!=='adopt')return;const next=event.id||'new';if(next===activeKey)return;cache.set(activeKey,files);if(event.type==='adopt'){activeKey=next;cache.set(next,files);void persist(next,files).catch(()=>toast('Could not save attachments.'));return;}const token=++generation;activeKey=next;files=[];render();const saved=await restore(next);if(token===generation){files=saved;render();}});
  const initialKey=activeKey;void restore(initialKey).then(saved=>{if(activeKey===initialKey&&!files.length){files=saved;render();}});
- form.attachments={get count(){return files.length;},async payload(){return Promise.all(files.map(async file=>({name:file.name,type:file.type,size:file.size,data:(await dataURL(file)).split(',')[1]})));},clear(){files=[];changed();}};
+ form.attachments={flush:()=>persistence,get count(){return files.length;},async payload(){return Promise.all(files.map(async file=>({name:file.name,type:file.type,size:file.size,data:(await dataURL(file)).split(',')[1]})));},clear(){files=[];changed();}};
  function showPreview(selected){
   const images=files.filter(file=>file.type.startsWith('image/'));let index=images.indexOf(selected),zoom='fit',currentURL;
   const dialog=document.createElement('dialog');dialog.className='image-preview';dialog.setAttribute('aria-label','Image preview');
