@@ -1,6 +1,6 @@
 import {createHash,randomUUID} from 'node:crypto';
 import {mkdir,readFile,writeFile,rename,readdir,lstat,realpath,rm} from 'node:fs/promises';
-import {resolve,relative,isAbsolute,sep} from 'node:path';
+import {resolve,relative,isAbsolute,sep,dirname,basename} from 'node:path';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {diffLines} from 'diff';
@@ -16,6 +16,8 @@ export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
  let canonicalRoot,key,operations;
  async function initialize(){canonicalRoot??=await realpath(cwd);key=process.platform==='win32'?canonicalRoot.toLowerCase():canonicalRoot;operations=resolve(home,'chat-change-activity',createHash('sha256').update(key).digest('hex'));}
  const overlaps=(a,b)=>!a||!b||a.some(path=>b.includes(path));
+ // Resolve directory aliases while keeping the final component intact for symlink checks.
+ async function toolTarget(path){const logical=resolve(cwd,path),suffix=[basename(logical)];let parent=dirname(logical);for(;;){try{return resolve(await realpath(parent),...suffix);}catch(error){if(error.code!=='ENOENT')throw error;const next=dirname(parent);if(next===parent)throw error;suffix.unshift(basename(parent));parent=next;}}}
  async function peers(token){
   for(const name of await readdir(operations)){if(!name.endsWith('.json')||name===token.operation+'.json')continue;
    let other;try{other=JSON.parse(await readFile(resolve(operations,name),'utf8'));}catch{continue;}
@@ -34,7 +36,7 @@ export function createChatChangeTracker({cwd,home,getId,onChange=()=>{}}){
  }
  async function save(){const path=ledgerPath(home,getId());if(!path)return;state.summary=totals(state);const value=JSON.stringify(state);const summary=state.summary;tail=tail.catch(()=>{}).then(async()=>{await mkdir(resolve(home,'chat-changes'),{recursive:true,mode:0o700});const temporary=path+'.tmp';await writeFile(temporary,value,{mode:0o600});await rename(temporary,path);const summaryPath=path.replace('.json','.summary.json');await writeFile(summaryPath+'.tmp',JSON.stringify(summary),{mode:0o600});await rename(summaryPath+'.tmp',summaryPath);onChange(summary);});await tail;}
  return {
-  async before(name,args){if(!['write','edit','bash','powershell'].includes(name))return null;await initialize();await load();const logical=resolve(cwd,args.path||''),suffix=relative(cwd,logical),inside=suffix===''||(!isAbsolute(suffix)&&suffix!=='..'&&!suffix.startsWith('..'+sep));const target=inside?resolve(canonicalRoot,suffix):logical;const names=['bash','powershell'].includes(name)?null:[relative(canonicalRoot,target).split(sep).join('/')];const token={names,conflict:false,operation:randomUUID()};const others=active.get(key)||new Set();for(const other of others){if(!names||!other.names||names.some(path=>other.names.includes(path)))token.conflict=other.conflict=true;}others.add(token);active.set(key,others);
+  async before(name,args){if(!['write','edit','bash','powershell'].includes(name))return null;await initialize();await load();const names=['bash','powershell'].includes(name)?null:[relative(canonicalRoot,await toolTarget(args.path)).split(sep).join('/')];const token={names,conflict:false,operation:randomUUID()};const others=active.get(key)||new Set();for(const other of others){if(!names||!other.names||names.some(path=>other.names.includes(path)))token.conflict=other.conflict=true;}others.add(token);active.set(key,others);
    try{await mkdir(operations,{recursive:true,mode:0o700});await writeFile(resolve(operations,token.operation+'.json'),JSON.stringify({pid:process.pid,names}),{mode:0o600});await peers(token);token.before=await snapshot(names);}catch{token.before={values:new Map(),partial:true};token.conflict=true;}return token;
   },
   async after(token){if(!token)return;try{const after=await snapshot(token.names);await peers(token);state.partial ||= token.before.partial||after.partial||token.conflict;
