@@ -26,7 +26,6 @@ jobs:
       run:
         shell: bash
     env:
-      SUFFICE_HOME: ${{ runner.temp }}/suffice-ci
       ELECTRON_ENABLE_LOGGING: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -38,6 +37,8 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: '1.4.4'
+      - name: Isolate test account state
+        run: echo "SUFFICE_HOME=$RUNNER_TEMP/suffice-ci" >> "$GITHUB_ENV"
       - name: Install frozen workspace dependencies
         run: bun install --frozen-lockfile
       - name: Record runtime versions
