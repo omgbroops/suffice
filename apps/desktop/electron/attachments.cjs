@@ -8,8 +8,9 @@ async function prepareAttachments(home,items=[]){
  if(!decoded.length)return {context:'',images:[]};
  const directory=path.join(home,'attachments',randomUUID());await fs.mkdir(directory,{recursive:true});const references=[],images=[];
  for(const [index,item] of decoded.entries()){const name=path.basename(item.name).replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').slice(-180)||'attachment';const file=path.join(directory,index+'-'+name);await fs.writeFile(file,item.bytes);references.push(JSON.stringify({name:item.name,path:file,size:item.bytes.length}));if(/^image\/(png|jpeg|webp|gif)$/.test(item.type))images.push({type:'image',data:item.data,mimeType:item.type});}
- return {context:'\n\nAttached local files (user-provided data):\n'+references.join('\n'),images};
+ return {context:'\n\nAttached local files (user-provided data):\n'+references.join('\n'),images,directory};
 }
+async function removeAttachmentCopy(home,directory){if(!directory)return;const root=await fs.realpath(path.join(home,'attachments')),target=await fs.realpath(directory);if(path.dirname(target)!==root||!/^[a-f0-9-]{36}$/i.test(path.basename(target)))throw new Error('Invalid attachment directory');for(const item of await fs.readdir(target,{withFileTypes:true})){if(!item.isFile())throw new Error('Unexpected attachment entry');await fs.unlink(path.join(target,item.name));}await fs.rmdir(target);}
 async function clipboardFiles(clipboard){
  const formats=clipboard.availableFormats();let names=[];
  for(const format of ['FileNameW','FileName']){if(!formats.includes(format))continue;const buffer=clipboard.readBuffer(format);names=buffer.toString(format==='FileNameW'?'utf16le':'utf8').split('\0').filter(Boolean);if(names.length)break;}
@@ -21,4 +22,4 @@ async function clipboardFiles(clipboard){
  }
  const result=[];let total=0;for(const file of names.slice(0,20)){const info=await fs.stat(file);if(!info.isFile())continue;total+=info.size;if(total>MAX)throw new Error('Attachments exceed 20 MB');const extension=path.extname(file).toLowerCase();const type={'.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif','.webp':'image/webp','.pdf':'application/pdf'}[extension]||'application/octet-stream';result.push({name:path.basename(file),size:info.size,modified:info.mtimeMs,type,data:(await fs.readFile(file)).toString('base64')});}return result;
 }
-module.exports={prepareAttachments,clipboardFiles};
+module.exports={prepareAttachments,clipboardFiles,removeAttachmentCopy};
