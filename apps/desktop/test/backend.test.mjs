@@ -27,7 +27,7 @@ test('git runner: GIT_DIR and GIT_CONFIG_* never reach the child', async () => {
   const seen=[];
   process.env.GIT_DIR='/elsewhere';process.env.GIT_CONFIG_COUNT='1';process.env.GIT_CONFIG_KEY_0='core.hooksPath';
   try{
-    const {git}=createRunner(async(cmd,args,options)=>{seen.push({cmd,args,env:options.env});return {stdout:' out\n'};});
+    const {git}=createRunner(async(cmd,args,options)=>{if(args[0]==='--version')return {stdout:'git version 2.50.0\n'};seen.push({cmd,args,env:options.env});return {stdout:' out\n'};});
     assert.equal(await git('/repo',['status']),'out');
     assert.equal(seen[0].cmd,'git');
     assert.deepEqual(Object.keys(seen[0].env).filter(k=>k==='GIT_DIR'||k.startsWith('GIT_CONFIG')),[]);

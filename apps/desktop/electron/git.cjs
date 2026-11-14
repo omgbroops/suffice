@@ -6,7 +6,7 @@ const path=require('node:path');
 // Apps started from Finder get a bare PATH; add the usual tool locations.
 const PATH=[process.env.PATH,'/opt/homebrew/bin','/usr/local/bin',path.join(process.env.HOME||'','.local/bin'),path.join(process.env.HOME||'','.local/share/mise/shims')].filter(Boolean).join(path.delimiter);
 // Attributes come from the empty tree, so a hostile repo's .gitattributes can't select a clean/smudge filter or diff driver.
-// shortcut: git older than 2.42 ignores GIT_ATTR_SOURCE; require 2.42+ or read filter.* names and blank them per call.
+// Git older than 2.42 ignores GIT_ATTR_SOURCE, so the runner refuses to call it at all.
 const EMPTY_TREE='4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 const HARDEN=['--no-optional-locks','-c','core.fsmonitor=false','-c','core.hooksPath=/dev/null'];
 
@@ -20,10 +20,21 @@ function cleanEnv(env){
  for(const key of Object.keys(out))if(key==='GIT_DIR'||key==='GIT_WORK_TREE'||key.startsWith('GIT_CONFIG'))delete out[key];
  return out;
 }
+function gitVersionOk(text){
+ const m=/git version (\d+)\.(\d+)/.exec(String(text));
+ return !!m&&(+m[1]>2||(+m[1]===2&&+m[2]>=42));
+}
 function createRunner(exec=promisify(execFile)){
  const run=(cmd,args,cwd,{timeout=15000,maxBuffer=4*1024*1024,raw=false}={})=>
   exec(cmd,args,{cwd,windowsHide:true,timeout,maxBuffer,env:cleanEnv(process.env)}).then(r=>raw?r.stdout:r.stdout.trim());
- const git=(root,args,options)=>run('git',gitArgs(root,args),root,options);
+ let checked;
+ const ensureGit=()=>checked??=run('git',['--version']).then(v=>{
+  if(!gitVersionOk(v))throw new Error(`Git 2.42 or newer is required (found: ${v||'unknown'})`);
+ });
+ const git=(root,args,options)=>{
+  const full=gitArgs(root,args);
+  return ensureGit().then(()=>run('git',full,root,options));
+ };
  return {run,git};
 }
-module.exports={...createRunner(),createRunner,gitArgs,HARDEN};
+module.exports={...createRunner(),createRunner,gitArgs,gitVersionOk,HARDEN};
