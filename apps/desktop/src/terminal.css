@@ -1,0 +1,6 @@
+/* A native shell sits directly on the same ground as the sidebars. */
+.right-panel-content[data-terminal='true'] { background:var(--surface-sidebar); border:0; border-radius:0; }
+.terminal-session { position:absolute;inset:0; padding:4px 4px 4px 3px; background:var(--surface-sidebar); overflow:hidden; }
+.terminal-session .xterm { height:100%; padding:0; }
+.terminal-session .xterm-viewport { background-color:var(--surface-sidebar) !important; scrollbar-width:thin; scrollbar-color:var(--scrollbar-thumb) transparent; }
+.terminal-session .xterm:focus,.terminal-session .xterm:focus-within { outline:none; }
