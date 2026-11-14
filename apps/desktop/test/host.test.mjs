@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp} from 'node:fs/promises';
+import {mkdtemp,writeFile,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {createHarnessHost} from '../electron/worker.mjs';
@@ -44,6 +44,26 @@ test('host rejects malformed and unauthenticated tasks without executing the har
  await host({id:30,action:'usage'});
  assert.equal(messages.find(m=>m.id===30).result,null);
  await host({id:3,action:'run',payload:{prompt:'',effort:'low'}});
- assert.match(messages.find(m=>m.id===2).error,/Sign in/);assert.equal(created,0);
+ assert.match(messages.find(m=>m.id===2).error,/Connect a provider/);assert.equal(created,0);
  assert.equal(messages.find(m=>m.id===3).ok,false);
+});
+
+
+test('desktop settings reach the harness and approvals wait for the matching answer',async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-host-settings-')),cwd=await mkdtemp(resolve(tmpdir(),'suffice-engine-settings-')),path=resolve(home,'session.jsonl');
+ await writeFile(path,JSON.stringify({type:'session',version:3,id:'settings',timestamp:new Date().toISOString(),cwd})+'\n');
+ const messages=[],captured=[];let named,disposed=0;
+ const host=createHarnessHost({home,send:message=>messages.push(message),createRuntime:async()=>({isUsingSubscription:()=>true}),createSession:async(options,hooksRuntime,hooks)=>{captured.push(options);return {session:{setSessionName:value=>{named=value;},subscribe(){},setThinkingLevel(){}},sessionPath:()=>path,dispose:async()=>{disposed++;},run:async()=>await hooks.onApproval('write',{path:'fixture.txt'})?'Allowed fixture':'Denied fixture'};}});
+ await host({id:1,action:'status'});
+ const prefs={'approval-mode':'Ask before every action','auto-compact':true,'compact-at':'70%','project-instructions':false,'allow-network':false,'execution-shell':'PowerShell',naming:'Untitled','remember-context':true};
+ const pending=host({id:2,action:'run',payload:{prompt:'fixture',effort:'low',cwd,desktopSettings:prefs}});
+ while(!messages.some(message=>message.event==='approval'))await new Promise(resolve=>setTimeout(resolve,1));
+ assert.equal(messages.some(message=>message.id===2),false);
+ assert.deepEqual(captured[0].desktopSettings,prefs);assert.equal(captured[0].browser,false);assert.equal(captured[0].desktop,false);assert.equal(named,'Untitled thread');
+ const request=messages.find(message=>message.event==='approval');await host({id:3,action:'approval-answer',payload:{requestId:request.requestId,allow:true}});await pending;assert.equal(messages.find(message=>message.id===2).result.text,'Allowed fixture');
+ const {projectContext}=await import('../electron/engine-settings.mjs');assert.match(await projectContext(home,cwd,{'remember-context':true}),/Allowed fixture/);
+ const rerun=host({id:4,action:'run',payload:{prompt:'again',effort:'low',cwd,desktopSettings:{...prefs,'compact-at':'90%'}}});
+ while(messages.filter(message=>message.event==='approval').length<2)await new Promise(resolve=>setTimeout(resolve,1));
+ const second=messages.filter(message=>message.event==='approval').at(-1);await host({id:5,action:'approval-answer',payload:{requestId:second.requestId,allow:false}});await rerun;
+ assert.equal(disposed,1);assert.equal(captured[1].desktopSettings['compact-at'],'90%');assert.equal(messages.find(message=>message.id===4).result.text,'Denied fixture');
 });
