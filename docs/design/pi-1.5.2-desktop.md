@@ -17,3 +17,7 @@ The dependency upgrade brings Codemode queueing, schema/extension fixes, provide
 ## Validation
 
 Exercise offline cache restoration, refresh coalescing/deadlines/failure fallback, new model discovery, preserved visibility choices, fork identity and source immutability, missing-directory selection, native IPC and desktop actions. Render pie/flow charts and safe links; test malicious directives. Run harness/CLI/desktop suites and renderer build. No distributable/package build. Native macOS and real provider entitlements remain separate live checks.
+
+## Provider sign-in
+
+Desktop and CLI use one persisted host-id UUID in Suffice home. OAuth supplies it through Pi LoginOptions alongside the Suffice agent name. Identity creation publishes complete files atomically across processes, and never replaces a valid saved identity. Errors cross native IPC as fixed classifications; the modal shows useful port/network/token-exchange failures without SDK response bodies. The actual Pi ChatGPT flow is exercised up to browser authorization in an isolated home, then cancelled before any account authorization or token exchange.
