@@ -11,13 +11,14 @@ From a clone (Node.js 24+ required):
 ```bash
 git clone --branch codex/suffice-cli-alpha https://github.com/bycontinuity/suffice.git
 cd suffice
-npm ci
+bun install
+npx suffice setup-automation
 npx suffice
 ```
 
 Launch from the Suffice checkout. Use `/project` to choose a directory with Pi's selector/input dialogs and `/login` to sign in on first use. Recent projects are available in the chooser; `/project ~/code/my-app` switches directly. Each switch starts a separate session so another project's context is not carried over. `--cwd PATH` selects a starting directory. `--print`, `login` and `doctor` remain available without the terminal UI.
 
-There is no global install, tarball-building step or required `--yes`, `--ignore-scripts` or `--package` flag for the clone workflow. `npm ci` installs dependencies once; run `git pull` to get updates. Private repositories require GitHub access. The package is **not yet published to npm**; running `npx suffice` outside this checkout may resolve a different registry package.
+There is no global install, tarball-building step or required `--yes`, `--ignore-scripts` or `--package` flag for the clone workflow. `bun install` installs workspace dependencies once; `setup-automation` prepares the native desktop binary and downloads Chrome for Testing. Linux may also need Chrome's system libraries. Run `git pull` to get updates. Private repositories require GitHub access. The package is **not yet published to npm**; running `npx suffice` outside this checkout may resolve a different registry package.
 
 macOS and Linux use their normal Bash shell. Windows needs Git for Windows. No WSL or VM is required. A separately shared tarball can still be launched with `npx --package=/absolute/path/to/package.tgz suffice`; that flag only identifies a local unpublished tarball.
 
@@ -40,6 +41,18 @@ Type a task in Pi's normal input editor. `/project [PATH]` (or `/cd`) changes pr
 Repository-wide read/edit/write, native Bash execution, and `symbols`, `symbol_read`, and `symbol_references` are available through codemode. Edits are serialized by the engine. Commands have a 180-second maximum. Per-task limits are 600 seconds, 60 assistant responses, 240 tool calls and $10 **API-equivalent** inference by default. Cost checks happen between responses, so an individual response can cross the allowance; this is not a provider billing cap. Failed and retried responses remain in event receipts. Subscription spending is not inferred from API-equivalent estimates.
 
 The system prompt, codemode settings, navigation algorithm, disabled automatic compaction, and append-only history are derived from the frozen general-v1 baseline. The benchmark execution boundary and model/effort enforcement are **not** included in this interactive product. This CLI is separately versioned; benchmark results do not certify this release's performance.
+
+## Browser and native app tools
+
+The shared harness includes pinned Vercel `agent-browser` and `agent-desktop` backends. Both the terminal and desktop app register typed tools for code mode. Descriptions are deferred: the agent discovers them with `searchTools("browser")` or `searchTools("desktop")` and can load namespace guidance with `describeNamespace`. Neither backend starts just because a coding session starts.
+
+Web tasks use an external, visible Chrome for Testing window, with a dedicated persistent profile per conversation under `~/.suffice/browser-profiles/`. Resuming the same conversation reuses its profile; other conversations use separate profiles and sessions. Suffice closes its owned browser when the conversation is disposed. It does not attach to your personal Chrome. `--browser-headless` runs without a visible window.
+
+Browser snapshots default to compact accessibility text with deltas. Native desktop tools use OS accessibility controls. Both expose screenshots as an explicit fallback, returning an image block that the agent forwards with `image(result.image)` in code mode. Desktop coordinate clicks use absolute screen coordinates from a fresh display screenshot. Large text observations are saved under the conversation's artifact directory and can be read in chunks with `browser_read_observation` or `desktop_read_observation`. Snapshot completeness and action delivery/retry metadata are preserved; mutating actions are never automatically retried.
+
+Use `--no-browser` and/or `--no-desktop` to omit those tools, discovery entries and prompt hints entirely. The desktop host and CLI also honor `SUFFICE_BROWSER=0`, `SUFFICE_DESKTOP=0`, and `SUFFICE_BROWSER_HEADLESS=1` at startup. These switches remove harness capabilities; unrestricted Bash remains available and this is not an OS security boundary. Desktop settings controls for these switches are not implemented.
+
+Desktop automation reaches apps beyond the selected repository when explicitly requested. Native accessibility coverage varies by app and platform; snapshots can be partial or controls ambiguous. Screenshots, browser profiles and normal tool receipts may contain private app content. No cross-platform reliability or cost improvement has been established by the integration checks.
 
 ## Permissions and local data
 

@@ -1,5 +1,7 @@
 # Third-party notices
 
+Browser automation uses Vercel Labs `agent-browser` 0.43.0 (https://github.com/vercel-labs/agent-browser). Native desktop automation uses Vercel Labs `agent-desktop` 1.3.1 (https://github.com/vercel-labs/agent-desktop). Both are Apache-2.0 licensed; their npm distributions retain their license and notice files. Chrome for Testing is downloaded separately by the setup command and retains its own terms. Neither automation backend contributes an additional reasoning model.
+
 Suffice uses the unmodified `@earendil-works/pi-coding-agent` 1.2.0 agent engine and its dependencies. Pi is a separate project, created by Mario Zechner: https://github.com/earendil-works/pi
 
 Pi is MIT licensed. Its license notice follows (source: https://github.com/earendil-works/pi/blob/main/LICENSE). Other dependencies retain their own package licenses; npm installs those dependencies separately.
