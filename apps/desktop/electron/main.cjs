@@ -5,12 +5,10 @@ const {randomUUID,createHash}=require('node:crypto');
 const workspaceFiles=require('./workspace-files.cjs');
 const {prepareAttachments,clipboardFiles,removeAttachmentCopy}=require('./attachments.cjs');
 let background,terminals;
-let win,worker,project=null,selectedProject=null,sequence=0,running=0;
-const requests=new Map(),attachmentGroups=new Map();
-function request(action,payload){
-  if(!worker)return Promise.reject(new Error('Harness process is not available'));
-  return new Promise((resolve,reject)=>{const id=++sequence;requests.set(id,{resolve,reject});worker.postMessage({id,action,payload});});
-}
+let win,project=null,selectedProject=null,running=0;
+const attachmentGroups=new Map();
+let harness;
+function request(action,payload){return harness.request(action,payload);}
 const primary=app.requestSingleInstanceLock();
 if(!primary)app.quit();
 else app.on('second-instance',()=>{
@@ -23,19 +21,19 @@ if(primary)app.whenReady().then(async()=>{
   background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:message=>{if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);}});
   const {projectIdentityMetadata}=await import('./sidebar-metadata.mjs');
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));if(process.env.SUFFICE_START_PROJECT){const start=await require('node:fs/promises').realpath(process.env.SUFFICE_START_PROJECT);await projects.add(start);project=selectedProject=start;}function openProjectWindow(folder){const profileRoot=process.env.SUFFICE_PROFILE_ROOT||app.getPath('userData');const profile=path.join(profileRoot,'project-windows',createHash('sha256').update(folder).digest('hex').slice(0,16));const child=require('node:child_process').spawn(process.execPath,[...(app.isPackaged?[]:[app.getAppPath()]),'--user-data-dir='+profile],{detached:true,stdio:'ignore',windowsHide:true,env:{...process.env,SUFFICE_START_PROJECT:folder,SUFFICE_PROFILE_ROOT:profileRoot,ELECTRON_RUN_AS_NODE:undefined}});child.unref();}
-  worker=utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'});
-  worker.on('message',message=>{
-    if(message.event){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval'){void notify('approval','Agent needs approval');void dialog.showMessageBox(win,{type:'question',title:'Allow agent action?',message:message.name,detail:JSON.stringify(message.input,null,2).slice(0,8000),buttons:['Deny','Allow'],defaultId:0,cancelId:0}).then(answer=>request('approval-answer',{threadId:message.threadId,requestId:message.requestId,allow:answer.response===1}));return;}if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
-    const pending=requests.get(message.id);if(!pending)return;requests.delete(message.id);
-    message.ok?pending.resolve(message.result):pending.reject(new Error(message.error));
+  harness=require('./worker-client.cjs').createWorkerClient({
+   fork:()=>utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'}),
+   onEvent:message=>{if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval'){void notify('approval','Agent needs approval');void dialog.showMessageBox(win,{type:'question',title:'Allow agent action?',message:message.name,detail:JSON.stringify(message.input,null,2).slice(0,8000),buttons:['Deny','Allow'],defaultId:0,cancelId:0}).then(answer=>request('approval-answer',{threadId:message.threadId,requestId:message.requestId,allow:answer.response===1}));return;}if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;},
+   onStderr:data=>process.stderr.write(data)
   });
-  worker.on('exit',()=>{worker=null;for(const pending of requests.values())pending.reject(new Error('Harness process exited'));requests.clear();});
-  worker.stderr?.on('data',data=>process.stderr.write(data));
   win=new BrowserWindow({width:1440,height:900,minWidth:720,minHeight:540,frame:false,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
   const entry=pathToFileURL(path.join(__dirname,'../dist/index.html')).href;
   win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   win.webContents.on('will-navigate',(event,url)=>{if(url!==entry)event.preventDefault();});
   function handle(name,handler){ipcMain.handle(`suffice:${name}`,(event,...args)=>{if(event.senderFrame!==win.webContents.mainFrame)throw new Error('Untrusted frame');return handler(...args);});}
+  const views=require('./view-state-store.cjs').createViewStateStore(path.join(app.getPath('userData'),'thread-views'));
+  handle('view-states',()=>views.load());
+  handle('save-view-state',payload=>views.save(payload));
   const providerSettings=(await import('./provider-settings.mjs')).createProviderSettings({emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});
   handle('providers',()=>providerSettings.list());
   handle('provider-login',async payload=>{try{return await providerSettings.login(payload);}catch{throw new Error('Provider connection cancelled or unsuccessful');}});
@@ -107,8 +105,8 @@ if(primary)app.whenReady().then(async()=>{
       const until=Date.now()+3000;while(running&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,25));
       if(!running)await request('reset').catch(()=>{});
     })();
-    void Promise.race([shutdown,new Promise(resolve=>setTimeout(resolve,3500))]).finally(()=>{worker?.kill();win.destroy();});
+    void Promise.race([shutdown,new Promise(resolve=>setTimeout(resolve,3500))]).finally(()=>{harness?.stop();win.destroy();});
   }
 });
 app.on('window-all-closed',()=>app.quit());
-app.on('will-quit',()=>{terminals?.dispose();background?.stop();worker?.kill();});
+app.on('will-quit',()=>{terminals?.dispose();background?.stop();harness?.stop();});
