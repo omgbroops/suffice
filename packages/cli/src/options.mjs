@@ -22,8 +22,8 @@ Options:
   --no-desktop        Disable native app tools and their discovery/instructions
   --browser-headless  Run the dedicated browser without a visible window
   --home PATH         Credential/session directory (default: ~/.suffice)
-  --max-cost USD      API-equivalent allowance per task (default: 10)
-  --timeout SECONDS   Time allowance per task (default: 600)
+  --max-cost USD      Optional API-equivalent allowance per task (default: unlimited)
+  --timeout SECONDS   Optional time allowance per task (default: unlimited)
   --print, -p         Print final answer; task may also come from stdin
   --help, -h          Show this help
   --version, -v       Show version
@@ -35,7 +35,7 @@ Pi's interface and engine, with Suffice's tools, prompt and codemode setup.
 `;
 
 export function parseOptions(args, env=process.env) {
-  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', access:'full', maxCost:10, timeout:600, prompt:'',browser:env.SUFFICE_BROWSER!=='0',desktop:env.SUFFICE_DESKTOP!=='0',browserHeadless:env.SUFFICE_BROWSER_HEADLESS==='1'};
+  const options = {cwd:process.cwd(), home:env.SUFFICE_HOME || resolve(homedir(), '.suffice'), model:'gpt-6.1-sol', effort:'low', access:'full', maxCost:null, timeout:null, prompt:'',browser:env.SUFFICE_BROWSER!=='0',desktop:env.SUFFICE_DESKTOP!=='0',browserHeadless:env.SUFFICE_BROWSER_HEADLESS==='1'};
   const values = {'--cwd':'cwd','--home':'home','--model':'model','--effort':'effort','--access':'access','--max-cost':'maxCost','--timeout':'timeout'};
   const words=[];
   for(let i=0;i<args.length;i++) {
@@ -57,6 +57,7 @@ export function parseOptions(args, env=process.env) {
   if(!['off','minimal','low','medium','high','xhigh'].includes(options.effort)) throw new Error('Invalid effort. Use off, minimal, low, medium, high, or xhigh.');
   if(!['read','edit','full'].includes(options.access))throw new Error('Invalid access. Use read, edit, or full.');
   for(const key of ['maxCost','timeout']) {
+    if(options[key]===null)continue;
     options[key]=Number(options[key]);
     if(!Number.isFinite(options[key]) || options[key]<=0) throw new Error(`${key} must be a positive number`);
   }

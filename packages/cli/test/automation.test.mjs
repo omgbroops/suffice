@@ -33,12 +33,28 @@ test('typed adapters isolate sessions, serialize calls, preserve errors and pass
     const result=await tool(a,'desktop_action',{action:'type',ref:'@snapshot:e2',text:'hello; $(unsafe)'});
     assert.equal(result.error.disposition.retry,'unsafe');assert.equal(calls.length,3);
     assert.equal(calls[2].options.input,'hello; $(unsafe)');assert.ok(!calls[2].args.includes('hello; $(unsafe)'));
+    assert.ok(calls[2].args.includes('--headed'));
     await tool(b,'browser_open',{url:'https://example.com'});
     assert.notEqual(calls[0].args[calls[0].args.indexOf('--profile')+1],calls[3].args[calls[3].args.indexOf('--profile')+1]);
     await assert.rejects(tool(a,'browser_open',{url:'file:///private'}),/http/);
     const before=calls.length,controller=new AbortController();controller.abort();
     await assert.rejects(tool(a,'desktop_status',{},controller.signal));assert.equal(calls.length,before);
   } finally {await Promise.all([a.dispose(),b.dispose()]);await rm(home,{recursive:true,force:true});}
+});
+
+test('native shortcuts require a target and preserve the chosen window; app constraints are explicit',async()=>{
+ const calls=[];
+ const a=createAutomation({home:tmpdir(),sessionId:'targeted',run:async(kind,args)=>{calls.push({kind,args});return {ok:true};}});
+ try {
+  await assert.rejects(tool(a,'desktop_press',{key:'ctrl+t'}),/requires windowId/);assert.equal(calls.length,0);
+  await tool(a,'desktop_window',{action:'focus',windowId:'w-fixture'});
+  await tool(a,'desktop_press',{key:'ctrl+t',windowId:'w-fixture'});
+  assert.deepEqual(calls[0].args.slice(-3),['focus-window','--window-id','w-fixture']);
+  assert.deepEqual(calls[1].args.slice(-5),['--headed','press','ctrl+t','--window-id','w-fixture']);
+  assert.ok(calls.every(c=>c.kind==='desktop'));
+  assert.match(a.prompt,/Never silently switch/);
+  assert.match(a.tools.find(t=>t.name==='desktop_press').namespace.instructions,/launch requires an absolute/);
+ } finally {await a.dispose();}
 });
 
 test('screenshots return image blocks to code mode; large observations remain recoverable',async()=>{
