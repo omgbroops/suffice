@@ -1,8 +1,10 @@
+import {readFileSync} from 'node:fs';
+import {mcpConfig} from './mcp-config.mjs';
 import {requiresDesktopApproval} from './desktop-policy.mjs';
 import {mkdir, appendFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
-import {createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension} from '@earendil-works/pi-coding-agent';
+import {createAgentSession, DefaultResourceLoader, SettingsManager, SessionManager, createCodemodeExtension, createMcpExtension,createToolSearchExtension,DefaultPackageManager,ProjectTrustStore,hasTrustRequiringProjectResources} from '@earendil-works/pi-coding-agent';
 import {repositoryTools} from './tools.mjs';
 import {hash} from './workspace.mjs';
 import {VERSION} from './options.mjs';
@@ -29,7 +31,10 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
   const tools=[...repositoryTools({workspace,access,shellPath:options.shellPath,preferredShell:options.desktopSettings?.['execution-shell'],toolObserver}),...automation.tools];
   const names=tools.filter(t=>t.exposure!=='deferred').map(t=>t.name);
   const contextWindow=options.modelObject?.contextWindow||runtime.getModel?.('openai',options.model)?.contextWindow||128000;
-  const settings=SettingsManager.inMemory({compaction:{enabled:options.desktopSettings?.['auto-compact']!==false,reserveTokens:Math.round(contextWindow*(1-parseInt(options.desktopSettings?.['compact-at']||'80%')/100)),keepRecentTokens:Math.min(10000,Math.floor(contextWindow*.15))},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
+  const trust=new ProjectTrustStore(options.home);let trusted=trust.get(workspace)===true;
+  if(trust.get(workspace)===null&&hasTrustRequiringProjectResources(workspace)&&onApproval){trusted=await onApproval('Trust project resources',{cwd:workspace,detail:'Allow project-local Pi settings, skills, extensions and MCP servers to load. Extensions can execute code.'});trust.set(workspace,trusted);}
+  const persisted=SettingsManager.create(workspace,options.home);persisted.setProjectTrusted(trusted);
+  const settings=SettingsManager.inMemory({...persisted.getSettings(),compaction:{enabled:options.desktopSettings?.['auto-compact']!==false,reserveTokens:Math.round(contextWindow*(1-parseInt(options.desktopSettings?.['compact-at']||'80%')/100)),keepRecentTokens:Math.min(10000,Math.floor(contextWindow*.15))},retry:{enabled:true,maxRetries:1,baseDelayMs:5000,maxAgentDelayMs:30000,provider:{maxRetries:0}},cacheWarming:'off',defaultTools:[...names,'codemode'],codemode:{mode:'only',inlineBudget:2000},transport:'sse',enableAnalytics:false,enableInstallTelemetry:false});
   const stop=reason=>{if(allowance) allowance.reason??=reason; queueMicrotask(()=>void session?.abort());};
   const observer=pi=>{
     pi.on('tool_call',async e=>{
@@ -49,29 +54,34 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     pi.on('provider_stream_event',e=>{if(e.data?.response?.usage) log({type:'provider_usage',responseId:e.data.response.id,usage:e.data.response.usage});});
     pi.on('session_shutdown',async event=>{finish();if(event.reason!=='reload')await automation.dispose();await tail;if(logError) throw logError;});
   };
-  const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,noExtensions:true,noSkills:true,noPromptTemplates:true,noThemes:true,noContextFiles:options.desktopSettings?.['project-instructions']===false,systemPrompt,extensionFactories:[createCodemodeExtension({mode:'only',models:true,inlineBudget:2000}),observer,...(options.extensions??[])]});
+  const resourceState=()=>{try{return JSON.parse(readFileSync(resolve(options.home,'resource-state.json'),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
+  const packages=new DefaultPackageManager({cwd:workspace,agentDir:options.home,settingsManager:settings}),resolvePackages=packages.resolve.bind(packages);packages.resolve=()=>resolvePackages(async()=> 'skip');
+  const loader=new DefaultResourceLoader({cwd:workspace,agentDir:options.home,settingsManager:settings,packageManager:packages,skillsOverride:base=>{const state=resourceState();return {...base,skills:base.skills.filter(skill=>state.skills?.[skill.name]!==false)};},promptsOverride:base=>{const state=resourceState();return {...base,prompts:base.prompts.filter(prompt=>state.templates?.[prompt.name]!==false)};},noExtensions:!externalAccess,noSkills:false,noPromptTemplates:false,noThemes:true,noContextFiles:options.desktopSettings?.['project-instructions']===false,systemPrompt,extensionFactories:[createCodemodeExtension({mode:'only',models:true,inlineBudget:2000}),...(externalAccess?[createToolSearchExtension(),createMcpExtension({loadConfig:ctx=>mcpConfig(options.home,workspace,ctx.isProjectTrusted()),logPath:resolve(options.home,'mcp.log')})]:[]),observer,...(options.extensions??[])]});
+  settings.setProjectTrusted(trusted);
+  const reloadResources=loader.reload.bind(loader);
+  loader.reload=async reloadOptions=>{const disk=SettingsManager.create(workspace,options.home);disk.setProjectTrusted(trusted);const config=disk.getSettings();settings.setExtensionPaths(config.extensions||[]);settings.setSkillPaths(config.skills||[]);settings.setPromptTemplatePaths(config.prompts||[]);settings.setPackages(config.packages||[]);await reloadResources(reloadOptions);};
   await loader.reload();
   const model=options.modelObject??runtime.getModel('openai',options.model);
   if(!model) throw new Error(`Model is absent from the pinned catalog: ${options.model}`);
-  const created=await createAgentSession({cwd:workspace,agentDir:options.home,modelRuntime:runtime,model,thinkingLevel:options.effort,resourceLoader:loader,settingsManager:settings,sessionManager:manager,tools:[...tools.map(t=>t.name),'codemode'],customTools:tools});
+  const created=await createAgentSession({cwd:workspace,agentDir:options.home,modelRuntime:runtime,model,thinkingLevel:options.effort,resourceLoader:loader,settingsManager:settings,sessionManager:manager,...(externalAccess?{}:{tools:[...tools.map(t=>t.name),'codemode']}),customTools:tools});
   session=created.session;
   // The SDK's tools option is both an allowlist and an initial active set.
   // Keep deferred capabilities registered and callable, but never declare them eagerly.
-  session.setActiveToolsByName([...names,'codemode']);
+  session.setActiveToolsByName([...new Set([...names,'codemode',...created.extensionsResult.extensions.flatMap(extension=>[...extension.tools].filter(([,tool])=>!tool.definition.exposure||tool.definition.exposure==='direct').map(([name])=>name))])]);
   try {
-    if(!options.deferBindings) await session.bindExtensions({});
-    if(created.extensionsResult.errors.length) throw new Error('Could not initialize programmatic tools');
+    if(!options.deferBindings) await session.bindExtensions(typeof options.extensionBindings==='function'?options.extensionBindings(session.extensionRunner.getUIContext(),session):options.extensionBindings||{});
+    if(created.extensionsResult.errors.length) throw new Error('Could not load extensions: '+created.extensionsResult.errors.map(e=>e.path+': '+e.error).join('; '));
     // Resumed sessions retain their history, but explicit CLI settings win.
     if(session.model?.id!==model.id) await session.setModel(model);
     session.setThinkingLevel(options.effort);
     if(session.thinkingLevel!==options.effort) throw new Error(`Model does not support requested effort ${options.effort}; resolved to ${session.thinkingLevel}`);
-  } catch(e) {session.dispose();await automation.dispose();throw e;}
-  const begin=()=>{
+  } catch(e) {await session.extensionRunner.emit({type:'session_shutdown',reason:'exit'});session.dispose();await automation.dispose();throw e;}
+  function begin(){
     if(allowance) return;
     allowance={turns:0,calls:0,spent:0};
     taskTimer=setTimeout(()=>stop('timeout'),options.timeout*1000);
   };
-  const finish=()=>{clearTimeout(taskTimer);if(allowance) log({type:'task_end',...allowance,totals});allowance=undefined;};
+  function finish(){clearTimeout(taskTimer);if(allowance) log({type:'task_end',...allowance,totals});allowance=undefined;};
   session.subscribe(e=>{
     if(e.type==='agent_start') begin();
     if(e.type==='agent_end' && !managedRun) finish();
@@ -100,7 +110,8 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
     async run(prompt,options={}) {
       managedRun=true;begin();
       try {
-        await session.prompt(prompt,options.images?.length?{images:options.images}:undefined);
+        let disposition;await session.prompt(prompt,{...(options.images?.length?{images:options.images}:{}),preflightResult:value=>{disposition=value;}});
+        if(disposition==='handled')return '';
         const last=[...session.messages].reverse().find(m=>m.role==='assistant');
         if(logError) throw new Error(`Could not save usage receipts: ${logError.message}`);
         if(allowance.reason) throw new Error(`Task stopped: ${allowance.reason}`);
@@ -111,6 +122,6 @@ export async function createSufficeSession(options, runtime, {onTool=()=>{}, onA
       }
     },
     abort:()=>{stop('cancelled');},
-    async dispose() {clearTimeout(taskTimer);session.dispose();await automation.dispose();await tail;if(logError) throw logError; }
+    async dispose() {clearTimeout(taskTimer);await session.extensionRunner.emit({type:'session_shutdown',reason:'exit'});session.dispose();await automation.dispose();await tail;if(logError) throw logError; }
   };
 }

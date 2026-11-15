@@ -37,6 +37,7 @@ async function login(runtime,options,sharedReader) {
 }
 
 export async function main(options) {
+  process.env.PI_CODING_AGENT_DIR=options.home;
   if(options.command==='setup-automation') {console.log(await setupAutomation());return;}
   options.cwd=await realpath(options.cwd);
   if(!(await stat(options.cwd)).isDirectory()) throw new Error('--cwd must be a directory');
