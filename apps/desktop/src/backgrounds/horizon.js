@@ -8,6 +8,7 @@ export function mountAtmosphere(canvas, palette = null) {
   const bayer = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
   let frame;
   function draw() {
+    const light=!palette&&document.documentElement.dataset.theme==='light';
     const pitch = 1.5;
     const width = Math.ceil(host.clientWidth / pitch);
     const height = Math.ceil(host.clientHeight / pitch);
@@ -46,12 +47,19 @@ export function mountAtmosphere(canvas, palette = null) {
             pixels.data[i + channel] = (palette.base[channel] + light * dither * daylight + grain + stars) * fade;
           }
         }
+        if(light){
+          const texture=.8+.2*dither;
+          pixels.data[i]=239-blue*38*texture-cyan*8+rim*12+amber*11+grain*.3;
+          pixels.data[i+1]=244-blue*18*texture-cyan*3-rim*2-amber*22+grain*.3;
+          pixels.data[i+2]=251-blue*3-cyan*2-rim*13-amber*37+grain*.3;
+        }
         pixels.data[i + 3] = 255;
       }
     }
     context.putImageData(pixels, 0, 0);
   }
-  const observer = observeBackgroundResize(host, () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(draw); });
+  const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);};
+  const observer=observeBackgroundResize(host,schedule),themeObserver=new MutationObserver(schedule);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   draw();
-  return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  return () => { observer.disconnect();themeObserver.disconnect(); cancelAnimationFrame(frame); };
 }

@@ -1,6 +1,6 @@
-// Moonlit Lake is the default; earlier studies remain available.
+// Pixel horizon is the default; earlier studies remain available.
 // Preview any preset with ?background=<preset key>.
-export const ACTIVE_BACKGROUND = 'lake';
+export const ACTIVE_BACKGROUND = 'horizon';
 
 export const backgroundPresets = Object.freeze({
   none: Object.freeze({label: 'None',type: 'none'}),
@@ -29,6 +29,8 @@ export const backgroundPresets = Object.freeze({
       dusk: [36, 24, 59], edge: [90, 105, 137],
     }),
   }),
+  softHorizon: Object.freeze({label:'Soft horizon',type:'soft-horizon'}),
+  custom: Object.freeze({label:'Custom',type:'custom'}),
   horizon: Object.freeze({ label: 'Pixel horizon', type: 'horizon' }),
   dusk: Object.freeze({
     label: 'Dusk', type: 'horizon',

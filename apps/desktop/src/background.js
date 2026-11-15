@@ -1,3 +1,5 @@
+import {mountCustomBackground} from './backgrounds/custom.js';
+import {mountSoftHorizon} from './backgrounds/soft-horizon.js';
 import { ACTIVE_BACKGROUND, backgroundPresets } from './backgrounds/presets.js';
 import { mountAtmosphere as mountHorizon } from './backgrounds/horizon.js';
 import { mountRidges } from './backgrounds/ridges.js';
@@ -21,6 +23,8 @@ export function mountAtmosphere(canvas) {
   if (preset.type === 'moonlit-lake') return mountMoonlitLake(canvas, preset);
   if (preset.type === 'sonar-grid') return mountSonarGrid(canvas, preset);
   if (preset.type === 'gradient-ascii') return mountGradientAscii(canvas, preset);
+  if (preset.type === 'custom') return mountCustomBackground(canvas);
+  if (preset.type === 'soft-horizon') return mountSoftHorizon(canvas);
   if (preset.type === 'orbital') return mountOrbital(canvas, preset);
   return preset.type === 'horizon' ? mountHorizon(canvas, preset.palette) : mountRidges(canvas, preset);
 }
