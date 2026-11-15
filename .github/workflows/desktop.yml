@@ -3,7 +3,7 @@ name: Desktop reliability
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, codex/desktop-installers]
   workflow_dispatch:
     inputs:
       task:
@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   native:
-    if: (github.event_name != 'workflow_dispatch' || inputs.task != 'installers') && github.head_ref != 'codex/desktop-installers'
+    if: (github.event_name != 'workflow_dispatch' || inputs.task != 'installers') && github.head_ref != 'codex/desktop-installers' && github.ref_name != 'codex/desktop-installers'
     name: Native tests (${{ matrix.os }})
     strategy:
       fail-fast: false
@@ -84,7 +84,7 @@ jobs:
             apps/desktop/spotlight-*.png
 
   installers:
-    if: (github.event_name == 'workflow_dispatch' && inputs.task == 'installers') || (github.event_name == 'pull_request' && github.head_ref == 'codex/desktop-installers')
+    if: (github.event_name == 'workflow_dispatch' && inputs.task == 'installers') || (github.event_name == 'push' && github.ref_name == 'codex/desktop-installers')
     name: Installer (${{ matrix.name }})
     strategy:
       fail-fast: false
