@@ -1,9 +1,12 @@
 const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('sufficeDesktop',{
+  platform:process.platform,
   windowChrome:process.argv.find(arg=>/^--suffice-window-chrome=(windows|macos-native|macos-preview)$/.test(arg))?.split('=')[1]||'windows',
   deleteThread:id=>ipcRenderer.invoke('suffice:delete-thread',id),
   updateProject:payload=>ipcRenderer.invoke('suffice:update-project',payload),
   removeProject:folder=>ipcRenderer.invoke('suffice:remove-project',folder),
+  fileOpenOptions:payload=>ipcRenderer.invoke('suffice:file-open-options',payload),
+  openFileIn:payload=>ipcRenderer.invoke('suffice:file-open-in',payload),
   openProjectFolder:folder=>ipcRenderer.invoke('suffice:open-project-folder',folder),
   chooseProjectImage:()=>ipcRenderer.invoke('suffice:choose-project-image'),
   moveThread:payload=>ipcRenderer.invoke('suffice:move-thread',payload),

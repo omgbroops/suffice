@@ -1,7 +1,8 @@
+const {externalLink}=require('./external-links.cjs');
 const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage}=require('electron');
 const path=require('node:path');
 const packaged=require('./launch-mode.cjs').isInstalledApp(app);
-const appIcon=path.join(__dirname,'../assets/suffice-logo.png');
+const appIcon=path.join(__dirname,process.platform==='darwin'?'../assets/suffice-logo-macos.png':'../assets/suffice-logo.png');
 if(process.platform==='win32')app.setAppUserModelId(require('./windows-app-details.cjs').windowsAppId(packaged));
 const {pathToFileURL}=require('node:url');
 const {randomUUID,createHash}=require('node:crypto');
@@ -39,8 +40,8 @@ if(primary)app.whenReady().then(async()=>{
   if(process.platform==='win32')require('./windows-app-details.cjs').applyWindowsAppDetails({app,win,shell,iconPath:path.join(__dirname,'../assets/suffice-logo.ico')});
   if(process.env.SUFFICE_TEST_HIDE_WINDOW!=='1')win.show();
   const entry=pathToFileURL(path.join(__dirname,'../dist/index.html')).href;
-  win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
-  win.webContents.on('will-navigate',(event,url)=>{if(url!==entry)event.preventDefault();});
+  win.webContents.setWindowOpenHandler(({url})=>{const link=externalLink(url);if(link)void shell.openExternal(link).catch(()=>{});return {action:'deny'};});
+  win.webContents.on('will-navigate',(event,url)=>{if(url!==entry){event.preventDefault();const link=externalLink(url);if(link)void shell.openExternal(link).catch(()=>{});}});
   function handle(name,handler){ipcMain.handle(`suffice:${name}`,(event,...args)=>{if(event.senderFrame!==win.webContents.mainFrame)throw new Error('Untrusted frame');if(branchBusy&&['select-project','thread','project','reset'].includes(name))throw new Error('Wait for the branch change to finish');return handler(...args);});}
   const views=require('./view-state-store.cjs').createViewStateStore(path.join(app.getPath('userData'),'thread-views'));
   handle('view-states',()=>views.load());
@@ -62,12 +63,15 @@ if(primary)app.whenReady().then(async()=>{
   app.on('will-quit',()=>providerSettings.cancel());
   handle('preferences',()=>settings.stored());
   handle('desktop-preference',async payload=>{if(payload?.id==='startup'&&typeof payload.value==='boolean'){app.setLoginItemSettings({openAtLogin:payload.value,path:process.execPath,args:packaged?[]:[app.getAppPath()]});}if(payload?.id==='history-retention'&&!['Until deleted','30 days','90 days'].includes(payload.value))throw new Error('Invalid retention');if(payload?.id==='history-retention'&&payload.value!=='Until deleted'){if(running)throw new Error('Finish active agents before changing history retention');const answer=await dialog.showMessageBox(win,{type:'question',message:'Apply history retention?',detail:'Chats older than '+payload.value+' will be moved to the Recycle Bin automatically. The currently viewed chat is kept.',buttons:['Cancel','Apply'],defaultId:0,cancelId:0});if(answer.response!==1)throw new Error('Retention change cancelled');await enforceRetention(parseInt(payload.value));}return settings.set(payload?.id,payload?.value);});
-  handle('open-external',url=>{const parsed=new URL(url);if(parsed.protocol!=='https:'||parsed.username||parsed.password)throw new Error('Unsupported link');return shell.openExternal(parsed.href);});
+  handle('open-external',url=>{const link=externalLink(url);if(!link)throw new Error('Unsupported link');return shell.openExternal(link);});
   handle('status',()=>request('status'));
   handle('models',options=>request('models',{all:options?.all===true}));
   handle('usage',threadId=>request('usage',{threadId}));
   handle('files',async directory=>{const result=await workspaceFiles.list(project,directory),prefs=await settings.get();let entries=result.entries;if(!prefs['hidden-files'])entries=entries.filter(item=>!item.name.startsWith('.'));if(!prefs.gitignored)entries=await workspaceFiles.filterIgnored(project,entries);if(prefs['file-sort']==='Type')entries.sort((a,b)=>a.kind.localeCompare(b.kind)||path.extname(a.name).localeCompare(path.extname(b.name))||a.name.localeCompare(b.name));if(prefs['file-sort']==='Modified'){const fs=require('node:fs/promises');entries=await Promise.all(entries.map(async item=>({...item,modified:(await fs.stat(path.join(project,item.path)).catch(()=>({mtimeMs:0}))).mtimeMs})));entries.sort((a,b)=>b.modified-a.modified);}return {...result,entries};});
-  handle('file',name=>workspaceFiles.read(project,name));
+  handle('file',name=>workspaceFiles.read(project,name,{external:true}));
+  const fileOpeners=require('./file-openers.cjs').createFileOpeners({app,shell});
+  handle('file-open-options',payload=>fileOpeners.options(threadLocations.get(payload?.threadId)||project,payload?.path));
+  handle('file-open-in',payload=>fileOpeners.open(threadLocations.get(payload?.threadId)||project,payload?.path,payload?.application));
   handle('changes',()=>workspaceFiles.changes(project));
   handle('diff',name=>workspaceFiles.diff(project,name));
   handle('clipboard-files',()=>clipboardFiles(clipboard));
@@ -112,7 +116,7 @@ if(primary)app.whenReady().then(async()=>{
     if(branchBusy)throw new Error('Wait for the branch change to finish');preparing++;const runId=payload?.threadId;if(runId)threadRuns.set(runId,(threadRuns.get(runId)||0)+1);try{
     if(!project)throw new Error('Choose a project above the composer first');
     if(!payload||typeof payload.prompt!=='string'||payload.prompt.length>1000000||!['off','minimal','low','medium','high','xhigh','max'].includes(payload.effort)||(payload.model!==undefined&&(typeof payload.model!=='string'||typeof payload.provider!=='string')))throw new Error('Invalid task');
-    const prefs=await settings.get();if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=project;
+    const prefs={...await settings.get()};if(payload.approvalMode!==undefined){if(!['Ask before every action','Ask when needed','Never ask'].includes(payload.approvalMode))throw new Error('Invalid approval mode');prefs['approval-mode']=payload.approvalMode;}if((inBackground||running>0)&&!prefs['background-agents'])throw new Error('Background agents are disabled in settings');let cwd=threadLocations.get(payload.threadId)||project;
     if(typeof payload.clientId==='string')threadLocations.set(payload.clientId,cwd);
     running++;const attachmentGroup=[];attachmentGroups.set(payload.threadId||payload.clientId,attachmentGroup);
     try{const attached=await prepareAttachments(app.getPath('userData'),payload.attachments);if(attached.directory)attachmentGroup.push(attached.directory);const task={prompt:payload.prompt+attached.context,displayPrompt:payload.prompt,attachmentMetadata:attached.metadata,images:attached.images,clientId:typeof payload.clientId==='string'?payload.clientId.slice(0,128):null,effort:payload.effort,model:payload.model,provider:payload.provider,threadId:payload.threadId,cwd,desktopSettings:prefs};try{const result=await request('run',task);await notify('finished','Agent finished');return result;}catch(error){await notify('failed','Agent encountered an error');if(prefs.diagnostics){await require('node:fs/promises').appendFile(path.join(settingsHome,'desktop-diagnostics.jsonl'),JSON.stringify({at:new Date().toISOString(),type:'task_error',name:error.name})+'\n',{mode:0o600});}throw error;}}finally{running--;for(const [key,group] of attachmentGroups)if(group===attachmentGroup)attachmentGroups.delete(key);if(!prefs['save-attachments'])for(const directory of attachmentGroup)await removeAttachmentCopy(app.getPath('userData'),directory).catch(()=>{});}
