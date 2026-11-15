@@ -3,7 +3,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { assertShape } from '../contract.mjs';
 
-const KINDS = ['commands', 'workflows', 'runners', 'tools', 'voices', 'panels'];
+const KINDS = ['commands', 'workflows', 'runners', 'tools', 'voices', 'panels', 'points', 'deciders'];
 const PERMS = ['fs.read', 'fs.write', 'exec', 'net', 'model', 'secrets', 'ui'];
 const KEYS = ['name', 'version', 'main', 'activation', 'permissions', 'contributes'];
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$/;
@@ -35,7 +35,7 @@ export function validateManifest(obj) {
   return { ok: errors.length === 0, errors };
 }
 
-export function createPluginHost({ dirs, bus, grant, clock, autoFire = false, activateTimeoutMs = 10000, timer = { set: setTimeout, clear: clearTimeout } } = {}) {
+export function createPluginHost({ dirs, bus, grant, clock, autoFire = false, onRegister, activateTimeoutMs = 10000, timer = { set: setTimeout, clear: clearTimeout } } = {}) {
   if (!isStrArray(dirs)) throw new TypeError('dirs: expected an array of folder paths');
   assertShape('bus', bus, ['on', 'emit']);
   assertShape('clock', clock, ['now']);
@@ -117,6 +117,7 @@ export function createPluginHost({ dirs, bus, grant, clock, autoFire = false, ac
           if (!(contributes[kind] ?? []).includes(id)) throw new TypeError(`${name} did not declare ${kind}:${id} in contributes`);
           const full = `${name}:${id}`;
           reg.set(full, impl);
+          try { onRegister?.(kind, full, impl); } catch { /* a bad point or script is the plugin's problem, not the host's */ }
           s.regs.push([kind, full]);
         },
       };

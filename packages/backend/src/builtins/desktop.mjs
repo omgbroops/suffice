@@ -22,7 +22,7 @@ export const DEFAULT_DENY = [
 const REF = /^@s[a-z0-9]+:e\d+$/;
 const SECURE = /secure|password|protected/i;
 
-export function createDesktop({ exec, clock, policy = {}, approve, onAction } = {}) {
+export function createDesktop({ exec, clock, policy = {}, approve, onAction, decide } = {}) {
   const tool = createCliTool({ exec, binary: 'agent-desktop', clock, installHint: DESKTOP_INSTALL, alwaysJson: true, versionArgs: ['version'] });
   const allowed = (policy.allowedApps ?? []).map((a) => String(a).toLowerCase());
   const auto = (policy.autoApprove ?? []).map((a) => String(a).toLowerCase());
@@ -81,6 +81,11 @@ export function createDesktop({ exec, clock, policy = {}, approve, onAction } = 
     } else if (!app) res = refuse('no_app', 'no app in focus; snapshot or focus an app first');
     if (!res) res = appCheck(app);
     if (!res && secureCheck && a.refs.get(ref).secure) res = refuse('policy', 'refusing to type into a secure field');
+    if (!res) { // a decision can only deny; allow, ask and errors fall through to the first-touch approval
+      let v = null;
+      try { v = await decide?.('action.approve', { tool: 'desktop', action, target: String(target ?? ''), app }, { agentId }); } catch { /* falls through */ }
+      if (v?.decision === 'deny') res = refuse('denied', `denied by decision: ${v.reason ?? 'no reason'}`);
+    }
     if (!res && !(await approved(agentId, a, app, action, target))) res = refuse('denied', `approval denied for ${app}`);
     if (!res && limited(a)) res = refuse('rate_limited', `rate limit: ${max} actions per ${windowMs} ms`);
     if (!res) {

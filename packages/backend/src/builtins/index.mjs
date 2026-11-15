@@ -52,8 +52,8 @@ async function activatePlugin(name, ctx) {
   const cfg = ctx.config ?? {};
   const exec = ctx.exec ?? cfg.exec ?? createExec();
   const onAction = cfg.onAction ?? ((evt) => ctx.bus?.emit?.('builtins.action', evt));
-  const base = { exec, clock: ctx.clock, policy: cfg.policy ?? {}, onAction };
-  const impl = name === 'browser' ? createBrowser(base) : createDesktop({ ...base, approve: cfg.approve });
+  const base = { exec, clock: ctx.clock, policy: cfg.policy ?? {}, onAction, decide: cfg.decide };
+  const impl = name === 'browser' ? createBrowser({ ...base, approve: cfg.approve }) : createDesktop({ ...base, approve: cfg.approve });
   for (const [id, [description, inputSchema, fn]] of Object.entries(tools[name](impl))) {
     const tool = (args = {}) => fn({ ...args, agentId: args.agentId ?? 'default' });
     tool.def = { name: `${name}:${id}`, description, inputSchema };

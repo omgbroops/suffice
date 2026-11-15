@@ -36,7 +36,7 @@ export function rank(findings) {
     .map(([f]) => f);
 }
 
-export function createWatchdog({ clock, bus, thresholds } = {}) {
+export function createWatchdog({ clock, bus, thresholds, decide } = {}) {
   assertShape('clock', clock, ['now']);
   assertShape('bus', bus, ['emit']);
   if (!thresholds || typeof thresholds !== 'object') throw new TypeError('thresholds: expected an object');
@@ -137,5 +137,12 @@ export function createWatchdog({ clock, bus, thresholds } = {}) {
     return [...(runs.get(runId)?.found ?? [])];
   }
 
-  return { observe, tick, findings };
+  // advice only: the watchdog never stops a run on its own say-so
+  async function advise(runId) {
+    const r = runs.get(runId);
+    if (!r || typeof decide !== 'function') return null;
+    try { return await decide('run.continue', { steps: r.steps.size, progress: r.zeroStreak, budgetRemaining: 1 }, { runId }); } catch { return null; }
+  }
+
+  return { observe, tick, findings, advise };
 }

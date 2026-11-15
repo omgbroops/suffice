@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { createJournal, createBus, listRuns } from '../journal/index.mjs';
 import { createSlots, createReader, projectJournal } from '../slots/index.mjs';
 import { createBudget, createFileStore } from '../budget/index.mjs';
+import { createDecider } from '../decide/index.mjs';
+import { createDatasetFile } from '../decide/dataset.mjs';
 import { createWatchdog } from '../watchdog/index.mjs';
 import { createRunnerRegistry } from '../runner/index.mjs';
 import { createPluginHost } from '../plugins/index.mjs';
@@ -27,14 +29,30 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
   const slots = createSlots({ bus, clock });
   const reader = createReader(slots);
   const budget = createBudget({ clock, store: createFileStore(path.join(dataDir, 'budget.json')), limits });
-  const watchdog = createWatchdog({ clock, bus, thresholds: THRESHOLDS });
   const handoff = createHandoff({ dir: path.join(dataDir, 'handoff'), clock });
   const registry = createRunnerRegistry({ clock });
   for (const [name, r] of Object.entries(runners)) registry.register(name, r);
   if (createSession && !registry.names().includes('pi')) registry.register('pi', createPiRunner({ createSession, clock }));
 
+  const dec = createDecider({ runners: registry, ask: async () => undefined, clock, bus, store: createDatasetFile({ dir: path.join(dataDir, 'decide') }) });
+  const statsSlot = slots.define({ id: 'decide:stats', title: 'Decision stats', schema: { type: 'object' } }, dec.stats());
+  const decide = Object.assign(async (point, input, ctx) => { try { return await dec.decide(point, input, ctx); } finally { try { statsSlot.set(dec.stats()); } catch { /* display only */ } } }, dec);
+  decide.decide = decide;
+  const watchdog = createWatchdog({ clock, bus, thresholds: THRESHOLDS, decide });
+  // layers: one JSON file each; a bad file is reported and ignored, never fatal
+  const cfgErrors = {};
+  const layerCfg = { builtin: { router: 'balanced' } };
+  for (const n of ['org', 'user', 'project']) {
+    const f = path.join(dataDir, 'decide', `${n}.json`);
+    let raw; try { raw = fs.readFileSync(f, 'utf8'); } catch { continue; }
+    try { const c = JSON.parse(raw); const v = dec.validateConfig({ [n]: c }); if (!v.ok) throw new Error(v.errors.join('; ')); layerCfg[n] = c; } catch (e) { cfgErrors[n] = e.message; }
+  }
+  try { dec.loadLayers(layerCfg); } catch (e) { cfgErrors.all = e.message; }
+  slots.define({ id: 'decide:config', title: 'Decision config', schema: { type: 'object' } }, { errors: cfgErrors });
+
   // plugins: builtins are loose files today, so discovery may find nothing; never let that break startup
-  const host = createPluginHost({ dirs: [BUILTINS], bus, grant: () => true, clock });
+  const host = createPluginHost({ dirs: [BUILTINS], bus, grant: () => true, clock,
+    onRegister: (kind, id, impl) => { if (kind === 'points') dec.definePoint(id, impl); else if (kind === 'deciders') dec.registerScript(id, impl); } });
   host.discover()
     .then((found) => Promise.all([].concat(found ?? []).filter((p) => p?.valid !== false && p?.name).map((p) => host.activate(p.name).catch(() => {}))))
     .catch(() => {});
@@ -59,7 +77,7 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
     return wrapped;
   };
 
-  const engine = createEngine({ journalFor, runners: registry, budget, bus, clock, approve, exec });
+  const engine = createEngine({ journalFor, runners: registry, budget, bus, clock, approve, exec, decide });
   const active = new Map(), finished = new Map(); // runId -> {ac, done}
   const metaPath = (id) => path.join(runsDir, `${id}.meta.json`);
 
@@ -81,6 +99,7 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
 
   return {
     slots,
+    decide,
     reader: () => reader,
     startRun(workflow, args = {}) {
       const fn = typeof workflow === 'function' ? workflow : lookup(workflow);

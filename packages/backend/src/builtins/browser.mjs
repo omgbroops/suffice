@@ -14,7 +14,7 @@ import { createCliTool, sessionName } from './cli-tool.mjs';
 export const BROWSER_INSTALL = 'npm install -g agent-browser && agent-browser install (or: brew install agent-browser)';
 const DENY_SCHEMES = /^(javascript|data|file|chrome|chrome-extension|blob|view-source|ftp|about|vbscript):/i;
 
-export function createBrowser({ exec, clock, policy = {}, onAction } = {}) {
+export function createBrowser({ exec, clock, policy = {}, onAction, decide, approve } = {}) {
   const tool = createCliTool({ exec, binary: 'agent-browser', clock, installHint: BROWSER_INSTALL, jsonFlag: '--json', versionArgs: ['--version'] });
   const allowed = (policy.allowedDomains ?? []).map((d) => String(d).toLowerCase());
   const states = new Map();
@@ -53,6 +53,17 @@ export function createBrowser({ exec, clock, policy = {}, onAction } = {}) {
     return res;
   }
   const cli = (agentId, args, o) => tool.run(args, { session: sessionName(agentId), ...o });
+  // a decision runs after every hard check and can only deny; allow, ask and a failed decision all proceed (ask also needs approve, when one is injected)
+  async function gated(agentId, action, target, go) {
+    let v = null;
+    try { v = await decide?.('action.approve', { tool: 'browser', action, target: String(target ?? '') }, { agentId }); } catch { /* falls through */ }
+    if (v?.decision === 'deny') return refuse('denied', `denied by decision: ${v.reason ?? 'no reason'}`);
+    if (v?.decision === 'ask' && approve) {
+      let ok = false; try { ok = !!(await approve({ tool: 'browser', action, target })); } catch { /* an approval error is a no */ }
+      if (!ok) return refuse('denied', 'approval not granted');
+    }
+    return go();
+  }
   const secret = (line) => /password|passwd|secret|type=password/i.test(line ?? '');
 
   return {
@@ -60,7 +71,7 @@ export function createBrowser({ exec, clock, policy = {}, onAction } = {}) {
     open: (agentId, url) => act(agentId, 'open', url, {}, async () => {
       const c = checkUrl(url);
       if (c.err) return c.err;
-      const r = await cli(agentId, ['open', c.url]);
+      const r = await gated(agentId, 'open', c.url, () => cli(agentId, ['open', c.url]));
       if (r.ok) { const s = st(agentId); s.valid = false; s.refs.clear(); s.url = c.url; }
       return r;
     }),
@@ -75,22 +86,22 @@ export function createBrowser({ exec, clock, policy = {}, onAction } = {}) {
       return r;
     }),
     click: (agentId, ref) => act(agentId, 'click', ref, {}, async () => {
-      const u = useRef(agentId, ref); return u.err ?? cli(agentId, ['click', u.r]);
+      const u = useRef(agentId, ref); return u.err ?? gated(agentId, 'click', u.r, () => cli(agentId, ['click', u.r]));
     }),
     fill: (agentId, ref, text) => act(agentId, 'fill', ref, { length: String(text ?? '').length }, async () => {
       const u = useRef(agentId, ref);
       if (u.err) return u.err;
       if (!policy.allowSecrets && secret(u.line)) return refuse('policy', 'refusing to fill a password field');
-      return cli(agentId, ['fill', u.r, String(text)]);
+      return gated(agentId, 'fill', u.r, () => cli(agentId, ['fill', u.r, String(text)]));
     }),
     type: (agentId, text, { ref } = {}) => act(agentId, 'type', ref ?? null, { length: String(text ?? '').length }, async () => {
-      if (ref === undefined) return cli(agentId, ['keyboard', 'type', String(text)]);
+      if (ref === undefined) return gated(agentId, 'type', null, () => cli(agentId, ['keyboard', 'type', String(text)]));
       const u = useRef(agentId, ref);
       if (u.err) return u.err;
       if (!policy.allowSecrets && secret(u.line)) return refuse('policy', 'refusing to type into a password field');
-      return cli(agentId, ['type', u.r, String(text)]);
+      return gated(agentId, 'type', u.r, () => cli(agentId, ['type', u.r, String(text)]));
     }),
-    press: (agentId, key) => act(agentId, 'press', key, {}, async () => (flagLike(key) || !key ? refuse('invalid_arg', 'bad key') : cli(agentId, ['press', String(key)]))),
+    press: (agentId, key) => act(agentId, 'press', key, {}, async () => (flagLike(key) || !key ? refuse('invalid_arg', 'bad key') : gated(agentId, 'press', key, () => cli(agentId, ['press', String(key)])))),
     get: (agentId, what, { ref } = {}) => act(agentId, `get ${what}`, ref ?? null, {}, async () => {
       if (what === 'url' || what === 'title') return cli(agentId, ['get', what]);
       if (what !== 'text') return refuse('invalid_arg', 'get: url, title or text');

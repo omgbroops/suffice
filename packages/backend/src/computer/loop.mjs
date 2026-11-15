@@ -165,8 +165,15 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
             tryStrategy: async (s) => {
               try {
                 if (s === 'scroll') await (surface === 'browser' ? browser.press(agentId, 'PageDown') : desktop.scroll?.(agentId, el?.ref, 'down'));
-                else if (s === 'wait') await browser?.wait?.(agentId, { ms: 500 });
-                else if (s === 'key') await (surface === 'browser' ? browser.press(agentId, 'Enter') : desktop.key(agentId, 'return'));
+                else if (s === 'wait') await (surface === 'browser' ? browser?.wait?.(agentId, { ms: 500 }) : desktop.wait ? desktop.wait(agentId, { ms: 500 }) : new Promise((f) => setTimeout(f, 500)));
+                else if (s === 'key') {
+                  // a blind Enter/return is an action too: same tags and approval as any step
+                  const kact = surface === 'browser' ? { action: 'press', key: 'Enter' } : { action: 'key', key: 'return' };
+                  const kt = tagAction({ surface, action: kact, element: el ?? undefined, obs: o, app: S.app });
+                  if (o.flag) kt.push('injection-suspect');
+                  if (kt.length && await approval(kt, kact, el)) return false;
+                  await (surface === 'browser' ? browser.press(agentId, 'Enter') : desktop.key(agentId, 'return'));
+                }
               } catch { /* a failed side effect just means this strategy did not help */ }
               const x = await run1(await observe('tree'));
               if (x.ok) r = x;
@@ -211,8 +218,10 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
       S.history.push({ step: rec.step, action: rec.action, target: rec.targetName, ok: rec.ok, sig: `${rec.action}|${rec.targetRole}|${rec.targetName}|${act?.text ?? ''}`, changed: S.lastAfter ? S.lastAfter.sig !== o.sig : false });
       S.lastAction = { action: rec.action, target: rec.targetName, ok: rec.ok };
       const { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason, textLen } = rec;
-      await journal?.append({ type: 'computer.step', data: { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason: reason ?? null, ...(textLen !== undefined ? { textLen } : {}) } });
-      await slots?.publish(agentId, S.steps);
+      try {
+        await journal?.append({ type: 'computer.step', data: { step, mode, action, targetRole, targetName, rung, riskTags, approved, ok, ms, reason: reason ?? null, ...(textLen !== undefined ? { textLen } : {}) } });
+        await slots?.publish(agentId, S.steps);
+      } catch { S.jerr = true; }
     }
 
     // §4.5: stop on limits, repeated failures, a no-progress loop, or the continue decision.
@@ -222,7 +231,21 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
       if (replay && S.steps.length && S.steps.every((s) => s.ok) && (!rep.hit || rep.fellBackAt !== null)) { await replay.put(key, S.trace, answer); rep.stored = true; }
     };
 
-    if (surface === 'browser') await browser.open(agentId, start);
+    try {
+      const opened = surface === 'browser' ? await browser.open(agentId, start) : await desktop.focus?.(agentId, start);
+      if (opened?.ok === false) return { ...finish(false, 'open_failed'), error: opened.error ?? opened.reason };
+    } catch (x) { return { ...finish(false, 'open_failed'), error: String(x?.message ?? x) }; }
+
+    // one model-driven step; commit failures set S.jerr
+    async function modelStep() {
+      const ob = await ask('computer.observe', { surface, target: S.app ?? start, lastAction: S.lastAction, availableModes: MODES });
+      const o = await observe(MODES.includes(ob?.mode) ? ob.mode : 'tree', Number.isInteger(ob?.depth) ? ob.depth : undefined);
+      const act = await ask('computer.act', { goal, observationSummary: summarize(o), allowedActions: ALLOWED[surface], history: S.history.slice(-8).map(({ step, action, target, ok }) => ({ step, action, target, ok })) });
+      if (act?.done) return { act };
+      const rec = await doStep(o, act, false);
+      await commit(rec, act, o);
+      return { rec };
+    }
 
     const entry = replay ? await replay.get(key) : null;
     if (entry) {
@@ -231,12 +254,20 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
         const st = entry.steps[i];
         const text = st.text === undefined ? undefined : fill(st.text, inputs);
         let rec = null; let o = null;
+        if (text === null && /\{\{secret\}\}/.test(st.text)) {
+          // planned handoff: the model supplies the secret, replay resumes after it
+          const m = await modelStep();
+          if (S.jerr) return finish(false, 'journal_failed');
+          if (m.rec?.ok) continue;
+          rep.fellBackAt = i; await replay.fail(key); break;
+        }
         if (text !== null) {
           o = await observe('tree');
           rec = await doStep(o, { action: st.action, ...(st.role || st.name ? { ref: { role: st.role, name: st.name } } : {}), text, key: st.key, url: st.url }, true);
         }
         if (!rec?.ok) { rep.fellBackAt = i; await replay.fail(key); break; }
         await commit(rec, { text }, o);
+        if (S.jerr) return finish(false, 'journal_failed');
       }
       if (rep.fellBackAt === null) { await replay.ok(key); return finish(true, 'done', entry.answer); }
     }
@@ -245,12 +276,9 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
       if (signal?.aborted) return finish(false, 'aborted');
       if (S.steps.length >= L.maxSteps) return finish(false, 'max_steps');
       if (now() - t0 >= L.maxMs) return finish(false, 'max_time');
-      const ob = await ask('computer.observe', { surface, target: S.app ?? start, lastAction: S.lastAction, availableModes: MODES });
-      const o = await observe(MODES.includes(ob?.mode) ? ob.mode : 'tree', Number.isInteger(ob?.depth) ? ob.depth : undefined);
-      const act = await ask('computer.act', { goal, observationSummary: summarize(o), allowedActions: ALLOWED[surface], history: S.history.slice(-8).map(({ step, action, target, ok }) => ({ step, action, target, ok })) });
+      const { act, rec } = await modelStep();
+      if (S.jerr) return finish(false, 'journal_failed');
       if (act?.done) { await store(act.answer); return finish(true, 'done', act.answer); }
-      const rec = await doStep(o, act, false);
-      await commit(rec, act, o);
       if (failures() >= L.maxFailures) return finish(false, 'max_failures');
       if (loopDetected(S.history, L.loopRepeats)) return finish(false, 'loop');
       const c = await ask('run.continue', { steps: S.steps.length, progress: { ok: S.steps.filter((s) => s.ok).length, failed: S.steps.filter((s) => !s.ok).length }, budget: { remainingSteps: L.maxSteps - S.steps.length, remainingMs: L.maxMs - (now() - t0) } });

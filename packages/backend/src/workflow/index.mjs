@@ -12,7 +12,7 @@ const hash = (v) => createHash('sha1').update(JSON.stringify(v)).digest('hex').s
 // refusals, failed gates, denied approvals, bad config and cancellation end the run, never become a null branch
 const fatal = (e) => [BudgetError, GateError, ApprovalDenied, ConfigError, Cancelled].some((C) => e instanceof C);
 
-export function createEngine({ journalFor, runners, budget, bus, clock, approve, exec } = {}) {
+export function createEngine({ journalFor, runners, budget, bus, clock, approve, exec, decide } = {}) {
   if (typeof journalFor !== 'function') throw new TypeError('journalFor: expected a function');
   assertShape('runners', runners, ['get']);
   assertShape('budget', budget, ['check', 'record']);
@@ -20,6 +20,7 @@ export function createEngine({ journalFor, runners, budget, bus, clock, approve,
   assertShape('clock', clock, ['now']);
   if (typeof approve !== 'function') throw new TypeError('approve: expected a function');
   if (exec !== undefined && typeof exec !== 'function') throw new TypeError('exec: expected a function');
+  if (decide !== undefined && typeof decide !== 'function') throw new TypeError('decide: expected a function');
 
   // scope = position in the call tree: {path, n: call counter, chain: hash of prior steps in this branch}
   const als = new AsyncLocalStorage();
@@ -45,6 +46,9 @@ export function createEngine({ journalFor, runners, budget, bus, clock, approve,
       }
     }
     const note = (type, data, stepKey) => { bus.emit(type, data); return journal.append(stepKey ? { type, stepKey, data } : { type, data }); };
+    // a decision failure never breaks a step: null means "use today's behaviour"
+    const ask = async (point, input, stepPath) => { if (!decide) return null; try { return (await decide(point, input, { runId, stepPath })) ?? null; } catch { return null; } };
+    const outcome = (d, ok) => { try { if (d?.decisionId) decide?.recordOutcome?.(d.decisionId, { ok }); } catch { /* never breaks a step */ } };
     const next = () => { const s = als.getStore(); return { s, idx: s.n++ }; };
     const child = (s, tag) => ({ path: `${s.path}/${tag}`, n: 0, chain: s.chain });
 
@@ -63,25 +67,42 @@ export function createEngine({ journalFor, runners, budget, bus, clock, approve,
         const hit = await journal.lookup(key);
         // journals older than the {value, usage} shape hold the bare value
         if (hit.hit) return hit.value && typeof hit.value === 'object' && 'value' in hit.value ? hit.value.value : hit.value;
-        const name = opts.runner || 'default';
+        // model.select fills only what the caller left unset; explicit opts always win
+        let model = opts.model, rname = opts.runner;
+        const sel = (!opts.model && !opts.runner) ? await ask('model.select', { kind: 'agent', promptTokens: Math.ceil(prompt.length / 4), stepPath: s.path }, s.path) : null;
+        if (sel) { if (sel.model && sel.model !== 'default') model = sel.model; if (sel.runner && sel.runner !== 'default') rname = sel.runner; }
+        const name = rname || 'default';
         let runner;
-        try { runner = runners.get(name); } catch (e) { throw new ConfigError(`agent: runner "${name}" unavailable: ${e.message}`); }
+        try { runner = runners.get(name); } catch (e) { if (rname === opts.runner) throw new ConfigError(`agent: runner "${name}" unavailable: ${e.message}`); }
+        if (!runner && rname !== opts.runner) { try { runner = runners.get('default'); model = opts.model; } catch { /* reported below */ } } // a selected runner that is missing falls back
         if (!runner) throw new ConfigError(`agent: unknown runner "${name}"`);
         const tags = { runId, label: opts.label };
         const est = opts.estimateTokens ?? 20000;
         // reserve holds the estimate so parallel agents cannot all pass the same check
         const rsv = budget.reserve ? budget.reserve(est, tags) : budget.check(est, tags);
         if (!rsv.allow) { await journal.append({ type: 'budget', stepKey: key, data: { reason: rsv.reason } }); throw new BudgetError(rsv.reason); }
-        let settled = false;
+        let settled = false, esc = null;
         // a failed agent step is journaled as step.error, so it re-runs on resume (only step.result replays)
-        const out = await memo(key, async () => {
-          const res = await runner.run({ prompt, model: opts.model, label: opts.label, schema: opts.schema, cwd: opts.cwd, signal });
-          settled = true;
-          if (budget.reserve) rsv.settle(res.usage ?? { inputTokens: 0, outputTokens: 0 }); else if (res.usage) budget.record(res.usage, tags);
-          live();
-          if (!res.ok) throw new Error(res.error || 'agent failed');
-          return { value: res.value !== undefined ? res.value : res.text ?? '', usage: res.usage };
-        }).finally(() => { if (!settled) rsv.release?.(); });
+        let out;
+        try {
+          out = await memo(key, async () => {
+            let res = await runner.run({ prompt, model, label: opts.label, schema: opts.schema, cwd: opts.cwd, signal });
+            let usage = res.usage;
+            if (!res.ok && !signal?.aborted) {
+              esc = await ask('model.escalate', { attempt: 1, failure: String(res.error || 'agent failed'), tried: model ? [model] : [] }, s.path);
+              if (esc?.escalate && esc.model && esc.model !== model) {
+                res = await runner.run({ prompt, model: esc.model, label: opts.label, schema: opts.schema, cwd: opts.cwd, signal });
+                if (res.usage) usage = usage ? { inputTokens: (usage.inputTokens ?? 0) + (res.usage.inputTokens ?? 0), outputTokens: (usage.outputTokens ?? 0) + (res.usage.outputTokens ?? 0) } : res.usage;
+              }
+            }
+            settled = true;
+            if (budget.reserve) rsv.settle(usage ?? { inputTokens: 0, outputTokens: 0 }); else if (usage) budget.record(usage, tags);
+            live();
+            if (!res.ok) throw new Error(res.error || 'agent failed');
+            return { value: res.value !== undefined ? res.value : res.text ?? '', usage: res.usage };
+          }).finally(() => { if (!settled) rsv.release?.(); });
+        } catch (e) { outcome(sel, false); outcome(esc, false); throw e; }
+        outcome(sel, true); outcome(esc, true);
         return out.value;
       },
 
@@ -142,9 +163,11 @@ export function createEngine({ journalFor, runners, budget, bus, clock, approve,
         const { s, idx } = next();
         const key = `${s.path}#${idx}:approval:${name}`;
         // the denial is memoized too: resume fails the same way without asking again
+        // a deny only tightens: allow, ask and a failed decision all fall through to the real approve
+        const verdict = await ask('action.approve', { tool: 'workflow', action: 'approval', target: String(name) }, s.path);
         const r = await memo(key, async () => {
           await journal.append({ type: 'approval', stepKey: key, data: { name } }); // asked, no answer yet
-          const approved = !!(await approve({ name, details }));
+          const approved = verdict?.decision === 'deny' ? false : !!(await approve({ name, details }));
           await note('approval', { name, approved }, key);
           return { approved };
         });

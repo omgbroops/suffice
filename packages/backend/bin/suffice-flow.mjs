@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // suffice-flow run <workflow> --args <json> [--runner fake|pi|cmd:<binary>] [--data <dir>] | list | show <runId> | resume <runId> | cancel <runId>
+import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { createBackend } from '../src/app/backend.mjs';
@@ -11,6 +12,7 @@ const flag = (name) => { const i = argv.indexOf(`--${name}`); return i < 0 ? und
 const dataDir = flag('data') ?? path.join(os.homedir(), '.suffice-flow');
 const runnerOpt = flag('runner') ?? 'fake';
 const argsJson = flag('args');
+const ctx = Object.fromEntries(['workflow', 'step', 'app', 'domain'].map((k) => [k, flag(k)]).filter(([, v]) => v !== undefined));
 const [cmd, target] = argv;
 const out = (v) => process.stdout.write(`${JSON.stringify(v)}\n`);
 
@@ -44,7 +46,15 @@ try {
   } else if (cmd === 'cancel') {
     if (!target) throw new Error('usage: cancel <runId>');
     out({ runId: target, cancelled: b.cancelRun(target) }); // only runs started by this process can be cancelled
-  } else throw new Error('usage: suffice-flow run|list|show|resume|cancel');
+  } else if (cmd === 'explain') {
+    if (!target) throw new Error('usage: explain <point> [--workflow w --step s --app a --domain d]');
+    out(b.decide.explain(target, ctx));
+  } else if (cmd === 'config') {
+    if (target !== 'validate' || !argv[2]) throw new Error('usage: config validate <file>');
+    const v = b.decide.validateConfig(JSON.parse(fs.readFileSync(argv[2], 'utf8')));
+    out(v);
+    if (!v.ok) { await b.dispose(); process.exit(1); }
+  } else throw new Error('usage: suffice-flow run|list|show|resume|cancel|explain|config');
   await b.dispose();
   process.exit(0);
 } catch (e) {

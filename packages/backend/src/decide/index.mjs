@@ -32,7 +32,7 @@ const BUILTIN_SCRIPTS = {
   'builtin:changed': ({ before, after }) => ({ ok: before !== after, reason: before !== after ? 'changed' : 'unchanged' }),
 };
 
-export function createDecider({ runners, ask, scripts: seed, clock, journal, bus, timer } = {}) {
+export function createDecider({ runners, ask, scripts: seed, clock, journal, bus, timer, store } = {}) {
   assertShape('runners', runners, ['get']);
   assertShape('clock', clock, ['now']);
   if (typeof ask !== 'function') throw new TypeError('ask: expected a function');
@@ -287,12 +287,14 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
         return [...tally.values()].find((e) => e.n >= need)?.r ?? null;
       }
       case 'shadow': {
-        // shortcut: awaits the candidate, so a slow candidate delays the caller up to the timeout; run it detached if that matters
-        const [a, b] = await Promise.allSettled([sub(s.primary), sub(s.candidate)]);
-        if (a.status === 'rejected') throw a.reason;
-        c.rt.shadow = true;
-        c.rt.agree = b.status === 'fulfilled' && !!b.value && !!a.value && canon(a.value.output) === canon(b.value.output);
-        return a.value;
+        // candidate runs detached on its own timer; the caller gets the primary at once and agreement lands when it settles
+        const a = await sub(s.primary);
+        const ms = s.candidate.timeoutMs ?? 10000;
+        let h;
+        const cand = Promise.race([sub(s.candidate), new Promise((_, rej) => { h = tm.setTimeout(() => rej(new Error('candidate timeout')), ms); })]);
+        c.rt.late = cand.then((b) => !!b && !!a && canon(a.output) === canon(b.output), () => { c.rt.shadowErr = true; return false; })
+          .finally(() => tm.clearTimeout(h));
+        return a;
       }
     }
     throw new Error(`unknown kind "${s.kind}"`);
@@ -327,12 +329,15 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
     const ms = clock.now() - t0, id = `dec-${++seq}`;
     let inputHash = '';
     try { inputHash = createHash('sha1').update(canon(inp) ?? '').digest('hex'); } catch { inputHash = createHash('sha1').update('').digest('hex'); }
-    const s = stats.get(point) ?? { n: 0, ms: 0, hits: 0, fb: 0, sh: 0, ag: 0 };
+    const s = stats.get(point) ?? { n: 0, ms: 0, hits: 0, fb: 0, sh: 0, ag: 0, se: 0 };
     stats.set(point, s);
     s.n++; s.ms += ms; s.hits += rt.cacheHit ? 1 : 0; s.fb += ok ? 0 : 1;
-    if (rt.shadow) { s.sh++; s.ag += rt.agree ? 1 : 0; }
+    let landed = false;
+    rt.late?.then((agree) => { landed = true; s.sh++; s.ag += agree ? 1 : 0; if (rt.shadowErr) s.se++; });
+    for (let i = 0; rt.late && !landed && i < 20; i++) await null; // a fast candidate lands before we return; a slow one never blocks
     if (rows.size >= MAX_ROWS) rows.delete(rows.keys().next().value);
     rows.set(id, { id, point, inputHash, output: structuredClone(output), ok });
+    try { store?.append({ id, point, inputHash, output, ok }); } catch { /* dataset loss never breaks a decision */ }
     const data = { decisionId: id, point, deciderKind: spec.kind, layer: winner?.layer ?? 'builtin', ms, cacheHit: rt.cacheHit, outputSummary: (JSON.stringify(output) ?? '').slice(0, 200), ok, runId: ctx.runId };
     if (error) data.error = error;
     try { bus?.emit('decision', data); } catch { /* a listener never breaks a decision */ }
@@ -343,8 +348,8 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
 
   return {
     definePoint, registerScript, loadLayers, decide, explain, validateConfig, exportConfig,
-    stats: () => Object.fromEntries([...stats].map(([p, s]) => [p, { count: s.n, meanMs: s.n ? s.ms / s.n : 0, cacheHitRate: s.n ? s.hits / s.n : 0, fallbacks: s.fb, agreement: s.sh ? s.ag / s.sh : null }])),
+    stats: () => Object.fromEntries([...stats].map(([p, s]) => [p, { count: s.n, meanMs: s.n ? s.ms / s.n : 0, cacheHitRate: s.n ? s.hits / s.n : 0, fallbacks: s.fb, agreement: s.sh ? s.ag / s.sh : null, shadowErrors: s.se }])),
     *dataset() { for (const r of rows.values()) yield { ...r }; },
-    recordOutcome(id, outcome) { const r = rows.get(id); if (!r) return false; r.outcome = structuredClone(outcome); return true; },
+    recordOutcome(id, outcome) { const r = rows.get(id); if (!r) return false; r.outcome = structuredClone(outcome); try { store?.append({ id, outcome: { ok: r.outcome?.ok } }); } catch { /* see above */ } return true; },
   };
 }
