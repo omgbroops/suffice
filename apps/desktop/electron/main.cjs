@@ -2,7 +2,7 @@ const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notificat
 const path=require('node:path');
 const packaged=require('./launch-mode.cjs').isInstalledApp(app);
 // Keep the installed app on the existing desktop profile; explicit smoke/test profiles win.
-if(packaged&&!process.argv.some(arg=>arg.startsWith('--user-data-dir')))app.setPath('userData',path.join(app.getPath('appData'),'@suffice','desktop'));
+require('./desktop-profile.cjs').configureDesktopProfile(app,{packaged});
 const appIcon=path.join(__dirname,'../assets/suffice-logo.png');
 if(process.platform==='win32')app.setAppUserModelId(require('./windows-app-details.cjs').windowsAppId(packaged));
 const {pathToFileURL}=require('node:url');
