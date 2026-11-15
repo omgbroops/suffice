@@ -19,6 +19,7 @@ export function connectApprovals(api,toast){
   let answering=false;const answer=async value=>{if(answering)return;answering=true;deny.disabled=allow.disabled=true;try{await api.approvalAnswer({threadId:event.threadId||event.clientId,requestId:event.requestId,allow:value});requests.delete(key(event));shown=null;draw();}catch(error){toast(error.message);answering=false;deny.disabled=allow.disabled=false;}};
   deny.onclick=()=>void answer(false);allow.onclick=()=>void answer(true);panel.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();void answer(false);}};
   footer.append(deny,allow);panel.append(title,heading,preview,footer);
+  void import('./code-highlight.js').then(({colorCode})=>colorCode(code,event.name==='codemode'?'input.js':event.name==='bash'?'input.sh':'input.json')).catch(()=>{});
   if(form.contains(document.activeElement))deny.focus({preventScroll:true});
  }
  threadViewState.subscribe(event=>{if(['select','adopt','remove'].includes(event.type))draw();});
