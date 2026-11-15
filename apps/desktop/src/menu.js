@@ -102,8 +102,8 @@ export function createMenu(element) {
   }
   listen(document,'pointerdown', e => {
     keyboard = false;
-    if (!element.hidden && !panels.some(p => p.element.contains(e.target)) && !trigger?.contains(e.target) && !e.target.closest('[data-action]')) close();
-  });
+    if (!element.hidden && !panels.some(p => p.element.contains(e.target)) && !trigger?.contains(e.target)) close();
+  }, {capture:true});
   listen(document,'keydown', e => {
     keyboard = true;
     if (element.hidden || !panels.length) return;

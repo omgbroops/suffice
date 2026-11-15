@@ -34,7 +34,7 @@ export function connectProjects({api,toast}){
  search.addEventListener('input',render);
  menu.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close(true);}navigation.keydown(event);});
  add.addEventListener('click',async()=>{close();try{const project=await api.chooseProject();if(project&&!project.openedNewWindow){apply(project);document.dispatchEvent(new Event('suffice-projects-updated'));}}catch(error){toast(error.message);}});
- document.addEventListener('pointerdown',event=>{if(!menu.contains(event.target)&&!trigger.contains(event.target))close();});
+ document.addEventListener('pointerdown',event=>{if(!menu.contains(event.target)&&!trigger.contains(event.target))close();},true);
  window.addEventListener('resize',()=>close());
  void api.initialProject?.().then(project=>{if(project&&!threadViewState.id)apply(project);}).catch(()=>{});
  const initialRevision=selectionRevision,storedId=localStorage.getItem('suffice-project'),cached=projects.find(project=>project.id===storedId);if(cached&&preference('restore-project',true))apply(cached,true);
