@@ -10,4 +10,4 @@ Windows development launch additionally uses a sibling `Suffice.exe` with the sa
 
 macOS has dedicated assets: `suffice-logo-macos.svg`, `.png` and `.icns`. The tile occupies 824px of a 1024px canvas with 100px transparent margins, with rounder corners, a gently shaded white tile, a fine highlight, and a soft elevation shadow. The original mark is kept intact. This corrects the oversized Dock appearance of the edge-to-edge Windows artwork. The ICNS contains 16, 32, 64, 128, 256, 512 and 1024px representations.
 
-Regenerate with `node apps/desktop/electron/build-macos-icon.mjs` (requires Chrome; set `SUFFICE_ICON_BROWSER=msedge` for Edge). macOS packaging must set its icon to `apps/desktop/assets/suffice-logo-macos.icns`; the installer build configuration is maintained on the separate installer branch. No installer is rebuilt by regenerating these assets.
+Regenerate with `node apps/desktop/electron/build-macos-icon.mjs` (requires Chrome; set `SUFFICE_ICON_BROWSER=msedge` for Edge). macOS packaging in `scripts/desktop/package.mjs` uses `apps/desktop/assets/suffice-logo-macos.icns`. No installer is rebuilt by regenerating these assets.
