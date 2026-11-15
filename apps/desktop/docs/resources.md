@@ -6,9 +6,8 @@ Open Settings to manage MCPs, Skills, Extensions and Prompt templates. These use
 - **Skills:** discover local and packaged skills, import a folder, create or edit `SKILL.md`, and toggle whether the agent sees a skill. Pi can select skills automatically; `/skill:name` invokes one explicitly.
 - **Prompt templates:** add or edit Markdown prompts and invoke them with `/name`. Pi expands positional arguments such as `$1` and `$ARGUMENTS`.
 - **Extensions:** import a local extension or install a Pi package from npm, Git or a local directory. Installed packages can be updated or removed. Extensions execute code with the agent's access; inspecting this page does not import them or install missing packages.
-- **Session tools:** for a conversation whose agent has been initialized, reload resources, compact context, inspect usage, browse history and queue a follow-up while it is working. Follow-ups appear in the transcript when delivered.
 
-Changes apply to new sessions. Reload resources applies them to an idle existing agent. Read/edit-only harness sessions retain their tool allowlists and do not load external extensions or MCP servers.
+Read/edit-only harness sessions retain their tool allowlists and do not load external extensions or MCP servers.
 
 Project-local Pi resources require explicit trust before loading. The desktop asks before the first trusted load; the decision is kept in Pi's trust store. User/global resources remain separate from project overrides.
 

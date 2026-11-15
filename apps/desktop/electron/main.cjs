@@ -10,7 +10,7 @@ let background,terminals;
 let win,project=null,selectedProject=null,running=0;
 const attachmentGroups=new Map();
 let harness;
-function request(action,payload){return (['approval-answer','extension-answer','abort','agent-action','steer'].includes(action)&&background?.request?.(action,payload))||harness.request(action,payload);}
+function request(action,payload){return (['approval-answer','extension-answer','abort','steer'].includes(action)&&background?.request?.(action,payload))||harness.request(action,payload);}
 const primary=app.requestSingleInstanceLock();
 if(!primary)app.quit();
 else app.on('second-instance',()=>{
@@ -44,7 +44,6 @@ if(primary)app.whenReady().then(async()=>{
   app.on('will-quit',()=>resources.dispose());
   handle('resources',()=>resources.list());
   handle('resource-action',payload=>resources.action(payload));
-  handle('agent-action',payload=>request('agent-action',payload));
   handle('extension-answer',payload=>request('extension-answer',payload));
   handle('providers',()=>providerSettings.list());
   handle('refresh-models',()=>providerSettings.refresh({force:true}));

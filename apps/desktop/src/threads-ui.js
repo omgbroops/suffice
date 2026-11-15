@@ -185,7 +185,6 @@ export function connectThreads({api,prompt,send,toast}){
   // The status is the live insertion point, not a footer below queued messages.
   job.addSteering=text=>{const bubble=document.createElement('article');bubble.className='thread-message thread-user';bubble.textContent=text;node.insertBefore(bubble,statusLine);group=log=null;return bubble;};
   job.event=event=>{
-   if(event.event==='follow_up'){job.addSteering(event.text);current=null;streamed='';}
    if(event.event==='changes'){job.diff=event.diff;drawThreads();}
    if(event.event==='assistant_start'){reasoning='';if(streamed){current=null;streamed='';}status('Working');}
    if(event.event==='text'){streamed+=event.text;if(preference('stream-markdown',true))markdown(response(),streamed);else response().textContent=streamed;statusLine.hidden=true;}

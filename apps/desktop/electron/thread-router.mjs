@@ -36,7 +36,7 @@ export function createThreadRouter({send,createHost,createRuntime}) {
      const target=record??create();selected=target;target.busy=true;target.clientId=payload.clientId;target.startedAt=Date.now();target.provider=payload.provider;target.model=payload.model;target.failed=false;target.cwd=payload.cwd;target.title=payload.prompt.slice(0,90);if(payload.clientId)byThread.set(payload.clientId,target);
      try{await target.ready;const resumeId=payload.threadId||(!payload.clientId?viewedThread:null);if(!record&&resumeId){await target.request('thread',{id:resumeId});target.threadId=resumeId;byThread.set(resumeId,target);}result=await target.request('run',payload);}catch(error){target.failed=true;throw error;}finally{target.busy=false;}
     }else if(action==='usage'){result=record?await record.request('usage'):viewedThread?await catalog.request('usage'):null;}
-    else if(['abort','steer','approval-answer','agent-action','extension-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);}
+    else if(['abort','steer','approval-answer','extension-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);}
     else throw new Error('Unknown harness action');
    }
    send({id,ok:true,result});

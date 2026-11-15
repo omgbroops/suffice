@@ -17,7 +17,6 @@ const port=process.parentPort;
 const send=value=>port?port.postMessage(value):process.send?.(value);
 export function createHarnessHost({send,createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:result=>send({event:'models_changed',catalog:result})}),createSession=createSufficeSession,home=parseOptions([]).home,threadStore}) {
 let agent,runtime,workspace,changeTracker,busy=false,abortRequested=false;
-const queuedFollowUps=new Set();
 const extensionPrompts=new Map();let extensionSequence=0;
 const approvals=new Map();let approvalSequence=0,preferencesKey='';
 let resumePath=null,viewedUsage=null,viewRevision=0;
@@ -28,15 +27,6 @@ async function receive(message) {
   try {
     if(action==='shutdown'){abortRequested=true;for(const finish of extensionPrompts.values())finish(undefined);for(const answer of approvals.values())answer(false);approvals.clear();agent?.abort();await agent?.session.agent?.waitForIdle?.();await agent?.dispose();agent=null;send({id,ok:true});return;}
     if(action==='extension-answer'){extensionPrompts.get(payload.requestId)?.(payload.value);send({id,ok:true});return;}
-    if(action==='agent-action'){
-     if(!agent)throw new Error('Send a message in this thread before using session actions');
-     let result;
-     if(payload.action==='context')result={usage:sessionUsage(agent.session),messages:agent.session.messages};
-     else if(payload.action==='tree')result=agent.session.sessionManager.getTree();
-     else if(payload.action==='follow-up'){if(!busy)throw new Error('Use the composer to start a new turn; follow-ups can be queued while the agent is working');if(typeof payload.text!=='string'||!payload.text.trim()||payload.text.length>1000000)throw new Error('Enter a follow-up');queuedFollowUps.add(payload.text);await agent.session.followUp(payload.text);result={queued:true};}
-     else{if(busy)throw new Error('Wait for this agent to finish before changing its context');if(payload.action==='compact')result=await agent.session.compact(payload.text||undefined);else if(payload.action==='reload')result=await agent.session.reload();else if(payload.action==='branch'){if(typeof payload.targetId!=='string')throw new Error('Choose an entry');result=await agent.session.navigateTree(payload.targetId,{summarize:false});}else throw new Error('Unknown session action');}
-     send({id,ok:true,result:result??{done:true}});return;
-    }
     if(action==='steer'){if(!busy||!agent)throw new Error('This thread is not running');if(typeof payload.prompt!=='string'||!payload.prompt.trim()||payload.prompt.length>1000000)throw new Error('A valid steering message is required');await agent.session.steer(payload.prompt,payload.images);send({id,ok:true});return;}
     if(action==='approval-answer'){approvals.get(payload.requestId)?.(!!payload.allow);approvals.delete(payload.requestId);send({id,ok:true});return;}
     if(action==='abort'){abortRequested=true;for(const finish of extensionPrompts.values())finish(undefined);for(const resolve of approvals.values())resolve(false);approvals.clear();agent?.abort();send({id,ok:true});return;}
@@ -87,7 +77,6 @@ async function receive(message) {
       if(newlyCreated&&agent.session.setSessionName)agent.session.setSessionName(threadTitle(payload.prompt,options.desktopSettings.naming));
       if(abortRequested){await agent.dispose();agent=null;throw new Error('Cancelled');}
       agent.session.subscribe(event=>{
-        if(event.type==='message_start'&&event.message?.role==='user'){const text=typeof event.message.content==='string'?event.message.content:event.message.content.filter(p=>p.type==='text').map(p=>p.text).join('');if(queuedFollowUps.delete(text))send({event:'follow_up',text});}
         if(['message_end','tool_execution_end','agent_end'].includes(event.type))send({event:'usage',usage:sessionUsage(agent.session)});
         if(event.type==='message_update'&&event.assistantMessageEvent?.type==='text_delta')send({event:'text',text:event.assistantMessageEvent.delta});
         if(event.type==='message_start'&&event.message?.role==='assistant')send({event:'assistant_start'});
