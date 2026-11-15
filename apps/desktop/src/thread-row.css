@@ -38,9 +38,9 @@
 .desktop-app { --sidebar-width: 260px; }
 .desktop-app[data-theme='light'] .thread-monogram { color: var(--project-color-light); background: color-mix(in srgb,var(--project-color-light) 14%,transparent); }
 .desktop-app[data-theme='light'] .thread-state,.desktop-app[data-theme='light'] .thread-added,.desktop-app[data-theme='light'] .thread-pr[data-state='OPEN'] { color: #059669; }
-.desktop-app[data-theme='light'] .thread-card[data-status='working'] :is(.thread-state,.thread-age) { color: #2563eb; }
-.desktop-app[data-theme='light'] .thread-card[data-status='failed'] .thread-state,.desktop-app[data-theme='light'] .thread-removed { color: #dc2626; }
-.desktop-app[data-theme='light'] .thread-card:is([data-status='approval'],[data-status='input']) .thread-state { color: #d97706; }
+.desktop-app[data-theme='light'] :is(.thread-card,.thread-hover-card)[data-status='working'] :is(.thread-state,.thread-age) { color: #2563eb; }
+.desktop-app[data-theme='light'] :is(.thread-card,.thread-hover-card)[data-status='failed'] .thread-state,.desktop-app[data-theme='light'] .thread-removed { color: #dc2626; }
+.desktop-app[data-theme='light'] :is(.thread-card,.thread-hover-card):is([data-status='approval'],[data-status='input']) .thread-state { color: #d97706; }
 
 .desktop-app:not([data-theme='light']) .thread-provider img { filter: invert(1); }
 .thread-provider-history { display: inline-flex; align-items: center; gap: 3px; margin-left: auto; }
