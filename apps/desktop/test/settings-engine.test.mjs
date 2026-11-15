@@ -10,7 +10,7 @@ import {requiresDesktopApproval} from '../../../packages/cli/src/desktop-policy.
 
 test('every editable setting persists through the validated desktop store',async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-settings-store-')),store=createSettingsStore(home);
- for(const row of settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','palette'].includes(row.type))){const value=settingsDefaults[row.id];await store.set(row.id,value);}
+ for(const row of settingsSections.flatMap(section=>section.groups.flatMap(group=>group.rows)).filter(row=>row.id&&['toggle','select','segment','palette','range'].includes(row.type))){const value=settingsDefaults[row.id];await store.set(row.id,value);}
  await Promise.all([store.set('send','Ctrl + Enter'),store.set('tray',true),store.set('auto-compact',true)]);
  await Promise.all([store.set('tab-size','4 spaces'),createSettingsStore(home).set('diff-layout','Split')]);
  await store.set('disabled-models',['openai|fixture-model']);await assert.rejects(store.set('disabled-models',[42]),/Invalid/);
@@ -29,4 +29,12 @@ test('approval policy gates actions and detected pushes while preserving read-on
  assert.equal(requiresDesktopApproval({'approval-mode':'Ask before every action'},'read',{}),true);
  assert.equal(requiresDesktopApproval({'approval-mode':'Never ask','confirm-push':true},'codemode',{code:'await tools.bash({command:"git push origin main"})'}),true);
  assert.equal(requiresDesktopApproval({'approval-mode':'Never ask','confirm-push':false},'bash',{command:'git push'}),false);
+});
+
+test('surface opacity accepts its full percentage range and persists',async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-opacity-')),store=createSettingsStore(home);
+ await store.set('surface-opacity',0);assert.equal((await store.get())['surface-opacity'],0);
+ await store.set('surface-opacity',100);assert.equal((await createSettingsStore(home).get())['surface-opacity'],100);
+ await assert.rejects(store.set('surface-opacity',101),/Invalid preference/);
+ await assert.rejects(store.set('background-dimming',81),/Invalid preference/);
 });

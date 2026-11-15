@@ -6,12 +6,12 @@ const group=(title,rows)=>({title,rows});
 export const settingsSections=[
  {id:'general',title:'General',icon:'settings',category:'Personal',groups:[
   group('Application',[select('language','Language','System',['System','English']),select('send','Send messages with','Enter',['Enter','Ctrl + Enter'],'Shift + Enter always starts a new line.'),toggle('startup','Launch at startup'),toggle('tray','Keep running in the background',false,'Closing the window keeps active agents running.')]),
-  group('Conversations',[toggle('escape','Stop agent with Escape',false,'When no menu or dialog is open.'),toggle('close-panel','Close right panel with its last tab'),select('naming','Thread naming','Automatic',['Automatic','First message','Untitled']),select('new-project','New threads use','Last used project',['Last used project','Ask each time'])]),
+  group('Conversations',[select('working-send','While agent is working','Steer',['Queue','Steer'],'Ctrl + Enter uses the other mode.'),toggle('escape','Stop agent with Escape',false,'When no menu or dialog is open.'),toggle('close-panel','Close right panel with its last tab'),select('naming','Thread naming','Automatic',['Automatic','First message','Untitled']),select('new-project','New threads use','Last used project',['Last used project','Ask each time'])]),
   group('Privacy',[toggle('private-labels','Hide sensitive details',false,'Conceal paths and account details while sharing your screen.')]),
  ]},
  {id:'appearance',title:'Appearance',icon:'agent',category:'Personal',groups:[
-  group('Theme',[{id:'mode',label:'Mode',value:'Dark',options:['System','Light','Dark'],type:'segment'},select('background','Background','Pixel horizon',['Moonlit lake','ASCII gradient','Pixel horizon','Orbital','Oceanic Shimmer','None']),{id:'accent',label:'Accent color',value:'#7b9ed5',type:'palette'},toggle('glass','Translucent surfaces',true)]),
-  group('Background visibility',[toggle('chat-background','Show background in chat',true),toggle('settings-background','Show background in settings',true)]),
+  group('Theme',[{id:'mode',label:'Mode',value:'Dark',options:['System','Light','Dark'],type:'segment'},select('background','Background','Pixel horizon',['Moonlit lake','ASCII gradient','Pixel horizon','Orbital','Oceanic Shimmer','None']),{id:'accent',label:'Accent color',value:'#7b9ed5',type:'palette'},toggle('glass','Translucent surfaces',true),{id:'surface-opacity',label:'Surface opacity',detail:'Opacity of translucent surfaces.',type:'range',value:72,min:0,max:100,whenGlass:true}]),
+  group('Background visibility',[toggle('chat-background','Show background in chat',true),toggle('settings-background','Show background in settings',true),{id:'background-dimming',label:'Background dimming',detail:'Dim the wallpaper in chats and settings.',type:'range',value:35}]),
   group('Motion',[toggle('background-motion','Animate background',true),toggle('reduced-motion','Reduce motion')]),
   group('Typography',[select('interface-font','Interface font','Inter',['Inter','Geist','Geist Mono','System']),select('code-font','Code font','JetBrains Mono',['JetBrains Mono','Geist Mono','System mono']),select('text-size','Text size','13 px',['12 px','13 px','14 px','15 px']),select('density','Density','Comfortable',['Comfortable','Compact'])]),
  ]},
@@ -30,7 +30,7 @@ export const settingsSections=[
  {id:'providers',title:'Providers',icon:'agent',category:'Agent',groups:[group('Connected',[]),group('Available',[])]},
  ...[['mcps','MCPs','plug'],['skills','Skills','deep'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files']].map(([id,title,icon])=>({id,title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',title:'Agent behavior',icon:'bolt',category:'Agent',groups:[
-  group('Execution',[select('approval-mode','Approvals','Never ask',['Ask when needed','Ask before every action','Never ask'],'Applies to new turns.'),select('execution-shell','Command shell','Native Bash',['Native Bash','PowerShell','System default']),toggle('allow-network','Browser & desktop tools',true,'Shell commands retain native OS network access.'),toggle('background-agents','Allow background agents',true)]),
+  group('Execution',[select('execution-shell','Command shell','Native Bash',['Native Bash','PowerShell','System default']),toggle('allow-network','Browser & desktop tools',true,'Shell commands retain native OS network access.'),toggle('background-agents','Allow background agents',true)]),
   group('Transcript',[toggle('collapse-work','Collapse completed actions',true),toggle('show-reasoning','Show reasoning status',true),toggle('stream-markdown','Render Markdown while streaming',true)]),
  ]},
  {id:'context',title:'Context & memory',icon:'context',category:'Agent',groups:[
@@ -56,6 +56,6 @@ export const settingsSections=[
   group('Data',[{id:'export',label:'Export conversations',value:'Export',type:'action'},{id:'clear-cache',label:'Clear cached previews',value:'Clear cache',type:'action'}]),
  ]},
  {id:'about',title:'About',icon:'info',category:'Application',groups:[
-  group('Suffice',[{label:'Desktop app',value:'Development',type:'text'},{label:'Harness',value:'Suffice · Pi',type:'text'},{label:'Preferences',value:'Saved on this device',type:'text'}]),
+  group('Suffice',[{label:'Desktop app',value:'Development',type:'text'},{label:'Harness',value:'Suffice',type:'text'},{label:'Preferences',value:'Saved on this device',type:'text'}]),
  ]},
 ];
