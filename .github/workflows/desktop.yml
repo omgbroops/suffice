@@ -122,6 +122,16 @@ jobs:
         run: bun run desktop:installer
       - name: Test the packaged application
         run: bun run desktop:smoke
+      - name: Verify macOS disk image and app signature
+        if: runner.os == 'macOS'
+        run: |
+          hdiutil verify release/*.dmg
+          mkdir -p "$RUNNER_TEMP/suffice-mount" "$RUNNER_TEMP/suffice-installed"
+          hdiutil attach -readonly -nobrowse -mountpoint "$RUNNER_TEMP/suffice-mount" release/*.dmg
+          cp -R "$RUNNER_TEMP/suffice-mount/Suffice.app" "$RUNNER_TEMP/suffice-installed/"
+          hdiutil detach "$RUNNER_TEMP/suffice-mount"
+          codesign --verify --deep --strict "$RUNNER_TEMP/suffice-installed/Suffice.app"
+          node scripts/desktop/smoke.mjs "$RUNNER_TEMP/suffice-installed/Suffice.app/Contents/MacOS/Suffice"
       - name: Record installer checksums
         run: node -e "const fs=require('fs'),p=require('path'),crypto=require('crypto');const names=fs.readdirSync('release').filter(n=>/\.(exe|dmg)$/.test(n));fs.writeFileSync('release/SHA256SUMS.txt',names.map(n=>crypto.createHash('sha256').update(fs.readFileSync(p.join('release',n))).digest('hex')+'  '+n).join('\n')+'\n');"
       - name: Retain installer and validation evidence
