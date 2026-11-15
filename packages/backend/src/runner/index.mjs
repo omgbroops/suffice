@@ -72,25 +72,30 @@ export function createFakeRunner(script) {
   };
 }
 
-// Last parseable top-level JSON object, one linear pass. Only '{' followed by '"' or '}' can start one.
-// shortcut: an object nested inside a malformed outer one is lost; upgrade if models emit that.
+// Last parseable top-level JSON object. Candidate starts ('{' then '"' or '}') are tried from the end backwards;
+// an earlier start replaces the best only if it parses and extends past it (so nested objects lose to their parent).
+// shortcut: total scan work is capped at ~32x the input; past the cap the best found so far wins. Raise if models need more.
 function lastJsonObject(s) {
-  const start = /\{\s*["}]/y;
-  const stack = [];
-  let best, inStr = false, esc = false;
-  for (let i = 0; i < s.length; i++) {
-    const c = s[i];
-    if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') inStr = false; }
-    else if (c === '"' && stack.length) inStr = true;
-    else if (c === '{') { start.lastIndex = i; if (stack.length || start.test(s)) stack.push(i); }
-    else if (c === '}' && stack.length) {
-      const from = stack.pop();
-      if (stack.length) continue;
-      try {
-        const v = JSON.parse(s.slice(from, i + 1));
-        if (v && typeof v === 'object' && !Array.isArray(v)) best = v;
-      } catch { /* not JSON, keep scanning */ }
+  const starts = [], re = /\{\s*["}]/g;
+  for (let m; (m = re.exec(s)); re.lastIndex = m.index + 1) starts.push(m.index);
+  let budget = 32 * s.length + 100000, best, bestEnd = -1;
+  for (let k = starts.length - 1; k >= 0 && budget > 0; k--) {
+    const from = starts[k];
+    let depth = 0, inStr = false, esc = false, end = -1, i = from;
+    for (; i < s.length; i++) {
+      const c = s[i];
+      if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') inStr = false; }
+      else if (c === '"') inStr = true;
+      else if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) { end = i; break; }
     }
+    budget -= i - from + 1;
+    if (end < 0 || (best && end <= bestEnd)) continue;
+    try {
+      const v = JSON.parse(s.slice(from, end + 1));
+      budget -= end - from;
+      if (v && typeof v === 'object' && !Array.isArray(v)) { best = v; bestEnd = end }
+    } catch { /* not JSON, keep scanning */ }
   }
   return best;
 }

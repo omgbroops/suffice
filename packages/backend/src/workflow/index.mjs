@@ -61,7 +61,8 @@ export function createEngine({ journalFor, runners, budget, bus, clock, approve,
           key = `${s.path}#${idx}:${h}`;
         }
         const hit = await journal.lookup(key);
-        if (hit.hit) return hit.value.value;
+        // journals older than the {value, usage} shape hold the bare value
+        if (hit.hit) return hit.value && typeof hit.value === 'object' && 'value' in hit.value ? hit.value.value : hit.value;
         const name = opts.runner || 'default';
         let runner;
         try { runner = runners.get(name); } catch (e) { throw new ConfigError(`agent: runner "${name}" unavailable: ${e.message}`); }

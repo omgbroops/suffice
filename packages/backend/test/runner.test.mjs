@@ -224,6 +224,20 @@ test('lastJsonObject: 1 MiB inputs finish fast', { timeout: 5000 }, async () => 
   assert.ok(Date.now() - t0 < 2000);
 });
 
+test('lastJsonObject: unterminated brace before the final object does not hide it', { timeout: 5000 }, async () => {
+  const v = async (s) => (await stubRunner(s).run({ prompt: 'p', schema: sch }));
+  assert.deepEqual((await v('note {"unfinished ... {"ok":true}')).value, { ok: true });
+  assert.deepEqual((await v('note {"a": {"b": ... {"ok":true}')).value, { ok: true });
+  assert.deepEqual((await v('{"a":{"b":1}} tail')).value, { a: { b: 1 } });
+});
+
+test('lastJsonObject: many unmatched braces stay fast and keep the final object', { timeout: 5000 }, async () => {
+  const t0 = Date.now();
+  const r = await stubRunner('{"'.repeat(1 << 19) + '{"ok":true}').run({ prompt: 'p', schema: sch });
+  assert.deepEqual(r.value, { ok: true });
+  assert.ok(Date.now() - t0 < 1000);
+});
+
 const gone = async (pid) => {
   for (let i = 0; i < 25; i++) {
     try { process.kill(pid, 0); } catch { return true; }

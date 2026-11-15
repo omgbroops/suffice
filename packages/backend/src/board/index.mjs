@@ -64,22 +64,32 @@ export function createBoard({ dir, clock, ttlMs = 600000 } = {}) {
     for (const d of t.deps) if ((await readJson(tfile(d)))?.state !== 'done') return { ok: false, reason: `deps not done: ${d}` };
     const lock = JSON.stringify({ agentId, ts: clock.now() });
     let from;
+    // write the whole lock to a temp file, then link it into place: the lock never exists half-written
+    const tmp = `${lfile(tid)}.${randomUUID()}.tmp`;
+    await fs.writeFile(tmp, lock);
     try {
-      await (await fs.open(lfile(tid), 'wx')).writeFile(lock).then(() => 0);
+      await fs.link(tmp, lfile(tid));
     } catch (e) {
       if (e.code !== 'EEXIST') throw e;
-      const held = await readJson(lfile(tid));
-      if (!held || clock.now() - held.ts <= ttlMs) return { ok: false, reason: `held by ${held?.agentId ?? 'another agent'}` };
+      const raw = await fs.readFile(lfile(tid), 'utf8').catch((x) => { if (x.code === 'ENOENT') return ''; throw x; });
+      let held; try { held = JSON.parse(raw); } catch { /* empty or torn lock */ }
+      if (held && typeof held.ts === 'number') {
+        if (clock.now() - held.ts <= ttlMs) return { ok: false, reason: `held by ${held.agentId ?? 'another agent'}` };
+      } else {
+        // no readable ts: age by file mtime (real time, the injected clock may be fake)
+        const st = await fs.stat(lfile(tid)).catch(() => undefined);
+        if (!st || Date.now() - st.mtimeMs <= ttlMs) return { ok: false, reason: 'held by another agent' };
+      }
       // one taker at a time; shortcut: a guard left by a crashed taker blocks takeover, delete it by hand
       const guard = `${lfile(tid)}.takeover`;
       try { await (await fs.open(guard, 'wx')).close(); } catch (g) { if (g.code === 'EEXIST') return { ok: false, reason: 'takeover in progress' }; throw g; }
       try {
-        const again = await readJson(lfile(tid));
-        if (!again || again.ts !== held.ts) return { ok: false, reason: 'lost takeover race' };
+        const again = await fs.readFile(lfile(tid), 'utf8').catch(() => undefined);
+        if (again !== raw) return { ok: false, reason: 'lost takeover race' };
         await writeAtomic(lfile(tid), lock);
-        from = held.agentId;
+        from = held?.agentId ?? 'unknown (stale empty lock)';
       } finally { await fs.rm(guard, { force: true }); }
-    }
+    } finally { await fs.rm(tmp, { force: true }); }
     t.state = 'claimed';
     t.owner = agentId;
     if (from) {

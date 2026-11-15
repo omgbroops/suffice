@@ -331,3 +331,15 @@ test('budget.reserve runs before the agent and settle after; failures release', 
   await engine.run('rid2', (api) => api.agent('boom'), null, {});
   assert.deepEqual(order, ['reserve 20000', 'run', 'release']);
 });
+
+test('replay reads a journal written before the {value, usage} shape', async (t) => {
+  const { engine, journals, calls } = await setup(t);
+  const wf = (api) => api.agent('p');
+  await engine.run('r', wf, null, {});
+  const ev = journals.get('r').events.find((e) => e.type === 'step.result');
+  ev.data = 'out:p'; // legacy: the bare value
+  assert.deepEqual(await engine.run('r', wf, null, {}), { ok: true, value: 'out:p' });
+  ev.data = { k: 1 }; // legacy bare object without a `value` key
+  assert.deepEqual((await engine.run('r', wf, null, {})).value, { k: 1 });
+  assert.equal(calls.length, 1);
+});

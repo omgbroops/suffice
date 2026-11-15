@@ -121,3 +121,28 @@ test('plan dedupes and drops base; bad input throws TypeError', () => {
   assert.throws(() => tr.plan(['--force'], { base: 'main' }), TypeError);
   assert.throws(() => createTrain({}), TypeError);
 });
+
+test('crash right after the target branch is created: rerun resumes', async (t) => {
+  const { dir } = await repo(t, ['a', 'b']);
+  const journal = memJournal();
+  const crashing = async (cmd, args, o) => {
+    const r = await realExec(cmd, args, o);
+    if (args[0] === 'checkout' && args.includes('-b')) throw new Error('injected crash');
+    return r;
+  };
+  const req = { repoDir: dir, base: 'main', target: 'train', branches: ['a', 'b'], gates, batch: 2 };
+  await assert.rejects(mk(journal, crashing).run(req), /injected crash/);
+  assert.equal((await journal.read()).filter((e) => e.type === 'train.start').length, 1);
+  const r = await mk(journal).run(req);
+  assert.deepEqual(r.merged, ['a', 'b']);
+});
+
+test('existing target is refused without a journal entry, or when its history misses the base', async (t) => {
+  const { dir, git } = await repo(t, ['a']);
+  await git('branch', 'train', 'a');
+  const req = { repoDir: dir, base: 'main', target: 'train', branches: ['a'], gates, batch: 1 };
+  await assert.rejects(mk().run(req), /already exists/);
+  const journal = memJournal();
+  await journal.append({ type: 'train.start', data: { base: 'main', target: 'train', green: 'f'.repeat(40), ts: 1 } });
+  await assert.rejects(mk(journal).run(req), /does not start at the journaled base/);
+});

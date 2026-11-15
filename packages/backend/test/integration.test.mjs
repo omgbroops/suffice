@@ -81,3 +81,10 @@ test('budget reservation holds under parallel: one of five 20000-token agents fi
   assert.equal(budget.check(20000, { runId: 'b1' }).remaining, 24850);
   assert.equal(budget.check(20000, { runId: 'other' }).remaining, 25000);
 });
+
+test('a failing gate inside parallel ends the run (GateError is fatal, not a null slot)', async (t) => {
+  const { boot } = await rig(t, { code: 1 });
+  const r = await boot().engine.run('pg', (api) => api.parallel([async () => 1, async () => api.gate('tests', await api.exec('npm', ['test']))]), null, {});
+  assert.equal(r.ok, false);
+  assert.match(r.error, /gate/);
+});

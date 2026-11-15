@@ -27,19 +27,24 @@ export function createTrain({ exec, journal, clock } = {}) {
     if ((await must('status', '--porcelain')) !== '') throw new Error('work tree is dirty; refusing to run');
 
     const events = await journal.read();
-    const started = events.some((e) => e.type === 'train.start');
+    const start = events.find((e) => e.type === 'train.start' && e.data.target === target);
     const targetExists = (await git('rev-parse', '--verify', '--quiet', `refs/heads/${target}`)).code === 0;
     let green;
-    if (!started) {
+    if (!start) {
       if (targetExists) throw new Error(`target branch "${target}" already exists`);
-      await must('checkout', '-q', '-b', target, base);
-      green = await must('rev-parse', 'HEAD');
+      // journal first: a crash after the branch exists must leave a record that explains it
+      green = await must('rev-parse', '--verify', `${base}^{commit}`);
       await log('train.start', { base, target, green });
+      await must('checkout', '-q', '-b', target, green);
     } else {
       // resume: the last journaled green commit is the truth; anything after it is unverified
       const last = events.filter((e) => e.type === 'train.merge' || e.type === 'train.start').at(-1).data;
       green = last.sha ?? last.green;
-      await must('checkout', '-q', target);
+      if (targetExists) {
+        const chain = (await must('rev-list', '--first-parent', `refs/heads/${target}`)).split('\n');
+        if (!chain.includes(start.data.green)) throw new Error(`target branch "${target}" does not start at the journaled base`);
+        await must('checkout', '-q', target);
+      } else await must('checkout', '-q', '-b', target, green);
       await must('reset', '--hard', '-q', green);
     }
     const decided = new Set(events.filter((e) => e.type === 'train.merge' || e.type === 'train.drop').map((e) => e.data.branch));

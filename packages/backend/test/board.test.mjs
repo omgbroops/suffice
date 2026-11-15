@@ -198,3 +198,29 @@ test('compact fits maxChars by dropping oldest unpinned tail; never splits', () 
   assert.ok(tiny.includes(m[0]) && tiny.includes(m[9]));
   assert.throws(() => compact('no', { maxChars: 1, keep: 1 }), TypeError);
 });
+
+test('empty lock older than ttl is taken over and recorded; fresh empty lock is not', async (t) => {
+  const dir = await tmp(t);
+  const b = createBoard({ dir, clock: mk(), ttlMs: 1000 });
+  await b.addTask({ id: 't1', title: 'x' });
+  await b.addTask({ id: 't2', title: 'y' });
+  await fs.writeFile(path.join(dir, 'locks', 't1.lock'), '');
+  await fs.writeFile(path.join(dir, 'locks', 't2.lock'), '');
+  assert.equal((await b.claim('t1', 'a')).ok, false);
+  const old = new Date(Date.now() - 60000);
+  await fs.utimes(path.join(dir, 'locks', 't2.lock'), old, old);
+  const r = await b.claim('t2', 'a');
+  assert.equal(r.ok, true);
+  assert.equal(r.takeover, true);
+  assert.match((await b.get('t2')).notes[0], /takeover: a took over/);
+});
+
+test('claim leaks no descriptors or temp files over 2000 tasks', async (t) => {
+  const dir = await tmp(t);
+  const b = createBoard({ dir, clock: mk() });
+  for (let i = 0; i < 2000; i++) {
+    await b.addTask({ id: `k${i}`, title: 'x' });
+    assert.equal((await b.claim(`k${i}`, 'a')).ok, true);
+  }
+  assert.deepEqual((await fs.readdir(path.join(dir, 'locks'))).filter((n) => !n.endsWith('.lock')), []);
+});

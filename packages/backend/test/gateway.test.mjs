@@ -241,7 +241,7 @@ test('token and admin comparison go through crypto.timingSafeEqual', async (t) =
 });
 
 test('client and runner adapter go through the gateway', async (t) => {
-  const g = await boot(t);
+  const g = await boot(t, { gw: { defaultMaxTokens: 1024 } });
   const a = await g.signup();
   await g.grant(a.accountId, 10000, 'g');
   const client = createGatewayClient({ baseUrl: g.base, token: a.token, fetch });
@@ -255,4 +255,116 @@ test('client and runner adapter go through the gateway', async (t) => {
   const f = await bad.run({ prompt: 'x' });
   assert.equal(f.ok, false);
   assert.deepEqual(f.usage, { inputTokens: 0, outputTokens: 0 });
+});
+
+test('reserve covers the whole body: output-limit aliases, system and tools; missing limit is 400 or defaulted', async (t) => {
+  const g = await boot(t);
+  const a = await g.signup();
+  await g.grant(a.accountId, 500, 'g');
+  assert.equal((await g.chat(a.token, { max_tokens: undefined, max_output_tokens: 100000 })).status, 402);
+  assert.equal((await g.chat(a.token, { max_tokens: 10, max_completion_tokens: 100000 })).status, 402);
+  assert.equal((await g.chat(a.token, { system: 'x'.repeat(4000) })).status, 402);
+  assert.equal((await g.chat(a.token, { tools: [{ name: 't', description: 'y'.repeat(4000) }] })).status, 402);
+  assert.equal(g.calls.length, 0);
+  const none = await g.chat(a.token, { max_tokens: undefined });
+  assert.equal(none.status, 400);
+  const d = await boot(t, { gw: { defaultMaxTokens: 50 } });
+  const b = await d.signup();
+  await d.grant(b.accountId, 1000, 'g');
+  assert.equal((await d.chat(b.token, { max_tokens: undefined })).status, 200);
+  assert.equal(d.calls[0].body.max_tokens, 50);
+});
+
+test('usage above the reserve is charged in full down to zero, shortfall recorded, calls blocked until credit', async (t) => {
+  const g = await boot(t, { reply: { output: { text: 'x' }, usage: { inputTokens: 1e6, outputTokens: 1e6 } } });
+  const a = await g.signup();
+  await g.grant(a.accountId, 100, 'g');
+  const r = await g.chat(a.token, { max_tokens: 10 });
+  assert.equal(r.status, 200);
+  assert.equal(r.json.balance, 0);
+  assert.equal(r.json.cost, 100);
+  const { ledger } = JSON.parse(await fs.readFile(g.file, 'utf8'));
+  const sf = ledger.find((e) => e.type === 'shortfall');
+  assert.equal(sf.shortfall, 3_000_000 - 100);
+  assert.ok(ledger.every((e) => e.balance >= 0));
+  assert.equal((await g.chat(a.token, { max_tokens: 10 })).status, 402);
+  await g.grant(a.accountId, 1000, 'g2');
+  assert.equal((await g.chat(a.token, { max_tokens: 10 })).status, 200);
+});
+
+test('moderation covers system, instructions and tool descriptions', async (t) => {
+  const g = await boot(t, { gw: { flagPolicy: { max: 99 } } });
+  const a = await g.signup();
+  await g.grant(a.accountId, 10000, 'g');
+  for (const extra of [{ system: 'BADWORD' }, { instructions: 'BADWORD' }, { tools: [{ name: 't', description: 'BADWORD' }] }, { tools: [{ type: 'function', function: { name: 't', description: 'BADWORD' } }] }]) {
+    const r = await g.chat(a.token, extra);
+    assert.equal(r.json.error, 'content_policy');
+  }
+  assert.equal(g.calls.length, 0);
+});
+
+test('admin credit key is scoped per account; same key with another amount is 409', async (t) => {
+  const g = await boot(t);
+  const a = await g.signup('a@example.com');
+  const b = await g.signup('b@example.com');
+  assert.equal((await g.grant(a.accountId, 100, 'k')).status, 200);
+  const rb = await g.grant(b.accountId, 100, 'k');
+  assert.equal(rb.status, 200);
+  assert.equal(rb.json.balance, 100);
+  assert.equal((await g.grant(a.accountId, 100, 'k')).json.balance, 100);
+  assert.equal((await g.grant(a.accountId, 200, 'k')).status, 409);
+  assert.equal((await g.call('/v1/balance', { method: 'GET', token: a.token })).json.balance, 100);
+});
+
+test('prune keeps idempotency records: late retries neither charge nor credit twice', async (t) => {
+  const g = await boot(t);
+  const a = await g.signup();
+  await g.grant(a.accountId, 1000, 'g1');
+  const h = { 'idempotency-key': 'req-old' };
+  await g.chat(a.token, {}, h);
+  g.time.t += 100_000;
+  await g.gw.prune(1000);
+  assert.equal((await g.chat(a.token, {}, h)).status, 200);
+  assert.equal((await g.grant(a.accountId, 1000, 'g1')).status, 200);
+  assert.equal(g.calls.length, 1);
+  assert.equal((await g.call('/v1/balance', { method: 'GET', token: a.token })).json.balance, 800);
+});
+
+test('provider timeout: abort signal, 504, reserve released, audit row, no charge', async (t) => {
+  let fire; let registered; const reg = new Promise((r) => { registered = r; });
+  const timers = { setTimeout: (fn, ms) => { fire = fn; registered(ms); return 1; }, clearTimeout() {} };
+  const g = await boot(t, { gw: { timers } });
+  const a = await g.signup();
+  await g.grant(a.accountId, 250, 'g'); // covers one reserve only
+  const normal = g.providers.fake.call;
+  g.providers.fake.call = (body, ctx) => new Promise((_, rej) => ctx.signal.addEventListener('abort', () => rej(new Error('aborted'))));
+  const p = g.chat(a.token);
+  assert.equal(await reg, 120000);
+  fire();
+  const r = await p;
+  assert.equal(r.status, 504);
+  g.providers.fake.call = normal;
+  assert.equal((await g.call('/v1/balance', { method: 'GET', token: a.token })).json.balance, 250);
+  const disk = JSON.parse(await fs.readFile(g.file, 'utf8'));
+  assert.equal(disk.audit.length, 1);
+  assert.equal(disk.audit[0].cost, 0);
+  assert.equal((await g.chat(a.token)).status, 200); // reserve was released
+});
+
+test('signup limit per socket address: 429 with Retry-After; forwarded header ignored unless trustProxy', async (t) => {
+  const g = await boot(t, { gw: { signupLimit: { max: 2, windowMs: 60_000 } } });
+  const su = (email, xff) => g.call('/v1/accounts', { body: { email, age18: true, terms: TERMS }, headers: xff ? { 'x-forwarded-for': xff } : {} });
+  assert.equal((await su('a@example.com', '1.1.1.1')).status, 201);
+  assert.equal((await su('b@example.com', '2.2.2.2')).status, 201);
+  const r = await su('c@example.com', '3.3.3.3');
+  assert.equal(r.status, 429);
+  assert.ok(Number(r.headers.get('retry-after')) >= 1);
+  g.time.t += 61_000;
+  assert.equal((await su('c@example.com')).status, 201);
+
+  const p = await boot(t, { gw: { trustProxy: true, signupLimit: { max: 1, windowMs: 60_000 } } });
+  const sp = (email, xff) => p.call('/v1/accounts', { body: { email, age18: true, terms: TERMS }, headers: { 'x-forwarded-for': xff } });
+  assert.equal((await sp('a@example.com', '1.1.1.1')).status, 201);
+  assert.equal((await sp('b@example.com', '2.2.2.2')).status, 201);
+  assert.equal((await sp('c@example.com', '1.1.1.1')).status, 429);
 });
