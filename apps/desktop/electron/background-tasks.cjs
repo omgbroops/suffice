@@ -1,6 +1,7 @@
 // Each background session owns a host, so it cannot replace the viewed session.
 function createBackgroundTasks({fork,entry,emit}){
  const workers=new Set(),sessions=new Map();
+ const shutdown=async promise=>{let timer;try{await Promise.race([promise.catch(()=>{}),new Promise(resolve=>{timer=setTimeout(resolve,1500);timer.unref?.();})]);}finally{clearTimeout(timer);}};
  async function run(payload){
   const worker=fork(entry,[],{serviceName:'Suffice background session',stdio:'pipe'});workers.add(worker);
   let sequence=0;const pending=new Map();
@@ -10,9 +11,9 @@ function createBackgroundTasks({fork,entry,emit}){
   worker.on('exit',()=>{workers.delete(worker);for(const response of pending.values())response.reject(new Error('Background session exited'));pending.clear();});
   worker.stderr?.on('data',data=>process.stderr.write(data));
   try{await request('status');const result=await request('run',payload);emit({event:'background_completed',threadId:result.threadId});return result;}
-  finally{await Promise.race([request('shutdown').catch(()=>{}),new Promise(resolve=>setTimeout(resolve,1500))]);for(const [key,value] of sessions)if(value===route)sessions.delete(key);worker.kill();workers.delete(worker);}
+  finally{await shutdown(request('shutdown'));for(const [key,value] of sessions)if(value===route)sessions.delete(key);worker.kill();workers.delete(worker);}
  }
- async function stop(){await Promise.all([...new Set(sessions.values())].map(session=>Promise.race([session.request('shutdown').catch(()=>{}),new Promise(resolve=>setTimeout(resolve,1500))])));for(const worker of workers)worker.kill();workers.clear();sessions.clear();}
+ async function stop(){await Promise.all([...new Set(sessions.values())].map(session=>shutdown(session.request('shutdown'))));for(const worker of workers)worker.kill();workers.clear();sessions.clear();}
  return {run,stop,request:(action,payload)=>sessions.get(payload?.threadId||payload?.clientId)?.request(action,payload)};
 }
 module.exports={createBackgroundTasks};
