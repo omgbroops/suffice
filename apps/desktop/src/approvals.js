@@ -19,16 +19,16 @@ export function connectApprovals(api,toast){
   const deny=document.createElement('button'),allow=document.createElement('button');for(const button of [deny,allow]){button.type='button';button.className='provider-dialog-button';}deny.textContent='Deny';allow.textContent='Allow';allow.classList.add('provider-dialog-primary');
   let answering=false;const answer=async value=>{if(answering)return;answering=true;deny.disabled=allow.disabled=true;try{await api.approvalAnswer({threadId:event.threadId||event.clientId,requestId:event.requestId,allow:value});requests.delete(key(event));shown=null;draw();}catch(error){toast(error.message);answering=false;deny.disabled=allow.disabled=false;}};
   deny.onclick=()=>void answer(false);allow.onclick=()=>void answer(true);panel.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();void answer(false);}};
-  footer.append(deny,allow);panel.append(title,heading,previewHost,footer);disconnectPreview=connectOverlayScrollbar(preview);
+  footer.append(deny,allow);panel.append(title,heading,previewHost,footer);disconnectPreview=connectOverlayScrollbar(preview,{inset:6});
   void import('./code-highlight.js').then(({colorCode})=>colorCode(code,event.name==='codemode'?'input.js':event.name==='bash'?'input.sh':'input.json')).catch(()=>{});
   if(form.contains(document.activeElement))deny.focus({preventScroll:true});
  }
  threadViewState.subscribe(event=>{if(['select','adopt','remove'].includes(event.type))draw();});
  form.addEventListener('submit',event=>{if(form.dataset.approval==='true'){event.preventDefault();event.stopImmediatePropagation();}},true);
- api.onEvent(event=>{
+ const receive=event=>{
   if(event.event==='approval'){requests.set(key(event),event);draw();}
   if(event.event==='approval_resolved'){requests.delete(key(event));shown=null;draw();}
   if(event.event==='background_completed'){for(const [id,pending] of requests)if([pending.threadId,pending.clientId].includes(event.threadId))requests.delete(id);shown=null;draw();}
- });
- return {clear:threadId=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);shown=null;draw();}};
+ };api.onEvent(receive);
+ return {receive,restore:(threadId,pending)=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);for(const event of pending)requests.set(key(event),event);shown=null;draw();},clear:threadId=>{for(const [id,event] of requests)if([event.threadId,event.clientId].includes(threadId))requests.delete(id);shown=null;draw();}};
 }

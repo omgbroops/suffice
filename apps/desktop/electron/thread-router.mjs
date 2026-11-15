@@ -4,11 +4,20 @@ export function createThreadRouter({send,createHost,createRuntime}) {
  const runtime=options=>runtimePromise??=createRuntime(options);
  function create(){
   const pending=new Map();let sequence=0;
-  const record={busy:false,threadId:null,clientId:null};records.add(record);
+  const record={busy:false,threadId:null,clientId:null,events:[],approvals:new Map(),eventSequence:0,baseMessages:[]};records.add(record);
+  record.emit=message=>{
+   const event={...message,sequence:++record.eventSequence,threadId:record.threadId,clientId:record.clientId};
+   if(message.event==='approval')record.approvals.set(message.requestId,event);
+   if(message.event==='approval_resolved')record.approvals.delete(message.requestId);
+   if(record.busy&&['assistant_start','text','reasoning','tool_start','tool_output','tool_end','changes','compaction_start','compaction_end','approval','approval_resolved'].includes(message.event)){
+    const last=record.events.at(-1);if(last&&last.event===event.event&&['text','reasoning'].includes(event.event)){last.text+=event.text||'';last.sequence=event.sequence;}else record.events.push({...event});
+   }
+   send(event);
+  };
   const receive=createHost({createRuntime:runtime,send:message=>{
    if(message.event){
     if(message.event==='thread_started'){record.threadId=message.id;byThread.set(message.id,record);}
-    send({...message,threadId:record.threadId,clientId:record.clientId});
+    record.emit(message);
    }else{const response=pending.get(message.id);if(response){pending.delete(message.id);message.ok?response.resolve(message.result):response.reject(new Error(message.error));}}
   }});
   record.request=(action,payload)=>new Promise((resolve,reject)=>{const id=++sequence;pending.set(id,{resolve,reject});void receive({id,action,payload});});
@@ -19,11 +28,11 @@ export function createThreadRouter({send,createHost,createRuntime}) {
   try{
    let result;
    if(action==='shutdown'){await Promise.all([...records].map(record=>record.request('shutdown')));result=null;}
-   else if(['status','models','threads'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?'working':run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
+   else if(['status','models','threads'].includes(action)){await catalog.ready;result=await catalog.request(action,payload);if(action==='threads')result=result.map(thread=>{const run=byThread.get(thread.id);return run?{...thread,status:run.busy?(run.approvals.size?'approval':'working'):run.failed?'failed':thread.status,startedAt:run.startedAt,provider:run.provider??thread.provider,model:run.model??thread.model}:thread;});}
    else if(action==='thread-location'){await catalog.ready;result=await catalog.request(action,payload);}
    else if(action==='thread'){
     const revision=++selectionRevision,live=byThread.get(payload.id);
-    if(live?.busy){selected=live;viewedThread=payload.id;result={id:payload.id,title:live.title,cwd:live.cwd,messages:[],running:true};send({id,ok:true,result});return;}
+    if(live?.busy){await live.snapshotReady;if(live.busy){selected=live;viewedThread=payload.id;result={id:payload.id,title:live.title,cwd:live.cwd,messages:[...live.baseMessages,{role:'user',content:[{type:'text',text:live.prompt}]}],running:true,runtime:{startedAt:live.startedAt,provider:live.provider,model:live.model,sequence:live.eventSequence,events:live.events.map(event=>({...event})),approvals:[...live.approvals.values()]}};send({id,ok:true,result});return;}}
     // Viewing a transcript is read-only. Start/resume its harness only on Send.
     result=await catalog.request('thread',payload);
     if(revision===selectionRevision){selected=byThread.get(payload.id)??null;viewedThread=payload.id;}
@@ -33,10 +42,10 @@ export function createThreadRouter({send,createHost,createRuntime}) {
     const record=payload.threadId?byThread.get(payload.threadId):payload.clientId?null:selected;
     if(action==='run'){
      if(record?.busy)throw new Error('A task is already running in this thread');
-     const target=record??create();selected=target;target.busy=true;target.clientId=payload.clientId;target.startedAt=Date.now();target.provider=payload.provider;target.model=payload.model;target.failed=false;target.cwd=payload.cwd;target.title=payload.prompt.slice(0,90);if(payload.clientId)byThread.set(payload.clientId,target);
-     try{await target.ready;const resumeId=payload.threadId||(!payload.clientId?viewedThread:null);if(!record&&resumeId){await target.request('thread',{id:resumeId});target.threadId=resumeId;byThread.set(resumeId,target);}result=await target.request('run',payload);}catch(error){target.failed=true;throw error;}finally{target.busy=false;}
+     const target=record??create();selected=target;target.busy=true;target.events=[];target.approvals.clear();target.prompt=payload.displayPrompt??payload.prompt;let snapshotReady;target.snapshotReady=new Promise(resolve=>snapshotReady=resolve);target.clientId=payload.clientId;target.startedAt=Date.now();target.provider=payload.provider;target.model=payload.model;target.failed=false;target.cwd=payload.cwd;target.title=payload.prompt.slice(0,90);if(payload.clientId)byThread.set(payload.clientId,target);
+     try{await target.ready;const resumeId=payload.threadId||(!payload.clientId?viewedThread:null);target.baseMessages=[];if(resumeId){const view=await (record?catalog:target).request('thread',{id:resumeId});target.baseMessages=view.messages||[];target.title=view.title||target.title;if(!record){target.threadId=resumeId;byThread.set(resumeId,target);}}snapshotReady();result=await target.request('run',payload);target.busy=false;target.emit({event:'run_completed',result});}catch(error){target.failed=true;target.busy=false;target.emit({event:'run_completed',error:error.message});throw error;}finally{snapshotReady();target.busy=false;target.events=[];target.approvals.clear();}
     }else if(action==='usage'){result=record?await record.request('usage'):viewedThread?await catalog.request('usage'):null;}
-    else if(['abort','steer','approval-answer','extension-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);}
+    else if(['abort','steer','approval-answer','extension-answer'].includes(action)){if(!record)throw new Error('No active thread');result=await record.request(action,payload);if(action==='steer')record.events.push({event:'steering',text:payload.prompt,sequence:++record.eventSequence});}
     else throw new Error('Unknown harness action');
    }
    send({id,ok:true,result});

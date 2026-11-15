@@ -35,7 +35,7 @@ export function connectThreads({api,prompt,send,toast}){
  const header=document.createElement('header');header.className='thread-header';header.hidden=true;workspace.append(header);
  let busy=false,opening=false,activeId=null,refreshVersion=0,openRevision=0,previousMotion;
  const savedHistories=new Map();let selectionReady=Promise.resolve();
- const jobs=new Map();
+ const jobs=new Map(),recovering=new Map();
  const visibleJob=()=>jobs.get(activeId);
  function syncRunning(){busy=!!visibleJob()?.running;form.setRunning(busy);send.disabled=!busy&&!prompt.value.trim();}
  const historyObserver=new ResizeObserver(()=>bottom());
@@ -60,7 +60,7 @@ export function connectThreads({api,prompt,send,toast}){
   const wasThread=workspace.classList.contains('thread-view');
   const change=()=>{
    if(workspace.classList.contains('thread-view')){const canvas=workspace.querySelector('.atmosphere');if(previousMotion===undefined)delete canvas.dataset.motion;else canvas.dataset.motion=previousMotion;canvas.dispatchEvent(new Event('motion-change'));}
-   workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;showHistory(document.createElement('div'));history.className='thread-messages';activeId=null;viewState.select(null);restoreView();syncRunning();
+   sessionStorage.removeItem('suffice-active-thread');workspace.classList.remove('thread-view');newSession.setAttribute('aria-current','page');header.hidden=true;showHistory(document.createElement('div'));history.className='thread-messages';activeId=null;viewState.select(null);restoreView();syncRunning();
    list.querySelectorAll('.thread-row').forEach(row=>row.setAttribute('aria-pressed','false'));
   };
   if(wasThread)transition.leave(change);else{transition.cancel();change();}
@@ -129,7 +129,7 @@ export function connectThreads({api,prompt,send,toast}){
  }
  connectThreadFork(list,{api,toast,onFork:async fork=>{await refresh();const thread=savedThreads.find(thread=>thread.id===fork.id);if(thread)await openSavedThread(thread);}});
  async function openSavedThread(thread){
-  if(!thread)return;const version=++openRevision;saveView();
+  if(!thread)return;const version=++openRevision;saveView();sessionStorage.setItem('suffice-active-thread',thread.id);if(!jobs.has(thread.id))recovering.set(thread.id,[]);
   const entering=!workspace.classList.contains('thread-view');
   const selection=api.openThread(thread.id);selectionReady=selection;selection.catch(()=>{});
   transition.cancel();
@@ -145,8 +145,15 @@ export function connectThreads({api,prompt,send,toast}){
    const selected=await selection;if(version!==openRevision||activeId!==thread.id)return;
    document.dispatchEvent(new Event('suffice:usage-change'));
    if(!reusable){saveView();renderMessages(selected.messages);savedHistories.delete(thread.id);if(JSON.stringify(selected.messages).length<4*1024*1024)savedHistories.set(thread.id,{modified:thread.modified,node:history});while(savedHistories.size>10)savedHistories.delete(savedHistories.keys().next().value);restoreView();}
+   if(selected.running&&!jobs.get(thread.id)?.running){
+    const runtime=selected.runtime||{},restored=createJob(thread.id,selected.title,history);restored.startedAt=runtime.startedAt||Date.now();restored.provider=runtime.provider;restored.model=runtime.model;
+    for(const event of runtime.events||[])restored.event(event);
+    restored.lastSequence=runtime.sequence||restored.lastSequence||0;approvals.restore(thread.id,runtime.approvals||[]);
+    for(const event of recovering.get(thread.id)||[])if(!event.sequence||event.sequence>restored.lastSequence){approvals.receive(event);if(event.event==='run_completed')restored.finish(event.result,event.error?new Error(event.error):null);else restored.event(event);}
+    syncRunning();drawThreads();
+   }
   }catch(error){if(version===openRevision){toast(error.message);if(!reusable){const message=document.createElement('p');message.className='thread-status';message.textContent='Could not load transcript';history.append(message);}}}
-  finally{if(version===openRevision)transcript.setAttribute('aria-busy','false');}
+  finally{recovering.delete(thread.id);if(version===openRevision)transcript.setAttribute('aria-busy','false');}
  }
  function drawThreads(){
   const scroll=list.scrollTop;
@@ -189,6 +196,8 @@ export function connectThreads({api,prompt,send,toast}){
   // The status is the live insertion point, not a footer below queued messages.
   job.addSteering=text=>{const bubble=document.createElement('article');bubble.className='thread-message thread-user';bubble.textContent=text;node.insertBefore(bubble,statusLine);group=log=null;return bubble;};
   job.event=event=>{
+   if(event.sequence&&event.sequence<=(job.lastSequence||0))return;if(event.sequence)job.lastSequence=event.sequence;
+   if(event.event==='steering'){job.addSteering(event.text);current=null;streamed='';return;}
    if(event.event==='compaction_start'){group=log=null;statusLine.hidden=true;if(!compaction){compaction=transcriptDivider('compacting');node.insertBefore(compaction,statusLine);}if(node===history)bottom();return;}
    if(event.event==='compaction_end'){if(compaction){if(event.completed)compaction.update('compacted',event.reason!=='manual');else compaction.remove();compaction=null;}if(event.errorMessage)status(event.errorMessage);if(node===history)bottom();return;}
    if(event.event==='approval'){job.approvalRequests.add(event.requestId);status('Waiting for approval');drawThreads();}
@@ -207,10 +216,10 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  job.finish=(result,error)=>{if(!job.running)return;const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=displayRunError(error.message,job.provider);}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.approvalRequests.clear();job.running=false;job.failed=!!error;job.error=error?displayRunError(error.message,job.provider):undefined;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
   return job;
  }
- function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);}drawThreads();}
+ function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);sessionStorage.setItem('suffice-active-thread',id);}drawThreads();}
  api.onClearCache?.(()=>{savedHistories.clear();});
  document.addEventListener('suffice-preference',event=>{if(event.detail.id==='collapse-work')document.querySelectorAll('.thread-activity').forEach(group=>group.open=!event.detail.value);if(event.detail.id==='new-project'&&!activeId)form.dataset.requireProject=String(event.detail.value==='Ask each time');});
  document.addEventListener('suffice-project-selected',()=>{delete form.dataset.requireProject;});
@@ -219,11 +228,12 @@ export function connectThreads({api,prompt,send,toast}){
   const job=jobs.get(event.threadId)||jobs.get(event.clientId)||(!event.threadId&&!event.clientId?visibleJob():null);
   if(event.event==='background_started'){adoptOptimistic(event.clientId,event.threadId);void refresh().catch(()=>{});return;}
   if(event.event==='background_completed'){void refresh().catch(()=>{});return;}
-  if(!job?.running)return;
+  if(!job?.running){recovering.get(event.threadId)?.push(event);if(event.event==='run_completed')void refresh().catch(()=>{});return;}
+  if(event.event==='run_completed'){job.finish(event.result,event.error?new Error(event.error):null);return;}
   if(event.event==='thread_started'){adoptJob(job,event.id);void refresh().catch(()=>{});return;}
   job.event(event);
  });
- api.status().then(async status=>{await refresh();if(!status.authenticated)toast('Connect a provider in Settings to start a session.');}).catch(error=>toast(error.message));
+ api.status().then(async status=>{await refresh();const previous=sessionStorage.getItem('suffice-active-thread');if(previous){const thread=savedThreads.find(thread=>thread.id===previous);if(thread)await openSavedThread(thread);}if(!status.authenticated)toast('Connect a provider in Settings to start a session.');}).catch(error=>toast(error.message));
  document.addEventListener('click',async event=>{
   const control=event.target.closest('[data-action]');if(!control)return;
   if(control.dataset.action==='repo-menu'){
