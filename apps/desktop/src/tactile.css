@@ -17,6 +17,7 @@
   --shadow-raised: inset 0 1px 0 #ffffff09,inset 0 0 0 .5px #ffffff03,0 0 0 var(--hairline) var(--overlay-edge),0 2px 4px #00000055,0 10px 28px -8px #00000080;
   --shadow-overlay: inset 0 1px 0 #ffffff09,0 0 0 var(--hairline) var(--overlay-edge),0 2px 4px #00000055,0 8px 20px -6px #00000080;
   --shadow-dialog: var(--shadow-raised);
+  --composer-shadow: var(--shadow-raised);
   --primary-bg: #ededed;
   --primary-fg: #171717;
   --primary-hover: color-mix(in srgb,var(--primary-bg),var(--primary-fg) 7%);
@@ -40,6 +41,7 @@
   --shadow-raised: 0 0 0 1px var(--overlay-edge),0 1px 2px #1818181a,0 3px 4px -2px #18181814;
   --shadow-overlay: 0 0 0 1px var(--overlay-edge),0 1px 2px #1818181a,0 4px 8px -4px #18181824;
   --shadow-dialog: 0 0 0 1px var(--overlay-edge),0 1px 2px #1818181a,0 6px 8px -4px #18181824;
+  --composer-shadow: 0 12px 32px #15243a12,0 2px 6px #15243a0a,inset 0 1px 0 #ffffff80;
   --primary-bg: #181818;
   --primary-fg: #ffffff;
   --focus-ring: #707070;
@@ -59,7 +61,7 @@
 .desktop-app :is(.button,.workspace-tool,.window-control):active:not(:disabled) { transform: scale(.97); }
 .desktop-app :is(.menu-item,.session-row):active:not(:disabled) { transform: scale(.99); }
 /* Keep the project trigger's deliberately steady interaction. */
-.desktop-app .project-bar .project-picker:active { transform: none; }
+.desktop-app .project-bar :is(.project-picker,.git-pill):active { transform: none; }
 .desktop-app :is(.button--subtle:not(.new-session),.project-bar .project-picker,.git-pill) { border-color: transparent; box-shadow: var(--shadow-control); }
 .desktop-app .button--subtle:not(.new-session) { background: var(--control-raised); color: var(--text); }
 .desktop-app .project-bar :is(.project-picker,.git-pill) { border-radius: 10px; min-height: 28px; line-height: 20px; }
@@ -71,7 +73,7 @@
 .desktop-app .send-group:has(.send-button:disabled) .send-options { color: var(--text-faint); }
 .desktop-app[data-theme='light'] .send-group:has(.send-button:disabled) { background: var(--primary-bg); opacity: .5; }
 .desktop-app[data-theme='light'] .send-group:has(.send-button:disabled) .button { color: var(--primary-fg); }
-.desktop-app .workspace .composer { border-color: transparent; outline: var(--hairline) solid var(--overlay-edge); box-shadow: var(--shadow-raised); }
+.desktop-app .workspace :is(.composer,.thread-user,.message-toolbar) { border-color: transparent; outline: var(--hairline) solid var(--overlay-edge); box-shadow: var(--composer-shadow); }
 .desktop-app .composer:focus-within { border-color: transparent; }
 .desktop-app .composer textarea { font-size: var(--ui-text); line-height: 24px; font-weight: var(--ui-weight); }
 .desktop-app :is(.popover,.detail-dialog,.context-usage-details,.custom-tooltip,.tool-widget-body,.toast) { border-color: transparent; box-shadow: var(--shadow-overlay); }
@@ -83,6 +85,8 @@
 .desktop-app .menu-item { min-height: 30px; margin-block: 0; padding: 5px 9px; }
 .desktop-app .popover .menu-item + .menu-item { margin-top: 2px; }
 .desktop-app .menu-item:is([aria-pressed='true'],[aria-checked='true']) { background: var(--selected-fill); color: var(--text-strong); }
+.desktop-app .menu-item[data-menu-action^='sidebar:'][aria-checked='true'] { background: transparent; }
+.desktop-app .menu-item[data-menu-action^='sidebar:'][aria-checked='true']:is(:hover,:focus-visible) { background: var(--hover-fill); }
 .desktop-app .menu-check { display: none; }
 .desktop-app .menu-label { font-weight: var(--ui-weight); color: inherit; }
 .desktop-app .menu-separator { height: var(--hairline); }
@@ -155,3 +159,13 @@
   .desktop-app .popover[data-motion='true'] { transform: none; transition-property: opacity; }
   .desktop-app :is(.right-sidebar,.workspace,.project-picker > .icon:last-child) { transition: none; }
 }
+
+/* Subtract the inset so option corners follow the outer menu's curve. */
+.desktop-app .popover .menu-item { border-radius:calc(var(--radius-menu) - var(--menu-inset)); }
+.desktop-app .effort-track { outline:var(--hairline) solid var(--overlay-edge); box-shadow:var(--shadow-raised); }
+.desktop-app .effort-fill { background:linear-gradient(to bottom,color-mix(in srgb,var(--blue) 78%,white),color-mix(in srgb,var(--blue) 85%,black)); box-shadow:inset 0 1px 0 #ffffff24,inset 0 -1px 2px #00000024; }
+.desktop-app .project-bar .git-pill { transition:background 100ms ease,color 100ms ease; }
+.desktop-app .project-bar .git-pill:not(:disabled):is(:hover,[aria-expanded='true']) { background:var(--surface-menu); color:var(--text); }
+
+/* User bubbles borrow the composer material in both themes. */
+.desktop-app .thread-user { border:1px solid transparent; border-radius:min(var(--radius-composer),10px); background:var(--surface-composer); -webkit-backdrop-filter:var(--glass-filter); backdrop-filter:var(--glass-filter); color:var(--text-strong); }

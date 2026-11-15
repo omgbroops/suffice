@@ -17,6 +17,7 @@ export function applyPreferences(){
  if(saved.mode)setTheme(saved.mode==='System'?(system.matches?'light':'dark'):saved.mode.toLowerCase());
  if(saved.background)localStorage.setItem('suffice-background',saved.background);
  if(saved.accent)root.style.setProperty('--blue',saved.accent);
+ root.classList.toggle('hide-chat-background',saved['chat-background']===false);root.classList.toggle('hide-settings-background',saved['settings-background']===false);
  root.classList.toggle('reduce-motion',!!saved['reduced-motion']);root.classList.toggle('solid-surfaces',saved.glass===false);root.classList.toggle('private-details',!!saved['private-labels']);root.classList.toggle('hide-context-ring',saved['context-ring']===false);
  const fonts={Inter:'"Inter Variable",sans-serif',Geist:'Geist,sans-serif',System:'system-ui', 'JetBrains Mono':'"JetBrains Mono",monospace','Geist Mono':'"Geist Mono",monospace','System mono':'monospace'};
  if(saved['interface-font'])root.style.setProperty('--font-sans',fonts[saved['interface-font']]);

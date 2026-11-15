@@ -1,0 +1,38 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFile,mkdtemp,mkdir,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {tmpdir} from 'node:os';
+import electronPath from 'electron';
+import {_electron} from 'playwright-core';
+import {windowsTaskbarDetails} from './windows-taskbar-details.mjs';
+const {windowsAppDetails}=createRequire(import.meta.url)('../electron/windows-app-details.cjs');
+test('Windows relaunch metadata preserves app/profile paths and a real multi-size icon',async()=>{
+ const details=windowsAppDetails({exePath:'C:/Program Files/Electron/electron.exe',appPath:'C:/My App/desktop',userData:'C:/My Profile',iconPath:'C:/My App/logo.ico'});
+ assert.equal(details.appId,'com.suffice.desktop');assert.equal(details.appIconIndex,0);assert.equal(details.relaunchDisplayName,'Suffice');assert.equal(details.relaunchCommand,'"C:/Program Files/Electron/electron.exe" "C:/My App/desktop" "--user-data-dir=C:/My Profile"');
+ const packaged=windowsAppDetails({exePath:'C:/Suffice.exe',appPath:'C:/app.asar',userData:'C:/Profile',iconPath:'C:/logo.ico',packaged:true});assert.ok(!packaged.relaunchCommand.includes('app.asar'));
+ const icon=await readFile(resolve('apps/desktop/assets/suffice-logo.ico'));assert.equal(icon.readUInt16LE(2),1);assert.equal(icon.readUInt16LE(4),7);for(let i=0;i<7;i++){const at=6+16*i,length=icon.readUInt32LE(at+8),offset=icon.readUInt32LE(at+12);assert.ok(offset+length<=icon.length);assert.equal(icon.subarray(offset+1,offset+4).toString(),'PNG');}
+});
+test('user bubbles share the composer material, assistant text stays plain, and the taskbar uses Suffice',{timeout:60000},async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-bubble-surface-')),folder=resolve(home,'sessions/fixture');await mkdir(folder,{recursive:true});const timestamp=new Date().toISOString();await writeFile(resolve(folder,'fixture.jsonl'),[{type:'session',version:3,id:'bubble-fixture',timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Bubble surface fixture'}],timestamp:Date.now()}},{type:'message',id:'assistant',parentId:'user',timestamp,message:{role:'assistant',content:[{type:'text',text:'This reply remains plain text.'}],timestamp:Date.now(),stopReason:'stop'}}].map(JSON.stringify).join('\n')+'\n');
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ try{const page=await app.firstWindow();await page.locator('.thread-row').click();await page.locator('.thread-assistant').waitFor();
+  const details=await windowsTaskbarDetails(app);if(details){assert.equal(details.appId,'com.suffice.desktop');assert.match(details.icon,/suffice-logo\.ico,0$/);assert.match(details.command,/Suffice\.lnk"?$/);const link=await app.evaluate(({shell,app})=>shell.readShortcutLink(app.getPath('userData')+'/Suffice.lnk'));assert.ok(link.args.includes(resolve('apps/desktop')));assert.ok(link.args.includes(resolve(home,'profile')));}
+
+  for(const theme of ['light','dark']){await page.locator('html').evaluate((el,theme)=>el.dataset.theme=theme,theme);const surfaces=await page.evaluate(()=>{const material=el=>{const s=getComputedStyle(el);return {fill:s.backgroundColor,edge:s.borderTopColor,width:s.borderTopWidth,radius:s.borderRadius,outline:s.outlineColor,shadow:s.boxShadow,blur:s.backdropFilter};};return {composer:material(document.querySelector('.composer')),bubbles:[...document.querySelectorAll('.thread-message')].map(material)};});assert.equal(surfaces.bubbles.length,2);const {radius:bubbleRadius,...bubbleMaterial}=surfaces.bubbles[0],{radius:composerRadius,...composerMaterial}=surfaces.composer;assert.deepEqual(bubbleMaterial,composerMaterial);assert.equal(bubbleRadius,'10px');assert.ok(parseFloat(bubbleRadius)<parseFloat(composerRadius));assert.equal(surfaces.bubbles[1].fill,'rgba(0, 0, 0, 0)');assert.equal(surfaces.bubbles[1].shadow,'none');await page.screenshot({path:resolve(home,'bubbles-'+theme+'.png')});}
+  await page.locator('html').evaluate(el=>el.classList.add('solid-surfaces'));const solid=await page.locator('.composer,.thread-user').evaluateAll(nodes=>nodes.map(el=>getComputedStyle(el).backgroundColor));assert.equal(new Set(solid).size,1);console.log('Bubble screenshots: '+home);
+ }finally{await app.close();}
+});
+
+test('Soft horizon is selectable, persists, renders a warm band and resizes',{timeout:60000},async()=>{
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-soft-horizon-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
+ try{const page=await app.firstWindow();await page.locator('.composer').waitFor();await page.getByRole('button',{name:'Settings',exact:true}).click();await page.getByRole('button',{name:'Appearance',exact:true}).click();await page.getByRole('button',{name:'Background',exact:true}).click();await page.getByRole('menuitemradio',{name:'Soft horizon',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.atmosphere')?.dataset.background==='softHorizon');await page.keyboard.press('Escape');await page.locator('.settings-main').waitFor({state:'hidden'});
+  const pixels=await page.locator('.atmosphere').evaluate(canvas=>{const ctx=canvas.getContext('2d'),sample=(x,y)=>[...ctx.getImageData(Math.floor(canvas.width*x),Math.floor(canvas.height*y),1,1).data];return {width:canvas.width,top:sample(.75,.08),band:sample(.75,.44),bottom:sample(.75,.9)};});assert.ok(pixels.band[0]>pixels.top[0]*3);assert.ok(pixels.band[0]>pixels.band[2]);assert.equal(pixels.band[3],255);assert.equal(await page.evaluate(()=>localStorage.getItem('suffice-background')),'softHorizon');await page.screenshot({path:resolve(home,'soft-horizon-dark.png')});
+  await page.locator('html').evaluate(el=>el.dataset.theme='light');await page.waitForFunction(()=>{const canvas=document.querySelector('.atmosphere');return canvas.getContext('2d').getImageData(1,1,1,1).data[0]>200;});const light=await page.locator('.atmosphere').evaluate(canvas=>{const ctx=canvas.getContext('2d'),sample=(x,y)=>[...ctx.getImageData(Math.floor(canvas.width*x),Math.floor(canvas.height*y),1,1).data];return {filter:getComputedStyle(canvas).filter,top:sample(.75,.08),band:sample(.75,.44),bottom:sample(.75,.9)};});assert.equal(light.filter,'none');assert.ok([...light.top,...light.band,...light.bottom].every(value=>value>190));assert.ok(light.top[2]>light.top[0]);assert.ok(light.band[0]>light.band[2]);await page.screenshot({path:resolve(home,'soft-horizon-light.png')});await page.locator('html').evaluate(el=>el.dataset.theme='dark');await page.waitForFunction(()=>document.querySelector('.atmosphere').getContext('2d').getImageData(1,1,1,1).data[0]<20);assert.deepEqual(await page.locator('.atmosphere').evaluate(canvas=>[...canvas.getContext('2d').getImageData(Math.floor(canvas.width*.75),Math.floor(canvas.height*.44),1,1).data]),pixels.band);
+
+  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].setSize(1000,720));await page.waitForFunction(previous=>document.querySelector('.atmosphere').width!==previous,pixels.width);await page.reload();await page.waitForFunction(()=>document.querySelector('.atmosphere')?.dataset.background==='softHorizon');console.log('Background screenshot: '+resolve(home,'soft-horizon-dark.png'));
+ }finally{await app.close();}
+});

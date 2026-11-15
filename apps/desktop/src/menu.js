@@ -1,4 +1,4 @@
-import {connectScrollEdges} from './components/ui/scroll-edges.js';
+import {connectOverlayScrollbar} from './overlay-scrollbar.js';
 import { icon } from './ui.js';
 import {showPopover,hidePopover} from './popover-motion.js';
 import {createCollectionNavigation} from './components/ui/collection-navigation.js';
@@ -60,10 +60,13 @@ export function createMenu(element) {
       const selectable = typeof selected === 'boolean';
       return `${separator ? '<div class="menu-separator" role="separator"></div>' : ''}<button type="button" role="${selectable ? 'menuitemradio' : 'menuitem'}" ${selectable ? `aria-checked="${selected}"` : ''} aria-label="${escape(label)}" ${detail ? `title="${escape(detail)}" aria-description="${escape(detail)}"` : ''} ${children ? 'aria-haspopup="menu" aria-expanded="false"' : ''} tabindex="-1" class="menu-item" data-menu-index="${index}" ${children ? 'data-submenu-trigger' : `data-menu-action="${escape(action)}"`}><span class="menu-label">${escape(label)}</span>${children ? icon('chevron', 'menu-chevron') : ''}</button>`;
     }).join('')+'</div>';
-    panel.disposeEdges=connectScrollEdges(node.querySelector('.menu-options'));
+    panel.disposeEdges=connectOverlayScrollbar(node.querySelector('.menu-options'),{variant:'menu'});
     node.addEventListener('pointerenter', cancelHover);
     for (const button of node.querySelectorAll('button')) {
       const item = items[Number(button.dataset.menuIndex)];
+      if(item.leading)button.prepend(item.leading());
+      if(!button.title)button.title=item.label;
+      if(item.icon)button.insertAdjacentHTML('afterbegin',icon(item.icon));
       button.addEventListener('pointerenter', e => {
         if (e.pointerType !== 'mouse') return;
         cancelHover();
