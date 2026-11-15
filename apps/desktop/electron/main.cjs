@@ -1,9 +1,10 @@
 const {app,BrowserWindow,ipcMain,dialog,utilityProcess,clipboard,shell,Notification,nativeImage}=require('electron');
 const path=require('node:path');
+const packaged=require('./launch-mode.cjs').isInstalledApp(app);
 // Keep the installed app on the existing desktop profile; explicit smoke/test profiles win.
-if(app.isPackaged&&!process.argv.some(arg=>arg.startsWith('--user-data-dir')))app.setPath('userData',path.join(app.getPath('appData'),'@suffice','desktop'));
+if(packaged&&!process.argv.some(arg=>arg.startsWith('--user-data-dir')))app.setPath('userData',path.join(app.getPath('appData'),'@suffice','desktop'));
 const appIcon=path.join(__dirname,'../assets/suffice-logo.png');
-if(process.platform==='win32')app.setAppUserModelId('com.suffice.desktop');
+if(process.platform==='win32')app.setAppUserModelId(require('./windows-app-details.cjs').windowsAppId(packaged));
 const {pathToFileURL}=require('node:url');
 const {randomUUID,createHash}=require('node:crypto');
 const workspaceFiles=require('./workspace-files.cjs');
@@ -29,13 +30,13 @@ if(primary)app.whenReady().then(async()=>{
   function onHarnessEvent(message){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval')void notify('approval','Agent needs approval');if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
   background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:onHarnessEvent});
   const {projectIdentityMetadata}=await import('./sidebar-metadata.mjs');
-  const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));if(process.env.SUFFICE_START_PROJECT){const start=await require('node:fs/promises').realpath(process.env.SUFFICE_START_PROJECT);await projects.add(start);project=selectedProject=start;}function openProjectWindow(folder){const profileRoot=process.env.SUFFICE_PROFILE_ROOT||app.getPath('userData');const profile=path.join(profileRoot,'project-windows',createHash('sha256').update(folder).digest('hex').slice(0,16));const child=require('node:child_process').spawn(process.execPath,[...(app.isPackaged?[]:[app.getAppPath()]),'--user-data-dir='+profile],{detached:true,stdio:'ignore',windowsHide:true,env:{...process.env,SUFFICE_START_PROJECT:folder,SUFFICE_PROFILE_ROOT:profileRoot,ELECTRON_RUN_AS_NODE:undefined}});child.unref();}
+  const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));if(process.env.SUFFICE_START_PROJECT){const start=await require('node:fs/promises').realpath(process.env.SUFFICE_START_PROJECT);await projects.add(start);project=selectedProject=start;}function openProjectWindow(folder){const profileRoot=process.env.SUFFICE_PROFILE_ROOT||app.getPath('userData');const profile=path.join(profileRoot,'project-windows',createHash('sha256').update(folder).digest('hex').slice(0,16));const child=require('node:child_process').spawn(process.execPath,[...(packaged?[]:[app.getAppPath()]),'--user-data-dir='+profile],{detached:true,stdio:'ignore',windowsHide:true,env:{...process.env,SUFFICE_START_PROJECT:folder,SUFFICE_PROFILE_ROOT:profileRoot,ELECTRON_RUN_AS_NODE:undefined}});child.unref();}
   harness=require('./worker-client.cjs').createWorkerClient({
    fork:()=>utilityProcess.fork(path.join(__dirname,'worker-entry.mjs'),[],{serviceName:'Suffice harness',stdio:'pipe'}),
    onEvent:onHarnessEvent,
    onStderr:data=>process.stderr.write(data)
   });
-  const chrome=require('./window-chrome.cjs').windowChrome({preview:process.env.SUFFICE_WINDOW_CHROME,packaged:app.isPackaged});
+  const chrome=require('./window-chrome.cjs').windowChrome({preview:process.env.SUFFICE_WINDOW_CHROME,packaged});
   win=new BrowserWindow({icon:appIcon,show:false,width:1440,height:900,minWidth:720,minHeight:540,...chrome.options,backgroundColor:'#0e0e0e',title:'Suffice',autoHideMenuBar:true,webPreferences:{additionalArguments:['--suffice-window-chrome='+chrome.mode],preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
   if(process.platform==='win32')require('./windows-app-details.cjs').applyWindowsAppDetails({app,win,shell,iconPath:path.join(__dirname,'../assets/suffice-logo.ico')});
   if(process.env.SUFFICE_TEST_HIDE_WINDOW!=='1')win.show();
@@ -62,7 +63,7 @@ if(primary)app.whenReady().then(async()=>{
   handle('provider-logout',id=>providerSettings.logout(id));
   app.on('will-quit',()=>providerSettings.cancel());
   handle('preferences',()=>settings.stored());
-  handle('desktop-preference',async payload=>{if(payload?.id==='startup'&&typeof payload.value==='boolean'){app.setLoginItemSettings({openAtLogin:payload.value,path:process.execPath,args:app.isPackaged?[]:[app.getAppPath()]});}if(payload?.id==='history-retention'&&!['Until deleted','30 days','90 days'].includes(payload.value))throw new Error('Invalid retention');if(payload?.id==='history-retention'&&payload.value!=='Until deleted'){if(running)throw new Error('Finish active agents before changing history retention');const answer=await dialog.showMessageBox(win,{type:'question',message:'Apply history retention?',detail:'Chats older than '+payload.value+' will be moved to the Recycle Bin automatically. The currently viewed chat is kept.',buttons:['Cancel','Apply'],defaultId:0,cancelId:0});if(answer.response!==1)throw new Error('Retention change cancelled');await enforceRetention(parseInt(payload.value));}return settings.set(payload?.id,payload?.value);});
+  handle('desktop-preference',async payload=>{if(payload?.id==='startup'&&typeof payload.value==='boolean'){app.setLoginItemSettings({openAtLogin:payload.value,path:process.execPath,args:packaged?[]:[app.getAppPath()]});}if(payload?.id==='history-retention'&&!['Until deleted','30 days','90 days'].includes(payload.value))throw new Error('Invalid retention');if(payload?.id==='history-retention'&&payload.value!=='Until deleted'){if(running)throw new Error('Finish active agents before changing history retention');const answer=await dialog.showMessageBox(win,{type:'question',message:'Apply history retention?',detail:'Chats older than '+payload.value+' will be moved to the Recycle Bin automatically. The currently viewed chat is kept.',buttons:['Cancel','Apply'],defaultId:0,cancelId:0});if(answer.response!==1)throw new Error('Retention change cancelled');await enforceRetention(parseInt(payload.value));}return settings.set(payload?.id,payload?.value);});
   handle('open-external',url=>{const parsed=new URL(url);if(parsed.protocol!=='https:'||parsed.username||parsed.password)throw new Error('Unsupported link');return shell.openExternal(parsed.href);});
   handle('status',()=>request('status'));
   handle('models',options=>request('models',{all:options?.all===true}));
