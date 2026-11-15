@@ -1,0 +1,2218 @@
+{
+  "schemaVersion": 1,
+  "node": "v24.22.2",
+  "method": {
+    "pairs": 5,
+    "order": "alternates baseline-first and current-first",
+    "profile": "every invocation uses independent fresh profile and identical generated sessions",
+    "osCache": "not flushed; OS-cold startup not established",
+    "scope": "same full packaged desktop workload as block comparison, repeated to investigate order/host drift; all runs and failures retained"
+  },
+  "pairs": [
+    {
+      "iteration": 1,
+      "order": [
+        "baseline",
+        "current"
+      ],
+      "baseline": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 35216,
+        "isPackaged": true,
+        "readyMs": 4395.4898,
+        "idle": {
+          "rootPid": 35216,
+          "processes": [
+            {
+              "pid": 35216,
+              "parentPid": 34748,
+              "name": "cmd.exe",
+              "workingSetBytes": 13316096,
+              "privateBytes": 9269248,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33544,
+              "parentPid": 35216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 194207744,
+              "privateBytes": 141213696,
+              "cpuTimeMs": 2890.625
+            },
+            {
+              "pid": 30936,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 178589696,
+              "privateBytes": 142495744,
+              "cpuTimeMs": 875
+            },
+            {
+              "pid": 34212,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51343360,
+              "privateBytes": 12738560,
+              "cpuTimeMs": 62.5
+            },
+            {
+              "pid": 35728,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 129417216,
+              "privateBytes": 57253888,
+              "cpuTimeMs": 828.125
+            },
+            {
+              "pid": 34120,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 171274240,
+              "privateBytes": 124747776,
+              "cpuTimeMs": 1875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 738148352,
+            "privateBytes": 487718912,
+            "cpuTimeMs": 6562.5
+          }
+        },
+        "idleSecond": {
+          "rootPid": 35216,
+          "processes": [
+            {
+              "pid": 35216,
+              "parentPid": 34748,
+              "name": "cmd.exe",
+              "workingSetBytes": 13316096,
+              "privateBytes": 9269248,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33544,
+              "parentPid": 35216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 194387968,
+              "privateBytes": 141320192,
+              "cpuTimeMs": 3375
+            },
+            {
+              "pid": 30936,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 178606080,
+              "privateBytes": 142475264,
+              "cpuTimeMs": 921.875
+            },
+            {
+              "pid": 34212,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51343360,
+              "privateBytes": 12738560,
+              "cpuTimeMs": 62.5
+            },
+            {
+              "pid": 35728,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 130752512,
+              "privateBytes": 58642432,
+              "cpuTimeMs": 875
+            },
+            {
+              "pid": 34120,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 171274240,
+              "privateBytes": 124747776,
+              "cpuTimeMs": 1875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 739680256,
+            "privateBytes": 489193472,
+            "cpuTimeMs": 7140.625
+          }
+        },
+        "idleIntervalMs": 2729.0197,
+        "idleCpu": {
+          "matchedPids": [
+            35216,
+            33544,
+            30936,
+            34212,
+            35728,
+            34120
+          ],
+          "corePercent": 21.184346892035997,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 1989.4616999999998,
+        "active": {
+          "rootPid": 35216,
+          "processes": [
+            {
+              "pid": 35216,
+              "parentPid": 34748,
+              "name": "cmd.exe",
+              "workingSetBytes": 13316096,
+              "privateBytes": 9269248,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33544,
+              "parentPid": 35216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 217149440,
+              "privateBytes": 164577280,
+              "cpuTimeMs": 4203.125
+            },
+            {
+              "pid": 30936,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 223199232,
+              "privateBytes": 186277888,
+              "cpuTimeMs": 1375
+            },
+            {
+              "pid": 34212,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51388416,
+              "privateBytes": 12767232,
+              "cpuTimeMs": 62.5
+            },
+            {
+              "pid": 35728,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 232325120,
+              "privateBytes": 158679040,
+              "cpuTimeMs": 3046.875
+            },
+            {
+              "pid": 34120,
+              "parentPid": 33544,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177287168,
+              "privateBytes": 129757184,
+              "cpuTimeMs": 2000
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 914665472,
+            "privateBytes": 661327872,
+            "cpuTimeMs": 10718.75
+          }
+        },
+        "terminal": {
+          "createMs": 64.79999999981374,
+          "markerMs": 1477.699999999255,
+          "closeMs": 175.90000000037253
+        },
+        "shutdownMs": 249.64080000000104,
+        "cleanup": {
+          "observedPids": [
+            35216,
+            33544,
+            30936,
+            34212,
+            35728,
+            34120
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "baselineTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\1-baseline.json",
+      "current": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 30828,
+        "isPackaged": true,
+        "readyMs": 3017.9769,
+        "idle": {
+          "rootPid": 30828,
+          "processes": [
+            {
+              "pid": 30828,
+              "parentPid": 26716,
+              "name": "cmd.exe",
+              "workingSetBytes": 13426688,
+              "privateBytes": 9646080,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 3500,
+              "parentPid": 30828,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128385024,
+              "privateBytes": 81252352,
+              "cpuTimeMs": 1281.25
+            },
+            {
+              "pid": 28168,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179838976,
+              "privateBytes": 143679488,
+              "cpuTimeMs": 890.625
+            },
+            {
+              "pid": 29872,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51261440,
+              "privateBytes": 12623872,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 19260,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 126730240,
+              "privateBytes": 57085952,
+              "cpuTimeMs": 593.75
+            },
+            {
+              "pid": 14932,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177983488,
+              "privateBytes": 133066752,
+              "cpuTimeMs": 1953.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 677625856,
+            "privateBytes": 437354496,
+            "cpuTimeMs": 4828.125
+          }
+        },
+        "idleSecond": {
+          "rootPid": 30828,
+          "processes": [
+            {
+              "pid": 30828,
+              "parentPid": 26716,
+              "name": "cmd.exe",
+              "workingSetBytes": 13426688,
+              "privateBytes": 9646080,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 3500,
+              "parentPid": 30828,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128536576,
+              "privateBytes": 81485824,
+              "cpuTimeMs": 1968.75
+            },
+            {
+              "pid": 28168,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179912704,
+              "privateBytes": 143695872,
+              "cpuTimeMs": 968.75
+            },
+            {
+              "pid": 29872,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51286016,
+              "privateBytes": 12627968,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 19260,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128065536,
+              "privateBytes": 58458112,
+              "cpuTimeMs": 609.375
+            },
+            {
+              "pid": 14932,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177983488,
+              "privateBytes": 133066752,
+              "cpuTimeMs": 1953.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 679211008,
+            "privateBytes": 438980608,
+            "cpuTimeMs": 5609.375
+          }
+        },
+        "idleIntervalMs": 2716.3269,
+        "idleCpu": {
+          "matchedPids": [
+            30828,
+            3500,
+            28168,
+            29872,
+            19260,
+            14932
+          ],
+          "corePercent": 28.761265810827112,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2127.2036,
+        "active": {
+          "rootPid": 30828,
+          "processes": [
+            {
+              "pid": 30828,
+              "parentPid": 26716,
+              "name": "cmd.exe",
+              "workingSetBytes": 13426688,
+              "privateBytes": 9646080,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 3500,
+              "parentPid": 30828,
+              "name": "Suffice.exe",
+              "workingSetBytes": 150073344,
+              "privateBytes": 103899136,
+              "cpuTimeMs": 3093.75
+            },
+            {
+              "pid": 28168,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 222113792,
+              "privateBytes": 184963072,
+              "cpuTimeMs": 1437.5
+            },
+            {
+              "pid": 29872,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51355648,
+              "privateBytes": 12693504,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 19260,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 233267200,
+              "privateBytes": 161869824,
+              "cpuTimeMs": 2734.375
+            },
+            {
+              "pid": 14932,
+              "parentPid": 3500,
+              "name": "Suffice.exe",
+              "workingSetBytes": 190300160,
+              "privateBytes": 144019456,
+              "cpuTimeMs": 2109.375
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 860536832,
+            "privateBytes": 617091072,
+            "cpuTimeMs": 9484.375
+          }
+        },
+        "terminal": {
+          "createMs": 64.1000000005588,
+          "markerMs": 1378.2999999998137,
+          "closeMs": 25.100000000558794
+        },
+        "shutdownMs": 200.14180000000124,
+        "cleanup": {
+          "observedPids": [
+            30828,
+            3500,
+            28168,
+            29872,
+            19260,
+            14932
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "currentTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\1-current.json"
+    },
+    {
+      "iteration": 2,
+      "order": [
+        "current",
+        "baseline"
+      ],
+      "current": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 29632,
+        "isPackaged": true,
+        "readyMs": 3051.0909,
+        "idle": {
+          "rootPid": 29632,
+          "processes": [
+            {
+              "pid": 29632,
+              "parentPid": 21908,
+              "name": "cmd.exe",
+              "workingSetBytes": 13262848,
+              "privateBytes": 9261056,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 22708,
+              "parentPid": 29632,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128655360,
+              "privateBytes": 82374656,
+              "cpuTimeMs": 1421.875
+            },
+            {
+              "pid": 21060,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179720192,
+              "privateBytes": 143736832,
+              "cpuTimeMs": 1000
+            },
+            {
+              "pid": 28268,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51220480,
+              "privateBytes": 12582912,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 32944,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 126869504,
+              "privateBytes": 57094144,
+              "cpuTimeMs": 671.875
+            },
+            {
+              "pid": 35948,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 178085888,
+              "privateBytes": 131317760,
+              "cpuTimeMs": 1906.25
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 677814272,
+            "privateBytes": 436367360,
+            "cpuTimeMs": 5156.25
+          }
+        },
+        "idleSecond": {
+          "rootPid": 29632,
+          "processes": [
+            {
+              "pid": 29632,
+              "parentPid": 21908,
+              "name": "cmd.exe",
+              "workingSetBytes": 13262848,
+              "privateBytes": 9261056,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 22708,
+              "parentPid": 29632,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128917504,
+              "privateBytes": 82567168,
+              "cpuTimeMs": 2046.875
+            },
+            {
+              "pid": 21060,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179752960,
+              "privateBytes": 143679488,
+              "cpuTimeMs": 1093.75
+            },
+            {
+              "pid": 28268,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51245056,
+              "privateBytes": 12587008,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 32944,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128212992,
+              "privateBytes": 58474496,
+              "cpuTimeMs": 703.125
+            },
+            {
+              "pid": 35948,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 178085888,
+              "privateBytes": 131317760,
+              "cpuTimeMs": 1906.25
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 679477248,
+            "privateBytes": 437886976,
+            "cpuTimeMs": 5906.25
+          }
+        },
+        "idleIntervalMs": 2714.6661000000004,
+        "idleCpu": {
+          "matchedPids": [
+            29632,
+            22708,
+            21060,
+            28268,
+            32944,
+            35948
+          ],
+          "corePercent": 27.6277071423259,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2013.5436,
+        "active": {
+          "rootPid": 29632,
+          "processes": [
+            {
+              "pid": 29632,
+              "parentPid": 21908,
+              "name": "cmd.exe",
+              "workingSetBytes": 13262848,
+              "privateBytes": 9261056,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 22708,
+              "parentPid": 29632,
+              "name": "Suffice.exe",
+              "workingSetBytes": 153907200,
+              "privateBytes": 109273088,
+              "cpuTimeMs": 2968.75
+            },
+            {
+              "pid": 21060,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 221679616,
+              "privateBytes": 185073664,
+              "cpuTimeMs": 1593.75
+            },
+            {
+              "pid": 28268,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51343360,
+              "privateBytes": 12681216,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 32944,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 230699008,
+              "privateBytes": 158969856,
+              "cpuTimeMs": 2812.5
+            },
+            {
+              "pid": 35948,
+              "parentPid": 22708,
+              "name": "Suffice.exe",
+              "workingSetBytes": 190377984,
+              "privateBytes": 143196160,
+              "cpuTimeMs": 2078.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 861270016,
+            "privateBytes": 618455040,
+            "cpuTimeMs": 9609.375
+          }
+        },
+        "terminal": {
+          "createMs": 59.5,
+          "markerMs": 1305.1000000005588,
+          "closeMs": 22.299999999813735
+        },
+        "shutdownMs": 246.8007000000016,
+        "cleanup": {
+          "observedPids": [
+            29632,
+            22708,
+            21060,
+            28268,
+            32944,
+            35948
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "currentTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\2-current.json",
+      "baseline": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 5420,
+        "isPackaged": true,
+        "readyMs": 4548.1221,
+        "idle": {
+          "rootPid": 5420,
+          "processes": [
+            {
+              "pid": 5420,
+              "parentPid": 6824,
+              "name": "cmd.exe",
+              "workingSetBytes": 13328384,
+              "privateBytes": 9277440,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33144,
+              "parentPid": 5420,
+              "name": "Suffice.exe",
+              "workingSetBytes": 194322432,
+              "privateBytes": 142155776,
+              "cpuTimeMs": 3093.75
+            },
+            {
+              "pid": 14468,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180060160,
+              "privateBytes": 143839232,
+              "cpuTimeMs": 968.75
+            },
+            {
+              "pid": 31544,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51191808,
+              "privateBytes": 12582912,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 32908,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 129462272,
+              "privateBytes": 56975360,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 21788,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 171466752,
+              "privateBytes": 125579264,
+              "cpuTimeMs": 1921.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 739831808,
+            "privateBytes": 490409984,
+            "cpuTimeMs": 7000
+          }
+        },
+        "idleSecond": {
+          "rootPid": 5420,
+          "processes": [
+            {
+              "pid": 5420,
+              "parentPid": 6824,
+              "name": "cmd.exe",
+              "workingSetBytes": 13328384,
+              "privateBytes": 9277440,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33144,
+              "parentPid": 5420,
+              "name": "Suffice.exe",
+              "workingSetBytes": 194428928,
+              "privateBytes": 141938688,
+              "cpuTimeMs": 3796.875
+            },
+            {
+              "pid": 14468,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180088832,
+              "privateBytes": 143859712,
+              "cpuTimeMs": 1000
+            },
+            {
+              "pid": 31544,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51191808,
+              "privateBytes": 12582912,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 32908,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 130805760,
+              "privateBytes": 58347520,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 21788,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 171466752,
+              "privateBytes": 125579264,
+              "cpuTimeMs": 1921.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 741310464,
+            "privateBytes": 491585536,
+            "cpuTimeMs": 7734.375
+          }
+        },
+        "idleIntervalMs": 2683.1543999999994,
+        "idleCpu": {
+          "matchedPids": [
+            5420,
+            33144,
+            14468,
+            31544,
+            32908,
+            21788
+          ],
+          "corePercent": 27.369837531526333,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2024.788700000001,
+        "active": {
+          "rootPid": 5420,
+          "processes": [
+            {
+              "pid": 5420,
+              "parentPid": 6824,
+              "name": "cmd.exe",
+              "workingSetBytes": 13328384,
+              "privateBytes": 9277440,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33144,
+              "parentPid": 5420,
+              "name": "Suffice.exe",
+              "workingSetBytes": 215769088,
+              "privateBytes": 163368960,
+              "cpuTimeMs": 4578.125
+            },
+            {
+              "pid": 14468,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 221376512,
+              "privateBytes": 184561664,
+              "cpuTimeMs": 1656.25
+            },
+            {
+              "pid": 31544,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51236864,
+              "privateBytes": 12595200,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 32908,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 232345600,
+              "privateBytes": 158527488,
+              "cpuTimeMs": 2781.25
+            },
+            {
+              "pid": 21788,
+              "parentPid": 33144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177385472,
+              "privateBytes": 129949696,
+              "cpuTimeMs": 2031.25
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 911441920,
+            "privateBytes": 658280448,
+            "cpuTimeMs": 11218.75
+          }
+        },
+        "terminal": {
+          "createMs": 66,
+          "markerMs": 1406.0999999996275,
+          "closeMs": 26.5
+        },
+        "shutdownMs": 221.0526000000009,
+        "cleanup": {
+          "observedPids": [
+            5420,
+            33144,
+            14468,
+            31544,
+            32908,
+            21788
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "baselineTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\2-baseline.json"
+    },
+    {
+      "iteration": 3,
+      "order": [
+        "baseline",
+        "current"
+      ],
+      "baseline": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 24272,
+        "isPackaged": true,
+        "readyMs": 4598.2702,
+        "idle": {
+          "rootPid": 24272,
+          "processes": [
+            {
+              "pid": 24272,
+              "parentPid": 25424,
+              "name": "cmd.exe",
+              "workingSetBytes": 13283328,
+              "privateBytes": 9281536,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 34216,
+              "parentPid": 24272,
+              "name": "Suffice.exe",
+              "workingSetBytes": 193028096,
+              "privateBytes": 140083200,
+              "cpuTimeMs": 3062.5
+            },
+            {
+              "pid": 29372,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180809728,
+              "privateBytes": 144564224,
+              "cpuTimeMs": 1000
+            },
+            {
+              "pid": 23708,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51216384,
+              "privateBytes": 12648448,
+              "cpuTimeMs": 203.125
+            },
+            {
+              "pid": 32976,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 129638400,
+              "privateBytes": 57372672,
+              "cpuTimeMs": 609.375
+            },
+            {
+              "pid": 33928,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 174628864,
+              "privateBytes": 128376832,
+              "cpuTimeMs": 1937.5
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 742604800,
+            "privateBytes": 492326912,
+            "cpuTimeMs": 6843.75
+          }
+        },
+        "idleSecond": {
+          "rootPid": 24272,
+          "processes": [
+            {
+              "pid": 24272,
+              "parentPid": 25424,
+              "name": "cmd.exe",
+              "workingSetBytes": 13283328,
+              "privateBytes": 9281536,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 34216,
+              "parentPid": 24272,
+              "name": "Suffice.exe",
+              "workingSetBytes": 193036288,
+              "privateBytes": 139931648,
+              "cpuTimeMs": 3625
+            },
+            {
+              "pid": 29372,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180899840,
+              "privateBytes": 144527360,
+              "cpuTimeMs": 1109.375
+            },
+            {
+              "pid": 23708,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51216384,
+              "privateBytes": 12648448,
+              "cpuTimeMs": 203.125
+            },
+            {
+              "pid": 32976,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 131043328,
+              "privateBytes": 58609664,
+              "cpuTimeMs": 640.625
+            },
+            {
+              "pid": 33928,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 174628864,
+              "privateBytes": 128376832,
+              "cpuTimeMs": 1937.5
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 744108032,
+            "privateBytes": 493375488,
+            "cpuTimeMs": 7546.875
+          }
+        },
+        "idleIntervalMs": 2763.3584999999994,
+        "idleCpu": {
+          "matchedPids": [
+            24272,
+            34216,
+            29372,
+            23708,
+            32976,
+            33928
+          ],
+          "corePercent": 25.444581294826573,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2277.2129999999997,
+        "active": {
+          "rootPid": 24272,
+          "processes": [
+            {
+              "pid": 24272,
+              "parentPid": 25424,
+              "name": "cmd.exe",
+              "workingSetBytes": 13283328,
+              "privateBytes": 9281536,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 34216,
+              "parentPid": 24272,
+              "name": "Suffice.exe",
+              "workingSetBytes": 360681472,
+              "privateBytes": 166756352,
+              "cpuTimeMs": 4656.25
+            },
+            {
+              "pid": 29372,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 238678016,
+              "privateBytes": 201998336,
+              "cpuTimeMs": 1625
+            },
+            {
+              "pid": 23708,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51302400,
+              "privateBytes": 12677120,
+              "cpuTimeMs": 203.125
+            },
+            {
+              "pid": 32976,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 233672704,
+              "privateBytes": 160145408,
+              "cpuTimeMs": 2890.625
+            },
+            {
+              "pid": 33928,
+              "parentPid": 34216,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180326400,
+              "privateBytes": 133292032,
+              "cpuTimeMs": 2078.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 1077944320,
+            "privateBytes": 684150784,
+            "cpuTimeMs": 11484.375
+          }
+        },
+        "terminal": {
+          "createMs": 858.0999999996275,
+          "markerMs": 2171.399999999441,
+          "closeMs": 298.70000000018626
+        },
+        "shutdownMs": 400.1103999999996,
+        "cleanup": {
+          "observedPids": [
+            24272,
+            34216,
+            29372,
+            23708,
+            32976,
+            33928
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "baselineTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\3-baseline.json",
+      "current": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 36460,
+        "isPackaged": true,
+        "readyMs": 3112.3388,
+        "idle": {
+          "rootPid": 36460,
+          "processes": [
+            {
+              "pid": 36460,
+              "parentPid": 36648,
+              "name": "cmd.exe",
+              "workingSetBytes": 13258752,
+              "privateBytes": 9252864,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 35856,
+              "parentPid": 36460,
+              "name": "Suffice.exe",
+              "workingSetBytes": 131448832,
+              "privateBytes": 84385792,
+              "cpuTimeMs": 1421.875
+            },
+            {
+              "pid": 28976,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179998720,
+              "privateBytes": 143740928,
+              "cpuTimeMs": 968.75
+            },
+            {
+              "pid": 28308,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51261440,
+              "privateBytes": 12656640,
+              "cpuTimeMs": 78.125
+            },
+            {
+              "pid": 25788,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 127127552,
+              "privateBytes": 57421824,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 31776,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177897472,
+              "privateBytes": 130977792,
+              "cpuTimeMs": 1921.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 680992768,
+            "privateBytes": 438435840,
+            "cpuTimeMs": 5281.25
+          }
+        },
+        "idleSecond": {
+          "rootPid": 36460,
+          "processes": [
+            {
+              "pid": 36460,
+              "parentPid": 36648,
+              "name": "cmd.exe",
+              "workingSetBytes": 13258752,
+              "privateBytes": 9252864,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 35856,
+              "parentPid": 36460,
+              "name": "Suffice.exe",
+              "workingSetBytes": 131821568,
+              "privateBytes": 84742144,
+              "cpuTimeMs": 2093.75
+            },
+            {
+              "pid": 28976,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180064256,
+              "privateBytes": 143740928,
+              "cpuTimeMs": 984.375
+            },
+            {
+              "pid": 28308,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51286016,
+              "privateBytes": 12660736,
+              "cpuTimeMs": 78.125
+            },
+            {
+              "pid": 25788,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128471040,
+              "privateBytes": 58822656,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 31776,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177897472,
+              "privateBytes": 130977792,
+              "cpuTimeMs": 1921.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 682799104,
+            "privateBytes": 440197120,
+            "cpuTimeMs": 5968.75
+          }
+        },
+        "idleIntervalMs": 2790.3611,
+        "idleCpu": {
+          "matchedPids": [
+            36460,
+            35856,
+            28976,
+            28308,
+            25788,
+            31776
+          ],
+          "corePercent": 24.63838820000752,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2331.547600000001,
+        "active": {
+          "rootPid": 36460,
+          "processes": [
+            {
+              "pid": 36460,
+              "parentPid": 36648,
+              "name": "cmd.exe",
+              "workingSetBytes": 13258752,
+              "privateBytes": 9252864,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 35856,
+              "parentPid": 36460,
+              "name": "Suffice.exe",
+              "workingSetBytes": 295178240,
+              "privateBytes": 108847104,
+              "cpuTimeMs": 3171.875
+            },
+            {
+              "pid": 28976,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 236212224,
+              "privateBytes": 199229440,
+              "cpuTimeMs": 1468.75
+            },
+            {
+              "pid": 28308,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51339264,
+              "privateBytes": 12677120,
+              "cpuTimeMs": 78.125
+            },
+            {
+              "pid": 25788,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 230895616,
+              "privateBytes": 159600640,
+              "cpuTimeMs": 3250
+            },
+            {
+              "pid": 31776,
+              "parentPid": 35856,
+              "name": "Suffice.exe",
+              "workingSetBytes": 191242240,
+              "privateBytes": 144171008,
+              "cpuTimeMs": 2093.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 1018126336,
+            "privateBytes": 633778176,
+            "cpuTimeMs": 10109.375
+          }
+        },
+        "terminal": {
+          "createMs": 766.5,
+          "markerMs": 2105.9000000003725,
+          "closeMs": 300.70000000018626
+        },
+        "shutdownMs": 451.28640000000087,
+        "cleanup": {
+          "observedPids": [
+            36460,
+            35856,
+            28976,
+            28308,
+            25788,
+            31776
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "currentTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\3-current.json"
+    },
+    {
+      "iteration": 4,
+      "order": [
+        "current",
+        "baseline"
+      ],
+      "current": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 4144,
+        "isPackaged": true,
+        "readyMs": 3175.2168,
+        "idle": {
+          "rootPid": 4144,
+          "processes": [
+            {
+              "pid": 4144,
+              "parentPid": 34544,
+              "name": "cmd.exe",
+              "workingSetBytes": 13426688,
+              "privateBytes": 9637888,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 36252,
+              "parentPid": 4144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128696320,
+              "privateBytes": 82219008,
+              "cpuTimeMs": 1531.25
+            },
+            {
+              "pid": 14472,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179671040,
+              "privateBytes": 143405056,
+              "cpuTimeMs": 1187.5
+            },
+            {
+              "pid": 4964,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51302400,
+              "privateBytes": 12750848,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 24224,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 126369792,
+              "privateBytes": 56852480,
+              "cpuTimeMs": 718.75
+            },
+            {
+              "pid": 28212,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177377280,
+              "privateBytes": 130416640,
+              "cpuTimeMs": 1968.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 676843520,
+            "privateBytes": 435281920,
+            "cpuTimeMs": 5578.125
+          }
+        },
+        "idleSecond": {
+          "rootPid": 4144,
+          "processes": [
+            {
+              "pid": 4144,
+              "parentPid": 34544,
+              "name": "cmd.exe",
+              "workingSetBytes": 13426688,
+              "privateBytes": 9637888,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 36252,
+              "parentPid": 4144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 129122304,
+              "privateBytes": 82382848,
+              "cpuTimeMs": 2234.375
+            },
+            {
+              "pid": 14472,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179707904,
+              "privateBytes": 143429632,
+              "cpuTimeMs": 1296.875
+            },
+            {
+              "pid": 4964,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51326976,
+              "privateBytes": 12754944,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 24224,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 127717376,
+              "privateBytes": 58253312,
+              "cpuTimeMs": 796.875
+            },
+            {
+              "pid": 28212,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 177377280,
+              "privateBytes": 130416640,
+              "cpuTimeMs": 1968.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 678678528,
+            "privateBytes": 436875264,
+            "cpuTimeMs": 6468.75
+          }
+        },
+        "idleIntervalMs": 2759.5405,
+        "idleCpu": {
+          "matchedPids": [
+            4144,
+            36252,
+            14472,
+            4964,
+            24224,
+            28212
+          ],
+          "corePercent": 32.27439495814611,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2135.2438,
+        "active": {
+          "rootPid": 4144,
+          "processes": [
+            {
+              "pid": 4144,
+              "parentPid": 34544,
+              "name": "cmd.exe",
+              "workingSetBytes": 13426688,
+              "privateBytes": 9637888,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 36252,
+              "parentPid": 4144,
+              "name": "Suffice.exe",
+              "workingSetBytes": 150167552,
+              "privateBytes": 104230912,
+              "cpuTimeMs": 3187.5
+            },
+            {
+              "pid": 14472,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 236711936,
+              "privateBytes": 199598080,
+              "cpuTimeMs": 1875
+            },
+            {
+              "pid": 4964,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51359744,
+              "privateBytes": 12718080,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 24224,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 230789120,
+              "privateBytes": 159461376,
+              "cpuTimeMs": 2937.5
+            },
+            {
+              "pid": 28212,
+              "parentPid": 36252,
+              "name": "Suffice.exe",
+              "workingSetBytes": 190894080,
+              "privateBytes": 144166912,
+              "cpuTimeMs": 2140.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 873349120,
+            "privateBytes": 629813248,
+            "cpuTimeMs": 10312.5
+          }
+        },
+        "terminal": {
+          "createMs": 73.5,
+          "markerMs": 1554,
+          "closeMs": 24.90000000037253
+        },
+        "shutdownMs": 215.39539999999943,
+        "cleanup": {
+          "observedPids": [
+            4144,
+            36252,
+            14472,
+            4964,
+            24224,
+            28212
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "currentTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\4-current.json",
+      "baseline": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 5376,
+        "isPackaged": true,
+        "readyMs": 4519.9664,
+        "idle": {
+          "rootPid": 5376,
+          "processes": [
+            {
+              "pid": 5376,
+              "parentPid": 13548,
+              "name": "cmd.exe",
+              "workingSetBytes": 13451264,
+              "privateBytes": 9654272,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 4744,
+              "parentPid": 5376,
+              "name": "Suffice.exe",
+              "workingSetBytes": 193589248,
+              "privateBytes": 141422592,
+              "cpuTimeMs": 3203.125
+            },
+            {
+              "pid": 29140,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179970048,
+              "privateBytes": 143695872,
+              "cpuTimeMs": 875
+            },
+            {
+              "pid": 21180,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51318784,
+              "privateBytes": 12746752,
+              "cpuTimeMs": 156.25
+            },
+            {
+              "pid": 35644,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 132526080,
+              "privateBytes": 61227008,
+              "cpuTimeMs": 609.375
+            },
+            {
+              "pid": 25400,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 170463232,
+              "privateBytes": 123338752,
+              "cpuTimeMs": 2171.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 741318656,
+            "privateBytes": 492085248,
+            "cpuTimeMs": 7062.5
+          }
+        },
+        "idleSecond": {
+          "rootPid": 5376,
+          "processes": [
+            {
+              "pid": 5376,
+              "parentPid": 13548,
+              "name": "cmd.exe",
+              "workingSetBytes": 13451264,
+              "privateBytes": 9654272,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 4744,
+              "parentPid": 5376,
+              "name": "Suffice.exe",
+              "workingSetBytes": 194179072,
+              "privateBytes": 141897728,
+              "cpuTimeMs": 3781.25
+            },
+            {
+              "pid": 29140,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179986432,
+              "privateBytes": 143675392,
+              "cpuTimeMs": 906.25
+            },
+            {
+              "pid": 21180,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51318784,
+              "privateBytes": 12746752,
+              "cpuTimeMs": 156.25
+            },
+            {
+              "pid": 35644,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 133869568,
+              "privateBytes": 62599168,
+              "cpuTimeMs": 609.375
+            },
+            {
+              "pid": 25400,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 170463232,
+              "privateBytes": 123338752,
+              "cpuTimeMs": 2171.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 743268352,
+            "privateBytes": 493912064,
+            "cpuTimeMs": 7671.875
+          }
+        },
+        "idleIntervalMs": 2752.8127000000004,
+        "idleCpu": {
+          "matchedPids": [
+            5376,
+            4744,
+            29140,
+            21180,
+            35644,
+            25400
+          ],
+          "corePercent": 22.136449748288356,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2215.3475,
+        "active": {
+          "rootPid": 5376,
+          "processes": [
+            {
+              "pid": 5376,
+              "parentPid": 13548,
+              "name": "cmd.exe",
+              "workingSetBytes": 13451264,
+              "privateBytes": 9654272,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 4744,
+              "parentPid": 5376,
+              "name": "Suffice.exe",
+              "workingSetBytes": 221208576,
+              "privateBytes": 169160704,
+              "cpuTimeMs": 4843.75
+            },
+            {
+              "pid": 29140,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 237658112,
+              "privateBytes": 200818688,
+              "cpuTimeMs": 1468.75
+            },
+            {
+              "pid": 21180,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51396608,
+              "privateBytes": 12836864,
+              "cpuTimeMs": 156.25
+            },
+            {
+              "pid": 35644,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 238481408,
+              "privateBytes": 165412864,
+              "cpuTimeMs": 2812.5
+            },
+            {
+              "pid": 25400,
+              "parentPid": 4744,
+              "name": "Suffice.exe",
+              "workingSetBytes": 176844800,
+              "privateBytes": 129105920,
+              "cpuTimeMs": 2312.5
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 939040768,
+            "privateBytes": 686989312,
+            "cpuTimeMs": 11640.625
+          }
+        },
+        "terminal": {
+          "createMs": 63.799999999813735,
+          "markerMs": 1486.4000000003725,
+          "closeMs": 24.799999999813735
+        },
+        "shutdownMs": 229.6836000000003,
+        "cleanup": {
+          "observedPids": [
+            5376,
+            4744,
+            29140,
+            21180,
+            35644,
+            25400
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "baselineTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\4-baseline.json"
+    },
+    {
+      "iteration": 5,
+      "order": [
+        "baseline",
+        "current"
+      ],
+      "baseline": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 35736,
+        "isPackaged": true,
+        "readyMs": 4607.684200000001,
+        "idle": {
+          "rootPid": 35736,
+          "processes": [
+            {
+              "pid": 35736,
+              "parentPid": 17300,
+              "name": "cmd.exe",
+              "workingSetBytes": 13434880,
+              "privateBytes": 9641984,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 27772,
+              "parentPid": 35736,
+              "name": "Suffice.exe",
+              "workingSetBytes": 195923968,
+              "privateBytes": 143511552,
+              "cpuTimeMs": 3093.75
+            },
+            {
+              "pid": 16832,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180006912,
+              "privateBytes": 144175104,
+              "cpuTimeMs": 984.375
+            },
+            {
+              "pid": 33676,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51122176,
+              "privateBytes": 12476416,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 3944,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 129404928,
+              "privateBytes": 56954880,
+              "cpuTimeMs": 812.5
+            },
+            {
+              "pid": 30400,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 172355584,
+              "privateBytes": 126271488,
+              "cpuTimeMs": 2203.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 742248448,
+            "privateBytes": 493031424,
+            "cpuTimeMs": 7234.375
+          }
+        },
+        "idleSecond": {
+          "rootPid": 35736,
+          "processes": [
+            {
+              "pid": 35736,
+              "parentPid": 17300,
+              "name": "cmd.exe",
+              "workingSetBytes": 13434880,
+              "privateBytes": 9641984,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 27772,
+              "parentPid": 35736,
+              "name": "Suffice.exe",
+              "workingSetBytes": 196104192,
+              "privateBytes": 143745024,
+              "cpuTimeMs": 3718.75
+            },
+            {
+              "pid": 16832,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180064256,
+              "privateBytes": 144154624,
+              "cpuTimeMs": 1046.875
+            },
+            {
+              "pid": 33676,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51122176,
+              "privateBytes": 12476416,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 3944,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 130789376,
+              "privateBytes": 58351616,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 30400,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 172355584,
+              "privateBytes": 126271488,
+              "cpuTimeMs": 2203.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 743870464,
+            "privateBytes": 494641152,
+            "cpuTimeMs": 7953.125
+          }
+        },
+        "idleIntervalMs": 2712.6448,
+        "idleCpu": {
+          "matchedPids": [
+            35736,
+            27772,
+            16832,
+            33676,
+            3944,
+            30400
+          ],
+          "corePercent": 26.496281415097176,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2275.3629,
+        "active": {
+          "rootPid": 35736,
+          "processes": [
+            {
+              "pid": 35736,
+              "parentPid": 17300,
+              "name": "cmd.exe",
+              "workingSetBytes": 13434880,
+              "privateBytes": 9641984,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 27772,
+              "parentPid": 35736,
+              "name": "Suffice.exe",
+              "workingSetBytes": 221618176,
+              "privateBytes": 169275392,
+              "cpuTimeMs": 4875
+            },
+            {
+              "pid": 16832,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 233213952,
+              "privateBytes": 196714496,
+              "cpuTimeMs": 1437.5
+            },
+            {
+              "pid": 33676,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51183616,
+              "privateBytes": 12537856,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 3944,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 232828928,
+              "privateBytes": 159350784,
+              "cpuTimeMs": 3265.625
+            },
+            {
+              "pid": 30400,
+              "parentPid": 27772,
+              "name": "Suffice.exe",
+              "workingSetBytes": 170434560,
+              "privateBytes": 122802176,
+              "cpuTimeMs": 2343.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 922714112,
+            "privateBytes": 670322688,
+            "cpuTimeMs": 12062.5
+          }
+        },
+        "terminal": {
+          "createMs": 61.5,
+          "markerMs": 1505.2999999998137,
+          "closeMs": 24.200000000186265
+        },
+        "shutdownMs": 261.14949999999953,
+        "cleanup": {
+          "observedPids": [
+            35736,
+            27772,
+            16832,
+            33676,
+            3944,
+            30400
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "baselineTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\5-baseline.json",
+      "current": {
+        "iteration": 1,
+        "profile": "fresh",
+        "errors": [],
+        "events": [],
+        "pid": 25364,
+        "isPackaged": true,
+        "readyMs": 3162.4152000000004,
+        "idle": {
+          "rootPid": 25364,
+          "processes": [
+            {
+              "pid": 25364,
+              "parentPid": 14896,
+              "name": "cmd.exe",
+              "workingSetBytes": 13275136,
+              "privateBytes": 9269248,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 30184,
+              "parentPid": 25364,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128520192,
+              "privateBytes": 81829888,
+              "cpuTimeMs": 1750
+            },
+            {
+              "pid": 36032,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180187136,
+              "privateBytes": 144105472,
+              "cpuTimeMs": 1312.5
+            },
+            {
+              "pid": 17064,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51220480,
+              "privateBytes": 12578816,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 36528,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 126914560,
+              "privateBytes": 57081856,
+              "cpuTimeMs": 656.25
+            },
+            {
+              "pid": 34120,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179453952,
+              "privateBytes": 133976064,
+              "cpuTimeMs": 1984.375
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 679571456,
+            "privateBytes": 438841344,
+            "cpuTimeMs": 5875
+          }
+        },
+        "idleSecond": {
+          "rootPid": 25364,
+          "processes": [
+            {
+              "pid": 25364,
+              "parentPid": 14896,
+              "name": "cmd.exe",
+              "workingSetBytes": 13275136,
+              "privateBytes": 9269248,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 30184,
+              "parentPid": 25364,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128647168,
+              "privateBytes": 81887232,
+              "cpuTimeMs": 2515.625
+            },
+            {
+              "pid": 36032,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 180269056,
+              "privateBytes": 143953920,
+              "cpuTimeMs": 1328.125
+            },
+            {
+              "pid": 17064,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51245056,
+              "privateBytes": 12582912,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 36528,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 128253952,
+              "privateBytes": 58449920,
+              "cpuTimeMs": 656.25
+            },
+            {
+              "pid": 34120,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179453952,
+              "privateBytes": 133976064,
+              "cpuTimeMs": 1984.375
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 681144320,
+            "privateBytes": 440119296,
+            "cpuTimeMs": 6656.25
+          }
+        },
+        "idleIntervalMs": 2764.6696,
+        "idleCpu": {
+          "matchedPids": [
+            25364,
+            30184,
+            36032,
+            17064,
+            36528,
+            34120
+          ],
+          "corePercent": 28.25834956914924,
+          "note": "Matching PID deltas only; short-lived processes excluded and PID reuse is possible."
+        },
+        "transcriptOpenMs": 2178.4426999999996,
+        "active": {
+          "rootPid": 25364,
+          "processes": [
+            {
+              "pid": 25364,
+              "parentPid": 14896,
+              "name": "cmd.exe",
+              "workingSetBytes": 13275136,
+              "privateBytes": 9269248,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 30184,
+              "parentPid": 25364,
+              "name": "Suffice.exe",
+              "workingSetBytes": 290443264,
+              "privateBytes": 102043648,
+              "cpuTimeMs": 3453.125
+            },
+            {
+              "pid": 36032,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 235790336,
+              "privateBytes": 198836224,
+              "cpuTimeMs": 1718.75
+            },
+            {
+              "pid": 17064,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51359744,
+              "privateBytes": 12693504,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 36528,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 231878656,
+              "privateBytes": 160387072,
+              "cpuTimeMs": 2843.75
+            },
+            {
+              "pid": 34120,
+              "parentPid": 30184,
+              "name": "Suffice.exe",
+              "workingSetBytes": 184872960,
+              "privateBytes": 138805248,
+              "cpuTimeMs": 2109.375
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 1007620096,
+            "privateBytes": 622034944,
+            "cpuTimeMs": 10296.875
+          }
+        },
+        "terminal": {
+          "createMs": 703,
+          "markerMs": 1922.6000000005588,
+          "closeMs": 372.09999999962747
+        },
+        "shutdownMs": 240.32970000000023,
+        "cleanup": {
+          "observedPids": [
+            25364,
+            30184,
+            36032,
+            17064,
+            36528,
+            34120
+          ],
+          "remaining": [],
+          "note": "PID reuse can cause false positives; descendants first observed after snapshots may be missed"
+        }
+      },
+      "currentTrace": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\desktop-lazy-interleaved-01.json.runs\\5-current.json"
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "baselineReadyMs": 4548.1221,
+    "currentReadyMs": 3112.3388,
+    "baselineTerminalMs": 1486.4000000003725,
+    "currentTerminalMs": 1554,
+    "baselineTranscriptMs": 2215.3475,
+    "currentTranscriptMs": 2135.2438,
+    "startupIncreasePercent": -31.56870612598549
+  }
+}

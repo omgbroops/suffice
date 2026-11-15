@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-15T18:52:21.567Z",
+  "method": "logical file sizes of local Windows NSIS installer and unpacked release tree; no install into user profile, no compression/allocation inference",
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logicalCpus": 20,
+    "ramBytes": 34071896064,
+    "osType": "Windows_NT",
+    "osRelease": "10.0.26300",
+    "node": "v24.22.2"
+  },
+  "baseline": {
+    "version": "0.1.0-preview.20261114.1",
+    "platform": "win32",
+    "arch": "x64",
+    "installer": {
+      "bytes": 163807660,
+      "sha256": "641d9c7e8e36f30263f3acd0bbfbba79df7de770133c960b64bd42dc6e49a8e3"
+    },
+    "installed": {
+      "logicalBytes": 526084728,
+      "files": 14788,
+      "symlinks": "not followed",
+      "allocatedDiskBytes": "not measured"
+    },
+    "optionalAutomation": {
+      "browser": {
+        "logicalBytes": 309662,
+        "files": 42,
+        "symlinks": "not followed",
+        "allocatedDiskBytes": "not measured"
+      },
+      "desktop": {
+        "logicalBytes": 4059995,
+        "files": 7,
+        "symlinks": "not followed",
+        "allocatedDiskBytes": "not measured"
+      },
+      "runtimeUse": "not activated in normal desktop benchmarks; active optional automation overhead remains unmeasured"
+    },
+    "renderer": {
+      "logicalBytes": 19537782,
+      "files": 1913,
+      "symlinks": "not followed",
+      "allocatedDiskBytes": "not measured"
+    }
+  },
+  "current": {
+    "version": "0.1.0-preview.20261114.1",
+    "platform": "win32",
+    "arch": "x64",
+    "installer": {
+      "bytes": 163922812,
+      "sha256": "aaea326b6d961b82e4b8697d716ce77e477632bd00e3b6e6a380b5ee894e33dc"
+    },
+    "installed": {
+      "logicalBytes": 526643293,
+      "files": 14793,
+      "symlinks": "not followed",
+      "allocatedDiskBytes": "not measured"
+    },
+    "optionalAutomation": {
+      "browser": {
+        "logicalBytes": 309662,
+        "files": 42,
+        "symlinks": "not followed",
+        "allocatedDiskBytes": "not measured"
+      },
+      "desktop": {
+        "logicalBytes": 4059995,
+        "files": 7,
+        "symlinks": "not followed",
+        "allocatedDiskBytes": "not measured"
+      },
+      "runtimeUse": "not activated in normal desktop benchmarks; active optional automation overhead remains unmeasured"
+    },
+    "renderer": {
+      "logicalBytes": 19537782,
+      "files": 1913,
+      "symlinks": "not followed",
+      "allocatedDiskBytes": "not measured"
+    }
+  },
+  "sharedWebView2": {
+    "directory": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\157.0.4341.46",
+    "logicalBytes": 920838213,
+    "files": 918,
+    "symlinks": "not followed",
+    "allocatedDiskBytes": "not measured",
+    "qualification": "OS-shared runtime excluded from Wry probe executable size; existing installation, not a measured fresh download"
+  }
+}

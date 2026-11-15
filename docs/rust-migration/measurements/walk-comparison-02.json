@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-15T18:18:39.912Z",
+  "node": "v24.22.2",
+  "platform": "win32",
+  "arch": "x64",
+  "baselineRoot": "C:\\Users\\aryas\\Programming\\suffice-rust-baseline-a5116549\\source",
+  "candidateRoot": "C:\\Users\\aryas\\Programming\\suffice",
+  "binary": "C:\\Users\\aryas\\Programming\\suffice\\crates\\suffice-fs-addon\\target\\release\\suffice_fs_addon.node",
+  "method": {
+    "warmupPairsPerFixture": 2,
+    "measuredPairsPerFixture": 20,
+    "order": "alternates baseline-first and candidate-first per pair",
+    "timing": "wall-clock around full filesIn or nativeFiles invocation, including child launch, JSON decoding and sorting",
+    "cache": "filesystem cache not flushed",
+    "memory": "not measured"
+  },
+  "fixtures": {
+    "small": {
+      "directories": 1,
+      "files": 4,
+      "manifestSha256": "fccf127ae217b128f5d2a792763d7e00b6ec6c28f7fd5e5d7074bd6878b29df4",
+      "warmups": [],
+      "pairs": []
+    }
+  },
+  "errors": [
+    "Error: Native helper failed or returned invalid output; no fallback accepted\n    at invoke (file:///C:/Users/aryas/Programming/suffice/scripts/rust-migration/compare-walk.mjs:28:206)\n    at async file:///C:/Users/aryas/Programming/suffice/scripts/rust-migration/compare-walk.mjs:30:124"
+  ],
+  "binaryBytes": 273920,
+  "binarySha256": "0e7f967ccd3fe6a232ca80872917b6da7c5f798eb2df8e6cc296824a8fa5e7e0",
+  "completedAt": "2026-11-15T18:18:39.927Z"
+}

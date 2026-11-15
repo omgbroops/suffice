@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<title>Suffice architecture probe</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f5f3;color:#1f2426;font:15px system-ui;display:grid;grid-template-columns:240px 1fr;height:100vh;padding:20px;gap:20px}label{display:flex;flex-direction:column;gap:12px;min-height:0}select,textarea{flex:1;min-height:0;width:100%;font:14px Consolas,monospace;padding:12px;background:white;color:#1f2426;border:1px solid #b8bdbc;border-radius:6px}textarea{resize:none;white-space:pre}h1{font-size:15px;margin:0}
+</style>
+<label><h1>Architecture probe · Sessions</h1><select id="sessions" size="30" aria-label="Sessions"></select></label>
+<label><h1>Read-only transcript</h1><textarea id="transcript" readonly aria-label="Transcript" spellcheck="false"></textarea></label>
+<script>
+const sessions=document.querySelector('#sessions'),transcript=document.querySelector('#transcript');
+const title=i=>`Thread ${String(i).padStart(2,'0')}`;
+const text=i=>Array.from({length:1000},(_,m)=>`${title(i)} message ${m} deterministic fixture`).join('\r\n');
+for(let i=0;i<30;i++)sessions.add(new Option(title(i),String(i)));
+sessions.selectedIndex=0;
+function select(){transcript.value=text(sessions.selectedIndex);}
+sessions.addEventListener('change',select);select();
+window.runProbe=()=>{
+ const start=performance.now();let ok=true;
+ for(const index of [1,29]){sessions.selectedIndex=index;sessions.dispatchEvent(new Event('change'));ok&&=transcript.value.replace(/\r\n/g,'\n')===text(index).replace(/\r\n/g,'\n');}
+ transcript.scrollTop=transcript.scrollHeight;ok&&=transcript.scrollTop>0&&sessions.options.length===30&&transcript.value.split('\n').length===1000;
+ sessions.focus();ok&&=document.activeElement===sessions;
+ requestAnimationFrame(()=>window.ipc.postMessage(JSON.stringify({event:'verified',ok,selectionMs:performance.now()-start,scrollTop:transcript.scrollTop,threads:sessions.options.length,messages:1000,keyboardFocus:document.activeElement===sessions,width:innerWidth,height:innerHeight})));
+};
+requestAnimationFrame(()=>requestAnimationFrame(()=>window.ipc.postMessage(JSON.stringify({event:'ready'}))));
+</script></html>

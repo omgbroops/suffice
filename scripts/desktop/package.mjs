@@ -5,10 +5,12 @@ import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {resolve,dirname,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
+import {buildNative} from '../rust-migration/build-native.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url)),version=process.env.SUFFICE_DESKTOP_VERSION||'0.1.0-preview.20261114.1';
 if(!['win32','darwin'].includes(process.platform))throw new Error('Build Windows on Windows and macOS on macOS.');
 if(process.platform==='win32'&&process.arch!=='x64'||process.platform==='darwin'&&process.arch!=='arm64')throw new Error('This preview targets Windows x64 and Apple Silicon macOS arm64.');
 const output=resolve(process.env.SUFFICE_INSTALLER_OUTPUT||join(root,'release')),stage=join(output,'.staging',process.platform+'-'+randomUUID());await mkdir(output,{recursive:true});
+await buildNative();
 const runtime=await stageDesktop(stage,{version});
 for(const [kind,binary] of [['browser',runtime.browser],['desktop',runtime.desktop]]){const info=execFileSync(binary,['--version'],{encoding:'utf8',timeout:20000,windowsHide:true});console.log('Bundled',kind,info.trim());}
 const electronVersion=JSON.parse(await readFile(join(root,'node_modules/electron/package.json'),'utf8')).version;

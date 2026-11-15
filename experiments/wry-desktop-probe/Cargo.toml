@@ -1,0 +1,21 @@
+[package]
+name = "suffice-wry-probe"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.92"
+publish = false
+
+[dependencies]
+serde_json = "=1.0.151"
+base64 = "=0.22.1"
+
+[target.'cfg(windows)'.dependencies]
+tao = "=0.37.1"
+wry = "=0.57.2"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

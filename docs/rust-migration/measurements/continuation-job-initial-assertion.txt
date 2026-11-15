@@ -1,0 +1,42 @@
+   Compiling suffice-desktop-rust v0.1.0 (C:\Users\aryas\Programming\suffice\apps\desktop-rust)
+   Compiling windows-sys v0.61.2
+warning: unused import: `Write`
+   --> src\process_tree.rs:116:34
+    |
+116 |         io::{BufRead, BufReader, Write},
+    |                                  ^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Write`
+ --> src\main.rs:7:30
+  |
+7 |     io::{BufRead, BufReader, Write},
+  |                              ^^^^^
+
+warning: `suffice-desktop-rust` (bin "suffice-desktop-rust" test) generated 2 warnings (run `cargo fix --bin "suffice-desktop-rust" -p suffice-desktop-rust --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.15s
+     Running unittests src\main.rs (apps\desktop-rust\target\debug\deps\suffice_desktop_rust-b1095445044439cd.exe)
+
+running 5 tests
+test native::tests::parses_dialog_properties_and_arguments ... ok
+test native::tests::parses_message_cancel_and_maps_response ... ok
+test native::tests::rejects_unrepresentable_message_options ... ok
+test transport::tests::blocked_pipe_never_blocks_sender ... ok
+test process_tree::tests::closing_job_kills_owned_parent_and_grandchild ... FAILED
+
+failures:
+
+---- process_tree::tests::closing_job_kills_owned_parent_and_grandchild stdout ----
+
+thread 'process_tree::tests::closing_job_kills_owned_parent_and_grandchild' (34484) panicked at src\process_tree.rs:153:9:
+assertion failed: parent.wait().unwrap().code().unwrap_or(1) != 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    process_tree::tests::closing_job_kills_owned_parent_and_grandchild
+
+test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+error: test failed, to rerun pass `--bin suffice-desktop-rust`

@@ -1,4 +1,3 @@
-import {ModelRuntime} from '@earendil-works/pi-coding-agent';
 import {resolve} from 'node:path';
 
 const states=new WeakMap();
@@ -23,6 +22,7 @@ export async function refreshModelCatalog(runtime,{force=false,providers,timeout
 }
 
 export async function createSufficeModelRuntime(options,{onRefresh}={}){
+ const {ModelRuntime}=await import('@earendil-works/pi-coding-agent');
  const runtime=await ModelRuntime.create(options);
  if(process.env.PI_OFFLINE===undefined){
   const refresh=()=>void refreshModelCatalog(runtime,{onRefresh});

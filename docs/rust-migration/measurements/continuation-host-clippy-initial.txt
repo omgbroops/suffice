@@ -1,0 +1,15 @@
+    Checking suffice-desktop-rust v0.1.0 (C:\Users\aryas\Programming\suffice\apps\desktop-rust)
+error: this looks like an `else if` but the `else` is missing
+   --> src\main.rs:251:14
+    |
+251 |             } if !deferred_ack {let _=ack.try_send(());} },
+    |              ^
+    |
+    = note: to remove this lint, add the missing `else` or add a new line before the second `if`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.92.0/index.html#possible_missing_else
+    = note: `-D clippy::possible-missing-else` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::possible_missing_else)]`
+
+error: could not compile `suffice-desktop-rust` (bin "suffice-desktop-rust") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `suffice-desktop-rust` (bin "suffice-desktop-rust" test) due to 1 previous error

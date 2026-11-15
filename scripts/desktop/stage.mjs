@@ -2,6 +2,7 @@ import {cp,mkdir,readFile,realpath,writeFile,access,chmod} from 'node:fs/promise
 import {createRequire} from 'node:module';
 import {dirname,resolve,relative,join,sep} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
+import {nativeArtifactFiles} from '../rust-migration/native-artifact.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const read=async file=>JSON.parse(await readFile(file,'utf8'));
 const exists=async file=>access(file).then(()=>true,()=>false);
@@ -14,6 +15,10 @@ export async function stageDesktop(stage,{version='0.1.0-preview.20261114.1'}={}
  await writeFile(join(stage,'package.json'),JSON.stringify(manifest,null,2)+'\n');
  const filter=source=>!['.git','node_modules','test','tests','__tests__'].includes(source.split(/[\\/]/).at(-1))&&!/^(?:\.env(?:\..*)?|auth\.json|\.npmrc)$/i.test(source.split(/[\\/]/).at(-1));
  for(const path of ['apps/desktop/electron','apps/desktop/dist','apps/desktop/assets','apps/desktop/shared','packages/cli/src','packages/cli/bin','packages/harness'])await cp(join(root,path),join(stage,path),{recursive:true,dereference:true,filter});
+ for(const name of await nativeArtifactFiles(join(root,'packages/cli/native'))){
+  const source=join(root,'packages/cli/native',name);
+  await mkdir(join(stage,'packages/cli/native'),{recursive:true});await cp(source,join(stage,'packages/cli/native',name));
+ }
  for(const path of ['apps/desktop/src/settings-data.js','apps/desktop/src/backgrounds/presets.js','packages/cli/package.json','packages/cli/README.md','packages/cli/THIRD-PARTY-NOTICES.md']){await mkdir(dirname(join(stage,path)),{recursive:true});await cp(join(root,path),join(stage,path));}
  // Internal source imports keep their monorepo-relative layout. Expose a package
  // proxy instead of shipping workspace links that point outside the installation.

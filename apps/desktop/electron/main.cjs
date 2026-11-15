@@ -24,7 +24,7 @@ else app.on('second-instance',()=>{
 });
 if(primary)app.whenReady().then(async()=>{
   if(process.platform==='darwin')app.dock?.setIcon(appIcon);
-  const {parseOptions}=await import('@suffice/harness');
+  const {parseOptions}=await import('../../../packages/cli/src/options.mjs');
   const settingsHome=parseOptions([]).home;
   const settings=(await import('./settings-store.mjs')).createSettingsStore(settingsHome);
   function onHarnessEvent(message){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval')void notify('approval','Agent needs approval');if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}

@@ -2,17 +2,19 @@ import {brandOAuthCallbacks,oauthPageTheme} from './oauth-page-branding.mjs';
 import {installationId} from '../../../packages/cli/src/installation-id.mjs';
 import {createSufficeModelRuntime,modelRuntimeOptions,refreshModelCatalog} from '../../../packages/cli/src/model-runtime.mjs';
 
-import {parseOptions} from '@suffice/harness';
+import {parseOptions} from '../../../packages/cli/src/options.mjs';
 
 
 // Pi owns provider discovery, login prompts, persistence and token refresh.
 export function createProviderSettings({emit,openBrowser,getPreferences=async()=>({}),onCatalog=()=>{},createRuntime=options=>createSufficeModelRuntime(options,{onRefresh:onCatalog}),home=parseOptions([]).home}){
- let runtimePromise,operation,pending,sequence=0;
+ let runtimePromise,operation,pending,sequence=0,cancelGeneration=0;
  const runtime=()=>runtimePromise??=createRuntime(modelRuntimeOptions(home));
  async function list(){const rt=await runtime(),credentials=await rt.listCredentials();return rt.getProviders().map(provider=>({id:provider.id,name:provider.name,connected:rt.hasConfiguredAuth(provider.id),credential:credentials.find(c=>c.providerId===provider.id)?.type,methods:[...(provider.auth.apiKey?.login?[{id:'api_key',name:provider.auth.apiKey.name}]:[]),...(provider.auth.oauth?[{id:'oauth',name:provider.auth.oauth.name||'Subscription'}]:[])]})).sort((a,b)=>a.name.localeCompare(b.name));}
  async function login(payload){
   if(operation)throw new Error('Finish or cancel the current connection first');
-  const rt=await runtime(),provider=rt.getProvider(payload?.provider);
+  const generation=cancelGeneration,rt=await runtime();
+  if(generation!==cancelGeneration)throw new Error('Connection cancelled');
+  const provider=rt.getProvider(payload?.provider);
   if(!provider||!['api_key','oauth'].includes(payload.type)||(payload.type==='api_key'?!provider.auth.apiKey?.login:!provider.auth.oauth))throw new Error('Unsupported provider login');
   if(operation)throw new Error('Finish or cancel the current connection first');
   const controller=new AbortController();operation=controller;const timeout=setTimeout(()=>controller.abort(),15*60*1000);
@@ -25,7 +27,7 @@ export function createProviderSettings({emit,openBrowser,getPreferences=async()=
  function answer(payload){if(!pending||payload?.id!==pending.id||typeof payload.value!=='string'||payload.value.length>32000)throw new Error('Invalid login response');const prompt=pending;pending=null;prompt.answer(payload.value);}
  async function logout(id){if(operation)throw new Error('Finish connection first');const rt=await runtime();if(!rt.getProvider(id))throw new Error('Unknown provider');await rt.logout(id);return list();}
  async function refresh(options={}){return refreshModelCatalog(await runtime(),{...options,onRefresh:onCatalog});}
- return {list,login,answer,logout,refresh,cancel(){operation?.abort();}};
+ return {list,login,answer,logout,refresh,cancel(){cancelGeneration++;operation?.abort();}};
 }
 
 // SDK errors may contain token responses. Only known, static explanations cross IPC.

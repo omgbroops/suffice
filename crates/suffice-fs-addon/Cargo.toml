@@ -1,0 +1,12 @@
+[package]
+name = "suffice-fs-addon"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = { version = "=2.16.17", default-features = false, features = ["napi6", "dyn-symbols"] }
+napi-derive = "=2.16.13"
+suffice-fs = { path = "../suffice-fs" }

@@ -1,0 +1,2226 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-15T20:17:41.185Z",
+  "root": "C:\\Users\\aryas\\Programming\\suffice",
+  "output": "C:\\Users\\aryas\\Programming\\suffice\\docs\\rust-migration\\measurements\\real-rust-vs-electron-01.json",
+  "platform": "win32",
+  "arch": "x64",
+  "pairs": 5,
+  "executables": {
+    "electron": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice\\release\\win-unpacked\\Suffice.exe",
+      "bytes": 249270272
+    },
+    "rust": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice\\apps\\desktop-rust\\target\\release\\suffice-desktop-rust.exe",
+      "bytes": 1150464
+    },
+    "node": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice-rust-tooling\\node_modules\\node\\bin\\node.exe",
+      "bytes": 93922624
+    }
+  },
+  "fixture": {
+    "sessions": 30,
+    "largeTranscriptMessages": 1000,
+    "sha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a"
+  },
+  "method": {
+    "order": "alternating first host by pair",
+    "homes": "fresh isolated home and profile for every sample; identical session bytes and project path",
+    "offline": "PI_OFFLINE=1; zero model requests",
+    "startup": "parent monotonic clock from launch to UI-ready event / Electron 30 rows visible",
+    "selection": "parent monotonic clock from click or measure-select write to transcript assertion; Rust includes instrumentation and event transport delay",
+    "memory": "instantaneous CIM process-tree snapshots; shared/external WebView2 processes may not be descendants and are excluded",
+    "cache": "no OS cache flush",
+    "scope": "matched rendered fixture only; no whole-feature parity claim"
+  },
+  "samples": [
+    {
+      "host": "electron",
+      "pair": 1,
+      "errors": [],
+      "events": [],
+      "snapshots": {
+        "idle": {
+          "rootPid": 29028,
+          "processes": [
+            {
+              "pid": 29028,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13508608,
+              "privateBytes": 9633792,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 2932,
+              "parentPid": 29028,
+              "name": "Suffice.exe",
+              "workingSetBytes": 122355712,
+              "privateBytes": 77811712,
+              "cpuTimeMs": 921.875
+            },
+            {
+              "pid": 25756,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51363840,
+              "privateBytes": 12673024,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 36284,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 176177152,
+              "privateBytes": 143003648,
+              "cpuTimeMs": 859.375
+            },
+            {
+              "pid": 30004,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123342848,
+              "privateBytes": 55992320,
+              "cpuTimeMs": 500
+            },
+            {
+              "pid": 21620,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 176214016,
+              "privateBytes": 132272128,
+              "cpuTimeMs": 1796.875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 662962176,
+            "privateBytes": 431386624,
+            "cpuTimeMs": 4203.125
+          },
+          "parentStartMs": 3001.8448,
+          "parentReceiptMs": 3777.2492
+        },
+        "active": {
+          "rootPid": 29028,
+          "processes": [
+            {
+              "pid": 29028,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13508608,
+              "privateBytes": 9633792,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 2932,
+              "parentPid": 29028,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123822080,
+              "privateBytes": 78872576,
+              "cpuTimeMs": 968.75
+            },
+            {
+              "pid": 25756,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51388416,
+              "privateBytes": 12677120,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 36284,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 236187648,
+              "privateBytes": 203010048,
+              "cpuTimeMs": 1265.625
+            },
+            {
+              "pid": 30004,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 231153664,
+              "privateBytes": 161595392,
+              "cpuTimeMs": 2187.5
+            },
+            {
+              "pid": 21620,
+              "parentPid": 2932,
+              "name": "Suffice.exe",
+              "workingSetBytes": 189337600,
+              "privateBytes": 144936960,
+              "cpuTimeMs": 1875
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 845398016,
+            "privateBytes": 610725888,
+            "cpuTimeMs": 6421.875
+          },
+          "parentStartMs": 5223.0518,
+          "parentReceiptMs": 5868.3517
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 29028,
+      "readyMs": 2997.7488999999996,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1445.7806,
+      "shutdownMs": 173.6291000000001,
+      "cleanup": {
+        "observedPids": [
+          29028,
+          2932,
+          25756,
+          36284,
+          30004,
+          21620
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "rust",
+      "pair": 1,
+      "errors": [],
+      "events": [
+        {
+          "elapsedMs": 706,
+          "event": "engine-ready",
+          "parentElapsedMs": 777.3760999999995
+        },
+        {
+          "devicePixelRatio": 1,
+          "elapsedMs": 3530,
+          "event": "ui-ready",
+          "height": 900,
+          "threadCount": 30,
+          "width": 1440,
+          "parentElapsedMs": 3601.0136999999995
+        },
+        {
+          "elapsedMs": 5684,
+          "event": "smoke",
+          "ok": true,
+          "reason": null,
+          "threadCount": 30,
+          "transcriptCharacters": 29389,
+          "parentElapsedMs": 5755.8855
+        },
+        {
+          "engineReady": true,
+          "event": "shutdown",
+          "ok": true,
+          "parentElapsedMs": 10817.957900000001
+        }
+      ],
+      "snapshots": {
+        "idle": {
+          "rootPid": 13668,
+          "processes": [
+            {
+              "pid": 13668,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27844608,
+              "privateBytes": 5439488,
+              "cpuTimeMs": 265.625
+            },
+            {
+              "pid": 2236,
+              "parentPid": 13668,
+              "name": "conhost.exe",
+              "workingSetBytes": 8122368,
+              "privateBytes": 1462272,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 21092,
+              "parentPid": 13668,
+              "name": "node.exe",
+              "workingSetBytes": 55783424,
+              "privateBytes": 60809216,
+              "cpuTimeMs": 187.5
+            },
+            {
+              "pid": 24224,
+              "parentPid": 21092,
+              "name": "conhost.exe",
+              "workingSetBytes": 8314880,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 9996,
+              "parentPid": 13668,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126910464,
+              "privateBytes": 38838272,
+              "cpuTimeMs": 1500
+            },
+            {
+              "pid": 31380,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14024704,
+              "privateBytes": 3325952,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 17800,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 153128960,
+              "privateBytes": 130314240,
+              "cpuTimeMs": 921.875
+            },
+            {
+              "pid": 28076,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44851200,
+              "privateBytes": 13164544,
+              "cpuTimeMs": 218.75
+            },
+            {
+              "pid": 5260,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20271104,
+              "privateBytes": 7688192,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 27960,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 99459072,
+              "privateBytes": 49815552,
+              "cpuTimeMs": 578.125
+            },
+            {
+              "pid": 22896,
+              "parentPid": 21092,
+              "name": "node.exe",
+              "workingSetBytes": 146034688,
+              "privateBytes": 172961792,
+              "cpuTimeMs": 2281.25
+            },
+            {
+              "pid": 21608,
+              "parentPid": 22896,
+              "name": "conhost.exe",
+              "workingSetBytes": 8306688,
+              "privateBytes": 1466368,
+              "cpuTimeMs": 0
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 713052160,
+            "privateBytes": 486760448,
+            "cpuTimeMs": 6125
+          },
+          "parentStartMs": 3601.119700000001,
+          "parentReceiptMs": 4308.178100000001
+        },
+        "active": {
+          "rootPid": 13668,
+          "processes": [
+            {
+              "pid": 13668,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27840512,
+              "privateBytes": 5046272,
+              "cpuTimeMs": 312.5
+            },
+            {
+              "pid": 2236,
+              "parentPid": 13668,
+              "name": "conhost.exe",
+              "workingSetBytes": 8122368,
+              "privateBytes": 1462272,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 21092,
+              "parentPid": 13668,
+              "name": "node.exe",
+              "workingSetBytes": 57139200,
+              "privateBytes": 61620224,
+              "cpuTimeMs": 218.75
+            },
+            {
+              "pid": 24224,
+              "parentPid": 21092,
+              "name": "conhost.exe",
+              "workingSetBytes": 8314880,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 9996,
+              "parentPid": 13668,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126246912,
+              "privateBytes": 38199296,
+              "cpuTimeMs": 1625
+            },
+            {
+              "pid": 31380,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14024704,
+              "privateBytes": 3325952,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 17800,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 234115072,
+              "privateBytes": 202240000,
+              "cpuTimeMs": 1406.25
+            },
+            {
+              "pid": 28076,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 45289472,
+              "privateBytes": 13111296,
+              "cpuTimeMs": 234.375
+            },
+            {
+              "pid": 5260,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20406272,
+              "privateBytes": 7712768,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 27960,
+              "parentPid": 9996,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 171298816,
+              "privateBytes": 119955456,
+              "cpuTimeMs": 2234.375
+            },
+            {
+              "pid": 22896,
+              "parentPid": 21092,
+              "name": "node.exe",
+              "workingSetBytes": 152666112,
+              "privateBytes": 177577984,
+              "cpuTimeMs": 2484.375
+            },
+            {
+              "pid": 21608,
+              "parentPid": 22896,
+              "name": "conhost.exe",
+              "workingSetBytes": 8306688,
+              "privateBytes": 1466368,
+              "cpuTimeMs": 0
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 873771008,
+            "privateBytes": 633192448,
+            "cpuTimeMs": 8687.5
+          },
+          "parentStartMs": 5755.954100000001,
+          "parentReceiptMs": 6436.9977
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 13668,
+      "stdout": "{\"elapsedMs\":706,\"event\":\"engine-ready\"}\n{\"devicePixelRatio\":1,\"elapsedMs\":3530,\"event\":\"ui-ready\",\"height\":900,\"threadCount\":30,\"width\":1440}\n{\"elapsedMs\":5684,\"event\":\"smoke\",\"ok\":true,\"reason\":null,\"threadCount\":30,\"transcriptCharacters\":29389}\n{\"engineReady\":true,\"event\":\"shutdown\",\"ok\":true}\n",
+      "stderr": "Could not update Suffice taskbar shortcut: shell.writeShortcutLink is unavailable in this host\npage http://suffice.localhost/\npage http://suffice.localhost/\n",
+      "readyMs": 3601.0136999999995,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1447.6954000000005,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "shutdownMs": 4450.8481999999985,
+      "cleanup": {
+        "observedPids": [
+          13668,
+          2236,
+          21092,
+          24224,
+          9996,
+          31380,
+          17800,
+          28076,
+          5260,
+          27960,
+          22896,
+          21608
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "rust",
+      "pair": 2,
+      "errors": [],
+      "events": [
+        {
+          "elapsedMs": 609,
+          "event": "engine-ready",
+          "parentElapsedMs": 657.1882000000005
+        },
+        {
+          "devicePixelRatio": 1,
+          "elapsedMs": 3429,
+          "event": "ui-ready",
+          "height": 900,
+          "threadCount": 30,
+          "width": 1440,
+          "parentElapsedMs": 3477.3505000000005
+        },
+        {
+          "elapsedMs": 5572,
+          "event": "smoke",
+          "ok": true,
+          "reason": null,
+          "threadCount": 30,
+          "transcriptCharacters": 29389,
+          "parentElapsedMs": 5621.192899999998
+        },
+        {
+          "engineReady": true,
+          "event": "shutdown",
+          "ok": true,
+          "parentElapsedMs": 10783.002299999996
+        }
+      ],
+      "snapshots": {
+        "idle": {
+          "rootPid": 4728,
+          "processes": [
+            {
+              "pid": 4728,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27865088,
+              "privateBytes": 4603904,
+              "cpuTimeMs": 234.375
+            },
+            {
+              "pid": 35664,
+              "parentPid": 4728,
+              "name": "conhost.exe",
+              "workingSetBytes": 8122368,
+              "privateBytes": 1466368,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 16136,
+              "parentPid": 4728,
+              "name": "node.exe",
+              "workingSetBytes": 55980032,
+              "privateBytes": 60993536,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 35396,
+              "parentPid": 16136,
+              "name": "conhost.exe",
+              "workingSetBytes": 8314880,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 16736,
+              "parentPid": 4728,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 128126976,
+              "privateBytes": 39563264,
+              "cpuTimeMs": 1281.25
+            },
+            {
+              "pid": 9348,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14028800,
+              "privateBytes": 3325952,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 8952,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 153051136,
+              "privateBytes": 130117632,
+              "cpuTimeMs": 937.5
+            },
+            {
+              "pid": 36740,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44294144,
+              "privateBytes": 12771328,
+              "cpuTimeMs": 265.625
+            },
+            {
+              "pid": 3924,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20262912,
+              "privateBytes": 7688192,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 12536,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 99250176,
+              "privateBytes": 49893376,
+              "cpuTimeMs": 625
+            },
+            {
+              "pid": 33840,
+              "parentPid": 16136,
+              "name": "node.exe",
+              "workingSetBytes": 146837504,
+              "privateBytes": 173711360,
+              "cpuTimeMs": 2156.25
+            },
+            {
+              "pid": 33368,
+              "parentPid": 33840,
+              "name": "conhost.exe",
+              "workingSetBytes": 8306688,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 714440704,
+            "privateBytes": 487084032,
+            "cpuTimeMs": 5781.25
+          },
+          "parentStartMs": 3477.4449999999997,
+          "parentReceiptMs": 4159.971600000001
+        },
+        "active": {
+          "rootPid": 4728,
+          "processes": [
+            {
+              "pid": 4728,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27975680,
+              "privateBytes": 5849088,
+              "cpuTimeMs": 265.625
+            },
+            {
+              "pid": 35664,
+              "parentPid": 4728,
+              "name": "conhost.exe",
+              "workingSetBytes": 8122368,
+              "privateBytes": 1466368,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 16136,
+              "parentPid": 4728,
+              "name": "node.exe",
+              "workingSetBytes": 57298944,
+              "privateBytes": 61878272,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 35396,
+              "parentPid": 16136,
+              "name": "conhost.exe",
+              "workingSetBytes": 8314880,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 16736,
+              "parentPid": 4728,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 127393792,
+              "privateBytes": 38821888,
+              "cpuTimeMs": 1328.125
+            },
+            {
+              "pid": 9348,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14028800,
+              "privateBytes": 3325952,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 8952,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 221048832,
+              "privateBytes": 198230016,
+              "cpuTimeMs": 1312.5
+            },
+            {
+              "pid": 36740,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44716032,
+              "privateBytes": 12652544,
+              "cpuTimeMs": 296.875
+            },
+            {
+              "pid": 3924,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20398080,
+              "privateBytes": 7712768,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 12536,
+              "parentPid": 16736,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 170348544,
+              "privateBytes": 119873536,
+              "cpuTimeMs": 2140.625
+            },
+            {
+              "pid": 33840,
+              "parentPid": 16136,
+              "name": "node.exe",
+              "workingSetBytes": 163958784,
+              "privateBytes": 199245824,
+              "cpuTimeMs": 2328.125
+            },
+            {
+              "pid": 33368,
+              "parentPid": 33840,
+              "name": "conhost.exe",
+              "workingSetBytes": 8306688,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 871911424,
+            "privateBytes": 652005376,
+            "cpuTimeMs": 7968.75
+          },
+          "parentStartMs": 5621.257300000001,
+          "parentReceiptMs": 6289.5897
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 4728,
+      "stdout": "{\"elapsedMs\":609,\"event\":\"engine-ready\"}\n{\"devicePixelRatio\":1,\"elapsedMs\":3429,\"event\":\"ui-ready\",\"height\":900,\"threadCount\":30,\"width\":1440}\n{\"elapsedMs\":5572,\"event\":\"smoke\",\"ok\":true,\"reason\":null,\"threadCount\":30,\"transcriptCharacters\":29389}\n{\"engineReady\":true,\"event\":\"shutdown\",\"ok\":true}\n",
+      "stderr": "Could not update Suffice taskbar shortcut: shell.writeShortcutLink is unavailable in this host\npage http://suffice.localhost/\npage http://suffice.localhost/\n",
+      "readyMs": 3477.3505000000005,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1461.1986999999972,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "shutdownMs": 4560.084999999999,
+      "cleanup": {
+        "observedPids": [
+          4728,
+          35664,
+          16136,
+          35396,
+          16736,
+          9348,
+          8952,
+          36740,
+          3924,
+          12536,
+          33840,
+          33368
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "electron",
+      "pair": 2,
+      "errors": [],
+      "events": [],
+      "snapshots": {
+        "idle": {
+          "rootPid": 8964,
+          "processes": [
+            {
+              "pid": 8964,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13340672,
+              "privateBytes": 9277440,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 34260,
+              "parentPid": 8964,
+              "name": "Suffice.exe",
+              "workingSetBytes": 121831424,
+              "privateBytes": 77504512,
+              "cpuTimeMs": 859.375
+            },
+            {
+              "pid": 1452,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 175607808,
+              "privateBytes": 143036416,
+              "cpuTimeMs": 921.875
+            },
+            {
+              "pid": 31768,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51257344,
+              "privateBytes": 12582912,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 31472,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123387904,
+              "privateBytes": 54767616,
+              "cpuTimeMs": 859.375
+            },
+            {
+              "pid": 29292,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 174952448,
+              "privateBytes": 131305472,
+              "cpuTimeMs": 2000
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 660377600,
+            "privateBytes": 428474368,
+            "cpuTimeMs": 4796.875
+          },
+          "parentStartMs": 3039.5377999999982,
+          "parentReceiptMs": 3748.6705999999976
+        },
+        "active": {
+          "rootPid": 8964,
+          "processes": [
+            {
+              "pid": 8964,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13340672,
+              "privateBytes": 9277440,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 34260,
+              "parentPid": 8964,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123351040,
+              "privateBytes": 78639104,
+              "cpuTimeMs": 859.375
+            },
+            {
+              "pid": 1452,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 237944832,
+              "privateBytes": 205479936,
+              "cpuTimeMs": 1437.5
+            },
+            {
+              "pid": 31768,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51281920,
+              "privateBytes": 12587008,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 31472,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 230518784,
+              "privateBytes": 159858688,
+              "cpuTimeMs": 2593.75
+            },
+            {
+              "pid": 29292,
+              "parentPid": 34260,
+              "name": "Suffice.exe",
+              "workingSetBytes": 178200576,
+              "privateBytes": 134053888,
+              "cpuTimeMs": 2078.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 834637824,
+            "privateBytes": 599896064,
+            "cpuTimeMs": 7125
+          },
+          "parentStartMs": 5361.093799999995,
+          "parentReceiptMs": 6083.176499999994
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 8964,
+      "readyMs": 3034.308799999999,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1612.4012999999977,
+      "shutdownMs": 179.24169999999867,
+      "cleanup": {
+        "observedPids": [
+          8964,
+          34260,
+          1452,
+          31768,
+          31472,
+          29292
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "electron",
+      "pair": 3,
+      "errors": [],
+      "events": [],
+      "snapshots": {
+        "idle": {
+          "rootPid": 33652,
+          "processes": [
+            {
+              "pid": 33652,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13500416,
+              "privateBytes": 9633792,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 12436,
+              "parentPid": 33652,
+              "name": "Suffice.exe",
+              "workingSetBytes": 122155008,
+              "privateBytes": 77688832,
+              "cpuTimeMs": 859.375
+            },
+            {
+              "pid": 30936,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 175529984,
+              "privateBytes": 142983168,
+              "cpuTimeMs": 890.625
+            },
+            {
+              "pid": 35344,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51286016,
+              "privateBytes": 12623872,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 34712,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123469824,
+              "privateBytes": 54583296,
+              "cpuTimeMs": 812.5
+            },
+            {
+              "pid": 34316,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 174309376,
+              "privateBytes": 130850816,
+              "cpuTimeMs": 1828.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 660250624,
+            "privateBytes": 428363776,
+            "cpuTimeMs": 4515.625
+          },
+          "parentStartMs": 3006.8004,
+          "parentReceiptMs": 3749.8575999999957
+        },
+        "active": {
+          "rootPid": 33652,
+          "processes": [
+            {
+              "pid": 33652,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13500416,
+              "privateBytes": 9633792,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 12436,
+              "parentPid": 33652,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123637760,
+              "privateBytes": 78798848,
+              "cpuTimeMs": 890.625
+            },
+            {
+              "pid": 30936,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 235991040,
+              "privateBytes": 203595776,
+              "cpuTimeMs": 1468.75
+            },
+            {
+              "pid": 35344,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51310592,
+              "privateBytes": 12627968,
+              "cpuTimeMs": 93.75
+            },
+            {
+              "pid": 34712,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 228769792,
+              "privateBytes": 158306304,
+              "cpuTimeMs": 2468.75
+            },
+            {
+              "pid": 34316,
+              "parentPid": 12436,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179773440,
+              "privateBytes": 135618560,
+              "cpuTimeMs": 1968.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 832983040,
+            "privateBytes": 598581248,
+            "cpuTimeMs": 6921.875
+          },
+          "parentStartMs": 5321.357599999996,
+          "parentReceiptMs": 6046.019
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 33652,
+      "readyMs": 3001.5574999999953,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1571.4896000000008,
+      "shutdownMs": 217.7911000000022,
+      "cleanup": {
+        "observedPids": [
+          33652,
+          12436,
+          30936,
+          35344,
+          34712,
+          34316
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "rust",
+      "pair": 3,
+      "errors": [],
+      "events": [
+        {
+          "elapsedMs": 620,
+          "event": "engine-ready",
+          "parentElapsedMs": 672.5109000000011
+        },
+        {
+          "devicePixelRatio": 1,
+          "elapsedMs": 3544,
+          "event": "ui-ready",
+          "height": 900,
+          "threadCount": 30,
+          "width": 1440,
+          "parentElapsedMs": 3596.396399999998
+        },
+        {
+          "elapsedMs": 5860,
+          "event": "smoke",
+          "ok": true,
+          "reason": null,
+          "threadCount": 30,
+          "transcriptCharacters": 29389,
+          "parentElapsedMs": 5912.587200000002
+        },
+        {
+          "engineReady": true,
+          "event": "shutdown",
+          "ok": true,
+          "parentElapsedMs": 10992.975900000005
+        }
+      ],
+      "snapshots": {
+        "idle": {
+          "rootPid": 8828,
+          "processes": [
+            {
+              "pid": 8828,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27738112,
+              "privateBytes": 4612096,
+              "cpuTimeMs": 250
+            },
+            {
+              "pid": 25748,
+              "parentPid": 8828,
+              "name": "conhost.exe",
+              "workingSetBytes": 8114176,
+              "privateBytes": 1462272,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 29200,
+              "parentPid": 8828,
+              "name": "node.exe",
+              "workingSetBytes": 55640064,
+              "privateBytes": 60858368,
+              "cpuTimeMs": 156.25
+            },
+            {
+              "pid": 21960,
+              "parentPid": 29200,
+              "name": "conhost.exe",
+              "workingSetBytes": 8314880,
+              "privateBytes": 1482752,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 26972,
+              "parentPid": 8828,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126898176,
+              "privateBytes": 38944768,
+              "cpuTimeMs": 1703.125
+            },
+            {
+              "pid": 14188,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14028800,
+              "privateBytes": 3317760,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33088,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 150458368,
+              "privateBytes": 127492096,
+              "cpuTimeMs": 921.875
+            },
+            {
+              "pid": 34900,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44306432,
+              "privateBytes": 12791808,
+              "cpuTimeMs": 265.625
+            },
+            {
+              "pid": 27660,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20262912,
+              "privateBytes": 7688192,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 25192,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 99659776,
+              "privateBytes": 50151424,
+              "cpuTimeMs": 625
+            },
+            {
+              "pid": 35456,
+              "parentPid": 29200,
+              "name": "node.exe",
+              "workingSetBytes": 146296832,
+              "privateBytes": 173056000,
+              "cpuTimeMs": 2375
+            },
+            {
+              "pid": 36156,
+              "parentPid": 35456,
+              "name": "conhost.exe",
+              "workingSetBytes": 8302592,
+              "privateBytes": 1470464,
+              "cpuTimeMs": 15.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 710021120,
+            "privateBytes": 483328000,
+            "cpuTimeMs": 6531.25
+          },
+          "parentStartMs": 3596.4905,
+          "parentReceiptMs": 4354.998899999999
+        },
+        "active": {
+          "rootPid": 8828,
+          "processes": [
+            {
+              "pid": 8828,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27815936,
+              "privateBytes": 4685824,
+              "cpuTimeMs": 296.875
+            },
+            {
+              "pid": 25748,
+              "parentPid": 8828,
+              "name": "conhost.exe",
+              "workingSetBytes": 8114176,
+              "privateBytes": 1462272,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 29200,
+              "parentPid": 8828,
+              "name": "node.exe",
+              "workingSetBytes": 57049088,
+              "privateBytes": 61829120,
+              "cpuTimeMs": 187.5
+            },
+            {
+              "pid": 21960,
+              "parentPid": 29200,
+              "name": "conhost.exe",
+              "workingSetBytes": 8314880,
+              "privateBytes": 1482752,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 26972,
+              "parentPid": 8828,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126103552,
+              "privateBytes": 38195200,
+              "cpuTimeMs": 1703.125
+            },
+            {
+              "pid": 14188,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14028800,
+              "privateBytes": 3317760,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 33088,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 219299840,
+              "privateBytes": 196005888,
+              "cpuTimeMs": 1390.625
+            },
+            {
+              "pid": 34900,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44773376,
+              "privateBytes": 12718080,
+              "cpuTimeMs": 281.25
+            },
+            {
+              "pid": 27660,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20398080,
+              "privateBytes": 7712768,
+              "cpuTimeMs": 125
+            },
+            {
+              "pid": 25192,
+              "parentPid": 26972,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 170622976,
+              "privateBytes": 119238656,
+              "cpuTimeMs": 2234.375
+            },
+            {
+              "pid": 35456,
+              "parentPid": 29200,
+              "name": "node.exe",
+              "workingSetBytes": 152342528,
+              "privateBytes": 176300032,
+              "cpuTimeMs": 2625
+            },
+            {
+              "pid": 36156,
+              "parentPid": 35456,
+              "name": "conhost.exe",
+              "workingSetBytes": 8302592,
+              "privateBytes": 1470464,
+              "cpuTimeMs": 15.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 857165824,
+            "privateBytes": 624418816,
+            "cpuTimeMs": 8953.125
+          },
+          "parentStartMs": 5912.645799999998,
+          "parentReceiptMs": 6679.246399999996
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 8828,
+      "stdout": "{\"elapsedMs\":620,\"event\":\"engine-ready\"}\n{\"devicePixelRatio\":1,\"elapsedMs\":3544,\"event\":\"ui-ready\",\"height\":900,\"threadCount\":30,\"width\":1440}\n{\"elapsedMs\":5860,\"event\":\"smoke\",\"ok\":true,\"reason\":null,\"threadCount\":30,\"transcriptCharacters\":29389}\n{\"engineReady\":true,\"event\":\"shutdown\",\"ok\":true}\n",
+      "stderr": "Could not update Suffice taskbar shortcut: shell.writeShortcutLink is unavailable in this host\npage http://suffice.localhost/\npage http://suffice.localhost/\n",
+      "readyMs": 3596.396399999998,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1557.580200000004,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "shutdownMs": 4378.642000000007,
+      "cleanup": {
+        "observedPids": [
+          8828,
+          25748,
+          29200,
+          21960,
+          26972,
+          14188,
+          33088,
+          34900,
+          27660,
+          25192,
+          35456,
+          36156
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "rust",
+      "pair": 4,
+      "errors": [],
+      "events": [
+        {
+          "elapsedMs": 636,
+          "event": "engine-ready",
+          "parentElapsedMs": 686.9725999999937
+        },
+        {
+          "devicePixelRatio": 1,
+          "elapsedMs": 3666,
+          "event": "ui-ready",
+          "height": 900,
+          "threadCount": 30,
+          "width": 1440,
+          "parentElapsedMs": 3716.6587
+        },
+        {
+          "elapsedMs": 5952,
+          "event": "smoke",
+          "ok": true,
+          "reason": null,
+          "threadCount": 30,
+          "transcriptCharacters": 29389,
+          "parentElapsedMs": 6002.539000000004
+        },
+        {
+          "engineReady": true,
+          "event": "shutdown",
+          "ok": true,
+          "parentElapsedMs": 11179.715200000006
+        }
+      ],
+      "snapshots": {
+        "idle": {
+          "rootPid": 33632,
+          "processes": [
+            {
+              "pid": 33632,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27906048,
+              "privateBytes": 5472256,
+              "cpuTimeMs": 218.75
+            },
+            {
+              "pid": 30240,
+              "parentPid": 33632,
+              "name": "conhost.exe",
+              "workingSetBytes": 8118272,
+              "privateBytes": 1454080,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 564,
+              "parentPid": 33632,
+              "name": "node.exe",
+              "workingSetBytes": 55754752,
+              "privateBytes": 60624896,
+              "cpuTimeMs": 171.875
+            },
+            {
+              "pid": 368,
+              "parentPid": 564,
+              "name": "conhost.exe",
+              "workingSetBytes": 8327168,
+              "privateBytes": 1503232,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 30808,
+              "parentPid": 33632,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126836736,
+              "privateBytes": 38858752,
+              "cpuTimeMs": 1578.125
+            },
+            {
+              "pid": 33944,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14024704,
+              "privateBytes": 3321856,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 31972,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 144015360,
+              "privateBytes": 119803904,
+              "cpuTimeMs": 984.375
+            },
+            {
+              "pid": 3640,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44273664,
+              "privateBytes": 12750848,
+              "cpuTimeMs": 312.5
+            },
+            {
+              "pid": 34208,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20320256,
+              "privateBytes": 7696384,
+              "cpuTimeMs": 78.125
+            },
+            {
+              "pid": 18676,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 102379520,
+              "privateBytes": 52785152,
+              "cpuTimeMs": 656.25
+            },
+            {
+              "pid": 18852,
+              "parentPid": 564,
+              "name": "node.exe",
+              "workingSetBytes": 146866176,
+              "privateBytes": 174854144,
+              "cpuTimeMs": 2375
+            },
+            {
+              "pid": 30988,
+              "parentPid": 18852,
+              "name": "conhost.exe",
+              "workingSetBytes": 8323072,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 707145728,
+            "privateBytes": 480600064,
+            "cpuTimeMs": 6468.75
+          },
+          "parentStartMs": 3716.721900000004,
+          "parentReceiptMs": 4485.502500000002
+        },
+        "active": {
+          "rootPid": 33632,
+          "processes": [
+            {
+              "pid": 33632,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27906048,
+              "privateBytes": 5009408,
+              "cpuTimeMs": 234.375
+            },
+            {
+              "pid": 30240,
+              "parentPid": 33632,
+              "name": "conhost.exe",
+              "workingSetBytes": 8118272,
+              "privateBytes": 1454080,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 564,
+              "parentPid": 33632,
+              "name": "node.exe",
+              "workingSetBytes": 57221120,
+              "privateBytes": 61624320,
+              "cpuTimeMs": 203.125
+            },
+            {
+              "pid": 368,
+              "parentPid": 564,
+              "name": "conhost.exe",
+              "workingSetBytes": 8327168,
+              "privateBytes": 1503232,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 30808,
+              "parentPid": 33632,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126251008,
+              "privateBytes": 38301696,
+              "cpuTimeMs": 1609.375
+            },
+            {
+              "pid": 33944,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14024704,
+              "privateBytes": 3321856,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 31972,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 202018816,
+              "privateBytes": 178765824,
+              "cpuTimeMs": 1343.75
+            },
+            {
+              "pid": 3640,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 44699648,
+              "privateBytes": 12619776,
+              "cpuTimeMs": 312.5
+            },
+            {
+              "pid": 34208,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20455424,
+              "privateBytes": 7725056,
+              "cpuTimeMs": 78.125
+            },
+            {
+              "pid": 18676,
+              "parentPid": 30808,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 173776896,
+              "privateBytes": 123240448,
+              "cpuTimeMs": 2390.625
+            },
+            {
+              "pid": 18852,
+              "parentPid": 564,
+              "name": "node.exe",
+              "workingSetBytes": 152399872,
+              "privateBytes": 175833088,
+              "cpuTimeMs": 2625
+            },
+            {
+              "pid": 30988,
+              "parentPid": 18852,
+              "name": "conhost.exe",
+              "workingSetBytes": 8323072,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 843522048,
+            "privateBytes": 610873344,
+            "cpuTimeMs": 8890.625
+          },
+          "parentStartMs": 6002.592199999999,
+          "parentReceiptMs": 6762.834000000003
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 33632,
+      "stdout": "{\"elapsedMs\":636,\"event\":\"engine-ready\"}\n{\"devicePixelRatio\":1,\"elapsedMs\":3666,\"event\":\"ui-ready\",\"height\":900,\"threadCount\":30,\"width\":1440}\n{\"elapsedMs\":5952,\"event\":\"smoke\",\"ok\":true,\"reason\":null,\"threadCount\":30,\"transcriptCharacters\":29389}\n{\"engineReady\":true,\"event\":\"shutdown\",\"ok\":true}\n",
+      "stderr": "Could not update Suffice taskbar shortcut: shell.writeShortcutLink is unavailable in this host\npage http://suffice.localhost/\npage http://suffice.localhost/\n",
+      "readyMs": 3716.6587,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1517.0264000000025,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "shutdownMs": 4488.707999999999,
+      "cleanup": {
+        "observedPids": [
+          33632,
+          30240,
+          564,
+          368,
+          30808,
+          33944,
+          31972,
+          3640,
+          34208,
+          18676,
+          18852,
+          30988
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "electron",
+      "pair": 4,
+      "errors": [],
+      "events": [],
+      "snapshots": {
+        "idle": {
+          "rootPid": 29128,
+          "processes": [
+            {
+              "pid": 29128,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13340672,
+              "privateBytes": 9273344,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 36596,
+              "parentPid": 29128,
+              "name": "Suffice.exe",
+              "workingSetBytes": 122249216,
+              "privateBytes": 77799424,
+              "cpuTimeMs": 796.875
+            },
+            {
+              "pid": 34904,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 175415296,
+              "privateBytes": 142864384,
+              "cpuTimeMs": 828.125
+            },
+            {
+              "pid": 30828,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51294208,
+              "privateBytes": 12599296,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 25740,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123305984,
+              "privateBytes": 54673408,
+              "cpuTimeMs": 578.125
+            },
+            {
+              "pid": 26344,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 175210496,
+              "privateBytes": 131321856,
+              "cpuTimeMs": 1843.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 660815872,
+            "privateBytes": 428531712,
+            "cpuTimeMs": 4234.375
+          },
+          "parentStartMs": 2967.9841000000015,
+          "parentReceiptMs": 3689.33189999999
+        },
+        "active": {
+          "rootPid": 29128,
+          "processes": [
+            {
+              "pid": 29128,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13340672,
+              "privateBytes": 9273344,
+              "cpuTimeMs": 46.875
+            },
+            {
+              "pid": 36596,
+              "parentPid": 29128,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123723776,
+              "privateBytes": 78893056,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 34904,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 238297088,
+              "privateBytes": 205799424,
+              "cpuTimeMs": 1265.625
+            },
+            {
+              "pid": 30828,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51318784,
+              "privateBytes": 12603392,
+              "cpuTimeMs": 140.625
+            },
+            {
+              "pid": 25740,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 229867520,
+              "privateBytes": 159744000,
+              "cpuTimeMs": 2234.375
+            },
+            {
+              "pid": 26344,
+              "parentPid": 36596,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179798016,
+              "privateBytes": 135581696,
+              "cpuTimeMs": 1968.75
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 836345856,
+            "privateBytes": 601894912,
+            "cpuTimeMs": 6500
+          },
+          "parentStartMs": 5286.6299,
+          "parentReceiptMs": 5970.583399999989
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 29128,
+      "readyMs": 2961.730199999991,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1597.2853000000032,
+      "shutdownMs": 185.7283000000025,
+      "cleanup": {
+        "observedPids": [
+          29128,
+          36596,
+          34904,
+          30828,
+          25740,
+          26344
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "electron",
+      "pair": 5,
+      "errors": [],
+      "events": [],
+      "snapshots": {
+        "idle": {
+          "rootPid": 18208,
+          "processes": [
+            {
+              "pid": 18208,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13332480,
+              "privateBytes": 9265152,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 4124,
+              "parentPid": 18208,
+              "name": "Suffice.exe",
+              "workingSetBytes": 122208256,
+              "privateBytes": 77660160,
+              "cpuTimeMs": 812.5
+            },
+            {
+              "pid": 28620,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 174989312,
+              "privateBytes": 142356480,
+              "cpuTimeMs": 906.25
+            },
+            {
+              "pid": 4144,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51408896,
+              "privateBytes": 12812288,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 36084,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123273216,
+              "privateBytes": 54890496,
+              "cpuTimeMs": 593.75
+            },
+            {
+              "pid": 33392,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 174432256,
+              "privateBytes": 129470464,
+              "cpuTimeMs": 1828.125
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 659644416,
+            "privateBytes": 426455040,
+            "cpuTimeMs": 4281.25
+          },
+          "parentStartMs": 2963.788499999995,
+          "parentReceiptMs": 3692.6431999999913
+        },
+        "active": {
+          "rootPid": 18208,
+          "processes": [
+            {
+              "pid": 18208,
+              "parentPid": 36152,
+              "name": "cmd.exe",
+              "workingSetBytes": 13332480,
+              "privateBytes": 9265152,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 4124,
+              "parentPid": 18208,
+              "name": "Suffice.exe",
+              "workingSetBytes": 123609088,
+              "privateBytes": 78667776,
+              "cpuTimeMs": 843.75
+            },
+            {
+              "pid": 28620,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 238374912,
+              "privateBytes": 205864960,
+              "cpuTimeMs": 1281.25
+            },
+            {
+              "pid": 4144,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 51433472,
+              "privateBytes": 12816384,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 36084,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 230457344,
+              "privateBytes": 159592448,
+              "cpuTimeMs": 2234.375
+            },
+            {
+              "pid": 33392,
+              "parentPid": 4124,
+              "name": "Suffice.exe",
+              "workingSetBytes": 179466240,
+              "privateBytes": 134483968,
+              "cpuTimeMs": 1984.375
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 836673536,
+            "privateBytes": 600690688,
+            "cpuTimeMs": 6484.375
+          },
+          "parentStartMs": 5279.922999999995,
+          "parentReceiptMs": 6039.190599999987
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 18208,
+      "readyMs": 2958.800199999998,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1587.268200000006,
+      "shutdownMs": 201.11569999999483,
+      "cleanup": {
+        "observedPids": [
+          18208,
+          4124,
+          28620,
+          4144,
+          36084,
+          33392
+        ],
+        "remaining": []
+      }
+    },
+    {
+      "host": "rust",
+      "pair": 5,
+      "errors": [],
+      "events": [
+        {
+          "elapsedMs": 667,
+          "event": "engine-ready",
+          "parentElapsedMs": 718.9523999999947
+        },
+        {
+          "devicePixelRatio": 1,
+          "elapsedMs": 3688,
+          "event": "ui-ready",
+          "height": 900,
+          "threadCount": 30,
+          "width": 1440,
+          "parentElapsedMs": 3740.219699999987
+        },
+        {
+          "elapsedMs": 5969,
+          "event": "smoke",
+          "ok": true,
+          "reason": null,
+          "threadCount": 30,
+          "transcriptCharacters": 29389,
+          "parentElapsedMs": 6021.253699999987
+        },
+        {
+          "engineReady": true,
+          "event": "shutdown",
+          "ok": true,
+          "parentElapsedMs": 11197.36129999999
+        }
+      ],
+      "snapshots": {
+        "idle": {
+          "rootPid": 33884,
+          "processes": [
+            {
+              "pid": 33884,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27906048,
+              "privateBytes": 5414912,
+              "cpuTimeMs": 218.75
+            },
+            {
+              "pid": 22712,
+              "parentPid": 33884,
+              "name": "conhost.exe",
+              "workingSetBytes": 8118272,
+              "privateBytes": 1466368,
+              "cpuTimeMs": 0
+            },
+            {
+              "pid": 33100,
+              "parentPid": 33884,
+              "name": "node.exe",
+              "workingSetBytes": 55812096,
+              "privateBytes": 60653568,
+              "cpuTimeMs": 156.25
+            },
+            {
+              "pid": 28204,
+              "parentPid": 33100,
+              "name": "conhost.exe",
+              "workingSetBytes": 8302592,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 33352,
+              "parentPid": 33884,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 127778816,
+              "privateBytes": 39374848,
+              "cpuTimeMs": 1359.375
+            },
+            {
+              "pid": 7264,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14032896,
+              "privateBytes": 3330048,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 5412,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 150282240,
+              "privateBytes": 126824448,
+              "cpuTimeMs": 1062.5
+            },
+            {
+              "pid": 17072,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 45858816,
+              "privateBytes": 12849152,
+              "cpuTimeMs": 234.375
+            },
+            {
+              "pid": 35896,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20275200,
+              "privateBytes": 7688192,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 29032,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 99287040,
+              "privateBytes": 50200576,
+              "cpuTimeMs": 734.375
+            },
+            {
+              "pid": 12992,
+              "parentPid": 33100,
+              "name": "node.exe",
+              "workingSetBytes": 146227200,
+              "privateBytes": 174546944,
+              "cpuTimeMs": 2500
+            },
+            {
+              "pid": 564,
+              "parentPid": 12992,
+              "name": "conhost.exe",
+              "workingSetBytes": 8306688,
+              "privateBytes": 1478656,
+              "cpuTimeMs": 31.25
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 712187904,
+            "privateBytes": 485302272,
+            "cpuTimeMs": 6453.125
+          },
+          "parentStartMs": 3740.295699999988,
+          "parentReceiptMs": 4467.338899999988
+        },
+        "active": {
+          "rootPid": 33884,
+          "processes": [
+            {
+              "pid": 33884,
+              "parentPid": 36152,
+              "name": "suffice-desktop-rust.exe",
+              "workingSetBytes": 27971584,
+              "privateBytes": 4714496,
+              "cpuTimeMs": 250
+            },
+            {
+              "pid": 22712,
+              "parentPid": 33884,
+              "name": "conhost.exe",
+              "workingSetBytes": 8118272,
+              "privateBytes": 1466368,
+              "cpuTimeMs": 0
+            },
+            {
+              "pid": 33100,
+              "parentPid": 33884,
+              "name": "node.exe",
+              "workingSetBytes": 57323520,
+              "privateBytes": 61636608,
+              "cpuTimeMs": 203.125
+            },
+            {
+              "pid": 28204,
+              "parentPid": 33100,
+              "name": "conhost.exe",
+              "workingSetBytes": 8302592,
+              "privateBytes": 1474560,
+              "cpuTimeMs": 15.625
+            },
+            {
+              "pid": 33352,
+              "parentPid": 33884,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 126943232,
+              "privateBytes": 38576128,
+              "cpuTimeMs": 1453.125
+            },
+            {
+              "pid": 7264,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 14032896,
+              "privateBytes": 3330048,
+              "cpuTimeMs": 31.25
+            },
+            {
+              "pid": 5412,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 220897280,
+              "privateBytes": 196861952,
+              "cpuTimeMs": 1453.125
+            },
+            {
+              "pid": 17072,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 46297088,
+              "privateBytes": 12767232,
+              "cpuTimeMs": 250
+            },
+            {
+              "pid": 35896,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 20410368,
+              "privateBytes": 7712768,
+              "cpuTimeMs": 109.375
+            },
+            {
+              "pid": 29032,
+              "parentPid": 33352,
+              "name": "msedgewebview2.exe",
+              "workingSetBytes": 170594304,
+              "privateBytes": 120049664,
+              "cpuTimeMs": 2578.125
+            },
+            {
+              "pid": 12992,
+              "parentPid": 33100,
+              "name": "node.exe",
+              "workingSetBytes": 151216128,
+              "privateBytes": 174845952,
+              "cpuTimeMs": 2671.875
+            },
+            {
+              "pid": 564,
+              "parentPid": 12992,
+              "name": "conhost.exe",
+              "workingSetBytes": 8306688,
+              "privateBytes": 1478656,
+              "cpuTimeMs": 31.25
+            }
+          ],
+          "totals": {
+            "workingSetBytes": 860413952,
+            "privateBytes": 624914432,
+            "cpuTimeMs": 9046.875
+          },
+          "parentStartMs": 6021.310599999997,
+          "parentReceiptMs": 6772.294299999994
+        }
+      },
+      "fixtureSha256": "22e6663cdc6fa2d54b0be304c9846f5e6c8c5fd5f27d88baf9672cd0a001701a",
+      "pid": 33884,
+      "stdout": "{\"elapsedMs\":667,\"event\":\"engine-ready\"}\n{\"devicePixelRatio\":1,\"elapsedMs\":3688,\"event\":\"ui-ready\",\"height\":900,\"threadCount\":30,\"width\":1440}\n{\"elapsedMs\":5969,\"event\":\"smoke\",\"ok\":true,\"reason\":null,\"threadCount\":30,\"transcriptCharacters\":29389}\n{\"engineReady\":true,\"event\":\"shutdown\",\"ok\":true}\n",
+      "stderr": "Could not update Suffice taskbar shortcut: shell.writeShortcutLink is unavailable in this host\npage http://suffice.localhost/\npage http://suffice.localhost/\n",
+      "readyMs": 3740.219699999987,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "devicePixelRatio": 1
+      },
+      "selectionMs": 1553.906999999992,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "shutdownMs": 4490.664000000004,
+      "cleanup": {
+        "observedPids": [
+          33884,
+          22712,
+          33100,
+          28204,
+          33352,
+          7264,
+          5412,
+          17072,
+          35896,
+          29032,
+          12992,
+          564
+        ],
+        "remaining": []
+      }
+    }
+  ],
+  "limitations": [
+    "WebView2 is an external shared runtime; its installation size is excluded and shared processes may not appear in the Rust process tree.",
+    "CIM snapshots can miss short-lived processes and PID reuse can affect cleanup observations."
+  ],
+  "completedAt": "2026-11-15T20:19:42.838Z",
+  "sandboxRemoved": true
+}

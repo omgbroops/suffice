@@ -1,0 +1,26 @@
+v24.22.2
+Baseline source: C:/Users/aryas/Programming/suffice-rust-baseline-a5116549/source
+Command: pinned node --test --test-concurrency=1 apps/desktop/test/settings.test.mjs
+✖ settings persist real preferences, preserve chats and use Pi provider registry (39510.8072ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40336.6326
+
+✖ failing tests:
+
+test at apps\desktop\test\settings.test.mjs:9:1
+✖ settings persist real preferences, preserve chats and use Pi provider registry (39510.8072ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('switch', { name: 'Close panel with its last tab', exact: true })[22m
+  
+      at TestContext.<anonymous> (C:\Users\aryas\Programming\suffice-rust-baseline-a5116549\source\apps\desktop\test\settings.test.mjs:26:938) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByRole('switch', { name: 'Close panel with its last tab', exact: true })" ]
+  }
+Exit code: 1

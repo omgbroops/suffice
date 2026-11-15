@@ -9,6 +9,7 @@
   "files": [
     "packages/cli/bin/",
     "packages/cli/src/",
+    "packages/cli/native/",
     "packages/cli/README.md",
     "packages/cli/THIRD-PARTY-NOTICES.md"
   ],
@@ -17,6 +18,7 @@
     "node": ">=24"
   },
   "scripts": {
+    "native:build": "node scripts/rust-migration/build-native.mjs",
     "pi": "node scripts/pi.mjs",
     "login": "node scripts/login.mjs",
     "preflight": "node scripts/preflight.mjs",

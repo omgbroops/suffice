@@ -1,0 +1,1426 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-15T18:32:53.398Z",
+  "node": "v24.22.2",
+  "platform": "win32",
+  "method": {
+    "iterations": 5,
+    "order": "alternate launch order each iteration",
+    "startup": "parent monotonic wall time from spawn to ready JSONL event",
+    "snapshots": "CIM descendant tree approximately 2 and 3 seconds after ready; shared or reparented WebView2 processes may not be captured",
+    "cpu": "matched-PID cumulative CPU-time delta divided by wall time; 100% is one core",
+    "scope": "Architecture probes with synthetic in-memory UI; workload differs from full Electron application, so no full-app equivalent or parity claim.",
+    "cache": "no OS cache flush"
+  },
+  "binaries": {
+    "native": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice\\experiments\\rust-desktop-probe\\target\\release\\suffice-rust-desktop-probe.exe",
+      "bytes": 226304,
+      "sha256": "8128a399af1bceab9282d7f74c51709f5aa223ee0070947c480061dea517b824"
+    },
+    "wry": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice\\experiments\\wry-desktop-probe\\target\\release\\suffice-wry-probe.exe",
+      "bytes": 576512,
+      "sha256": "c9417d55fee4a2d9f4ad07c276b69e50ae1b4ca46e70af12a47f58c8db983d93"
+    }
+  },
+  "samples": [
+    {
+      "kind": "native",
+      "iteration": 1,
+      "events": [
+        {
+          "atMs": 71.138,
+          "value": {
+            "elapsed_ms": 33.6023,
+            "event": "ready"
+          }
+        },
+        {
+          "atMs": 300.8233,
+          "value": {
+            "elapsed_ms": 263.7611,
+            "event": "selection",
+            "messages": 1000,
+            "resize_verified": true,
+            "scroll_first_visible_line": 966,
+            "selected": [
+              1,
+              29
+            ],
+            "text_matches": true
+          }
+        },
+        {
+          "atMs": 6301.614500000001,
+          "value": {
+            "elapsed_ms": 6264.5925,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "",
+      "pid": 30132,
+      "readyMs": 71.1487,
+      "idle": {
+        "rootPid": 30132,
+        "processes": [
+          {
+            "pid": 30132,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17125376,
+            "privateBytes": 2539520,
+            "cpuTimeMs": 78.125
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17125376,
+          "privateBytes": 2539520,
+          "cpuTimeMs": 78.125
+        }
+      },
+      "idleSecond": {
+        "rootPid": 30132,
+        "processes": [
+          {
+            "pid": 30132,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17125376,
+            "privateBytes": 2539520,
+            "cpuTimeMs": 78.125
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17125376,
+          "privateBytes": 2539520,
+          "cpuTimeMs": 78.125
+        }
+      },
+      "intervalMs": 2059.5728,
+      "idleCpu": {
+        "matchedPids": [
+          30132
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "wry",
+      "iteration": 1,
+      "events": [
+        {
+          "atMs": 503.40529999999944,
+          "value": {
+            "event": "ready",
+            "fixtureMessages": 1000,
+            "fixtureThreads": 30,
+            "host": "wry-webview2",
+            "pid": 34272,
+            "readyMs": 469.42699999999996
+          }
+        },
+        {
+          "atMs": 518.9919,
+          "value": {
+            "event": "verified",
+            "height": 650,
+            "keyboardFocus": true,
+            "messages": 1000,
+            "ok": true,
+            "scrollTop": 16448,
+            "selectionMs": 8.799999999813735,
+            "threads": 30,
+            "width": 900
+          }
+        },
+        {
+          "atMs": 6531.797699999999,
+          "value": {
+            "elapsedMs": 6497.8339,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "WebView2 build starting at 29.9377ms\nWebView2 build completed at 434.5642ms\nFixture load: about:blank\nFixture load: about:blank\n",
+      "pid": 34272,
+      "readyMs": 503.41159999999945,
+      "idle": {
+        "rootPid": 34272,
+        "processes": [
+          {
+            "pid": 34272,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26734592,
+            "privateBytes": 4239360,
+            "cpuTimeMs": 62.5
+          },
+          {
+            "pid": 27532,
+            "parentPid": 34272,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122032128,
+            "privateBytes": 37449728,
+            "cpuTimeMs": 1140.625
+          },
+          {
+            "pid": 22852,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13955072,
+            "privateBytes": 3338240,
+            "cpuTimeMs": 15.625
+          },
+          {
+            "pid": 31440,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 109891584,
+            "privateBytes": 81203200,
+            "cpuTimeMs": 265.625
+          },
+          {
+            "pid": 12424,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 45121536,
+            "privateBytes": 12705792,
+            "cpuTimeMs": 187.5
+          },
+          {
+            "pid": 15588,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19533824,
+            "privateBytes": 7553024,
+            "cpuTimeMs": 109.375
+          },
+          {
+            "pid": 26824,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75268096,
+            "privateBytes": 41885696,
+            "cpuTimeMs": 171.875
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 412536832,
+          "privateBytes": 188375040,
+          "cpuTimeMs": 1953.125
+        }
+      },
+      "idleSecond": {
+        "rootPid": 34272,
+        "processes": [
+          {
+            "pid": 34272,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26734592,
+            "privateBytes": 4239360,
+            "cpuTimeMs": 62.5
+          },
+          {
+            "pid": 27532,
+            "parentPid": 34272,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 121823232,
+            "privateBytes": 37212160,
+            "cpuTimeMs": 1140.625
+          },
+          {
+            "pid": 22852,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13955072,
+            "privateBytes": 3338240,
+            "cpuTimeMs": 15.625
+          },
+          {
+            "pid": 31440,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 109854720,
+            "privateBytes": 81166336,
+            "cpuTimeMs": 265.625
+          },
+          {
+            "pid": 12424,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 45121536,
+            "privateBytes": 12705792,
+            "cpuTimeMs": 187.5
+          },
+          {
+            "pid": 15588,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19533824,
+            "privateBytes": 7553024,
+            "cpuTimeMs": 109.375
+          },
+          {
+            "pid": 26824,
+            "parentPid": 27532,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75268096,
+            "privateBytes": 41885696,
+            "cpuTimeMs": 171.875
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 412291072,
+          "privateBytes": 188100608,
+          "cpuTimeMs": 1953.125
+        }
+      },
+      "intervalMs": 1980.9624999999996,
+      "idleCpu": {
+        "matchedPids": [
+          34272,
+          27532,
+          22852,
+          31440,
+          12424,
+          15588,
+          26824
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "wry",
+      "iteration": 2,
+      "events": [
+        {
+          "atMs": 450.7579999999998,
+          "value": {
+            "event": "ready",
+            "fixtureMessages": 1000,
+            "fixtureThreads": 30,
+            "host": "wry-webview2",
+            "pid": 33452,
+            "readyMs": 423.40450000000004
+          }
+        },
+        {
+          "atMs": 468.8148000000001,
+          "value": {
+            "event": "verified",
+            "height": 650,
+            "keyboardFocus": true,
+            "messages": 1000,
+            "ok": true,
+            "scrollTop": 16448,
+            "selectionMs": 10.5,
+            "threads": 30,
+            "width": 900
+          }
+        },
+        {
+          "atMs": 6474.0656,
+          "value": {
+            "elapsedMs": 6446.6853,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "WebView2 build starting at 43.3808ms\nWebView2 build completed at 375.7786ms\nFixture load: about:blank\nFixture load: about:blank\n",
+      "pid": 33452,
+      "readyMs": 450.7656999999999,
+      "idle": {
+        "rootPid": 33452,
+        "processes": [
+          {
+            "pid": 33452,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26775552,
+            "privateBytes": 4222976,
+            "cpuTimeMs": 78.125
+          },
+          {
+            "pid": 29800,
+            "parentPid": 33452,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122257408,
+            "privateBytes": 38711296,
+            "cpuTimeMs": 890.625
+          },
+          {
+            "pid": 13092,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13946880,
+            "privateBytes": 3313664,
+            "cpuTimeMs": 31.25
+          },
+          {
+            "pid": 22316,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 102080512,
+            "privateBytes": 81653760,
+            "cpuTimeMs": 328.125
+          },
+          {
+            "pid": 34236,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 43347968,
+            "privateBytes": 12406784,
+            "cpuTimeMs": 187.5
+          },
+          {
+            "pid": 28932,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19554304,
+            "privateBytes": 8601600,
+            "cpuTimeMs": 46.875
+          },
+          {
+            "pid": 7516,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75104256,
+            "privateBytes": 42086400,
+            "cpuTimeMs": 156.25
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 403066880,
+          "privateBytes": 190996480,
+          "cpuTimeMs": 1718.75
+        }
+      },
+      "idleSecond": {
+        "rootPid": 33452,
+        "processes": [
+          {
+            "pid": 33452,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26775552,
+            "privateBytes": 4222976,
+            "cpuTimeMs": 78.125
+          },
+          {
+            "pid": 29800,
+            "parentPid": 33452,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 121958400,
+            "privateBytes": 38387712,
+            "cpuTimeMs": 890.625
+          },
+          {
+            "pid": 13092,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13946880,
+            "privateBytes": 3313664,
+            "cpuTimeMs": 31.25
+          },
+          {
+            "pid": 22316,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 102080512,
+            "privateBytes": 81653760,
+            "cpuTimeMs": 328.125
+          },
+          {
+            "pid": 34236,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 43347968,
+            "privateBytes": 12406784,
+            "cpuTimeMs": 187.5
+          },
+          {
+            "pid": 28932,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19554304,
+            "privateBytes": 8601600,
+            "cpuTimeMs": 46.875
+          },
+          {
+            "pid": 7516,
+            "parentPid": 29800,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75104256,
+            "privateBytes": 42086400,
+            "cpuTimeMs": 156.25
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 402767872,
+          "privateBytes": 190672896,
+          "cpuTimeMs": 1718.75
+        }
+      },
+      "intervalMs": 2089.6332999999995,
+      "idleCpu": {
+        "matchedPids": [
+          33452,
+          29800,
+          13092,
+          22316,
+          34236,
+          28932,
+          7516
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "native",
+      "iteration": 2,
+      "events": [
+        {
+          "atMs": 83.90039999999863,
+          "value": {
+            "elapsed_ms": 57.4542,
+            "event": "ready"
+          }
+        },
+        {
+          "atMs": 317.59579999999914,
+          "value": {
+            "elapsed_ms": 291.1841,
+            "event": "selection",
+            "messages": 1000,
+            "resize_verified": true,
+            "scroll_first_visible_line": 966,
+            "selected": [
+              1,
+              29
+            ],
+            "text_matches": true
+          }
+        },
+        {
+          "atMs": 6317.704699999998,
+          "value": {
+            "elapsed_ms": 6291.2776,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "",
+      "pid": 30736,
+      "readyMs": 83.90539999999964,
+      "idle": {
+        "rootPid": 30736,
+        "processes": [
+          {
+            "pid": 30736,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17108992,
+            "privateBytes": 2531328,
+            "cpuTimeMs": 62.5
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17108992,
+          "privateBytes": 2531328,
+          "cpuTimeMs": 62.5
+        }
+      },
+      "idleSecond": {
+        "rootPid": 30736,
+        "processes": [
+          {
+            "pid": 30736,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17108992,
+            "privateBytes": 2531328,
+            "cpuTimeMs": 62.5
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17108992,
+          "privateBytes": 2531328,
+          "cpuTimeMs": 62.5
+        }
+      },
+      "intervalMs": 2095.185699999998,
+      "idleCpu": {
+        "matchedPids": [
+          30736
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "native",
+      "iteration": 3,
+      "events": [
+        {
+          "atMs": 70.21169999999984,
+          "value": {
+            "elapsed_ms": 43.8378,
+            "event": "ready"
+          }
+        },
+        {
+          "atMs": 299.3085000000028,
+          "value": {
+            "elapsed_ms": 273.0259,
+            "event": "selection",
+            "messages": 1000,
+            "resize_verified": true,
+            "scroll_first_visible_line": 966,
+            "selected": [
+              1,
+              29
+            ],
+            "text_matches": true
+          }
+        },
+        {
+          "atMs": 6322.230600000003,
+          "value": {
+            "elapsed_ms": 6295.9767,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "",
+      "pid": 2904,
+      "readyMs": 70.21720000000278,
+      "idle": {
+        "rootPid": 2904,
+        "processes": [
+          {
+            "pid": 2904,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17113088,
+            "privateBytes": 2519040,
+            "cpuTimeMs": 93.75
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17113088,
+          "privateBytes": 2519040,
+          "cpuTimeMs": 93.75
+        }
+      },
+      "idleSecond": {
+        "rootPid": 2904,
+        "processes": [
+          {
+            "pid": 2904,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17113088,
+            "privateBytes": 2519040,
+            "cpuTimeMs": 93.75
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17113088,
+          "privateBytes": 2519040,
+          "cpuTimeMs": 93.75
+        }
+      },
+      "intervalMs": 2043.1311999999998,
+      "idleCpu": {
+        "matchedPids": [
+          2904
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "wry",
+      "iteration": 3,
+      "events": [
+        {
+          "atMs": 480.2443000000021,
+          "value": {
+            "event": "ready",
+            "fixtureMessages": 1000,
+            "fixtureThreads": 30,
+            "host": "wry-webview2",
+            "pid": 5420,
+            "readyMs": 454.0072
+          }
+        },
+        {
+          "atMs": 517.4288000000015,
+          "value": {
+            "event": "verified",
+            "height": 650,
+            "keyboardFocus": true,
+            "messages": 1000,
+            "ok": true,
+            "scrollTop": 16448,
+            "selectionMs": 28.59999999962747,
+            "threads": 30,
+            "width": 900
+          }
+        },
+        {
+          "atMs": 6521.827799999999,
+          "value": {
+            "elapsedMs": 6495.54,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "WebView2 build starting at 31.6004ms\nWebView2 build completed at 399.6255ms\nFixture load: about:blank\nFixture load: about:blank\n",
+      "pid": 5420,
+      "readyMs": 480.25670000000173,
+      "idle": {
+        "rootPid": 5420,
+        "processes": [
+          {
+            "pid": 5420,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26882048,
+            "privateBytes": 4239360,
+            "cpuTimeMs": 62.5
+          },
+          {
+            "pid": 35232,
+            "parentPid": 5420,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122089472,
+            "privateBytes": 37588992,
+            "cpuTimeMs": 781.25
+          },
+          {
+            "pid": 30148,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13950976,
+            "privateBytes": 3313664,
+            "cpuTimeMs": 15.625
+          },
+          {
+            "pid": 32628,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 101740544,
+            "privateBytes": 81129472,
+            "cpuTimeMs": 328.125
+          },
+          {
+            "pid": 30424,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 45146112,
+            "privateBytes": 12738560,
+            "cpuTimeMs": 234.375
+          },
+          {
+            "pid": 5360,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19566592,
+            "privateBytes": 7569408,
+            "cpuTimeMs": 78.125
+          },
+          {
+            "pid": 34716,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75218944,
+            "privateBytes": 41594880,
+            "cpuTimeMs": 156.25
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 404594688,
+          "privateBytes": 188174336,
+          "cpuTimeMs": 1656.25
+        }
+      },
+      "idleSecond": {
+        "rootPid": 5420,
+        "processes": [
+          {
+            "pid": 5420,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26882048,
+            "privateBytes": 4239360,
+            "cpuTimeMs": 62.5
+          },
+          {
+            "pid": 35232,
+            "parentPid": 5420,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 121798656,
+            "privateBytes": 37273600,
+            "cpuTimeMs": 781.25
+          },
+          {
+            "pid": 30148,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13950976,
+            "privateBytes": 3313664,
+            "cpuTimeMs": 15.625
+          },
+          {
+            "pid": 32628,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 101740544,
+            "privateBytes": 81129472,
+            "cpuTimeMs": 328.125
+          },
+          {
+            "pid": 30424,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 45146112,
+            "privateBytes": 12738560,
+            "cpuTimeMs": 234.375
+          },
+          {
+            "pid": 5360,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19566592,
+            "privateBytes": 7569408,
+            "cpuTimeMs": 78.125
+          },
+          {
+            "pid": 34716,
+            "parentPid": 35232,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75218944,
+            "privateBytes": 41594880,
+            "cpuTimeMs": 156.25
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 404303872,
+          "privateBytes": 187858944,
+          "cpuTimeMs": 1656.25
+        }
+      },
+      "intervalMs": 2039.2976999999955,
+      "idleCpu": {
+        "matchedPids": [
+          5420,
+          35232,
+          30148,
+          32628,
+          30424,
+          5360,
+          34716
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "wry",
+      "iteration": 4,
+      "events": [
+        {
+          "atMs": 467.41270000000077,
+          "value": {
+            "event": "ready",
+            "fixtureMessages": 1000,
+            "fixtureThreads": 30,
+            "host": "wry-webview2",
+            "pid": 34440,
+            "readyMs": 442.4907
+          }
+        },
+        {
+          "atMs": 490.2043000000049,
+          "value": {
+            "event": "verified",
+            "height": 650,
+            "keyboardFocus": true,
+            "messages": 1000,
+            "ok": true,
+            "scrollTop": 16448,
+            "selectionMs": 11.299999999813735,
+            "threads": 30,
+            "width": 900
+          }
+        },
+        {
+          "atMs": 6496.555899999999,
+          "value": {
+            "elapsedMs": 6471.7406,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "WebView2 build starting at 43.4733ms\nWebView2 build completed at 402.801ms\nFixture load: about:blank\nFixture load: about:blank\n",
+      "pid": 34440,
+      "readyMs": 467.41679999999906,
+      "idle": {
+        "rootPid": 34440,
+        "processes": [
+          {
+            "pid": 34440,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26800128,
+            "privateBytes": 4300800,
+            "cpuTimeMs": 140.625
+          },
+          {
+            "pid": 3256,
+            "parentPid": 34440,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122408960,
+            "privateBytes": 37584896,
+            "cpuTimeMs": 828.125
+          },
+          {
+            "pid": 26372,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13971456,
+            "privateBytes": 3317760,
+            "cpuTimeMs": 15.625
+          },
+          {
+            "pid": 33608,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 107868160,
+            "privateBytes": 86786048,
+            "cpuTimeMs": 265.625
+          },
+          {
+            "pid": 29096,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 43884544,
+            "privateBytes": 12619776,
+            "cpuTimeMs": 187.5
+          },
+          {
+            "pid": 14084,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 20295680,
+            "privateBytes": 7569408,
+            "cpuTimeMs": 62.5
+          },
+          {
+            "pid": 31356,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 76451840,
+            "privateBytes": 40722432,
+            "cpuTimeMs": 171.875
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 411680768,
+          "privateBytes": 192901120,
+          "cpuTimeMs": 1671.875
+        }
+      },
+      "idleSecond": {
+        "rootPid": 34440,
+        "processes": [
+          {
+            "pid": 34440,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26800128,
+            "privateBytes": 4300800,
+            "cpuTimeMs": 140.625
+          },
+          {
+            "pid": 3256,
+            "parentPid": 34440,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122195968,
+            "privateBytes": 37347328,
+            "cpuTimeMs": 828.125
+          },
+          {
+            "pid": 26372,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13971456,
+            "privateBytes": 3317760,
+            "cpuTimeMs": 15.625
+          },
+          {
+            "pid": 33608,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 107868160,
+            "privateBytes": 86786048,
+            "cpuTimeMs": 265.625
+          },
+          {
+            "pid": 29096,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 43884544,
+            "privateBytes": 12619776,
+            "cpuTimeMs": 187.5
+          },
+          {
+            "pid": 14084,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 20295680,
+            "privateBytes": 7569408,
+            "cpuTimeMs": 62.5
+          },
+          {
+            "pid": 31356,
+            "parentPid": 3256,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 76451840,
+            "privateBytes": 40722432,
+            "cpuTimeMs": 171.875
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 411467776,
+          "privateBytes": 192663552,
+          "cpuTimeMs": 1671.875
+        }
+      },
+      "intervalMs": 2049.3963000000003,
+      "idleCpu": {
+        "matchedPids": [
+          34440,
+          3256,
+          26372,
+          33608,
+          29096,
+          14084,
+          31356
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "native",
+      "iteration": 4,
+      "events": [
+        {
+          "atMs": 73.68759999999747,
+          "value": {
+            "elapsed_ms": 46.8148,
+            "event": "ready"
+          }
+        },
+        {
+          "atMs": 310.52589999999327,
+          "value": {
+            "elapsed_ms": 283.6382,
+            "event": "selection",
+            "messages": 1000,
+            "resize_verified": true,
+            "scroll_first_visible_line": 966,
+            "selected": [
+              1,
+              29
+            ],
+            "text_matches": true
+          }
+        },
+        {
+          "atMs": 6323.293099999995,
+          "value": {
+            "elapsed_ms": 6296.4511999999995,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "",
+      "pid": 26028,
+      "readyMs": 73.69179999999324,
+      "idle": {
+        "rootPid": 26028,
+        "processes": [
+          {
+            "pid": 26028,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17129472,
+            "privateBytes": 2535424,
+            "cpuTimeMs": 62.5
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17129472,
+          "privateBytes": 2535424,
+          "cpuTimeMs": 62.5
+        }
+      },
+      "idleSecond": {
+        "rootPid": 26028,
+        "processes": [
+          {
+            "pid": 26028,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17129472,
+            "privateBytes": 2535424,
+            "cpuTimeMs": 62.5
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17129472,
+          "privateBytes": 2535424,
+          "cpuTimeMs": 62.5
+        }
+      },
+      "intervalMs": 2127.7983999999997,
+      "idleCpu": {
+        "matchedPids": [
+          26028
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "native",
+      "iteration": 5,
+      "events": [
+        {
+          "atMs": 64.73359999999957,
+          "value": {
+            "elapsed_ms": 37.494800000000005,
+            "event": "ready"
+          }
+        },
+        {
+          "atMs": 290.2363000000041,
+          "value": {
+            "elapsed_ms": 263.044,
+            "event": "selection",
+            "messages": 1000,
+            "resize_verified": true,
+            "scroll_first_visible_line": 966,
+            "selected": [
+              1,
+              29
+            ],
+            "text_matches": true
+          }
+        },
+        {
+          "atMs": 6297.531900000002,
+          "value": {
+            "elapsed_ms": 6270.1465,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "",
+      "pid": 6720,
+      "readyMs": 64.73649999999907,
+      "idle": {
+        "rootPid": 6720,
+        "processes": [
+          {
+            "pid": 6720,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17125376,
+            "privateBytes": 2531328,
+            "cpuTimeMs": 93.75
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17125376,
+          "privateBytes": 2531328,
+          "cpuTimeMs": 93.75
+        }
+      },
+      "idleSecond": {
+        "rootPid": 6720,
+        "processes": [
+          {
+            "pid": 6720,
+            "parentPid": 33180,
+            "name": "suffice-rust-desktop-probe.exe",
+            "workingSetBytes": 17125376,
+            "privateBytes": 2531328,
+            "cpuTimeMs": 93.75
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 17125376,
+          "privateBytes": 2531328,
+          "cpuTimeMs": 93.75
+        }
+      },
+      "intervalMs": 2074.173999999999,
+      "idleCpu": {
+        "matchedPids": [
+          6720
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "wry",
+      "iteration": 5,
+      "events": [
+        {
+          "atMs": 504.31899999999587,
+          "value": {
+            "event": "ready",
+            "fixtureMessages": 1000,
+            "fixtureThreads": 30,
+            "host": "wry-webview2",
+            "pid": 8948,
+            "readyMs": 476.79949999999997
+          }
+        },
+        {
+          "atMs": 522.7508999999991,
+          "value": {
+            "event": "verified",
+            "height": 650,
+            "keyboardFocus": true,
+            "messages": 1000,
+            "ok": true,
+            "scrollTop": 16448,
+            "selectionMs": 11.099999999627473,
+            "threads": 30,
+            "width": 900
+          }
+        },
+        {
+          "atMs": 6529.162799999998,
+          "value": {
+            "elapsedMs": 6501.6969,
+            "event": "shutdown",
+            "ok": true
+          }
+        }
+      ],
+      "errors": [],
+      "stderr": "WebView2 build starting at 32.7585ms\nWebView2 build completed at 437.2942ms\nFixture load: about:blank\nFixture load: about:blank\n",
+      "pid": 8948,
+      "readyMs": 504.32279999999446,
+      "idle": {
+        "rootPid": 8948,
+        "processes": [
+          {
+            "pid": 8948,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26869760,
+            "privateBytes": 4231168,
+            "cpuTimeMs": 109.375
+          },
+          {
+            "pid": 5260,
+            "parentPid": 8948,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122888192,
+            "privateBytes": 38162432,
+            "cpuTimeMs": 812.5
+          },
+          {
+            "pid": 35712,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13950976,
+            "privateBytes": 3313664,
+            "cpuTimeMs": 31.25
+          },
+          {
+            "pid": 26784,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 101773312,
+            "privateBytes": 81100800,
+            "cpuTimeMs": 343.75
+          },
+          {
+            "pid": 31652,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 43552768,
+            "privateBytes": 12652544,
+            "cpuTimeMs": 250
+          },
+          {
+            "pid": 2988,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19529728,
+            "privateBytes": 7565312,
+            "cpuTimeMs": 93.75
+          },
+          {
+            "pid": 34532,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75112448,
+            "privateBytes": 40488960,
+            "cpuTimeMs": 125
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 403677184,
+          "privateBytes": 187514880,
+          "cpuTimeMs": 1765.625
+        }
+      },
+      "idleSecond": {
+        "rootPid": 8948,
+        "processes": [
+          {
+            "pid": 8948,
+            "parentPid": 33180,
+            "name": "suffice-wry-probe.exe",
+            "workingSetBytes": 26869760,
+            "privateBytes": 4231168,
+            "cpuTimeMs": 109.375
+          },
+          {
+            "pid": 5260,
+            "parentPid": 8948,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 122585088,
+            "privateBytes": 37834752,
+            "cpuTimeMs": 812.5
+          },
+          {
+            "pid": 35712,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 13950976,
+            "privateBytes": 3313664,
+            "cpuTimeMs": 31.25
+          },
+          {
+            "pid": 26784,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 101773312,
+            "privateBytes": 81100800,
+            "cpuTimeMs": 343.75
+          },
+          {
+            "pid": 31652,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 43552768,
+            "privateBytes": 12652544,
+            "cpuTimeMs": 250
+          },
+          {
+            "pid": 2988,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 19529728,
+            "privateBytes": 7565312,
+            "cpuTimeMs": 93.75
+          },
+          {
+            "pid": 34532,
+            "parentPid": 5260,
+            "name": "msedgewebview2.exe",
+            "workingSetBytes": 75112448,
+            "privateBytes": 40488960,
+            "cpuTimeMs": 125
+          }
+        ],
+        "totals": {
+          "workingSetBytes": 403374080,
+          "privateBytes": 187187200,
+          "cpuTimeMs": 1765.625
+        }
+      },
+      "intervalMs": 2039.7056999999986,
+      "idleCpu": {
+        "matchedPids": [
+          8948,
+          5260,
+          35712,
+          26784,
+          31652,
+          2988,
+          34532
+        ],
+        "corePercent": 0
+      },
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    }
+  ],
+  "errors": [],
+  "completedAt": "2026-11-15T18:33:57.791Z"
+}

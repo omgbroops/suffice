@@ -1,0 +1,121 @@
+{
+  "scope": {
+    "order": "alternating first host by pair",
+    "homes": "fresh isolated home and profile for every sample; identical session bytes and project path",
+    "offline": "PI_OFFLINE=1; zero model requests",
+    "startup": "parent monotonic clock from launch to UI-ready event / Electron 30 rows visible",
+    "selection": "parent monotonic clock from click or measure-select write to transcript assertion; Rust includes instrumentation and event transport delay",
+    "memory": "instantaneous CIM process-tree snapshots; shared/external WebView2 processes may not be descendants and are excluded",
+    "cache": "no OS cache flush",
+    "scope": "matched rendered fixture only; no whole-feature parity claim"
+  },
+  "executables": {
+    "electron": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice\\release\\win-unpacked\\Suffice.exe",
+      "bytes": 249270272
+    },
+    "rust": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice\\apps\\desktop-rust\\target\\release\\suffice-desktop-rust.exe",
+      "bytes": 1150464
+    },
+    "node": {
+      "path": "C:\\Users\\aryas\\Programming\\suffice-rust-tooling\\node_modules\\node\\bin\\node.exe",
+      "bytes": 93922624
+    }
+  },
+  "hosts": {
+    "electron": {
+      "readyMs": {
+        "n": 5,
+        "median": 2997.7488999999996,
+        "p10": 2959.972199999995,
+        "p90": 3021.2082799999976,
+        "min": 2958.800199999998,
+        "max": 3034.308799999999
+      },
+      "selectionMs": {
+        "n": 5,
+        "median": 1587.268200000006,
+        "p10": 1496.0642000000003,
+        "p90": 1606.3548999999998,
+        "min": 1445.7806,
+        "max": 1612.4012999999977
+      },
+      "idleBytes": {
+        "n": 5,
+        "median": 660377600,
+        "p10": 659886899.2,
+        "p90": 662103654.4,
+        "min": 659644416,
+        "max": 662962176
+      },
+      "activeBytes": {
+        "n": 5,
+        "median": 836345856,
+        "p10": 833644953.6,
+        "p90": 841908224,
+        "min": 832983040,
+        "max": 845398016
+      },
+      "shutdownMs": {
+        "n": 5,
+        "median": 185.7283000000025,
+        "p10": 175.87413999999953,
+        "p90": 211.12093999999925,
+        "min": 173.6291000000001,
+        "max": 217.7911000000022
+      },
+      "errors": [],
+      "remainingPids": []
+    },
+    "rust": {
+      "readyMs": {
+        "n": 5,
+        "median": 3601.0136999999995,
+        "p10": 3524.9688599999995,
+        "p90": 3730.795299999992,
+        "min": 3477.3505000000005,
+        "max": 3740.219699999987
+      },
+      "selectionMs": {
+        "n": 5,
+        "median": 1517.0264000000025,
+        "p10": 1453.096719999999,
+        "p90": 1556.1109199999992,
+        "min": 1447.6954000000005,
+        "max": 1557.580200000004
+      },
+      "idleBytes": {
+        "n": 5,
+        "median": 712187904,
+        "p10": 708295884.8,
+        "p90": 713885286.4,
+        "min": 707145728,
+        "max": 714440704
+      },
+      "activeBytes": {
+        "n": 5,
+        "median": 860413952,
+        "p10": 848979558.4,
+        "p90": 873027174.4,
+        "min": 843522048,
+        "max": 873771008
+      },
+      "shutdownMs": {
+        "n": 5,
+        "median": 4488.707999999999,
+        "p10": 4407.524480000004,
+        "p90": 4532.316600000001,
+        "min": 4378.642000000007,
+        "max": 4560.084999999999
+      },
+      "errors": [],
+      "remainingPids": []
+    }
+  },
+  "reductionPercent": {
+    "startup": -20.123926990682904,
+    "idle": -7.84555745076756,
+    "active": -2.8777683092866324
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-15",
+  "scope": [
+    "apps/desktop/src/transcript-scroll.js",
+    "apps/desktop/test/transcript-scroll.test.mjs",
+    "apps/desktop/test/scroll-layout.test.mjs"
+  ],
+  "runtime": {
+    "node": "24.22.2",
+    "bun": "1.4.4",
+    "electron": "45.3.0",
+    "providers": "PI_OFFLINE=1; fixture suffice:run IPC; no model requests"
+  },
+  "finding": "A browser layout clamp can decrease scrollTop while the transcript remains at the geometric end. The old helper interprets every decrease as upward intent and stops following subsequent output.",
+  "fix": "Compare scrollTop against min(lastScrollTop,max(0,scrollHeight-clientHeight)) for upward movement. Preserve the existing explicit wheel/key release and downward-to-end re-entry behavior.",
+  "observations": {
+    "originalIntegration": "No assertions changed. The exact original intermittent composer-triggered failure was not independently established; the final regression includes the same long second draft and 70-paragraph response, and demonstrates a controlled native viewport clamp.",
+    "padding": "Real padding shrink clamps scrollTop, but history ResizeObserver can repair lastScrollTop before the queued scroll event. Padding-only runs therefore depend on observer timing.",
+    "viewport": "After pending follow RAFs settle, increasing native content height by 80 leaves history height unchanged, reduces reachable scrollTop by 80, and reliably reproduces the old-helper failure on subsequent streamed output.",
+    "baselineMetrics": {
+      "beforeViewport": {
+        "top": 1918,
+        "height": 2748,
+        "viewport": 830,
+        "gap": 0
+      },
+      "afterViewport": {
+        "top": 1838,
+        "height": 2748,
+        "viewport": 910,
+        "gap": 0
+      }
+    }
+  },
+  "developmentRuns": [
+    {
+      "sequence": 1,
+      "helper": "old",
+      "test": "initial padding-only fixture",
+      "result": "failed/cancelled at test timeout 30000ms",
+      "evidence": {
+        "before": {
+          "top": 1684,
+          "height": 2514,
+          "viewport": 830,
+          "gap": 0
+        },
+        "clamped": {
+          "top": 1500,
+          "height": 2330,
+          "viewport": 830,
+          "gap": 0
+        },
+        "afterOutput": {
+          "top": 1500,
+          "height": 2362,
+          "viewport": 830,
+          "gap": 32
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "helper": "fixed",
+      "test": "initial fixture plus helper tests",
+      "result": "4 helper tests passed; renderer assertion clamped.height<before.height failed because fixture had not awaited 70 paragraphs",
+      "resolution": "Await actual paragraph rendering before layout measurement."
+    },
+    {
+      "sequence": 3,
+      "helper": "fixed",
+      "test": "long second draft plus padding clamp",
+      "result": "passed"
+    },
+    {
+      "sequence": 4,
+      "helper": "fixed",
+      "test": "padding clamp plus initial viewport scenario",
+      "result": "passed"
+    },
+    {
+      "sequence": 5,
+      "helper": "old",
+      "test": "padding and initial viewport scenario",
+      "result": "passed",
+      "log": "scroll-investigation-baseline-test.txt",
+      "interpretation": "Pending bottom RAF and resize observers can mask the old-helper defect."
+    },
+    {
+      "sequence": 6,
+      "helper": "old",
+      "test": "padding mutation in RAF",
+      "result": "passed",
+      "interpretation": "History ResizeObserver repairs padding-related lastScrollTop."
+    },
+    {
+      "sequence": 7,
+      "helper": "old",
+      "test": "native viewport after settled RAFs",
+      "result": "failed at atBottom after streamed output, timeout 5000ms"
+    },
+    {
+      "sequence": 8,
+      "helper": "old",
+      "test": "final regression with native viewport metrics assertions",
+      "result": "failed at atBottom after streamed output, timeout 5000ms",
+      "log": "scroll-investigation-baseline-final-test.txt"
+    }
+  ],
+  "verificationCommand": "node --test --test-concurrency=1 apps/desktop/test/transcript-scroll.test.mjs apps/desktop/test/scroll-layout.test.mjs apps/desktop/test/electron.test.mjs",
+  "fixedRepeatedRuns": {
+    "result": "3/3 serial batches passed, each 6/6 tests; original electron integration and final layout regression each passed 3/3.",
+    "durationsMs": [27087.1733, 29554.1153, 31708.7939],
+    "logs": ["scroll-investigation-fixed-test-1.txt", "scroll-investigation-fixed-test-2.txt", "scroll-investigation-fixed-test-3.txt"]
+  },
+  "diffCheck": "git diff --check -- apps/desktop/src/transcript-scroll.js apps/desktop/test/transcript-scroll.test.mjs passed",
+  "build": {
+    "command": "bun run desktop:build",
+    "result": "passed; pre-existing large chunk warning",
+    "logs": [
+      "scroll-investigation-baseline-build.txt",
+      "scroll-investigation-fixed-build.txt"
+    ]
+  },
+  "authorization": "No commit, push, publication, deployment, provider call, or historical evidence overwrite. Changes confined to assigned UI/helper/test files and new measurement evidence.",
+  "routing": {
+    "requested": "Sol High",
+    "effective": "unverified; runtime child metadata not available"
+  }
+}

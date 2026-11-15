@@ -1,0 +1,43 @@
+v24.22.2
+Baseline source: C:/Users/aryas/Programming/suffice-rust-baseline-a5116549/source
+Command: pinned node --test --test-concurrency=1 apps/desktop/test/electron.test.mjs apps/desktop/test/provider-model-ui.test.mjs
+✖ Electron loads the unchanged shell and reaches the real isolated harness (39339.9263ms)
+✖ connected providers, modal cancellation and model visibility persist into the picker (3219.0541ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43568.5498
+
+✖ failing tests:
+
+test at apps\desktop\test\electron.test.mjs:10:1
+✖ Electron loads the unchanged shell and reaches the real isolated harness (39339.9263ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for getByRole('button', { name: 'Choose project', exact: true })[22m
+  
+      at TestContext.<anonymous> (C:\Users\aryas\Programming\suffice-rust-baseline-a5116549\source\apps\desktop\test\electron.test.mjs:158:71) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for getByRole('button', { name: 'Choose project', exact: true })" ]
+  }
+
+test at apps\desktop\test\provider-model-ui.test.mjs:9:1
+✖ connected providers, modal cancellation and model visibility persist into the picker (3219.0541ms)
+  locator.waitFor: Error: strict mode violation: locator('.provider-dialog') resolved to 5 elements:
+      1) <dialog aria-label="Edit project" class="provider-dialog project-editor">…</dialog> aka getByLabel('Edit project')
+      2) <dialog aria-label="Remove project" class="provider-dialog project-remove-dialog">…</dialog> aka getByLabel('Remove project')
+      3) <dialog aria-label="Rename thread" class="provider-dialog thread-rename-dialog">…</dialog> aka getByLabel('Rename thread')
+      4) <dialog aria-label="Delete thread" class="provider-dialog thread-delete-dialog">…</dialog> aka getByLabel('Delete thread')
+      5) <dialog aria-labelledby="provider-dialog-title" class="provider-dialog provider-connect-dialog">…</dialog> aka getByLabel('Connect Google')
+  
+  Call log:
+  [2m  - waiting for locator('.provider-dialog') to be hidden[22m
+  
+      at TestContext.<anonymous> (C:\Users\aryas\Programming\suffice-rust-baseline-a5116549\source\apps\desktop\test\provider-model-ui.test.mjs:21:1913) {
+    log: [ "  - waiting for locator('.provider-dialog') to be hidden" ]
+  }
+Exit code: 1

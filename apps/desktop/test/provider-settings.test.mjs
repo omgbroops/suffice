@@ -44,3 +44,11 @@ test('provider errors expose useful causes without forwarding credential-bearing
  const secret='secret-access-token';const message=providerLoginErrorMessage(new Error('OpenAI OAuth token request failed (403): '+secret));assert.match(message,/HTTP 403/);assert.ok(!message.includes(secret));
  assert.equal(providerLoginErrorMessage(new Error(secret)),'Could not connect to the provider. Please try again.');
 });
+
+test('cancelling while lazy runtime initializes prevents a late authentication attempt',async()=>{
+ let release;const waiting=new Promise(resolve=>release=resolve);let loginCalls=0;
+ const service=createProviderSettings({home:await mkdtemp(resolve(tmpdir(),'suffice-lazy-auth-')),createRuntime:()=>waiting,emit(){},openBrowser(){throw Error('Unexpected browser launch');}});
+ const result=service.login({provider:'fixture',type:'api_key'});service.cancel();
+ release({getProvider:()=>({id:'fixture',auth:{apiKey:{login:true}}}),login:async()=>{loginCalls++;}});
+ await assert.rejects(result,/cancelled/);assert.equal(loginCalls,0);
+});

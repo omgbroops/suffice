@@ -2,12 +2,12 @@ import {mkdir,readFile,writeFile,rename,realpath} from 'node:fs/promises';
 import {resolve,join,relative} from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
-import {SettingsManager,DefaultPackageManager,DefaultResourceLoader} from '@earendil-works/pi-coding-agent';
 export function createResourceService(home,{choosePath}={}){
  let tail=Promise.resolve(),mutations=Promise.resolve();const children=new Set();
  const json=async file=>{try{return JSON.parse(await readFile(resolve(home,file),'utf8'));}catch(e){if(e.code==='ENOENT')return {};throw e;}};
  const save=(file,value)=>{const job=tail.then(async()=>{await mkdir(home,{recursive:true});const target=resolve(home,file),temporary=target+'.'+randomUUID()+'.tmp';await writeFile(temporary,JSON.stringify(value,null,2),{mode:0o600});await rename(temporary,target);});tail=job.catch(()=>{});return job;};
  async function list(){
+  const {SettingsManager,DefaultPackageManager,DefaultResourceLoader}=await import('@earendil-works/pi-coding-agent');
   const settings=SettingsManager.create(home,home),mcp=await json('mcp.json'),state=await json('resource-state.json');
   const manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});
   // Inspection never installs a missing package or imports an extension.
@@ -34,7 +34,7 @@ export function createResourceService(home,{choosePath}={}){
   }else settings.extensions=[...(settings.extensions||[]).filter(x=>x!==p.path&&x!=='-'+p.path),p.enabled?p.path:'-'+p.path];
   await save('settings.json',settings);return list();
  }
- if(['install','update','remove'].includes(p.action)){if(typeof p.source!=='string'||p.source.length>1000||!p.source.trim())throw new Error('Enter a package source');const settings=SettingsManager.create(home,home),manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});if(p.action==='install')await manager.installAndPersist(p.source);if(p.action==='update')await manager.update(p.source);if(p.action==='remove')await manager.removeAndPersist(p.source);await settings.flush();return list();}
+ if(['install','update','remove'].includes(p.action)){if(typeof p.source!=='string'||p.source.length>1000||!p.source.trim())throw new Error('Enter a package source');const {SettingsManager,DefaultPackageManager}=await import('@earendil-works/pi-coding-agent');const settings=SettingsManager.create(home,home),manager=new DefaultPackageManager({cwd:home,agentDir:home,settingsManager:settings});if(p.action==='install')await manager.installAndPersist(p.source);if(p.action==='update')await manager.update(p.source);if(p.action==='remove')await manager.removeAndPersist(p.source);await settings.flush();return list();}
  if(['mcp-check','mcp-login','mcp-logout'].includes(p.action)){const args=p.action==='mcp-check'?['mcp','list']:['mcp',p.action==='mcp-login'?'login':'logout',p.name];if(p.name&&!/^[a-zA-Z0-9_-]+$/.test(p.name))throw new Error('Invalid server');const entry=(await import('node:url')).fileURLToPath(import.meta.resolve('@earendil-works/pi-coding-agent'));const cli=resolve(entry,'..','bundle','cli.js');return new Promise((resolveResult,reject)=>{const child=spawn(process.execPath,[cli,...args],{cwd:home,env:{...process.env,ELECTRON_RUN_AS_NODE:'1',PI_CODING_AGENT_DIR:home},windowsHide:true,stdio:['ignore','pipe','pipe']});children.add(child);child.once('close',()=>children.delete(child));let output='';const take=chunk=>{output=(output+chunk.toString()).slice(-60000);};child.stdout.on('data',take);child.stderr.on('data',take);child.on('error',error=>{clearTimeout(timer);reject(error);});const timer=setTimeout(()=>child.kill(),p.action==='mcp-login'?180000:30000);child.on('exit',code=>{clearTimeout(timer);resolveResult({output,ok:code===0});});});}
  throw new Error('Unknown resource action');}
  return {list,dispose(){for(const child of children)child.kill();children.clear();},action:payload=>{const job=mutations.then(()=>action(payload));mutations=job.catch(()=>{});return job;}};

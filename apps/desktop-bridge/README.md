@@ -1,0 +1,13 @@
+# Transitional desktop bridge
+
+This starts the existing Electron main process business logic under Node using a narrowly scoped Electron compatibility shim. The worker is the original Pi worker entry, launched with Node IPC. The renderer still invokes the original `suffice:*` handlers and receives their original events. This is an experimental bridge, not Electron parity.
+
+Run `node apps/desktop-bridge/main.mjs --root ABSOLUTE_REPO --profile ABSOLUTE_PROFILE` with an explicitly set absolute `SUFFICE_HOME`. It expects JSON lines on stdin and reserves stdout for JSON lines. `PI_OFFLINE=1` can be used for offline testing. The host owns the profile and must choose scratch paths when testing.
+
+With `--wait-for-host`, the bridge emits `bootstrap-ready` after installing stdin handlers and waits for a single `host-start` message before loading the desktop main module. Invocations received before the desktop is ready return `not ready`. Duplicate starts are ignored, and shutdown or EOF before start exits cleanly. This gate lets the host establish process containment before desktop code can start workers. Without the flag, startup remains immediate.
+
+Input messages: `host-start` (for gated startup), `invoke` with `id`, `channel` and `args`; `native-reply` with `id`, `ok`, and `result` or `error`; `window-state` with state booleans `focused`, `minimized`, `maximized`, `visible`; and `shutdown`. Output messages: `ready`, `reply`, `event`, and `native`. Native messages contain a request id, method and args. Shutdown asks owned worker processes to stop, then closes terminals, flushes views and terminates remaining workers. A disconnected stdin initiates the same cleanup.
+
+Known gaps: clipboard file reads, native image transforms, login-at-startup and notifications are unavailable. Native dialogs, shell operations, cache clearing and window operations require a host implementation; errors are surfaced to the caller. Window state depends on updates from the host. Native window operations outside an invoke (such as startup show) are asynchronous. Electron-specific taskbar shortcut metadata is unavailable. Multi-window project launch is not adapted and must not be treated as working. Browser security and renderer isolation are the responsibility of the native host; the shim supplies the trusted frame only to calls received over its private protocol. This prototype must not be shipped or described as full desktop parity.
+
+Offline verification: `node --test apps/desktop-bridge/*.test.mjs` creates separate temporary profile and session files, opens the saved session, checks the original session bytes, exercises a real PTY, rejects unsupported operations and shuts down. It does not invoke a model or connect to a provider.

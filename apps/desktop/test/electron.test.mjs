@@ -154,6 +154,7 @@ test('Electron loads the unchanged shell and reaches the real isolated harness',
     await page.screenshot({path:resolve('apps/desktop/desktop-thread.png')});
     await page.reload();
     await page.locator('.thread-row').filter({hasText:'First saved thread'}).waitFor();
+    await page.getByRole('button',{name:'New session',exact:true}).click();
     await electron.evaluate(({dialog},project)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[project]});},project);
     await page.getByRole('button',{name:'Choose project',exact:true}).click();
     await page.getByRole('button',{name:'New project',exact:true}).click();

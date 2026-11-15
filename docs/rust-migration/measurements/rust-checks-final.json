@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "commands": [
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "crates/suffice-fs/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "exitCode": 0,
+      "wallMs": 400.5864,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--manifest-path",
+        "crates/suffice-fs/Cargo.toml",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exitCode": 0,
+      "wallMs": 812.2992,
+      "stdout": "",
+      "stderr": "    Checking suffice-fs v0.1.0 (C:\\Users\\aryas\\Programming\\suffice\\crates\\suffice-fs)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.49s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "crates/suffice-fs/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 433.20860000000016,
+      "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 1 test\ntest tests::walk_skips_hidden_and_node_modules_and_reads_nested_files ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (crates\\suffice-fs\\target\\debug\\deps\\suffice_fs-a7910a855ffaa96c.exe)\n     Running unittests src\\main.rs (crates\\suffice-fs\\target\\debug\\deps\\suffice_fs-de247ef3a2d87533.exe)\n   Doc-tests suffice_fs\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "--manifest-path",
+        "crates/suffice-fs/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 1390.4685,
+      "stdout": "",
+      "stderr": "   Compiling suffice-fs v0.1.0 (C:\\Users\\aryas\\Programming\\suffice\\crates\\suffice-fs)\n    Finished `release` profile [optimized] target(s) in 1.24s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "crates/suffice-fs-addon/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "exitCode": 0,
+      "wallMs": 363.88229999999976,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--manifest-path",
+        "crates/suffice-fs-addon/Cargo.toml",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exitCode": 0,
+      "wallMs": 500.9970000000003,
+      "stdout": "",
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "crates/suffice-fs-addon/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 7146.172600000001,
+      "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": "   Compiling memchr v2.8.3\n   Compiling windows-link v0.2.1\n   Compiling once_cell v1.21.4\n   Compiling itoa v1.0.19\n   Compiling bitflags v2.13.2\n   Compiling zmij v1.0.23\n   Compiling serde_core v1.0.229\n   Compiling libloading v0.8.9\n   Compiling napi-sys v2.4.0\n   Compiling aho-corasick v1.1.5\n   Compiling napi v2.16.17\n   Compiling regex-automata v0.4.18\n   Compiling serde_json v1.0.151\n   Compiling suffice-fs v0.1.0 (C:\\Users\\aryas\\Programming\\suffice\\crates\\suffice-fs)\n   Compiling regex v1.13.1\n   Compiling napi-derive-backend v1.0.75\n   Compiling napi-derive v2.16.13\n   Compiling suffice-fs-addon v0.1.0 (C:\\Users\\aryas\\Programming\\suffice\\crates\\suffice-fs-addon)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.96s\n     Running unittests src\\lib.rs (crates\\suffice-fs-addon\\target\\debug\\deps\\suffice_fs_addon-c3fc93f74028aabe.exe)\nLoad Node-API [napi_get_last_error_info] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_undefined] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_null] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_global] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_boolean] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_object] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_array] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_array_with_length] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_double] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_int32] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_uint32] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_int64] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_string_latin1] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_string_utf8] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_string_utf16] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_symbol] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_type_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_range_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_typeof] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_double] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_int32] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_uint32] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_int64] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_bool] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_string_latin1] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_string_utf8] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_string_utf16] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_coerce_to_bool] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_coerce_to_number] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_coerce_to_object] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_coerce_to_string] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_prototype] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_property_names] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_set_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_has_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_delete_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_has_own_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_set_named_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_has_named_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_named_property] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_set_element] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_has_element] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_element] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_delete_element] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_define_properties] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_array] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_array_length] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_strict_equals] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_call_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_new_instance] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_instanceof] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_cb_info] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_new_target] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_define_class] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_wrap] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_unwrap] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_remove_wrap] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_external] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_external] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_reference] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_delete_reference] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_reference_ref] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_reference_unref] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_reference_value] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_open_handle_scope] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_close_handle_scope] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_open_escapable_handle_scope] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_close_escapable_handle_scope] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_escape_handle] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_throw] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_throw_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_throw_type_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_throw_range_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_exception_pending] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_and_clear_last_exception] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_arraybuffer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_arraybuffer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_external_arraybuffer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_arraybuffer_info] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_typedarray] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_typedarray] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_typedarray_info] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_dataview] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_dataview] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_dataview_info] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_version] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_promise] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_resolve_deferred] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_reject_deferred] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_promise] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_run_script] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_adjust_external_memory] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_module_register] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_fatal_error] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_async_init] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_async_destroy] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_make_callback] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_buffer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_external_buffer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_buffer_copy] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_buffer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_buffer_info] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_async_work] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_delete_async_work] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_queue_async_work] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_cancel_async_work] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_node_version] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_uv_event_loop] from host runtime failed: GetProcAddress failed\nLoad Node-API [uv_run] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_fatal_exception] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_add_env_cleanup_hook] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_remove_env_cleanup_hook] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_open_callback_scope] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_close_callback_scope] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_threadsafe_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_threadsafe_function_context] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_call_threadsafe_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_acquire_threadsafe_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_release_threadsafe_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_unref_threadsafe_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_ref_threadsafe_function] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_date] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_is_date] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_date_value] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_add_finalizer] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_bigint_int64] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_bigint_uint64] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_create_bigint_words] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_bigint_int64] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_bigint_uint64] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_value_bigint_words] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_all_property_names] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_set_instance_data] from host runtime failed: GetProcAddress failed\nLoad Node-API [napi_get_instance_data] from host runtime failed: GetProcAddress failed\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "--manifest-path",
+        "crates/suffice-fs-addon/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 214.13390000000072,
+      "stdout": "",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.07s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "experiments/rust-desktop-probe/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "exitCode": 0,
+      "wallMs": 354.6340999999993,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--manifest-path",
+        "experiments/rust-desktop-probe/Cargo.toml",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exitCode": 0,
+      "wallMs": 474.6184999999987,
+      "stdout": "",
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "experiments/rust-desktop-probe/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 327.47310000000107,
+      "stdout": "\nrunning 1 test\ntest tests::fixture ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\main.rs (experiments\\rust-desktop-probe\\target\\debug\\deps\\suffice_rust_desktop_probe-b1887c4b82db4661.exe)\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "--manifest-path",
+        "experiments/rust-desktop-probe/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 190.9423000000006,
+      "stdout": "",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.04s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "experiments/wry-desktop-probe/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "exitCode": 0,
+      "wallMs": 357.0141000000003,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--manifest-path",
+        "experiments/wry-desktop-probe/Cargo.toml",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exitCode": 0,
+      "wallMs": 685.3710999999985,
+      "stdout": "",
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.35s\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "experiments/wry-desktop-probe/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 36402.50810000001,
+      "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": "   Compiling windows-link v0.2.1\n   Compiling stable_deref_trait v1.2.1\n   Compiling writeable v0.6.4\n   Compiling utf_types v1.0.0\n   Compiling litemap v0.8.3\n   Compiling smallvec v1.16.5\n   Compiling num-conv v0.2.2\n   Compiling time-core v0.1.9\n   Compiling itoa v1.0.19\n   Compiling percent-encoding v2.3.2\n   Compiling icu_normalizer_data v2.4.0\n   Compiling icu_properties_data v2.4.0\n   Compiling scopeguard v1.2.0\n   Compiling deranged v0.5.9\n   Compiling cfg-if v1.0.5\n   Compiling powerfmt v0.2.1\n   Compiling crossbeam-utils v0.8.23\n   Compiling zerofrom v0.1.8\n   Compiling thiserror v2.0.21\n   Compiling dpi v0.1.2\n   Compiling windows-strings v0.5.1\n   Compiling windows-result v0.4.1\n   Compiling windows-threading v0.2.1\n   Compiling lock_api v0.4.14\n   Compiling form_urlencoded v1.2.2\n   Compiling time-macros v0.2.32\n   Compiling windows-version v0.1.7\n   Compiling parking_lot_core v0.9.12\n   Compiling bytes v1.12.1\n   Compiling yoke v0.8.4\n   Compiling utf8_iter v1.1.0\n   Compiling webview2-com-sys v0.39.1\n   Compiling raw-window-handle v0.6.2\n   Compiling zmij v1.0.23\n   Compiling serde_core v1.0.229\n   Compiling libc v0.2.191\n   Compiling memchr v2.8.3\n   Compiling bitflags v2.13.2\n   Compiling log v0.4.35\n   Compiling dunce v1.0.5\n   Compiling windows-core v0.62.2\n   Compiling zerovec v0.11.9\n   Compiling zerotrie v0.2.5\n   Compiling parking_lot v0.12.5\n   Compiling unicode-segmentation v1.13.3\n   Compiling crossbeam-channel v0.5.17\n   Compiling base64 v0.22.1\n   Compiling windows-numerics v0.3.1\n   Compiling windows-collections v0.3.2\n   Compiling windows-future v0.3.2\n   Compiling http v1.5.0\n   Compiling tinystr v0.8.5\n   Compiling potential_utf v0.1.6\n   Compiling icu_collections v2.4.0\n   Compiling icu_locale_core v2.4.0\n   Compiling time v0.3.55\n   Compiling windows v0.62.2\n   Compiling icu_provider v2.4.0\n   Compiling icu_normalizer v2.4.0\n   Compiling icu_properties v2.4.0\n   Compiling serde_json v1.0.151\n   Compiling cookie v0.18.2\n   Compiling idna_adapter v1.2.2\n   Compiling idna v1.1.0\n   Compiling url v2.5.8\n   Compiling tao v0.37.1\n   Compiling webview2-com v0.39.1\n   Compiling wry v0.57.2\n   Compiling suffice-wry-probe v0.1.0 (C:\\Users\\aryas\\Programming\\suffice\\experiments\\wry-desktop-probe)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 36.21s\n     Running unittests src\\main.rs (experiments\\wry-desktop-probe\\target\\debug\\deps\\suffice_wry_probe-21a0fb245d726bb2.exe)\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "--manifest-path",
+        "experiments/wry-desktop-probe/Cargo.toml"
+      ],
+      "exitCode": 0,
+      "wallMs": 415.3700000000026,
+      "stdout": "",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.25s\n"
+    }
+  ]
+}
