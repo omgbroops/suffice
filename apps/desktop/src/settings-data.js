@@ -27,6 +27,7 @@ export const settingsSections=[
   group('Defaults',[select('default-model','Default model','Last used',['Last used']),select('default-effort','Reasoning effort','Medium',['Low','Medium','High','Extra high','Max'])]),
  ]},
  {id:'providers',title:'Providers',icon:'agent',category:'Agent',groups:[group('Connected',[]),group('Available',[])]},
+ ...[['mcps','MCPs','plug'],['skills','Skills','deep'],['extensions','Extensions','puzzle'],['templates','Prompt templates','files'],['session-tools','Session tools','context']].map(([id,title,icon])=>({id,title,icon,category:'Agent',groups:[{title:'Resources',rows:[],empty:'Loading…'}]})),
  {id:'agent',title:'Agent behavior',icon:'bolt',category:'Agent',groups:[
   group('Execution',[select('approval-mode','Approvals','Never ask',['Ask when needed','Ask before every action','Never ask'],'Applies to new turns.'),select('execution-shell','Command shell','Native Bash',['Native Bash','PowerShell','System default']),toggle('allow-network','Browser & desktop tools',true,'Shell commands retain native OS network access.'),toggle('background-agents','Allow background agents',true)]),
   group('Transcript',[toggle('collapse-work','Collapse completed actions',true),toggle('show-reasoning','Show reasoning status',true),toggle('stream-markdown','Render Markdown while streaming',true)]),

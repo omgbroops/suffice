@@ -168,3 +168,24 @@
 .settings-catalog-status:empty { display:none; }
 @keyframes catalog-spin { to { transform:rotate(360deg); } }
 @media(prefers-reduced-motion:reduce){.settings-catalog-refresh .icon{animation:none!important;}}
+
+.resource-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.resource-actions .settings-select { min-width:0; font-size:12px; }
+.resource-note,.resource-status { color:var(--text-muted); font-size:12px; line-height:18px; margin:12px 0; }
+.resource-status:empty { display:none; }
+.resource-card .settings-option-copy { overflow:hidden; }
+.resource-card .settings-option-copy p { overflow-wrap:anywhere; }
+.resource-field { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; font-size:13px; }
+.resource-field input,.resource-field textarea { width:100%; box-sizing:border-box; border:0; border-radius:8px; padding:10px; color:var(--text); background:var(--control-raised); font:13px/1.6 var(--font-mono); }
+.resource-field textarea { resize:vertical; min-height:160px; max-height:55vh; }
+.resource-dialog { width:min(620px,calc(100vw - 32px)); }
+.resource-dialog form { margin:0; }
+@media(max-width:800px){.resource-card .settings-option{flex-wrap:wrap;}.resource-actions{flex-wrap:wrap;}}
+
+.extension-dialog input,.extension-dialog textarea,.extension-dialog select { width:100%; box-sizing:border-box; background:var(--control-raised); border:0; border-radius:8px; color:var(--text); padding:10px; font:inherit; }
+.extension-dialog textarea { min-height:180px; resize:vertical; max-height:55vh; }
+.extension-status { color:var(--text-muted); font-size:12px; white-space:pre-wrap; padding:0 12px 8px; max-height:100px; overflow:auto; }
+
+.resource-history { max-height:55vh; overflow:auto; }
+.resource-history-entry { display:block; width:100%; padding:9px 10px; border:0; border-radius:8px; background:transparent; color:var(--text); text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:inherit; }
+.resource-history-entry:hover { background:var(--control-raised); }
