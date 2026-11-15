@@ -13,6 +13,7 @@ test('saved compaction checkpoints distinguish automatic/manual and interruption
  const projection={entries:[{sourceEntry:compact,messages:[{role:'compactionSummary',summary:'Private summary'}]},{sourceEntry:reason,messages:[]},{sourceEntry:{type:'message'},messages:[{role:'assistant',content:[],stopReason:'aborted'}]},{sourceEntry:{type:'custom',customType:'suffice:interrupted'},messages:[]}]};
  assert.deepEqual(transcriptMessages(projection).map(m=>m.kind||m.role),['compacted','assistant','interrupted']);assert.equal(transcriptMessages(projection)[0].automatic,true);
  reason.data.reason='manual';assert.equal(transcriptMessages(projection)[0].automatic,false);
+ const earlier={type:'message',id:'before'},later={type:'message',id:'after'};const sorted=transcriptMessages({entries:[{sourceEntry:compact,messages:[{role:'compactionSummary'}]},{sourceEntry:earlier,messages:[{role:'user'}]},{sourceEntry:later,messages:[{role:'assistant'}]}]},[earlier,compact,later]);assert.deepEqual(sorted.map(m=>m.kind||m.role),['user','compacted','assistant']);
 });
 
 test('worker forwards compaction and returns a normal interrupted result for user stop',async()=>{

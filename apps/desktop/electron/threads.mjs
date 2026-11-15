@@ -25,7 +25,7 @@ export function createThreadStore(home){
   if(!path.startsWith(base+sep))throw new Error('Thread path is outside the session directory');
   const infoStat=await stat(path),version=`${infoStat.mtimeMs}:${infoStat.size}`,cached=transcripts.get(path);if(cached?.version===version)return cached.value;
   const entries=readTranscriptJournal(await readFile(path,'utf8'));
-  const messages=transcriptMessages(buildSessionProjection(entries.filter(entry=>entry.type!=='session')));
+  const messages=transcriptMessages(buildSessionProjection(entries.filter(entry=>entry.type!=='session')),entries);
   const lastAssistant=[...messages].reverse().find(message=>message.role==='assistant');
   const usage=savedUsage(entries,lastAssistant?resolveModel(lastAssistant.provider,lastAssistant.model):undefined);
   const value={id,title:info.name||info.firstMessage?.slice(0,90)||'Untitled thread',cwd:info.cwd,path,usage,messages:messages.map(message=>({role:message.role,kind:message.kind,automatic:message.automatic,toolName:message.toolName,toolCallId:message.toolCallId,isError:message.isError,content:typeof message.content==='string'?[{type:'text',text:message.content}]:(Array.isArray(message.content)?message.content:[{type:'text',text:message.output||JSON.stringify(message,null,2)}]).map(part=>part.type==='text'?{type:'text',text:part.text}:part.type==='thinking'?{type:'thinking',text:part.thinking}:part.type==='toolCall'?{type:'toolCall',id:part.id,name:part.name,text:JSON.stringify(part.arguments,null,2)}:{type:part.type,text:`[${part.type}]`})}))};
