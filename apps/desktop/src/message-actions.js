@@ -27,6 +27,7 @@ export function connectMessageActions(workspace,transcript){
  transcript.addEventListener('scroll',()=>{hovered=null;hide();},{passive:true});window.addEventListener('blur',hide);new ResizeObserver(()=>{if(shown)position();}).observe(workspace);
  return {
   hide,
+  reposition(){if(shown)position();},
   user(element,{timestamp,text,attachments=[],images=[]}={}){const info={role:'user',anchor:element,timestamp,text:text??element.textContent};register(element,info);const grid=sentAttachmentGrid(attachments,images);if(grid){element.after(grid);register(grid,info);}return info;},
   turn(meta={},active=false){return {role:'assistant',meta:{...meta},active,anchor:null,texts:new Map()};},
   assistant(element,turn,text){turn.anchor=element;turn.texts.set(element,text);register(element,turn);},

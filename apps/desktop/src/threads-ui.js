@@ -41,7 +41,7 @@ export function connectThreads({api,prompt,send,toast}){
  const jobs=new Map(),recovering=new Map();
  const visibleJob=()=>jobs.get(activeId);
  function syncRunning(){busy=!!visibleJob()?.running;form.setRunning(busy);send.disabled=!busy&&!prompt.value.trim();}
- const historyObserver=new ResizeObserver(()=>bottom());
+ const historyObserver=new ResizeObserver(()=>{bottom();messageActions.reposition();});
  function showHistory(node){messageActions.hide();historyObserver.disconnect();history=node;transcript.replaceChildren(history);historyObserver.observe(history);}
  let following=true,lastScrollTop=0,scrollFrame=0;
  const bottom=(force=false)=>{if(force)following=true;if(!following)return;transcript.scrollTop=transcript.scrollHeight;lastScrollTop=transcript.scrollTop;if(!scrollFrame)scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;if(following){transcript.scrollTop=transcript.scrollHeight;lastScrollTop=transcript.scrollTop;}});};
