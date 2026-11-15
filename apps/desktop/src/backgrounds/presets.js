@@ -29,6 +29,7 @@ export const backgroundPresets = Object.freeze({
       dusk: [36, 24, 59], edge: [90, 105, 137],
     }),
   }),
+  softHorizon: Object.freeze({label:'Soft horizon',type:'soft-horizon'}),
   horizon: Object.freeze({ label: 'Pixel horizon', type: 'horizon' }),
   dusk: Object.freeze({
     label: 'Dusk', type: 'horizon',
