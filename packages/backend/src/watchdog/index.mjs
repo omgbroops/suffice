@@ -36,7 +36,7 @@ export function rank(findings) {
     .map(([f]) => f);
 }
 
-export function createWatchdog({ clock, bus, thresholds, decide } = {}) {
+export function createWatchdog({ clock, bus, thresholds, decide, budgetStatus } = {}) {
   assertShape('clock', clock, ['now']);
   assertShape('bus', bus, ['emit']);
   if (!thresholds || typeof thresholds !== 'object') throw new TypeError('thresholds: expected an object');
@@ -44,6 +44,9 @@ export function createWatchdog({ clock, bus, thresholds, decide } = {}) {
   posInt('loopRepeats', thresholds.loopRepeats, 2);
   posInt('noProgressSteps', thresholds.noProgressSteps, 1);
   posInt('tokensPerStep', thresholds.tokensPerStep, 1);
+  const maxFallbacks = thresholds.fallbacksPerPoint ?? 3;
+  posInt('fallbacksPerPoint', maxFallbacks, 1);
+  if (budgetStatus !== undefined && typeof budgetStatus !== 'function') throw new TypeError('budgetStatus: expected a function');
 
   const runs = new Map();
   const run = (id) => {
@@ -73,6 +76,15 @@ export function createWatchdog({ clock, bus, thresholds, decide } = {}) {
     const w = actions.slice(-Math.max(n, 4));
     return w.length === Math.max(n, 4) && w[0] !== w[1] && w.every((a, i) => a === w[i % 2]);
   }
+
+  // a point that keeps falling back to its safe default is a wiring or config problem, not a model one
+  const fallbacks = new Map();
+  bus.on?.('decision', (d) => {
+    if (!d || d.ok !== false || typeof d.runId !== 'string' || typeof d.point !== 'string') return;
+    const k = `${d.runId}:${d.point}`, n = (fallbacks.get(k) ?? 0) + 1;
+    fallbacks.set(k, n);
+    if (n > maxFallbacks) add(run(d.runId), d.runId, `fallback:${d.point}`, 'decision-fallback', 'medium', undefined, { point: d.point, count: n, limit: maxFallbacks, error: d.error }, []);
+  });
 
   function observe(e) {
     if (!e || typeof e !== 'object') throw new TypeError('event: expected an object');
@@ -137,11 +149,16 @@ export function createWatchdog({ clock, bus, thresholds, decide } = {}) {
     return [...(runs.get(runId)?.found ?? [])];
   }
 
+  const remaining = () => {
+    try { const r = (budgetStatus?.() ?? []).map((b) => b.remaining).filter(Number.isFinite); return r.length ? Math.min(...r) : 1e9; } catch { return 1e9; }
+  };
+
   // advice only: the watchdog never stops a run on its own say-so
   async function advise(runId) {
     const r = runs.get(runId);
     if (!r || typeof decide !== 'function') return null;
-    try { return await decide('run.continue', { steps: r.steps.size, progress: r.zeroStreak, budgetRemaining: 1 }, { runId }); } catch { return null; }
+    const steps = r.steps.size, progress = steps ? Math.max(0, 1 - r.zeroStreak / steps) : 1; // share of steps not in the current no-diff streak
+    try { return await decide('run.continue', { steps, progress, budgetRemaining: remaining() }, { runId }); } catch { return null; }
   }
 
   return { observe, tick, findings, advise };

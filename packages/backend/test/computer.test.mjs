@@ -99,7 +99,7 @@ function fakeDecide(h = {}) {
     const n = calls.filter((c) => c.point === point).length;
     if (point === 'computer.act') {
       if (typeof h.acts === 'function') return h.acts(input, ctx, n);
-      return acts?.shift() ?? { done: true, answer: 'out of script' };
+      return acts?.shift() ?? { action: 'none', done: true, answer: 'out of script' };
     }
     const f = h[point];
     if (typeof f === 'function') return f(input, ctx, n);
@@ -119,7 +119,7 @@ const SHOP_ACTS = () => [
   { action: 'click', ref: 'go' },
   { action: 'click', ref: '@e1' },
   { action: 'click', ref: 'add to cart' },
-  { done: true, answer: 'added' },
+  { action: 'none', done: true, answer: 'added' },
 ];
 const run = (agent, extra = {}) => agent.run({ goal: 'Buy a laptop', surface: 'browser', start: 'https://shop.test/', agentId: 'a1', ...extra });
 
@@ -137,41 +137,41 @@ test('a 4-step task completes through exact and rule rungs', async () => {
 });
 
 test('observe defaults to the tree; decide chooses other modes', async () => {
-  let b = fakeBrowser(); let d = fakeDecide({ acts: [{ done: true }] });
+  let b = fakeBrowser(); let d = fakeDecide({ acts: [{ action: 'none', done: true }] });
   await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }));
   assert.deepEqual(b.state.log.filter((l) => l[0] === 'snapshot'), [['snapshot', true]]);
   assert.equal(d.count('computer.observe'), 1);
-  assert.deepEqual(Object.keys(d.of('computer.observe')[0].input).sort(), ['availableModes', 'lastAction', 'surface', 'target']);
+  assert.deepEqual(Object.keys(d.of('computer.observe')[0].input).sort(), ['modes', 'target']);
 
-  b = fakeBrowser(); d = fakeDecide({ 'computer.observe': { mode: 'snapshot', depth: 2 }, acts: [{ done: true }] });
+  b = fakeBrowser(); d = fakeDecide({ 'computer.observe': { mode: 'snapshot', depth: 2 }, acts: [{ action: 'none', done: true }] });
   await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }));
   assert.deepEqual(b.state.log.filter((l) => l[0] === 'snapshot'), [['snapshot', false]]);
 
-  b = fakeBrowser(); d = fakeDecide({ 'computer.observe': { mode: 'hybrid' }, acts: [{ done: true }] });
+  b = fakeBrowser(); d = fakeDecide({ 'computer.observe': { mode: 'hybrid' }, acts: [{ action: 'none', done: true }] });
   await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }));
   assert.ok(b.state.log.some((l) => l[0] === 'screenshot') && b.state.log.some((l) => l[0] === 'snapshot'));
 
-  b = fakeBrowser(); d = fakeDecide({ 'computer.observe': () => { throw new Error('x'); }, acts: [{ done: true }] });
+  b = fakeBrowser(); d = fakeDecide({ 'computer.observe': () => { throw new Error('x'); }, acts: [{ action: 'none', done: true }] });
   await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }));
   assert.deepEqual(b.state.log.filter((l) => l[0] === 'snapshot'), [['snapshot', true]]);
 });
 
 test('an empty tree falls back to a screenshot', async () => {
   const b = fakeBrowser({ home: { url: 'https://c.test/', els: [] } });
-  await run(createComputerAgent({ browser: b, decide: fakeDecide({ acts: [{ done: true }] }), clock: fakeClock() }), { start: 'https://c.test/' });
+  await run(createComputerAgent({ browser: b, decide: fakeDecide({ acts: [{ action: 'none', done: true }] }), clock: fakeClock() }), { start: 'https://c.test/' });
   assert.ok(b.state.log.some((l) => l[0] === 'screenshot'));
 });
 
 test('the observation summary is bounded, interactive first and delimited', async () => {
   const els = [...Array.from({ length: 30 }, (_, i) => ['heading', `Heading ${i}`]), ...Array.from({ length: 10 }, (_, i) => ['button', `B${i} ${'x'.repeat(500)}`])];
   const b = fakeBrowser({ home: { url: 'https://big.test/', els } });
-  const d = fakeDecide({ acts: [{ done: true }] });
+  const d = fakeDecide({ acts: [{ action: 'none', done: true }] });
   await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock(), limits: { maxElements: 5, maxChars: 600 } }), { start: 'https://big.test/' });
-  const s = d.of('computer.act')[0].input.observationSummary;
+  const s = d.of('computer.act')[0].input.observation;
   assert.ok(!s.includes('heading') && s.includes('button'));
   assert.ok(s.length < 900);
   assert.equal(s.split('[[UNTRUSTED-DATA:').length, 2);
-  assert.deepEqual(d.of('computer.act')[0].input.allowedActions.includes('click'), true);
+  assert.deepEqual(d.of('computer.act')[0].input.allowed.includes('click'), true);
 });
 
 // ---------------- grounding ladder ----------------
@@ -193,7 +193,7 @@ test('ground: exact, cache, rule (equality then unique substring), model', async
   assert.deepEqual([m.rung, m.element.ref], ['model', '@e1']); // two elements named Search: ambiguous, so the model decides
   assert.equal(asked[0], 'computer.ground');
   assert.equal(asked[1].instruction, 'search');
-  assert.deepEqual(Object.keys(asked[1].elements[0]).sort(), ['name', 'ref', 'role']);
+  assert.deepEqual(Object.keys(asked[1].elements[0]).sort(), ['label', 'name', 'ref', 'role']);
 });
 
 test('ground: low confidence re-observes once at greater depth, then asks again', async () => {
@@ -213,7 +213,7 @@ test('ground: low confidence re-observes once at greater depth, then asks again'
 test('stale ref: re-observe and re-ground once without asking the model', async () => {
   const b = fakeBrowser(); let once = true;
   b.state.beforeClick = (s) => { if (once) { once = false; s.epoch++; } };
-  const d = fakeDecide({ acts: [{ action: 'click', ref: b.refOf('Go') }, { done: true }] });
+  const d = fakeDecide({ acts: [{ action: 'click', ref: b.refOf('Go') }, { action: 'none', done: true }] });
   const r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }));
   assert.equal(r.ok, true);
   assert.equal(r.steps[0].ok, true);
@@ -224,7 +224,7 @@ test('stale ref: re-observe and re-ground once without asking the model', async 
 
 test('a failed action retries with a different strategy each time', async () => {
   const b = fakeBrowser(); b.state.failClicks = 2;
-  const d = fakeDecide({ acts: [{ action: 'click', ref: 'go' }, { done: true }] });
+  const d = fakeDecide({ acts: [{ action: 'click', ref: 'go' }, { action: 'none', done: true }] });
   const r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }));
   assert.equal(r.steps[0].ok, true);
   assert.deepEqual(r.steps[0].recovery, ['reground', 'scroll']);
@@ -233,7 +233,7 @@ test('a failed action retries with a different strategy each time', async () => 
 
 test('a check that is not ok triggers recovery', async () => {
   const b = fakeBrowser(TOGGLE);
-  const d = fakeDecide({ 'computer.check': (i, c, n) => (n === 1 ? { ok: false, reason: 'nothing changed' } : { ok: true }), acts: [{ action: 'click', ref: 'flip' }, { done: true }] });
+  const d = fakeDecide({ 'computer.check': (i, c, n) => (n === 1 ? { ok: false, reason: 'nothing changed' } : { ok: true }), acts: [{ action: 'click', ref: 'flip' }, { action: 'none', done: true }] });
   const r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }), { start: 'https://t.test/a' });
   assert.equal(r.steps[0].ok, true);
   assert.equal(r.steps[0].recovery[0], 'reground');
@@ -249,8 +249,8 @@ test('strategies run in order, then model.escalate, then the strategies again', 
   const e = d.of('model.escalate');
   assert.equal(e.length, 1);
   assert.equal(e[0].input.attempt, 1);
-  assert.deepEqual(e[0].input.modelsTried, []);
-  assert.ok(typeof e[0].input.failureSummary === 'string');
+  assert.deepEqual(e[0].input.tried, []);
+  assert.ok(typeof e[0].input.failure === 'string');
 });
 
 test('escalation declined stops after one pass', async () => {
@@ -283,7 +283,7 @@ test('limits: loop, max_steps, max_time, max_failures, run.continue and abort', 
   const d = fakeDecide({ 'run.continue': { continue: false, reason: 'budget' }, acts: flip });
   r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }), { start: 'https://t.test/a' });
   assert.deepEqual([r.stopReason, r.steps.length], ['stopped', 1]);
-  assert.deepEqual(Object.keys(d.of('run.continue')[0].input).sort(), ['budget', 'progress', 'steps']);
+  assert.deepEqual(Object.keys(d.of('run.continue')[0].input).sort(), ['budgetRemaining', 'progress', 'steps']);
 
   b = fakeBrowser(TOGGLE); const ac = new AbortController();
   r = await run(createComputerAgent({ browser: b, decide: fakeDecide({ acts: () => { ac.abort(); return flip(); } }), clock: fakeClock() }), { start: 'https://t.test/a', signal: ac.signal });
@@ -327,7 +327,7 @@ test('injection detector flags instruction-like text and hidden imperatives only
 // ---------------- approval ----------------
 const DEL = { home: { url: 'https://d.test/', els: [['button', 'Delete account', { to: 'cart' }]] }, cart: { url: 'https://d.test/gone', els: [['heading', 'Gone']] } };
 const delRun = (decideH, approve) => {
-  const b = fakeBrowser(DEL); const d = fakeDecide({ acts: [{ action: 'click', ref: 'delete account' }, { done: true }], ...decideH });
+  const b = fakeBrowser(DEL); const d = fakeDecide({ acts: [{ action: 'click', ref: 'delete account' }, { action: 'none', done: true }], ...decideH });
   return { b, d, p: run(createComputerAgent({ browser: b, decide: d, clock: fakeClock(), approve }), { start: 'https://d.test/' }) };
 };
 
@@ -339,7 +339,7 @@ test('approve: deny stops the step with a recorded reason', async () => {
   assert.deepEqual(r.steps[0].riskTags, ['destructive']);
   assert.equal(b.state.executed.length, 0);
   assert.equal(human, 0);
-  assert.deepEqual(d.of('action.approve')[0].input, { tool: 'browser', action: 'click', target: { role: 'button', name: 'Delete account' }, riskTags: ['destructive'] });
+  assert.deepEqual(d.of('action.approve')[0].input, { tool: 'browser', action: 'click', target: 'Delete account', riskTags: ['destructive'] });
 });
 
 test('approve: ask calls the human; allow does not', async () => {
@@ -383,7 +383,7 @@ const INJ = { home: { url: 'https://i.test/', els: [['link', 'Next', { to: 'cart
 test('injection-suspect text forces human approval even when decide allows', async () => {
   for (const human of [false, true]) {
     const b = fakeBrowser(INJ); const seen = [];
-    const d = fakeDecide({ 'action.approve': { decision: 'allow', reason: 'looks fine' }, acts: [{ action: 'click', ref: 'next' }, { done: true }] });
+    const d = fakeDecide({ 'action.approve': { decision: 'allow', reason: 'looks fine' }, acts: [{ action: 'click', ref: 'next' }, { action: 'none', done: true }] });
     const r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock(), approve: async (q) => { seen.push(q); return human; } }), { start: 'https://i.test/' });
     assert.equal(seen.length, 1);
     assert.ok(seen[0].riskTags.includes('injection-suspect'));
@@ -396,9 +396,9 @@ test('injection-suspect text forces human approval even when decide allows', asy
 });
 
 test('page text is wrapped in a nonce delimiter that page text cannot forge', async () => {
-  const b = fakeBrowser(INJ); const d = fakeDecide({ acts: [{ done: true }] });
+  const b = fakeBrowser(INJ); const d = fakeDecide({ acts: [{ action: 'none', done: true }] });
   await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock() }), { start: 'https://i.test/' });
-  const s = d.of('computer.act')[0].input.observationSummary;
+  const s = d.of('computer.act')[0].input.observation;
   assert.equal(s.split('[[UNTRUSTED-DATA:').length, 2);
   assert.equal(s.split('[[/UNTRUSTED-DATA:').length, 2);
   assert.ok(!s.includes('abc123') || !s.includes('[[/UNTRUSTED-DATA:abc123'));
@@ -432,7 +432,7 @@ test('replay falls back to the model loop at the first step that fails verificat
   await run(createComputerAgent({ browser: fakeBrowser(), decide: fakeDecide({ acts: SHOP_ACTS() }), clock: fakeClock(), replay }));
   const changed = { ...SHOP, results: { url: 'https://shop.test/r', els: [['link', 'Notebook', { to: 'item' }]] } };
   const b = fakeBrowser(changed);
-  const d = fakeDecide({ acts: [{ action: 'click', ref: 'notebook' }, { action: 'click', ref: 'add to cart' }, { done: true, answer: 'ok2' }] });
+  const d = fakeDecide({ acts: [{ action: 'click', ref: 'notebook' }, { action: 'click', ref: 'add to cart' }, { action: 'none', done: true, answer: 'ok2' }] });
   const r = await run(createComputerAgent({ browser: b, decide: d, clock: fakeClock(), replay }));
   assert.deepEqual([r.ok, r.replay.hit, r.replay.fellBackAt, r.answer, b.state.page], [true, true, 2, 'ok2', 'cart']);
   assert.equal(d.count('computer.act'), 3);
@@ -445,7 +445,7 @@ test('secrets are never stored: not the password text, not a declared secret', a
   const d = fakeDecide({ acts: [
     { action: 'type', ref: 'email', text: 'me@x.test-EMAILMARKER' },
     { action: 'type', ref: 'password', text: 'hunter2-SECRETMARKER' },
-    { action: 'click', ref: 'go' }, { done: true, answer: 'in' }] });
+    { action: 'click', ref: 'go' }, { action: 'none', done: true, answer: 'in' }] });
   const r = await run(createComputerAgent({ browser: fakeBrowser(world), decide: d, clock: fakeClock(), replay, approve: async () => true }), { start: 'https://l.test/', secrets: ['EMAILMARKER'] });
   assert.equal(r.ok, true);
   const files = await fs.readdir(dir);
@@ -520,7 +520,7 @@ test('pool: desktop actions on the same app are serialised, different apps overl
   const d = fakeDesktop(); const clock = fakeClock();
   const make = ({ serialize }) => createComputerAgent({
     desktop: d, clock, serialize,
-    decide: fakeDecide({ acts: [{ action: 'click', ref: '@s1:e1' }, { action: 'click', ref: '@s1:e2' }, { done: true }] }),
+    decide: fakeDecide({ acts: [{ action: 'click', ref: '@s1:e1' }, { action: 'click', ref: '@s1:e2' }, { action: 'none', done: true }] }),
   });
   const pool = createComputerPool({ make, max: 4 });
   const go = (app, id) => pool.run({ goal: 'save it', surface: 'desktop', start: app, agentId: id });

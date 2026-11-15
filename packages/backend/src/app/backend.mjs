@@ -20,7 +20,7 @@ const BUILTINS = fileURLToPath(new URL('../builtins', import.meta.url));
 // generous: only a real stall or loop should trip these
 const THRESHOLDS = { stallMs: 600000, loopRepeats: 5, noProgressSteps: 50, tokensPerStep: 500000 };
 
-export function createBackend({ dataDir, clock = { now: () => Date.now() }, createSession, exec, approve = async () => false, runners = {}, limits = [] } = {}) {
+export function createBackend({ dataDir, clock = { now: () => Date.now() }, createSession, exec, approve = async () => false, runners = {}, limits = [], strict = false } = {}) {
   if (typeof dataDir !== 'string' || !dataDir) throw new TypeError('createBackend: dataDir must be a non-empty string');
   const runsDir = path.join(dataDir, 'runs');
   fs.mkdirSync(runsDir, { recursive: true });
@@ -34,11 +34,11 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
   for (const [name, r] of Object.entries(runners)) registry.register(name, r);
   if (createSession && !registry.names().includes('pi')) registry.register('pi', createPiRunner({ createSession, clock }));
 
-  const dec = createDecider({ runners: registry, ask: async () => undefined, clock, bus, store: createDatasetFile({ dir: path.join(dataDir, 'decide') }) });
+  const dec = createDecider({ runners: registry, ask: async () => undefined, clock, bus, strictInputs: strict || undefined, store: createDatasetFile({ dir: path.join(dataDir, 'decide') }) });
   const statsSlot = slots.define({ id: 'decide:stats', title: 'Decision stats', schema: { type: 'object' } }, dec.stats());
   const decide = Object.assign(async (point, input, ctx) => { try { return await dec.decide(point, input, ctx); } finally { try { statsSlot.set(dec.stats()); } catch { /* display only */ } } }, dec);
   decide.decide = decide;
-  const watchdog = createWatchdog({ clock, bus, thresholds: THRESHOLDS, decide });
+  const watchdog = createWatchdog({ clock, bus, thresholds: THRESHOLDS, decide, budgetStatus: () => budget.status() });
   // layers: one JSON file each; a bad file is reported and ignored, never fatal
   const cfgErrors = {};
   const layerCfg = { builtin: { router: 'balanced' } };
@@ -68,7 +68,10 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
       ...j,
       async append(e) {
         const ev = await j.append(e);
-        try { watchdog.observe(ev); } catch { /* observers never break a run */ }
+        try {
+          // advice only: a high finding asks run.continue and publishes the answer; the run is never stopped
+          if (watchdog.observe(ev).some((f) => f.severity === 'high')) advise(ev.runId).catch(() => {});
+        } catch { /* observers never break a run */ }
         try { observe(ev); } catch { /* same */ }
         return ev;
       },
@@ -76,6 +79,14 @@ export function createBackend({ dataDir, clock = { now: () => Date.now() }, crea
     journals.set(runId, wrapped);
     return wrapped;
   };
+
+  const adviceSlots = new Map();
+  async function advise(runId) {
+    const a = await watchdog.advise(runId);
+    if (!a) return;
+    if (!adviceSlots.has(runId)) adviceSlots.set(runId, slots.define({ id: `run:${runId}:advice`, title: 'Run advice', schema: { type: 'object' } }, a));
+    else adviceSlots.get(runId).set(a);
+  }
 
   const engine = createEngine({ journalFor, runners: registry, budget, bus, clock, approve, exec, decide });
   const active = new Map(), finished = new Map(); // runId -> {ac, done}

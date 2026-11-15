@@ -151,7 +151,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
         if (res.ok && !replaying) {
           const after = await observe('tree');
           S.lastAfter = after;
-          const c = await ask('computer.check', { expected: `${act.action} ${rec.targetName ?? act.url ?? act.key ?? ''}`.trim(), before: brief(o), after: brief(after) });
+          const c = await ask('computer.check', { expected: `${act.action} ${rec.targetName ?? act.url ?? act.key ?? ''}`.trim(), before: o.sig ?? '', after: after.sig ?? '' });
           if (c?.ok === false) return bad('check', c.reason);
         }
         return res;
@@ -180,7 +180,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
               return x.ok;
             },
             escalate: async (n) => {
-              const d = await ask('model.escalate', { attempt: n, failureSummary: String(r.error ?? r.reason), modelsTried: [...S.modelsTried] });
+              const d = await ask('model.escalate', { attempt: n, failure: String(r.error ?? r.reason), tried: [...S.modelsTried] });
               if (d?.escalate !== true) return false;
               S.modelsTried.push(d.model); S.ctx.model = d.model; return true;
             },
@@ -202,14 +202,14 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
 
     // §4.7: deny is final; ask (or allow on a suspect page) goes to the human; no human means fail closed.
     async function approval(tags, act, el) {
-      const q = { tool: surface, action: act.action, target: { role: el?.role ?? null, name: el?.name ?? act.url ?? act.key ?? null }, riskTags: tags };
+      const q = { tool: surface, action: act.action, target: String(el?.name ?? act.url ?? act.key ?? ''), riskTags: tags };
       const d = await ask('action.approve', q);
       const decision = ['allow', 'ask', 'deny'].includes(d?.decision) ? d.decision : 'ask';
       if (decision === 'deny') return { ...bad('denied', d.reason ?? 'denied'), final: true, approval: true };
       const suspect = tags.includes('injection-suspect');
       if (decision === 'allow' && !suspect) return null;
       let yes = false;
-      try { yes = (await approve?.({ ...q, reason: d?.reason ?? (suspect ? 'injection-suspect' : null) })) === true; } catch { yes = false; }
+      try { yes = (await approve?.({ ...q, target: { role: el?.role ?? null, name: el?.name ?? act.url ?? act.key ?? null }, reason: d?.reason ?? (suspect ? 'injection-suspect' : null) })) === true; } catch { yes = false; }
       return yes ? null : { ...bad('denied', 'approval denied'), final: true, approval: true };
     }
 
@@ -238,9 +238,9 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
 
     // one model-driven step; commit failures set S.jerr
     async function modelStep() {
-      const ob = await ask('computer.observe', { surface, target: S.app ?? start, lastAction: S.lastAction, availableModes: MODES });
+      const ob = await ask('computer.observe', { ...((S.app ?? start) !== undefined && (S.app ?? start) !== null ? { target: String(S.app ?? start) } : {}), ...(S.lastAction ? { lastAction: `${S.lastAction.action}${S.lastAction.ok ? '' : ' failed'}` } : {}), modes: MODES });
       const o = await observe(MODES.includes(ob?.mode) ? ob.mode : 'tree', Number.isInteger(ob?.depth) ? ob.depth : undefined);
-      const act = await ask('computer.act', { goal, observationSummary: summarize(o), allowedActions: ALLOWED[surface], history: S.history.slice(-8).map(({ step, action, target, ok }) => ({ step, action, target, ok })) });
+      const act = await ask('computer.act', { goal, observation: summarize(o), allowed: ALLOWED[surface], history: S.history.slice(-8).map(({ step, action, target, ok }) => ({ step, action: String(action), ...(target ? { target: String(target) } : {}), ok })) });
       if (act?.done) return { act };
       const rec = await doStep(o, act, false);
       await commit(rec, act, o);
@@ -281,7 +281,7 @@ export function createComputerAgent({ browser, desktop, decide, journal, clock, 
       if (act?.done) { await store(act.answer); return finish(true, 'done', act.answer); }
       if (failures() >= L.maxFailures) return finish(false, 'max_failures');
       if (loopDetected(S.history, L.loopRepeats)) return finish(false, 'loop');
-      const c = await ask('run.continue', { steps: S.steps.length, progress: { ok: S.steps.filter((s) => s.ok).length, failed: S.steps.filter((s) => !s.ok).length }, budget: { remainingSteps: L.maxSteps - S.steps.length, remainingMs: L.maxMs - (now() - t0) } });
+      const c = await ask('run.continue', { steps: S.steps.length, progress: S.steps.filter((s) => s.ok).length / Math.max(1, S.steps.length), budgetRemaining: L.maxMs - (now() - t0) });
       if (c?.continue === false) return finish(false, 'stopped');
     }
   }

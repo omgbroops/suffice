@@ -32,7 +32,7 @@ const BUILTIN_SCRIPTS = {
   'builtin:changed': ({ before, after }) => ({ ok: before !== after, reason: before !== after ? 'changed' : 'unchanged' }),
 };
 
-export function createDecider({ runners, ask, scripts: seed, clock, journal, bus, timer, store } = {}) {
+export function createDecider({ runners, ask, scripts: seed, clock, journal, bus, timer, store, strictInputs = process.env.NODE_ENV === 'test', shadowTimeoutMs = 30000 } = {}) {
   assertShape('runners', runners, ['get']);
   assertShape('clock', clock, ['now']);
   if (typeof ask !== 'function') throw new TypeError('ask: expected a function');
@@ -289,10 +289,10 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
       case 'shadow': {
         // candidate runs detached on its own timer; the caller gets the primary at once and agreement lands when it settles
         const a = await sub(s.primary);
-        const ms = s.candidate.timeoutMs ?? 10000;
+        const ms = s.candidate.timeoutMs ?? shadowTimeoutMs;
         let h;
-        const cand = Promise.race([sub(s.candidate), new Promise((_, rej) => { h = tm.setTimeout(() => rej(new Error('candidate timeout')), ms); })]);
-        c.rt.late = cand.then((b) => !!b && !!a && canon(a.output) === canon(b.output), () => { c.rt.shadowErr = true; return false; })
+        const cand = Promise.race([sub(s.candidate), new Promise((_, rej) => { h = tm.setTimeout(() => rej(Object.assign(new Error('candidate timeout'), { timeout: true })), ms); })]);
+        c.rt.late = cand.then((b) => !!b && !!a && canon(a.output) === canon(b.output), (e) => { c.rt.shadowErr = true; if (e?.timeout) c.rt.shadowTimeout = true; return false; })
           .finally(() => tm.clearTimeout(h));
         return a;
       }
@@ -307,11 +307,13 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
     const { winner } = resolve(point, ctx);
     const spec = winner?.spec ?? { kind: 'constant', output: def.default };
     const rt = { cacheHit: false };
-    let output, ok = false, error, inp = input;
+    let output, ok = false, error, inp = input, badInput = false;
+    const s = stats.get(point) ?? { n: 0, ms: 0, hits: 0, fb: 0, sh: 0, ag: 0, se: 0, inf: 0, to: 0, dis: 0 };
+    stats.set(point, s);
     try {
       inp = structuredClone(input);
       const e = check(def.input, inp);
-      if (e.length) throw new Error(`input invalid: ${e[0]}`);
+      if (e.length) { badInput = true; throw new Error(`input invalid: ${e[0]}`); }
       if (canon(inp).length > MAX_INPUT) throw new Error('input too large');
       const ac = new AbortController();
       const ms = spec.timeoutMs ?? (spec.kind === 'human' ? 300000 : 10000);
@@ -323,17 +325,16 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
       output = r.output; ok = true;
     } catch (e) {
       error = e.message;
+      if (badInput) { s.inf++; if (strictInputs) throw e; } // a wrong-shape caller is a bug: loud when strict, safe default otherwise
       output = def.failClosed ? def.closed ?? def.default : def.default;
     }
     output = structuredClone(output);
     const ms = clock.now() - t0, id = `dec-${++seq}`;
     let inputHash = '';
     try { inputHash = createHash('sha1').update(canon(inp) ?? '').digest('hex'); } catch { inputHash = createHash('sha1').update('').digest('hex'); }
-    const s = stats.get(point) ?? { n: 0, ms: 0, hits: 0, fb: 0, sh: 0, ag: 0, se: 0 };
-    stats.set(point, s);
     s.n++; s.ms += ms; s.hits += rt.cacheHit ? 1 : 0; s.fb += ok ? 0 : 1;
     let landed = false;
-    rt.late?.then((agree) => { landed = true; s.sh++; s.ag += agree ? 1 : 0; if (rt.shadowErr) s.se++; });
+    rt.late?.then((agree) => { landed = true; s.sh++; s.ag += agree ? 1 : 0; if (rt.shadowErr) s.se++; if (rt.shadowTimeout) s.to++; else if (!agree && !rt.shadowErr) s.dis++; });
     for (let i = 0; rt.late && !landed && i < 20; i++) await null; // a fast candidate lands before we return; a slow one never blocks
     if (rows.size >= MAX_ROWS) rows.delete(rows.keys().next().value);
     rows.set(id, { id, point, inputHash, output: structuredClone(output), ok });
@@ -348,7 +349,7 @@ export function createDecider({ runners, ask, scripts: seed, clock, journal, bus
 
   return {
     definePoint, registerScript, loadLayers, decide, explain, validateConfig, exportConfig,
-    stats: () => Object.fromEntries([...stats].map(([p, s]) => [p, { count: s.n, meanMs: s.n ? s.ms / s.n : 0, cacheHitRate: s.n ? s.hits / s.n : 0, fallbacks: s.fb, agreement: s.sh ? s.ag / s.sh : null, shadowErrors: s.se }])),
+    stats: () => Object.fromEntries([...stats].map(([p, s]) => [p, { count: s.n, meanMs: s.n ? s.ms / s.n : 0, cacheHitRate: s.n ? s.hits / s.n : 0, fallbacks: s.fb, agreement: s.sh ? s.ag / s.sh : null, shadowErrors: s.se, inputFailures: s.inf, timeouts: s.to, disagreements: s.dis }])),
     *dataset() { for (const r of rows.values()) yield { ...r }; },
     recordOutcome(id, outcome) { const r = rows.get(id); if (!r) return false; r.outcome = structuredClone(outcome); try { store?.append({ id, outcome: { ok: r.outcome?.ok } }); } catch { /* see above */ } return true; },
   };

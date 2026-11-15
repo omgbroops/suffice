@@ -39,7 +39,7 @@ const fakeDecide = (h = {}) => {
   const calls = []; const acts = [...(h.acts ?? [])];
   const fn = async (point, input, ctx) => {
     calls.push({ point, input, ctx });
-    if (point === 'computer.act') return acts.shift() ?? { done: true, answer: 'out of script' };
+    if (point === 'computer.act') return acts.shift() ?? { action: 'none', done: true, answer: 'out of script' };
     const f = h[point];
     if (typeof f === 'function') return f(input, ctx);
     if (f !== undefined) return f;

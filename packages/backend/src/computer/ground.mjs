@@ -1,7 +1,7 @@
 // §4.2: ground a target by cheapest rung first: cache, rule, then the model; deeper snapshot once if unsure.
 const norm = (s) => String(s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
 const NONE = { element: null, rung: null };
-const slim = (els) => els.map((e) => ({ ref: e.ref, role: e.role, name: e.name, ...(e.value !== undefined ? { value: e.value } : {}) }));
+const slim = (els) => els.map((e) => ({ ref: e.ref, role: e.role, name: e.name, label: String(e.name ?? ''), ...(e.value !== undefined ? { value: e.value } : {}) }));
 
 export async function ground({ target, elements = [], cached = [], ask, threshold = 0.6, deeper } = {}) {
   if (!target) return null;
