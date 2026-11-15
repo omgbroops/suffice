@@ -15,13 +15,21 @@ test('desktop manages resources through real native IPC and shared settings surf
  try{
   const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.locator('.composer').waitFor();
   await page.getByRole('button',{name:'Settings',exact:true}).click();
+  assert.equal(await page.getByRole('button',{name:'Session tools',exact:true}).count(),0);assert.equal(await page.evaluate(()=>typeof window.sufficeDesktop.agentAction),'undefined');
   await page.getByRole('button',{name:'Skills',exact:true}).click();
   await page.getByRole('switch',{name:'fixture',exact:true}).click();
   await page.getByRole('switch',{name:'fixture',exact:true}).getAttribute('aria-checked').then(async()=>{await page.waitForFunction(()=>document.querySelector('[aria-label="fixture"]')?.getAttribute('aria-checked')==='false');});
   assert.equal((await service.list()).skills[0].enabled,false);
   await page.getByRole('button',{name:'Prompt templates',exact:true}).click();
   await page.getByRole('button',{name:'Add',exact:true}).click();
-  const dialog=page.getByRole('dialog',{name:'New prompt template'});await dialog.getByLabel('Name',{exact:true}).fill('review');await dialog.getByLabel('Instructions').fill('Review $1 carefully.');await dialog.getByRole('button',{name:'Save',exact:true}).click();await dialog.waitFor({state:'detached'});
+  const dialog=page.getByRole('dialog',{name:'New prompt template'});await dialog.getByLabel('Name',{exact:true}).fill('review');await dialog.getByLabel('Instructions').fill('Review $1 carefully.');
+  assert.equal(await page.locator('.resource-note').count(),0);
+  await page.locator('html').evaluate(el=>el.dataset.theme='light');
+  const fieldStyles=()=>dialog.locator('input,textarea').evaluateAll(nodes=>nodes.map(el=>{const s=getComputedStyle(el);return {fill:s.backgroundColor,border:s.borderTopColor,width:s.borderTopWidth,style:s.borderTopStyle};}));
+  const light=await fieldStyles();assert.equal(light[0].fill,'rgb(255, 255, 255)');assert.deepEqual(light[0],light[1]);assert.equal(light[0].width,'1px');assert.equal(light[0].style,'solid');assert.notEqual(light[0].border,'rgba(0, 0, 0, 0)');
+  await page.screenshot({path:resolve(home,'template-fields-light.png')});
+  await page.locator('html').evaluate(el=>el.dataset.theme='dark');const dark=await fieldStyles();assert.deepEqual(dark[0],dark[1]);await page.screenshot({path:resolve(home,'template-fields-dark.png')});
+  await dialog.getByRole('button',{name:'Save',exact:true}).click();await dialog.waitFor({state:'detached'});
   assert.equal(await readFile(resolve(home,'prompts/review.md'),'utf8'),'Review $1 carefully.');
   await page.getByRole('button',{name:'MCPs',exact:true}).click();await page.getByRole('button',{name:'Add server',exact:true}).click();
   const mcp=page.getByRole('dialog',{name:'Add MCP server'});await mcp.getByLabel('Name',{exact:true}).fill('docs');await mcp.getByLabel('Executable or HTTPS URL').fill('https://example.com/mcp');await mcp.getByRole('button',{name:'Save',exact:true}).click();await mcp.waitFor({state:'detached'});await page.getByRole('switch',{name:'docs',exact:true}).waitFor();assert.equal((await service.list()).mcp.docs.url,'https://example.com/mcp');

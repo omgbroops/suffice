@@ -57,7 +57,7 @@
 .settings-unavailable { color:var(--text-faint); font-size:11px; flex-shrink:0; }
 .desktop-app:not([data-theme=light]) .settings-provider-icon { filter:invert(1); }
 .reduce-motion *,.reduce-motion *::before,.reduce-motion *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
-.solid-surfaces .composer,.solid-surfaces .settings-card,.solid-surfaces .popover { background:var(--surface-sidebar)!important; backdrop-filter:none!important; }
+.solid-surfaces .composer,.solid-surfaces .thread-user,.solid-surfaces .settings-card,.solid-surfaces .popover { background:var(--surface-sidebar)!important; backdrop-filter:none!important; }
 .private-details :is(.thread-branch,.thread-project-name,.git-pill,.project-picker) { filter:blur(5px); }
 .hide-context-ring .context-ring { display:none; }
 [data-settings-density=Compact] .thread-card { min-height:32px!important; padding-block:4px!important; }
@@ -185,3 +185,10 @@
 .extension-dialog input,.extension-dialog textarea,.extension-dialog select { width:100%; box-sizing:border-box; background:var(--control-raised); border:0; border-radius:8px; color:var(--text); padding:10px; font:inherit; }
 .extension-dialog textarea { min-height:180px; resize:vertical; max-height:55vh; }
 .extension-status { color:var(--text-muted); font-size:12px; white-space:pre-wrap; padding:0 12px 8px; max-height:100px; overflow:auto; }
+
+
+/* All modal text fields share the same fill and visible edge. */
+.desktop-app dialog { --dialog-field-fill:color-mix(in srgb,var(--text) 4%,var(--dialog-surface,var(--surface-menu))); --dialog-field-edge:color-mix(in srgb,var(--text) 22%,transparent); }
+.desktop-app[data-theme=light] dialog { --dialog-field-fill:#fff; }
+.desktop-app dialog :is(input:not([type=radio],[type=checkbox],[type=range],[type=file],[type=color]),textarea) { box-sizing:border-box; background:var(--dialog-field-fill); border:1px solid var(--dialog-field-edge); color:var(--text-strong); box-shadow:inset 0 1px 2px #0000000a; }
+.desktop-app dialog textarea:focus-visible { outline:2px solid var(--focus-ring); outline-offset:2px; }
