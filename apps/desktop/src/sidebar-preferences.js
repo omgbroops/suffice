@@ -10,7 +10,7 @@ export const sidebarPreferences={
  items(){const choice=(name,label,value)=>({label,selected:state[name]===value,action:`sidebar:${name}=${value}`});const toggle=(name,label)=>({label,selected:state[name],action:`sidebar:${name}=toggle`});return [
  {label:'Group by',children:()=>[choice('group','None','none'),choice('group','Project','project')]},
  {label:'Sort by',children:()=>[choice('sort','Last activity','activity'),choice('sort','Name','name')]},
- {label:'Filter',children:()=>[choice('filter','All threads','all'),choice('filter','Running','working'),choice('filter','Needs attention','attention'),choice('filter','Unread','unread'),choice('filter','With drafts','draft')]},
+ {label:'Filter',children:()=>[choice('filter','All threads','all'),choice('filter','Running','working'),choice('filter','Needs attention','attention'),choice('filter','Unread','unread'),choice('filter','With drafts','draft'),choice('filter','Archived','archived')]},
  {label:'Show',children:()=>[toggle('branch','Branch'),toggle('provider','Model provider'),toggle('diff','Chat changes')]},
  {...toggle('compact','Compact'),separator:true},
  {label:'Reset sidebar',action:'sidebar:reset',separator:true}];}
