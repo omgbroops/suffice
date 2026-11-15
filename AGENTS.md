@@ -15,7 +15,8 @@ assuming that research behavior is production behavior.
   historical evidence byte for byte. JavaScript subject repositories stay JavaScript.
 - `scripts/rust-migration`, `docs/rust-migration`: reproducible offline migration
   measurements, parity inventories and evidence. Do not overwrite earlier samples.
-- `crates/suffice-session`: experimental read-only Pi session projection; rebuild
+- `crates/suffice-session`: experimental read-only Pi/session presentation and
+  saved usage, plus JavaScript-compatible finite JSON number handling; rebuild
   its executable before running the installed-Pi differential tests. New file-read
   integrations must retain `SessionStore` directory capabilities and enforce
   byte/line/catalog budgets, rather than reopen canonical ambient file paths.
@@ -86,7 +87,7 @@ Experimental offline checks (after frozen dependency installation):
 ```text
 cargo build --locked --manifest-path crates/suffice-session/Cargo.toml
 cargo test --locked --manifest-path crates/suffice-session/Cargo.toml
-node --test crates/suffice-session/tests/differential.test.mjs
+node --test crates/suffice-session/tests/*.test.mjs
 cargo test --locked --manifest-path apps/desktop-native/Cargo.toml
 cargo build --release --locked --manifest-path apps/desktop-native/Cargo.toml
 node apps/desktop-native/smoke.mjs

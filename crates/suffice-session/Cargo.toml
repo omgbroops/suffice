@@ -6,5 +6,8 @@ edition = "2021"
 [dependencies]
 cap-std = "=4.0.3"
 cap-fs-ext = "=4.0.3"
-serde_json = { version = "=1.0.151", features = ["preserve_order"] }
+ryu-js = "=1.0.3"
+sha2 = "=0.10.9"
+serde = "=1.0.229"
+serde_json = { version = "=1.0.151", features = ["preserve_order", "float_roundtrip"] }
 time = { version = "=0.3.55", features = ["parsing"] }

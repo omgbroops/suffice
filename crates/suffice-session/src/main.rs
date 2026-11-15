@@ -14,6 +14,24 @@ fn store(v: &Value) -> Result<SessionStore, String> {
 }
 fn run(v: Value) -> Result<Value, String> {
     match v["op"].as_str() {
+        Some("present") => {
+            let entries = v["entries"].as_array().ok_or("entries must be an array")?;
+            let messages = suffice_session::desktop_messages(entries, v.get("leaf"))?;
+            let usage = suffice_session::saved_usage(entries, v["contextWindow"].as_f64());
+            Ok(json!({"messages":messages,"usage":usage}))
+        }
+        Some("present_session") => {
+            let entries = store(&v)?
+                .read(Path::new(
+                    v["relativePath"]
+                        .as_str()
+                        .ok_or("relativePath must be a string")?,
+                ))
+                .map_err(|error| error.to_string())?;
+            let messages = suffice_session::desktop_messages(&entries, v.get("leaf"))?;
+            let usage = suffice_session::saved_usage(&entries, v["contextWindow"].as_f64());
+            Ok(json!({"messages":messages,"usage":usage}))
+        }
         Some("project") => suffice_session::project(
             v["entries"].as_array().ok_or("entries must be an array")?,
             v.get("leaf"),
@@ -62,7 +80,7 @@ fn main() {
             if input.len() > MAX_WIRE_BYTES {
                 return Err("Request exceeds 128 MiB wire limit".to_owned());
             }
-            serde_json::from_slice(&input).map_err(|e| e.to_string())
+            suffice_session::parse_js_json(&input).map_err(|e| e.to_string())
         })
         .and_then(run);
     let mut response = match result {
@@ -75,7 +93,7 @@ fn main() {
         // Reserve the terminating newline inside the total wire budget.
         limit: MAX_WIRE_BYTES - 1,
     };
-    if serde_json::to_writer(&mut output, &response).is_err() {
+    if suffice_session::write_js_json(&mut output, &response, false).is_err() {
         output.bytes = b"{\"ok\":false,\"error\":\"Response exceeds 128 MiB wire limit\"}".to_vec();
     }
     output.bytes.push(b'\n');

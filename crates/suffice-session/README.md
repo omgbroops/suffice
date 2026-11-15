@@ -1,6 +1,6 @@
 # Read-only session core (experimental)
 
-This crate supplies Pi-style projection plus a bounded, capability-relative session reader used by the experimental native viewer. Electron/Pi still own production browsing and session resume. Nothing here migrates, rewrites, or creates session files. Tests use isolated synthetic histories, including v1/v2 data that Pi may rewrite if opened through its live session manager.
+This crate supplies Pi-style projection, desktop saved-transcript presentation/usage, and a bounded capability-relative session reader used by the experimental native viewer. Electron/Pi still own production browsing and session resume. Nothing here migrates, rewrites, or creates session files. Tests use isolated synthetic histories, including v1/v2 data that Pi may rewrite if opened through its live session manager.
 
 ## Retained session store
 
@@ -32,10 +32,18 @@ Build the executable before testing it; do not reuse a stale target. It reads on
 - `discover`: absolute `root` -> summary array, now through the bounded store; retained for existing differential fixtures. Use `discover_confined` to receive skipped reasons too.
 - `discover_confined`: absolute `root` -> `{ sessions: [{ relativePath, summary }], skipped }`.
 - `read_session`: absolute `root`, `relativePath`, optional `leaf` -> `{ entries, projection }`. Session headers are excluded from the Pi graph, while projected `sourceIndex` values still point into the returned raw journal entries.
+- `present`: `entries`, optional `leaf` and numeric `contextWindow` -> `{ messages, usage }`, using the desktop's outward saved-message shape.
+- `present_session`: absolute `root`, `relativePath`, optional `leaf` and numeric `contextWindow` -> the same saved view, read through `SessionStore`. This response omits raw entries and private compaction summaries.
 
 The native viewer retains its store between operations; the one-shot JSON executable opens an explicit root for each test request. It is not a persistent host, production adapter, or user-facing replacement CLI. Pure/legacy library `read_journal`, `project`, `summarize`, and `discover` helpers remain available for oracle work; ambient `summarize`/`discover` do not provide the store's bounds or confinement and must not be used for new file-reading integrations.
 
-Opaque JSON object keys follow JavaScript integer-index enumeration in wire output: numeric index keys ascend before other insertion-order keys. This does not establish complete JSON.stringify byte parity. Explicit null leaf means empty path; omitted leaf means last entry. Cyclic parent chains error instead of reproducing Pi 1.5.2's possible hang.
+Opaque JSON object keys follow JavaScript integer-index enumeration in wire output: numeric index keys ascend before other insertion-order keys. Finite JSON inputs are rounded to ECMAScript binary64 Numbers, including integers beyond 2^53; parsing enables round-trip float conversion and serialization uses pinned ryu-js 1.0.3 for JavaScript decimal spelling, negative zero and exponent thresholds. `to_js_string(value, true)` supplies two-space tool-argument display with the same numeric/key conventions. A seeded corpus generated from 2,048 binary64 patterns (excluding non-finite values) and explicit boundaries compare raw wire strings, rather than parsing away formatting differences. This does not establish complete JavaScript value/Unicode/overflow parity. Explicit null leaf means empty path; omitted leaf means last entry. Cyclic parent chains error instead of reproducing Pi 1.5.2's possible hang.
+
+## Saved presentation boundary
+
+`desktop_messages(entries, leaf)` applies the Pi graph then desktop presentation: chronological compaction/interruption markers, suppression of private compaction summaries, turn ancestry/latest-end/backfill semantics, prompt-hash display metadata, bounded legacy attachment markers and renderer-normalized text/tool/image fields. `saved_usage(entries, context_window)` follows the existing Node/Pi cumulative and current-window calculations, including its partial-usage field conventions. Missing usage remains null; the Rust port does not invent prices or independently resolve models. The host supplies an optional resolved model context window.
+
+The native viewer consumes these normalized values, shows display prompts and attachment metadata, and suppresses persisted reasoning at render time like `threads-ui.js`. The backend message payload retains normalized thinking blocks to match Electron's existing API; it is not an API that redacts every reasoning field from memory or transport. Select failures preserve the previous messages/usage/selection. Native images, live turns, settings and complete visual/accessibility parity are not implemented by this boundary.
 
 ## Checks and remaining compatibility
 
@@ -44,10 +52,10 @@ cargo fmt --manifest-path crates/suffice-session/Cargo.toml -- --check
 cargo clippy --locked --manifest-path crates/suffice-session/Cargo.toml --all-targets -- -D warnings
 cargo test --locked --manifest-path crates/suffice-session/Cargo.toml
 cargo build --locked --manifest-path crates/suffice-session/Cargo.toml
-node --test crates/suffice-session/tests/differential.test.mjs
+node --test crates/suffice-session/tests/*.test.mjs
 cargo build --release --locked --manifest-path crates/suffice-session/Cargo.toml
 ```
 
-Tests import installed Pi 1.5.2 using Node 24. Set `SUFFICE_PI_ORACLE_ROOT` to another checkout with that pinned installation if needed. File bytes are checked before and after compatibility reads. Store regressions cover path escape, retained-root replacement, symlink replacement, non-regular files, sparse oversize, file growth, line and catalog budgets, parse recovery and provenance.
+Tests import installed Pi 1.5.2 and the current Electron presentation/usage functions using Node 24. Install the frozen dependencies in this checkout for the complete suite. The original projection differential file additionally supports `SUFFICE_PI_ORACLE_ROOT` for an external pinned Pi installation. File bytes are checked before and after compatibility reads. Store regressions cover path escape, retained-root replacement, symlink replacement, non-regular files, sparse oversize, file growth, line and catalog budgets, parse recovery and provenance. Presentation tests compare complete normalized responses to the actual Node functions, including off-branch markers, turn identities, undefined/null distinctions, attachments and floating-point aggregation order.
 
-Timestamp conversion covers a tested subset of null, booleans, finite numbers, RFC3339/date-only strings, ordinary JSON objects, empty arrays and one-string arrays. Remaining gaps include JavaScript legacy date grammar and arbitrary array/object primitive coercion, number formatting and IEEE-754 boundaries, non-JSON undefined inputs, malformed primitive messages/entries, locale filename ordering (only ASCII ties compared), discovery error semantics, invalid Unicode, and platform path behavior. Desktop turn presentation, attachment handling, saved usage/model resolution, cache, authorization and lazy Pi resume remain separate production obligations. Bounds and confinement do not close those semantic gaps.
+Timestamp conversion covers a tested subset of null, booleans, finite numbers, RFC3339/date-only strings, ordinary JSON objects, empty arrays and one-string arrays. Remaining gaps include JavaScript legacy date grammar and arbitrary array/object primitive coercion, overflowed numeric literals that JSON.parse accepts as Infinity, non-JSON undefined/reference aliases, malformed primitive messages/entries, locale filename ordering (only ASCII ties compared), discovery error semantics, invalid Unicode/unpaired surrogates, and platform path behavior. The read-only native candidate now uses the Rust saved-view port, but production cache/catalog authorization, model resolution and lazy Pi resume remain Node-owned. Broader adversarial/legacy/platform qualification and memory/performance evidence are still required before making it authoritative for production browsing.

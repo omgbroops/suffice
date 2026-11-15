@@ -7,7 +7,11 @@ use std::{
 };
 use time::{format_description::well_known::Rfc3339, Date, OffsetDateTime};
 
+mod js_json;
 mod store;
+pub use js_json::{parse_js_json, to_js_string, write_js_json};
+pub mod presentation;
+pub use presentation::{desktop_messages, saved_usage};
 pub use store::{Discovery, ReadError, ReadLimits, SessionInfo, SessionStore};
 
 fn timestamp(v: Option<&Value>) -> Option<i64> {
@@ -99,7 +103,7 @@ fn truthy(v: &Value) -> bool {
     }
 }
 fn key(v: Option<&Value>) -> String {
-    v.map(|x| x.to_string())
+    v.map(|x| to_js_string(x, false).expect("JSON value serialization"))
         .unwrap_or_else(|| "<undefined>".into())
 }
 
@@ -111,7 +115,7 @@ pub fn read_journal(source: &str) -> Result<Vec<Value>, String> {
         if line.trim().is_empty() {
             continue;
         }
-        match serde_json::from_str(line) {
+        match parse_js_json(line.as_bytes()) {
             Ok(entry) => out.push(entry),
             Err(_) if i + 1 == lines.len() && !source.ends_with('\n') => break,
             Err(_) => {
@@ -466,7 +470,7 @@ pub fn summarize(path: &Path) -> Option<Value> {
     let metadata = fs::metadata(path).ok()?;
     let mut parsed = text
         .lines()
-        .filter_map(|line| serde_json::from_str::<Value>(line).ok())
+        .filter_map(|line| parse_js_json(line.as_bytes()).ok())
         .filter(truthy);
     let mut summary = SummaryBuilder::new(parsed.next()?)?;
     for entry in parsed {

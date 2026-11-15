@@ -20,6 +20,7 @@ struct State {
     highlighted: Option<usize>,
     selected: Option<usize>,
     messages: Vec<Value>,
+    usage: Value,
     error: Option<String>,
     follow: bool,
     jump: bool,
@@ -60,12 +61,11 @@ impl State {
             .ok_or("Session index out of range")?;
         let store = self.store.as_ref().ok_or("Session store unavailable")?;
         let entries = store.read(&session.path).map_err(|e| e.to_string())?;
-        let projected = suffice_session::project_journal(&entries, None)?;
-        let messages = projected["messages"]
-            .as_array()
-            .cloned()
-            .ok_or("Invalid projection")?;
+        let projected = suffice_session::desktop_messages(&entries, None)?;
+        let messages = projected.as_array().cloned().ok_or("Invalid projection")?;
+        let usage = suffice_session::saved_usage(&entries, None);
         self.messages = messages;
+        self.usage = usage;
         self.selected = Some(index);
         self.highlighted = Some(index);
         self.follow = true;
@@ -148,28 +148,94 @@ fn search_keyboard_selection(
     state.search_key(key)
 }
 fn blocks(message: &Value) -> Vec<(String, String)> {
-    let content = &message["content"];
-    if let Some(s) = content.as_str() {
-        return vec![("text".into(), s.into())];
+    if message["role"] == "status" {
+        let label = match message["kind"].as_str() {
+            Some("compacted") if message["automatic"] == true => "Automatically compacted",
+            Some("compacted") => "Compacted",
+            Some("interrupted") => "Interrupted",
+            _ => "Status",
+        };
+        return vec![("status".into(), label.into())];
     }
-    if let Some(arr) = content.as_array() {
-        return arr
-            .iter()
-            .map(|b| {
-                let kind = b["type"].as_str().unwrap_or("unknown");
-                let text = match kind {
-                    "text" => b["text"].as_str().unwrap_or("").to_owned(),
-                    "thinking" => b["thinking"].as_str().unwrap_or("").to_owned(),
-                    _ => serde_json::to_string_pretty(b).unwrap_or_default(),
-                };
-                (kind.into(), text)
-            })
-            .collect();
+    let mut result = Vec::new();
+    if message["role"] == "user" {
+        if let Some(text) = message["displayText"].as_str() {
+            result.push(("text".into(), text.into()));
+        }
     }
-    message["summary"]
-        .as_str()
-        .map(|s| vec![("text".into(), s.into())])
-        .unwrap_or_default()
+    if result.is_empty() {
+        if let Some(content) = message["content"].as_array() {
+            for part in content {
+                let kind = part["type"].as_str().unwrap_or("unknown");
+                match kind {
+                    // As in the production saved transcript, reasoning is a
+                    // live status rather than a permanent visible entry.
+                    "thinking" => {}
+                    "text" | "toolCall" => {
+                        if let Some(text) = part["text"].as_str() {
+                            result.push((kind.into(), text.into()));
+                        }
+                    }
+                    "image" => result.push(("status".into(), "Image attachment".into())),
+                    _ => result.push(("status".into(), format!("[{kind}]"))),
+                }
+            }
+        }
+    }
+    if let Some(attachments) = message["attachments"].as_array() {
+        for attachment in attachments {
+            let name = attachment["name"].as_str().unwrap_or("Attachment");
+            // A name is metadata, but never render a path supplied in its place.
+            let name = name.rsplit(['/', '\\']).next().unwrap_or("Attachment");
+            let size = attachment["size"]
+                .as_f64()
+                .filter(|n| n.is_finite() && *n >= 0.0)
+                .map(|n| format!("{n} bytes"))
+                .unwrap_or_else(|| "size unknown".into());
+            let typ = attachment["type"].as_str().unwrap_or("type unknown");
+            result.push((
+                "status".into(),
+                format!("Attachment: {name} · {size} · {typ}"),
+            ));
+        }
+    }
+    result
+}
+fn turn_label(message: &Value) -> String {
+    let turn = &message["turn"];
+    let mut parts = Vec::new();
+    for value in [
+        turn["provider"].as_str(),
+        turn["modelName"]
+            .as_str()
+            .or_else(|| turn["model"].as_str()),
+        turn["effort"].as_str(),
+    ] {
+        if let Some(value) = value.filter(|v| !v.is_empty()) {
+            parts.push(value.to_owned());
+        }
+    }
+    if let (Some(start), Some(end)) = (turn["startedAt"].as_f64(), turn["endedAt"].as_f64()) {
+        if end >= start && (end - start).is_finite() {
+            parts.push(format!("{:.1}s", (end - start) / 1000.0));
+        }
+    }
+    parts.join(" · ")
+}
+fn usage_label(usage: &Value) -> String {
+    let value = |key: &str| match usage.get(key) {
+        Some(value @ Value::Number(_)) => {
+            suffice_session::to_js_string(value, false).unwrap_or_else(|_| "—".into())
+        }
+        _ => "—".into(),
+    };
+    format!(
+        "Cost: {} · Tokens: {} · Context: {} · Context %: {}",
+        value("cost"),
+        value("totalTokens"),
+        value("windowTokens"),
+        value("windowPercent")
+    )
 }
 struct App {
     state: State,
@@ -270,6 +336,9 @@ impl eframe::App for App {
                 }
                 ui.checkbox(&mut self.state.follow, "Follow latest");
             });
+            if self.state.selected.is_some() {
+                ui.small(usage_label(&self.state.usage));
+            }
             ui.separator();
             if let Some(e) = &self.state.error {
                 ui.colored_label(Color32::LIGHT_RED, e);
@@ -287,19 +356,22 @@ impl eframe::App for App {
                                     .small()
                                     .color(Color32::from_gray(150)),
                             );
+                            let metadata = turn_label(message);
+                            if !metadata.is_empty() {
+                                ui.small(metadata);
+                            }
                             for (kind, text) in blocks(message) {
                                 if kind == "text" {
                                     CommonMarkViewer::new().show(ui, &mut self.cache, &text);
+                                } else if kind == "status" {
+                                    ui.small(text);
                                 } else {
-                                    egui::CollapsingHeader::new(format!("{kind} details")).show(
-                                        ui,
-                                        |ui| {
-                                            ui.add(
-                                                egui::Label::new(RichText::new(text).monospace())
-                                                    .selectable(true),
-                                            );
-                                        },
-                                    );
+                                    egui::CollapsingHeader::new("Tool details").show(ui, |ui| {
+                                        ui.add(
+                                            egui::Label::new(RichText::new(text).monospace())
+                                                .selectable(true),
+                                        );
+                                    });
                                 }
                             }
                         });
@@ -396,6 +468,65 @@ mod tests {
         "{\"type\":\"session\",\"version\":3,\"id\":\"fixture\",\"timestamp\":\"2026-01-01T00:00:00.000Z\",\"cwd\":\"/fixture\"}\n",
         "{\"type\":\"message\",\"id\":\"m0\",\"parentId\":null,\"timestamp\":\"2026-01-01T00:00:00.000Z\",\"message\":{\"role\":\"user\",\"content\":[{\"type\":\"text\",\"text\":\"fixture\"}]}}\n"
     );
+    #[test]
+    fn saved_presentation_selection_and_update_hide_private_projection() {
+        let root = fixture_root("presentation");
+        let entries = vec![
+            json!({"type":"session","version":3,"id":"fixture","timestamp":"2026-01-01T00:00:00.000Z","cwd":"/fixture"}),
+            json!({"type":"custom","id":"t","parentId":null,"customType":"suffice:turn-start","data":{"id":"turn","startedAt":1000,"provider":"provider","model":"model","effort":"high","displayPrompt":"visible prompt","attachments":[{"name":"report.txt","path":"/internal/secret","size":12,"type":"text/plain"}]}}),
+            json!({"type":"message","id":"u","parentId":"t","message":{"role":"user","content":"raw prompt /internal/secret"}}),
+            json!({"type":"message","id":"a","parentId":"u","message":{"role":"assistant","content":[{"type":"thinking","thinking":"reasoning"},{"type":"text","text":"answer"}],"usage":{"input":10,"output":4,"cacheRead":3,"cacheWrite":2,"totalTokens":30,"cost":{"total":0.25}}}}),
+            json!({"type":"custom","id":"e","parentId":"a","customType":"suffice:turn-end","data":{"id":"turn","endedAt":3000}}),
+            json!({"type":"compaction","id":"c","parentId":"e","summary":"PRIVATE COMPACTION","firstKeptEntryId":"u","tokensBefore":10}),
+            json!({"type":"custom","id":"r","parentId":"c","customType":"suffice:compaction","data":{"entryId":"c","reason":"automatic"}}),
+            json!({"type":"custom","id":"i","parentId":"r","customType":"suffice:interrupted","data":{}}),
+            json!({"type":"message","id":"z","parentId":"i","message":{"role":"user","content":"after"}}),
+        ];
+        let journal = entries
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<_>>()
+            .join("\n")
+            + "\n";
+        std::fs::write(root.join("group/fixture.jsonl"), journal).unwrap();
+        let mut state = State::discover(&root).unwrap();
+        state.select(0).unwrap();
+        let presented = state
+            .messages
+            .iter()
+            .flat_map(blocks)
+            .map(|(_, text)| text)
+            .collect::<Vec<_>>()
+            .join("\n");
+        assert!(presented.contains("visible prompt"));
+        assert!(presented.contains("report.txt · 12 bytes · text/plain"));
+        assert!(presented.contains("Automatically compacted"));
+        assert!(presented.contains("Interrupted"));
+        assert!(!presented.contains("reasoning"));
+        assert!(!presented.contains("PRIVATE COMPACTION"));
+        assert!(!presented.contains("/internal/secret"));
+        assert!(state
+            .messages
+            .iter()
+            .any(|m| turn_label(m).contains("provider · model · high · 2.0s")));
+        assert_eq!(state.usage["totalTokens"].as_f64(), Some(19.0));
+        assert!(usage_label(&state.usage).contains("—"));
+        let mut app = App {
+            state,
+            cache: CommonMarkCache::default(),
+            smoke: false,
+            phase: 0,
+            hold: Duration::ZERO,
+            started: Instant::now(),
+            ready_emitted: true,
+            focus_search_once: false,
+        };
+        let context = egui::Context::default();
+        let mut frame = eframe::Frame::_new_kittest();
+        let _ = context.run(egui::RawInput::default(), |ctx| app.update(ctx, &mut frame));
+        drop(app);
+        std::fs::remove_dir_all(root).unwrap();
+    }
     #[cfg(unix)]
     #[test]
     fn replacement_symlink_cannot_escape_store_on_selection() {
@@ -406,12 +537,16 @@ mod tests {
         assert_eq!(state.sessions.len(), 1);
         state.select(0).unwrap();
         let before = state.messages.clone();
+        let before_usage = state.usage.clone();
+        let before_selected = state.selected;
         let outside = root.with_extension("outside.jsonl");
         std::fs::write(&outside, JOURNAL.replace("fixture\"}]", "escaped\"}]")).unwrap();
         std::fs::remove_file(&path).unwrap();
         std::os::unix::fs::symlink(&outside, &path).unwrap();
         assert!(state.select(0).is_err());
         assert_eq!(state.messages, before);
+        assert_eq!(state.usage, before_usage);
+        assert_eq!(state.selected, before_selected);
         std::fs::remove_dir_all(root).unwrap();
         std::fs::remove_file(outside).unwrap();
     }
@@ -429,15 +564,9 @@ mod tests {
         std::fs::remove_dir_all(root).unwrap();
     }
     #[test]
-    fn blocks_preserve_text_and_disclose_thinking() {
-        let v = json!({"content":[{"type":"text","text":"hello"},{"type":"thinking","thinking":"private"}]});
-        assert_eq!(
-            blocks(&v),
-            vec![
-                ("text".into(), "hello".into()),
-                ("thinking".into(), "private".into())
-            ]
-        );
+    fn saved_blocks_preserve_text_and_suppress_reasoning() {
+        let v = json!({"content":[{"type":"text","text":"hello"},{"type":"thinking","text":"private"}]});
+        assert_eq!(blocks(&v), vec![("text".into(), "hello".into())]);
     }
     #[test]
     fn invalid_selection_does_not_change_state() {

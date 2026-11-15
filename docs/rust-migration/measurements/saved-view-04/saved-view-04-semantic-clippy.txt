@@ -1,0 +1,25 @@
+    Checking suffice-session v0.1.0 (/Users/aryasalem/Downloads/Programming/suffice/crates/suffice-session)
+error: this `if` statement can be collapsed
+   --> src/presentation.rs:173:13
+    |
+173 | /             if s(e, "customType") == Some("suffice:turn-end") {
+174 | |                 if truth(d.get("id")) {
+175 | |                     ends.insert(identity(d.get("id")), d.clone());
+176 | |                 }
+177 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.92.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+173 ~             if s(e, "customType") == Some("suffice:turn-end")
+174 ~                 && truth(d.get("id")) {
+175 |                     ends.insert(identity(d.get("id")), d.clone());
+176 ~                 }
+    |
+
+error: could not compile `suffice-session` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `suffice-session` (lib test) due to 1 previous error

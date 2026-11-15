@@ -75,6 +75,13 @@ limited UI is a fair substitute for the full Electron workload.
 
 ## Pi replacement obligations
 
+The experimental eframe saved-history path now uses `SessionStore` -> Rust Pi
+projection -> Rust desktop presentation/saved usage -> native rendering. Private
+compaction content and persisted reasoning follow their separate saved-view
+suppression rules. Finite JSON parsing/formatting uses JavaScript number
+conventions. See `continuation-saved-view.md` for direct Node-oracle evidence and
+remaining semantic/platform gaps; production Electron browsing still uses Pi.
+
 The installed Pi 1.5.2 source was inspected, including session-manager,
 agent-session, model-runtime, auth-storage, resource-loader, project-trust,
 extensions, MCP, codemode and the transitive Pi packages. See

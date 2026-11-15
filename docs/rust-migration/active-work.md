@@ -4,7 +4,13 @@ The user's persistent goal remains active: a concretely verified, demonstrably
 lighter app and continued work toward full Rust across all original features.
 The earlier delivery report is a historical checkpoint, not completion.
 
-Latest integration: [`edge-to-edge-integration.md`](edge-to-edge-integration.md).
+Latest continuation: [`continuation-saved-view.md`](continuation-saved-view.md).
+The native viewer now consumes Rust saved-transcript presentation and usage,
+including private-summary/reasoning suppression and finite JSON number parity.
+42 Node/Pi comparisons, 15 Rust tests and 9 native tests pass. Production
+Electron browsing/resume and the full migration/performance gates remain open.
+
+Previous integration: [`edge-to-edge-integration.md`](edge-to-edge-integration.md).
 The user requested `experiment/edge-to-edge-chat`; upstream `9164605` was merged
 with local migration checkpoint `801387e`, retaining the Rust addon, native hosts,
 session store and earlier evidence. The current feature inventory includes the

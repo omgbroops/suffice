@@ -362,7 +362,7 @@ fn scan(
         if text.trim().is_empty() {
             continue;
         }
-        match serde_json::from_str(&text) {
+        match crate::parse_js_json(text.as_bytes()) {
             Ok(value) => record(value),
             Err(_) if strict && line.ends_with(b"\n") => {
                 return Err(ReadError::InvalidJson(number))
