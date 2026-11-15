@@ -132,8 +132,8 @@ jobs:
           hdiutil detach "$RUNNER_TEMP/suffice-mount"
           codesign --verify --deep --strict "$RUNNER_TEMP/suffice-installed/Suffice.app"
           node scripts/desktop/smoke.mjs "$RUNNER_TEMP/suffice-installed/Suffice.app/Contents/MacOS/Suffice"
-      - name: Record installer checksums
-        run: node -e "const fs=require('fs'),p=require('path'),crypto=require('crypto');const names=fs.readdirSync('release').filter(n=>/\.(exe|dmg)$/.test(n));fs.writeFileSync('release/SHA256SUMS.txt',names.map(n=>crypto.createHash('sha256').update(fs.readFileSync(p.join('release',n))).digest('hex')+'  '+n).join('\n')+'\n');"
+      - name: Verify installer archive and record checksums
+        run: node scripts/desktop/verify.mjs
       - name: Retain installer and validation evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -147,3 +147,4 @@ jobs:
             release/packaged-smoke-*.json
             release/packaged-smoke-*.png
             release/build-result.json
+            release/installer-validation.json
