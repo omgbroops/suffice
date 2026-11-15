@@ -9,7 +9,7 @@ import {_electron} from 'playwright-core';
 test('real utility-process failure recovers saved chats without replay and relaunch restores drafts',{timeout:60000},async()=>{
  const home=await mkdtemp(resolve(tmpdir(),'suffice-recovery-')),dir=resolve(home,'sessions','fixture');await mkdir(dir,{recursive:true});
  const timestamp=new Date().toISOString(),source=[{type:'session',version:3,id:'recovery',timestamp,cwd:home},{type:'message',id:'user',parentId:null,timestamp,message:{role:'user',content:[{type:'text',text:'Recovery fixture'}],timestamp:Date.now()}}].map(JSON.stringify).join('\n')+'\n';await writeFile(resolve(dir,'saved.jsonl'),source);
- const env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const launch=()=>_electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'profile')],env});
  let app=await launch();
  try{

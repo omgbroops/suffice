@@ -7,7 +7,7 @@ import {resolve} from 'node:path';
 import {_electron} from 'playwright-core';
 
 test('threads keep independent live runs and accept steering without aborting',{timeout:60000},async()=>{
- const home=await mkdtemp(resolve(tmpdir(),'suffice-concurrent-')),env={...process.env,SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
+ const home=await mkdtemp(resolve(tmpdir(),'suffice-concurrent-')),env={...process.env,PI_OFFLINE:'1',SUFFICE_HOME:home};delete env.ELECTRON_RUN_AS_NODE;
  const app=await _electron.launch({executablePath:electronPath,args:[resolve('apps/desktop'),'--user-data-dir='+resolve(home,'electron')],env});
  try{
   const page=await app.firstWindow();await page.locator('.composer').waitFor();
@@ -38,6 +38,7 @@ test('threads keep independent live runs and accept steering without aborting',{
   assert.deepEqual(await app.evaluate(()=>globalThis.aborts),[]);
   await app.evaluate(()=>globalThis.runs.get('two').resolve({threadId:'two',text:'Second completed'}));
   await page.getByRole('button',{name:'Stop task',exact:true}).waitFor();
+  await page.locator('.thread-row').filter({hasText:'two'}).getByLabel('Unread response',{exact:true}).waitFor();
   await emit({event:'assistant_start',threadId:'one'});await emit({event:'text',threadId:'one',text:'Following your steering'});
   await app.evaluate(()=>globalThis.runs.get('one').resolve({threadId:'one',text:'Following your steering'}));
   await page.waitForFunction(()=>document.querySelector('.composer').dataset.running==='false');
