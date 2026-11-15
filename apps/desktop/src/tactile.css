@@ -71,7 +71,7 @@
 .desktop-app .send-group:has(.send-button:disabled) .send-options { color: var(--text-faint); }
 .desktop-app[data-theme='light'] .send-group:has(.send-button:disabled) { background: var(--primary-bg); opacity: .5; }
 .desktop-app[data-theme='light'] .send-group:has(.send-button:disabled) .button { color: var(--primary-fg); }
-.desktop-app .workspace .composer { border-color: transparent; outline: var(--hairline) solid var(--overlay-edge); box-shadow: var(--shadow-raised); }
+.desktop-app .workspace :is(.composer,.thread-user) { border-color: transparent; outline: var(--hairline) solid var(--overlay-edge); box-shadow: var(--shadow-raised); }
 .desktop-app .composer:focus-within { border-color: transparent; }
 .desktop-app .composer textarea { font-size: var(--ui-text); line-height: 24px; font-weight: var(--ui-weight); }
 .desktop-app :is(.popover,.detail-dialog,.context-usage-details,.custom-tooltip,.tool-widget-body,.toast) { border-color: transparent; box-shadow: var(--shadow-overlay); }
@@ -155,3 +155,6 @@
   .desktop-app .popover[data-motion='true'] { transform: none; transition-property: opacity; }
   .desktop-app :is(.right-sidebar,.workspace,.project-picker > .icon:last-child) { transition: none; }
 }
+
+/* User bubbles borrow the composer material in both themes. */
+.desktop-app .thread-user { border:1px solid transparent; border-radius:var(--radius-composer); background:var(--surface-composer); -webkit-backdrop-filter:var(--glass-filter); backdrop-filter:var(--glass-filter); color:var(--text-strong); }

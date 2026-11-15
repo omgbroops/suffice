@@ -80,7 +80,7 @@ body:not(:has(.thread-view)) .right-sidebar { visibility: hidden; pointer-events
 .window-controls::before { left: calc(-1 * var(--notch)); top: calc(15px - var(--chrome-control-top)); }
 .window-controls::after { top: 100%; right: calc(8px - var(--window-chrome-inset)); }
 .right-panel-open .window-controls::before,.right-panel-open .window-controls::after { display: none; }
-.desktop-app:not([data-theme='light']) .workspace .composer { outline-color: transparent; box-shadow: var(--shadow-raised); }
+.desktop-app:not([data-theme='light']) .workspace :is(.composer,.thread-user) { outline-color: transparent; box-shadow: var(--shadow-raised); }
 .desktop-app { --chrome-center-y: calc(var(--chrome-control-top) - 2px + var(--window-control-size) / 2); }
 .desktop-app .sidebar-reopen { position: fixed; top: calc(var(--chrome-center-y) - 12.5px); left: 16px; width: var(--header-control-size); height: var(--header-control-size); min-height: var(--header-control-size); padding: 5px; background: transparent; z-index: 90; }
 .desktop-app .sidebar-reopen > .icon { width: 15px; height: 15px; }
