@@ -1,3 +1,4 @@
+import {fadeGlassContent} from './glass-content-motion.js';
 import {icon} from './ui.js';
 import {projectBadge,threadState,threadProviders,tickThreadTimes} from './thread-row.js';
 import {getThreadDirectory} from './thread-directory.js';
@@ -7,8 +8,13 @@ export function createSpotlight({commands}){
  const dialog=document.createElement('dialog');dialog.className='spotlight';dialog.setAttribute('aria-label','Search Suffice');
  dialog.innerHTML=`<div class="spotlight-search">${icon('search')}<input id="spotlight-query" type="search" placeholder="Search threads and commands…" aria-label="Search threads and commands" role="combobox" aria-expanded="true" aria-controls="spotlight-results" aria-autocomplete="list" autocomplete="off" spellcheck="false"><button class="spotlight-close" aria-label="Close search">${icon('close')}</button></div><div class="spotlight-scopes" role="tablist" aria-label="Search scope"></div><div id="spotlight-results" class="spotlight-results" role="listbox" aria-label="Search results"></div><footer class="spotlight-footer"><span><kbd>Enter</kbd> Open</span><span><kbd>↑</kbd><kbd>↓</kbd> Navigate <kbd>Tab</kbd> Scope <kbd>Esc</kbd> Close</span></footer>`;
  document.body.append(dialog);const input=dialog.querySelector('input'),list=dialog.querySelector('.spotlight-results'),scopes=dialog.querySelector('.spotlight-scopes');
- let scope='all',selected=0,items=[],previousFocus,animation;
- const reduce=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ // Native modal backdrops form a separate compositing layer. Blur that layer,
+ // clipped to the search surface, so the dialog samples the actual wallpaper.
+ const glassStyle=document.createElement('style');document.head.append(glassStyle);
+ const syncGlass=()=>{if(!dialog.open)return;const r=dialog.getBoundingClientRect();const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${innerWidth}" height="${innerHeight}"><rect x="${r.left}" y="${r.top}" width="${r.width}" height="${r.height}" rx="16" fill="white"/></svg>`;glassStyle.textContent=`.desktop-app dialog.spotlight::backdrop {backdrop-filter:blur(20px) saturate(1.1);-webkit-backdrop-filter:blur(20px) saturate(1.1);clip-path:none;mask-image:url("data:image/svg+xml,${encodeURIComponent(svg)}");mask-size:100% 100%;mask-repeat:no-repeat;}`;};
+ new ResizeObserver(syncGlass).observe(dialog);
+ window.addEventListener('resize',syncGlass);
+ let scope='all',selected=0,items=[],previousFocus,cancelContentFade,closing=false;
  const span=(cls,text)=>{const el=document.createElement('span');el.className=cls;el.textContent=text;return el;};
  const matches=(text,query)=>query.split(/\s+/).every(term=>text.toLowerCase().includes(term));
  function source(){const directory=getThreadDirectory();const threads=directory.threads.map(thread=>({id:'thread:'+thread.id,scope:'threads',title:thread.title,detail:[thread.project||'No project',thread.branch].filter(Boolean).join(' · '),thread,run:()=>directory.open(thread.id)}));return [...threads,...commands().map(command=>({...command,scope:'commands'}))];}
@@ -32,7 +38,7 @@ export function createSpotlight({commands}){
  }
  function updateFade(){list.dataset.top=String(list.scrollTop>1);list.dataset.bottom=String(list.scrollHeight-list.scrollTop-list.clientHeight>1);}
  new ResizeObserver(updateFade).observe(list);list.addEventListener('scroll',updateFade,{passive:true});
- function close(instant=false){if(!dialog.open)return;animation?.cancel();const done=()=>{dialog.close();previousFocus?.focus({preventScroll:true});};if(instant||reduce()){done();return;}animation=dialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(-3px) scale(.99)'}],{duration:110,easing:'ease-out'});animation.finished.then(done).catch(()=>{});}
+ function close(instant=false){if(!dialog.open||closing)return;cancelContentFade?.();const done=()=>{dialog.close();closing=false;previousFocus?.focus({preventScroll:true});};if(instant||document.documentElement.classList.contains('reduce-motion')||matchMedia('(prefers-reduced-motion: reduce)').matches){done();return;}closing=true;const fades=[...dialog.children].map(element=>element.animate([{opacity:1},{opacity:0}],{duration:110,easing:'ease-out'}));Promise.all(fades.map(animation=>animation.finished)).then(done).catch(done);}
  function run(index=selected){const item=items[index];if(!item)return;close(true);void item.run();}
  dialog.querySelector('.spotlight-close').addEventListener('click',()=>close());
  dialog.addEventListener('cancel',event=>{event.preventDefault();close(true);});
@@ -41,5 +47,5 @@ export function createSpotlight({commands}){
  dialog.addEventListener('keydown',event=>{if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();highlight((selected+(event.key==='ArrowDown'?1:-1)+items.length)%Math.max(1,items.length),true);}if(event.key==='Enter'){event.preventDefault();run();}if(event.key==='Tab'){event.preventDefault();const ids=['all','threads','commands'];scope=ids[(ids.indexOf(scope)+(event.shiftKey?2:1))%3];selected=0;render();input.focus();}if((event.ctrlKey||event.metaKey)&&event.key==='k'){event.preventDefault();event.stopPropagation();close(true);}});
  setInterval(()=>{if(dialog.open)tickThreadTimes(list);},1000);
  document.addEventListener('suffice-thread-directory',()=>{if(dialog.open)render();});
- return {open({keyboard=false}={}){if(dialog.open){input.focus();return;}previousFocus=document.activeElement;scope='all';selected=0;input.value='';render();dialog.showModal();input.focus();animation?.cancel();if(!reduce())animation=dialog.animate([{opacity:0,transform:'translateY(-6px) scale(.985)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:180,easing:getComputedStyle(dialog).getPropertyValue('--ease-out').trim()||'ease-out'});},close};
+ return {open({keyboard=false}={}){if(dialog.open){input.focus();return;}previousFocus=document.activeElement;scope='all';selected=0;input.value='';render();dialog.showModal();syncGlass();input.focus();cancelContentFade=fadeGlassContent(dialog);},close};
 }
