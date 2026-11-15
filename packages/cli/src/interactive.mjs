@@ -22,7 +22,7 @@ export function sufficeInterface(options) {
       ctx.ui.setHeader((_tui,theme)=>({
         render:()=>[
           theme.fg('accent',theme.bold(`Suffice ${VERSION}`)),
-          theme.fg('muted','Pi interface and engine · Suffice tools and codemode'),
+          theme.fg('muted','Suffice workspace · tools and Codemode'),
           theme.fg('dim','/project choose a project · /login sign in · /model choose model'),
           theme.fg('dim','/settings preferences · /resume sessions · Ctrl+C interrupt'),
         ],invalidate(){}
