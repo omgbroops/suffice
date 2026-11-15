@@ -41,6 +41,7 @@ if(primary)app.whenReady().then(async()=>{
   const {createProviderSettings,providerLoginErrorMessage}=await import('./provider-settings.mjs');
   const providerSettings=createProviderSettings({onCatalog:catalog=>{if(!win.isDestroyed())win.webContents.send('suffice:event',{event:'models_changed',catalog});},emit:event=>{if(!win.isDestroyed())win.webContents.send('suffice:provider-auth',event);},openBrowser:url=>shell.openExternal(url)});
   const resources=(await import('./resources.mjs')).createResourceService(settingsHome,{choosePath:async kind=>{const result=await dialog.showOpenDialog(win,{title:'Add '+kind,properties:kind==='extensions'?['openFile']:['openDirectory']});return result.canceled?null:result.filePaths[0];}});
+  app.on('will-quit',()=>resources.dispose());
   handle('resources',()=>resources.list());
   handle('resource-action',payload=>resources.action(payload));
   handle('agent-action',payload=>request('agent-action',payload));
