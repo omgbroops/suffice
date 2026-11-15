@@ -1,3 +1,4 @@
+import {connectApprovals} from './approvals.js';
 import {transcriptDivider,isInterruption} from './transcript-divider.js';
 import {connectExtensionUI} from './extension-ui.js';
 import {connectThreadFork} from './thread-fork.js';
@@ -18,7 +19,7 @@ import {createToolWidget,toolOutput} from './tool-widget.js';
 import {nextTranscriptFollowing} from './transcript-scroll.js';
 
 export function connectThreads({api,prompt,send,toast}){
- connectExtensionUI(api,toast);
+ connectExtensionUI(api,toast);const approvals=connectApprovals(api,toast);
  const workspace=document.querySelector('.workspace'),form=document.querySelector('.composer');
  const transition=createThreadTransition(workspace,form);
  if(preference('new-project','Last used project')==='Ask each time')form.dataset.requireProject='true';
@@ -189,6 +190,8 @@ export function connectThreads({api,prompt,send,toast}){
   job.event=event=>{
    if(event.event==='compaction_start'){group=log=null;statusLine.hidden=true;if(!compaction){compaction=transcriptDivider('compacting');node.insertBefore(compaction,statusLine);}if(node===history)bottom();return;}
    if(event.event==='compaction_end'){if(compaction){if(event.completed)compaction.update('compacted',event.reason!=='manual');else compaction.remove();compaction=null;}if(event.errorMessage)status(event.errorMessage);if(node===history)bottom();return;}
+   if(event.event==='approval')status('Waiting for approval');
+   if(event.event==='approval_resolved')status('Working');
    if(event.event==='changes'){job.diff=event.diff;drawThreads();}
    if(event.event==='assistant_start'){reasoning='';if(streamed){current=null;streamed='';}status('Working');}
    if(event.event==='text'){streamed+=event.text;if(preference('stream-markdown',true))markdown(response(),streamed);else response().textContent=streamed;statusLine.hidden=true;}
@@ -203,7 +206,7 @@ export function connectThreads({api,prompt,send,toast}){
    if(event.event==='text')group=log=null;
    if(node===history)bottom();
   };
-  job.finish=(result,error)=>{const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=error.message;}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);job.running=false;job.failed=!!error;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
+  job.finish=(result,error)=>{const interrupted=result?.interrupted||isInterruption(error);if(compaction){compaction.remove();compaction=null;}if(interrupted){node.insertBefore(transcriptDivider('interrupted'),statusLine);error=null;}else if(error){current=null;streamed='';response().textContent=error.message;}else if(result?.text)markdown(response(),result.text);statusLine.remove();if(preference('collapse-work',true))node.querySelectorAll('.thread-activity').forEach(group=>group.open=false);approvals.clear(job.id);job.running=false;job.failed=!!error;job.terminalCount=0;if(node===history)localStorage.setItem('suffice-thread-seen:'+job.id,String(Date.now()));drawThreads();if(node===history){syncRunning();saveView();bottom();document.dispatchEvent(new Event('suffice:usage-change'));}document.dispatchEvent(new Event('suffice:thread-updated'));void refresh().catch(()=>{});};
   return job;
  }
  function adoptJob(job,id){if(!id||id===job.id)return;const previous=job.id;jobs.delete(previous);jobs.set(id,job);job.id=id;adoptOptimistic(previous,id);if(activeId===previous){activeId=id;viewState.adopt(id);}drawThreads();}

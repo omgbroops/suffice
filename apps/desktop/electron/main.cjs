@@ -21,7 +21,7 @@ if(primary)app.whenReady().then(async()=>{
   const {parseOptions}=await import('@suffice/harness');
   const settingsHome=parseOptions([]).home;
   const settings=(await import('./settings-store.mjs')).createSettingsStore(settingsHome);
-  function onHarnessEvent(message){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval'){void notify('approval','Agent needs approval');void dialog.showMessageBox(win,{type:'question',title:'Allow agent action?',message:message.name,detail:JSON.stringify(message.input,null,2).slice(0,8000),buttons:['Deny','Allow'],defaultId:0,cancelId:0}).then(answer=>request('approval-answer',{threadId:message.threadId||message.clientId,requestId:message.requestId,allow:answer.response===1}));return;}if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
+  function onHarnessEvent(message){if(message.event==='thread_started'&&attachmentGroups.has(message.clientId))attachmentGroups.set(message.id,attachmentGroups.get(message.clientId));if(message.event==='approval')void notify('approval','Agent needs approval');if(message.event==='thread_started'&&threadLocations.has(message.clientId))threadLocations.set(message.id,threadLocations.get(message.clientId));if(win&&!win.isDestroyed())win.webContents.send('suffice:event',message);return;}
   background=require('./background-tasks.cjs').createBackgroundTasks({fork:(...args)=>utilityProcess.fork(...args),entry:path.join(__dirname,'worker-entry.mjs'),emit:onHarnessEvent});
   const {projectIdentityMetadata}=await import('./sidebar-metadata.mjs');
   const projects=require('./projects.cjs').createProjectStore(app.getPath('userData'));if(process.env.SUFFICE_START_PROJECT){const start=await require('node:fs/promises').realpath(process.env.SUFFICE_START_PROJECT);await projects.add(start);project=selectedProject=start;}function openProjectWindow(folder){const profileRoot=process.env.SUFFICE_PROFILE_ROOT||app.getPath('userData');const profile=path.join(profileRoot,'project-windows',createHash('sha256').update(folder).digest('hex').slice(0,16));const child=require('node:child_process').spawn(process.execPath,[...(app.isPackaged?[]:[app.getAppPath()]),'--user-data-dir='+profile],{detached:true,stdio:'ignore',windowsHide:true,env:{...process.env,SUFFICE_START_PROJECT:folder,SUFFICE_PROFILE_ROOT:profileRoot,ELECTRON_RUN_AS_NODE:undefined}});child.unref();}
@@ -46,6 +46,7 @@ if(primary)app.whenReady().then(async()=>{
   app.on('will-quit',()=>resources.dispose());
   handle('resources',()=>resources.list());
   handle('resource-action',payload=>resources.action(payload));
+  handle('approval-answer',payload=>{if(!payload||typeof payload.threadId!=='string'||!Number.isSafeInteger(payload.requestId)||typeof payload.allow!=='boolean')throw new Error('Invalid approval answer');return request('approval-answer',payload);});
   handle('extension-answer',payload=>request('extension-answer',payload));
   handle('providers',()=>providerSettings.list());
   handle('refresh-models',()=>providerSettings.refresh({force:true}));

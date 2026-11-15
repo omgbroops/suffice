@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('sufficeDesktop',{
   refreshModels:()=>ipcRenderer.invoke('suffice:refresh-models'),
   resources:()=>ipcRenderer.invoke('suffice:resources'),
   resourceAction:payload=>ipcRenderer.invoke('suffice:resource-action',payload),
+  approvalAnswer:payload=>ipcRenderer.invoke('suffice:approval-answer',payload),
   extensionAnswer:payload=>ipcRenderer.invoke('suffice:extension-answer',payload),
   providers:()=>ipcRenderer.invoke('suffice:providers'),
   providerLogin:payload=>ipcRenderer.invoke('suffice:provider-login',payload),
