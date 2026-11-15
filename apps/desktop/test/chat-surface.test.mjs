@@ -11,7 +11,7 @@ const {windowsAppDetails}=createRequire(import.meta.url)('../electron/windows-ap
 test('Windows relaunch metadata preserves app/profile paths and a real multi-size icon',async()=>{
  const details=windowsAppDetails({exePath:'C:/Program Files/Electron/electron.exe',appPath:'C:/My App/desktop',userData:'C:/My Profile',iconPath:'C:/My App/logo.ico'});
  assert.equal(details.appId,'com.suffice.desktop.development');assert.equal(details.appIconIndex,0);assert.equal(details.relaunchDisplayName,'Suffice');assert.equal(details.relaunchCommand,'"C:/Program Files/Electron/electron.exe" "C:/My App/desktop" "--user-data-dir=C:/My Profile"');
- const packaged=windowsAppDetails({exePath:'C:/Suffice.exe',appPath:'C:/app.asar',userData:'C:/Profile',iconPath:'C:/logo.ico',packaged:true});assert.equal(packaged.appId,'com.suffice.desktop');assert.ok(!packaged.relaunchCommand.includes('app.asar'));
+ const packaged=windowsAppDetails({exePath:'C:/Suffice.exe',appPath:'C:/app.asar',userData:'C:/Profile',iconPath:'C:/logo.ico',packaged:true});assert.equal(packaged.appId,'com.suffice.app');assert.ok(!packaged.relaunchCommand.includes('app.asar'));
  const icon=await readFile(resolve('apps/desktop/assets/suffice-logo.ico'));assert.equal(icon.readUInt16LE(2),1);assert.equal(icon.readUInt16LE(4),7);for(let i=0;i<7;i++){const at=6+16*i,length=icon.readUInt32LE(at+8),offset=icon.readUInt32LE(at+12);assert.ok(offset+length<=icon.length);assert.equal(icon.subarray(offset+1,offset+4).toString(),'PNG');}
 });
 test('user bubbles share the composer material, assistant text stays plain, and the taskbar uses Suffice',{timeout:60000},async()=>{
