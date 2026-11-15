@@ -1,3 +1,5 @@
+import {parse} from 'acorn';
+import {joinActivityLabels} from './activity-groups.js';
 export function groupActions(messages){
  const calls=[],output=[];
  const resultText=parts=>parts.map(part=>{const text=part.text||'';try{const data=JSON.parse(text);return typeof data.output==='string'?data.output:JSON.stringify(data,null,2);}catch{return text;}}).filter(Boolean).join('\n\n');
@@ -12,7 +14,18 @@ export function groupActions(messages){
 }
 export function actionTitle(part){
  let input={};try{input=JSON.parse(part.text||'{}');}catch{}
- const verb={codemode:'Executed code',file_read:'Read file',read:'Read file',search:'Searched',file_edit:'Edited file',file_write:'Wrote file',test:'Ran tests',files:'Listed files'}[part.name]||`Used ${part.name}`;
- const target=input.path||input.filePath||input.command||input.query;
- return target?`${verb} · ${String(target).split('\n')[0].slice(0,100)}`:verb;
+ const active=part.done===false,labels={read:['Reading files','Read files'],file_read:['Reading files','Read files'],write:['Writing files','Wrote files'],file_write:['Writing files','Wrote files'],edit:['Editing files','Edited files'],file_edit:['Editing files','Edited files'],bash:['Running bash','Ran bash'],powershell:['Running PowerShell','Ran PowerShell'],browser_tabs:['Getting browser tabs','Got browser tabs'],web_search:['Searching the web','Searched the web'],fetch_content:['Reading web pages','Read web pages'],get_search_content:['Reading search results','Read search results'],set_session_title:['Naming session','Named session'],search:['Searching files','Searched files'],files:['Listing files','Listed files']};
+ const label=name=>(labels[name]||[ `Using ${name.replaceAll('_',' ')}`,`Used ${name.replaceAll('_',' ')}`])[active?0:1];
+ if(part.name==='codemode'){
+  const names=new Set();
+  try{
+   const tree=parse(input.code||'',{ecmaVersion:'latest',sourceType:'module',allowAwaitOutsideFunction:true,allowReturnOutsideFunction:true});
+   const member=node=>node?.type==='MemberExpression'?[...member(node.object),node.computed?node.property.value:node.property.name]:node?.type==='Identifier'?[node.name]:[];
+   const visit=node=>{if(!node||typeof node!=='object')return;if(node.type==='CallExpression'){const path=member(node.callee);if(path[0]==='tools'&&path.length>1)names.add(path.at(-1));}for(const value of Object.values(node))if(Array.isArray(value))value.forEach(visit);else if(value&&typeof value==='object')visit(value);};visit(tree);
+  }catch{/* An incomplete script retains a neutral execution label. */}
+  const actions=[...new Set([...names].map(label))];
+  return actions.length?joinActivityLabels(actions):(active?'Running code':'Executed code');
+ }
+ const verb=label(part.name);
+ return verb;
 }
