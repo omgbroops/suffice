@@ -6,7 +6,7 @@ const root=fileURLToPath(new URL('../../',import.meta.url));
 const read=async file=>JSON.parse(await readFile(file,'utf8'));
 const exists=async file=>access(file).then(()=>true,()=>false);
 const compatible=(list,value)=>!list||(!list.includes('!'+value)&&(!list.some(x=>!x.startsWith('!'))||list.includes(value)));
-export async function stageDesktop(stage,{version='0.1.0-preview.20261114'}={}){
+export async function stageDesktop(stage,{version='0.1.0-preview.20261114.1'}={}){
  stage=resolve(stage);await mkdir(stage,{recursive:true});if(await exists(join(stage,'package.json')))throw new Error('Stage must be a fresh directory: '+stage);
  const app=await read(join(root,'apps/desktop/package.json')),base=await read(join(root,'package.json')),cli=await read(join(root,'packages/cli/package.json'));
  const dependencies={...base.dependencies,...cli.dependencies,...Object.fromEntries(Object.entries(app.dependencies).filter(([name])=>name.startsWith('@fontsource/')))};delete dependencies['@suffice/harness'];
