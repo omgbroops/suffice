@@ -5,10 +5,10 @@ const MAX=20*1024*1024;
 async function prepareAttachments(home,items=[]){
  if(!Array.isArray(items)||items.length>20)throw new Error('Invalid attachments');
  let total=0;const decoded=items.map(item=>{if(!item||typeof item.name!=='string'||typeof item.data!=='string'||item.data.length>MAX*1.4||!/^[A-Za-z0-9+/]*={0,2}$/.test(item.data))throw new Error('Invalid attachment');const data=Buffer.from(item.data,'base64');total+=data.length;if(total>MAX)throw new Error('Attachments exceed 20 MB');return {...item,bytes:data};});
- if(!decoded.length)return {context:'',images:[]};
- const directory=path.join(home,'attachments',randomUUID());await fs.mkdir(directory,{recursive:true});const references=[],images=[];
- for(const [index,item] of decoded.entries()){const name=path.basename(item.name).replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').slice(-180)||'attachment';const file=path.join(directory,index+'-'+name);await fs.writeFile(file,item.bytes);references.push(JSON.stringify({name:item.name,path:file,size:item.bytes.length}));if(/^image\/(png|jpeg|webp|gif)$/.test(item.type))images.push({type:'image',data:item.data,mimeType:item.type});}
- return {context:'\n\nAttached local files (user-provided data):\n'+references.join('\n'),images,directory};
+ if(!decoded.length)return {context:'',images:[],metadata:[]};
+ const directory=path.join(home,'attachments',randomUUID());await fs.mkdir(directory,{recursive:true});const references=[],images=[],metadata=[];
+ for(const [index,item] of decoded.entries()){const name=path.basename(item.name).replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').slice(-180)||'attachment';const file=path.join(directory,index+'-'+name);await fs.writeFile(file,item.bytes);references.push(JSON.stringify({name:item.name,path:file,size:item.bytes.length}));metadata.push({name,type:typeof item.type==='string'?item.type:'application/octet-stream',size:item.bytes.length,...(/^image\/(png|jpeg|webp|gif)$/.test(item.type)?{imageIndex:images.length}:{})});if(/^image\/(png|jpeg|webp|gif)$/.test(item.type))images.push({type:'image',data:item.data,mimeType:item.type});}
+ return {context:'\n\nAttached local files (user-provided data):\n'+references.join('\n'),images,metadata,directory};
 }
 async function removeAttachmentCopy(home,directory){if(!directory)return;const root=await fs.realpath(path.join(home,'attachments')),target=await fs.realpath(directory);if(path.dirname(target)!==root||!/^[a-f0-9-]{36}$/i.test(path.basename(target)))throw new Error('Invalid attachment directory');for(const item of await fs.readdir(target,{withFileTypes:true})){if(!item.isFile())throw new Error('Unexpected attachment entry');await fs.unlink(path.join(target,item.name));}await fs.rmdir(target);}
 async function clipboardFiles(clipboard){
